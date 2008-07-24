@@ -18,7 +18,7 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 class ipinit
 {
     var $ip; // IP адрес в LONG формате
-    var $flood_chk = '1'; // Включение - выключение функции IP антифлуда
+    var $flood_chk = '0'; // Включение - выключение функции IP антифлуда
     var $flood_interval = '60'; // Интервал времени
     var $flood_limit = '20'; // Число разрешенных запросов за интервал
     var $flood_file = 'flood.dat'; // Рабочий файл функции
