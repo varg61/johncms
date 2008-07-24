@@ -1,13 +1,13 @@
 <?php
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
+// JohnCMS                                                                    //
 // Официальный сайт сайт проекта:      http://johncms.com                     //
 // Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+// Евгений Рябинин aka john77          john77@johncms.com                     //
+// Олег Касьянов aka AlkatraZ          alkatraz@johncms.com                   //
 //                                                                            //
 // Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
@@ -23,28 +23,107 @@ if (!isset($rootpath))
     $rootpath = '../';
 
 ////////////////////////////////////////////////////////////
-// Предварительная проверка IP адреса                     //
+// Удаляем слэши, если открыт magic_quotes_gpc            //
+////////////////////////////////////////////////////////////
+if (get_magic_quotes_gpc())
+{
+    $in = array(&$_GET, &$_POST, &$_COOKIE);
+    while (list($k, $v) = each($in))
+    {
+        foreach ($v as $key => $val)
+        {
+            if (!is_array($val))
+            {
+                $in[$k][$key] = stripslashes($val);
+                continue;
+            }
+            $in[] = &$in[$k][$key];
+        }
+    }
+    unset($in);
+    if (!empty($_FILES))
+    {
+        foreach ($_FILES as $k => $v)
+        {
+            $_FILES[$k]['name'] = stripslashes((string )$v['name']);
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////
 // 1) Получаем реальный IP                                //
 // 2) Проверяем на попытку HTTP флуда                     //
 ////////////////////////////////////////////////////////////
 require_once ($rootpath . 'incfiles/class_ipinit.php');
-$ipinit = new ipinit($rootpath);
+$ipinit = new ipinit();
 $ipl = $ipinit->ip;
 $ipp = long2ip($ipl);
 unset($ipinit);
 
+// Стартуем сессию
 session_name("SESID");
 session_start();
 
-// Подключаемся к базе данных
+////////////////////////////////////////////////////////////
+// Подключаемся к базе данных                             //
+////////////////////////////////////////////////////////////
 require_once ($rootpath . 'incfiles/db.php');
 $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server');
 @mysql_select_db($db_name) or die('cannot connect to db');
 @mysql_query("SET NAMES 'utf8'", $connect);
 
 ////////////////////////////////////////////////////////////
+// Проверяем адрес IP на Бан                              //
+////////////////////////////////////////////////////////////
+/*
+$req = mysql_query("SELECT `ban_type`, `link` FROM `ban_ip` WHERE `ip`='" . $ipl . "';") or die('Error: table "ban_ip"');
+if (mysql_num_rows($req) != 0)
+{
+    $res = mysql_fetch_array($req);
+    switch ($res['ban_type'])
+    {
+        case 2:
+            // Редирект по ссылке
+            if (!empty($res['link']))
+            {
+                header("Location: " . $res['link']);
+                exit;
+            } else
+            {
+                header("Location: http://gazenwagen.com");
+                exit;
+            }
+            break;
+
+        case 3:
+            // Закрытие регистрации
+            $regban = true;
+            break;
+
+        default:
+            // Полный запрет доступа к сайту
+            echo 'Access forbidden!';
+            exit;
+    }
+}
+*/
+
+////////////////////////////////////////////////////////////
 // Основные настройки системы                             //
 ////////////////////////////////////////////////////////////
+$kmess = 10; // Число сообщений на страницу, для гостей
+$sdvig = 0; // Временной сдвиг для гостей
+$user_id = false;
+$user_ps = false;
+$dostsadm = 0;
+$dostadm = 0;
+$dostsmod = 0;
+$dostlmod = 0;
+$dostdmod = 0;
+$dostfmod = 0;
+$dostcmod = 0;
+$dostkmod = 0;
+$dostmod = 0;
 $req = mysql_query("select * from `settings`;");
 $set = mysql_fetch_array($req);
 $nickadmina = $set['nickadmina']; // Ник 1-го админа
@@ -54,12 +133,10 @@ $sdvigclock = $set['sdvigclock']; // Временной сдвиг по умол
 $copyright = $set['copyright']; // Коприайт сайта
 $home = $set['homeurl']; // Домашняя страница
 $ras_pages = $set['rashstr']; // Расширение текстовых страниц
-$gzip = $set['gzip']; // Включение GZIP сжатия
 $admp = $set['admp']; // Папка с Админкой
 $fmod = $set['fmod']; // Премодерация форума
 $rmod = $set['rmod']; // Премодерация регистраций в системе
 $flsz = $set['flsz']; // Максимальный размер файлов
-$gb = $set['gb']; // Открыть гостевую для гостей
 mysql_free_result($req);
 
 // Дата и время
@@ -87,19 +164,6 @@ if ($set['clean_time'] <= ($realtime - 43200))
     mysql_query("update `settings` set  `clean_time`='" . $realtime . "';");
 }
 
-// Настройки по умолчанию
-$kmess = 10;
-$sdvig = 0;
-$dostsadm = 0;
-$dostadm = 0;
-$dostsmod = 0;
-$dostlmod = 0;
-$dostdmod = 0;
-$dostfmod = 0;
-$dostcmod = 0;
-$dostkmod = 0;
-$dostmod = 0;
-
 ////////////////////////////////////////////////////////////
 // Авторизация пользователей                              //
 ////////////////////////////////////////////////////////////
@@ -124,84 +188,94 @@ elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
     $cookauth = true;
 }
 
-// Если нет ни сессии, ни COOKIE
-else
-{
-    $user_id = false;
-    $user_ps = false;
-}
-
 // Запрос в базе данных по юзеру
 if ($user_id && $user_ps)
 {
-    $req = mysql_query("select * from `users` where id='" . $user_id . "' LIMIT 1;");
-    $datauser = mysql_fetch_array($req);
-    if ($user_ps === $datauser['password'])
+    $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1;");
+    if (mysql_num_rows($req) != 0)
     {
-        // Получение параметров пользователя
-        $idus = $user_id;
-        $login = $datauser['name']; // Логин (Ник) пользователя
-        $sdvig = $datauser['sdvig']; // Сдвиг времени
-        $kmess = $datauser['kolanywhwere']; // Число сообщений на страницу
-        $offpg = $datauser['offpg'];
-        $offtr = $datauser['offtr']; // Выключить транслит
-        $offgr = $datauser['offgr']; // Выключить графику
-        $offsm = $datauser['offsm']; // Выключить смайлы
-        $upfp = $datauser['upfp'];
-        $nmenu = $datauser['nmenu'];
-        $chmes = $datauser['chmes'];
-        mysql_free_result($req);
+        $datauser = mysql_fetch_array($req);
+        if ($user_ps === $datauser['password'])
+        {
+            // Получение параметров пользователя
+            $idus = $user_id;
+            $login = $datauser['name']; // Логин (Ник) пользователя
+            $sdvig = $datauser['sdvig']; // Сдвиг времени
+            $kmess = $datauser['kolanywhwere']; // Число сообщений на страницу
+            $offpg = $datauser['offpg'];
+            $offtr = $datauser['offtr']; // Выключить транслит
+            $offgr = $datauser['offgr']; // Выключить графику
+            $offsm = $datauser['offsm']; // Выключить смайлы
+            $upfp = $datauser['upfp'];
+            $nmenu = $datauser['nmenu'];
+            $chmes = $datauser['chmes'];
+            mysql_free_result($req);
 
-        // Установка административного доступа
-        if ($login == $nickadmina || $login == $nickadmina2)
-        {
-            $dostsadm = "1"; // Супер Админ
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7")
-        {
-            $dostadm = "1"; // Админ
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6")
-        {
-            $dostsmod = "1"; // Старший модер
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "5")
-        {
-            $dostlmod = "1";
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "4")
-        {
-            $dostdmod = "1";
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "3")
-        {
-            $dostfmod = "1";
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "2")
-        {
-            $dostcmod = "1";
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "1" || $datauser['rights'] == "7" || $datauser['rights'] == "6")
-        {
-            $dostkmod = "1";
-        }
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= "1")
-        {
-            $dostmod = "1";
-        }
+            // Установка административного доступа
+            if ($login == $nickadmina || $login == $nickadmina2)
+            {
+                $dostsadm = "1"; // Супер Админ
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7")
+            {
+                $dostadm = "1"; // Админ
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6")
+            {
+                $dostsmod = "1"; // Старший модер
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "5")
+            {
+                $dostlmod = "1";
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "4")
+            {
+                $dostdmod = "1";
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "3")
+            {
+                $dostfmod = "1";
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "2")
+            {
+                $dostcmod = "1";
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "1" || $datauser['rights'] == "7" || $datauser['rights'] == "6")
+            {
+                $dostkmod = "1";
+            }
+            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= "1")
+            {
+                $dostmod = "1";
+            }
 
-        // Устанавливаем время начала сессии
-        if ($datauser['lastdate'] <= ($realtime - 300))
-            mysql_query("update `users` set `sestime`='" . $realtime . "' where `id`='" . $user_id . "';");
+            // Устанавливаем время начала сессии
+            if ($datauser['lastdate'] <= ($realtime - 300))
+                mysql_query("update `users` set `sestime`='" . $realtime . "' where `id`='" . $user_id . "';");
 
-        // Обновляем данные
-        $totalonsite = $datauser['total_on_site'];
-        if ($datauser['lastdate'] >= ($realtime - 300))
-            $totalonsite = $totalonsite + $realtime - $datauser['lastdate'];
-        mysql_query("update `users` set `total_on_site`='" . $totalonsite . "', `lastdate`='" . $realtime . "', `ip`='" . $ipp . "', `browser`='" . mysql_real_escape_string($agn) . "' where `id`='" . $user_id . "';");
+            // Обновляем данные
+            $totalonsite = $datauser['total_on_site'];
+            if ($datauser['lastdate'] >= ($realtime - 300))
+                $totalonsite = $totalonsite + $realtime - $datauser['lastdate'];
+            mysql_query("UPDATE `users` SET
+			`total_on_site`='" . $totalonsite . "',
+			`lastdate`='" . $realtime . "',
+			`ip`='" . $ipl . "',
+			`browser`='" . mysql_real_escape_string($agn) . "'
+			WHERE `id`='" . $user_id . "';");
+        } else
+        {
+            // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки
+            unset($_SESSION['uid']);
+            unset($_SESSION['ups']);
+            setcookie('cuid', '');
+            setcookie('cups', '');
+            $user_id = false;
+            $user_ps = false;
+        }
     } else
     {
-        // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки
+        // Если юзер не найден, уничтожаем переменные сессии и чистим куки
         unset($_SESSION['uid']);
         unset($_SESSION['ups']);
         setcookie('cuid', '');
@@ -214,25 +288,14 @@ if ($user_id && $user_ps)
 // Подключаем дополнительные файлы
 require_once ($rootpath . 'incfiles/func.php'); // Вспомогательные функции
 require_once ($rootpath . 'incfiles/stat.php'); // Статистика
-if (!isset($headmod))
-    $headmod = '';
-if ($headmod == "mainpage")
-{
-    $textl = $copyright;
-}
 
 // Буфферизация вывода
-if ($gzip == 1)
+if ($set['gzip'] == 1)
 {
     ob_start('ob_gzhandler');
 } else
 {
     ob_start();
 }
-
-//if ($offgr == 1)
-//{
-//    ob_start(offimg);
-//}
 
 ?>

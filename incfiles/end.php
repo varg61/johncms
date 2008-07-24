@@ -40,10 +40,10 @@ echo '</div>';
 
 // Выводим счетчик посетителей Online
 $ontime = $realtime - 300;
-$qon = @mysql_query("select * from `users` where lastdate>='" . $ontime . "';");
+$qon = @mysql_query("SELECT * FROM `users` WHERE `lastdate`>='" . $ontime . "';");
 $qon2 = mysql_num_rows($qon);
 $massall = array();
-$all = @mysql_query("select * from `count` where time>='" . $ontime . "' GROUP BY `ip`, `browser`;");
+$all = @mysql_query("SELECT * FROM `count` WHERE `time`>='" . $ontime . "' GROUP BY `ip`, `browser`;");
 $all2 = mysql_num_rows($all);
 if (!empty($_SESSION['uid']))
 {
@@ -56,15 +56,14 @@ if (!empty($_SESSION['uid']))
 echo '<div>';
 
 // Выводим параметры Gzip сжатия
-if ($gzip == "1")
+if ($set['gzip'])
 {
     $Contents = ob_get_contents();
     $gzib_file = strlen($Contents);
     $gzib_file_out = strlen(gzcompress($Contents, 9));
     $gzib_pro = round(100 - (100 / ($gzib_file / $gzib_file_out)), 1);
     echo '<center>Cжатие вкл. (' . $gzib_pro . '%)</center>';
-}
-if ($gzip == "0")
+} else
 {
     echo '<center>Cжатие выкл.</center>';
 }
