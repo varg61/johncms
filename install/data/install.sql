@@ -1,30 +1,6 @@
--- phpMyAdmin SQL Dump
--- version 2.11.7
--- http://www.phpmyadmin.net
---
--- Хост: localhost
--- Время создания: Июл 24 2008 г., 16:10
--- Версия сервера: 5.0.45
--- Версия PHP: 5.2.4
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- База данных: `dev_johncms`
---
-
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `chat`
 --
-
 DROP TABLE IF EXISTS `chat`;
 CREATE TABLE `chat` (
   `id` int(11) NOT NULL auto_increment,
@@ -48,12 +24,9 @@ CREATE TABLE `chat` (
   KEY `to` (`to`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `count`
 --
-
 DROP TABLE IF EXISTS `count`;
 CREATE TABLE `count` (
   `id` int(11) NOT NULL auto_increment,
@@ -69,12 +42,9 @@ CREATE TABLE `count` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `download`
 --
-
 DROP TABLE IF EXISTS `download`;
 CREATE TABLE `download` (
   `id` int(11) NOT NULL auto_increment,
@@ -94,12 +64,9 @@ CREATE TABLE `download` (
   KEY `time` (`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `forum`
 --
-
 DROP TABLE IF EXISTS `forum`;
 CREATE TABLE `forum` (
   `id` int(11) NOT NULL auto_increment,
@@ -129,12 +96,9 @@ CREATE TABLE `forum` (
   KEY `moder` (`moder`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `gallery`
 --
-
 DROP TABLE IF EXISTS `gallery`;
 CREATE TABLE `gallery` (
   `id` int(11) NOT NULL auto_increment,
@@ -154,15 +118,13 @@ CREATE TABLE `gallery` (
   KEY `avtor` (`avtor`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `guest`
 --
-
 DROP TABLE IF EXISTS `guest`;
 CREATE TABLE `guest` (
   `id` int(11) NOT NULL auto_increment,
+  `adm` tinyint(1) NOT NULL default '0',
   `time` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `name` varchar(25) NOT NULL,
@@ -176,17 +138,15 @@ CREATE TABLE `guest` (
   `edit_time` int(11) NOT NULL,
   `edit_count` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
+  KEY `adm` (`adm`),
   KEY `soft` (`soft`),
   KEY `time` (`time`),
   KEY `ip` (`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `lib`
 --
-
 DROP TABLE IF EXISTS `lib`;
 CREATE TABLE `lib` (
   `id` int(11) NOT NULL auto_increment,
@@ -208,31 +168,9 @@ CREATE TABLE `lib` (
   KEY `refid` (`refid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Структура таблицы `moder`
---
-
-DROP TABLE IF EXISTS `moder`;
-CREATE TABLE `moder` (
-  `id` int(11) NOT NULL auto_increment,
-  `time` int(11) NOT NULL,
-  `to` varchar(25) NOT NULL default '',
-  `user_id` int(11) NOT NULL,
-  `avtor` varchar(25) NOT NULL default '',
-  `text` text NOT NULL,
-  `ip` text NOT NULL,
-  `soft` text NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `news`
 --
-
 DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `id` int(11) NOT NULL auto_increment,
@@ -244,12 +182,9 @@ CREATE TABLE `news` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `privat`
 --
-
 DROP TABLE IF EXISTS `privat`;
 CREATE TABLE `privat` (
   `id` int(11) NOT NULL auto_increment,
@@ -270,12 +205,9 @@ CREATE TABLE `privat` (
   KEY `ignor` (`ignor`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `settings`
 --
-
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL auto_increment,
@@ -296,12 +228,9 @@ CREATE TABLE `settings` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `users`
 --
-
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
@@ -361,12 +290,9 @@ CREATE TABLE `users` (
   KEY `lastdate` (`lastdate`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Структура таблицы `vik`
 --
-
 DROP TABLE IF EXISTS `vik`;
 CREATE TABLE `vik` (
   `id` int(11) NOT NULL auto_increment,

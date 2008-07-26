@@ -77,17 +77,6 @@ if ($headmod == "mainpage" && !isset($_GET['do']) && $headnews)
 $do = isset($_GET['do']) ? $_GET['do'] : '';
 switch ($do)
 {
-    case 'cab': // Подраздел личного кабинета
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/privat.php">Личная почта</a></div>';
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/anketa.php">Ваша анкета</a></div>';
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/usset.php">Настройки</a></div>';
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/anketa.php?act=statistic">Статистика</a></div>';
-        if ($dostmod == 1)
-        {
-            echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/' . $admp . '/main.php">Админка</a></div>';
-        }
-        break;
-
     case 'info': // Подраздел информации
         echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="str/users.php">Список юзеров</a> (' . kuser() . ')</div>';
         echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="str/brd.php">Именинники</a> (' . brth() . ')</div>';
@@ -95,7 +84,7 @@ switch ($do)
         echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="str/smile.php?">Смайлы</a></div>';
         echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="read.php?">FAQ (ЧаВо)</a></div>';
         $_SESSION['refsm'] = '../index.php?do=info';
-		break;
+        break;
 
     default: // Главное меню
         echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="str/news.php">Все новости</a> (' . dnews() . ')</div>';

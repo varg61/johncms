@@ -23,12 +23,91 @@ $rootpath = '';
 require_once ("incfiles/core.php");
 require_once ("incfiles/head.php");
 
+$mod = isset($_GET['mod']) ? trim($_GET['mod']) : '';
 if (isset($_GET['err']))
+    $mod = 404;
+switch ($mod)
 {
-    echo '<div style="text-align: center">Ошибка 404: файл не найден!!!</div>';
+    case '404':
+        ////////////////////////////////////////////////////////////
+        // Сообщение об ошибке 404                                //
+        ////////////////////////////////////////////////////////////
+        echo '<p>Ошибка 404: файл не найден!!!</p>';
+        break;
+
+    case 'cab':
+        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/privat.php">Личная почта</a></div>';
+        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/anketa.php">Ваша анкета</a></div>';
+        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/usset.php">Настройки</a></div>';
+        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/anketa.php?act=statistic">Статистика</a></div>';
+        if ($dostmod == 1)
+        {
+            echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/' . $admp . '/main.php">Админка</a></div>';
+        }
+        break;
+
+    case 'digest':
+        ////////////////////////////////////////////////////////////
+        // Дайджест                                               //
+        ////////////////////////////////////////////////////////////
+        echo '<p>Привет, ' . $login . ' !<br/>';
+        echo 'Добро пожаловать на ' . $copyright . '!</p><p>';
+        // Поздравление с днем рождения
+        if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon)
+        {
+            echo "<font color = 'red'><b>С ДНЁМ РОЖДЕНИЯ!!!</b></font></p><p>";
+        }
+        // Дата последнего посещения
+        echo 'Последнее посещение: ' . date("d.m.Y (H:i)", $datauser['lastdate']) . '<br /><br />';
+        echo '<b>Новое на сайте:</b><br />';
+        // Новости
+        echo '&nbsp;Новости: ';
+        $total = mysql_num_rows(mysql_query("SELECT * FROM `news` WHERE `time`>'" . $datauser['lastdate'] . "';"));
+        if ($total != 0)
+        {
+            echo $total . '&nbsp;<a href="str/news.php?kv=' . $total . '">&gt;&gt;&gt;</a><br/>';
+        } else
+        {
+            echo " нет.<br/>";
+        }
+        // Форум
+        $lp = mysql_query("select * from `forum` where type='t' and moder='1' and close!='1';");
+        while ($arrt = mysql_fetch_array($lp))
+        {
+            $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt[refid] . "';");
+            $q4 = mysql_fetch_array($q3);
+            $rz = mysql_query("select * from `forum` where type='n' and refid='" . $q4[refid] . "' and `from`='" . $login . "';");
+            $np = mysql_query("select * from `forum` where type='l' and time>='" . $arrt[time] . "' and refid='" . $arrt[id] . "' and `from`='" . $login . "';");
+            if ((mysql_num_rows($np)) != 1 && (mysql_num_rows($rz)) != 1)
+            {
+                $total = $total + 1;
+            }
+        }
+        echo '&nbsp;Форум: ' . ($total != 0 ? $total . '&nbsp;<a href="forum/index.php?act=new">&gt;&gt;&gt;</a><br/>' : 'нет.<br/>');
+        // Гостевая
+        $total = gbook(1);
+        echo '&nbsp;Гостевая: ' . ($total != 0 ? $total . '&nbsp;<a href="str/guest.php?act=ga">&gt;&gt;&gt;</a><br/>' : 'нет.<br/>');
+        // Админ-Клуб
+        $total = gbook(2);
+        echo '&nbsp;Админ-Клуб: ' . ($total != 0 ? $total . '&nbsp;<a href="str/guest.php?act=ga&amp;do=set">&gt;&gt;&gt;</a><br/>' : 'нет.<br/>');
+        // Библиотека
+        $total = stlib(1);
+        echo '&nbsp;Библиотека: ' . ($total != 0 ? $total . '&nbsp;<a href="library/index.php?act=new">&gt;&gt;&gt;</a><br/>' : 'нет.<br/>');
+        // Галерея
+        $total = fgal(1);
+        echo '&nbsp;Галерея: ' . ($total != 0 ? $total . '&nbsp;<a href="gallery/index.php?act=new">&gt;&gt;&gt;</a><br/>' : 'нет.<br/>');
+        // Ссылка на Главную
+        echo '</p><p><a href="index.php">На главную</a>';
+        echo '</p>';
+        break;
+
+    default:
+        ////////////////////////////////////////////////////////////
+        // Главное меню сайта                                     //
+        ////////////////////////////////////////////////////////////
+        include_once 'pages/mainmenu.php';
 }
 
-include "pages/mainmenu.php";
 require_once ("incfiles/end.php");
 
 ?>

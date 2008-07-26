@@ -67,8 +67,7 @@ if ($dostmod == 1)
         default:
             echo '<p><b>Админ Панель</b></p><hr />';
             echo '<p><b>Пользователи</b><br />';
-            echo '&nbsp;- <a href="main.php?do=search">Поиск</a><br/>';
-            echo "&nbsp;- <a href='moderka.php'>Админ чат</a></p>";
+            echo '&nbsp;- <a href="main.php?do=search">Поиск</a></p>';
 
             echo '<p><b>Модули</b><br />';
             echo "&nbsp;- <a href='news.php'>Новости</a><br/>";

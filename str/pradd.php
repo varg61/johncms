@@ -36,6 +36,9 @@ if (!empty($_SESSION['uid']))
     switch ($act)
     {
         case "send":
+            ////////////////////////////////////////////////////////////
+            // Отправка письма и обработка прикрепленного файла       //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $ign = mysql_query("select * from `privat` where me='" . $foruser . "' and ignor='" . $login . "';");
             $ign1 = mysql_num_rows($ign);
@@ -85,7 +88,6 @@ if (!empty($_SESSION['uid']))
                         // Список допустимых расширений файлов.
                         $al_ext = array('rar', 'zip', 'pdf', 'txt', 'tar', 'gz', 'jpg', 'jpeg', 'gif', 'png', 'bmp', '3gp', 'mp3', 'mpg', 'sis', 'thm', 'jar', 'jad');
                         $ext = explode(".", $fname);
-
                         // Проверка на допустимый размер файла
                         if ($fsize >= 1024 * $flsz)
                         {
@@ -94,7 +96,6 @@ if (!empty($_SESSION['uid']))
                             require_once ('../incfiles/end.php');
                             exit;
                         }
-
                         // Проверка файла на наличие только одного расширения
                         if (count($ext) != 2)
                         {
@@ -105,7 +106,6 @@ if (!empty($_SESSION['uid']))
                             require_once ('../incfiles/end.php');
                             exit;
                         }
-
                         // Проверка допустимых расширений файлов
                         if (!in_array($ext[1], $al_ext))
                         {
@@ -116,7 +116,6 @@ if (!empty($_SESSION['uid']))
                             require_once ('../incfiles/end.php');
                             exit;
                         }
-
                         // Проверка на длину имени
                         if (strlen($fname) > 30)
                         {
@@ -125,7 +124,6 @@ if (!empty($_SESSION['uid']))
                             require_once ('../incfiles/end.php');
                             exit;
                         }
-
                         // Проверка на запрещенные символы
                         if (eregi("[^a-z0-9.()+_-]", $fname))
                         {
@@ -135,13 +133,11 @@ if (!empty($_SESSION['uid']))
                             require_once ('../incfiles/end.php');
                             exit;
                         }
-
                         // Проверка наличия файла с таким же именем
                         if (file_exists("../pratt/$fname"))
                         {
-                        	$fname = $realtime . $fname;
+                            $fname = $realtime . $fname;
                         }
-
                         // Окончательная обработка
                         if ($do_file)
                         {
@@ -182,7 +178,6 @@ if (!empty($_SESSION['uid']))
                             }
                         }
                     }
-
                     mysql_query("insert into `privat` values(0,'" . $foruser . "','" . $msg . "','" . $realtime . "','" . $login . "','in','no','" . $tem . "','0','','','','" . mysql_real_escape_string($fname) . "');");
                     mysql_query("insert into `privat` values(0,'" . $foruser . "','" . $msg . "','" . $realtime . "','" . $login . "','out','no','" . $tem . "','0','','','','" . mysql_real_escape_string($fname) . "');");
                     if (!empty($idm))
@@ -206,10 +201,13 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "load":
-            $id = intval(check($_GET['id']));
+            ////////////////////////////////////////////////////////////
+            // Скачивание файла                                       //
+            ////////////////////////////////////////////////////////////
+            $id = intval($_GET['id']);
             $fil = mysql_query("select * from `privat` where id='" . $id . "';");
             $mas = mysql_fetch_array($fil);
-            $att = $mas[attach];
+            $att = $mas['attach'];
             if (!empty($att))
             {
                 $tfl = strtolower(format(trim($att)));
@@ -228,7 +226,10 @@ if (!empty($_SESSION['uid']))
             }
             break;
 
-        case "write": // Форма для отправки привата
+        case "write":
+            ////////////////////////////////////////////////////////////
+            // Форма для отправки привата                             //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             if (!empty($_GET['adr']))
             {
@@ -250,10 +251,10 @@ if (!empty($_SESSION['uid']))
             }
             if (!empty($_GET['id']))
             {
-                $id = intval(check($_GET['id']));
+                $id = intval($_GET['id']);
                 $messages2 = mysql_query("select * from `privat` where id='" . $id . "';");
                 $tm = mysql_fetch_array($messages2);
-                $thm = $tm[temka];
+                $thm = $tm['temka'];
                 if (stristr($thm, "Re:"))
                 {
                     $thm = str_replace("Re:", "", $thm);
@@ -297,6 +298,9 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "delch":
+            ////////////////////////////////////////////////////////////
+            // Удаление выбранных писем                               //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             if (isset($_GET['yes']))
             {
@@ -317,7 +321,7 @@ if (!empty($_SESSION['uid']))
                 }
                 foreach ($_POST['delch'] as $v)
                 {
-                    $dc[] = intval(check($v));
+                    $dc[] = intval($v);
                 }
 
                 $_SESSION['dc'] = $dc;
@@ -327,6 +331,9 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "in":
+            ////////////////////////////////////////////////////////////
+            // Список входящих писем                                  //
+            ////////////////////////////////////////////////////////////
             $headmod = 'pradd';
             require_once ("../incfiles/head.php");
             if (isset($_GET['new']))
@@ -371,19 +378,19 @@ if (!empty($_SESSION['uid']))
                     {
                         $div = "<div class='b'>";
                     }
-                    $mas = mysql_fetch_array(@mysql_query("select * from `users` where `name`='" . $massiv[author] . "';"));
-                    echo "$div<input type='checkbox' name='delch[]' value='" . $massiv[id] . "'/><a href='pradd.php?id=" . $massiv[id] . "&amp;act=readmess'>От $massiv[author]</a>";
-                    $vrp = $massiv[time] + $sdvig * 3600;
+                    $mas = mysql_fetch_array(@mysql_query("select * from `users` where `name`='" . $massiv['author'] . "';"));
+                    echo "$div<input type='checkbox' name='delch[]' value='" . $massiv['id'] . "'/><a href='pradd.php?id=" . $massiv['id'] . "&amp;act=readmess'>От $massiv[author]</a>";
+                    $vrp = $massiv['time'] + $sdvig * 3600;
                     echo "(" . date("d.m.y H:i", $vrp) . ")<br/>Тема: $massiv[temka]<br/>";
-                    if (!empty($massiv[attach]))
+                    if (!empty($massiv['attach']))
                     {
                         echo "+ вложение<br/>";
                     }
-                    if ($massiv[chit] == "no")
+                    if ($massiv['chit'] == "no")
                     {
                         echo "Не прочитано<br/>";
                     }
-                    if ($massiv[otvet] == 0)
+                    if ($massiv['otvet'] == 0)
                     {
                         echo "Не отвечено<br/>";
                     }
@@ -482,12 +489,15 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "delread":
+            ////////////////////////////////////////////////////////////
+            // Удаление прочитанных писем                             //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $mess1 = mysql_query("select * from `privat` where user='" . $login . "' and type='in' and chit='yes';");
             while ($mas1 = mysql_fetch_array($mess1))
             {
-                $delid = $mas1[id];
-                $delfile = $mas1[attach];
+                $delid = $mas1['id'];
+                $delfile = $mas1['attach'];
                 if (!empty($delfile))
                 {
                     if (file_exists("../pratt/$delfile"))
@@ -501,12 +511,15 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "delin":
+            ////////////////////////////////////////////////////////////
+            // Удаление всех входящих писем                           //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $mess1 = mysql_query("select * from `privat` where user='" . $login . "' and type='in';");
             while ($mas1 = mysql_fetch_array($mess1))
             {
-                $delid = $mas1[id];
-                $delfile = $mas1[attach];
+                $delid = $mas1['id'];
+                $delfile = $mas1['attach'];
                 if (!empty($delfile))
                 {
                     if (file_exists("../pratt/$delfile"))
@@ -520,11 +533,14 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "readmess":
+            ////////////////////////////////////////////////////////////
+            // Читаем входящие письма                                 //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
-            $id = intval(check($_GET['id']));
+            $id = intval($_GET['id']);
             $messages1 = mysql_query("select * from `privat` where user='" . $login . "' and type='in' and id='" . $id . "';");
             $massiv1 = mysql_fetch_array($messages1);
-            if ($massiv1[chit] == "no")
+            if ($massiv1['chit'] == "no")
             {
                 mysql_query("update `privat` set `chit`='yes' where `id`='" . $massiv1['id'] . "';");
             }
@@ -534,55 +550,45 @@ if (!empty($_SESSION['uid']))
             {
                 echo "<div style='text-align: center'><a href='$home/str/pradd.php?act=in&amp;new'><b><font color='red'>Вам письмо: $countnew</font></b></a></div>";
             }
-            $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='" . $massiv1[author] . "';"));
-            $massiv1[text] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $massiv1[text]);
-            $massiv1[text] = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $massiv1[text]);
-
-            if (stristr($massiv1[text], "<a href="))
-            {
-                $massiv1[text] = eregi_replace("\\<a href\\='((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)'>[[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)</a>",
-                    "<a href='\\1\\3'>\\3</a>", $massiv1[text]);
-            } else
-            {
-                $massiv1[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $massiv1[text]);
-            }
+            $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='" . $massiv1['author'] . "';"));
+            $text = $massiv1['text'];
+            $text = tags($text);
             if ($offsm != 1 && $offgr != 1)
             {
-                $tekst = smiles($massiv1[text]);
-                $tekst = smilescat($tekst);
-
-                if ($massiv1[from] == nickadmina || $massiv1[from] == nickadmina2 || $massiv11[rights] >= 1)
+                $text = smiles($text);
+                $text = smilescat($text);
+                if ($massiv1['from'] == nickadmina || $massiv1['from'] == nickadmina2 || $massiv11['rights'] >= 1)
                 {
-                    $tekst = smilesadm($tekst);
+                    $text = smilesadm($text);
                 }
-            } else
-            {
-                $tekst = $massiv1[text];
             }
-            echo "От <a href='anketa.php?user=" . $mass[id] . "'>$massiv1[author]</a><br/>";
-            $vrp = $massiv1[time] + $sdvig * 3600;
-            echo "(" . date("d.m.y H:i", $vrp) . ")<br/><div class='b'>Тема: $massiv1[temka]<br/></div><div class='c'>Текст: $tekst</div>";
-            if (!empty($massiv1[attach]))
+            echo "<p>От <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
+            $vrp = $massiv1['time'] + $sdvig * 3600;
+            echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
+            if (!empty($massiv1['attach']))
             {
-                echo "Прикреплённый файл: <a href='?act=load&amp;id=" . $id . "'>$massiv1[attach]</a><br/>";
+                echo "<p>Прикреплённый файл: <a href='?act=load&amp;id=" . $id . "'>$massiv1[attach]</a></p>";
             }
-            echo "<a href='pradd.php?act=write&amp;adr=" . $mass[id] . "&amp;id=" . $massiv1[id] . "'>Ответить</a><br/><a href='pradd.php?act=delmess&amp;del=" . $massiv1[id] . "'>Удалить</a>";
+            echo "<hr /><p><a href='pradd.php?act=write&amp;adr=" . $mass['id'] . "&amp;id=" . $massiv1['id'] . "'>Ответить</a><br/><a href='pradd.php?act=delmess&amp;del=" . $massiv1['id'] . "'>Удалить</a></p>";
             $mas2 = mysql_fetch_array(@mysql_query("select * from `privat` where `time`='$massiv1[time]' and author='$massiv1[author]' and type='out';"));
-            if ($mas2[chit] == "no")
+            if ($mas2['chit'] == "no")
             {
                 mysql_query("update `privat` set `chit`='yes' where `id`='" . $mas2['id'] . "';");
             }
-            if ($massiv1[chit] == "no")
+            if ($massiv1['chit'] == "no")
             {
                 mysql_query("update `privat` set `chit`='yes' where `id`='" . $massiv1['id'] . "';");
             }
             break;
 
         case "delmess":
+            ////////////////////////////////////////////////////////////
+            // Удаление отдельного сообщения                          //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $mess1 = mysql_query("select * from `privat` where id='" . intval($_GET['del']) . "' and type='in';");
             $mas1 = mysql_fetch_array($mess1);
-            $delfile = $mas1[attach];
+            $delfile = $mas1['attach'];
             if (!empty($delfile))
             {
                 if (file_exists("../pratt/$delfile"))
@@ -595,6 +601,9 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "delout":
+            ////////////////////////////////////////////////////////////
+            // Удаление отправленных писем                            //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $mess1 = mysql_query("select * from `privat` where author='$login' and type='out';");
             while ($mas1 = mysql_fetch_array($mess1))
@@ -606,6 +615,9 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "out":
+            ////////////////////////////////////////////////////////////
+            // Список отправленных                                    //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $messages = mysql_query("select * from `privat` where author='" . $login . "' and type='out' order by time desc;");
             echo "Исходящие<br/>";
@@ -642,17 +654,17 @@ if (!empty($_SESSION['uid']))
                     {
                         $div = "<div class='b'>";
                     }
-                    $vpr = $massiv[time] + $sdvig * 3600;
-                    echo "$div<input type='checkbox' name='delch[]' value='" . $massiv[id] . "'/><a href='pradd.php?act=readout&amp;id=" . $massiv[id] . "'>Для: $massiv[user]</a> (" . date("d.m.y H:i", $vpr) . ")<br/>Тема: $massiv[temka]<br/>";
-                    if (!empty($massiv[attach]))
+                    $vpr = $massiv['time'] + $sdvig * 3600;
+                    echo "$div<input type='checkbox' name='delch[]' value='" . $massiv['id'] . "'/><a href='pradd.php?act=readout&amp;id=" . $massiv['id'] . "'>Для: $massiv[user]</a> (" . date("d.m.y H:i", $vpr) . ")<br/>Тема: $massiv[temka]<br/>";
+                    if (!empty($massiv['attach']))
                     {
                         echo "+ вложение<br/>";
                     }
-                    if ($massiv[chit] == "no")
+                    if ($massiv['chit'] == "no")
                     {
                         echo "Не прочитано<br/>";
                     }
-                    echo "<a href='pradd.php?act=delmess&amp;del=" . $massiv[id] . "'>Удалить</a></div>";
+                    echo "<a href='pradd.php?act=delmess&amp;del=" . $massiv['id'] . "'>Удалить</a></div>";
                 }
                 ++$i;
             }
@@ -746,42 +758,33 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "readout":
+            ////////////////////////////////////////////////////////////
+            // Читаем исходящие письма                                //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
-            $id = intval(check($_GET['id']));
+            $id = intval($_GET['id']);
             $messages1 = mysql_query("select * from `privat` where author='" . $login . "' and type='out' and id='" . $id . "';");
             $massiv1 = mysql_fetch_array($messages1);
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='$massiv1[user]';"));
-            $massiv1[text] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $massiv1[text]);
-            $massiv1[text] = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $massiv1[text]);
-            if (stristr($massiv1[text], "<a href="))
-            {
-                $massiv1[text] = eregi_replace("\\<a href\\='((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)'>[[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)</a>",
-                    "<a href='\\1\\3'>\\3</a>", $massiv1[text]);
-            } else
-            {
-                $massiv1[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $massiv1[text]);
-            }
+            $text = $massiv1['text'];
+            $text = tags($text);
             if ($offsm != 1 && $offgr != 1)
             {
-                $tekst = smiles($massiv1[text]);
-                $tekst = smilescat($tekst);
-
-                if ($massiv1[from] == nickadmina || $massiv1[from] == nickadmina2 || $massiv11[rights] >= 1)
+                $text = smiles($text);
+                $text = smilescat($text);
+                if ($massiv1['from'] == nickadmina || $massiv1['from'] == nickadmina2 || $massiv11['rights'] >= 1)
                 {
-                    $tekst = smilesadm($tekst);
+                    $text = smilesadm($text);
                 }
-            } else
-            {
-                $tekst = $massiv1[text];
             }
-            echo "Для <a href='anketa.php?user=" . $mass[id] . "'>$massiv1[user]</a><br/>";
+            echo "<p>Для <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
             $vrp = $massiv1[time] + $sdvig * 3600;
-            echo "(" . date("d.m.y H:i", $vrp) . ")<br/><div class='b'>Тема: $massiv1[temka]<br/></div><div class='c'>Текст: $tekst</div>";
-            if (!empty($massiv1[attach]))
+            echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
+            if (!empty($massiv1['attach']))
             {
-                echo "Прикреплённый файл: $massiv1[attach]<br/>";
+                echo "<p>Прикреплённый файл: $massiv1[attach]</p>";
             }
-            echo "<a href='pradd.php?act=delmess&amp;del=" . $massiv1[id] . "'>Удалить</a>";
+            echo "<hr /><p><a href='pradd.php?act=delmess&amp;del=" . $massiv1['id'] . "'>Удалить</a></p>";
             break;
         case "trans":
             require_once ("../incfiles/head.php");
@@ -789,8 +792,8 @@ if (!empty($_SESSION['uid']))
             echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
             break;
     }
-    echo "<br/><a href='privat.php'>В письма</a><br/>";
-    echo "<a href='pradd.php?act=write'>Написать</a><br/>";
+    echo "<p><a href='privat.php'>В письма</a><br/>";
+    echo "<a href='pradd.php?act=write'>Написать</a></p>";
 }
 
 require_once ('../incfiles/end.php');
