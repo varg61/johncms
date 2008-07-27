@@ -101,7 +101,8 @@ switch ($_GET['act'])
 			`copyright`='" . mysql_real_escape_string($cop) . "',
 			`homeurl`='" . mysql_real_escape_string($hom) . "',
 			`admp`='panel',
-			`rashstr`='txt'
+			`rashstr`='txt',
+			`flsz`='1000'
 			;") or die('Ошибка импорта настроек</body></html>');
             echo '<span class="green">OK</span> - настройки импортированы<br />';
 
