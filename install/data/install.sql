@@ -159,7 +159,7 @@ CREATE TABLE `lib` (
   `text` mediumtext NOT NULL,
   `ip` int(11) NOT NULL,
   `soft` text NOT NULL,
-  `moder` binary(1) NOT NULL default '\0',
+  `moder` tinyint(1) NOT NULL default '0',
   `count` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `type` (`type`),
