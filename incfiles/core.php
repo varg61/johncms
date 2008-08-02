@@ -75,7 +75,6 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect t
 ////////////////////////////////////////////////////////////
 // Проверяем адрес IP на Бан                              //
 ////////////////////////////////////////////////////////////
-/*
 $req = mysql_query("SELECT `ban_type`, `link` FROM `ban_ip` WHERE `ip`='" . $ipl . "';") or die('Error: table "ban_ip"');
 if (mysql_num_rows($req) != 0)
 {
@@ -106,7 +105,6 @@ if (mysql_num_rows($req) != 0)
             exit;
     }
 }
-*/
 
 ////////////////////////////////////////////////////////////
 // Основные настройки системы                             //

@@ -19,8 +19,15 @@ $textl = 'Регистрация';
 $rootpath = '';
 require_once ("incfiles/core.php");
 require_once ("incfiles/head.php");
-echo '<b>РЕГИСТРАЦИЯ</b><hr />';
 
+if ($regban)
+{
+	echo '<p>Регистрация временно закрыта.</p>';
+	require_once ("incfiles/end.php");
+	exit;
+}
+
+echo '<div class="phdr">Регистрация на сайте</div>';
 function regform()
 {
     $cod = rand(1000, 9999);

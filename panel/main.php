@@ -66,16 +66,17 @@ if ($dostmod == 1)
 
         default:
             echo '<div class="phdr">Админ Панель</div>';
-			echo '<div class="bmenu">Пользователи</div>';
+			echo '<div class="rmenu">Пользователи</div>';
             echo '<div class="menu"><a href="main.php?do=search">Поиск</a></div>';
-            echo '<div class="bmenu">Модули</div>';
+            echo '<div class="rmenu">Модули</div>';
             echo '<div class="menu"><a href="news.php">Новости</a></div>';
             echo '<div class="menu"><a href="forum.php">Форум</a></div>';
             echo '<div class="menu"><a href="chat.php">Чат</a></div>';
             if ($dostadm == 1)
             {
-                echo '<div class="bmenu">Система</div>';
-                echo '<div class="menu"><a href="set.php">Настройки</a></div>';
+                echo '<div class="rmenu">Система</div>';
+                echo '<div class="menu"><a href="ipban.php">Бан по IP</a></div>';
+				echo '<div class="menu"><a href="set.php">Настройки</a></div>';
             }
     }
 } else

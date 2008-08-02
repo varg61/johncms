@@ -1,4 +1,18 @@
 --
+-- Структура таблицы `ban_ip`
+--
+DROP TABLE IF EXISTS `ban_ip`;
+CREATE TABLE `ban_ip` (
+  `ip` int(11) NOT NULL default '0',
+  `ban_type` tinyint(4) NOT NULL default '0',
+  `link` varchar(100) NOT NULL,
+  `who` varchar(25) NOT NULL,
+  `reason` text NOT NULL,
+  `date` int(11) NOT NULL,
+  PRIMARY KEY  (`ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
 -- Структура таблицы `chat`
 --
 DROP TABLE IF EXISTS `chat`;
