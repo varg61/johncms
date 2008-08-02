@@ -28,28 +28,24 @@ if ($dostadm == 1)
     switch ($act)
     {
         case "set":
-            $nadm = check($_POST['nadm']);
-            $nadm2 = check($_POST['nadm2']);
-            $madm = htmlspecialchars($_POST['madm']);
-            $sdv = check($_POST['sdvigclock']);
-            $cop = check($_POST['copyright']);
-            $url = check($_POST['homeurl']);
-            mysql_query("UPDATE `settings` SET
-			`nickadmina2`='" . $nadm2 . "',
-			`nickadmina`='" . $nadm . "',
-			`emailadmina`='" . $madm . "',
-			`sdvigclock`='" . $sdv . "',
-			`copyright`='" . $cop . "',
-			`homeurl`='" . $url . "',
-			`rashstr`='" . mysql_real_escape_string(trim($_POST['rashstr'])) . "',
-			`admp`='" . mysql_real_escape_string(trim($_POST['admp'])) . "',
-			`flsz`='" . intval(trim($_POST['flsz'])) . "',
-			`gzip`='" . intval(trim($_POST['gz'])) . "',
-			`fmod`='" . intval(trim($_POST['fm'])) . "',
-			`gb`='" . intval(trim($_POST['gb'])) . "',
-			`rmod`='" . intval(trim($_POST['rm'])) . "'
-			WHERE `id`='1'
-			;");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['nadm']) . "' WHERE `key`='nickadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(htmlspecialchars($_POST['madm'])) . "' WHERE `key`='emailadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['nadm2']) . "' WHERE `key`='nickadmina2';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['sdvigclock']) . "' WHERE `key`='sdvigclock';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['copyright']) . "' WHERE `key`='copyright';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['homeurl']) . "' WHERE `key`='homeurl';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(trim($_POST['rashstr'])) . "' WHERE `key`='rashstr';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(trim($_POST['admp'])) . "' WHERE `key`='admp';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['flsz']) . "' WHERE `key`='flsz';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['gz']) . "' WHERE `key`='gzip';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['fm']) . "' WHERE `key`='fmod';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['gb']) . "' WHERE `key`='gb';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['rm']) . "' WHERE `key`='rmod';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['nadm']) . "' WHERE `key`='nickadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['nadm']) . "' WHERE `key`='nickadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['nadm']) . "' WHERE `key`='nickadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['nadm']) . "' WHERE `key`='nickadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['nadm']) . "' WHERE `key`='nickadmina';");
             header("location: set.php?set");
             break;
 

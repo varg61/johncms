@@ -220,27 +220,33 @@ CREATE TABLE `privat` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
--- Структура таблицы `settings`
+-- Структура таблицы `cms_settings`
 --
-DROP TABLE IF EXISTS `settings`;
-CREATE TABLE `settings` (
-  `id` int(11) NOT NULL auto_increment,
-  `nickadmina` varchar(25) NOT NULL,
-  `emailadmina` varchar(40) NOT NULL,
-  `nickadmina2` varchar(25) NOT NULL,
-  `sdvigclock` tinyint(4) NOT NULL default '0',
-  `copyright` varchar(100) NOT NULL,
-  `homeurl` varchar(150) NOT NULL,
-  `rashstr` varchar(10) NOT NULL,
-  `admp` varchar(25) NOT NULL,
-  `flsz` int(4) NOT NULL,
-  `gzip` tinyint(1) NOT NULL default '0',
-  `rmod` tinyint(1) NOT NULL default '0',
-  `fmod` tinyint(1) NOT NULL default '0',
-  `gb` tinyint(1) NOT NULL default '0',
-  `clean_time` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `cms_settings`;
+CREATE TABLE `cms_settings` (
+  `key` tinytext NOT NULL,
+  `val` text NOT NULL,
+  PRIMARY KEY  (`key`(30))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `cms_settings`
+--
+INSERT INTO `cms_settings` (`key`, `val`) VALUES
+('nickadmina', ''),
+('emailadmina', ''),
+('nickadmina2', ''),
+('sdvigclock', '0'),
+('copyright', ''),
+('homeurl', ''),
+('rashstr', 'txt'),
+('admp', 'panel'),
+('flsz', '1000'),
+('gzip', '0'),
+('rmod', '0'),
+('fmod', '0'),
+('gb', '0'),
+('clean_time', '0');
 
 --
 -- Структура таблицы `users`

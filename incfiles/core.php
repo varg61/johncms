@@ -122,8 +122,11 @@ $dostfmod = 0;
 $dostcmod = 0;
 $dostkmod = 0;
 $dostmod = 0;
-$req = mysql_query("select * from `settings`;");
-$set = mysql_fetch_array($req);
+$req = mysql_query("SELECT * FROM `cms_settings`;");
+$set = array();
+while ($res = mysql_fetch_row($req))
+    $set[$res[0]] = $res[1];
+mysql_free_result($req);
 $nickadmina = $set['nickadmina']; // Ник 1-го админа
 $nickadmina2 = $set['nickadmina2']; // Ник 2-го (скрытого) админа
 $emailadmina = $set['emailadmina']; // E-mail администратора
@@ -132,11 +135,7 @@ $copyright = $set['copyright']; // Коприайт сайта
 $home = $set['homeurl']; // Домашняя страница
 $ras_pages = $set['rashstr']; // Расширение текстовых страниц
 $admp = $set['admp']; // Папка с Админкой
-$fmod = $set['fmod']; // Премодерация форума
-$rmod = $set['rmod']; // Премодерация регистраций в системе
 $flsz = $set['flsz']; // Максимальный размер файлов
-mysql_free_result($req);
-
 // Дата и время
 $realtime = time() + $sdvigclock * 3600;
 $mon = date("m", $realtime);
@@ -159,7 +158,7 @@ if ($set['clean_time'] <= ($realtime - 43200))
     // Очищаем таблицу "count"
     mysql_query("delete from `count` where `time`<='" . ($realtime - 600) . "';");
     mysql_query("OPTIMIZE TABLE `count`;");
-    mysql_query("update `settings` set  `clean_time`='" . $realtime . "';");
+    mysql_query("UPDATE `cms_settings` SET  `val`='" . $realtime . "' WHERE `key`='clean_time';");
 }
 
 ////////////////////////////////////////////////////////////
@@ -249,7 +248,7 @@ if ($user_id && $user_ps)
 
             // Устанавливаем время начала сессии
             if ($datauser['lastdate'] <= ($realtime - 300))
-                mysql_query("update `users` set `sestime`='" . $realtime . "' where `id`='" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `sestime`='" . $realtime . "' WHERE `id`='" . $user_id . "';");
 
             // Обновляем данные
             $totalonsite = $datauser['total_on_site'];

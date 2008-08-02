@@ -2,8 +2,19 @@
 -- Удаляем ненужные таблицы
 --
 DROP TABLE IF EXISTS `ban`;
-DROP TABLE IF EXISTS `ban_ip`;
 DROP TABLE IF EXISTS `moder`;
+
+
+--
+-- Создаем таблицу настроек
+--
+DROP TABLE IF EXISTS `cms_settings`;
+CREATE TABLE `cms_settings` (
+  `key` tinytext character set utf8 NOT NULL,
+  `val` text character set utf8 NOT NULL,
+  PRIMARY KEY  (`key`(30))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 --
 -- Создаем таблицу `ban_ip`

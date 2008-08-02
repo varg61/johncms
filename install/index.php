@@ -75,7 +75,6 @@ switch ($_GET['act'])
             $hom = trim($_POST[whome]);
             $brow = $_SERVER["HTTP_USER_AGENT"];
             $ip = $_SERVER["REMOTE_ADDR"];
-            $cop = trim($_POST['wcopyright']);
 
             // Настройка администратора
             mysql_query("insert into `users` set
@@ -95,15 +94,10 @@ switch ($_GET['act'])
             echo '<span class="green">OK</span> - администратор настроен<br />';
 
             // Импорт настроек
-            mysql_query("INSERT INTO `settings` SET
-			`nickadmina`='" . mysql_real_escape_string($log) . "',
-			`emailadmina`='" . mysql_real_escape_string($meil) . "',
-			`copyright`='" . mysql_real_escape_string($cop) . "',
-			`homeurl`='" . mysql_real_escape_string($hom) . "',
-			`admp`='panel',
-			`rashstr`='txt',
-			`flsz`='1000'
-			;") or die('Ошибка импорта настроек</body></html>');
+            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($log) . "' WHERE `key`='nickadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($meil) . "' WHERE `key`='emailadmina';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(trim($_POST['wcopyright'])) . "' WHERE `key`='copyright';");
+            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($hom) . "' WHERE `key`='homeurl';");
             echo '<span class="green">OK</span> - настройки импортированы<br />';
 
             // Импорт вопросов Викторины
