@@ -55,12 +55,12 @@ if ($dostadm == 1)
 
         default:
             require_once ("../incfiles/head.php");
+            echo '<div class="phdr">Настройка системы</div>';
             if (isset($_GET['set']))
             {
                 echo "<div style='color: red'>Сайт настроен</div>";
             }
-            echo '<b>АДМИН ПАНЕЛЬ</b><br />Настройка системы<hr/>';
-            echo '<br />Время на сервере: ' . date("H.i(d/m/Y)") . '<br /><br />';
+            echo '<p>Время на сервере: ' . date("H.i(d/m/Y)") . '</p>';
             $setdata = array("rashstr" => "Расширение страниц:");
             echo "<form method='post' action='set.php?act=set'>";
             if ($dostsadm == 1)

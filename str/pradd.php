@@ -26,7 +26,7 @@ if ($_POST[msgtrans] == 1)
 }
 $foruser = check(trim($_POST['foruser']));
 $tem = check(trim($_POST['tem']));
-$idm = intval(trim($_POST['idm']));
+$idm = intval($_POST['idm']);
 if (!empty($_SESSION['uid']))
 {
     if (!empty($_GET['act']))
@@ -35,7 +35,7 @@ if (!empty($_SESSION['uid']))
     }
     switch ($act)
     {
-        case "send":
+        case 'send':
             ////////////////////////////////////////////////////////////
             // Отправка письма и обработка прикрепленного файла       //
             ////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ if (!empty($_SESSION['uid']))
             }
             break;
 
-        case "load":
+        case 'load':
             ////////////////////////////////////////////////////////////
             // Скачивание файла                                       //
             ////////////////////////////////////////////////////////////
@@ -226,7 +226,7 @@ if (!empty($_SESSION['uid']))
             }
             break;
 
-        case "write":
+        case 'write':
             ////////////////////////////////////////////////////////////
             // Форма для отправки привата                             //
             ////////////////////////////////////////////////////////////
@@ -297,7 +297,7 @@ if (!empty($_SESSION['uid']))
             echo "<a href='pradd.php?act=trans'>Транслит</a><br/><a href='smile.php'>Смайлы</a><br/>";
             break;
 
-        case "delch":
+        case 'delch':
             ////////////////////////////////////////////////////////////
             // Удаление выбранных писем                               //
             ////////////////////////////////////////////////////////////
@@ -330,7 +330,7 @@ if (!empty($_SESSION['uid']))
             }
             break;
 
-        case "in":
+        case 'in':
             ////////////////////////////////////////////////////////////
             // Список входящих писем                                  //
             ////////////////////////////////////////////////////////////
@@ -340,11 +340,11 @@ if (!empty($_SESSION['uid']))
             {
                 $_SESSION['refpr'] = htmlspecialchars(getenv("HTTP_REFERER"));
                 $messages = mysql_query("select * from `privat` where user='" . $login . "' and type='in' and chit='no' order by time desc;");
-                echo "Новые входящие<br/>";
+                echo '<div class="phdr">Новые входящие</div>';
             } else
             {
                 $messages = mysql_query("select * from `privat` where user='" . $login . "' and type='in' order by time desc;");
-                echo "<div style='text-align: center'>Входящие</div>";
+                echo '<div class="phdr">Входящие письма</div>';
             }
             echo "<form action='pradd.php?act=delch' method='post'>";
             $count = mysql_num_rows($messages);
@@ -398,10 +398,9 @@ if (!empty($_SESSION['uid']))
                 }
                 ++$i;
             }
+            echo "<hr/>";
             if ($count > $kmess)
             {
-                echo "<hr/>";
-
                 $ba = ceil($count / $kmess);
                 if ($offpg != 1)
                 {
@@ -488,7 +487,7 @@ if (!empty($_SESSION['uid']))
             }
             break;
 
-        case "delread":
+        case 'delread':
             ////////////////////////////////////////////////////////////
             // Удаление прочитанных писем                             //
             ////////////////////////////////////////////////////////////
@@ -510,7 +509,7 @@ if (!empty($_SESSION['uid']))
             echo "Прочитанные письма удалены<br/>";
             break;
 
-        case "delin":
+        case 'delin':
             ////////////////////////////////////////////////////////////
             // Удаление всех входящих писем                           //
             ////////////////////////////////////////////////////////////
@@ -532,7 +531,7 @@ if (!empty($_SESSION['uid']))
             echo "Входящие письма удалены<br/>";
             break;
 
-        case "readmess":
+        case 'readmess':
             ////////////////////////////////////////////////////////////
             // Читаем входящие письма                                 //
             ////////////////////////////////////////////////////////////
@@ -581,7 +580,7 @@ if (!empty($_SESSION['uid']))
             }
             break;
 
-        case "delmess":
+        case 'delmess':
             ////////////////////////////////////////////////////////////
             // Удаление отдельного сообщения                          //
             ////////////////////////////////////////////////////////////
@@ -600,7 +599,7 @@ if (!empty($_SESSION['uid']))
             echo "Сообщение удалено!<br/>";
             break;
 
-        case "delout":
+        case 'delout':
             ////////////////////////////////////////////////////////////
             // Удаление отправленных писем                            //
             ////////////////////////////////////////////////////////////
@@ -614,13 +613,13 @@ if (!empty($_SESSION['uid']))
             echo "Исходящие письма удалены<br/>";
             break;
 
-        case "out":
+        case 'out':
             ////////////////////////////////////////////////////////////
             // Список отправленных                                    //
             ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $messages = mysql_query("select * from `privat` where author='" . $login . "' and type='out' order by time desc;");
-            echo "Исходящие<br/>";
+            echo '<div class="phdr">Исходящие письма</div>';
             echo "<form action='pradd.php?act=delch' method='post'>";
             $count = mysql_num_rows($messages);
             if (empty($_GET['page']))
@@ -664,14 +663,13 @@ if (!empty($_SESSION['uid']))
                     {
                         echo "Не прочитано<br/>";
                     }
-                    echo "<a href='pradd.php?act=delmess&amp;del=" . $massiv['id'] . "'>Удалить</a></div>";
+                    echo '</div>';
                 }
                 ++$i;
             }
+            echo '<hr/>';
             if ($count > $kmess)
             {
-                echo "<hr/>";
-
                 $ba = ceil($count / $kmess);
                 if ($offpg != 1)
                 {
@@ -757,7 +755,7 @@ if (!empty($_SESSION['uid']))
             }
             break;
 
-        case "readout":
+        case 'readout':
             ////////////////////////////////////////////////////////////
             // Читаем исходящие письма                                //
             ////////////////////////////////////////////////////////////
@@ -786,7 +784,7 @@ if (!empty($_SESSION['uid']))
             }
             echo "<hr /><p><a href='pradd.php?act=delmess&amp;del=" . $massiv1['id'] . "'>Удалить</a></p>";
             break;
-        case "trans":
+        case 'trans':
             require_once ("../incfiles/head.php");
             include ("../pages/trans.$ras_pages");
             echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';

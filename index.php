@@ -36,13 +36,15 @@ switch ($mod)
         break;
 
     case 'cab':
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/privat.php">Личная почта</a></div>';
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/anketa.php">Ваша анкета</a></div>';
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/usset.php">Настройки</a></div>';
-        echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/str/anketa.php?act=statistic">Статистика</a></div>';
+        echo '<div class="phdr">Личный кабинет</div>';
+        echo '<div class="gmenu"><a href="str/privat.php">Личная почта</a></div>';
+        echo '<div class="menu"><a href="str/anketa.php">Ваша анкета</a></div>';
+        echo '<div class="menu"><a href="str/usset.php">Настройки</a></div>';
+        echo '<div class="menu"><a href="str/anketa.php?act=statistic">Статистика</a></div>';
         if ($dostmod == 1)
         {
-            echo '<div class="menu"><img alt="" src="images/arrow.gif" width="7" height="12" />&nbsp;<a href="' . $home . '/' . $admp . '/main.php">Админка</a></div>';
+            echo '<div class="rmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a></div>';
+			echo '<div class="rmenu"><a href="' . $admp . '/main.php">Админка</a></div>';
         }
         break;
 

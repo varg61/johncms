@@ -20,7 +20,7 @@ $headmod = "news";
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-echo '<p><b>Новости ресурса</b></p><hr />';
+echo '<div class="phdr">Новости ресурса</div>';
 $nw = mysql_query("select * from `news` order by `time` desc;");
 if (!empty($_GET['kv']))
 {

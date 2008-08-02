@@ -53,8 +53,8 @@ if ($dostmod == 1)
             break;
 
         case "search":
-            echo '<b>АДМИН ПАНЕЛЬ</b><br />Поиск юзера<hr />';
-            echo '<br />Кого ищем?:<br/>';
+            echo '<div class="phdr">Поиск юзера</div>';
+			echo '<br />Кого ищем?:<br/>';
             echo '<form action="main.php?do=users" method="post">';
             echo '<input type="text" name="user"/><br/>';
             echo '<input name="term" type="radio" value="0" checked="checked" />Поиск по Нику<br />';
@@ -65,21 +65,18 @@ if ($dostmod == 1)
             break;
 
         default:
-            echo '<p><b>Админ Панель</b></p><hr />';
-            echo '<p><b>Пользователи</b><br />';
-            echo '&nbsp;- <a href="main.php?do=search">Поиск</a></p>';
-
-            echo '<p><b>Модули</b><br />';
-            echo "&nbsp;- <a href='news.php'>Новости</a><br/>";
-            echo "&nbsp;- <a href='forum.php'>Форум</a><br/>";
-            echo "&nbsp;- <a href='chat.php'>Чат</a></p>";
-
+            echo '<div class="phdr">Админ Панель</div>';
+			echo '<div class="bmenu">Пользователи</div>';
+            echo '<div class="menu"><a href="main.php?do=search">Поиск</a></div>';
+            echo '<div class="bmenu">Модули</div>';
+            echo '<div class="menu"><a href="news.php">Новости</a></div>';
+            echo '<div class="menu"><a href="forum.php">Форум</a></div>';
+            echo '<div class="menu"><a href="chat.php">Чат</a></div>';
             if ($dostadm == 1)
             {
-                echo '<p><b>Система</b><br />';
-                echo '&nbsp;- <a href="set.php">Настройки</a></p>';
+                echo '<div class="bmenu">Система</div>';
+                echo '<div class="menu"><a href="set.php">Настройки</a></div>';
             }
-
     }
 } else
 {

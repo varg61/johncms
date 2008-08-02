@@ -466,12 +466,6 @@ switch ($act)
                     $dizm = date("d.m.y /H:i", $diz);
                     echo "<br /><small><font color='#999999'>Посл. изм. <b>$res[edit_who]</b>  ($dizm)<br />Всего изм.:<b> $res[edit_count]</b></font></small>";
                 }
-                // Ссылки на Модерские функции
-                if ($dostsmod == 1)
-                {
-                    echo '<div class="func"><a href="guest.php?act=otvet&amp;id=' . $res['id'] . '">Отв.</a> | <a href="guest.php?act=edit&amp;id=' . $res['id'] . '">Изм.</a> | <a href="guest.php?act=delpost&amp;id=' . $res['id'] . '">Удалить</a><br/>';
-                    echo long2ip($res['ip']) . ' - ' . $res['soft'] . '</div>';
-                }
                 // Ответ Модера
                 if (!empty($res['otvet']))
                 {
@@ -487,6 +481,12 @@ switch ($act)
                         $otvet = smilesadm($otvet);
                     }
                     echo '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
+                }
+                // Ссылки на Модерские функции
+                if ($dostsmod == 1)
+                {
+                    echo '<div class="func"><a href="guest.php?act=otvet&amp;id=' . $res['id'] . '">Отв.</a> | <a href="guest.php?act=edit&amp;id=' . $res['id'] . '">Изм.</a> | <a href="guest.php?act=delpost&amp;id=' . $res['id'] . '">Удалить</a><br/>';
+                    echo long2ip($res['ip']) . ' - ' . $res['soft'] . '</div>';
                 }
                 echo "</div>";
             }
