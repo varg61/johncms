@@ -34,7 +34,7 @@ if ($headmod != "auto")
     echo "\n" . '"http://www.wapforum.org/DTD/xhtml-mobile10.dtd">';
     echo "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">';
     echo "\n" . '<head><meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>';
-    echo "\n" . '<link rel="shortcut icon" href="favicon.ico" />';
+    echo "\n" . '<link rel="shortcut icon" href="' . $home . '/favicon.ico" />';
     echo "\n" . '<link rel="alternate" type="application/rss+xml" title="RSS | Новости ресурса" href="' . $home . '/rss/rss.php" />';
     echo "\n" . '<title>' . $textl . '</title>';
     echo "\n" . '<link rel="stylesheet" href="' . $home . '/style.css" type="text/css" />';

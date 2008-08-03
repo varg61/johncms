@@ -20,12 +20,12 @@ $textl = 'Библиотека';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-//if (!$set['mod_lib'] && $dostadm != 1)
-//{
-//    echo '<p>' . $set['mod_lib_msg'] . '</p>';
-//    require_once ("../incfiles/end.php");
-//    exit;
-//}
+if (!$set['mod_lib'] && $dostadm != 1)
+{
+    echo '<p>' . $set['mod_lib_msg'] . '</p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
 
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 switch ($act)
@@ -1541,8 +1541,8 @@ Cообщение(max. 500)<br/>
         break;
 
     default:
-        //if (!$set['mod_lib'])
-        //    echo '<p><font color="#FF0000"><b>Библиотека закрыта!</b></font></p>';
+        if (!$set['mod_lib'])
+            echo '<p><font color="#FF0000"><b>Библиотека закрыта!</b></font></p>';
 
         if ($dostlmod == 1)
         {
@@ -1550,7 +1550,7 @@ Cообщение(max. 500)<br/>
             $mod1 = mysql_num_rows($mod);
             if ($mod1 > 0)
             {
-                echo "<br/>Модерации ожидают <a href='index.php?act=moder'>$mod1</a> статей<br/>";
+                echo "<p>Модерации ожидают <a href='index.php?act=moder'>$mod1</a> статей</p>";
             }
         }
         if (empty($_GET['id']))

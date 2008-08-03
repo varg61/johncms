@@ -20,7 +20,7 @@ $rootpath = '';
 require_once ("incfiles/core.php");
 require_once ("incfiles/head.php");
 
-if ($regban)
+if ($regban || !$set['mod_reg'])
 {
 	echo '<p>Регистрация временно закрыта.</p>';
 	require_once ("incfiles/end.php");

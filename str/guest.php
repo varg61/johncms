@@ -26,13 +26,13 @@ $headmod = 'guest';
 $textl = isset($_SESSION['ga']) ? 'Админ-Клуб' : 'Гостевая';
 
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
-//if (!$set['mod_guest'] && $dostadm != 1)
-//{
-//    require_once ("../incfiles/head.php");
-//    echo '<p>' . $set['mod_guest_msg'] . '</p>';
-//    require_once ("../incfiles/end.php");
-//    exit;
-//}
+if (!$set['mod_guest'] && $dostadm != 1)
+{
+    require_once ("../incfiles/head.php");
+    echo '<p>' . $set['mod_guest_msg'] . '</p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
 
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 switch ($act)
@@ -319,8 +319,8 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         require_once ("../incfiles/head.php");
         // Напоминание для Админа при закрытой Гостевой
-        //if (!$set['mod_guest'])
-        //    echo '<p><font color="#FF0000"><b>Гостевая закрыта!</b></font></p>';
+        if (!$set['mod_guest'])
+            echo '<p><font color="#FF0000"><b>Гостевая закрыта!</b></font></p>';
         if ((!empty($_SESSION['uid'])) || $set['gb'] != 0)
         {
             $_SESSION['guest'] = rand(1000, 9999);

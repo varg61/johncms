@@ -246,7 +246,22 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('rmod', '0'),
 ('fmod', '0'),
 ('gb', '0'),
-('clean_time', '0');
+('clean_time', '0'),
+('mod_reg', '1'),
+('mod_reg_msg', 'Регистрация временно закрыта'),
+('mod_forum', '1'),
+('mod_forum_msg', 'Форум временно закрыт'),
+('mod_chat', '1'),
+('mod_chat_msg', 'Чат временно закрыт'),
+('mod_guest', '1'),
+('mod_guest_msg', 'Гостевая временно закрыта'),
+('mod_lib', '1'),
+('mod_lib_msg', 'Библиотека временно закрыта'),
+('mod_gal', '1'),
+('mod_gal_msg', 'Галерея временно закрыта'),
+('mod_down', '1'),
+('mod_down_msg', 'Загрузки временно закрыты');
+
 
 --
 -- Структура таблицы `users`

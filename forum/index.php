@@ -20,13 +20,13 @@ $headmod = "forum";
 require_once ("../incfiles/core.php");
 
 // Закрываем доступ к форуму
-//if (!$set['mod_forum'] && $dostadm != 1)
-//{
-//    require_once ("../incfiles/head.php");
-//    echo '<p>' . $set['mod_forum_msg'] . '</p>';
-//    require_once ("../incfiles/end.php");
-//    exit;
-//}
+if (!$set['mod_forum'] && $dostadm != 1)
+{
+    require_once ("../incfiles/head.php");
+    echo '<p>' . $set['mod_forum_msg'] . '</p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
 
 if (!empty($_SESSION['uid']))
 {
@@ -72,8 +72,8 @@ if (in_array($act, $do))
         default:
             require_once ("../incfiles/head.php");
             // Если форум закрыт, то для Админов выводим напоминание
-            //if (!$set['mod_forum'])
-            //    echo '<p><font color="#FF0000"><b>Форум закрыт!</b></font></p>';
+            if (!$set['mod_forum'])
+                echo '<p><font color="#FF0000"><b>Форум закрыт!</b></font></p>';
             if (empty($_SESSION['uid']))
             {
                 if (isset($_GET['newup']))
@@ -188,8 +188,8 @@ if (in_array($act, $do))
 
                     case "r":
                         ////////////////////////////////////////////////////////////
-						// Список топиков раздела                                 //
-						////////////////////////////////////////////////////////////
+                        // Список топиков раздела                                 //
+                        ////////////////////////////////////////////////////////////
                         if ($dostsadm == 1)
                         {
                             $qz = mysql_query("select `id` from `forum` where type='t' and refid='" . $id . "' and moder='1' ;");
@@ -570,7 +570,7 @@ if (in_array($act, $do))
                         if ($colmes > $kmess)
                         {
                             echo '<p>';
-							$ba = ceil($colmes / $kmess);
+                            $ba = ceil($colmes / $kmess);
                             if ($offpg != 1)
                             {
                                 echo "Страницы:<br/>";
@@ -600,7 +600,7 @@ if (in_array($act, $do))
                         if ($dostfmod == 1)
                         {
                             echo '<div class="func">';
-							if ($type1['moder'] != 1)
+                            if ($type1['moder'] != 1)
                             {
                                 echo "<a href='index.php?act=fmoder&amp;id=" . $id . "'>Принять тему</a><br/>";
                             }

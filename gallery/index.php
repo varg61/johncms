@@ -20,6 +20,13 @@ $textl = 'Галерея сайта';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
+if (!$set['mod_gal'] && $dostadm != 1)
+{
+    echo '<p>' . $set['mod_gal_msg'] . '</p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
+
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 $do = array('new', 'edf', 'delf', 'edit', 'del', 'delmes', 'addkomm', 'trans', 'komm', 'preview', 'load', 'upl', 'cral', 'album', 'razd');
 if (in_array($act, $do))
@@ -27,12 +34,14 @@ if (in_array($act, $do))
     require_once ($act . '.php');
 } else
 {
+    if (!$set['mod_gal'])
+        echo '<p><font color="#FF0000"><b>Галерея закрыта!</b></font></p>';
     if (!empty($_GET['id']))
     {
         $id = intval($_GET['id']);
         $type = mysql_query("select * from `gallery` where id='" . $id . "';");
         $ms = mysql_fetch_array($type);
-        switch ($ms[type])
+        switch ($ms['type'])
         {
             case "rz":
 
