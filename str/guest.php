@@ -16,9 +16,10 @@
 define('_IN_JOHNCMS', 1);
 
 require_once ("../incfiles/core.php");
+require_once ("../incfiles/head.php");
 
 // Проверяем права доступа в Админ-Клуб
-if (!(isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= 1)))
+if (isset($_SESSION['ga']) && ($dostmod !=1 || $ban['1'] || $ban['13']))
     unset($_SESSION['ga']);
 
 // Задаем заголовки страницы
@@ -28,7 +29,6 @@ $textl = isset($_SESSION['ga']) ? 'Админ-Клуб' : 'Гостевая';
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
 if (!$set['mod_guest'] && $dostadm != 1)
 {
-    require_once ("../incfiles/head.php");
     echo '<p>' . $set['mod_guest_msg'] . '</p>';
     require_once ("../incfiles/end.php");
     exit;
@@ -41,11 +41,10 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Удаление отдельного поста                              //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1)
+        if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
         {
             if (empty($_GET['id']))
             {
-                require_once ("../incfiles/head.php");
                 echo "Ошибка!<br/><a href='guest.php?'>В гостевую</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
@@ -57,7 +56,6 @@ switch ($act)
                 header("Location: guest.php");
             } else
             {
-                require_once ("../incfiles/head.php");
                 echo '<p>Вы действительно хотите удалить пост?<br/>';
                 echo "<a href='guest.php?act=delpost&amp;id=" . $id . "&amp;yes'>Удалить</a> | <a href='guest.php'>Отмена</a></p>";
             }
@@ -71,7 +69,6 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Справка по транслиту                                   //
         ////////////////////////////////////////////////////////////
-        require_once ("../incfiles/head.php");
         include ("../pages/trans.$ras_pages");
         echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
         break;
@@ -87,28 +84,24 @@ switch ($act)
         $req = mysql_query("SELECT * FROM `guest` WHERE `soft`='" . mysql_real_escape_string($agn) . "' AND `time` >='" . ($realtime - 30) . "' AND `ip` ='" . $ipl . "' AND `adm`='" . $admset . "';");
         if (mysql_num_rows($req) > 0)
         {
-            require_once ("../incfiles/head.php");
             echo "<p><b>Антифлуд!</b><br />Вы не можете так часто добавлять сообщения<br/>Порог 30 секунд<br/><br/><a href='guest.php'>Назад</a></p>";
             require_once ("../incfiles/end.php");
             exit;
         }
         if (empty($user_id) && empty($_POST['name']))
         {
-            require_once ("../incfiles/head.php");
             echo "<p>Вы не ввели имя!<br/><a href='guest.php'>Назад</a></p>";
             require_once ("../incfiles/end.php");
             exit;
         }
         if (empty($_POST['msg']))
         {
-            require_once ("../incfiles/head.php");
             echo "<p>Вы не ввели сообщение!<br/><a href='guest.php'>Назад</a></p>";
             require_once ("../incfiles/end.php");
             exit;
         }
-        if (empty($_SESSION['guest']))
+        if (empty($_SESSION['guest']) && !$ban['1'] && !$ban['13'])
         {
-            require_once ("../incfiles/head.php");
             echo "<p><b>Спам!</b></p>";
             require_once ("../incfiles/end.php");
             exit;
@@ -146,11 +139,10 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Добавление "ответа Админа"                             //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1)
+        if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
         {
             if (empty($_GET['id']))
             {
-                require_once ("../incfiles/head.php");
                 echo "Ошибка!<br/><a href='guest.php?'>В гостевую</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
@@ -167,7 +159,6 @@ switch ($act)
                 header("location: guest.php");
             } else
             {
-                require_once ("../incfiles/head.php");
                 $ps = mysql_query("select * from `guest` where id='" . $id . "';");
                 $ps1 = mysql_fetch_array($ps);
                 if (!empty($ps1['otvet']))
@@ -188,11 +179,10 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Редактирование поста                                   //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1)
+        if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
         {
             if (empty($_GET['id']))
             {
-                require_once ("../incfiles/head.php");
                 echo "Ошибка!<br/><a href='guest.php?'>В гостевую</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
@@ -213,7 +203,6 @@ switch ($act)
                 header("location: guest.php");
             } else
             {
-                require_once ("../incfiles/head.php");
                 $ps = mysql_query("select * from `guest` where id='" . $id . "';");
                 $ps1 = mysql_fetch_array($ps);
                 $text = htmlentities($ps1['text'], ENT_QUOTES, 'UTF-8');
@@ -246,7 +235,6 @@ switch ($act)
                             mysql_query("DELETE FROM `guest` WHERE `adm`='0' AND `time`<='" . ($realtime - 86400) . "';");
                         }
                         mysql_query("OPTIMIZE TABLE `guest`;");
-                        require_once ("../incfiles/head.php");
                         echo '<p>Удалены все сообщения, старше 1 дня.</p><p><a href="guest.php">Вернуться</a></p>';
                         break;
 
@@ -260,7 +248,6 @@ switch ($act)
                             mysql_query("DELETE FROM `guest` WHERE `adm`='0';");
                         }
                         mysql_query("OPTIMIZE TABLE `guest`;");
-                        require_once ("../incfiles/head.php");
                         echo '<p>Удалены все сообщения.</p><p><a href="guest.php">Вернуться</a></p>';
                         break;
 
@@ -274,12 +261,10 @@ switch ($act)
                             mysql_query("DELETE FROM `guest` WHERE `adm`='0' AND `time`<='" . ($realtime - 604800) . "';");
                         }
                         mysql_query("OPTIMIZE TABLE `guest`;");
-                        require_once ("../incfiles/head.php");
                         echo '<p>Все сообщения, старше 1 недели удалены из Гостевой.</p><p><a href="guest.php">В Гостевую</a></p>';
                 }
             } else
             {
-                require_once ("../incfiles/head.php");
                 echo '<p><b>Очистка сообщений</b></p>';
                 echo '<u>Что чистим?</u>';
                 echo '<form id="clean" method="post" action="guest.php?act=clean">';
@@ -300,7 +285,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Переключение режима работы Гостевая / Админ-клуб       //
         ////////////////////////////////////////////////////////////
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= "1")
+        if ($dostmod == 1)
         {
             if ($_GET['do'] == 'set')
             {
@@ -317,11 +302,10 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Отображаем Гостевую, или Админ клуб                    //
         ////////////////////////////////////////////////////////////
-        require_once ("../incfiles/head.php");
-        // Напоминание для Админа при закрытой Гостевой
         if (!$set['mod_guest'])
             echo '<p><font color="#FF0000"><b>Гостевая закрыта!</b></font></p>';
-        if ((!empty($_SESSION['uid'])) || $set['gb'] != 0)
+        // Форма ввода нового сообщения
+        if (($user_id || $set['gb'] != 0) && !$ban['1'] && !$ban['13'])
         {
             $_SESSION['guest'] = rand(1000, 9999);
             echo '<form action="guest.php?act=say" method="post">';
@@ -329,7 +313,7 @@ switch ($act)
             {
                 echo "Имя(max. 25):<br/><input type='text' name='name' maxlength='25'/><br/>";
             }
-            echo "Текст сообщения(max. 500):<br/><textarea cols='20' rows='2' title='Введите текст сообщения' name='msg'></textarea><br/>";
+            echo 'Текст сообщения(max. 500):<br/><textarea cols="20" rows="2" name="msg"></textarea><br/>';
             if ($offtr != 1)
             {
                 echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
@@ -337,7 +321,7 @@ switch ($act)
             echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form><br />";
         } else
         {
-            echo "<p>Закрыто для гостей.</p>";
+            echo "<p>Гостевая закрыта.</p>";
         }
         if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= "1"))
         {
@@ -483,7 +467,7 @@ switch ($act)
                     echo '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
                 // Ссылки на Модерские функции
-                if ($dostsmod == 1)
+                if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
                 {
                     echo '<div class="func"><a href="guest.php?act=otvet&amp;id=' . $res['id'] . '">Отв.</a> | <a href="guest.php?act=edit&amp;id=' . $res['id'] . '">Изм.</a> | <a href="guest.php?act=delpost&amp;id=' . $res['id'] . '">Удалить</a><br/>';
                     echo long2ip($res['ip']) . ' - ' . $res['soft'] . '</div>';
@@ -575,7 +559,7 @@ switch ($act)
             echo '<a href="guest.php?act=clean">Чистка истории</a>';
         echo '</p>';
         // Для Модеров и выше, даем ссылку на Админ-клуб
-        if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= "1")
+        if ($dostmod == 1 && !$ban['1'] && !$ban['13'])
         {
             if (isset($_SESSION['ga']))
             {

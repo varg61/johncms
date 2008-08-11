@@ -161,21 +161,21 @@ if ($set['clean_time'] <= ($realtime - 43200))
     mysql_query("UPDATE `cms_settings` SET  `val`='" . $realtime . "' WHERE `key`='clean_time';");
 }
 
-////////////////////////////////////////////////////////////
-// Авторизация пользователей                              //
-////////////////////////////////////////////////////////////
-
 // Получаем переменные окружения
 $agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES); // User Agent
 
-// Авторизация по сессии
+////////////////////////////////////////////////////////////
+// Авторизация по сессии                                  //
+////////////////////////////////////////////////////////////
 if (isset($_SESSION['uid']) && isset($_SESSION['ups']))
 {
     $user_id = intval($_SESSION['uid']);
     $user_ps = $_SESSION['ups'];
 }
 
-// Авторизация по COOKIE
+////////////////////////////////////////////////////////////
+// Авторизация по COOKIE                                  //
+////////////////////////////////////////////////////////////
 elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
 {
     $user_id = intval(base64_decode($_COOKIE['cuid']));
@@ -185,7 +185,9 @@ elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
     $cookauth = true;
 }
 
-// Запрос в базе данных по юзеру
+////////////////////////////////////////////////////////////
+// Запрос в базе данных по юзеру                          //
+////////////////////////////////////////////////////////////
 if ($user_id && $user_ps)
 {
     $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1;");
@@ -260,6 +262,12 @@ if ($user_id && $user_ps)
 			`ip`='" . $ipl . "',
 			`browser`='" . mysql_real_escape_string($agn) . "'
 			WHERE `id`='" . $user_id . "';");
+
+            // Проверка юзера на бан
+            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user_id . "' AND `ban_time`>'" . $realtime . "';") or die('Error: table "cms_ban_users"');
+            if (mysql_num_rows($req) != 0)
+                require_once ($rootpath . 'incfiles/ban_users.php');
+            mysql_free_result($req);
         } else
         {
             // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки

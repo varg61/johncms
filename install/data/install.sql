@@ -15,6 +15,23 @@ CREATE TABLE `cms_ban_ip` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
+-- Структура таблицы `cms_ban_users`
+--
+DROP TABLE IF EXISTS `cms_ban_users`;
+CREATE TABLE `cms_ban_users` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) NOT NULL,
+  `ban_time` int(11) NOT NULL,
+  `ban_while` int(11) NOT NULL,
+  `ban_type` tinyint(4) NOT NULL default '1',
+  `ban_who` int(11) NOT NULL,
+  `ban_reason` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `ban_time` (`ban_time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
 -- Структура таблицы `chat`
 --
 DROP TABLE IF EXISTS `chat`;
