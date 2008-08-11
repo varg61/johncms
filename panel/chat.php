@@ -19,7 +19,7 @@ session_start();
 $textl = 'Чат';
 require_once ("../incfiles/core.php");
 
-if ($dostsmod == 1)
+if ($dostsmod == 1 && !isset($ban))
 {
     if (!empty($_GET['act']))
     {

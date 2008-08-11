@@ -14,12 +14,12 @@
 */
 
 define('_IN_JOHNCMS', 1);
-session_name("SESID");
-session_start();
+
 $textl = 'Подтверждение регистрации';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
-if ($dostadm == "1")
+
+if ($dostadm == 1  && !isset($ban))
 {
     if (empty($_GET['act']))
     {
@@ -95,3 +95,5 @@ if ($dostadm == "1")
     header("Location: ../index.php?err");
     exit;
 }
+
+?>

@@ -17,7 +17,8 @@ define('_IN_JOHNCMS', 1);
 
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
-if ($dostadm == 1)
+
+if ($dostadm == 1  && !isset($ban))
 {
     if (!empty($_GET['act']))
     {
@@ -319,4 +320,5 @@ if ($dostadm == 1)
 
 
 require_once ("../incfiles/end.php");
+
 ?>

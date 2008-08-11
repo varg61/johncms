@@ -14,12 +14,11 @@
 */
 
 define('_IN_JOHNCMS', 1);
-session_name("SESID");
-session_start();
+
 $textl = 'Настройки сайта';
 require_once ("../incfiles/core.php");
 
-if ($dostadm == 1)
+if ($dostadm == 1  && !isset($ban))
 {
     if (!empty($_GET['act']))
     {
@@ -88,6 +87,7 @@ if ($dostadm == 1)
 {
     header("Location: ../index.php?err");
 }
+
 include ("../incfiles/end.php");
 
 ?>

@@ -2,6 +2,8 @@
 В MySQL существует оператор EXPLAIN, он служит для получения получение информации о SELECT-запросе.
 $req = mysql_query("SELECT `forum`.* FROM `forum` LEFT JOIN `forum_read` ON `forum`.`id` = `forum_read`.`topic_id` WHERE `forum`.`type`='t' AND ((`forum_read`.`topic_id`) Is Null);");
 
+Наладил бан:
+Гостевая
 
 ############################################################
 Ядро системы

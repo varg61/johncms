@@ -18,7 +18,8 @@ define('_IN_JOHNCMS', 1);
 $textl = 'Админка';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
-if ($dostmod == 1)
+
+if ($dostmod == 1 && !isset($ban))
 {
     $do = isset($_GET['do']) ? $_GET['do'] : '';
     switch ($do)

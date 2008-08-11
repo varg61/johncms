@@ -14,12 +14,11 @@
 */
 
 define('_IN_JOHNCMS', 1);
-session_name("SESID");
-session_start();
+
 $textl = 'Форум';
 require_once ("../incfiles/core.php");
 
-if ($dostsmod == 1)
+if ($dostsmod == 1  && !isset($ban))
 {
     if (!empty($_GET['act']))
     {
