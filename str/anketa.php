@@ -328,7 +328,7 @@ if (!empty($_SESSION['uid']))
                 {
                     echo "Зарегистрирована";
                 }
-                echo ": " . date("d.m.Y", $arr[datereg]) . "<br/>";
+                echo ": " . date("d.m.Y", $arr['datereg']) . "<br/>";
                 if ($arr['sex'] == "m")
                 {
                     echo 'Всего пробыл';
@@ -338,25 +338,23 @@ if (!empty($_SESSION['uid']))
                     echo 'Всего пробыла';
                 }
                 echo ' на сайте: ' . gmdate('H:i:s', $arr['total_on_site']) . '<br />';
-                $mmon = $arr[monthb];
+                $mmon = $arr['monthb'];
                 echo "<a href='anketa.php?act=par&amp;user=" . $idus . "'>Сменить пароль</a></p>";
                 echo "<p><a href='anketa.php?act=name'>Имя:</a>$arr[imname]<br/>";
                 echo "<a href='anketa.php?act=gor'>Город:</a>$arr[live]<br/>";
                 echo "<a href='anketa.php?act=inf'>О себе:</a>$arr[about]<br/>";
                 echo "<a href='anketa.php?act=icq'>ICQ:</a>$arr[icq]<br/>";
                 echo "<a href='anketa.php?act=mail'>E-mail:</a>$arr[mail] ";
-                if ($arr[mailact] == 0)
+                if ($arr['mailact'] == 0)
                 {
                     echo "<font color='" . $clink . "'>(!)</font>";
                 }
                 echo "<br/><a href='anketa.php?act=mobila'>Мобила:</a>$arr[mibile]<br/>";
                 echo "<a href='anketa.php?act=dr'>Дата рождения:</a>$arr[dayb] $mesyac[$mmon] $arr[yearofbirth]<br/>";
-                echo "<a href='anketa.php?act=site'>Сайт:</a>$arr[www]</p><hr/>";
-
-
-                echo '<p><a href="anketa.php?act=statistic">Моя активность</a><br/>';
-                $req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $arr['name'] . "' LIMIT 1;");
-                if (mysql_num_rows($req) == 1)
+                echo "<a href='anketa.php?act=site'>Сайт:</a>$arr[www]</p>";
+                echo '<p>';
+                $req = mysql_query("select * from `gallery` where `type`='al' and `user`='1' and `avtor`='" . $arr['name'] . "' LIMIT 1;");
+                if (mysql_num_rows($req) != 0)
                 {
                     $res = mysql_fetch_array($req);
                     echo '<a href="../gallery/index.php?id=' . $res['id'] . '">Личный альбом</a><br />';

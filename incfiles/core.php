@@ -122,6 +122,7 @@ $dostfmod = 0;
 $dostcmod = 0;
 $dostkmod = 0;
 $dostmod = 0;
+$rights = 0;
 $req = mysql_query("SELECT * FROM `cms_settings`;");
 $set = array();
 while ($res = mysql_fetch_row($req))
@@ -208,44 +209,60 @@ if ($user_id && $user_ps)
             $upfp = $datauser['upfp'];
             $nmenu = $datauser['nmenu'];
             $chmes = $datauser['chmes'];
+            $rights = $datauser['rights'];
             mysql_free_result($req);
+
+            ////////////////////////////////////////////////////////////
+			// Проверка юзера на бан                                  //
+			////////////////////////////////////////////////////////////
+            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user_id . "' AND `ban_time`>'" . $realtime . "';") or die('Error: table "cms_ban_users"');
+            if (mysql_num_rows($req) != 0)
+            {
+                $rights = 0;
+                $ban = array();
+                while ($res = mysql_fetch_row($req))
+                    $ban[$res[4]] = 1;
+                mysql_free_result($req);
+                if (isset($ban['9']))
+                    exit;
+            }
 
             // Установка административного доступа
             if ($login == $nickadmina || $login == $nickadmina2)
             {
-                $dostsadm = "1"; // Супер Админ
+                $dostsadm = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7)
             {
-                $dostadm = "1"; // Админ
+                $dostadm = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6)
             {
-                $dostsmod = "1"; // Старший модер
+                $dostsmod = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "5")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 5)
             {
-                $dostlmod = "1";
+                $dostlmod = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "4")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 4)
             {
-                $dostdmod = "1";
+                $dostdmod = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "3")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 3)
             {
-                $dostfmod = "1";
+                $dostfmod = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "7" || $datauser['rights'] == "6" || $datauser['rights'] == "2")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 2)
             {
-                $dostcmod = "1";
+                $dostcmod = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] == "1" || $datauser['rights'] == "7" || $datauser['rights'] == "6")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 1 || $rights == 7 || $rights == 6)
             {
-                $dostkmod = "1";
+                $dostkmod = 1;
             }
-            if ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= "1")
+            if ($login == $nickadmina || $login == $nickadmina2 || $rights >= 1)
             {
-                $dostmod = "1";
+                $dostmod = 1;
             }
 
             // Устанавливаем время начала сессии
@@ -262,12 +279,6 @@ if ($user_id && $user_ps)
 			`ip`='" . $ipl . "',
 			`browser`='" . mysql_real_escape_string($agn) . "'
 			WHERE `id`='" . $user_id . "';");
-
-            // Проверка юзера на бан
-            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user_id . "' AND `ban_time`>'" . $realtime . "';") or die('Error: table "cms_ban_users"');
-            if (mysql_num_rows($req) != 0)
-                require_once ($rootpath . 'incfiles/ban_users.php');
-            mysql_free_result($req);
         } else
         {
             // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки

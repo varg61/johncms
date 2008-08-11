@@ -69,7 +69,7 @@ if (in_array($act, $do))
                     {
                         $fot = mysql_query("select * from `gallery` where type='ft' and  refid='" . $al1['id'] . "';");
                         $countf = mysql_num_rows($fot);
-                        echo '<div class="menu"><img alt="" src="../images/arrow.gif" width="7" height="12" />&nbsp;<a href="index.php?id=' . $al1['id'] . '">' . $al1['text'] . '</a> (' . $countf . ')</div>';
+                        echo '<div class="menu"><a href="index.php?id=' . $al1['id'] . '">' . $al1['text'] . '</a> (' . $countf . ')</div>';
                     }
                     ++$i;
                 }
@@ -408,7 +408,7 @@ if (in_array($act, $do))
                 }
                 $rz = mysql_query("select * from `gallery` where type='rz' and  id='" . $ms['refid'] . "';");
                 $rz1 = mysql_fetch_array($rz);
-                if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || ($dostsmod == 1))
+                if (($user_id && $rz1['user'] == 1 && $ms['text'] == $login && !$ban['1'] && !$ban['14']) || $dostsmod == 1)
                 {
                     echo "<a href='index.php?act=upl&amp;id=" . $id . "'>Выгрузить фото</a><br/>";
                 }
@@ -516,7 +516,7 @@ if (in_array($act, $do))
         {
             $al = mysql_query("select * from `gallery` where type='al' and  refid='" . $rz1['id'] . "';");
             $countal = mysql_num_rows($al);
-            echo '<div class="menu"><img alt="" src="../images/arrow.gif" width="7" height="12" />&nbsp;<a href="index.php?id=' . $rz1['id'] . '">' . $rz1['text'] . '</a> (' . $countal . ')</div>';
+            echo '<div class="menu"><a href="index.php?id=' . $rz1['id'] . '">' . $rz1['text'] . '</a> (' . $countal . ')</div>';
         }
         echo '<hr /><p>';
         if ($count != 0)

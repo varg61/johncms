@@ -178,10 +178,10 @@ MIDlet-Jar-URL: ' . $home . '/library/files/' . $id . '.jar';
             switch ($mod)
             {
                 case 1:
-                    if (stristr($array[name], $srh))
+                    if (stristr($array['name'], $srh))
                     {
-                        $arrname = htmlentities($array[name], ENT_QUOTES, 'UTF-8');
-                        $res[] = '<br/><a href="index.php?id=' . $array[id] . '">' . $arrname . '</a><br/>';
+                        $arrname = htmlentities($array['name'], ENT_QUOTES, 'UTF-8');
+                        $res[] = '<br/><a href="index.php?id=' . $array['id'] . '">' . $arrname . '</a><br/>';
                     }
                     break;
 
@@ -195,10 +195,10 @@ MIDlet-Jar-URL: ' . $home . '/library/files/' . $id . '.jar';
                         $simvol = 600;
                     }
                     $page = ceil($pg / $simvol);
-                    $tx = $array[text];
+                    $tx = $array['text'];
                     if (stristr($tx, $srh))
                     {
-                        $arrname = htmlentities($array[name], ENT_QUOTES, 'UTF-8');
+                        $arrname = htmlentities($array['name'], ENT_QUOTES, 'UTF-8');
                         $tx = htmlentities($tx, ENT_QUOTES, 'UTF-8');
                         $a = mb_strpos($tx, $srh);
                         $page = ceil($a / $simvol) + 1;
@@ -218,7 +218,7 @@ MIDlet-Jar-URL: ' . $home . '/library/files/' . $id . '.jar';
                         $tx = mb_substr($tx, $b, $b2 - $b);
                         $tx = str_replace($srh1, "<b>$srh1</b>", $tx);
                         $tx = "...$tx...";
-                        $res[] = "<a href='?id=" . $array[id] . "&amp;page=" . $page . "'>$arrname</a><br/>$tx<br/>";
+                        $res[] = "<a href='?id=" . $array['id'] . "&amp;page=" . $page . "'>$arrname</a><br/>$tx<br/>";
                     }
                     break;
 
@@ -633,7 +633,7 @@ MIDlet-Jar-URL: ' . $home . '/library/files/' . $id . '.jar';
         break;
 
     case "addkomm":
-        if (!empty($_SESSION['uid']))
+        if ($user_id && !$ban['1'] && !$ban['10'])
         {
             if ($_GET['id'] == "")
             {
@@ -660,7 +660,7 @@ MIDlet-Jar-URL: ' . $home . '/library/files/' . $id . '.jar';
                     exit;
                 }
                 $msg = check(trim($_POST['msg']));
-                if ($_POST[msgtrans] == 1)
+                if ($_POST['msgtrans'] == 1)
                 {
                     $msg = trans($msg);
                 }
@@ -695,11 +695,11 @@ Cообщение(max. 500)<br/>
   </form><br/>";
                 echo "<a href='index.php?act=trans'>Транслит</a><br /><a href='../str/smile.php'>Смайлы</a><br/>";
             }
+            echo '<a href="?act=komm&amp;id=' . $id . '">К комментариям</a></p>';
         } else
         {
-            echo "Вы не авторизованы!<br/>";
+            echo "<p>Ошибка</p>";
         }
-        echo '<br/><a href="?act=komm&amp;id=' . $id . '">К комментариям</a></p>';
         break;
 
     case "trans":
@@ -714,14 +714,14 @@ Cообщение(max. 500)<br/>
             require_once ('../incfiles/end.php');
             exit;
         }
-        $id = intval(check(trim($_GET['id'])));
+        $id = intval($_GET['id']);
         $messz = mysql_query("select `id` from `lib` where type='komm' and refid='" . $id . "'  ;");
         $countm = mysql_num_rows($messz);
         $ba = ceil($countm / $kmess);
         $fayl = mysql_query("select `name` from `lib` where type='bk' and id='" . $id . "';");
         $fayl1 = mysql_fetch_array($fayl);
         echo "<p>Комментируем статью:<br /><b>$fayl1[name]</b><br/>";
-        if (!empty($_SESSION['uid']))
+        if ($user_id && !$ban['1'] && !$ban['10'])
         {
             echo "</p><p><a href='index.php?act=addkomm&amp;id=" . $id . "'>Написать</a>";
         }
@@ -1569,10 +1569,10 @@ Cообщение(max. 500)<br/>
             $id = intval(trim($_GET['id']));
             $tp = mysql_query("select * from `lib` where id = '" . $id . "';");
             $tp1 = mysql_fetch_array($tp);
-            $tip = $tp1[type];
-            if ($tp1[type] == "cat")
+            $tip = $tp1['type'];
+            if ($tp1['type'] == "cat")
             {
-                echo '<p><b>' . $tp1[text] . '</b></p><hr/>';
+                echo '<p><b>' . $tp1['text'] . '</b></p><hr/>';
             }
         }
         switch ($tip)
@@ -1621,7 +1621,7 @@ Cообщение(max. 500)<br/>
                         {
                             $kol = "0";
                         }
-                        echo '<div class="menu"><img alt="" src="../images/arrow.gif" width="7" height="12" />&nbsp;<a href="index.php?id=' . $cat1[id] . '">' . $cat1[text] . '</a>(' . $kol . ')</div>';
+                        echo '<div class="menu"><a href="index.php?id=' . $cat1['id'] . '">' . $cat1['text'] . '</a>(' . $kol . ')</div>';
                         ++$i;
                     }
                 } elseif ($totalbk != 0)
@@ -1728,13 +1728,13 @@ Cообщение(max. 500)<br/>
                     }
                     echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить категорию</a><br/>";
                 }
-                if ($dostlmod == 1 && ($tp1[ip] == 1 || $id == 0))
+                if ($dostlmod == 1 && ($tp1['ip'] == 1 || $id == 0))
                 {
                     echo "<a href='index.php?act=mkcat&amp;id=" . $id . "'>Создать категорию</a><br/>";
                 }
-                if ($tp1[ip] == 0 && $id != 0)
+                if ($tp1['ip'] == 0 && $id != 0)
                 {
-                    if ($dostlmod == 1 || ($tp1[soft] == 1 && !empty($_SESSION['uid'])))
+                    if ($dostlmod == 1 || ($tp1['soft'] == 1 && !empty($_SESSION['uid'])))
                     {
                         echo "<a href='index.php?act=write&amp;id=" . $id . "'>Написать статью</a><br/>";
                     }
@@ -1747,7 +1747,7 @@ Cообщение(max. 500)<br/>
                 {
                     $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $id . "';");
                     $dnam1 = mysql_fetch_array($dnam);
-                    $dnam2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnam1[refid] . "';");
+                    $dnam2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnam1['refid'] . "';");
                     $dnam3 = mysql_fetch_array($dnam2);
                     $catname = "$dnam3[text]";
                     $dirid = "$dnam1[id]";
@@ -1758,10 +1758,10 @@ Cообщение(max. 500)<br/>
                         echo "&#187;<a href='index.php?id=" . $nadir . "'>$catname</a><br/>";
                         $dnamm = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "';");
                         $dnamm1 = mysql_fetch_array($dnamm);
-                        $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1[refid] . "';");
+                        $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "';");
                         $dnamm3 = mysql_fetch_array($dnamm2);
-                        $nadir = $dnamm1[refid];
-                        $catname = $dnamm3[text];
+                        $nadir = $dnamm1['refid'];
+                        $catname = $dnamm3['text'];
                     }
                     echo "&#187;<a href='index.php?'>В библиотеку</a><br/>";
                 } else
@@ -1801,7 +1801,7 @@ Cообщение(max. 500)<br/>
                 }
 
                 // Заголовок статьи
-                echo '<p><b>' . htmlentities($tp1[name], ENT_QUOTES, 'UTF-8') . '</b></p>';
+                echo '<p><b>' . htmlentities($tp1['name'], ENT_QUOTES, 'UTF-8') . '</b></p>';
                 $tx = $tp1['text'];
 
                 # для постраничного вывода используется модифицированный код от hintoz #

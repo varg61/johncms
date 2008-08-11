@@ -31,7 +31,15 @@ if (!$set['mod_chat'] && $dostadm != 1)
 // Определяем и проверяем переменные
 $id = isset($_GET['id']) ? intval($_GET['id']) : false; // Идентификатор комнаты
 
-if (!empty($_SESSION['uid']))
+if ($ban['1'] || $ban['12'])
+{
+    require_once ("../incfiles/head.php");
+    echo '<p>Для Вас доступ в Чат закрыт.</p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
+
+if ($user_id)
 {
     // Определяем местонахождение пользователя
     $where = !empty($id) ? "chat,$id" : 'chat';
@@ -241,7 +249,7 @@ if (!empty($_SESSION['uid']))
                     {
                         require_once ("chat_header.php");
                         echo 'Добавление сообщения<br />(max. 500)';
-                        echo '<div class="title1">'.$type1[text].'</div>';
+                        echo '<div class="title1">' . $type1[text] . '</div>';
                         echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='40' rows='3' title='Введите текст сообщения' name='msg'></textarea><br/>";
                         if ($offtr != 1)
                         {

@@ -19,7 +19,7 @@ $textl = 'Админка';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-if ($dostmod == 1 && !isset($ban))
+if ($dostmod == 1)
 {
     $do = isset($_GET['do']) ? $_GET['do'] : '';
     switch ($do)

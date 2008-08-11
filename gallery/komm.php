@@ -24,7 +24,7 @@ if ($_GET['id'] == "")
 $id = intval($_GET['id']);
 $mess = mysql_query("select * from `gallery` where type='km' and refid='" . $id . "' order by time desc ;");
 $countm = mysql_num_rows($mess);
-if (!empty($_SESSION['uid']))
+if ($user_id && !$ban['1'] && !$ban['10'])
 {
     echo "<a href='?act=addkomm&amp;id=" . $id . "'>Написать</a><br/>";
 }

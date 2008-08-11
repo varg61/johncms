@@ -21,7 +21,7 @@ $textl = 'Почта';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-if (!empty($_SESSION['uid']))
+if ($user_id)
 {
     echo '<div class="phdr">Почта</div>';
     $newl = mysql_query("select * from `privat` where `user` LIKE '" . $login . "' and `type` LIKE 'in' and `chit` LIKE 'no';");
@@ -59,7 +59,8 @@ if (!empty($_SESSION['uid']))
     echo '<div class="menu"><a href="pradd.php?act=out">Исходящие</a> (' . $count . $newleto . ')</div>';
     echo '<div class="menu"><a href="cont.php">Контакты</a> (' . $g . '/' . $vscon . ')</div>';
     echo '<div class="menu"><a href="ignor.php">Игнор</a> (' . $ign1 . ')</div>';
-    echo '<div class="gmenu"><a href="pradd.php?act=write">Написать</a></div>';
+    if (!$ban['1'] && !$ban['3'])
+        echo '<div class="gmenu"><a href="pradd.php?act=write">Написать</a></div>';
 }
 
 require_once ('../incfiles/end.php');

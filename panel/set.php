@@ -18,7 +18,7 @@ define('_IN_JOHNCMS', 1);
 $textl = 'Настройки сайта';
 require_once ("../incfiles/core.php");
 
-if ($dostadm == 1  && !isset($ban))
+if ($dostadm == 1)
 {
     if (!empty($_GET['act']))
     {

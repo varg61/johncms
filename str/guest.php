@@ -19,7 +19,7 @@ require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
 // Проверяем права доступа в Админ-Клуб
-if (isset($_SESSION['ga']) && ($dostmod !=1 || $ban['1'] || $ban['13']))
+if (isset($_SESSION['ga']) && $dostmod != 1)
     unset($_SESSION['ga']);
 
 // Задаем заголовки страницы
@@ -41,7 +41,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Удаление отдельного поста                              //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
+        if ($dostsmod == 1)
         {
             if (empty($_GET['id']))
             {
@@ -139,7 +139,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Добавление "ответа Админа"                             //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
+        if ($dostsmod == 1)
         {
             if (empty($_GET['id']))
             {
@@ -179,7 +179,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Редактирование поста                                   //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
+        if ($dostsmod == 1)
         {
             if (empty($_GET['id']))
             {
@@ -323,7 +323,7 @@ switch ($act)
         {
             echo "<p>Гостевая закрыта.</p>";
         }
-        if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $datauser['rights'] >= "1"))
+        if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1"))
         {
             // Запрос для Админ клуба
             echo '<b>АДМИН-КЛУБ</b><hr class="redhr" />';
@@ -467,7 +467,7 @@ switch ($act)
                     echo '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
                 // Ссылки на Модерские функции
-                if ($dostsmod == 1 && !$ban['1'] && !$ban['13'])
+                if ($dostsmod == 1)
                 {
                     echo '<div class="func"><a href="guest.php?act=otvet&amp;id=' . $res['id'] . '">Отв.</a> | <a href="guest.php?act=edit&amp;id=' . $res['id'] . '">Изм.</a> | <a href="guest.php?act=delpost&amp;id=' . $res['id'] . '">Удалить</a><br/>';
                     echo long2ip($res['ip']) . ' - ' . $res['soft'] . '</div>';
@@ -559,7 +559,7 @@ switch ($act)
             echo '<a href="guest.php?act=clean">Чистка истории</a>';
         echo '</p>';
         // Для Модеров и выше, даем ссылку на Админ-клуб
-        if ($dostmod == 1 && !$ban['1'] && !$ban['13'])
+        if ($dostmod == 1)
         {
             if (isset($_SESSION['ga']))
             {

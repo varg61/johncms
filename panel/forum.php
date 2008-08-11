@@ -18,7 +18,7 @@ define('_IN_JOHNCMS', 1);
 $textl = 'Форум';
 require_once ("../incfiles/core.php");
 
-if ($dostsmod == 1  && !isset($ban))
+if ($dostsmod == 1)
 {
     if (!empty($_GET['act']))
     {

@@ -16,7 +16,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $agn = strtok($agn, ' ');
-if (empty($_GET['id']))
+if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
 {
     require_once ("../incfiles/head.php");
     echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
@@ -24,20 +24,13 @@ if (empty($_GET['id']))
     exit;
 }
 $id = intval($_GET['id']);
-if (empty($_SESSION['uid']))
-{
-    require_once ("../incfiles/head.php");
-    echo "Вы не авторизованы!<br/>";
-    require_once ("../incfiles/end.php");
-    exit;
-}
 $type = mysql_query("select * from `forum` where id= '" . $id . "';");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 switch ($tip)
 {
     case "t":
-        if ($type1[edit] == 1)
+        if ($type1['edit'] == 1)
         {
             require_once ("../incfiles/head.php");
             echo '<p>Вы не можете писать в закрытую тему</p><p><a href="index.php?id=' . $id . '">&lt;&lt; Назад</a></p>';
