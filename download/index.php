@@ -86,7 +86,7 @@ if (in_array($act, $do))
                 switch ($zap2['type'])
                 {
                     case "cat":
-                        echo '<div class="menu"><img alt="" src="../images/arrow.gif" width="7" height="12" />&nbsp;<a href="?cat=' . $zap2['id'] . '">' . $zap2['text'] . '</a>';
+                        echo '<div class="menu"><a href="?cat=' . $zap2['id'] . '">' . $zap2['text'] . '</a>';
                         $g = 0;
                         $g1 = 0;
                         $kf = mysql_query("select * from `download` where type='file' ;");

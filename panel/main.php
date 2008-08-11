@@ -100,8 +100,8 @@ if ($dostmod == 1)
             echo '<input name="term" type="radio" value="0" checked="checked" />Поиск по Нику<br />';
             echo '<input name="term" type="radio" value="1" />Поиск по ID<br /><br />';
             echo '<input type="submit" value="Поиск"/>';
-            echo '</form><br/>';
-            echo '<a href="main.php">В админку</a><br/><br/>';
+            echo '</form>';
+            echo '<p><a href="main.php">В админку</a></p>';
             break;
 
         default:
@@ -110,7 +110,13 @@ if ($dostmod == 1)
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr">Админ Панель</div>';
             echo '<div class="rmenu">Пользователи</div>';
+            $total = @mysql_num_rows(mysql_query("SELECT * FROM `users`;"));
+            echo '<div class="menu">Всего в базе: <a href="../str/users.php">' . $total . '</a><br />';
+            $total = @mysql_num_rows(mysql_query("SELECT * FROM `users` WHERE `preg`='0';"));
+            echo 'На регистрации: <a href="preg.php">' . $total . '</a><br />';
+            echo 'Забаненных: 0</div>';
             echo '<div class="menu"><a href="main.php?do=search">Поиск</a></div>';
+            echo '<div class="menu"><a href="zaban.php">Бан-панель</a></div>';
             echo '<div class="rmenu">Модули</div>';
             echo '<div class="menu"><a href="news.php">Новости</a></div>';
             echo '<div class="menu"><a href="forum.php">Форум</a></div>';
@@ -120,6 +126,7 @@ if ($dostmod == 1)
                 echo '<div class="rmenu">Система</div>';
                 echo '<div class="menu"><a href="ipban.php">Бан по IP</a></div>';
                 echo '<div class="menu"><a href="main.php?do=modules">Модули (вкл/выкл)</a></div>';
+                echo '<div class="menu"><a href="">Чистка системы</a></div>';
                 echo '<div class="menu"><a href="set.php">Настройки</a></div>';
             }
     }

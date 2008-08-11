@@ -37,24 +37,4 @@ if (!empty($_SESSION['uid']))
 }
 
 
-$rega = mysql_query("select * from `users` where preg='0' ;");
-$rega1 = mysql_fetch_array($rega);
-$rega2 = mysql_num_rows($rega);
-if ($dostadm == "1" && $rega2 !== 0)
-{
-    echo "<div>Подтверждения регистрации ожидают
-<a href=\"$home/$admp/preg.php\">$rega2</a>
-человек</div>";
-}
-
-
-$ref = getenv("HTTP_REFERER");
-$ref = htmlspecialchars($ref);
-
-if ((isset($_SESSION['refsm'])) && ($headmod != "smile"))
-{
-    unset($_SESSION['refsm']);
-}
-
-
 ?>

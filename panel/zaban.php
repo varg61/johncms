@@ -18,7 +18,14 @@ define('_IN_JOHNCMS', 1);
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-echo 'Приносим извинения.<br />Функция Бана будет доступна немного позже, и будет выпущена в виде отдельного Add-On Pack.';
+if ($dostkmod == 1)
+{
+	echo '<div class="phdr">Кто в бане?</div>';
+	echo '<p><a href="main.php">В админку</a></p>';
+} else
+{
+    header("Location: ../index.php?mod=404");
+}
 
 require_once ("../incfiles/end.php");
 

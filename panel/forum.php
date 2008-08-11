@@ -782,7 +782,7 @@ if ($dostsmod == 1)
 
 } else
 {
-    header("Location: ../index.php?err");
+    header("Location: ../index.php?mod=404");
 }
 echo "<a href='../forum/?'>В форум</a><br/>";
 require_once ("../incfiles/end.php");

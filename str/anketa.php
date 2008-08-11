@@ -562,10 +562,10 @@ if (!empty($_SESSION['uid']))
             echo "<a href='pradd.php?act=write&amp;adr=" . $arr['id'] . "'>Написать в приват</a><br/>";
         }
 
-        if ($dostkmod == "1")
+        if ($dostkmod == 1)
         {
             echo '</p><p>';
-            echo "IP: $arr[ip]<br/>Browser: $arr[browser]<br/>";
+            echo 'IP: ' . long2ip($arr['ip']) . '<br/>Browser: ' . $arr['browser'] . '<br/>';
             echo "<a href='../" . $admp . "/zaban.php?user=" . $arr['id'] . "'>Банить</a><br/>";
         }
         if ($dostadm == "1")
