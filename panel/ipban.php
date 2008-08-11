@@ -63,14 +63,14 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            if (($ban_ip == $ipl && $ban_term == 1) || ($ban_ip == $ipl && $ban_term == 2))
-            {
-                echo '<p><b>ОШИБКА!</b><br />Вы пытаетесь отправить в бан собственный адрес IP.</p>';
-                echo '<p><a href="ipban.php?do=new">Назад</a><br /><a href="main.php">В Админку</a></p>';
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            $req = mysql_query("SELECT * FROM `ban_ip` WHERE `ip`='" . $ban_ip . "'");
+            //if (($ban_ip == $ipl && $ban_term == 1) || ($ban_ip == $ipl && $ban_term == 2))
+            //{
+            //    echo '<p><b>ОШИБКА!</b><br />Вы пытаетесь отправить в бан собственный адрес IP.</p>';
+            //    echo '<p><a href="ipban.php?do=new">Назад</a><br /><a href="main.php">В Админку</a></p>';
+            //    require_once ("../incfiles/end.php");
+            //    exit;
+            //}
+            $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `ip`='" . $ban_ip . "'");
             if (mysql_num_rows($req) != 0)
             {
                 echo '<p><b>ОШИБКА!</b><br />Адрес <b>' . long2ip($ban_ip) . '</b> уже есть в базе.</p>';
@@ -78,7 +78,7 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            mysql_query("INSERT INTO `ban_ip` SET
+            mysql_query("INSERT INTO `cms_ban_ip` SET
 			`ip`='" . $ban_ip . "',
 			`ban_type`='" . $ban_term . "',
 			`link`='" . check($ban_url) . "',
@@ -95,7 +95,7 @@ if ($dostadm == 1)
             ////////////////////////////////////////////////////////////
             if (isset($_GET['yes']))
             {
-                mysql_query("TRUNCATE TABLE `ban_ip`;");
+                mysql_query("TRUNCATE TABLE `cms_ban_ip`;");
                 echo '<p>Таблица IP банов успешно очищена.<br />Разбанены все адреса.</p>';
                 echo '<p><a href="ipban.php">Продолжить</a><br /><a href="main.php">В Админку</a></p>';
             } else
@@ -123,7 +123,7 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $req = mysql_query("SELECT * FROM `ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
+            $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
             if (mysql_num_rows($req) != 1)
             {
                 echo '<p>Такого адреса нет в базе.</p>';
@@ -172,7 +172,7 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $req = mysql_query("SELECT * FROM `ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
+            $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
             if (mysql_num_rows($req) != 1)
             {
                 echo '<p>Такого адреса нет в базе.</p>';
@@ -183,7 +183,7 @@ if ($dostadm == 1)
             {
                 if (isset($_POST['submit']))
                 {
-                    mysql_query("UPDATE `ban_ip` SET
+                    mysql_query("UPDATE `cms_ban_ip` SET
 					`ban_type`='" . intval($_POST['term']) . "',
 					`link`='" . check($_POST['url']) . "',
 					`who`='" . $login . "',
@@ -241,13 +241,13 @@ if ($dostadm == 1)
             }
             if (isset($_GET['yes']))
             {
-                mysql_query("DELETE FROM `ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
-                mysql_query("OPTIMIZE TABLE `ban_ip`;");
+                mysql_query("DELETE FROM `cms_ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
+                mysql_query("OPTIMIZE TABLE `cms_ban_ip`;");
                 echo '<p>Адрес ' . long2ip($baseip) . ' разбанен.</p>';
                 echo '<p><a href="ipban.php">Назад</a><br /><a href="main.php">В Админку</a></p>';
             } else
             {
-                $req = mysql_query("SELECT * FROM `ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
+                $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `ip`='" . $baseip . "' LIMIT 1;");
                 if (mysql_num_rows($req) != 1)
                 {
                     echo '<p>Такого адреса нет в базе.</p>';
@@ -280,7 +280,7 @@ if ($dostadm == 1)
             // Вывод общего списка забаненных IP                      //
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr">Бан по IP</div>';
-            $req = mysql_query("SELECT * FROM `ban_ip` ORDER BY `ip` ASC;");
+            $req = mysql_query("SELECT * FROM `cms_ban_ip` ORDER BY `ip` ASC;");
             $total = mysql_num_rows($req);
             if (empty($_GET['page']))
             {

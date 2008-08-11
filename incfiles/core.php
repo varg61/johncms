@@ -75,7 +75,7 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect t
 ////////////////////////////////////////////////////////////
 // Проверяем адрес IP на Бан                              //
 ////////////////////////////////////////////////////////////
-$req = mysql_query("SELECT `ban_type`, `link` FROM `ban_ip` WHERE `ip`='" . $ipl . "';") or die('Error: table "ban_ip"');
+$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE `ip`='" . $ipl . "';") or die('Error: table "cms_ban_ip"');
 if (mysql_num_rows($req) != 0)
 {
     $res = mysql_fetch_array($req);
@@ -101,7 +101,7 @@ if (mysql_num_rows($req) != 0)
 
         default:
             // Полный запрет доступа к сайту
-            echo 'Access forbidden!';
+            header("HTTP/1.0 404 Not Found");
             exit;
     }
 }

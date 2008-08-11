@@ -91,10 +91,10 @@ if (in_array($act, $do))
                 $knt = 0;
                 while ($arrt = mysql_fetch_array($lp))
                 {
-                    $q3 = mysql_query("select `refid` from `forum` where type='r' and id='" . $arrt[refid] . "';");
+                    $q3 = mysql_query("select `refid` from `forum` where type='r' and id='" . $arrt['refid'] . "';");
                     $q4 = mysql_fetch_array($q3);
-                    $rz = mysql_query("select `id` from `forum` where type='n' and refid='" . $q4[refid] . "' and `from`='" . $login . "';");
-                    $np = mysql_query("select `id` from `forum` where type='l' and time>='" . $arrt[time] . "' and refid='" . $arrt[id] . "' and `from`='" . $login . "';");
+                    $rz = mysql_query("select `id` from `forum` where type='n' and refid='" . $q4['refid'] . "' and `from`='" . $login . "';");
+                    $np = mysql_query("select `id` from `forum` where type='l' and time>='" . $arrt['time'] . "' and refid='" . $arrt['id'] . "' and `from`='" . $login . "';");
                     if ((mysql_num_rows($np)) != 1 && (mysql_num_rows($rz)) != 1)
                     {
                         $knt = $knt + 1;
@@ -116,14 +116,16 @@ if (in_array($act, $do))
             }
             if (empty($_GET['id']))
             {
-                // Список главных разделов
+                ////////////////////////////////////////////////////////////
+                // Список разделов                                        //
+                ////////////////////////////////////////////////////////////
                 echo "<b>Все форумы</b><hr/>";
                 $q = mysql_query("select `id`, `text` from `forum` where type='f' order by realid ;");
                 while ($mass = mysql_fetch_array($q))
                 {
-                    $colraz = mysql_query("select `id` from `forum` where type='r' and refid='" . $mass[id] . "';");
+                    $colraz = mysql_query("select `id` from `forum` where type='r' and refid='" . $mass['id'] . "';");
                     $colraz1 = mysql_num_rows($colraz);
-                    echo "<div class=\"menu\"><img alt=\"\" src=\"../images/arrow.gif\" width=\"7\" height=\"12\" />&nbsp;<a href='index.php?id=" . $mass[id] . "'>$mass[text]</a> [$colraz1]</div>";
+                    echo '<div class="menu"><a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
                 }
                 echo "<hr/><p>";
                 if (!empty($_SESSION['uid']))
@@ -151,17 +153,17 @@ if (in_array($act, $do))
                         $i = 0;
                         while ($mass1 = mysql_fetch_array($q1))
                         {
-                            $coltem = mysql_query("select id, time from `forum` where type='t' and moder='1' and refid='" . $mass1[id] . "' order by time desc;");
+                            $coltem = mysql_query("select id, time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc;");
                             $coltem1 = mysql_num_rows($coltem);
-                            $cmes = mysql_query("select time from `forum` where type='t' and moder='1' and refid='" . $mass1[id] . "' order by time desc LIMIT 1;");
+                            $cmes = mysql_query("select time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc LIMIT 1;");
                             $clm = 0;
                             while ($arr1 = mysql_fetch_array($coltem))
                             {
-                                $colmes = mysql_query("select id from `forum` where type='m' and refid='" . $arr1[id] . "' ;");
+                                $colmes = mysql_query("select id from `forum` where type='m' and refid='" . $arr1['id'] . "' ;");
                                 $colmes1 = mysql_num_rows($colmes);
                                 $clm = $clm + $colmes1;
                             }
-                            $cmes = mysql_query("select time from `forum` where type='t' and moder='1' and refid='" . $mass1[id] . "' order by time desc LIMIT 1;");
+                            $cmes = mysql_query("select time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc LIMIT 1;");
                             $arr = mysql_fetch_array($cmes);
                             $posl = $arr[time];
                             $d = $i / 2;
@@ -231,8 +233,8 @@ if (in_array($act, $do))
                         $i = 0;
                         while ($mass = mysql_fetch_array($q1))
                         {
-                            $colmes = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass[id] . "'ORDER BY time DESC;");
-                            $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass[id] . "'ORDER BY time DESC LIMIT 1;");
+                            $colmes = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
+                            $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC LIMIT 1;");
                             $colmes1 = mysql_num_rows($colmes);
                             $cpg = ceil($colmes1 / $kmess);
                             $colmes1 = $colmes1 - 1;
@@ -253,15 +255,15 @@ if (in_array($act, $do))
                                 $div = "<div class='c'>";
                             }
                             echo "$div";
-                            if ($mass[vip] == 1)
+                            if ($mass['vip'] == 1)
                             {
                                 echo "<img src='../images/pt.gif' alt=''/>";
-                            } elseif ($mass[edit] == 1)
+                            } elseif ($mass['edit'] == 1)
                             {
                                 echo "<img src='../images/tz.gif' alt=''/>";
                             } else
                             {
-                                $np = mysql_query("SELECT `id` FROM `forum` WHERE `type`='l' AND `time`>='" . $mass[time] . "' AND `refid`='" . $mass[id] . "' and `from`='" . $login . "';");
+                                $np = mysql_query("SELECT `id` FROM `forum` WHERE `type`='l' AND `time`>='" . $mass['time'] . "' AND `refid`='" . $mass['id'] . "' and `from`='" . $login . "';");
                                 $np1 = mysql_num_rows($np);
                                 if ($np1 == 0)
                                 {
@@ -284,12 +286,12 @@ if (in_array($act, $do))
                                 }
                             }
                             echo "<br/>";
-                            if ($mass[close] == 1)
+                            if ($mass['close'] == 1)
                             {
                                 echo "<font color='#FF0000'>Тема удалена!</font><br/>";
                             }
-                            echo "(" . date("H:i /d.m.y", $mass[time]) . ")<br/>[$mass[from]";
-                            if (!empty($nam[from]))
+                            echo "(" . date("H:i /d.m.y", $mass['time']) . ")<br/>[$mass[from]";
+                            if (!empty($nam['from']))
                             {
                                 echo "/$nam[from]";
                             }
@@ -324,9 +326,9 @@ if (in_array($act, $do))
                             echo "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='id' value='" . $id .
                                 "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
                         }
-                        $forum = mysql_query("select * from `forum` where type='f' and id='" . $type1[refid] . "';");
+                        $forum = mysql_query("select * from `forum` where type='f' and id='" . $type1['refid'] . "';");
                         $forum1 = mysql_fetch_array($forum);
-                        echo "&#187;<a href='?id=" . $type1[refid] . "'>$forum1[text]</a><br/>";
+                        echo "&#187;<a href='?id=" . $type1['refid'] . "'>$forum1[text]</a><br/>";
                         echo "&#187;<a href='?'>В форум</a><br/>";
                         break;
 

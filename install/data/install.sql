@@ -1,8 +1,10 @@
 --
 -- Структура таблицы `ban_ip`
 --
+DROP TABLE IF EXISTS `ban`;
 DROP TABLE IF EXISTS `ban_ip`;
-CREATE TABLE `ban_ip` (
+DROP TABLE IF EXISTS `cms_ban_ip`;
+CREATE TABLE `cms_ban_ip` (
   `ip` int(11) NOT NULL default '0',
   `ban_type` tinyint(4) NOT NULL default '0',
   `link` varchar(100) NOT NULL,

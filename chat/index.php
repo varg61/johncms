@@ -195,7 +195,6 @@ if (!empty($_SESSION['uid']))
                             $pro = mysql_query("select * from `chat` where dpar='vop' and type='m' and id='" . $prr[0] . "';");
                             $protv1 = mysql_fetch_array($pro);
                             $prr = array();
-
                             $ans = $protv1[realid];
                             $vopr = mysql_query("select * from `vik` where id='" . $ans . "';");
                             $vopr1 = mysql_fetch_array($vopr);
