@@ -114,7 +114,8 @@ if ($dostmod == 1)
             echo '<div class="menu">Всего в базе: <a href="../str/users.php">' . $total . '</a><br />';
             $total = @mysql_num_rows(mysql_query("SELECT * FROM `users` WHERE `preg`='0';"));
             echo 'На регистрации: ' . ($total > 0 ? '<a href="preg.php">' . $total . '</a>' : '0') . '<br />';
-            echo 'Забаненных: 0</div>';
+            $total = @mysql_num_rows(mysql_query("SELECT * FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "';"));
+            echo 'Забаненных: ' . ($total > 0 ? '<a href="zaban.php">' . $total . '</a>' : '0') . '</div>';
             echo '<div class="menu"><a href="main.php?do=search">Поиск</a></div>';
             echo '<div class="menu"><a href="zaban.php">Бан-панель</a></div>';
             echo '<div class="rmenu">Модули</div>';
@@ -126,7 +127,6 @@ if ($dostmod == 1)
                 echo '<div class="rmenu">Система</div>';
                 echo '<div class="menu"><a href="ipban.php">Бан по IP</a></div>';
                 echo '<div class="menu"><a href="main.php?do=modules">Модули (вкл/выкл)</a></div>';
-                echo '<div class="menu"><a href="">Чистка системы</a></div>';
                 echo '<div class="menu"><a href="set.php">Настройки</a></div>';
             }
     }

@@ -29,7 +29,7 @@ if ($dostadm == 1)
             // Форма ввода IP адреса для Бана                         //
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr">Баним IP</div>';
-			echo '<p><form action="ipban.php?do=insert" method="post">';
+            echo '<p><form action="ipban.php?do=insert" method="post">';
             echo 'Введите IP адрес:<br />';
             echo '<input type="text" name="ip"/><br/><br/>';
             echo '<b>Вид блокировки:</b><br />';
@@ -63,13 +63,13 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            //if (($ban_ip == $ipl && $ban_term == 1) || ($ban_ip == $ipl && $ban_term == 2))
-            //{
-            //    echo '<p><b>ОШИБКА!</b><br />Вы пытаетесь отправить в бан собственный адрес IP.</p>';
-            //    echo '<p><a href="ipban.php?do=new">Назад</a><br /><a href="main.php">В Админку</a></p>';
-            //    require_once ("../incfiles/end.php");
-            //    exit;
-            //}
+            if (($ban_ip == $ipl && $ban_term == 1) || ($ban_ip == $ipl && $ban_term == 2))
+            {
+                echo '<p><b>ОШИБКА!</b><br />Вы пытаетесь отправить в бан собственный адрес IP.</p>';
+                echo '<p><a href="ipban.php?do=new">Назад</a><br /><a href="main.php">В Админку</a></p>';
+                require_once ("../incfiles/end.php");
+                exit;
+            }
             $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `ip`='" . $ban_ip . "'");
             if (mysql_num_rows($req) != 0)
             {
@@ -281,21 +281,16 @@ if ($dostadm == 1)
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr">Бан по IP</div>';
             $req = mysql_query("SELECT * FROM `cms_ban_ip` ORDER BY `ip` ASC;");
-            $total = mysql_num_rows($req);
-            if (empty($_GET['page']))
-            {
-                $page = 1;
-            } else
-            {
-                $page = intval($_GET['page']);
-            }
-            $start = $page * 10 - 10;
-            if ($total < $start + 10)
+            $total = @mysql_num_rows($req);
+            $page = (isset($_GET['page']) && ($_GET['page'] > 0)) ? intval($_GET['page']):
+            1;
+            $start = $page * $kmess - $kmess;
+            if ($total < $start + $kmess)
             {
                 $end = $total;
             } else
             {
-                $end = $start + 10;
+                $end = $start + $kmess;
             }
             if ($total != 0)
             {
@@ -332,86 +327,18 @@ if ($dostadm == 1)
                     }
                     ++$i;
                 }
-                if ($total > 10)
+                if ($total > $kmess)
                 {
-                    echo '<hr /><p>';
-                    $ba = ceil($total / 10);
-                    if ($offpg != 1)
-                    {
-                        echo "Страницы:<br/>";
-                    } else
-                    {
-                        echo "Страниц: $ba<br/>";
-                    }
-                    if ($start != 0)
-                    {
-                        echo '<a href="ipban.php?page=' . ($page - 1) . '">&lt;&lt;</a> ';
-                    }
-                    $asd = $start - 10;
-                    $asd2 = $start + 20;
-                    if ($offpg != 1)
-                    {
-                        if ($asd < $total && $asd > 0)
-                        {
-                            echo ' <a href="ipban.php?page=1">1</a> .. ';
-                        }
-                        $page2 = $ba - $page;
-                        $pa = ceil($page / 2);
-                        $paa = ceil($page / 3);
-                        $pa2 = $page + floor($page2 / 2);
-                        $paa2 = $page + floor($page2 / 3);
-                        $paa3 = $page + (floor($page2 / 3) * 2);
-                        if ($page > 13)
-                        {
-                            echo ' <a href="ipban.php?page=' . $paa . '">' . $paa . '</a> <a href="ipban.php?page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="ipban.php?page=' . ($paa * 2) . '">' . ($paa * 2) . '</a> <a href="ipban.php?page=' . ($paa * 2 + 1) .
-                                '">' . ($paa * 2 + 1) . '</a> .. ';
-                        } elseif ($page > 7)
-                        {
-                            echo ' <a href="ipban.php?page=' . $pa . '">' . $pa . '</a> <a href="ipban.php?page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-                        }
-                        for ($i = $asd; $i < $asd2; )
-                        {
-                            if ($i < $total && $i >= 0)
-                            {
-                                $ii = floor(1 + $i / 10);
-                                if ($start == $i)
-                                {
-                                    echo " <b>$ii</b>";
-                                } else
-                                {
-                                    echo ' <a href="ipban.php?page=' . $ii . '">' . $ii . '</a> ';
-                                }
-                            }
-                            $i = $i + 10;
-                        }
-                        if ($page2 > 12)
-                        {
-                            echo ' .. <a href="ipban.php?page=' . $paa2 . '">' . $paa2 . '</a> <a href="ipban.php?page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="ipban.php?page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="ipban.php?page=' . ($paa3 + 1) .
-                                '">' . ($paa3 + 1) . '</a> ';
-                        } elseif ($page2 > 6)
-                        {
-                            echo ' .. <a href="ipban.php?page=' . $pa2 . '">' . $pa2 . '</a> <a href="ipban.php?page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
-                        }
-                        if ($asd2 < $total)
-                        {
-                            echo ' .. <a href="ipban.php?page=' . $ba . '">' . $ba . '</a>';
-                        }
-                    } else
-                    {
-                        echo "<b>[$page]</b>";
-                    }
-                    if ($total > $start + 10)
-                    {
-                        echo ' <a href="ipban.php?page=' . ($page + 1) . '">&gt;&gt;</a>';
-                    }
+                    echo '<p>';
+					$pagenav = array('address' => 'ipban.php?', 'total' => $total, 'numpr' => $kmess, 'page' => $page);
+                    pagenav($pagenav);
                     echo '</p>';
                 }
             } else
             {
                 echo "Список пуст.";
             }
-
-            echo '<hr /><p><a href="ipban.php?do=new">Банить IP</a><br />';
+            echo '<p><a href="ipban.php?do=new">Банить IP</a><br />';
             if ($total > 0)
                 echo '<a href="ipban.php?do=search">Поиск в базе</a><br /><a href="ipban.php?do=clear">Разбанить все IP</a>';
             echo '</p><p><a href="main.php">В Админку</a></p>';
