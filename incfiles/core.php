@@ -213,8 +213,8 @@ if ($user_id && $user_ps)
             mysql_free_result($req);
 
             ////////////////////////////////////////////////////////////
-			// Проверка юзера на бан                                  //
-			////////////////////////////////////////////////////////////
+            // Проверка юзера на бан                                  //
+            ////////////////////////////////////////////////////////////
             $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user_id . "' AND `ban_time`>'" . $realtime . "';") or die('Error: table "cms_ban_users"');
             if (mysql_num_rows($req) != 0)
             {
@@ -224,7 +224,10 @@ if ($user_id && $user_ps)
                     $ban[$res[4]] = 1;
                 mysql_free_result($req);
                 if (isset($ban['9']))
-                    exit;
+                {
+                	header("HTTP/1.0 404 Not Found");
+                	exit;
+                }
             }
 
             // Установка административного доступа

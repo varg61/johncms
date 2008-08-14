@@ -107,6 +107,87 @@ if ($dostkmod == 1)
             }
             break;
 
+        case 'help':
+            echo '<div class="phdr">Справка по бану</div>';
+            echo '<div class="menu">Все виды бана (кроме блокировки) разрешают пользователю доступ на сайт под его ником, но не позволяют писать.<br />';
+            echo 'Есть возможность читать входящую почту, но при банах &quot;тишина&quot;, или &quot;приват&quot;, нельзя отправлять письма.</div><div class="menu">';
+            echo '<b>' . $ban_term[1] . '</b><br />' . $ban_desc[1] . '<br />';
+            echo '<b>' . $ban_term[3] . '</b><br />' . $ban_desc[3] . '<br />';
+            echo '<b>' . $ban_term[10] . '</b><br />' . $ban_desc[10] . '<br />';
+            echo '<b>' . $ban_term[11] . '</b><br />' . $ban_desc[11] . '<br />';
+            echo '<b>' . $ban_term[12] . '</b><br />' . $ban_desc[12] . '<br />';
+            echo '<b>' . $ban_term[13] . '</b><br />' . $ban_desc[13] . '<br />';
+            echo '<b>' . $ban_term[14] . '</b><br />' . $ban_desc[14] . '<br />';
+            echo '<b>' . $ban_term[9] . '</b><br />' . $ban_desc[9];
+            echo '</div><div class="bmenu"><a href="zaban.php?do=ban&amp;id=' . $id . '">Назад</a></div>';
+            break;
+
+        case 'ban':
+            if (!empty($id))
+            {
+                $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $id . "' LIMIT 1;");
+                if (mysql_num_rows($req) != 1)
+                {
+                    echo 'Такого пользователя нет';
+                    require_once ("../incfiles/end.php");
+                    exit;
+                }
+                $res = mysql_fetch_array($req);
+                if ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] > $rights)
+                {
+                    echo $rights . '<br />';
+                    echo '<p>У Вас недостаточно прав, чтоб банить этого пользователя.</p>';
+                    require_once ("../incfiles/end.php");
+                    exit;
+                }
+                if (isset($_POST['submit']))
+                {
+                    $term = isset($_POST['term']) ? intval($_POST['term']) : '';
+                    $timeval = isset($_POST['timeval']) ? intval($_POST['timeval']) : '';
+                    $time = isset($_POST['time']) ? intval($_POST['time']) : '';
+                    if (empty($term) || empty($timeval) || empty($time))
+                    {
+                        echo 'Отсутствуют необходимые данные';
+                        require_once ("../incfiles/end.php");
+                        exit;
+                    }
+                    // Проверяем, есть ли аналогичный активный бан
+					$banq = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $id . "' AND `ban_time`>'" . $realtime . "' AND `ban_type`='" . $term . "' LIMIT 1;");
+                    if (mysql_num_rows($banq) == 1)
+                    {
+                        $banr = mysql_fetch_array($banq);
+                        echo '<p><b>Внимание,</b><br />такой бан уже есть.<br /><a href="zaban.php?do=detail&amp;id=' . $banr['id'] . '">Смотреть</a><br /><a href="zaban.php?do=ban&amp;id=' . $id . '">Назад</a></p>';
+                    }
+                } else
+                {
+                    // Форма ввода Бана
+                    echo '<div class="phdr">Кого наказываем?</div>';
+                    echo '<div class="gmenu">Ник: <a href="../str/anketa.php?user=' . $id . '"><b>' . $res['name'] . '</b></a>';
+                    echo '</div><form action="zaban.php?do=ban&amp;id=' . $id . '" method="post">';
+                    echo '<div class="rmenu"><b>Тип Бана:</b>&nbsp;<a href="zaban.php?do=help&amp;id=' . $id . '">[?]</a></div>';
+                    echo '<div class="menu"><input name="term" type="radio" value="1" checked="checked" />Тишина<br />';
+                    echo '<input name="term" type="radio" value="3" />Приват<br />';
+                    echo '<input name="term" type="radio" value="3" />Каменты<br />';
+                    echo '<input name="term" type="radio" value="3" />Форум<br />';
+                    echo '<input name="term" type="radio" value="3" />Чат<br />';
+                    echo '<input name="term" type="radio" value="3" />Гостевая<br />';
+                    if ($dostadm == 1)
+                        echo '<input name="term" type="radio" value="3" /><b>блокировка</b></div>';
+                    echo '<div class="rmenu"><b>Срок Бана:</b></div>';
+                    echo '<div class="menu"><input type="text" name="timeval" size="2" maxlength="2" value="10"/>&nbsp;время<br/>';
+                    echo '<input name="time" type="radio" value="1" checked="checked" />минут (60 max)<br />';
+                    echo '<input name="time" type="radio" value="3" />часов (24 max)<br />';
+                    echo '<input name="time" type="radio" value="3" />дней (30 max)<br />';
+                    if ($dostadm == 1)
+                        echo '<input name="time" type="radio" value="3" /><b>до отмены</b></div>';
+                    echo '<div class="rmenu"><b>Причина Бана:</b></div>';
+                    echo '<div class="menu"><textarea cols="20" rows="4" name="reason"></textarea></div>';
+                    echo '<div class="bmenu"><input type="submit" name="submit" value="Банить"/></div>';
+                    echo '</form>';
+                }
+            }
+            break;
+
         default:
             ////////////////////////////////////////////////////////////
             // Список забаненных                                      //

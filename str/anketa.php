@@ -566,7 +566,7 @@ if (!empty($_SESSION['uid']))
         {
             echo '</p><p>';
             echo 'IP: ' . long2ip($arr['ip']) . '<br/>Browser: ' . $arr['browser'] . '<br/>';
-            echo "<a href='../" . $admp . "/zaban.php?user=" . $arr['id'] . "'>Банить</a><br/>";
+            echo "<a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $arr['id'] . "'>Банить</a><br/>";
         }
         if ($dostadm == "1")
         {
