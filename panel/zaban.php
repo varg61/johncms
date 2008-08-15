@@ -86,6 +86,8 @@ if ($dostkmod == 1)
             {
                 $res = mysql_fetch_array($req);
                 echo '<div class="phdr">Бан детально</div>';
+                if (isset($_GET['ok']))
+                    echo '<div class="rmenu">Юзер забанен</div>';
                 echo '<div class="menu">Ник: <a href="../str/anketa.php?user=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a></div>';
                 echo '<div class="menu">Тип бана: <b>' . $ban_term[$res['ban_type']] . '</b><br />';
                 echo $ban_desc[$res['ban_type']] . '</div>';
@@ -98,7 +100,7 @@ if ($dostkmod == 1)
                 echo '<a href="zaban.php?do=razban&amp;id=' . $id . '">Разбанить</a>';
                 if ($dostadm == 1)
                     echo '<br /><a href="zaban.php?do=delban&amp;id=' . $id . '">Удалить бан</a>';
-                echo '</p><p><a href="zaban.php">Назад</a><br /><a href="">В админку</a></p>';
+                echo '</p><p><a href="zaban.php">Бан-панель</a><br /><a href="main.php">В админку</a></p>';
             } else
             {
                 echo 'Ошибка';
@@ -126,6 +128,7 @@ if ($dostkmod == 1)
             if (!empty($id))
             {
                 $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $id . "' LIMIT 1;");
+                // Проверяем, есть ли в базе пользователь
                 if (mysql_num_rows($req) != 1)
                 {
                     echo 'Такого пользователя нет';
@@ -133,31 +136,72 @@ if ($dostkmod == 1)
                     exit;
                 }
                 $res = mysql_fetch_array($req);
-                if ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] > $rights)
+                // Достаточно ли прав, чтоб банить выбранного юзера
+                if ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= $rights)
                 {
                     echo $rights . '<br />';
                     echo '<p>У Вас недостаточно прав, чтоб банить этого пользователя.</p>';
                     require_once ("../incfiles/end.php");
                     exit;
                 }
+                // Обработка принятых из формы данных
                 if (isset($_POST['submit']))
                 {
                     $term = isset($_POST['term']) ? intval($_POST['term']) : '';
                     $timeval = isset($_POST['timeval']) ? intval($_POST['timeval']) : '';
                     $time = isset($_POST['time']) ? intval($_POST['time']) : '';
-                    if (empty($term) || empty($timeval) || empty($time))
+                    $reason = !empty($_POST['reason']) ? check($_POST['reason']) : 'Причина не указана';
+                    if (empty($term) || empty($timeval) || empty($time) || $timeval < 1)
                     {
                         echo 'Отсутствуют необходимые данные';
                         require_once ("../incfiles/end.php");
                         exit;
                     }
                     // Проверяем, есть ли аналогичный активный бан
-					$banq = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $id . "' AND `ban_time`>'" . $realtime . "' AND `ban_type`='" . $term . "' LIMIT 1;");
+                    $banq = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $id . "' AND `ban_time`>'" . $realtime . "' AND `ban_type`='" . $term . "' LIMIT 1;");
                     if (mysql_num_rows($banq) == 1)
                     {
                         $banr = mysql_fetch_array($banq);
                         echo '<p><b>Внимание,</b><br />такой бан уже есть.<br /><a href="zaban.php?do=detail&amp;id=' . $banr['id'] . '">Смотреть</a><br /><a href="zaban.php?do=ban&amp;id=' . $id . '">Назад</a></p>';
+                        require_once ("../incfiles/end.php");
+                        exit;
                     }
+                    // Пересчитываем время бана
+                    switch ($time)
+                    {
+                        case 2:
+                            // Часы
+                            if ($timeval > 24)
+                                $timeval = 24;
+                            $timeval = $timeval * 3600;
+                            break;
+                        case 3:
+                            // Дни
+                            if ($timeval > 30)
+                                $timeval = 30;
+                            $timeval = $timeval * 86400;
+                            break;
+                        case 4:
+                            // До отмены (на 10 лет)
+                            $timeval = 315360000;
+                            break;
+                        default:
+                            // Минуты
+                            if ($timeval > 60)
+                                $timeval = 60;
+                            $timeval = $timeval * 60;
+                    }
+                    // Заносим в базу
+                    mysql_query("INSERT INTO `cms_ban_users` SET
+					`user_id`='" . $id . "',
+					`ban_time`='" . ($realtime + $timeval) . "',
+					`ban_while`='" . $realtime . "',
+					`ban_type`='" . $term . "',
+					`ban_who`='" . $login . "',
+					`ban_reason`='" . $reason . "'
+					;");
+                    $detail = mysql_insert_id();
+                    header("Location: zaban.php?do=detail&id=$detail&ok=1");
                 } else
                 {
                     // Форма ввода Бана
@@ -167,23 +211,25 @@ if ($dostkmod == 1)
                     echo '<div class="rmenu"><b>Тип Бана:</b>&nbsp;<a href="zaban.php?do=help&amp;id=' . $id . '">[?]</a></div>';
                     echo '<div class="menu"><input name="term" type="radio" value="1" checked="checked" />Тишина<br />';
                     echo '<input name="term" type="radio" value="3" />Приват<br />';
-                    echo '<input name="term" type="radio" value="3" />Каменты<br />';
-                    echo '<input name="term" type="radio" value="3" />Форум<br />';
-                    echo '<input name="term" type="radio" value="3" />Чат<br />';
-                    echo '<input name="term" type="radio" value="3" />Гостевая<br />';
+                    echo '<input name="term" type="radio" value="10" />Каменты<br />';
+                    echo '<input name="term" type="radio" value="11" />Форум<br />';
+                    echo '<input name="term" type="radio" value="12" />Чат<br />';
+                    echo '<input name="term" type="radio" value="13" />Гостевая<br />';
+                    echo '<input name="term" type="radio" value="14" />Галерея<br />';
                     if ($dostadm == 1)
-                        echo '<input name="term" type="radio" value="3" /><b>блокировка</b></div>';
+                        echo '<input name="term" type="radio" value="9" /><b>блокировка</b></div>';
                     echo '<div class="rmenu"><b>Срок Бана:</b></div>';
                     echo '<div class="menu"><input type="text" name="timeval" size="2" maxlength="2" value="10"/>&nbsp;время<br/>';
                     echo '<input name="time" type="radio" value="1" checked="checked" />минут (60 max)<br />';
-                    echo '<input name="time" type="radio" value="3" />часов (24 max)<br />';
+                    echo '<input name="time" type="radio" value="2" />часов (24 max)<br />';
                     echo '<input name="time" type="radio" value="3" />дней (30 max)<br />';
                     if ($dostadm == 1)
-                        echo '<input name="time" type="radio" value="3" /><b>до отмены</b></div>';
+                        echo '<input name="time" type="radio" value="4" /><b>до отмены</b></div>';
                     echo '<div class="rmenu"><b>Причина Бана:</b></div>';
                     echo '<div class="menu"><textarea cols="20" rows="4" name="reason"></textarea></div>';
                     echo '<div class="bmenu"><input type="submit" name="submit" value="Банить"/></div>';
                     echo '</form>';
+                    echo '<p><a href="../str/anketa.php?user=' . $id . '">Отмена</a></p>';
                 }
             }
             break;

@@ -43,7 +43,7 @@ switch ($mod)
         echo '<div class="menu"><a href="str/anketa.php?act=statistic">Статистика</a></div>';
         if ($dostmod == 1)
         {
-            echo '<div class="rmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a></div>';
+            echo '<div class="gmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a></div>';
 			echo '<div class="rmenu"><a href="' . $admp . '/main.php">Админка</a></div>';
         }
         break;
