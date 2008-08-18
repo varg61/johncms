@@ -39,7 +39,7 @@ if (!empty($_SESSION['uid']))
             ////////////////////////////////////////////////////////////
             // Отправка письма и обработка прикрепленного файла       //
             ////////////////////////////////////////////////////////////
-            if ($ban['1'] || !$ban['3'])
+            if ($ban['1'] || $ban['3'])
                 exit;
             require_once ("../incfiles/head.php");
             $ign = mysql_query("select * from `privat` where me='" . $foruser . "' and ignor='" . $login . "';");
@@ -186,7 +186,7 @@ if (!empty($_SESSION['uid']))
                     {
                         mysql_query("update `privat` set otvet='1' where id='" . $idm . "';");
                     }
-                    echo "<hr/>Письмо отправлено!<br/>";
+                    echo "<p>Письмо отправлено!</p>";
                     if (!empty($_SESSION['refpr']))
                     {
                         echo "<a href='" . $_SESSION['refpr'] . "'>Вернуться откуда пришли</a><br/>";
@@ -232,7 +232,7 @@ if (!empty($_SESSION['uid']))
             ////////////////////////////////////////////////////////////
             // Форма для отправки привата                             //
             ////////////////////////////////////////////////////////////
-            if ($ban['1'] || !$ban['3'])
+            if ($ban['1'] || $ban['3'])
                 exit;
             require_once ("../incfiles/head.php");
             if (!empty($_GET['adr']))

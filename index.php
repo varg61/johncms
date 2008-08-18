@@ -35,6 +35,28 @@ switch ($mod)
         echo '<p>Ошибка 404: файл не найден!!!</p>';
         break;
 
+    case 'ban':
+        ////////////////////////////////////////////////////////////
+        // Подробности бана                                       //
+        ////////////////////////////////////////////////////////////
+        require_once ('incfiles/ban.php');
+        echo '<div class="phdr">У Вас есть следующие наказания:</div>';
+        $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user_id . "' AND `ban_time`>'" . $realtime . "';");
+        if (mysql_num_rows($req) != 0)
+        {
+            while ($res = mysql_fetch_array($req))
+            {
+                echo '<div class="menu">';
+                echo '<b>' . $ban_term[$res['ban_type']] . '</b><br />';
+                echo $ban_desc[$res['ban_type']] . '<br />';
+                echo '<u>Причина:</u> ' . $res['ban_reason'] . '<br />';
+                echo '<u>Срок:</u> ' . timecount($res['ban_time'] - $res['ban_while']) . '<br />';
+				echo '<u>Осталось:</u> ' . timecount($res['ban_time'] - $realtime) . '';
+                echo '</div>';
+            }
+        }
+        break;
+
     case 'cab':
         echo '<div class="phdr">Личный кабинет</div>';
         echo '<div class="gmenu"><a href="str/privat.php">Личная почта</a></div>';
@@ -44,7 +66,7 @@ switch ($mod)
         if ($dostmod == 1)
         {
             echo '<div class="gmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a></div>';
-			echo '<div class="rmenu"><a href="' . $admp . '/main.php">Админка</a></div>';
+            echo '<div class="rmenu"><a href="' . $admp . '/main.php">Админка</a></div>';
         }
         break;
 

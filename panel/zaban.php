@@ -95,8 +95,7 @@ if ($dostkmod == 1)
                 echo '<div class="menu">Когда: ' . gmdate('d.m.Y, H:i:s', $res['ban_while']) . '</div>';
                 echo '<div class="menu">Срок: ' . timecount($res['ban_time'] - $res['ban_while']) . '</div>';
                 echo '<div class="menu">Причина: ' . $res['ban_reason'] . '</div>';
-                $estimate = $res['ban_time'] - $realtime;
-                echo '<div class="bmenu">Осталось: ' . timecount($estimate) . '</div><p>';
+                echo '<div class="bmenu">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div><p>';
                 echo '<a href="zaban.php?do=razban&amp;id=' . $id . '">Разбанить</a>';
                 if ($dostadm == 1)
                     echo '<br /><a href="zaban.php?do=delban&amp;id=' . $id . '">Удалить бан</a>';

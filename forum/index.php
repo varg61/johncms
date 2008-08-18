@@ -225,7 +225,7 @@ if (in_array($act, $do))
                             $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `close`!='1' AND `moder`='1' AND `refid`='" . $id . "'  ORDER BY vip DESC, time DESC LIMIT " . $start . "," . $kmess . ";");
                         }
                         echo "<b>$type1[text]</b><br/>Тем в разделе: $coltem<br/>";
-                        if (!empty($_SESSION['uid']))
+                        if ($user_id && !$ban['1'] && !$ban['11'])
                         {
                             echo "<a href='index.php?act=nt&amp;id=" . $id . "'>Новая тема</a>";
                         }

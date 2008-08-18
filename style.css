@@ -1,8 +1,17 @@
-a:link, a:visited{ color: #0000bb; text-decoration: underline; }
+a:link, a:visited{
+	color: #0000bb;
+	text-decoration: underline;
+}
 
-a:hover{ color: #ff6600; text-decoration: none; }
+a:hover{
+	color: #ff6600;
+	text-decoration: none;
+}
 
-a:active{ color: #666600; text-decoration: underline; }
+a:active{
+	color: #666600;
+	text-decoration: underline;
+}
 
 body{
 	margin: 0px;
@@ -13,9 +22,17 @@ body{
 	font-size: small;
 }
 
-form{ padding: 0px; margin: 0px; font-size: small; }
+form{
+	padding: 0px;
+	margin: 0px;
+	font-size: small;
+}
 
-hr{ margin: 0; border: 0; border-top: 1px solid gray; }
+hr{
+	margin: 0;
+	border: 0;
+	border-top: 1px solid gray;
+}
 
 .a{
 	border: 1px solid #b5bec7;
@@ -25,20 +42,33 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 }
 
 .alarm{
-	background-color: #ff4500;
+	background-color: Red;
 	color: #ffffff;
-	text-align: center;
 	font-weight: bold;
-	padding-bottom: 2px;
+	border: 1px solid white;
+	padding: 3px 0px 3px 4px;
 }
 
-.alarm a:link, .alarm a:visited{ font-size: x-small; color: white; }
+.alarm a:link, .alarm a:visited{
+	font-size: x-small;
+	color: white;
+}
 
-.b{ padding: 2px; margin: 0px; background-color: #e8e8e8; }
+.b{
+	padding: 2px;
+	margin: 0px;
+	background-color: #e8e8e8;
+}
 
-.c{ padding: 2px; margin: 0px; background-color: #ffffff; }
+.c{
+	padding: 2px;
+	margin: 0px;
+	background-color: #ffffff;
+}
 
-.end{ text-align: center; }
+.end{
+	text-align: center;
+}
 
 .fmenu{
 	margin: 0px;
@@ -52,7 +82,9 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 	padding: 4px 1px 0px 0px;
 }
 
-.footer a:link, .footer a:visited{ color: #ffffff; }
+.footer a:link, .footer a:visited{
+	color: #ffffff;
+}
 
 .hdr{
 	padding-left: 2px;
@@ -113,9 +145,15 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 	border-left: 3px solid #c0c0c0;
 }
 
-.red{ color: red; }
+.red{
+	color: red;
+}
 
-.redhr{ margin: 0; border: 0; border-top: 3px solid red; }
+.redhr{
+	margin: 0;
+	border: 0;
+	border-top: 3px solid red;
+}
 
 .tmn{
 	padding: 5px 0px 5px 4px;
@@ -124,24 +162,28 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 	background-color: #586776;
 	border-top: 3px solid #45515d;
 }
+
 .tmn a:link, .tmn a:visited, .fmenu a:link, .fmenu a:visited{
 	color: white;
 	text-decoration: none;
 }
+
 .tmn a:hover, .fmenu a:hover{
 	text-decoration: underline;
-
 }
+
 .reply{
 	padding: 2px 0px 2px 4px;
 	border-left: 4px solid red;
 	color: red;
 }
+
 .func{
 	color: gray;
 	padding: 2px 0px 2px 4px;
 	border-left: 4px solid #9acd32;
 }
+
 .phdr{
 	color: black;
 	font-weight: bold;
@@ -149,3 +191,4 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 	background-color: #bcc4cd;
 	border-bottom: 3px solid white;
 }
+

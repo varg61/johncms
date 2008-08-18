@@ -23,7 +23,7 @@ if (empty($_GET['id']))
     exit;
 }
 $id = intval(check($_GET['id']));
-if (empty($_SESSION['uid']))
+if (!$user_id || $ban['1'] || $ban['11'])
 {
     require_once ("../incfiles/head.php");
     echo "Вы не авторизованы!<br/>";
