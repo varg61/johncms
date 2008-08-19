@@ -340,13 +340,13 @@ switch ($act)
         {
             // Запрос для Админ клуба
             echo '<b>АДМИН-КЛУБ</b><hr class="redhr" />';
-            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`
+            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`
 			FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='1' ORDER BY `time` DESC;");
         } else
         {
             // Запрос для обычной Гастивухи
             echo '<hr />';
-            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`
+            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`
 			FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='0' ORDER BY `time` DESC;");
         }
         $colmes = mysql_num_rows($req);
@@ -434,6 +434,8 @@ switch ($act)
                 $vrp = $res['time'] + $sdvig * 3600;
                 $vr = date("d.m.y / H:i", $vrp);
                 echo ' <font color="#999999">(' . $vr . ')</font><br/>';
+                if (!empty($res['status']))
+                    echo '<div class="status"><img src="../images/star.gif" alt=""/>&nbsp;'.$res['status'] . '</div>';
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
                 if ($res['user_id'] != "0")
                 {

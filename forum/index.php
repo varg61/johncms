@@ -408,7 +408,7 @@ if (in_array($act, $do))
                             echo '<b><font color="#FF0000">Тема закрыта</font></b><br/>';
                         } elseif ($type1['close'] == 1)
                         {
-                        	echo '<b><font color="#FF0000">Тема удалена</font></b><br/>';
+                            echo '<b><font color="#FF0000">Тема удалена</font></b><br/>';
                         }
                         if ($type1['edit'] != 1 && $_SESSION['uid'] != "" && $upfp == 1)
                         {
@@ -442,7 +442,7 @@ if (in_array($act, $do))
                                 {
                                     $div = "<div class='c'>";
                                 }
-                                $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb` FROM `users` WHERE `name`='" . $mass['from'] . "';");
+                                $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb`, `status` FROM `users` WHERE `name`='" . $mass['from'] . "';");
                                 $mass1 = mysql_fetch_array($uz);
                                 echo "$div";
                                 switch ($mass1['sex'])
@@ -487,11 +487,13 @@ if (in_array($act, $do))
                                 {
                                     echo '<font color="#00AA00"> [ON]</font>';
                                 }
+                                echo ' <font color="#999999">(' . $vr . ')</font><br/>';
+                                if (!empty($mass1['status']))
+                                    echo '<div class="status"><img src="../images/star.gif" alt=""/>&nbsp;' . $mass1['status'] . '</div>';
                                 if ($mass1['dayb'] == $day && $mass1['monthb'] == $mon)
                                 {
-                                    echo "!!!<br/>";
+                                    echo '<font color="#FF0000">Именины!!!</font><br/>';
                                 }
-                                echo "($vr)<br/>";
                                 if ($mass['close'] == 1)
                                 {
                                     echo "Пост удалён!<br/>";

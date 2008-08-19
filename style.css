@@ -201,3 +201,7 @@ hr{
 	background-image: url(images/bg.gif);
 	border-bottom: 1px solid red;
 }
+.status{
+	color: #CD853F;
+	font-weight: bold;
+}
