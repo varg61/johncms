@@ -61,6 +61,7 @@ switch ($tip)
             // Первая подсказка Умника                                //
             ////////////////////////////////////////////////////////////
             if ($prov['otv'] == "2" && $prov['time'] < intval($realtime - 50)) // Время ожидания от начала до первой подсказки
+
             {
                 $vopr = mysql_query("select * from `vik` where id='" . $prov['realid'] . "';");
                 $vopr1 = mysql_fetch_array($vopr);
@@ -88,6 +89,7 @@ switch ($tip)
             // Вторая подсказка Умника                                //
             ////////////////////////////////////////////////////////////
             if ($prov['otv'] == "3" && $prov['time'] < intval($realtime - 100)) // Время ожидания от начала до второй подсказки
+
             {
                 $vopr = mysql_query("select * from `vik` where id='" . $prov['realid'] . "';");
                 $vopr1 = mysql_fetch_array($vopr);
@@ -107,6 +109,7 @@ switch ($tip)
             }
 
             if ($prov['otv'] == "5" && $prov[time] < intval($realtime - 15)) // Пауза перед новым вопросом
+
             {
                 $v = mysql_query("select * from `vik` ;");
                 $c = mysql_num_rows($v);
@@ -206,7 +209,7 @@ switch ($tip)
                 $als = mysql_query("select * from `users` where name='" . $mass['from'] . "';");
                 $als1 = mysql_fetch_array($als);
                 $psw = $als1['alls'];
-				if (($mass['dpar'] != 1 || $mass['to'] == $login || $mass['from'] == $login || $dostsadm == 1) && ($ign1 == 0 || $dostcmod == 1))
+                if (($mass['dpar'] != 1 || $mass['to'] == $login || $mass['from'] == $login || $dostsadm == 1) && ($ign1 == 0 || $dostcmod == 1))
                 {
                     if ($type1['dpar'] != "in" || $psw == $datauser['alls'])
                     {
@@ -266,7 +269,6 @@ switch ($tip)
                                     echo " [Kil] ";
                                     break;
                             }
-
                             // Выводим метку Онлайн / Офлайн
                             //$ontime = $mass1[lastdate];
                             //$ontime2 = $ontime + 300;
@@ -277,7 +279,6 @@ switch ($tip)
                             //{
                             //    echo "<font color='" . $cons . "'> [ON]</font>";
                             //}
-
                             // Выводим метку именнинника
                             //if ($mass1[dayb] == $day && $mass1[monthb] == $mon)
                             //{
@@ -306,39 +307,26 @@ switch ($tip)
                                 echo "</b></font>";
                             }
                         }
-                        $mass['text'] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $mass['text']);
-                        $mass['text'] = eregi_replace("\\[l\\]([[:alnum:]_=/:-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/;%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $mass['text']);
-                        if (stristr($mass['text'], "<a href="))
-                        {
-                            $mass['text'] = eregi_replace("\\<a href\\='((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/;%]*)?)?)'>[[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/;%]*)?)?)</a>",
-                                "<a href='\\1\\3'>\\3</a>", $mass['text']);
-                        } else
-                        {
-                            $mass['text'] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/;%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $mass['text']);
-                        }
+                        $text = tags($mass['text']);
                         if ($offsm != 1 && $offgr != 1)
                         {
-                            $tekst = smiles($mass['text']);
-                            $tekst = smilescat($tekst);
+                            $text = smiles($text);
+                            $text = smilescat($text);
 
                             if ($mass['from'] == nickadmina || $mass['from'] == nickadmina2 || $mass1['rights'] >= 1)
                             {
-                                $tekst = smilesadm($tekst);
+                                $text = smilesadm($text);
                             }
-                        } else
-                        {
-                            $tekst = $mass['text'];
                         }
                         if ($mass['to'] == $login)
                         {
-                            echo "<font color='" . $cdinf . "'><b>";
+                            echo '<b>';
                         }
-                        echo "$tekst<br/>";
+                        echo $text . '<br/>';
                         if ($mass['to'] == $login)
                         {
-                            echo "</b></font>";
+                            echo '</b>';
                         }
-
                         // Удаление постов и информация о браузере
                         //if ($dostcmod == 1)
                         //{
