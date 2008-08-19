@@ -261,6 +261,9 @@ if (in_array($act, $do))
                             } elseif ($mass['edit'] == 1)
                             {
                                 echo "<img src='../images/tz.gif' alt=''/>";
+                            } elseif ($mass['close'] == 1)
+                            {
+                                echo "<img src='../images/dl.gif' alt=''/>";
                             } else
                             {
                                 $np = mysql_query("SELECT `id` FROM `forum` WHERE `type`='l' AND `time`>='" . $mass['time'] . "' AND `refid`='" . $mass['id'] . "' and `from`='" . $login . "';");
@@ -286,10 +289,6 @@ if (in_array($act, $do))
                                 }
                             }
                             echo "<br/>";
-                            if ($mass['close'] == 1)
-                            {
-                                echo "<font color='#FF0000'>Тема удалена!</font><br/>";
-                            }
                             echo "(" . date("H:i /d.m.y", $mass['time']) . ")<br/>[$mass[from]";
                             if (!empty($nam['from']))
                             {
@@ -407,6 +406,9 @@ if (in_array($act, $do))
                         if ($type1['edit'] == 1)
                         {
                             echo '<b><font color="#FF0000">Тема закрыта</font></b><br/>';
+                        } elseif ($type1['close'] == 1)
+                        {
+                        	echo '<b><font color="#FF0000">Тема удалена</font></b><br/>';
                         }
                         if ($type1['edit'] != 1 && $_SESSION['uid'] != "" && $upfp == 1)
                         {

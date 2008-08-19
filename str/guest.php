@@ -77,17 +77,6 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Добавление нового поста                                //
         ////////////////////////////////////////////////////////////
-        $agn = strtok($agn, ' ');
-        // Задаем куда вставляем, в Админ клуб (1), или в Гастивуху (0)
-        $admset = isset($_SESSION['ga']) ? 1:
-        0;
-        $req = mysql_query("SELECT * FROM `guest` WHERE `soft`='" . mysql_real_escape_string($agn) . "' AND `time` >='" . ($realtime - 30) . "' AND `ip` ='" . $ipl . "' AND `adm`='" . $admset . "';");
-        if (mysql_num_rows($req) > 0)
-        {
-            echo "<p><b>Антифлуд!</b><br />Вы не можете так часто добавлять сообщения<br/>Порог 30 секунд<br/><br/><a href='guest.php'>Назад</a></p>";
-            require_once ("../incfiles/end.php");
-            exit;
-        }
         if (empty($user_id) && empty($_POST['name']))
         {
             echo "<p>Вы не ввели имя!<br/><a href='guest.php'>Назад</a></p>";
@@ -100,9 +89,26 @@ switch ($act)
             require_once ("../incfiles/end.php");
             exit;
         }
-        if (empty($_SESSION['guest']) && !$ban['1'] && !$ban['13'])
+        if (empty($_SESSION['guest']) || $ban['1'] || $ban['13'])
         {
             echo "<p><b>Спам!</b></p>";
+            require_once ("../incfiles/end.php");
+            exit;
+        }
+        if (!$user_id && $_SESSION['code'] != $_POST['code'])
+        {
+            echo "<p>Код введен неверно!<br/><a href='guest.php'>Назад</a></p>";
+            require_once ("../incfiles/end.php");
+            exit;
+        }
+        $agn = strtok($agn, ' ');
+        // Задаем куда вставляем, в Админ клуб (1), или в Гастивуху (0)
+        $admset = isset($_SESSION['ga']) ? 1:
+        0;
+        $req = mysql_query("SELECT * FROM `guest` WHERE `soft`='" . mysql_real_escape_string($agn) . "' AND `time` >='" . ($realtime - 30) . "' AND `ip` ='" . $ipl . "' AND `adm`='" . $admset . "';");
+        if (mysql_num_rows($req) > 0)
+        {
+            echo "<p><b>Антифлуд!</b><br />Вы не можете так часто добавлять сообщения<br/>Порог 30 секунд<br/><br/><a href='guest.php'>Назад</a></p>";
             require_once ("../incfiles/end.php");
             exit;
         }
@@ -309,7 +315,7 @@ switch ($act)
         {
             $_SESSION['guest'] = rand(1000, 9999);
             echo '<form action="guest.php?act=say" method="post">';
-            if (empty($_SESSION['uid']))
+            if (!$user_id)
             {
                 echo "Имя(max. 25):<br/><input type='text' name='name' maxlength='25'/><br/>";
             }
@@ -317,6 +323,13 @@ switch ($act)
             if ($offtr != 1)
             {
                 echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
+            }
+            if (!$user_id)
+            {
+                // CAPTCHA для гостей
+                $_SESSION['code'] = rand(1000, 9999);
+                echo '<img src="../code.php" alt="Код"/><br />';
+                echo '<input type="text" size="4" maxlength="4"  name="code"/>&nbsp;введите код<br /><br />';
             }
             echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form><br />";
         } else

@@ -45,9 +45,9 @@ $qon2 = mysql_num_rows($qon);
 $massall = array();
 $all = @mysql_query("SELECT * FROM `count` WHERE `time`>='" . $ontime . "' GROUP BY `ip`, `browser`;");
 $all2 = mysql_num_rows($all);
-echo '<div class="cnt">' . ($user_id ? '<a href="' . $home . '/str/online.php">Онлайн: ' . $qon2 . ' / ' . $all2 . '</a>' : 'Онлайн: ' . $qon2 . ' / ' . $all2) . '</div>';
+echo '</div><div class="footer">' . ($user_id ? '<a href="' . $home . '/str/online.php">Онлайн: ' . $qon2 . ' / ' . $all2 . '</a>' : 'Онлайн: ' . $qon2 . ' / ' . $all2) . '</div>';
 
-echo '</div><div>';
+echo '<div>';
 
 // Выводим параметры Gzip сжатия
 if ($set['gzip'])

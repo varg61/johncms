@@ -305,10 +305,10 @@ if (!empty($_SESSION['uid']))
             $knt = 0;
             while ($arrt = mysql_fetch_array($lp))
             {
-                $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt[refid] . "';");
+                $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt['refid'] . "';");
                 $q4 = mysql_fetch_array($q3);
-                $rz = mysql_query("select * from `forum` where type='n' and refid='" . $q4[refid] . "' and `from`='" . $login . "';");
-                $np = mysql_query("select * from `forum` where type='l' and time>='" . $arrt[time] . "' and refid='" . $arrt[id] . "' and `from`='" . $login . "';");
+                $rz = mysql_query("select * from `forum` where type='n' and refid='" . $q4['refid'] . "' and `from`='" . $login . "';");
+                $np = mysql_query("select * from `forum` where type='l' and time>='" . $arrt['time'] . "' and refid='" . $arrt['id'] . "' and `from`='" . $login . "';");
                 if ((mysql_num_rows($np)) != 1 && (mysql_num_rows($rz)) != 1)
                 {
                     $knt = $knt + 1;
@@ -350,17 +350,17 @@ if (!empty($_SESSION['uid']))
             }
             while ($arrt = mysql_fetch_array($lp))
             {
-                $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt[refid] . "';");
+                $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt['refid'] . "';");
                 $q4 = mysql_fetch_array($q3);
-                $rz = mysql_query("select * from `forum` where type='n' and refid='" . $q4[refid] . "' and `from`='" . $login . "';");
-                $np = mysql_query("select * from `forum` where type='l' and time>='" . $arrt[time] . "' and refid='" . $arrt[id] . "' and `from`='" . $login . "';");
+                $rz = mysql_query("select * from `forum` where type='n' and refid='" . $q4['refid'] . "' and `from`='" . $login . "';");
+                $np = mysql_query("select * from `forum` where type='l' and time>='" . $arrt['time'] . "' and refid='" . $arrt['id'] . "' and `from`='" . $login . "';");
                 if ((mysql_num_rows($np)) != 1 && (mysql_num_rows($rz)) != 1)
                 {
-                    $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt[refid] . "';");
+                    $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt['refid'] . "';");
                     $razd = mysql_fetch_array($q3);
-                    $q4 = mysql_query("select * from `forum` where type='f' and id='" . $razd[refid] . "';");
+                    $q4 = mysql_query("select * from `forum` where type='f' and id='" . $razd['refid'] . "';");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("select * from `forum` where type='m' and close!='1' and refid='" . $arrt[id] . "' order by time desc;");
+                    $colmes = mysql_query("select * from `forum` where type='m' and close!='1' and refid='" . $arrt['id'] . "' order by time desc;");
                     $pp = 0;
                     while ($nik = mysql_fetch_array($colmes))
                     {
@@ -392,12 +392,15 @@ if (!empty($_SESSION['uid']))
                             $div = "<div class='c'>";
                         }
                         echo "$div";
-                        if ($arrt[edit] == 1)
+                        if ($arrt['edit'] == 1)
                         {
-                            echo "<img src='../images/tz.gif' alt=''/>";
+                            echo '<img src="../images/tz.gif" alt=""/>';
+                        } elseif ($arrt['close'] == 1)
+                        {
+                        	echo '<img src="../images/dl.gif" alt=""/>';
                         } else
                         {
-                            echo "<img src='../images/np.gif' alt=''/>";
+                            echo '<img src="../images/np.gif" alt=""/>';
                         }
                         echo '<a href="index.php?id=' . $arrt['id'] . '&amp;page=' . $page . '"><b>' . $arrt['text'] . '</b></a>&nbsp;[' . $colmes1 . ']';
                         if ($cpg > 1)
@@ -406,12 +409,12 @@ if (!empty($_SESSION['uid']))
                         }
                         echo "<br /><small><a href='index.php?id=" . $razd['id'] . "'>$frm[text]/$razd[text]</a>";
                         echo "<br /></small>[$arrt[from]"; // Авторы
-                        if (!empty($nam[from]))
+                        if (!empty($nam['from']))
                         {
                             echo "&nbsp;/&nbsp;$nam[from]";
                         }
                         echo "]";
-                        echo " <small><font color='#999999'>" . date("H:i /d.m.y", $arrt[time]) . '</font>'; // Дата
+                        echo " <small><font color='#999999'>" . date("H:i /d.m.y", $arrt['time']) . '</font>'; // Дата
                         echo "</small></div>";
                     }
                     $i++;
@@ -513,12 +516,12 @@ if (!empty($_SESSION['uid']))
     $lp = mysql_query("select * from `forum` where type='t' and moder='1' order by time desc LIMIT 10;");
     while ($arr = mysql_fetch_array($lp))
     {
-        $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr[refid] . "';");
+        $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "';");
         $razd = mysql_fetch_array($q3);
-        $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd[refid] . "';");
+        $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "';");
         $frm = mysql_fetch_array($q4);
-        $colmes = mysql_query("select `id` from `forum` where type='m' and close!='1' and refid='" . $arr[id] . "' order by time desc;");
-        $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr[id] . "'ORDER BY time DESC LIMIT 1;");
+        $colmes = mysql_query("select `id` from `forum` where type='m' and close!='1' and refid='" . $arr['id'] . "' order by time desc;");
+        $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr['id'] . "'ORDER BY time DESC LIMIT 1;");
         $colmes1 = mysql_num_rows($colmes);
         $cpg = ceil($colmes1 / $kmess);
         $colmes1 = $colmes1 - 1;
@@ -539,14 +542,14 @@ if (!empty($_SESSION['uid']))
             $div = "<div class='c'>";
         }
         echo "$div";
-        if ($arrt[edit] == 1)
+        if ($arrt['edit'] == 1)
         {
             echo "<img src='../images/tz.gif' alt=''/>";
         } else
         {
             echo "<img src='../images/np.gif' alt=''/>";
         }
-        echo "<a href='index.php?id=" . $arr[id] . "'>$arr[text]</a>[$colmes1]";
+        echo "<a href='index.php?id=" . $arr['id'] . "'>$arr[text]</a>[$colmes1]";
         if ($cpg > 1)
         {
             if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
@@ -560,8 +563,8 @@ if (!empty($_SESSION['uid']))
         echo "<br/>";
 
 
-        echo "(" . date("H:i /d.m.y", $arr[time]) . ")<br/>[$arr[from]";
-        if (!empty($nam[from]))
+        echo "(" . date("H:i /d.m.y", $arr['time']) . ")<br/>[$arr[from]";
+        if (!empty($nam['from']))
         {
             echo "/$nam[from]";
         }
