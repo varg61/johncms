@@ -136,9 +136,8 @@ if ($dostkmod == 1)
                 }
                 $res = mysql_fetch_array($req);
                 // Достаточно ли прав, чтоб банить выбранного юзера
-                if ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= $rights)
+                if ($login != $nickadmina && $login != $nickadmina2 && ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= $rights))
                 {
-                    echo $rights . '<br />';
                     echo '<p>У Вас недостаточно прав, чтоб банить этого пользователя.</p>';
                     require_once ("../incfiles/end.php");
                     exit;
@@ -273,7 +272,7 @@ if ($dostkmod == 1)
             {
                 echo '<p>Список пуст</p>';
             }
-            echo '<p><a href="">Банить</a><br /><a href="">Амнистия</a></p>';
+            echo '<p><a href="main.php?do=search">Банить</a><br /><a href="">Амнистия</a></p>';
             echo '<p><a href="main.php">В админку</a></p>';
     }
 } else

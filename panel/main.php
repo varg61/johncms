@@ -89,7 +89,7 @@ if ($dostmod == 1)
                 exit;
             }
             $res = mysql_fetch_array($req);
-            header("location: editusers.php?act=edit&user=$res[id]");
+            header("location: ../str/anketa.php?user=$res[id]");
             break;
 
         case 'search':
