@@ -20,45 +20,57 @@ $headmod = 'online';
 $textl = 'Онлайн';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
-
+echo '<div class="phdr">Кто в онлайне?</div>';
 $onltime = $realtime - 300;
-$q = @mysql_query("select * from `users` where lastdate>='" . intval($onltime) .
-    "';");
+$q = @mysql_query("select * from `users` where lastdate>='" . intval($onltime) . "';");
 $count = mysql_num_rows($q);
-if (empty($_GET['page'])) {
+if (empty($_GET['page']))
+{
     $page = 1;
-} else {
+} else
+{
     $page = intval($_GET['page']);
 }
 $start = $page * 10 - 10;
-if ($count < $start + 10) {
+if ($count < $start + 10)
+{
     $end = $count;
-} else {
+} else
+{
     $end = $start + 10;
 }
-while ($arr = mysql_fetch_array($q)) {
-    if ($i >= $start && $i < $end) {
+while ($arr = mysql_fetch_array($q))
+{
+    if ($i >= $start && $i < $end)
+    {
         $d = $i / 2;
         $d1 = ceil($d);
         $d2 = $d1 - $d;
         $d3 = ceil($d2);
-        if ($d3 == 0) {
+        if ($d3 == 0)
+        {
             $div = "<div class='b'>";
-        } else {
+        } else
+        {
             $div = "<div class='c'>";
         }
-        if ($arr['sex'] == "m") {
+        if ($arr['sex'] == "m")
+        {
             $pol = "<img src='../images/m.gif' alt=''/>";
-        } elseif ($arr['sex'] == "zh") {
+        } elseif ($arr['sex'] == "zh")
+        {
             $pol = "<img src='../images/f.gif' alt=''/>";
         }
 
-        if (empty($_SESSION['uid']) || $_SESSION['uid'] == $arr['id']) {
+        if (empty($_SESSION['uid']) || $_SESSION['uid'] == $arr['id'])
+        {
             print "$div $pol <b>$arr[name]</b>";
-        } else {
+        } else
+        {
             print "$div $pol <a href='anketa.php?user=" . $arr['id'] . "'>$arr[name]</a>";
         }
-        switch ($arr['rights']) {
+        switch ($arr['rights'])
+        {
             case 7:
                 echo ' Adm ';
                 break;
@@ -81,68 +93,83 @@ while ($arr = mysql_fetch_array($q)) {
                 echo ' Kil ';
                 break;
         }
-        $prh = @mysql_query("select * from `count` where time>='" . intval($arr['sestime']) .
-            "' and name='" . $arr['name'] . "';");
+        $prh = @mysql_query("select * from `count` where time>='" . intval($arr['sestime']) . "' and name='" . $arr['name'] . "';");
         $prh1 = mysql_num_rows($prh);
         $svr = $realtime - $arr['sestime'];
-        if ($svr >= "3600") {
+        if ($svr >= "3600")
+        {
             $hvr = ceil($svr / 3600) - 1;
-            if ($hvr < 10) {
+            if ($hvr < 10)
+            {
                 $hvr = "0$hvr";
             }
             $svr1 = $svr - $hvr * 3600;
             $mvr = ceil($svr1 / 60) - 1;
-            if ($mvr < 10) {
+            if ($mvr < 10)
+            {
                 $mvr = "0$mvr";
             }
             $ivr = $svr1 - $mvr * 60;
-            if ($ivr < 10) {
+            if ($ivr < 10)
+            {
                 $ivr = "0$ivr";
             }
-            if ($ivr == "60") {
+            if ($ivr == "60")
+            {
                 $ivr = "59";
             }
             $sitevr = "$hvr:$mvr:$ivr";
-        } else {
-            if ($svr >= "60") {
+        } else
+        {
+            if ($svr >= "60")
+            {
                 $mvr = ceil($svr / 60) - 1;
-                if ($mvr < 10) {
+                if ($mvr < 10)
+                {
                     $mvr = "0$mvr";
                 }
                 $ivr = $svr - $mvr * 60;
-                if ($ivr < 10) {
+                if ($ivr < 10)
+                {
                     $ivr = "0$ivr";
                 }
-                if ($ivr == "60") {
+                if ($ivr == "60")
+                {
                     $ivr = "59";
                 }
                 $sitevr = "00:$mvr:$ivr";
-            } else {
+            } else
+            {
                 $ivr = $svr;
-                if ($ivr < 10) {
+                if ($ivr < 10)
+                {
                     $ivr = "0$ivr";
                 }
                 $sitevr = "00:00:$ivr";
             }
         }
         echo '(' . $prh1 . ' - ' . $sitevr . ')<br/>';
-        if ($dostmod == 1) {
+        if ($dostmod == 1)
+        {
             echo long2ip($arr['ip']) . "--$arr[browser]<br/>";
         }
-        if (!empty($_SESSION['uid'])) {
+        if (!empty($_SESSION['uid']))
+        {
             echo "Где: ";
-            $wh = mysql_query("select * from `count` where name='" . $arr['name'] .
-                "' order by time desc ;");
+            $wh = mysql_query("select * from `count` where name='" . $arr['name'] . "' order by time desc ;");
             $i1 = 0;
-            while ($wh1 = mysql_fetch_array($wh)) {
-                if ($i1 < 1) {
+            while ($wh1 = mysql_fetch_array($wh))
+            {
+                if ($i1 < 1)
+                {
                     $wher = $wh1['where'];
                     $wher1 = explode(",", $wher);
                     $where = $wher1[0];
                 }
                 ++$i1;
             }
-            switch ($where) {
+            switch ($where)
+            {
                 case "mainpage":
                     echo "<a href='../index.php'>на главной</a>";
                     break;
@@ -207,22 +234,28 @@ while ($arr = mysql_fetch_array($q)) {
     }
     ++$i;
 }
-if ($count > 10) {
+if ($count > 10)
+{
     echo "<hr/>";
     $ba = ceil($count / 10);
-    if ($offpg != 1) {
+    if ($offpg != 1)
+    {
         echo "Страницы:<br/>";
-    } else {
+    } else
+    {
         echo "Страниц: $ba<br/>";
     }
     $asd = $start - (10);
     $asd2 = $start + (10 * 2);
 
-    if ($start != 0) {
+    if ($start != 0)
+    {
         echo '<a href="online.php?page=' . ($page - 1) . '">&lt;&lt;</a> ';
     }
-    if ($offpg != 1) {
-        if ($asd < $count && $asd > 0) {
+    if ($offpg != 1)
+    {
+        if ($asd < $count && $asd > 0)
+        {
             echo ' <a href="online.php?page=1&amp;">1</a> .. ';
         }
         $page2 = $ba - $page;
@@ -231,50 +264,54 @@ if ($count > 10) {
         $pa2 = $page + floor($page2 / 2);
         $paa2 = $page + floor($page2 / 3);
         $paa3 = $page + (floor($page2 / 3) * 2);
-        if ($page > 13) {
-            echo ' <a href="ponline.php?page=' . $paa . '">' . $paa .
-                '</a> <a href="online.php?page=' . ($paa + 1) . '">' . ($paa + 1) .
-                '</a> .. <a href="online.php?page=' . ($paa * 2) . '">' . ($paa * 2) .
-                '</a> <a href="online.php?page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) .
-                '</a> .. ';
-        } elseif ($page > 7) {
-            echo ' <a href="online.php?page=' . $pa . '">' . $pa .
-                '</a> <a href="online.php?page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
+        if ($page > 13)
+        {
+            echo ' <a href="ponline.php?page=' . $paa . '">' . $paa . '</a> <a href="online.php?page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="online.php?page=' . ($paa * 2) . '">' . ($paa * 2) . '</a> <a href="online.php?page=' . ($paa *
+                2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
+        } elseif ($page > 7)
+        {
+            echo ' <a href="online.php?page=' . $pa . '">' . $pa . '</a> <a href="online.php?page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
         }
-        for ($i = $asd; $i < $asd2; ) {
-            if ($i < $count && $i >= 0) {
+        for ($i = $asd; $i < $asd2; )
+        {
+            if ($i < $count && $i >= 0)
+            {
                 $ii = floor(1 + $i / 10);
 
-                if ($start == $i) {
+                if ($start == $i)
+                {
                     echo " <b>$ii</b>";
-                } else {
+                } else
+                {
                     echo ' <a href="online.php?page=' . $ii . '">' . $ii . '</a> ';
                 }
             }
             $i = $i + 10;
         }
-        if ($page2 > 12) {
-            echo ' .. <a href="online.php?page=' . $paa2 . '">' . $paa2 .
-                '</a> <a href="online.php?page=' . ($paa2 + 1) . '">' . ($paa2 + 1) .
-                '</a> .. <a href="online.php?page=' . ($paa3) . '">' . ($paa3) .
-                '</a> <a href="online.php?page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-        } elseif ($page2 > 6) {
-            echo ' .. <a href="online.php?page=' . $pa2 . '">' . $pa2 .
-                '</a> <a href="online.php?page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
+        if ($page2 > 12)
+        {
+            echo ' .. <a href="online.php?page=' . $paa2 . '">' . $paa2 . '</a> <a href="online.php?page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="online.php?page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="online.php?page=' . ($paa3 +
+                1) . '">' . ($paa3 + 1) . '</a> ';
+        } elseif ($page2 > 6)
+        {
+            echo ' .. <a href="online.php?page=' . $pa2 . '">' . $pa2 . '</a> <a href="online.php?page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
         }
-        if ($asd2 < $count) {
+        if ($asd2 < $count)
+        {
             echo ' .. <a href="online.php?page=' . $ba . '">' . $ba . '</a>';
         }
-    } else {
+    } else
+    {
         echo "<b>[$page]</b>";
     }
-    if ($count > $start + 10) {
+    if ($count > $start + 10)
+    {
         echo ' <a href="online.php?page=' . ($page + 1) . '">&gt;&gt;</a>';
     }
     echo "<form action='online.php'>Перейти к странице:<br/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
 }
 
-echo "<hr/><div>Всего он-лайн: $count</div>";
+echo '<div class="bmenu">Всего он-лайн: ' . $count . '</div>';
 require_once ("../incfiles/end.php");
 
 ?>

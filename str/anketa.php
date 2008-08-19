@@ -270,9 +270,10 @@ if (!empty($_SESSION['uid']))
                 {
                     if (isset($_POST['submit']))
                     {
-                        if (intval($_POST['provact']) == $arr['kod'])
+                        if (intval($_POST['provact']) == $arr[kod])
                         {
-                            mysql_query("update `users` set mailact='1' where id='" . $_SESSION['uid'] . "';");
+
+                            mysql_query("update `users` set `mailact`='1' where `id`='" . $user_id . "';");
                             unset($_SESSION['activ']);
                             echo "E-mail адрес успешно активирован<br/>";
                             echo "<a href='anketa.php?user=" . $idus . "'>В анкету</a><br/>";
@@ -286,17 +287,18 @@ if (!empty($_SESSION['uid']))
                         echo "<form action='anketa.php?user=" . $idus . "&amp;act=activmail&amp;continue' method='post'>Код активации:<br/><input type='text' name='provact'/><br/><input type='submit' name='submit' value='ok'/></form><br/><a href='anketa.php?user=" .
                             $idus . "'>Назад</a><br/>";
                     }
-                    require_once ("../incfiles/end.php");
+                    require ("../incfiles/end.php");
                     exit;
                 }
                 if ($_SESSION['activ'] != 1)
                 {
-                    $mailcode = rand(100000, 999999);
+                    require_once ('../incfiles/char.php');
+					$mailcode = rand(100000, 999999);
                     $subject = "E-mail activation";
                     $mail = "Здравствуйте " . $login . "\r\nКод для активации e-mail адреса " . $mailcode . "\r\nТеперь Вы можете продолжить активацию\r\n";
-                    $subject = iconv('UTF-8', 'KOI8-R', $subject);
-                    $name = iconv('UTF-8', 'KOI8-R', $name);
-                    $mail = iconv('UTF-8', 'KOI8-R', $mail);
+                    $subject = utfwin($subject);
+                    $name = utfwin($name);
+                    $mail = utfwin($mail);
                     $name = convert_cyr_string($name, 'w', 'k');
                     $subject = convert_cyr_string($subject, 'w', 'k');
                     $mail = convert_cyr_string($mail, 'w', 'k');
@@ -306,8 +308,8 @@ if (!empty($_SESSION['uid']))
                     $adds .= "MIME-Version: 1.0\r\n";
                     $adds .= "Content-Transfer-Encoding: 8bit\r\n";
                     $adds .= "X-Mailer: PHP v." . phpversion();
-                    mail($arr[mail], $subject, $mail, $adds);
-                    mysql_query("update `users` set kod='" . $mailcode . "' where id='" . $_SESSION['uid'] . "';");
+                    mail($arr['mail'], $subject, $mail, $adds);
+                    mysql_query("update `users` set `kod`='" . $mailcode . "' where `id`='" . $user_id . "';");
                     echo 'Код для активации выслан по указанному адресу<br/>';
                     $_SESSION['activ'] = 1;
                 } else
