@@ -188,11 +188,6 @@ hr{
 	border-bottom: 3px solid white;
 }
 
-.b img, .c img{
-	float: left;
-	margin-right: 4px;
-}
-
 .footer{
 	margin: 0px;
 	background-color: black;
