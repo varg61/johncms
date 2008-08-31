@@ -15,7 +15,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$agn = strtok($agn, ' ');
 if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
 {
     require_once ("../incfiles/head.php");
@@ -61,7 +60,8 @@ switch ($tip)
             {
                 $msg = trans($msg);
             }
-            mysql_query("insert into `forum` set 
+            $agn = strtok($agn, ' ');
+			mysql_query("insert into `forum` set 
 			`refid`='" . $id . "',
 			`type`='m',
 			`time`='" . $realtime . "',
