@@ -20,15 +20,9 @@ $textl = 'Юзеры';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 echo '<div class="phdr">Список пользователей</div>';
-$req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` ORDER BY `lastdate` DESC;");
+$req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` ORDER BY `datereg` DESC;");
 $count = mysql_num_rows($req);
-if (empty($_GET['page']))
-{
-    $page = 1;
-} else
-{
-    $page = intval($_GET['page']);
-}
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $start = $page * 10 - 10;
 if ($count < $start + 10)
 {
