@@ -340,13 +340,13 @@ switch ($act)
         {
             // Запрос для Админ клуба
             echo '<b>АДМИН-КЛУБ</b><hr class="redhr" />';
-            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`
+            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`
 			FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='1' ORDER BY `time` DESC;");
         } else
         {
             // Запрос для обычной Гастивухи
             echo '<hr />';
-            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`
+            $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`
 			FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='0' ORDER BY `time` DESC;");
         }
         $colmes = mysql_num_rows($req);
@@ -381,7 +381,8 @@ switch ($act)
                     $div = "<div class='c'>";
                 }
                 echo $div;
-                if ($res['user_id'] != "0")
+                echo $res['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
+				if ($res['user_id'] != "0")
                 {
                     // Значок пола
                     switch ($res['sex'])

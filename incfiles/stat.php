@@ -36,9 +36,16 @@ function dnews()
 // Колличество зарегистрированных пользователей
 function kuser()
 {
-    $req = mysql_query("select * from `users` ;");
+    global $realtime;
+	// Общее колличество
+    $req = mysql_query("SELECT * FROM `users` ;");
+    $total = mysql_num_rows($req);
+    // Зарегистрированные за последние сутки
+    $req = mysql_query("SELECT * FROM `users` WHERE `datereg`>" . ($realtime - 86400) . ";");
     $res = mysql_num_rows($req);
-    return $res;
+    if ($res > 0)
+        $total = $total . '&nbsp;<font color="#FF0000">+' . $res . '</font>';
+    return $total;
 }
 
 // Счетчик "Кто в форуме?"
