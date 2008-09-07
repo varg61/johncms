@@ -29,7 +29,7 @@ function tags($var = '')
     $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
     $var = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $var);
-    $var = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/;%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $var);
+    //$var = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/;%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $var);
     return $var;
 }
 
@@ -38,7 +38,7 @@ function hrefCallback($p)
     ////////////////////////////////////////////////////////////
     // Служебная функция парсинга URL                         //
     ////////////////////////////////////////////////////////////
-    $name = htmlspecialchars($p[0], ENT_QUOTES);
+    $name = $p[0];
     $href = !empty($p[1]) ? $name : "http://$name";
     return "<a href=\"$href\">$name</a>";
 }

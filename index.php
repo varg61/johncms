@@ -46,13 +46,13 @@ switch ($mod)
         {
             while ($res = mysql_fetch_array($req))
             {
-                echo '<div class="menu">';
-                echo '<b>' . $ban_term[$res['ban_type']] . '</b><br />';
-                echo $ban_desc[$res['ban_type']] . '<br />';
-                echo '<u>Причина:</u> ' . $res['ban_reason'] . '<br />';
-                echo '<u>Срок:</u> ' . timecount($res['ban_time'] - $res['ban_while']) . '<br />';
-                echo '<u>Осталось:</u> ' . timecount($res['ban_time'] - $realtime) . '';
-                echo '</div>';
+                echo '<div class="menu"><b>' . $ban_term[$res['ban_type']] . '</b><br />' . $ban_desc[$res['ban_type']] . '</div>';
+                echo '<div class="menu"><u>Причина</u>: ';
+                if (!empty($res['ban_ref']))
+                    echo 'Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $res['ban_ref'] . '">на форуме</a><br />';
+                echo $res['ban_reason'] . '</div>';
+				echo '<div class="menu"><u>Срок:</u> ' . timecount($res['ban_time'] - $res['ban_while']) . '</div>';
+                echo '<div class="bmenu">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div>';
             }
         }
         break;
@@ -76,7 +76,7 @@ switch ($mod)
         // Дайджест                                               //
         ////////////////////////////////////////////////////////////
         echo '<div class="phdr">Дайджест</div>';
-		echo '<div class="gmenu">Привет, <b>' . $login . '</b><br/>';
+        echo '<div class="gmenu">Привет, <b>' . $login . '</b><br/>';
         echo 'Добро пожаловать на ' . $copyright . '!</div>';
         // Поздравление с днем рождения
         if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon)
@@ -86,7 +86,7 @@ switch ($mod)
         echo '<div class="bmenu">Новое на сайте</div>';
         // Новости
         $total = mysql_num_rows(mysql_query("SELECT * FROM `news` WHERE `time`>'" . ($realtime - 86400) . "';"));
-		echo '<div class="menu">Новости: '.($total > 0 ? $total . ' <a href="str/news.php">&gt;&gt;&gt;</a>' : ' нет').'</div>';
+        echo '<div class="menu">Новости: ' . ($total > 0 ? $total . ' <a href="str/news.php">&gt;&gt;&gt;</a>' : ' нет') . '</div>';
         // Форум
         $lp = mysql_query("select * from `forum` where type='t' and moder='1' and close!='1';");
         while ($arrt = mysql_fetch_array($lp))
@@ -114,7 +114,8 @@ switch ($mod)
         $total = fgal(1);
         echo '<div class="menu">Галерея: ' . ($total != 0 ? $total . '&nbsp;<a href="gallery/index.php?act=new">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
         // Дата последнего посещения
-        $last = isset($_GET['last']) ? intval($_GET['last']) : $lastdate;
+        $last = isset($_GET['last']) ? intval($_GET['last']):
+        $lastdate;
         echo '<div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
         break;
 
