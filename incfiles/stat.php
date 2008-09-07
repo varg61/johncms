@@ -37,7 +37,7 @@ function dnews()
 function kuser()
 {
     global $realtime;
-	// Общее колличество
+    // Общее колличество
     $req = mysql_query("SELECT * FROM `users` ;");
     $total = mysql_num_rows($req);
     // Зарегистрированные за последние сутки
@@ -201,10 +201,37 @@ function wch($id)
 }
 
 // Статистика гостевой
-function gbook()
+// Если вызвать с параметром 1, то будет выдавать колличество новых в гостевой
+// Если вызвать с параметром 2, то будет выдавать колличество новых в Админ-Клубе
+function gbook($mod = 0)
 {
-    $gbs = mysql_query("select * from `guest` ;");
-    $gbs1 = mysql_num_rows($gbs);
-    return $gbs1;
+    global $realtime;
+    global $dostmod;
+    switch ($mod)
+    {
+        case 1:
+            $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
+            $count = mysql_num_rows($req);
+            break;
+
+        case 2:
+            if ($dostmod == 1)
+            {
+                $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
+                $count = mysql_num_rows($req);
+            }
+            break;
+
+        default:
+            $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
+            $count = mysql_num_rows($req);
+            if ($dostmod == 1)
+            {
+                $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
+                $count = $count . '&nbsp;/&nbsp;<span class="red">' . mysql_num_rows($req) . '</span>';
+            }
+    }
+    return $count;
 }
+
 ?>
