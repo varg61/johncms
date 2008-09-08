@@ -51,7 +51,7 @@ switch ($mod)
                 if (!empty($res['ban_ref']))
                     echo 'Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $res['ban_ref'] . '">на форуме</a><br />';
                 echo $res['ban_reason'] . '</div>';
-				echo '<div class="menu"><u>Срок:</u> ' . timecount($res['ban_time'] - $res['ban_while']) . '</div>';
+                echo '<div class="menu"><u>Срок:</u> ' . timecount($res['ban_time'] - $res['ban_while']) . '</div>';
                 echo '<div class="bmenu">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div>';
             }
         }
@@ -105,8 +105,11 @@ switch ($mod)
         $total = gbook(1);
         echo '<div class="menu">Гостевая: ' . ($total != 0 ? $total . '&nbsp;<a href="str/guest.php?act=ga">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
         // Админ-Клуб
-        $total = gbook(2);
-        echo '<div class="menu">Админ-Клуб: ' . ($total != 0 ? $total . '&nbsp;<a href="str/guest.php?act=ga&amp;do=set">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
+        if ($dostmod == 1)
+        {
+            $total = gbook(2);
+            echo '<div class="menu">Админ-Клуб: ' . ($total != 0 ? $total . '&nbsp;<a href="str/guest.php?act=ga&amp;do=set">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
+        }
         // Библиотека
         $total = stlib(1);
         echo '<div class="menu">Библиотека: ' . ($total != 0 ? $total . '&nbsp;<a href="library/index.php?act=new">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
