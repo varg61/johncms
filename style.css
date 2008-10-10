@@ -139,6 +139,7 @@ hr{
 	padding: 2px 0px 2px 4px;
 	color: #878787;
 	border-left: 3px solid #c0c0c0;
+	display: block;
 }
 
 .red{
