@@ -86,10 +86,10 @@ function wfrm($id)
 function dload()
 {
     global $realtime;
-    $fl = mysql_query("select * from `download` where type='file' ;");
+    $fl = mysql_query("select `id` from `download` where `type`='file' ;");
     $countf = mysql_num_rows($fl);
     $old = $realtime - (3 * 24 * 3600);
-    $fl1 = mysql_query("select * from `download` where time > '" . $old . "' and type='file' ;");
+    $fl1 = mysql_query("select `id` from `download` where `time` > '" . $old . "' and `type`='file' ;");
     $countf1 = mysql_num_rows($fl1);
     $out = $countf;
     if ($countf1 > 0)
@@ -105,12 +105,12 @@ function fgal($mod = 0)
 {
     global $realtime;
     $old = $realtime - (3 * 24 * 3600);
-    $req = mysql_query("select * from `gallery` where time > '" . $old . "' and type='ft' ;");
+    $req = mysql_query("select `id` from `gallery` where `time` > '" . $old . "' and `type`='ft' ;");
     $new = mysql_num_rows($req);
     mysql_free_result($req);
     if ($mod == 0)
     {
-        $req = mysql_query("select * from `gallery` where type='ft' ;");
+        $req = mysql_query("select `id` from `gallery` where `type`='ft' ;");
         $total = mysql_num_rows($req);
         mysql_free_result($req);
         $out = $total;
@@ -149,17 +149,17 @@ function stlib()
 {
     global $realtime;
     global $dostlmod;
-    $fl = mysql_query("select * from `lib` where type='bk' and moder='1';");
+    $fl = mysql_query("select `id` from `lib` where `type`='bk' and `moder`='1';");
     $countf = mysql_num_rows($fl);
     $old = $realtime - (3 * 24 * 3600);
-    $fl1 = mysql_query("select * from `lib` where time > '" . $old . "' and type='bk' and moder='1';");
+    $fl1 = mysql_query("select `id` from `lib` where `time` > '" . $old . "' and `type`='bk' and `moder`='1';");
     $countf1 = mysql_num_rows($fl1);
     $out = $countf;
     if ($countf1 > 0)
     {
         $out = $out . '/<font color="#FF0000">+' . $countf1 . '</font>';
     }
-    $fm = @mysql_query("select * from `lib` where type='bk' and moder='0';");
+    $fm = @mysql_query("select `id` from `lib` where `type`='bk' and `moder`='0';");
     $countm = @mysql_num_rows($fm);
     if ($dostlmod == '1' && ($countm > 0))
         $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> Мод:$countm</font></a>";
@@ -172,10 +172,10 @@ function wch($id)
     global $realtime;
     $onltime = $realtime - 300;
     $count = 0;
-    $qf = @mysql_query("select * from `users` where  lastdate>='" . intval($onltime) . "';");
+    $qf = @mysql_query("select `id` from `users` where  `lastdate` >='" . intval($onltime) . "';");
     while ($arrf = mysql_fetch_array($qf))
     {
-        $whf = mysql_query("select * from `count` where name='" . $arrf[name] . "' order by time desc ;");
+        $whf = mysql_query("select `id` from `count` where `name`='" . $arrf['name'] . "' order by `time` desc ;");
         while ($whf1 = mysql_fetch_array($whf))
         {
             $whf2[] = $whf1[where];
@@ -210,24 +210,24 @@ function gbook($mod = 0)
     switch ($mod)
     {
         case 1:
-            $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
+            $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
             $count = mysql_num_rows($req);
             break;
 
         case 2:
             if ($dostmod == 1)
             {
-                $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
+                $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
                 $count = mysql_num_rows($req);
             }
             break;
 
         default:
-            $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
+            $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
             $count = mysql_num_rows($req);
             if ($dostmod == 1)
             {
-                $req = mysql_query("SELECT * FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
+                $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
                 $count = $count . '&nbsp;/&nbsp;<span class="red">' . mysql_num_rows($req) . '</span>';
             }
     }

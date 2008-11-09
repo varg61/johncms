@@ -92,7 +92,15 @@ if ($headmod == "mainpage")
 echo '</div>';
 
 // Данный копирайт нельзя убирать в течение 60 дней с момента установки скриптов
-echo '<div class="end"><a href="http://johncms.com">JohnCMS 1.7.0</a></div>';
+echo '<div class="end"><a href="http://johncms.com">JohnCMS 1.7.0</a><br />';
+
+$mtime = explode(' ', microtime());
+$mtime = $mtime[1] + $mtime[0];
+$endtime = $mtime;
+$totaltime = round(($endtime - $starttime), 3);
+echo $totaltime;
+echo '</div>';
+
 echo '</body></html>';
 
 ?>

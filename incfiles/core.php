@@ -19,6 +19,11 @@ Error_Reporting(E_ALL & ~ E_NOTICE);
 Error_Reporting(ERROR | WARNING);
 mb_internal_encoding('UTF-8');
 
+// Включаем замер времени генерации страницы
+$mtime = explode(' ', microtime());
+$mtime = $mtime[1] + $mtime[0];
+$starttime = $mtime;
+
 if (!isset($rootpath))
     $rootpath = '../';
 
@@ -75,7 +80,7 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect t
 ////////////////////////////////////////////////////////////
 // Проверяем адрес IP на Бан                              //
 ////////////////////////////////////////////////////////////
-$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE `ip`='" . $ipl . "';") or die('Error: table "cms_ban_ip"');
+$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE `ip`='" . $ipl . "' LIMIT 1;") or die('Error: table "cms_ban_ip"');
 if (mysql_num_rows($req) != 0)
 {
     $res = mysql_fetch_array($req);
