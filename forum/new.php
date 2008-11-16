@@ -125,22 +125,20 @@ if (!empty($_SESSION['uid']))
             break;
 
         case "reset":
-            $lp = mysql_query("select `id`, `time` from `forum` where type='t' and moder='1';");
-            while ($arrt = mysql_fetch_array($lp))
+            ////////////////////////////////////////////////////////////
+            // Отмечаем все темы как прочитанные                      //
+            ////////////////////////////////////////////////////////////
+            $req = mysql_query("SELECT `forum`.`id`
+			FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id`
+			WHERE `forum`.`type`='3'
+			AND `cms_forum_rdm`.`topic_id` Is Null;");
+            while ($res = mysql_fetch_array($req))
             {
-                $np = mysql_query("select `id` from `forum` where type='l' and time>'" . $arrt[time] . "' and refid='" . $arrt[id] . "' and `from`='" . $login . "';");
-                if ((mysql_num_rows($np)) != 1)
-                {
-                    $np1 = mysql_query("select `id` from `forum` where type='l' and refid='" . $arrt[id] . "' and `from`='" . $login . "';");
-                    if ((mysql_num_rows($np1)) == 0)
-                    {
-                        mysql_query("insert into `forum` values(0,'" . $arrt[id] . "','l','" . $realtime . "','" . $login . "','','','','','','','','','','','','','');");
-                    } else
-                    {
-                        $np2 = mysql_fetch_array($np1);
-                        mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $np2[id] . "';");
-                    }
-                }
+                mysql_query("INSERT INTO `cms_forum_rdm` SET
+				`topic_id`='" . $res['id'] . "',
+				`user_id`='" . $user_id . "',
+				`time`='" . time() . "'
+				;");
             }
             echo "Все темы приняты как прочитанные<br/>";
             break;
@@ -397,7 +395,7 @@ if (!empty($_SESSION['uid']))
                             echo '<img src="../images/tz.gif" alt=""/>';
                         } elseif ($arrt['close'] == 1)
                         {
-                        	echo '<img src="../images/dl.gif" alt=""/>';
+                            echo '<img src="../images/dl.gif" alt=""/>';
                         } else
                         {
                             echo '<img src="../images/np.gif" alt=""/>';

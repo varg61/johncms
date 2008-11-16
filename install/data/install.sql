@@ -132,6 +132,17 @@ CREATE TABLE `forum` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
+-- Структура таблицы `cms_forum_rdm`
+--
+CREATE TABLE IF NOT EXISTS `cms_forum_rdm` (
+  `topic_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY  (`topic_id`,`user_id`),
+  KEY `time` (`time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
 -- Структура таблицы `gallery`
 --
 DROP TABLE IF EXISTS `gallery`;

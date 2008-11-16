@@ -11,6 +11,14 @@
 //                                                                            //
 // Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
+
+В новом форуме, для ускорения работы были заменены типы полей на числовые
+1 - Форум (f)
+2 - Раздел (r)
+3 - Топик (t)
+4 - Пост (m)
+5 - Настройка (n)
+6 - Метки прочтения (l)
 */
 
 define('_IN_JOHNCMS', 1);
@@ -64,26 +72,10 @@ if (in_array($act, $do))
             $_SESSION['uppost'] = 0;
         }
     }
-    if (!empty($_SESSION['uid']))
-    {
-        $lp = mysql_query("select `id`, `refid`, `time` from `forum` where type='t' and moder='1' and close!='1';");
-        $knt = 0;
-        while ($arrt = mysql_fetch_array($lp))
-        {
-            $q3 = mysql_query("select `refid` from `forum` where type='r' and id='" . $arrt['refid'] . "';");
-            $q4 = mysql_fetch_array($q3);
-            $rz = mysql_query("select `id` from `forum` where type='n' and refid='" . $q4['refid'] . "' and `from`='" . $login . "';");
-            $np = mysql_query("select `id` from `forum` where type='l' and time>='" . $arrt['time'] . "' and refid='" . $arrt['id'] . "' and `from`='" . $login . "';");
-            if ((mysql_num_rows($np)) != 1 && (mysql_num_rows($rz)) != 1)
-            {
-                $knt = $knt + 1;
-            }
-        }
-        echo "<p><a href='index.php?act=new'>Новые: $knt</a></p>";
-    } else
-    {
-        echo "<p><a href='index.php?act=new'>10 новых</a></p>";
-    }
+
+    // Ссылка на новые темы форума
+	echo '<p><a href="index.php?act=new">' . forum_new() . '</a></p>';
+
     if ($dostfmod == 1)
     {
         $fm = mysql_query("select `id` from `forum` where type='t' and moder!='1';");
@@ -96,15 +88,15 @@ if (in_array($act, $do))
     if (empty($_GET['id']))
     {
         ////////////////////////////////////////////////////////////
-        // Список разделов                                        //
+        // Список Форумов                                         //
         ////////////////////////////////////////////////////////////
         echo "<b>Все форумы</b><hr/>";
-        $q = mysql_query("select `id`, `text` from `forum` where type='f' order by realid ;");
-        while ($mass = mysql_fetch_array($q))
+        $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='1' ORDER BY `realid`;");
+        while ($res = mysql_fetch_array($req))
         {
-            $colraz = mysql_query("select `id` from `forum` where type='r' and refid='" . $mass['id'] . "';");
+            $colraz = mysql_query("select `id` from `forum` where type='2' and refid='" . $res['id'] . "';");
             $colraz1 = mysql_num_rows($colraz);
-            echo '<div class="menu"><a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
+            echo '<div class="menu"><a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colraz1 . ']</div>';
         }
         echo "<hr/><p>";
         if (!empty($_SESSION['uid']))
@@ -119,15 +111,17 @@ if (in_array($act, $do))
     if (!empty($_GET['id']))
     {
         $id = intval($_GET['id']);
-        $type = mysql_query("select * from `forum` where id= '" . $id . "';");
+        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "';");
         $type1 = mysql_fetch_array($type);
         $tip = $type1['type'];
         switch ($tip)
         {
-            case "f":
-                // Список подразделов
+            case 1:
+                ////////////////////////////////////////////////////////////
+				// Список разделов                                        //
+				////////////////////////////////////////////////////////////
                 echo "<b>$type1[text]</b><hr/>";
-                $q1 = mysql_query("select id, text from `forum` where type='r' and refid='" . $id . "'  order by realid ;");
+                $q1 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='2' AND `refid`='" . $id . "'  ORDER BY `realid`;");
                 $colraz2 = mysql_num_rows($q1);
                 $i = 0;
                 while ($mass1 = mysql_fetch_array($q1))
@@ -314,18 +308,18 @@ if (in_array($act, $do))
                 ////////////////////////////////////////////////////////////
                 // Читаем топик                                           //
                 ////////////////////////////////////////////////////////////
-                if (!empty($_SESSION['uid']))
+                if ($user_id)
                 {
                     //блок, фиксирующий факт прочтения топика
-                    $np = mysql_query("select `id` from `forum` where type='l' and refid='" . $id . "' and `from`='" . $login . "';");
-                    $np1 = mysql_num_rows($np);
-                    if ($np1 == 0)
+                    $req = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+                    if (mysql_num_rows($req) == 1)
                     {
-                        mysql_query("insert into `forum` values(0,'" . $id . "','l','" . $realtime . "','" . $login . "','','','','','','','','','','','','','');");
+                        // Обновляем время метки о прочтении
+                        mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . time() . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
                     } else
                     {
-                        $np2 = mysql_fetch_array($np);
-                        mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $np2['id'] . "';");
+                        // Ставим метку о прочтении
+                        mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . time() . "';");
                     }
                 }
                 if ($dostsadm != 1 && $type1['close'] == 1)
