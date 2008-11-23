@@ -11,14 +11,6 @@
 //                                                                            //
 // Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
-
-В новом форуме, для ускорения работы были заменены типы полей на числовые
-1 - Форум (f)
-2 - Раздел (r)
-3 - Топик (t)
-4 - Пост (m)
-5 - Настройка (n)
-6 - Метки прочтения (l)
 */
 
 define('_IN_JOHNCMS', 1);
@@ -72,10 +64,14 @@ if (in_array($act, $do))
             $_SESSION['uppost'] = 0;
         }
     }
-
-    // Ссылка на новые темы форума
-	echo '<p><a href="index.php?act=new">' . forum_new() . '</a></p>';
-
+    // Ссылка на непрочитанные темы на форуме
+	if (!empty($_SESSION['uid']))
+    {
+        echo '<p><a href="index.php?act=new">Новые: ' . forum_new() . '</a></p>';
+    } else
+    {
+        echo "<p><a href='index.php?act=new'>10 новых</a></p>";
+    }
     if ($dostfmod == 1)
     {
         $fm = mysql_query("select `id` from `forum` where type='t' and moder!='1';");
@@ -88,15 +84,15 @@ if (in_array($act, $do))
     if (empty($_GET['id']))
     {
         ////////////////////////////////////////////////////////////
-        // Список Форумов                                         //
+        // Список разделов                                        //
         ////////////////////////////////////////////////////////////
         echo "<b>Все форумы</b><hr/>";
-        $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='1' ORDER BY `realid`;");
-        while ($res = mysql_fetch_array($req))
+        $q = mysql_query("select `id`, `text` from `forum` where type='f' order by realid ;");
+        while ($mass = mysql_fetch_array($q))
         {
-            $colraz = mysql_query("select `id` from `forum` where type='2' and refid='" . $res['id'] . "';");
+            $colraz = mysql_query("select `id` from `forum` where type='r' and refid='" . $mass['id'] . "';");
             $colraz1 = mysql_num_rows($colraz);
-            echo '<div class="menu"><a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colraz1 . ']</div>';
+            echo '<div class="menu"><a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
         }
         echo "<hr/><p>";
         if (!empty($_SESSION['uid']))
@@ -111,17 +107,15 @@ if (in_array($act, $do))
     if (!empty($_GET['id']))
     {
         $id = intval($_GET['id']);
-        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "';");
+        $type = mysql_query("select * from `forum` where id= '" . $id . "';");
         $type1 = mysql_fetch_array($type);
         $tip = $type1['type'];
         switch ($tip)
         {
-            case 1:
-                ////////////////////////////////////////////////////////////
-				// Список разделов                                        //
-				////////////////////////////////////////////////////////////
+            case "f":
+                // Список подразделов
                 echo "<b>$type1[text]</b><hr/>";
-                $q1 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='2' AND `refid`='" . $id . "'  ORDER BY `realid`;");
+                $q1 = mysql_query("select id, text from `forum` where type='r' and refid='" . $id . "'  order by realid ;");
                 $colraz2 = mysql_num_rows($q1);
                 $i = 0;
                 while ($mass1 = mysql_fetch_array($q1))

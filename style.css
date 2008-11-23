@@ -201,3 +201,11 @@ hr{
 	color: #CD853F;
 	font-weight: bold;
 }
+.sub{
+	font-size: x-small;
+	border-top: 1px dotted #a69f4b;
+		border-left: 1px dotted #a69f4b;
+	padding-left: 4px;
+	margin-top: 4px;
+	background-color: #e0e0bc;
+}

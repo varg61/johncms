@@ -315,8 +315,7 @@ if ($user_id && $user_ps)
 }
 
 // Подключаем дополнительные файлы
-require_once ($rootpath . 'incfiles/func.php'); // Вспомогательные функции
-require_once ($rootpath . 'incfiles/stat.php'); // Статистика
+require_once ($rootpath . 'incfiles/func.php');
 
 // Буфферизация вывода
 if ($set['gzip'] == 1)
