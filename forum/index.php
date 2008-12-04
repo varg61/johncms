@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                                                                    //
@@ -28,18 +29,22 @@ if (!$set['mod_forum'] && $dostadm != 1)
     exit;
 }
 
-if (!empty($_SESSION['uid']))
+if ($user_id)
 {
     $tti = round(($datauser['ftime'] - $realtime) / 60);
-    if (!empty($_GET['id']))
+    if ($id)
     {
-        $id = intval($_GET['id']);
         $where = "forum,$id";
     } else
     {
         $where = "forum";
     }
-    mysql_query("insert into `count` values(0,'" . $ipp . "','" . $agn . "','" . $realtime . "','" . $where . "','" . $login . "','0');");
+    mysql_query("INSERT INTO `count`  SET
+	`ip`='" . $ipp . "',
+	`browser`='" . $agn . "',
+	`time`='" . $realtime . "',
+	`where`='" . $where . "',
+	`name`='" . $login . "';");
 }
 
 $act = isset($_GET['act']) ? $_GET['act'] : '';
@@ -53,7 +58,7 @@ if (in_array($act, $do))
     // Если форум закрыт, то для Админов выводим напоминание
     if (!$set['mod_forum'])
         echo '<p><font color="#FF0000"><b>Форум закрыт!</b></font></p>';
-    if (empty($_SESSION['uid']))
+    if (!$user_id)
     {
         if (isset($_GET['newup']))
         {
@@ -65,13 +70,8 @@ if (in_array($act, $do))
         }
     }
     // Ссылка на непрочитанные темы на форуме
-	if (!empty($_SESSION['uid']))
-    {
-        echo '<p><a href="index.php?act=new">Новые: ' . forum_new() . '</a></p>';
-    } else
-    {
-        echo "<p><a href='index.php?act=new'>10 новых</a></p>";
-    }
+    //echo '<p>' . ($user_id ? '<a href="index.php?act=new">Новые: ' . forum_new() . '</a>' : '<a href="index.php?act=new">10 новых</a>') . '</p>';
+
     if ($dostfmod == 1)
     {
         $fm = mysql_query("select `id` from `forum` where type='t' and moder!='1';");
@@ -81,70 +81,40 @@ if (in_array($act, $do))
             echo "Модерацию ожидают <a href='index.php?act=fmoder'>$fm1</a> тем<br/>";
         }
     }
-    if (empty($_GET['id']))
+
+    if ($id)
     {
-        ////////////////////////////////////////////////////////////
-        // Список разделов                                        //
-        ////////////////////////////////////////////////////////////
-        echo "<b>Все форумы</b><hr/>";
-        $q = mysql_query("select `id`, `text` from `forum` where type='f' order by realid ;");
-        while ($mass = mysql_fetch_array($q))
-        {
-            $colraz = mysql_query("select `id` from `forum` where type='r' and refid='" . $mass['id'] . "';");
-            $colraz1 = mysql_num_rows($colraz);
-            echo '<div class="menu"><a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
-        }
-        echo "<hr/><p>";
-        if (!empty($_SESSION['uid']))
-        {
-            echo '<a href="index.php?act=who">Кто в форуме(' . wfrm() . ')</a><br/>';
-        }
-        echo "<a href='search.php'>Поиск по форуму</a><br/>";
-        echo "<a href='../str/usset.php?act=forum'>Настройки форума</a><br/>";
-        echo "<a href='index.php?act=read'>Правила форума</a><br/>";
-        echo "<a href='index.php?act=faq'>FAQ</a><br/>";
-    }
-    if (!empty($_GET['id']))
-    {
-        $id = intval($_GET['id']);
-        $type = mysql_query("select * from `forum` where id= '" . $id . "';");
+        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1;");
         $type1 = mysql_fetch_array($type);
         $tip = $type1['type'];
         switch ($tip)
         {
             case "f":
-                // Список подразделов
-                echo "<b>$type1[text]</b><hr/>";
-                $q1 = mysql_query("select id, text from `forum` where type='r' and refid='" . $id . "'  order by realid ;");
+                ////////////////////////////////////////////////////////////
+                // Список разделов                                        //
+                ////////////////////////////////////////////////////////////
+                echo '<div class="phdr"><div><img src="../images/nnew.gif" width="30" height="15"/>&nbsp;<a href="index.php?act=new"><small>Непрочитанное&nbsp;(' . forum_new() .
+                    ')</small></a></div><div style="height:18px"><img src="../images/nstart.gif" width="15" height="15"/>&nbsp;<a href="index.php">Форум</a></div><img src="../images/nfinal.gif" width="30" height="15"/>&nbsp;<b><span class="red">' .
+                    $type1['text'] . '</span></b></div>';
+                $q1 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='r' AND `refid`='" . $id . "' ORDER BY `realid`;");
                 $colraz2 = mysql_num_rows($q1);
                 $i = 0;
                 while ($mass1 = mysql_fetch_array($q1))
                 {
-                    $coltem = mysql_query("select id, time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc;");
-                    $coltem1 = mysql_num_rows($coltem);
+                    //$coltem = mysql_query("select id, time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc;");
+                    //$coltem1 = mysql_num_rows($coltem);
                     $cmes = mysql_query("select time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc LIMIT 1;");
                     $clm = 0;
                     while ($arr1 = mysql_fetch_array($coltem))
                     {
-                        $colmes = mysql_query("select id from `forum` where type='m' and refid='" . $arr1['id'] . "' ;");
-                        $colmes1 = mysql_num_rows($colmes);
-                        $clm = $clm + $colmes1;
+                        //$colmes = mysql_query("select id from `forum` where type='m' and refid='" . $arr1['id'] . "' ;");
+                        //$colmes1 = mysql_num_rows($colmes);
+                        //$clm = $clm + $colmes1;
                     }
-                    $cmes = mysql_query("select time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc LIMIT 1;");
-                    $arr = mysql_fetch_array($cmes);
-                    $posl = $arr[time];
-                    $d = $i / 2;
-                    $d1 = ceil($d);
-                    $d2 = $d1 - $d;
-                    $d3 = ceil($d2);
-                    if ($d3 == 0)
-                    {
-                        $div = "<div class='b'>";
-                    } else
-                    {
-                        $div = "<div class='c'>";
-                    }
-                    echo "$div<a href='?id=$mass1[id]'>$mass1[text]</a>";
+                    //$cmes = mysql_query("select time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc LIMIT 1;");
+                    //$arr = mysql_fetch_array($cmes);
+                    //$posl = $arr['time'];
+                    echo '<div class="menu"><a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
                     if ($coltem1 > 0)
                     {
                         echo " [$coltem1/$clm]<br/>(" . date("H:i /d.m.y", $posl) . ")";
@@ -152,51 +122,46 @@ if (in_array($act, $do))
                     echo "</div>";
                     ++$i;
                 }
-                echo "<hr/><p><a href='?'>В форум</a><br/>";
+                echo '<div class="bmenu">Кто в разделе()</div>';
                 break;
 
             case "r":
                 ////////////////////////////////////////////////////////////
-                // Список топиков раздела                                 //
+                // Список тем                                             //
                 ////////////////////////////////////////////////////////////
                 if ($dostsadm == 1)
                 {
-                    $qz = mysql_query("select `id` from `forum` where type='t' and refid='" . $id . "' and moder='1' ;");
+                    $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1' ;");
                 } else
                 {
-                    $qz = mysql_query("select `id` from `forum` where type='t' and close!='1' and moder='1' and refid='" . $id . "'  ;");
+                    $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `close`!='1' AND `moder`='1' AND `refid`='" . $id . "';");
                 }
-                $coltem = mysql_num_rows($qz);
+                $coltem = mysql_result($qz, 0);
                 $ba = ceil($coltem / $kmess);
-                if (empty($_GET['page']))
-                {
-                    $page = 1;
-                } else
-                {
-                    $page = intval($_GET['page']);
-                }
-                if ($page < 1)
-                {
-                    $page = 1;
-                }
                 if ($page > $ba)
                 {
                     $page = $ba;
                 }
                 $start = $page * $kmess - $kmess;
-                if ($dostsadm == 1)
-                {
-                    $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1'  ORDER BY vip DESC, time DESC LIMIT " . $start . "," . $kmess . ";");
-                } else
-                {
-                    $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `close`!='1' AND `moder`='1' AND `refid`='" . $id . "'  ORDER BY vip DESC, time DESC LIMIT " . $start . "," . $kmess . ";");
-                }
-                echo "<b>$type1[text]</b><br/>Тем в разделе: $coltem<br/>";
+
+                // Панель навигации
+                $forum = mysql_query("select * from `forum` where type='f' and id='" . $type1['refid'] . "';");
+                $forum1 = mysql_fetch_array($forum);
+                echo '<div class="phdr"><div><img src="../images/nnew.gif" width="30" height="15"/>&nbsp;<a href="index.php?act=new"><small>Непрочитанное&nbsp;(' . forum_new() .
+                    ')</small></a></div><div style="height:18px"><img src="../images/nstart.gif" width="15" height="15"/>&nbsp;<a href="index.php">Форум</a><small> &gt; <a href="index.php?id=' . $type1['refid'] . '">' . $forum1['text'] .
+                    '</a></small></div><img src="../images/nfinal.gif" width="30" height="15"/>&nbsp;<b><span class="red">' . $type1['text'] . '</span></b></div>';
+
                 if ($user_id && !$ban['1'] && !$ban['11'])
                 {
-                    echo "<a href='index.php?act=nt&amp;id=" . $id . "'>Новая тема</a>";
+                    echo '<div class="gmenu"><a href="index.php?act=nt&amp;id=' . $id . '">Новая тема</a></div>';
                 }
-                echo "<hr/>";
+                if ($dostsadm == 1)
+                {
+                    $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
+                } else
+                {
+                    $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `close`!='1' AND `moder`='1' AND `refid`='" . $id . "'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
+                }
                 $i = 0;
                 while ($mass = mysql_fetch_array($q1))
                 {
@@ -210,18 +175,7 @@ if (in_array($act, $do))
                         $colmes1 = 0;
                     }
                     $nam = mysql_fetch_array($nikuser);
-                    $d = $i / 2;
-                    $d1 = ceil($d);
-                    $d2 = $d1 - $d;
-                    $d3 = ceil($d2);
-                    if ($d3 == 0)
-                    {
-                        $div = "<div class='b'>";
-                    } else
-                    {
-                        $div = "<div class='c'>";
-                    }
-                    echo "$div";
+                    echo '<div class="menu">';
                     if ($mass['vip'] == 1)
                     {
                         echo "<img src='../images/pt.gif' alt=''/>";
@@ -244,58 +198,31 @@ if (in_array($act, $do))
                         }
                     }
                     // Выводим список тем
-                    echo "<a href='index.php?id=$mass[id]'>$mass[text]</a> [$colmes1]";
+                    echo "&nbsp;<a href='index.php?id=$mass[id]'>$mass[text]</a> [$colmes1]";
                     if ($cpg > 1)
                     {
-                        if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
-                        {
-                            echo "<a href='index.php?id=$mass[id]&amp;page=$cpg'>[&lt;&lt;]</a>";
-                        } else
-                        {
-                            echo "<a href='index.php?id=$mass[id]&amp;page=$cpg'>[&gt;&gt;]</a>";
-                        }
+                        echo "<a href='index.php?id=$mass[id]&amp;page=$cpg'>&nbsp;&gt;&gt;</a>";
                     }
-                    echo "<br/>";
-                    echo "(" . date("H:i /d.m.y", $mass['time']) . ")<br/>[$mass[from]";
+                    echo '<div class="sub">';
+                    echo $mass['from'];
                     if (!empty($nam['from']))
                     {
-                        echo "/$nam[from]";
+                        echo '&nbsp;/&nbsp;' . $nam['from'];
                     }
-                    echo "]</div>";
+                    echo ' <font color="#777777">' . date("d.m.y / H:i", $mass['time']) . "</font></div></div>";
                     ++$i;
                 }
-                echo "<hr/><p>";
+                echo '<div class="bmenu">Всего тем: ' . $coltem . '</div>';
                 if ($coltem > $kmess)
                 {
-                    if ($offpg != 1)
-                    {
-                        echo "Страницы:<br/>";
-                    } else
-                    {
-                        echo "Страниц: $ba<br/>";
-                    }
-                    if ($start != 0)
-                    {
-                        echo '<a href="index.php?id=' . $id . '&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
-                    }
-                    if ($offpg != 1)
-                    {
-                        navigate('index.php?id=' . $id . '', $coltem, $kmess, $start, $page); #функция постраничного вывода из файла incfiles/end.php
-                    } else
-                    {
-                        echo "<b>[$page]</b>";
-                    }
-                    if ($coltem > $start + $kmess)
-                    {
-                        echo ' <a href="index.php?id=' . $id . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
-                    }
+                    echo '<p>';
+                    // Постраничная навигация
+                    $pagenav = array('address' => 'index.php?id=' . $id, 'total' => $coltem, 'numpr' => $kmess, 'page' => $page);
+                    pagenav($pagenav);
+                    echo '</p>';
                     echo "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='id' value='" . $id .
                         "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
                 }
-                $forum = mysql_query("select * from `forum` where type='f' and id='" . $type1['refid'] . "';");
-                $forum1 = mysql_fetch_array($forum);
-                echo "&#187;<a href='?id=" . $type1['refid'] . "'>$forum1[text]</a><br/>";
-                echo "&#187;<a href='?'>В форум</a><br/>";
                 break;
 
             case "t":
@@ -570,7 +497,6 @@ if (in_array($act, $do))
                     echo "<form action='?'>Перейти к странице:<br/><input type='hidden' name='id' value='" . $id .
                         "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form></p>";
                 }
-                echo "<p>";
                 if ($dostfmod == 1)
                 {
                     echo '<div class="func">';
@@ -614,7 +540,33 @@ if (in_array($act, $do))
                 echo "<p><b>Ошибка!</b><br />Тема удалена или не существует!</p><p><a href='?'>В форум</a><br/>";
                 break;
         }
+    } else
+    {
+        ////////////////////////////////////////////////////////////
+        // Список Форумов                                         //
+        ////////////////////////////////////////////////////////////
+        echo '<div class="phdr"><img src="../images/nnew.gif" width="30" height="15"/>&nbsp;<a href="index.php?act=new"><small>Непрочитанное&nbsp;(' . forum_new() .
+            ')</small></a><br /><img src="../images/nstart.gif" width="15" height="15"/>&nbsp;<b><span class="red">Форум</span></b></div>';
+        $q = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' ORDER BY `realid`;");
+        while ($mass = mysql_fetch_array($q))
+        {
+            $colraz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $mass['id'] . "';");
+            $colraz1 = mysql_result($colraz, 0);
+            echo '<div class="menu"><a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
+        }
+        if ($user_id)
+        {
+            echo '<div class="bmenu"><a href="index.php?act=who">Кто в форуме</a>(' . wfrm() . ')</div>';
+        } else
+        {
+            echo '<div class="bmenu">Кто в форуме(' . wfrm() . ')</div>';
+        }
+        echo "<p><a href='search.php'>Поиск по форуму</a><br/>";
+        echo "<a href='../str/usset.php?act=forum'>Настройки форума</a><br/>";
+        echo "<a href='index.php?act=read'>Правила форума</a><br/>";
+        echo "<a href='index.php?act=faq'>FAQ</a></p>";
     }
+
     if (empty($_SESSION['uid']))
     {
         if ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0))
@@ -625,7 +577,7 @@ if (in_array($act, $do))
             echo "<a href='index.php?id=" . $id . "&amp;page=" . $page . "&amp;newdown'>Новые внизу</a><br/>";
         }
     }
-    echo "<a href='index.php?act=moders&amp;id=" . $id . "'>Модераторы</a></p>";
+    echo "<p><a href='index.php?act=moders&amp;id=" . $id . "'>Модераторы</a></p>";
 }
 require_once ("../incfiles/end.php");
 

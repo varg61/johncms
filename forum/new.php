@@ -18,7 +18,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = 'Форум-новые';
 $headmod = "forums";
 require_once ("../incfiles/head.php");
-echo '<div class="phdr">Новое на форуме</div>';
+echo '<div class="phdr"><img src="../images/nnew.gif" width="30" height="15"/>&nbsp;<b><span class="red">Непрочитанное</span><br /><img src="../images/nstart.gif" width="15" height="15"/>&nbsp;<a href="index.php"><small>Форум</small></a></b></div>';
 if (empty($_SESSION['uid']))
 {
     if (isset($_GET['newup']))
@@ -357,7 +357,7 @@ if (!empty($_SESSION['uid']))
                 {
                     echo '<img src="../images/np.gif" alt=""/>';
                 }
-                echo '<a href="index.php?id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a>&nbsp;[' . $colmes1 . ']';
+                echo '&nbsp;<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
                 echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
                 echo $res['from'];
                 if ($colmes1 > 1)

@@ -41,43 +41,9 @@ switch ($do)
 		
 		// Удаляем метки (l)
         $req = mysql_query("DELETE FROM `forum` WHERE `type`='l';");
+        mysql_query("OPTIMIZE TABLE `forum`;");
         echo '<span class="green">OK</span> метки удалены.<br />';
 
-        // Обновляем типы
-        $req = mysql_query("SELECT * FROM `forum` WHERE `type`='f';");
-        while ($res = mysql_fetch_array($req))
-        {
-            mysql_query("UPDATE `forum` SET `type`='1' WHERE `id`='" . $res['id'] . "';");
-        }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `type`='r';");
-        while ($res = mysql_fetch_array($req))
-        {
-            mysql_query("UPDATE `forum` SET `type`='2' WHERE `id`='" . $res['id'] . "';");
-        }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t';");
-        while ($res = mysql_fetch_array($req))
-        {
-            mysql_query("UPDATE `forum` SET `type`='3' WHERE `id`='" . $res['id'] . "';");
-        }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `type`='m';");
-        while ($res = mysql_fetch_array($req))
-        {
-            mysql_query("UPDATE `forum` SET `type`='4' WHERE `id`='" . $res['id'] . "';");
-        }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `type`='n';");
-        while ($res = mysql_fetch_array($req))
-        {
-            mysql_query("UPDATE `forum` SET `type`='5' WHERE `id`='" . $res['id'] . "';");
-        }
-        echo '<span class="green">OK</span> типы обновлены.<br />';
-
-        // Модифицируем таблицу "forum"
-        mysql_query("ALTER TABLE `forum` DROP INDEX `type`;");
-        mysql_query("ALTER TABLE `forum` CHANGE `type` `type` TINYINT( 3 ) NOT NULL;");
-        mysql_query("ALTER TABLE `forum` ADD INDEX ( `type` );");
-        mysql_query("OPTIMIZE TABLE `forum`;");
-        echo '<span class="green">OK</span> таблица "forum" модифицирована.<br />';
-        
         // Создаем таблицу меток прочтения
         mysql_query("DROP TABLE IF EXISTS `cms_forum_rdm`;");
 		mysql_query("CREATE TABLE `cms_forum_rdm` (
