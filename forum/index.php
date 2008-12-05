@@ -208,12 +208,12 @@ if (in_array($act, $do)) {
                         "' AND `user_id`='" . $user_id . "';");
                     if (mysql_num_rows($req) == 1) {
                         // Обновляем время метки о прочтении
-                        mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . time() .
+                        mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime .
                             "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
                     } else {
                         // Ставим метку о прочтении
                         mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id .
-                            "', `user_id`='" . $user_id . "', `time`='" . time() . "';");
+                            "', `user_id`='" . $user_id . "', `time`='" . $tealtime . "';");
                     }
                 }
                 if ($dostsadm != 1 && $type1['close'] == 1) {

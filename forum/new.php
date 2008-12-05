@@ -138,7 +138,7 @@ if (!empty($_SESSION['uid']))
                 mysql_query("INSERT INTO `cms_forum_rdm` SET
 				`topic_id`='" . $res['id'] . "',
 				`user_id`='" . $user_id . "',
-				`time`='" . time() . "';");
+				`time`='" . $realtime . "';");
             }
             $req = mysql_query("SELECT `forum`.`id` AS `id`
 			FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
@@ -147,8 +147,7 @@ if (!empty($_SESSION['uid']))
 			AND `forum`.`time` > `cms_forum_rdm`.`time`;");
             while ($res = mysql_fetch_array($req))
             {
-                echo $res['id'] . '<br />';
-                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . time() . "' WHERE `topic_id`='" . $res['id'] . "' AND `user_id`='" . $user_id . "';");
+                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $res['id'] . "' AND `user_id`='" . $user_id . "';");
             }
             $_SESSION['fnew'] = 0;
             $_SESSION['fnewtime'] = time();

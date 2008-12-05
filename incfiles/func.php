@@ -32,13 +32,14 @@ function forum_new()
     ////////////////////////////////////////////////////////////
     global $user_id;
     global $dostsadm;
+    global $realtime;
     if ($user_id)
     {
-        if (isset($_SESSION['fnew']) && $_SESSION['fnewtime'] > (time() - 3))
-        {
+        //if (isset($_SESSION['fnew']) && $_SESSION['fnewtime'] > ($realtime - 3))
+        //{
             $out = $_SESSION['fnew'];
-        } else
-        {
+        //} else
+        //{
             $req = mysql_query("SELECT COUNT(*)
 			FROM `forum`
 			LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
@@ -48,9 +49,9 @@ function forum_new()
 			OR `forum`.`time` > `cms_forum_rdm`.`time`);");
             $res = mysql_result($req, 0);
             $_SESSION['fnew'] = $res;
-            $_SESSION['fnewtime'] = time();
+            $_SESSION['fnewtime'] = $realtime;
             $out = $res;
-        }
+        //}
         return $out;
     } else
     {
