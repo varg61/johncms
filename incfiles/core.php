@@ -290,7 +290,7 @@ if ($user_id && $user_ps)
 			WHERE `id`='" . $user_id . "';");
 
             // Если юзера не было на сайте более 1-го часа , показываем дайджест
-            if ($lastdate < ($realtime - 3600))
+            if ($lastdate < ($realtime - 3600) && $headmod = "mainpage")
                 header("Location: " . $home . "/index.php?mod=digest&last=" . $lastdate);
         } else
         {

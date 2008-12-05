@@ -103,13 +103,13 @@ function wfrm($id)
     global $realtime;
     $onltime = $realtime - 300;
     $count = 0;
-    $qf = @mysql_query("select * from `users` where  lastdate>='" . intval($onltime) . "';");
+    $qf = @mysql_query("select * from `users` where  lastdate>='" . $onltime . "';");
     while ($arrf = mysql_fetch_array($qf))
     {
-        $whf = mysql_query("select * from `count` where name='" . $arrf[name] . "' order by time desc ;");
+        $whf = mysql_query("select * from `count` where name='" . $arrf['name'] . "' order by time desc ;");
         while ($whf1 = mysql_fetch_array($whf))
         {
-            $whf2[] = $whf1[where];
+            $whf2[] = $whf1['where'];
         }
         $wherf = $whf2[0];
         $whf2 = array();

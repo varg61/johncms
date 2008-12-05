@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -85,41 +86,44 @@ switch ($mod)
         }
         echo '<div class="bmenu">Новое на сайте</div>';
         // Новости
-        $total = mysql_num_rows(mysql_query("SELECT * FROM `news` WHERE `time`>'" . ($realtime - 86400) . "';"));
-        echo '<div class="menu">Новости: ' . ($total > 0 ? $total . ' <a href="str/news.php">&gt;&gt;&gt;</a>' : ' нет') . '</div>';
+        $total_news = mysql_num_rows(mysql_query("SELECT * FROM `news` WHERE `time`>'" . ($realtime - 86400) . "';"));
+        if ($total_news > 0)
+            echo '<div class="menu">Новости: ' . $total_news . ' <a href="str/news.php">&gt;&gt;&gt;</a></div>';
         // Форум
-        $lp = mysql_query("select * from `forum` where type='t' and moder='1' and close!='1';");
-        while ($arrt = mysql_fetch_array($lp))
-        {
-            $q3 = mysql_query("select * from `forum` where type='r' and id='" . $arrt['refid'] . "';");
-            $q4 = mysql_fetch_array($q3);
-            $rz = mysql_query("select * from `forum` where type='n' and refid='" . $q4['refid'] . "' and `from`='" . $login . "';");
-            $np = mysql_query("select * from `forum` where type='l' and time>='" . $arrt['time'] . "' and refid='" . $arrt['id'] . "' and `from`='" . $login . "';");
-            if ((mysql_num_rows($np)) != 1 && (mysql_num_rows($rz)) != 1)
-            {
-                $total = $total + 1;
-            }
-        }
-        echo '<div class="menu">Форум: ' . ($total != 0 ? $total . '&nbsp;<a href="forum/index.php?act=new">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
+        $total_forum = forum_new();
+        if ($total_forum > 0)
+            echo '<div class="menu">Форум: ' . $total_forum . '&nbsp;<a href="forum/index.php?act=new">&gt;&gt;&gt;</a></div>';
         // Гостевая
-        $total = gbook(1);
-        echo '<div class="menu">Гостевая: ' . ($total != 0 ? $total . '&nbsp;<a href="str/guest.php?act=ga">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
+        $total_guest = gbook(1);
+        if ($total_guest > 0)
+            echo '<div class="menu">Гостевая: ' . $total_guest . '&nbsp;<a href="str/guest.php?act=ga">&gt;&gt;&gt;</a></div>';
         // Админ-Клуб
+        $total_admin = 0;
         if ($dostmod == 1)
         {
-            $total = gbook(2);
-            echo '<div class="menu">Админ-Клуб: ' . ($total != 0 ? $total . '&nbsp;<a href="str/guest.php?act=ga&amp;do=set">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
+            $total_admin = gbook(2);
+            if ($total_admin > 0)
+                echo '<div class="menu">Админ-Клуб: ' . $total_admin . '&nbsp;<a href="str/guest.php?act=ga&amp;do=set">&gt;&gt;&gt;</a></div>';
         }
-        // Библиотека
-        $total = stlib(1);
-        echo '<div class="menu">Библиотека: ' . ($total != 0 ? $total . '&nbsp;<a href="library/index.php?act=new">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
         // Галерея
-        $total = fgal(1);
-        echo '<div class="menu">Галерея: ' . ($total != 0 ? $total . '&nbsp;<a href="gallery/index.php?act=new">&gt;&gt;&gt;</a></div>' : 'нет.</div>');
+        $total_gal = fgal(1);
+        if ($total_gal > 0)
+            echo '<div class="menu">Галерея: ' . $total_gal . '&nbsp;<a href="gallery/index.php?act=new">&gt;&gt;&gt;</a></div>';
+        // Библиотека
+        $old = $realtime - (3 * 24 * 3600);
+        $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type`='bk' AND `moder`='1' AND `time` > '" . $old . "';");
+        $total_lib = mysql_result($req, 0);
+        if ($total_lib > 0)
+            echo '<div class="menu">Библиотека: ' . $total_lib . '&nbsp;<a href="library/index.php?act=new">&gt;&gt;&gt;</a></div>';
+        // Если нового нет, выводим сообщение
+        if ($total_news == 0 && $total_forum == 0 && $total_guest == 0 && $total_admin == 0 && $total_gal == 0 && $total_lib == 0)
+            echo '<div class="menu">Новостей нет</div>';
         // Дата последнего посещения
         $last = isset($_GET['last']) ? intval($_GET['last']):
         $lastdate;
         echo '<div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
+
+        echo '<div class="gmenu" style="font-size:large; padding-top: 8px; padding-bottom: 8px;"><a href="index.php">Войти на сайт</a></div>';
         break;
 
     default:
