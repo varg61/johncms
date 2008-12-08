@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                                                                    //
@@ -18,7 +19,8 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = 'Форум-новые';
 $headmod = "forums";
 require_once ("../incfiles/head.php");
-echo '<div class="phdr"><img src="../images/nnew.gif" width="30" height="15"/>&nbsp;<b><span class="red">Непрочитанное</span><br /><img src="../images/nstart.gif" width="15" height="15"/>&nbsp;<a href="index.php"><small>Форум</small></a></b></div>';
+echo '<p><a href="index.php">Вернуться в форум</a></p>';
+echo '<div class="phdr"><b>Непрочитанное</b></div>';
 if (empty($_SESSION['uid']))
 {
     if (isset($_GET['newup']))
@@ -309,13 +311,6 @@ if (!empty($_SESSION['uid']))
             ////////////////////////////////////////////////////////////
             $knt = forum_new();
             $start = $page * $kmess - $kmess;
-            if ($knt < $start + $kmess)
-            {
-                $end = $knt;
-            } else
-            {
-                $end = $start + $kmess;
-            }
             if ($dostsadm == 1)
             {
                 $req = mysql_query("SELECT *
@@ -324,7 +319,9 @@ if (!empty($_SESSION['uid']))
 				WHERE `forum`.`type`='t'
 				AND `moder`='1'
 				AND (`cms_forum_rdm`.`topic_id` Is Null
-				OR `forum`.`time` > `cms_forum_rdm`.`time`) LIMIT " . $start . "," . $kmess . ";");
+				OR `forum`.`time` > `cms_forum_rdm`.`time`)
+				ORDER BY `forum`.`time` DESC
+				LIMIT " . $start . "," . $kmess . ";");
             } else
             {
                 $req = mysql_query("SELECT *
@@ -334,7 +331,9 @@ if (!empty($_SESSION['uid']))
 				AND `moder`='1'
 				AND `close`!='1'
 				AND (`cms_forum_rdm`.`topic_id` Is Null
-				OR `forum`.`time` > `cms_forum_rdm`.`time`) LIMIT " . $start . "," . $kmess . ";");
+				OR `forum`.`time` > `cms_forum_rdm`.`time`)
+				ORDER BY `forum`.`time` DESC
+				LIMIT " . $start . "," . $kmess . ";");
             }
             while ($res = mysql_fetch_array($req))
             {
@@ -357,6 +356,11 @@ if (!empty($_SESSION['uid']))
                     echo '<img src="../images/np.gif" alt=""/>';
                 }
                 echo '&nbsp;<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
+                $cpg = ceil($colmes1 / $kmess);
+                if ($cpg > 1)
+                {
+                    echo "<a href='index.php?id=$res[id]&amp;page=$cpg'>&nbsp;&gt;&gt;</a>";
+                }
                 echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
                 echo $res['from'];
                 if ($colmes1 > 1)
@@ -373,6 +377,7 @@ if (!empty($_SESSION['uid']))
                 // Постраничная навигация
                 $pagenav = array('address' => 'index.php?act=new', 'total' => $knt, 'numpr' => $kmess, 'page' => $page);
                 pagenav($pagenav);
+                echo '<form action="index.php" method="get">Перейти к странице:<br/> <input type="hidden" name="act" value="new"/> <input type="text" name="page"/><br/><input type="submit" title="Нажмите для перехода" value="Go!"/></form>';
                 echo '</p>';
             }
             echo '<p><a href="index.php?act=new&amp;do=reset">Сброс!</a><br/>';
@@ -456,4 +461,5 @@ if (!empty($_SESSION['uid']))
 }
 echo '<a href="index.php">В форум</a>';
 require_once ("../incfiles/end.php");
+
 ?>

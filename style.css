@@ -39,7 +39,7 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 .bmenu{
 	margin: 0px;
 	padding: 2px 0px 3px 4px;
-	background-color: #c9cfd7;
+	background-color: #bfc6cf;
 	border: 1px solid white;
 }
 
@@ -112,11 +112,9 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 .phdr{
 	color: black;
 	padding: 6px 0px 8px 4px;
-	background-color: #c9cfd7;
+	background-color: #bfc6cf;
 	border: 1px solid white;
 }
-
-.phdr img{ float: left; }
 
 .quote{
 	font-size: x-small;

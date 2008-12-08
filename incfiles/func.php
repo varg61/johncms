@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -18,8 +19,8 @@ defined('_IN_JOHNCMS') or die('Error:restricted access');
 ////////////////////////////////////////////////////////////////////////////////
 // Получаем и фильтруем основные переменные для системы                       //
 ////////////////////////////////////////////////////////////////////////////////
-$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : false; // Идентификатор
-$page = (isset($_GET['page']) && $_GET['page'] > 1) ? intval($_GET['page']) : 1; // Номер страницы
+$id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false; // Идентификатор
+$page = (isset($_GET['page'])) ? abs(intval($_GET['page'])) : 1; // Номер страницы
 
 ////////////////////////////////////////////////////////////////////////////////
 // Статистические функции и счетчики                                          //
@@ -35,23 +36,18 @@ function forum_new()
     global $realtime;
     if ($user_id)
     {
-        //if (isset($_SESSION['fnew']) && $_SESSION['fnewtime'] > ($realtime - 3))
-        //{
-            $out = $_SESSION['fnew'];
-        //} else
-        //{
-            $req = mysql_query("SELECT COUNT(*)
+        $out = $_SESSION['fnew'];
+        $req = mysql_query("SELECT COUNT(*)
 			FROM `forum`
 			LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
 			WHERE `forum`.`type`='t'
 			AND `moder`='1'
 			AND (`cms_forum_rdm`.`topic_id` Is Null
 			OR `forum`.`time` > `cms_forum_rdm`.`time`);");
-            $res = mysql_result($req, 0);
-            $_SESSION['fnew'] = $res;
-            $_SESSION['fnewtime'] = $realtime;
-            $out = $res;
-        //}
+        $res = mysql_result($req, 0);
+        $_SESSION['fnew'] = $res;
+        $_SESSION['fnewtime'] = $realtime;
+        $out = $res;
         return $out;
     } else
     {
@@ -348,6 +344,18 @@ function trans($str)
         'Е', 'YO' => 'Ё', 'ZH' => 'Ж', 'Z' => 'З', 'I' => 'И', 'J' => 'Й', 'K' => 'К', 'L' => 'Л', 'M' => 'М', 'N' => 'Н', 'O' => 'О', 'P' => 'П', 'R' => 'Р', 'S' => 'С', 'T' => 'Т', 'U' => 'У', 'F' => 'Ф', 'H' => 'Х', 'C' => 'Ц', 'CH' => 'Ч', 'W' =>
         'Ш', 'SH' => 'Щ', 'Q' => 'Ъ', 'Y' => 'Ы', 'X' => 'Э', 'YU' => 'Ю', 'YA' => 'Я'));
     return $str;
+}
+
+function unhtmlentities($string)
+{
+    ////////////////////////////////////////////////////////////
+    // Декодирование htmlentities, PHP4совместимый режим      //
+    ////////////////////////////////////////////////////////////
+    $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
+    $string = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
+    $trans_tbl = get_html_translation_table(HTML_ENTITIES);
+    $trans_tbl = array_flip($trans_tbl);
+    return strtr($string, $trans_tbl);
 }
 
 function pagenav($var = array())

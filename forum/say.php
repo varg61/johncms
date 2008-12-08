@@ -22,7 +22,6 @@ if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
     require_once ("../incfiles/end.php");
     exit;
 }
-$id = intval($_GET['id']);
 $type = mysql_query("select * from `forum` where id= '" . $id . "';");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
@@ -127,7 +126,7 @@ switch ($tip)
 
     case "m":
         $th = $type1['refid'];
-        $th2 = mysql_query("select * from `forum` where id= '" . $th . "';");
+        $th2 = mysql_query("select * from `forum` where `id`= '" . $th . "';");
         $th1 = mysql_fetch_array($th2);
         if (isset($_POST['submit']))
         {
