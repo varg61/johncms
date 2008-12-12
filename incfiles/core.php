@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                                                                    //
@@ -54,6 +55,13 @@ if (get_magic_quotes_gpc())
         }
     }
 }
+
+////////////////////////////////////////////////////////////
+// Получаем и фильтруем основные переменные для системы   //
+////////////////////////////////////////////////////////////
+$id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false; // Идентификатор
+$page = isset($_GET['page']) ? abs(intval($_GET['page'])) : 1; // Номер страницы
+$act = isset($_GET['act']) ? trim($_GET['act']) : ''; // Выбор действия
 
 ////////////////////////////////////////////////////////////
 // 1) Получаем реальный IP                                //
@@ -208,9 +216,8 @@ if ($user_id && $user_ps)
             $sdvig = $datauser['sdvig']; // Сдвиг времени
             $kmess = $datauser['kolanywhwere']; // Число сообщений на страницу
             $offpg = $datauser['offpg'];
-            $offtr = $datauser['offtr']; // Выключить транслит
-            $offgr = $datauser['offgr']; // Выключить графику
-            $offsm = $datauser['offsm']; // Выключить смайлы
+            $offtr = $datauser['offtr'] ? 0 : 1; // Выключить транслит
+            $offsm = $datauser['offsm'] ? 0 : 1; // Выключить смайлы
             $upfp = $datauser['upfp'];
             $nmenu = $datauser['nmenu'];
             $chmes = $datauser['chmes'];
@@ -290,7 +297,7 @@ if ($user_id && $user_ps)
 			WHERE `id`='" . $user_id . "';");
 
             // Если юзера не было на сайте более 1-го часа , показываем дайджест
-            if ($lastdate < ($realtime - 3600) && $headmod = "mainpage")
+            if ($lastdate < ($realtime - 3600) && $datauser['digest'] == 1 && $headmod == 'mainpage')
                 header("Location: " . $home . "/index.php?mod=digest&last=" . $lastdate);
         } else
         {

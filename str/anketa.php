@@ -50,7 +50,7 @@ if (!empty($_SESSION['uid']))
         echo '<div class="menu">Игровой баланс: ' . $arr['balans'] . '</div>';
         if ($total > 0)
             echo '<div class="rmenu">Нарушения: <a href="anketa.php?act=ban&amp;user=' . $user . '">' . $total . '</a></div>';
-        echo '<div class="bmenu"><a href="anketa.php?user=' . $arr['id'] . '">В анкету</a></div>';
+        echo '<div class="bmenu"><a href="../index.php?mod=cab">В кабинет</a></div>';
         require_once ("../incfiles/end.php");
         exit;
     }

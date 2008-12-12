@@ -21,10 +21,10 @@ if ($headmod != "mainpage" || isset($_GET['do']) || isset($_GET['mod']))
     echo '<a href=\'' . $home . '\'>На главную</a><br/>';
 }
 // Меню быстрого перехода
-if (empty($_SESSION['uid']) || $datauser['pereh'] != 1)
+if (empty($_SESSION['uid']) || $datauser['pereh'] == 1)
 {
     echo "<form action='" . $home . "/go.php' method='post'><select name='adres' style='font-size:10px'><option selected='selected'>Быстрый переход </option>";
-    if (!empty($_SESSION['uid']))
+    if ($user_id)
     {
         echo "<option value='privat'>Приват</option><option value='set'>Настройки</option><option value='prof'>Анкета</option><option value='chat'>Чат</option>";
     }

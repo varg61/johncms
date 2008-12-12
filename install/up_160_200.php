@@ -38,22 +38,25 @@ switch ($do)
 {
     case 'forum':
         echo '<b><u>Обновляем форум</u></b><br />';
-		
-		// Удаляем метки (l)
+
+        // Удаляем метки (l)
         $req = mysql_query("DELETE FROM `forum` WHERE `type`='l';");
         mysql_query("OPTIMIZE TABLE `forum`;");
         echo '<span class="green">OK</span> метки удалены.<br />';
 
         // Создаем таблицу меток прочтения
         mysql_query("DROP TABLE IF EXISTS `cms_forum_rdm`;");
-		mysql_query("CREATE TABLE `cms_forum_rdm` (
+        mysql_query("CREATE TABLE `cms_forum_rdm` (
 		`topic_id` int(11) NOT NULL,
 		`user_id` int(11) NOT NULL,
 		`time` int(11) NOT NULL,
 		PRIMARY KEY  (`topic_id`,`user_id`),
 		KEY `time` (`time`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
-		echo '<span class="green">OK</span> таблица меток создана.<br />';
+        echo '<span class="green">OK</span> таблица меток создана.<br />';
+
+        // Создаем поле users.digest
+		mysql_query("ALTER TABLE `users` ADD `digest` TINYINT NOT NULL DEFAULT '1';");
 
         echo '<hr /><a href="up_160_200.php?do=final">Продолжить</a>';
         break;

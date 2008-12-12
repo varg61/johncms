@@ -16,7 +16,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = "mainpage";
+$headmod = 'mainpage';
 
 // Внимание! Если файл находится в корневой папке, нужно указать $rootpath = '';
 $rootpath = '';
@@ -61,15 +61,17 @@ switch ($mod)
     case 'cab':
         echo '<div class="phdr">Личный кабинет</div>';
         echo '<div class="gmenu"><a href="str/privat.php">Личная почта</a></div>';
-        echo '<div class="menu"><a href="str/anketa.php">Ваша анкета</a></div>';
-        echo '<div class="menu"><a href="str/usset.php">Настройки</a></div>';
-        echo '<div class="menu"><a href="str/anketa.php?act=statistic">Статистика</a></div>';
         if ($dostmod == 1)
         {
             $guest = gbook(2);
             echo '<div class="gmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a>' . ($guest > 0 ? ' (<span class="red">+' . $guest . '</span>)' : '') . '</div>';
-            echo '<div class="rmenu"><a href="' . $admp . '/main.php">Админка</a></div>';
         }
+        echo '<div class="menu"><a href="str/anketa.php">Ваша анкета</a></div>';
+        echo '<div class="menu"><a href="str/anketa.php?act=statistic">Статистика</a></div>';
+        echo '<div class="menu"><a href="str/usset.php">Настройки</a></div>';
+        if ($dostsmod == 1)
+            echo '<div class="menu">Админка <a href="' . $admp . '/main.php">&gt;&gt;&gt;</a></div>';
+        echo '<div class="bmenu"><a href="index.php?mod=digest">Новое на сайте</a></div>';
         break;
 
     case 'digest':
@@ -122,8 +124,7 @@ switch ($mod)
         $last = isset($_GET['last']) ? intval($_GET['last']):
         $lastdate;
         echo '<div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
-
-        echo '<div class="gmenu" style="font-size:large; padding-top: 8px; padding-bottom: 8px;"><a href="index.php">Войти на сайт</a></div>';
+        //echo '<div class="gmenu" style="font-size:large; padding-top: 8px; padding-bottom: 8px;"><a href="index.php">Войти на сайт</a></div>';
         break;
 
     default:
