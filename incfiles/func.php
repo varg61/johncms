@@ -26,23 +26,29 @@ function forum_new()
     // Счетчик непрочитанных тем на форуме                    //
     ////////////////////////////////////////////////////////////
     global $user_id;
-    global $dostsadm;
     global $realtime;
+    global $dostadm;
     if ($user_id)
     {
-        $out = $_SESSION['fnew'];
-        $req = mysql_query("SELECT COUNT(*)
-			FROM `forum`
+        if ($dostadm)
+        {
+            $req = mysql_query("SELECT COUNT(*) FROM `forum`
+			LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
+			WHERE `forum`.`type`='t'
+			AND (`cms_forum_rdm`.`topic_id` Is Null
+			OR `forum`.`time` > `cms_forum_rdm`.`time`);");
+            return mysql_result($req, 0);
+        } else
+        {
+            $req = mysql_query("SELECT COUNT(*) FROM `forum`
 			LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
 			WHERE `forum`.`type`='t'
 			AND `moder`='1'
+			AND `close`='0'
 			AND (`cms_forum_rdm`.`topic_id` Is Null
 			OR `forum`.`time` > `cms_forum_rdm`.`time`);");
-        $res = mysql_result($req, 0);
-        $_SESSION['fnew'] = $res;
-        $_SESSION['fnewtime'] = $realtime;
-        $out = $res;
-        return $out;
+            return mysql_result($req, 0);
+        }
     } else
     {
         return false;
