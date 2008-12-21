@@ -40,24 +40,46 @@ switch ($do)
         echo '<b><u>Обновляем форум</u></b><br />';
 
         // Удаляем метки (l)
-        $req = mysql_query("DELETE FROM `forum` WHERE `type`='l';");
-        mysql_query("OPTIMIZE TABLE `forum`;");
-        echo '<span class="green">OK</span> метки удалены.<br />';
+        //$req = mysql_query("DELETE FROM `forum` WHERE `type`='l';");
+        //mysql_query("OPTIMIZE TABLE `forum`;");
+        //echo '<span class="green">OK</span> метки удалены.<br />';
+
+        $req = mysql_query("SELECT * FROM `forum` WHERE `type`='m';");
+        while ($res = mysql_fetch_array($req))
+        {
+            $text = $res['text'];
+            $text = str_replace("<br/>", "\r\n", $text);
+
+            $text = str_replace('&amp;', '&', $text);
+            $text = preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $text);
+            $text = preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $text);
+            $trans_tbl = get_html_translation_table(HTML_ENTITIES);
+            $trans_tbl = array_flip($trans_tbl);
+            $text = strtr($text, $trans_tbl);
+
+            $text = mysql_real_escape_string($text);
+            mysql_query("UPDATE `forum` SET
+			`text`='" . $text . "'
+			WHERE `id`='" . $res['id'] . "';");
+        }
+
+        /*
 
         // Создаем таблицу меток прочтения
         mysql_query("DROP TABLE IF EXISTS `cms_forum_rdm`;");
         mysql_query("CREATE TABLE `cms_forum_rdm` (
-		`topic_id` int(11) NOT NULL,
-		`user_id` int(11) NOT NULL,
-		`time` int(11) NOT NULL,
-		PRIMARY KEY  (`topic_id`,`user_id`),
-		KEY `time` (`time`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+        `topic_id` int(11) NOT NULL,
+        `user_id` int(11) NOT NULL,
+        `time` int(11) NOT NULL,
+        PRIMARY KEY  (`topic_id`,`user_id`),
+        KEY `time` (`time`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
         echo '<span class="green">OK</span> таблица меток создана.<br />';
 
-        // Создаем поле users.digest
-		mysql_query("ALTER TABLE `users` ADD `digest` TINYINT NOT NULL DEFAULT '1';");
+        */
 
+        // Создаем поле users.digest
+        mysql_query("ALTER TABLE `users` ADD `digest` TINYINT NOT NULL DEFAULT '1';");
         echo '<hr /><a href="up_160_200.php?do=final">Продолжить</a>';
         break;
 

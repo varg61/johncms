@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -22,7 +23,8 @@ if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
     require_once ("../incfiles/end.php");
     exit;
 }
-$type = mysql_query("select * from `forum` where id= '" . $id . "';");
+$agn = strtok($agn, ' ');
+$type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "';");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 switch ($tip)
@@ -54,24 +56,23 @@ switch ($tip)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $msg = check(trim($_POST['msg']));
+            $msg = trim($_POST['msg']);
             if ($_POST['msgtrans'] == 1)
             {
                 $msg = trans($msg);
             }
-            $agn = strtok($agn, ' ');
-			mysql_query("insert into `forum` set 
+            mysql_query("INSERT INTO `forum` SET
 			`refid`='" . $id . "',
 			`type`='m',
 			`time`='" . $realtime . "',
 			`from`='" . $login . "',
 			`ip`='" . $ipp . "',
 			`soft`='" . mysql_real_escape_string($agn) . "',
-			`text`='" . $msg . "';");
+			`text`='" . mysql_real_escape_string($msg) . "';");
             $fadd = mysql_insert_id();
-            mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $id . "';");
+            mysql_query("UPDATE `forum` SET  `time`='" . $realtime . "' WHERE `id`='" . $id . "';");
             $fpst = $datauser['postforum'] + 1;
-            mysql_query("update `users` set  postforum='" . $fpst . "' where id='" . intval($_SESSION['uid']) . "';");
+            mysql_query("UPDATE `users` SET  `postforum`='" . $fpst . "' WHERE `id`='" . $user_id . "';");
             $pa = mysql_query("select `id` from `forum` where type='m' and refid= '" . $id . "';");
             $pa2 = mysql_num_rows($pa);
             if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
@@ -81,16 +82,19 @@ switch ($tip)
             {
                 $page = ceil($pa2 / $kmess);
             }
-            $np = mysql_query("select * from `forum` where type='l' and refid='" . $id . "' and `from`='" . $login . "';");
-            $np1 = mysql_num_rows($np);
-            if ($np1 == 0)
+
+            //блок, фиксирующий факт прочтения топика
+            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+            if (mysql_result($req, 0) == 1)
             {
-                mysql_query("insert into `forum` values(0,'" . $id . "','l','" . $realtime . "','" . $login . "','','','','','','','','','','','','');");
+                // Обновляем время метки о прочтении
+                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
             } else
             {
-                $np2 = mysql_fetch_array($np);
-                mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $np2[id] . "';");
+                // Ставим метку о прочтении
+                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
             }
+
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1)
             {
@@ -147,7 +151,7 @@ switch ($tip)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $msg = check(trim($_POST['msg']));
+            $msg = trim($_POST['msg']);
             if ($_POST['msgtrans'] == 1)
             {
                 $msg = trans($msg);
@@ -171,7 +175,17 @@ switch ($tip)
                 $msg = "[c]$to($tp):&quot; $citata &quot;[/c]$msg";
                 $to = "";
             }
-            mysql_query("insert into `forum` values(0,'" . $th . "','m','" . $realtime . "','" . $login . "','" . $to . "','','" . $ipp . "','" . $agn . "','" . $msg . "','','','','','','','','');");
+            //mysql_query("insert into `forum` values(0,'" . $th . "','m','" . $realtime . "','" . $login . "','" . $to . "','','" . $ipp . "','" . $agn . "','" . $msg . "','','','','','','','','');");
+            mysql_query("INSERT INTO `forum` SET
+			`refid`='" . $id . "',
+			`type`='m',
+			`time`='" . $realtime . "',
+			`from`='" . $login . "',
+			`to`='" . $to . "',
+			`ip`='" . $ipp . "',
+			`soft`='" . mysql_real_escape_string($agn) . "',
+			`text`='" . mysql_real_escape_string($msg) . "';");
+
             $fadd = mysql_insert_id();
             mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $th . "';");
             if (empty($datauser['postforum']))
@@ -192,16 +206,19 @@ switch ($tip)
             {
                 $page = ceil($pa2 / $kmess);
             }
-            $np = mysql_query("select * from `forum` where type='l' and refid='" . $th . "' and `from`='" . $login . "';");
-            $np1 = mysql_num_rows($np);
-            if ($np1 == 0)
+
+            //блок, фиксирующий факт прочтения топика
+            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+            if (mysql_result($req, 0) == 1)
             {
-                mysql_query("insert into `forum` values(0,'" . $th . "','l','" . $realtime . "','" . $login . "','','','','','','','','','','','','');");
+                // Обновляем время метки о прочтении
+                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
             } else
             {
-                $np2 = mysql_fetch_array($np);
-                mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $np2['id'] . "';");
+                // Ставим метку о прочтении
+                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
             }
+
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1)
             {
@@ -269,7 +286,6 @@ switch ($tip)
                 $stats = $udat['status'];
                 $stats = smiles($stats);
                 $stats = smilescat($stats);
-
                 $stats = smilesadm($stats);
                 echo "<br/><font color='" . $cdinf . "'>$stats</font><br/>";
             }

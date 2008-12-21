@@ -227,15 +227,15 @@ if (in_array($act, $do))
                 if ($user_id)
                 {
                     //блок, фиксирующий факт прочтения топика
-                    $req = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
-                    if (mysql_num_rows($req) == 1)
+                    $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+                    if (mysql_result($req, 0) == 1)
                     {
                         // Обновляем время метки о прочтении
                         mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
                     } else
                     {
                         // Ставим метку о прочтении
-                        mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $tealtime . "';");
+                        mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
                     }
                 }
 
@@ -406,30 +406,31 @@ if (in_array($act, $do))
                         {
                             echo "$mass[to], ";
                         }
-                        $text = $mass['text'];
-                        if ($offsm != 1 && $offgr != 1)
-                        {
-                            $text = smiles($text);
-                            $text = smilescat($text);
-                            if ($mass['from'] == nickadmina || $mass['from'] == nickadmina2 || $mass1['rights'] >= 1)
-                            {
-                                $text = smilesadm($text);
-                            }
-                        }
                         ////////////////////////////////////////////////////////////
                         // Вывод текста поста                                     //
                         ////////////////////////////////////////////////////////////
+                        $text = $mass['text'];
                         if (mb_strlen($text) >= 500)
                         {
                             // Если текст длинный, обрезаем и даем ссылку на полный вариант
                             $text = strip_tags($text, "<br>");
-                            $text = unhtmlentities($text);
                             $text = mb_substr($text, 0, 500);
                             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
                             echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $mass['id'] . '">весь пост &gt;&gt;</a>';
                         } else
                         {
-                            // Если текст короткий, обрабатываем тэги и выводим весь
+                            // Или, обрабатываем тэги и выводим весь текст
+                            $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
+                            if ($offsm != 1)
+                            {
+                                $text = smiles($text);
+                                $text = smilescat($text);
+                                if ($mass['from'] == nickadmina || $mass['from'] == nickadmina2 || $mass1['rights'] >= 1)
+                                {
+                                    $text = smilesadm($text);
+                                }
+                            }
+                            $text = str_replace("\r\n", "<br/>", $text);
                             $text = tags($text);
                             echo $text;
                         }
