@@ -33,6 +33,7 @@ if ($ms['type'] != "m")
 }
 echo '<div class="menu"><b>' . $ms['from'] . '</b><br />';
 $text = htmlentities($ms['text'], ENT_QUOTES, 'UTF-8');
+$text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
 $text = str_replace("\r\n", "<br/>", $text);
 $text = tags($text);
 $uz = @mysql_query("select `id`, `from`, `rights` FROM `users` where name='" . $ms['from'] . "';");

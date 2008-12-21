@@ -413,10 +413,11 @@ if (in_array($act, $do))
                         if (mb_strlen($text) >= 500)
                         {
                             // Если текст длинный, обрезаем и даем ссылку на полный вариант
-                            $text = strip_tags($text, "<br>");
-                            $text = mb_substr($text, 0, 500);
+                            $text = mb_substr($text, 0, 400);
                             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-                            echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $mass['id'] . '">весь пост &gt;&gt;</a>';
+                            $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
+                            $text = str_replace("\r\n", "<br/>", $text);
+                            echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $mass['id'] . '">Читать все &gt;&gt;</a>';
                         } else
                         {
                             // Или, обрабатываем тэги и выводим весь текст
@@ -430,6 +431,7 @@ if (in_array($act, $do))
                                     $text = smilesadm($text);
                                 }
                             }
+                            $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                             $text = str_replace("\r\n", "<br/>", $text);
                             $text = tags($text);
                             echo $text;
