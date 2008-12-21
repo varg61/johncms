@@ -82,7 +82,6 @@ switch ($tip)
             {
                 $page = ceil($pa2 / $kmess);
             }
-
             //блок, фиксирующий факт прочтения топика
             $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
             if (mysql_result($req, 0) == 1)
@@ -94,7 +93,6 @@ switch ($tip)
                 // Ставим метку о прочтении
                 mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
             }
-
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1)
             {
@@ -168,16 +166,16 @@ switch ($tip)
                 }
                 $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
                 $citata = strip_tags($citata, "<br/>");
-                $citata = mb_strcut($citata, 0, 200);
-                $citata = check($citata);
+                $citata = mb_substr($citata, 0, 200);
+                //$citata = check($citata);
                 $citata = str_replace("&lt;br/&gt;", "<br/>", $citata);
                 $tp = date("d.m.Y/H:i", $type1['time']);
-                $msg = "[c]$to($tp):&quot; $citata &quot;[/c]$msg";
-                $to = "";
+                $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
+                $to = '';
             }
             //mysql_query("insert into `forum` values(0,'" . $th . "','m','" . $realtime . "','" . $login . "','" . $to . "','','" . $ipp . "','" . $agn . "','" . $msg . "','','','','','','','','');");
             mysql_query("INSERT INTO `forum` SET
-			`refid`='" . $id . "',
+			`refid`='" . $th . "',
 			`type`='m',
 			`time`='" . $realtime . "',
 			`from`='" . $login . "',
