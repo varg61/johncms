@@ -360,7 +360,7 @@ if (in_array($act, $do))
                         }
                         if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id']))
                         {
-                            echo "<a href='index.php?act=say&amp;id=" . $mass['id'] . "'><b>$mass[from]</b></a> <a href='index.php?act=say&amp;id=" . $mass['id'] . "&amp;cyt'> [ц]</a>";
+                            echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '"><b>'.$mass['from'].'</b></a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
                         } else
                         {
                             echo "<b>$mass[from]</b>";

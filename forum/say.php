@@ -103,6 +103,9 @@ switch ($tip)
             }
         } else
         {
+            ////////////////////////////////////////////////////////////
+            // Форма добавления сообщения                             //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             if ($datauser['postforum'] == 0)
             {
@@ -114,16 +117,18 @@ switch ($tip)
                     exit;
                 }
             }
-            echo "Добавление сообщения в тему <font color='" . $cntem . "'>$type1[text]</font>:<br/><form action='index.php?act=say&amp;id=" . $id .
-                "' method='post' enctype='multipart/form-data'><textarea cols='20' rows='3' title='Введите текст сообщения' name='msg'></textarea><br/><input type='checkbox' name='addfiles' value='1' /> Добавить файл<br/>";
+            echo '<div class="phdr">Тема: <b>' . $type1['text'] . '</b></div>';
+            echo '<form action="index.php?act=say&amp;id=' . $id . '" method="post" enctype="multipart/form-data">';
+            echo '<div class="menu"><p>Добавить сообщение:<br /><textarea cols="24" rows="4" title="Введите текст сообщения" name="msg"></textarea><br />';
+            echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($offtr != 1)
             {
                 echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
             }
-            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form>";
+            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></p></div></form>";
         }
-        echo "<a href='index.php?act=trans'>Транслит</a><br /><a href='../str/smile.php'>Смайлы</a><br/>";
-        echo "<a href='?id=" . $id . "'>Назад</a><br/>";
+        echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+        echo '<p><a href="?id=' . $id . '">Назад</a></p>';
         break;
 
     case "m":
@@ -167,13 +172,11 @@ switch ($tip)
                 $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
                 $citata = strip_tags($citata, "<br/>");
                 $citata = mb_substr($citata, 0, 200);
-                //$citata = check($citata);
                 $citata = str_replace("&lt;br/&gt;", "<br/>", $citata);
                 $tp = date("d.m.Y/H:i", $type1['time']);
                 $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
                 $to = '';
             }
-            //mysql_query("insert into `forum` values(0,'" . $th . "','m','" . $realtime . "','" . $login . "','" . $to . "','','" . $ipp . "','" . $agn . "','" . $msg . "','','','','','','','','');");
             mysql_query("INSERT INTO `forum` SET
 			`refid`='" . $th . "',
 			`type`='m',
@@ -183,7 +186,6 @@ switch ($tip)
 			`ip`='" . $ipp . "',
 			`soft`='" . mysql_real_escape_string($agn) . "',
 			`text`='" . mysql_real_escape_string($msg) . "';");
-
             $fadd = mysql_insert_id();
             mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $th . "';");
             if (empty($datauser['postforum']))
@@ -227,207 +229,43 @@ switch ($tip)
             }
         } else
         {
+            ////////////////////////////////////////////////////////////
+            // Добавление сообщения с цитированием                    //
+            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
-            if (!empty($type1['to']))
-            {
-                $qt = "$type1[to], $type1[text]";
-            } else
-            {
-                $qt = " $type1[text]";
-            }
-            $user = mysql_query("select * from `users` where name='" . $type1['from'] . "';");
-            $udat = mysql_fetch_array($user);
-            echo "<b><font color='" . $conik . "'>$type1[from]</font></b>";
-            echo " (id: $udat[id])";
-            $ontime = $udat['lastdate'];
-            $ontime2 = $ontime + 300;
-            if ($realtime > $ontime2)
-            {
-                echo "<font color='" . $coffs . "'> [Off]</font><br/>";
-            } else
-            {
-                echo "<font color='" . $cons . "'> [ON]</font><br/>";
-            }
-            if ($udat['dayb'] == $day && $udat['monthb'] == $mon)
-            {
-                echo "<font color='" . $cdinf . "'>ИМЕНИННИК!!!</font><br/>";
-            }
-            switch ($udat['rights'])
-            {
-                case 7:
-                    echo ' Админ ';
-                    break;
-                case 6:
-                    echo ' Супермодер ';
-                    break;
-                case 5:
-                    echo ' Зам. админа по библиотеке ';
-                    break;
-                case 4:
-                    echo ' Зам. админа по загрузкам ';
-                    break;
-                case 3:
-                    echo ' Модер форума ';
-                    break;
-                case 2:
-                    echo ' Модер чата ';
-                    break;
-                case 1:
-                    echo ' Киллер ';
-                    break;
-                default:
-                    echo ' юзер ';
-                    break;
-            }
-            if (!empty($udat['status']))
-            {
-                $stats = $udat['status'];
-                $stats = smiles($stats);
-                $stats = smilescat($stats);
-                $stats = smilesadm($stats);
-                echo "<br/><font color='" . $cdinf . "'>$stats</font><br/>";
-            }
-
-            if ($udat['sex'] == "m")
-            {
-                echo "Парень<br/>";
-            }
-            if ($udat['sex'] == "zh")
-            {
-                echo "Девушка<br/>";
-            }
-            if ($udat['ban'] == "1" && $udat['bantime'] > $realtime || $udat['ban'] == "2")
-            {
-                echo "<font color='" . $cdinf . "'>Бан!</font><br/>";
-            }
-            if (!empty($_SESSION['uid']))
-            {
-                $nmen = array(1 => "Имя", "Город", "Инфа", "ICQ", "E-mail", "Мобила", "Дата рождения", "Сайт");
-                $nmen1 = array(1 => "imname", "live", "about", "icq", "mail", "mibila", "Дата рождения ", "www");
-                if (!empty($nmenu))
-                {
-                    $nmenu1 = explode(",", $nmenu);
-                    foreach ($nmenu1 as $v)
-                    {
-                        if ($v != 7 && $v != 5 && $v != 8)
-                        {
-                            $dus = $nmen1[$v];
-                            if (!empty($udat[$dus]))
-                            {
-                                echo "$nmen[$v]: $udat[$dus]<br/>";
-                            }
-                        }
-                        if ($v == 5)
-                        {
-                            if (!empty($udat['mail']))
-                            {
-                                echo "$nmen[$v]: ";
-                                if ($udat['mailvis'] == 1)
-                                {
-                                    echo "$udat[mail]<br/>";
-                                } else
-                                {
-                                    echo "скрыт<br/>";
-                                }
-                            }
-                        }
-                        if ($v == 8)
-                        {
-                            if (!empty($udat['www']))
-                            {
-                                $sit = str_replace("http://", "", $udat['www']);
-                                echo "$nmen[$v]: <a href='$udat[www]'>$sit</a><br/>";
-                            }
-                        }
-                        if ($v == 7)
-                        {
-                            if ((!empty($udat['dayb'])) && (!empty($udat['monthb'])))
-                            {
-                                $mnt = $udat['monthb'];
-                                echo "$nmen[$v]: $udat[dayb] $mesyac[$mnt]<br/>";
-                            }
-                        }
-                    }
-                }
-                if ($dostkmod == 1)
-                {
-                    echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $udat['id'] . '&amp;fid=' . $id . '">Банить</a><br/>';
-                } elseif ($dostfmod == 1)
-                {
-                    echo "<a href='../" . $admp . "/zaban.php?user=" . $udat['id'] . "&amp;forum&amp;id=" . $id . "'>Пнуть</a><br/>";
-                }
-                echo "<a href='../str/anketa.php?user=" . $udat['id'] . "'>Подробнее...</a><br/>";
-                $contacts = mysql_query("select * from `privat` where me='$login' and cont='" . $udat['name'] . "';");
-                $conts = mysql_num_rows($contacts);
-                if ($conts != 1)
-                {
-                    echo "<a href='../str/cont.php?act=edit&amp;nik=" . $udat['name'] . "&amp;add=1'>Добавить в контакты</a><br/>";
-                } else
-                {
-                    echo "<a href='../str/cont.php?act=edit&amp;nik=" . $udat['name'] . "'>Удалить из контактов</a><br/>";
-                }
-                $igns = mysql_query("select * from `privat` where me='" . $login . "' and ignor='" . $udat['name'] . "';");
-                $ignss = mysql_num_rows($igns);
-                if ($igns != 1)
-                {
-                    echo "<a href='../str/ignor.php?act=edit&amp;nik=" . $udat['name'] . "&amp;add=1'>Добавить в игнор</a><br/>";
-                } else
-                {
-                    echo "<a href='../str/ignor.php?act=edit&amp;nik=" . $udat['name'] . "'>Удалить из игнора</a><br/>";
-                }
-                echo "<a href='../str/pradd.php?act=write&amp;adr=" . $udat['id'] . "'>Написать в приват</a><br/>";
-            }
+            $qt = " $type1[text]";
             if ($th1['edit'] == 1)
             {
                 echo "Вы не можете писать в закрытую тему<br/><a href='?id=" . $th . "'>В тему</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            if (isset($_GET['cyt']))
+            if (($datauser['postforum'] == "" || $datauser['postforum'] == 0))
             {
-                if (($datauser['postforum'] == "" || $datauser['postforum'] == 0))
+                if (!isset($_GET['yes']))
                 {
-                    if (!isset($_GET['yes']))
-                    {
-                        include ("../pages/forum.txt");
+                    include ("../pages/forum.txt");
 
-                        echo "<a href='?act=say&amp;id=" . $id . "&amp;yes&amp;cyt'>Согласен</a>|<a href='?id=" . $type1['refid'] . "'>Не согласен</a><br/>";
-                        require_once ("../incfiles/end.php");
-                        exit;
-                    }
+                    echo "<a href='?act=say&amp;id=" . $id . "&amp;yes&amp;cyt'>Согласен</a>|<a href='?id=" . $type1['refid'] . "'>Не согласен</a><br/>";
+                    require_once ("../incfiles/end.php");
+                    exit;
                 }
-                echo "Ответ с цитированием в тему <font color='" . $cntem . "'>$th1[text]</font><br/> Пост <font color='" . $conik . "'>$type1[from]</font>  :<br/>
-&quot;$qt&quot;<br/><a href='index.php?act=say&amp;id=" . $id . "&amp;edit'>(Редактировать)</a><br/>Ответ:<br/><form action='index.php?act=say&amp;id=" . $id . "&amp;cyt' method='post' enctype='multipart/form-data'>";
-            } elseif (isset($_GET['edit']))
-            {
-                $qt = str_replace("<br/>", "\r\n", $qt);
-                echo "Ответ с цитированием в тему <font color='" . $cntem . "'>$th1[text]</font><br/> Пост <font color='" . $conik . "'>$type1[from]</font>  :<br/><form action='?act=say&amp;id=" . $id .
-                    "&amp;cyt' method='post' enctype='multipart/form-data'><textarea cols='20' title='Редактирование цитаты' rows='3' name='citata'>$qt</textarea><br/>Ответ(max. 500):<br/>";
-            } else
-            {
-                if (($datauser['postforum'] == "" || $datauser['postforum'] == 0))
-                {
-                    if (!isset($_GET['yes']))
-                    {
-                        include ("../pages/forum.txt");
-
-                        echo "<a href='?act=say&amp;id=" . $id . "&amp;yes'>Согласен</a>|<a href='?id=" . $type1['refid'] . "'>Не согласен</a><br/>";
-                        require_once ("../incfiles/end.php");
-                        exit;
-                    }
-                }
-                echo "Добавление сообщения в тему <font color='" . $cntem . "'>$th1[text]</font> для <font color='" . $conik . "'>$type1[from]</font>:<br/><form action='?act=say&amp;id=" . $id . "' method='post' enctype='multipart/form-data'>";
             }
-            echo "<textarea cols='20' rows='3' title='Введите ответ' name='msg'></textarea><br/><input type='checkbox' name='addfiles' value='1' /> Добавить файл<br/>";
+            echo '<div class="phdr">Тема: <b>' . $th1['text'] . '</b></div>';
+            $qt = str_replace("<br/>", "\r\n", $qt);
+            $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
+            echo '<form action="?act=say&amp;id=' . $id . '&amp;cyt" method="post" enctype="multipart/form-data">';
+            echo '<div class="gmenu"><p>Цитата [<b>' . $type1['from'] . '</b>]<br/><textarea cols="24" rows="4" name="citata">' . $qt . '</textarea></p></div>';
+            echo '<div class="menu"><p>Ответ<br/><textarea cols="24" rows="4" name="msg"></textarea><br/>';
+            echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($offtr != 1)
             {
-                echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения
-      <br/>";
+                echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
             }
-            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form>";
+            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></p></div></form>";
         }
-        echo "<a href='index.php?act=trans'>Транслит</a><br /><a href='../str/smile.php'>Смайлы</a><br/>";
-        echo "<a href='?id=" . $type1['refid'] . "'>Назад</a><br/>";
+        echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+        echo '<p><a href="?id=' . $type1['refid'] . '">Назад</a></p>';
         break;
 
     default:
