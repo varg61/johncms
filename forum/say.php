@@ -119,13 +119,13 @@ switch ($tip)
             }
             echo '<div class="phdr">Тема: <b>' . $type1['text'] . '</b></div>';
             echo '<form action="index.php?act=say&amp;id=' . $id . '" method="post" enctype="multipart/form-data">';
-            echo '<div class="menu"><p>Добавить сообщение:<br /><textarea cols="24" rows="4" title="Введите текст сообщения" name="msg"></textarea><br />';
+            echo '<div class="gmenu"><b>Сообщение:</b><br /><textarea cols="24" rows="4" title="Введите текст сообщения" name="msg"></textarea><br />';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($offtr != 1)
             {
                 echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
             }
-            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></p></div></form>";
+            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></div></form>";
         }
         echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
         echo '<p><a href="?id=' . $id . '">Назад</a></p>';
@@ -160,21 +160,18 @@ switch ($tip)
                 $msg = trans($msg);
             }
             $to = $type1['from'];
-            if (isset($_GET['cyt']))
+            if (!empty($_POST['citata']))
             {
-                if (!empty($_POST['citata']))
-                {
-                    $citata = trim($_POST['citata']);
-                } else
-                {
-                    $citata = $type1['text'];
-                }
+                $citata = trim($_POST['citata']);
                 $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
-                $citata = strip_tags($citata, "<br/>");
                 $citata = mb_substr($citata, 0, 200);
-                $citata = str_replace("&lt;br/&gt;", "<br/>", $citata);
                 $tp = date("d.m.Y/H:i", $type1['time']);
                 $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
+                $to = '';
+            } elseif (!empty($_POST['txt']))
+            {
+                $txt = trim($_POST['txt']);
+                $msg = $txt . ' ' . $msg;
                 $to = '';
             }
             mysql_query("INSERT INTO `forum` SET
@@ -255,14 +252,35 @@ switch ($tip)
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
             echo '<form action="?act=say&amp;id=' . $id . '&amp;cyt" method="post" enctype="multipart/form-data">';
-            echo '<div class="gmenu"><p>Цитата [<b>' . $type1['from'] . '</b>]<br/><textarea cols="24" rows="4" name="citata">' . $qt . '</textarea></p></div>';
-            echo '<div class="menu"><p>Ответ<br/><textarea cols="24" rows="4" name="msg"></textarea><br/>';
+            if (isset($_GET['cyt']))
+            {
+                echo '<div class="menu"><b>Автор:</b> ' . $type1['from'] . '</div>';
+                echo '<div class="menu"><b>Цитата:</b><br/><textarea cols="24" rows="4" name="citata">' . $qt . '</textarea>';
+                echo '<br /><small>Допустимо макс. 200 символов.<br />Весь лишний текст обрезается.</small></div>';
+            } else
+            {
+                echo '<div class="menu"><b>Кому:</b> ' . $type1['from'] . '</div>';
+                echo '<div class="menu">Выберите вариант обращения:';
+                echo '<br /><input type="radio" value="' . $type1['from'] . ', " checked="checked" name="txt" />';
+                echo '&nbsp;' . $type1['from'] . ',';
+                $vrp = $type1['time'] + $sdvig * 3600;
+                $vr = date("d.m.Y / H:i", $vrp);
+                echo '<br /><input type="radio" value="' . $type1['from'] . ', с удовольствием тебе отвечу," name="txt" />';
+                echo '&nbsp;' . $type1['from'] . ', с удовольствием тебе отвечу,';
+                echo '<br /><input type="radio" value="' . $type1['from'] . ', на твой пост (' . $vr . ') отвечаю," name="txt" />';
+                echo '&nbsp;' . $type1['from'] . ', на твой пост (' . $vr . ') отвечаю,';
+                echo '<br /><input type="radio" value="' . $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю!" name="txt" />';
+                echo '&nbsp;' . $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю!';
+                echo '<br /><small>Выбранный текст будет вставлен перед Вашим текстом, который Вы напишите ниже.</small>';
+                echo '</div>';
+            }
+            echo '<div class="gmenu"><b>Сообщение:</b><br/><textarea cols="24" rows="4" name="msg"></textarea><br/>';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($offtr != 1)
             {
                 echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
             }
-            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></p></div></form>";
+            echo '<input type="submit" name="submit" value="Отправить"/></div></form>';
         }
         echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
         echo '<p><a href="?id=' . $type1['refid'] . '">Назад</a></p>';

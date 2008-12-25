@@ -347,7 +347,7 @@ if (in_array($act, $do))
                         }
                         $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `name`='" . $mass['from'] . "';");
                         $mass1 = mysql_fetch_array($uz);
-                        echo "$div";
+                        echo $div;
                         echo $mass1['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
                         switch ($mass1['sex'])
                         {
@@ -360,7 +360,8 @@ if (in_array($act, $do))
                         }
                         if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id']))
                         {
-                            echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '"><b>'.$mass['from'].'</b></a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
+                            echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '"><b>'.$mass['from'].'</b></a> ';
+							echo '<a href="index.php?act=say&amp;id=' . $mass['id'] . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
                         } else
                         {
                             echo "<b>$mass[from]</b>";
