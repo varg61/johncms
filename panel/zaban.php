@@ -223,15 +223,15 @@ if ($dostkmod == 1)
                     echo '<input name="term" type="radio" value="13" />Гостевая<br />';
                     echo '<input name="term" type="radio" value="14" />Галерея<br />';
                     if ($dostadm == 1)
-                        echo '<input name="term" type="radio" value="9" /><b>блокировка</b></div>';
-                    echo '<div class="rmenu"><b>Срок Бана:</b></div>';
+                        echo '<input name="term" type="radio" value="9" /><b>блокировка</b>';
+                    echo '</div><div class="rmenu"><b>Срок Бана:</b></div>';
                     echo '<div class="menu"><input type="text" name="timeval" size="2" maxlength="2" value="10"/>&nbsp;время<br/>';
                     echo '<input name="time" type="radio" value="1" checked="checked" />минут (60 max)<br />';
                     echo '<input name="time" type="radio" value="2" />часов (24 max)<br />';
                     echo '<input name="time" type="radio" value="3" />дней (30 max)<br />';
                     if ($dostadm == 1)
-                        echo '<input name="time" type="radio" value="4" /><b>до отмены</b></div>';
-                    echo '<div class="rmenu"><b>Причина Бана:</b></div>';
+                        echo '<input name="time" type="radio" value="4" /><b>до отмены</b>';
+                    echo '</div><div class="rmenu"><b>Причина Бана:</b></div>';
                     if (isset($_GET['fid']))
                     {
                         // Если бан из форума, фиксируем ID поста
