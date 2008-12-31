@@ -28,15 +28,9 @@ if (empty($_SESSION['uid']) || $datauser['pereh'] == 1)
     {
         echo "<option value='privat'>Приват</option><option value='set'>Настройки</option><option value='prof'>Анкета</option><option value='chat'>Чат</option>";
     }
-    echo "<option value='guest'>Гостевая</option><option value='forum'>Форум:</option>";
-    //$fr = @mysql_query("select `id`, `text` from `forum` where type='f';");
-    //while ($fr1 = mysql_fetch_array($fr))
-    //{
-    //    echo "<option value='frm." . $fr1[id] . "'>&nbsp;- $fr1[text]&quot;</option>";
-    //}
+    echo "<option value='guest'>Гостевая</option><option value='forum'>Форум</option>";
     echo "<option value='news'>Новости</option><option value='gallery'>Галерея</option><option value='down'>Загрузки</option><option value='lib'>Библиотека</option><option value='gazen'>Ф Газенвагенъ</option></select><input style='font-size:9px' type='submit' value='Go!'/></form>";
 }
-//echo '</div>';
 
 // Счетчик посетителей Online
 $ontime = $realtime - 300;
