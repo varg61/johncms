@@ -418,6 +418,7 @@ if (in_array($act, $do))
                             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
                             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                             $text = str_replace("\r\n", "<br/>", $text);
+                            $text = tags($text);
                             echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $mass['id'] . '">Читать все &gt;&gt;</a>';
                         } else
                         {
