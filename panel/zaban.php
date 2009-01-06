@@ -58,7 +58,11 @@ if ($dostsmod == 1)
                         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `ban_time` > '" . $realtime . "';");
                         while ($res = mysql_fetch_array($req))
                         {
-                            mysql_query("UPDATE `cms_ban_users` SET `ban_time`='" . $realtime . "', `ban_raz`='--Амнистия--' WHERE `id`='" . $res['id'] . "';");
+                            $ban_left = $res['ban_time'] - $realtime;
+                            if ($ban_left < 2592000)
+                            {
+                                mysql_query("UPDATE `cms_ban_users` SET `ban_time`='" . $realtime . "', `ban_raz`='--Амнистия--' WHERE `id`='" . $res['id'] . "';");
+                            }
                         }
                         break;
                     case 3:
@@ -126,7 +130,7 @@ if ($dostsmod == 1)
                     echo '<div class="bmenu">';
                     echo '<p><b>Амнистия</b><br /><small>Разбанивает всех, у кого оставшийся срок менее 3-х суток<br />Уменьшает в 2 раза срок тем, у кого осталось более 3, но менее 30 суток.<br />Не влияет на бан "До отмены".<br />История нарушений сохраняется.</small></p>';
                     echo '<p><b>Разбанить активные</b><br /><small>Разбанивает все активные баны, кроме "До отмены"<br />История нарушений сохраняется.</small></p>';
-                    echo '<p><b>Удалить активные</b><br /><small>Удаляет все активные баны, и их записи из истории нарушений<br />Не влияет на бан "До отмены".</small></p>';
+                    echo '<p><b>Удалить активные</b><br /><small>Удаляет все активные баны, и их записи из истории нарушений.</small></p>';
                     echo '<p><b>Очистить историю</b><br /><small>Полностью удаляет всю историю нарушений для неактивных банов.<br />Не влияет на активные баны.</small></p>';
                     echo '<p><b>Очистить базу</b><br /><small>База банов полностью очищается.<br />Удаляются все активные баны и вся история нарушений.</small></p>';
                     echo '</div>';
