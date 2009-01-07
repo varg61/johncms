@@ -170,29 +170,29 @@ if (in_array($act, $do))
                         $colmes1 = 0;
                     }
                     $nam = mysql_fetch_array($nikuser);
+                    // Выводим список тем
                     echo '<div class="menu">';
                     if ($mass['vip'] == 1)
                     {
-                        echo "<img src='../images/pt.gif' alt=''/>";
+                        echo '<img src="../theme/' . $skin . '/images/pt.gif" alt=""/>';
                     } elseif ($mass['edit'] == 1)
                     {
-                        echo "<img src='../images/tz.gif' alt=''/>";
+                        echo '<img src="../theme/' . $skin . '/images/tz.gif" alt=""/>';
                     } elseif ($mass['close'] == 1)
                     {
-                        echo "<img src='../images/dl.gif' alt=''/>";
+                        echo '<img src="../theme/' . $skin . '/images/dl.gif" alt=""/>';
                     } else
                     {
-                        $np = mysql_query("SELECT `id` FROM `forum` WHERE `type`='l' AND `time`>='" . $mass['time'] . "' AND `refid`='" . $mass['id'] . "' and `from`='" . $login . "';");
+                        $np = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `time`>='" . $mass['time'] . "' AND `topic_id`='" . $mass['id'] . "' AND `user_id`='" . $user_id . "';");
                         $np1 = mysql_num_rows($np);
                         if ($np1 == 0)
                         {
-                            echo "<img src='../images/np.gif' alt=''/>";
+                            echo '<img src="../theme/' . $skin . '/images/np.gif" alt=""/>';
                         } else
                         {
-                            echo "<img src='../images/op.gif' alt=''/>";
+                            echo '<img src="../theme/' . $skin . '/images/op.gif" alt=""/>';
                         }
                     }
-                    // Выводим список тем
                     echo "&nbsp;<a href='index.php?id=$mass[id]'>$mass[text]</a> [$colmes1]";
                     if ($cpg > 1)
                     {
@@ -348,20 +348,20 @@ if (in_array($act, $do))
                         $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `name`='" . $mass['from'] . "';");
                         $mass1 = mysql_fetch_array($uz);
                         echo $div;
-                        echo $mass1['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
+                        echo $mass1['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $skin . '/images/add.gif" alt=""/>&nbsp;' : '';
                         switch ($mass1['sex'])
                         {
-                            case "m":
-                                echo "<img src='../images/m.gif' alt=''/>";
+                            case 'm':
+                                echo '<img src="../theme/' . $skin . '/images/m.gif" alt=""/>';
                                 break;
-                            case "zh":
-                                echo "<img src='../images/f.gif' alt=''/>";
+                            case 'zh':
+                                echo '<img src="../theme/' . $skin . '/images/f.gif" alt=""/>';
                                 break;
                         }
                         if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id']))
                         {
-                            echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '"><b>'.$mass['from'].'</b></a> ';
-							echo '<a href="index.php?act=say&amp;id=' . $mass['id'] . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
+                            echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '"><b>' . $mass['from'] . '</b></a> ';
+                            echo '<a href="index.php?act=say&amp;id=' . $mass['id'] . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
                         } else
                         {
                             echo "<b>$mass[from]</b>";
@@ -394,7 +394,7 @@ if (in_array($act, $do))
                         }
                         echo ' <font color="#999999">(' . $vr . ')</font><br/>';
                         if (!empty($mass1['status']))
-                            echo '<div class="status"><img src="../images/star.gif" alt=""/>&nbsp;' . $mass1['status'] . '</div>';
+                            echo '<div class="status"><img src="../theme/' . $skin . '/images/star.gif" alt=""/>&nbsp;' . $mass1['status'] . '</div>';
                         if ($mass1['dayb'] == $day && $mass1['monthb'] == $mon)
                         {
                             echo '<font color="#FF0000">Именины!!!</font><br/>';

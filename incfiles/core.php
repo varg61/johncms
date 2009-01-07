@@ -150,6 +150,7 @@ $home = $set['homeurl']; // Домашняя страница
 $ras_pages = $set['rashstr']; // Расширение текстовых страниц
 $admp = $set['admp']; // Папка с Админкой
 $flsz = $set['flsz']; // Максимальный размер файлов
+$skindef = $set['skindef'];// скин по умолчанию для гостей
 // Дата и время
 $realtime = time() + $sdvigclock * 3600;
 $mon = date("m", $realtime);
@@ -212,6 +213,7 @@ if ($user_id && $user_ps)
         {
             // Получение параметров пользователя
             $idus = $user_id;
+			$skin = $datauser['skin']; // скин юзера
             $login = $datauser['name']; // Логин (Ник) пользователя
             $sdvig = $datauser['sdvig']; // Сдвиг времени
             $kmess = $datauser['kolanywhwere']; // Число сообщений на страницу

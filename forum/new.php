@@ -115,10 +115,10 @@ if (!empty($_SESSION['uid']))
                     $q3 = mysql_num_rows($q2);
                     if ($q3 == 0)
                     {
-                        echo "<input type='checkbox' name='pf[]' value='" . $q1[id] . "' checked='checked'/>$q1[text]<br/>";
+                        echo "<input type='checkbox' name='pf[]' value='" . $q1['id'] . "' checked='checked'/>$q1[text]<br/>";
                     } else
                     {
-                        echo "<input type='checkbox' name='pf[]' value='" . $q1[id] . "'/>$q1[text]<br/>";
+                        echo "<input type='checkbox' name='pf[]' value='" . $q1['id'] . "'/>$q1[text]<br/>";
                     }
                 }
                 echo "<input type='submit' name='submit' value='Ok!'/><br/></form>";
@@ -255,8 +255,8 @@ if (!empty($_SESSION['uid']))
                         }
                     }
                     echo "<br/>";
-                    echo "<font color='" . $cdtim . "'>(" . date("H:i /d.m.y", $arr[time]) . ")</font><br/><font color='" . $cssip . "'>[$arr[from]</font>";
-                    if (!empty($nam[from]))
+                    echo "<font color='" . $cdtim . "'>(" . date("H:i /d.m.y", $arr['time']) . ")</font><br/><font color='" . $cssip . "'>[$arr[from]</font>";
+                    if (!empty($nam['from']))
                     {
                         echo "<font color='" . $cssip . "'>/$nam[from]</font>";
                     }
@@ -270,8 +270,6 @@ if (!empty($_SESSION['uid']))
                 echo "Всего: $count<br/>";
                 if ($count > $kmess)
                 {
-
-
                     if ($offpg != 1)
                     {
                         echo "Страницы:<br/>";

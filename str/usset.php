@@ -44,7 +44,8 @@ if ($user_id)
 				`pereh`='" . intval($_POST['pereh']) . "',
 				`offsm`='" . intval($_POST['offsm']) . "',
 				`offtr`='" . intval($_POST['offtr']) . "',
-				`digest`='" . intval($_POST['digest']) . "'
+				`digest`='" . intval($_POST['digest']) . "',
+				`skin`='" . check(trim($_POST['skin'])) . "'
 				WHERE id='" . $user_id . "';");
                 header("Location: usset.php?act=all&yes");
             } else
@@ -63,6 +64,18 @@ if ($user_id)
                 echo '<input name="pereh" type="checkbox" value="1" ' . ($datauser['pereh'] ? 'checked="checked"' : '') . ' />&nbsp;Быстрый переход<br/>';
                 echo '<input name="digest" type="checkbox" value="1" ' . ($datauser['digest'] ? 'checked="checked"' : '') . ' />&nbsp;Дайджест';
                 echo '</div>';
+                echo '<div class="menu">Изменить скин<br/>';
+                echo '<select name="skin">';
+                $dr = opendir('../theme');
+				while ($skindef = readdir($dr))
+                {
+                    if (($skindef != ".") && ($skindef != ".."))
+                    {
+                        $skindef = str_replace(".css", "", $skindef);
+                        echo '<option' . ($skin == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
+                    }
+                }
+                echo '</select></div>';
                 echo '<div class="menu"><input type="submit" name="submit" value="Запомнить"/></div></form>';
                 echo '<div class="bmenu"><a href="usset.php">Меню настроек</a></div>';
             }
@@ -233,7 +246,7 @@ if ($user_id)
                     }
                     echo "Или укажите свое:<br/><input type='text' name='snas' value='" . $nastroy1 . "'/><br/>";
                 }
-				echo '</div><div class="menu"><input type="submit" name="submit" value="Сохранить"/></div></form>';
+                echo '</div><div class="menu"><input type="submit" name="submit" value="Сохранить"/></div></form>';
                 echo '<div class="gmenu"><a href="../chat">В чат</a></div>';
                 echo '<div class="bmenu"><a href="usset.php">Меню настроек</a></div>';
             }

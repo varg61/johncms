@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -34,15 +35,16 @@ if ($headmod != "auto")
     echo "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">';
     echo "\n" . '<head><meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>';
     echo "\n" . '<link rel="shortcut icon" href="' . $home . '/favicon.ico" />';
+    echo "\n" . '<meta name="copyright" content="Powered by JohnCMS" />'; // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
     echo "\n" . '<link rel="alternate" type="application/rss+xml" title="RSS | Новости ресурса" href="' . $home . '/rss/rss.php" />';
     echo "\n" . '<title>' . $textl . '</title>';
-    echo "\n" . '<link rel="stylesheet" href="' . $home . '/style.css" type="text/css" />';
+    if ($skin == "")
+        $skin = $skindef;
+    echo "\n" . '<link rel="stylesheet" href="' . $home . '/theme/' . $skin . '/style.css" type="text/css" />';
     echo "\n" . '</head><body>';
-    // Внимание!!! Данный копирайт удалять нельзя.
-    echo "\n" . '<!-- Powered by JohnCMS -->' . "\n";
 
     // Выводим логотип
-    echo '<div><img src="' . $home . '/images/logo.gif" alt=""/></div>';
+	echo '<div><img src="' . $home . '/theme/' . $skin . '/images/logo.gif" alt=""/></div>';
 
     ////////////////////////////////////////////////////////////
     // Выводим верхний блок с приветствием                    //
@@ -53,7 +55,7 @@ if ($headmod != "auto")
     // Выводим меню пользователя                              //
     ////////////////////////////////////////////////////////////
     echo '<div class="tmn">';
-	echo ($headmod != "mainpage" || isset($_GET['do']) || isset($_GET['mod'])) ? '<a href=\'' . $home . '\'>На главную</a> | ' : '';
+    echo ($headmod != "mainpage" || isset($_GET['do']) || isset($_GET['mod'])) ? '<a href=\'' . $home . '\'>На главную</a> | ' : '';
     echo ($user_id && $_GET['mod'] != 'cab') ? '<a href="' . $home . '/index.php?mod=cab">Личное</a> | ' : '';
     echo $user_id ? '<a href="' . $home . '/exit.php">Выход</a>' : '<a href="' . $home . '/in.php">Вход</a> | <a href="' . $home . '/registration.php">Регистрация</a>';
     echo '</div>';
