@@ -19,7 +19,7 @@ define('_IN_JOHNCMS', 1);
 header("Cache-Control: no-cache, must-revalidate");
 header("Content-type: application/xhtml+xml; charset=UTF-8");
 $version = 'JohnCMS 2.0.0';
-$codename = ' - NewYear Release';
+$codename = '';
 echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>
 <head><meta http-equiv='content-type' content='application/xhtml+xml; charset=utf-8'/>";
@@ -55,7 +55,7 @@ switch ($_GET['act'])
         require_once ("../incfiles/db.php");
         require_once ("../incfiles/func.php");
         $connect = mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server</div></body></html>');
-        mysql_select_db($db_name) or die('cannot connect to db');
+        mysql_select_db($db_name) or die('cannot connect to db</div></body></html>');
         mysql_query("SET NAMES 'utf8'", $connect);
         $error = '';
         @set_magic_quotes_runtime(0);
@@ -203,8 +203,8 @@ switch ($_GET['act'])
         echo 'Ниже вы должны ввести настройки соединения с базой данных MySQL.<br />Если вы не уверенны в них, свяжитесь с вашим хостинг-провайдером.';
         echo '<div class="conf">Сервер<br /><input type="text" name="host" value="localhost"/></div>';
         echo '<div class="conf">Название базы<br /><input type="text" name="name" value="johncms"/></div>';
-        echo '<div class="conf">Имя пользователя<br /><input type="text" name="user" value="username"/></div>';
-        echo '<div class="conf">MySQL пароль<br /><input type="text" name="pass" value="password"/></div>';
+        echo '<div class="conf">Имя пользователя<br /><input type="text" name="user" value="root"/></div>';
+        echo '<div class="conf">MySQL пароль<br /><input type="text" name="pass"/></div>';
         echo '<div style="padding-left: 2px; margin-left: 1px; margin-top: 8px;"><input type="submit" class="button" value="Отправить"/></div></form>';
         break;
 
