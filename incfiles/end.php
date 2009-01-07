@@ -91,7 +91,7 @@ $mtime = explode(' ', microtime());
 $mtime = $mtime[1] + $mtime[0];
 $endtime = $mtime;
 $totaltime = round(($endtime - $starttime), 3);
-echo $totaltime;
+//echo $totaltime;
 echo '</div>';
 
 echo '</body></html>';
