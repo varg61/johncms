@@ -19,10 +19,9 @@ define('_IN_JOHNCMS', 1);
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-if ($dostsmod == 1)
+if ($dostmod == 1)
 {
     require_once ('../incfiles/ban.php');
-    $id = isset($_GET['id']) ? intval($_GET['id']) : '';
     $do = isset($_GET['do']) ? $_GET['do'] : '';
     switch ($do)
     {
@@ -213,9 +212,11 @@ if ($dostsmod == 1)
                 if (!empty($res['ban_reason']))
                     echo '<div class="menu">' . $res['ban_reason'] . '</div>';
                 echo '<div class="bmenu">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div><p>';
-                echo '<a href="zaban.php?do=razban&amp;id=' . $id . '">Разбанить</a>';
                 if ($dostadm == 1)
+                {
+                    echo '<a href="zaban.php?do=razban&amp;id=' . $id . '">Разбанить</a>';
                     echo '<br /><a href="zaban.php?do=delban&amp;id=' . $id . '">Удалить бан</a>';
+                }
                 echo '</p><p><a href="zaban.php">Бан-панель</a><br /><a href="main.php">В админку</a></p>';
             } else
             {
@@ -233,6 +234,7 @@ if ($dostsmod == 1)
             echo '<b>' . $ban_term[3] . '</b><br />' . $ban_desc[3] . '<br />';
             echo '<b>' . $ban_term[10] . '</b><br />' . $ban_desc[10] . '<br />';
             echo '<b>' . $ban_term[11] . '</b><br />' . $ban_desc[11] . '<br />';
+            echo '<b>Пинок</b><br />Разновидность бана по форуму. Специальная функция для модеров. Макс. срок 24 часа.<br />';
             echo '<b>' . $ban_term[12] . '</b><br />' . $ban_desc[12] . '<br />';
             echo '<b>' . $ban_term[13] . '</b><br />' . $ban_desc[13] . '<br />';
             echo '<b>' . $ban_term[14] . '</b><br />' . $ban_desc[14] . '<br />';
@@ -328,20 +330,28 @@ if ($dostsmod == 1)
                     echo '<div class="gmenu">Ник: <a href="../str/anketa.php?user=' . $id . '"><b>' . $res['name'] . '</b></a>';
                     echo '</div><form action="zaban.php?do=ban&amp;id=' . $id . '" method="post">';
                     echo '<div class="rmenu"><b>Тип Бана:</b>&nbsp;<a href="zaban.php?do=help&amp;id=' . $id . '">[?]</a></div>';
-                    echo '<div class="menu"><input name="term" type="radio" value="1" checked="checked" />Тишина<br />';
-                    echo '<input name="term" type="radio" value="3" />Приват<br />';
-                    echo '<input name="term" type="radio" value="10" />Каменты<br />';
-                    echo '<input name="term" type="radio" value="11" />Форум<br />';
-                    echo '<input name="term" type="radio" value="12" />Чат<br />';
-                    echo '<input name="term" type="radio" value="13" />Гостевая<br />';
-                    echo '<input name="term" type="radio" value="14" />Галерея<br />';
-                    if ($dostadm == 1)
-                        echo '<input name="term" type="radio" value="9" /><b>блокировка</b>';
+                    if ($dostsmod == 1)
+                    {
+                        echo '<div class="menu"><input name="term" type="radio" value="1" checked="checked" />Тишина<br />';
+                        echo '<input name="term" type="radio" value="3" />Приват<br />';
+                        echo '<input name="term" type="radio" value="10" />Каменты<br />';
+                        echo '<input name="term" type="radio" value="11" />Форум<br />';
+                        echo '<input name="term" type="radio" value="12" />Чат<br />';
+                        echo '<input name="term" type="radio" value="13" />Гостевая<br />';
+                        echo '<input name="term" type="radio" value="14" />Галерея<br />';
+                        if ($dostadm == 1)
+                            echo '<input name="term" type="radio" value="9" /><b>блокировка</b>';
+                    } elseif ($dostfmod == 1)
+                    {
+                        echo '<input name="term" type="hidden" value="11" />';
+                        echo '<div class="menu">Пинок по форуму';
+                    }
                     echo '</div><div class="rmenu"><b>Срок Бана:</b></div>';
                     echo '<div class="menu"><input type="text" name="timeval" size="2" maxlength="2" value="10"/>&nbsp;время<br/>';
                     echo '<input name="time" type="radio" value="1" checked="checked" />минут (60 max)<br />';
                     echo '<input name="time" type="radio" value="2" />часов (24 max)<br />';
-                    echo '<input name="time" type="radio" value="3" />дней (30 max)<br />';
+                    if ($dostsmod)
+                        echo '<input name="time" type="radio" value="3" />дней (30 max)<br />';
                     if ($dostadm == 1)
                         echo '<input name="time" type="radio" value="4" /><b>до отмены</b>';
                     echo '</div><div class="rmenu"><b>Причина Бана:</b></div>';

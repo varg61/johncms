@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -635,10 +636,17 @@ if (!empty($_SESSION['uid']))
             echo "<a href='pradd.php?act=write&amp;adr=" . $arr['id'] . "'>Написать в приват</a></p>";
         }
 
-        if ($dostkmod == 1)
+        if ($dostmod == 1)
         {
             echo '<p>IP: ' . long2ip($arr['ip']) . '<br/>Browser: ' . $arr['browser'] . '</p>';
-            echo "<p><a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $arr['id'] . "'>Банить</a><br/>";
+            if ($dostsmod == 1)
+            {
+                echo "<p><a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $arr['id'] . "'>Банить</a><br/>";
+            } elseif ($dostfmod == 1 && isset($_GET['fid']))
+            {
+                $fid = intval($_GET['fid']);
+                echo '<p><a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $arr['id'] . '&amp;fid=' . $fid . '">Пнуть из форума</a><br/>';
+            }
             if ($dostadm == "1")
             {
                 echo "<a href='../" . $admp . "/editusers.php?act=edit&amp;user=" . $arr['id'] . "'>Редактировать</a><br/><a href='../" . $admp . "/editusers.php?act=del&amp;user=" . $arr['id'] . "'>Удалить</a><br/>";
