@@ -92,7 +92,7 @@ function kuser()
     return $total;
 }
 
-function wfrm($id)
+function wfrm($id='')
 {
     ////////////////////////////////////////////////////////////
     // Счетчик "Кто в форуме?"                                //
@@ -220,7 +220,7 @@ function stlib()
     return $out;
 }
 
-function wch($id)
+function wch($id='')
 {
     ////////////////////////////////////////////////////////////
     // Статистика Чата                                        //

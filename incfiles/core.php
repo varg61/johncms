@@ -62,6 +62,7 @@ if (get_magic_quotes_gpc())
 $id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false; // Идентификатор
 $page = isset($_GET['page']) ? abs(intval($_GET['page'])) : 1; // Номер страницы
 $act = isset($_GET['act']) ? trim($_GET['act']) : ''; // Выбор действия
+$agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES); // User Agent
 
 ////////////////////////////////////////////////////////////
 // 1) Получаем реальный IP                                //
@@ -151,7 +152,11 @@ $ras_pages = $set['rashstr']; // Расширение текстовых стр�
 $admp = $set['admp']; // Папка с Админкой
 $flsz = $set['flsz']; // Максимальный размер файлов
 $skindef = $set['skindef'];// скин по умолчанию для гостей
-// Дата и время
+
+////////////////////////////////////////////////////////////
+// Дата и время                                           //
+////////////////////////////////////////////////////////////
+date_default_timezone_set('Europe/Moscow');
 $realtime = time() + $sdvigclock * 3600;
 $mon = date("m", $realtime);
 if (substr($mon, 0, 1) == 0)
@@ -175,9 +180,6 @@ if ($set['clean_time'] <= ($realtime - 43200))
     mysql_query("OPTIMIZE TABLE `count`;");
     mysql_query("UPDATE `cms_settings` SET  `val`='" . $realtime . "' WHERE `key`='clean_time';");
 }
-
-// Получаем переменные окружения
-$agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES); // User Agent
 
 ////////////////////////////////////////////////////////////
 // Авторизация по сессии                                  //
