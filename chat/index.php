@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -16,7 +17,7 @@
 define('_IN_JOHNCMS', 1);
 
 $textl = 'Чат';
-$headmod = "chat";
+$headmod = 'chat';
 require_once ("../incfiles/core.php");
 
 // Закрываем доступ в чат
@@ -28,9 +29,6 @@ if (!$set['mod_chat'] && $dostadm != 1)
     exit;
 }
 
-// Определяем и проверяем переменные
-$id = isset($_GET['id']) ? intval($_GET['id']) : false; // Идентификатор комнаты
-
 if ($ban['1'] || $ban['12'])
 {
     require_once ("../incfiles/head.php");
@@ -41,9 +39,14 @@ if ($ban['1'] || $ban['12'])
 
 if ($user_id)
 {
-    // Определяем местонахождение пользователя
-    $where = !empty($id) ? "chat,$id" : 'chat';
-    mysql_query("insert into `count` values(0,'" . $ipp . "','" . mysql_real_escape_string($agn) . "','" . $realtime . "','" . $where . "','" . $login . "','0');");
+    // Фиксируем местонахождение пользователя
+    $where = !empty($id) ? 'chat,' . $id : 'chat';
+    mysql_query("INSERT INTO `count` SET
+	`ip`='" . $ipp . "',
+	`browser`='" . mysql_real_escape_string($agn) . "',
+	`time`='" . $realtime . "',
+	`where`='" . $where . "',
+	`name`='" . $login . "';");
 
     if (!empty($_GET['act']))
     {

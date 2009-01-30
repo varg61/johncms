@@ -420,7 +420,7 @@ switch ($tip)
                 echo ' <a href="?id=' . $id . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
             }
         }
-        echo '<div class="title2"><a href="who.php?id=' . $id . '">Кто в чате(' . wch($id) . '/' . wch() . ')</a></div>';
+        echo '<div class="title2"><a href="who.php?id=' . $id . '">Кто в чате(' . wch($id) . '/' . wch(0,1) . ')</a></div>';
         echo '[0] <a href="index.php?" accesskey="0">Прихожая</a><br/>';
         if ($type1['dpar'] == "in")
         {

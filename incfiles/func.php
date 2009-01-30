@@ -92,7 +92,7 @@ function kuser()
     return $total;
 }
 
-function wfrm($id='')
+function wfrm($id = '')
 {
     ////////////////////////////////////////////////////////////
     // Счетчик "Кто в форуме?"                                //
@@ -220,39 +220,30 @@ function stlib()
     return $out;
 }
 
-function wch($id='')
+function wch($id = false, $mod = false)
 {
     ////////////////////////////////////////////////////////////
     // Статистика Чата                                        //
     ////////////////////////////////////////////////////////////
+    // Если вызвать с параметром 0,1 то покажет общее число юзеров в Чате
     global $realtime;
-    $onltime = $realtime - 300;
-    $count = 0;
-    $qf = @mysql_query("select `id` from `users` where  `lastdate` >='" . intval($onltime) . "';");
-    while ($arrf = mysql_fetch_array($qf))
+    $onltime = $realtime - 60;
+    if ($mod)
     {
-        $whf = mysql_query("select `id` from `count` where `name`='" . $arrf['name'] . "' order by `time` desc ;");
-        while ($whf1 = mysql_fetch_array($whf))
-        {
-            $whf2[] = $whf1[where];
-        }
-        $wherf = $whf2[0];
-        $whf2 = array();
-        $wherf1 = explode(",", $wherf);
-        if (empty($id))
-        {
-            if ($wherf1[0] == "chat")
-            {
-                $count = $count + 1;
-            }
-        } else
-        {
-            if ($wherf == "chat,$id")
-            {
-                $count = $count + 1;
-            }
-        }
+        $where = $id ? 'chat,' . $id : 'chat';
+        $res = mysql_query("SELECT `id` FROM `count` WHERE
+		`time` > '" . $onltime . "' AND
+		`where` LIKE 'chat%'
+		GROUP BY `name`;");
+    } else
+    {
+        $where = $id ? 'chat,' . $id : 'chat';
+        $res = mysql_query("SELECT `id` FROM `count` WHERE
+		`time` > '" . $onltime . "' AND
+		`where` = '" . $where . "'
+		GROUP BY `name`;");
     }
+    $count = mysql_num_rows($res);
     return $count;
 }
 
@@ -457,7 +448,7 @@ function formatsize($size)
     ////////////////////////////////////////////////////////////
     // Форматирование размера файлов                          //
     ////////////////////////////////////////////////////////////
-	if ($size >= 1073741824)
+    if ($size >= 1073741824)
     {
         $size = round($size / 1073741824 * 100) / 100 . ' Gb';
     } elseif ($size >= 1048576)

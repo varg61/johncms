@@ -26,8 +26,9 @@ while ($mass = mysql_fetch_array($q))
 {
     echo '<div class="menu"><a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> (' . wch($mass['id']) . ')</div>';
 }
-echo '<div class="bmenu"><a href="who.php">Кто в чате(' . wch() . ')</a></div>';
-echo '<p><a href="index.php?act=moders&amp;id=' . $id . '">Модераторы</a><br/>';
+echo '<div class="bmenu">В прихожей (' . wch() . ')</div>';
+echo '<p><a href="who.php">Кто в чате? (' . wch(0,1) . ')</a><br/>';
+echo '<a href="index.php?act=moders&amp;id=' . $id . '">Модераторы</a><br/>';
 echo "<a href='../str/usset.php?act=chat'>Настройки чата</a></p>";
 require_once ('../incfiles/end.php');
 
