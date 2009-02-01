@@ -149,7 +149,8 @@ if (in_array($act, $do))
                 {
                     $page = $ba;
                 }
-                $start = $page * $kmess - $kmess;
+                $start = isset($_GET['page']) ? $page * $kmess - $kmess:
+                $start;
                 if ($dostsadm == 1)
                 {
                     $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
@@ -207,16 +208,11 @@ if (in_array($act, $do))
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $mass['time']) . "</font></div></div>";
                     ++$i;
                 }
-                echo '<div class="bmenu">Кто в разделе(' . wfrm($id) . ')</div>';
+                echo '<div class="bmenu">Всего: ' . $coltem . '</div>';
                 if ($coltem > $kmess)
                 {
-                    echo '<p>';
-                    // Постраничная навигация
-                    $pagenav = array('address' => 'index.php?id=' . $id, 'total' => $coltem, 'numpr' => $kmess, 'page' => $page);
-                    pagenav($pagenav);
-                    echo "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='id' value='" . $id .
-                        "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
-                    echo '</p>';
+                    echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $coltem, $kmess) . '</p>';
+                    echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
                 }
                 break;
 
@@ -273,7 +269,8 @@ if (in_array($act, $do))
                 {
                     $page = $ba;
                 }
-                $start = $page * $kmess - $kmess;
+                $start = isset($_GET['page']) ? $page * $kmess - $kmess:
+                $start;
                 if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
                 {
                     if ($dostsadm == 1)
@@ -486,14 +483,9 @@ if (in_array($act, $do))
                 }
                 if ($colmes > $kmess)
                 {
-                    echo '<p>';
-                    // Постраничная навигация
-                    $pagenav = array('address' => 'index.php?id=' . $id, 'total' => $colmes, 'numpr' => $kmess, 'page' => $page);
-                    pagenav($pagenav);
-                    echo "<form action='?'>Перейти к странице:<br/><input type='hidden' name='id' value='" . $id . "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
-                    echo '</p>';
+                    echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
+                    echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
                 }
-
                 if ($dostfmod == 1)
                 {
                     echo '<p><div class="func">';

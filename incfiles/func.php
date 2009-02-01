@@ -350,69 +350,61 @@ function unhtmlentities($string)
     return strtr($string, $trans_tbl);
 }
 
-function pagenav($var = array())
+function pagenav($base_url, $start, $max_value, $num_per_page)
 {
     ////////////////////////////////////////////////////////////
-    // Навигация по страницам                                 //
+    // Функция постраничной навигации                         //
     ////////////////////////////////////////////////////////////
-    $ba = ceil($var['total'] / $var['numpr']);
-    $page = ($ba > $var['page']) ? $var['page'] : $ba;
-    $start = $page * $var['numpr'] - $var['numpr'];
-    $asd = $start - ($var['numpr']);
-    $asd2 = $start + ($var['numpr'] * 2);
-    echo '<div class="f-pgn">';
-    // Ссылка на предыдущую страницу
-    if ($start > 0)
-        echo '<a href="' . $var['address'] . '&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
-    if ($asd < $var['total'] && $asd > 0)
-    {
-        echo ' <a href="' . $var['address'] . '&amp;page=1">1</a> .. ';
-    }
-    $page2 = $ba - $page;
-    $pa = ceil($page / 2);
-    $paa = ceil($page / 3);
-    $pa2 = $page + floor($page2 / 2);
-    $paa2 = $page + floor($page2 / 3);
-    $paa3 = $page + (floor($page2 / 3) * 2);
-    if ($page > 13)
-    {
-        echo ' <a href="' . $var['address'] . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="' . $var['address'] . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="' . $var['address'] . '&amp;page=' . ($paa * 2) . '">' . ($paa *
-            2) . '</a> <a href="' . $var['address'] . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-    } elseif ($page > 7)
-    {
-        echo ' <a href="' . $var['address'] . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="' . $var['address'] . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-    }
-    for ($i = $asd; $i < $asd2; )
-    {
-        if ($i < $var['total'] && $i >= 0)
+    // В качестве основы использован модифицированный         //
+    // вариант аналогичной функции от форума SMF2.0           //
+    ////////////////////////////////////////////////////////////
+    $pgcont = 4; // Число ссылок на страницы в блоке
+    $pgcont = (int)($pgcont - ($pgcont % 2)) / 2;
+    // Not greater than the upper bound.
+    if ($start >= $max_value)
+        $start = max(0, (int)$max_value - (((int)$max_value % (int)$num_per_page) == 0 ? $num_per_page : ((int)$max_value % (int)$num_per_page)));
+    // And it has to be a multiple of $num_per_page!
+    else
+        $start = max(0, (int)$start - ((int)$start % (int)$num_per_page));
+    $base_link = '<a class="navpg" href="' . strtr($base_url, array('%' => '%%')) . 'start=%d' . '">%s</a> ';
+    // Левый указатель (<<)
+    $pageindex = $start == 0 ? '' : sprintf($base_link, $start - $num_per_page, '&lt;&lt;');
+    // Ссылка на первую страницу (>1< ... 6 7 [8] 9 10 ... 15)
+    if ($start > $num_per_page * $pgcont)
+        $pageindex .= sprintf($base_link, 0, '1');
+    // Точки перед блоком ссылок  (1 >...< 6 7 [8] 9 10 ... 15)
+    if ($start > $num_per_page * ($pgcont + 1))
+        $pageindex .= '<span style="font-weight: bold;"> ... </span>';
+    // Ссылки перед текушей страницей (1 ... >6 7< [8] 9 10 ... 15)
+    for ($nCont = $pgcont; $nCont >= 1; $nCont--)
+        if ($start >= $num_per_page * $nCont)
         {
-            $ii = floor(1 + $i / $var['numpr']);
-            if ($start == $i)
-            {
-                echo " <b>$ii</b>";
-            } else
-            {
-                echo ' <a href="' . $var['address'] . '&amp;page=' . $ii . '">' . $ii . '</a> ';
-            }
+            $tmpStart = $start - $num_per_page * $nCont;
+            $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
         }
-        $i = $i + $var['numpr'];
-    }
-    if ($page2 > 12)
+    // Текущая страница (1 ... 6 7 >[8]< 9 10 ... 15)
+    $pageindex .= '[<b>' . ($start / $num_per_page + 1) . '</b>] ';
+    // Ссылки после текущей страницы (1 ... 6 7 [8] >9 10< ... 15)
+    $tmpMaxPages = (int)(($max_value - 1) / $num_per_page) * $num_per_page;
+    for ($nCont = 1; $nCont <= $pgcont; $nCont++)
+        if ($start + $num_per_page * $nCont <= $tmpMaxPages)
+        {
+            $tmpStart = $start + $num_per_page * $nCont;
+            $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
+        }
+    // Точки после блока ссылок (1 ... 6 7 [8] 9 10 >...< 15)
+    if ($start + $num_per_page * ($pgcont + 1) < $tmpMaxPages)
+        $pageindex .= '<span style="font-weight: bold;"> ... </span>';
+    // Ссылка на последнюю страницу (1 ... 6 7 [8] 9 10 ... >15<)
+    if ($start + $num_per_page * $pgcont < $tmpMaxPages)
+        $pageindex .= sprintf($base_link, $tmpMaxPages, $tmpMaxPages / $num_per_page + 1);
+    // Show the right arrow.
+    if ($start + $num_per_page <= $max_value)
     {
-        echo ' .. <a href="' . $var['address'] . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="' . $var['address'] . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="' . $var['address'] . '&amp;page=' . ($paa3) . '">' . ($paa3) .
-            '</a> <a href="' . $var['address'] . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-    } elseif ($page2 > 6)
-    {
-        echo ' .. <a href="' . $var['address'] . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="' . $var['address'] . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
+        $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start + $num_per_page);
+		$pageindex .= sprintf($base_link, $display_page, '&gt;&gt;');
     }
-    if ($asd2 < $var['total'])
-    {
-        echo ' .. <a href="' . $var['address'] . '&amp;page=' . $ba . '">' . $ba . '</a>';
-    }
-    // Ссылка на следующую страницу
-    if ($var['total'] > $start + $var['numpr'])
-        echo ' <a href="' . $var['address'] . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
-    echo '</div>';
+    return $pageindex;
 }
 
 function timecount($var)

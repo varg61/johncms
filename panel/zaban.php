@@ -375,22 +375,14 @@ if ($dostmod == 1)
             // Список забаненных                                      //
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr">Кто в бане?</div>';
-            $req = mysql_query("SELECT `cms_ban_users`.*, `users`.`name`
-			FROM `cms_ban_users` LEFT JOIN `users` ON `cms_ban_users`.`user_id` = `users`.`id`
-			WHERE `cms_ban_users`.`ban_time`>'" . $realtime . "';");
-            $total = @mysql_num_rows($req);
-            $page = (isset($_GET['page']) && ($_GET['page'] > 0)) ? intval($_GET['page']):
-            1;
-            $start = $page * $kmess - $kmess;
-            if ($total < $start + $kmess)
+            $req = mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "'");
+            $total = mysql_result($req, 0);
+            if ($total > 0)
             {
-                $end = $total;
-            } else
-            {
-                $end = $start + $kmess;
-            }
-            if ($total != 0)
-            {
+                $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
+                $req = mysql_query("SELECT `cms_ban_users`.*, `users`.`name`
+				FROM `cms_ban_users` LEFT JOIN `users` ON `cms_ban_users`.`user_id` = `users`.`id`
+				WHERE `cms_ban_users`.`ban_time`>'" . $realtime . "' LIMIT " . $start . "," . $kmess);
                 // Выводим общий список забаненных
                 while ($res = mysql_fetch_array($req))
                 {
@@ -401,18 +393,16 @@ if ($dostmod == 1)
                 echo '<div class="bmenu">Всего: ' . $total . '</div>';
                 if ($total > $kmess)
                 {
-                    echo '<p>';
-                    $pagenav = array('address' => 'ipban.php?', 'total' => $total, 'numpr' => $kmess, 'page' => $page);
-                    pagenav($pagenav);
-                    echo '</p>';
+                    echo '<p>' . pagenav('zaban.php?', $start, $total, $kmess) . '</p>';
+                    echo '<p><form action="zaban.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
                 }
+                echo '<p><a href="main.php?do=search">Банить</a><br />';
+                if ($dostadm)
+                    echo '<a href="zaban.php?do=amnesty">Амнистия</a>';
             } else
             {
-                echo '<p>Список пуст</p>';
+                echo '<p>Забаненных нет.';
             }
-            echo '<p><a href="main.php?do=search">Банить</a><br />';
-            if ($dostadm)
-                echo '<a href="zaban.php?do=amnesty">Амнистия</a>';
             echo '</p><p><a href="main.php">В админку</a></p>';
     }
 } else

@@ -61,6 +61,7 @@ if (get_magic_quotes_gpc())
 ////////////////////////////////////////////////////////////
 $id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false; // Идентификатор
 $page = isset($_GET['page']) ? abs(intval($_GET['page'])) : 1; // Номер страницы
+$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0; // Для постраничной навигации
 $act = isset($_GET['act']) ? trim($_GET['act']) : ''; // Выбор действия
 $agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES); // User Agent
 

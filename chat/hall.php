@@ -19,7 +19,7 @@ require_once ("../incfiles/head.php");
 if (!$set['mod_chat'])
     echo '<p><font color="#FF0000"><b>Чат закрыт!</b></font></p>';
 
-echo '<div class="phdr">Чат</div>';
+echo '<div class="phdr"><b>Чат</b></div>';
 $_SESSION['intim'] = '';
 $q = mysql_query("select * from `chat` where type='r' order by realid ;");
 while ($mass = mysql_fetch_array($q))
