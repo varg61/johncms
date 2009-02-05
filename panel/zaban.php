@@ -379,7 +379,6 @@ if ($dostmod == 1)
             $total = mysql_result($req, 0);
             if ($total > 0)
             {
-                $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
                 $req = mysql_query("SELECT `cms_ban_users`.*, `users`.`name`
 				FROM `cms_ban_users` LEFT JOIN `users` ON `cms_ban_users`.`user_id` = `users`.`id`
 				WHERE `cms_ban_users`.`ban_time`>'" . $realtime . "' LIMIT " . $start . "," . $kmess);

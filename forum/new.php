@@ -95,7 +95,6 @@ if ($user_id)
             if ($count > 0)
             {
                 echo '<div class="phdr">Все за период ' . $vr . ' часов</div>';
-                $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
                 if ($dostsadm == 1)
                 {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `moder`='1' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
@@ -188,7 +187,6 @@ if ($user_id)
             if ($total > 0)
             {
                 echo '<div class="phdr"><b>Непрочитанное</b></div>';
-                $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
                 if ($dostsadm == 1)
                 {
                     $req = mysql_query("SELECT *

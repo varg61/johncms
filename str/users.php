@@ -23,7 +23,6 @@ require_once ("../incfiles/head.php");
 echo '<div class="phdr">Список пользователей</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0); // Общее число зареганных юзеров
-$start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` ORDER BY `datereg` DESC LIMIT " . $start . "," . $kmess);
 while ($arr = mysql_fetch_array($req))
 {

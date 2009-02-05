@@ -37,21 +37,21 @@ if (in_array($act, $do))
 {
     if (!$set['mod_lib'])
         echo '<p><font color="#FF0000"><b>Библиотека закрыта!</b></font></p>';
-
-    if ($dostlmod == 1)
-    {
-        // Считаем число статей, ожидающих модерацию
-        $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0';");
-        $res = mysql_result($req, 0);
-        if ($res > 0)
-            echo '<p>Модерации ожидают <a href="index.php?act=moder">' . $res . '</a> статей</p>';
-    }
     if (empty($_GET['id']))
     {
+        echo '<div class="phdr"><b>Библиотека</b></div>';
+        if ($dostlmod == 1)
+        {
+            // Считаем число статей, ожидающих модерацию
+            $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0';");
+            $res = mysql_result($req, 0);
+            if ($res > 0)
+                echo '<div class="rmenu">Модерации ожидают <a href="index.php?act=moder">' . $res . '</a> статей</div>';
+        }
         $old = $realtime - (3 * 24 * 3600); // Сколько суток считать статьи новыми?
         $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type`='bk' AND `moder`='1'");
         $res = mysql_result($req, 0);
-        echo '<div class="phdr"><b>Библиотека</b></div><div class="gmenu"><p>';
+        echo '<div class="gmenu"><p>';
         if ($res > 0)
             echo '<a href="index.php?act=new">Новые статьи</a> (' . $res . ')<br/>';
         echo '<a href="index.php?act=topread">Самые читаемые</a></p></div>';
@@ -70,23 +70,15 @@ if (in_array($act, $do))
     switch ($tip)
     {
         case 'cat':
-            $catz = mysql_query("select `id`  from `lib` where type = 'cat' and refid = '" . $id . "';");
-            $totalcat = mysql_num_rows($catz);
-            $bkz = mysql_query("select `id` from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1';");
-            $totalbk = mysql_num_rows($bkz);
-            if ($totalcat != 0)
+            $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'cat' AND `refid` = '" . $id . "'");
+            $totalcat = mysql_result($req, 0);
+            $bkz = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `refid` = '" . $id . "' AND `moder`='1'");
+            $totalbk = mysql_result($bkz, 0);
+            if ($totalcat > 0)
             {
                 $total = $totalcat;
-                $ba = ceil($total / 10);
-                if ($page > $ba)
-                {
-                    $page = $ba;
-                }
-                $start = $page * 10 - 10;
-                $cat = mysql_query("select `id`, `text`  from `lib` where type = 'cat' and refid = '" . $id . "' LIMIT " . $start . ", 10;");
-                $i = 0;
-                $mm = mysql_num_rows($cat);
-                while ($cat1 = mysql_fetch_array($cat))
+                $req = mysql_query("SELECT `id`, `text`  FROM `lib` WHERE `type` = 'cat' AND `refid` = '" . $id . "' LIMIT " . $start . "," . $kmess);
+                while ($cat1 = mysql_fetch_array($req))
                 {
                     $cat2 = mysql_query("select `id` from `lib` where type = 'cat' and refid = '" . $cat1['id'] . "';");
                     $totalcat2 = mysql_num_rows($cat2);
@@ -105,8 +97,8 @@ if (in_array($act, $do))
                     echo '<div class="menu"><a href="index.php?id=' . $cat1['id'] . '">' . $cat1['text'] . '</a>(' . $kol . ')</div>';
                     ++$i;
                 }
-                echo '<div class="bmenu">Всего категорий: '.$totalcat .'</div>';
-            } elseif ($totalbk != 0)
+                echo '<div class="bmenu">Всего категорий: ' . $totalcat . '</div>';
+            } elseif ($totalbk > 0)
             {
                 $total = $totalbk;
                 $ba = ceil($total / 10);

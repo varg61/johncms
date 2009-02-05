@@ -347,7 +347,6 @@ switch ($act)
         $colmes = mysql_result($req, 0); // Число сообщений в гастивухе
         if ($colmes > 0)
         {
-            $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
             if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1"))
             {
                 // Запрос для Админ клуба

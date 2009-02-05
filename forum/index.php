@@ -98,72 +98,47 @@ if (in_array($act, $do))
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
-
-                $q1 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='r' AND `refid`='" . $id . "' ORDER BY `realid`;");
-                $colraz2 = mysql_num_rows($q1);
-                $i = 0;
-                while ($mass1 = mysql_fetch_array($q1))
+                $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='r' AND `refid`='" . $id . "' ORDER BY `realid`;");
+                $total = mysql_num_rows($req);
+                while ($mass1 = mysql_fetch_array($req))
                 {
-                    $coltem = mysql_query("select id, time from `forum` where type='t' and moder='1' and refid='" . $mass1['id'] . "' order by time desc;");
-                    $coltem1 = mysql_num_rows($coltem);
+                    $coltem = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `refid` = '" . $mass1['id'] . "'");
+                    $coltem1 = mysql_result($coltem, 0);
                     echo '<div class="menu"><a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
                     if ($coltem1 > 0)
                     {
                         echo " [$coltem1]";
                     }
                     echo "</div>";
-                    ++$i;
                 }
-                echo '<div class="bmenu">Кто в разделе(' . wfrm($id) . ')</div>';
+                echo '<div class="bmenu">Всего: ' . $total . '</div>';
                 break;
 
             case "r":
                 ////////////////////////////////////////////////////////////
                 // Список тем                                             //
                 ////////////////////////////////////////////////////////////
-                if ($dostsadm == 1)
-                {
-                    $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1' ;");
-                } else
-                {
-                    $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `close`!='1' AND `moder`='1' AND `refid`='" . $id . "';");
-                }
+                $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1'" . ($dostadm == 1 ? '' : " AND `close`!='1'"));
                 $coltem = mysql_result($qz, 0);
-
                 // Ссылка на Новые темы
                 echo '<p><a href="index.php?act=new">' . ($user_id ? 'Непрочитанное&nbsp;(' . forum_new() . ')' : 'Последние 10 тем') . '</a></p>';
-
                 // Панель навигации
                 $forum = mysql_query("SELECT * FROM `forum` WHERE `type`='f' AND `id`='" . $type1['refid'] . "';");
                 $forum1 = mysql_fetch_array($forum);
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $type1['refid'] . '">' . $forum1['text'] . '</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
-
                 if ($user_id && !$ban['1'] && !$ban['11'])
                 {
                     echo '<div class="gmenu"><a href="index.php?act=nt&amp;id=' . $id . '">Новая тема</a></div>';
                 }
-                $ba = ceil($coltem / $kmess);
-                if ($page > $ba)
-                {
-                    $page = $ba;
-                }
-                $start = isset($_GET['page']) ? $page * $kmess - $kmess:
-                $start;
-                if ($dostsadm == 1)
-                {
-                    $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
-                } else
-                {
-                    $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t' AND `close`!='1' AND `moder`='1' AND `refid`='" . $id . "'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
-                }
-                $i = 0;
+                $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='" . $id .
+                    "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
                 while ($mass = mysql_fetch_array($q1))
                 {
-                    $colmes = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
+                    $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC LIMIT 1;");
-                    $colmes1 = mysql_num_rows($colmes);
+                    $colmes1 = mysql_result($colmes, 0);
                     $cpg = ceil($colmes1 / $kmess);
                     $colmes1 = $colmes1 - 1;
                     if ($colmes1 < 0)
@@ -206,7 +181,6 @@ if (in_array($act, $do))
                         echo '&nbsp;/&nbsp;' . $nam['from'];
                     }
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $mass['time']) . "</font></div></div>";
-                    ++$i;
                 }
                 echo '<div class="bmenu">Всего: ' . $coltem . '</div>';
                 if ($coltem > $kmess)
@@ -234,66 +208,20 @@ if (in_array($act, $do))
                         mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
                     }
                 }
-
                 // Ссылка на Новые темы
                 echo '<p><a href="index.php?act=new">' . ($user_id ? 'Непрочитанное&nbsp;(' . forum_new() . ')' : 'Последние 10 тем') . '</a></p>';
-
                 if ($dostsadm != 1 && $type1['close'] == 1)
                 {
-
                     echo "<font color='#FF0000'>Тема удалена!</font><br/><a href='?id=" . $type1['refid'] . "'>В раздел</a><br/>";
                     require_once ("../incfiles/end.php");
                     exit;
                 }
-                if ($dostsadm == 1)
-                {
-                    $qz = mysql_query("select `id` from `forum` where type='m' and refid='" . $id . "' ;");
-                } else
-                {
-                    $qz = mysql_query("select `id` from `forum` where type='m' and close!='1' and refid='" . $id . "'  ;");
-                }
-                $colmes = mysql_num_rows($qz);
-                $ba = ceil($colmes / $kmess);
-                if (empty($_GET['page']))
-                {
-                    $page = 1;
-                } else
-                {
-                    $page = intval($_GET['page']);
-                }
-                if ($page < 1)
-                {
-                    $page = 1;
-                }
-                if ($page > $ba)
-                {
-                    $page = $ba;
-                }
-                $start = isset($_GET['page']) ? $page * $kmess - $kmess:
-                $start;
-                if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
-                {
-                    if ($dostsadm == 1)
-                    {
-                        $q1 = mysql_query("SELECT * FROM `forum` WHERE type='m' AND refid='" . $id . "'  ORDER BY time DESC LIMIT " . $start . ", " . $kmess . " ;");
-                    } else
-                    {
-                        $q1 = mysql_query("SELECT * FROM `forum` WHERE type='m' AND close!='1' AND refid='" . $id . "'  ORDER BY time DESC LIMIT " . $start . ", " . $kmess . "  ;");
-                    }
-                } else
-                {
-                    if ($dostsadm == 1)
-                    {
-                        $q1 = mysql_query("SELECT * FROM `forum` WHERE type='m' AND refid='" . $id . "'  ORDER BY time LIMIT " . $start . ", " . $kmess . " ;");
-                    } else
-                    {
-                        $q1 = mysql_query("SELECT * FROM `forum` WHERE type='m' AND close!='1' AND refid='" . $id . "'  ORDER BY time LIMIT " . $start . ", " . $kmess . " ;");
-                    }
-                }
-
-                $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $type1['refid'] . "';");
+                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $id . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
+                $colmes = mysql_result($req, 0);
+                $q1 = mysql_query("SELECT * FROM `forum` WHERE type='m' AND refid='" . $id . ($dostadm == 1 ? "'" : "' AND close!='1'") . "  ORDER BY time LIMIT " . $start . ", " . $kmess . " ;");
+                $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1");
                 $razd = mysql_fetch_array($q3);
-                $q4 = mysql_query("select `id`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "';");
+                $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1");
                 $frm = mysql_fetch_array($q4);
 
                 // Панель навигации
@@ -534,9 +462,8 @@ if (in_array($act, $do))
         // Панель навигации
         echo '<div class="phdr">';
         echo '<b>Форум</b></div>';
-
-        $q = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' ORDER BY `realid`;");
-        while ($mass = mysql_fetch_array($q))
+        $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
+        while ($mass = mysql_fetch_array($req))
         {
             $colraz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $mass['id'] . "';");
             $colraz1 = mysql_result($colraz, 0);

@@ -152,7 +152,7 @@ $home = $set['homeurl']; // Домашняя страница
 $ras_pages = $set['rashstr']; // Расширение текстовых страниц
 $admp = $set['admp']; // Папка с Админкой
 $flsz = $set['flsz']; // Максимальный размер файлов
-$skindef = $set['skindef'];// скин по умолчанию для гостей
+$skindef = $set['skindef']; // скин по умолчанию для гостей
 
 ////////////////////////////////////////////////////////////
 // Дата и время                                           //
@@ -216,7 +216,7 @@ if ($user_id && $user_ps)
         {
             // Получение параметров пользователя
             $idus = $user_id;
-			$skin = $datauser['skin']; // скин юзера
+            $skin = $datauser['skin']; // скин юзера
             $login = $datauser['name']; // Логин (Ник) пользователя
             $sdvig = $datauser['sdvig']; // Сдвиг времени
             $kmess = $datauser['kolanywhwere']; // Число сообщений на страницу
@@ -328,6 +328,9 @@ if ($user_id && $user_ps)
 
 // Подключаем дополнительные файлы
 require_once ($rootpath . 'incfiles/func.php');
+
+// Актуализация переменных
+$start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
 
 // Буфферизация вывода
 if ($set['gzip'] == 1)
