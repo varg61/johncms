@@ -128,7 +128,7 @@ switch ($tip)
             echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></div></form>";
         }
         echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
-        echo '<p><a href="?id=' . $id . '">Назад</a></p>';
+        echo '<p><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p>';
         break;
 
     case "m":

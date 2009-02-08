@@ -381,7 +381,7 @@ if (in_array($act, $do))
                         $tpp = $realtime - 300;
                         if (($dostfmod == 1) || (($arr1['from'] == $login) && ($arr1['id'] == $mass['id']) && ($mass['time'] > $tpp)))
                         {
-                            echo "<br /><a href='index.php?act=editpost&amp;id=" . $mass['id'] . "'>Изменить</a>";
+                            echo '<br /><a href="index.php?act=editpost&amp;id=' . $mass['id'] . '&amp;start=' . $start . '">Изменить</a>';
                         }
                         if ($dostfmod == 1)
                         {
@@ -406,7 +406,7 @@ if (in_array($act, $do))
                         echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form></div>";
                     } else
                     {
-                        echo '<a href="?act=say&amp;id=' . $id . '">Написать</a><br />';
+                        echo '<a href="?act=say&amp;id=' . $id . '&amp;start=' . $start . '">Написать</a><br />';
                     }
                 }
                 if ($colmes > $kmess)
