@@ -102,16 +102,18 @@ if (in_array($act, $do))
                 $total = mysql_num_rows($req);
                 while ($mass1 = mysql_fetch_array($req))
                 {
+                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
                     $coltem = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `refid` = '" . $mass1['id'] . "'");
                     $coltem1 = mysql_result($coltem, 0);
-                    echo '<div class="menu"><a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
+                    echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
                     if ($coltem1 > 0)
                     {
                         echo " [$coltem1]";
                     }
                     echo "</div>";
+                    ++$i;
                 }
-                echo '<div class="bmenu">Всего: ' . $total . '</div>';
+                echo '<div class="phdr">Всего: ' . $total . '</div>';
                 break;
 
             case "r":
@@ -136,7 +138,8 @@ if (in_array($act, $do))
                     "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
                 while ($mass = mysql_fetch_array($q1))
                 {
-                    $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
+                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+					$colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC LIMIT 1;");
                     $colmes1 = mysql_result($colmes, 0);
                     $cpg = ceil($colmes1 / $kmess);
@@ -147,7 +150,7 @@ if (in_array($act, $do))
                     }
                     $nam = mysql_fetch_array($nikuser);
                     // Выводим список тем
-                    echo '<div class="menu">';
+                    //echo '<div class="menu">';
                     if ($mass['vip'] == 1)
                     {
                         echo '<img src="../theme/' . $skin . '/images/pt.gif" alt=""/>';
@@ -181,8 +184,9 @@ if (in_array($act, $do))
                         echo '&nbsp;/&nbsp;' . $nam['from'];
                     }
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $mass['time']) . "</font></div></div>";
-                }
-                echo '<div class="bmenu">Всего: ' . $coltem . '</div>';
+                ++$i;
+				}
+                echo '<div class="phdr">Всего: ' . $coltem . '</div>';
                 if ($coltem > $kmess)
                 {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $coltem, $kmess) . '</p>';
@@ -465,17 +469,13 @@ if (in_array($act, $do))
         $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($mass = mysql_fetch_array($req))
         {
+            echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
             $colraz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $mass['id'] . "';");
             $colraz1 = mysql_result($colraz, 0);
-            echo '<div class="menu"><a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
+            echo '<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
+            ++$i;
         }
-        if ($user_id)
-        {
-            echo '<div class="bmenu"><a href="index.php?act=who">Кто в форуме</a>(' . wfrm() . ')</div>';
-        } else
-        {
-            echo '<div class="bmenu">Кто в форуме(' . wfrm() . ')</div>';
-        }
+        echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '(' . wfrm() . ')</div>';
     }
 
     // Навигация внизу страницы

@@ -26,7 +26,7 @@ $total = mysql_result($req, 0); // Общее число зареганных ю
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` ORDER BY `datereg` DESC LIMIT " . $start . "," . $kmess);
 while ($arr = mysql_fetch_array($req))
 {
-    echo '<div class="menu">';
+    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
     echo $arr['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
     if ($arr['sex'] == "m")
     {
@@ -76,6 +76,7 @@ while ($arr = mysql_fetch_array($req))
         echo '<font color="#00AA00"> [ON]</font><br/>';
     }
     echo '</div>';
+    ++$i;
 }
 echo '<div class="bmenu">Всего: ' . $total . '</div><p>';
 if ($total > $kmess)

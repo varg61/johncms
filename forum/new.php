@@ -168,7 +168,7 @@ if ($user_id)
                     echo '<p><form action="index.php" method="get">
 					<input type="hidden" name="act" value="new"/>
 					<input type="hidden" name="do" value="all"/>
-					<input type="hidden" name="vr" value="' . $vr .'"/>
+					<input type="hidden" name="vr" value="' . $vr . '"/>
 					<input type="text" name="page" size="2"/>
 					<input type="submit" value="К странице &gt;&gt;"/></form></p>';
                 }
@@ -213,6 +213,7 @@ if ($user_id)
                 }
                 while ($res = mysql_fetch_array($req))
                 {
+                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
                     $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "';");
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "';");
@@ -220,7 +221,6 @@ if ($user_id)
                     $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid`='" . $res['id'] . "' AND `type`='m' AND `close`!='1' order by time desc;");
                     $colmes1 = mysql_num_rows($colmes);
                     $nick = mysql_fetch_array($colmes);
-                    echo '<div class="menu">';
                     if ($res['edit'] == 1)
                     {
                         echo '<img src="../images/tz.gif" alt=""/>';
@@ -245,8 +245,9 @@ if ($user_id)
                     }
                     echo " <font color='#777777'>" . date("d.m.y / H:i", $nick['time']) . '</font>';
                     echo '</div></div>';
+                    ++$i;
                 }
-                echo '<div class="bmenu">Всего: ' . $total . '</div>';
+                echo '<div class="phdr">Всего: ' . $total . '</div>';
                 if ($total > $kmess)
                 {
                     echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';

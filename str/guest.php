@@ -362,18 +362,7 @@ switch ($act)
             }
             while ($res = mysql_fetch_array($req))
             {
-                $d = $i / 2;
-                $d1 = ceil($d);
-                $d2 = $d1 - $d;
-                $d3 = ceil($d2);
-                if ($d3 == 0)
-                {
-                    $div = "<div class='b'>";
-                } else
-                {
-                    $div = "<div class='c'>";
-                }
-                echo $div;
+                echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
                 if ($res['user_id'] != "0")
                 {
                     // Значек нового юзера
@@ -475,6 +464,7 @@ switch ($act)
                     echo long2ip($res['ip']) . ' - ' . $res['soft'] . '</div>';
                 }
                 echo "</div>";
+                ++$i;
             }
             echo isset($_SESSION['ga']) ? '<hr class="redhr" />' : '<hr />';
             echo "<p>Всего сообщений: $colmes<br/>";
@@ -489,7 +479,7 @@ switch ($act)
             echo '</p>';
         } else
         {
-        	echo '<p>В Гостевой сообщений нет.</p>';
+            echo '<p>В Гостевой сообщений нет.</p>';
         }
         // Для Модеров и выше, даем ссылку на Админ-клуб
         if ($dostmod == 1)

@@ -95,6 +95,20 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 	border-top: 1px solid red;
 }
 
+.list1{
+	margin: 0px;
+	padding: 2px 0px 3px 4px;
+	background-color: #eeecd9;
+	border: 1px solid white;
+}
+
+.list2{
+	margin: 0px;
+	padding: 2px 0px 3px 4px;
+	background-color: #f5f5f5;
+	border: 1px solid white;
+}
+
 .maintxt{
 	margin: 0px;
 	font-weight: normal;
@@ -144,11 +158,8 @@ hr{ margin: 0; border: 0; border-top: 1px solid gray; }
 
 .sub{
 	font-size: x-small;
-	border-top: 1px solid #bcb669;
-	border-left: 1px solid #bcb669;
-	padding-left: 4px;
+	padding-left: 20px;
 	margin-top: 4px;
-	background-color: #e0e0bc;
 }
 
 .tmn{
