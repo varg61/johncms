@@ -41,7 +41,6 @@ if (!empty($_GET['id']))
     $q = @mysql_query("select * from `users` where  lastdate>='" . intval($onltime) . "';");
     while ($arr = mysql_fetch_array($q))
     {
-        echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
         $wh = mysql_query("select * from `count` where name='" . $arr['name'] . "' order by time desc ;");
         while ($wh1 = mysql_fetch_array($wh))
         {
@@ -51,6 +50,7 @@ if (!empty($_GET['id']))
         $wh2 = array();
         if ($wher == $whr)
         {
+        echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
             echo "<b>$arr[name]</b>";
             switch ($arr['rights'])
             {
@@ -70,7 +70,6 @@ if (!empty($_GET['id']))
             echo '</div>';
             $i++;
         }
-        ++$i;
     }
     echo '<div class="phdr">В теме ' . $i . ' человек</div>';
     echo '<p><a href="index.php?id=' . $id . '">В тему</a></p>';
