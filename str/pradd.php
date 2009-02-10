@@ -88,7 +88,7 @@ if (!empty($_SESSION['uid']))
                     if ($do_file || $do_file_mini)
                     {
                         // Список допустимых расширений файлов.
-                        $al_ext = array('rar', 'zip', 'pdf', 'txt', 'tar', 'gz', 'jpg', 'jpeg', 'gif', 'png', 'bmp', '3gp', 'mp3', 'mpg', 'sis', 'thm', 'jar', 'jad');
+                        $al_ext = array('rar', 'zip', 'pdf', 'txt', 'tar', 'gz', 'jpg', 'jpeg', 'gif', 'png', 'bmp', '3gp', 'mp3', 'mpg', 'sis', 'thm', 'jar', 'jad', 'cab', 'sis', 'sisx', 'exe', 'msi');
                         $ext = explode(".", $fname);
                         // Проверка на допустимый размер файла
                         if ($fsize >= 1024 * $flsz)

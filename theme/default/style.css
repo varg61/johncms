@@ -130,7 +130,7 @@ hr{
 
 .list1{
 	margin: 0px;
-	padding: 2px 0px 3px 4px;
+	padding: 3px 4px 4px 4px;
 	background-color: #eeecd9;
 	border: 1px solid white;
 }
@@ -141,7 +141,7 @@ hr{
 
 .list2{
 	margin: 0px;
-	padding: 2px 0px 3px 4px;
+	padding: 3px 4px 4px 4px;
 	background-color: #f5f5f5;
 	border: 1px solid white;
 }
@@ -207,6 +207,10 @@ hr{
 	border-top: 1px dotted #c6c17f;
 	padding: 0px 0px 0px 20px;
 	margin-top: 4px;
+}
+
+.sub a:link, .sub a:visited{
+	text-decoration: none;
 }
 
 .tmn{
