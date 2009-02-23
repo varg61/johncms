@@ -249,16 +249,14 @@ if (!empty($_SESSION['uid']))
                     ++$i;
                 }
                 $mnt = $arr['monthb'];
-                echo "</select>
-<select name='user_month' class='textbox'><option value='" . $mnt . "'>$mesyac[$mnt]</option>";
+                echo "</select><select name='user_month' class='textbox'><option value='" . $mnt . "'>$mesyac[$mnt]</option>";
                 $i = 1;
                 while ($i <= 12)
                 {
                     echo "<option value='" . $i . "'>$mesyac[$i]</option>";
                     ++$i;
                 }
-                echo "</select>
-<select name='user_year' class='textbox'><option>$arr[yearofbirth]</option>";
+                echo "</select><select name='user_year' class='textbox'><option>$arr[yearofbirth]</option>";
                 $i = 1950;
                 while ($i <= 2000)
                 {
@@ -400,40 +398,23 @@ if (!empty($_SESSION['uid']))
                 break;
 
             default:
+                ////////////////////////////////////////////////////////////
+                // Личная анкета                                          //
+                ////////////////////////////////////////////////////////////
                 echo '<div class="phdr">Моя анкета</div>';
-                echo '<p>Ник: <b>' . $login . '</b><br />';
-                if ($arr['sex'] == "m")
-                {
-                    echo "Зарегистрирован";
-                }
-                if ($arr['sex'] == "zh")
-                {
-                    echo "Зарегистрирована";
-                }
-                echo ": " . date("d.m.Y", $arr['datereg']) . "<br/>";
-                if ($arr['sex'] == "m")
-                {
-                    echo 'Всего пробыл';
-                }
-                if ($arr['sex'] == "zh")
-                {
-                    echo 'Всего пробыла';
-                }
-                echo ' на сайте: ' . timecount($arr['total_on_site']) . '<br />';
-                $mmon = $arr['monthb'];
-                echo "<a href='anketa.php?act=par&amp;user=" . $idus . "'>Сменить пароль</a></p>";
-                echo "<p><a href='anketa.php?act=name'>Имя:</a>$arr[imname]<br/>";
-                echo "<a href='anketa.php?act=gor'>Город:</a>$arr[live]<br/>";
-                echo "<a href='anketa.php?act=inf'>О себе:</a>$arr[about]<br/>";
-                echo "<a href='anketa.php?act=icq'>ICQ:</a>$arr[icq]<br/>";
-                echo "<a href='anketa.php?act=mail'>E-mail:</a>$arr[mail] ";
-                if ($arr['mailact'] == 0)
-                {
-                    echo "<font color='" . $clink . "'>(!)</font>";
-                }
-                echo "<br/><a href='anketa.php?act=mobila'>Мобила:</a>$arr[mibile]<br/>";
-                echo "<a href='anketa.php?act=dr'>Дата рождения:</a>$arr[dayb] $mesyac[$mmon] $arr[yearofbirth]<br/>";
-                echo "<a href='anketa.php?act=site'>Сайт:</a>$arr[www]</p>";
+                echo '<div class="menu">Ник: <b>' . $login . '</b></div>';
+                echo '<div class="menu">Зарегистрирован' . ($arr['sex'] == 'm' ? '' : 'а') . ': ' . date("d.m.Y", $arr['datereg']) . '</div>';
+                echo '<div class="bmenu">Личные данные</div>';
+                echo '<div class="menu"><a href="anketa.php?act=name">Имя:</a> ' . $arr['imname'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=dr">Дата рождения:</a> ' . $arr['dayb'] . ' ' . $mesyac[$arr['monthb']] . ' ' . $arr['yearofbirth'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=gor">Город:</a> ' . $arr['live'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=inf">О себе:</a> ' . $arr['about'] . '</div>';
+                echo '<div class="bmenu">Связь</div>';
+                echo '<div class="menu"><a href="anketa.php?act=icq">ICQ:</a> ' . $arr['icq'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=mail">E-mail:</a> ' . $arr['mail'] . ($arr['mailact'] == 0 ? '(!)' : '') . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=mobila">Мобила:</a> ' . $arr['mibile'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=site">Сайт:</a> ' . $arr['www'] . '</div>';
+                echo '<div class="bmenu">Всего пробыл' . ($arr['sex'] == 'm' ? '' : 'а') . ' на сайте: ' . timecount($arr['total_on_site']) . '</div>';
                 echo '<p>';
                 $req = mysql_query("select * from `gallery` where `type`='al' and `user`='1' and `avtor`='" . $arr['name'] . "' LIMIT 1;");
                 if (mysql_num_rows($req) != 0)
@@ -443,8 +424,9 @@ if (!empty($_SESSION['uid']))
                 }
                 if ($dostadm == 1)
                 {
-                    echo "<a href='../" . $admp . "/editusers.php?act=edit&amp;user=" . $idus . "'>Редактировать свои данные</a><br/>";
+                    echo "<a href='../" . $admp . "/editusers.php?act=edit&amp;user=" . $idus . "'>Редактировать анкету</a><br/>";
                 }
+                echo '<div><a href="anketa.php?act=par&amp;user=' . $idus . '">Сменить пароль</a></div>';
                 echo '</p>';
                 require_once ("../incfiles/end.php");
                 exit;
