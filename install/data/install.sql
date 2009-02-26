@@ -317,6 +317,8 @@ CREATE TABLE `users` (
   `lastdate` int(11) NOT NULL,
   `mail` varchar(50) NOT NULL,
   `icq` int(9) NOT NULL,
+  `skype` varchar(50) NOT NULL,
+  `jabber` varchar(50) NOT NULL,
   `www` varchar(50) NOT NULL,
   `about` text NOT NULL,
   `live` varchar(50) NOT NULL,

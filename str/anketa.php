@@ -193,7 +193,7 @@ if (!empty($_SESSION['uid']))
                 break;
 
             case 'gor':
-                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editgor' method='post'>Изменить город(max. 20):<br/><input type='text' name='ngor' value='" . $arr[live] .
+                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editgor' method='post'>Изменить город(max. 20):<br/><input type='text' name='ngor' value='" . $arr['live'] .
                     "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus . "'>Назад</a><br/>";
                 break;
 
@@ -205,38 +205,62 @@ if (!empty($_SESSION['uid']))
                 break;
 
             case 'inf':
-                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editinf' method='post'>Изменить инфу(max. 500):<br/><input type='text' name='ninf' value='" . $arr[about] .
+                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editinf' method='post'>Изменить инфу(max. 500):<br/><input type='text' name='ninf' value='" . $arr['about'] .
                     "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus . "'>Назад</a><br/>";
                 break;
 
             case 'editinf':
                 $ninf = check(trim($_POST['ninf']));
                 $ninf = mb_substr($ninf, 0, 500);
-                mysql_query("update `users` set about='" . $ninf . "' where id='" . $_SESSION['uid'] . "';");
+                mysql_query("update `users` set about='" . $ninf . "' where id='" . $user_id . "';");
                 echo "Принято: $ninf<br/><a href='anketa.php?user=" . $idus . "'>Продолжить</a><br/>";
                 break;
 
             case 'icq':
-                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editicq' method='post'>Изменить ICQ:<br/><input type='text' name='nicq' value='" . $arr[icq] . "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus .
+                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editicq' method='post'>Изменить ICQ:<br/><input type='text' name='nicq' value='" . $arr['icq'] . "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus .
                     "'>Назад</a><br/>";
                 break;
 
             case 'editicq':
                 $nicq = intval($_POST['nicq']);
                 $nicq = substr($nicq, 0, 9);
-                mysql_query("update `users` set icq='" . $nicq . "' where id='" . $_SESSION['uid'] . "';");
+                mysql_query("update `users` set icq='" . $nicq . "' where id='" . $user_id . "';");
                 echo "Принято: $nicq<br/><a href='anketa.php?user=" . $idus . "'>Продолжить</a><br/>";
                 break;
 
+            case 'skype':
+                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editskype' method='post'>Изменить Skype(max. 30):<br/><input type='text' name='skype' value='" . $arr['skype'] .
+                    "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus . "'>Назад</a><br/>";
+                break;
+
+            case 'editskype':
+                $skype = check(trim($_POST['skype']));
+                $skype = mb_substr($skype, 0, 30);
+                mysql_query("UPDATE `users` SET `skype` = '" . $skype . "' WHERE `id` = '" . $user_id . "';");
+                echo "Принято: $skype<br/><a href='anketa.php?user=" . $idus . "'>Продолжить</a><br/>";
+                break;
+
+            case 'jabber':
+                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editjabber' method='post'>Изменить Jabber(max. 30):<br/><input type='text' name='jabber' value='" . $arr['jabber'] .
+                    "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus . "'>Назад</a><br/>";
+                break;
+
+            case 'editjabber':
+                $jabber = check(trim($_POST['jabber']));
+                $jabber = mb_substr($jabber, 0, 30);
+                mysql_query("UPDATE `users` SET `jabber` = '" . $jabber . "' WHERE `id` = '" . $user_id . "';");
+                echo "Принято: $jabber<br/><a href='anketa.php?user=" . $idus . "'>Продолжить</a><br/>";
+                break;
+
             case 'mobila':
-                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editmobila' method='post'>Изменить модель телефона(max.50):<br/><input type='text' name='nmobila' value='" . $arr[mibile] .
+                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editmobila' method='post'>Изменить номер телефона (max.20):<br/><input type='text' name='nmobila' value='" . $arr['mibile'] .
                     "' /><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus . "'>Назад</a><br/>";
                 break;
 
             case 'editmobila':
                 $nmobila = check(trim($_POST['nmobila']));
-                $nmobila = mb_substr($nmobila, 0, 50);
-                mysql_query("update `users` set mibile='" . $nmobila . "' where id='" . $_SESSION['uid'] . "';");
+                $nmobila = mb_substr($nmobila, 0, 20);
+                mysql_query("update `users` set `mibile` = '" . $nmobila . "' where id='" . $user_id . "';");
                 echo "Принято: $nmobila<br/><a href='anketa.php?user=" . $idus . "'>Продолжить</a><br/>";
                 break;
 
@@ -275,7 +299,7 @@ if (!empty($_SESSION['uid']))
                 break;
 
             case 'site':
-                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editsite' method='post'>Изменить сайт(max. 50):<br/><input type='text' name='nsite' value='" . $arr[www] .
+                echo "<form action='anketa.php?user=" . $idus . "&amp;act=editsite' method='post'>Изменить сайт(max. 50):<br/><input type='text' name='nsite' value='" . $arr['www'] .
                     "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $idus . "'>Назад</a><br/>";
                 break;
 
@@ -403,6 +427,8 @@ if (!empty($_SESSION['uid']))
                 ////////////////////////////////////////////////////////////
                 echo '<div class="phdr">Моя анкета</div>';
                 echo '<div class="menu">Ник: <b>' . $login . '</b></div>';
+                echo '<div class="menu">Логин: <b>' . $arr['name_lat'] . '</b></div>';
+                echo '<div class="menu">ID: <b>' . $arr['id'] . '</b></div>';
                 echo '<div class="menu">Зарегистрирован' . ($arr['sex'] == 'm' ? '' : 'а') . ': ' . date("d.m.Y", $arr['datereg']) . '</div>';
                 echo '<div class="bmenu">Личные данные</div>';
                 echo '<div class="menu"><a href="anketa.php?act=name">Имя:</a> ' . $arr['imname'] . '</div>';
@@ -411,8 +437,10 @@ if (!empty($_SESSION['uid']))
                 echo '<div class="menu"><a href="anketa.php?act=inf">О себе:</a> ' . $arr['about'] . '</div>';
                 echo '<div class="bmenu">Связь</div>';
                 echo '<div class="menu"><a href="anketa.php?act=icq">ICQ:</a> ' . $arr['icq'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=skype">Skype:</a> ' . $arr['skype'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=jabber">Jabber:</a> ' . $arr['jabber'] . '</div>';
                 echo '<div class="menu"><a href="anketa.php?act=mail">E-mail:</a> ' . $arr['mail'] . ($arr['mailact'] == 0 ? '(!)' : '') . '</div>';
-                echo '<div class="menu"><a href="anketa.php?act=mobila">Мобила:</a> ' . $arr['mibile'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=mobila">Телефон:</a> ' . $arr['mibile'] . '</div>';
                 echo '<div class="menu"><a href="anketa.php?act=site">Сайт:</a> ' . $arr['www'] . '</div>';
                 echo '<div class="bmenu">Всего пробыл' . ($arr['sex'] == 'm' ? '' : 'а') . ' на сайте: ' . timecount($arr['total_on_site']) . '</div>';
                 echo '<p>';
