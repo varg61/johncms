@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -42,8 +43,6 @@ if ($dostadm == 1)
     {
         echo 'ВНИМАНИЕ! ВЫ РЕДАКТИРУЕТЕ CОБСТВЕННЫЙ АККАУНТ<br/>';
     }
-    ################
-
 
     if (!empty($_GET['act']))
     {
@@ -75,39 +74,28 @@ if ($dostadm == 1)
             }
             break;
 
-
         case "edit":
-
-
-            $user = intval(check($_GET['user']));
-
+            $user = intval($_GET['user']);
             $q1 = @mysql_query("select * from `users` where id='" . $user . "';");
             $arr1 = @mysql_fetch_array($q1);
             echo "Профиль юзера $arr1[name]<br/>";
-            $usdata = array("name" => "Логин:", "par" => "ПАРОЛЬ:", "imname" => "Имя:", "status" => "Статус:", "live" => "Город:", "mibile" => "Мобила:", "mail" => "E-mail:", "icq" => "ICQ:", "www" => "Сайт:", "about" => "О себе:");
+            $usdata = array("name" => "Логин:", "par" => "ПАРОЛЬ:", "imname" => "Имя:", "status" => "Статус:", "live" => "Город:", "mibile" => "Мобила:", "mail" => "E-mail:", "icq" => "ICQ:", "skype" => "Skype:", "jabber" => "Jabber:", "www" => "Сайт:", "about" => "О себе:");
             if (isset($_GET['ok']))
             {
                 echo "Профиль изменён!<br/>";
             }
-
-            echo "<form action='editusers.php?act=yes&amp;user=" . intval(check($_GET['user'])) . "' method='post' >";
-
+            echo "<form action='editusers.php?act=yes&amp;user=" . intval($_GET['user']) . "' method='post' >";
             foreach ($usdata as $key => $value)
             {
                 echo "$usdata[$key]<br/><input type='text' name='" . $key . "' value='" . $userprof[$key] . "'/><br/>";
             }
-
-            if ($userprof[sex] == "m")
+            if ($userprof['sex'] == "m")
             {
                 echo 'Пол:<br/><select name=\'sex\' title=\'Пол\' value=\'' . $userprof['sex'] . '\'>' . '<option value=\'m\'>М</option>' . '<option value=\'zh\'>Ж</option></select><br/>';
             } else
             {
-
-
                 echo 'Пол:<br/><select name=\'sex\' title=\'Пол\' value=\'' . $userprof['sex'] . '\'>' . '<option value=\'zh\'>Ж</option>' . '<option value=\'m\'>М</option></select><br/>';
             }
-
-
             echo "Назначить:<br/>";
             if ($userprof['rights'] == "1")
             {
@@ -196,22 +184,25 @@ if ($dostadm == 1)
                 $par1 = md5(md5($par));
             } else
             {
-                $par1 = $userprof[password];
+                $par1 = $userprof['password'];
             }
-            $status = check($_POST['status']);
-            $name = check($_POST['name']);
-            $imname = check($_POST['imname']);
-            $sex = check($_POST['sex']);
-            $mibile = check($_POST['mibile']);
-            $mail = mysql_escape_string(htmlspecialchars($_POST['mail']));
-            $icq = intval(check($_POST['icq']));
-            $www = check($_POST['www']);
-            $about = check($_POST['about']);
-            $live = check($_POST['live']);
-            $rights = intval(check($_POST['admst']));
 
-            mysql_query("update `users` set name='" . $name . "', password='" . $par1 . "', imname='" . $imname . "', sex='" . $sex . "', mibile='" . $mibile . "', mail='" . $mail . "',rights='" . $rights . "', icq='" . $icq . "', www='" . $www .
-                "', about='" . $about . "', live='" . $live . "', status='" . $status . "'  where id='" . intval(check($_GET['user'])) . "';");
+            mysql_query("UPDATE `users` SET
+			`name` = '" . check($_POST['name']) . "',
+			`password` = '" . $par1 . "',
+			`imname` = '" . check($_POST['imname']) . "',
+			`sex` = '" . check($_POST['sex']) . "',
+			`mibile` = '" . check($_POST['mibile']) . "',
+			`mail` = '" . mysql_escape_string(htmlspecialchars($_POST['mail'])) . "',
+			`rights` = '" . intval($_POST['admst']) . "',
+			`icq` = '" . intval($_POST['icq']) . "',
+			`skype` = '" . check($_POST['skype']) . "',
+			`jabber` = '" . check($_POST['jabber']) . "',
+			`www` = '" . check($_POST['www']) . "',
+			`about` = '" . check($_POST['about']) . "',
+			`live` = '" . check($_POST['live']) . "',
+			`status` = '" . check($_POST['status']) . "'
+			WHERE `id` = '" . intval($_GET['user']) . "';");
             if (!empty($_POST['par']))
             {
                 echo "Вы изменили пароль юзера!<br/>Новый пароль: $par<br/>";
@@ -230,4 +221,5 @@ if ($dostadm == 1)
 
 
 require_once ("../incfiles/end.php");
+
 ?>

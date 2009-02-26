@@ -567,6 +567,10 @@ if (!empty($_SESSION['uid']))
         }
         if (!empty($arr['icq']))
             echo '<div class="menu"><u>ICQ</u>:&nbsp;<img src="http://web.icq.com/whitepages/online?icq=' . $arr['icq'] . '&amp;img=5" width="12" height="12" alt=""/>&nbsp;' . $arr['icq'] . '</div> ';
+        if (!empty($arr['skype']))
+            echo '<div class="menu"><u>Skype</u>:&nbsp;' . $arr['skype'] . '</div> ';
+        if (!empty($arr['jabber']))
+            echo '<div class="menu"><u>Jabber</u>:&nbsp;' . $arr['jabber'] . '</div> ';
         if (!empty($arr['www']) && $arr['www'] !== "http://" && stristr($arr['www'], "http://"))
         {
             $sait = str_replace("http://", "", $arr['www']);
