@@ -85,7 +85,7 @@ if (($dostfmod == 1) || (($arr1['from'] == $login) && ($arr1['id'] == $ms['id'])
     {
         echo '<div class="phdr"><b>Изменить сообщение</b></div>';
         echo '<div class="rmenu"><form action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
-        echo '<textarea cols="20" rows="3" name="msg">' . $ms['text'] . '</textarea><br/>';
+        echo '<textarea cols="20" rows="3" name="msg">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
         if ($offtr != 1)
         {
             echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";

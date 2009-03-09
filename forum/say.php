@@ -251,7 +251,8 @@ switch ($tip)
             echo '<div class="phdr">Тема: <b>' . $th1['text'] . '</b></div>';
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
-            echo '<form action="?act=say&amp;id=' . $id . '&amp;cyt" method="post" enctype="multipart/form-data">';
+            $qt = htmlentities($qt, ENT_QUOTES, 'UTF-8');
+			echo '<form action="?act=say&amp;id=' . $id . '&amp;cyt" method="post" enctype="multipart/form-data">';
             if (isset($_GET['cyt']))
             {
                 echo '<div class="menu"><b>Автор:</b> ' . $type1['from'] . '</div>';
