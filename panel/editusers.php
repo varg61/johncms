@@ -27,18 +27,15 @@ if ($dostadm == 1)
         require_once ("../incfiles/end.php");
         exit;
     }
-
     $qus = @mysql_query("select * from `users` where id='" . intval($_GET['user']) . "';");
     $userprof = @mysql_fetch_array($qus);
     $nam = trim($userprof['name']);
-
     if (($login !== $nickadmina) && ($nam == $nickadmina) || ($nam !== $login) && ($nickadmina !== $login) && ($rights == 7) && ($userprof['rights'] == "7"))
     {
         echo "У ВАС НЕДОСТАТОЧНО ПРАВ ДЛЯ ЭТОГО!<br/>";
         require_once ("../incfiles/end.php");
         exit;
     }
-
     if ($nam == $login)
     {
         echo 'ВНИМАНИЕ! ВЫ РЕДАКТИРУЕТЕ CОБСТВЕННЫЙ АККАУНТ<br/>';
@@ -51,13 +48,10 @@ if ($dostadm == 1)
     switch ($act)
     {
         case "del":
-            $user = intval(check($_GET['user']));
-
+            $user = intval($_GET['user']);
             $q1 = mysql_query("select * from `users` where id='" . $user . "';");
             $arr1 = mysql_fetch_array($q1);
-
-
-            if ($arr1['name'] != $nickadmina && $arr1['name'] != $nickadmina2)
+            if ($arr1['name'] != $nickadmina && $arr1['name'] != $nickadmina2 && $arr1['immunity'] == 0)
             {
                 if (isset($_GET['yes']))
                 {
@@ -70,7 +64,14 @@ if ($dostadm == 1)
                 }
             } else
             {
-                echo "Нельзя!!!!!<br/>";
+                echo '<p>Нельзя!!!<br/>';
+                if ($arr1['immunity'] == 1)
+                {
+                	echo 'Этот пользователь имеет иммунитет.</p>';
+                } else
+                {
+                	echo 'Нельзя удалять Суперадмина.</p>';
+                }
             }
             break;
 
@@ -78,25 +79,30 @@ if ($dostadm == 1)
             $user = intval($_GET['user']);
             $q1 = @mysql_query("select * from `users` where id='" . $user . "';");
             $arr1 = @mysql_fetch_array($q1);
-            echo "Профиль юзера $arr1[name]<br/>";
-            $usdata = array("name" => "Логин:", "par" => "ПАРОЛЬ:", "imname" => "Имя:", "status" => "Статус:", "live" => "Город:", "mibile" => "Мобила:", "mail" => "E-mail:", "icq" => "ICQ:", "skype" => "Skype:", "jabber" => "Jabber:", "www" => "Сайт:", "about" => "О себе:");
+            echo '<div class="phdr">Профиль юзера <b>' . $arr1['name'] . '</b></div>';
+            $usdata = array("name" => "Логин:", "par" => "ПАРОЛЬ:", "imname" => "Имя:", "status" => "Статус:", "live" => "Город:", "mibile" => "Мобила:", "mail" => "E-mail:", "icq" => "ICQ:", "skype" => "Skype:", "jabber" => "Jabber:", "www" => "Сайт:",
+                "about" => "О себе:");
             if (isset($_GET['ok']))
             {
-                echo "Профиль изменён!<br/>";
+                echo '<div class="rmenu">Профиль изменён!</div>';
             }
             echo "<form action='editusers.php?act=yes&amp;user=" . intval($_GET['user']) . "' method='post' >";
             foreach ($usdata as $key => $value)
             {
-                echo "$usdata[$key]<br/><input type='text' name='" . $key . "' value='" . $userprof[$key] . "'/><br/>";
+                echo '<div class="menu">' . $usdata[$key] . '<br/><input type="text" name="' . $key . '" value="' . $userprof[$key] . '"/></div>';
             }
+            echo '<div class="menu">';
             if ($userprof['sex'] == "m")
             {
-                echo 'Пол:<br/><select name=\'sex\' title=\'Пол\' value=\'' . $userprof['sex'] . '\'>' . '<option value=\'m\'>М</option>' . '<option value=\'zh\'>Ж</option></select><br/>';
+                echo 'Пол:&nbsp;<select name=\'sex\' title=\'Пол\' value=\'' . $userprof['sex'] . '\'>' . '<option value=\'m\'>М</option>' . '<option value=\'zh\'>Ж</option></select><br/>';
             } else
             {
-                echo 'Пол:<br/><select name=\'sex\' title=\'Пол\' value=\'' . $userprof['sex'] . '\'>' . '<option value=\'zh\'>Ж</option>' . '<option value=\'m\'>М</option></select><br/>';
+                echo 'Пол:&nbsp;<select name=\'sex\' title=\'Пол\' value=\'' . $userprof['sex'] . '\'>' . '<option value=\'zh\'>Ж</option>' . '<option value=\'m\'>М</option></select><br/>';
             }
-            echo "Назначить:<br/>";
+            echo '</div>';
+            if ($dostsadm)
+                echo '<div class="gmenu"><input name="immunity" type="checkbox" value="1" ' . ($arr1['immunity'] ? 'checked="checked"' : '') . ' />&nbsp;Иммунитет</div>';
+            echo '<div class="rmenu"><b>Должность:</b><br/>';
             if ($userprof['rights'] == "1")
             {
                 echo "<input name='admst' type='radio' value='1' checked='checked' />";
@@ -104,7 +110,7 @@ if ($dostadm == 1)
             {
                 echo "<input name='admst' type='radio' value='1'/>";
             }
-            echo "киллером<br/>";
+            echo '&nbsp;Киллер<br/>';
             if ($userprof['rights'] == "2")
             {
                 echo "<input name='admst' type='radio' value='2' checked='checked' />";
@@ -112,7 +118,7 @@ if ($dostadm == 1)
             {
                 echo "<input name='admst' type='radio' value='2'/>";
             }
-            echo "модером чата<br/>";
+            echo '&nbsp;Модер чата<br/>';
             if ($userprof['rights'] == "3")
             {
                 echo "<input name='admst' type='radio' value='3' checked='checked' />";
@@ -120,7 +126,7 @@ if ($dostadm == 1)
             {
                 echo "<input name='admst' type='radio' value='3'/>";
             }
-            echo "модером форума<br/>";
+            echo '&nbsp;Модер форума<br/>';
             if ($userprof['rights'] == "4")
             {
                 echo "<input name='admst' type='radio' value='4' checked='checked' />";
@@ -128,7 +134,7 @@ if ($dostadm == 1)
             {
                 echo "<input name='admst' type='radio' value='4'/>";
             }
-            echo "зам. админа по загрузкам<br/>";
+            echo '&nbsp;Модер по загрузкам<br/>';
 
             if ($userprof['rights'] == "5")
             {
@@ -137,7 +143,7 @@ if ($dostadm == 1)
             {
                 echo "<input name='admst' type='radio' value='5'/>";
             }
-            echo "зам. админа по библиотеке<br/>";
+            echo '&nbsp;Модер библиотеки<br/>';
 
             if ($userprof['rights'] == "6")
             {
@@ -146,7 +152,7 @@ if ($dostadm == 1)
             {
                 echo "<input name='admst' type='radio' value='6'/>";
             }
-            echo "супермодератором<br/>";
+            echo '&nbsp;Супермодератор<br/>';
             if ($dostsadm == 1)
             {
                 if ($userprof['rights'] == "7")
@@ -156,7 +162,7 @@ if ($dostadm == 1)
                 {
                     echo "<input name='admst' type='radio' value='7'/>";
                 }
-                echo "администратором<br/>";
+                echo '&nbsp;Администратор<br/>';
             } else
             {
                 if ($dostadm == 1 && $nam == $login)
@@ -166,15 +172,14 @@ if ($dostadm == 1)
             }
             if ($userprof['rights'] == "0")
             {
-                echo "<input name='admst' type='radio' value='0' checked='checked' />";
+                echo "<br /><input name='admst' type='radio' value='0' checked='checked' />";
             } else
             {
-                echo "<input name='admst' type='radio' value='0'/>";
+                echo "<br /><input name='admst' type='radio' value='0'/>";
             }
-            echo "Нулевой доступ<br/>";
-
-            print '<input type=\'submit\' value=\'ok\'/></form>';
-            echo "<a href='main.php'>В админку</a><br/>";
+            echo '&nbsp;Обычный юзер</div>';
+            echo '<div class="phdr"><input type="submit" value="Сохранить" /></div></form>';
+            echo '<p><a href="main.php">В админку</a></p>';
             break;
 
         case "yes":
@@ -186,30 +191,52 @@ if ($dostadm == 1)
             {
                 $par1 = $userprof['password'];
             }
-
-            mysql_query("UPDATE `users` SET
-			`name` = '" . check($_POST['name']) . "',
-			`password` = '" . $par1 . "',
-			`imname` = '" . check($_POST['imname']) . "',
-			`sex` = '" . check($_POST['sex']) . "',
-			`mibile` = '" . check($_POST['mibile']) . "',
-			`mail` = '" . mysql_escape_string(htmlspecialchars($_POST['mail'])) . "',
-			`rights` = '" . intval($_POST['admst']) . "',
-			`icq` = '" . intval($_POST['icq']) . "',
-			`skype` = '" . check($_POST['skype']) . "',
-			`jabber` = '" . check($_POST['jabber']) . "',
-			`www` = '" . check($_POST['www']) . "',
-			`about` = '" . check($_POST['about']) . "',
-			`live` = '" . check($_POST['live']) . "',
-			`status` = '" . check($_POST['status']) . "'
-			WHERE `id` = '" . intval($_GET['user']) . "';");
-            if (!empty($_POST['par']))
+            if ($dostsadm)
             {
-                echo "Вы изменили пароль юзера!<br/>Новый пароль: $par<br/>";
-                echo "<a href='main.php'>В админку</a><br/>";
+                mysql_query("UPDATE `users` SET
+				`name` = '" . check($_POST['name']) . "',
+				`password` = '" . $par1 . "',
+				`immunity` = '" . intval($_POST['immunity']) . "',
+				`imname` = '" . check($_POST['imname']) . "',
+				`sex` = '" . check($_POST['sex']) . "',
+				`mibile` = '" . check($_POST['mibile']) . "',
+				`mail` = '" . mysql_real_escape_string(htmlspecialchars($_POST['mail'])) . "',
+				`rights` = '" . intval($_POST['admst']) . "',
+				`icq` = '" . intval($_POST['icq']) . "',
+				`skype` = '" . check($_POST['skype']) . "',
+				`jabber` = '" . check($_POST['jabber']) . "',
+				`www` = '" . check($_POST['www']) . "',
+				`about` = '" . check($_POST['about']) . "',
+				`live` = '" . check($_POST['live']) . "',
+				`status` = '" . check($_POST['status']) . "'
+				WHERE `id` = '" . intval($_GET['user']) . "';");
             } else
             {
-                echo "Профиль изменён<br/><a href='main.php'>В админку</a><br/>";
+                mysql_query("UPDATE `users` SET
+				`name` = '" . check($_POST['name']) . "',
+				`password` = '" . $par1 . "',
+				`imname` = '" . check($_POST['imname']) . "',
+				`sex` = '" . check($_POST['sex']) . "',
+				`mibile` = '" . check($_POST['mibile']) . "',
+				`mail` = '" . mysql_real_escape_string(htmlspecialchars($_POST['mail'])) . "',
+				`rights` = '" . intval($_POST['admst']) . "',
+				`icq` = '" . intval($_POST['icq']) . "',
+				`skype` = '" . check($_POST['skype']) . "',
+				`jabber` = '" . check($_POST['jabber']) . "',
+				`www` = '" . check($_POST['www']) . "',
+				`about` = '" . check($_POST['about']) . "',
+				`live` = '" . check($_POST['live']) . "',
+				`status` = '" . check($_POST['status']) . "'
+				WHERE `id` = '" . intval($_GET['user']) . "';");
+            }
+            if (!empty($_POST['par']))
+            {
+                echo '<p>Вы изменили пароль юзера!<br/>Новый пароль: ' . $par . '<br/>';
+                echo '<a href="editusers.php?act=edit&amp;ok=1&amp;user=' . intval($_GET['user']) . '">Анкета</a></p><p>';
+                echo '<a href="main.php">В админку</a></p>';
+            } else
+            {
+                header("Location: editusers.php?act=edit&ok=1&user=" . intval($_GET['user']));
             }
 
             break;

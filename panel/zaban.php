@@ -261,6 +261,12 @@ if ($dostmod == 1)
                     require_once ("../incfiles/end.php");
                     exit;
                 }
+                if ($res['immunity'] == 1)
+                {
+                    echo '<p>Этот юзер имеет иммунитет, банить его нельзя.</p>';
+                    require_once ("../incfiles/end.php");
+                    exit;
+                }
                 // Обработка принятых из формы данных
                 if (isset($_POST['submit']))
                 {

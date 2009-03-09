@@ -89,6 +89,7 @@ switch ($do)
         // Модифицируем таблицу `users`
         mysql_query("ALTER TABLE `users` ADD `skype` VARCHAR( 50 ) NOT NULL AFTER `icq`");
         mysql_query("ALTER TABLE `users` ADD `jabber` VARCHAR( 50 ) NOT NULL AFTER `skype`");
+        mysql_query("ALTER TABLE `users` ADD `immunity` BOOL NOT NULL AFTER `id`");
         echo '<span class="green">OK</span> таблица users готова<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;

@@ -303,6 +303,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
+  `immunity` tinyint(1) NOT NULL,
   `name` varchar(20) NOT NULL,
   `name_lat` varchar(40) NOT NULL,
   `password` varchar(32) NOT NULL,
