@@ -451,7 +451,7 @@ if (in_array($act, $do))
                 break;
 
             default:
-                echo "<p><b>Ошибка!</b><br />Тема удалена или не существует!</p><p><a href='?'>В форум</a><br/>";
+                echo '<p><b>Ошибка!</b><br />Тема удалена или не существует!</p>';
                 break;
         }
     } else
@@ -479,7 +479,7 @@ if (in_array($act, $do))
     }
 
     // Навигация внизу страницы
-    echo '<p>' . ($id ? '<a href="index.php">К началу</a><br />' : '') . '<a href="search.php">Поиск по форуму</a>';
+    echo '<p>' . ($id ? '<a href="index.php">В Форум</a><br />' : '') . '<a href="search.php">Поиск по форуму</a>';
     if (!$id)
     {
         echo '<br /><a href="../str/usset.php?act=forum">Настройки форума</a><br/>';
