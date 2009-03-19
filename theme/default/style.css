@@ -135,10 +135,6 @@ hr{
 	border: 1px solid white;
 }
 
-.list1 img, .list2 img{
-	float: left;
-}
-
 .list2{
 	margin: 0px;
 	padding: 3px 4px 4px 4px;
