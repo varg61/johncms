@@ -23,7 +23,7 @@ if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
     require_once ("../incfiles/end.php");
     exit;
 }
-$agn = strtok($agn, ' ');
+$agn1 = strtok($agn, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "';");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
@@ -67,7 +67,7 @@ switch ($tip)
 			`time`='" . $realtime . "',
 			`from`='" . $login . "',
 			`ip`='" . $ipp . "',
-			`soft`='" . mysql_real_escape_string($agn) . "',
+			`soft`='" . mysql_real_escape_string($agn1) . "',
 			`text`='" . mysql_real_escape_string($msg) . "';");
             $fadd = mysql_insert_id();
             mysql_query("UPDATE `forum` SET  `time`='" . $realtime . "' WHERE `id`='" . $id . "';");
@@ -181,7 +181,7 @@ switch ($tip)
 			`from`='" . $login . "',
 			`to`='" . $to . "',
 			`ip`='" . $ipp . "',
-			`soft`='" . mysql_real_escape_string($agn) . "',
+			`soft`='" . mysql_real_escape_string($agn1) . "',
 			`text`='" . mysql_real_escape_string($msg) . "';");
             $fadd = mysql_insert_id();
             mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $th . "';");
