@@ -106,10 +106,19 @@ switch ($act)
         // Задаем куда вставляем, в Админ клуб (1), или в Гастивуху (0)
         $admset = isset($_SESSION['ga']) ? 1:
         0;
-        $req = mysql_query("SELECT * FROM `guest` WHERE `soft`='" . mysql_real_escape_string($agn) . "' AND `time` >='" . ($realtime - 30) . "' AND `ip` ='" . $ipl . "' AND `adm`='" . $admset . "';");
-        if (mysql_num_rows($req) > 0)
+        // Антиспам, проверка на частоту добавления сообщений
+        if ($user_id)
         {
-            echo "<p><b>Антифлуд!</b><br />Вы не можете так часто добавлять сообщения<br/>Порог 30 секунд<br/><br/><a href='guest.php'>Назад</a></p>";
+            $old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
+            $spam = $lastpost > ($realtime - $old) ? 1 : false;
+        } else
+        {
+            $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `soft`='" . mysql_real_escape_string($agn) . "' AND `time` >='" . ($realtime - 30) . "' AND `ip` ='" . $ipl . "' AND `adm`='" . $admset . "';");
+            $spam = mysql_result($req, 0) > 0 ? 1 : false;
+        }
+        if ($spam)
+        {
+            echo "<p><b>Антифлуд!</b><br />Вы не можете так часто добавлять сообщения<br/>Порог $old секунд<br/><br/><a href='guest.php'>Назад</a></p>";
             require_once ("../incfiles/end.php");
             exit;
         }
@@ -139,6 +148,9 @@ switch ($act)
 		`text`='" . mysql_real_escape_string($msg) . "',
 		`ip`='" . $ipl . "',
 		`soft`='" . mysql_real_escape_string($agn) . "';");
+        // Фиксируем время последнего поста (антиспам)
+        if ($user_id)
+            mysql_query("UPDATE `users` SET `lastpost` = '" . $realtime . "' WHERE `id` = '" . $user_id . "'");
         header("location: guest.php");
         break;
 

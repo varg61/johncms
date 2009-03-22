@@ -228,6 +228,7 @@ if ($user_id && $user_ps)
             $chmes = $datauser['chmes'];
             $rights = $datauser['rights'];
             $lastdate = $datauser['lastdate'];
+            $lastpost = $datauser['lastpost'];
             mysql_free_result($req);
 
             ////////////////////////////////////////////////////////////

@@ -359,6 +359,7 @@ CREATE TABLE `users` (
   `total_on_site` int(11) NOT NULL default '0',
   `digest` tinyint(4) NOT NULL default '1',
   `skin` varchar(15) NOT NULL,
+  `lastpost` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `name_lat` (`name_lat`),
   KEY `lastdate` (`lastdate`)
