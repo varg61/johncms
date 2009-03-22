@@ -310,9 +310,8 @@ function hrefCallback($p)
     ////////////////////////////////////////////////////////////
     // Служебная функция парсинга URL                         //
     ////////////////////////////////////////////////////////////
-    $name = htmlspecialchars($p[0]);
-    $href = !empty($p[1]) ? $name : "http://$name";
-    return "<a href=\"$href\">$name</a>";
+    $href = !empty($p[1]) ? $p[0] : 'http://' . $p[0];
+    return '<a href="' . $href . '">' . $p[0] . '</a>';
 }
 
 function antilink($var)
