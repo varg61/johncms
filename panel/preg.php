@@ -59,7 +59,7 @@ if ($dostadm == 1)
                         print '<br />Отклонил <b>' . $reg1['regadm'] . '</b>';
                     }
                     $agent = strtok($reg1['browser'], ' ');
-					echo '<div class="sub"><u>Agent</u>:&nbsp;' . $agent . '<br /><u>IP</u>:&nbsp;' . long2ip($reg1['ip']) . '</div>';
+					echo '<div class="sub"><u>UA</u>:&nbsp;' . $agent . '<br /><u>IP</u>:&nbsp;' . long2ip($reg1['ip']) . '</div>';
                     echo '</div>';
                 }
                 ++$i;
