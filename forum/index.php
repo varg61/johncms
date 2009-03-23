@@ -150,7 +150,6 @@ if (in_array($act, $do))
                     }
                     $nam = mysql_fetch_array($nikuser);
                     // Выводим список тем
-                    //echo '<div class="menu">';
                     if ($mass['vip'] == 1)
                     {
                         echo '<img src="../theme/' . $skin . '/images/pt.gif" alt=""/>';
@@ -183,7 +182,8 @@ if (in_array($act, $do))
                     {
                         echo '&nbsp;/&nbsp;' . $nam['from'];
                     }
-                    echo ' <font color="#777777">' . date("d.m.y / H:i", $mass['time']) . "</font></div></div>";
+                    $vrp = $mass['time'] + $sdvig * 3600;
+					echo ' <font color="#777777">' . date("d.m.y / H:i", $vrp) . "</font></div></div>";
                     ++$i;
                 }
                 echo '<div class="phdr">Всего: ' . $coltem . '</div>';
