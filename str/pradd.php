@@ -21,16 +21,6 @@ require_once ("../incfiles/core.php");
 
 if ($user_id)
 {
-    // Проверка на спам
-    $old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
-    if ($lastpost > ($realtime - $old))
-    {
-        require_once ("../incfiles/head.php");
-		echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='privat.php'>Назад</a></p>";
-        require_once ("../incfiles/end.php");
-        exit;
-    }
-
     $msg = check(trim($_POST['msg']));
     if ($_POST['msgtrans'] == 1)
     {
@@ -47,6 +37,18 @@ if ($user_id)
             ////////////////////////////////////////////////////////////
             // Отправка письма и обработка прикрепленного файла       //
             ////////////////////////////////////////////////////////////
+
+            // Проверка на спам
+            $old = ($rights > 0 || $dostsadm = 1) ? 10:
+            30;
+            if ($lastpost > ($realtime - $old))
+            {
+                require_once ("../incfiles/head.php");
+                echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='privat.php'>Назад</a></p>";
+                require_once ("../incfiles/end.php");
+                exit;
+            }
+
             if ($ban['1'] || $ban['3'])
                 exit;
             require_once ("../incfiles/head.php");
@@ -243,6 +245,18 @@ if ($user_id)
             ////////////////////////////////////////////////////////////
             if ($ban['1'] || $ban['3'])
                 exit;
+
+            // Проверка на спам
+            $old = ($rights > 0 || $dostsadm = 1) ? 10:
+            30;
+            if ($lastpost > ($realtime - $old))
+            {
+                require_once ("../incfiles/head.php");
+                echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='privat.php'>Назад</a></p>";
+                require_once ("../incfiles/end.php");
+                exit;
+            }
+
             require_once ("../incfiles/head.php");
             if (!empty($_GET['adr']))
             {
