@@ -163,7 +163,6 @@ $good_files = array(
 '../panel/index.php',
 '../panel/ipban.php',
 '../panel/main.php',
-'../panel/news.php',
 '../panel/preg.php',
 '../panel/scan_class.php',
 '../panel/scan_list.php',
@@ -199,10 +198,7 @@ $good_files = array(
 '../in.php',
 '../index.php',
 '../read.php',
-'../registration.php',
-'',
-'',
-'',
+'../registration.php'
 );
 
 ?>
