@@ -77,8 +77,8 @@ if ($dostadm == 1) {
 
         case "edit":
             $user = intval($_GET['user']);
-            $q1 = @mysql_query("select * from `users` where id='" . $user . "';");
-            $arr1 = @mysql_fetch_array($q1);
+            $q1 = mysql_query("select * from `users` where `id` = '" . $user . "';");
+            $arr1 = mysql_fetch_array($q1);
             echo '<div class="phdr">Профиль юзера <b>' . $arr1['name'] . '</b></div>';
             $usdata = array("name" => "Логин:", "par" => "ПАРОЛЬ:", "imname" => "Имя:",
                 "status" => "Статус:", "live" => "Город:", "mibile" => "Мобила:", "mail" =>
@@ -102,6 +102,18 @@ if ($dostadm == 1) {
                     '\'>' . '<option value=\'zh\'>Ж</option>' . '<option value=\'m\'>М</option></select><br/>';
             }
             echo '</div>';
+                echo '<div class="menu">Изменить скин<br/>';
+                echo '<select name="skin">';
+                $dr = opendir('../theme');
+				while ($skindef = readdir($dr))
+                {
+                    if (($skindef != ".") && ($skindef != ".."))
+                    {
+                        $skindef = str_replace(".css", "", $skindef);
+                        echo '<option' . ($arr1['skin'] == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
+                    }
+                }
+                echo '</select></div>';
             if ($dostsadm)
                 echo '<div class="gmenu"><input name="immunity" type="checkbox" value="1" ' . ($arr1['immunity'] ?
                     'checked="checked"' : '') . ' />&nbsp;Иммунитет</div>';
@@ -190,7 +202,8 @@ if ($dostadm == 1) {
 				`www` = '" . check($_POST['www']) . "',
 				`about` = '" . check($_POST['about']) . "',
 				`live` = '" . check($_POST['live']) . "',
-				`status` = '" . check($_POST['status']) . "'
+				`status` = '" . check($_POST['status']) . "',
+				`skin`='" . check(trim($_POST['skin'])) . "'
 				WHERE `id` = '" . intval($_GET['user']) . "';");
             } else {
                 mysql_query("UPDATE `users` SET
@@ -208,7 +221,8 @@ if ($dostadm == 1) {
 				`www` = '" . check($_POST['www']) . "',
 				`about` = '" . check($_POST['about']) . "',
 				`live` = '" . check($_POST['live']) . "',
-				`status` = '" . check($_POST['status']) . "'
+				`status` = '" . check($_POST['status']) . "',
+				`skin`='" . check(trim($_POST['skin'])) . "'
 				WHERE `id` = '" . intval($_GET['user']) . "';");
             }
             if (!empty($_POST['par'])) {
