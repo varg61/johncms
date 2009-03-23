@@ -183,7 +183,7 @@ if (in_array($act, $do))
                         echo '&nbsp;/&nbsp;' . $nam['from'];
                     }
                     $vrp = $mass['time'] + $sdvig * 3600;
-					echo ' <font color="#777777">' . date("d.m.y / H:i", $vrp) . "</font></div></div>";
+                    echo ' <font color="#777777">' . date("d.m.y / H:i", $vrp) . "</font></div></div>";
                     ++$i;
                 }
                 echo '<div class="phdr">Всего: ' . $coltem . '</div>';
@@ -222,7 +222,9 @@ if (in_array($act, $do))
                 }
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $id . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
                 $colmes = mysql_result($req, 0);
-                $q1 = mysql_query("SELECT * FROM `forum` WHERE type='m' AND refid='" . $id . ($dostadm == 1 ? "'" : "' AND close!='1'") . "  ORDER BY time LIMIT " . $start . ", " . $kmess . " ;");
+                $order = $datauser['upfp'] == 1 ? 'DESC':
+                'ASC';
+                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $id . ($dostadm == 1 ? "'" : "' AND `close` != '1'") . "  ORDER BY `time` " . $order . " LIMIT " . $start . ", " . $kmess . " ;");
                 $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1");
                 $razd = mysql_fetch_array($q3);
                 $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1");
@@ -450,7 +452,7 @@ if (in_array($act, $do))
                         echo '</form>';
                     } else
                     {
-                    	echo '</div></p>';
+                        echo '</div></p>';
                     }
                 }
                 if (!empty($_SESSION['uid']))
