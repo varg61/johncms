@@ -48,7 +48,7 @@ if ($user_id)
 }
 
 $act = isset($_GET['act']) ? $_GET['act'] : '';
-$do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'fmoder', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans');
+$do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'fmoder', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel');
 if (in_array($act, $do))
 {
     require_once ($act . '.php');
@@ -139,7 +139,7 @@ if (in_array($act, $do))
                 while ($mass = mysql_fetch_array($q1))
                 {
                     echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
-					$colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
+                    $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC LIMIT 1;");
                     $colmes1 = mysql_result($colmes, 0);
                     $cpg = ceil($colmes1 / $kmess);
@@ -184,8 +184,8 @@ if (in_array($act, $do))
                         echo '&nbsp;/&nbsp;' . $nam['from'];
                     }
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $mass['time']) . "</font></div></div>";
-                ++$i;
-				}
+                    ++$i;
+                }
                 echo '<div class="phdr">Всего: ' . $coltem . '</div>';
                 if ($coltem > $kmess)
                 {
@@ -259,6 +259,8 @@ if (in_array($act, $do))
                     }
                 }
                 echo '<a name="up" id="up"></a><a href="#down">Вниз</a><hr />';
+                if ($dostsmod == 1)
+                    echo '<form action="index.php?act=massdel" method="post">';
                 while ($mass = mysql_fetch_array($q1))
                 {
                     if ($i >= 0 && $i < $colmes)
@@ -330,7 +332,7 @@ if (in_array($act, $do))
                         }
                         if ($mass['close'] == 1)
                         {
-                            echo "Пост удалён!<br/>";
+                            echo '<font color="#FF0000">Пост удалён!</font><br/>';
                         }
                         if (!empty($mass['to']))
                         {
@@ -389,14 +391,14 @@ if (in_array($act, $do))
                         }
                         if ($dostfmod == 1)
                         {
-                            echo "|<a href='?act=delpost&amp;id=" . $mass['id'] . "'>Удалить</a><br/>";
+                            echo "<br /><input type='checkbox' name='delch[]' value='" . $mass['id'] . "'/>&nbsp;<a href='?act=delpost&amp;id=" . $mass['id'] . "'>Удалить</a><br/>";
                             echo "$mass[ip] - $mass[soft]<br/>";
                         }
                         echo '</div>';
                     }
                     ++$i;
                 }
-                echo "<hr /><div id='down'><a href='#up'>Вверх</a></div>";
+                echo '<hr /><div id="down"><a href="#up">Вверх</a></div>';
                 if ($type1['edit'] != 1 && $user_id && $upfp != 1 && !$ban['1'] && !$ban['11'])
                 {
                     if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
@@ -441,7 +443,15 @@ if (in_array($act, $do))
                     {
                         echo "<a href='index.php?act=vip&amp;id=" . $id . "&amp;vip'>Закрепить тему</a>";
                     }
-                    echo "<br/><a href='index.php?act=per&amp;id=" . $id . "'>Переместить тему</a></div></p>";
+                    echo "<br/><a href='index.php?act=per&amp;id=" . $id . "'>Переместить тему</a><br /><br />";
+                    if ($dostsmod == 1)
+                    {
+                        echo "<input type='submit' value='Удалить отмеченные'/></div></p>";
+                        echo '</form>';
+                    } else
+                    {
+                    	echo '</div></p>';
+                    }
                 }
                 if (!empty($_SESSION['uid']))
                 {
