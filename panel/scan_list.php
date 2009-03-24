@@ -90,6 +90,7 @@ $good_files = array(
 '../forum/fmoder.php',
 '../forum/index.php',
 '../forum/loadtem.php',
+'../forum/massdel.php',
 '../forum/moders.php',
 '../forum/new.php',
 '../forum/nt.php',
