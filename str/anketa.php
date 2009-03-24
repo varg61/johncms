@@ -652,19 +652,19 @@ if (!empty($_SESSION['uid']))
 
         if ($dostmod == 1)
         {
-            echo '<p>IP: ' . long2ip($arr['ip']) . '<br/>Browser: ' . $arr['browser'] . '</p>';
+            echo '<p>IP: ' . long2ip($arr['ip']) . '<br/>Browser: ' . $arr['browser'] . '</p><p>';
             if ($arr['immunity'] == 1)
             {
-            	echo '<p>[!]&nbsp;Иммунитет<br />';
+            	echo '[!]&nbsp;Иммунитет<br />';
             } else
             {
                 if ($dostsmod == 1)
                 {
-                    echo "<p><a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $arr['id'] . "'>Банить</a><br/>";
+                    echo "<a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $arr['id'] . "'>Банить</a><br/>";
                 } elseif ($dostfmod == 1 && isset($_GET['fid']))
                 {
                     $fid = intval($_GET['fid']);
-                    echo '<p><a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $arr['id'] . '&amp;fid=' . $fid . '">Пнуть из форума</a><br/>';
+                    echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $arr['id'] . '&amp;fid=' . $fid . '">Пнуть из форума</a><br/>';
                 }
             }
             if ($dostadm == "1")
