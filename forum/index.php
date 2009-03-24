@@ -393,7 +393,10 @@ if (in_array($act, $do))
                         }
                         if ($dostfmod == 1)
                         {
-                            echo "<br /><input type='checkbox' name='delch[]' value='" . $mass['id'] . "'/>&nbsp;<a href='?act=delpost&amp;id=" . $mass['id'] . "'>Удалить</a><br/>";
+                            echo '<br />';
+                            if ($dostsmod == 1)
+                                echo '<input type="checkbox" name="delch[]" value="' . $mass['id'] . '"/>&nbsp;';
+                            echo '<a href="?act=delpost&amp;id=' . $mass['id'] . '">Удалить</a><br/>';
                             echo "$mass[ip] - $mass[soft]<br/>";
                         }
                         echo '</div>';
