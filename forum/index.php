@@ -356,7 +356,7 @@ if (in_array($act, $do))
                         } else
                         {
                             // Или, обрабатываем тэги и выводим весь текст
-                            $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
+                            $text = check($text);
                             if ($offsm != 1)
                             {
                                 $text = smiles($text);

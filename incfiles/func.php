@@ -293,7 +293,7 @@ function tags($var = '')
     ////////////////////////////////////////////////////////////
     // Обработка ссылок и тэгов BBCODE в тексте               //
     ////////////////////////////////////////////////////////////
-    $var = preg_replace_callback('{(?:(\w+://)|www\.|wap\.)[\w-]+(\.[\w-]+)*(?: : \d+)?[^<>"\'()\[\]\s]*(?:(?<! [[:punct:]])|(?<= [-/&+*]))}xis', "hrefCallback", $var);
+	$var = preg_replace_callback('{(?:(\w+://)|www\.|wap\.)[\w-]+(\.[\w-]+)*(?: : \d+)?[^<>"\'()\[\]\s]*(?:(?<! [[:punct:]])|(?<= [-/&+*;]))}xis', "hrefCallback", $var);
     $var = preg_replace('#\[b\](.*?)\[/b\]#si', '<span style="font-weight: bold;">\1</span>', $var);
     $var = preg_replace('#\[i\](.*?)\[/i\]#si', '<span style="font-style:italic;">\1</span>', $var);
     $var = preg_replace('#\[u\](.*?)\[/u\]#si', '<span style="text-decoration:underline;">\1</span>', $var);
@@ -301,7 +301,7 @@ function tags($var = '')
     $var = preg_replace('#\[red\](.*?)\[/red\]#si', '<span style="color:red">\1</span>', $var);
     $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
-    //$var = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/;%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $var);
+    $var = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/;%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $var);
     return $var;
 }
 
@@ -401,7 +401,7 @@ function pagenav($base_url, $start, $max_value, $num_per_page)
     if ($start + $num_per_page <= $max_value)
     {
         $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start + $num_per_page);
-		$pageindex .= sprintf($base_link, $display_page, '&gt;&gt;');
+        $pageindex .= sprintf($base_link, $display_page, '&gt;&gt;');
     }
     return $pageindex;
 }
@@ -521,8 +521,6 @@ function format($name)
 // Проверка переменных
 function check($str)
 {
-    if (get_magic_quotes_gpc())
-        $str = stripslashes($str);
     $str = htmlentities($str, ENT_QUOTES, 'UTF-8');
     $str = str_replace("\'", "&#39;", $str);
     $str = str_replace("\r\n", "<br/>", $str);
