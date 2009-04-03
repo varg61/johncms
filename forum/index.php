@@ -403,7 +403,15 @@ if (in_array($act, $do))
                     }
                     ++$i;
                 }
-                echo '<hr /><div id="down"><a href="#up">Вверх</a></div>';
+                echo '<hr />';
+                if ($dostsmod == 1)
+                {
+                    echo "<input type='submit' value='Удалить отмеченные'/>";
+                    echo '</form>';
+                }
+
+
+                echo '<div id="down"><a href="#up">Вверх</a></div>';
                 if ($type1['edit'] != 1 && $user_id && $upfp != 1 && !$ban['1'] && !$ban['11'])
                 {
                     if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
@@ -448,15 +456,7 @@ if (in_array($act, $do))
                     {
                         echo "<a href='index.php?act=vip&amp;id=" . $id . "&amp;vip'>Закрепить тему</a>";
                     }
-                    echo "<br/><a href='index.php?act=per&amp;id=" . $id . "'>Переместить тему</a><br /><br />";
-                    if ($dostsmod == 1)
-                    {
-                        echo "<input type='submit' value='Удалить отмеченные'/></div></p>";
-                        echo '</form>';
-                    } else
-                    {
-                        echo '</div></p>';
-                    }
+                    echo "<br/><a href='index.php?act=per&amp;id=" . $id . "'>Переместить тему</a></div></p>";
                 }
                 if (!empty($_SESSION['uid']))
                 {
