@@ -83,7 +83,7 @@ switch ($do)
             {
                 echo '<form action="news.php?do=add" method="post">';
                 echo 'Заголовок:<br/><input type="text" name="name"/><br/>';
-                echo 'Текст:<br/><textarea cols="20" rows="4" name="text"/><br/><br/>';
+                echo 'Текст:<br/><textarea cols="20" rows="4" name="text"></textarea><br/><br/>';
                 echo 'Выберите раздел форума для обсуждения новости:<br/>';
                 $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
                 echo '<input type="radio" name="pf" value="0" checked="checked" />Не обсуждать<br />';
