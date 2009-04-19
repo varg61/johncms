@@ -222,19 +222,23 @@ if (in_array($act, $do))
                 }
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $id . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
                 $colmes = mysql_result($req, 0);
-                $order = $datauser['upfp'] == 1 ? 'DESC':
-                'ASC';
+                // Задаем правила сортировки (новые внизу / вверху)
+                if ($user_id)
+                {
+                    $order = $datauser['upfp'] == 1 ? 'DESC' : 'ASC';
+                } else
+                {
+                	$order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
+                }
                 $q1 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $id . ($dostadm == 1 ? "'" : "' AND `close` != '1'") . "  ORDER BY `time` " . $order . " LIMIT " . $start . ", " . $kmess . " ;");
                 $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1");
                 $razd = mysql_fetch_array($q3);
                 $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1");
                 $frm = mysql_fetch_array($q4);
-
                 // Панель навигации
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>';
                 echo '</div>';
-
                 // Выводим название топика
                 echo "<br /><b>$type1[text]</b><br/>Сообщений: $colmes<br/>";
                 if ($type1['edit'] == 1)
@@ -409,8 +413,6 @@ if (in_array($act, $do))
                     echo "<input type='submit' value='Удалить отмеченные'/>";
                     echo '</form>';
                 }
-
-
                 echo '<div id="down"><a href="#up">Вверх</a></div>';
                 if ($type1['edit'] != 1 && $user_id && $upfp != 1 && !$ban['1'] && !$ban['11'])
                 {
@@ -497,14 +499,13 @@ if (in_array($act, $do))
     echo '<p>' . ($id ? '<a href="index.php">В Форум</a><br />' : '') . '<a href="search.php">Поиск по форуму</a>';
     if (!$id)
     {
-        echo '<br /><a href="../str/usset.php?act=forum">Настройки форума</a><br/>';
-        echo '<a href="index.php?act=read">Правила форума</a><br/>';
+        echo '<br /><a href="index.php?act=read">Правила форума</a><br/>';
         echo '<a href="index.php?act=moders&amp;id=' . $id . '">Модераторы</a><br />';
         echo '<a href="index.php?act=faq">FAQ</a>';
     }
     echo '</p>';
 
-    if (empty($_SESSION['uid']))
+    if (!$user_id)
     {
         if ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0))
         {
