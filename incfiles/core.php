@@ -20,11 +20,6 @@ Error_Reporting(E_ALL & ~ E_NOTICE);
 Error_Reporting(ERROR | WARNING);
 mb_internal_encoding('UTF-8');
 
-// Включаем замер времени генерации страницы
-$mtime = explode(' ', microtime());
-$mtime = $mtime[1] + $mtime[0];
-$starttime = $mtime;
-
 if (!isset($rootpath))
     $rootpath = '../';
 
