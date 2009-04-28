@@ -32,7 +32,6 @@ function counters()
 			$count = ($headmod == 'mainpage') ? $link1 : $link2;
             if (!empty($count))
                 echo $count;
-                echo $headmod;
         }
     }
 }
