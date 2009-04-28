@@ -34,6 +34,21 @@ CREATE TABLE `cms_ban_users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
+-- Структура таблицы `cms_counters`
+--
+DROP TABLE IF EXISTS `cms_counters`;
+CREATE TABLE IF NOT EXISTS `cms_counters` (
+  `id` int(11) NOT NULL auto_increment,
+  `sort` int(11) NOT NULL default '1',
+  `name` varchar(30) NOT NULL,
+  `link1` text NOT NULL,
+  `link2` text NOT NULL,
+  `mode` tinyint(4) NOT NULL default '1',
+  `switch` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
 -- Структура таблицы `chat`
 --
 DROP TABLE IF EXISTS `chat`;

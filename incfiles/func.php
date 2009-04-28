@@ -17,21 +17,20 @@
 defined('_IN_JOHNCMS') or die('Error:restricted access');
 
 ////////////////////////////////////////////////////////////
-// Показ различных счетчиков                              //
+// Показ различных счетчиков внизу страницы               //
 ////////////////////////////////////////////////////////////
 function counters()
 {
     global $headmod;
-    if ($headmod == "mainpage")
+    $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
+    if (mysql_num_rows($req) > 0)
     {
-        // Тут, вставляем коды счетчиков, которые будут выводиться
-        // ТОЛЬКО на главной странице сайта
-        echo 'dsf';
-    } else
-    {
-        // Тут, вставляем коды счетчиков, которые будут выводиться
-        // на ВСЕХ страницах сайта, кроме Главной
-        echo '';
+        while ($res = mysql_fetch_array($req))
+        {
+            $count = ($headmod == "mainpage") ? $res['link1'] : $res['link2'];
+            if (!empty($count))
+                echo $count;
+        }
     }
 }
 
@@ -43,7 +42,7 @@ function usersonline()
     global $realtime;
     global $user_id;
     global $home;
-	$ontime = $realtime - 300;
+    $ontime = $realtime - 300;
     $qon = mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate`>='" . $ontime . "';");
     $qon2 = mysql_result($qon, 0);
     $all = mysql_query("SELECT `id` FROM `count` WHERE `time`>='" . $ontime . "' GROUP BY `ip`, `browser`;");

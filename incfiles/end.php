@@ -49,7 +49,7 @@ counters(); // Счетчики каталогов
 // Данный копирайт нельзя убирать в течение 60 дней       //
 // с момента установки скриптов                           //
 ////////////////////////////////////////////////////////////
-echo '<div><a href="http://johncms.com">JohnCMS</a></div>';
+echo '<div><small><a href="http://johncms.com">JohnCMS</a></small></div>';
 echo '</div></body></html>';
 
 ?>
