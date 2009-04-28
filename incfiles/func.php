@@ -27,9 +27,12 @@ function counters()
     {
         while ($res = mysql_fetch_array($req))
         {
-            $count = ($headmod == "mainpage") ? $res['link1'] : $res['link2'];
+            $link1 = ($res['mode'] == 1 || $res['mode'] == 2) ? $res['link1'] : $res['link2'];
+            $link2 = $res['mode'] == 2 ? $res['link1'] : $res['link2'];
+			$count = ($headmod == 'mainpage') ? $link1 : $link2;
             if (!empty($count))
                 echo $count;
+                echo $headmod;
         }
     }
 }
