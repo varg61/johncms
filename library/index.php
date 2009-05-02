@@ -104,7 +104,7 @@ if (in_array($act, $do))
             } elseif ($totalbk > 0)
             {
                 $total = $totalbk;
-                $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by time desc LIMIT " . $start . "," . $kmess . ";");
+                $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by `time` desc LIMIT " . $start . "," . $kmess . ";");
                 while ($bk1 = mysql_fetch_array($bk))
                 {
                     echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
@@ -124,7 +124,6 @@ if (in_array($act, $do))
             echo '<p>';
             // Навигация по страницам
             if ($total > $kmess) //TODO: Доделать переход к странице из формы
-
             {
                 echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
