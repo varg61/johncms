@@ -159,6 +159,7 @@ $good_files = array(
 '../pages/index.php',
 '../pages/mainmenu.php',
 '../panel/chat.php',
+'../panel/counters.php',
 '../panel/editusers.php',
 '../panel/forum.php',
 '../panel/index.php',
