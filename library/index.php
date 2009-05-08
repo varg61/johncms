@@ -28,7 +28,6 @@ if (!$set['mod_lib'] && $dostadm != 1)
     exit;
 }
 
-$act = isset($_GET['act']) ? $_GET['act'] : '';
 $do = array('java', 'symb', 'search', 'new', 'moder', 'addkomm', 'komm', 'del', 'edit', 'load', 'write', 'mkcat', 'topread', 'trans');
 if (in_array($act, $do))
 {
