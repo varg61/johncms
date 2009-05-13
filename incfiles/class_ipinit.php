@@ -49,7 +49,7 @@ class ipinit
         } elseif ($ip2 && $ip2 > 184549376)
         {
             return $ip2;
-        } elseif ($ip3 && $ip3 > 184549376)
+        } elseif ($ip3)
         {
             return $ip3;
         } else
