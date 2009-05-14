@@ -29,7 +29,7 @@ function counters()
         {
             $link1 = ($res['mode'] == 1 || $res['mode'] == 2) ? $res['link1'] : $res['link2'];
             $link2 = $res['mode'] == 2 ? $res['link1'] : $res['link2'];
-			$count = ($headmod == 'mainpage') ? $link1 : $link2;
+            $count = ($headmod == 'mainpage') ? $link1 : $link2;
             if (!empty($count))
                 echo $count;
         }
@@ -614,7 +614,7 @@ function format($name)
 
 function smiles($str)
 {
-    $dir = opendir("../sm/prost");
+    $dir = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/prost");
     while ($file = readdir($dir))
     {
         if (ereg(".gif$", "$file"))
@@ -630,7 +630,7 @@ function smiles($str)
 
 function smilesadm($str)
 {
-    $dir = opendir("../sm/adm");
+    $dir = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/adm");
     while ($file = readdir($dir))
     {
         if (ereg(".gif$", "$file"))
@@ -648,7 +648,7 @@ function smilesadm($str)
 
 function smilescat($str)
 {
-    $dir = opendir("../sm/cat");
+    $dir = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/cat");
     while ($file = readdir($dir))
     {
         if (($file != ".") && ($file != "..") && ($file != ".htaccess") && ($file != "index.php"))
@@ -660,7 +660,7 @@ function smilescat($str)
     $total = count($a);
     for ($a1 = 0; $a1 < $total; $a1++)
     {
-        $d = opendir("../sm/cat/$a[$a1]");
+        $d = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/cat/$a[$a1]");
         while ($k = readdir($d))
         {
             if (ereg(".gif$", "$k"))
