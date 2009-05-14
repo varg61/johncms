@@ -265,7 +265,7 @@ if (in_array($act, $do))
                     }
                 }
                 echo '<a name="up" id="up"></a><a href="#down">Вниз</a><hr />';
-                if ($dostsmod == 1)
+                if ($dostfmod == 1)
                     echo '<form action="index.php?act=massdel" method="post">';
                 while ($mass = mysql_fetch_array($q1))
                 {
@@ -408,7 +408,7 @@ if (in_array($act, $do))
                     ++$i;
                 }
                 echo '<hr />';
-                if ($dostsmod == 1)
+                if ($dostfmod == 1)
                 {
                     echo "<input type='submit' value='Удалить отмеченные'/>";
                     echo '</form>';
