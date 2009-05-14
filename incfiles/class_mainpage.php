@@ -42,7 +42,8 @@ class mainpage
             $req = mysql_query("SELECT * FROM `news` WHERE `time` > '" . $reqtime . "' ORDER BY `time` DESC LIMIT " . $this->settings['quantity']);
             if (mysql_num_rows($req) > 0)
             {
-                while ($res = mysql_fetch_array($req))
+                $news = '<div class="bmenu">Новости</div>';
+				while ($res = mysql_fetch_array($req))
                 {
                     $text = $res['text'];
                     // Если текст больше заданного предела, обрезаем

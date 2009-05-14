@@ -28,7 +28,6 @@ switch ($do)
         echo '<div class="menu"><a href="str/brd.php">Именинники</a> (' . brth() . ')</div>';
         echo '<div class="menu"><a href="str/moders.php">Администрация</a></div>';
         echo '<div class="menu"><a href="str/smile.php?">Смайлы</a></div>';
-        echo '<div class="menu"><a href="read.php?">FAQ (ЧаВо)</a></div>';
         $_SESSION['refsm'] = '../index.php?do=info';
         break;
 
@@ -39,9 +38,10 @@ switch ($do)
         require_once ('incfiles/class_mainpage.php');
         $mp = new mainpage();
         // Блок новостей
-        echo '<div class="bmenu">Новости</div>';
         echo $mp->news;
-        echo '<div class="menu"><a href="str/news.php">Архив новостей</a> (' . $mp->newscount . ')</div>';
+        echo '<div class="bmenu">Информация</div>';
+		echo '<div class="menu"><a href="str/news.php">Архив новостей</a> (' . $mp->newscount . ')</div>';
+        echo '<div class="menu"><a href="read.php?">FAQ (ЧаВо)</a></div>';
         echo '<div class="menu"><a href="index.php?do=info">Статистика</a></div>';
         echo '<div class="bmenu">Общение</div>';
         echo '<div class="menu"><a href="str/guest.php">Гостевая</a> (' . gbook() . ')</div>';
