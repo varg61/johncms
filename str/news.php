@@ -234,7 +234,7 @@ switch ($do)
             echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
             $text = $nw1['text'];
             $text = str_replace("\r\n", "<br/>", $text);
-			$text = tags($text);
+            $text = tags($text);
             if ($offsm != 1 && $offgr != 1)
             {
                 $text = smiles($text);
@@ -248,7 +248,8 @@ switch ($do)
             {
                 $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $nw1['kom'] . "'");
                 $komm = mysql_result($mes, 0) - 1;
-                echo '<a href="../forum/?id=' . $nw1['kom'] . '">Обсудить на форуме (' . $komm . ')</a><br/>';
+                if ($komm >= 0)
+                    echo '<a href="../forum/?id=' . $nw1['kom'] . '">Обсудить на форуме (' . $komm . ')</a><br/>';
             }
             if ($dostsmod == 1)
             {

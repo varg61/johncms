@@ -17,7 +17,6 @@
 defined('_IN_JOHNCMS') or die('Restricted access');
 
 class mainpage
-
 {
     public $news = ''; // Текст новостей
     public $newscount = 0; // Общее к-во новостей
@@ -87,6 +86,14 @@ class mainpage
                         default:
                             $news .= '<u>' . $res['name'] . '</u><br />' . $text;
                     }
+                    // Ссылка на каменты
+                    if (!empty($res['kom']) && $this->settings['view'] != 2 && $this->settings['kom'] == 1)
+                    {
+                        $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");
+                        $komm = mysql_result($mes, 0) - 1;
+                        if ($komm >= 0)
+                            $news .= '<br /><a href="../forum/?id=' . $res['kom'] . '">Обсудить</a> (' . $komm . ')';
+                    }
                     $news .= '</div>';
                     ++$i;
                 }
@@ -111,7 +118,7 @@ class mainpage
     {
         global $realtime;
         $ltime = $realtime - (86400 * 3);
-		$req = mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > '" . $ltime . "'");
+        $req = mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > '" . $ltime . "'");
         $res = mysql_result($req, 0);
         return ($res > 0 ? '/<font color="#FF0000">+' . $res . '</font>' : false);
     }
