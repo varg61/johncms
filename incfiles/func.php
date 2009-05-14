@@ -386,6 +386,19 @@ function hrefCallback($p)
     return '<a href="' . $href . '">' . $p[0] . '</a>';
 }
 
+// Вырезание BBcode тэгов из текста
+function notags($var = '')
+{
+    $var = preg_replace('#\[b\](.*?)\[/b\]#si', '\1', $var);
+    $var = preg_replace('#\[i\](.*?)\[/i\]#si', '\1', $var);
+    $var = preg_replace('#\[u\](.*?)\[/u\]#si', '\1', $var);
+    $var = preg_replace('#\[s\](.*?)\[/s\]#si', '\1', $var);
+    $var = preg_replace('#\[red\](.*?)\[/red\]#si', '\1', $var);
+    $var = preg_replace('#\[green\](.*?)\[/green\]#si', '\1', $var);
+    $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '\1', $var);
+    return $var;
+}
+
 ////////////////////////////////////////////////////////////
 // Маскировка ссылок в тексте                             //
 ////////////////////////////////////////////////////////////
