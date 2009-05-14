@@ -97,7 +97,7 @@ switch ($do)
 		`switch` tinyint(1) NOT NULL default '0',
 		PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
-        echo '<span class="green">OK</span> таблица cms_counters готова<br />';
+        echo '<span class="green">OK</span> таблица cms_counters создана<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
