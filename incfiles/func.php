@@ -677,60 +677,6 @@ function smilescat($str)
     return $str;
 }
 
-function navigate($adr_str, $itogo, $kol_na_str, $begin, $num_str)
-{
-    $ba = ceil($itogo / $kol_na_str);
-    $asd = $begin - ($kol_na_str);
-    $asd2 = $begin + ($kol_na_str * 2);
-    if ($asd < $itogo && $asd > 0)
-    {
-        echo ' <a href="' . $adr_str . '&amp;page=1&amp;">1</a> .. ';
-    }
-    $page2 = $ba - $num_str;
-    $pa = ceil($num_str / 2);
-    $paa = ceil($num_str / 3);
-    $pa2 = $num_str + floor($page2 / 2);
-    $paa2 = $num_str + floor($page2 / 3);
-    $paa3 = $num_str + (floor($page2 / 3) * 2);
-    if ($num_str > 13)
-    {
-        echo ' <a href="' . $adr_str . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="' . $adr_str . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="' . $adr_str . '&amp;page=' . ($paa * 2) . '">' . ($paa * 2) .
-            '</a> <a href="' . $adr_str . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-    } elseif ($num_str > 7)
-    {
-        echo ' <a href="' . $adr_str . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="' . $adr_str . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-    }
-    for ($i = $asd; $i < $asd2; )
-    {
-        if ($i < $itogo && $i >= 0)
-        {
-            $ii = floor(1 + $i / $kol_na_str);
-
-            if ($begin == $i)
-            {
-                echo " <b>$ii</b>";
-            } else
-            {
-                echo ' <a href="' . $adr_str . '&amp;page=' . $ii . '">' . $ii . '</a> ';
-            }
-        }
-        $i = $i + $kol_na_str;
-    }
-    if ($page2 > 12)
-    {
-        echo ' .. <a href="' . $adr_str . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="' . $adr_str . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="' . $adr_str . '&amp;page=' . ($paa3) . '">' . ($paa3) .
-            '</a> <a href="' . $adr_str . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-    } elseif ($page2 > 6)
-    {
-        echo ' .. <a href="' . $adr_str . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="' . $adr_str . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
-    }
-    if ($asd2 < $itogo)
-    {
-        echo ' .. <a href="' . $adr_str . '&amp;page=' . $ba . '">' . $ba . '</a>';
-    }
-
-}
-
 function rus_lat($str)
 {
     $str = strtr($str, array('а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'e', 'ж' => 'j', 'з' => 'z', 'и' => 'i', 'й' => 'i', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r',
