@@ -49,7 +49,7 @@ if ($total > 0)
     }
     echo '<div class="phdr">Всего: ' . $total . '</div>';
     // Навигация по страницам
-    if ($total > $kmess) //TODO: Доделать переход к странице из формы
+    if ($total > $kmess)
 
     {
         echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';

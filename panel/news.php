@@ -51,7 +51,7 @@ if (!empty($set['news']))
         header("location: news.php?set");
     } else
     {
-        if (isset($_GET['set'])) //TODO: Разобраться со смайлами и переносами строк
+        if (isset($_GET['set']))
 
         {
             echo '<div class="rmenu">Настройки сохранены</div>';
