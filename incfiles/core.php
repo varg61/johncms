@@ -85,8 +85,8 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect t
 ////////////////////////////////////////////////////////////
 // Проверяем адрес IP на Бан                              //
 ////////////////////////////////////////////////////////////
-$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE `ip`='" . $ipl . "' LIMIT 1;") or die('Error: table "cms_ban_ip"');
-if (mysql_num_rows($req) != 0)
+$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . $ipl . "' BETWEEN `ip1` AND `ip2` LIMIT 1;") or die('Error: table "cms_ban_ip"');
+if (mysql_num_rows($req) > 0)
 {
     $res = mysql_fetch_array($req);
     switch ($res['ban_type'])
@@ -103,12 +103,10 @@ if (mysql_num_rows($req) != 0)
                 exit;
             }
             break;
-
         case 3:
             // Закрытие регистрации
             $regban = true;
             break;
-
         default:
             // Полный запрет доступа к сайту
             header("HTTP/1.0 404 Not Found");

@@ -86,7 +86,8 @@ switch ($do)
 
     case 'step2':
         echo '<b><u>Подготовка таблиц</u></b><br />';
-        mysql_query("DROP TABLE IF EXISTS `cms_counters`");
+        // Таблица счетчиков
+		mysql_query("DROP TABLE IF EXISTS `cms_counters`");
 		mysql_query("CREATE TABLE IF NOT EXISTS `cms_counters` (
 		`id` int(11) NOT NULL auto_increment,
 		`sort` int(11) NOT NULL default '1',
@@ -98,6 +99,22 @@ switch ($do)
 		PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
         echo '<span class="green">OK</span> таблица cms_counters создана<br />';
+        // Таблица бана по IP
+		mysql_query("DROP TABLE IF EXISTS `cms_ban_ip`");
+		mysql_query("CREATE TABLE `cms_ban_ip` (
+		`id` int(11) NOT NULL auto_increment,
+		`ip1` int(11) NOT NULL,
+		`ip2` int(11) NOT NULL,
+		`ban_type` tinyint(4) NOT NULL default '0',
+		`link` varchar(100) NOT NULL,
+		`who` varchar(25) NOT NULL,
+		`reason` text NOT NULL,
+		`date` int(11) NOT NULL,
+		PRIMARY KEY  (`id`),
+		UNIQUE KEY `ip1` (`ip1`),
+		UNIQUE KEY `ip2` (`ip2`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+        echo '<span class="green">OK</span> таблица cms_ban_ip создана<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
