@@ -58,7 +58,7 @@ if ($dostlmod == 1)
             }
             $l = mb_strlen($pat);
             $pat1 = mb_substr($pat, 0, $l - 1);
-            echo "[$pat1]<br/><a href='index.php?act=moder&amp;id=" . $md2['id'] . "&amp;yes'> Принять</a></div>";
+            echo "[$pat1]<br/><a href='index.php?act=moder&amp;id=" . $res['id'] . "&amp;yes'> Принять</a></div>";
             ++$i;
         }
         echo '<div class="phdr">Всего: ' . $total . '</div>';
