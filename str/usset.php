@@ -72,7 +72,8 @@ if ($user_id)
                 {
                     echo '<div class="rmenu">Настройки сохранены</div>';
                 }
-                echo '<div class="menu"><input type="text" name="sdvig" size="3" maxlength="3" value="' .
+                echo '<div class="menu">Время: <b>' . date("H:i", $realtime + $sdvig * 3600) . '</b><br />';
+				echo '<input type="text" name="sdvig" size="3" maxlength="3" value="' .
                     $datauser['sdvig'] . '"/> Сдвиг времени</div>';
                 echo '<div class="menu"><input type="text" name="kolanywhwere" size="3" maxlength="3" value="' .
                     $datauser['kolanywhwere'] . '"/> Строк на страницу</div>';
