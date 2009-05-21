@@ -267,7 +267,7 @@ if ($user_id)
     // Вывод непрочитанных тем (для незарегистрированных)     //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr"><b>Последние 10 тем</b></div>';
-	$req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `moder` = '1' ORDER BY `time` DESC LIMIT 10;");
+	$req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `close`!='1' ORDER BY `time` DESC LIMIT 10;");
     while ($arr = mysql_fetch_array($req))
     {
         $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "';");
