@@ -16,7 +16,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-$textl = 'Форум';
 $headmod = "forum";
 require_once ("../incfiles/core.php");
 
@@ -27,6 +26,19 @@ if (!$set['mod_forum'] && $dostadm != 1)
     echo '<p>' . $set['mod_forum_msg'] . '</p>';
     require_once ("../incfiles/end.php");
     exit;
+}
+
+// Заголовки форума
+if (empty($id))
+{
+    $textl = 'Форум';
+} else
+{
+    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1;");
+    $res = mysql_fetch_array($req);
+    $hdr = mb_substr($res['text'], 0, 30);
+    $hdr = htmlentities($hdr, ENT_QUOTES, 'UTF-8');
+    $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
 
 if ($user_id)
@@ -228,7 +240,7 @@ if (in_array($act, $do))
                     $order = $datauser['upfp'] == 1 ? 'DESC' : 'ASC';
                 } else
                 {
-                	$order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
+                    $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 }
                 $q1 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $id . ($dostadm == 1 ? "'" : "' AND `close` != '1'") . "  ORDER BY `time` " . $order . " LIMIT " . $start . ", " . $kmess . " ;");
                 $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1");
