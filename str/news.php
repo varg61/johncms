@@ -233,7 +233,8 @@ switch ($do)
         {
             echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
             $text = $nw1['text'];
-            $text = str_replace("\r\n", "<br/>", $text);
+            $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
+			$text = str_replace("\r\n", "<br/>", $text);
             $text = tags($text);
             if ($offsm != 1 && $offgr != 1)
             {
