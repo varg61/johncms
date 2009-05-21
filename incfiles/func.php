@@ -471,7 +471,7 @@ function pagenav($base_url, $start, $max_value, $num_per_page)
         $pageindex .= '<span style="font-weight: bold;"> ... </span>';
     if ($start + $num_per_page * $pgcont < $tmpMaxPages)
         $pageindex .= sprintf($base_link, $tmpMaxPages, $tmpMaxPages / $num_per_page + 1);
-    if ($start + $num_per_page <= $max_value)
+    if ($start + $num_per_page < $max_value)
     {
         $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start + $num_per_page);
         $pageindex .= sprintf($base_link, $display_page, '&gt;&gt;');
