@@ -153,9 +153,14 @@ if ($user_id)
                 break;
 
             case 'par':
-                echo "<form action='anketa.php?user=" . $user_id .
-                    "&amp;act=editpar' method='post'>Старый пароль:<br/><input type='text' name='par1'/><br/>Новый пароль:<br/><input type='text' name='par2'/><br/>Подтвердите пароль:<br/><input type='text' name='par3'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" .
-                    $user_id . "'>Назад</a><br/>";
+                echo '<div class="phdr">Смена пароля</div>';
+                echo '<form action="anketa.php?user=' . $user_id . '&amp;act=editpar" method="post">';
+                echo '<div class="menu"><u>Старый пароль</u><br/><input type="text" name="par1"/></div>';
+                echo '<div class="menu">Новый пароль:<br/><input type="text" name="par2"/><br/>';
+                echo 'Подтвердите пароль:<br/><input type="text" name="par3"/><br/>';
+                echo '<small>Мин. 3, макс. 10 символов.<br />Разрешены буквы Латинского алфавита и цифры.</small></div>';
+                echo '<div class="bmenu"><input type="submit" value="ok"/></div></form>';
+                echo "<br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
                 break;
 
             case 'editpar':
@@ -183,6 +188,18 @@ if ($user_id)
                     require_once ("../incfiles/end.php");
                     exit;
                 }
+                if (preg_match("/[^\da-zA-Z_]+/", $par2))
+                {
+                    echo "Недопустимые символы в новом пароле<br/><a href='anketa.php?act=par&amp;user=" . $user_id . "'>Повторить</a><br/>";
+                    require_once ("../incfiles/end.php");
+                    exit;
+                }
+                if (strlen($par2) < 3 || strlen($par2) > 10)
+                {
+                    echo "Недопустимая длина нового пароля<br/><a href='anketa.php?act=par&amp;user=" . $user_id . "'>Повторить</a><br/>";
+                    require_once ("../incfiles/end.php");
+                    exit;
+                }
                 mysql_query("update `users` set `password` = '" . $par22 . "' where `id` = '" . $user_id . "';");
                 echo "Пароль изменен,войдите на сайт заново<br/><a href='../in.php'>Вход</a><br/>";
                 unset($_SESSION['uid']);
@@ -203,7 +220,8 @@ if ($user_id)
                 break;
 
             case 'inf':
-                echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editinf' method='post'>Изменить инфу(max. 500):<br/><textarea cols=\"20\" rows=\"4\" name=\"ninf\">" . $arr['about'] . "</textarea><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
+                echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editinf' method='post'>Изменить инфу(max. 500):<br/><textarea cols=\"20\" rows=\"4\" name=\"ninf\">" . $arr['about'] .
+                    "</textarea><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
                 break;
 
             case 'editinf':
