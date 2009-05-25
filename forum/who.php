@@ -50,7 +50,7 @@ if (!empty($_GET['id']))
         $wh2 = array();
         if ($wher == $whr)
         {
-        echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
             echo "<b>$arr[name]</b>";
             switch ($arr['rights'])
             {
@@ -125,7 +125,7 @@ if (!empty($_GET['id']))
         {
             if ($i >= $start && $i < $end)
             {
-                echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                 if (empty($wher1[1]))
                 {
                     $adres = "<a href='index.php'>На главной форума</a>";

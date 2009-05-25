@@ -231,7 +231,7 @@ switch ($do)
         $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT " . $start . "," . $kmess . ";");
         while ($nw1 = mysql_fetch_array($req))
         {
-            echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
             $text = $nw1['text'];
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
 			$text = str_replace("\r\n", "<br/>", $text);

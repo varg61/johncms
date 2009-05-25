@@ -188,8 +188,7 @@ switch ($tip)
                         $uz = @mysql_query("select * from `users` where name='" . $mass['from'] . "';");
                         $mass1 = @mysql_fetch_array($uz);
                     }
-                    //echo '<div class="text">';
-                    echo ceil(ceil($lr / 2) - ($lr / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     if ($mass['from'] != "Умник")
                     {
                         if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id']))

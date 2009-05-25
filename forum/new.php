@@ -119,18 +119,7 @@ if ($user_id)
                         $colmes1 = 0;
                     }
                     $nam = mysql_fetch_array($nikuser);
-                    $d = $i / 2;
-                    $d1 = ceil($d);
-                    $d2 = $d1 - $d;
-                    $d3 = ceil($d2);
-                    if ($d3 == 0)
-                    {
-                        $div = "<div class='b'>";
-                    } else
-                    {
-                        $div = "<div class='c'>";
-                    }
-                    echo $div;
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     if ($arr['edit'] == 1)
                     {
                         echo "<img src='../images/tz.gif' alt=''/>";
@@ -213,7 +202,7 @@ if ($user_id)
                 }
                 while ($res = mysql_fetch_array($req))
                 {
-                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "';");
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "';");
@@ -279,7 +268,7 @@ if ($user_id)
         $colmes1 = mysql_result($colmes, 0);
         $cpg = ceil($colmes1 / $kmess);
         $nam = mysql_fetch_array($nikuser);
-        echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
         if ($arrt['edit'] == 1)
         {
             echo "<img src='../images/tz.gif' alt=''/>";

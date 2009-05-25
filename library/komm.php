@@ -44,7 +44,7 @@ if ($user_id && !$ban['1'] && !$ban['10'])
 $mess = mysql_query("SELECT * FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
 while ($mass = mysql_fetch_array($mess))
 {
-    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
     $uz = mysql_query("select * from `users` where name='" . check($mass['avtor']) . "';");
     $mass1 = mysql_fetch_array($uz);
     if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id']))

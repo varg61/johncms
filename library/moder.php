@@ -42,7 +42,7 @@ if ($dostlmod == 1)
         $req = mysql_query("SELECT * FROM `lib` WHERE `type` = 'bk' AND `moder` = '0' LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req))
         {
-            echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
             $vr = $res['time'] + $sdvig * 3600;
             $vr = date("d.m.y / H:i", $vr);
             $tx = $res['soft'];

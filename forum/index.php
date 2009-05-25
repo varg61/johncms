@@ -114,7 +114,7 @@ if (in_array($act, $do))
                 $total = mysql_num_rows($req);
                 while ($mass1 = mysql_fetch_array($req))
                 {
-                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     $coltem = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `refid` = '" . $mass1['id'] . "'");
                     $coltem1 = mysql_result($coltem, 0);
                     echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
@@ -150,7 +150,7 @@ if (in_array($act, $do))
                     "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
                 while ($mass = mysql_fetch_array($q1))
                 {
-                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC LIMIT 1;");
                     $colmes1 = mysql_result($colmes, 0);
@@ -498,7 +498,7 @@ if (in_array($act, $do))
         $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($mass = mysql_fetch_array($req))
         {
-            echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
             $colraz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $mass['id'] . "';");
             $colraz1 = mysql_result($colraz, 0);
             echo '<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';

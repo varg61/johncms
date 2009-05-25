@@ -373,7 +373,7 @@ switch ($act)
             }
             while ($res = mysql_fetch_array($req))
             {
-                echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                 if ($res['user_id'] != "0")
                 {
                     // Значек нового юзера

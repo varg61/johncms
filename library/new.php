@@ -25,7 +25,7 @@ if ($total > 0)
     $req = mysql_query("SELECT * FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
     while ($newf = mysql_fetch_array($req))
     {
-        echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
         $vr = $newf['time'] + $sdvig * 3600;
         $vr = date("d.m.y / H:i", $vr);
         echo $div;

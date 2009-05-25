@@ -95,7 +95,7 @@ if (in_array($act, $do))
                     {
                         $kol = "0";
                     }
-                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     echo '<a href="index.php?id=' . $cat1['id'] . '">' . $cat1['text'] . '</a>(' . $kol . ')</div>';
                     ++$i;
                 }
@@ -106,7 +106,7 @@ if (in_array($act, $do))
                 $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by `time` desc LIMIT " . $start . "," . $kmess . ";");
                 while ($bk1 = mysql_fetch_array($bk))
                 {
-                    echo ceil(ceil($i / 2) - ($i / 2)) == 0 ? '<div class="list1">' : '<div class="list2">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     $vr = $bk1['time'] + $sdvig * 3600;
                     $vr = date("d.m.y / H:i", $vr);
                     echo $div . '<b><a href="index.php?id=' . $bk1['id'] . '">' . htmlentities($bk1['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
