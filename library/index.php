@@ -19,14 +19,27 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'lib';
 $textl = 'Библиотека';
 require_once ("../incfiles/core.php");
-require_once ("../incfiles/head.php");
 
 if (!$set['mod_lib'] && $dostadm != 1)
 {
-    echo '<p>' . $set['mod_lib_msg'] . '</p>';
+    require_once ("../incfiles/head.php");
+	echo '<p>' . $set['mod_lib_msg'] . '</p>';
     require_once ("../incfiles/end.php");
     exit;
 }
+// Заголовки библиотеки
+if (empty($id))
+{
+    $textl = 'Библиотека';
+} else
+{
+    $req = mysql_query("SELECT * FROM `lib` WHERE `id`= '" . $id . "' LIMIT 1;");
+    $zag = mysql_fetch_array($req);
+    $hdr = $zag['type'] == 'bk' ? $zag['name'] : $zag['text'];
+    $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
+	$textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
+}
+require_once ("../incfiles/head.php");
 
 $do = array('java', 'symb', 'search', 'new', 'moder', 'addkomm', 'komm', 'del', 'edit', 'load', 'write', 'mkcat', 'topread', 'trans');
 if (in_array($act, $do))
@@ -36,13 +49,13 @@ if (in_array($act, $do))
 {
     if (!$set['mod_lib'])
         echo '<p><font color="#FF0000"><b>Библиотека закрыта!</b></font></p>';
-    if (empty($_GET['id']))
+    if (!$id)
     {
         echo '<div class="phdr"><b>Библиотека</b></div>';
         if ($dostlmod == 1)
         {
             // Считаем число статей, ожидающих модерацию
-            $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0';");
+            $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'");
             $res = mysql_result($req, 0);
             if ($res > 0)
                 echo '<div class="rmenu">Модерации ожидают <a href="index.php?act=moder">' . $res . '</a> статей</div>';
@@ -60,12 +73,10 @@ if (in_array($act, $do))
         $tip = "cat";
     } else
     {
-        $tp = mysql_query("SELECT * FROM `lib` WHERE `id` = '" . $id . "' LIMIT 1;");
-        $tp1 = mysql_fetch_array($tp);
-        $tip = $tp1['type'];
-        if ($tp1['type'] == "cat")
+        $tip = $zag['type'];
+        if ($tip == "cat")
         {
-            echo '<div class="phdr"><b>' . $tp1['text'] . '</b></div>';
+            echo '<div class="phdr"><b>' . $zag['text'] . '</b></div>';
         }
     }
     switch ($tip)
@@ -81,9 +92,9 @@ if (in_array($act, $do))
                 $req = mysql_query("SELECT `id`, `text`  FROM `lib` WHERE `type` = 'cat' AND `refid` = '" . $id . "' LIMIT " . $start . "," . $kmess);
                 while ($cat1 = mysql_fetch_array($req))
                 {
-                    $cat2 = mysql_query("select `id` from `lib` where type = 'cat' and refid = '" . $cat1['id'] . "';");
+                    $cat2 = mysql_query("select `id` from `lib` where type = 'cat' and refid = '" . $cat1['id'] . "'");
                     $totalcat2 = mysql_num_rows($cat2);
-                    $bk2 = mysql_query("select `id` from `lib` where type = 'bk' and refid = '" . $cat1['id'] . "' and moder='1';");
+                    $bk2 = mysql_query("select `id` from `lib` where type = 'bk' and refid = '" . $cat1['id'] . "' and moder='1'");
                     $totalbk2 = mysql_num_rows($bk2);
                     if ($totalcat2 != 0)
                     {
@@ -103,7 +114,7 @@ if (in_array($act, $do))
             } elseif ($totalbk > 0)
             {
                 $total = $totalbk;
-                $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by `time` desc LIMIT " . $start . "," . $kmess . ";");
+                $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by `time` desc LIMIT " . $start . "," . $kmess);
                 while ($bk1 = mysql_fetch_array($bk))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -129,7 +140,7 @@ if (in_array($act, $do))
             }
             if ($dostlmod == 1 && $id != 0)
             {
-                $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . $id . "';");
+                $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . $id . "'");
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 == 0)
                 {
@@ -137,13 +148,13 @@ if (in_array($act, $do))
                 }
                 echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить категорию</a><br/>";
             }
-            if ($dostlmod == 1 && ($tp1['ip'] == 1 || $id == 0))
+            if ($dostlmod == 1 && ($zag['ip'] == 1 || $id == 0))
             {
                 echo "<a href='index.php?act=mkcat&amp;id=" . $id . "'>Создать категорию</a><br/>";
             }
-            if ($tp1['ip'] == 0 && $id != 0)
+            if ($zag['ip'] == 0 && $id != 0)
             {
-                if ($dostlmod == 1 || ($tp1['soft'] == 1 && !empty($_SESSION['uid'])))
+                if ($dostlmod == 1 || ($zag['soft'] == 1 && !empty($_SESSION['uid'])))
                 {
                     echo "<a href='index.php?act=write&amp;id=" . $id . "'>Написать статью</a><br/>";
                 }
@@ -154,20 +165,20 @@ if (in_array($act, $do))
             }
             if ($id != 0)
             {
-                $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $id . "';");
+                $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $id . "'");
                 $dnam1 = mysql_fetch_array($dnam);
-                $dnam2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnam1['refid'] . "';");
+                $dnam2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnam1['refid'] . "'");
                 $dnam3 = mysql_fetch_array($dnam2);
                 $catname = "$dnam3[text]";
                 $dirid = "$dnam1[id]";
 
-                $nadir = $dnam1[refid];
+                $nadir = $dnam1['refid'];
                 while ($nadir != "0")
                 {
                     echo "&#187;<a href='index.php?id=" . $nadir . "'>$catname</a><br/>";
-                    $dnamm = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "';");
+                    $dnamm = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "'");
                     $dnamm1 = mysql_fetch_array($dnamm);
-                    $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "';");
+                    $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "'");
                     $dnamm3 = mysql_fetch_array($dnamm2);
                     $nadir = $dnamm1['refid'];
                     $catname = $dnamm3['text'];
@@ -198,13 +209,13 @@ if (in_array($act, $do))
             if ($_SESSION['lib'] != $id)
             {
                 $_SESSION['lib'] = $id;
-                $libcount = intval($tp1[count]) + 1;
-                mysql_query("update `lib` set  `count`='" . $libcount . "' where id='" . $id . "';");
+                $libcount = intval($zag['count']) + 1;
+                mysql_query("UPDATE `lib` SET  `count` = '" . $libcount . "' WHERE `id` = '" . $id . "'");
             }
 
             // Заголовок статьи
-            echo '<p><b>' . htmlentities($tp1['name'], ENT_QUOTES, 'UTF-8') . '</b></p>';
-            $tx = $tp1['text'];
+            echo '<p><b>' . htmlentities($zag['name'], ENT_QUOTES, 'UTF-8') . '</b></p>';
+            $tx = $zag['text'];
 
             # для постраничного вывода используется модифицированный код от hintoz #
             $strrpos = mb_strrpos($tx, " ");
@@ -331,24 +342,24 @@ if (in_array($act, $do))
                 echo "<a href='index.php?act=del&amp;id=" . $id . "'>Удалить статью</a><br/>";
                 echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить название</a><br/><br/>";
             }
-            $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = '" . $id . "';");
+            $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = '" . $id . "'");
             $km1 = mysql_num_rows($km);
             echo "<a href='index.php?act=komm&amp;id=" . $id . "'>Комментарии</a>($km1)<br />";
             echo '<a href="index.php?act=java&amp;id=' . $id . '">Скачать Java книгу</a><br /><br />';
-            $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $tp1[refid] . "';");
+            $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $zag['refid'] . "'");
             $dnam1 = mysql_fetch_array($dnam);
             $catname = "$dnam1[text]";
             $dirid = "$dnam1[id]";
-            $nadir = $tp1[refid];
+            $nadir = $zag['refid'];
             while ($nadir != "0")
             {
                 echo "&#187;<a href='index.php?id=" . $nadir . "'>$catname</a><br/>";
-                $dnamm = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "';");
+                $dnamm = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "'");
                 $dnamm1 = mysql_fetch_array($dnamm);
-                $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1[refid] . "';");
+                $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "'");
                 $dnamm3 = mysql_fetch_array($dnamm2);
-                $nadir = $dnamm1[refid];
-                $catname = $dnamm3[text];
+                $nadir = $dnamm1['refid'];
+                $catname = $dnamm3['text'];
             }
             echo "&#187;<a href='index.php?'>В библиотеку</a></p>";
             break;
