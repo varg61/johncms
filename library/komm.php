@@ -35,7 +35,7 @@ $article = mysql_fetch_array($req);
 // Запрос числа каментов
 $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "'");
 $countm = mysql_result($req, 0);
-echo '<div class="phdr">Комментируем статью:<br /><b>' . $article['name'] . '</b></div>';
+echo '<div class="phdr">Комментируем статью:<br /><b>' . htmlentities($article['name'], ENT_QUOTES, 'UTF-8') . '</b></div>';
 if ($user_id && !$ban['1'] && !$ban['10'])
 {
     echo '<div class="gmenu"><a href="index.php?act=addkomm&amp;id=' . $id . '">Написать</a></div>';

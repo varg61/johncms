@@ -76,7 +76,7 @@ if (in_array($act, $do))
         $tip = $zag['type'];
         if ($tip == "cat")
         {
-            echo '<div class="phdr"><b>' . $zag['text'] . '</b></div>';
+            echo '<div class="phdr"><b>' . htmlentities($zag['text'], ENT_QUOTES, 'UTF-8') . '</b></div>';
         }
     }
     switch ($tip)
