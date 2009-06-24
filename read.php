@@ -44,7 +44,7 @@ switch ($do)
     default:
         echo '<div class="menu"><a href="read.php?do=actmail">Активация e-mail</a></div>';
         echo '<div class="menu"><a href="read.php?do=forum">Правила форума</a></div>';
-        echo '<div class="menu"><a href="read.php?do=forumfaq">FAQ по форуму</a></div>';
+        echo '<div class="menu"><a href="read.php?do=forumfaq">FAQ по тэгам</a></div>';
         echo '<div class="menu"><a href="read.php?do=trans">Справка по транслиту</a></div>';
 }
 
