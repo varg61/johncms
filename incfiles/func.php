@@ -367,7 +367,6 @@ function gbook($mod = 0)
 ////////////////////////////////////////////////////////////
 function tags($var = '')
 {
-    $var = preg_replace_callback('{(?:(\w+://)|www\.|wap\.)[\w-]+(\.[\w-]+)*(?: : \d+)?[^<>"\'()\[\]\s]*(?:(?<! [[:punct:]])|(?<= [-/&+*;]))}xis', "hrefCallback", $var);
     $var = preg_replace('#\[b\](.*?)\[/b\]#si', '<span style="font-weight: bold;">\1</span>', $var);
     $var = preg_replace('#\[i\](.*?)\[/i\]#si', '<span style="font-style:italic;">\1</span>', $var);
     $var = preg_replace('#\[u\](.*?)\[/u\]#si', '<span style="text-decoration:underline;">\1</span>', $var);
@@ -375,15 +374,20 @@ function tags($var = '')
     $var = preg_replace('#\[red\](.*?)\[/red\]#si', '<span style="color:red">\1</span>', $var);
     $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
-    //$var = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/;%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $var);
+    $var = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'url_replace', $var);
     return $var;
 }
 
-// Служебная функция парсинга URL
-function hrefCallback($p)
+// Служебная функция парсинга URL (прислал seg0ro)
+function url_replace($m)
 {
-    $href = !empty($p[1]) ? $p[0] : 'http://' . $p[0];
-    return '<a href="' . $href . '">' . $p[0] . '</a>';
+    if (!isset($m[3]))
+    {
+        return '<a href="' . $m[1] . '">' . $m[2] . '</a>';
+    } else
+    {
+        return '<a href="' . $m[3] . '">' . $m[3] . '</a>';
+    }
 }
 
 // Вырезание BBcode тэгов из текста
