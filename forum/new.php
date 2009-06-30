@@ -50,16 +50,16 @@ if ($user_id)
                 mysql_query("INSERT INTO `cms_forum_rdm` SET
 				`topic_id`='" . $res['id'] . "',
 				`user_id`='" . $user_id . "',
-				`time`='" . $realtime . "';");
+				`time`='" . $realtime . "'");
             }
             $req = mysql_query("SELECT `forum`.`id` AS `id`
 			FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
 			WHERE `forum`.`type`='t'
 			AND `moder`='1'
-			AND `forum`.`time` > `cms_forum_rdm`.`time`;");
+			AND `forum`.`time` > `cms_forum_rdm`.`time`");
             while ($res = mysql_fetch_array($req))
             {
-                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $res['id'] . "' AND `user_id`='" . $user_id . "';");
+                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $res['id'] . "' AND `user_id`='" . $user_id . "'");
             }
             $_SESSION['fnew'] = 0;
             $_SESSION['fnewtime'] = time();
@@ -105,12 +105,12 @@ if ($user_id)
                 $i = 0;
                 while ($arr = mysql_fetch_array($req))
                 {
-                    $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "';");
+                    $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "'");
                     $razd = mysql_fetch_array($q3);
-                    $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "';");
+                    $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("select `id` from `forum` where type='m' and close!='1' and refid='" . $arr['id'] . "' order by time desc;");
-                    $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr['id'] . "'ORDER BY time DESC LIMIT 1;");
+                    $colmes = mysql_query("select `id` from `forum` where type='m' and close!='1' and refid='" . $arr['id'] . "' order by time desc");
+                    $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr['id'] . "'ORDER BY time DESC LIMIT 1");
                     $colmes1 = mysql_num_rows($colmes);
                     $cpg = ceil($colmes1 / $kmess);
                     $colmes1 = $colmes1 - 1;
@@ -186,7 +186,7 @@ if ($user_id)
 					AND (`cms_forum_rdm`.`topic_id` Is Null
 					OR `forum`.`time` > `cms_forum_rdm`.`time`)
 					ORDER BY `forum`.`time` DESC
-					LIMIT " . $start . "," . $kmess . ";");
+					LIMIT " . $start . "," . $kmess);
                 } else
                 {
                     $req = mysql_query("SELECT *
@@ -198,16 +198,16 @@ if ($user_id)
 					AND (`cms_forum_rdm`.`topic_id` Is Null
 					OR `forum`.`time` > `cms_forum_rdm`.`time`)
 					ORDER BY `forum`.`time` DESC
-					LIMIT " . $start . "," . $kmess . ";");
+					LIMIT " . $start . "," . $kmess);
                 }
                 while ($res = mysql_fetch_array($req))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                    $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "';");
+                    $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "'");
                     $razd = mysql_fetch_array($q3);
-                    $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "';");
+                    $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid`='" . $res['id'] . "' AND `type`='m' AND `close`!='1' order by time desc;");
+					$colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm == 1 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
                     $nick = mysql_fetch_array($colmes);
                     if ($res['edit'] == 1)

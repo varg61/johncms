@@ -151,8 +151,9 @@ if (in_array($act, $do))
                 while ($mass = mysql_fetch_array($q1))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                    $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC;");
-                    $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC LIMIT 1;");
+                    $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "'ORDER BY time DESC LIMIT 1");
+                    $nam = mysql_fetch_array($nikuser);
+                    $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
                     $colmes1 = mysql_result($colmes, 0);
                     $cpg = ceil($colmes1 / $kmess);
                     $colmes1 = $colmes1 - 1;
@@ -160,7 +161,6 @@ if (in_array($act, $do))
                     {
                         $colmes1 = 0;
                     }
-                    $nam = mysql_fetch_array($nikuser);
                     // Выводим список тем
                     if ($mass['vip'] == 1)
                     {

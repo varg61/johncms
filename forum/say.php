@@ -35,7 +35,7 @@ if ($lastpost > ($realtime - $old))
 }
 
 $agn1 = strtok($agn, ' ');
-$type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "';");
+$type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "'");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 switch ($tip)
@@ -69,16 +69,16 @@ switch ($tip)
 			`from`='" . $login . "',
 			`ip`='" . $ipp . "',
 			`soft`='" . mysql_real_escape_string($agn1) . "',
-			`text`='" . mysql_real_escape_string($msg) . "';");
+			`text`='" . mysql_real_escape_string($msg) . "'");
             $fadd = mysql_insert_id();
             mysql_query("UPDATE `forum` SET  `time`='" . $realtime . "' WHERE `id`='" . $id . "';");
             $fpst = $datauser['postforum'] + 1;
             mysql_query("UPDATE `users` SET
 			`postforum`='" . $fpst . "',
 			`lastpost` = '" . $realtime . "'
-			WHERE `id`='" . $user_id . "';");
-            $pa = mysql_query("select `id` from `forum` where type='m' and refid= '" . $id . "';");
-            $pa2 = mysql_num_rows($pa);
+			WHERE `id`='" . $user_id . "'");
+            $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $id . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
+            $pa2 = mysql_result($colmes, 0);
             if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
             {
                 $page = 1;
@@ -190,9 +190,8 @@ switch ($tip)
 			`postforum` = '" . $fpst . "',
 			`lastpost` = '" . $realtime . "'
 			WHERE `id` = '" . $user_id . "';");
-            $pa = mysql_query("select * from `forum` where type='m' and refid= '" . $th . "';");
-            $pa2 = mysql_num_rows($pa);
-
+            $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $th . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
+            $pa2 = mysql_result($colmes, 0);
             if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
             {
                 $page = 1;
