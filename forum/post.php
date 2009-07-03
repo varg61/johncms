@@ -43,7 +43,7 @@ if ($offsm != 1 && $offgr != 1)
     $text = smiles($text);
     $text = smilescat($text);
 
-    if ($ms['from'] == nickadmina || $ms['from'] == nickadmina2 || $mass1['rights'] >= 1)
+    if ($ms['from'] == $nickadmina || $ms['from'] == $nickadmina2 || $mass1['rights'] >= 1)
     {
         $text = smilesadm($text);
     }

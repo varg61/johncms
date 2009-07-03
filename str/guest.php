@@ -433,7 +433,7 @@ switch ($act)
                     {
                         $text = smiles($text);
                         $text = smilescat($text);
-                        if ($res['name'] == nickadmina || $res['name'] == nickadmina2 || $res['rights'] >= 1)
+                        if ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= 1)
                         {
                             $text = smilesadm($text);
                         }

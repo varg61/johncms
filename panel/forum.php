@@ -652,7 +652,7 @@ if ($dostadm == 1)
                         $tekst = smiles($dp2[text]);
                         $tekst = smilescat($tekst);
 
-                        if ($dp2[from] == nickadmina || $dp2[from] == nickadmina2 || $array1[rights] >= 1)
+                        if ($dp2['from'] == $nickadmina || $dp2['from'] == $nickadmina2 || $array1[rights] >= 1)
                         {
                             $tekst = smilesadm($tekst);
                         }
@@ -664,7 +664,7 @@ if ($dostadm == 1)
 
                     ###
                     echo "$div $hd $tekst<br/>$df1[text]/$dr1[text]/$dt1[text]<br/>";
-                    echo "<a href='forum.php?act=nah&amp;id=" . $dp2[id] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dp2[id] . "'>Восстановить</a>";
+                    echo "<a href='forum.php?act=nah&amp;id=" . $dp2['id'] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dp2[id] . "'>Восстановить</a>";
 
                     echo "</div>";
                     ++$i;
@@ -676,8 +676,6 @@ if ($dostadm == 1)
             }
             break;
 
-
-            ######
         default:
             require_once ("../incfiles/head.php");
             if (empty($_GET['id']))

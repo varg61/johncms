@@ -583,7 +583,7 @@ if ($user_id)
             {
                 $text = smiles($text);
                 $text = smilescat($text);
-                if ($massiv1['from'] == nickadmina || $massiv1['from'] == nickadmina2 || $massiv11['rights'] >= 1)
+                if ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1)
                 {
                     $text = smilesadm($text);
                 }
@@ -797,13 +797,13 @@ if ($user_id)
             {
                 $text = smiles($text);
                 $text = smilescat($text);
-                if ($massiv1['from'] == nickadmina || $massiv1['from'] == nickadmina2 || $massiv11['rights'] >= 1)
+                if ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1)
                 {
                     $text = smilesadm($text);
                 }
             }
             echo "<p>Для <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
-            $vrp = $massiv1[time] + $sdvig * 3600;
+            $vrp = $massiv1['time'] + $sdvig * 3600;
             echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
             if (!empty($massiv1['attach']))
             {

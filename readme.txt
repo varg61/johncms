@@ -56,7 +56,7 @@ heavi (http://xwep.net)
 Piks (ICQ: 7271172)
 визуальный мод инсталлятора
 
-seg0ro (http://mobilarts.ru)
-Функция парсинга BBcode для ссылок
+FlySelf (http://mobilarts.ru)
+Функция парсинга BBcode ссылок
 ---
 Вы можете быть в этом списке ;-)

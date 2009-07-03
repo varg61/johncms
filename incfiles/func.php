@@ -378,7 +378,7 @@ function tags($var = '')
     return $var;
 }
 
-// Служебная функция парсинга URL (прислал seg0ro)
+// Служебная функция парсинга URL (прислал FlySelf)
 function url_replace($m)
 {
     if (!isset($m[3]))

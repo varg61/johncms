@@ -116,18 +116,18 @@ while ($mass = mysql_fetch_array($mess))
             $tekst = smiles($mass[text]);
             $tekst = smilescat($tekst);
 
-            if ($mass[from] == nickadmina || $mass[from] == nickadmina2 || $mass1[rights] >= 1)
+            if ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1)
             {
                 $tekst = smilesadm($tekst);
             }
         } else
         {
-            $tekst = $mass[text];
+            $tekst = $mass['text'];
         }
         echo "$tekst<br/>";
         if ($dostdmod == 1)
         {
-            echo "$mass[ip] - $mass[soft]<br/><a href='index.php?act=delmes&amp;id=" . $mass[id] . "'>(Удалить)</a><br/>";
+            echo "$mass[ip] - $mass[soft]<br/><a href='index.php?act=delmes&amp;id=" . $mass['id'] . "'>(Удалить)</a><br/>";
         }
         echo "</div>";
     }

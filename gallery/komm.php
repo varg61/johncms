@@ -98,7 +98,7 @@ while ($mass = mysql_fetch_array($mess))
             $text = smiles($text);
             $text = smilescat($text);
 
-            if ($mass['from'] == nickadmina || $mass['from'] == nickadmina2 || $mass1['rights'] >= 1)
+            if ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1)
             {
                 $text = smilesadm($text);
             }
