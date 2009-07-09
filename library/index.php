@@ -23,7 +23,7 @@ require_once ("../incfiles/core.php");
 if (!$set['mod_lib'] && $dostadm != 1)
 {
     require_once ("../incfiles/head.php");
-	echo '<p>' . $set['mod_lib_msg'] . '</p>';
+    echo '<p>' . $set['mod_lib_msg'] . '</p>';
     require_once ("../incfiles/end.php");
     exit;
 }
@@ -37,7 +37,7 @@ if (empty($id))
     $zag = mysql_fetch_array($req);
     $hdr = $zag['type'] == 'bk' ? $zag['name'] : $zag['text'];
     $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
-	$textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
+    $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
 require_once ("../incfiles/head.php");
 
@@ -212,14 +212,24 @@ if (in_array($act, $do))
                 $libcount = intval($zag['count']) + 1;
                 mysql_query("UPDATE `lib` SET  `count` = '" . $libcount . "' WHERE `id` = '" . $id . "'");
             }
-
             // Заголовок статьи
             echo '<p><b>' . htmlentities($zag['name'], ENT_QUOTES, 'UTF-8') . '</b></p>';
+            // Постраничная навигация читаемой статьи
+            // Используется модифицированный код от hintoz
             $tx = $zag['text'];
-
-            # для постраничного вывода используется модифицированный код от hintoz #
             $strrpos = mb_strrpos($tx, " ");
             $pages = 1;
+            // Вычисляем номер страницы
+			if (isset($_GET['page']))
+            {
+                $page = abs(intval($_GET['page']));
+                if ($page == 0)
+                    $page = 1;
+                $start = $page - 1;
+            } else
+            {
+                $page = $start + 1;
+            }
             $t_si = 0;
             if ($strrpos)
             {
@@ -259,88 +269,17 @@ if (in_array($act, $do))
             }
             // Текст статьи
             $page_text = htmlentities($page_text, ENT_QUOTES, 'UTF-8');
-            $page_text = str_replace("\r\n", "<br />", $page_text);
-            echo $page_text;
+            echo '<p>' . nl2br($page_text) . '</p>';
             echo '<hr /><p>';
-            $next = $page + 1;
-            $prev = $page - 1;
             if ($pages > 1)
             {
-                if ($offpg != 1)
-                {
-                    echo "Страницы:<br/>";
-                } else
-                {
-                    echo "Страниц: $pages<br/>";
-                }
-                if ($page > 1)
-                {
-                    print " <a href=\"index.php?id=$id&amp;page=$prev\">&lt;&lt;</a> ";
-                }
-                if ($offpg != 1)
-                {
-                    if ($page > 1)
-                    {
-                        print "<a href=\"index.php?id=$id&amp;page=1\">1</a> ";
-                    }
-                    if ($prev > 2)
-                    {
-                        print " .. ";
-                    }
-                    $page2 = $pages - $page;
-                    $pa = ceil($page / 2);
-                    $paa = ceil($page / 3);
-                    $pa2 = $page + floor($page2 / 2);
-                    $paa2 = $page + floor($page2 / 3);
-                    $paa3 = $page + (floor($page2 / 3) * 2);
-                    if ($page > 13)
-                    {
-                        echo ' <a href="index.php?id=' . $id . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?id=' . $id . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="index.php?id=' . $id . '&amp;page=' . ($paa * 2) . '">' . ($paa *
-                            2) . '</a> <a href="index.php?id=' . $id . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-                    } elseif ($page > 7)
-                    {
-                        echo ' <a href="index.php?id=' . $id . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?id=' . $id . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-                    }
-                    if ($prev > 1)
-                    {
-                        print "<a href=\"index.php?id=$id&amp;page=$prev\">$prev</a> ";
-                    }
-                    echo "<b>$page</b> ";
-                    if ($next < $pages)
-                    {
-                        print "<a href=\"index.php?id=$id&amp;page=$next\">$next</a> ";
-                    }
-                    if ($page2 > 12)
-                    {
-                        echo ' .. <a href="index.php?id=' . $id . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?id=' . $id . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="index.php?id=' . $id . '&amp;page=' . ($paa3) . '">' . ($paa3) .
-                            '</a> <a href="index.php?id=' . $id . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-                    } elseif ($page2 > 6)
-                    {
-                        echo ' .. <a href="index.php?id=' . $id . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="index.php?id=' . $id . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
-                    }
-                    if ($next < ($pages - 1))
-                    {
-                        print " .. ";
-                    }
-                    if ($page < $pages)
-                    {
-                        print "<a href=\"index.php?id=$id&amp;page=$pages\">$pages</a> ";
-                    }
-                } else
-                {
-                    echo "<b>[$page]</b>";
-                }
-                if ($page < $pages)
-                {
-                    print " <a href=\"index.php?id=$id&amp;page=$next\">&gt;&gt;</a>";
-                }
-                echo "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='id' value='" . $id .
-                    "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
+                echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $pages, 1) . '</p>';
+                echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
             }
             if ($dostlmod == 1)
             {
-                echo "<a href='index.php?act=del&amp;id=" . $id . "'>Удалить статью</a><br/>";
-                echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить название</a><br/><br/>";
+                echo '<p><a href="index.php?act=edit&amp;id=' . $id . '">Редактировать</a><br/>';
+                echo '<a href="index.php?act=del&amp;id=' . $id . '">Удалить статью</a></p>';
             }
             $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = '" . $id . "'");
             $km1 = mysql_num_rows($km);
