@@ -18,8 +18,8 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 
 class mainpage
 {
-    public $news = ''; // Текст новостей
-    public $newscount = 0; // Общее к-во новостей
+    public $news; // Текст новостей
+    public $newscount; // Общее к-во новостей
     public $lastnewsdate; // Дата последней новости
     private $settings = array();
 
@@ -111,7 +111,7 @@ class mainpage
     {
         $req = mysql_query("SELECT COUNT(*) FROM `news`");
         $res = mysql_result($req, 0);
-        return ($res > 0 ? $res : false);
+        return ($res > 0 ? $res : '0');
     }
 
     // Счетчик свежих новостей
