@@ -84,7 +84,7 @@ if ($total > $kmess)
     echo '<p>' . pagenav('users.php?', $start, $total, $kmess) . '</p>';
     echo '<p><form action="users.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
 }
-echo '<a href="' . $_SESSION['refsm'] . '">Назад</a></p>';
+echo '<a href="user_search.php">Поиск пользователя</a><br /><a href="' . $_SESSION['refsm'] . '">Назад</a></p>';
 
 require_once ("../incfiles/end.php");
 

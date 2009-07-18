@@ -25,6 +25,7 @@ switch ($do)
         ////////////////////////////////////////////////////////////
         echo '<div class="phdr">Информация</div>';
         echo '<div class="menu"><a href="str/users.php">Список юзеров</a> (' . kuser() . ')</div>';
+        echo '<div class="menu"><a href="str/user_search.php">Поиск юзера</a></div>';
         echo '<div class="menu"><a href="str/brd.php">Именинники</a> (' . brth() . ')</div>';
         echo '<div class="menu"><a href="str/moders.php">Администрация</a></div>';
         echo '<div class="menu"><a href="str/smile.php?">Смайлы</a></div>';

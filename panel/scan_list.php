@@ -194,6 +194,7 @@ $good_files = array(
 '../str/smile.php',
 '../str/users.php',
 '../str/usset.php',
+'../str/user_search.php',
 '../.htaccess',
 '../auto.php',
 '../code.php',
