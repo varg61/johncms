@@ -256,16 +256,15 @@ if ($user_id)
     // Вывод непрочитанных тем (для незарегистрированных)     //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr"><b>Последние 10 тем</b></div>';
-	$req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `close`!='1' ORDER BY `time` DESC LIMIT 10;");
+	$req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `close`!='1' ORDER BY `time` DESC LIMIT 10");
     while ($arr = mysql_fetch_array($req))
     {
-        $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "';");
+        $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "'");
         $razd = mysql_fetch_array($q3);
-        $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "';");
+        $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "'");
         $frm = mysql_fetch_array($q4);
-        $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr['id'] . "'ORDER BY time DESC LIMIT 1;");
-        $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr['id'] . "'");
-        $colmes1 = mysql_result($colmes, 0);
+        $nikuser = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr['id'] . "'ORDER BY time DESC");
+        $colmes1 = mysql_num_rows($nikuser);
         $cpg = ceil($colmes1 / $kmess);
         $nam = mysql_fetch_array($nikuser);
         echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -293,7 +292,7 @@ if ($user_id)
         {
             echo '&nbsp;/&nbsp;' . $nam['from'];
         }
-        echo ' <font color="#777777">' . date("d.m.y / H:i", $nick['time']) . '</font>';
+        echo ' <font color="#777777">' . date("d.m.y / H:i", $nam['time']) . '</font>';
         echo '</div></div>';
         $i++;
     }
