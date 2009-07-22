@@ -624,7 +624,7 @@ if ($user_id)
         {
             echo 'Всего пробыла';
         }
-        echo ' на сайте: ' . timecount($arr['total_on_site']) . '</div>';
+        echo ' на сайте: ' . timecount($arr['total_on_site'] + 10000000) . '</div>';
 
         // Если были нарушения, показываем ссылку на их историю
         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user . "';");

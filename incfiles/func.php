@@ -492,10 +492,7 @@ function timecount($var)
     if ($var < 0)
         $var = 0;
     $day = ceil($var / 86400);
-    if ($var > 2592000)
-    {
-        $str = 'До отмены';
-    } elseif ($var > 345600)
+    if ($var > 345600)
     {
         $str = $day . ' дней';
     } elseif ($var >= 172800)

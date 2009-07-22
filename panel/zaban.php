@@ -205,13 +205,13 @@ if ($dostmod == 1)
                 echo $ban_desc[$res['ban_type']] . '</div>';
                 echo '<div class="menu">Забанил: ' . $res['ban_who'] . '</div>';
                 echo '<div class="menu">Когда: ' . gmdate('d.m.Y, H:i:s', $res['ban_while']) . '</div>';
-                echo '<div class="menu">Срок: ' . timecount($res['ban_time'] - $res['ban_while']) . '</div>';
+                echo '<div class="menu">Срок: ' . ($res['ban_time'] < 31536000 + $realtime ? timecount($res['ban_time'] - $res['ban_while']) : 'До отмены') . '</div>';
                 echo '<div class="bmenu">Причина</div>';
                 if (!empty($res['ban_ref']))
                     echo '<div class="menu">Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $res['ban_ref'] . '">на форуме</a></div>';
                 if (!empty($res['ban_reason']))
                     echo '<div class="menu">' . $res['ban_reason'] . '</div>';
-                echo '<div class="bmenu">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div><p>';
+                echo '<div class="bmenu">Осталось: ' . ($res['ban_time'] < 31536000 + $realtime ? timecount($res['ban_time'] - $realtime) : 'До отмены') . '</div><p>';
                 if ($dostadm == 1)
                 {
                     echo '<a href="zaban.php?do=razban&amp;id=' . $id . '">Разбанить</a>';
