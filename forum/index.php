@@ -426,7 +426,7 @@ if (in_array($act, $do))
                     echo '</form>';
                 }
                 echo '<div id="down"><a href="#up">Вверх</a></div>';
-                if ($type1['edit'] != 1 && $user_id && $upfp != 1 && !$ban['1'] && !$ban['11'])
+                if ($dostadm || ($type1['edit'] != 1 && $user_id && $upfp != 1 && !$ban['1'] && !$ban['11']))
                 {
                     if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
                     {

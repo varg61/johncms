@@ -37,17 +37,18 @@ if ($lastpost > ($realtime - $old))
 $agn1 = strtok($agn, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "'");
 $type1 = mysql_fetch_array($type);
+// Проверка, закрыта ли тема
+if ($type1['edit'] == 1 && !$dostadm)
+{
+    require_once ("../incfiles/head.php");
+    echo '<p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">&lt;&lt; Назад</a></p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
 $tip = $type1['type'];
 switch ($tip)
 {
     case "t":
-        if ($type1['edit'] == 1)
-        {
-            require_once ("../incfiles/head.php");
-            echo '<p>Вы не можете писать в закрытую тему</p><p><a href="index.php?id=' . $id . '">&lt;&lt; Назад</a></p>';
-            require_once ("../incfiles/end.php");
-            exit;
-        }
         if (isset($_POST['submit']))
         {
             if (empty($_POST['msg']))
