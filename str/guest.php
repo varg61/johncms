@@ -123,6 +123,7 @@ switch ($act)
             exit;
         }
         unset($_SESSION['guest']);
+        $_SESSION['code'] = rand(1000, 9999);
         $name = mb_substr(trim($_POST['name']), 0, 20);
         if (!empty($_SESSION['uid']))
         {
