@@ -43,7 +43,7 @@ switch ($do)
         echo '<div class="bmenu">Информация</div>';
 		echo '<div class="menu"><a href="str/news.php">Архив новостей</a> (' . $mp->newscount . ')</div>';
         echo '<div class="menu"><a href="read.php?">FAQ (ЧаВо)</a></div>';
-        echo '<div class="menu"><a href="index.php?do=info">Статистика</a></div>';
+        echo '<div class="menu"><a href="index.php?do=info">Доп. информация</a></div>';
         echo '<div class="bmenu">Общение</div>';
         echo '<div class="menu"><a href="str/guest.php">Гостевая</a> (' . gbook() . ')</div>';
         echo '<div class="menu"><a href="forum/">Форум</a> (' . wfrm() . ')</div>';

@@ -83,12 +83,7 @@ while ($mass = mysql_fetch_array($mess))
     echo "($vr1)<br/>";
     if ($offsm != 1 && $offgr != 1)
     {
-        $tekst = smiles($mass['text']);
-        $tekst = smilescat($tekst);
-        if ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1)
-        {
-            $tekst = smilesadm($tekst);
-        }
+        $tekst = smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
     } else
     {
         $tekst = $mass['text'];

@@ -191,6 +191,20 @@ if ($dostmod == 1)
             echo '<p><a href="main.php">В админку</a></p>';
             break;
 
+        case 'smileys':
+            echo '<div class="phdr"><b>Смайлы</b></div>';
+            if ($total = smileys(0, 2))
+            {
+                echo '<div class="gmenu"><p>Кэш смайлов успешно обновлен</p></div>';
+            } else
+            {
+            	echo '<div class="rmenu"><p>Ошибка лоступа к Кэшу смайлов</p></div>';
+            	$total = 0;
+            }
+            echo '<div class="phdr">Всего смайлов: ' . $total . '</div>';
+            echo '<p><a href="main.php">В админку</a></p>';
+            break;
+
         default:
             ////////////////////////////////////////////////////////////
             // Главное меню админки                                   //
@@ -220,6 +234,7 @@ if ($dostmod == 1)
                 echo '<div class="menu"><a href="chat.php">Чат</a></div>';
                 echo '<div class="bmenu">Система</div>';
                 echo '<div class="menu"><a href="ipban.php">Бан по IP</a></div>';
+                echo '<div class="menu"><a href="main.php?do=smileys">Обновить смайлы</a></div>';
                 echo '<div class="menu"><a href="main.php?do=antispy">Сканер файлов</a></div>';
                 echo '<div class="menu"><a href="set.php">Настройки</a></div>';
             }

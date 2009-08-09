@@ -550,17 +550,99 @@ function check($str)
     return $str;
 }
 
+////////////////////////////////////////////////////////////
+// Обработка смайлов                                      //
+////////////////////////////////////////////////////////////
+// Если $adm=1 то покажет Админские смайлы
+// Если $adm=2 то пересоздаст кэш смайлов
 
-#############################################################
-## Старые функции, которые постепенно будут удаляться.      #
-## НЕ ИСПОЛЬЗУЙТЕ их в своих модулях!!!                     #
-#############################################################
-
-function texttolink($str)
+function smileys($str, $adm = 2)
 {
-    $str = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $str);
-    return $str;
+    global $rootpath;
+    // Записываем КЭШ смайлов
+    if ($adm == 2)
+    {
+        $array1 = array();
+        $array2 = array();
+        $array3 = array();
+        $array4 = array();
+        // Обрабатываем простые смайлы
+        $path = $rootpath . 'smileys/simply/';
+        $dir = opendir($path);
+        while ($file = readdir($dir))
+        {
+            $name = explode(".", $file);
+            if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
+            {
+                $array1[':' . $name[0]] = '<img src="' . $path . $file . '" alt="" />';
+                ++$count;
+            }
+        }
+        closedir($dir);
+        // Обрабатываем Админские смайлы
+        if ($adm)
+        {
+            $path = $rootpath . 'smileys/admin/';
+            $dir = opendir($path);
+            while ($file = readdir($dir))
+            {
+                $name = explode(".", $file);
+                if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
+                {
+                    $array2[':' . $name[0] . ':'] = '<img src="' . $path . $file . '" alt="" />';
+                    ++$count;
+                }
+            }
+        }
+        // Обрабатываем смайлы в каталогах
+        $cat = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
+        $total = count($cat);
+        for ($i = 0; $i < $total; $i++)
+        {
+            $dir = opendir($cat[$i]);
+            while ($file = readdir($dir))
+            {
+                $name = explode(".", $file);
+                if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
+                {
+                    $array3[':' . $name[0] . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
+                    $array4[':' . trans($name[0]) . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
+                    ++$count;
+                }
+            }
+            closedir($dir);
+        }
+        $smileys = serialize(array_merge($array1, $array3, $array4));
+        $smileys_adm = serialize($array2);
+        // Записываем в файл Кэша
+        if ($fp = fopen($rootpath . 'smileys.dat', 'w'))
+        {
+            fputs($fp, $smileys . "\r\n" . $smileys_adm);
+            fclose($fp);
+            return $count;
+        } else
+        {
+			return false;
+        }
+    } else
+    {
+        // Выдаем кэшированные смайлы
+        $file = file($rootpath . 'smileys.dat');
+        $smileys = unserialize($file[0]);
+        if ($adm)
+            $smileys = array_merge($smileys, unserialize($file[1]));
+        return strtr($str, $smileys);
+    }
 }
+
+/*
+################################################################################
+##                                                                            ##
+##  Старые функции, которые постепенно будут удаляться.                       ##
+##  НЕ ИСПОЛЬЗУЙТЕ их в своих модулях!!!                                      ##
+##                                                                            ##
+################################################################################
+*/
 
 function provcat($catalog)
 {
@@ -611,71 +693,6 @@ function format($name)
     $f2 = substr($name, $f1 + 1, 999);
     $fname = strtolower($f2);
     return $fname;
-}
-
-function smiles($str)
-{
-    $dir = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/prost");
-    while ($file = readdir($dir))
-    {
-        if (ereg(".gif$", "$file"))
-        {
-            $file2 = $file;
-            $file2 = str_replace(".gif", "", $file2);
-            $str = str_replace(":$file2", "<img src=\"../sm/prost/$file2.gif\" alt=\"\" />", $str);
-        }
-    }
-    closedir($dir);
-    return $str;
-}
-
-function smilesadm($str)
-{
-    $dir = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/adm");
-    while ($file = readdir($dir))
-    {
-        if (ereg(".gif$", "$file"))
-        {
-            $file2 = $file;
-            $file2 = str_replace(".gif", "", $file2);
-            $trfile = trans($file2);
-            $str = str_replace(":$file2:", "<img src=\"../sm/adm/$file2.gif\" alt=\"\" />", $str);
-            $str = str_replace(":$trfile:", "<img src=\"../sm/adm/$file2.gif\" alt=\"\" />", $str);
-        }
-    }
-    closedir($dir);
-    return $str;
-}
-
-function smilescat($str)
-{
-    $dir = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/cat");
-    while ($file = readdir($dir))
-    {
-        if (($file != ".") && ($file != "..") && ($file != ".htaccess") && ($file != "index.php"))
-        {
-            $a[] = $file;
-        }
-    }
-    closedir($dir);
-    $total = count($a);
-    for ($a1 = 0; $a1 < $total; $a1++)
-    {
-        $d = opendir($_SERVER["DOCUMENT_ROOT"] . "/sm/cat/$a[$a1]");
-        while ($k = readdir($d))
-        {
-            if (ereg(".gif$", "$k"))
-            {
-                $file2 = $k;
-                $file2 = str_replace(".gif", "", $file2);
-                $trfile = trans($file2);
-                $str = str_replace(":$file2:", "<img src=\"../sm/cat/$a[$a1]/$file2.gif\" alt=\"\" />", $str);
-                $str = str_replace(":$trfile:", "<img src=\"../sm/cat/$a[$a1]/$file2.gif\" alt=\"\" />", $str);
-            }
-        }
-        closedir($d);
-    }
-    return $str;
 }
 
 function rus_lat($str)

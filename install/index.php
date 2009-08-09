@@ -317,7 +317,7 @@ switch ($_GET['act'])
         }
 
         // Проверка прав доступа к файлам
-        $arr = array('flood.dat', 'library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF', 'panel/filebase.dat');
+        $arr = array('flood.dat', 'smileys.dat', 'library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF', 'panel/filebase.dat');
         foreach ($arr as $v)
         {
             if (permissions($v) < 666)

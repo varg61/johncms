@@ -95,13 +95,7 @@ while ($mass = mysql_fetch_array($mess))
         $text = tags($mass['text']);
         if ($offsm != 1 && $offgr != 1)
         {
-            $text = smiles($text);
-            $text = smilescat($text);
-
-            if ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1)
-            {
-                $text = smilesadm($text);
-            }
+            $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
         }
         echo $text . '<br/>';
         if ($dostsmod == 1)
@@ -112,7 +106,7 @@ while ($mass = mysql_fetch_array($mess))
     }
     ++$i;
 }
-if ($countm > $kmess)
+if ($countm > $kmess)//TODO: Переделать на новую навигацию
 {
     echo "<hr/>";
     $ba = ceil($countm / $kmess);

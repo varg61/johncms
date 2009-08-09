@@ -40,16 +40,9 @@ $uz = @mysql_query("select `id`, `from`, `rights` FROM `users` where name='" . $
 $mass1 = @mysql_fetch_array($uz);
 if ($offsm != 1 && $offgr != 1)
 {
-    $text = smiles($text);
-    $text = smilescat($text);
-
-    if ($ms['from'] == $nickadmina || $ms['from'] == $nickadmina2 || $mass1['rights'] >= 1)
-    {
-        $text = smilesadm($text);
-    }
+    $text = smileys($text, ($ms['from'] == $nickadmina || $ms['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
 }
 echo $text . '</div>';
-//echo "</div><div class='a'>";
 $q5 = mysql_query("select * from `forum` where type='t' and id='" . $ms['refid'] . "';");
 $them = mysql_fetch_array($q5);
 $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $them['refid'] . "';");
@@ -60,7 +53,5 @@ echo "<div>&#187;<a href='index.php?id=" . $ms['refid'] . "&amp;page=" . $s . "'
 echo "&#187;<a href='index.php?id=" . $type1['refid'] . "'>$razd[text]</a><br/>";
 echo "&#187;<a href='index.php?id=" . $razd['refid'] . "'>$frm[text]</a><br/>";
 echo "&#187;<a href='index.php?'>В форум</a></div>";
-//echo "</div><div class='a'>";
-
 
 ?>

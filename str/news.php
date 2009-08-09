@@ -238,9 +238,7 @@ switch ($do)
             $text = tags($text);
             if ($offsm != 1 && $offgr != 1)
             {
-                $text = smiles($text);
-                $text = smilescat($text);
-                $text = smilesadm($text);
+                $text = smileys($text, 1);
             }
             $vr = $nw1['time'] + $sdvig * 3600;
             $vr1 = date("d.m.y / H:i", $vr);

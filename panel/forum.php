@@ -104,7 +104,7 @@ if ($dostadm == 1)
                     $q = mysql_query("select * from `forum` where type='f' order by realid;");
                     while ($q1 = mysql_fetch_array($q))
                     {
-                        echo "<a href='forum.php?act=moders&amp;id=" . $q1[id] . "'>$q1[text]</a><br/>";
+                        echo "<a href='forum.php?act=moders&amp;id=" . $q1['id'] . "'>$q1[text]</a><br/>";
                     }
                 }
             }
@@ -123,13 +123,13 @@ if ($dostadm == 1)
             $id = intval(check($_GET['id']));
             $typ = mysql_query("select * from `forum` where id='" . $id . "';");
             $ms = mysql_fetch_array($typ);
-            if ($ms[type] != "f" && $ms[type] != "r")
+            if ($ms['type'] != "f" && $ms['type'] != "r")
             {
                 echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            switch ($ms[type])
+            switch ($ms['type'])
             {
                 case "f":
                     if (isset($_GET['yes']))
@@ -137,21 +137,21 @@ if ($dostadm == 1)
                         $raz = mysql_query("select * from `forum` where refid='" . $id . "';");
                         while ($raz1 = mysql_fetch_array($raz))
                         {
-                            $tem = mysql_query("select * from `forum` where refid='" . $raz1[id] . "';");
+                            $tem = mysql_query("select * from `forum` where refid='" . $raz1['id'] . "';");
                             while ($tem1 = mysql_fetch_array($tem))
                             {
-                                $mes = mysql_query("select * from `forum` where refid='" . $tem1[id] . "';");
+                                $mes = mysql_query("select * from `forum` where refid='" . $tem1['id'] . "';");
                                 while ($mes1 = mysql_fetch_array($mes))
                                 {
-                                    if (!empty($mes1[attach]))
+                                    if (!empty($mes1['attach']))
                                     {
                                         unlink("../forum/files/$mes1[attach]");
                                     }
-                                    mysql_query("delete from `forum` where `id`='" . $mes1[id] . "';");
+                                    mysql_query("delete from `forum` where `id`='" . $mes1['id'] . "';");
                                 }
-                                mysql_query("delete from `forum` where `id`='" . $tem1[id] . "';");
+                                mysql_query("delete from `forum` where `id`='" . $tem1['id'] . "';");
                             }
-                            mysql_query("delete from `forum` where `id`='" . $raz1[id] . "';");
+                            mysql_query("delete from `forum` where `id`='" . $raz1['id'] . "';");
                         }
                         mysql_query("delete from `forum` where `id`='" . $id . "';");
                         header("Location: forum.php");
@@ -166,16 +166,16 @@ if ($dostadm == 1)
                         $tem = mysql_query("select * from `forum` where refid='" . $id . "';");
                         while ($tem1 = mysql_fetch_array($tem))
                         {
-                            $mes = mysql_query("select * from `forum` where refid='" . $tem1[id] . "';");
+                            $mes = mysql_query("select * from `forum` where refid='" . $tem1['id'] . "';");
                             while ($mes1 = mysql_fetch_array($mes))
                             {
-                                if (!empty($mes1[attach]))
+                                if (!empty($mes1['attach']))
                                 {
                                     unlink("../forum/files/$mes1[attach]");
                                 }
-                                mysql_query("delete from `forum` where `id`='" . $mes1[id] . "';");
+                                mysql_query("delete from `forum` where `id`='" . $mes1['id'] . "';");
                             }
-                            mysql_query("delete from `forum` where `id`='" . $tem1[id] . "';");
+                            mysql_query("delete from `forum` where `id`='" . $tem1['id'] . "';");
                         }
                         mysql_query("delete from `forum` where `id`='" . $id . "';");
                         header("Location: forum.php");
@@ -183,7 +183,6 @@ if ($dostadm == 1)
                     {
                         echo "Вы уверены,что хотите удалить раздел $ms[text]?<br/><a href='forum.php?act=del&amp;id=" . $id . "&amp;yes'>Да</a>|<a href='forum.php'>Нет</a><br/>";
                     }
-
                     break;
             }
             echo "<a href='forum.php?'>В управление форумом</a><br/>";
@@ -197,7 +196,6 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $id = intval(check($_GET['id']));
             $raz = mysql_query("select * from `forum` where type='f' and id='" . $id . "' ;");
             if (mysql_num_rows($raz) == 0)
             {
@@ -226,7 +224,7 @@ if ($dostadm == 1)
                 {
                     while ($arr = mysql_fetch_array($q))
                     {
-                        $arr1[] = $arr[realid];
+                        $arr1[] = $arr['realid'];
                     }
                     $rid = $arr1[0] + 1;
                 }
@@ -261,7 +259,7 @@ if ($dostadm == 1)
                 {
                     while ($arr = mysql_fetch_array($q))
                     {
-                        $arr1[] = $arr[realid];
+                        $arr1[] = $arr['realid'];
                     }
                     $rid = $arr1[0] + 1;
                 }
@@ -283,10 +281,9 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $id = intval(check($_GET['id']));
             $typ = mysql_query("select * from `forum` where id='" . $id . "';");
             $ms = mysql_fetch_array($typ);
-            if ($ms[type] != "f" && $ms[type] != "r")
+            if ($ms['type'] != "f" && $ms['type'] != "r")
             {
                 require_once ("../incfiles/head.php");
                 echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
@@ -304,7 +301,6 @@ if ($dostadm == 1)
                     exit;
                 }
                 $nf = check(trim($_POST['nf']));
-
                 mysql_query("update `forum` set  text='" . $nf . "' where id='" . $id . "';");
                 header("Location: forum.php?id=$ms[refid]");
             } else
@@ -323,22 +319,21 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $id = intval(check($_GET['id']));
-            $typ = mysql_query("select * from `forum` where id='" . $id . "';");
+            $typ = mysql_query("select * from `forum` where id='" . $id . "'");
             $ms = mysql_fetch_array($typ);
-            if ($ms[type] != "f" && $ms[type] != "r")
+            if ($ms['type'] != "f" && $ms['type'] != "r")
             {
                 echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            switch ($ms[type])
+            switch ($ms['type'])
             {
                 case "f":
-                    $ri = mysql_query("select * from `forum` where type='f' and realid<'" . $ms[realid] . "' order by realid desc;");
+                    $ri = mysql_query("select * from `forum` where type='f' and realid<'" . $ms['realid'] . "' order by realid desc");
                     break;
                 case "r":
-                    $ri = mysql_query("select * from `forum` where type='r' and refid='" . $ms[refid] . "' and realid<'" . $ms[realid] . "' order by realid desc;");
+                    $ri = mysql_query("select * from `forum` where type='r' and refid='" . $ms['refid'] . "' and realid<'" . $ms['realid'] . "' order by realid desc");
                     break;
             }
             $rei = mysql_num_rows($ri);
@@ -350,9 +345,9 @@ if ($dostadm == 1)
             }
             while ($rid = mysql_fetch_array($ri))
             {
-                $arr[] = $rid[id];
+                $arr[] = $rid['id'];
             }
-            switch ($ms[type])
+            switch ($ms['type'])
             {
                 case "f":
                     $tr = mysql_query("select * from `forum` where type='f' and id='" . $arr[0] . "';");
@@ -362,8 +357,8 @@ if ($dostadm == 1)
                     break;
             }
             $tr1 = mysql_fetch_array($tr);
-            $real1 = $tr1[realid];
-            $real2 = $ms[realid];
+            $real1 = $tr1['realid'];
+            $real2 = $ms['realid'];
             mysql_query("update `forum` set  realid='" . $real1 . "' where id='" . $id . "';");
             mysql_query("update `forum` set  realid='" . $real2 . "' where id='" . $arr[0] . "';");
             header("Location: forum.php?id=$ms[refid]");
@@ -378,22 +373,21 @@ if ($dostadm == 1)
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            $id = intval(check($_GET['id']));
             $typ = mysql_query("select * from `forum` where id='" . $id . "';");
             $ms = mysql_fetch_array($typ);
-            if ($ms[type] != "f" && $ms[type] != "r")
+            if ($ms['type'] != "f" && $ms['type'] != "r")
             {
                 echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            switch ($ms[type])
+            switch ($ms['type'])
             {
                 case "f":
-                    $ri = mysql_query("select * from `forum` where type='f' and realid>'" . $ms[realid] . "' order by realid;");
+                    $ri = mysql_query("select * from `forum` where type='f' and realid>'" . $ms['realid'] . "' order by realid;");
                     break;
                 case "r":
-                    $ri = mysql_query("select * from `forum` where type='r' and refid='" . $ms[refid] . "' and realid>'" . $ms[realid] . "' order by realid;");
+                    $ri = mysql_query("select * from `forum` where type='r' and refid='" . $ms['refid'] . "' and realid>'" . $ms['realid'] . "' order by realid");
                     break;
             }
             $rei = mysql_num_rows($ri);
@@ -405,9 +399,9 @@ if ($dostadm == 1)
             }
             while ($rid = mysql_fetch_array($ri))
             {
-                $arr[] = $rid[id];
+                $arr[] = $rid['id'];
             }
-            switch ($ms[type])
+            switch ($ms['type'])
             {
                 case "f":
                     $tr = mysql_query("select * from `forum` where type='f' and id='" . $arr[0] . "';");
@@ -417,14 +411,14 @@ if ($dostadm == 1)
                     break;
             }
             $tr1 = mysql_fetch_array($tr);
-            $real1 = $tr1[realid];
-            $real2 = $ms[realid];
+            $real1 = $tr1['realid'];
+            $real2 = $ms['realid'];
             mysql_query("update `forum` set  realid='" . $real1 . "' where id='" . $id . "';");
             mysql_query("update `forum` set  realid='" . $real2 . "' where id='" . $arr[0] . "';");
             header("Location: forum.php?id=$ms[refid]");
 
             break;
-            #####
+
         case "them":
             if ($dostsadm == 1)
             {
@@ -434,7 +428,7 @@ if ($dostadm == 1)
                 $dt1 = mysql_num_rows($dt);
                 while ($dt2 = mysql_fetch_array($dt))
                 {
-                    $d = $i / 2;
+                    $d = $i / 2;//TODO: Переделать на новое чередование цветов и ввести постраничную навигацию
                     $d1 = ceil($d);
                     $d2 = $d1 - $d;
                     $d3 = ceil($d2);
@@ -445,12 +439,12 @@ if ($dostadm == 1)
                     {
                         $div = "<div class='c'>";
                     }
-                    $dr = mysql_query("select * from `forum` where type='r' and id='" . $dt2[refid] . "';");
+                    $dr = mysql_query("select * from `forum` where type='r' and id='" . $dt2['refid'] . "';");
                     $dr1 = mysql_fetch_array($dr);
-                    $df = mysql_query("select * from `forum` where type='f' and id='" . $dr1[refid] . "';");
+                    $df = mysql_query("select * from `forum` where type='f' and id='" . $dr1['refid'] . "';");
                     $df1 = mysql_fetch_array($df);
                     echo "$div<a href='../forum/?id=" . $dt2[id] . "'>$df1[text]/$dr1[text]/$dt2[text]</a><br/>";
-                    echo "<a href='forum.php?act=nah&amp;id=" . $dt2[id] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dt2[id] . "'>Восстановить</a>";
+                    echo "<a href='forum.php?act=nah&amp;id=" . $dt2['id'] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dt2['id'] . "'>Восстановить</a>";
 
                     echo "</div>";
                     ++$i;
@@ -461,7 +455,7 @@ if ($dostadm == 1)
                 header("Location: forum.php");
             }
             break;
-            ######
+
         case "ins":
             if ($dostsadm == 1)
             {
@@ -473,10 +467,9 @@ if ($dostadm == 1)
                     require_once ("../incfiles/end.php");
                     exit;
                 }
-                $id = intval(check($_GET['id']));
                 $typ = mysql_query("select * from `forum` where id='" . $id . "';");
                 $ms = mysql_fetch_array($typ);
-                if ($ms[type] != "t" && $ms[type] != "m")
+                if ($ms['type'] != "t" && $ms['type'] != "m")
                 {
                     require_once ("../incfiles/head.php");
                     echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
@@ -484,7 +477,7 @@ if ($dostadm == 1)
                     exit;
                 }
                 mysql_query("update `forum` set  close='0' where id='" . $id . "';");
-                switch ($ms[type])
+                switch ($ms['type'])
                 {
                     case "t":
                         header("Location: forum.php?act=them");
@@ -499,7 +492,6 @@ if ($dostadm == 1)
             }
             break;
 
-            ######
         case "nah":
             if ($dostsadm == 1)
             {
@@ -510,22 +502,21 @@ if ($dostadm == 1)
                     require_once ("../incfiles/end.php");
                     exit;
                 }
-                $id = intval(check($_GET['id']));
                 $typ = mysql_query("select * from `forum` where id='" . $id . "';");
                 $ms = mysql_fetch_array($typ);
-                if ($ms[type] != "t" && $ms[type] != "m")
+                if ($ms['type'] != "t" && $ms['type'] != "m")
                 {
                     require_once ("../incfiles/head.php");
                     echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
                     require_once ("../incfiles/end.php");
                     exit;
                 }
-                if (!empty($ms[attach]))
+                if (!empty($ms['attach']))
                 {
                     unlink("../forum/files/$ms[attach]");
                 }
-                mysql_query("delete from `forum` where id='" . $ms[id] . "';");
-                switch ($ms[type])
+                mysql_query("delete from `forum` where id='" . $ms['id'] . "';");
+                switch ($ms['type'])
                 {
                     case "t":
                         header("Location: forum.php?act=them");
@@ -539,9 +530,8 @@ if ($dostadm == 1)
                 header("Location: forum.php");
             }
             break;
-            ######
-        case "delhid":
 
+        case "delhid":
             if ($dostsadm == 1)
             {
                 if (isset($_GET['yes']))
@@ -549,11 +539,11 @@ if ($dostadm == 1)
                     $dd = mysql_query("select * from `forum` where close='1';");
                     while ($dd1 = mysql_fetch_array($dd))
                     {
-                        if (!empty($dd1[attach]))
+                        if (!empty($dd1['attach']))
                         {
                             unlink("../forum/files/$dd1[attach]");
                         }
-                        mysql_query("delete from `forum` where id='" . $dd1[id] . "';");
+                        mysql_query("delete from `forum` where id='" . $dd1['id'] . "';");
                         header("Location: forum.php");
                     }
                 } else
@@ -566,7 +556,7 @@ if ($dostadm == 1)
                 header("Location: forum.php");
             }
             break;
-            ######
+
         case "post":
 
             if ($dostsadm == 1)
@@ -577,7 +567,7 @@ if ($dostadm == 1)
                 $dp1 = mysql_num_rows($dp);
                 while ($dp2 = mysql_fetch_array($dp))
                 {
-                    $d = $i / 2;
+                    $d = $i / 2;// Переделать на новое чередование цветов и постраничную навигацию
                     $d1 = ceil($d);
                     $d2 = $d1 - $d;
                     $d3 = ceil($d2);
@@ -588,18 +578,18 @@ if ($dostadm == 1)
                     {
                         $div = "<div class='c'>";
                     }
-                    $dt = mysql_query("select * from `forum` where type='t' and id='" . $dp2[refid] . "';");
+                    $dt = mysql_query("select * from `forum` where type='t' and id='" . $dp2['refid'] . "';");
                     $dt1 = mysql_fetch_array($dt);
-                    $dr = mysql_query("select * from `forum` where type='r' and id='" . $dt1[refid] . "';");
+                    $dr = mysql_query("select * from `forum` where type='r' and id='" . $dt1['refid'] . "';");
                     $dr1 = mysql_fetch_array($dr);
-                    $df = mysql_query("select * from `forum` where type='f' and id='" . $dr1[refid] . "';");
+                    $df = mysql_query("select * from `forum` where type='f' and id='" . $dr1['refid'] . "';");
                     $df1 = mysql_fetch_array($df);
                     ###
-                    $vrp = $dp2[time] + $sdvig * 3600;
+                    $vrp = $dp2['time'] + $sdvig * 3600;
                     $vr = date("d.m.Y / H:i", $vrp);
-                    $uz = @mysql_query("select * from `users` where name='" . check($dp2[from]) . "';");
+                    $uz = @mysql_query("select * from `users` where name='" . check($dp2['from']) . "';");
                     $mass1 = @mysql_fetch_array($uz);
-                    switch ($mass1[rights])
+                    switch ($mass1['rights'])
                     {
                         case 7:
                             $stat = "Adm";
@@ -617,7 +607,7 @@ if ($dostadm == 1)
                             $stat = "";
                             break;
                     }
-                    switch ($mass1[sex])
+                    switch ($mass1['sex'])
                     {
                         case "m":
                             $pol = "<img src='../images/m.gif' alt=''/>";
@@ -628,44 +618,34 @@ if ($dostadm == 1)
                     }
                     $hd = "$pol <b>$dp2[from]</b> $stat ($vr)<br/>";
 
-                    if (!empty($dp2[to]))
+                    if (!empty($dp2['to']))
                     {
                         $hd = "$hd $dp2[to], ";
                     }
 
 
                     ##
-                    $dp2[text] = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class=\'d\'>\1<br/></div>', $dp2[text]);
-                    $dp2[text] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $dp2[text]);
-                    $dp2[text] = eregi_replace("\\[l\\]((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='\\1\\3'>\\7</a>", $dp2[text]);
+                    $dp2['text'] = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class=\'d\'>\1<br/></div>', $dp2['text']);
+                    $dp2['text'] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $dp2['text']);
+                    $dp2['text'] = eregi_replace("\\[l\\]((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='\\1\\3'>\\7</a>", $dp2['text']);
 
-                    if (stristr($dt2[text], "<a href="))
+                    if (stristr($dt2['text'], "<a href="))
                     {
-                        $dp2[text] = eregi_replace("\\<a href\\='((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)'>[[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)</a>",
-                            "<a href='\\1\\3'>\\3</a>", $dp2[text]);
+                        $dp2['text'] = eregi_replace("\\<a href\\='((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)'>[[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)</a>",
+                            "<a href='\\1\\3'>\\3</a>", $dp2['text']);
                     } else
                     {
-                        $dp2[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $dp2[text]);
+                        $dp2[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $dp2['text']);
                     }
                     if ($offsm != 1 && $offgr != 1)
                     {
-                        $tekst = smiles($dp2[text]);
-                        $tekst = smilescat($tekst);
-
-                        if ($dp2['from'] == $nickadmina || $dp2['from'] == $nickadmina2 || $array1[rights] >= 1)
-                        {
-                            $tekst = smilesadm($tekst);
-                        }
+                        $tekst = smileys($dp2['text']);
                     } else
                     {
-                        $tekst = $dp2[text];
+                        $tekst = $dp2['text'];
                     }
-
-
-                    ###
                     echo "$div $hd $tekst<br/>$df1[text]/$dr1[text]/$dt1[text]<br/>";
-                    echo "<a href='forum.php?act=nah&amp;id=" . $dp2['id'] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dp2[id] . "'>Восстановить</a>";
-
+                    echo "<a href='forum.php?act=nah&amp;id=" . $dp2['id'] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dp2['id'] . "'>Восстановить</a>";
                     echo "</div>";
                     ++$i;
                 }
@@ -684,9 +664,9 @@ if ($dostadm == 1)
                 $q = mysql_query("select * from `forum` where type='f' order by realid ;");
                 while ($mass = mysql_fetch_array($q))
                 {
-                    $colraz = mysql_query("select * from `forum` where type='r' and refid='" . $mass[id] . "';");
+                    $colraz = mysql_query("select * from `forum` where type='r' and refid='" . $mass['id'] . "';");
                     $colraz1 = mysql_num_rows($colraz);
-                    $d = $i / 2;
+                    $d = $i / 2;//TODO: Переделать на новое чередование цветов
                     $d1 = ceil($d);
                     $d2 = $d1 - $d;
                     $d3 = ceil($d2);
@@ -697,20 +677,20 @@ if ($dostadm == 1)
                     {
                         $div = "<div class='c'>";
                     }
-                    $ri = mysql_query("select * from `forum` where type='f' and  realid>'" . $mass[realid] . "';");
+                    $ri = mysql_query("select * from `forum` where type='f' and  realid>'" . $mass['realid'] . "';");
                     $rei = mysql_num_rows($ri);
-                    $ri1 = mysql_query("select * from `forum` where type='f' and realid<'" . $mass[realid] . "';");
+                    $ri1 = mysql_query("select * from `forum` where type='f' and realid<'" . $mass['realid'] . "';");
                     $rei1 = mysql_num_rows($ri1);
-                    echo "$div<a href='forum.php?id=" . $mass[id] . "'>$mass[text]</a> ($colraz1)<br/>";
+                    echo "$div<a href='forum.php?id=" . $mass['id'] . "'>$mass[text]</a> ($colraz1)<br/>";
                     if ($rei1 != 0)
                     {
-                        echo "<a href='forum.php?act=up&amp;id=" . $mass[id] . "'>Вверх</a> | ";
+                        echo "<a href='forum.php?act=up&amp;id=" . $mass['id'] . "'>Вверх</a> | ";
                     }
                     if ($rei != 0)
                     {
-                        echo "<a href='forum.php?act=down&amp;id=" . $mass[id] . "'>Вниз</a> | ";
+                        echo "<a href='forum.php?act=down&amp;id=" . $mass['id'] . "'>Вниз</a> | ";
                     }
-                    echo "<a href='forum.php?act=edit&amp;id=" . $mass[id] . "'>Edit</a> | <a href='forum.php?act=del&amp;id=" . $mass[id] . "'>Del</a>";
+                    echo "<a href='forum.php?act=edit&amp;id=" . $mass['id'] . "'>Edit</a> | <a href='forum.php?act=del&amp;id=" . $mass['id'] . "'>Del</a>";
                     echo "</div>";
                     ++$i;
                 }
@@ -727,10 +707,9 @@ if ($dostadm == 1)
             }
             if (!empty($_GET['id']))
             {
-                $id = intval(check($_GET['id']));
                 $type = mysql_query("select * from `forum` where id= '" . $id . "';");
                 $type1 = mysql_fetch_array($type);
-                $tip = $type1[type];
+                $tip = $type1['type'];
                 switch ($tip)
                 {
                     case "f":
@@ -740,7 +719,7 @@ if ($dostadm == 1)
 
                         while ($mass = mysql_fetch_array($q1))
                         {
-                            $d = $i / 2;
+                            $d = $i / 2;//TODO: Переделать на новое чередование цветов
                             $d1 = ceil($d);
                             $d2 = $d1 - $d;
                             $d3 = ceil($d2);
@@ -751,21 +730,21 @@ if ($dostadm == 1)
                             {
                                 $div = "<div class='c'>";
                             }
-                            $ri = mysql_query("select * from `forum` where type='r' and refid='" . $id . "' and  realid>'" . $mass[realid] . "';");
+                            $ri = mysql_query("select * from `forum` where type='r' and refid='" . $id . "' and  realid>'" . $mass['realid'] . "';");
                             $rei = mysql_num_rows($ri);
-                            $ri1 = mysql_query("select * from `forum` where type='r' and refid='" . $id . "' and realid<'" . $mass[realid] . "';");
+                            $ri1 = mysql_query("select * from `forum` where type='r' and refid='" . $id . "' and realid<'" . $mass['realid'] . "';");
                             $rei1 = mysql_num_rows($ri1);
 
                             echo "$div$mass[text]<br/>";
                             if ($rei1 != 0)
                             {
-                                echo "<a href='forum.php?act=up&amp;id=" . $mass[id] . "'>Вверх</a> | ";
+                                echo "<a href='forum.php?act=up&amp;id=" . $mass['id'] . "'>Вверх</a> | ";
                             }
                             if ($rei != 0)
                             {
-                                echo "<a href='forum.php?act=down&amp;id=" . $mass[id] . "'>Вниз</a> | ";
+                                echo "<a href='forum.php?act=down&amp;id=" . $mass['id'] . "'>Вниз</a> | ";
                             }
-                            echo "<a href='forum.php?act=edit&amp;id=" . $mass[id] . "'>Edit</a> | <a href='forum.php?act=del&amp;id=" . $mass[id] . "'>Del</a>";
+                            echo "<a href='forum.php?act=edit&amp;id=" . $mass['id'] . "'>Edit</a> | <a href='forum.php?act=del&amp;id=" . $mass['id'] . "'>Del</a>";
                             echo "</div>";
                             ++$i;
                         }
@@ -774,16 +753,14 @@ if ($dostadm == 1)
                         break;
                 }
             }
-
             break;
     }
-
-
 } else
 {
     header("Location: ../index.php?mod=404");
 }
 echo "<a href='../forum/?'>В форум</a><br/>";
+
 require_once ("../incfiles/end.php");
 
 ?>

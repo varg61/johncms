@@ -21,8 +21,8 @@ $headmod = 'mainpage';
 // Внимание! Если файл находится в корневой папке, нужно указать $rootpath = '';
 $rootpath = '';
 
-require_once ("incfiles/core.php");
-require_once ("incfiles/head.php");
+require_once ('incfiles/core.php');
+require_once ('incfiles/head.php');
 
 $mod = isset($_GET['mod']) ? trim($_GET['mod']) : '';
 if (isset($_GET['err']))
@@ -82,11 +82,11 @@ switch ($mod)
         {
             echo '<div class="phdr">Дайджест</div>';
             echo '<div class="gmenu">Привет, <b>' . $login . '</b><br/>';
-            echo 'Добро пожаловать на ' . $copyright . '!</div>';
+            echo 'Добро пожаловать на ' . $copyright . '!<br />Войти на сайт <a href="index.php">&gt;&gt;&gt;</a></div>';
             // Поздравление с днем рождения
             if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon)
             {
-                echo '<div class="rmenu">С ДНЁМ РОЖДЕНИЯ!!!</div>';
+                echo '<div class="rmenu"><p>С ДНЁМ РОЖДЕНИЯ!!!</p></div>';
             }
             echo '<div class="bmenu">Новое на сайте</div>';
             // Новости
@@ -125,7 +125,6 @@ switch ($mod)
             // Дата последнего посещения
             $last = isset($_GET['last']) ? intval($_GET['last']) : $lastdate;
             echo '<div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
-            //echo '<div class="gmenu" style="font-size:large; padding-top: 8px; padding-bottom: 8px;"><a href="index.php">Войти на сайт</a></div>';
         }
         break;
 

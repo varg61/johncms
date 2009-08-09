@@ -581,12 +581,7 @@ if ($user_id)
             $text = tags($text);
             if ($offsm != 1 && $offgr != 1)
             {
-                $text = smiles($text);
-                $text = smilescat($text);
-                if ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1)
-                {
-                    $text = smilesadm($text);
-                }
+                $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             }
             echo "<p>От <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
             $vrp = $massiv1['time'] + $sdvig * 3600;
@@ -664,7 +659,6 @@ if ($user_id)
             {
                 $end = $start + $kmess;
             }
-
             while ($massiv = mysql_fetch_array($messages))
             {
                 if ($i >= $start && $i < $end)
@@ -707,7 +701,6 @@ if ($user_id)
                 }
                 $asd = $start - ($kmess);
                 $asd2 = $start + ($kmess * 2);
-
                 if ($start != 0)
                 {
                     echo '<a href="pradd.php?act=out&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
@@ -737,7 +730,6 @@ if ($user_id)
                         if ($i < $count && $i >= 0)
                         {
                             $ii = floor(1 + $i / $kmess);
-
                             if ($start == $i)
                             {
                                 echo " <b>$ii</b>";
@@ -787,7 +779,6 @@ if ($user_id)
             // Читаем исходящие письма                                //
             ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
-            $id = intval($_GET['id']);
             $messages1 = mysql_query("select * from `privat` where author='" . $login . "' and type='out' and id='" . $id . "';");
             $massiv1 = mysql_fetch_array($messages1);
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='$massiv1[user]';"));
@@ -795,12 +786,7 @@ if ($user_id)
             $text = tags($text);
             if ($offsm != 1 && $offgr != 1)
             {
-                $text = smiles($text);
-                $text = smilescat($text);
-                if ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1)
-                {
-                    $text = smilesadm($text);
-                }
+                $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             }
             echo "<p>Для <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
             $vrp = $massiv1['time'] + $sdvig * 3600;
@@ -811,6 +797,7 @@ if ($user_id)
             }
             echo "<hr /><p><a href='pradd.php?act=delmess&amp;del=" . $massiv1['id'] . "'>Удалить</a></p>";
             break;
+
         case 'trans':
             require_once ("../incfiles/head.php");
             include ("../pages/trans.$ras_pages");

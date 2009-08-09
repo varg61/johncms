@@ -375,12 +375,7 @@ if (in_array($act, $do))
                             $text = check($text);
                             if ($offsm != 1)
                             {
-                                $text = smiles($text);
-                                $text = smilescat($text);
-                                if ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1)
-                                {
-                                    $text = smilesadm($text);
-                                }
+                                $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
                             }
                             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                             $text = str_replace("\r\n", "<br/>", $text);

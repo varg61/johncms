@@ -429,15 +429,10 @@ switch ($act)
                 {
                     // Для зарегистрированных показываем ссылки и смайлы
                     $text = tags($text);
-                    $text = str_replace("\r\n", "<br />", $text);
+                    $text = nl2br($text);
                     if ($offsm != 1 && $offgr != 1)
                     {
-                        $text = smiles($text);
-                        $text = smilescat($text);
-                        if ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= 1)
-                        {
-                            $text = smilesadm($text);
-                        }
+                        $text = smileys($text, ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= 1) ? 1 : 0);
                     }
                 } else
                 {
@@ -457,15 +452,13 @@ switch ($act)
                 if (!empty($res['otvet']))
                 {
                     $otvet = htmlentities($res['otvet'], ENT_QUOTES, 'UTF-8');
-                    $otvet = str_replace("\r\n", "<br />", $otvet);
+                    $otvet = nl2br($otvet);
                     $otvet = tags($otvet);
                     $vrp1 = $res['otime'] + $sdvig * 3600;
                     $vr1 = date("d.m.Y / H:i", $vrp1);
                     if ($offsm != 1 && $offgr != 1)
                     {
-                        $otvet = smiles($otvet);
-                        $otvet = smilescat($otvet);
-                        $otvet = smilesadm($otvet);
+                        $otvet = smileys($otvet, 1);
                     }
                     echo '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }

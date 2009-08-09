@@ -62,9 +62,7 @@ class mainpage
                     // Парсинг смайлов
                     if ($this->settings['smileys'])
                     {
-                        $text = call_user_func('smiles', $text);
-                        $text = call_user_func('smilescat', $text);
-                        $text = call_user_func('smilesadm', $text);
+                        $text = call_user_func('smileys', $text);//TODO: Проверить Админские смайлы
                     }
                     // Обрабатываем тэги
                     if ($this->settings['tags'])
