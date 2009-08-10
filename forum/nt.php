@@ -30,6 +30,16 @@ if (!$user_id || $ban['1'] || $ban['11'])
     exit;
 }
 
+// Проверка на спам
+$old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
+if ($lastpost > ($realtime - $old))
+{
+    require_once ("../incfiles/head.php");
+    echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
+
 $type = mysql_query("select * from `forum` where id= '" . $id . "';");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
