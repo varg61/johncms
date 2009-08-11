@@ -589,7 +589,7 @@ function smileys($str, $adm = 0)
                 $name = explode(".", $file);
                 if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
                 {
-                    $array2[':' . $name[0] . ':'] = '<img src="' . $path . $file . '" alt="" />';
+                    $array2[':' . trans($name[0]) . ':'] = '<img src="' . $path . $file . '" alt="" />';
                     ++$count;
                 }
             }
@@ -605,14 +605,13 @@ function smileys($str, $adm = 0)
                 $name = explode(".", $file);
                 if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
                 {
-                    $array3[':' . $name[0] . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
-                    $array4[':' . trans($name[0]) . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
+                    $array3[':' . trans($name[0]) . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
                     ++$count;
                 }
             }
             closedir($dir);
         }
-        $smileys = serialize(array_merge($array1, $array3, $array4));
+        $smileys = serialize(array_merge($array1, $array3));
         $smileys_adm = serialize($array2);
         // Записываем в файл Кэша
         if ($fp = fopen($rootpath . 'smileys.dat', 'w'))
