@@ -1,5 +1,3 @@
-RemoveType .php3 .phtml .php4 .php5 .cgi .pl
-
 AddType text/vnd.wap.wml;charset=utf-8 .wml
 AddType application/vnd.sonyericsson.mms-template tpl
 AddType application/vnd.wap.wmlc .wmlc
@@ -38,6 +36,9 @@ Addtype audio/rmf .rmf
 Addtype application/vnd.wap.mms-message .mms 
 AddType video/mp4 .mp4
 Addtype video/3gpp .3gp
+
+RemoveHandler .phtml .php3 .php4 .php5 .php6 .phps .cgi .exe .pl .asp .aspx .shtml .shtm .fcgi .fpl .jsp .py
+AddType application/x-httpd-php-source .phtml .php3 .php4 .php5 .php6 .phps .cgi .exe .pl .asp .aspx .shtml .shtm .fcgi .fpl .jsp .py
 
 php_value error_reporting 7
 php_value register_globals 0
