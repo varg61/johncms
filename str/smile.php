@@ -100,7 +100,8 @@ switch ($act)
         {
             $_SESSION['refsm'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
         }
-        $dir = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
+        echo '<div class="phdr"><b>Каталог смайлов</b></div>';
+		$dir = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
         $total_dir = count($dir);
         for ($i = 0; $i < $total_dir; $i++)
         {
