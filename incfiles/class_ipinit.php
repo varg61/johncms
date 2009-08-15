@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 class ipinit
 {
     public $ip; // IP адрес в LONG формате
-    public $flood_chk = '0'; // Включение - выключение функции IP антифлуда
+    public $flood_chk = 1; // Включение - выключение функции IP антифлуда
     public $flood_interval = '60'; // Интервал времени
     public $flood_limit = '20'; // Число разрешенных запросов за интервал
     public $flood_file = 'flood.dat'; // Рабочий файл функции
@@ -31,7 +31,7 @@ class ipinit
         // Проверка адреса IP на HTTP флуд
         if ($this->flood_chk)
         {
-            $this->requests = reqcount();
+            $this->requests = $this->reqcount();
             if ($this->requests > $this->flood_limit)
                 die('Flood!!!');
         }
