@@ -565,7 +565,6 @@ function smileys($str, $adm = 0)
         $array1 = array();
         $array2 = array();
         $array3 = array();
-        $array4 = array();
         // Обрабатываем простые смайлы
         $path = $rootpath . 'smileys/simply/';
         $dir = opendir($path);
@@ -643,26 +642,14 @@ function smileys($str, $adm = 0)
 ################################################################################
 */
 
-function provcat($catalog)
+function provcat($catalog)//TODO: Удалить функцию
 {
     $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
     $cat2 = mysql_num_rows($cat1);
     $adrdir = mysql_fetch_array($cat1);
     if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]")))
     {
-        echo "Ошибка при выборе категории<br/><a href='?'>К категориям</a><br/>";
-        require_once ('../incfiles/end.php');
-        exit;
-    }
-}
-function provupl($catalog)
-{
-    $cat1 = mysql_query("select * from `upload` where type = 'cat' and id = '" . $catalog . "';");
-    $cat2 = mysql_num_rows($cat1);
-    $adrdir = mysql_fetch_array($cat1);
-    if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]")))
-    {
-        echo "Ошибка при выборе категории<br/><a href='?'>К категориям</a><br/>";
+        echo 'Ошибка при выборе категории<br/><a href="?">К категориям</a><br/>';
         require_once ('../incfiles/end.php');
         exit;
     }
