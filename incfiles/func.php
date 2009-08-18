@@ -562,10 +562,10 @@ function smileys($str, $adm = 0)
     // Записываем КЭШ смайлов
     if ($adm == 2)
     {
+        ////////////////////////////////////////////////////////////
+        // Обрабатываем простые смайлы                            //
+        ////////////////////////////////////////////////////////////
         $array1 = array();
-        $array2 = array();
-        $array3 = array();
-        // Обрабатываем простые смайлы
         $path = $rootpath . 'smileys/simply/';
         $dir = opendir($path);
         while ($file = readdir($dir))
@@ -578,22 +578,28 @@ function smileys($str, $adm = 0)
             }
         }
         closedir($dir);
-        // Обрабатываем Админские смайлы
-        if ($adm)
+        ////////////////////////////////////////////////////////////
+		// Обрабатываем Админские смайлы                          //
+		////////////////////////////////////////////////////////////
+        $array2 = array();
+        $array3 = array();
+        $path = $rootpath . 'smileys/admin/';
+        $dir = opendir($path);
+        while ($file = readdir($dir))
         {
-            $path = $rootpath . 'smileys/admin/';
-            $dir = opendir($path);
-            while ($file = readdir($dir))
+            $name = explode(".", $file);
+            if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
             {
-                $name = explode(".", $file);
-                if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
-                {
-                    $array2[':' . trans($name[0]) . ':'] = '<img src="' . $path . $file . '" alt="" />';
-                    ++$count;
-                }
+                $array2[':' . trans($name[0]) . ':'] = '<img src="' . $path . $file . '" alt="" />';
+                $array3[':' . $name[0] . ':'] = '<img src="' . $path . $file . '" alt="" />';
+                ++$count;
             }
         }
-        // Обрабатываем смайлы в каталогах
+        ////////////////////////////////////////////////////////////
+		// Обрабатываем смайлы в каталогах                        //
+		////////////////////////////////////////////////////////////
+        $array4 = array();
+        $array5 = array();
         $cat = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
         $total = count($cat);
         for ($i = 0; $i < $total; $i++)
@@ -604,14 +610,15 @@ function smileys($str, $adm = 0)
                 $name = explode(".", $file);
                 if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png')
                 {
-                    $array3[':' . trans($name[0]) . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
+                    $array4[':' . trans($name[0]) . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
+                    $array5[':' . $name[0] . ':'] = '<img src="' . $cat[$i] . '/' . $file . '" alt="" />';
                     ++$count;
                 }
             }
             closedir($dir);
         }
-        $smileys = serialize(array_merge($array1, $array3));
-        $smileys_adm = serialize($array2);
+        $smileys = serialize(array_merge($array1, $array4, $array5));
+        $smileys_adm = serialize(array_merge($array2, $array3));
         // Записываем в файл Кэша
         if ($fp = fopen($rootpath . 'smileys.dat', 'w'))
         {
@@ -620,7 +627,7 @@ function smileys($str, $adm = 0)
             return $count;
         } else
         {
-			return false;
+            return false;
         }
     } else
     {
@@ -642,7 +649,8 @@ function smileys($str, $adm = 0)
 ################################################################################
 */
 
-function provcat($catalog)//TODO: Удалить функцию
+function provcat($catalog) //TODO: Удалить функцию
+
 {
     $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
     $cat2 = mysql_num_rows($cat1);
