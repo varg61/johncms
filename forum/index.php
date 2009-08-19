@@ -147,7 +147,7 @@ if (in_array($act, $do))
                     echo '<div class="gmenu"><a href="index.php?act=nt&amp;id=' . $id . '">Новая тема</a></div>';
                 }
                 $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='" . $id .
-                    "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess . ";");
+                    "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess);
                 while ($mass = mysql_fetch_array($q1))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';

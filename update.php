@@ -86,11 +86,16 @@ switch ($do)
 
     case 'step2':
         echo '<b><u>Подготовка таблиц</u></b><br />';
+        mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `forum` CHANGE `vip` `vip` TINYINT( 1 ) NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `forum` CHANGE `moder` `moder` TINYINT( 1 ) NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `forum` DROP INDEX `moder`");
+        echo '<span class="green">OK</span> таблица `forum` обновлена<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
     case 'final':
-        echo '<b><span class="green">Поздравляем!</span></b><br />Процедура обновления успешно завершена.<br />Не забудьте удалить папку /install';
+        echo '<b><span class="green">Поздравляем!</span></b><br />Процедура обновления успешно завершена.<br />Не забудьте удалить файл /update.php';
         echo '<hr /><a href="../../index.php">На сайт</a>';
         break;
 

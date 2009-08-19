@@ -80,9 +80,7 @@ if (in_array($act, $do))
         echo '<div class="phdr"><a href="index.php">Загрузки</a> | ';
         foreach ($tree as $value)
         {
-            echo $value;
-            if ($value != $cdir)
-                echo ' | ';
+            echo $value . ' | ';
         }
         echo '<b>' . strip_tags($cdir) . '</b></div>';
     }
