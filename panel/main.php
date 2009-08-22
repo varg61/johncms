@@ -111,45 +111,6 @@ if ($dostmod == 1)
             }
             break;
 
-        case 'modules':
-            ////////////////////////////////////////////////////////////
-            // Включение / выключение модулей системы                 //
-            ////////////////////////////////////////////////////////////
-            if ($dostadm == 1)
-            {
-                echo '<div class="phdr">Включить / выключить</div>';
-                if (isset($_POST['submit']))
-                {
-                    // Записываем настройки
-                    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['reg']) ? intval($_POST['reg']) : 0) . "' WHERE `key`='mod_reg';");
-                    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['forum']) ? intval($_POST['forum']) : 0) . "' WHERE `key`='mod_forum';");
-                    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['chat']) ? intval($_POST['chat']) : 0) . "' WHERE `key`='mod_chat';");
-                    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['guest']) ? intval($_POST['guest']) : 0) . "' WHERE `key`='mod_guest';");
-                    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['lib']) ? intval($_POST['lib']) : 0) . "' WHERE `key`='mod_lib';");
-                    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['gal']) ? intval($_POST['gal']) : 0) . "' WHERE `key`='mod_gal';");
-                    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['down']) ? intval($_POST['down']) : 0) . "' WHERE `key`='mod_down';");
-                    $req = mysql_query("SELECT * FROM `cms_settings`;");
-                    $set = array();
-                    while ($res = mysql_fetch_row($req))
-                        $set[$res[0]] = $res[1];
-                    mysql_free_result($req);
-                    echo '<div class="rmenu">Сайт настроен</div>';
-                }
-                // Выводим форму
-                echo '<form id="form1" method="post" action="main.php?do=modules">';
-                echo '<p><input name="reg" type="checkbox" value="1" ' . ($set['mod_reg'] ? 'checked="checked"' : '') . ' />&nbsp;регистрация<br />';
-                echo '<input name="forum" type="checkbox" value="1" ' . ($set['mod_forum'] ? 'checked="checked"' : '') . ' />&nbsp;форум<br />';
-                echo '<input name="chat" type="checkbox" value="1" ' . ($set['mod_chat'] ? 'checked="checked"' : '') . ' />&nbsp;чат<br />';
-                echo '<input name="guest" type="checkbox" value="1" ' . ($set['mod_guest'] ? 'checked="checked"' : '') . ' />&nbsp;гостевая<br />';
-                echo '<input name="lib" type="checkbox" value="1" ' . ($set['mod_lib'] ? 'checked="checked"' : '') . ' />&nbsp;библиотека<br />';
-                echo '<input name="gal" type="checkbox" value="1" ' . ($set['mod_gal'] ? 'checked="checked"' : '') . ' />&nbsp;галерея<br />';
-                echo '<input name="down" type="checkbox" value="1" ' . ($set['mod_down'] ? 'checked="checked"' : '') . ' />&nbsp;загрузки<br />';
-                echo '<br /><input type="submit" name="submit" id="button" value="Запомнить" /></p>';
-                echo '<p><a href="main.php">В админку</a></p>';
-                echo '</form>';
-            }
-            break;
-
         case 'users':
             if (empty($_POST['user']))
             {
@@ -198,8 +159,8 @@ if ($dostmod == 1)
                 echo '<div class="gmenu"><p>Кэш смайлов успешно обновлен</p></div>';
             } else
             {
-            	echo '<div class="rmenu"><p>Ошибка лоступа к Кэшу смайлов</p></div>';
-            	$total = 0;
+                echo '<div class="rmenu"><p>Ошибка лоступа к Кэшу смайлов</p></div>';
+                $total = 0;
             }
             echo '<div class="phdr">Всего смайлов: ' . $total . '</div>';
             echo '<p><a href="main.php">В админку</a></p>';
@@ -210,39 +171,47 @@ if ($dostmod == 1)
             // Главное меню админки                                   //
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr"><b>Админ Панель</b></div>';
-            echo '<div class="bmenu">Пользователи</div>';
-            $total = @mysql_num_rows(mysql_query("SELECT * FROM `users`;"));
-            echo '<div class="gmenu">Всего в базе: <a href="../str/users.php">' . $total . '</a><br />';
-            if ($dostadm == 1)
+            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
+            $regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg`='0'"), 0);
+            $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "'"), 0);
+            echo '<div class="menu">';
+            // Блок пользователей
+            //TODO: Разобраться с правами доступа на подтверждение реги.
+            echo '<p><img src="../images/users.png" width="16" height="16" class="left" />&nbsp;<b>Пользователи</b><ul>
+			<li><a href="../str/users.php">Весь список</a>&nbsp;(' . $total . ')</li>
+			<li><a href="preg.php">На регистрации</a>&nbsp;(' . $regtotal . ')</li>
+			' . ($dostsadm ? '<li><a href="">Чистка базы</a></li>' : '') . '
+			<li><a href="zaban.php">Бан-панель</a>&nbsp;(' . $bantotal . ')</li>
+			<li><a href="main.php?do=search">Поиск</a></li>
+			</ul></p>';
+            // Блок модулей
+            if ($dostadm)
             {
-                $total = @mysql_num_rows(mysql_query("SELECT * FROM `users` WHERE `preg`='0';"));
-                echo 'На регистрации: ' . ($total > 0 ? '<a href="preg.php">' . $total . '</a>' : '0') . '<br />';
+                echo '<p><img src="../images/modules.png" width="16" height="16" class="left" />&nbsp;<b>Модули</b><ul>
+				<li><a href="modules.php">Права доступа</a></li>
+				' . ($dostsadm ? '<li><a href="counters.php">Счетчики</a></li>' : '') . '
+				<li><a href="news.php">Новости</a></li>
+				<li><a href="forum.php">Форум</a></li>
+				<li><a href="chat.php">Чат</a></li>
+				</ul></p>';
             }
-            $total = @mysql_num_rows(mysql_query("SELECT * FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "';"));
-            echo 'Забаненных: ' . ($total > 0 ? '<a href="zaban.php">' . $total . '</a>' : '0') . '</div>';
-            echo '<div class="menu"><a href="main.php?do=search">Поиск</a></div>';
-            echo '<div class="menu"><a href="zaban.php">Бан-панель</a></div>';
-            if ($dostadm == 1)
+            echo '</div>';
+            // Блок системных настроек</b>
+            if ($dostadm)
             {
-                echo '<div class="bmenu">Модули</div>';
-                echo '<div class="menu"><a href="main.php?do=modules">Модули (вкл/выкл)</a></div>';
-                if ($dostsadm)
-                    echo '<div class="menu"><a href="counters.php">Счетчики</a></div>';
-                if ($dostadm)
-                    echo '<div class="menu"><a href="news.php">Новости</a></div>';
-                echo '<div class="menu"><a href="forum.php">Форум</a></div>';
-                echo '<div class="menu"><a href="chat.php">Чат</a></div>';
-                echo '<div class="bmenu">Система</div>';
-                echo '<div class="menu"><a href="ipban.php">Бан по IP</a></div>';
-                echo '<div class="menu"><a href="main.php?do=smileys">Обновить смайлы</a></div>';
-                echo '<div class="menu"><a href="main.php?do=antispy">Сканер файлов</a></div>';
-                echo '<div class="menu"><a href="set.php">Настройки</a></div>';
+                echo '<div class="bmenu"><p><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;<b>Система</b><ul>
+				<li><a href="ipban.php">Бан по IP</a></li>
+				<li><a href="main.php?do=smileys">Обновить смайлы</a></li>
+				<li><a href="main.php?do=antispy">Сканер антишпион</a></li>
+				<li><a href="set.php">Настройки</a></li>
+				</ul></p></div>';
             }
     }
 } else
 {
     header("Location: ../index.php?err");
 }
+
 require_once ("../incfiles/end.php");
 
 ?>

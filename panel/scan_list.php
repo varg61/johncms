@@ -166,6 +166,7 @@ $good_files = array(
 '../panel/index.php',
 '../panel/ipban.php',
 '../panel/main.php',
+'../panel/modules.php',
 '../panel/news.php',
 '../panel/preg.php',
 '../panel/scan_class.php',

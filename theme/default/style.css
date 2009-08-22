@@ -233,3 +233,11 @@ hr{
 	background-color: #EEEEEE;
 	border: 1px solid white;
 }
+
+ul {
+	margin: 0;
+	padding-left: 20px;
+}
+.left{
+	float: left;
+}
