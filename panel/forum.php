@@ -637,7 +637,7 @@ if ($dostadm == 1)
                     {
                         $dp2[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $dp2['text']);
                     }
-                    if ($offsm != 1 && $offgr != 1)
+                    if ($offsm != 1)
                     {
                         $tekst = smileys($dp2['text']);
                     } else

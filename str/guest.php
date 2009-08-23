@@ -430,7 +430,7 @@ switch ($act)
                     // Для зарегистрированных показываем ссылки и смайлы
                     $text = tags($text);
                     $text = nl2br($text);
-                    if ($offsm != 1 && $offgr != 1)
+                    if ($offsm != 1)
                     {
                         $text = smileys($text, ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= 1) ? 1 : 0);
                     }
@@ -456,7 +456,7 @@ switch ($act)
                     $otvet = tags($otvet);
                     $vrp1 = $res['otime'] + $sdvig * 3600;
                     $vr1 = date("d.m.Y / H:i", $vrp1);
-                    if ($offsm != 1 && $offgr != 1)
+                    if ($offsm != 1)
                     {
                         $otvet = smileys($otvet, 1);
                     }

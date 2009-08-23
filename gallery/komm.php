@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -93,7 +94,7 @@ while ($mass = mysql_fetch_array($mess))
         }
         echo "($vr1)<br/>";
         $text = tags($mass['text']);
-        if ($offsm != 1 && $offgr != 1)
+        if ($offsm != 1)
         {
             $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
         }
@@ -106,75 +107,63 @@ while ($mass = mysql_fetch_array($mess))
     }
     ++$i;
 }
-if ($countm > $kmess)//TODO: Переделать на новую навигацию
+if ($countm > $kmess) //TODO: Переделать на новую навигацию
+
 {
     echo "<hr/>";
     $ba = ceil($countm / $kmess);
-    if ($offpg != 1)
-    {
-        echo "Страницы:<br/>";
-    } else
-    {
-        echo "Страниц: $ba<br/>";
-    }
+    echo "Страницы:<br/>";
     $asd = $start - ($kmess);
     $asd2 = $start + ($kmess * 2);
-
     if ($start != 0)
     {
         echo '<a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
     }
-    if ($offpg != 1)
+    if ($asd < $countm && $asd > 0)
     {
-        if ($asd < $countm && $asd > 0)
+        echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=1&amp;">1</a> .. ';
+    }
+    $page2 = $ba - $page;
+    $pa = ceil($page / 2);
+    $paa = ceil($page / 3);
+    $pa2 = $page + floor($page2 / 2);
+    $paa2 = $page + floor($page2 / 3);
+    $paa3 = $page + (floor($page2 / 3) * 2);
+    if ($page > 13)
+    {
+        echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="?id=' . $id . '&amp;page=' . ($paa *
+            2) . '">' . ($paa * 2) . '</a> <a href="?id=' . $id . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
+    } elseif ($page > 7)
+    {
+        echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
+    }
+    for ($i = $asd; $i < $asd2; )
+    {
+        if ($i < $countm && $i >= 0)
         {
-            echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=1&amp;">1</a> .. ';
-        }
-        $page2 = $ba - $page;
-        $pa = ceil($page / 2);
-        $paa = ceil($page / 3);
-        $pa2 = $page + floor($page2 / 2);
-        $paa2 = $page + floor($page2 / 3);
-        $paa3 = $page + (floor($page2 / 3) * 2);
-        if ($page > 13)
-        {
-            echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="?id=' . $id . '&amp;page=' . ($paa *
-                2) . '">' . ($paa * 2) . '</a> <a href="?id=' . $id . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-        } elseif ($page > 7)
-        {
-            echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-        }
-        for ($i = $asd; $i < $asd2; )
-        {
-            if ($i < $countm && $i >= 0)
-            {
-                $ii = floor(1 + $i / $kmess);
+            $ii = floor(1 + $i / $kmess);
 
-                if ($start == $i)
-                {
-                    echo " <b>$ii</b>";
-                } else
-                {
-                    echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $ii . '">' . $ii . '</a> ';
-                }
+            if ($start == $i)
+            {
+                echo " <b>$ii</b>";
+            } else
+            {
+                echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $ii . '">' . $ii . '</a> ';
             }
-            $i = $i + $kmess;
         }
-        if ($page2 > 12)
-        {
-            echo ' .. <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="index.php?act=komm&amp;id=' .
-                $id . '&amp;page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-        } elseif ($page2 > 6)
-        {
-            echo ' .. <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
-        }
-        if ($asd2 < $countm)
-        {
-            echo ' .. <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $ba . '">' . $ba . '</a>';
-        }
-    } else
+        $i = $i + $kmess;
+    }
+    if ($page2 > 12)
     {
-        echo "<b>[$page]</b>";
+        echo ' .. <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="index.php?act=komm&amp;id=' .
+            $id . '&amp;page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
+    } elseif ($page2 > 6)
+    {
+        echo ' .. <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
+    }
+    if ($asd2 < $countm)
+    {
+        echo ' .. <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . $ba . '">' . $ba . '</a>';
     }
     if ($countm > $start + $kmess)
     {

@@ -213,7 +213,6 @@ if ($user_id && $user_ps)
             $login = $datauser['name']; // Логин (Ник) пользователя
             $sdvig = $datauser['sdvig']; // Сдвиг времени
             $kmess = $datauser['kolanywhwere']; // Число сообщений на страницу
-            $offpg = $datauser['offpg'];
             $offtr = $datauser['offtr'] ? 0 : 1; // Выключить транслит
             $offsm = $datauser['offsm'] ? 0 : 1; // Выключить смайлы
             $upfp = $datauser['upfp'];

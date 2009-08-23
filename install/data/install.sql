@@ -356,8 +356,6 @@ CREATE TABLE `users` (
   `dayb` int(2) NOT NULL,
   `monthb` int(2) NOT NULL,
   `sdvig` int(2) NOT NULL default '0',
-  `offpg` tinyint(1) NOT NULL default '0',
-  `offgr` tinyint(1) NOT NULL default '0',
   `offsm` tinyint(1) NOT NULL default '1',
   `offtr` tinyint(1) NOT NULL default '1',
   `pereh` tinyint(1) NOT NULL default '1',

@@ -246,7 +246,7 @@ switch ($tip)
                         }
                     }
                     $text = tags($mass['text']);
-                    if ($offsm != 1 && $offgr != 1)
+                    if ($offsm != 1)
                     {
                         $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
                     }

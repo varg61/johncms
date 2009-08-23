@@ -81,7 +81,7 @@ while ($mass = mysql_fetch_array($mess))
         echo '<font color="#00AA00"> [ON]</font>';
     }
     echo "($vr1)<br/>";
-    if ($offsm != 1 && $offgr != 1)
+    if ($offsm != 1)
     {
         $tekst = smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
     } else

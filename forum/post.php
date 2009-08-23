@@ -38,7 +38,7 @@ $text = str_replace("\r\n", "<br/>", $text);
 $text = tags($text);
 $uz = @mysql_query("select `id`, `from`, `rights` FROM `users` where name='" . $ms['from'] . "';");
 $mass1 = @mysql_fetch_array($uz);
-if ($offsm != 1 && $offgr != 1)
+if ($offsm != 1)
 {
     $text = smileys($text, ($ms['from'] == $nickadmina || $ms['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
 }

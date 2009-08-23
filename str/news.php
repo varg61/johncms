@@ -236,7 +236,7 @@ switch ($do)
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
 			$text = str_replace("\r\n", "<br/>", $text);
             $text = tags($text);
-            if ($offsm != 1 && $offgr != 1)
+            if ($offsm != 1)
             {
                 $text = smileys($text, 1);
             }

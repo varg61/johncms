@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -136,79 +137,67 @@ if ($totalnew != 0)
             $al1 = mysql_fetch_array($al);
             $rz = mysql_query("select * from `gallery` where type = 'rz' and id = '" . $al1['refid'] . "';");
             $rz1 = mysql_fetch_array($rz);
-            echo '<a href="index.php?id='.$al1['id'].'">' . $rz1['text'] . '&nbsp;/&nbsp;' . $al1['text'] . '</a></div>';
+            echo '<a href="index.php?id=' . $al1['id'] . '">' . $rz1['text'] . '&nbsp;/&nbsp;' . $al1['text'] . '</a></div>';
         }
         ++$i;
     }
-    if ($totalnew > 10)
+    if ($totalnew > 10) //TODO: Переделать на новый листинг по страницам
+
     {
         echo "<hr/>";
         $ba = ceil($totalnew / 10);
-        if ($offpg != 1)
-        {
-            echo "Страницы:<br/>";
-        } else
-        {
-            echo "Страниц: $ba<br/>";
-        }
-
+        echo "Страницы:<br/>";
         if ($start != 0)
         {
             echo '<a href="index.php?act=new&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
         }
         $asd = $start - 10;
         $asd2 = $start + 20;
-        if ($offpg != 1)
+        if ($asd < $totalnew && $asd > 0)
         {
-            if ($asd < $totalnew && $asd > 0)
+            echo ' <a href="index.php?act=new&amp;page=1">1</a> .. ';
+        }
+        $page2 = $ba - $page;
+        $pa = ceil($page / 2);
+        $paa = ceil($page / 3);
+        $pa2 = $page + floor($page2 / 2);
+        $paa2 = $page + floor($page2 / 3);
+        $paa3 = $page + (floor($page2 / 3) * 2);
+        if ($page > 13)
+        {
+            echo ' <a href="index.php?act=new&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=new&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="index.php?act=new&amp;page=' . ($paa * 2) . '">' . ($paa * 2) .
+                '</a> <a href="index.php?act=new&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
+        } elseif ($page > 7)
+        {
+            echo ' <a href="index.php?act=new&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=new&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
+        }
+        for ($i = $asd; $i < $asd2; )
+        {
+            if ($i < $totalnew && $i >= 0)
             {
-                echo ' <a href="index.php?act=new&amp;page=1">1</a> .. ';
-            }
-            $page2 = $ba - $page;
-            $pa = ceil($page / 2);
-            $paa = ceil($page / 3);
-            $pa2 = $page + floor($page2 / 2);
-            $paa2 = $page + floor($page2 / 3);
-            $paa3 = $page + (floor($page2 / 3) * 2);
-            if ($page > 13)
-            {
-                echo ' <a href="index.php?act=new&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=new&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="index.php?act=new&amp;page=' . ($paa * 2) . '">' . ($paa * 2) .
-                    '</a> <a href="index.php?act=new&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-            } elseif ($page > 7)
-            {
-                echo ' <a href="index.php?act=new&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=new&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-            }
-            for ($i = $asd; $i < $asd2; )
-            {
-                if ($i < $totalnew && $i >= 0)
-                {
-                    $ii = floor(1 + $i / 10);
+                $ii = floor(1 + $i / 10);
 
-                    if ($start == $i)
-                    {
-                        echo " <b>$ii</b>";
-                    } else
-                    {
-                        echo ' <a href="index.php?act=new&amp;page=' . $ii . '">' . $ii . '</a> ';
-                    }
+                if ($start == $i)
+                {
+                    echo " <b>$ii</b>";
+                } else
+                {
+                    echo ' <a href="index.php?act=new&amp;page=' . $ii . '">' . $ii . '</a> ';
                 }
-                $i = $i + 10;
             }
-            if ($page2 > 12)
-            {
-                echo ' .. <a href="index.php?act=new&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=new&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="index.php?act=new&amp;page=' . ($paa3) . '">' . ($paa3) .
-                    '</a> <a href="index.php?act=new&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-            } elseif ($page2 > 6)
-            {
-                echo ' .. <a href="index.php?act=new&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="?act=new&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
-            }
-            if ($asd2 < $totalnew)
-            {
-                echo ' .. <a href="index.php?act=new&amp;page=' . $ba . '">' . $ba . '</a>';
-            }
-        } else
+            $i = $i + 10;
+        }
+        if ($page2 > 12)
         {
-            echo "<b>[$page]</b>";
+            echo ' .. <a href="index.php?act=new&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=new&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="index.php?act=new&amp;page=' . ($paa3) . '">' . ($paa3) .
+                '</a> <a href="index.php?act=new&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
+        } elseif ($page2 > 6)
+        {
+            echo ' .. <a href="index.php?act=new&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="?act=new&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
+        }
+        if ($asd2 < $totalnew)
+        {
+            echo ' .. <a href="index.php?act=new&amp;page=' . $ba . '">' . $ba . '</a>';
         }
         if ($totalnew > $start + 10)
         {

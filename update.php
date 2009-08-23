@@ -86,6 +86,9 @@ switch ($do)
 
     case 'step2':
         echo '<b><u>Подготовка таблиц</u></b><br />';
+        mysql_query("ALTER TABLE `users` DROP `offpg`");
+        mysql_query("ALTER TABLE `users` DROP `offgr`");
+        echo '<span class="green">OK</span> таблица `users` обновлена<br />';
         mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `vip` `vip` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `moder` `moder` TINYINT( 1 ) NOT NULL DEFAULT '0'");
