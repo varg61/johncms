@@ -33,7 +33,6 @@ if ($lastpost > ($realtime - $old))
     require_once ("../incfiles/end.php");
     exit;
 }
-
 $agn1 = strtok($agn, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "'");
 $type1 = mysql_fetch_array($type);
@@ -200,7 +199,6 @@ switch ($tip)
             {
                 $page = ceil($pa2 / $kmess);
             }
-
             //блок, фиксирующий факт прочтения топика
             $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
             if (mysql_result($req, 0) == 1)
@@ -212,7 +210,6 @@ switch ($tip)
                 // Ставим метку о прочтении
                 mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
             }
-
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1)
             {

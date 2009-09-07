@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -24,8 +25,7 @@ if ($dostfmod == 1)
         require_once ("../incfiles/end.php");
         exit;
     }
-    $id = intval($_GET['id']);
-    $typ = mysql_query("select * from `forum` where id='" . $id . "';");
+    $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $id . "'");
     $ms = mysql_fetch_array($typ);
     if ($ms['type'] != "m")
     {
@@ -38,14 +38,24 @@ if ($dostfmod == 1)
     {
         if ($dostsadm == 1)
         {
-            if (!empty($ms['attach']))
+            $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id'");
+            if (mysql_num_rows($req1) > 0)
             {
-                unlink("files/$ms[attach]");
+                $res1 = mysql_fetch_array($req1);
+                unlink('files/' . $res1['filename']);
+                mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
             }
-            mysql_query("delete from `forum` where `id`='" . $id . "';");
+            mysql_query("DELETE FROM `forum` WHERE `id`='$id' LIMIT 1");
         } else
         {
-            mysql_query("update `forum` set  close='1' where id='" . $id . "';");
+            // Скрываем пост
+            mysql_query("UPDATE `forum` SET `close` = '1' WHERE `id` = '$id'");
+            // Скрываем файл
+            $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id'");
+            if (mysql_num_rows($req1) > 0)
+            {
+                mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = '$id'");
+            }
         }
         header("Location: index.php?id=$ms[refid]");
     }
@@ -53,7 +63,13 @@ if ($dostfmod == 1)
     {
         if ($dostsadm == 1)
         {
-            mysql_query("update `forum` set  close='1' where id='" . $id . "';");
+            mysql_query("update `forum` set  close='1' where id='$id'");
+            // Скрываем файл
+            $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id'");
+            if (mysql_num_rows($req1) > 0)
+            {
+                mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = '$id'");
+            }
         }
         header("Location: index.php?id=$ms[refid]");
     }

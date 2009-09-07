@@ -99,12 +99,12 @@ if (isset($_POST['submit']))
     {
         $fmd = 0;
     }
-    mysql_query("insert into `forum` values(0,'" . $id . "','t','" . $realtime . "','" . $login . "','','','','','" . $th . "','','','" . $fmd . "','','','','','');");
+    mysql_query("insert into `forum` values(0,'" . $id . "','t','" . $realtime . "','" . $login . "','','','','','" . $th . "','','','" . $fmd . "','','','');");
     $rid = mysql_insert_id();
     $thm = mysql_query("select `id`, `refid` from `forum` where type='t'  and id= '" . $rid . "';");
     $tem1 = mysql_fetch_array($thm);
     $agn = strtok($agn, ' ');
-    mysql_query("insert into `forum` values(0,'" . $rid . "','m','" . $realtime . "','" . $login . "','','','" . $ipp . "','" . $agn . "','" . $msg . "','','','','','','','" . $ch . "','');");
+    mysql_query("insert into `forum` values(0,'" . $rid . "','m','" . $realtime . "','" . $login . "','','','" . $ipp . "','" . $agn . "','" . $msg . "','','','','','','');");
     $postid = mysql_insert_id();
     $fpst = $datauser['postforum'] + 1;
     mysql_query("update `users` set  postforum='" . $fpst . "' where id='" . intval($_SESSION['uid']) . "';");

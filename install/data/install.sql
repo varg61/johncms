@@ -161,6 +161,28 @@ CREATE TABLE IF NOT EXISTS `cms_forum_rdm` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
+-- Структура таблицы `cms_forum_files`
+--
+DROP TABLE IF EXISTS `cms_forum_files`;
+CREATE TABLE `cms_forum_files` (
+  `id` int(11) NOT NULL auto_increment,
+  `cat` int(11) NOT NULL,
+  `subcat` int(11) NOT NULL,
+  `topic` int(11) NOT NULL,
+  `post` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `filename` text NOT NULL,
+  `filetype` tinyint(4) NOT NULL,
+  `dlcount` int(11) NOT NULL,
+  `del` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `cat` (`cat`),
+  KEY `subcat` (`subcat`),
+  KEY `topic` (`topic`),
+  KEY `post` (`post`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
 -- Структура таблицы `gallery`
 --
 DROP TABLE IF EXISTS `gallery`;

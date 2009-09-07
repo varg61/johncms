@@ -16,6 +16,28 @@
 
 define('_IN_JOHNCMS', 1);
 
+////////////////////////////////////////////////////////////
+// Список расширений, разрешенных к выгрузке файлов       //
+////////////////////////////////////////////////////////////
+// Файлы Windows
+$ext_win = array('exe', 'msi');
+// Файлы Java
+$ext_java = array('jar', 'jad');
+// Файлы SIS
+$ext_sis = array('sis');
+// Файлы документов и тексты
+$ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu');
+// Файлы картинок
+$ext_pic = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'tiff', 'wmf');
+// Файлы архивов
+$ext_zip = array('zip', 'rar', '7z', 'tar', 'gz');
+// Файлы видео
+$ext_video = array('3gp', 'avi', 'flv', 'mpeg', 'mp4');
+// Звуковые файлы
+$ext_audio = array('mp3', 'amr');
+// Другие типы файлов (что не перечислены выше)
+$ext_other = array();
+
 $headmod = "forum";
 require_once ("../incfiles/core.php");
 
@@ -59,8 +81,7 @@ if ($user_id)
 	`name`='" . $login . "';");
 }
 
-$act = isset($_GET['act']) ? $_GET['act'] : '';
-$do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'fmoder', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel');
+$do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'fmoder', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel', 'files');
 if (in_array($act, $do))
 {
     require_once ($act . '.php');
@@ -93,7 +114,7 @@ if (in_array($act, $do))
 
     if ($id)
     {
-        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1;");
+        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1");
         $type1 = mysql_fetch_array($type);
         $tip = $type1['type'];
         switch ($tip)
@@ -110,7 +131,7 @@ if (in_array($act, $do))
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
-                $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='r' AND `refid`='" . $id . "' ORDER BY `realid`;");
+                $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='r' AND `refid`='" . $id . "' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 while ($mass1 = mysql_fetch_array($req))
                 {
@@ -242,7 +263,7 @@ if (in_array($act, $do))
                 {
                     $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 }
-                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $id . ($dostadm == 1 ? "'" : "' AND `close` != '1'") . "  ORDER BY `time` " . $order . " LIMIT " . $start . ", " . $kmess . " ;");
+                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $id . ($dostadm == 1 ? "'" : "' AND `close` != '1'") . "  ORDER BY `time` " . $order . " LIMIT " . $start . ", " . $kmess);
                 $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1");
                 $razd = mysql_fetch_array($q3);
                 $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1");
@@ -281,137 +302,119 @@ if (in_array($act, $do))
                     echo '<form action="index.php?act=massdel" method="post">';
                 while ($mass = mysql_fetch_array($q1))
                 {
-                    if ($i >= 0 && $i < $colmes)
+                    $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `name`='" . $mass['from'] . "' LIMIT 1");
+                    $mass1 = mysql_fetch_array($uz);
+                    echo is_integer($i / 2) ? '<div class="b">' : '<div class="c">';
+                    echo $mass1['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $skin . '/images/add.gif" alt=""/>&nbsp;' : '';
+                    // Значок пола
+                    echo '<img src="../theme/' . $skin . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>';
+                    if ($user_id && $user_id != $mass1['id'])
                     {
-                        $d = $i / 2;
-                        $d1 = ceil($d);
-                        $d2 = $d1 - $d;
-                        $d3 = ceil($d2);
-                        if ($d3 == 0)
-                        {
-                            $div = "<div class='b'>";
-                        } else
-                        {
-                            $div = "<div class='c'>";
-                        }
-                        $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `name`='" . $mass['from'] . "';");
-                        $mass1 = mysql_fetch_array($uz);
-                        echo $div;
-                        echo $mass1['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $skin . '/images/add.gif" alt=""/>&nbsp;' : '';
-                        switch ($mass1['sex'])
-                        {
-                            case 'm':
-                                echo '<img src="../theme/' . $skin . '/images/m.gif" alt=""/>';
-                                break;
-                            case 'zh':
-                                echo '<img src="../theme/' . $skin . '/images/f.gif" alt=""/>';
-                                break;
-                        }
-                        if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id']))
-                        {
-                            echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '&amp;fid=' . $mass['id'] . '"><b>' . $mass['from'] . '</b></a> ';
-                            echo '<a href="index.php?act=say&amp;id=' . $mass['id'] . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
-                        } else
-                        {
-                            echo "<b>$mass[from]</b>";
-                        }
-                        $vrp = $mass['time'] + $sdvig * 3600;
-                        $vr = date("d.m.Y / H:i", $vrp);
-                        switch ($mass1['rights'])
-                        {
-                            case 7:
-                                echo " Adm ";
-                                break;
-                            case 6:
-                                echo " Smd ";
-                                break;
-                            case 3:
-                                echo " Mod ";
-                                break;
-                            case 1:
-                                echo " Kil ";
-                                break;
-                        }
-                        $ontime = $mass1['lastdate'];
-                        $ontime2 = $ontime + 300;
-                        if ($realtime > $ontime2)
-                        {
-                            echo '<font color="#FF0000"> [Off]</font>';
-                        } else
-                        {
-                            echo '<font color="#00AA00"> [ON]</font>';
-                        }
-                        echo ' <font color="#999999">(' . $vr . ')</font><br/>';
-                        if (!empty($mass1['status']))
-                            echo '<div class="status"><img src="../theme/' . $skin . '/images/star.gif" alt=""/>&nbsp;' . $mass1['status'] . '</div>';
-                        if ($mass1['dayb'] == $day && $mass1['monthb'] == $mon)
-                        {
-                            echo '<font color="#FF0000">Именины!!!</font><br/>';
-                        }
-                        if ($mass['close'] == 1)
-                        {
-                            echo '<font color="#FF0000">Пост удалён!</font><br/>';
-                        }
-                        if (!empty($mass['to']))
-                        {
-                            echo "$mass[to], ";
-                        }
-                        ////////////////////////////////////////////////////////////
-                        // Вывод текста поста                                     //
-                        ////////////////////////////////////////////////////////////
-                        $text = $mass['text'];
-                        if (mb_strlen($text) >= 500)
-                        {
-                            // Если текст длинный, обрезаем и даем ссылку на полный вариант
-                            $text = mb_substr($text, 0, 400);
-                            $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-                            $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                            $text = str_replace("\r\n", "<br/>", $text);
-                            $text = tags($text);
-                            echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $mass['id'] . '">Читать все &gt;&gt;</a>';
-                        } else
-                        {
-                            // Или, обрабатываем тэги и выводим весь текст
-                            $text = check($text);
-                            if ($offsm != 1)
-                            {
-                                $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
-                            }
-                            $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                            $text = str_replace("\r\n", "<br/>", $text);
-                            $text = tags($text);
-                            echo $text;
-                        }
-                        if ($mass['kedit'] >= 1)
-                        {
-                            $diz = $mass['tedit'] + $sdvig * 3600;
-                            $dizm = date("d.m /H:i", $diz);
-                            echo "<br /><font color='#999999'>Посл. изм. <b>$mass[edit]</b>  ($dizm)<br />Всего изм.:<b> $mass[kedit]</b></font>";
-                        }
-                        if (!empty($mass['attach']))
-                        {
-                            $fls = filesize("./files/$mass[attach]");
-                            $fls = round($fls / 1024, 2);
-                            echo "<br /><font color='#999999'>Прикреплённый файл:<br /><a href='index.php?act=file&amp;id=" . $mass['id'] . "'>$mass[attach]</a> ($fls кб.)<br/>";
-                            echo 'Скачано: ' . $mass['dlcount'] . ' раз.</font>';
-                        }
-                        $lp = mysql_query("select `from`, `id` from `forum` where type='m' and refid='" . $id . "'  order by time desc LIMIT 1;");
-                        $arr1 = mysql_fetch_array($lp);
-                        $tpp = $realtime - 300;
-                        if (($dostfmod == 1) || (($arr1['from'] == $login) && ($arr1['id'] == $mass['id']) && ($mass['time'] > $tpp)))
-                        {
-                            echo '<br /><a href="index.php?act=editpost&amp;id=' . $mass['id'] . '&amp;start=' . $start . '">Изменить</a>';
-                        }
-                        if ($dostfmod == 1)
-                        {
-                            echo '<br />';
-                            if ($dostfmod == 1)
-                                echo '<input type="checkbox" name="delch[]" value="' . $mass['id'] . '"/>&nbsp;';
-                            echo '<a href="?act=delpost&amp;id=' . $mass['id'] . '">Удалить</a><br/>';
-                            echo "$mass[ip] - $mass[soft]<br/>";
-                        }
-                        echo '</div>';
+                        echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '&amp;fid=' . $mass['id'] . '"><b>' . $mass['from'] . '</b></a> ';
+                        echo '<a href="index.php?act=say&amp;id=' . $mass['id'] . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
+                    } else
+                    {
+                        echo "<b>$mass[from]</b>";
                     }
+                    $vrp = $mass['time'] + $sdvig * 3600;
+                    $vr = date("d.m.Y / H:i", $vrp);
+                    switch ($mass1['rights'])
+                    {
+                        case 7:
+                            echo " Adm ";
+                            break;
+                        case 6:
+                            echo " Smd ";
+                            break;
+                        case 3:
+                            echo " Mod ";
+                            break;
+                        case 1:
+                            echo " Kil ";
+                            break;
+                    }
+                    $ontime = $mass1['lastdate'];
+                    $ontime2 = $ontime + 300;
+                    if ($realtime > $ontime2)
+                    {
+                        echo '<font color="#FF0000"> [Off]</font>';
+                    } else
+                    {
+                        echo '<font color="#00AA00"> [ON]</font>';
+                    }
+                    echo ' <font color="#999999">(' . $vr . ')</font><br/>';
+                    if (!empty($mass1['status']))
+                        echo '<div class="status"><img src="../theme/' . $skin . '/images/star.gif" alt=""/>&nbsp;' . $mass1['status'] . '</div>';
+                    if ($mass1['dayb'] == $day && $mass1['monthb'] == $mon)
+                    {
+                        echo '<font color="#FF0000">Именины!!!</font><br/>';
+                    }
+                    if ($mass['close'] == 1)
+                    {
+                        echo '<font color="#FF0000">Пост удалён!</font><br/>';
+                    }
+                    if (!empty($mass['to']))
+                    {
+                        echo "$mass[to], ";
+                    }
+                    ////////////////////////////////////////////////////////////
+                    // Вывод текста поста                                     //
+                    ////////////////////////////////////////////////////////////
+                    $text = $mass['text'];
+                    if (mb_strlen($text) >= 500)
+                    {
+                        // Если текст длинный, обрезаем и даем ссылку на полный вариант
+                        $text = mb_substr($text, 0, 400);
+                        $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
+                        $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
+                        $text = nl2br($text);
+                        $text = tags($text);
+                        echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $mass['id'] . '">Читать все &gt;&gt;</a>';
+                    } else
+                    {
+                        // Или, обрабатываем тэги и выводим весь текст
+                        $text = check($text);
+                        if ($offsm != 1)
+                        {
+                            $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
+                        }
+                        $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
+                        $text = nl2br($text);
+                        $text = tags($text);
+                        echo $text;
+                    }
+                    if ($mass['kedit'] >= 1)
+                    {
+                        $diz = $mass['tedit'] + $sdvig * 3600;
+                        $dizm = date("d.m /H:i", $diz);
+                        echo "<br /><font color='#999999'>Посл. изм. <b>$mass[edit]</b>  ($dizm)<br />Всего изм.:<b> $mass[kedit]</b></font>";
+                    }
+                    // Если есть прикрепленный файл, выводим его описание
+                    $freq = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $mass['id'] . "'");
+                    if (mysql_num_rows($freq) > 0)
+                    {
+                        $fres = mysql_fetch_array($freq);
+                        $fls = filesize('./files/' . $fres['filename']);
+                        $fls = round($fls / 1024, 2);
+                        echo "<br /><font color='#999999'>Прикреплённый файл:<br /><a href='index.php?act=file&amp;id=" . $fres['id'] . "'>$fres[filename]</a> ($fls кб.)<br/>";
+                        echo 'Скачано: ' . $fres['dlcount'] . ' раз.</font>';
+                    }
+                    $lp = mysql_query("select `from`, `id` from `forum` where type='m' and refid='" . $id . "'  order by time desc LIMIT 1;");
+                    $arr1 = mysql_fetch_array($lp);
+                    $tpp = $realtime - 300;
+                    if (($dostfmod == 1) || (($arr1['from'] == $login) && ($arr1['id'] == $mass['id']) && ($mass['time'] > $tpp)))
+                    {
+                        echo '<br /><a href="index.php?act=editpost&amp;id=' . $mass['id'] . '&amp;start=' . $start . '">Изменить</a>';
+                    }
+                    if ($dostfmod == 1)
+                    {
+                        echo '<br />';
+                        if ($dostfmod == 1)
+                            echo '<input type="checkbox" name="delch[]" value="' . $mass['id'] . '"/>&nbsp;';
+                        echo '<a href="?act=delpost&amp;id=' . $mass['id'] . '">Удалить</a><br/>';
+                        echo "$mass[ip] - $mass[soft]<br/>";
+                    }
+                    echo '</div>';
                     ++$i;
                 }
                 echo '<hr />';
@@ -499,9 +502,43 @@ if (in_array($act, $do))
             echo '<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colraz1 . ']</div>';
             ++$i;
         }
-        echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '(' . wfrm() . ')</div>';
+        echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&nbsp;(' . wfrm() . ')</div>';
     }
 
+    ////////////////////////////////////////////////////////////
+    // Счетчик файлов и ссылка на них                         //
+    ////////////////////////////////////////////////////////////
+    $sql = $dostsadm ? "" : " AND `del` != '1'";
+    if ($id && $tip == 'f')
+    {
+        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = '$id'" . $sql), 0);
+        if ($count > 0)
+            echo '<p><a href="index.php?act=files&amp;c=' . $id . '">Файлы раздела</a>&nbsp;(' . $count . ')</p>';
+        else
+            echo '<p>Прикрепленных файлов нет</p>';
+    } elseif ($id && $tip == 'r')
+    {
+        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = '$id'" . $sql), 0);
+        if ($count > 0)
+            echo '<p><a href="index.php?act=files&amp;s=' . $id . '">Файлы подраздела</a>&nbsp;(' . $count . ')</p>';
+        else
+            echo '<p>Прикрепленных файлов нет</p>';
+    } elseif ($id && $tip == 't')
+    {
+        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = '$id'" . $sql), 0);
+        if ($count > 0)
+            echo '<p><a href="index.php?act=files&amp;t=' . $id . '">Файлы топика</a>&nbsp;(' . $count . ')</p>';
+        else
+            echo '<p>Прикрепленных файлов нет</p>';
+    } else
+    {
+        $sql = $dostsadm ? '' : " WHERE `del` != '1'";
+        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . $sql), 0);
+        if ($count > 0)
+            echo '<p><a href="index.php?act=files">Файлы форума</a>&nbsp;(' . $count . ')</p>';
+        else
+            echo '<p>Прикрепленных файлов нет</p>';
+    }
     // Навигация внизу страницы
     echo '<p>' . ($id ? '<a href="index.php">В Форум</a><br />' : '') . '<a href="search.php">Поиск по форуму</a>';
     if (!$id)
@@ -511,7 +548,6 @@ if (in_array($act, $do))
         echo '<a href="index.php?act=faq">FAQ</a>';
     }
     echo '</p>';
-
     if (!$user_id)
     {
         if ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0))

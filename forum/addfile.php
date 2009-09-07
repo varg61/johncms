@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                                                                    //
@@ -16,30 +17,31 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 require_once ("../incfiles/head.php");
-if (empty($_GET['id']))
+if (!$id || !$user_id)
 {
     echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
     require_once ("../incfiles/end.php");
     exit;
 }
-$id = intval(check($_GET['id']));
-if (empty($_SESSION['uid']))
+
+// Проверяем, тот ли юзер заливает файл
+$req = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1");
+$res = mysql_fetch_array($req);
+if ($res['from'] != $login)
 {
-    echo "Вы не авторизованы!<br/>";
+    echo '<p>ОШИБКА!</p>';
+    require_once ("../incfiles/end.php");
+    exit;
+}
+$req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = '" . $id . "'");
+if (mysql_result($req1, 0) > 0)
+{
+    echo '<p>ОШИБКА!<br />Файл уже загружен</p>';
     require_once ("../incfiles/end.php");
     exit;
 }
 
-$typ = mysql_query("select `id`, `type`, `from`, `refid` from `forum` where `id`= '" . $id . "';");
-$ms = mysql_fetch_array($typ);
-if ($ms[from] != $login)
-{
-    echo "Ошибка!<br/>";
-    require_once ("../incfiles/end.php");
-    exit;
-}
-
-switch ($ms[type])
+switch ($res['type'])
 {
     case "m":
         if (isset($_POST['submit']))
@@ -72,9 +74,8 @@ switch ($ms[type])
             if ($do_file || $do_file_mini)
             {
                 // Список допустимых расширений файлов.
-                $al_ext = array('rar', 'zip', 'pdf', 'txt', 'tar', 'gz', 'jpg', 'jpeg', 'gif', 'png', 'bmp', '3gp', 'mp3', 'mpg', 'sis', 'thm', 'jar', 'jad', 'cab', 'sis', 'sisx', 'exe', 'msi');
+                $al_ext = array_merge($ext_win, $ext_java, $ext_sis, $ext_doc, $ext_pic, $ext_zip, $ext_video, $ext_audio, $ext_other);
                 $ext = explode(".", $fname);
-
                 // Проверка на допустимый размер файла
                 if ($fsize >= 1024 * $flsz)
                 {
@@ -83,7 +84,6 @@ switch ($ms[type])
                     require_once ('../incfiles/end.php');
                     exit;
                 }
-
                 // Проверка файла на наличие только одного расширения
                 if (count($ext) != 2)
                 {
@@ -94,7 +94,6 @@ switch ($ms[type])
                     require_once ('../incfiles/end.php');
                     exit;
                 }
-
                 // Проверка допустимых расширений файлов
                 if (!in_array($ext[1], $al_ext))
                 {
@@ -105,7 +104,6 @@ switch ($ms[type])
                     require_once ('../incfiles/end.php');
                     exit;
                 }
-
                 // Проверка на длину имени
                 if (strlen($fname) > 30)
                 {
@@ -114,7 +112,6 @@ switch ($ms[type])
                     require_once ('../incfiles/end.php');
                     exit;
                 }
-
                 // Проверка на запрещенные символы
                 if (eregi("[^a-z0-9.()+_-]", $fname))
                 {
@@ -124,13 +121,11 @@ switch ($ms[type])
                     require_once ('../incfiles/end.php');
                     exit;
                 }
-
                 // Проверка наличия файла с таким же именем
                 if (file_exists("files/$fname"))
                 {
                     $fname = $realtime . $fname;
                 }
-
                 // Окончательная обработка
                 if ($do_file)
                 {
@@ -171,35 +166,60 @@ switch ($ms[type])
                     }
                 }
             }
-
-            mysql_query("update `forum` set  attach='" . mysql_real_escape_string($fname) . "' where id='" . $id . "';");
-            $pa = mysql_query("select `id` from `forum` where type='m' and refid= '" . $ms['refid'] . "';");
+            // Определяем тип файла
+            $ext = strtolower($ext[1]);
+            if (in_array($ext, $ext_win))
+                $type = 1;
+            elseif (in_array($ext, $ext_java))
+                $type = 2;
+            elseif (in_array($ext, $ext_sis))
+                $type = 3;
+            elseif (in_array($ext, $ext_doc))
+                $type = 4;
+            elseif (in_array($ext, $ext_pic))
+                $type = 5;
+            elseif (in_array($ext, $ext_zip))
+                $type = 6;
+            elseif (in_array($ext, $ext_video))
+                $type = 7;
+            elseif (in_array($ext, $ext_audio))
+                $type = 8;
+            else
+                $type = 9;
+            // Определяем ID субкатегории и категории
+            $req2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
+            $res2 = mysql_fetch_array($req2);
+            $req3 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res2['refid'] . "' LIMIT 1");
+            $res3 = mysql_fetch_array($req3);
+            // Заносим данные в базу
+            mysql_query("INSERT INTO `cms_forum_files` SET
+			`cat` = '" . $res3['refid'] . "',
+			`subcat` = '" . $res2['refid'] . "',
+			`topic` = '" . $res['refid'] . "',
+			`post` = '$id',
+			`time` = '" . $res['time'] . "',
+			`filename` = '" . mysql_real_escape_string($fname) . "',
+			`filetype` = '$type'");
+            $pa = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['refid'] . "'");
             $pa2 = mysql_num_rows($pa);
-            if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
-            {
-                $page = 1;
-            } else
-            {
-                $page = ceil($pa2 / $kmess);
-            }
-            echo "<br/><a href='index.php?id=" . $ms[refid] . "&amp;page=" . $page . "'>Продолжить</a><br/>";
+            $page = ceil($pa2 / $kmess);
+            echo "<br/><a href='index.php?id=" . $res['refid'] . "&amp;page=" . $page . "'>Продолжить</a><br/>";
         } else
         {
             echo "Добавление файла (max. $flsz kb)<br/><form action='index.php?act=addfile&amp;id=" . $id . "' method='post' enctype='multipart/form-data'>";
             if (!eregi("Opera/8.01", $agent))
             {
-                echo "<input type='file' name='fail'/><br/>";
+                echo '<div class="gmenu"><p><input type="file" name="fail"/></p></div>';
             } else
             {
-                echo "	<input name='fail1' value =''/>&nbsp;<br/>
-<a href='op:fileselect'>Выбрать файл</a><br/>";
+                echo "	<input name='fail1' value =''/>&nbsp;<br/><a href='op:fileselect'>Выбрать файл</a><br/>";
             }
             echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form>";
         }
         break;
+
     default:
         echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
-
         break;
 }
 

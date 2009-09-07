@@ -13,17 +13,16 @@ echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.or
 <meta http-equiv='content-type' content='application/xhtml+xml; charset=utf-8'/>";
 echo "<title>Обновление системы</title>
 <style type='text/css'>
-body { font-weight: normal; font-family: Century Gothic; font-size: 12px; color: #FFFFFF; background-color: #000033}
-a:link { text-decoration: underline; color : #D3ECFF}
-a:active { text-decoration: underline; color : #2F3528 }
-a:visited { text-decoration: underline; color : #31F7D4}
-a:hover { text-decoration: none; font-size: 12px; color : #E4F992 }
+body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}
+h2{ margin: 0; padding: 0; padding-bottom: 4px; }
+ul{ margin:0; padding-left:20px; }
+li { padding-bottom: 6px; }
 .red { color: #FF0000; font-weight: bold; }
 .green{ color: #009933; font-weight: bold; }
 .gray{ color: #FF0000; font: small; }
 </style>
 </head><body>";
-echo '<big><b>JohnCMS v.2.4.0</b></big><br />Обновление с версии 2.3.0<hr />';
+echo '<h2 class="green">JohnCMS v.3.0.0</h2>Обновление с версии 2.4.0<hr />';
 
 // Подключаемся к базе данных
 require_once ("incfiles/db.php");
@@ -36,7 +35,7 @@ $do = isset($_GET['do']) ? $_GET['do'] : '';
 switch ($do)
 {
     case 'step1':
-        echo '<b><u>Права доступа</u></b><br />';
+        echo '<h2>Проверка прав доступа</h2>';
         // Проверка прав доступа к файлам и папкам
         function permissions($filez) {
             $filez = @decoct(@fileperms($filez)) % 1000;
@@ -85,15 +84,125 @@ switch ($do)
         break;
 
     case 'step2':
-        echo '<b><u>Подготовка таблиц</u></b><br />';
+        echo '<h2>Подготовка таблиц</h2>';
         mysql_query("ALTER TABLE `users` DROP `offpg`");
         mysql_query("ALTER TABLE `users` DROP `offgr`");
-        echo '<span class="green">OK</span> таблица `users` обновлена<br />';
+        echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `vip` `vip` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `moder` `moder` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` DROP INDEX `moder`");
-        echo '<span class="green">OK</span> таблица `forum` обновлена<br />';
+        echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
+        mysql_query("DROP TABLE IF EXISTS `cms_forum_files`");
+        mysql_query("CREATE TABLE `cms_forum_files` (
+		`id` int(11) NOT NULL auto_increment,
+		`cat` int(11) NOT NULL,
+		`subcat` int(11) NOT NULL,
+		`topic` int(11) NOT NULL,
+		`post` int(11) NOT NULL,
+		`time` int(11) NOT NULL,
+		`filename` text NOT NULL,
+		`filetype` tinyint(4) NOT NULL,
+		`dlcount` int(11) NOT NULL,
+		`del` tinyint(1) NOT NULL default '0',
+		PRIMARY KEY  (`id`),
+		KEY `cat` (`cat`),
+		KEY `subcat` (`subcat`),
+		KEY `topic` (`topic`),
+		KEY `post` (`post`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        echo '<span class="green">OK</span> таблица `cms_forum_files` создана.<br />';
+        echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
+        break;
+
+    case 'step3':
+        echo '<h2>Очистка форума</h2>';
+        // Очистка форума
+        $i = 0;
+        $f = 0;
+        $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm'");
+        while ($res = mysql_fetch_array($req))
+        {
+            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '" . $res['refid'] . "'"), 0);
+            if ($count == 0)
+            {
+                // Если есть файл, удаляем
+                if (!empty($res['attach']) && file_exists('forum/files/' . $res['attach']))
+                {
+                    unlink('forum/files/' . $res['attach']);
+                    ++$f;
+                }
+                // Удаляем запись из базы
+                mysql_query("DELETE FROM `forum` WHERE `id` = '" . $res['id'] . "'");
+                ++$i;
+            }
+        }
+        echo '<span class="green">OK</span> Форум очищен, удалено <span class="red">' . $i . '</span> мертвых записей из базы и <span class="red">' . $f . '</span> файлов.<br />';
+        echo '<hr /><a href="update.php?do=step4">Продолжить</a>';
+        break;
+
+    case 'step4':
+        echo '<h2>Перенос файлов форума</h2>';
+        // Перечисляем типы файлов, разрешенных к выгрузке на форуме
+        $ext_win = array('exe', 'msi');
+        $ext_java = array('jar', 'jad');
+        $ext_sis = array('sis');
+        $ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu');
+        $ext_pic = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'tiff', 'wmf');
+        $ext_zip = array('zip', 'rar', '7z', 'tar');
+        $ext_video = array('3gp', 'avi', 'flv', 'mpeg', 'mp4');
+        $ext_audio = array('mp3', 'amr');
+        // Переносим данные в новую таблицу
+        $req = mysql_query("SELECT * FROM `forum` WHERE `attach` != ''");
+        while ($res = mysql_fetch_array($req))
+        {
+            if (file_exists('forum/files/' . $res['attach']))
+            {
+                $ext = explode('.', $res['attach']);
+                $ext = strtolower($ext[1]);
+                if (in_array($ext, $ext_win))
+                    $type = 1;
+                elseif (in_array($ext, $ext_java))
+                    $type = 2;
+                elseif (in_array($ext, $ext_sis))
+                    $type = 3;
+                elseif (in_array($ext, $ext_doc))
+                    $type = 4;
+                elseif (in_array($ext, $ext_pic))
+                    $type = 5;
+                elseif (in_array($ext, $ext_zip))
+                    $type = 6;
+                elseif (in_array($ext, $ext_video))
+                    $type = 7;
+                elseif (in_array($ext, $ext_audio))
+                    $type = 8;
+                else
+                    $type = 9;
+                // Получаем ID подкатегории
+                $req1 = mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
+                $res1 = mysql_fetch_array($req1);
+                // Получаем ID категории
+                $req2 = mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res1['refid'] . "'");
+                $res2 = mysql_fetch_array($req2);
+                // Переносим информацию о файлах в новую таблицу
+                mysql_query("INSERT INTO `cms_forum_files` SET
+				`cat` = '" . $res2['refid'] . "',
+				`subcat` = '" . $res1['refid'] . "',
+				`topic` = '" . $res['refid'] . "',
+				`post` = '" . $res['id'] . "',
+				`time` = '" . $res['time'] . "',
+				`filename` = '" . mysql_real_escape_string($res['attach']) . "',
+				`filetype` = '$type',
+				`dlcount` = '" . $res['dlcount'] . "',
+				`del` = '" . $res['close'] . "'");
+            }
+        }
+        echo '<span class="green">OK</span> файлы Форума перенесены.<br />';
+        mysql_query("ALTER TABLE `forum` DROP `attach`");
+        mysql_query("ALTER TABLE `forum` DROP `dlcount`");
+        echo '<span class="green">OK</span> старые данные удалены.<br />';
+        mysql_query("OPTIMIZE TABLE `forum`");
+        echo '<span class="green">OK</span> таблица оптимизирована.<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
@@ -103,14 +212,13 @@ switch ($do)
         break;
 
     default:
-        echo '<p><big><span class="red">ВНИМАНИЕ!</span></big><ul>';
-        echo '<li>Учтите, что обновление возможно только для системы <b>JohnCMS 2.3.0</b></li>';
-        echo '<li>Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.</li>';
-        echo '<li>Перед началом процедуры обновления, ОБЯЗАТЕЛЬНО сделайте резервную копию базы данных. Если по какой то причине обновление не пройдет до конца, Вам придется восстанавливать базу из резервной копии.</li>';
+        echo '<h2><span class="red">ВНИМАНИЕ!</span></h2><ul>';
+        echo '<li>Учтите, что обновление возможно только для оригинальной (без модов) системы <b>JohnCMS 2.4.0</b><br />Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.<br />Установка данного обновления на модифицированную систему может привести к полной неработоспособности сайта.</li>';
+        echo '<li>Некоторые этапы обновления могут занимать довольно продолжительное время (несколько минут), которое зависит от размера базы данных сайта и скорости сервера хостинга.</li>';
+        echo '<li>Перед началом процедуры обновления, ОБЯЗАТЕЛЬНО сделайте резервную копию базы данных.<br />Если по какой то причине обновление не пройдет до конца, Вам придется восстанавливать базу из резервной копии.</li>';
+        echo '<li>В течение всего периода работы данного инсталлятора, НЕЛЬЗЯ нажимать кнопки браузена "Назад" и "Обновить", иначе может быть нарушена целостность данных.</li>';
         echo '<li>Если Вы нажмете ссылку "Продолжить", то отмена изменений будет невозможна без восстановления из резервной копии.</li>';
-        echo '<li></li>';
-        echo '</ul></p>';
-        echo '<hr />Вы уверены?<br /><a href="update.php?do=step1">Продолжить</a>';
+        echo '</ul><hr />Вы уверены? У Вас есть резервная копия базы данных?<br /><a href="update.php?do=step1">Начать обновление</a>';
 }
 
 echo '</body>
