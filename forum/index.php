@@ -28,7 +28,7 @@ $ext_sis = array('sis');
 // Файлы документов и тексты
 $ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu');
 // Файлы картинок
-$ext_pic = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'tiff', 'wmf');
+$ext_pic = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'wmf');
 // Файлы архивов
 $ext_zip = array('zip', 'rar', '7z', 'tar', 'gz');
 // Файлы видео

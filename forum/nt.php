@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -40,7 +41,7 @@ if ($lastpost > ($realtime - $old))
     exit;
 }
 
-$type = mysql_query("select * from `forum` where id= '" . $id . "';");
+$type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 if ($tip != "r")
@@ -52,16 +53,6 @@ if ($tip != "r")
 }
 if (isset($_POST['submit']))
 {
-    $flt = $realtime - 30;
-    $af = mysql_query("select * from `forum` where type='m' and time>'" . $flt . "' and `from`= '" . $login . "';");
-    $af1 = mysql_num_rows($af);
-    if ($af1 != 0)
-    {
-        require_once ("../incfiles/head.php");
-        echo "Антифлуд!Вы не можете так часто добавлять сообщения<br/>Порог 30 секунд<br/><a href='?id=" . $id . "'>В раздел</a><br/>";
-        require_once ("../incfiles/end.php");
-        exit;
-    }
     if (empty($_POST['th']))
     {
         require_once ("../incfiles/head.php");
@@ -82,13 +73,13 @@ if (isset($_POST['submit']))
     if ($_POST['msgtrans'] == 1)
     {
         $th = trans($th);
-		$msg = trans($msg);
+        $msg = trans($msg);
     }
-    $pt = mysql_query("select `id` from `forum` where type='t' and refid='" . $id . "' and text='" . $th . "';");
-    if (mysql_num_rows($pt) != 0)
+    $pt = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '$id' AND `text` = '$th'");
+    if (mysql_result($pt, 0) > 0)
     {
         require_once ("../incfiles/head.php");
-        echo "Ошибка!Тема с таким названием уже есть в этом разделе<br/><a href='index.php?act=nt&amp;id=" . $id . "'>Повторить</a><br/>";
+        echo '<p>ОШИБКА!<br />Тема с таким названием уже есть в этом разделе<br/><a href="index.php?act=nt&amp;id=' . $id . '">Повторить</a></p>';
         require_once ("../incfiles/end.php");
         exit;
     }
@@ -99,40 +90,38 @@ if (isset($_POST['submit']))
     {
         $fmd = 0;
     }
-    mysql_query("insert into `forum` values(0,'" . $id . "','t','" . $realtime . "','" . $login . "','','','','','" . $th . "','','','" . $fmd . "','','','');");
+    // Добавляем заголовок темы
+    mysql_query("INSERT INTO `forum` SET
+	`refid` = '$id',
+	`type` = 't',
+	`time` = '$realtime',
+	`from` = '$login',
+	`text` = '$th',
+	`moder` = '$fmd'");
     $rid = mysql_insert_id();
-    $thm = mysql_query("select `id`, `refid` from `forum` where type='t'  and id= '" . $rid . "';");
-    $tem1 = mysql_fetch_array($thm);
     $agn = strtok($agn, ' ');
-    mysql_query("insert into `forum` values(0,'" . $rid . "','m','" . $realtime . "','" . $login . "','','','" . $ipp . "','" . $agn . "','" . $msg . "','','','','','','');");
+    // Добавляем текст поста
+    mysql_query("INSERT INTO `forum` SET
+	`refid` = '$rid',
+	`type` = 'm',
+	`time` = '$realtime',
+	`from` = '$login',
+	`ip` = '$ipp',
+	`soft` = '$agn',
+	`text` = '$msg'");
     $postid = mysql_insert_id();
+    // Записываем счетчик постов юзера
     $fpst = $datauser['postforum'] + 1;
-    mysql_query("update `users` set  postforum='" . $fpst . "' where id='" . intval($_SESSION['uid']) . "';");
-    if ($set['fmod'] != 1)
-    {
-        $hid = $rid;
-    } else
-    {
-        $hid = $tem1[refid];
-    }
-    #echo "Тема добавлена<br/><a href='index.php?id=" . $hid . "'>Продолжить</a><br/>";
-    $np = mysql_query("select `id` from `forum` where type='l' and refid='" . $tem1[id] . "' and `from`='" . $login . "';");
-    $np1 = mysql_num_rows($np);
-    if ($np1 == 0)
-    {
-        mysql_query("insert into `forum` values(0,'" . $tem1[id] . "','l','" . $realtime . "','" . $login . "','','','','','','','','','','','','');");
-    } else
-    {
-        $np2 = mysql_fetch_array($np);
-        mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $np2[id] . "';");
-    }
-    $addfiles = intval($_POST[addfiles]);
+    mysql_query("UPDATE `users` SET  `postforum` = '$fpst', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
+    // Ставим метку о прочтении
+    mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='$rid', `user_id`='$user_id', `time`='$realtime'");
+    $addfiles = intval($_POST['addfiles']);
     if ($addfiles == 1)
     {
         header("Location: index.php?id=$postid&act=addfile");
     } else
     {
-        header("Location: index.php?id=$hid");
+        header("Location: index.php?id=" . ($set['fmod'] != 1 ? $rid : $id));
     }
 } else
 {
