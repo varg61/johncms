@@ -17,19 +17,8 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once ('../incfiles/head.php');
 
-/*
-Описания типов файлоы
-1 - win
-2 - java
-3 - sis
-4 - doc
-5 - pic
-6 - zip
-7 - video
-8 - audio
-9 - другие типы файлов
-*/
 $types = array(1 => 'Приложения WIN', 2 => 'Приложения Java', 3 => 'Приложения SIS', 4 => 'Текстовые файлы', 5 => 'Картинки', 6 => 'Архивы', 7 => 'Видео', 8 => 'MP3', 9 => 'Другое');
+$new = $realtime - 86400; // Сколько времени файлы считать новыми?
 
 // Получаем ID раздела и подготавливаем запрос
 $c = abs(intval($_GET['c'])); // ID раздела
@@ -40,28 +29,28 @@ if ($c)
     $id = $c;
     $lnk = '&amp;c=' . $c;
     $sql = " AND `cat` = '" . $c . "'";
-    $caption = 'Файлы раздела: ';
+    $caption = '<b>Файлы раздела</b>: ';
     $input = '<input type="hidden" name="c" value="' . $c . '"/>';
 } elseif ($s)
 {
     $id = $s;
     $lnk = '&amp;s=' . $s;
     $sql = " AND `subcat` = '" . $s . "'";
-    $caption = 'Файлы подраздела: ';
+    $caption = '<b>Файлы подраздела</b>: ';
     $input = '<input type="hidden" name="s" value="' . $s . '"/>';
 } elseif ($t)
 {
     $id = $t;
     $lnk = '&amp;t=' . $t;
     $sql = " AND `topic` = '" . $t . "'";
-    $caption = 'Файлы темы: ';
+    $caption = '<b>Файлы темы</b>: ';
     $input = '<input type="hidden" name="t" value="' . $t . '"/>';
 } else
 {
     $id = false;
     $sql = '';
     $lnk = '';
-    $caption = 'Файлы форума';
+    $caption = '<b>Файлы всего форума</b>';
     $input = '';
 }
 if ($c || $s || $t)
@@ -81,24 +70,24 @@ if ($c || $s || $t)
 }
 
 $do = isset($_GET['do']) ? abs(intval($_GET['do'])) : 0;
-if ($do > 0 && $do < 10)
+if ($do > 0 && $do < 10 || isset($_GET['new']))
 {
     ////////////////////////////////////////////////////////////
     // Выводим список файлов нужного раздела                  //
     ////////////////////////////////////////////////////////////
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$do'" . $sql), 0);
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE " . (isset($_GET['new']) ? " `time` > '$new'" : " `filetype` = '$do'") . $sql), 0);
     if ($total > 0)
     {
-        echo '<div class="phdr">Список файлов</div>';
+        echo '<div class="phdr"><b>'.(isset($_GET['new']) ? 'Новые файлы' : 'Список файлов').'</b></div>';
         $req = mysql_query("SELECT `cms_forum_files`.*, `forum`.`from`, `forum`.`text`, `topicname`.`text` AS `topicname`
 		FROM `cms_forum_files`
 		LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
-		Left Join `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
-		WHERE `filetype` = '$do'$sql ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+		LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
+		WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . $sql . " ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req))
         {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            echo '<img src="images/' . $do . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . ']';
+            echo '<img src="images/' . $res['filetype'] . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . ']';
             // Название темы
             echo '<div class="sub">';
             // Выводим данные юзера, кто и когда написал пост
@@ -164,6 +153,8 @@ if ($do > 0 && $do < 10)
     ////////////////////////////////////////////////////////////
     // Выводим список разделов, в которых есть файлы          //
     ////////////////////////////////////////////////////////////
+    $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . $sql), 0);
+	echo '<p>'.($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">Новые файлы (' . $countnew . ')</a>' : 'Новых файлов нет').'</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array();
     $total = 0;
@@ -183,7 +174,7 @@ if ($do > 0 && $do < 10)
     }
     echo '<div class="phdr">Всего файлов: ' . $total . '</div>';
 }
-echo '<p>' . ($do ? '<a href="index.php?act=files' . $lnk . '">К списку разделов</a><br />' : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">Форум</a></p>';
+echo '<p>' . (($do || isset($_GET['new'])) ? '<a href="index.php?act=files' . $lnk . '">К списку разделов</a><br />' : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">Форум</a></p>';
 
 require_once ('../incfiles/end.php');
 
