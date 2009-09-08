@@ -29,7 +29,7 @@ require_once ('../incfiles/head.php');
 8 - audio
 9 - другие типы файлов
 */
-$types = array(1 => 'Приложения WIN', 2 => 'Приложения Java', 3 => 'Приложения SIS', 4 => 'Документы', 5 => 'Картинки', 6 => 'Архивы', 7 => 'Видео', 8 => 'MP3', 9 => 'Другое');
+$types = array(1 => 'Приложения WIN', 2 => 'Приложения Java', 3 => 'Приложения SIS', 4 => 'Текстовые файлы', 5 => 'Картинки', 6 => 'Архивы', 7 => 'Видео', 8 => 'MP3', 9 => 'Другое');
 
 // Получаем ID раздела и подготавливаем запрос
 $c = abs(intval($_GET['c'])); // ID раздела
@@ -98,7 +98,7 @@ if ($do > 0 && $do < 10)
         while ($res = mysql_fetch_array($req))
         {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            echo '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . ']';
+            echo '<img src="images/' . $do . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . ']';
             // Название темы
             echo '<div class="sub">';
             // Выводим данные юзера, кто и когда написал пост
@@ -172,7 +172,7 @@ if ($do > 0 && $do < 10)
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . ($dostadm ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0)
         {
-            $link[] = '<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&nbsp;(' . $count . ')';
+            $link[] = '<img src="images/' . $i . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&nbsp;(' . $count . ')';
             $total = $total + $count;
         }
     }
