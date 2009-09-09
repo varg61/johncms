@@ -65,8 +65,12 @@ if (empty($id))
 
 if ($user_id)
 {
+    // Фиксируем местоположение юзера
     $tti = round(($datauser['ftime'] - $realtime) / 60);
-    if ($id)
+    if ($act == 'files')
+    {
+    	$where = 'forumfiles';
+    } elseif ($id)
     {
         $where = "forum,$id";
     } else
@@ -74,11 +78,11 @@ if ($user_id)
         $where = "forum";
     }
     mysql_query("INSERT INTO `count`  SET
-	`ip`='" . $ipp . "',
-	`browser`='" . $agn . "',
-	`time`='" . $realtime . "',
-	`where`='" . $where . "',
-	`name`='" . $login . "';");
+	`ip`='$ipp',
+	`browser`='$agn',
+	`time`='$realtime',
+	`where`='$where',
+	`name`='$login';");
 }
 
 $do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'fmoder', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel', 'files');

@@ -175,6 +175,9 @@ while ($arr = mysql_fetch_array($q))
             }
             switch ($where)
             {
+                case 'forumfiles':
+                    echo "<a href='../forum/index.php?act=files'>файлы форума</a>";
+                    break;
                 case "mainpage":
                     echo "<a href='../index.php'>на главной</a>";
                     break;
