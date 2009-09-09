@@ -86,16 +86,22 @@ if ($do || isset($_GET['new']))
 		WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($dostadm ? '' : " AND `del` != '1'") . $sql . " ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req))
         {
+            $fls = filesize('./files/' . $res['filename']);
+            $fls = round($fls / 1024, 0);
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            echo '<img src="images/' . $res['filetype'] . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . ']';
+            echo ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="images/' . $res['filetype'] . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id=' . $res['id'] .
+                '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . '] <font color="#999999">' . $fls . 'кб.</font>';
             // Название темы
             echo '<div class="sub">';
             // Выводим данные юзера, кто и когда написал пост
             $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `name`='" . $res['from'] . "' LIMIT 1");
             $mass1 = mysql_fetch_array($uz);
             // Значок пола
-            echo '<img src="../theme/' . $skin . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="10" height="10"/>';
-            if ($user_id && $user_id != $mass1['id'])
+            if ($mass1['id'])
+                echo '<img src="../theme/' . $skin . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="10" height="10"/>&nbsp;';
+            else
+                echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
+            if ($user_id && $mass1['id'] && $user_id != $mass1['id'])
             {
                 echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
             } else
