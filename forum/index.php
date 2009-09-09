@@ -26,7 +26,7 @@ $ext_java = array('jar', 'jad');
 // Файлы SIS
 $ext_sis = array('sis');
 // Файлы документов и тексты
-$ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu');
+$ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu', 'xls');
 // Файлы картинок
 $ext_pic = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'wmf');
 // Файлы архивов

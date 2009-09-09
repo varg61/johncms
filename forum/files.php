@@ -24,6 +24,7 @@ $new = $realtime - 86400; // Сколько времени файлы счита
 $c = abs(intval($_GET['c'])); // ID раздела
 $s = abs(intval($_GET['s'])); // ID подраздела
 $t = abs(intval($_GET['t'])); // ID топика
+$do = isset($_GET['do']) && intval($_GET['do']) > 0 && intval($_GET['do']) < 10 ? intval($_GET['do']) : 0;
 if ($c)
 {
     $id = $c;
@@ -69,8 +70,7 @@ if ($c || $s || $t)
     }
 }
 
-$do = isset($_GET['do']) ? abs(intval($_GET['do'])) : 0;
-if ($do > 0 && $do < 10 || isset($_GET['new']))
+if ($do || isset($_GET['new']))
 {
     ////////////////////////////////////////////////////////////
     // Выводим список файлов нужного раздела                  //
@@ -78,12 +78,12 @@ if ($do > 0 && $do < 10 || isset($_GET['new']))
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE " . (isset($_GET['new']) ? " `time` > '$new'" : " `filetype` = '$do'") . $sql), 0);
     if ($total > 0)
     {
-        echo '<div class="phdr"><b>'.(isset($_GET['new']) ? 'Новые файлы' : 'Список файлов').'</b></div>';
+        echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />Новые файлы за последние 24 часа' : '') . ($do ? '<br />' . $types[$do] : '') . '</div>';
         $req = mysql_query("SELECT `cms_forum_files`.*, `forum`.`from`, `forum`.`text`, `topicname`.`text` AS `topicname`
 		FROM `cms_forum_files`
 		LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
 		LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
-		WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . $sql . " ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+		WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($dostadm ? '' : " AND `del` != '1'") . $sql . " ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req))
         {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -140,7 +140,7 @@ if ($do > 0 && $do < 10 || isset($_GET['new']))
         if ($total > $kmess)
         {
             // Постраничная навигация
-            echo '<p>' . pagenav('index.php?act=files&amp;do=' . $do . $lnk . '&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . pagenav('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="files"/><input type="hidden" name="do" value="' . $do . '"/>' . $input .
                 '<input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
@@ -153,8 +153,8 @@ if ($do > 0 && $do < 10 || isset($_GET['new']))
     ////////////////////////////////////////////////////////////
     // Выводим список разделов, в которых есть файлы          //
     ////////////////////////////////////////////////////////////
-    $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . $sql), 0);
-	echo '<p>'.($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">Новые файлы (' . $countnew . ')</a>' : 'Новых файлов нет').'</p>';
+    $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . ($dostadm ? '' : " AND `del` != '1'") . $sql), 0);
+    echo '<p>' . ($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">Новые файлы (' . $countnew . ')</a>' : 'Новых файлов нет') . '</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array();
     $total = 0;
