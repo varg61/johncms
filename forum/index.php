@@ -24,7 +24,7 @@ $ext_win = array('exe', 'msi');
 // Файлы Java
 $ext_java = array('jar', 'jad');
 // Файлы SIS
-$ext_sis = array('sis');
+$ext_sis = array('sis', 'sisx');
 // Файлы документов и тексты
 $ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu', 'xls');
 // Файлы картинок

@@ -85,7 +85,7 @@ switch ($do)
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
-        mysql_query("ALTER TABLE `users` DROP `offpg`");
+		mysql_query("ALTER TABLE `users` DROP `offpg`");
         mysql_query("ALTER TABLE `users` DROP `offgr`");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
@@ -118,7 +118,7 @@ switch ($do)
     case 'step3':
         echo '<h2>Очистка форума</h2>';
         // Очистка форума
-        $i = 0;
+		$i = 0;
         $f = 0;
         $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm'");
         while ($res = mysql_fetch_array($req))
@@ -137,16 +137,17 @@ switch ($do)
                 ++$i;
             }
         }
-        echo '<span class="green">OK</span> Форум очищен, удалено <span class="red">' . $i . '</span> мертвых записей из базы и <span class="red">' . $f . '</span> файлов.<br />';
+        mysql_query("DELETE FROM `forum` WHERE `type` = 'l'");
+		echo '<span class="green">OK</span> Форум очищен, удалено <span class="red">' . $i . '</span> мертвых записей из базы и <span class="red">' . $f . '</span> файлов.<br />';
         echo '<hr /><a href="update.php?do=step4">Продолжить</a>';
         break;
 
     case 'step4':
         echo '<h2>Перенос файлов форума</h2>';
         // Перечисляем типы файлов, разрешенных к выгрузке на форуме
-        $ext_win = array('exe', 'msi');
+		$ext_win = array('exe', 'msi');
         $ext_java = array('jar', 'jad');
-        $ext_sis = array('sis');
+        $ext_sis = array('sis', 'sisx');
         $ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu');
         $ext_pic = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'tiff', 'wmf');
         $ext_zip = array('zip', 'rar', '7z', 'tar');
@@ -203,7 +204,7 @@ switch ($do)
         echo '<span class="green">OK</span> старые данные удалены.<br />';
         mysql_query("OPTIMIZE TABLE `forum`");
         echo '<span class="green">OK</span> таблица оптимизирована.<br />';
-        echo '<hr /><a href="update.php?do=final">Продолжить</a>';
+		echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
     case 'final':
