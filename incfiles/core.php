@@ -244,35 +244,35 @@ if ($user_id && $user_ps)
             // Установка административного доступа
             if ($login == $nickadmina || $login == $nickadmina2)
             {
-                $dostsadm = 1;
+                $dostsadm = 1; //Суперадмин
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7)
             {
-                $dostadm = 1;
+                $dostadm = 1; // Админ
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6)
             {
-                $dostsmod = 1;
+                $dostsmod = 1; // Старший модер
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 5)
             {
-                $dostlmod = 1;
+                $dostlmod = 1; // Модер библиотеки
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 4)
             {
-                $dostdmod = 1;
+                $dostdmod = 1; // Модер по загрузкам
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 3)
             {
-                $dostfmod = 1;
+                $dostfmod = 1; // Модер форума
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 2)
             {
-                $dostcmod = 1;
+                $dostcmod = 1; // Модер Чата
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 1 || $rights == 7 || $rights == 6)
             {
-                $dostkmod = 1;
+                $dostkmod = 1; // Киллер
             }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights >= 1)
             {

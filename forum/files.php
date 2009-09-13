@@ -113,16 +113,19 @@ if ($do || isset($_GET['new']))
             switch ($mass1['rights'])
             {
                 case 7:
-                    echo " Adm ";
+                    echo ' Adm ';
                     break;
                 case 6:
-                    echo " Smd ";
+                    echo ' Smd ';
                     break;
+                case 5:
+                case 4:
                 case 3:
-                    echo " Mod ";
+                case 2:
+                    echo ' Mod ';
                     break;
                 case 1:
-                    echo " Kil ";
+                    echo ' Kil ';
                     break;
             }
             $ontime = $mass1['lastdate'];
