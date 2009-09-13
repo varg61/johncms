@@ -23,7 +23,7 @@ require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 echo '<div class="phdr"><b>Кто в онлайне?</b></div>';
 $onltime = $realtime - 300;
-$total = mysql_result(mysql_query("SELECT * FROM `users` WHERE `lastdate` > $ontime"), 0);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '$onltime'"), 0);
 $req = mysql_query("SELECT * FROM `users` WHERE `lastdate` > '" . intval($onltime) . "' ORDER BY `name` LIMIT " . $start . "," . $kmess);
 while ($res = mysql_fetch_array($req))
 {
@@ -103,10 +103,10 @@ while ($res = mysql_fetch_array($req))
         }
     }
     $prh = mysql_result(mysql_query("SELECT COUNT(*) FROM `count` WHERE `time` > '" . $res['sestime'] . "' AND `name` = '" . $res['name'] . "'"), 0);
-    echo ' (' . $prh . ' - ' . $sitevr . ')<br/>';
+    echo ' (' . $prh . ' - ' . $sitevr . ') ';
     if ($user_id)
     {
-        echo "Где: ";
+        //echo "Где: ";
         $wh = mysql_query("SELECT * FROM `count` WHERE `name` = '" . $res['name'] . "' ORDER BY `time` DESC LIMIT 1");
         $wh1 = mysql_fetch_array($wh);
         $wher = $wh1['where'];
@@ -115,58 +115,52 @@ while ($res = mysql_fetch_array($req))
         switch ($where)
         {
             case 'forumfiles':
-                echo '<a href="../forum/index.php?act=files">файлы форума</a>';
-                break;
-            case 'mainpage':
-                echo '<a href="../index.php">на главной</a>';
+                echo '<a href="../forum/index.php?act=files">Файлы форума</a>';
                 break;
             case 'anketa':
-                echo '<a href="anketa.php">в анкете</a>';
+                echo '<a href="anketa.php">Анкета</a>';
                 break;
             case 'settings':
-                echo '<a href="usset.php">в настройках</a>';
+                echo '<a href="usset.php">Настройки</a>';
                 break;
             case 'users':
-                echo '<a href="users.php">в списке юзеров</a>';
+                echo '<a href="users.php">Список юзеров</a>';
                 break;
             case 'online':
-                echo 'тут';
+                echo 'Тут, в списке';
                 break;
             case 'privat':
-                echo '<a href="privat.php">в привате</a>';
-                break;
             case 'pradd':
-                echo '<a href="privat.php">в привате</a>';
+                echo '<a href="privat.php">Приват</a>';
                 break;
             case 'birth':
-                echo '<a href="brd.php">в списке именинников</a>';
+                echo '<a href="brd.php">Список именинников</a>';
                 break;
             case 'read':
-                echo '<a href="../read.php">читает FAQ</a>';
+                echo '<a href="../read.php">Читает FAQ</a>';
                 break;
             case 'load':
-                echo '<a href="../download/index.php">в загрузках</a>';
+                echo '<a href="../download/index.php">Загрузки</a>';
                 break;
             case 'gallery':
-                echo '<a href="../gallery/index.php">в галерее</a>';
+                echo '<a href="../gallery/index.php">Галерея</a>';
                 break;
             case 'forum':
-                echo '<a href="../forum/index.php">в форуме</a>';
-                break;
             case 'forums':
-                echo '<a href="../forum/index.php">в форуме</a>';
+                echo '<a href="../forum/index.php">Форум</a>';
                 break;
             case 'chat':
-                echo '<a href="../chat/index.php">в чате</a>';
+                echo '<a href="../chat/index.php">Чат</a>';
                 break;
             case 'guest':
-                echo '<a href="guest.php">в гостевой</a>';
+                echo '<a href="guest.php">Гостевая</a>';
                 break;
             case 'lib':
-                echo '<a href="../library/index.php">в библиотеке</a>';
+                echo '<a href="../library/index.php">Библиотека</a>';
                 break;
+            case 'mainpage':
             default:
-                echo '<a href="../index.php">на главной</a>';
+                echo '<a href="../index.php">Главная</a>';
                 break;
         }
     }
