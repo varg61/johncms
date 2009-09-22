@@ -45,9 +45,9 @@ function usersonline()
     global $user_id;
     global $home;
     $ontime = $realtime - 300;
-    $qon = mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate`>='" . $ontime . "';");
+    $qon = mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate`>='" . $ontime . "'");
     $qon2 = mysql_result($qon, 0);
-    $all = mysql_query("SELECT `id` FROM `count` WHERE `time`>='" . $ontime . "' GROUP BY `ip`, `browser`;");
+    $all = mysql_query("SELECT `id` FROM `count` WHERE `time`>='" . $ontime . "' GROUP BY `ip`, `browser`");
     $all2 = mysql_num_rows($all);
     return ($user_id ? '<a href="' . $home . '/str/online.php">Онлайн: ' . $qon2 . ' / ' . $all2 . '</a>' : 'Онлайн: ' . $qon2 . ' / ' . $all2);
 }
@@ -115,7 +115,7 @@ function forum_new()
 			LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
 			WHERE `forum`.`type`='t'
 			AND (`cms_forum_rdm`.`topic_id` Is Null
-			OR `forum`.`time` > `cms_forum_rdm`.`time`);");
+			OR `forum`.`time` > `cms_forum_rdm`.`time`)");
             return mysql_result($req, 0);
         } else
         {
@@ -125,7 +125,7 @@ function forum_new()
 			AND `moder`='1'
 			AND `close`!='1'
 			AND (`cms_forum_rdm`.`topic_id` Is Null
-			OR `forum`.`time` > `cms_forum_rdm`.`time`);");
+			OR `forum`.`time` > `cms_forum_rdm`.`time`)");
             return mysql_result($req, 0);
         }
     } else
@@ -147,7 +147,7 @@ function dnews()
         global $sdvigclock;
         $sdvig = $sdvigclock;
     }
-    $req = mysql_query("select `time` from `news` order by `time` desc;");
+    $req = mysql_query("select `time` from `news` order by `time` desc");
     $res = mysql_fetch_array($req);
     $vrn = $res['time'] + $sdvig * 3600;
     $vrn1 = date("H:i/d.m.y", $vrn);
@@ -159,9 +159,10 @@ function dnews()
 ////////////////////////////////////////////////////////////
 function kuser()
 {
-    global $realtime;
+    //TODO: Переделать
+	global $realtime;
     // Общее колличество
-    $req = mysql_query("SELECT * FROM `users` ;");
+    $req = mysql_query("SELECT * FROM `users`");
     $total = mysql_num_rows($req);
     // Зарегистрированные за последние сутки
     $req = mysql_query("SELECT * FROM `users` WHERE `datereg`>" . ($realtime - 86400) . ";");
@@ -176,7 +177,8 @@ function kuser()
 ////////////////////////////////////////////////////////////
 function wfrm($id = '')
 {
-    global $realtime;
+    //TODO: Переделать этот ужоснах
+	global $realtime;
     $onltime = $realtime - 300;
     $count = 0;
     $qf = @mysql_query("select * from `users` where  lastdate>='" . $onltime . "';");
@@ -212,7 +214,8 @@ function wfrm($id = '')
 ////////////////////////////////////////////////////////////
 function dload()
 {
-    global $realtime;
+    //TODO: Переделать
+	global $realtime;
     $fl = mysql_query("select `id` from `download` where `type`='file' ;");
     $countf = mysql_num_rows($fl);
     $old = $realtime - (3 * 24 * 3600);
@@ -232,7 +235,8 @@ function dload()
 // Если вызвать с параметром 1, будет выдавать только колличество новых картинок
 function fgal($mod = 0)
 {
-    global $realtime;
+    //TODO: Переделать
+	global $realtime;
     $old = $realtime - (3 * 24 * 3600);
     $req = mysql_query("select `id` from `gallery` where `time` > '" . $old . "' and `type`='ft' ;");
     $new = mysql_num_rows($req);
@@ -259,7 +263,8 @@ function fgal($mod = 0)
 ////////////////////////////////////////////////////////////
 function brth()
 {
-    global $realtime;
+    //TODO: Переделать
+	global $realtime;
     $mon = date("m", $realtime);
     if (substr($mon, 0, 1) == 0)
     {
@@ -280,7 +285,8 @@ function brth()
 ////////////////////////////////////////////////////////////
 function stlib()
 {
-    global $realtime;
+    //TODO: Переделать
+	global $realtime;
     global $dostlmod;
     $fl = mysql_query("select `id` from `lib` where `type`='bk' and `moder`='1';");
     $countf = mysql_num_rows($fl);
@@ -305,7 +311,8 @@ function stlib()
 // Если вызвать с параметром 0,1 то покажет общее число юзеров в Чате
 function wch($id = false, $mod = false)
 {
-    global $realtime;
+    //TODO: Переделать
+	global $realtime;
     $onltime = $realtime - 60;
     if ($mod)
     {
@@ -333,7 +340,8 @@ function wch($id = false, $mod = false)
 // Если вызвать с параметром 2, то будет выдавать колличество новых в Админ-Клубе
 function gbook($mod = 0)
 {
-    global $realtime;
+    //TODO: Переделать
+	global $realtime;
     global $dostmod;
     switch ($mod)
     {
@@ -374,7 +382,7 @@ function tags($var = '')
     $var = preg_replace('#\[red\](.*?)\[/red\]#si', '<span style="color:red">\1</span>', $var);
     $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
-    $var = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'url_replace', $var);
+    $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'url_replace', $var);
     return $var;
 }
 
