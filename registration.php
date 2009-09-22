@@ -23,7 +23,7 @@ require_once ("incfiles/head.php");
 
 if ($regban || !$set['mod_reg'])
 {
-    echo '<p>Регистрация временно закрыта.</p>';
+    echo '<p>Регистрация закрыта.</p>';
     require_once ("incfiles/end.php");
     exit;
 }
@@ -33,19 +33,19 @@ function regform()
 {
     $cod = rand(1000, 9999);
     $_SESSION['code'] = $cod;
-    echo '<form action="registration.php" method="post">';
-    echo '<br /><b>Логин:</b><br/><input type="text" name="nick" maxlength="15" value="' . check($_POST['nick']) . '" /><br />';
-    echo '<small>Мин. 2, макс. 15 символов.<br />Разрешены буквы Русского и Латинского алфавита,<br />цифры и знаки - = @ ! ? ~ _ ( ) [ ] . * (кроме нуля)</small><br /><br />';
-    echo '<b>Пароль:</b><br/><input type="text" name="password" maxlength="20" /><br/>';
-    echo '<small>Мин. 3, макс. 10 символов.<br />Разрешены буквы Латинского алфавита и цифры.</small><br /><br />';
-    echo '<b>Имя:</b><br/><input type="text" name="imname" maxlength="30" value="' . check($_POST['imname']) . '" /><br />';
-    echo '<small>Макс. 30 символов.</small><br /><br />';
-    echo 'Пол:<br/><select name="sex"><option value="m">Муж.</option><option value="zh">Жен.</option></select><br /><br />';
-    echo 'О себе: <small>(макс. 500 символов)</small><br/><textarea rows="3" name="about">' . check($_POST['about']) . '</textarea><br/><br/>';
-    echo 'Если Вы не видите рисунок с кодом,<br />включите поддержку графики в настройках браузера<br />и обновите страницу.<br /><br />';
+    echo '<form action="registration.php" method="post"><div class="gmenu"><p>';
+    echo '<b>Логин:</b><br/><input type="text" name="nick" maxlength="15" value="' . check($_POST['nick']) . '" /><br />';
+    echo '<small>Мин. 2, макс. 15 символов.<br />Разрешены буквы Русского и Латинского алфавита,<br />цифры и знаки - = @ ! ? ~ _ ( ) [ ] . * (кроме нуля)</small></p>';
+    echo '<p><b>Пароль:</b><br/><input type="text" name="password" maxlength="20" /><br/>';
+    echo '<small>Мин. 3, макс. 10 символов.<br />Разрешены буквы Латинского алфавита и цифры.</small></p>';
+    echo '<p><b>Пол:</b><br/><select name="sex"><option value="?">-?-</option><option value="m">Муж.</option><option value="zh">Жен.</option></select></p></div>';
+    echo '<div class="menu"><p>Имя:<br/><input type="text" name="imname" maxlength="30" value="' . check($_POST['imname']) . '" /><br />';
+    echo '<small>Макс. 30 символов.</small></p>';
+    echo '<p>О себе: <small>(макс. 500 символов)</small><br/><textarea rows="3" name="about">' . check($_POST['about']) . '</textarea></p></div>';
+    echo '<div class="gmenu"><p>Если Вы не видите рисунок с кодом,<br />включите поддержку графики в настройках браузера<br />и обновите страницу.<br />';
     echo '<img src="code.php" alt=""/><br />';
-    echo 'Код с картинки:<br/><input type="text" maxlength="4"  name="kod"/><br /><br />';
-    echo '<input type="submit" name="submit" value="Регистрация"/><br /><br /></form>';
+    echo 'Код с картинки:<br/><input type="text" size="4" maxlength="4"  name="kod"/></p></div>';
+    echo '<div class="bmenu"><input type="submit" name="submit" value="Регистрация"/></div></form>';
 }
 
 if (isset($_POST['submit']))
@@ -75,8 +75,10 @@ if (isset($_POST['submit']))
     if (preg_match("/[^\da-zA-Z_]+/", $reg_pass))
         $error = $error . 'Недопустимые символы в пароле!<br/>';
     // Проверка имени
-    if (empty($reg_name))
-        $error = $error . 'Не введено имя!<br/>';
+    if ($reg_sex == 'm' || $reg_sex == 'zh')
+    {
+    } else
+        $error = $error . 'Не указан пол!<br/>';
     // Проверка кода
     if (empty($reg_kod))
         $error = $error . 'Не введён проверочный код!<br/>';
@@ -100,13 +102,7 @@ if (isset($_POST['submit']))
     $_SESSION['code'] = rand(1000, 9999);
     if (empty($error))
     {
-        if ($set['rmod'] != 1)
-        {
-            $preg = 1;
-        } else
-        {
-            $preg = 0;
-        }
+        $preg = $set['mod_reg'] > 1 ? 1 : 0;
         mysql_query("INSERT INTO `users` SET
 		`name`='" . mysql_real_escape_string($reg_nick) . "',
 		`name_lat`='" . mysql_real_escape_string($lat_nick) . "',
@@ -136,7 +132,7 @@ if (isset($_POST['submit']))
         }
     } else
     {
-        echo '<br /><b>ОШИБКА!</b><br />' . $error;
+        echo '<div class="rmenu"><p><b>ОШИБКА!</b><br />' . $error . '</p></div>';
         regform();
     }
 }
@@ -144,10 +140,10 @@ if (isset($_POST['submit']))
 // Форма регистрации
 else
 {
-    if ($set['rmod'] == 1)
+    if ($set['mod_reg'] == 1)
     {
-        echo '<p>В данный момент на сайте включена премодерация.<br/>Вы сможете получить авторизованный доступ к разделам сайта после подтверждения Вашей регистрации.<br />Подтверждение проводится 1-2 раза в сутки.</p>';
-        echo '<p>Просьба не регистрировать ники типа 111, ггг, uuuu и им подобные, они будут сразу же удалены.<br />Также будут удалены ВСЕ профили, которые регистрировались через Прокси серверы.</p>';
+        echo '<div class="rmenu"><p>Вы сможете получить авторизованный доступ к разделам сайта после подтверждения Вашей регистрации.<br />Подтверждение проводится 1-2 раза в сутки.</p>';
+        echo '<p>Просьба не регистрировать ники типа 111, ггг, uuuu и им подобные, они будут сразу же удалены.<br />Также будут удалены ВСЕ профили, которые регистрировались через Прокси серверы.</p></div>';
     }
     regform();
 }

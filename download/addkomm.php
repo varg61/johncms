@@ -14,7 +14,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if ($user_id && !$ban['1'] && !$ban['10'])
+if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_down_comm'] || $dostadm))
 {
     if ($_GET['id'] == "")
     {
@@ -23,7 +23,6 @@ if ($user_id && !$ban['1'] && !$ban['10'])
         require_once ('../incfiles/end.php');
         exit;
     }
-    $id = intval(check(trim($_GET['id'])));
     if (isset($_POST['submit']))
     {
         $flt = $realtime - 30;

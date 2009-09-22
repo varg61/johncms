@@ -91,7 +91,7 @@ if (($dostfmod == 1) || (($arr1['from'] == $login) && ($arr1['id'] == $ms['id'])
             echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
         }
         echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
-        echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
         echo '<p><a href="index.php?id=' . $ms['refid'] . '&amp;start=' . $start . '">Назад</a></p>';
     }
 }

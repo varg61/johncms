@@ -16,14 +16,28 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($_GET['id'] == "")
+if (!$id)
 {
-    echo "Не выбрано фото<br/><a href='index.php'>В галерею</a><br/>";
+    echo '<p>Не выбрано фото<br/><a href="index.php">Назад</a></p>';
     require_once ('../incfiles/end.php');
     exit;
 }
-$id = intval($_GET['id']);
-$mess = mysql_query("select * from `gallery` where type='km' and refid='" . $id . "' order by time desc ;");
+if (!$set['mod_gal_comm'] && !$dostadm)
+{
+    echo '<p>Коментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
+    require_once ('../incfiles/end.php');
+    exit;
+}
+// Запрос имени статьи
+$req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'ft' AND `id` = '" . $id . "' LIMIT 1");
+if (mysql_num_rows($req) != 1)
+{
+    // если статья не существует, останавливаем скрипт
+	echo '<p>Не выбрано фото<br/><a href="index.php">Назад</a></p>';
+    require_once ('../incfiles/end.php');
+    exit;
+}
+$mess = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'km' AND `refid` = '" . $id . "' ORDER BY `time` DESC");
 $countm = mysql_num_rows($mess);
 if ($user_id && !$ban['1'] && !$ban['10'])
 {

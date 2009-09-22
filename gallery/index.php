@@ -21,14 +21,20 @@ $textl = 'Галерея сайта';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-if (!$set['mod_gal'] && $dostadm != 1)
+// Ограничиваем доступ к Галерее
+$error = '';
+if (!$set['mod_gal'] && !$dostadm)
+    $error = 'Галерея закрыта';
+elseif ($set['mod_gal'] == 1 && !$user_id)
+    $error = 'Доступ в Галерею открыт только <a href="../in.php">авторизованным</a> посетителям';
+if ($error)
 {
-    echo '<p>' . $set['mod_gal_msg'] . '</p>';
+    require_once ("../incfiles/head.php");
+    echo '<div class="rmenu"><p>' . $error . '</p></div>';
     require_once ("../incfiles/end.php");
     exit;
 }
 
-$act = isset($_GET['act']) ? $_GET['act'] : '';
 $do = array('new', 'edf', 'delf', 'edit', 'del', 'delmes', 'addkomm', 'trans', 'komm', 'preview', 'load', 'upl', 'cral', 'album', 'razd');
 if (in_array($act, $do))
 {
@@ -294,14 +300,15 @@ if (in_array($act, $do))
                         $fotsz = filesize("foto/$ms[name]");
                         $vrf = $fot1['time'] + $sdvig * 3600;
                         $vrf1 = date("d.m.y / H:i", $vrf);
-                        $kom = mysql_query("select * from `gallery` where type='km' and refid='" . $fot1['id'] . "';");
-                        $kom1 = mysql_num_rows($kom);
                         echo '</a>';
                         if (!empty($fot1['text']))
                             echo "$fot1[text]<br/>";
-                        if ($kom1 > 0)
-                            echo "<a href='index.php?act=komm&amp;id=" . $fot1['id'] . "'>Комментарии</a> ($kom1)<br/>";
-                        //echo "<a href='foto/$fot1[name]'>Скачать</a><br />";
+                        if ($set['mod_gal_comm'] || $dostadm)
+                        {
+                            $comm = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'km' AND `refid` = '" . $fot1['id'] . "'"), 0);
+                            if ($comm > 0)
+                                echo '<a href="index.php?act=komm&amp;id=' . $fot1['id'] . '">Комментарии</a> (' . $comm . ')<br/>';
+                        }
                         if ($dostsmod == 1)
                         {
                             echo "<a href='index.php?act=edf&amp;id=" . $fot1['id'] . "'>Изменить</a> | <a href='index.php?act=delf&amp;id=" . $fot1['id'] . "'>Удалить</a><br/>";
@@ -467,9 +474,11 @@ if (in_array($act, $do))
                 $vrf = $ms[time] + $sdvig * 3600;
                 $vrf1 = date("d.m.y / H:i", $vrf);
                 echo "<p>Подпись: $ms[text]<br/>";
-                $kom = mysql_query("select * from `gallery` where type='km' and refid='" . $id . "';");
-                $kom1 = mysql_num_rows($kom);
-                echo "<a href='index.php?act=komm&amp;id=" . $id . "'>Комментарии</a> ($kom1)<br/>";
+                if ($set['mod_gal_comm'] || $dostadm)
+                {
+                    $comm = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'km' AND `refid` = '" . $id . "'"), 0);
+                    echo '<a href="index.php?act=komm&amp;id=' . $id . '">Комментарии</a> (' . $comm . ')<br/>';
+                }
                 echo "Размеры: $fwidth*$fheight пкс.<br/>";
                 echo "Вес: $fotsz кб.<br/>";
                 echo "Добавлено: $vrf1<br/>";

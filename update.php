@@ -85,9 +85,32 @@ switch ($do)
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
-		mysql_query("ALTER TABLE `users` DROP `offpg`");
+        // Таблица `users`
+        mysql_query("ALTER TABLE `users` DROP `offpg`");
         mysql_query("ALTER TABLE `users` DROP `offgr`");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
+        // Таблица `cms_settings`
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'gb' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'rmod' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_reg_msg' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_forum_msg' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_chat_msg' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_guest_msg' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_lib_msg' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_gal_msg' LIMIT 1");
+        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_down_msg' LIMIT 1");
+        mysql_query("INSERT INTO `cms_settings` SET `key` = 'mod_lib_comm', `val` = '1'");
+        mysql_query("INSERT INTO `cms_settings` SET `key` = 'mod_gal_comm', `val` = '1'");
+        mysql_query("INSERT INTO `cms_settings` SET `key` = 'mod_down_comm', `val` = '1'");
+        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_reg'");
+        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_forum'");
+        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_chat'");
+        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_guest'");
+        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_lib'");
+        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_gal'");
+        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_down'");
+        echo '<span class="green">OK</span> таблица `cms_settings` обновлена.<br />';
+        // Таблицы форума
         mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `vip` `vip` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `moder` `moder` TINYINT( 1 ) NOT NULL DEFAULT '0'");
@@ -95,22 +118,22 @@ switch ($do)
         echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
         mysql_query("DROP TABLE IF EXISTS `cms_forum_files`");
         mysql_query("CREATE TABLE `cms_forum_files` (
-		`id` int(11) NOT NULL auto_increment,
-		`cat` int(11) NOT NULL,
-		`subcat` int(11) NOT NULL,
-		`topic` int(11) NOT NULL,
-		`post` int(11) NOT NULL,
-		`time` int(11) NOT NULL,
-		`filename` text NOT NULL,
-		`filetype` tinyint(4) NOT NULL,
-		`dlcount` int(11) NOT NULL,
-		`del` tinyint(1) NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `cat` (`cat`),
-		KEY `subcat` (`subcat`),
-		KEY `topic` (`topic`),
-		KEY `post` (`post`)
-		) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        `id` int(11) NOT NULL auto_increment,
+        `cat` int(11) NOT NULL,
+        `subcat` int(11) NOT NULL,
+        `topic` int(11) NOT NULL,
+        `post` int(11) NOT NULL,
+        `time` int(11) NOT NULL,
+        `filename` text NOT NULL,
+        `filetype` tinyint(4) NOT NULL,
+        `dlcount` int(11) NOT NULL,
+        `del` tinyint(1) NOT NULL default '0',
+        PRIMARY KEY  (`id`),
+        KEY `cat` (`cat`),
+        KEY `subcat` (`subcat`),
+        KEY `topic` (`topic`),
+        KEY `post` (`post`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица `cms_forum_files` создана.<br />';
         echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
         break;
@@ -118,7 +141,7 @@ switch ($do)
     case 'step3':
         echo '<h2>Очистка форума</h2>';
         // Очистка форума
-		$i = 0;
+        $i = 0;
         $f = 0;
         $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm'");
         while ($res = mysql_fetch_array($req))
@@ -138,14 +161,14 @@ switch ($do)
             }
         }
         mysql_query("DELETE FROM `forum` WHERE `type` = 'l'");
-		echo '<span class="green">OK</span> Форум очищен, удалено <span class="red">' . $i . '</span> мертвых записей из базы и <span class="red">' . $f . '</span> файлов.<br />';
+        echo '<span class="green">OK</span> Форум очищен, удалено <span class="red">' . $i . '</span> мертвых записей из базы и <span class="red">' . $f . '</span> файлов.<br />';
         echo '<hr /><a href="update.php?do=step4">Продолжить</a>';
         break;
 
     case 'step4':
         echo '<h2>Перенос файлов форума</h2>';
         // Перечисляем типы файлов, разрешенных к выгрузке на форуме
-		$ext_win = array('exe', 'msi');
+        $ext_win = array('exe', 'msi');
         $ext_java = array('jar', 'jad');
         $ext_sis = array('sis', 'sisx');
         $ext_doc = array('txt', 'pdf', 'doc', 'rtf', 'djvu');
@@ -204,7 +227,7 @@ switch ($do)
         echo '<span class="green">OK</span> старые данные удалены.<br />';
         mysql_query("OPTIMIZE TABLE `forum`");
         echo '<span class="green">OK</span> таблица оптимизирована.<br />';
-		echo '<hr /><a href="update.php?do=final">Продолжить</a>';
+        echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
     case 'final':

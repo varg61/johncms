@@ -18,7 +18,13 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!$id)
 {
-    echo '<p>Не выбрана статья<br/><a href="index.php">К категориям</a></p>';
+    echo '<p>Не выбрана статья<br/><a href="index.php">В библиотеку</a></p>';
+    require_once ('../incfiles/end.php');
+    exit;
+}
+if (!$set['mod_lib_comm'] && !$dostadm)
+{
+    echo '<p>Коментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
     require_once ('../incfiles/end.php');
     exit;
 }

@@ -20,13 +20,20 @@ $headmod = 'lib';
 $textl = 'Библиотека';
 require_once ("../incfiles/core.php");
 
-if (!$set['mod_lib'] && $dostadm != 1)
+// Ограничиваем доступ к Библиотеке
+$error = '';
+if (!$set['mod_lib'] && !$dostadm)
+    $error = 'Библиотека закрыта';
+elseif ($set['mod_lib'] == 1 && !$user_id)
+    $error = 'Доступ в Библиотеку открыт только <a href="../in.php">авторизованным</a> посетителям';
+if ($error)
 {
     require_once ("../incfiles/head.php");
-    echo '<p>' . $set['mod_lib_msg'] . '</p>';
+    echo '<div class="rmenu"><p>' . $error . '</p></div>';
     require_once ("../incfiles/end.php");
     exit;
 }
+
 // Заголовки библиотеки
 if (empty($id))
 {
@@ -220,7 +227,7 @@ if (in_array($act, $do))
             $strrpos = mb_strrpos($tx, " ");
             $pages = 1;
             // Вычисляем номер страницы
-			if (isset($_GET['page']))
+            if (isset($_GET['page']))
             {
                 $page = abs(intval($_GET['page']));
                 if ($page == 0)
@@ -281,9 +288,13 @@ if (in_array($act, $do))
                 echo '<p><a href="index.php?act=edit&amp;id=' . $id . '">Редактировать</a><br/>';
                 echo '<a href="index.php?act=del&amp;id=' . $id . '">Удалить статью</a></p>';
             }
-            $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = '" . $id . "'");
-            $km1 = mysql_num_rows($km);
-            echo "<a href='index.php?act=komm&amp;id=" . $id . "'>Комментарии</a>($km1)<br />";
+            // Ссылка на коментарии
+			if ($set['mod_lib_comm'] || $dostadm)
+            {
+                $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = '" . $id . "'");
+                $km1 = mysql_num_rows($km);
+                echo "<a href='index.php?act=komm&amp;id=" . $id . "'>Комментарии</a>($km1)<br />";
+            }
             echo '<a href="index.php?act=java&amp;id=' . $id . '">Скачать Java книгу</a><br /><br />';
             $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $zag['refid'] . "'");
             $dnam1 = mysql_fetch_array($dnam);

@@ -178,9 +178,12 @@ if ($dostmod == 1)
             // Блок пользователей
             //TODO: Разобраться с правами доступа на подтверждение реги.
             echo '<p><img src="../images/users.png" width="16" height="16" class="left" />&nbsp;<b>Пользователи</b><ul>
-			<li><a href="../str/users.php">Весь список</a>&nbsp;(' . $total . ')</li>
-			<li><a href="preg.php">На регистрации</a>&nbsp;(' . $regtotal . ')</li>
-			' . ($dostsadm ? '<li><a href="">Чистка базы</a></li>' : '') . '
+			<li><a href="../str/users.php">Весь список</a>&nbsp;(' . $total . ')</li>';
+            if ($regtotal > 0)
+                echo '<li><span class="red"><a href="preg.php">На регистрации</a>&nbsp;(' . $regtotal . ')</span></li>';
+            else
+                echo '<li><a href="preg.php">На регистрации</a>&nbsp;(' . $regtotal . ')</li>';
+            echo ($dostsadm ? '<li><a href="">Чистка базы</a></li>' : '') . '
 			<li><a href="zaban.php">Бан-панель</a>&nbsp;(' . $bantotal . ')</li>
 			<li><a href="main.php?do=search">Поиск</a></li>
 			</ul></p>';

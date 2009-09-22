@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -14,6 +15,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 require_once ("../incfiles/head.php");
 $delimag = opendir("$filesroot/graftemp");
 while ($imd = readdir($delimag))
@@ -59,7 +61,7 @@ $filtime = filemtime("$adrfile[adres]/$adrfile[name]");
 $filtime = date("d.m.Y", $filtime);
 echo "Файл: $adrfile[name]<br/>Вес:$siz кб<br/>Загружен:$filtime<br/>";
 $graf = array("gif", "jpg", "png");
-$prg = strtolower(format($adrfile[name]));
+$prg = strtolower(format($adrfile['name']));
 if (in_array($prg, $graf))
 {
     $sizsf = GetImageSize("$adrfile[adres]/$adrfile[name]");
@@ -67,7 +69,7 @@ if (in_array($prg, $graf))
     $heightf = $sizsf[1];
     echo "Размеры $widthf*$heightf px<br/>";
     #  !предпросмотр!
-    $namefile = $adrfile[name];
+    $namefile = $adrfile['name'];
     $infile = "$adrfile[adres]/$namefile";
 
     if (!empty($_SESSION['razm']))
@@ -150,13 +152,13 @@ if ($prg == "mp3")
     $result = $id3->study();
 
     echo '<p>';
-	echo 'Исполнитель: <b>' . $id3->artists . '</b><br />';
+    echo 'Исполнитель: <b>' . $id3->artists . '</b><br />';
     echo 'Альбом: <b>' . $id3->album . '</b><br />';
     echo 'Год выхода: <b>' . $id3->year . '</b><br />';
     echo 'Композиция: <b>' . $id3->name . '</b>';
     echo '</p>';
-	
-	echo "Каналы:" . $id3->getTag('mode') . "<br/>";
+
+    echo "Каналы:" . $id3->getTag('mode') . "<br/>";
     if ($id3->getTag('bitrate') != 0)
     {
         echo "Битрейт: " . $id3->getTag('bitrate') . " кбит/сек<br/>
@@ -166,7 +168,7 @@ if ($prg == "mp3")
         echo "Не удалось распознать кодек<br/>";
     }
 }
-if (empty($adrfile[text]))
+if (empty($adrfile['text']))
 {
     echo "<p>Описание отсутствует</p>";
 } else
@@ -174,14 +176,14 @@ if (empty($adrfile[text]))
     echo "<p>Описание:<br/>$adrfile[text]</p>";
 }
 
-if (!empty($adrfile[ip]))
+if (!empty($adrfile['ip']))
 {
     echo "Скачиваний: $adrfile[ip]<br/>";
 }
 
-if (!empty($adrfile[soft]))
+if (!empty($adrfile['soft']))
 {
-    $rating = explode(",", $adrfile[soft]);
+    $rating = explode(",", $adrfile['soft']);
 
     $rat = $rating[0] / $rating[1];
     $rat = round($rat, 2);
@@ -196,7 +198,7 @@ for ($i = 10; $i >= 1; --$i)
 echo "</select><input type='submit' value='Ok!'/></form><br/>";
 if ((!in_array($prg, $graf)) && ($prg != "mp3"))
 {
-    if (empty($adrfile[screen]))
+    if (empty($adrfile['screen']))
     {
         echo "Скриншот отсутствует<br/>";
     } else
@@ -310,8 +312,6 @@ if (($dostdmod == 1) && (!empty($_GET['file'])))
     echo "<a href='?act=renf&amp;file=" . $file . "'>Переименовать файл</a><br/>";
     echo "<a href='?act=dfile&amp;file=" . $file . "'>Удалить файл</a><hr/>";
 }
-$comm = mysql_query("select * from `download` where type = 'komm' and refid = '$file';");
-$totalkomm = mysql_num_rows($comm);
 if ($prg == "mp3")
 {
     echo "<a href='?act=cut&amp;id=" . $file . "'>Нарезать</a><br/>";
@@ -320,23 +320,25 @@ if ($prg == "zip")
 {
     echo "<a href='?act=zip&amp;file=" . $file . "'>Открыть архив</a><br/>";
 }
-echo "<a href='?act=down&amp;id=" . $file . "'>Скачать</a><br/><a href='?act=komm&amp;id=" . $file . "'>Комментарии ($totalkomm)</a><br/>";
-
-
-$dnam = mysql_query("select * from `download` where type = 'cat' and id = '" . $adrfile[refid] . "';");
+if ($set['mod_down_comm'] || $dostadm)
+{
+    $totalkomm = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'komm' AND `refid` = '$file'"), 0);
+    echo "<a href='?act=down&amp;id=" . $file . "'>Скачать</a><br/><a href='?act=komm&amp;id=" . $file . "'>Комментарии ($totalkomm)</a><br/>";
+}
+$dnam = mysql_query("select * from `download` where type = 'cat' and id = '" . $adrfile['refid'] . "';");
 $dnam1 = mysql_fetch_array($dnam);
 $dirname = "$dnam1[text]";
 $dirid = "$dnam1[id]";
-$nadir = $adrfile[refid];
+$nadir = $adrfile['refid'];
 while ($nadir != "" && $nadir != "0")
 {
     echo "&#187;<a href='?cat=" . $nadir . "'>$dirname</a><br/>";
     $dnamm = mysql_query("select * from `download` where type = 'cat' and id = '" . $nadir . "';");
     $dnamm1 = mysql_fetch_array($dnamm);
-    $dnamm2 = mysql_query("select * from `download` where type = 'cat' and id = '" . $dnamm1[refid] . "';");
+    $dnamm2 = mysql_query("select * from `download` where type = 'cat' and id = '" . $dnamm1['refid'] . "';");
     $dnamm3 = mysql_fetch_array($dnamm2);
-    $nadir = $dnamm1[refid];
-    $dirname = $dnamm3[text];
+    $nadir = $dnamm1['refid'];
+    $dirname = $dnamm3['text'];
 }
 echo "&#187;<a href='?'>В загрузки</a><br/>";
 

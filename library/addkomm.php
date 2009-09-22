@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($user_id && !$ban['1'] && !$ban['10'])
+if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_lib_comm'] || $dostadm))
 {
     if (!$id)
     {
@@ -41,7 +41,6 @@ if ($user_id && !$ban['1'] && !$ban['10'])
         require_once ("../incfiles/end.php");
         exit;
     }
-    //TODO: Добавить проверку на существование статьи
     if (isset($_POST['submit']))
     {
         if ($_POST['msg'] == "")
@@ -70,7 +69,7 @@ if ($user_id && !$ban['1'] && !$ban['10'])
         mysql_query("UPDATE `users` SET
 		`komm`='" . $fpst . "',
 		`lastpost` = '" . $realtime . "'
-		WHERE `id`='" . $user_id . "';");
+		WHERE `id`='" . $user_id . "'");
         echo '<p>Комментарий успешно добавлен<br />';
     } else
     {

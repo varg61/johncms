@@ -25,11 +25,16 @@ $filesroot = "../download";
 $screenroot = "$filesroot/screen";
 $loadroot = "$filesroot/files";
 
-// Если модуль выключен, закрываем доступ
-if (!$set['mod_down'] && $dostadm != 1)
+// Ограничиваем доступ к Загрузкам
+$error = '';
+if (!$set['mod_down'] && !$dostadm)
+    $error = 'Загрузки закрыты';
+elseif ($set['mod_down'] == 1 && !$user_id)
+    $error = 'Доступ к загрузкам открыт только <a href="../in.php">авторизованным</a> посетителям';
+if ($error)
 {
     require_once ("../incfiles/head.php");
-    echo '<p>' . $set['mod_down_msg'] . '</p>';
+    echo '<div class="rmenu"><p>' . $error . '</p></div>';
     require_once ("../incfiles/end.php");
     exit;
 }

@@ -41,11 +41,16 @@ $ext_other = array();
 $headmod = "forum";
 require_once ("../incfiles/core.php");
 
-// Закрываем доступ к форуму
-if (!$set['mod_forum'] && $dostadm != 1)
+// Ограничиваем доступ к Форуму
+$error = '';
+if (!$set['mod_forum'] && !$dostadm)
+    $error = 'Форум закрыт';
+elseif ($set['mod_forum'] == 1 && !$user_id)
+    $error = 'Доступ на форум открыт только <a href="../in.php">авторизованным</a> посетителям';
+if ($error)
 {
     require_once ("../incfiles/head.php");
-    echo '<p>' . $set['mod_forum_msg'] . '</p>';
+    echo '<div class="rmenu"><p>' . $error . '</p></div>';
     require_once ("../incfiles/end.php");
     exit;
 }
@@ -69,7 +74,7 @@ if ($user_id)
     $tti = round(($datauser['ftime'] - $realtime) / 60);
     if ($act == 'files')
     {
-    	$where = 'forumfiles';
+        $where = 'forumfiles';
     } elseif ($id)
     {
         $where = "forum,$id";

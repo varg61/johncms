@@ -22,7 +22,12 @@ if ($_GET['id'] == "")
     require_once ('../incfiles/end.php');
     exit;
 }
-$id = intval(check(trim($_GET['id'])));
+if (!$set['mod_down_comm'] || !$dostadm)
+{
+    echo '<p>Коментарии закрыты<br/><a href="index.php">К загрузкам</a></p>';
+    require_once ('../incfiles/end.php');
+    exit;
+}
 $mess = mysql_query("select * from `download` where type='komm' and refid='" . $id . "' order by time desc ;");
 $countm = mysql_num_rows($mess);
 $fayl = mysql_query("select * from `download` where type='file' and id='" . $id . "';");

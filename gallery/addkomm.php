@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($user_id && !$ban['1'] && !$ban['10'])
+if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_gal_comm'] || $dostadm))
 {
     if ($_GET['id'] == "")
     {
@@ -75,7 +75,7 @@ Cообщение<br/>
     }
 } else
 {
-    echo "Вы не авторизованы!<br/>";
+    echo 'Нет доступа<br />';
 }
 echo '<br/><br/><a href="?act=komm&amp;id=' . $id . '">К комментариям</a><br/><a href="index.php?id=' . $id . '">К фото</a><br/>';
 echo "<a href='index.php'>В галерею</a><br/>";
