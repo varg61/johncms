@@ -147,7 +147,7 @@ function dnews()
         global $sdvigclock;
         $sdvig = $sdvigclock;
     }
-    $req = mysql_query("select `time` from `news` order by `time` desc");
+    $req = mysql_query("SELECT `time` FROM `news` ORDER BY `time` DESC LIMIT 1");
     $res = mysql_fetch_array($req);
     $vrn = $res['time'] + $sdvig * 3600;
     $vrn1 = date("H:i/d.m.y", $vrn);
@@ -159,16 +159,11 @@ function dnews()
 ////////////////////////////////////////////////////////////
 function kuser()
 {
-    //TODO: Переделать
-	global $realtime;
-    // Общее колличество
-    $req = mysql_query("SELECT * FROM `users`");
-    $total = mysql_num_rows($req);
-    // Зарегистрированные за последние сутки
-    $req = mysql_query("SELECT * FROM `users` WHERE `datereg`>" . ($realtime - 86400) . ";");
-    $res = mysql_num_rows($req);
+    global $realtime;
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
+    $res = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "'"), 0);
     if ($res > 0)
-        $total = $total . '&nbsp;<font color="#FF0000">+' . $res . '</font>';
+        $total .= '&nbsp;<span class="red">+' . $res . '</span>';
     return $total;
 }
 
@@ -177,11 +172,11 @@ function kuser()
 ////////////////////////////////////////////////////////////
 function wfrm($id = '')
 {
-    //TODO: Переделать этот ужоснах
-	global $realtime;
+    //TODO: Переделать
+    global $realtime;
     $onltime = $realtime - 300;
     $count = 0;
-    $qf = @mysql_query("select * from `users` where  lastdate>='" . $onltime . "';");
+    $qf = mysql_query("select * from `users` where  lastdate > '" . $onltime . "'");
     while ($arrf = mysql_fetch_array($qf))
     {
         $whf = mysql_query("select * from `count` where name='" . $arrf['name'] . "' order by time desc ;");
@@ -214,19 +209,13 @@ function wfrm($id = '')
 ////////////////////////////////////////////////////////////
 function dload()
 {
-    //TODO: Переделать
-	global $realtime;
-    $fl = mysql_query("select `id` from `download` where `type`='file' ;");
-    $countf = mysql_num_rows($fl);
+    global $realtime;
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file'"), 0);
     $old = $realtime - (3 * 24 * 3600);
-    $fl1 = mysql_query("select `id` from `download` where `time` > '" . $old . "' and `type`='file' ;");
-    $countf1 = mysql_num_rows($fl1);
-    $out = $countf;
-    if ($countf1 > 0)
-    {
-        $out = $out . "/<font color='#FF0000'>+$countf1</font>";
-    }
-    return $out;
+    $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0);
+    if ($new > 0)
+        $total .= '/<span class="red">+' . $new . '</span>';
+    return $total;
 }
 
 ////////////////////////////////////////////////////////////
@@ -235,22 +224,16 @@ function dload()
 // Если вызвать с параметром 1, будет выдавать только колличество новых картинок
 function fgal($mod = 0)
 {
-    //TODO: Переделать
-	global $realtime;
+    global $realtime;
     $old = $realtime - (3 * 24 * 3600);
-    $req = mysql_query("select `id` from `gallery` where `time` > '" . $old . "' and `type`='ft' ;");
-    $new = mysql_num_rows($req);
+    $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `time` > '" . $old . "' AND `type` = 'ft'"), 0);
     mysql_free_result($req);
     if ($mod == 0)
     {
-        $req = mysql_query("select `id` from `gallery` where `type`='ft' ;");
-        $total = mysql_num_rows($req);
-        mysql_free_result($req);
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft'"), 0);
         $out = $total;
         if ($new > 0)
-        {
-            $out = $out . "/<font color='#FF0000'>+$new</font>";
-        }
+            $out .= '/<span class="red">+' . $new . '</span>';
     } else
     {
         $out = $new;
@@ -263,8 +246,7 @@ function fgal($mod = 0)
 ////////////////////////////////////////////////////////////
 function brth()
 {
-    //TODO: Переделать
-	global $realtime;
+    global $realtime;
     $mon = date("m", $realtime);
     if (substr($mon, 0, 1) == 0)
     {
@@ -275,8 +257,7 @@ function brth()
     {
         $day = str_replace("0", "", $day);
     }
-    $q = mysql_query("select * from `users` where dayb='" . $day . "' and monthb='" . $mon . "' and preg='1';");
-    $count = mysql_num_rows($q);
+    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . $day . "' AND `monthb` = '" . $mon . "' AND `preg` = '1'"), 0);
     return $count;
 }
 
@@ -285,21 +266,15 @@ function brth()
 ////////////////////////////////////////////////////////////
 function stlib()
 {
-    //TODO: Переделать
-	global $realtime;
+    global $realtime;
     global $dostlmod;
-    $fl = mysql_query("select `id` from `lib` where `type`='bk' and `moder`='1';");
-    $countf = mysql_num_rows($fl);
+    $countf = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
     $old = $realtime - (3 * 24 * 3600);
-    $fl1 = mysql_query("select `id` from `lib` where `time` > '" . $old . "' and `type`='bk' and `moder`='1';");
-    $countf1 = mysql_num_rows($fl1);
+    $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
     $out = $countf;
     if ($countf1 > 0)
-    {
-        $out = $out . '/<font color="#FF0000">+' . $countf1 . '</font>';
-    }
-    $fm = @mysql_query("select `id` from `lib` where `type`='bk' and `moder`='0';");
-    $countm = @mysql_num_rows($fm);
+        $out = $out . '/<span class="red">+' . $countf1 . '</span>';
+    $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
     if ($dostlmod == '1' && ($countm > 0))
         $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> Мод:$countm</font></a>";
     return $out;
@@ -311,8 +286,7 @@ function stlib()
 // Если вызвать с параметром 0,1 то покажет общее число юзеров в Чате
 function wch($id = false, $mod = false)
 {
-    //TODO: Переделать
-	global $realtime;
+    global $realtime;
     $onltime = $realtime - 60;
     if ($mod)
     {
@@ -320,14 +294,14 @@ function wch($id = false, $mod = false)
         $res = mysql_query("SELECT `id` FROM `count` WHERE
 		`time` > '" . $onltime . "' AND
 		`where` LIKE 'chat%'
-		GROUP BY `name`;");
+		GROUP BY `name`");
     } else
     {
         $where = $id ? 'chat,' . $id : 'chat';
         $res = mysql_query("SELECT `id` FROM `count` WHERE
 		`time` > '" . $onltime . "' AND
 		`where` = '" . $where . "'
-		GROUP BY `name`;");
+		GROUP BY `name`");
     }
     $count = mysql_num_rows($res);
     return $count;
@@ -340,31 +314,25 @@ function wch($id = false, $mod = false)
 // Если вызвать с параметром 2, то будет выдавать колличество новых в Админ-Клубе
 function gbook($mod = 0)
 {
-    //TODO: Переделать
-	global $realtime;
+    global $realtime;
     global $dostmod;
     switch ($mod)
     {
         case 1:
-            $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
-            $count = mysql_num_rows($req);
+            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . ($realtime - 86400) . "'"), 0);
             break;
 
         case 2:
             if ($dostmod == 1)
-            {
-                $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
-                $count = mysql_num_rows($req);
-            }
+                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time` > '" . ($realtime - 86400) . "'"), 0);
             break;
 
         default:
-            $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='0' AND `time`>'" . ($realtime - 86400) . "';");
-            $count = mysql_num_rows($req);
+            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . ($realtime - 86400) . "'"), 0);
             if ($dostmod == 1)
             {
-                $req = mysql_query("SELECT `id` FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "';");
-                $count = $count . '&nbsp;/&nbsp;<span class="red">' . mysql_num_rows($req) . '</span>';
+                $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "'");
+                $count = $count . '&nbsp;/&nbsp;<span class="red">' . mysql_result($req, 0) . '</span>';
             }
     }
     return $count;
@@ -584,7 +552,7 @@ function smileys($str, $adm = 0)
             }
         }
         closedir($dir);
-		// Обрабатываем Админские смайлы
+        // Обрабатываем Админские смайлы
         $array2 = array();
         $array3 = array();
         $path = $rootpath . 'smileys/admin/';
@@ -599,7 +567,7 @@ function smileys($str, $adm = 0)
                 ++$count;
             }
         }
-		// Обрабатываем смайлы в каталогах
+        // Обрабатываем смайлы в каталогах
         $array4 = array();
         $array5 = array();
         $cat = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
