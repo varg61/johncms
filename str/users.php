@@ -23,7 +23,7 @@ require_once ("../incfiles/head.php");
 echo '<div class="phdr">Список пользователей</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0); // Общее число зареганных юзеров
-$req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` ORDER BY `datereg` DESC LIMIT " . $start . "," . $kmess);
+$req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT " . $start . "," . $kmess);
 while ($arr = mysql_fetch_array($req))
 {
     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';

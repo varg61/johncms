@@ -81,50 +81,64 @@ switch ($mod)
         if ($user_id)
         {
             echo '<div class="phdr">Дайджест</div>';
-            echo '<div class="gmenu">Привет, <b>' . $login . '</b><br/>';
-            echo 'Добро пожаловать на ' . $copyright . '!<br />Войти на сайт <a href="index.php">&gt;&gt;&gt;</a></div>';
+            echo '<div class="gmenu"><p>Привет, <b>' . $login . '</b><br/>Добро пожаловать на ' . $copyright . '!<br /><a href="index.php">Войти на сайт</a></p></div>';
             // Поздравление с днем рождения
             if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon)
             {
                 echo '<div class="rmenu"><p>С ДНЁМ РОЖДЕНИЯ!!!</p></div>';
             }
-            echo '<div class="bmenu">Новое на сайте</div>';
+            // Дайджест Администратора
+            if ($dostmod)
+            {
+                $newusers_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "' AND `preg` = '1'"), 0);
+                $reg_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg` = 0"), 0);
+                $ban_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "'"), 0);
+                echo '<div class="bmenu">События в админке</div>';
+                echo '<div class="menu">';
+                if ($newusers_total > 0)
+                    echo '<div><a href="str/users.php">Новые посетители</a> (' . $newusers_total . ')</div>';
+                if ($reg_total > 0)
+                    echo '<div><a href="panel/preg.php">На регистрации</a> (' . $reg_total . ')</div>';
+                if ($ban_total > 0)
+                    echo '<div><a href="panel/zaban.php">Имеют Бан</a> (' . $ban_total . ')</div>';
+                $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
+                if ($total_libmod > 0)
+                    echo '<div><a href="library/index.php?act=moder">Мод. Библиотеки</a> (' . $total_libmod . ')</div>';
+                $total_admin = gbook(2);
+                if ($total_admin > 0)
+                    echo '<div><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a> (' . $total_admin . ')</div>';
+                if (!$newusers_total && !$reg_total && !$ban_total && !$total_libmod && !$total_admin)
+                    echo 'Новых событий нет';
+                echo '</div>';
+            }
+            echo '<div class="bmenu">Новое на сайте</div><div class="menu">';
             // Новости
-            $total_news = mysql_num_rows(mysql_query("SELECT * FROM `news` WHERE `time`>'" . ($realtime - 86400) . "';"));
+            $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
             if ($total_news > 0)
-                echo '<div class="menu">Новости: ' . $total_news . ' <a href="str/news.php">&gt;&gt;&gt;</a></div>';
+                echo '<div><a href="str/news.php">Новости</a> (' . $total_news . ')</div>';
             // Форум
             $total_forum = forum_new();
             if ($total_forum > 0)
-                echo '<div class="menu">Форум: ' . $total_forum . '&nbsp;<a href="forum/index.php?act=new">&gt;&gt;&gt;</a></div>';
+                echo '<div><a href="forum/index.php?act=new">Форум</a> (' . $total_forum . ')</div>';
             // Гостевая
             $total_guest = gbook(1);
             if ($total_guest > 0)
-                echo '<div class="menu">Гостевая: ' . $total_guest . '&nbsp;<a href="str/guest.php?act=ga">&gt;&gt;&gt;</a></div>';
-            // Админ-Клуб
-            $total_admin = 0;
-            if ($dostmod == 1)
-            {
-                $total_admin = gbook(2);
-                if ($total_admin > 0)
-                    echo '<div class="menu">Админ-Клуб: ' . $total_admin . '&nbsp;<a href="str/guest.php?act=ga&amp;do=set">&gt;&gt;&gt;</a></div>';
-            }
+                echo '<div><a href="str/guest.php?act=ga">Гостевая</a> (' . $total_guest . ')</div>';
             // Галерея
             $total_gal = fgal(1);
             if ($total_gal > 0)
-                echo '<div class="menu">Галерея: ' . $total_gal . '&nbsp;<a href="gallery/index.php?act=new">&gt;&gt;&gt;</a></div>';
+                echo '<div><a href="gallery/index.php?act=new">Галерея</a> (' . $total_gal . ')</div>';
             // Библиотека
             $old = $realtime - (3 * 24 * 3600);
-            $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type`='bk' AND `moder`='1' AND `time` > '" . $old . "';");
-            $total_lib = mysql_result($req, 0);
+            $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . $old), 0);
             if ($total_lib > 0)
-                echo '<div class="menu">Библиотека: ' . $total_lib . '&nbsp;<a href="library/index.php?act=new">&gt;&gt;&gt;</a></div>';
+                echo '<div><a href="library/index.php?act=new">Библиотека</a> (' . $total_lib . ')</div>';
             // Если нового нет, выводим сообщение
-            if ($total_news == 0 && $total_forum == 0 && $total_guest == 0 && $total_admin == 0 && $total_gal == 0 && $total_lib == 0)
-                echo '<div class="menu">Новостей нет</div>';
+            if (!$total_news && !$total_forum && !$total_guest && !$total_gal && !$total_lib)
+                echo 'Новостей нет';
             // Дата последнего посещения
             $last = isset($_GET['last']) ? intval($_GET['last']) : $lastdate;
-            echo '<div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
+            echo '</div><div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
         }
         break;
 
