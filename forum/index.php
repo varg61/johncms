@@ -438,13 +438,13 @@ if (in_array($act, $do))
                 {
                     if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
                     {
-                        echo "<div class='e'>Написать<br/><form action='index.php?act=say&amp;id=" . $id . "' method='post' enctype='multipart/form-data'><textarea cols='20' rows='2' title='Введите текст сообщения' name='msg'></textarea><br/>";
-                        echo "<input type='checkbox' name='addfiles' value='1' /> Добавить файл<br/>";
+                        echo '<div>Написать<br/><form action="index.php?act=say&amp;id=' . $id . '" method="post"><textarea cols="20" rows="2" name="msg"></textarea><br/>';
+                        echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
                         if ($offtr != 1)
                         {
-                            echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
+                            echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
                         }
-                        echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form></div>";
+                        echo '<input type="submit" title="Нажмите для отправки" name="submit" value="Отправить"/></form></div>';
                     } else
                     {
                         echo '<a href="?act=say&amp;id=' . $id . '&amp;start=' . $start . '">Написать</a><br />';

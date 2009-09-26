@@ -18,9 +18,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
 {
-    require_once ("../incfiles/head.php");
-    echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
-    require_once ("../incfiles/end.php");
+    require_once ('../incfiles/head.php');
+    echo 'Ошибка!<br/><a href="index.php">В форум</a><br/>';
+    require_once ('../incfiles/end.php');
     exit;
 }
 
@@ -28,9 +28,9 @@ if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
 $old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
 if ($lastpost > ($realtime - $old))
 {
-    require_once ("../incfiles/head.php");
+    require_once ('../incfiles/head.php');
     echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p>';
-    require_once ("../incfiles/end.php");
+    require_once ('../incfiles/end.php');
     exit;
 }
 $agn1 = strtok($agn, ' ');
@@ -39,9 +39,9 @@ $type1 = mysql_fetch_array($type);
 // Проверка, закрыта ли тема
 if ($type1['edit'] == 1 && !$dostadm)
 {
-    require_once ("../incfiles/head.php");
+    require_once ('../incfiles/head.php');
     echo '<p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">&lt;&lt; Назад</a></p>';
-    require_once ("../incfiles/end.php");
+    require_once ('../incfiles/end.php');
     exit;
 }
 $tip = $type1['type'];

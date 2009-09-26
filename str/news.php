@@ -141,10 +141,10 @@ switch ($do)
                 echo '<p>Новость изменена.<br /><a href="news.php">Продолжить</a></p>';
             } else
             {
-                $req = mysql_query("select * from `news` where id='" . $id . "';");
+                $req = mysql_query("SELECT * FROM `news` WHERE `id` = '" . $id . "'");
                 $res = mysql_fetch_array($req);
-                echo '<form action="news.php?do=edit&amp;id=' . $id . '" method="post">Заголовок:<br/><input type="text" name="name" value="' . $res['name'] . '"/><br/>Текст:<br/><textarea cols="30" rows="5" name="text">' . $res['text'] .
-                    '</textarea><br/><input type="submit" name="submit" value="Ok!"/></form><p><a href="news.php">К новостям</a></p>';
+                echo '<form action="news.php?do=edit&amp;id=' . $id . '" method="post">Заголовок:<br/><input type="text" name="name" value="' . $res['name'] . '"/><br/>Текст:<br/><textarea cols="30" rows="5" name="text">' . htmlentities($res['text'],
+                    ENT_QUOTES, 'UTF-8') . '</textarea><br/><input type="submit" name="submit" value="Ok!"/></form><p><a href="news.php">К новостям</a></p>';
             }
         } else
         {
@@ -234,7 +234,7 @@ switch ($do)
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
             $text = $nw1['text'];
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-			$text = str_replace("\r\n", "<br/>", $text);
+            $text = str_replace("\r\n", "<br/>", $text);
             $text = tags($text);
             if ($offsm != 1)
             {
