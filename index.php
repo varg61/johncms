@@ -94,7 +94,7 @@ switch ($mod)
                 $reg_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg` = 0"), 0);
                 $ban_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "'"), 0);
                 echo '<div class="bmenu">События в админке</div>';
-                echo '<div class="menu">';
+                echo '<div class="menu"><p>';
                 if ($newusers_total > 0)
                     echo '<div><a href="str/users.php">Новые посетители</a> (' . $newusers_total . ')</div>';
                 if ($reg_total > 0)
@@ -109,9 +109,9 @@ switch ($mod)
                     echo '<div><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a> (' . $total_admin . ')</div>';
                 if (!$newusers_total && !$reg_total && !$ban_total && !$total_libmod && !$total_admin)
                     echo 'Новых событий нет';
-                echo '</div>';
+                echo '</p></div>';
             }
-            echo '<div class="bmenu">Новое на сайте</div><div class="menu">';
+            echo '<div class="bmenu">Новое на сайте</div><div class="menu"><p>';
             // Новости
             $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
             if ($total_news > 0)
@@ -138,7 +138,7 @@ switch ($mod)
                 echo 'Новостей нет';
             // Дата последнего посещения
             $last = isset($_GET['last']) ? intval($_GET['last']) : $lastdate;
-            echo '</div><div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
+            echo '</p></div><div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
         }
         break;
 

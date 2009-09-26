@@ -317,7 +317,10 @@ if (in_array($act, $do))
                     echo is_integer($i / 2) ? '<div class="b">' : '<div class="c">';
                     echo $mass1['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $skin . '/images/add.gif" alt=""/>&nbsp;' : '';
                     // Значок пола
-                    echo '<img src="../theme/' . $skin . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>';
+                    if ($mass1['id'])
+                        echo '<img src="../theme/' . $skin . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
+                    else
+                        echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
                     if ($user_id && $user_id != $mass1['id'])
                     {
                         echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '&amp;fid=' . $mass['id'] . '"><b>' . $mass['from'] . '</b></a> ';

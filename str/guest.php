@@ -273,7 +273,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Отображаем Гостевую, или Админ клуб                    //
         ////////////////////////////////////////////////////////////
-		if (!$set['mod_guest'])
+        if (!$set['mod_guest'])
             echo '<p><span class="red"><b>Гостевая закрыта!</b></span></p>';
         echo '<div class="phdr"><b>Гостевая</b></div>';
         // Форма ввода нового сообщения
@@ -321,7 +321,7 @@ switch ($act)
             } else
             {
                 // Запрос для обычной Гастивухи
-                $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`
+                $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id` AS `uid`
 				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
             }
             while ($res = mysql_fetch_array($req))
@@ -332,7 +332,10 @@ switch ($act)
                     // Значек нового юзера
                     echo $res['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
                     // Значок пола
-                    echo '<img src="../images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""/>&nbsp;';
+                    if ($res['uid'])
+                        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
+                    else
+                        echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
                     // Ник юзера и ссылка на Анкету
                     if (!empty($user_id) && ($user_id != $res['user_id']))
                     {
@@ -436,7 +439,7 @@ switch ($act)
                 if ($dostadm == 1)
                     echo '<a href="guest.php?act=clean">Чистка истории</a><br />';
                 // Ссылка на Админ-клуб
-				if (isset($_SESSION['ga']))
+                if (isset($_SESSION['ga']))
                 {
                     echo '<a href="guest.php?act=ga"><b>Гостевая &gt;&gt;</b></a>';
                 } else
