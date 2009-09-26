@@ -100,7 +100,7 @@ if ($ms['ip'] == 0)
             echo 'Добавление статьи<br/><form action="index.php?act=write&amp;id=' . $id . '" method="post">';
             echo 'Введите название(max. 100):<br/><input type="text" name="name"/><br/>';
             echo 'Анонс(max. 100):<br/><input type="text" name="anons"/><br/>';
-            echo 'Введите текст:<br/><textarea name="text"></textarea><br/>';
+            echo 'Введите текст:<br/><textarea name="text" cols="20" rows="5"></textarea><br/>';
             echo '<input type="submit" name="submit" value="Ok!"/><br/>';
             echo '</form><a href ="index.php?id=' . $id . '">Назад</a><br/>';
         }
