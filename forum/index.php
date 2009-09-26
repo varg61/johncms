@@ -63,7 +63,8 @@ if (empty($id))
 {
     $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1;");
     $res = mysql_fetch_array($req);
-    $hdr = mb_substr($res['text'], 0, 30);
+    $hdr = strtr($res['text'], array('&quot;' => '', '&amp;' => '', '&lt;' => '', '&gt;' => ''));
+    $hdr = mb_substr($hdr, 0, 30);
     $hdr = htmlentities($hdr, ENT_QUOTES, 'UTF-8');
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
