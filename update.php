@@ -1,17 +1,29 @@
 <?php
 
+/*
+////////////////////////////////////////////////////////////////////////////////
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Доп. сайт поддержки:                http://gazenwagen.com                  //
+////////////////////////////////////////////////////////////////////////////////
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Плагиат и удаление копирайтов заруганы на ближайших родственников!!!       //
+////////////////////////////////////////////////////////////////////////////////
+// Визуальный мод инсталлятора от Piks                                        //
+////////////////////////////////////////////////////////////////////////////////
+*/
+
 define('_IN_JOHNCMS', 1);
 
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Cache-Control: no-cache, must-revalidate");
-header("Pragma: no-cache");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT");
 header("Content-type: application/xhtml+xml; charset=UTF-8");
 echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>
-<head>
-<meta http-equiv='content-type' content='application/xhtml+xml; charset=utf-8'/>";
-echo "<title>Обновление системы</title>
+<head><meta http-equiv='content-type' content='application/xhtml+xml; charset=utf-8'/>";
+echo "<title>JohnCMS 3.0 - обновление</title>
 <style type='text/css'>
 body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}
 h2{ margin: 0; padding: 0; padding-bottom: 4px; }
@@ -35,7 +47,7 @@ $do = isset($_GET['do']) ? $_GET['do'] : '';
 switch ($do)
 {
     case 'step1':
-        echo '<h2>Проверка прав доступа</h2>';
+        echo '<h2>Проверка прав доступа</h2><ul>';
         // Проверка прав доступа к файлам и папкам
         function permissions($filez) {
             $filez = @decoct(@fileperms($filez)) % 1000;
@@ -70,16 +82,16 @@ switch ($do)
                 $cherr = $cherr . '<div class="smenu"><span class="green">Ок</span> - ' . $v . '</div>';
             }
         }
-        echo '<div class="menu">';
+        echo '<div>';
         echo $cherr;
-        echo '</div><br />';
+        echo '</div></ul><hr />';
         if ($err)
         {
             echo '<span class="red">Внимание!</span> Имеются критические ошибки!<br />Вы не сможете продолжить инсталляцию, пока не устраните их.';
             echo '<p clss="step"><a class="button" href="index.php?act=check">Проверить заново</a></p>';
         } else
         {
-            echo '<span class="green">Отлично!</span><br />Все настройки правильные.<hr /><a class="button" href="update.php?do=step2">Продолжить</a>';
+            echo '<span class="green">Отлично!</span><br />Все настройки правильные.<p><a class="button" href="update.php?do=step2">Продолжить</a></p>';
         }
         break;
 
@@ -90,25 +102,21 @@ switch ($do)
         mysql_query("ALTER TABLE `users` DROP `offgr`");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'gb' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'rmod' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_reg_msg' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_forum_msg' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_chat_msg' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_guest_msg' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_lib_msg' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_gal_msg' LIMIT 1");
-        mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'mod_down_msg' LIMIT 1");
-        mysql_query("INSERT INTO `cms_settings` SET `key` = 'mod_lib_comm', `val` = '1'");
-        mysql_query("INSERT INTO `cms_settings` SET `key` = 'mod_gal_comm', `val` = '1'");
-        mysql_query("INSERT INTO `cms_settings` SET `key` = 'mod_down_comm', `val` = '1'");
-        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_reg'");
-        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_forum'");
-        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_chat'");
-        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_guest'");
-        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_lib'");
-        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_gal'");
-        mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = 'mod_down'");
+        $array = array('gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');
+        foreach ($array as $val)
+        {
+            mysql_query("DELETE FROM `cms_settings` WHERE `key` = '$val' LIMIT 1");
+        }
+        $array = array('mod_lib_comm', 'mod_gal_comm', 'mod_down_comm');
+        foreach ($array as $val)
+        {
+            mysql_query("INSERT INTO `cms_settings` SET `key` = '$val', `val` = '1'");
+        }
+        $array = array('mod_reg', 'mod_forum', 'mod_chat', 'mod_guest', 'mod_lib', 'mod_gal', 'mod_down');
+        foreach ($array as $val)
+        {
+            mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = '$val'");
+        }
         echo '<span class="green">OK</span> таблица `cms_settings` обновлена.<br />';
         // Таблицы форума
         mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
@@ -116,8 +124,7 @@ switch ($do)
         mysql_query("ALTER TABLE `forum` CHANGE `moder` `moder` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` DROP INDEX `moder`");
         echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
-        mysql_query("DROP TABLE IF EXISTS `cms_forum_files`");
-        mysql_query("CREATE TABLE `cms_forum_files` (
+        mysql_query("CREATE TABLE IF NOT EXISTS `cms_forum_files` (
         `id` int(11) NOT NULL auto_increment,
         `cat` int(11) NOT NULL,
         `subcat` int(11) NOT NULL,
