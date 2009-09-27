@@ -148,7 +148,7 @@ if ($user_id)
 
             case 'editname':
                 $var = check(mb_substr(trim($_POST['nname']), 0, 20));
-                mysql_query("update `users` set imname='" . $var . "' where id='" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `imname` = '$var' WHERE `id` = '$user_id'");
                 echo '<p>Принято: ' . $var . '<br/><a href="anketa.php?user=' . $user_id . '">Продолжить</a></p>';
                 break;
 
@@ -200,7 +200,7 @@ if ($user_id)
                     require_once ("../incfiles/end.php");
                     exit;
                 }
-                mysql_query("update `users` set `password` = '" . $par22 . "' where `id` = '" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `password` = '$par22' WHERE `id` = '$user_id'");
                 echo "Пароль изменен,войдите на сайт заново<br/><a href='../in.php'>Вход</a><br/>";
                 unset($_SESSION['uid']);
                 unset($_SESSION['ups']);
@@ -215,7 +215,7 @@ if ($user_id)
 
             case 'editgor':
                 $var = check(mb_substr(trim($_POST['ngor']), 0, 20));
-                mysql_query("update `users` set live='" . $var . "' where id='" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `live` = '$var' WHERE `id` = '$user_id'");
                 echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
                 break;
 
@@ -226,7 +226,7 @@ if ($user_id)
 
             case 'editinf':
                 $var = check(mb_substr(trim($_POST['ninf']), 0, 500));
-                mysql_query("update `users` set about='" . $var . "' where id='" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `about` = '$var' WHERE `id` = '$user_id'");
                 echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
                 break;
 
@@ -237,7 +237,7 @@ if ($user_id)
 
             case 'editicq':
                 $var = intval(substr($_POST['nicq'], 0, 9));
-                mysql_query("update `users` set icq='" . $var . "' where id='" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `icq` = '$var' WHERE `id` = '$user_id'");
                 echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
                 break;
 
@@ -248,7 +248,7 @@ if ($user_id)
 
             case 'editskype':
                 $var = check(mb_substr(trim($_POST['skype']), 0, 30));
-                mysql_query("UPDATE `users` SET `skype` = '" . $var . "' WHERE `id` = '" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `skype` = '$var' WHERE `id` = '$user_id'");
                 echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
                 break;
 
@@ -259,7 +259,7 @@ if ($user_id)
 
             case 'editjabber':
                 $var = check(mb_substr(trim($_POST['jabber']), 0, 30));
-                mysql_query("UPDATE `users` SET `jabber` = '" . $var . "' WHERE `id` = '" . $user_id . "';");
+                mysql_query("UPDATE `users` SET `jabber` = '$var' WHERE `id` = '$user_id'");
                 echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
                 break;
 
@@ -270,7 +270,7 @@ if ($user_id)
 
             case 'editmobila':
                 $var = check(mb_substr(trim($_POST['nmobila']), 0, 20));
-                mysql_query("update `users` set `mibile` = '" . $var . "' where id='" . $user_id . "';");
+                mysql_query("update `users` set `mibile` = '$var' where id='$user_id'");
                 echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
                 break;
 
@@ -309,13 +309,13 @@ if ($user_id)
                 break;
 
             case 'site':
-                echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editsite' method='post'>Изменить сайт(max. 50):<br/><input type='text' name='nsite' value='" . $arr['www'] .
+                echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editsite' method='post'>Изменить сайт(max. 50):<br/><input type='text' name='nsite' value='" . (empty($arr['www']) ? 'http://' : $arr['www']) .
                     "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
                 break;
 
             case 'editsite':
                 $var = check(mb_substr(trim($_POST['nsite']), 0, 50));
-                mysql_query("update `users` set www='" . $var . "' where id='" . $_SESSION['uid'] . "';");
+                mysql_query("UPDATE `users` SET `www` = '$var' WHERE `id` = '$user_id'");
                 echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
                 break;
 
@@ -450,7 +450,7 @@ if ($user_id)
                 echo '<div class="menu"><a href="anketa.php?act=jabber">Jabber:</a> ' . $arr['jabber'] . '</div>';
                 echo '<div class="menu"><a href="anketa.php?act=mail">E-mail:</a> ' . $arr['mail'] . ($arr['mailact'] == 0 ? '(!)' : '') . '</div>';
                 echo '<div class="menu"><a href="anketa.php?act=mobila">Телефон:</a> ' . $arr['mibile'] . '</div>';
-                echo '<div class="menu"><a href="anketa.php?act=site">Сайт:</a> ' . $arr['www'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=site">Сайт:</a> ' . tags($arr['www']) . '</div>';
                 echo '<div class="bmenu">Всего пробыл' . ($arr['sex'] == 'm' ? '' : 'а') . ' на сайте: ' . timecount($arr['total_on_site']) . '</div>';
                 echo '<p>';
                 $req = mysql_query("select * from `gallery` where `type`='al' and `user`='1' and `avtor`='" . $arr['name'] . "' LIMIT 1;");
@@ -580,10 +580,10 @@ if ($user_id)
             echo '<div class="menu"><u>Skype</u>:&nbsp;' . $arr['skype'] . '</div> ';
         if (!empty($arr['jabber']))
             echo '<div class="menu"><u>Jabber</u>:&nbsp;' . $arr['jabber'] . '</div> ';
-        if (!empty($arr['www']) && $arr['www'] !== "http://" && stristr($arr['www'], "http://"))
+        if (!empty($arr['www']))
         {
-            $sait = str_replace("http://", "", $arr['www']);
-            echo '<div class="menu"><u>Сайт</u>: <a href="' . $arr['www'] . '">' . $sait . '</a></div>';
+            //$sait = str_replace("http://", "", $arr['www']);
+            echo '<div class="menu"><u>Сайт</u>: ' . tags($arr['www']) . '</div>';
         }
         echo '<div class="bmenu">Статистика</div><div class="menu">';
         if ($arr['sex'] == "m")

@@ -316,7 +316,7 @@ switch ($act)
             {
                 // Запрос для Админ клуба
                 echo '<div class="rmenu"><b>АДМИН-КЛУБ</b></div>';
-                $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`
+                $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id` AS `uid`
 				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
             } else
             {
