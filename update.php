@@ -12,8 +12,6 @@
 //                                                                            //
 // Плагиат и удаление копирайтов заруганы на ближайших родственников!!!       //
 ////////////////////////////////////////////////////////////////////////////////
-// Визуальный мод инсталлятора от Piks                                        //
-////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
@@ -100,6 +98,8 @@ switch ($do)
         // Таблица `users`
         mysql_query("ALTER TABLE `users` DROP `offpg`");
         mysql_query("ALTER TABLE `users` DROP `offgr`");
+        mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
         $array = array('gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');

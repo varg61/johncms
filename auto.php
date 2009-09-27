@@ -19,19 +19,18 @@ $rootpath = '';
 require_once ("incfiles/core.php");
 
 // Получение данных
-$auto_login = isset($_GET['id']) ? intval(trim($_GET['id'])) : false;
-$auto_pass = isset($_GET['p']) ? check(trim($_GET['p'])) : false;
-$form_login = isset($_POST['n']) ? check(trim($_POST['n'])) : false;
-$form_pass = isset($_POST['p']) ? check(trim($_POST['p'])) : false;
+$auto_pass = isset($_GET['p']) ? check($_GET['p']) : false;
+$form_login = isset($_POST['n']) ? check($_POST['n']) : false;
+$form_pass = isset($_POST['p']) ? check($_POST['p']) : false;
 
 if ($form_login && $form_pass)
 {
     $user_ps = md5(md5($form_pass));
-	$req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . rus_lat(mb_strtolower(($form_login))) . "' LIMIT 1");
+	$req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . rus_lat(mb_strtolower($form_login)) . "' LIMIT 1");
 } elseif ($auto_login && $auto_pass)
 {
     $user_ps = md5(md5($auto_pass));
-	$req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $auto_login . "' LIMIT 1");
+	$req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $id . "' LIMIT 1");
 } else
 {
     header("Location: in.php?msg=1");

@@ -390,6 +390,8 @@ CREATE TABLE `users` (
   `digest` tinyint(4) NOT NULL default '1',
   `skin` varchar(15) NOT NULL,
   `lastpost` int(11) NOT NULL,
+  `rest_code` varchar(32) NOT NULL,
+  `rest_time` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `name_lat` (`name_lat`),
   KEY `lastdate` (`lastdate`)
