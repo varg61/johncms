@@ -25,12 +25,13 @@ $form_pass = isset($_POST['p']) ? check($_POST['p']) : false;
 
 if ($form_login && $form_pass)
 {
-    $user_ps = md5(md5($form_pass));
+    // Если Логин через форму
+	$user_ps = md5(md5($form_pass));
 	$req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . rus_lat(mb_strtolower($form_login)) . "' LIMIT 1");
-} elseif ($auto_login && $auto_pass)
+} elseif ($id && $auto_pass)
 {
     $user_ps = md5(md5($auto_pass));
-	$req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $id . "' LIMIT 1");
+	$req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
 } else
 {
     header("Location: in.php?msg=1");
@@ -82,7 +83,7 @@ if ($_POST['mem'] == 1)
 // Установка данных сессии
 $_SESSION['uid'] = $user_id;
 $_SESSION['ups'] = $user_ps;
-mysql_query("update `users` set `sestime`='" . $realtime . "' where `id`='" . $user_id . "';");
+mysql_query("UPDATE `users` SET `sestime` = '$realtime' WHERE `id` = '$user_id'");
 header("Location: index.php?mod=digest");
 
 ?>

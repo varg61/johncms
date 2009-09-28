@@ -102,7 +102,7 @@ switch ($do)
         mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
-        $array = array('gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');
+        $array = array('fmod', 'gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');
         foreach ($array as $val)
         {
             mysql_query("DELETE FROM `cms_settings` WHERE `key` = '$val' LIMIT 1");
@@ -121,7 +121,7 @@ switch ($do)
         // Таблицы форума
         mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `vip` `vip` TINYINT( 1 ) NOT NULL DEFAULT '0'");
-        mysql_query("ALTER TABLE `forum` CHANGE `moder` `moder` TINYINT( 1 ) NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `forum` DROP `moder`");
         mysql_query("ALTER TABLE `forum` DROP INDEX `moder`");
         echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
         mysql_query("CREATE TABLE IF NOT EXISTS `cms_forum_files` (

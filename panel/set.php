@@ -38,9 +38,13 @@ if ($dostadm == 1)
         mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['gz']) . "' WHERE `key` = 'gzip'");
         mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['fm']) . "' WHERE `key` = 'fmod'");
         echo '<div class="rmenu">Сайт настроен</div>';
+        $req = mysql_query("SELECT * FROM `cms_settings`;");
+        $set = array();
+        while ($res = mysql_fetch_row($req))
+            $set[$res[0]] = $res[1];
     }
     echo '<p>Время на сервере: ' . date("H.i(d/m/Y)") . '</p>';
-    echo "<form method='post' action='set.php?act=set'>";
+    echo '<form method="post" action="set.php?act=set">';
     if ($dostsadm == 1)
     {
         echo "Ник админа:<br/><input name='nadm' maxlength='50' value='" . $nickadmina . "'/><br/>";
@@ -69,7 +73,6 @@ if ($dostadm == 1)
     echo 'Папка с админкой:<br/><input type="text" name="admp" value="' . htmlentities($set['admp']) . '"/><br/>';
     echo 'Расширение страниц:<br/><input type="text" name="rashstr" value="' . htmlentities($set['rashstr']) . '"/><br/>';
     echo '<p><input name="gz" type="checkbox" value="1" ' . ($set['gzip'] ? 'checked="checked"' : '') . ' />&nbsp;GZIP сжатие<br/>';
-    echo '<input name="fm" type="checkbox" value="1" ' . ($set['fmod'] ? 'checked="checked"' : '') . ' />&nbsp;мод. форума<br/>';
     echo '</p><input type="submit" name="submit" id="button" value="Запомнить" /></form>';
     echo '<p><a href="main.php">В админку</a></p>';
 } else

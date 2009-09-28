@@ -43,8 +43,7 @@ if ($user_id)
             $req = mysql_query("SELECT `forum`.`id`
             FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
             WHERE `forum`.`type`='t'
-            AND `moder`='1'
-            AND `cms_forum_rdm`.`topic_id` Is Null;");
+            AND `cms_forum_rdm`.`topic_id` Is Null");
             while ($res = mysql_fetch_array($req))
             {
                 mysql_query("INSERT INTO `cms_forum_rdm` SET
@@ -55,7 +54,6 @@ if ($user_id)
             $req = mysql_query("SELECT `forum`.`id` AS `id`
 			FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
 			WHERE `forum`.`type`='t'
-			AND `moder`='1'
 			AND `forum`.`time` > `cms_forum_rdm`.`time`");
             while ($res = mysql_fetch_array($req))
             {
@@ -86,10 +84,10 @@ if ($user_id)
             $vr1 = $realtime - $vr * 3600;
             if ($dostsadm == 1)
             {
-                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `moder`='1' AND `time` > '" . $vr1 . "'");
+                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "'");
             } else
             {
-                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `moder`='1' AND `time` > '" . $vr1 . "' AND `close` != '1'");
+                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1'");
             }
             $count = mysql_result($req, 0);
             if ($count > 0)
@@ -97,10 +95,10 @@ if ($user_id)
                 echo '<div class="phdr">Все за период ' . $vr . ' часов</div>';
                 if ($dostsadm == 1)
                 {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `moder`='1' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
                 } else
                 {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `moder`='1' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
                 }
                 $i = 0;
                 while ($arr = mysql_fetch_array($req))
@@ -176,13 +174,12 @@ if ($user_id)
             if ($total > 0)
             {
                 echo '<div class="phdr"><b>Непрочитанное</b></div>';
-                if ($dostsadm == 1)
+                if ($dostsadm)
                 {
                     $req = mysql_query("SELECT *
 					FROM `forum`
 					LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
 					WHERE `forum`.`type`='t'
-					AND `moder`='1'
 					AND (`cms_forum_rdm`.`topic_id` Is Null
 					OR `forum`.`time` > `cms_forum_rdm`.`time`)
 					ORDER BY `forum`.`time` DESC
@@ -193,7 +190,6 @@ if ($user_id)
 					FROM `forum`
 					LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
 					WHERE `forum`.`type`='t'
-					AND `moder`='1'
 					AND `close`!='1'
 					AND (`cms_forum_rdm`.`topic_id` Is Null
 					OR `forum`.`time` > `cms_forum_rdm`.`time`)
@@ -256,7 +252,7 @@ if ($user_id)
     // Вывод непрочитанных тем (для незарегистрированных)     //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr"><b>Последние 10 тем</b></div>';
-	$req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `close`!='1' ORDER BY `time` DESC LIMIT 10");
+	$req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close`!='1' ORDER BY `time` DESC LIMIT 10");
     while ($arr = mysql_fetch_array($req))
     {
         $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "'");

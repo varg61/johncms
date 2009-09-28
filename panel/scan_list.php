@@ -87,7 +87,6 @@ $good_files = array(
 '../forum/file.php',
 '../forum/files/.htaccess',
 '../forum/files/index.php',
-'../forum/fmoder.php',
 '../forum/index.php',
 '../forum/loadtem.php',
 '../forum/massdel.php',

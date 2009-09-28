@@ -131,21 +131,17 @@ CREATE TABLE `forum` (
   `ip` text NOT NULL,
   `soft` text NOT NULL,
   `text` text NOT NULL,
-  `close` binary(1) NOT NULL,
-  `vip` binary(1) NOT NULL,
-  `moder` binary(1) NOT NULL,
+  `close` tinyint(1) NOT NULL default '0',
+  `vip` tinyint(1) NOT NULL default '0',
   `edit` text NOT NULL,
   `tedit` int(11) NOT NULL,
   `kedit` int(2) NOT NULL,
-  `attach` text NOT NULL,
-  `dlcount` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `refid` (`refid`),
   KEY `type` (`type`),
   KEY `time` (`time`),
   KEY `from` (`from`),
-  KEY `to` (`to`),
-  KEY `moder` (`moder`)
+  KEY `to` (`to`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -315,7 +311,6 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('admp', 'panel'),
 ('flsz', '2000'),
 ('gzip', '1'),
-('fmod', '0'),
 ('clean_time', ''),
 ('mod_reg', '2'),
 ('mod_forum', '2'),

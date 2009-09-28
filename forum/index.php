@@ -91,7 +91,7 @@ if ($user_id)
 	`name`='$login';");
 }
 
-$do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'fmoder', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel', 'files');
+$do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel', 'files');
 if (in_array($act, $do))
 {
     require_once ($act . '.php');
@@ -110,15 +110,6 @@ if (in_array($act, $do))
         if (isset($_GET['newdown']))
         {
             $_SESSION['uppost'] = 0;
-        }
-    }
-    if ($dostfmod == 1)
-    {
-        $fm = mysql_query("select `id` from `forum` where type='t' and moder!='1';");
-        $fm1 = mysql_num_rows($fm);
-        if ($fm1 != 0)
-        {
-            echo "Модерацию ожидают <a href='index.php?act=fmoder'>$fm1</a> тем<br/>";
         }
     }
 
@@ -146,7 +137,7 @@ if (in_array($act, $do))
                 while ($mass1 = mysql_fetch_array($req))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                    $coltem = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `moder` = '1' AND `refid` = '" . $mass1['id'] . "'");
+                    $coltem = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $mass1['id'] . "'");
                     $coltem1 = mysql_result($coltem, 0);
                     echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
                     if ($coltem1 > 0)
@@ -163,12 +154,12 @@ if (in_array($act, $do))
                 ////////////////////////////////////////////////////////////
                 // Список тем                                             //
                 ////////////////////////////////////////////////////////////
-                $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='" . $id . "' AND `moder`='1'" . ($dostadm == 1 ? '' : " AND `close`!='1'"));
+                $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='$id'" . ($dostadm ? '' : " AND `close`!='1'"));
                 $coltem = mysql_result($qz, 0);
                 // Ссылка на Новые темы
                 echo '<p><a href="index.php?act=new">' . ($user_id ? 'Непрочитанное&nbsp;(' . forum_new() . ')' : 'Последние 10 тем') . '</a></p>';
                 // Панель навигации
-                $forum = mysql_query("SELECT * FROM `forum` WHERE `type`='f' AND `id`='" . $type1['refid'] . "';");
+                $forum = mysql_query("SELECT * FROM `forum` WHERE `type`='f' AND `id`='" . $type1['refid'] . "'");
                 $forum1 = mysql_fetch_array($forum);
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $type1['refid'] . '">' . $forum1['text'] . '</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
@@ -177,8 +168,7 @@ if (in_array($act, $do))
                 {
                     echo '<div class="gmenu"><a href="index.php?act=nt&amp;id=' . $id . '">Новая тема</a></div>';
                 }
-                $q1 = mysql_query("SELECT `id`, `from`, `time`, `vip`, `close`, `edit`, `text` FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='" . $id .
-                    "' AND `moder`='1'  ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess);
+                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess);
                 while ($mass = mysql_fetch_array($q1))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -204,15 +194,8 @@ if (in_array($act, $do))
                         echo '<img src="../theme/' . $skin . '/images/dl.gif" alt=""/>';
                     } else
                     {
-                        $np = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `time`>='" . $mass['time'] . "' AND `topic_id`='" . $mass['id'] . "' AND `user_id`='" . $user_id . "';");
-                        $np1 = mysql_num_rows($np);
-                        if ($np1 == 0)
-                        {
-                            echo '<img src="../theme/' . $skin . '/images/np.gif" alt=""/>';
-                        } else
-                        {
-                            echo '<img src="../theme/' . $skin . '/images/op.gif" alt=""/>';
-                        }
+                        $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $mass['time'] . "' AND `topic_id` = '" . $mass['id'] . "' AND `user_id`='$user_id'"), 0);
+                        echo '<img src="../theme/' . $skin . '/images/'.($np ? 'op' : 'np').'.gif" alt=""/>';
                     }
                     echo "&nbsp;<a href='index.php?id=$mass[id]'>$mass[text]</a> [$colmes1]";
                     if ($cpg > 1)
@@ -244,15 +227,15 @@ if (in_array($act, $do))
                 if ($user_id)
                 {
                     //блок, фиксирующий факт прочтения топика
-                    $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+                    $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "'");
                     if (mysql_result($req, 0) == 1)
                     {
                         // Обновляем время метки о прочтении
-                        mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+                        mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "'");
                     } else
                     {
                         // Ставим метку о прочтении
-                        mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
+                        mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "'");
                     }
                 }
                 // Ссылка на Новые темы
@@ -263,7 +246,7 @@ if (in_array($act, $do))
                     require_once ("../incfiles/end.php");
                     exit;
                 }
-                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $id . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
+                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
                 $colmes = mysql_result($req, 0);
                 // Задаем правила сортировки (новые внизу / вверху)
                 if ($user_id)
