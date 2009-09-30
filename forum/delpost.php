@@ -57,7 +57,7 @@ if ($dostfmod == 1)
                 mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = '$id'");
             }
         }
-        header("Location: index.php?id=$ms[refid]");
+        header("Location: index.php?id=" . $ms['refid'] . "&start=" . $start);
     }
     if (isset($_GET['hid']))
     {
@@ -75,15 +75,15 @@ if ($dostfmod == 1)
     }
     require_once ("../incfiles/head.php");
     echo '<p>Вы действительно хотите удалить пост?</p>';
-    echo '<p><a href="?act=delpost&amp;id=' . $id . '&amp;yes">Удалить</a><br />';
+    echo '<p><a href="?act=delpost&amp;id=' . $id . '&amp;start=' . $start . '&amp;yes">Удалить</a><br />';
     if (($dostsadm == 1) && ($ms['close'] != 1))
     {
-        echo '<a href="index.php?act=delpost&amp;id=' . $id . '&amp;hid">Скрыть</a><br />';
+        echo '<a href="index.php?act=delpost&amp;id=' . $id . '&amp;start=' . $start . '&amp;hid">Скрыть</a><br />';
     }
     echo '<a href="index.php?id=' . $ms['refid'] . '">Отмена</a></p>';
 } else
 {
-    echo "Доступ закрыт!!!<br>";
+    echo 'Доступ закрыт!!!<br>';
 }
 
 ?>

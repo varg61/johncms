@@ -114,7 +114,7 @@ switch ($act)
         unset($_SESSION['guest']);
         $_SESSION['code'] = rand(1000, 9999);
         $name = mb_substr(trim($_POST['name']), 0, 20);
-        if (!empty($_SESSION['uid']))
+        if ($user_id)
         {
             $from = $login;
         } else
@@ -127,6 +127,14 @@ switch ($act)
         if ($_POST['msgtrans'] == 1)
         {
             $msg = trans($msg);
+        }
+        // Проверка на одинаковые сообщения
+        $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '$user_id' ORDER BY `time` DESC");
+        $res = mysql_fetch_array($req);
+        if ($res['text'] == $msg)
+        {
+            header("location: guest.php");
+            exit;
         }
         // Вставляем сообщение в базу
         mysql_query("INSERT INTO `guest` SET

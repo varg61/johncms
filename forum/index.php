@@ -195,7 +195,7 @@ if (in_array($act, $do))
                     } else
                     {
                         $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $mass['time'] . "' AND `topic_id` = '" . $mass['id'] . "' AND `user_id`='$user_id'"), 0);
-                        echo '<img src="../theme/' . $skin . '/images/'.($np ? 'op' : 'np').'.gif" alt=""/>';
+                        echo '<img src="../theme/' . $skin . '/images/' . ($np ? 'op' : 'np') . '.gif" alt=""/>';
                     }
                     echo "&nbsp;<a href='index.php?id=$mass[id]'>$mass[text]</a> [$colmes1]";
                     if ($cpg > 1)
@@ -307,7 +307,7 @@ if (in_array($act, $do))
                     if ($user_id && $user_id != $mass1['id'])
                     {
                         echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '&amp;fid=' . $mass['id'] . '"><b>' . $mass['from'] . '</b></a> ';
-                        echo '<a href="index.php?act=say&amp;id=' . $mass['id'] . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;cyt"> [ц]</a>';
+                        echo '<a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $mass['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a>';
                     } else
                     {
                         echo "<b>$mass[from]</b>";
@@ -407,7 +407,7 @@ if (in_array($act, $do))
                         echo '<br />';
                         if ($dostfmod == 1)
                             echo '<input type="checkbox" name="delch[]" value="' . $mass['id'] . '"/>&nbsp;';
-                        echo '<a href="?act=delpost&amp;id=' . $mass['id'] . '">Удалить</a><br/>';
+                        echo '<a href="?act=delpost&amp;id=' . $mass['id'] . '&amp;start=' . $start . '">Удалить</a><br/>';
                         echo "$mass[ip] - $mass[soft]<br/>";
                     }
                     echo '</div>';
