@@ -85,6 +85,8 @@ $good_files = array(
 '../forum/editpost.php',
 '../forum/faq.php',
 '../forum/file.php',
+'../forum/files.php',
+'../forum/filter.php',
 '../forum/files/.htaccess',
 '../forum/files/index.php',
 '../forum/index.php',

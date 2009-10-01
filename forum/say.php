@@ -16,31 +16,29 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if (empty($_GET['id']) || !$user_id || $ban['1'] || $ban['11'])
+if (!$id || !$user_id || $ban['1'] || $ban['11'])
 {
-    require_once ('../incfiles/head.php');
-    echo 'Ошибка!<br/><a href="index.php">В форум</a><br/>';
-    require_once ('../incfiles/end.php');
+    header("Location: index.php");
     exit;
 }
-
 // Проверка на спам
 $old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
 if ($lastpost > ($realtime - $old))
 {
-    require_once ('../incfiles/head.php');
-    echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p>';
-    require_once ('../incfiles/end.php');
+    require_once ("../incfiles/head.php");
+    echo '<div class="rmenu"><p>АНТИФЛУД!<br />Вы не можете так часто писать, порог ' . $old . ' секунд<br/><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
+    require_once ("../incfiles/end.php");
     exit;
 }
+
 $agn1 = strtok($agn, ' ');
-$type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "'");
+$type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
 // Проверка, закрыта ли тема
 if ($type1['edit'] == 1 && !$dostadm)
 {
     require_once ('../incfiles/head.php');
-    echo '<p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">&lt;&lt; Назад</a></p>';
+    echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">Назад</a></p></div>';
     require_once ('../incfiles/end.php');
     exit;
 }
@@ -48,12 +46,15 @@ $tip = $type1['type'];
 switch ($tip)
 {
     case "t":
+        ////////////////////////////////////////////////////////////
+        // Добавление простого сообщения                          //
+        ////////////////////////////////////////////////////////////
         if (isset($_POST['submit']))
         {
             if (empty($_POST['msg']))
             {
                 require_once ("../incfiles/head.php");
-                echo '<p>Вы не ввели сообщение!</p><p><a href="index.php?act=say&amp;id=' . $id . '">&lt;&lt; Повторить</a></p>';
+                echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не ввели сообщение<br /><a href="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '">Повторить</a></p></div>';
                 require_once ("../incfiles/end.php");
                 exit;
             }
@@ -62,54 +63,51 @@ switch ($tip)
             {
                 $msg = trans($msg);
             }
-            mysql_query("INSERT INTO `forum` SET
-			`refid`='" . $id . "',
-			`type`='m',
-			`time`='" . $realtime . "',
-			`from`='" . $login . "',
-			`ip`='" . $ipp . "',
-			`soft`='" . mysql_real_escape_string($agn1) . "',
-			`text`='" . mysql_real_escape_string($msg) . "'");
-            $fadd = mysql_insert_id();
-            mysql_query("UPDATE `forum` SET  `time`='" . $realtime . "' WHERE `id`='" . $id . "';");
-            $fpst = $datauser['postforum'] + 1;
-            mysql_query("UPDATE `users` SET
-			`postforum`='" . $fpst . "',
-			`lastpost` = '" . $realtime . "'
-			WHERE `id`='" . $user_id . "'");
-            $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $id . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
-            $pa2 = mysql_result($colmes, 0);
-            if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
+            // Проверяем, не повторяется ли сообщение?
+            $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC");
+            if (mysql_num_rows($req) > 0)
             {
-                $page = 1;
-            } else
-            {
-                $page = ceil($pa2 / $kmess);
+                $res = mysql_fetch_array($req);
+                if ($msg == $res['text'])
+                {
+                    require_once ('../incfiles/head.php');
+                    echo '<div class="rmenu"><p>АНТИФЛУД!<br />Такое сообщение уже было<br /><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
+                    require_once ('../incfiles/end.php');
+                    exit;
+                }
             }
+            // Добавляем сообщение в базу
+            mysql_query("INSERT INTO `forum` SET
+			`refid` = '$id',
+			`type` = 'm' ,
+			`time` = '$realtime',
+			`user_id` = '$user_id',
+			`from` = '$login',
+			`ip` = '$ipp',
+			`soft` = '" . mysql_real_escape_string($agn1) . "',
+			`text` = '" . mysql_real_escape_string($msg) . "'");
+            $fadd = mysql_insert_id();
+            // Обновляем время топика
+            mysql_query("UPDATE `forum` SET  `time` = '$realtime' WHERE `id` = '$id'");
+            // Обновляем статистику юзера
+            mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
+            // Вычисляем, на какую страницу попадает добавляемый пост
+            $page = $upfp ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
             //блок, фиксирующий факт прочтения топика
-            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id'");
             if (mysql_result($req, 0) == 1)
             {
-                // Обновляем время метки о прочтении
-                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+                mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id` = '$id' AND `user_id` = '$user_id'");
             } else
             {
-                // Ставим метку о прочтении
-                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
+                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id` = '$id', `user_id` = '$user_id', `time` = '$realtime'");
             }
-            $addfiles = intval($_POST['addfiles']);
-            if ($addfiles == 1)
-            {
+            if ($_POST['addfiles'] == 1)
                 header("Location: index.php?id=$fadd&act=addfile");
-            } else
-            {
+            else
                 header("Location: index.php?id=$id&page=$page");
-            }
         } else
         {
-            ////////////////////////////////////////////////////////////
-            // Форма добавления сообщения                             //
-            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             if ($datauser['postforum'] == 0)
             {
@@ -122,7 +120,7 @@ switch ($tip)
                 }
             }
             echo '<div class="phdr">Тема: <b>' . $type1['text'] . '</b></div>';
-            echo '<form action="index.php?act=say&amp;id=' . $id . '" method="post" enctype="multipart/form-data">';
+            echo '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post" enctype="multipart/form-data">';
             echo '<div class="gmenu"><b>Сообщение:</b><br /><textarea cols="24" rows="4" title="Введите текст сообщения" name="msg"></textarea><br />';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($offtr != 1)
@@ -136,8 +134,11 @@ switch ($tip)
         break;
 
     case "m":
+        ////////////////////////////////////////////////////////////
+        // Добавление сообщения с цитированием поста              //
+        ////////////////////////////////////////////////////////////
         $th = $type1['refid'];
-        $th2 = mysql_query("select * from `forum` where `id`= '" . $th . "';");
+        $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
         if (isset($_POST['submit']))
         {
@@ -153,6 +154,19 @@ switch ($tip)
             {
                 $msg = trans($msg);
             }
+            // Проверяем, не повторяется ли сообщение?
+            $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC");
+            if (mysql_num_rows($req) > 0)
+            {
+                $res = mysql_fetch_array($req);
+                if ($msg == $res['text'])
+                {
+                    require_once ('../incfiles/head.php');
+                    echo '<div class="rmenu"><p>АНТИФЛУД!<br />Такое сообщение уже было<br /><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
+                    require_once ('../incfiles/end.php');
+                    exit;
+                }
+            }
             $to = $type1['from'];
             if (!empty($_POST['citata']))
             {
@@ -161,54 +175,38 @@ switch ($tip)
                 $citata = mb_substr($citata, 0, 200);
                 $tp = date("d.m.Y/H:i", $type1['time']);
                 $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
-                $to = '';
             } elseif (!empty($_POST['txt']))
             {
                 $txt = trim($_POST['txt']);
                 $msg = $txt . ' ' . $msg;
-                $to = '';
             }
+            // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
-			`refid`='" . $th . "',
-			`type`='m',
-			`time`='" . $realtime . "',
-			`from`='" . $login . "',
-			`to`='" . $to . "',
-			`ip`='" . $ipp . "',
-			`soft`='" . mysql_real_escape_string($agn1) . "',
-			`text`='" . mysql_real_escape_string($msg) . "';");
+			`refid` = '$th',
+			`type` = 'm',
+			`time` = '$realtime',
+			`user_id` = '$user_id',
+			`from` = '$login',
+			`ip` = '$ipp',
+			`soft` = '" . mysql_real_escape_string($agn1) . "',
+			`text` = '" . mysql_real_escape_string($msg) . "'");
             $fadd = mysql_insert_id();
-            mysql_query("update `forum` set  time='" . $realtime . "' where id='" . $th . "';");
-            if (empty($datauser['postforum']))
-            {
-                $fpst = 1;
-            } else
-            {
-                $fpst = $datauser['postforum'] + 1;
-            }
-            mysql_query("UPDATE `users` SET
-			`postforum` = '" . $fpst . "',
-			`lastpost` = '" . $realtime . "'
-			WHERE `id` = '" . $user_id . "';");
-            $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $th . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
-            $pa2 = mysql_result($colmes, 0);
-            if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
-            {
-                $page = 1;
-            } else
-            {
-                $page = ceil($pa2 / $kmess);
-            }
+            // Обновляем время топика
+            mysql_query("UPDATE `forum` SET `time` = '$realtime' WHERE `id` = '$th'");
+            // Обновляем статистику юзера
+            mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
+            // Вычисляем, на какую страницу попадает добавляемый пост
+            $page = $upfp ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
             //блок, фиксирующий факт прочтения топика
-            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='$th' AND `user_id`='$user_id'");
             if (mysql_result($req, 0) == 1)
             {
                 // Обновляем время метки о прочтении
-                mysql_query("UPDATE `cms_forum_rdm` SET `time`='" . $realtime . "' WHERE `topic_id`='" . $id . "' AND `user_id`='" . $user_id . "';");
+                mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id` = '$th' AND `user_id` = '$user_id'");
             } else
             {
                 // Ставим метку о прочтении
-                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id`='" . $id . "', `user_id`='" . $user_id . "', `time`='" . $realtime . "';");
+                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id` = '$th', `user_id` = '$user_id', `time` = '$realtime'");
             }
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1)
@@ -220,9 +218,6 @@ switch ($tip)
             }
         } else
         {
-            ////////////////////////////////////////////////////////////
-            // Добавление сообщения с цитированием                    //
-            ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
             $qt = " $type1[text]";
             if ($th1['edit'] == 1)
@@ -246,7 +241,7 @@ switch ($tip)
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
             $qt = htmlentities($qt, ENT_QUOTES, 'UTF-8');
-            echo '<form action="?act=say&amp;id=' . $id . '&amp;cyt" method="post" enctype="multipart/form-data">';
+            echo '<form action="?act=say&amp;id=' . $id . '&amp;start=' . $start . '&amp;cyt" method="post" enctype="multipart/form-data">';
             if (isset($_GET['cyt']))
             {
                 echo '<div class="menu"><b>Автор:</b> ' . $type1['from'] . '</div>';
@@ -278,7 +273,7 @@ switch ($tip)
             echo '<input type="submit" name="submit" value="Отправить"/></div></form>';
         }
         echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
-        echo '<p><a href="?id=' . $type1['refid'] . '">Назад</a></p>';
+        echo '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . $start . '">Назад</a></p>';
         break;
 
     default:
