@@ -19,9 +19,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once ('../incfiles/head.php');
 if (!$id)
 {
-	echo '<div class="rmenu">ОШИБКА!<br /><a href="index.php">В форум</a></div>';
-	require_once ('../incfiles/end.php');
-	exit;
+    echo '<div class="rmenu">ОШИБКА!<br /><a href="index.php">В форум</a></div>';
+    require_once ('../incfiles/end.php');
+    exit;
 }
 
 $do = isset($_GET['do']) ? trim($_GET['do']) : '';
@@ -36,6 +36,12 @@ switch ($do)
     case 'set':
         $users = isset($_POST['users']) ? $_POST['users']:
         '';
+        if (empty($_POST['users']))
+        {
+            echo '<div class="rmenu"><p>Вы не выбрали ни одного автора<br /><a href="index.php?act=filter&amp;id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
+            require_once ('../incfiles/end.php');
+            exit;
+        }
         $array = array();
         foreach ($users as $val)
         {
@@ -54,7 +60,7 @@ switch ($do)
         $total = mysql_num_rows($req);
         if ($total > 0)
         {
-            echo '<form action="index.php?act=filter&amp;id=' . $id . '&amp;do=set" method="post">';
+            echo '<form action="index.php?act=filter&amp;id=' . $id . '&amp;start=' . $start . '&amp;do=set" method="post">';
             echo '<div class="phdr">Фильтрация постов</div>';
             while ($res = mysql_fetch_array($req))
             {

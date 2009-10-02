@@ -76,6 +76,12 @@ switch ($tip)
                     exit;
                 }
             }
+            // Удаляем фильтр, если он был
+            if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $id)
+            {
+                unset($_SESSION['fsort_id']);
+                unset($_SESSION['fsort_users']);
+            }
             // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
 			`refid` = '$id',
@@ -120,6 +126,8 @@ switch ($tip)
                 }
             }
             echo '<div class="phdr">Тема: <b>' . $type1['text'] . '</b></div>';
+            if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $id)
+                echo '<div class="rmenu">Фильтр по авторам постов будет выключен после написания сообщения</div>';
             echo '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post" enctype="multipart/form-data">';
             echo '<div class="gmenu"><b>Сообщение:</b><br /><textarea cols="24" rows="4" title="Введите текст сообщения" name="msg"></textarea><br />';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
@@ -180,6 +188,12 @@ switch ($tip)
                 $txt = trim($_POST['txt']);
                 $msg = $txt . ' ' . $msg;
             }
+            // Удаляем фильтр, если он был
+            if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $th)
+            {
+                unset($_SESSION['fsort_id']);
+                unset($_SESSION['fsort_users']);
+            }
             // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
 			`refid` = '$th',
@@ -238,6 +252,8 @@ switch ($tip)
                 }
             }
             echo '<div class="phdr">Тема: <b>' . $th1['text'] . '</b></div>';
+            if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $th)
+                echo '<div class="rmenu">Фильтр по авторам постов будет выключен после написания сообщения</div>';
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
             $qt = htmlentities($qt, ENT_QUOTES, 'UTF-8');
