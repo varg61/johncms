@@ -20,6 +20,8 @@ $textl = 'Форум-новые';
 $headmod = "forums";
 require_once ("../incfiles/head.php");
 echo '<p><a href="index.php">Вернуться в форум</a></p>';
+unset($_SESSION['fsort_id']);
+unset($_SESSION['fsort_users']);
 if (empty($_SESSION['uid']))
 {
     if (isset($_GET['newup']))
@@ -203,7 +205,7 @@ if ($user_id)
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-					$colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm == 1 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm == 1 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
                     $nick = mysql_fetch_array($colmes);
                     if ($res['edit'] == 1)
@@ -252,7 +254,7 @@ if ($user_id)
     // Вывод непрочитанных тем (для незарегистрированных)     //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr"><b>Последние 10 тем</b></div>';
-	$req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close`!='1' ORDER BY `time` DESC LIMIT 10");
+    $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close`!='1' ORDER BY `time` DESC LIMIT 10");
     while ($arr = mysql_fetch_array($req))
     {
         $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "'");

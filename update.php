@@ -119,10 +119,16 @@ switch ($do)
         }
         echo '<span class="green">OK</span> таблица `cms_settings` обновлена.<br />';
         // Таблицы форума
+        mysql_query("ALTER TABLE `forum` ADD `user_id` INT NOT NULL AFTER `time`");
+        mysql_query("ALTER TABLE `forum` ADD INDEX ( `user_id` )");
         mysql_query("ALTER TABLE `forum` CHANGE `close` `close` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` CHANGE `vip` `vip` TINYINT( 1 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `forum` DROP `moder`");
         mysql_query("ALTER TABLE `forum` DROP INDEX `moder`");
+        mysql_query("ALTER TABLE `forum` DROP `to`");
+        mysql_query("ALTER TABLE `forum` DROP INDEX `to`");
+        mysql_query("ALTER TABLE `forum` DROP INDEX `from`");
+        mysql_query("TRUNCATE TABLE `cms_forum_rdm`");
         echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
         mysql_query("CREATE TABLE IF NOT EXISTS `cms_forum_files` (
         `id` int(11) NOT NULL auto_increment,
@@ -234,11 +240,34 @@ switch ($do)
         echo '<span class="green">OK</span> старые данные удалены.<br />';
         mysql_query("OPTIMIZE TABLE `forum`");
         echo '<span class="green">OK</span> таблица оптимизирована.<br />';
+        echo '<hr /><a href="update.php?do=step5">Продолжить</a>';
+        break;
+
+    case 'step5':
+        echo '<h2>Конвертирование User ID</h2>';
+        // Временно ставим индекс
+        mysql_query("ALTER TABLE `users` ADD INDEX ( `name` )");
+        // Прописываем user_id в форуме
+        $req = mysql_query("SELECT `forum`.`id`, `forum`.`from`, `users`.`id` AS `uid`
+		FROM `forum` LEFT JOIN `users` ON `forum`.`from` = `users`.`name`
+		WHERE `forum`.`type` = 't' OR `forum`.`type` = 'm'");
+        while ($res = mysql_fetch_array($req))
+        {
+            mysql_query("UPDATE `forum` SET `user_id` = '" . $res['uid'] . "' WHERE `id` = '" . $res['id'] . "' LIMIT 1");
+        }
+        echo '<span class="green">OK</span> форум готов<br />';
+        // Убираем временный индекс
+        mysql_query("ALTER TABLE `users` DROP INDEX `name`");
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
     case 'final':
-        echo '<b><span class="green">Поздравляем!</span></b><br />Процедура обновления успешно завершена.<br />Не забудьте удалить файл /update.php';
+        echo '<h2 class="green">Поздравляем!</h2>Процедура обновления успешно завершена.<br /><br /><h2 class="red">Не забудьте удалить!!!</h2>';
+        echo '<div>/update.php</div>';
+        echo '<div>/forum/fmoder.php</div>';
+        echo '<div>/sm <small>(Удаляем весь каталог). Если были нужные смайлы, то перенесите в новый каталог) Если вы добавляли новые смайлы, то не забудьте через админку "Обновить кэш смайлов"</small></div>';
+        echo '<div></div>';
+        echo '<div></div>';
         echo '<hr /><a href="../../index.php">На сайт</a>';
         break;
 
