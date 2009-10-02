@@ -349,6 +349,7 @@ function tags($var = '')
     $var = preg_replace('#\[red\](.*?)\[/red\]#si', '<span style="color:red">\1</span>', $var);
     $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
+    $var = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $var);
     $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'url_replace', $var);
     return $var;
 }
@@ -368,13 +369,7 @@ function url_replace($m)
 // Вырезание BBcode тэгов из текста
 function notags($var = '')
 {
-    $var = preg_replace('#\[b\](.*?)\[/b\]#si', '\1', $var);
-    $var = preg_replace('#\[i\](.*?)\[/i\]#si', '\1', $var);
-    $var = preg_replace('#\[u\](.*?)\[/u\]#si', '\1', $var);
-    $var = preg_replace('#\[s\](.*?)\[/s\]#si', '\1', $var);
-    $var = preg_replace('#\[red\](.*?)\[/red\]#si', '\1', $var);
-    $var = preg_replace('#\[green\](.*?)\[/green\]#si', '\1', $var);
-    $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '\1', $var);
+    $var = strtr($var, array('[green]' => '', '[/green]' => '', '[red]' => '', '[/red]' => '', '[blue]' => '', '[/blue]' => '', '[b]' => '', '[/b]' => '', '[i]' => '', '[/i]' => '', '[u]' => '', '[/u]' => '', '[s]' => '', '[/s]' => '', '[c]' => '', '[/c]' => ''));
     return $var;
 }
 

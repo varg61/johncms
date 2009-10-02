@@ -88,7 +88,7 @@ if ($user_id)
 	`browser`='$agn',
 	`time`='$realtime',
 	`where`='$where',
-	`name`='$login';");
+	`name`='$login'");
 }
 
 $do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel', 'files', 'filter');
@@ -124,10 +124,8 @@ if (in_array($act, $do))
                 ////////////////////////////////////////////////////////////
                 // Список Подразделов форума                              //
                 ////////////////////////////////////////////////////////////
-
                 // Ссылка на Новые темы
                 echo '<p><a href="index.php?act=new">' . ($user_id ? 'Непрочитанное&nbsp;(' . forum_new() . ')' : 'Последние 10 тем') . '</a></p>';
-
                 // Панель навигации
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
@@ -148,6 +146,8 @@ if (in_array($act, $do))
                     ++$i;
                 }
                 echo '<div class="phdr">Всего: ' . $total . '</div>';
+                unset($_SESSION['fsort_id']);
+                unset($_SESSION['fsort_users']);
                 break;
 
             case "r":
@@ -218,6 +218,8 @@ if (in_array($act, $do))
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $coltem, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
                 }
+                unset($_SESSION['fsort_id']);
+                unset($_SESSION['fsort_users']);
                 break;
 
             case "t":
@@ -275,11 +277,11 @@ if (in_array($act, $do))
                 {
                     $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 }
+                // Панель навигации
                 $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1");
                 $razd = mysql_fetch_array($q3);
                 $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1");
                 $frm = mysql_fetch_array($q4);
-                // Панель навигации
                 echo '<div class="gmenu">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>';
                 echo '</div>';
@@ -339,7 +341,7 @@ if (in_array($act, $do))
                         echo '<b>' . $res['from'] . '</b>';
                     }
                     // Метка должности
-                    switch ($mass1['rights'])
+                    switch ($res['rights'])
                     {
                         case 7:
                             echo " Adm ";
@@ -376,7 +378,7 @@ if (in_array($act, $do))
                         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         $text = nl2br($text);
-                        $text = tags($text);
+                        $text = notags($text);
                         echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
                     } else
                     {
@@ -385,13 +387,11 @@ if (in_array($act, $do))
                         //TODO: Переделать с ников Суперадминов, на их ID
                         if ($offsm != 1)
                             $text = smileys($text, ($res['from'] == $nickadmina || $res['from'] == $nickadmina2 || $res['rights'] >= 1) ? 1 : 0);
-                        $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         $text = nl2br($text);
                         $text = tags($text);
                         echo $text;
                     }
-                    if ($res['kedit'] > 0) //TODO: Доработать
-
+                    if ($res['kedit'] > 0)
                     {
                         $diz = $res['tedit'] + $sdvig * 3600;
                         $dizm = date("d.m /H:i", $diz);
@@ -439,7 +439,7 @@ if (in_array($act, $do))
                     echo '<input type="submit" value="Удалить отмеченные"/>';
                     echo '</form>';
                 }
-                echo '<div id="down"><a href="#up">Вверх</a></div>'; //TODO: Разобраться с якорями
+                echo '<div><a name="down" id="down"></a><a href="#up">Вверх</a></div>';
                 if ($dostadm || ($type1['edit'] != 1 && $user_id && $upfp != 1 && !$ban['1'] && !$ban['11']))
                 {
                     if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
@@ -509,6 +509,8 @@ if (in_array($act, $do))
             ++$i;
         }
         echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&nbsp;(' . wfrm() . ')</div>';
+        unset($_SESSION['fsort_id']);
+        unset($_SESSION['fsort_users']);
     }
 
     ////////////////////////////////////////////////////////////
