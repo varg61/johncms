@@ -31,6 +31,36 @@ if ($lastpost > ($realtime - $old))
     exit;
 }
 
+//вспомогательная функция для обработки ссылок (AlkatraZ, FlySelf)
+function forum_link($m)
+{
+    global $home;
+    if (!isset($m[3]))
+    {
+        return '[url=' . $m[1] . ']' . $m[2] . '[/url]';
+    } else
+    {
+        $p = parse_url($m[3]);
+        if ('http://' . $p['host'] . $p['path'] . '?id=' == $home . '/forum/index.php?id=')
+        {
+            $thid = abs(intval(preg_replace('/(.*?)id=/si', '', $m[3])));
+            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
+            if (mysql_num_rows($req) > 0)
+            {
+                $res = mysql_fetch_array($req);
+                $name = $res['text'];
+                if (mb_strlen($name) > 30)
+                    $name = mb_substr($name, 0, 30) . '...';
+                return '[url=' . $m[3] . ']' . $name . '[/url]';
+            } else
+            {
+                return $m[3];
+            }
+        } else
+            return $m[3];
+    }
+}
+
 $agn1 = strtok($agn, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
@@ -82,6 +112,8 @@ switch ($tip)
                 unset($_SESSION['fsort_id']);
                 unset($_SESSION['fsort_users']);
             }
+            //Обрабатываем ссылки
+            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
             // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
 			`refid` = '$id',
@@ -194,6 +226,8 @@ switch ($tip)
                 unset($_SESSION['fsort_id']);
                 unset($_SESSION['fsort_users']);
             }
+            //Обрабатываем ссылки
+            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
             // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
 			`refid` = '$th',
