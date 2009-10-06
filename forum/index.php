@@ -325,10 +325,8 @@ if (in_array($act, $do))
                 while ($res = mysql_fetch_array($req))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                    echo $res['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $skin . '/images/add.gif" alt=""/>&nbsp;' : '';
-                    // Значок пола
                     if ($res['sex'])
-                        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
+                        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
                     else
                         echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
                     // Ник юзера и ссылка на его анкету
@@ -379,7 +377,7 @@ if (in_array($act, $do))
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         $text = nl2br($text);
                         $text = notags($text);
-                        echo $text . '...<br /><a href="index.php?act=post&amp;s=' . $page . '&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
+                        echo $text . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
                     } else
                     {
                         // Или, обрабатываем тэги и выводим весь текст

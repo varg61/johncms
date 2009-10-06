@@ -24,25 +24,21 @@ echo '<div class="phdr">Список пользователей</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0); // Общее число зареганных юзеров
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT " . $start . "," . $kmess);
-while ($arr = mysql_fetch_array($req))
+while ($res = mysql_fetch_array($req))
 {
     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-    echo $arr['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
-    if ($arr['sex'] == "m")
+    if ($res['sex'])
+        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+    else
+        echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
+    if (!$user_id || $user_id == $res['id'])
     {
-        echo '<img src="../images/m.gif" alt=""/>&nbsp;';
-    } elseif ($arr['sex'] == "zh")
-    {
-        echo '<img src="../images/f.gif" alt=""/>&nbsp;';
-    }
-    if (empty($_SESSION['uid']) || $_SESSION['uid'] == $arr['id'])
-    {
-        print '<b>' . $arr['name'] . '</b>';
+        print '<b>' . $res['name'] . '</b>';
     } else
     {
-        print "<a href='anketa.php?user=" . $arr['id'] . "'>$arr[name]</a>";
+        print "<a href='anketa.php?user=" . $res['id'] . "'>$res[name]</a>";
     }
-    switch ($arr['rights'])
+    switch ($res['rights'])
     {
         case 7:
             echo ' Adm ';
@@ -66,14 +62,14 @@ while ($arr = mysql_fetch_array($req))
             echo ' Kil ';
             break;
     }
-    $ontime = $arr['lastdate'];
+    $ontime = $res['lastdate'];
     $ontime2 = $ontime + 300;
     if ($realtime > $ontime2)
     {
-        echo '<font color="#FF0000"> [Off]</font><br/>';
+        echo '<span class="red"> [Off]</span><br/>';
     } else
     {
-        echo '<font color="#00AA00"> [ON]</font><br/>';
+        echo '<span class="green"> [ON]</span><br/>';
     }
     echo '</div>';
     ++$i;

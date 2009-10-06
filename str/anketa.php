@@ -476,12 +476,13 @@ if ($user_id)
     ////////////////////////////////////////////////////////////
     if ($act == "")
     {
-        echo '<div class="phdr">Анкета</div>';
+        echo '<div class="phdr">Анкета</div><div class="menu">';
         if ($arr['dayb'] == $day && $arr['monthb'] == $mon)
         {
             echo '<div class="gmenu">ИМЕНИНЫ!!!</div>';
         }
-        echo '<div class="menu"><img src="../images/' . ($arr['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""/>&nbsp;<b>' . $arr['name'] . '</b> (id: ' . $arr['id'] . ')';
+        echo '<img src="../theme/' . $skin . '/images/' . ($arr['sex'] == 'm' ? 'm' : 'f') . ($arr['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+        echo '<b>' . $arr['name'] . '</b> (id: ' . $arr['id'] . ')';
         $ontime = $arr['lastdate'];
         $ontime2 = $ontime + 300;
         $preg = $arr['preg'];

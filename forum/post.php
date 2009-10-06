@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                                                                    //
@@ -23,35 +24,62 @@ if (empty($_GET['id']))
     exit;
 }
 $s = intval($_GET['s']);
-$typ = mysql_query("SELECT * FROM `forum` WHERE `id`='" . $id . "';");
-$ms = mysql_fetch_array($typ);
-if ($ms['type'] != "m")
+// Запрос сообщения
+$req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
+FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
+WHERE `forum`.`type` = 'm' AND `forum`.`id` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . " LIMIT 1");
+$res = mysql_fetch_array($req);
+
+// Запрос темы
+$them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
+echo '<div class="phdr"><b>Тема:</b> ' . $them['text'] . '</div><div class="menu">';
+echo $res['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $skin . '/images/add.gif" alt=""/>&nbsp;' : '';
+// Значок пола
+if ($res['sex'])
+    echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
+else
+    echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
+// Ник юзера и ссылка на его анкету
+if ($user_id && $user_id != $res['user_id'])
 {
-    echo 'Ошибка!<br/><a href="?">В форум</a><br/>';
-    require_once ('../incfiles/end.php');
-    exit;
+    echo '<a href="../str/anketa.php?user=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
+    echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a>';
+} else
+{
+    echo '<b>' . $res['from'] . '</b>';
 }
-echo '<div class="menu"><b>' . $ms['from'] . '</b><br />';
-$text = htmlentities($ms['text'], ENT_QUOTES, 'UTF-8');
-$text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-$text = str_replace("\r\n", "<br/>", $text);
+// Метка должности
+switch ($res['rights'])
+{
+    case 7:
+        echo " Adm ";
+        break;
+    case 6:
+        echo " Smd ";
+        break;
+    case 3:
+        echo " Mod ";
+        break;
+    case 1:
+        echo " Kil ";
+        break;
+}
+// Метка Онлайн / Офлайн
+echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+// Время поста
+echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $sdvig * 3600) . ')</span><br/>';
+// Статус юзера
+if (!empty($res['status']))
+    echo '<div class="status"><img src="../theme/' . $skin . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
+$text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
+$text = nl2br($text);
 $text = tags($text);
-$uz = @mysql_query("select `id`, `from`, `rights` FROM `users` where name='" . $ms['from'] . "';");
-$mass1 = @mysql_fetch_array($uz);
 if ($offsm != 1)
-{
-    $text = smileys($text, ($ms['from'] == $nickadmina || $ms['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
-}
+    $text = smileys($text, ($res['rights'] >= 1) ? 1 : 0);
 echo $text . '</div>';
-$q5 = mysql_query("select * from `forum` where type='t' and id='" . $ms['refid'] . "';");
-$them = mysql_fetch_array($q5);
-$q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $them['refid'] . "';");
-$razd = mysql_fetch_array($q3);
-$q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "';");
-$frm = mysql_fetch_array($q4);
-echo "<div>&#187;<a href='index.php?id=" . $ms['refid'] . "&amp;page=" . $s . "'>$them[text]</a><br/>";
-echo "&#187;<a href='index.php?id=" . $type1['refid'] . "'>$razd[text]</a><br/>";
-echo "&#187;<a href='index.php?id=" . $razd['refid'] . "'>$frm[text]</a><br/>";
-echo "&#187;<a href='index.php?'>В форум</a></div>";
+// Вычисляем, на какой странице сообщение?
+$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '$id'"), 0) / $kmess);
+echo '<div class="phdr"><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">Вернуться в тему</a></div>';
+echo '<p><a href="index.php">В форум</a></p>';
 
 ?>

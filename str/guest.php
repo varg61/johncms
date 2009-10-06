@@ -337,11 +337,8 @@ switch ($act)
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                 if ($res['user_id'] != "0")
                 {
-                    // Значек нового юзера
-                    echo $res['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
-                    // Значок пола
-                    if ($res['uid'])
-                        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
+                    if ($res['sex'])
+                        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
                     else
                         echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
                     // Ник юзера и ссылка на Анкету

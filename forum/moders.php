@@ -22,25 +22,25 @@ if (empty($_GET['id']))
     $f = mysql_query("select * from `forum` where type='f'  order by realid;");
     while ($f1 = mysql_fetch_array($f))
     {
-        $mod = mysql_query("select * from `forum` where type='a' and refid='" . $f1[id] . "';");
+        $mod = mysql_query("select * from `forum` where type='a' and refid='" . $f1['id'] . "';");
         $mod2 = mysql_num_rows($mod);
         if ($mod2 != 0)
         {
             echo "$f1[text]<br/><br/>";
             while ($mod1 = mysql_fetch_array($mod))
             {
-                $uz = mysql_query("select * from `users` where name='" . $mod1[from] . "';");
+                $uz = mysql_query("select * from `users` where name='" . $mod1['from'] . "';");
                 $uz1 = mysql_fetch_array($uz);
-                if ($uz1[rights] == 3)
+                if ($uz1['rights'] == 3)
                 {
-                    if ((!empty($_SESSION['uid'])) && ($login != $mod1[from]))
+                    if ((!empty($_SESSION['uid'])) && ($login != $mod1['from']))
                     {
-                        echo "<a href='../str/anketa.php?user=" . $uz1[id] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
+                        echo "<a href='../str/anketa.php?user=" . $uz1['id'] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
                     } else
                     {
-                        echo "<font color='" . $csnik . "'>$mod1[from]</font>";
+                        echo $mod1['from'];
                     }
-                    $ontime = $uz1[lastdate];
+                    $ontime = $uz1['lastdate'];
                     $ontime2 = $ontime + 300;
                     if ($realtime > $ontime2)
                     {
@@ -56,28 +56,27 @@ if (empty($_GET['id']))
     }
 } else
 {
-    $id = intval(check($_GET['id']));
     $typ = mysql_query("select * from `forum` where id='" . $id . "';");
     $ms = mysql_fetch_array($typ);
-    switch ($ms[type])
+    switch ($ms['type'])
     {
         case "t":
-            $q3 = mysql_query("select * from `forum` where type='r' and id='" . $ms[refid] . "';");
+            $q3 = mysql_query("select * from `forum` where type='r' and id='" . $ms['refid'] . "';");
             $razd = mysql_fetch_array($q3);
-            $q4 = mysql_query("select * from `forum` where type='f' and id='" . $razd[refid] . "';");
+            $q4 = mysql_query("select * from `forum` where type='f' and id='" . $razd['refid'] . "';");
             $fr = mysql_fetch_array($q4);
-            $mid = $razd[refid];
-            $pfr = $fr[text];
+            $mid = $razd['refid'];
+            $pfr = $fr['text'];
             break;
         case "r":
-            $mid = $ms[refid];
-            $q3 = mysql_query("select * from `forum` where type='f' and id='" . $ms[refid] . "';");
+            $mid = $ms['refid'];
+            $q3 = mysql_query("select * from `forum` where type='f' and id='" . $ms['refid'] . "';");
             $fr = mysql_fetch_array($q3);
-            $pfr = $fr[text];
+            $pfr = $fr['text'];
             break;
         case "f":
             $mid = $id;
-            $pfr = $ms[text];
+            $pfr = $ms['text'];
             break;
         default:
             echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
@@ -92,32 +91,32 @@ if (empty($_GET['id']))
     {
         while ($mod1 = mysql_fetch_array($mod))
         {
-            $uz = mysql_query("select * from `users` where name='" . $mod1[from] . "';");
+            $uz = mysql_query("select * from `users` where name='" . $mod1['from'] . "';");
             $uz1 = mysql_fetch_array($uz);
-            if ($uz1[rights] == 3)
+            if ($uz1['rights'] == 3)
             {
-                if ((!empty($_SESSION['uid'])) && ($login != $mod1[from]))
+                if ((!empty($_SESSION['uid'])) && ($login != $mod1['from']))
                 {
-                    echo "<a href='../str/anketa.php?user=" . $uz1[id] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
+                    echo "<a href='../str/anketa.php?user=" . $uz1['id'] . "'>$mod1[from]</a>";
                 } else
                 {
-                    echo "<font color='" . $csnik . "'>$mod1[from]</font>";
+                    echo $mod1['from'];
                 }
-                $ontime = $uz1[lastdate];
+                $ontime = $uz1['lastdate'];
                 $ontime2 = $ontime + 300;
                 if ($realtime > $ontime2)
                 {
-                    echo "<font color='" . $coffs . "'> [Off]</font><br/>";
+                    echo '<span class="red"> [Off]</span><br/>';
                 } else
                 {
-                    echo "<font color='" . $cons . "'> [ON]</font><br/>";
+                    echo '<span class="green"> [ON]</span><br/>';
                 }
             }
         }
-        echo "<hr/>";
+        echo '<hr/>';
     } else
     {
-        echo "Не назначены<br/>";
+        echo 'Не назначены<br/>';
     }
 }
 echo "<a href='index.php?id=" . $id . "'>Назад</a><br/>";

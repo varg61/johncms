@@ -142,7 +142,8 @@ if ($do || isset($_GET['new']))
             $text = mb_substr($res['text'], 0, 200);
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
-            echo '<b><a href="index.php?id=' . $res['topic'] . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
+            $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
+            echo '<b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
             ++$i;
         }
         echo '<div class="phdr">Всего: ' . $total . '</div>';
