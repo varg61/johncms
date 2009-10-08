@@ -48,9 +48,9 @@ function forum_link($m)
             if (mysql_num_rows($req) > 0)
             {
                 $res = mysql_fetch_array($req);
-                $name = $res['text'];
-                if (mb_strlen($name) > 30)
-                    $name = mb_substr($name, 0, 30) . '...';
+                $name = strtr($res['text'], array('&quot;' => '', '&amp;' => '', '&lt;' => '', '&gt;' => '', '&#039;' => '', '[' => '', ']' => ''));
+                if (mb_strlen($name) > 40)
+                    $name = mb_substr($name, 0, 40) . '...';
                 return '[url=' . $m[3] . ']' . $name . '[/url]';
             } else
             {
