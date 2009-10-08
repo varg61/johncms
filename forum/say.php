@@ -180,6 +180,8 @@ switch ($tip)
         $th = $type1['refid'];
         $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
+        $vrp = $type1['time'] + $sdvig * 3600;
+        $vr = date("d.m.Y / H:i", $vrp);
         if (isset($_POST['submit']))
         {
             if (empty($_POST['msg']))
@@ -194,6 +196,37 @@ switch ($tip)
             {
                 $msg = trans($msg);
             }
+            $to = $type1['from'];
+            if (!empty($_POST['citata']))
+            {
+                // Если была цитата, форматируем ее и обрабатываем
+                $citata = trim($_POST['citata']);
+                $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
+                $citata = mb_substr($citata, 0, 200);
+                $tp = date("d.m.Y/H:i", $type1['time']);
+                $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
+            } elseif (isset($_POST['txt']))
+            {
+                // Если был ответ, обрабатываем реплику
+                $txt = intval($_POST['txt']);
+                switch ($txt)
+                {
+                    case 2:
+                        $repl = $type1['from'] . ', с удовольствием тебе отвечу, ';
+                        break;
+                    case 3:
+                        $repl = $type1['from'] . ', на твой пост ([url=' . $home . '/forum/index.php?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) отвечу, ';
+                        break;
+                    case 4:
+                        $repl = $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю! ';
+                        break;
+                    default:
+                        $repl = $type1['from'] . ', ';
+                }
+                $msg = $repl . ' ' . $msg;
+            }
+            //Обрабатываем ссылки
+            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
             // Проверяем, не повторяется ли сообщение?
             $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC");
             if (mysql_num_rows($req) > 0)
@@ -202,23 +235,10 @@ switch ($tip)
                 if ($msg == $res['text'])
                 {
                     require_once ('../incfiles/head.php');
-                    echo '<div class="rmenu"><p>АНТИФЛУД!<br />Такое сообщение уже было<br /><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
+                    echo '<div class="rmenu"><p>АНТИФЛУД!<br />Такое сообщение уже было<br /><a href="?id=' . $th . '&amp;start=' . $start . '">Назад</a></p></div>';
                     require_once ('../incfiles/end.php');
                     exit;
                 }
-            }
-            $to = $type1['from'];
-            if (!empty($_POST['citata']))
-            {
-                $citata = trim($_POST['citata']);
-                $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
-                $citata = mb_substr($citata, 0, 200);
-                $tp = date("d.m.Y/H:i", $type1['time']);
-                $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
-            } elseif (!empty($_POST['txt']))
-            {
-                $txt = trim($_POST['txt']);
-                $msg = $txt . ' ' . $msg;
             }
             // Удаляем фильтр, если он был
             if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $th)
@@ -226,8 +246,6 @@ switch ($tip)
                 unset($_SESSION['fsort_id']);
                 unset($_SESSION['fsort_users']);
             }
-            //Обрабатываем ссылки
-            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
             // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
 			`refid` = '$th',
@@ -268,12 +286,6 @@ switch ($tip)
         {
             require_once ("../incfiles/head.php");
             $qt = " $type1[text]";
-            if ($th1['edit'] == 1)
-            {
-                echo "Вы не можете писать в закрытую тему<br/><a href='?id=" . $th . "'>В тему</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
             if (($datauser['postforum'] == "" || $datauser['postforum'] == 0))
             {
                 if (!isset($_GET['yes']))
@@ -294,24 +306,20 @@ switch ($tip)
             echo '<form action="?act=say&amp;id=' . $id . '&amp;start=' . $start . '&amp;cyt" method="post" enctype="multipart/form-data">';
             if (isset($_GET['cyt']))
             {
+                // Форма с цитатой
                 echo '<div class="menu"><b>Автор:</b> ' . $type1['from'] . '</div>';
                 echo '<div class="menu"><b>Цитата:</b><br/><textarea cols="24" rows="4" name="citata">' . $qt . '</textarea>';
                 echo '<br /><small>Допустимо макс. 200 символов.<br />Весь лишний текст обрезается.</small></div>';
             } else
             {
+                // Форма с репликой
                 echo '<div class="menu"><b>Кому:</b> ' . $type1['from'] . '</div>';
-                echo '<div class="menu">Выберите вариант обращения:';
-                echo '<br /><input type="radio" value="' . $type1['from'] . ', " checked="checked" name="txt" />';
-                echo '&nbsp;' . $type1['from'] . ',';
-                $vrp = $type1['time'] + $sdvig * 3600;
-                $vr = date("d.m.Y / H:i", $vrp);
-                echo '<br /><input type="radio" value="' . $type1['from'] . ', с удовольствием тебе отвечу," name="txt" />';
-                echo '&nbsp;' . $type1['from'] . ', с удовольствием тебе отвечу,';
-                echo '<br /><input type="radio" value="' . $type1['from'] . ', на твой пост (' . $vr . ') отвечаю," name="txt" />';
-                echo '&nbsp;' . $type1['from'] . ', на твой пост (' . $vr . ') отвечаю,';
-                echo '<br /><input type="radio" value="' . $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю!" name="txt" />';
-                echo '&nbsp;' . $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю!';
-                echo '<br /><small>Выбранный текст будет вставлен перед Вашим текстом, который Вы напишите ниже.</small>';
+                echo '<div class="menu">Выберите вариант обращения:<br />';
+                echo '<input type="radio" value="1" checked="checked" name="txt" />&nbsp;' . $type1['from'] . ',<br />';
+                echo '<input type="radio" value="2" name="txt" />&nbsp;' . $type1['from'] . ', с удовольствием тебе отвечу,<br />';
+                echo '<input type="radio" value="3" name="txt" />&nbsp;' . $type1['from'] . ', на твой пост (<a href="index.php?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) отвечу,<br />';
+                echo '<input type="radio" value="4" name="txt" />&nbsp;' . $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю!<br />';
+                echo '<small>Выбранный текст будет вставлен перед Вашим текстом, который Вы напишите ниже.</small>';
                 echo '</div>';
             }
             echo '<div class="gmenu"><b>Сообщение:</b><br/><textarea cols="24" rows="4" name="msg"></textarea><br/>';

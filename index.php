@@ -69,7 +69,7 @@ switch ($mod)
         echo '<div class="menu"><a href="str/anketa.php">Ваша анкета</a></div>';
         echo '<div class="menu"><a href="str/anketa.php?act=statistic">Статистика</a></div>';
         echo '<div class="menu"><a href="str/usset.php">Настройки</a></div>';
-        if ($dostmod == 1)
+        if ($dostmod)
             echo '<div class="menu">Админка <a href="' . $admp . '/main.php">&gt;&gt;&gt;</a></div>';
         echo '<div class="bmenu"><a href="index.php?mod=digest">Новое на сайте</a></div>';
         break;
@@ -111,24 +111,20 @@ switch ($mod)
                     echo 'Новых событий нет';
                 echo '</ul></div>';
             }
+            // Дайджест юзеров
             echo '<div class="bmenu">Новое на сайте</div><div class="menu"><ul>';
-            // Новости
             $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
             if ($total_news > 0)
                 echo '<li><a href="str/news.php">Новости</a> (' . $total_news . ')</li>';
-            // Форум
             $total_forum = forum_new();
             if ($total_forum > 0)
                 echo '<li><a href="forum/index.php?act=new">Форум</a> (' . $total_forum . ')</li>';
-            // Гостевая
             $total_guest = gbook(1);
             if ($total_guest > 0)
                 echo '<li><a href="str/guest.php?act=ga">Гостевая</a> (' . $total_guest . ')</li>';
-            // Галерея
             $total_gal = fgal(1);
             if ($total_gal > 0)
                 echo '<li><a href="gallery/index.php?act=new">Галерея</a> (' . $total_gal . ')</li>';
-            // Библиотека
             $old = $realtime - (3 * 24 * 3600);
             $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . $old), 0);
             if ($total_lib > 0)
