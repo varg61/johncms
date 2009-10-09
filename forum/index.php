@@ -315,10 +315,7 @@ if (in_array($act, $do))
                 }
                 if ($dostfmod == 1)
                     echo '<form action="index.php?act=massdel" method="post">';
-
-                ////////////////////////////////////////////////////////////
-                // Запросы
-                ////////////////////////////////////////////////////////////
+                // Запрос в базу
                 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 				FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
 				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`time` $order LIMIT $start, $kmess");
@@ -333,27 +330,14 @@ if (in_array($act, $do))
                     if ($user_id && $user_id != $res['user_id'])
                     {
                         echo '<a href="../str/anketa.php?user=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
-                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a>';
+                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a> ';
                     } else
                     {
-                        echo '<b>' . $res['from'] . '</b>';
+                        echo '<b>' . $res['from'] . '</b> ';
                     }
                     // Метка должности
-                    switch ($res['rights'])
-                    {
-                        case 7:
-                            echo " Adm ";
-                            break;
-                        case 6:
-                            echo " Smd ";
-                            break;
-                        case 3:
-                            echo " Mod ";
-                            break;
-                        case 1:
-                            echo " Kil ";
-                            break;
-                    }
+                    $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
+                    echo $user_rights[$res['rights']];
                     // Метка Онлайн / Офлайн
                     echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
                     // Время поста
@@ -382,9 +366,8 @@ if (in_array($act, $do))
                     {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-                        //TODO: Переделать с ников Суперадминов, на их ID
                         if ($offsm != 1)
-                            $text = smileys($text, ($res['from'] == $nickadmina || $res['from'] == $nickadmina2 || $res['rights'] >= 1) ? 1 : 0);
+                            $text = smileys($text, $res['rights'] ? 1 : 0);
                         $text = nl2br($text);
                         $text = tags($text);
                         echo $text;
@@ -400,14 +383,10 @@ if (in_array($act, $do))
                     if (mysql_num_rows($freq) > 0)
                     {
                         $fres = mysql_fetch_array($freq);
-                        $fls = filesize('./files/' . $fres['filename']);
-                        $fls = round($fls / 1024, 2);
-                        echo "<br /><font color='#999999'>Прикреплённый файл:<br /><a href='index.php?act=file&amp;id=" . $fres['id'] . "'>$fres[filename]</a> ($fls кб.)<br/>";
-                        echo 'Скачано: ' . $fres['dlcount'] . ' раз.</font>';
+                        $fls = round(filesize('./files/' . $fres['filename']) / 1024, 2);
+                        echo '<br /><span class="gray">Прикреплённый файл:<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a> (' . $fls . ' кб.)<br/>';
+                        echo 'Скачано: ' . $fres['dlcount'] . ' раз.</span>';
                     }
-                    $lp = mysql_query("select `from`, `id` from `forum` where type='m' and refid='" . $id . "'  order by time desc LIMIT 1;");
-                    $arr1 = mysql_fetch_array($lp);
-                    $tpp = $realtime - 300;
                     if ($dostfmod || (($arr1['from'] == $login) && ($arr1['id'] == $res['id']) && ($res['time'] > $tpp)))
                     {
                         //TODO: Разобраться с алгоритмом, по возможности исключить лишний запрос к базе
@@ -431,8 +410,16 @@ if (in_array($act, $do))
                     echo '</div>';
                     ++$i;
                 }
+                if (!$dostfmod && $tip == 't')
+                {
+                    // Изменение последнего поста для обычного юзера
+                    $lp = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm' AND `refid` = '$id' ORDER BY `time` DESC LIMIT 1");
+                    $arr1 = mysql_fetch_array($lp);
+                    if ($arr1['user_id'] == $user_id && $arr1['time'] > ($realtime - 300))
+                        echo (is_integer($i / 2) ? '<div class="list2">' : '<div class="list1">') . '<a href="index.php?act=editpost&amp;id=' . $arr1['id'] . '&amp;start=' . $start . '">Изменить</a></div>';
+                }
                 echo '<div class="phdr">Всего сообщений: ' . $colmes . '</div>';
-                if ($dostfmod == 1)
+                if ($dostfmod)
                 {
                     echo '<input type="submit" value="Удалить отмеченные"/>';
                     echo '</form>';
@@ -458,6 +445,9 @@ if (in_array($act, $do))
                 {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                } else
+                {
+                    echo '<br />';
                 }
                 if ($dostfmod == 1)
                 {
