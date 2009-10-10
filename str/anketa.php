@@ -443,7 +443,7 @@ if ($user_id)
                 echo '<div class="menu"><a href="anketa.php?act=name">Имя:</a> ' . $arr['imname'] . '</div>';
                 echo '<div class="menu"><a href="anketa.php?act=dr">Дата рождения:</a> ' . $arr['dayb'] . ' ' . $mesyac[$arr['monthb']] . ' ' . $arr['yearofbirth'] . '</div>';
                 echo '<div class="menu"><a href="anketa.php?act=gor">Город:</a> ' . $arr['live'] . '</div>';
-                echo '<div class="menu"><a href="anketa.php?act=inf">О себе:</a> ' . $arr['about'] . '</div>';
+                echo '<div class="menu"><a href="anketa.php?act=inf">О себе:</a> ' . smileys(tags($arr['about'])) . '</div>';
                 echo '<div class="bmenu">Связь</div>';
                 echo '<div class="menu"><a href="anketa.php?act=icq">ICQ:</a> ' . $arr['icq'] . '</div>';
                 echo '<div class="menu"><a href="anketa.php?act=skype">Skype:</a> ' . $arr['skype'] . '</div>';
@@ -550,7 +550,7 @@ if ($user_id)
         }
         if (!empty($arr['about']))
         {
-            echo '<div class="menu"><u>О себе</u>: ' . $arr['about'] . '</div>';
+            echo '<div class="menu"><u>О себе</u>: ' . smileys(tags($arr['about'])) . '</div>';
         }
         $req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $arr['name'] . "' LIMIT 1;");
         if (mysql_num_rows($req) == 1)

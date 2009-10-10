@@ -109,24 +109,12 @@ function forum_new()
     global $dostadm;
     if ($user_id)
     {
-        if ($dostadm)
-        {
-            $req = mysql_query("SELECT COUNT(*) FROM `forum`
-			LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
-			WHERE `forum`.`type`='t'
-			AND (`cms_forum_rdm`.`topic_id` Is Null
-			OR `forum`.`time` > `cms_forum_rdm`.`time`)");
-            return mysql_result($req, 0);
-        } else
-        {
-            $req = mysql_query("SELECT COUNT(*) FROM `forum`
-			LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
-			WHERE `forum`.`type`='t'
-			AND `close`!='1'
-			AND (`cms_forum_rdm`.`topic_id` Is Null
-			OR `forum`.`time` > `cms_forum_rdm`.`time`)");
-            return mysql_result($req, 0);
-        }
+        $req = mysql_query("SELECT COUNT(*) FROM `forum`
+        LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
+        WHERE `forum`.`type`='t'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . "
+        AND (`cms_forum_rdm`.`topic_id` Is Null
+        OR `forum`.`time` > `cms_forum_rdm`.`time`)");
+        return mysql_result($req, 0);
     } else
     {
         return false;
@@ -178,7 +166,7 @@ function wfrm($id = '')
     $qf = mysql_query("select * from `users` where  lastdate > '" . $onltime . "'");
     while ($arrf = mysql_fetch_array($qf))
     {
-        $whf = mysql_query("select * from `count` where name='" . $arrf['name'] . "' order by time desc ;");
+        $whf = mysql_query("SELECT * FROM `count` WHERE `name` = '" . $arrf['name'] . "' ORDER BY `time` DESC");
         while ($whf1 = mysql_fetch_array($whf))
         {
             $whf2[] = $whf1['where'];
@@ -369,7 +357,8 @@ function url_replace($m)
 // Вырезание BBcode тэгов из текста
 function notags($var = '')
 {
-    $var = strtr($var, array('[green]' => '', '[/green]' => '', '[red]' => '', '[/red]' => '', '[blue]' => '', '[/blue]' => '', '[b]' => '', '[/b]' => '', '[i]' => '', '[/i]' => '', '[u]' => '', '[/u]' => '', '[s]' => '', '[/s]' => '', '[c]' => '', '[/c]' => ''));
+    $var = strtr($var, array('[green]' => '', '[/green]' => '', '[red]' => '', '[/red]' => '', '[blue]' => '', '[/blue]' => '', '[b]' => '', '[/b]' => '', '[i]' => '', '[/i]' => '', '[u]' => '', '[/u]' => '', '[s]' => '', '[/s]' => '', '[c]' =>
+        '', '[/c]' => ''));
     return $var;
 }
 
