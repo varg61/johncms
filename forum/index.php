@@ -280,15 +280,12 @@ if (in_array($act, $do))
                 echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
                 echo '<div class="phdr"><a href="#down"><img src="../theme/' . $skin . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
-                if ($type1['edit'] == 1)
-                {
-                    echo '<b><span class="red">Тема закрыта</span></b><br/>';
-                } elseif ($type1['close'] == 1)
-                {
-                    echo '<b><span class="red">Тема удалена</span></b><br/>';
-                }
+                if ($type1['close'])
+                    echo '<div class="rmenu"><b>Тема удалена</b></div>';
+                if ($type1['edit'])
+                    echo '<div class="rmenu">Тема закрыта</div>';
                 // Фиксация первого поста в теме
-                if ($datauser['postclip'] && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0))
+                if (($datauser['postclip'] && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset($_GET['clip']))
                 {
                     $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`

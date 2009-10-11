@@ -94,7 +94,7 @@ if ($user_id)
                 }
                 echo '</select></div>';
                 echo '<div class="menu"><input type="submit" name="submit" value="Запомнить"/></div></form>';
-                echo '<div class="bmenu"><a href="usset.php">Меню настроек</a></div>';
+                echo '<div class="phdr"><a href="usset.php">Меню настроек</a></div>';
             }
             break;
 
@@ -116,8 +116,8 @@ if ($user_id)
             echo '<input name="farea" type="checkbox" value="1" ' . ($datauser['farea'] ? 'checked="checked"' : '') . ' />&nbsp;Поле ввода<br/>';
             echo '<input name="postclip" type="checkbox" value="1" ' . ($datauser['postclip'] ? 'checked="checked"' : '') . ' />&nbsp;Закреплять 1-й пост<br/>';
             echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-            echo '<div class="gmenu"><a href="../forum">В форум</a></div>';
-            echo '<div class="bmenu"><a href="usset.php">Меню настроек</a></div>';
+            echo '<div class="phdr"><a href="usset.php">Меню настроек</a></div>';
+            echo '<p><a href="../forum">В форум</a></p>';
             break;
 
         case "chat":
@@ -166,23 +166,7 @@ if ($user_id)
                 echo '<form action="usset.php?act=chat" method="post">';
                 echo '<div class="menu"><input type="text" name="refresh" size="3" maxlength="3" value="' . $datauser['timererfesh'] . '"/> Обновление (сек.)</div>';
                 echo '<div class="menu"><input type="text" name="chmess" size="3" maxlength="3" value="' . $datauser['chmes'] . '"/> Постов на странице</div>';
-                echo '<div class="menu">Поле ввода:<br/>';
-                if ($datauser['carea'] == "1")
-                {
-                    echo "<input name='charea' type='radio' value='1' checked='checked'/>";
-                } else
-                {
-                    echo "<input name='charea' type='radio' value='1' />";
-                }
-                echo ' Вкл.<br />';
-                if ($datauser['carea'] == "0")
-                {
-                    echo "<input name='charea' type='radio' value='0' checked='checked' />";
-                } else
-                {
-                    echo "<input name='charea' type='radio' value='0'/>";
-                }
-                echo ' Выкл.</div>';
+                echo '<div class="menu"><input name="charea" type="checkbox" value="1" ' . ($datauser['carea'] ? 'checked="checked"' : '') . ' />&nbsp;Поле ввода</div>';
                 echo '<div class="menu">Выберите настроение:<br/><select name="nastr">';
                 if (!empty($datauser['nastroy']))
                 {
@@ -208,8 +192,8 @@ if ($user_id)
                     echo "Или укажите свое:<br/><input type='text' name='snas' value='" . $nastroy1 . "'/><br/>";
                 }
                 echo '</div><div class="menu"><input type="submit" name="submit" value="Сохранить"/></div></form>';
-                echo '<div class="gmenu"><a href="../chat">В чат</a></div>';
-                echo '<div class="bmenu"><a href="usset.php">Меню настроек</a></div>';
+                echo '<div class="phdr"><a href="usset.php">Меню настроек</a></div>';
+                echo '<p><a href="../chat">В чат</a></p>';
             }
             break;
 
@@ -218,7 +202,7 @@ if ($user_id)
             echo '<div class="menu"><a href="usset.php?act=all">Общие</a><br /><small>Данные настройки влияют на весь сайт и его модули.</small></div>';
             echo '<div class="menu"><a href="usset.php?act=forum">Форум</a><br /><small>Настройка отображения информации на Форуме.</small></div>';
             echo '<div class="menu"><a href="usset.php?act=chat">Чат</a><br /><small>Индивидуальная настройка Чата.</small></div>';
-            echo '<div class="bmenu"><a href="../index.php?mod=cab">В кабинет</a></div>';
+            echo '<div class="phdr"><a href="../index.php?mod=cab">В кабинет</a></div>';
             echo '<div class=""></div>';
             echo '<div class=""></div>';
             echo '<div class=""></div>';

@@ -176,28 +176,13 @@ if ($user_id)
             if ($total > 0)
             {
                 echo '<div class="phdr"><b>Непрочитанное</b></div>';
-                if ($dostsadm)
-                {
-                    $req = mysql_query("SELECT *
-					FROM `forum`
-					LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
-					WHERE `forum`.`type`='t'
-					AND (`cms_forum_rdm`.`topic_id` Is Null
-					OR `forum`.`time` > `cms_forum_rdm`.`time`)
-					ORDER BY `forum`.`time` DESC
-					LIMIT " . $start . "," . $kmess);
-                } else
-                {
-                    $req = mysql_query("SELECT *
-					FROM `forum`
-					LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
-					WHERE `forum`.`type`='t'
-					AND `close`!='1'
-					AND (`cms_forum_rdm`.`topic_id` Is Null
-					OR `forum`.`time` > `cms_forum_rdm`.`time`)
-					ORDER BY `forum`.`time` DESC
-					LIMIT " . $start . "," . $kmess);
-                }
+                $req = mysql_query("SELECT * FROM `forum`
+                LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
+                WHERE `forum`.`type`='t'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . "
+                AND (`cms_forum_rdm`.`topic_id` Is Null
+                OR `forum`.`time` > `cms_forum_rdm`.`time`)
+                ORDER BY `forum`.`time` DESC
+                LIMIT " . $start . "," . $kmess);
                 while ($res = mysql_fetch_array($req))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -205,25 +190,19 @@ if ($user_id)
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm == 1 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
-                    $nick = mysql_fetch_array($colmes);
-                    if ($res['edit'] == 1)
-                    {
-                        echo '<img src="../images/tz.gif" alt=""/>';
-                    } elseif ($res['close'] == 1)
-                    {
-                        echo '<img src="../images/dl.gif" alt=""/>';
-                    } else
-                    {
-                        echo '<img src="../images/np.gif" alt=""/>';
-                    }
-                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
                     $cpg = ceil($colmes1 / $kmess);
+                    $nick = mysql_fetch_array($colmes);
+                    if ($res['edit'])
+                        echo '<img src="../images/tz.gif" alt=""/>';
+                    elseif ($res['close'])
+                        echo '<img src="../images/dl.gif" alt=""/>';
+                    else
+                        echo '<img src="../images/np.gif" alt=""/>';
+                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($upfp ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
                     if ($cpg > 1)
-                    {
-                        echo "<a href='index.php?id=$res[id]&amp;page=$cpg'>&nbsp;&gt;&gt;</a>";
-                    }
+                        echo '<a href="index.php?id=' . $res['id'] . '&amp;clip' . ($upfp ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
                     echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
                     echo $res['from'];
                     if ($colmes1 > 1)
@@ -266,24 +245,10 @@ if ($user_id)
         $cpg = ceil($colmes1 / $kmess);
         $nam = mysql_fetch_array($nikuser);
         echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-        if ($arrt['edit'] == 1)
-        {
-            echo "<img src='../images/tz.gif' alt=''/>";
-        } else
-        {
-            echo "<img src='../images/np.gif' alt=''/>";
-        }
-        echo "<a href='index.php?id=" . $arr['id'] . "'>$arr[text]</a>[$colmes1]";
+        echo '<img src="../images/' . ($arr['edit'] == 1 ? 'tz' : 'np') . '.gif" alt=""/>';
+        echo '<a href="index.php?id=' . $arr['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $arr['text'] . '</a>&nbsp;[' . $colmes1 . ']';
         if ($cpg > 1)
-        {
-            if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
-            {
-                echo "<a href='index.php?id=$arr[id]&amp;page=$cpg'>[&lt;&lt;]</a>";
-            } else
-            {
-                echo "<a href='index.php?id=$arr[id]&amp;page=$cpg'>[&gt;&gt;]</a>";
-            }
-        }
+            echo '&nbsp;<a href="index.php?id=' . $arr['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
         echo '<br/><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
         echo $arr['from'];
         if (!empty($nam['from']))

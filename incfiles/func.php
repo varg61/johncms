@@ -111,7 +111,7 @@ function forum_new()
     {
         $req = mysql_query("SELECT COUNT(*) FROM `forum`
         LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
-        WHERE `forum`.`type`='t'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . "
+        WHERE `forum`.`type`='t'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . "
         AND (`cms_forum_rdm`.`topic_id` Is Null
         OR `forum`.`time` > `cms_forum_rdm`.`time`)");
         return mysql_result($req, 0);
