@@ -309,9 +309,9 @@ switch ($do)
             while ($res = mysql_fetch_array($req))
             {
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                echo $res['switch'] == 1 ? '<font color="#00AA00">[ON]</font>' : '<font color="#FF0000">[OFF]</font>';
-                echo '&nbsp;<a href="counters.php?do=view&amp;id=' . $res['id'] . '">' . $res['name'] . '</a><br />';
-                echo '<div class="func"><a href="counters.php?do=up&amp;id=' . $res['id'] . '">Вверх</a> | <a href="counters.php?do=down&amp;id=' . $res['id'] . '">Вниз</a> | <a href="counters.php?do=edit&amp;id=' . $res['id'] .
+                echo '<img src="../images/' . ($res['switch'] == 1 ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&nbsp;';
+                echo '<a href="counters.php?do=view&amp;id=' . $res['id'] . '"><b>' . $res['name'] . '</b></a><br />';
+                echo '<div class="sub"><a href="counters.php?do=up&amp;id=' . $res['id'] . '">Вверх</a> | <a href="counters.php?do=down&amp;id=' . $res['id'] . '">Вниз</a> | <a href="counters.php?do=edit&amp;id=' . $res['id'] .
                     '">Изм.</a> | <a href="counters.php?do=del&amp;id=' . $res['id'] . '">Удалить</a></div></div>';
                 ++$i;
             }

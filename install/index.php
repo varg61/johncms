@@ -172,7 +172,7 @@ switch ($_GET['act'])
         $duser = trim($_POST['user']);
         $dpass = trim($_POST['pass']);
         $dname = trim($_POST['name']);
-        $text = "<?php\r\n\r\n" . "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" . "$" . "version_info = 100270408;\r\n\r\n" . "$" . "db_host=\"$dhost\";\r\n" . "$" . "db_user=\"$duser\";\r\n" . "$" . "db_pass=\"$dpass\";\r\n" .
+        $text = "<?php\r\n\r\n" . "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" . "$" . "db_host=\"$dhost\";\r\n" . "$" . "db_user=\"$duser\";\r\n" . "$" . "db_pass=\"$dpass\";\r\n" .
             "$" . "db_name=\"$dname\";\r\n" . "\r\n?>";
         $fp = @fopen("../incfiles/db.php", "w");
         fputs($fp, $text);
