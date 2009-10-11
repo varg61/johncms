@@ -112,7 +112,6 @@ if (in_array($act, $do))
             $_SESSION['uppost'] = 0;
         }
     }
-
     if ($id)
     {
         $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1");
@@ -247,12 +246,13 @@ if (in_array($act, $do))
                 }
                 if ($user_id && !$filter)
                 {
-                    //блок, фиксирующий факт прочтения топика
-                    $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id'");
-                    if (mysql_result($req, 0) == 1)
+                    // Фиксация факта прочтения топика
+                    $req = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
+                    if (mysql_num_rows($req) > 0)
                     {
-                        // Обновляем время метки о прочтении
-                        mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id`='$id' AND `user_id` = '$user_id'");
+                        $res = mysql_fetch_array($req);
+                        if ($type1['time'] > $res['time'])
+                            mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id`='$id' AND `user_id` = '$user_id'");
                     } else
                     {
                         // Ставим метку о прочтении
@@ -260,7 +260,7 @@ if (in_array($act, $do))
                     }
                 }
                 // Ссылка на Новые темы
-                echo '<p><a href="index.php?act=new">' . ($user_id ? 'Непрочитанное&nbsp;(' . forum_new() . ')' : 'Последние 10 тем') . '</a></p>';
+                echo '<a name="up" id="up"></a><p><a href="index.php?act=new">' . ($user_id ? 'Непрочитанное&nbsp;(' . forum_new() . ')' : 'Последние 10 тем') . '</a></p>';
                 if ($dostsadm != 1 && $type1['close'] == 1)
                 {
                     echo '<div class="rmenu"><p>Тема удалена!<br/><a href="?id=' . $type1['refid'] . '">В раздел</a></p></div>';
@@ -271,25 +271,15 @@ if (in_array($act, $do))
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0);
                 // Задаем правила сортировки (новые внизу / вверху)
                 if ($user_id)
-                {
                     $order = $datauser['upfp'] == 1 ? 'DESC' : 'ASC';
-                } else
-                {
+                else
                     $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
-                }
                 // Панель навигации
-                $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1");
-                $razd = mysql_fetch_array($q3);
-                $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1");
-                $frm = mysql_fetch_array($q4);
-                echo '<div class="gmenu">';
-                echo '<a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>';
-                echo '</div>';
-                echo '<p><a name="up" id="up"></a><a href="#down">Вниз</a></p>';
+                $razd = mysql_fetch_array(mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
+                $frm = mysql_fetch_array(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
+                echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
-                echo '<div class="phdr"><b>' . $type1['text'] . '</b></div>';
-                if ($filter)
-                    echo '<div class="rmenu">В теме включена фильтрация по авторам постов</div>';
+                echo '<div class="phdr"><a href="#down"><img src="../theme/' . $skin . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
                 if ($type1['edit'] == 1)
                 {
                     echo '<b><span class="red">Тема закрыта</span></b><br/>';
@@ -297,28 +287,60 @@ if (in_array($act, $do))
                 {
                     echo '<b><span class="red">Тема удалена</span></b><br/>';
                 }
-                if ($user_id && $type1['edit'] != 1 && $upfp == 1)
+                // Фиксация первого поста в теме
+                if (!$postclip && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0))
                 {
-                    if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
+                    $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
+                    FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
+                    WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . " ORDER BY `forum`.`id` LIMIT 1");
+                    $postres = mysql_fetch_array($postreq);
+                    echo '<div class="clip">';
+                    if ($postres['sex'])
+                        echo '<img src="../theme/' . $skin . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'f') . ($postres['datereg'] > $realtime - 86400 ? '_new.gif" width="14"' : '.gif" width="10"') . ' height="10"/>&nbsp;';
+                    else
+                        echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
+                    if ($user_id && $user_id != $postres['user_id'])
                     {
-                        echo "<div class='e'>Написать<br/><form action='index.php?act=say&amp;id=" . $id . "' method='post' enctype='multipart/form-data'><textarea cols='20' rows='2' title='Введите текст сообщения' name='msg'></textarea><br/>";
-                        echo "<input type='checkbox' name='addfiles' value='1' /> Добавить файл<br/>";
-                        if ($offtr != 1)
-                        {
-                            echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-                        }
-                        echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form></div>";
+                        echo '<a href="../str/anketa.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ';
+                        echo '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a> ';
                     } else
                     {
-                        echo '<a href="?act=say&amp;id=' . $id . '">Написать</a><br />';
+                        echo '<b>' . $postres['from'] . '</b> ';
                     }
+                    $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
+                    echo $user_rights[$postres['rights']];
+                    echo ($realtime > $postres['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $postres['time'] + $sdvig * 3600) . ')</span><br/>';
+                    if ($postres['close'])
+                    {
+                        echo '<span class="red">Пост удалён!</span><br/>';
+                    }
+                    echo htmlentities($postres['text'], ENT_QUOTES, 'UTF-8') . '</div>';
                 }
-                if ($dostfmod == 1)
-                    echo '<form action="index.php?act=massdel" method="post">';
+                if ($filter)
+                    echo '<div class="rmenu">В теме включена фильтрация по авторам постов</div>';
                 // Запрос в базу
                 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 				FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
 				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`time` $order LIMIT $start, $kmess");
+                // Верхнее поле "Написать"
+                //TODO:Дописать возможность Админу писать в закрытой теме и переделать НАПИСАТЬ на кнопку
+                if ($user_id && $type1['edit'] != 1 && $upfp)
+                {
+                    if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
+                    {
+                        echo '<div class="gmenu">Написать<br/><form action="index.php?act=say&amp;id=' . $id . '" method="post"><textarea cols="20" rows="2" name="msg"></textarea><br/>';
+                        echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
+                        if ($offtr != 1)
+                            echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
+                        echo '<input type="submit" title="Нажмите для отправки" name="submit" value="Отправить"/></form></div>';
+                    } else
+                    {
+                        echo '<div class="gmenu"><a href="?act=say&amp;id=' . $id . '">Написать</a></div>';
+                    }
+                }
+                if ($dostfmod)
+                    echo '<form action="index.php?act=massdel" method="post">';
                 while ($res = mysql_fetch_array($req))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -410,6 +432,11 @@ if (in_array($act, $do))
                     echo '</div>';
                     ++$i;
                 }
+                if ($dostfmod)
+                {
+                    echo '<div class="rmenu"><input type="submit" value=" Удалить "/></div>';
+                    echo '</form>';
+                }
                 if (!$dostfmod && $tip == 't')
                 {
                     // Изменение последнего поста для обычного юзера
@@ -418,29 +445,22 @@ if (in_array($act, $do))
                     if ($arr1['user_id'] == $user_id && $arr1['time'] > ($realtime - 300))
                         echo (is_integer($i / 2) ? '<div class="list2">' : '<div class="list1">') . '<a href="index.php?act=editpost&amp;id=' . $arr1['id'] . '&amp;start=' . $start . '">Изменить</a></div>';
                 }
-                echo '<div class="phdr">Всего сообщений: ' . $colmes . '</div>';
-                if ($dostfmod)
-                {
-                    echo '<input type="submit" value="Удалить отмеченные"/>';
-                    echo '</form>';
-                }
-                echo '<div><a name="down" id="down"></a><a href="#up">Вверх</a></div>';
-                if ($dostadm || ($type1['edit'] != 1 && $user_id && $upfp != 1 && !$ban['1'] && !$ban['11']))
+                // Нижнее поле "Написать"
+                if ($user_id && $type1['edit'] != 1 && !$upfp)
                 {
                     if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
                     {
-                        echo '<div>Написать<br/><form action="index.php?act=say&amp;id=' . $id . '" method="post"><textarea cols="20" rows="2" name="msg"></textarea><br/>';
+                        echo '<div class="gmenu">Написать<br/><form action="index.php?act=say&amp;id=' . $id . '" method="post"><textarea cols="20" rows="2" name="msg"></textarea><br/>';
                         echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
                         if ($offtr != 1)
-                        {
                             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
-                        }
-                        echo '<input type="submit" title="Нажмите для отправки" name="submit" value="Отправить"/></form></div>';
+                        echo '<input type="submit" name="submit" value="Отправить"/></form></div>';
                     } else
                     {
-                        echo '<a href="?act=say&amp;id=' . $id . '&amp;start=' . $start . '">Написать</a><br />';
+                        echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><input type="submit" name="go" value="Написать"/></form></div>';
                     }
                 }
+                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $skin . '/images/up.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
                 if ($colmes > $kmess)
                 {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
