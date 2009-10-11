@@ -374,6 +374,7 @@ CREATE TABLE `users` (
   `vrrat` int(11) NOT NULL default '0',
   `upfp` tinyint(1) NOT NULL default '0',
   `farea` tinyint(1) NOT NULL default '0',
+  `postclip` tinyint(1) NOT NULL default '1',
   `chmes` int(2) NOT NULL default '10',
   `nmenu` text NOT NULL,
   `carea` tinyint(1) NOT NULL default '0',

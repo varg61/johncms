@@ -201,7 +201,7 @@ elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
 ////////////////////////////////////////////////////////////
 if ($user_id && $user_ps)
 {
-    $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1;");
+    $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1");
     if (mysql_num_rows($req) != 0)
     {
         $datauser = mysql_fetch_array($req);

@@ -288,7 +288,7 @@ if (in_array($act, $do))
                     echo '<b><span class="red">Тема удалена</span></b><br/>';
                 }
                 // Фиксация первого поста в теме
-                if (!$postclip && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0))
+                if ($datauser['postclip'] && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0))
                 {
                     $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`

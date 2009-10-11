@@ -58,7 +58,7 @@ if ($dostadm)
         $img = 'yelow';
     else
         $img = 'red';
-    echo '<div class="menu"><p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Форум</h3><div class="sub">
+    echo '<div class="menu"><p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Форум</h3><div style="font-size: x-small;">
 	<input type="radio" value="2" name="forum" ' . ($set['mod_forum'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыт<br />
 	<input type="radio" value="1" name="forum" ' . ($set['mod_forum'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;авторизованным<br />
 	<input type="radio" value="0" name="forum" ' . (!$set['mod_forum'] ? 'checked="checked"' : '') . '/>&nbsp;закрыт</div></p>';
@@ -69,12 +69,12 @@ if ($dostadm)
         $img = 'yelow';
     else
         $img = 'red';
-    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Гостевая</h3><div class="sub">
+    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Гостевая</h3><div style="font-size: x-small;">
 	<input type="radio" value="2" name="guest" ' . ($set['mod_guest'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;могут писать гости<br />
 	<input type="radio" value="1" name="guest" ' . ($set['mod_guest'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;открыта<br />
 	<input type="radio" value="0" name="guest" ' . (!$set['mod_guest'] ? 'checked="checked"' : '') . '/>&nbsp;закрыта</div></p>';
     // Доступ к Чату
-    echo '<p><h3><img src="../images/' . ($set['mod_chat'] ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&nbsp;Чат</h3><div class="sub">
+    echo '<p><h3><img src="../images/' . ($set['mod_chat'] ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&nbsp;Чат</h3><div style="font-size: x-small;">
 	<input type="radio" value="2" name="chat" ' . ($set['mod_chat'] ? 'checked="checked"' : '') . '/>&nbsp;открыт<br />
 	<input type="radio" value="0" name="chat" ' . (!$set['mod_chat'] ? 'checked="checked"' : '') . '/>&nbsp;закрыт</div></p>';
     // Доступ к Библиотеке
@@ -84,7 +84,7 @@ if ($dostadm)
         $img = 'yelow';
     else
         $img = 'red';
-    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Библиотека</h3><div class="sub">
+    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Библиотека</h3><div style="font-size: x-small;">
 	<input type="radio" value="2" name="lib" ' . ($set['mod_lib'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыта<br />
 	<input type="radio" value="1" name="lib" ' . ($set['mod_lib'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;авторизованным<br />
 	<input type="radio" value="0" name="lib" ' . (!$set['mod_lib'] ? 'checked="checked"' : '') . '/>&nbsp;закрыта<br />
@@ -96,7 +96,7 @@ if ($dostadm)
         $img = 'yelow';
     else
         $img = 'red';
-    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Галерея</h3><div class="sub">
+    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Галерея</h3><div style="font-size: x-small;">
 	<input type="radio" value="2" name="gal" ' . ($set['mod_gal'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыта<br />
 	<input type="radio" value="1" name="gal" ' . ($set['mod_gal'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;авторизованным<br />
 	<input type="radio" value="0" name="gal" ' . (!$set['mod_gal'] ? 'checked="checked"' : '') . '/>&nbsp;закрыта<br />
@@ -108,7 +108,7 @@ if ($dostadm)
         $img = 'yelow';
     else
         $img = 'red';
-    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Загрузки</h3><div class="sub">
+    echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Загрузки</h3><div style="font-size: x-small;">
 	<input type="radio" value="2" name="down" ' . ($set['mod_down'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыты<br />
 	<input type="radio" value="1" name="down" ' . ($set['mod_down'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;авторизованным<br />
 	<input type="radio" value="0" name="down" ' . (!$set['mod_down'] ? 'checked="checked"' : '') . '/>&nbsp;закрыты<br />
@@ -120,7 +120,7 @@ if ($dostadm)
         $img = 'yelow';
     else
         $img = 'red';
-    echo '<div class="gmenu"><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Регистрация</h3><div class="sub">
+    echo '<div class="gmenu"><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&nbsp;Регистрация</h3><div style="font-size: x-small;">
 	<input type="radio" value="2" name="reg" ' . ($set['mod_reg'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыта<br />
 	<input type="radio" value="1" name="reg" ' . ($set['mod_reg'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;с модерацией<br />
 	<input type="radio" value="0" name="reg" ' . (!$set['mod_reg'] ? 'checked="checked"' : '') . '/>&nbsp;закрыта</div></div>';
