@@ -98,7 +98,7 @@ switch ($do)
         // Таблица `users`
         mysql_query("ALTER TABLE `users` DROP `offpg`");
         mysql_query("ALTER TABLE `users` DROP `offgr`");
-        mysql_query("ALTER TABLE `users` ADD `postclip` BOOL NOT NULL DEFAULT '1' AFTER `farea`");
+        mysql_query("ALTER TABLE `users` ADD `postclip` TINYINT( 2 ) NOT NULL DEFAULT '2' AFTER `farea`");
         mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
         mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';

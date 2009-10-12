@@ -200,9 +200,9 @@ if ($user_id)
                         echo '<img src="../images/dl.gif" alt=""/>';
                     else
                         echo '<img src="../images/np.gif" alt=""/>';
-                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($upfp ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
+                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $upfp && $datauser['postclip'] ? '&amp;clip' : '') . ($upfp && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
                     if ($cpg > 1)
-                        echo '<a href="index.php?id=' . $res['id'] . '&amp;clip' . ($upfp ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
+                        echo '<a href="index.php?id=' . $res['id'] . (!$upfp && $datauser['postclip'] ? '&amp;clip' : '') . ($upfp ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
                     echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
                     echo $res['from'];
                     if ($colmes1 > 1)

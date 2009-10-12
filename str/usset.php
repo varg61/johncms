@@ -111,10 +111,13 @@ if ($user_id)
                 $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1");
                 $datauser = mysql_fetch_array($req);
             }
-            echo '<form action="usset.php?act=forum" method="post"><div class="menu"><p>';
+            echo '<form action="usset.php?act=forum" method="post"><div class="menu"><p><h3>Основные настройки</h3>';
             echo '<input name="upfp" type="checkbox" value="1" ' . ($datauser['upfp'] ? 'checked="checked"' : '') . ' />&nbsp;Обратная сортировка<br/>';
             echo '<input name="farea" type="checkbox" value="1" ' . ($datauser['farea'] ? 'checked="checked"' : '') . ' />&nbsp;Поле ввода<br/>';
-            echo '<input name="postclip" type="checkbox" value="1" ' . ($datauser['postclip'] ? 'checked="checked"' : '') . ' />&nbsp;Закреплять 1-й пост<br/>';
+            echo '</p><p><h3>Закреплять 1-й пост</h3>';
+            echo '<input type="radio" value="2" name="postclip" ' . ($datauser['postclip'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;всегда<br />';
+            echo '<input type="radio" value="1" name="postclip" ' . ($datauser['postclip'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;в непрочитанных<br />';
+            echo '<input type="radio" value="0" name="postclip" ' . (!$datauser['postclip'] ? 'checked="checked"' : '') . '/>&nbsp;никогда';
             echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
             echo '<div class="phdr"><a href="usset.php">Меню настроек</a></div>';
             echo '<p><a href="../forum">В форум</a></p>';

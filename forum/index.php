@@ -285,7 +285,7 @@ if (in_array($act, $do))
                 if ($type1['edit'])
                     echo '<div class="rmenu">Тема закрыта</div>';
                 // Фиксация первого поста в теме
-                if (($datauser['postclip'] && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset($_GET['clip']))
+                if (($datauser['postclip'] == 2 && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset($_GET['clip']))
                 {
                     $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
