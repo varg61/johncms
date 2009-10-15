@@ -20,8 +20,8 @@ class ipinit
 {
     public $ip; // IP адрес в LONG формате
     public $flood_chk = 1; // Включение - выключение функции IP антифлуда
-    public $flood_interval = '60'; // Интервал времени
-    public $flood_limit = '20'; // Число разрешенных запросов за интервал
+    public $flood_interval = '120'; // Интервал времени в секундах
+    public $flood_limit = '50'; // Число разрешенных запросов за интервал
     public $flood_file = 'flood.dat'; // Рабочий файл функции
     private $requests; // Число запросов с IP адреса за период времени
 

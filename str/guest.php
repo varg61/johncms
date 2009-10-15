@@ -17,6 +17,7 @@
 define('_IN_JOHNCMS', 1);
 
 $headmod = 'guest';
+$textl = 'Гостевая';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
@@ -437,26 +438,18 @@ switch ($act)
                 echo '<p>' . pagenav('guest.php?', $start, $colmes, $kmess) . '</p>';
                 echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
             }
-            if ($dostmod)
-            {
-                echo '<p><div class="func">';
-                // Для Админов даем ссылку на чистку Гостевой
-                if ($dostadm == 1)
-                    echo '<a href="guest.php?act=clean">Чистка истории</a><br />';
-                // Ссылка на Админ-клуб
-                if (isset($_SESSION['ga']))
-                {
-                    echo '<a href="guest.php?act=ga"><b>Гостевая &gt;&gt;</b></a>';
-                } else
-                {
-                    echo '<a href="guest.php?act=ga&amp;do=set"><b>Админ-Клуб &gt;&gt;</b></a>';
-                }
-                echo '</div></p>';
-            }
+            echo '<p><div class="func">';
+            // Для Админов даем ссылку на чистку Гостевой
+            if ($dostadm)
+                echo '<a href="guest.php?act=clean">Чистка истории</a><br />';
+            echo '</div></p>';
         } else
         {
             echo '<p>В Гостевой сообщений нет.</p>';
         }
+        // Ссылка на Админ-клуб
+        if ($dostmod)
+            echo (isset($_SESSION['ga']) ? '<p><a href="guest.php?act=ga"><b>Гостевая &gt;&gt;</b></a></p>' : '<p><a href="guest.php?act=ga&amp;do=set"><b>Админ-Клуб &gt;&gt;</b></a></p>');
         break;
 }
 
