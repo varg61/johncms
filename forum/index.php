@@ -312,7 +312,11 @@ if (in_array($act, $do))
                     {
                         echo '<span class="red">Пост удалён!</span><br/>';
                     }
-                    echo htmlentities($postres['text'], ENT_QUOTES, 'UTF-8') . '</div>';
+                    $cliptext = mb_substr($postres['text'], 0, 500);
+                    echo htmlentities($cliptext, ENT_QUOTES, 'UTF-8');
+                    if (mb_strlen($postres['text']) > 500)
+                        echo '...<a href="index.php?act=post&amp;id=' . $postres['id'] . '">читать все</a>';
+                    echo '</div>';
                 }
                 if ($filter)
                     echo '<div class="rmenu">В теме включена фильтрация по авторам постов</div>';
@@ -375,7 +379,7 @@ if (in_array($act, $do))
                     if (mb_strlen($text) > 500)
                     {
                         // Если текст длинный, обрезаем и даем ссылку на полный вариант
-                        $text = mb_substr($text, 0, 400);
+                        $text = mb_substr($text, 0, 500);
                         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         $text = nl2br($text);
@@ -408,7 +412,6 @@ if (in_array($act, $do))
                     }
                     if ($dostfmod || (($arr1['from'] == $login) && ($arr1['id'] == $res['id']) && ($res['time'] > $tpp)))
                     {
-                        //TODO: Разобраться с алгоритмом, по возможности исключить лишний запрос к базе
                         echo '<br /><a href="index.php?act=editpost&amp;id=' . $res['id'] . '&amp;start=' . $start . '">Изменить</a>';
                     }
                     if ($dostfmod)
@@ -457,7 +460,7 @@ if (in_array($act, $do))
                         echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><input type="submit" name="go" value="Написать"/></form></div>';
                     }
                 }
-                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $skin . '/images/up.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
+                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $skin . '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
                 if ($colmes > $kmess)
                 {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
