@@ -178,6 +178,32 @@ CREATE TABLE `cms_forum_files` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
+-- Структура таблицы `forum_vote`
+--
+DROP TABLE IF EXISTS `forum_vote`;
+CREATE TABLE `forum_vote` (
+  `id` int(11) NOT NULL auto_increment,
+  `type` int(2) NOT NULL default '0',
+  `time` int(11) NOT NULL default '0',
+  `topic` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `count` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `forum_vote_us`
+--
+DROP TABLE IF EXISTS `forum_vote_us`;
+CREATE TABLE `forum_vote_us` (
+  `id` int(11) NOT NULL auto_increment,
+  `user` int(11) NOT NULL default '0',
+  `topic` int(11) NOT NULL,
+  `vote` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
 -- Структура таблицы `gallery`
 --
 DROP TABLE IF EXISTS `gallery`;

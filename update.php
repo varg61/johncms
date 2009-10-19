@@ -95,6 +95,27 @@ switch ($do)
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
+        // Таблицы голосований
+        mysql_query("DROP TABLE IF EXISTS `forum_vote`");
+        mysql_query("CREATE TABLE `forum_vote` (
+        `id` int(11) NOT NULL auto_increment,
+        `type` int(2) NOT NULL default '0',
+        `time` int(11) NOT NULL default '0',
+        `topic` int(11) NOT NULL,
+        `name` varchar(200) NOT NULL,
+        `count` int(11) NOT NULL,
+        PRIMARY KEY  (`id`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        echo '<span class="green">OK</span> таблица `forum_vote` создана.<br />';
+        mysql_query("DROP TABLE IF EXISTS `forum_vote_us`");
+        mysql_query("CREATE TABLE `forum_vote_us` (
+        `id` int(11) NOT NULL auto_increment,
+        `user` int(11) NOT NULL default '0',
+        `topic` int(11) NOT NULL,
+        `vote` int(11) NOT NULL,
+        PRIMARY KEY  (`id`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        echo '<span class="green">OK</span> таблица `forum_vote_us` создана.<br />';
         // Таблица `users`
         mysql_query("ALTER TABLE `users` DROP `offpg`");
         mysql_query("ALTER TABLE `users` DROP `offgr`");

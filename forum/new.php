@@ -200,7 +200,8 @@ if ($user_id)
                         echo '<img src="../images/dl.gif" alt=""/>';
                     else
                         echo '<img src="../images/np.gif" alt=""/>';
-                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $upfp && $datauser['postclip'] ? '&amp;clip' : '') . ($upfp && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
+                    if($res['realid'] == 1)  echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
+                   echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $upfp && $datauser['postclip'] ? '&amp;clip' : '') . ($upfp && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
                     if ($cpg > 1)
                         echo '<a href="index.php?id=' . $res['id'] . (!$upfp && $datauser['postclip'] ? '&amp;clip' : '') . ($upfp ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
                     echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
@@ -246,7 +247,8 @@ if ($user_id)
         $nam = mysql_fetch_array($nikuser);
         echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
         echo '<img src="../images/' . ($arr['edit'] == 1 ? 'tz' : 'np') . '.gif" alt=""/>';
-        echo '<a href="index.php?id=' . $arr['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $arr['text'] . '</a>&nbsp;[' . $colmes1 . ']';
+        if($arr['realid'] == 1)  echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
+        echo '&nbsp;<a href="index.php?id=' . $arr['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $arr['text'] . '</a>&nbsp;[' . $colmes1 . ']';
         if ($cpg > 1)
             echo '&nbsp;<a href="index.php?id=' . $arr['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
         echo '<br/><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';

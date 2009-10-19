@@ -91,7 +91,8 @@ if ($user_id)
 	`name`='$login'");
 }
 
-$do = array('new', 'who', 'addfile', 'file', 'moders', 'per', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel', 'files', 'filter');
+$do = array('new', 'who', 'addfile', 'file', 'users', 'moders', 'addvote', 'editvote', 'delvote', 'vote', 'per', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans',
+    'massdel', 'files', 'filter');
 if (in_array($act, $do))
 {
     require_once ($act . '.php');
@@ -104,13 +105,9 @@ if (in_array($act, $do))
     if (!$user_id)
     {
         if (isset($_GET['newup']))
-        {
             $_SESSION['uppost'] = 1;
-        }
         if (isset($_GET['newdown']))
-        {
             $_SESSION['uppost'] = 0;
-        }
     }
     if ($id)
     {
@@ -134,13 +131,10 @@ if (in_array($act, $do))
                 while ($mass1 = mysql_fetch_array($req))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                    $coltem = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $mass1['id'] . "'");
-                    $coltem1 = mysql_result($coltem, 0);
+                    $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $mass1['id'] . "'"), 0);
                     echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
-                    if ($coltem1 > 0)
-                    {
-                        echo " [$coltem1]";
-                    }
+                    if ($coltem)
+                        echo " [$coltem]";
                     echo '</div>';
                     ++$i;
                 }
@@ -176,11 +170,6 @@ if (in_array($act, $do))
                     $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
                     $colmes1 = mysql_result($colmes, 0);
                     $cpg = ceil($colmes1 / $kmess);
-                    $colmes1 = $colmes1 - 1;
-                    if ($colmes1 < 0)
-                    {
-                        $colmes1 = 0;
-                    }
                     // Выводим список тем
                     if ($mass['vip'] == 1)
                     {
@@ -196,7 +185,9 @@ if (in_array($act, $do))
                         $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $mass['time'] . "' AND `topic_id` = '" . $mass['id'] . "' AND `user_id`='$user_id'"), 0);
                         echo '<img src="../theme/' . $skin . '/images/' . ($np ? 'op' : 'np') . '.gif" alt=""/>';
                     }
-                    echo "&nbsp;<a href='index.php?id=$mass[id]'>$mass[text]</a> [$colmes1]";
+                    if ($mass['realid'] == 1)
+                        echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
+                    echo '&nbsp;<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colmes1 . ']';
                     if ($cpg > 1)
                     {
                         echo "<a href='index.php?id=$mass[id]&amp;page=$cpg'>&nbsp;&gt;&gt;</a>";
@@ -284,6 +275,42 @@ if (in_array($act, $do))
                     echo '<div class="rmenu"><b>Тема удалена</b></div>';
                 if ($type1['edit'])
                     echo '<div class="rmenu">Тема закрыта</div>';
+                ////////////////////////////////////////////////////////////
+                // Блок голосований (by FlySelf)                          //
+                ////////////////////////////////////////////////////////////
+                if ($type1['realid'])
+                {
+                    if (isset($_GET['clip']))
+                        $clip_forum = '&amp;clip';
+                    $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
+                    $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
+                    echo '<div  class="gmenu"><p><span class="gray">' . date('d.m / H:i', $topic_vote['time'] + $sdvig * 3600) . '</span><br />' . htmlentities($topic_vote['name'], ENT_QUOTES, 'UTF-8') . '</p>';
+                    $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "'");
+                    if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0)
+                    {
+                        // Выводим форму с опросами
+                        echo '<form action="index.php?act=vote&amp;id=' . $id . '" method="post">';
+                        while ($vote = mysql_fetch_array($vote_result))
+                        {
+                            echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . htmlentities($vote['name'], ENT_QUOTES, 'UTF-8') . '<br />';
+                        }
+                        echo '<p><input type="submit" name="submit" value="Голосовать"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum . '">Результаты</a></p></form>';
+                    } else
+                    {
+                        // Выводим результаты голосования
+                        echo '<p><small>';
+                        while ($vote = mysql_fetch_array($vote_result))
+                        {
+                            $count_vote = round(100 / $topic_vote['count'] * $vote['count']);
+                            echo '' . htmlentities($vote['name'], ENT_QUOTES, 'UTF-8') . ' [' . $vote['count'] . ']<br />';
+                            echo '<img src="vote_img.php?img=' . $count_vote . '" alt="Рейтинг: ' . $count_vote . '%" /><br />';
+                        }
+                        echo '</small></p><p>Всего голосов: <a href="index.php?act=users&amp;id=' . $id . '">' . $topic_vote['count'] . '</a></p>';
+                        if ($user_id && $vote_user == 0)
+                            echo '<div class="bmenu"><a href="index.php?id=' . $id . '&amp;start=' . $start . $clip_forum . '">Голосовать</a></div>';
+                    }
+                    echo '</div>';
+                }
                 // Фиксация первого поста в теме
                 if (($datauser['postclip'] == 2 && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset($_GET['clip']))
                 {
@@ -472,6 +499,9 @@ if (in_array($act, $do))
                 if ($dostfmod == 1)
                 {
                     echo '<p><div class="func">';
+
+                    echo $topic_vote > 0 ? '<a href="index.php?act=editvote&amp;id=' . $id . '">Изменить опрос</a><br/><a href="index.php?act=delvote&amp;id=' . $id . '">Удалить опрос</a><br/>' : '<a href="index.php?act=addvote&amp;id=' . $id .
+                        '">Добавить опрос</a><br/>';
                     echo "<a href='index.php?act=ren&amp;id=" . $id . "'>Переименовать тему</a><br/>";
                     if ($type1['edit'] == 1)
                         echo "<a href='index.php?act=close&amp;id=" . $id . "'>Открыть тему</a><br/>";
