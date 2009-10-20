@@ -64,14 +64,6 @@ function forum_link($m)
 $agn1 = strtok($agn, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
-// Проверка, закрыта ли тема
-if ($type1['edit'] == 1 && !$dostadm)
-{
-    require_once ('../incfiles/head.php');
-    echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">Назад</a></p></div>';
-    require_once ('../incfiles/end.php');
-    exit;
-}
 $tip = $type1['type'];
 switch ($tip)
 {
@@ -79,6 +71,14 @@ switch ($tip)
         ////////////////////////////////////////////////////////////
         // Добавление простого сообщения                          //
         ////////////////////////////////////////////////////////////
+        // Проверка, закрыта ли тема
+        if (($type1['edit'] == 1 || $type1['close'] == 1) && !$dostadm)
+        {
+            require_once ('../incfiles/head.php');
+            echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">Назад</a></p></div>';
+            require_once ('../incfiles/end.php');
+            exit;
+        }
         if (isset($_POST['submit']))
         {
             if (empty($_POST['msg']))
@@ -180,6 +180,13 @@ switch ($tip)
         $th = $type1['refid'];
         $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
+        if (($th1['edit'] == 1 || $th1['close'] == 1) && !$dostadm)
+        {
+            require_once ('../incfiles/head.php');
+            echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">Назад</a></p></div>';
+            require_once ('../incfiles/end.php');
+            exit;
+        }
         $vrp = $type1['time'] + $sdvig * 3600;
         $vr = date("d.m.Y / H:i", $vrp);
         if (isset($_POST['submit']))
@@ -302,7 +309,7 @@ switch ($tip)
                 echo '<div class="rmenu">Фильтр по авторам постов будет выключен после написания сообщения</div>';
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
-            $qt = htmlentities($qt, ENT_QUOTES, 'UTF-8');
+            $qt = checkout($qt, 0, 2);
             echo '<form action="?act=say&amp;id=' . $id . '&amp;start=' . $start . '&amp;cyt" method="post" enctype="multipart/form-data">';
             if (isset($_GET['cyt']))
             {

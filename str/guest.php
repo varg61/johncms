@@ -378,19 +378,17 @@ switch ($act)
                 } else
                 {
                     // Ник Гостя
-                    echo '<b>Гость ' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '</b>';
+                    echo '<b>Гость ' . checkout($res['name']) . '</b>';
                 }
                 $vrp = $res['time'] + $sdvig * 3600;
                 $vr = date("d.m.y / H:i", $vrp);
                 echo ' <font color="#999999">(' . $vr . ')</font><br/>';
                 if (!empty($res['status']))
                     echo '<div class="status"><img src="../images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
-                $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
                 if ($res['user_id'] != "0")
                 {
                     // Для зарегистрированных показываем ссылки и смайлы
-                    $text = tags($text);
-                    $text = nl2br($text);
+                    $text = checkout($res['text'], 1, 1);
                     if ($offsm != 1)
                     {
                         $text = smileys($text, ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= 1) ? 1 : 0);
@@ -398,7 +396,7 @@ switch ($act)
                 } else
                 {
                     // Для гостей фильтруем ссылки
-                    $text = antilink($text);
+                    $text = antilink(checkout($res['text'], 0, 2));
                 }
                 // Отображаем текст поста
                 echo $text;
@@ -412,9 +410,7 @@ switch ($act)
                 // Ответ Модера
                 if (!empty($res['otvet']))
                 {
-                    $otvet = htmlentities($res['otvet'], ENT_QUOTES, 'UTF-8');
-                    $otvet = nl2br($otvet);
-                    $otvet = tags($otvet);
+                    $otvet = checkout($res['otvet'], 1, 1);
                     $vrp1 = $res['otime'] + $sdvig * 3600;
                     $vr1 = date("d.m.Y / H:i", $vrp1);
                     if ($offsm != 1)

@@ -65,7 +65,7 @@ if (empty($id))
     $res = mysql_fetch_array($req);
     $hdr = strtr($res['text'], array('&quot;' => '', '&amp;' => '', '&lt;' => '', '&gt;' => '', '&#039;' => ''));
     $hdr = mb_substr($hdr, 0, 30);
-    $hdr = htmlentities($hdr, ENT_QUOTES, 'UTF-8');
+    $hdr = checkout($hdr);
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
 
@@ -161,7 +161,7 @@ if (in_array($act, $do))
                 {
                     echo '<div class="gmenu"><a href="index.php?act=nt&amp;id=' . $id . '">Новая тема</a></div>';
                 }
-                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT " . $start . "," . $kmess);
+                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
                 while ($mass = mysql_fetch_array($q1))
                 {
                     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -284,7 +284,7 @@ if (in_array($act, $do))
                         $clip_forum = '&amp;clip';
                     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
                     $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
-                    echo '<div  class="gmenu"><p><span class="gray">' . date('d.m / H:i', $topic_vote['time'] + $sdvig * 3600) . '</span><br />' . htmlentities($topic_vote['name'], ENT_QUOTES, 'UTF-8') . '</p>';
+                    echo '<div  class="gmenu"><p><span class="gray">' . date('d.m / H:i', $topic_vote['time'] + $sdvig * 3600) . '</span><br />' . checkout($topic_vote['name']) . '</p>';
                     $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "'");
                     if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0)
                     {
@@ -292,7 +292,7 @@ if (in_array($act, $do))
                         echo '<form action="index.php?act=vote&amp;id=' . $id . '" method="post">';
                         while ($vote = mysql_fetch_array($vote_result))
                         {
-                            echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . htmlentities($vote['name'], ENT_QUOTES, 'UTF-8') . '<br />';
+                            echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . checkout($vote['name']) . '<br />';
                         }
                         echo '<p><input type="submit" name="submit" value="Голосовать"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum . '">Результаты</a></p></form>';
                     } else
@@ -302,7 +302,7 @@ if (in_array($act, $do))
                         while ($vote = mysql_fetch_array($vote_result))
                         {
                             $count_vote = round(100 / $topic_vote['count'] * $vote['count']);
-                            echo '' . htmlentities($vote['name'], ENT_QUOTES, 'UTF-8') . ' [' . $vote['count'] . ']<br />';
+                            echo checkout($vote['name']) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="vote_img.php?img=' . $count_vote . '" alt="Рейтинг: ' . $count_vote . '%" /><br />';
                         }
                         echo '</small></p><p>Всего голосов: <a href="index.php?act=users&amp;id=' . $id . '">' . $topic_vote['count'] . '</a></p>';
@@ -339,8 +339,7 @@ if (in_array($act, $do))
                     {
                         echo '<span class="red">Пост удалён!</span><br/>';
                     }
-                    $cliptext = mb_substr($postres['text'], 0, 500);
-                    echo htmlentities($cliptext, ENT_QUOTES, 'UTF-8');
+                    echo checkout(mb_substr($postres['text'], 0, 500), 0, 2);
                     if (mb_strlen($postres['text']) > 500)
                         echo '...<a href="index.php?act=post&amp;id=' . $postres['id'] . '">читать все</a>';
                     echo '</div>';
@@ -407,19 +406,14 @@ if (in_array($act, $do))
                     {
                         // Если текст длинный, обрезаем и даем ссылку на полный вариант
                         $text = mb_substr($text, 0, 500);
-                        $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                        $text = nl2br($text);
-                        $text = notags($text);
-                        echo $text . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
+                        echo checkout($text, 1, 2) . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
                     } else
                     {
                         // Или, обрабатываем тэги и выводим весь текст
-                        $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
+                        $text = checkout($text, 1, 1);
                         if ($offsm != 1)
                             $text = smileys($text, $res['rights'] ? 1 : 0);
-                        $text = nl2br($text);
-                        $text = tags($text);
                         echo $text;
                     }
                     if ($res['kedit'] > 0)
@@ -499,7 +493,6 @@ if (in_array($act, $do))
                 if ($dostfmod == 1)
                 {
                     echo '<p><div class="func">';
-
                     echo $topic_vote > 0 ? '<a href="index.php?act=editvote&amp;id=' . $id . '">Изменить опрос</a><br/><a href="index.php?act=delvote&amp;id=' . $id . '">Удалить опрос</a><br/>' : '<a href="index.php?act=addvote&amp;id=' . $id .
                         '">Добавить опрос</a><br/>';
                     echo "<a href='index.php?act=ren&amp;id=" . $id . "'>Переименовать тему</a><br/>";
