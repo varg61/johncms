@@ -284,7 +284,7 @@ if (in_array($act, $do))
                         $clip_forum = '&amp;clip';
                     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
                     $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
-                    echo '<div  class="gmenu"><p><span class="gray">' . date('d.m / H:i', $topic_vote['time'] + $sdvig * 3600) . '</span><br />' . checkout($topic_vote['name']) . '</p>';
+                    echo '<div  class="list2"><b>' . checkout($topic_vote['name']) . '</b><br />';
                     $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "'");
                     if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0)
                     {
@@ -294,24 +294,25 @@ if (in_array($act, $do))
                         {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . checkout($vote['name']) . '<br />';
                         }
-                        echo '<p><input type="submit" name="submit" value="Голосовать"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum . '">Результаты</a></p></form>';
+                        echo '<p><input type="submit" name="submit" value="Голосовать"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum . '">Результаты</a></p></form></div>';
                     } else
                     {
                         // Выводим результаты голосования
-                        echo '<p><small>';
+                        echo '<small>';
                         while ($vote = mysql_fetch_array($vote_result))
                         {
                             $count_vote = round(100 / $topic_vote['count'] * $vote['count']);
                             echo checkout($vote['name']) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="vote_img.php?img=' . $count_vote . '" alt="Рейтинг: ' . $count_vote . '%" /><br />';
                         }
-                        echo '</small></p><p>Всего голосов: <a href="index.php?act=users&amp;id=' . $id . '">' . $topic_vote['count'] . '</a></p>';
+                        echo '</small></div><div class="bmenu">Всего голосов: <a href="index.php?act=users&amp;id=' . $id . '">' . $topic_vote['count'] . '</a></div>';
                         if ($user_id && $vote_user == 0)
                             echo '<div class="bmenu"><a href="index.php?id=' . $id . '&amp;start=' . $start . $clip_forum . '">Голосовать</a></div>';
                     }
-                    echo '</div>';
                 }
-                // Фиксация первого поста в теме
+                ////////////////////////////////////////////////////////////
+                // Фиксация первого поста в теме                          //
+                ////////////////////////////////////////////////////////////
                 if (($datauser['postclip'] == 2 && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset($_GET['clip']))
                 {
                     $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
@@ -406,8 +407,9 @@ if (in_array($act, $do))
                     {
                         // Если текст длинный, обрезаем и даем ссылку на полный вариант
                         $text = mb_substr($text, 0, 500);
+                        $text = checkout($text, 1, 0);
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                        echo checkout($text, 1, 2) . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
+                        echo $text . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
                     } else
                     {
                         // Или, обрабатываем тэги и выводим весь текст

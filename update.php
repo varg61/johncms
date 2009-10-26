@@ -151,6 +151,7 @@ switch ($do)
         mysql_query("ALTER TABLE `forum` DROP INDEX `to`");
         mysql_query("ALTER TABLE `forum` DROP INDEX `from`");
         mysql_query("TRUNCATE TABLE `cms_forum_rdm`");
+        mysql_query("ALTER TABLE `forum` ADD FULLTEXT ( `text` )");
         echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
         mysql_query("CREATE TABLE IF NOT EXISTS `cms_forum_files` (
         `id` int(11) NOT NULL auto_increment,

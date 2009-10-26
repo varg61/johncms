@@ -140,7 +140,8 @@ CREATE TABLE `forum` (
   KEY `refid` (`refid`),
   KEY `type` (`type`),
   KEY `time` (`time`),
-  KEY `user_id` (`user_id`)
+  KEY `user_id` (`user_id`),
+  FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
