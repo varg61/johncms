@@ -330,6 +330,7 @@ function gbook($mod = 0)
 ////////////////////////////////////////////////////////////
 function tags($var = '')
 {
+    $var = preg_replace(array('#\[php\](.*?)\[\/php\]#se'), array("''.highlight('$1').''"), str_replace("]\n", "]", $var));
     $var = preg_replace('#\[b\](.*?)\[/b\]#si', '<span style="font-weight: bold;">\1</span>', $var);
     $var = preg_replace('#\[i\](.*?)\[/i\]#si', '<span style="font-style:italic;">\1</span>', $var);
     $var = preg_replace('#\[u\](.*?)\[/u\]#si', '<span style="text-decoration:underline;">\1</span>', $var);
@@ -338,22 +339,29 @@ function tags($var = '')
     $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
     $var = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $var);
-    $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'url_replace', $var);
+    $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'hrefCallback', $var);
     return $var;
 }
-
-// Служебная функция парсинга URL (прислал FlySelf)
-function url_replace($m)
+// Подсветка PHP кода
+function highlight($php)
 {
-    if (!isset($m[3]))
-    {
-        return '<a href="' . $m[1] . '">' . $m[2] . '</a>';
-    } else
-    {
-        return '<a href="' . $m[3] . '">' . $m[3] . '</a>';
-    }
+    $php = html_entity_decode(trim($php), ENT_QUOTES, 'UTF-8');
+    $php = strtr($php, array('<br />' => '', '\\' => '&#slach;'));
+    $php = substr($php, 0, 2) != "<?" ? $php = "<?PHP\n" . $php . "\n?>" : $php;
+    $php = highlight_string(stripslashes($php), true);
+    $php = str_replace('&amp;#slach;', '\\', $php);
+    return '<div class="phpcode">' . $php . '</div>';
 }
-
+// Служебная функция парсинга URL (прислал FlySelf)
+function hrefCallback($m)
+{
+    global $home;
+    $name_link = !isset($m[3]) ? $m[2] : $m[3];
+    $link = !isset($m[3]) ? $m[1] : $m[3];
+    $host = parse_url($link);
+    $link = 'http://' . $host['host'] == $home ? $link : $home . '/golink.php?go=' . urlencode(str_replace('&amp;', "&", $link));
+    return '<a href="' . $link . '">' . $name_link . '</a>';
+}
 // Вырезание BBcode тэгов из текста
 function notags($var = '')
 {
