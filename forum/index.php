@@ -305,7 +305,12 @@ if (in_array($act, $do))
                             echo checkout($vote['name']) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="vote_img.php?img=' . $count_vote . '" alt="Рейтинг: ' . $count_vote . '%" /><br />';
                         }
-                        echo '</small></div><div class="bmenu">Всего голосов: <a href="index.php?act=users&amp;id=' . $id . '">' . $topic_vote['count'] . '</a></div>';
+                        echo '</small></div><div class="bmenu">Всего голосов: ';
+                        if ($datauser['rights'] > 6)
+                            echo '<a href="index.php?act=users&amp;id=' . $id . '">' . $topic_vote['count'] . '</a>';
+                        else
+                            echo $topic_vote['count'];
+                        echo '</div>';
                         if ($user_id && $vote_user == 0)
                             echo '<div class="bmenu"><a href="index.php?id=' . $id . '&amp;start=' . $start . $clip_forum . '">Голосовать</a></div>';
                     }

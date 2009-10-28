@@ -29,7 +29,7 @@ while ($res = mysql_fetch_array($req))
 {
     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
     echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-    echo ($user_id && $user_id != $res['id'] ? '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b></a>' : '<b>' . $res['name'] . '</b>');
+    echo ($user_id && $user_id != $res['id'] ? '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
     switch ($res['rights'])
     {
         case 7:
