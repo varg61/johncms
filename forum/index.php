@@ -92,7 +92,7 @@ if ($user_id)
 }
 
 $do = array('new', 'who', 'addfile', 'file', 'users', 'moders', 'addvote', 'editvote', 'delvote', 'vote', 'per', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans',
-    'massdel', 'files', 'filter');
+    'massdel', 'files', 'filter', 'restore');
 if (in_array($act, $do))
 {
     require_once ($act . '.php');
@@ -449,9 +449,8 @@ if (in_array($act, $do))
                         echo '<br />';
                         if ($res['close'])
                         {
-                            //TODO: Написать восстановление удаленного поста
                             //TODO: Написать чистку темы от удаленных постов
-                            echo '<a href="">Восстановить</a><br />';
+                            echo '<a href="index.php?act=restore&amp;id=' . $res['id'] . '">Восстановить</a><br />';
                         } else
                         {
                             echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>&nbsp;';
@@ -505,11 +504,16 @@ if (in_array($act, $do))
                     echo $topic_vote > 0 ? '<a href="index.php?act=editvote&amp;id=' . $id . '">Изменить опрос</a><br/><a href="index.php?act=delvote&amp;id=' . $id . '">Удалить опрос</a><br/>' : '<a href="index.php?act=addvote&amp;id=' . $id .
                         '">Добавить опрос</a><br/>';
                     echo "<a href='index.php?act=ren&amp;id=" . $id . "'>Переименовать тему</a><br/>";
+                    // Закрыть - открыть тему
                     if ($type1['edit'] == 1)
                         echo "<a href='index.php?act=close&amp;id=" . $id . "'>Открыть тему</a><br/>";
                     else
                         echo "<a href='index.php?act=close&amp;id=" . $id . "&amp;closed'>Закрыть тему</a><br/>";
-                    echo "<a href='index.php?act=deltema&amp;id=" . $id . "'>Удалить тему</a><br/>";
+                    // Удалить - восстановить тему
+                    if ($type1['close'] == 1)
+                        echo "<a href='index.php?act=restore&amp;id=" . $id . "'>Восстановить тему</a><br/>";
+                    else
+                        echo "<a href='index.php?act=deltema&amp;id=" . $id . "'>Удалить тему</a><br/>";
                     if ($type1['vip'] == 1)
                         echo "<a href='index.php?act=vip&amp;id=" . $id . "'>Открепить тему</a>";
                     else

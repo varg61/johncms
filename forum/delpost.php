@@ -61,7 +61,7 @@ if ($dostfmod == 1)
     }
     if (isset($_GET['hid']))
     {
-        if ($dostsadm == 1)
+        if ($dostsadm)
         {
             mysql_query("update `forum` set  close='1' where id='$id'");
             // Скрываем файл
@@ -71,7 +71,8 @@ if ($dostfmod == 1)
                 mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = '$id'");
             }
         }
-        header("Location: index.php?id=$ms[refid]");
+        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $ms['refid'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '" . $id . "'"), 0) / $kmess);
+        header('Location: index.php?id=' . $ms['refid'] . '&page=' . $page);
     }
     require_once ("../incfiles/head.php");
     echo '<p>Вы действительно хотите удалить пост?</p>';

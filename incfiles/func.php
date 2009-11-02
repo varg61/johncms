@@ -345,11 +345,11 @@ function tags($var = '')
 // Подсветка PHP кода
 function highlight($php)
 {
+    $php = strtr($php, array('<br />' => '', '\\' => 'slash_JOHNCMS'));
     $php = html_entity_decode(trim($php), ENT_QUOTES, 'UTF-8');
-    $php = strtr($php, array('<br />' => '', '\\' => '&#slach;'));
-    $php = substr($php, 0, 2) != "<?" ? $php = "<?PHP\n" . $php . "\n?>" : $php;
+    $php = substr($php, 0, 2) != "<?" ? $php = "<?php\n" . $php . "\n?>" : $php;
     $php = highlight_string(stripslashes($php), true);
-    $php = str_replace('&amp;#slach;', '\\', $php);
+    $php = strtr($php, array('slash_JOHNCMS' => '&#92;', ':' => '&#58;', '[' => '&#91;'));
     return '<div class="phpcode">' . $php . '</div>';
 }
 // Служебная функция парсинга URL (прислал FlySelf)

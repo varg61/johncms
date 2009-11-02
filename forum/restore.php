@@ -21,14 +21,22 @@ if (!$dostfmod || !$id)
     header('Location: index.php');
     exit;
 }
-if (mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$id' AND `type` = 't'"), 0))
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND (`type` = 't' OR `type` = 'm') LIMIT 1");
+if (mysql_num_rows($req))
 {
-    if (isset($_GET['closed']))
-        mysql_query("UPDATE `forum` SET `edit` = '1' WHERE `id` = '$id'");
-    else
-        mysql_query("UPDATE `forum` SET `edit` = '0' WHERE `id` = '$id'");
+    $res = mysql_fetch_assoc($req);
+    mysql_query("UPDATE `forum` SET `close` = '0' WHERE `id` = '$id'");
+    if ($res['type'] == 't')
+    {
+        header('Location: index.php?id=' . $id);
+    } else
+    {
+        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '" . $id . "'"), 0) / $kmess);
+        header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
+    }
+} else
+{
+    header('Location: index.php');
 }
-
-header("Location: index.php?id=$id");
 
 ?>
