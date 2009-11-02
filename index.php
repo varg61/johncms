@@ -134,7 +134,7 @@ switch ($mod)
                 echo 'Новостей нет';
             // Дата последнего посещения
             $last = isset($_GET['last']) ? intval($_GET['last']) : $lastdate;
-            echo '</ul></div><div class="bmenu"><small>Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</small></div>';
+            echo '</ul></div><div class="phdr">Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</div>';
         }
         break;
 

@@ -160,16 +160,14 @@ switch ($tip)
             echo '<div class="phdr">Тема: <b>' . $type1['text'] . '</b></div>';
             if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $id)
                 echo '<div class="rmenu">Фильтр по авторам постов будет выключен после написания сообщения</div>';
-            echo '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post" enctype="multipart/form-data">';
-            echo '<div class="gmenu"><b>Сообщение:</b><br /><textarea cols="24" rows="4" title="Введите текст сообщения" name="msg"></textarea><br />';
+            echo '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
+            echo '<div class="gmenu"><p><b>Сообщение:</b><br /><textarea cols="24" rows="4" name="msg"></textarea><br />';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
-            if ($offtr != 1)
-            {
-                echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-            }
-            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></div></form>";
+            if (!$offtr)
+                echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит<br/>';
+            echo '</p><p><input type="submit" name="submit" value="Отправить"/></p></div></form>';
         }
-        echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
         echo '<p><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p>';
         break;
 
@@ -337,7 +335,7 @@ switch ($tip)
             }
             echo '<input type="submit" name="submit" value="Отправить"/></div></form>';
         }
-        echo '<div class="bmenu"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
         echo '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . $start . '">Назад</a></p>';
         break;
 

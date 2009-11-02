@@ -23,20 +23,23 @@ require_once ("../incfiles/head.php");
 
 echo '<div class="phdr"><b>Поиск по форуму</b></div>';
 
-// принимаем данные
+////////////////////////////////////////////////////////////
+// Принимаем данные, выводим форму поиска                 //
+////////////////////////////////////////////////////////////
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 $search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
-$search_t = isset($_REQUEST['t']) ? intval($_REQUEST['t']) : 0;
+$search_t = isset($_REQUEST['t']) ? 1 : 0;
 
-// Выводим форму запросов на поиск
 echo '<div class="gmenu"><form action="search.php" method="post"><p>';
 echo '<input type="text" value="' . ($search ? checkout($search) : '') . '" name="search" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
-echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;Искать в нзваниях тем';
+echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;Искать в названиях тем';
 echo '</p></form></div>';
 
-// Проверяем на ошибки
+////////////////////////////////////////////////////////////
+// Проверям на ошибки                                     //
+////////////////////////////////////////////////////////////
 $error = false;
 if ($search && mb_strlen($search) < 4)
     $error = 'Общая длина поискового запроса должна быть не менее 4 букв.';
@@ -45,9 +48,13 @@ if ($search && mb_strlen($search) > 64)
 
 if ($search && !$error)
 {
-    // Выводим результаты поиска
+    ////////////////////////////////////////////////////////////
+    // Выводим результаты поиска                              //
+    ////////////////////////////////////////////////////////////
     echo '<div class="bmenu">Результаты поиска</div>';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "') AND `type` = '" . ($search_t ? 't' : 'm') . "'"), 0);
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum`
+    WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "')
+    AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($dostadm == 1 ? "" : " AND `close` != '1'")), 0);
     if ($total)
     {
         $req = mysql_query("SELECT * FROM `forum` WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "') AND `type` = '" . ($search_t ? 't' : 'm') . "' LIMIT $start, $kmess");
@@ -56,7 +63,7 @@ if ($search && !$error)
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
             if (!$search_t)
             {
-                $req_t = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
+                $req_t = mysql_query("SELECT `id`,`text` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
                 $res_t = mysql_fetch_assoc($req_t);
                 echo '<b>' . $res_t['text'] . '</b><br />';
             } else
@@ -84,7 +91,7 @@ if ($search && !$error)
     echo '<div class="phdr">Всего совпадений: ' . $total . '</div>';
     if ($total > $kmess)
     {
-        // Панель навигации по страницам
+        // Навигация по страницам
         echo '<p>' . pagenav('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
@@ -93,6 +100,7 @@ if ($search && !$error)
     // Выводим сообщение об ошибке
     if ($error)
         echo '<div class="rmenu"><p>ОШИБКА!<br />' . $error . '</p></div>';
+    // Инструкции для поиска
     echo '<div class="phdr"><small>Длина запроса: 4мин., 64макс.<br />Поиск нечувствителен к регистру букв<br />Результаты выводятся с сортировкой по релевантности</small></div>';
 }
 

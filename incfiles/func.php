@@ -339,7 +339,7 @@ function tags($var = '')
     $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
     $var = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $var);
-    $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'hrefCallback', $var);
+    $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'url_replace', $var);
     return $var;
 }
 // Подсветка PHP кода
@@ -353,14 +353,12 @@ function highlight($php)
     return '<div class="phpcode">' . $php . '</div>';
 }
 // Служебная функция парсинга URL (прислал FlySelf)
-function hrefCallback($m)
+function url_replace($m)
 {
-    global $home;
-    $name_link = !isset($m[3]) ? $m[2] : $m[3];
-    $link = !isset($m[3]) ? $m[1] : $m[3];
-    $host = parse_url($link);
-    $link = 'http://' . $host['host'] == $home ? $link : $home . '/golink.php?go=' . urlencode(str_replace('&amp;', "&", $link));
-    return '<a href="' . $link . '">' . $name_link . '</a>';
+    if (!isset($m[3]))
+        return '<a href="' . $m[1] . '">' . $m[2] . '</a>';
+    else
+        return '<a href="' . $m[3] . '">' . $m[3] . '</a>';
 }
 // Вырезание BBcode тэгов из текста
 function notags($var = '')
@@ -622,6 +620,18 @@ function smileys($str, $adm = 0)
             $smileys = array_merge($smileys, unserialize($file[1]));
         return strtr($str, $smileys);
     }
+}
+
+////////////////////////////////////////////////////////////
+// Сообщения об ошибках                                   //
+////////////////////////////////////////////////////////////
+function display_error($error = array())
+{
+    $out = '<div class="rmenu"><p>ОШИБКА!<br />';
+    foreach ($error as $val)
+        $out .= '<div>' . $val . '</div>';
+    $out .= '</p></div>';
+    return $out;
 }
 
 /*

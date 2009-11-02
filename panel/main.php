@@ -171,26 +171,28 @@ if ($dostmod == 1)
             // Главное меню админки                                   //
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr"><b>Админ Панель</b></div>';
-            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
+            echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
+            echo '<li>Пользователей:&nbsp;' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . '</li>';
+            $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '$realtime'"), 0);
+            if ($bantotal)
+                echo '<li>Забаненных:&nbsp;' . $bantotal . '</li>';
+            //TODO: Разобраться с правами доступа на подтверждение реги.
             $regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg`='0'"), 0);
-            $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "'"), 0);
+            if ($regtotal)
+                echo '<li><a href="preg.php"><b>На регистрации:&nbsp;' . $regtotal . '</b></a></li>';
+            echo '</ul></p></div>';
             echo '<div class="menu">';
             // Блок пользователей
-            //TODO: Разобраться с правами доступа на подтверждение реги.
-            echo '<p><img src="../images/users.png" width="16" height="16" class="left" />&nbsp;<b>Пользователи</b><ul>
-			<li><a href="../str/users.php">Весь список</a>&nbsp;(' . $total . ')</li>';
-            if ($regtotal > 0)
-                echo '<li><span class="red"><a href="preg.php">На регистрации</a>&nbsp;(' . $regtotal . ')</span></li>';
-            else
-                echo '<li><a href="preg.php">На регистрации</a>&nbsp;(' . $regtotal . ')</li>';
+            echo '<p><h3><img src="../images/users.png" width="16" height="16" class="left" />&nbsp;Пользователи</h3><ul>';
+            echo '<li><a href="../str/users.php">Весь список</a></li>';
             echo ($dostsadm ? '<li><a href="">Чистка базы</a></li>' : '') . '
-			<li><a href="zaban.php">Бан-панель</a>&nbsp;(' . $bantotal . ')</li>
+			<li><a href="zaban.php">Бан-панель</a></li>
 			<li><a href="main.php?do=search">Поиск</a></li>
 			</ul></p>';
             // Блок модулей
             if ($dostadm)
             {
-                echo '<p><img src="../images/modules.png" width="16" height="16" class="left" />&nbsp;<b>Модули</b><ul>
+                echo '<p><h3><img src="../images/modules.png" width="16" height="16" class="left" />&nbsp;Модули</h3><ul>
 				<li><a href="modules.php">Права доступа</a></li>
 				' . ($dostsadm ? '<li><a href="counters.php">Счетчики</a></li>' : '') . '
 				<li><a href="news.php">Новости</a></li>
@@ -202,7 +204,7 @@ if ($dostmod == 1)
             // Блок системных настроек</b>
             if ($dostadm)
             {
-                echo '<div class="bmenu"><p><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;<b>Система</b><ul>
+                echo '<div class="bmenu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;Система</h3><ul>
 				<li><a href="ipban.php">Бан по IP</a></li>
 				<li><a href="main.php?do=smileys">Обновить смайлы</a></li>
 				<li><a href="main.php?do=antispy">Сканер антишпион</a></li>

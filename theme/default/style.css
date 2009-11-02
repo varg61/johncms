@@ -258,3 +258,10 @@ ul{
 .clip a:link, .clip a:visited{
 	color: #424e59;
 }
+.phpcode{
+  background-color: #E0E6E9;
+  border: 1px dotted #9FAEBB;
+  margin-top: 4px;
+  padding: 0px 2px 0px 2px
+}
+

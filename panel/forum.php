@@ -17,749 +17,367 @@
 define('_IN_JOHNCMS', 1);
 
 $textl = 'Форум';
-require_once ("../incfiles/core.php");
+require_once ('../incfiles/core.php');
+require_once ('../incfiles/head.php');
 
-if ($dostadm == 1)
+if (!$dostsadm)
 {
-    if (!empty($_GET['act']))
-    {
-        $act = check($_GET['act']);
-    }
-    switch ($act)
-    {
-        case "moders":
-            if (isset($_POST['submit']))
-            {
-                if (empty($_GET['id']))
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                if (isset($_POST['mod']))
-                {
-                    $q = mysql_query("select * from `forum` where type='a' and refid='" . $id . "';");
-                    while ($q1 = mysql_fetch_array($q))
-                    {
-                        if (!in_array($q1['from'], $_POST['mod']))
-                        {
-                            mysql_query("delete from `forum` where `id`='" . $q1['id'] . "';");
-                        }
-                    }
-                    foreach ($_POST['mod'] as $v)
-                    {
-                        $q2 = mysql_query("select * from `forum` where type='a' and `from`='" . $v . "' and refid='" . $id . "';");
-                        $q3 = mysql_num_rows($q2);
-                        if ($q3 == 0)
-                        {
-                            mysql_query("INSERT INTO `forum` SET
-							`refid`='" . $id . "',
-							`type`='a',
-							`from`='" . check($v) . "';");
-                        }
-                    }
-                } else
-                {
+    header('Location: main.php');
+    exit;
+}
 
-                    $q = mysql_query("select * from `forum` where type='a' and refid='" . $id . "';");
-                    while ($q1 = mysql_fetch_array($q))
+switch ($act)
+{
+    case 'moders':
+        if (isset($_POST['submit']))
+        {
+            if (empty($_GET['id']))
+            {
+                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
+                require_once ("../incfiles/end.php");
+                exit;
+            }
+            if (isset($_POST['mod']))
+            {
+                $q = mysql_query("select * from `forum` where type='a' and refid='" . $id . "';");
+                while ($q1 = mysql_fetch_array($q))
+                {
+                    if (!in_array($q1['from'], $_POST['mod']))
                     {
                         mysql_query("delete from `forum` where `id`='" . $q1['id'] . "';");
                     }
                 }
-                header("Location: forum.php?act=moders&id=$id");
-            } else
-            {
-                require_once ("../incfiles/head.php");
-                if (!empty($_GET['id']))
+                foreach ($_POST['mod'] as $v)
                 {
-                    $typ = mysql_query("select * from `forum` where id='" . $id . "';");
-                    $ms = mysql_fetch_array($typ);
-                    if ($ms['type'] != "f")
+                    $q2 = mysql_query("select * from `forum` where type='a' and `from`='" . $v . "' and refid='" . $id . "';");
+                    $q3 = mysql_num_rows($q2);
+                    if ($q3 == 0)
                     {
-                        echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                        require_once ("../incfiles/end.php");
-                        exit;
+                        mysql_query("INSERT INTO `forum` SET
+							`refid`='" . $id . "',
+							`type`='a',
+							`from`='" . check($v) . "';");
                     }
-                    echo "Назначение модеров в подфорум $ms[text]<br/><form action='forum.php?act=moders&amp;id=" . $id . "' method='post'>";
-                    $q = mysql_query("select * from `users` where rights='3';");
-                    while ($q1 = mysql_fetch_array($q))
-                    {
-                        $q2 = mysql_query("select * from `forum` where type='a' and `from`='" . $q1['name'] . "' and refid='" . $id . "';");
-                        $q3 = mysql_num_rows($q2);
-                        if ($q3 == 0)
-                        {
-                            echo "<input type='checkbox' name='mod[]' value='" . $q1['name'] . "'/>$q1[name]<br/>";
-                        } else
-                        {
-                            echo "<input type='checkbox' name='mod[]' value='" . $q1['name'] . "' checked='checked'/>$q1[name]<br/>";
-                        }
-                    }
-                    echo "<input type='submit' name='submit' value='Ok!'/><br/></form>";
-                    echo "<br/><a href='forum.php?act=moders'>Выбрать подфорум</a>";
-                } else
-                {
-                    echo "Выберите подфорум<hr/>";
-                    $q = mysql_query("select * from `forum` where type='f' order by realid;");
-                    while ($q1 = mysql_fetch_array($q))
-                    {
-                        echo "<a href='forum.php?act=moders&amp;id=" . $q1['id'] . "'>$q1[text]</a><br/>";
-                    }
-                }
-            }
-            echo "<br/><a href='forum.php?'>В управление форумом</a><br/>";
-
-            break;
-
-        case "del":
-            require_once ("../incfiles/head.php");
-            if (empty($_GET['id']))
-            {
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            $id = intval(check($_GET['id']));
-            $typ = mysql_query("select * from `forum` where id='" . $id . "';");
-            $ms = mysql_fetch_array($typ);
-            if ($ms['type'] != "f" && $ms['type'] != "r")
-            {
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            switch ($ms['type'])
-            {
-                case "f":
-                    if (isset($_GET['yes']))
-                    {
-                        $raz = mysql_query("select * from `forum` where refid='" . $id . "';");
-                        while ($raz1 = mysql_fetch_array($raz))
-                        {
-                            $tem = mysql_query("select * from `forum` where refid='" . $raz1['id'] . "';");
-                            while ($tem1 = mysql_fetch_array($tem))
-                            {
-                                $mes = mysql_query("select * from `forum` where refid='" . $tem1['id'] . "';");
-                                while ($mes1 = mysql_fetch_array($mes))
-                                {
-                                    if (!empty($mes1['attach']))
-                                    {
-                                        unlink("../forum/files/$mes1[attach]");
-                                    }
-                                    mysql_query("delete from `forum` where `id`='" . $mes1['id'] . "';");
-                                }
-                                mysql_query("delete from `forum` where `id`='" . $tem1['id'] . "';");
-                            }
-                            mysql_query("delete from `forum` where `id`='" . $raz1['id'] . "';");
-                        }
-                        mysql_query("delete from `forum` where `id`='" . $id . "';");
-                        header("Location: forum.php");
-                    } else
-                    {
-                        echo "Вы уверены,что хотите удалить подфорум $ms[text]?<br/><a href='forum.php?act=del&amp;id=" . $id . "&amp;yes'>Да</a>|<a href='forum.php'>Нет</a><br/>";
-                    }
-                    break;
-                case "r":
-                    if (isset($_GET['yes']))
-                    {
-                        $tem = mysql_query("select * from `forum` where refid='" . $id . "';");
-                        while ($tem1 = mysql_fetch_array($tem))
-                        {
-                            $mes = mysql_query("select * from `forum` where refid='" . $tem1['id'] . "';");
-                            while ($mes1 = mysql_fetch_array($mes))
-                            {
-                                if (!empty($mes1['attach']))
-                                {
-                                    unlink("../forum/files/$mes1[attach]");
-                                }
-                                mysql_query("delete from `forum` where `id`='" . $mes1['id'] . "';");
-                            }
-                            mysql_query("delete from `forum` where `id`='" . $tem1['id'] . "';");
-                        }
-                        mysql_query("delete from `forum` where `id`='" . $id . "';");
-                        header("Location: forum.php");
-                    } else
-                    {
-                        echo "Вы уверены,что хотите удалить раздел $ms[text]?<br/><a href='forum.php?act=del&amp;id=" . $id . "&amp;yes'>Да</a>|<a href='forum.php'>Нет</a><br/>";
-                    }
-                    break;
-            }
-            echo "<a href='forum.php?'>В управление форумом</a><br/>";
-            break;
-
-        case "crraz":
-            if (empty($_GET['id']))
-            {
-                require_once ("../incfiles/head.php");
-                echo "Ошибка!<br/><a href='?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            $raz = mysql_query("select * from `forum` where type='f' and id='" . $id . "' ;");
-            if (mysql_num_rows($raz) == 0)
-            {
-                require_once ("../incfiles/head.php");
-                echo "Ошибка!<br/><a href='?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            $raz1 = mysql_fetch_array($raz);
-            if (isset($_POST['submit']))
-            {
-                if (empty($_POST['nr']))
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Вы не ввели имя раздела!<br/><a href='forum.php?act=crraz&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                $nr = check($_POST['nr']);
-                $q = mysql_query("select * from `forum` where type='r' and refid='" . $id . "' order by realid desc ;");
-                $q1 = mysql_num_rows($q);
-                if ($q1 == 0)
-                {
-                    $rid = 1;
-                } else
-                {
-                    while ($arr = mysql_fetch_array($q))
-                    {
-                        $arr1[] = $arr['realid'];
-                    }
-                    $rid = $arr1[0] + 1;
-                }
-                mysql_query("insert into `forum` values(0,'" . $id . "','r','" . $realtime . "','','','" . $rid . "','','','" . $nr . "','','','','','','','','');");
-                header("Location: forum.php?id=$id");
-            } else
-            {
-                require_once ("../incfiles/head.php");
-                echo "Добавление раздела в подфорум <font color='orange'>$raz1[text]</font>:<br/><form action='forum.php?act=crraz&amp;id=" . $id .
-                    "' method='post'><input type='text' name='nr'/><br/><input type='submit' name='submit' value='Ok!'/><br/></form>";
-            }
-            echo "<a href='forum.php?'>В управление форумом</a><br/>";
-            break;
-
-        case "crforum":
-            if (isset($_POST['submit']))
-            {
-                if (empty($_POST['nf']))
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Вы не ввели имя подфорума!<br/><a href='forum.php?act=crforum'>Повторить</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                $nf = check($_POST['nf']);
-                $q = mysql_query("select * from `forum` where type='f' order by realid desc;");
-                $q1 = mysql_num_rows($q);
-                if ($q1 == 0)
-                {
-                    $rid = 1;
-                } else
-                {
-                    while ($arr = mysql_fetch_array($q))
-                    {
-                        $arr1[] = $arr['realid'];
-                    }
-                    $rid = $arr1[0] + 1;
-                }
-                mysql_query("insert into `forum` values(0,'','f','" . $realtime . "','','','" . $rid . "','','','" . $nf . "','','','','','','','','');");
-                header("Location: forum.php");
-            } else
-            {
-                require_once ("../incfiles/head.php");
-                echo "Добавление подфорума:<br/><form action='forum.php?act=crforum' method='post'><input type='text' name='nf'/><br/><input type='submit' name='submit' value='Ok!'/><br/></form>";
-            }
-            echo "<a href='forum.php?'>В управление форумом</a><br/>";
-            break;
-
-        case "edit":
-            if (empty($_GET['id']))
-            {
-                require_once ("../incfiles/head.php");
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            $typ = mysql_query("select * from `forum` where id='" . $id . "';");
-            $ms = mysql_fetch_array($typ);
-            if ($ms['type'] != "f" && $ms['type'] != "r")
-            {
-                require_once ("../incfiles/head.php");
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-
-            if (isset($_POST['submit']))
-            {
-                if (empty($_POST['nf']))
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Вы не ввели новое название!<br/><a href='forum.php?act=edit&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                $nf = check(trim($_POST['nf']));
-                mysql_query("update `forum` set  text='" . $nf . "' where id='" . $id . "';");
-                header("Location: forum.php?id=$ms[refid]");
-            } else
-            {
-                require_once ("../incfiles/head.php");
-                echo "Изменить название:<br/><form action='forum.php?act=edit&amp;id=" . $id . "' method='post'><input type='text' name='nf' value='" . $ms[text] . "'/><br/><input type='submit' name='submit' value='Ok!'/><br/></form>";
-            }
-            echo "<a href='forum.php?'>В управление форумом</a><br/>";
-            break;
-
-        case "up":
-            require_once ("../incfiles/head.php");
-            if (empty($_GET['id']))
-            {
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            $typ = mysql_query("select * from `forum` where id='" . $id . "'");
-            $ms = mysql_fetch_array($typ);
-            if ($ms['type'] != "f" && $ms['type'] != "r")
-            {
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            switch ($ms['type'])
-            {
-                case "f":
-                    $ri = mysql_query("select * from `forum` where type='f' and realid<'" . $ms['realid'] . "' order by realid desc");
-                    break;
-                case "r":
-                    $ri = mysql_query("select * from `forum` where type='r' and refid='" . $ms['refid'] . "' and realid<'" . $ms['realid'] . "' order by realid desc");
-                    break;
-            }
-            $rei = mysql_num_rows($ri);
-            if ($rei == 0)
-            {
-                echo "Нельзя туда двигать!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            while ($rid = mysql_fetch_array($ri))
-            {
-                $arr[] = $rid['id'];
-            }
-            switch ($ms['type'])
-            {
-                case "f":
-                    $tr = mysql_query("select * from `forum` where type='f' and id='" . $arr[0] . "';");
-                    break;
-                case "r":
-                    $tr = mysql_query("select * from `forum` where type='r' and id='" . $arr[0] . "';");
-                    break;
-            }
-            $tr1 = mysql_fetch_array($tr);
-            $real1 = $tr1['realid'];
-            $real2 = $ms['realid'];
-            mysql_query("update `forum` set  realid='" . $real1 . "' where id='" . $id . "';");
-            mysql_query("update `forum` set  realid='" . $real2 . "' where id='" . $arr[0] . "';");
-            header("Location: forum.php?id=$ms[refid]");
-
-            break;
-
-        case "down":
-            require_once ("../incfiles/head.php");
-            if (empty($_GET['id']))
-            {
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            $typ = mysql_query("select * from `forum` where id='" . $id . "';");
-            $ms = mysql_fetch_array($typ);
-            if ($ms['type'] != "f" && $ms['type'] != "r")
-            {
-                echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            switch ($ms['type'])
-            {
-                case "f":
-                    $ri = mysql_query("select * from `forum` where type='f' and realid>'" . $ms['realid'] . "' order by realid;");
-                    break;
-                case "r":
-                    $ri = mysql_query("select * from `forum` where type='r' and refid='" . $ms['refid'] . "' and realid>'" . $ms['realid'] . "' order by realid");
-                    break;
-            }
-            $rei = mysql_num_rows($ri);
-            if ($rei == 0)
-            {
-                echo "Нельзя туда двигать!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once ("../incfiles/end.php");
-                exit;
-            }
-            while ($rid = mysql_fetch_array($ri))
-            {
-                $arr[] = $rid['id'];
-            }
-            switch ($ms['type'])
-            {
-                case "f":
-                    $tr = mysql_query("select * from `forum` where type='f' and id='" . $arr[0] . "';");
-                    break;
-                case "r":
-                    $tr = mysql_query("select * from `forum` where type='r' and id='" . $arr[0] . "';");
-                    break;
-            }
-            $tr1 = mysql_fetch_array($tr);
-            $real1 = $tr1['realid'];
-            $real2 = $ms['realid'];
-            mysql_query("update `forum` set  realid='" . $real1 . "' where id='" . $id . "';");
-            mysql_query("update `forum` set  realid='" . $real2 . "' where id='" . $arr[0] . "';");
-            header("Location: forum.php?id=$ms[refid]");
-
-            break;
-
-        case "them":
-            if ($dostsadm == 1)
-            {
-                require_once ("../incfiles/head.php");
-                echo "Скрытые темы<br/>";
-                $dt = mysql_query("select * from `forum` where type='t' and close='1';");
-                $dt1 = mysql_num_rows($dt);
-                while ($dt2 = mysql_fetch_array($dt))
-                {
-                    $d = $i / 2;//TODO: Переделать на новое чередование цветов и ввести постраничную навигацию
-                    $d1 = ceil($d);
-                    $d2 = $d1 - $d;
-                    $d3 = ceil($d2);
-                    if ($d3 == 0)
-                    {
-                        $div = "<div class='b'>";
-                    } else
-                    {
-                        $div = "<div class='c'>";
-                    }
-                    $dr = mysql_query("select * from `forum` where type='r' and id='" . $dt2['refid'] . "';");
-                    $dr1 = mysql_fetch_array($dr);
-                    $df = mysql_query("select * from `forum` where type='f' and id='" . $dr1['refid'] . "';");
-                    $df1 = mysql_fetch_array($df);
-                    echo "$div<a href='../forum/?id=" . $dt2[id] . "'>$df1[text]/$dr1[text]/$dt2[text]</a><br/>";
-                    echo "<a href='forum.php?act=nah&amp;id=" . $dt2['id'] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dt2['id'] . "'>Восстановить</a>";
-
-                    echo "</div>";
-                    ++$i;
-                }
-                echo "<a href='forum.php?'>В управление форумом</a><br/>";
-            } else
-            {
-                header("Location: forum.php");
-            }
-            break;
-
-        case "ins":
-            if ($dostsadm == 1)
-            {
-                require_once ("../incfiles/head.php");
-                if (empty($_GET['id']))
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                $typ = mysql_query("select * from `forum` where id='" . $id . "';");
-                $ms = mysql_fetch_array($typ);
-                if ($ms['type'] != "t" && $ms['type'] != "m")
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                mysql_query("update `forum` set  close='0' where id='" . $id . "';");
-                switch ($ms['type'])
-                {
-                    case "t":
-                        header("Location: forum.php?act=them");
-                        break;
-                    case "m":
-                        header("Location: forum.php?act=post");
-                        break;
                 }
             } else
             {
-                header("Location: forum.php");
-            }
-            break;
-
-        case "nah":
-            if ($dostsadm == 1)
-            {
-                if (empty($_GET['id']))
+                $q = mysql_query("select * from `forum` where type='a' and refid='" . $id . "';");
+                while ($q1 = mysql_fetch_array($q))
                 {
-                    require_once ("../incfiles/head.php");
-                    echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                $typ = mysql_query("select * from `forum` where id='" . $id . "';");
-                $ms = mysql_fetch_array($typ);
-                if ($ms['type'] != "t" && $ms['type'] != "m")
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                    require_once ("../incfiles/end.php");
-                    exit;
-                }
-                if (!empty($ms['attach']))
-                {
-                    unlink("../forum/files/$ms[attach]");
-                }
-                mysql_query("delete from `forum` where id='" . $ms['id'] . "';");
-                switch ($ms['type'])
-                {
-                    case "t":
-                        header("Location: forum.php?act=them");
-                        break;
-                    case "m":
-                        header("Location: forum.php?act=post");
-                        break;
-                }
-            } else
-            {
-                header("Location: forum.php");
-            }
-            break;
-
-        case "delhid":
-            if ($dostsadm == 1)
-            {
-                if (isset($_GET['yes']))
-                {
-                    $dd = mysql_query("select * from `forum` where close='1';");
-                    while ($dd1 = mysql_fetch_array($dd))
-                    {
-                        if (!empty($dd1['attach']))
-                        {
-                            unlink("../forum/files/$dd1[attach]");
-                        }
-                        mysql_query("delete from `forum` where id='" . $dd1['id'] . "';");
-                        header("Location: forum.php");
-                    }
-                } else
-                {
-                    require_once ("../incfiles/head.php");
-                    echo "Вы уверены?<br/><a href='forum.php?act=delhid&amp;yes'>Да</a>|<a href='forum.php'>Нет</a><br/>";
-                }
-            } else
-            {
-                header("Location: forum.php");
-            }
-            break;
-
-        case "post":
-
-            if ($dostsadm == 1)
-            {
-                require_once ("../incfiles/head.php");
-                echo "Скрытые посты<br/>";
-                $dp = mysql_query("select * from `forum` where type='m' and close='1';");
-                $dp1 = mysql_num_rows($dp);
-                while ($dp2 = mysql_fetch_array($dp))
-                {
-                    $d = $i / 2;// Переделать на новое чередование цветов и постраничную навигацию
-                    $d1 = ceil($d);
-                    $d2 = $d1 - $d;
-                    $d3 = ceil($d2);
-                    if ($d3 == 0)
-                    {
-                        $div = "<div class='b'>";
-                    } else
-                    {
-                        $div = "<div class='c'>";
-                    }
-                    $dt = mysql_query("select * from `forum` where type='t' and id='" . $dp2['refid'] . "';");
-                    $dt1 = mysql_fetch_array($dt);
-                    $dr = mysql_query("select * from `forum` where type='r' and id='" . $dt1['refid'] . "';");
-                    $dr1 = mysql_fetch_array($dr);
-                    $df = mysql_query("select * from `forum` where type='f' and id='" . $dr1['refid'] . "';");
-                    $df1 = mysql_fetch_array($df);
-                    ###
-                    $vrp = $dp2['time'] + $sdvig * 3600;
-                    $vr = date("d.m.Y / H:i", $vrp);
-                    $uz = @mysql_query("select * from `users` where name='" . check($dp2['from']) . "';");
-                    $mass1 = @mysql_fetch_array($uz);
-                    switch ($mass1['rights'])
-                    {
-                        case 7:
-                            $stat = "Adm";
-                            break;
-                        case 6:
-                            $stat = "Smd";
-                            break;
-                        case 3:
-                            $stat = "Mod";
-                            break;
-                        case 1:
-                            $stat = "Kil";
-                            break;
-                        default:
-                            $stat = "";
-                            break;
-                    }
-                    switch ($mass1['sex'])
-                    {
-                        case "m":
-                            $pol = "<img src='../images/m.gif' alt=''/>";
-                            break;
-                        case "zh":
-                            $pol = "<img src='../images/f.gif' alt=''/>";
-                            break;
-                    }
-                    $hd = "$pol <b>$dp2[from]</b> $stat ($vr)<br/>";
-
-                    if (!empty($dp2['to']))
-                    {
-                        $hd = "$hd $dp2[to], ";
-                    }
-
-
-                    ##
-                    $dp2['text'] = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class=\'d\'>\1<br/></div>', $dp2['text']);
-                    $dp2['text'] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $dp2['text']);
-                    $dp2['text'] = eregi_replace("\\[l\\]((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='\\1\\3'>\\7</a>", $dp2['text']);
-
-                    if (stristr($dt2['text'], "<a href="))
-                    {
-                        $dp2['text'] = eregi_replace("\\<a href\\='((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)'>[[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)</a>",
-                            "<a href='\\1\\3'>\\3</a>", $dp2['text']);
-                    } else
-                    {
-                        $dp2[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $dp2['text']);
-                    }
-                    if ($offsm != 1)
-                    {
-                        $tekst = smileys($dp2['text']);
-                    } else
-                    {
-                        $tekst = $dp2['text'];
-                    }
-                    echo "$div $hd $tekst<br/>$df1[text]/$dr1[text]/$dt1[text]<br/>";
-                    echo "<a href='forum.php?act=nah&amp;id=" . $dp2['id'] . "'>Удалить</a> | <a href='forum.php?act=ins&amp;id=" . $dp2['id'] . "'>Восстановить</a>";
-                    echo "</div>";
-                    ++$i;
-                }
-                echo "<a href='forum.php?'>В управление форумом</a><br/>";
-            } else
-            {
-                header("Location: forum.php");
-            }
-            break;
-
-        default:
-            require_once ("../incfiles/head.php");
-            if (empty($_GET['id']))
-            {
-                echo "Все форумы<hr/>";
-                $q = mysql_query("select * from `forum` where type='f' order by realid ;");
-                while ($mass = mysql_fetch_array($q))
-                {
-                    $colraz = mysql_query("select * from `forum` where type='r' and refid='" . $mass['id'] . "';");
-                    $colraz1 = mysql_num_rows($colraz);
-                    $d = $i / 2;//TODO: Переделать на новое чередование цветов
-                    $d1 = ceil($d);
-                    $d2 = $d1 - $d;
-                    $d3 = ceil($d2);
-                    if ($d3 == 0)
-                    {
-                        $div = "<div class='b'>";
-                    } else
-                    {
-                        $div = "<div class='c'>";
-                    }
-                    $ri = mysql_query("select * from `forum` where type='f' and  realid>'" . $mass['realid'] . "';");
-                    $rei = mysql_num_rows($ri);
-                    $ri1 = mysql_query("select * from `forum` where type='f' and realid<'" . $mass['realid'] . "';");
-                    $rei1 = mysql_num_rows($ri1);
-                    echo "$div<a href='forum.php?id=" . $mass['id'] . "'>$mass[text]</a> ($colraz1)<br/>";
-                    if ($rei1 != 0)
-                    {
-                        echo "<a href='forum.php?act=up&amp;id=" . $mass['id'] . "'>Вверх</a> | ";
-                    }
-                    if ($rei != 0)
-                    {
-                        echo "<a href='forum.php?act=down&amp;id=" . $mass['id'] . "'>Вниз</a> | ";
-                    }
-                    echo "<a href='forum.php?act=edit&amp;id=" . $mass['id'] . "'>Edit</a> | <a href='forum.php?act=del&amp;id=" . $mass['id'] . "'>Del</a>";
-                    echo "</div>";
-                    ++$i;
-                }
-                echo "<hr/><a href='?act=crforum'>Создать подфорум</a><br/><br/>";
-                echo "<a href='?act=moders'>Модераторы</a><br/>";
-                if ($dostsadm == 1)
-                {
-                    $dt = mysql_query("select * from `forum` where type='t' and close='1';");
-                    $dt1 = mysql_num_rows($dt);
-                    $dp = mysql_query("select * from `forum` where type='m' and close='1';");
-                    $dp1 = mysql_num_rows($dp);
-                    echo "<a href='forum.php?act=them'>Скрытые темы</a>($dt1)<br/><a href='forum.php?act=post'>Скрытые посты</a>($dp1)<br/><a href='forum.php?act=delhid'>Удалить скрытые темы и посты</a><br/>";
+                    mysql_query("delete from `forum` where `id`='" . $q1['id'] . "';");
                 }
             }
+            header("Location: forum.php?act=moders&id=$id");
+        } else
+        {
             if (!empty($_GET['id']))
             {
-                $type = mysql_query("select * from `forum` where id= '" . $id . "';");
-                $type1 = mysql_fetch_array($type);
-                $tip = $type1['type'];
-                switch ($tip)
+                $typ = mysql_query("select * from `forum` where id='" . $id . "';");
+                $ms = mysql_fetch_array($typ);
+                if ($ms['type'] != "f")
                 {
-                    case "f":
-                        echo "<b>$type1[text]</b><hr/>";
-                        $q1 = mysql_query("select * from `forum` where type='r' and refid='" . $id . "'  order by realid ;");
-                        $colraz2 = mysql_num_rows($q1);
-
-                        while ($mass = mysql_fetch_array($q1))
-                        {
-                            $d = $i / 2;//TODO: Переделать на новое чередование цветов
-                            $d1 = ceil($d);
-                            $d2 = $d1 - $d;
-                            $d3 = ceil($d2);
-                            if ($d3 == 0)
-                            {
-                                $div = "<div class='b'>";
-                            } else
-                            {
-                                $div = "<div class='c'>";
-                            }
-                            $ri = mysql_query("select * from `forum` where type='r' and refid='" . $id . "' and  realid>'" . $mass['realid'] . "';");
-                            $rei = mysql_num_rows($ri);
-                            $ri1 = mysql_query("select * from `forum` where type='r' and refid='" . $id . "' and realid<'" . $mass['realid'] . "';");
-                            $rei1 = mysql_num_rows($ri1);
-
-                            echo "$div$mass[text]<br/>";
-                            if ($rei1 != 0)
-                            {
-                                echo "<a href='forum.php?act=up&amp;id=" . $mass['id'] . "'>Вверх</a> | ";
-                            }
-                            if ($rei != 0)
-                            {
-                                echo "<a href='forum.php?act=down&amp;id=" . $mass['id'] . "'>Вниз</a> | ";
-                            }
-                            echo "<a href='forum.php?act=edit&amp;id=" . $mass['id'] . "'>Edit</a> | <a href='forum.php?act=del&amp;id=" . $mass['id'] . "'>Del</a>";
-                            echo "</div>";
-                            ++$i;
-                        }
-                        echo "<hr/><a href='?act=crraz&amp;id=" . $id . "'>Создать раздел</a><br/>";
-                        echo "<a href='forum.php?'>В управление форумом</a><br/>";
-                        break;
+                    echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
+                    require_once ("../incfiles/end.php");
+                    exit;
+                }
+                echo "Назначение модеров в подфорум $ms[text]<br/><form action='forum.php?act=moders&amp;id=" . $id . "' method='post'>";
+                $q = mysql_query("select * from `users` where rights='3';");
+                while ($q1 = mysql_fetch_array($q))
+                {
+                    $q2 = mysql_query("select * from `forum` where type='a' and `from`='" . $q1['name'] . "' and refid='" . $id . "';");
+                    $q3 = mysql_num_rows($q2);
+                    if ($q3 == 0)
+                    {
+                        echo "<input type='checkbox' name='mod[]' value='" . $q1['name'] . "'/>$q1[name]<br/>";
+                    } else
+                    {
+                        echo "<input type='checkbox' name='mod[]' value='" . $q1['name'] . "' checked='checked'/>$q1[name]<br/>";
+                    }
+                }
+                echo "<input type='submit' name='submit' value='Ok!'/><br/></form>";
+                echo "<br/><a href='forum.php?act=moders'>Выбрать подфорум</a>";
+            } else
+            {
+                echo "Выберите подфорум<hr/>";
+                $q = mysql_query("select * from `forum` where type='f' order by realid;");
+                while ($q1 = mysql_fetch_array($q))
+                {
+                    echo "<a href='forum.php?act=moders&amp;id=" . $q1['id'] . "'>$q1[text]</a><br/>";
                 }
             }
-            break;
-    }
-} else
-{
-    header("Location: ../index.php?mod=404");
+        }
+        echo "<br/><a href='forum.php?'>В управление форумом</a><br/>";
+
+        break;
+
+    case 'del':
+        echo 'Еще не готово';
+        break;
+
+    case 'add':
+        ////////////////////////////////////////////////////////////
+        // Добавление категории                                   //
+        ////////////////////////////////////////////////////////////
+        if ($id)
+        {
+            // Проверяем наличие категории
+            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 'f' LIMIT 1");
+            if (mysql_num_rows($req))
+            {
+                $res = mysql_fetch_array($req);
+                $cat_name = $res['text'];
+            } else
+            {
+                header('Location: forum.php?act=cat');
+                exit;
+            }
+        }
+        if (isset($_POST['submit']))
+        {
+            // Принимаем данные
+            $name = isset($_POST['name']) ? check($_POST['name']) : '';
+            $desc = isset($_POST['desc']) ? check($_POST['desc']) : '';
+            // проверяем на ошибки
+            $error = array();
+            if (!$name)
+                $error[] = 'Вы не ввели название';
+            if ($name && (mb_strlen($name) < 2 || mb_strlen($name) > 30))
+                $error[] = 'Длина названия должна быть не менее 2-х и не более 30 символов';
+            if ($desc && mb_strlen($desc) < 2)
+                $error[] = 'Длина описания должна быть не менее 2-х символов';
+            if (!$error)
+            {
+                // Добавляем в базу категорию
+                $req = mysql_query("SELECT `realid` FROM `forum` WHERE " . ($id ? "`refid` = '$id' AND `type` = 'r'" : "`type` = 'f'") . " ORDER BY `realid` DESC LIMIT 1");
+                if (mysql_num_rows($req))
+                {
+                    $res = mysql_fetch_assoc($req);
+                    $sort = $res['realid'] + 1;
+                } else
+                {
+                    $sort = 1;
+                }
+                mysql_query("INSERT INTO `forum` SET
+                `refid` = '" . ($id ? $id : '') . "',
+                `type` = '" . ($id ? 'r' : 'f') . "',
+                `text` = '$name',
+                `soft` = '$desc',
+                `realid` = '$sort'");
+                header('Location: forum.php?act=cat' . ($id ? '&id=' . $id : ''));
+            } else
+            {
+                // Выводим сообщение об ошибках
+                echo display_error($error);
+            }
+        } else
+        {
+            // Форма ввода
+            echo '<div class="phdr"><b>Добавить ' . ($id ? 'раздел' : 'категорию') . '</b></div>';
+            echo '<div class="bmenu">В категорию: ' . $cat_name . '</div>';
+            echo '<form action="forum.php?act=add' . ($id ? '&amp;id=' . $id : '') . '" method="post"><div class="gmenu"><p>';
+            echo '<b>Название:</b><br /><input type="text" name="name" /><br /><small>Мин. 2, макс. 30 символов</small><br />';
+            echo '<b>Описание:</b><br /><textarea name="desc" cols="24" rows="4"></textarea><br /><small>Мин. 2, макс. 500 симолов<br />Описание не обязательно</small><br />';
+            echo '</p><p><input type="submit" value="Добавить" name="submit" />';
+            echo '</p></div></form>';
+            echo '<div class="phdr"><a href="forum.php?act=cat' . ($id ? '&amp;id=' . $id : '') . '">Назад</a></div>';
+        }
+        break;
+
+    case 'edit':
+        ////////////////////////////////////////////////////////////
+        // Редактирование выбранной категории, или раздела        //
+        ////////////////////////////////////////////////////////////
+        if ($id)
+        {
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
+            if (mysql_num_rows($req))
+            {
+                $res = mysql_fetch_assoc($req);
+                if ($res['type'] == 'f' || $res['type'] == 'r')
+                {
+                    if (isset($_POST['submit']))
+                    {
+                        // Принимаем данные
+                        $name = isset($_POST['name']) ? check($_POST['name']) : '';
+                        $desc = isset($_POST['desc']) ? check($_POST['desc']) : '';
+                        // проверяем на ошибки
+                        $error = array();
+                        if (!$name)
+                            $error[] = 'Вы не ввели название';
+                        if ($name && (mb_strlen($name) < 2 || mb_strlen($name) > 30))
+                            $error[] = 'Длина названия должна быть не менее 2-х и не более 30 символов';
+                        if ($desc && mb_strlen($desc) < 2)
+                            $error[] = 'Длина описания должна быть не менее 2-х символов';
+                        if (!$error)
+                        {
+                            // Записываем в базу
+                            mysql_query("UPDATE `forum` SET
+                            `text` = '$name',
+                            `soft` = '$desc'
+                            WHERE `id` = '$id'");
+                            header('Location: forum.php?act=cat' . ($res['type'] == 'r' ? '&id=' . $res['refid'] : ''));
+                        } else
+                        {
+                            // Выводим сообщение об ошибках
+                            echo display_error($error);
+                        }
+                    } else
+                    {
+                        // Форма ввода
+                        echo '<div class="phdr"><b>Редактируем ' . ($res['type'] == 'r' ? 'раздел' : 'категорию') . '</b></div>';
+                        echo '<form action="forum.php?act=edit&amp;id=' . $id . '" method="post"><div class="gmenu"><p>';
+                        echo '<b>Название:</b><br /><input type="text" name="name" value="' . $res['text'] . '"/><br /><small>Мин. 2, макс. 30 символов</small><br />';
+                        echo '<b>Описание:</b><br /><textarea name="desc" cols="24" rows="4">' . str_replace('<br />', "\r\n", $res['soft']) . '</textarea><br /><small>Мин. 2, макс. 500 симолов<br />Описание не обязательно</small><br />';
+                        echo '</p><p><input type="submit" value="Добавить" name="submit" />';
+                        echo '</p></div></form>';
+                        echo '<div class="phdr"><a href="forum.php?act=cat' . ($res['type'] == 'r' ? '&amp;id=' . $id : '') . '">Назад</a></div>';
+                    }
+                } else
+                {
+                    header('Location: forum.php?act=cat');
+                }
+            } else
+            {
+                header('Location: forum.php?act=cat');
+            }
+        } else
+        {
+            header('Location: forum.php?act=cat');
+        }
+        break;
+
+    case 'up':
+        ////////////////////////////////////////////////////////////
+        // Перемещение на одну позицию вверх                      //
+        ////////////////////////////////////////////////////////////
+        if ($id)
+        {
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $id . "' LIMIT 1");
+            if (mysql_num_rows($req))
+            {
+                $res1 = mysql_fetch_array($req);
+                $sort = $res1['realid'];
+                $req = mysql_query("SELECT * FROM `forum` WHERE `type` = '" . ($res1['type'] == 'f' ? "f" : "r") . "' AND `realid` < '" . $sort . "' ORDER BY `realid` DESC LIMIT 1");
+                if (mysql_num_rows($req))
+                {
+                    $res = mysql_fetch_assoc($req);
+                    $id2 = $res['id'];
+                    $sort2 = $res['realid'];
+                    mysql_query("UPDATE `forum` SET `realid` = '" . $sort2 . "' WHERE `id` = '" . $id . "'");
+                    mysql_query("UPDATE `forum` SET `realid` = '" . $sort . "' WHERE `id` = '" . $id2 . "'");
+                }
+            }
+        }
+        header('Location: forum.php?act=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
+        break;
+
+    case 'down':
+        ////////////////////////////////////////////////////////////
+        // Перемещение на одну позицию вниз                       //
+        ////////////////////////////////////////////////////////////
+        if ($id)
+        {
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $id . "' LIMIT 1");
+            if (mysql_num_rows($req))
+            {
+                $res1 = mysql_fetch_assoc($req);
+                $sort = $res1['realid'];
+                $req = mysql_query("SELECT * FROM `forum` WHERE `type` = '" . ($res1['type'] == 'f' ? "f" : "r") . "' AND `realid` > '" . $sort . "' ORDER BY `realid` ASC LIMIT 1");
+                if (mysql_num_rows($req))
+                {
+                    $res = mysql_fetch_array($req);
+                    $id2 = $res['id'];
+                    $sort2 = $res['realid'];
+                    mysql_query("UPDATE `forum` SET `realid` = '" . $sort2 . "' WHERE `id` = '" . $id . "'");
+                    mysql_query("UPDATE `forum` SET `realid` = '" . $sort . "' WHERE `id` = '" . $id2 . "'");
+                }
+            }
+        }
+        header('Location: forum.php?act=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
+        break;
+
+    case 'cat';
+        if ($id)
+        {
+            ////////////////////////////////////////////////////////////
+            // Управление разделами                                   //
+            ////////////////////////////////////////////////////////////
+            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 'f' LIMIT 1");
+            $res = mysql_fetch_assoc($req);
+            echo '<div class="phdr"><b>Категория:</b> ' . $res['text'] . '</div>';
+            $req = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'r' ORDER BY `realid` ASC");
+            if (mysql_num_rows($req))
+            {
+                echo '<div class="bmenu">Список разделов</div>';
+                while ($res = mysql_fetch_assoc($req))
+                {
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo '<b>' . $res['text'] . '</b>';
+                    if (!empty($res['soft']))
+                        echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
+                    echo '<div class="sub"><a href="forum.php?act=up&amp;id=' . $res['id'] . '">Вверх</a> | <a href="forum.php?act=down&amp;id=' . $res['id'] . '">Вниз</a> | <a href="forum.php?act=edit&amp;id=' . $res['id'] .
+                        '">Изм.</a> | <a href="forum.php?act=del&amp;id=' . $res['id'] . '">Удалить</a></div></div>';
+                    ++$i;
+                }
+            } else
+            {
+                echo '<div class="menu"><p>Список разделов пуст</p></div>';
+            }
+        } else
+        {
+            ////////////////////////////////////////////////////////////
+            // Управление категориями                                 //
+            ////////////////////////////////////////////////////////////
+            echo '<div class="phdr"><b>Список категорий</b></div>';
+            $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid` ASC");
+            while ($res = mysql_fetch_assoc($req))
+            {
+                //TODO: Написать вывод описаний категорий
+                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                echo '<b>' . $res['text'] . '</b> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $res['id'] . "'"), 0) . ') <a href="forum.php?act=cat&amp;id=' . $res['id'] . '">&gt;&gt;</a>';
+                if (!empty($res['soft']))
+                    echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
+                echo '<div class="sub"><a href="forum.php?act=up&amp;id=' . $res['id'] . '">Вверх</a> | <a href="forum.php?act=down&amp;id=' . $res['id'] . '">Вниз</a> | <a href="forum.php?act=edit&amp;id=' . $res['id'] .
+                    '">Изм.</a> | <a href="forum.php?act=del&amp;id=' . $res['id'] . '">Удалить</a></div></div>';
+                ++$i;
+            }
+        }
+        echo '<div class="gmenu"><form action="forum.php?act=add' . ($id ? '&amp;id=' . $id : '') . '" method="post"><input type="submit" value="Добавить" /></form></div>';
+        echo '<div class="phdr">' . ($act == 'cat' && $id ? '<a href="forum.php?act=cat">К списку категорий</a>' : '<a href="forum.php">Управление Форумом</a>') . '</div>';
+        break;
+
+    default:
+        ////////////////////////////////////////////////////////////
+        // Панель управления форумом                              //
+        ////////////////////////////////////////////////////////////
+        $total_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'f'"), 0);
+        $total_sub = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r'"), 0);
+        $total_thm = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'"), 0);
+        $total_thm_del = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1'"), 0);
+        $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'"), 0);
+        $total_msg_del = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'"), 0);
+        $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
+        $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote` WHERE `type` = '1'"), 0);
+        echo '<div class="phdr"><b>Управление форумом</b></div>';
+        echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
+        echo '<li>Категории:&nbsp;' . $total_cat . '</li>';
+        echo '<li>Разделы:&nbsp;' . $total_sub . '</li>';
+        echo '<li>Темы:&nbsp;' . $total_thm . '&nbsp;/&nbsp;<span class="red">' . $total_thm_del . '</span></li>';
+        echo '<li>Посты:&nbsp;' . $total_msg . '&nbsp;/&nbsp;<span class="red">' . $total_msg_del . '</span></li>';
+        echo '<li>Файлы:&nbsp;' . $total_files . '</li>';
+        echo '<li>Голосования:&nbsp;' . $total_votes . '</li>';
+        echo '</ul></p></div>';
+        echo '<div class="menu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;Управление</h3><ul>';
+        echo '<li><a href="forum.php?act=cat">Структура форума</a></li>';
+        echo '<li><a href="forum.php?act=them">Удаленные темы</a></li>';
+        echo '<li><a href="forum.php?act=post">Удаленные посты</a></li>';
+        echo '<li><a href="forum.php?act=delhid">Чистка форума</a></li>';
+        echo '<li><a href="forum.php?act=moders">Модераторы</a></li>';
+        echo '</ul></p></div>';
+        echo '<div class="phdr"><a href="../forum/index.php">В форум</a></div>';
 }
-echo "<a href='../forum/?'>В форум</a><br/>";
+
+echo '<p><a href="main.php">В Админку</a><br /><a href="../forum/index.php">В Форум</a></p>';
 
 require_once ("../incfiles/end.php");
 

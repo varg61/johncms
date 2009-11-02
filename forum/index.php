@@ -126,7 +126,7 @@ if (in_array($act, $do))
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
-                $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
+                $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 while ($mass1 = mysql_fetch_array($req))
                 {
@@ -135,6 +135,8 @@ if (in_array($act, $do))
                     echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
                     if ($coltem)
                         echo " [$coltem]";
+                    if (!empty($mass1['soft']))
+                        echo '<br /><span class="gray"><small>' . $mass1['soft'] . '</small></span><br />';
                     echo '</div>';
                     ++$i;
                 }
@@ -538,12 +540,15 @@ if (in_array($act, $do))
         // Панель навигации
         echo '<div class="phdr">';
         echo '<b>Форум</b></div>';
-        $req = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
+        $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($res = mysql_fetch_array($req))
         {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
-            echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']</div>';
+            echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
+            if (!empty($res['soft']))
+                echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
+            echo '</div>';
             ++$i;
         }
         echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&nbsp;(' . wfrm() . ')</div>';

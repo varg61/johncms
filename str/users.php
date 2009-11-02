@@ -20,9 +20,10 @@ $headmod = 'users';
 $textl = 'Юзеры';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
-echo '<div class="phdr">Список пользователей</div>';
+
+echo '<div class="phdr"><b>Список пользователей</b></div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
-$total = mysql_result($req, 0); // Общее число зареганных юзеров
+$total = mysql_result($req, 0);
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT " . $start . "," . $kmess);
 while ($res = mysql_fetch_array($req))
 {
@@ -74,7 +75,7 @@ while ($res = mysql_fetch_array($req))
     echo '</div>';
     ++$i;
 }
-echo '<div class="bmenu">Всего: ' . $total . '</div><p>';
+echo '<div class="phdr">Всего: ' . $total . '</div><p>';
 if ($total > $kmess)
 {
     echo '<p>' . pagenav('users.php?', $start, $total, $kmess) . '</p>';

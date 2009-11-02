@@ -88,12 +88,12 @@ switch ($do)
         if ($id)
         {
             $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = '" . $id . "'");
-            if (mysql_num_rows($req) > 0)
+            if (mysql_num_rows($req))
             {
                 $res = mysql_fetch_array($req);
                 $sort = $res['sort'];
                 $req = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` < '" . $sort . "' ORDER BY `sort` DESC");
-                if (mysql_num_rows($req) > 0)
+                if (mysql_num_rows($req))
                 {
                     $res = mysql_fetch_array($req);
                     $id2 = $res['id'];
@@ -113,12 +113,12 @@ switch ($do)
         if ($id)
         {
             $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = '" . $id . "'");
-            if (mysql_num_rows($req) > 0)
+            if (mysql_num_rows($req))
             {
                 $res = mysql_fetch_array($req);
                 $sort = $res['sort'];
                 $req = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` > '" . $sort . "' ORDER BY `sort` ASC");
-                if (mysql_num_rows($req) > 0)
+                if (mysql_num_rows($req))
                 {
                     $res = mysql_fetch_array($req);
                     $id2 = $res['id'];

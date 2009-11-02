@@ -21,71 +21,43 @@ require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
 ////////////////////////////////////////////////////////////
-// Принимаем и проверяем условия для поиска               //
+// Принимаем данные, выводим форму поиска                 //
 ////////////////////////////////////////////////////////////
-$error = false;
-$search = '';
-$term = 1;
-if (isset($_GET['reset']))
-{
-    // Сброс формы поиска
-    unset($_SESSION['search']);
-    unset($_SESSION['term']);
-} elseif (isset($_POST['search']) && isset($_POST['submit']))
-{
-    // Принимаем данные из формы
-    $search = isset($_POST['search']) ? trim($_POST['search']) : '';
-    $term = isset($_POST['term']) ? 1 : 0;
-    if (!empty($search) && (mb_strlen($search) < 2 || mb_strlen($search) > 15))
-        $error = '<div>Недопустимая длина Ника. Разрешено минимум 2 и максимум 15 символов.</div>';
-    if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", rus_lat(mb_strtolower($search))))
-        $error .= '<div>Недопустимые символы</div>';
-    if (!$error && !empty($search))
-    {
-        $_SESSION['search'] = $search;
-        $_SESSION['term'] = $term;
-    }
-} elseif (isset($_SESSION['search']))
-{
-    // Принимаем данные из сессии
-    $search = $_SESSION['search'];
-    $term = $_SESSION['term'];
-}
+$search = isset($_POST['search']) ? trim($_POST['search']) : '';
+$search = $search ? $search : rawurldecode(trim($_GET['search']));
+$search_t = isset($_REQUEST['t']) ? 1 : 0;
 
 echo '<div class="phdr"><b>Поиск пользователя</b></div>';
 echo '<form action="user_search.php" method="post"><div class="gmenu"><p>';
-echo 'Кого ищем?<br /><input type="text" name="search" value="' . htmlentities($search, ENT_QUOTES, 'UTF-8') . '" />';
+echo 'Кого ищем?<br /><input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
-echo '<input name="term" type="checkbox" value="1" ' . ($term ? 'checked="checked"' : '') . ' />&nbsp;Строгий поиск<br/>';
+echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;Строгий поиск<br/>';
 echo '</p></div></form>';
 
-if ($error)
-{
-    ////////////////////////////////////////////////////////////
-    // Если есть ошибки, выводим предупреждения               //
-    ////////////////////////////////////////////////////////////
-    unset($_SESSION['search']);
-    unset($_SESSION['term']);
-    echo '<div class="rmenu"><p>ОШИБКА!<br />' . $error . '</p></div>';
-    require_once ("../incfiles/end.php");
-    exit;
-}
+////////////////////////////////////////////////////////////
+// Проверям на ошибки                                     //
+////////////////////////////////////////////////////////////
+$error = false;
+if (!empty($search) && (mb_strlen($search) < 2 || mb_strlen($search) > 15))
+    $error = '<div>Недопустимая длина Ника. Разрешено минимум 2 и максимум 15 символов.</div>';
+if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", rus_lat(mb_strtolower($search))))
+    $error .= '<div>Недопустимые символы</div>';
 
-if (isset($_SESSION['search']))
+if ($search && !$error)
 {
     ////////////////////////////////////////////////////////////
-    // Поиск и вывод результатов                              //
+    // Выводим результаты поиска                              //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr">Результаты запроса</div>';
-    $search = mysql_real_escape_string(rus_lat(mb_strtolower($search)));
-    $search = strtr($search, array('_' => '\\_', '%' => '\\%', '*' => '%'));
-    if (!$term)
-        $search = '%' . $search . '%'; // Если задан нестрогий поиск
-    $req = mysql_query("SELECT COUNT(*) FROM `users` WHERE `name_lat` LIKE '" . $search . "'");
+    $search_db = mysql_real_escape_string(rus_lat(mb_strtolower($search)));
+    $search_db = strtr($search_db, array('_' => '\\_', '%' => '\\%', '*' => '%'));
+    if (!$search_t)
+        $search_db = '%' . $search_db . '%'; // Если задан нестрогий поиск
+    $req = mysql_query("SELECT COUNT(*) FROM `users` WHERE `name_lat` LIKE '" . $search_db . "'");
     $total = mysql_result($req, 0);
     if ($total > 0)
     {
-        $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . $search . "' ORDER BY `name` ASC LIMIT " . $start . "," . $kmess);
+        $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . $search_db . "' ORDER BY `name` ASC LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req))
         {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
@@ -131,13 +103,18 @@ if (isset($_SESSION['search']))
     echo '<div class="phdr">Всего найдено: ' . $total . '</div>';
     if ($total > $kmess)
     {
-        echo '<p>' . pagenav('user_search.php?', $start, $total, $kmess) . '</p>';
+        // Навигация по страницам
+        echo '<p>' . pagenav('user_search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="user_search.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="user_search.php?reset">Новый поиск</a></p>';
+    echo '<p><a href="user_search.php">Новый поиск</a></p>';
 } else
 {
-    echo '<div class="bmenu"><small>';
+    // Выводим сообщение об ошибке
+    if ($error)
+        echo '<div class="rmenu"><p>ОШИБКА!<br />' . $error . '</p></div>';
+    // Инструкции для поиска
+    echo '<div class="phdr"><small>';
     echo 'Поиск идет по Нику пользователя (NickName) и нечувствителен к регистру букв. То есть, <b>UsEr</b> и <b>user</b> для поиска равноценны.';
     echo '<br />Если включен строгий поиск, то будет найдено только полное совпадение, иначе будет искаться любое совпадение внутри Ников.';
     echo '<br />В поиске допустимо использовать знак маски *';
