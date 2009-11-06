@@ -530,7 +530,7 @@ function smileys($str, $adm = 0)
         $smileys = serialize(array_merge($array1, $array4, $array5));
         $smileys_adm = serialize(array_merge($array2, $array3));
         // Записываем в файл Кэша
-        if ($fp = fopen($rootpath . 'smileys.dat', 'w'))
+        if ($fp = fopen($rootpath . 'cache/smileys_cache.dat', 'w'))
         {
             fputs($fp, $smileys . "\r\n" . $smileys_adm);
             fclose($fp);
@@ -542,7 +542,7 @@ function smileys($str, $adm = 0)
     } else
     {
         // Выдаем кэшированные смайлы
-        $file = file($rootpath . 'smileys.dat');
+        $file = file($rootpath . 'cache/smileys_cache.dat');
         $smileys = unserialize($file[0]);
         if ($adm)
             $smileys = array_merge($smileys, unserialize($file[1]));

@@ -22,7 +22,7 @@ class ipinit
     public $flood_chk = 1; // Включение - выключение функции IP антифлуда
     public $flood_interval = '120'; // Интервал времени в секундах
     public $flood_limit = '50'; // Число разрешенных запросов за интервал
-    public $flood_file = 'flood.dat'; // Рабочий файл функции
+    public $flood_file = 'http_antiflood.dat'; // Рабочий файл функции
     private $requests; // Число запросов с IP адреса за период времени
 
     function __construct()
@@ -59,12 +59,15 @@ class ipinit
     }
 
     // Счетчик числа обращений с данного IP
-	private function reqcount()
+    private function reqcount()
     {
         global $rootpath;
         $tmp = array();
         $requests = 1;
-        $in = fopen($rootpath . $this->flood_file, "r+");
+        if (!file_exists($rootpath . 'cache/' . $this->flood_file))
+            $in = fopen($rootpath . 'cache/' . $this->flood_file, "w+");
+        else
+            $in = fopen($rootpath . 'cache/' . $this->flood_file, "r+");
         flock($in, LOCK_EX) or die("Cannot flock ANTIFLOOD file.");
         $now = time();
         while ($block = fread($in, 8))
