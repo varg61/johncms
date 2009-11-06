@@ -41,15 +41,10 @@ function counters()
 ////////////////////////////////////////////////////////////
 function usersonline()
 {
-    global $realtime;
-    global $user_id;
-    global $home;
-    $ontime = $realtime - 300;
-    $qon = mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate`>='" . $ontime . "'");
-    $qon2 = mysql_result($qon, 0);
-    $all = mysql_query("SELECT `id` FROM `count` WHERE `time`>='" . $ontime . "' GROUP BY `ip`, `browser`");
-    $all2 = mysql_num_rows($all);
-    return ($user_id ? '<a href="' . $home . '/str/online.php">Онлайн: ' . $qon2 . ' / ' . $all2 . '</a>' : 'Онлайн: ' . $qon2 . ' / ' . $all2);
+    global $realtime, $user_id, $home;
+    $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
+    $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `time` > '" . ($realtime - 300) . "'"), 0);
+    return ($user_id ? '<a href="' . $home . '/str/online.php">Онлайн: ' . $users . ' / ' . $guests . '</a>' : 'Онлайн: ' . $users . ' / ' . $guests);
 }
 
 ////////////////////////////////////////////////////////////
@@ -76,27 +71,9 @@ function zipcount()
 ////////////////////////////////////////////////////////////
 function timeonline()
 {
-    global $realtime;
-    global $datauser;
-    global $user_id;
+    global $realtime, $datauser, $user_id;
     if ($user_id)
         echo '<div>В онлайне: ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
-}
-
-////////////////////////////////////////////////////////////
-// Подсчет колличества переходов по сайту                 //
-////////////////////////////////////////////////////////////
-function movements()
-{
-    global $datauser;
-    global $user_id;
-    global $login;
-    if ($user_id)
-    {
-        $req = mysql_query("SELECT COUNT(*) FROM `count` WHERE `time` > '" . $datauser['sestime'] . "' AND `name` = '" . $login . "'");
-        $count = mysql_result($req, 0);
-        echo '<div>Переходов: ' . $count . '</div>';
-    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -104,9 +81,7 @@ function movements()
 ////////////////////////////////////////////////////////////
 function forum_new()
 {
-    global $user_id;
-    global $realtime;
-    global $dostadm;
+    global $user_id, $realtime, $dostadm;
     if ($user_id)
     {
         $req = mysql_query("SELECT COUNT(*) FROM `forum`
@@ -155,40 +130,13 @@ function kuser()
 }
 
 ////////////////////////////////////////////////////////////
-// Счетчик "Кто в форуме?"                                //
+// Статистика Форума                                    //
 ////////////////////////////////////////////////////////////
-function wfrm($id = '')
+function wfrm()
 {
-    //TODO: Переделать
-    global $realtime;
-    $onltime = $realtime - 300;
-    $count = 0;
-    $qf = mysql_query("select * from `users` where  lastdate > '" . $onltime . "'");
-    while ($arrf = mysql_fetch_array($qf))
-    {
-        $whf = mysql_query("SELECT * FROM `count` WHERE `name` = '" . $arrf['name'] . "' ORDER BY `time` DESC");
-        while ($whf1 = mysql_fetch_array($whf))
-        {
-            $whf2[] = $whf1['where'];
-        }
-        $wherf = $whf2[0];
-        $whf2 = array();
-        $wherf1 = explode(",", $wherf);
-        if (empty($id))
-        {
-            if ($wherf1[0] == "forum")
-            {
-                $count = $count + 1;
-            }
-        } else
-        {
-            if ($wherf == "forum,$id")
-            {
-                $count = $count + 1;
-            }
-        }
-    }
-    return $count;
+    $total_thm = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` != '1'"), 0);
+    $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1'"), 0);
+    return $total_thm . '/<span class="red">' . $total_msg . '</span>';
 }
 
 ////////////////////////////////////////////////////////////
@@ -253,8 +201,7 @@ function brth()
 ////////////////////////////////////////////////////////////
 function stlib()
 {
-    global $realtime;
-    global $dostlmod;
+    global $realtime, $dostlmod;
     $countf = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
     $old = $realtime - (3 * 24 * 3600);
     $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
@@ -270,28 +217,10 @@ function stlib()
 ////////////////////////////////////////////////////////////
 // Статистика Чата                                        //
 ////////////////////////////////////////////////////////////
-// Если вызвать с параметром 0,1 то покажет общее число юзеров в Чате
 function wch($id = false, $mod = false)
 {
-    global $realtime;
-    $onltime = $realtime - 60;
-    if ($mod)
-    {
-        $where = $id ? 'chat,' . $id : 'chat';
-        $res = mysql_query("SELECT `id` FROM `count` WHERE
-		`time` > '" . $onltime . "' AND
-		`where` LIKE 'chat%'
-		GROUP BY `name`");
-    } else
-    {
-        $where = $id ? 'chat,' . $id : 'chat';
-        $res = mysql_query("SELECT `id` FROM `count` WHERE
-		`time` > '" . $onltime . "' AND
-		`where` = '" . $where . "'
-		GROUP BY `name`");
-    }
-    $count = mysql_num_rows($res);
-    return $count;
+    //TODO: Написать функцию статистики Чата
+    return 0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -301,8 +230,7 @@ function wch($id = false, $mod = false)
 // Если вызвать с параметром 2, то будет выдавать колличество новых в Админ-Клубе
 function gbook($mod = 0)
 {
-    global $realtime;
-    global $dostmod;
+    global $realtime, $dostmod;
     switch ($mod)
     {
         case 1:
@@ -643,8 +571,7 @@ function display_error($error = array())
 ################################################################################
 */
 
-function provcat($catalog) //TODO: Удалить функцию
-
+function provcat($catalog)
 {
     $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
     $cat2 = mysql_num_rows($cat1);

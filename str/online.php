@@ -15,38 +15,53 @@
 */
 
 define('_IN_JOHNCMS', 1);
-session_name("SESID");
-session_start();
+
 $headmod = 'online';
 $textl = 'Онлайн';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
-echo '<div class="phdr"><b>Кто в онлайне?</b></div>';
+
+echo '<div class="phdr"><b>Список ' . ($act == 'guest' ? 'гостей' : 'авторизованных') . '</b></div>';
 $onltime = $realtime - 300;
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '$onltime'"), 0);
-$req = mysql_query("SELECT * FROM `users` WHERE `lastdate` > '" . intval($onltime) . "' ORDER BY `name` LIMIT " . $start . "," . $kmess);
-while ($res = mysql_fetch_array($req))
+if ($act == 'guest')
+{
+    // Запрос по гостям
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `time` > '$onltime'"), 0);
+    $req = mysql_query("SELECT *, `user_ip` AS `ip`, `user_agent` AS `browser` FROM `cms_guests` WHERE `time` > '$onltime' ORDER BY `movings` DESC LIMIT " . $start . "," . $kmess);
+} else
+{
+    // Запрос по юзерам
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '$onltime'"), 0);
+    $req = mysql_query("SELECT * FROM `users` WHERE `lastdate` > '$onltime' ORDER BY `name` LIMIT " . $start . "," . $kmess);
+}
+while ($res = mysql_fetch_assoc($req))
 {
     echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-    echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-    echo ($user_id && $user_id != $res['id'] ? '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
-    switch ($res['rights'])
+    if ($act == 'guest')
     {
-        case 7:
-            echo ' (Adm)';
-            break;
-        case 6:
-            echo ' (Smd)';
-            break;
-        case 5:
-        case 4:
-        case 3:
-        case 2:
-            echo ' (Mod)';
-            break;
-        case 1:
-            echo ' (Kil)';
-            break;
+        echo '<b>Гость</b>';
+    } else
+    {
+        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+        echo ($user_id && $user_id != $res['id'] ? '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
+        switch ($res['rights'])
+        {
+            case 7:
+                echo ' (Adm)';
+                break;
+            case 6:
+                echo ' (Smd)';
+                break;
+            case 5:
+            case 4:
+            case 3:
+            case 2:
+                echo ' (Mod)';
+                break;
+            case 1:
+                echo ' (Kil)';
+                break;
+        }
     }
     $svr = $realtime - $res['sestime'];
     if ($svr >= "3600")
@@ -101,20 +116,17 @@ while ($res = mysql_fetch_array($req))
             $sitevr = "00:00:$ivr";
         }
     }
-    $prh = mysql_result(mysql_query("SELECT COUNT(*) FROM `count` WHERE `time` > '" . $res['sestime'] . "' AND `name` = '" . $res['name'] . "'"), 0);
-    echo ' (' . $prh . ' - ' . $sitevr . ') ';
+    echo ' (' . $res['movings'] . ' - ' . $sitevr . ') ';
     if ($user_id)
     {
-        //echo "Где: ";
-        $wh = mysql_query("SELECT * FROM `count` WHERE `name` = '" . $res['name'] . "' ORDER BY `time` DESC LIMIT 1");
-        $wh1 = mysql_fetch_array($wh);
-        $wher = $wh1['where'];
-        $wher1 = explode(",", $wher);
-        $where = $wher1[0];
-        switch ($where)
+        $where = explode(",", $res['place']);
+        switch ($where[0])
         {
             case 'forumfiles':
                 echo '<a href="../forum/index.php?act=files">Файлы форума</a>';
+                break;
+            case 'forumwho':
+                echo '<a href="../forum/index.php?act=who">Смотрит кто в форуме?</a>';
                 break;
             case 'anketa':
                 echo '<a href="anketa.php">Анкета</a>';
@@ -163,21 +175,20 @@ while ($res = mysql_fetch_array($req))
                 break;
         }
     }
+    echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
     if ($dostmod == 1)
-    {
-        echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'] . '<br /><u>IP Address</u>: ' . long2ip($res['ip']) . '</div>';
-    }
-
-    echo '</div>';
+        echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
+    echo '</div></div>';
     ++$i;
 }
-echo '<div class="phdr">Всего он-лайн: ' . $total . '</div>';
+echo '<div class="phdr">Всего: ' . $total . '</div>';
 if ($total > 10)
 {
-    echo '<p>' . pagenav('online.php?', $start, $total, $kmess) . '</p>';
-    echo '<p><form action="online.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+    echo '<p>' . pagenav('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
+    echo '<p><form action="online.php" method="get"><input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') . '<input type="submit" value="К странице &gt;&gt;"/></form></p>';
 }
-
+if ($user_id)
+    echo '<p>' . ($act == 'guest' ? '<a href="online.php">Показать авторизованных</a>' : '<a href="online.php?act=guest">Показать гостей</a>') . '</p>';
 require_once ("../incfiles/end.php");
 
 ?>

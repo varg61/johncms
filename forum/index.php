@@ -38,7 +38,6 @@ $ext_audio = array('mp3', 'amr');
 // Другие типы файлов (что не перечислены выше)
 $ext_other = array();
 
-$headmod = 'forum';
 require_once ('../incfiles/core.php');
 
 // Ограничиваем доступ к Форуму
@@ -55,6 +54,8 @@ if ($error)
     exit;
 }
 
+$headmod = $id ? 'forum,' . $id : 'forum';
+
 // Заголовки форума
 if (empty($id))
 {
@@ -67,28 +68,6 @@ if (empty($id))
     $hdr = mb_substr($hdr, 0, 30);
     $hdr = checkout($hdr);
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
-}
-
-if ($user_id)
-{
-    // Фиксируем местоположение юзера
-    $tti = round(($datauser['ftime'] - $realtime) / 60);
-    if ($act == 'files')
-    {
-        $where = 'forumfiles';
-    } elseif ($id)
-    {
-        $where = "forum,$id";
-    } else
-    {
-        $where = "forum";
-    }
-    mysql_query("INSERT INTO `count`  SET
-	`ip`='$ipp',
-	`browser`='$agn',
-	`time`='$realtime',
-	`where`='$where',
-	`name`='$login'");
 }
 
 $do = array('new', 'who', 'addfile', 'file', 'users', 'moders', 'addvote', 'editvote', 'delvote', 'vote', 'per', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans',
@@ -287,7 +266,7 @@ if (in_array($act, $do))
                     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
                     $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
                     echo '<div  class="list2"><b>' . checkout($topic_vote['name']) . '</b><br />';
-                    $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "'");
+                    $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "' ORDER BY `id` ASC");
                     if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0)
                     {
                         // Выводим форму с опросами
@@ -521,7 +500,12 @@ if (in_array($act, $do))
                     echo "<br/><a href='index.php?act=per&amp;id=" . $id . "'>Переместить тему</a></div></p>";
                 }
                 if ($user_id)
-                    echo "<a href='index.php?act=who&amp;id=" . $id . "'>Кто здесь?(" . wfrm($id) . ")</a><br/>";
+                {
+                    $onltime = $realtime - 300;
+                    $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
+                    $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `time` > $onltime AND `place` = 'forum,$id'"), 0);
+                    echo '<a href="index.php?act=who&amp;id=' . $id . '">Кто здесь?&nbsp;(' . $online_u . '&nbsp;/&nbsp;' . $online_g . ')</a><br/>';
+                }
                 if ($filter)
                     echo '<div><a href="index.php?act=filter&amp;id=' . $id . '&amp;do=unset">Отменить фильтрацию</a></div>';
                 else
@@ -555,7 +539,10 @@ if (in_array($act, $do))
             echo '</div>';
             ++$i;
         }
-        echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&nbsp;(' . wfrm() . ')</div>';
+        $onltime = $realtime - 300;
+        $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
+        $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `time` > $onltime AND `place` LIKE 'forum%'"), 0);
+        echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&nbsp;(' . $online_u . '&nbsp;/&nbsp;' . $online_g . ')</div>';
         unset($_SESSION['fsort_id']);
         unset($_SESSION['fsort_users']);
     }

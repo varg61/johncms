@@ -95,6 +95,22 @@ switch ($do)
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
+        // Таблицы счетчика гостей
+        mysql_query("DROP TABLE `count`");
+        mysql_query("DROP TABLE IF EXISTS `cms_guests`");
+        mysql_query("CREATE TABLE `cms_guests` (
+        `session_id` char(32) NOT NULL,
+        `user_ip` int(11) NOT NULL,
+        `user_agent` tinytext NOT NULL,
+        `time` int(11) NOT NULL,
+        `sestime` int(11) NOT NULL,
+        `movings` int(11) NOT NULL default '0',
+        `place` varchar(30) NOT NULL,
+        PRIMARY KEY  (`session_id`),
+        KEY `time` (`time`),
+        KEY `place` (`place`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+        echo '<span class="green">OK</span> таблица `cms_guests` создана.<br />';
         // Таблицы голосований
         mysql_query("DROP TABLE IF EXISTS `forum_vote`");
         mysql_query("CREATE TABLE `forum_vote` (
@@ -122,6 +138,9 @@ switch ($do)
         mysql_query("ALTER TABLE `users` ADD `postclip` TINYINT( 2 ) NOT NULL DEFAULT '2' AFTER `farea`");
         mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
         mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `movings` INT NOT NULL DEFAULT '0");
+        mysql_query("ALTER TABLE `users` ADD `place` VARCHAR( 30 ) NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD INDEX ( `place` )");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
         $array = array('fmod', 'gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');

@@ -77,22 +77,21 @@ CREATE TABLE `chat` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Структура таблицы `count`
+-- Структура таблицы `cms_guests`
 --
-DROP TABLE IF EXISTS `count`;
-CREATE TABLE `count` (
-  `id` int(11) NOT NULL auto_increment,
-  `ip` varchar(15) NOT NULL,
-  `browser` text NOT NULL,
-  `time` varchar(25) NOT NULL,
-  `where` varchar(100) NOT NULL,
-  `name` varchar(25) NOT NULL,
-  `dos` binary(1) NOT NULL,
-  PRIMARY KEY  (`id`),
+DROP TABLE IF EXISTS `cms_guests`;
+CREATE TABLE `cms_guests` (
+  `session_id` char(32) NOT NULL,
+  `user_ip` int(11) NOT NULL,
+  `user_agent` tinytext NOT NULL,
+  `time` int(11) NOT NULL,
+  `sestime` int(11) NOT NULL,
+  `movings` int(11) NOT NULL default '0',
+  `place` varchar(30) NOT NULL,
+  PRIMARY KEY  (`session_id`),
   KEY `time` (`time`),
-  KEY `where` (`where`),
-  KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+  KEY `place` (`place`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Структура таблицы `download`

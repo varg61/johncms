@@ -14,7 +14,7 @@
 */
 
 define('_IN_JOHNCMS', 1);
-$headmod = 'auto';
+
 $rootpath = '';
 require_once ("incfiles/core.php");
 

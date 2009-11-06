@@ -146,7 +146,6 @@ $good_files = array(
 '../incfiles/mp3.php',
 '../incfiles/pclzip.php',
 '../incfiles/pear.php',
-'../incfiles/usersystem.php',
 '../library/addkomm.php',
 '../library/del.php',
 '../library/edit.php',

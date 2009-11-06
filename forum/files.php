@@ -15,6 +15,8 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
+$headmod = 'forumfiles';
 require_once ('../incfiles/head.php');
 
 $types = array(1 => 'Приложения WIN', 2 => 'Приложения Java', 3 => 'Приложения SIS', 4 => 'Текстовые файлы', 5 => 'Картинки', 6 => 'Архивы', 7 => 'Видео', 8 => 'MP3', 9 => 'Другое');

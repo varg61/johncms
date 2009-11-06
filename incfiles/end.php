@@ -16,6 +16,10 @@
 
 defined('_IN_JOHNCMS') or die('Error:restricted access');
 
+// Выводим рекламу MOBILEADS.RU
+if (isset($_SESSION['mad_links']) && $_SESSION['mad_time'] > ($realtime - 60 * 15))
+    echo '<div class="gmenu">' . $_SESSION['mad_links'] . '</div>';
+
 echo '</div><div class="fmenu">';
 if ($headmod != "mainpage" || isset($_GET['do']) || isset($_GET['mod']))
     echo '<a href=\'' . $home . '\'>На главную</a><br/>';
@@ -40,7 +44,7 @@ echo '</div><div class="footer">' . usersonline() . '</div>';
 echo '<div align="center">';
 zipcount(); // Индикатор сжатия
 timeonline(); // Время, проведенное в онлайне
-movements(); // Счетчик перемещений по сайту
+echo 'Переходов: ' . $movings; // Счетчик перемещений по сайту
 echo '<div><b>' . $copyright . '</b></div>';
 counters(); // Счетчики каталогов
 
@@ -51,5 +55,36 @@ counters(); // Счетчики каталогов
 ////////////////////////////////////////////////////////////
 echo '<div><small><a href="http://johncms.com">JohnCMS</a></small></div>';
 echo '</div></body></html>';
+
+ob_end_flush();
+
+// Блок Mobileads.ru
+if (!isset($_SESSION['mad_time']) || $_SESSION['mad_time'] < ($realtime - 60 * 3))
+{
+    $mad_socketTimeout = 2; // таймаут соединения с сервером mobileads.ru
+    ini_set("default_socket_timeout", $mad_socketTimeout);
+    $mad_siteId = 2106;
+    $mad_pageEncoding = "UTF-8"; // устанавливаем кодировку страницы
+    $mad_ua = urlencode(@$_SERVER['HTTP_USER_AGENT']);
+    $mad_ip = urlencode(@$_SERVER['REMOTE_ADDR']);
+    $mad_xip = urlencode(@$_SERVER['HTTP_X_FORWARDED_FOR']);
+    $mad_ref = urlencode(@$_SERVER['SERVER_NAME'] . @$_SERVER['REQUEST_URI']);
+    $mad_lines = "";
+    $mad_fp = @fsockopen("mobileads.ru", 80, $mad_errno, $mad_errstr, $mad_socketTimeout);
+    if ($mad_fp)
+    {
+        // переменная $mad_lines будет содержать массив, непарные элементы которого будут ссылками, парные - названием
+        $mad_lines = @file("http://mobileads.ru/links?id=$mad_siteId&ip=$mad_ip&xip=$mad_xip&ua=$mad_ua&ref=$mad_ref");
+    }
+    @fclose($mad_fp); // вывод ссылок
+    for ($malCount = 0; $malCount < count($mad_lines); $malCount += 2)
+    {
+        $linkURL = trim($mad_lines[$malCount]);
+        $linkName = iconv("Windows-1251", $mad_pageEncoding, $mad_lines[$malCount + 1]);
+        $out .= '<a href="' . $linkURL . '">' . $linkName . '</a><br />';
+    }
+    $_SESSION['mad_links'] = $out;
+    $_SESSION['mad_time'] = $realtime;
+}
 
 ?>

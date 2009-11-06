@@ -169,10 +169,11 @@ $mesyac = array(1 => "января", "февраля", "марта", "апрел
 ////////////////////////////////////////////////////////////
 if ($set['clean_time'] <= ($realtime - 43200))
 {
-    // Очищаем таблицу "count"
-    mysql_query("delete from `count` where `time`<='" . ($realtime - 600) . "';");
-    mysql_query("OPTIMIZE TABLE `count`;");
-    mysql_query("UPDATE `cms_settings` SET  `val`='" . $realtime . "' WHERE `key`='clean_time';");
+    // Очищаем таблицу `cms_guests`
+    mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($realtime - 600) . "'");
+    mysql_query("OPTIMIZE TABLE `cms_guests`");
+    mysql_query("UPDATE `cms_settings` SET  `val`='" . $realtime . "' WHERE `key`='clean_time'");
+    // Очищаем Чат
 }
 
 ////////////////////////////////////////////////////////////
@@ -243,56 +244,23 @@ if ($user_id && $user_ps)
 
             // Установка административного доступа
             if ($login == $nickadmina || $login == $nickadmina2)
-            {
                 $dostsadm = 1; //Суперадмин
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7)
-            {
                 $dostadm = 1; // Админ
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6)
-            {
                 $dostsmod = 1; // Старший модер
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 5)
-            {
                 $dostlmod = 1; // Модер библиотеки
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 4)
-            {
                 $dostdmod = 1; // Модер по загрузкам
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 3)
-            {
                 $dostfmod = 1; // Модер форума
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 2)
-            {
                 $dostcmod = 1; // Модер Чата
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights == 1 || $rights == 7 || $rights == 6)
-            {
                 $dostkmod = 1; // Киллер
-            }
             if ($login == $nickadmina || $login == $nickadmina2 || $rights >= 1)
-            {
                 $dostmod = 1;
-            }
-
-            // Устанавливаем время начала сессии
-            if ($lastdate <= ($realtime - 300))
-                mysql_query("UPDATE `users` SET `sestime`='" . $realtime . "' WHERE `id`='" . $user_id . "';");
-
-            // Обновляем данные
-            $totalonsite = $datauser['total_on_site'];
-            if ($lastdate >= ($realtime - 300))
-                $totalonsite = $totalonsite + $realtime - $lastdate;
-            mysql_query("UPDATE `users` SET
-			`total_on_site`='" . $totalonsite . "',
-			`lastdate`='" . $realtime . "',
-			`ip`='" . $ipl . "',
-			`browser`='" . mysql_real_escape_string($agn) . "'
-			WHERE `id`='" . $user_id . "';");
 
             // Если юзера не было на сайте более 1-го часа , показываем дайджест
             if ($lastdate < ($realtime - 3600) && $datauser['digest'] == 1 && $headmod == 'mainpage')
