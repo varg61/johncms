@@ -41,7 +41,7 @@ switch ($_GET['act'])
         // Создание таблиц в базе данных MySQL                    //
         ////////////////////////////////////////////////////////////
         echo '<h2>Установка системы</h2><ul>';
-		require_once ("../incfiles/db.php");
+        require_once ("../incfiles/db.php");
         require_once ("../incfiles/func.php");
         $connect = mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server</div></body></html>');
         mysql_select_db($db_name) or die('cannot connect to db</div></body></html>');
@@ -117,7 +117,7 @@ switch ($_GET['act'])
             echo '<ul>При желании, Вы можете установить <a href="index.php?act=demo&amp;id=' . $user_id . '&amp;ps=' . $_POST['wpassadmina'] .
                 '">Демо данные</a><br />Это может быть полезно для начинающих сайтостроителей.<br />В базу будут внесены некоторые исходные настроики и материалы.</ul>';
             echo '<br /><h2 class="red">Не забудьте:</h2><ul><li>Сменить права к папке incfiles на 755</li><li>Сменить права на файл incfiles/db.php 644</li><li>Удалить папку install с сайта</li></ul>';
-			echo '<hr /><a href="../auto.php?id=' . $user_id . '&amp;p=' . $_POST['wpassadmina'] . '">Вход на сайт</a>';
+            echo '<hr /><a href="../auto.php?id=' . $user_id . '&amp;p=' . $_POST['wpassadmina'] . '">Вход на сайт</a>';
         } else
         {
             // Если были ошибки, выводим их
@@ -172,8 +172,7 @@ switch ($_GET['act'])
         $duser = trim($_POST['user']);
         $dpass = trim($_POST['pass']);
         $dname = trim($_POST['name']);
-        $text = "<?php\r\n\r\n" . "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" . "$" . "db_host=\"$dhost\";\r\n" . "$" . "db_user=\"$duser\";\r\n" . "$" . "db_pass=\"$dpass\";\r\n" .
-            "$" . "db_name=\"$dname\";\r\n" . "\r\n?>";
+        $text = "<?php\r\n\r\n" . "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" . "$" . "db_host=\"$dhost\";\r\n" . "$" . "db_user=\"$duser\";\r\n" . "$" . "db_pass=\"$dpass\";\r\n" . "$" . "db_name=\"$dname\";\r\n" . "\r\n?>";
         $fp = @fopen("../incfiles/db.php", "w");
         fputs($fp, $text);
         fclose($fp);
@@ -289,8 +288,8 @@ switch ($_GET['act'])
         $cherr = '';
 
         // Проверка прав доступа к папкам
-        $arr = array("incfiles/", "gallery/foto/", "gallery/temp/", "library/files/", "library/temp/", "pratt/", "forum/files/", "forum/temtemp/", "download/arctemp/", "download/files/", "download/graftemp/", "download/screen/", "download/mp3temp/",
-            "download/upl/");
+        $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/',
+            'download/mp3temp/', 'download/upl/');
         foreach ($arr as $v)
         {
             if (permissions($v) < 777)
@@ -304,7 +303,7 @@ switch ($_GET['act'])
         }
 
         // Проверка прав доступа к файлам
-        $arr = array('flood.dat', 'smileys.dat', 'library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF', 'panel/filebase.dat');
+        $arr = array('library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF');
         foreach ($arr as $v)
         {
             if (permissions($v) < 666)

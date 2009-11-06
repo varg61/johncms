@@ -22,7 +22,7 @@ class scaner
     var $scan_folders = array();
     var $cache_files = array();
     var $good_files = array();
-    var $snap_base = 'filebase.dat';
+    var $snap_base = 'scan_snapshot.dat';
 
     var $checked_folders = array();
     var $track_files = array();
@@ -46,9 +46,9 @@ class scaner
         ////////////////////////////////////////////////////////////
         // Сканирование по образу                                 //
         ////////////////////////////////////////////////////////////
-        if (file_exists($this->snap_base))
+        if (file_exists('../cache/' . $this->snap_base))
         {
-			$filecontents = file($this->snap_base);
+            $filecontents = file('../cache/' . $this->snap_base);
             foreach ($filecontents as $name => $value)
             {
                 $filecontents[$name] = explode("|", trim($value));
@@ -77,10 +77,10 @@ class scaner
         {
             $filecontents .= $data['file_path'] . "|" . $data['file_crc'] . "\r\n";
         }
-        $filehandle = fopen($this->snap_base, "w+");
+        $filehandle = fopen('../cache/' . $this->snap_base, "w+");
         fwrite($filehandle, $filecontents);
         fclose($filehandle);
-        @chmod($this->snap_base, 0666);
+        @chmod('../cache/' . $this->snap_base, 0666);
     }
 
     function scan_files($dir, $snap = false)

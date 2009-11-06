@@ -54,8 +54,8 @@ switch ($do)
         $cherr = '';
         $err = false;
         // Проверка прав доступа к папкам
-        $arr = array("gallery/foto/", "gallery/temp/", "library/files/", "library/temp/", "pratt/", "forum/files/", "forum/temtemp/", "download/arctemp/", "download/files/", "download/graftemp/", "download/screen/", "download/mp3temp/",
-            "download/upl/");
+        $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/',
+            'download/mp3temp/', 'download/upl/');
         foreach ($arr as $v)
         {
             if (permissions($v) < 777)
@@ -68,7 +68,7 @@ switch ($do)
             }
         }
         // Проверка прав доступа к файлам
-        $arr = array('flood.dat', 'smileys.dat', 'library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF', 'panel/filebase.dat');
+        $arr = array('library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF');
         foreach ($arr as $v)
         {
             if (permissions($v) < 666)

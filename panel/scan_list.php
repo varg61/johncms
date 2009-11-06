@@ -98,6 +98,7 @@ $good_files = array(
 '../forum/per.php',
 '../forum/post.php',
 '../forum/read.php',
+'../forum/restore.php',
 '../forum/ren.php',
 '../forum/say.php',
 '../forum/search.php',
