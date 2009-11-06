@@ -336,7 +336,7 @@ if (in_array($act, $do))
                 // Запрос в базу
                 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 				FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`time` $order LIMIT $start, $kmess");
+				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`time` $order LIMIT $start, $kmess");
                 // Верхнее поле "Написать"
                 //TODO:Дописать возможность Админу писать в закрытой теме и переделать НАПИСАТЬ на кнопку
                 if ($user_id && $type1['edit'] != 1 && $upfp)
@@ -389,10 +389,24 @@ if (in_array($act, $do))
                     // Вывод текста поста                                     //
                     ////////////////////////////////////////////////////////////
                     $text = $res['text'];
-                    if (mb_strlen($text) > 500)
+                    if ($datauser['postcut'])
                     {
                         // Если текст длинный, обрезаем и даем ссылку на полный вариант
-                        $text = mb_substr($text, 0, 500);
+                        switch ($datauser['postcut'])
+                        {
+                            case 2:
+                                $cut = 1000;
+                                break;
+                            case 3:
+                                $cut = 3000;
+                                break;
+                            default:
+                                $cut = 500;
+                        }
+                    }
+                    if ($datauser['postcut'] && mb_strlen($text) > $cut)
+                    {
+                        $text = mb_substr($text, 0, $cut);
                         $text = checkout($text, 1, 0);
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         echo $text . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';

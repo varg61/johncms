@@ -400,7 +400,8 @@ CREATE TABLE `users` (
   `vrrat` int(11) NOT NULL default '0',
   `upfp` tinyint(1) NOT NULL default '0',
   `farea` tinyint(1) NOT NULL default '0',
-  `postclip` tinyint(2) NOT NULL default '2',
+  `postclip` tinyint(2) NOT NULL default '1',
+  `postcut` smallint(6) NOT NULL default '1',
   `chmes` int(2) NOT NULL default '10',
   `nmenu` text NOT NULL,
   `carea` tinyint(1) NOT NULL default '0',
@@ -411,9 +412,14 @@ CREATE TABLE `users` (
   `digest` tinyint(4) NOT NULL default '1',
   `skin` varchar(20) NOT NULL,
   `lastpost` int(11) NOT NULL,
+  `rest_code` varchar(32) NOT NULL,
+  `rest_time` int(11) NOT NULL,
+  `place` varchar(30) NOT NULL,
+  `movings` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `name_lat` (`name_lat`),
-  KEY `lastdate` (`lastdate`)
+  KEY `lastdate` (`lastdate`),
+  KEY `place` (`place`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --

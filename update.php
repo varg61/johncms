@@ -141,6 +141,7 @@ switch ($do)
         mysql_query("ALTER TABLE `users` ADD `movings` INT NOT NULL DEFAULT '0");
         mysql_query("ALTER TABLE `users` ADD `place` VARCHAR( 30 ) NOT NULL");
         mysql_query("ALTER TABLE `users` ADD INDEX ( `place` )");
+        mysql_query("ALTER TABLE `users` ADD `postcut` SMALLINT NOT NULL DEFAULT '1' AFTER `postclip`");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
         $array = array('fmod', 'gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');

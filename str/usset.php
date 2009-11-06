@@ -25,7 +25,7 @@ if ($user_id)
 {
     switch ($act)
     {
-        case "all":
+        case 'all':
             if (isset($_POST['submit']))
             {
                 $sdvig = intval($_POST['sdvig']);
@@ -98,14 +98,17 @@ if ($user_id)
             }
             break;
 
-        case "forum":
+        case 'forum':
             echo '<div class="phdr"><b>Настройки Форума</b></div>';
             if (isset($_POST['submit']))
             {
+                $farea = isset($_POST['farea']) ? 1 : 0;
+                $upfp = isset($_POST['upfp']) ? 1 : 0;
                 mysql_query("UPDATE `users` SET 
-				`farea` = '" . intval($_POST['farea']) . "',
-				`upfp` = '" . intval($_POST['upfp']) . "',
-                `postclip` = '" . intval($_POST['postclip']) . "'
+				`farea` = '$farea',
+				`upfp` = '$upfp',
+                `postclip` = '" . intval($_POST['postclip']) . "',
+                `postcut` = '" . intval($_POST['postcut']) . "'
 				WHERE `id` = '$user_id'");
                 echo '<div class="rmenu">Настройки форума сохранены</div>';
                 $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1");
@@ -118,12 +121,17 @@ if ($user_id)
             echo '<input type="radio" value="2" name="postclip" ' . ($datauser['postclip'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;всегда<br />';
             echo '<input type="radio" value="1" name="postclip" ' . ($datauser['postclip'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;в непрочитанных<br />';
             echo '<input type="radio" value="0" name="postclip" ' . (!$datauser['postclip'] ? 'checked="checked"' : '') . '/>&nbsp;никогда';
+            echo '</p><p><h3>Обрезка постов</h3>';
+            echo '<input type="radio" value="1" name="postcut" ' . ($datauser['postcut'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;500 символов<br />';
+            echo '<input type="radio" value="2" name="postcut" ' . ($datauser['postcut'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;1000 символов<br />';
+            echo '<input type="radio" value="3" name="postcut" ' . ($datauser['postcut'] == 3 ? 'checked="checked"' : '') . '/>&nbsp;3000 символов<br />';
+            echo '<input type="radio" value="0" name="postcut" ' . ($datauser['postcut'] == 0 ? 'checked="checked"' : '') . '/>&nbsp;не обрезать<br />';
             echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
             echo '<div class="phdr"><a href="usset.php">Меню настроек</a></div>';
             echo '<p><a href="../forum">В форум</a></p>';
             break;
 
-        case "chat":
+        case 'chat':
             if (isset($_POST['submit']))
             {
                 if ($dostsadm == 1)

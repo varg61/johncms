@@ -130,13 +130,21 @@ function kuser()
 }
 
 ////////////////////////////////////////////////////////////
-// Статистика Форума                                    //
+// Статистика Форума                                      //
 ////////////////////////////////////////////////////////////
 function wfrm()
 {
-    $total_thm = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` != '1'"), 0);
-    $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1'"), 0);
-    return $total_thm . '/<span class="red">' . $total_msg . '</span>';
+    global $user_id, $dostadm, $home;
+    $total_thm = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'" . ($dostadm ? "" : " AND `close` != '1'")), 0);
+    $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'" . ($dostadm ? "" : " AND `close` != '1'")), 0);
+    $out = $total_thm . '&nbsp;/&nbsp;' . $total_msg . '';
+    if ($user_id)
+    {
+        $new = forum_new();
+        if ($new)
+            $out .= '&nbsp;/&nbsp;<span class="red"><a href="' . $home . '/forum/index.php?act=new">+' . $new . '</a></span>';
+    }
+    return $out;
 }
 
 ////////////////////////////////////////////////////////////
