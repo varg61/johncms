@@ -43,7 +43,7 @@ function usersonline()
 {
     global $realtime, $user_id, $home;
     $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
-    $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `time` > '" . ($realtime - 300) . "'"), 0);
+    $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
     return ($user_id ? '<a href="' . $home . '/str/online.php">Онлайн: ' . $users . ' / ' . $guests . '</a>' : 'Онлайн: ' . $users . ' / ' . $guests);
 }
 
@@ -255,7 +255,7 @@ function gbook($mod = 0)
             if ($dostmod == 1)
             {
                 $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "'");
-                $count = $count . '&nbsp;/&nbsp;<span class="red">' . mysql_result($req, 0) . '</span>';
+                $count = $count . '&nbsp;/&nbsp;<span class="red"><a href="str/guest.php?act=ga&amp;do=set">' . mysql_result($req, 0) . '</a></span>';
             }
     }
     return $count;

@@ -82,14 +82,14 @@ CREATE TABLE `chat` (
 DROP TABLE IF EXISTS `cms_guests`;
 CREATE TABLE `cms_guests` (
   `session_id` char(32) NOT NULL,
-  `user_ip` int(11) NOT NULL,
-  `user_agent` tinytext NOT NULL,
-  `time` int(11) NOT NULL,
+  `ip` int(11) NOT NULL,
+  `browser` tinytext NOT NULL,
+  `lastdate` int(11) NOT NULL,
   `sestime` int(11) NOT NULL,
   `movings` int(11) NOT NULL default '0',
   `place` varchar(30) NOT NULL,
   PRIMARY KEY  (`session_id`),
-  KEY `time` (`time`),
+  KEY `time` (`lastdate`),
   KEY `place` (`place`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -17,7 +17,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = 'Форум-новые';
-$headmod = "forums";
+$headmod = 'forumnew';
 require_once ("../incfiles/head.php");
 echo '<p><a href="index.php">Вернуться в форум</a></p>';
 unset($_SESSION['fsort_id']);

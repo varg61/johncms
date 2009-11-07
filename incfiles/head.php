@@ -97,26 +97,26 @@ if ($user_id)
             $movings = 0;
             $sql .= "`sestime` = '$realtime',";
         }
-        if ($res['user_ip'] != $ipl)
-            $sql .= "`user_ip` = '$ipl',";
-        if ($res['user_agent'] != $agn)
-            $sql .= "`user_agent` = '" . mysql_real_escape_string($agn) . "',";
+        if ($res['ip'] != $ipl)
+            $sql .= "`ip` = '$ipl',";
+        if ($res['browser'] != $agn)
+            $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
         if ($res['place'] != $headmod)
         {
             $movings = $movings + 1;
             $sql .= "`movings` = '$movings', `place` = '$headmod',";
         }
         mysql_query("UPDATE `cms_guests` SET $sql
-        `time` = '$realtime'
+        `lastdate` = '$realtime'
         WHERE `session_id` = '$sid'");
     } else
     {
         // Если еще небыло в базе, то добавляем запись
         mysql_query("INSERT INTO `cms_guests` SET
         `session_id` = '$sid',
-        `user_ip` = '$ipl',
-        `user_agent` = '" . mysql_real_escape_string($agn) . "',
-        `time` = '$realtime',
+        `ip` = '$ipl',
+        `browser` = '" . mysql_real_escape_string($agn) . "',
+        `lastdate` = '$realtime',
         `sestime` = '$realtime',
         `place` = '$headmod'");
     }

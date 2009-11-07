@@ -60,7 +60,7 @@ function forum_link($m)
             return $m[3];
     }
 }
-
+$headmod = 'forum,' . $id . ',1';
 $agn1 = strtok($agn, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);

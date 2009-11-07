@@ -95,9 +95,9 @@ if (in_array($act, $do))
         $tip = $type1['type'];
         switch ($tip)
         {
-            case "f":
+            case 'f':
                 ////////////////////////////////////////////////////////////
-                // Список Подразделов форума                              //
+                // Список Разделов форума                                 //
                 ////////////////////////////////////////////////////////////
                 // Ссылка на Новые темы
                 echo '<p><a href="index.php?act=new">' . ($user_id ? 'Непрочитанное&nbsp;(' . forum_new() . ')' : 'Последние 10 тем') . '</a></p>';
@@ -109,7 +109,7 @@ if (in_array($act, $do))
                 $total = mysql_num_rows($req);
                 while ($mass1 = mysql_fetch_array($req))
                 {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
                     $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $mass1['id'] . "'"), 0);
                     echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
                     if ($coltem)
@@ -124,7 +124,7 @@ if (in_array($act, $do))
                 unset($_SESSION['fsort_users']);
                 break;
 
-            case "r":
+            case 'r':
                 ////////////////////////////////////////////////////////////
                 // Список тем                                             //
                 ////////////////////////////////////////////////////////////
@@ -140,12 +140,12 @@ if (in_array($act, $do))
                 echo '</div>';
                 if ($user_id && !$ban['1'] && !$ban['11'])
                 {
-                    echo '<div class="gmenu"><a href="index.php?act=nt&amp;id=' . $id . '">Новая тема</a></div>';
+                    echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . $id . '" method="post"><input type="submit" value="Новая тема" /></form></div>';
                 }
                 $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
                 while ($mass = mysql_fetch_array($q1))
                 {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "' ORDER BY `time` DESC LIMIT 1");
                     $nam = mysql_fetch_array($nikuser);
                     $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
@@ -193,7 +193,7 @@ if (in_array($act, $do))
                 unset($_SESSION['fsort_users']);
                 break;
 
-            case "t":
+            case 't':
                 ////////////////////////////////////////////////////////////
                 // Читаем топик                                           //
                 ////////////////////////////////////////////////////////////
@@ -265,7 +265,7 @@ if (in_array($act, $do))
                         $clip_forum = '&amp;clip';
                     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
                     $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
-                    echo '<div  class="list2"><b>' . checkout($topic_vote['name']) . '</b><br />';
+                    echo '<div  class="gmenu"><b>' . checkout($topic_vote['name']) . '</b><br />';
                     $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "' ORDER BY `id` ASC");
                     if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0)
                     {
@@ -357,7 +357,7 @@ if (in_array($act, $do))
                     echo '<form action="index.php?act=massdel" method="post">';
                 while ($res = mysql_fetch_array($req))
                 {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
                     if ($res['sex'])
                         echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
                     else
@@ -517,7 +517,7 @@ if (in_array($act, $do))
                 {
                     $onltime = $realtime - 300;
                     $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
-                    $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `time` > $onltime AND `place` = 'forum,$id'"), 0);
+                    $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
                     echo '<a href="index.php?act=who&amp;id=' . $id . '">Кто здесь?&nbsp;(' . $online_u . '&nbsp;/&nbsp;' . $online_g . ')</a><br/>';
                 }
                 if ($filter)
@@ -534,7 +534,7 @@ if (in_array($act, $do))
     } else
     {
         ////////////////////////////////////////////////////////////
-        // Список Разделов форума                                 //
+        // Список Категорий форума                                //
         ////////////////////////////////////////////////////////////
 
         // Ссылка на Новые темы
@@ -545,7 +545,7 @@ if (in_array($act, $do))
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($res = mysql_fetch_array($req))
         {
-            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+            echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
             if (!empty($res['soft']))
@@ -555,7 +555,7 @@ if (in_array($act, $do))
         }
         $onltime = $realtime - 300;
         $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
-        $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `time` > $onltime AND `place` LIKE 'forum%'"), 0);
+        $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
         echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&nbsp;(' . $online_u . '&nbsp;/&nbsp;' . $online_g . ')</div>';
         unset($_SESSION['fsort_id']);
         unset($_SESSION['fsort_users']);
