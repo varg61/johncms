@@ -55,7 +55,7 @@ if (get_magic_quotes_gpc())
 // Получаем и фильтруем основные переменные для системы   //
 ////////////////////////////////////////////////////////////
 $id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false; // Идентификатор
-$page = isset($_GET['page']) && $_GET['page'] > 0 ? intval($_GET['page']) : 1; // Номер страницы
+$page = isset($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1; // Номер страницы
 $start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0; // Для постраничной навигации
 $act = isset($_GET['act']) ? trim($_GET['act']) : ''; // Выбор действия
 $agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES); // User Agent

@@ -15,6 +15,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+$headmod = 'forummod';
 require_once ("../incfiles/head.php");
 if (empty($_GET['id']))
 {

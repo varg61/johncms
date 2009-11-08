@@ -39,35 +39,88 @@ if ($id)
     {
         $res = mysql_fetch_assoc($req);
         echo '<div class="phdr"><b>Кто в теме</b> &quot;' . $res['text'] . '&quot;</div>';
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
+        echo '<div class="bmenu">Список ' . ($do == 'guest' ? 'гостей' : 'авторизованных') . '</div>';
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
         if ($total)
         {
-            $req = mysql_query("SELECT * FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id' ORDER BY `name` LIMIT $start, $kmess");
+            $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > $onltime AND `place` = 'forum,$id' ORDER BY `movings` DESC LIMIT $start, $kmess");
             while ($res = mysql_fetch_assoc($req))
             {
-                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-                echo ($user_id && $user_id != $res['id'] ? '<a href="../str/anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b></a>' : '<b>' . $res['name'] . '</b>');
-                // Метка должности
-                $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
-                echo $user_rights[$res['rights']];
-                switch ($res['rights'])
+                echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+                if ($do == 'guest')
                 {
-                    case 7:
-                        echo ' (Adm)';
-                        break;
-                    case 6:
-                        echo ' (Smd)';
-                        break;
-                    case 5:
-                    case 4:
-                    case 3:
-                    case 2:
-                        echo ' (Mod)';
-                        break;
-                    case 1:
-                        echo ' (Kil)';
-                        break;
+                    echo '<b>Гость</b>';
+                } else
+                {
+                    echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+                    echo ($user_id && $user_id != $res['id'] ? '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
+                    // Метка должности
+                    if ($res['rights'])
+                    {
+                        $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
+                        echo ' (' . $user_rights[$res['rights']] . ')';
+                    }
+                }
+                $svr = $realtime - $res['sestime'];
+                if ($svr >= "3600")
+                {
+                    $hvr = ceil($svr / 3600) - 1;
+                    if ($hvr < 10)
+                    {
+                        $hvr = "0$hvr";
+                    }
+                    $svr1 = $svr - $hvr * 3600;
+                    $mvr = ceil($svr1 / 60) - 1;
+                    if ($mvr < 10)
+                    {
+                        $mvr = "0$mvr";
+                    }
+                    $ivr = $svr1 - $mvr * 60;
+                    if ($ivr < 10)
+                    {
+                        $ivr = "0$ivr";
+                    }
+                    if ($ivr == "60")
+                    {
+                        $ivr = "59";
+                    }
+                    $sitevr = "$hvr:$mvr:$ivr";
+                } else
+                {
+                    if ($svr >= "60")
+                    {
+                        $mvr = ceil($svr / 60) - 1;
+                        if ($mvr < 10)
+                        {
+                            $mvr = "0$mvr";
+                        }
+                        $ivr = $svr - $mvr * 60;
+                        if ($ivr < 10)
+                        {
+                            $ivr = "0$ivr";
+                        }
+                        if ($ivr == "60")
+                        {
+                            $ivr = "59";
+                        }
+                        $sitevr = "00:$mvr:$ivr";
+                    } else
+                    {
+                        $ivr = $svr;
+                        if ($ivr < 10)
+                        {
+                            $ivr = "0$ivr";
+                        }
+                        $sitevr = "00:00:$ivr";
+                    }
+                }
+                echo ' (' . $res['movings'] . ' - ' . $sitevr . ') ';
+                if ($do == 'guest')
+                {
+                    echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
+                    if ($dostmod)
+                        echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
+                    echo '</div>';
                 }
                 echo '</div>';
                 ++$i;
@@ -77,28 +130,35 @@ if ($id)
     {
         header('Location: index.php');
     }
-    echo '<div class="phdr">В теме ' . $total . ' человек</div>';
-    echo '<p><a href="index.php?id=' . $id . '">В тему</a></p>';
+    echo '<div class="phdr">Всего: ' . $total . '</div>';
+    echo '<p><a href="index.php?id=' . $id . '&amp;act=who' . ($do == 'guest' ? '">Показать авторизованных' : '&amp;do=guest">Показать гостей') . '</a><br /><a href="index.php?id=' . $id . '">В тему</a></p>';
 } else
 {
     ////////////////////////////////////////////////////////////
     // Показываем общий список тех, кто в форуме              //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr"><b>Кто в форуме</b></div>';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
+    echo '<div class="bmenu">Список ' . ($do == 'guest' ? 'гостей' : 'авторизованных') . '</div>';
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
     if ($total)
     {
-        $req = mysql_query("SELECT * FROM `users` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%' ORDER BY `name` LIMIT $start, $kmess");
+        $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%' ORDER BY `movings` DESC LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req))
         {
             echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
-            echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-            echo ($user_id && $user_id != $res['id'] ? '<a href="../str/anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b></a>' : '<b>' . $res['name'] . '</b> ');
-            // Метка должности
-            if ($res['rights'])
+            if ($do == 'guest')
             {
-                $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
-                echo ' (' . $user_rights[$res['rights']] . ')';
+                echo '<b>Гость</b>';
+            } else
+            {
+                echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+                echo ($user_id && $user_id != $res['id'] ? '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
+                // Метка должности
+                if ($res['rights'])
+                {
+                    $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
+                    echo ' (' . $user_rights[$res['rights']] . ')';
+                }
             }
             $svr = $realtime - $res['sestime'];
             if ($svr >= "3600")
@@ -170,6 +230,18 @@ if ($id)
                 case 'forumnew':
                     $place = '<a href="index.php?act=new">смотрит непрочитанное</a>';
                     break;
+                case 'forumsearch':
+                    $place = '<a href="search.php">поиск форума</a>';
+                    break;
+                case 'forumlaw':
+                    $place = '<a href="index.php?act=read">читает правила форума</a>';
+                    break;
+                case 'forummod':
+                    $place = '<a href="index.php?act=moders">смотрит список модеров</a>';
+                    break;
+                case 'forumfaq':
+                    $place = '<a href="index.php?act=faq">смотрит FAQ</a>';
+                    break;
                 default:
                     $where = explode(",", $res['place']);
                     if ($where[0] == 'forum' && intval($where[1]))
@@ -178,8 +250,7 @@ if ($id)
                         if (mysql_num_rows($req_t))
                         {
                             $res_t = mysql_fetch_assoc($req_t);
-                            $theme = mb_substr($res_t['text'], 0, 40);
-                            $link = '<a href="index.php?id=' . $where[1] . '">' . $theme . '</a>';
+                            $link = '<a href="index.php?id=' . $where[1] . '">' . $res_t['text'] . '</a>';
                             switch ($res_t['type'])
                             {
                                 case 'f':
@@ -196,16 +267,21 @@ if ($id)
                                     if (mysql_num_rows($req_m))
                                     {
                                         $res_m = mysql_fetch_assoc($req_m);
-                                        $theme = mb_substr($res_m['text'], 0, 40);
-                                        $place = (isset($where[2]) ? 'отвечает в теме' : 'в теме') . ' &quot;<a href="index.php?id=' . $res_t['refid'] . '">' . $theme . '</a>&quot;';
+                                        $place = (isset($where[2]) ? 'отвечает в теме' : 'в теме') . ' &quot;<a href="index.php?id=' . $res_t['refid'] . '">' . $res_m['text'] . '</a>&quot;';
                                     }
                                     break;
                             }
                         }
                     }
             }
-            echo '<div class="sub"><u>Находится</u>: ' . $place . '</div>';
-            echo '</div>';
+            echo '<div class="sub"><u>Находится</u>: ' . $place;
+            if ($do == 'guest')
+            {
+                echo '<br /><u>UserAgent</u>: ' . $res['browser'];
+                if ($dostmod)
+                    echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
+            }
+            echo '</div></div>';
             ++$i;
         }
     } else
@@ -213,6 +289,11 @@ if ($id)
         echo '<div class="menu"><p>В форуме никого нет</p></div>';
     }
     echo '<div class="phdr">Всего: ' . $total . '</div>';
+    if ($total > 10)
+    {
+        echo '<p>' . pagenav('index.php?act=who&amp;' . ($do == 'guest' ? 'do=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
+        echo '<p><form action="index.php?act=who' . ($do == 'guest' ? '&amp;do=guest' : '') . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+    }
     echo '<p><a href="index.php?act=who' . ($do == 'guest' ? '">Показать авторизованных' : '&amp;do=guest">Показать гостей') . '</a><br /><a href="index.php">В форум</a></p>';
 }
 

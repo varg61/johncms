@@ -18,8 +18,9 @@ define('_IN_JOHNCMS', 1);
 
 
 $textl = 'Форум-поиск';
-require_once ("../incfiles/core.php");
-require_once ("../incfiles/head.php");
+$headmod = 'forumsearch';
+require_once ('../incfiles/core.php');
+require_once ('../incfiles/head.php');
 
 echo '<div class="phdr"><b>Поиск по форуму</b></div>';
 

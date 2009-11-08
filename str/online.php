@@ -21,15 +21,16 @@ $textl = 'Онлайн';
 require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
-echo '<div class="phdr"><b>Список ' . ($act == 'guest' ? 'гостей' : 'авторизованных') . '</b></div>';
+echo '<div class="phdr"><b>Кто на сайте?</b></div>';
+echo '<div class="bmenu">Список ' . ($act == 'guest' ? 'гостей' : 'авторизованных') . '</div>';
 $onltime = $realtime - 300;
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($act == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > '$onltime'"), 0);
-$req = mysql_query("SELECT * FROM `" . ($act == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > '$onltime' ORDER BY `movings` DESC LIMIT " . $start . "," . $kmess);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime'"), 0);
 if ($total)
 {
+    $req = mysql_query("SELECT * FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY `movings` DESC LIMIT " . $start . "," . $kmess);
     while ($res = mysql_fetch_assoc($req))
     {
-        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+        echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
         if ($act == 'guest')
         {
             echo '<b>Гость</b>';
@@ -157,7 +158,7 @@ if ($total)
             }
         }
         echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
-        if ($dostmod == 1)
+        if ($dostmod)
             echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
         echo '</div></div>';
         ++$i;
