@@ -67,8 +67,8 @@ switch ($mod)
             echo '<div class="gmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a>' . ($guest > 0 ? ' (<span class="red">+' . $guest . '</span>)' : '') . '</div>';
         }
         echo '<div class="menu"><a href="str/anketa.php">Ваша анкета</a></div>';
-        echo '<div class="menu"><a href="str/anketa.php?act=statistic">Статистика</a></div>';
-        echo '<div class="menu"><a href="str/usset.php">Настройки</a></div>';
+        echo '<div class="menu"><a href="str/my_act.php">Моя активность</a></div>';
+        echo '<div class="menu"><a href="str/my_set.php">Настройки</a></div>';
         if ($dostmod)
             echo '<div class="menu">Админка <a href="' . $admp . '/main.php">&gt;&gt;&gt;</a></div>';
         echo '<div class="bmenu"><a href="index.php?mod=digest">Новое на сайте</a></div>';
@@ -133,7 +133,7 @@ switch ($mod)
             if (!$total_news && !$total_forum && !$total_guest && !$total_gal && !$total_lib)
                 echo 'Новостей нет';
             // Дата последнего посещения
-            $last = isset($_GET['last']) ? intval($_GET['last']) : $lastdate;
+            $last = isset($_GET['last']) ? intval($_GET['last']) : $datauser['lastdate'];
             echo '</ul></div><div class="phdr">Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</div>';
         }
         break;

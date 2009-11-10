@@ -83,7 +83,7 @@ while ($mass = mysql_fetch_array($mess))
         {
             echo "$mass[avtor]";
         }
-        $vr = $mass[time] + $sdvig * 3600;
+        $vr = $mass[time] + $set_user['sdvig'] * 3600;
         $vr1 = date("d.m.Y / H:i", $vr);
         switch ($mass1['rights'])
         {
@@ -108,10 +108,8 @@ while ($mass = mysql_fetch_array($mess))
         }
         echo "($vr1)<br/>";
         $text = tags($mass['text']);
-        if ($offsm != 1)
-        {
+        if ($set_user['smileys'])
             $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
-        }
         echo $text . '<br/>';
         if ($dostsmod == 1)
         {

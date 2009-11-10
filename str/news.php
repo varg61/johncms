@@ -32,7 +32,7 @@ switch ($do)
         {
             echo '<div class="phdr">Добавить новость</div>';
             $old = 20;
-            if ($lastpost > ($realtime - $old))
+            if ($datauser['lastpost'] > ($realtime - $old))
             {
                 echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="news.php">Назад</a></p>';
                 require_once ("../incfiles/end.php");
@@ -236,11 +236,9 @@ switch ($do)
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
             $text = str_replace("\r\n", "<br/>", $text);
             $text = tags($text);
-            if ($offsm != 1)
-            {
+            if ($set_user['smileys'])
                 $text = smileys($text, 1);
-            }
-            $vr = $nw1['time'] + $sdvig * 3600;
+            $vr = $nw1['time'] + $set_user['sdvig'] * 3600;
             $vr1 = date("d.m.y / H:i", $vr);
             echo '<b>' . $nw1['name'] . '</b><br/>' . $text . '<div class="func"><font color="#999999">Добавил: ' . $nw1['avt'] . ' (' . $vr1 . ')</font><br/>';
             if ($nw1['kom'] != 0 && $nw1['kom'] != "")

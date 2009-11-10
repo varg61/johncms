@@ -52,7 +52,7 @@ if ($totalnew != 0)
             {
                 $div = "<div class='b'>";
             }
-            $vr = $newf['time'] + $sdvig * 3600;
+            $vr = $newf['time'] + $set_user['sdvig'] * 3600;
             $vr = date("d.m.y / H:i", $vr);
             echo $div;
             echo '<b><a href="?id=' . $res['id'] . '">' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';

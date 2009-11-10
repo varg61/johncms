@@ -25,7 +25,7 @@ echo "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">';
 echo "\n" . '<head>';
 echo "\n" . '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 if ($arefresh)
-    echo "\n" . '<meta http-equiv="refresh" content="' . $datauser['timererfesh'] . ';URL=index.php?id=' . intval($_GET['id']) . '&amp;refr=' . $refr . '"/>';
+    echo "\n" . '<meta http-equiv="refresh" content="' . $set_chat['refresh'] . ';URL=index.php?id=' . intval($_GET['id']) . '&amp;refr=' . $refr . '"/>';
 echo "\n" . '<link rel="shortcut icon" href="favicon . ico" />';
 echo "\n" . '<title>' . $textl . '</title>';
 

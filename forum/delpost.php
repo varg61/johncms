@@ -71,7 +71,7 @@ if ($dostfmod == 1)
                 mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = '$id'");
             }
         }
-        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $ms['refid'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '" . $id . "'"), 0) / $kmess);
+        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $ms['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'"), 0) / $kmess);
         header('Location: index.php?id=' . $ms['refid'] . '&page=' . $page);
     }
     require_once ("../incfiles/head.php");

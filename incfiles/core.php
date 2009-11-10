@@ -117,8 +117,6 @@ if (mysql_num_rows($req) > 0)
 ////////////////////////////////////////////////////////////
 // Основные настройки системы                             //
 ////////////////////////////////////////////////////////////
-$kmess = 10; // Число сообщений на страницу, для гостей
-$sdvig = 0; // Временной сдвиг для гостей
 $user_id = false;
 $user_ps = false;
 $dostsadm = 0;
@@ -131,6 +129,8 @@ $dostcmod = 0;
 $dostkmod = 0;
 $dostmod = 0;
 $rights = 0;
+
+// Основные настройки системы
 $req = mysql_query("SELECT * FROM `cms_settings`;");
 $set = array();
 while ($res = mysql_fetch_row($req))
@@ -145,7 +145,15 @@ $home = $set['homeurl']; // Домашняя страница
 $ras_pages = $set['rashstr']; // Расширение текстовых страниц
 $admp = $set['admp']; // Папка с Админкой
 $flsz = $set['flsz']; // Максимальный размер файлов
-$skindef = $set['skindef']; // скин по умолчанию для гостей
+
+// Пользовательские параметры для Гостей
+$set_user = array();
+$set_user['sdvig'] = 0; // Временной сдвиг
+$set_user['smileys'] = 1; // Включить(1) выключить(0) смайлы
+$set_user['kmess'] = 10; // Число сообщений на страницу
+$set_user['quick_go'] = 1; // Быстрый переход
+$set_user['skin'] = $set['skindef']; // Тема оформления
+$kmess = $set_user['kmess'];
 
 ////////////////////////////////////////////////////////////
 // Дата и время                                           //
@@ -203,26 +211,29 @@ elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
 if ($user_id && $user_ps)
 {
     $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1");
-    if (mysql_num_rows($req) != 0)
+    if (mysql_num_rows($req))
     {
-        $datauser = mysql_fetch_array($req);
+        $datauser = mysql_fetch_assoc($req);
         if ($user_ps === $datauser['password'])
         {
-            // Получение параметров пользователя
-            $idus = $user_id;
-            $skin = $datauser['skin']; // скин юзера
+            // Получаем общие настройки пользователя
+            $set_user = array();
+            $set_user = unserialize($datauser['set_user']);
+            if (empty($set_user))
+            {
+                // Задаем пользовательские настройки по-умолчанию
+                $set_user['smileys'] = 1;
+                $set_user['translit'] = 1;
+                $set_user['quick_go'] = 1;
+                $set_user['digest'] = 1;
+                $set_user['sdvig'] = 0;
+                $set_user['kmess'] = 10;
+                $set_user['skin'] = 'default';
+            }
+            $kmess = (int)$set_user['kmess']; // Число сообщений на страницу
+            // Получаем данные пользователя
             $login = $datauser['name']; // Логин (Ник) пользователя
-            $sdvig = $datauser['sdvig']; // Сдвиг времени
-            $kmess = $datauser['kolanywhwere']; // Число сообщений на страницу
-            $offtr = $datauser['offtr'] ? 0 : 1; // Выключить транслит
-            $offsm = $datauser['offsm'] ? 0 : 1; // Выключить смайлы
-            $upfp = $datauser['upfp'];
-            $nmenu = $datauser['nmenu'];
-            $chmes = $datauser['chmes'];
             $rights = $datauser['rights'];
-            $lastdate = $datauser['lastdate'];
-            $lastpost = $datauser['lastpost'];
-            mysql_free_result($req);
 
             ////////////////////////////////////////////////////////////
             // Проверка юзера на бан                                  //
@@ -263,8 +274,8 @@ if ($user_id && $user_ps)
                 $dostmod = 1;
 
             // Если юзера не было на сайте более 1-го часа , показываем дайджест
-            if ($lastdate < ($realtime - 3600) && $datauser['digest'] == 1 && $headmod == 'mainpage')
-                header("Location: " . $home . "/index.php?mod=digest&last=" . $lastdate);
+            if ($datauser['lastdate'] < ($realtime - 3600) && $set_user['digest'] && $headmod == 'mainpage')
+                header("Location: " . $home . "/index.php?mod=digest&last=" . $datauser['lastdate']);
         } else
         {
             // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки

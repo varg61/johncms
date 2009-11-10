@@ -43,7 +43,7 @@ if ($dostlmod == 1)
         while ($res = mysql_fetch_array($req))
         {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            $vr = $res['time'] + $sdvig * 3600;
+            $vr = $res['time'] + $set_user['sdvig'] * 3600;
             $vr = date("d.m.y / H:i", $vr);
             $tx = $res['soft'];
             echo "<a href='index.php?id=" . $res['id'] . "'>$res[name]</a><br/>Добавил: $res[avtor] ($vr)<br/>$tx <br/>";

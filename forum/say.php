@@ -23,7 +23,7 @@ if (!$id || !$user_id || $ban['1'] || $ban['11'])
 }
 // Проверка на спам
 $old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
-if ($lastpost > ($realtime - $old))
+if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");
     echo '<div class="rmenu"><p>АНТИФЛУД!<br />Вы не можете так часто писать, порог ' . $old . ' секунд<br/><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
@@ -79,15 +79,8 @@ switch ($tip)
             require_once ('../incfiles/end.php');
             exit;
         }
-        if (isset($_POST['submit']))
+        if (isset($_POST['submit']) && !empty($_POST['msg']))
         {
-            if (empty($_POST['msg']))
-            {
-                require_once ("../incfiles/head.php");
-                echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не ввели сообщение<br /><a href="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '">Повторить</a></p></div>';
-                require_once ("../incfiles/end.php");
-                exit;
-            }
             $msg = trim($_POST['msg']);
             if ($_POST['msgtrans'] == 1)
             {
@@ -130,7 +123,7 @@ switch ($tip)
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             // Вычисляем, на какую страницу попадает добавляемый пост
-            $page = $upfp ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
+            $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
             //блок, фиксирующий факт прочтения топика
             $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id'");
             if (mysql_result($req, 0) == 1)
@@ -160,12 +153,13 @@ switch ($tip)
             echo '<div class="phdr">Тема: <b>' . $type1['text'] . '</b></div>';
             if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $id)
                 echo '<div class="rmenu">Фильтр по авторам постов будет выключен после написания сообщения</div>';
-            echo '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
-            echo '<div class="gmenu"><p><b>Сообщение:</b><br /><textarea cols="24" rows="4" name="msg"></textarea><br />';
+            echo '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><div class="gmenu">';
+            echo '<b>Сообщение:</b><br /><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br />';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
-            if (!$offtr)
+            if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит<br/>';
-            echo '</p><p><input type="submit" name="submit" value="Отправить"/></p></div></form>';
+            echo '<input type="submit" name="submit" value="Отправить"/>';
+            echo '</div></form>';
         }
         echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
         echo '<p><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p>';
@@ -185,7 +179,7 @@ switch ($tip)
             require_once ('../incfiles/end.php');
             exit;
         }
-        $vrp = $type1['time'] + $sdvig * 3600;
+        $vrp = $type1['time'] + $set_user['sdvig'] * 3600;
         $vr = date("d.m.Y / H:i", $vrp);
         if (isset($_POST['submit']))
         {
@@ -267,7 +261,7 @@ switch ($tip)
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             // Вычисляем, на какую страницу попадает добавляемый пост
-            $page = $upfp ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
+            $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
             //блок, фиксирующий факт прочтения топика
             $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='$th' AND `user_id`='$user_id'");
             if (mysql_result($req, 0) == 1)
@@ -329,10 +323,8 @@ switch ($tip)
             }
             echo '<div class="gmenu"><b>Сообщение:</b><br/><textarea cols="24" rows="4" name="msg"></textarea><br/>';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
-            if ($offtr != 1)
-            {
-                echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-            }
+            if ($set_user['translit'])
+                echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             echo '<input type="submit" name="submit" value="Отправить"/></div></form>';
         }
         echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';

@@ -30,13 +30,13 @@ if ($total)
     $req = mysql_query("SELECT * FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY `movings` DESC LIMIT " . $start . "," . $kmess);
     while ($res = mysql_fetch_assoc($req))
     {
-        echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
         if ($act == 'guest')
         {
             echo '<b>Гость</b>';
         } else
         {
-            echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+            echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
             echo ($user_id && $user_id != $res['id'] ? '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
             // Метка должности
             if ($res['rights'])

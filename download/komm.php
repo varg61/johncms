@@ -78,7 +78,7 @@ while ($mass = mysql_fetch_array($mess))
         {
             echo "$mass[avtor]";
         }
-        $vr = $mass[time] + $sdvig * 3600;
+        $vr = $mass['time'] + $set_user['sdvig'] * 3600;
         $vr1 = date("d.m.Y / H:i", $vr);
         switch ($mass1[rights])
         {
@@ -105,9 +105,9 @@ while ($mass = mysql_fetch_array($mess))
             echo " [ON]";
         }
         echo "($vr1)<br/>";
-        $mass[text] = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class=\'d\'>\1<br/></div>', $mass[text]);
-        $mass[text] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $mass[text]);
-        $mass[text] = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $mass[text]);
+        $mass['text'] = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class=\'d\'>\1<br/></div>', $mass[text]);
+        $mass['text'] = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $mass[text]);
+        $mass['text'] = eregi_replace("\\[l\\]([[:alnum:]_=:/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+.&_=/%]*)?)?)\\[l/\\]((.*)?)\\[/l\\]", "<a href='http://\\1'>\\6</a>", $mass[text]);
 
         if (stristr($mass[text], "<a href="))
         {
@@ -117,7 +117,7 @@ while ($mass = mysql_fetch_array($mess))
         {
             $mass[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $mass[text]);
         }
-        if ($offsm != 1)
+        if ($set_user['smileys'])
         {
             $tekst = smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
         } else

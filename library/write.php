@@ -25,7 +25,7 @@ if ($_GET['id'] == "")
 
 // Проверка на спам
 $old = ($rights > 0 || $dostsadm = 1) ? 5 : 60;
-if ($lastpost > ($realtime - $old))
+if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");
     echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href ="index.php?id=' . $id . '">Назад</a></p>';

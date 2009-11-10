@@ -33,10 +33,10 @@ $res = mysql_fetch_array($req);
 // Запрос темы
 $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
 echo '<div class="phdr"><b>Тема:</b> ' . $them['text'] . '</div><div class="menu">';
-echo $res['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $skin . '/images/add.gif" alt=""/>&nbsp;' : '';
+echo $res['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $set_user['skin'] . '/images/add.gif" alt=""/>&nbsp;' : '';
 // Значок пола
 if ($res['sex'])
-    echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
+    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
 else
     echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
 // Ник юзера и ссылка на его анкету
@@ -67,18 +67,18 @@ switch ($res['rights'])
 // Метка Онлайн / Офлайн
 echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
 // Время поста
-echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $sdvig * 3600) . ')</span><br/>';
+echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
 // Статус юзера
 if (!empty($res['status']))
-    echo '<div class="status"><img src="../theme/' . $skin . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
+    echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
 $text = nl2br($text);
 $text = tags($text);
-if ($offsm != 1)
+if ($set_user['smileys'])
     $text = smileys($text, ($res['rights'] >= 1) ? 1 : 0);
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
-$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '$id'"), 0) / $kmess);
+$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'"), 0) / $kmess);
 echo '<div class="phdr"><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">Вернуться в тему</a></div>';
 echo '<p><a href="index.php">В форум</a></p>';
 

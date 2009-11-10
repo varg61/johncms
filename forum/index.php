@@ -16,9 +16,25 @@
 
 define('_IN_JOHNCMS', 1);
 
+require_once ('../incfiles/core.php');
+
 ////////////////////////////////////////////////////////////
-// Список расширений, разрешенных к выгрузке файлов       //
+// Настройки форума                                       //
 ////////////////////////////////////////////////////////////
+$set_forum = array();
+if ($user_id)
+    $set_forum = unserialize($datauser['set_forum']);
+if (empty($set_forum))
+{
+    // Настроки по-умолчанию
+    $set_forum['farea'] = 0;
+    $set_forum['upfp'] = 0;
+    $set_forum['farea_w'] = 20;
+    $set_forum['farea_h'] = 4;
+    $set_forum['postclip'] = 1;
+    $set_forum['postcut'] = 2;
+}
+// Список расширений, разрешенных к выгрузке файлов
 // Файлы Windows
 $ext_win = array('exe', 'msi');
 // Файлы Java
@@ -38,9 +54,9 @@ $ext_audio = array('mp3', 'amr');
 // Другие типы файлов (что не перечислены выше)
 $ext_other = array();
 
-require_once ('../incfiles/core.php');
-
-// Ограничиваем доступ к Форуму
+////////////////////////////////////////////////////////////
+// Ограничиваем доступ к Форуму                           //
+////////////////////////////////////////////////////////////
 $error = '';
 if (!$set['mod_forum'] && !$dostadm)
     $error = 'Форум закрыт';
@@ -109,7 +125,7 @@ if (in_array($act, $do))
                 $total = mysql_num_rows($req);
                 while ($mass1 = mysql_fetch_array($req))
                 {
-                    echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $mass1['id'] . "'"), 0);
                     echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
                     if ($coltem)
@@ -145,7 +161,7 @@ if (in_array($act, $do))
                 $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
                 while ($mass = mysql_fetch_array($q1))
                 {
-                    echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "' ORDER BY `time` DESC LIMIT 1");
                     $nam = mysql_fetch_array($nikuser);
                     $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
@@ -154,17 +170,17 @@ if (in_array($act, $do))
                     // Выводим список тем
                     if ($mass['vip'] == 1)
                     {
-                        echo '<img src="../theme/' . $skin . '/images/pt.gif" alt=""/>';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>';
                     } elseif ($mass['edit'] == 1)
                     {
-                        echo '<img src="../theme/' . $skin . '/images/tz.gif" alt=""/>';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>';
                     } elseif ($mass['close'] == 1)
                     {
-                        echo '<img src="../theme/' . $skin . '/images/dl.gif" alt=""/>';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/dl.gif" alt=""/>';
                     } else
                     {
                         $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $mass['time'] . "' AND `topic_id` = '" . $mass['id'] . "' AND `user_id`='$user_id'"), 0);
-                        echo '<img src="../theme/' . $skin . '/images/' . ($np ? 'op' : 'np') . '.gif" alt=""/>';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($np ? 'op' : 'np') . '.gif" alt=""/>';
                     }
                     if ($mass['realid'] == 1)
                         echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
@@ -179,7 +195,7 @@ if (in_array($act, $do))
                     {
                         echo '&nbsp;/&nbsp;' . $nam['from'];
                     }
-                    $vrp = $mass['time'] + $sdvig * 3600;
+                    $vrp = $mass['time'] + $set_user['sdvig'] * 3600;
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $vrp) . "</font></div></div>";
                     ++$i;
                 }
@@ -241,17 +257,12 @@ if (in_array($act, $do))
                 }
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0);
-                // Задаем правила сортировки (новые внизу / вверху)
-                if ($user_id)
-                    $order = $datauser['upfp'] == 1 ? 'DESC' : 'ASC';
-                else
-                    $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 // Панель навигации
                 $razd = mysql_fetch_array(mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
                 $frm = mysql_fetch_array(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
                 echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
-                echo '<div class="phdr"><a href="#down"><img src="../theme/' . $skin . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
+                echo '<div class="phdr"><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
                 if ($type1['close'])
                     echo '<div class="rmenu"><b>Тема удалена</b></div>';
                 if ($type1['edit'])
@@ -299,7 +310,7 @@ if (in_array($act, $do))
                 ////////////////////////////////////////////////////////////
                 // Фиксация первого поста в теме                          //
                 ////////////////////////////////////////////////////////////
-                if (($datauser['postclip'] == 2 && ($upfp ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset($_GET['clip']))
+                if (($set_forum['postclip'] == 2 && ($set_forum['upfp'] ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset($_GET['clip']))
                 {
                     $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
@@ -307,7 +318,7 @@ if (in_array($act, $do))
                     $postres = mysql_fetch_array($postreq);
                     echo '<div class="clip">';
                     if ($postres['sex'])
-                        echo '<img src="../theme/' . $skin . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'f') . ($postres['datereg'] > $realtime - 86400 ? '_new.gif" width="14"' : '.gif" width="10"') . ' height="10"/>&nbsp;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'f') . ($postres['datereg'] > $realtime - 86400 ? '_new.gif" width="14"' : '.gif" width="10"') . ' height="10"/>&nbsp;';
                     else
                         echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
                     if ($user_id && $user_id != $postres['user_id'])
@@ -321,7 +332,7 @@ if (in_array($act, $do))
                     $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
                     echo $user_rights[$postres['rights']];
                     echo ($realtime > $postres['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
-                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $postres['time'] + $sdvig * 3600) . ')</span><br/>';
+                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $postres['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
                     if ($postres['close'])
                     {
                         echo '<span class="red">Пост удалён!</span><br/>';
@@ -333,33 +344,36 @@ if (in_array($act, $do))
                 }
                 if ($filter)
                     echo '<div class="rmenu">В теме включена фильтрация по авторам постов</div>';
+                // Задаем правила сортировки (новые внизу / вверху)
+                if ($user_id)
+                    $order = $set_forum['upfp'] ? 'DESC' : 'ASC';
+                else
+                    $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 // Запрос в базу
                 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 				FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`time` $order LIMIT $start, $kmess");
+				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order LIMIT $start, $kmess");
                 // Верхнее поле "Написать"
-                //TODO:Дописать возможность Админу писать в закрытой теме и переделать НАПИСАТЬ на кнопку
-                if ($user_id && $type1['edit'] != 1 && $upfp)
+                if (($user_id && !$type1['edit'] && $set_forum['upfp']) || ($dostadm && $set_forum['upfp']))
                 {
-                    if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
+                    echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
+                    if ($set_forum['farea'])
                     {
-                        echo '<div class="gmenu">Написать<br/><form action="index.php?act=say&amp;id=' . $id . '" method="post"><textarea cols="20" rows="2" name="msg"></textarea><br/>';
+                        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
                         echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
-                        if ($offtr != 1)
+                        if ($set_user['translit'])
                             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
-                        echo '<input type="submit" title="Нажмите для отправки" name="submit" value="Отправить"/></form></div>';
-                    } else
-                    {
-                        echo '<div class="gmenu"><a href="?act=say&amp;id=' . $id . '">Написать</a></div>';
                     }
+                    echo '<input type="submit" name="submit" value="Написать"/>';
+                    echo '</form></div>';
                 }
                 if ($dostfmod)
                     echo '<form action="index.php?act=massdel" method="post">';
                 while ($res = mysql_fetch_array($req))
                 {
-                    echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     if ($res['sex'])
-                        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
                     else
                         echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
                     // Ник юзера и ссылка на его анкету
@@ -377,10 +391,10 @@ if (in_array($act, $do))
                     // Метка Онлайн / Офлайн
                     echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
                     // Время поста
-                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $sdvig * 3600) . ')</span><br/>';
+                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
                     // Статус юзера
                     if (!empty($res['status']))
-                        echo '<div class="status"><img src="../theme/' . $skin . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
+                        echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
                     if ($res['close'])
                     {
                         echo '<span class="red">Пост удалён!</span><br/>';
@@ -389,10 +403,10 @@ if (in_array($act, $do))
                     // Вывод текста поста                                     //
                     ////////////////////////////////////////////////////////////
                     $text = $res['text'];
-                    if ($datauser['postcut'])
+                    if ($set_forum['postcut'])
                     {
                         // Если текст длинный, обрезаем и даем ссылку на полный вариант
-                        switch ($datauser['postcut'])
+                        switch ($set_forum['postcut'])
                         {
                             case 2:
                                 $cut = 1000;
@@ -404,7 +418,7 @@ if (in_array($act, $do))
                                 $cut = 500;
                         }
                     }
-                    if ($datauser['postcut'] && mb_strlen($text) > $cut)
+                    if ($set_forum['postcut'] && mb_strlen($text) > $cut)
                     {
                         $text = mb_substr($text, 0, $cut);
                         $text = checkout($text, 1, 0);
@@ -414,13 +428,13 @@ if (in_array($act, $do))
                     {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = checkout($text, 1, 1);
-                        if ($offsm != 1)
+                        if ($set_user['smileys'])
                             $text = smileys($text, $res['rights'] ? 1 : 0);
                         echo $text;
                     }
                     if ($res['kedit'] > 0)
                     {
-                        $diz = $res['tedit'] + $sdvig * 3600;
+                        $diz = $res['tedit'] + $set_user['sdvig'] * 3600;
                         $dizm = date("d.m /H:i", $diz);
                         echo '<br /><span class="gray"><small>Изм. <b>' . $res['edit'] . '</b> (' . $dizm . ') <b>[' . $res['kedit'] . ']</b></small></span>';
                     }
@@ -468,21 +482,20 @@ if (in_array($act, $do))
                         echo (is_integer($i / 2) ? '<div class="list2">' : '<div class="list1">') . '<a href="index.php?act=editpost&amp;id=' . $arr1['id'] . '&amp;start=' . $start . '">Изменить</a></div>';
                 }
                 // Нижнее поле "Написать"
-                if ($user_id && $type1['edit'] != 1 && !$upfp)
+                if (($user_id && !$type1['edit'] && !$set_forum['upfp']) || ($dostadm && !$set_forum['upfp']))
                 {
-                    if ($datauser['farea'] == 1 && $datauser['postforum'] >= 1)
+                    echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
+                    if ($set_forum['farea'])
                     {
-                        echo '<div class="gmenu">Написать<br/><form action="index.php?act=say&amp;id=' . $id . '" method="post"><textarea cols="20" rows="2" name="msg"></textarea><br/>';
+                        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
                         echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
-                        if ($offtr != 1)
+                        if ($set_user['translit'])
                             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
-                        echo '<input type="submit" name="submit" value="Отправить"/></form></div>';
-                    } else
-                    {
-                        echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><input type="submit" name="go" value="Написать"/></form></div>';
                     }
+                    echo '<input type="submit" name="submit" value="Написать"/>';
+                    echo '</form></div>';
                 }
-                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $skin . '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
+                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $set_user['skin'] . '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
                 if ($colmes > $kmess)
                 {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
@@ -545,7 +558,7 @@ if (in_array($act, $do))
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($res = mysql_fetch_array($req))
         {
-            echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
             if (!empty($res['soft']))

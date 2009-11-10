@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Error:restricted access');
 ////////////////////////////////////////////////////////////
 // Комнаты Чата                                           //
 ////////////////////////////////////////////////////////////
-$type = mysql_query("SELECT * FROM `chat` WHERE `id`= '" . $id . "' LIMIT 1;");
+$type = mysql_query("SELECT * FROM `chat` WHERE `id`= '$id' LIMIT 1");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 switch ($tip)
@@ -154,13 +154,11 @@ switch ($tip)
         $refr = rand(0, 999);
         $arefresh = true;
         require_once ('chat_header.php');
-        if ($datauser['carea'] == 1)
+        if ($set_chat['carea'])
         {
-            echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='20' rows='2' title='Введите текст сообщения' name='msg'></textarea><br/>";
-            if ($offtr != 1)
-            {
+            echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='" . $set_chat['carea_w'] . "' rows='" . $set_chat['carea_h'] . "' title='Введите текст сообщения' name='msg'></textarea><br/>";
+            if ($set_user['translit'])
                 echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-            }
             echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Сказать'/><br/></form>";
         } else
         {
@@ -170,7 +168,7 @@ switch ($tip)
         echo '<div class="title1">' . $type1['text'] . '</div>';
         $req = mysql_query("SELECT COUNT(*) FROM `chat` WHERE `refid` = '" . $id . "' AND `type` = 'm'");
         $colmes = mysql_result($req, 0);
-        $req = mysql_query("SELECT * FROM `chat` WHERE `refid` = '" . $id . "' AND `type` = 'm' ORDER BY `time` DESC LIMIT " . $start . "," . $chmes);
+        $req = mysql_query("SELECT * FROM `chat` WHERE `refid` = '" . $id . "' AND `type` = 'm' ORDER BY `time` DESC LIMIT $start," . $set_chat['chmes']);
         $i = 0;
         while ($mass = mysql_fetch_array($req))
         {
@@ -202,7 +200,7 @@ switch ($tip)
                     {
                         echo "<b><font color='" . $conik . "'>$mass[from]</font></b>";
                     }
-                    $vrp = $mass['time'] + $sdvig * 3600;
+                    $vrp = $mass['time'] + $set_user['sdvig'] * 3600;
                     $vr = date("H:i", $vrp); // Время поста
                     if ($mass['from'] != "Умник")
                     {
@@ -246,10 +244,8 @@ switch ($tip)
                         }
                     }
                     $text = tags($mass['text']);
-                    if ($offsm != 1)
-                    {
+                    if ($set_user['smileys'])
                         $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
-                    }
                     if ($mass['to'] == $login)
                     {
                         echo '<b>';
@@ -272,9 +268,9 @@ switch ($tip)
             }
         }
         echo '<div class="title2"><a href="who.php?id=' . $id . '">Кто в чате(' . wch($id) . '/' . wch(0, 1) . ')</a></div>';
-        if ($colmes > $chmes)
+        if ($colmes > $set_chat['chmes'])
         {
-            echo '<p>' . pagenav('?id=' . $id . '&amp;', $start, $colmes, $chmes) . '</p>';
+            echo '<p>' . pagenav('?id=' . $id . '&amp;', $start, $colmes, $set_chat['chmes']) . '</p>';
             echo '<p><form action="index.php" method="get">
 			<input type="hidden" name="id" value="' . $id . '"/>
 			<input type="text" name="page" size="2"/>

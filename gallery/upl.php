@@ -30,7 +30,7 @@ if (empty($_GET['id']))
 
 // Проверка на спам
 $old = ($rights > 0 || $dostsadm = 1) ? 10 : 60;
-if ($lastpost > ($realtime - $old))
+if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");
     echo '<p><b>Антифлуд!</b><br />Порог ' . $old . ' секунд<br/><br/><a href="index.php?id=' . $id . '">Назад</a></p>';

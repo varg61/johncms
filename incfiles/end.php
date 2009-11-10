@@ -25,7 +25,7 @@ if ($headmod != "mainpage" || isset($_GET['do']) || isset($_GET['mod']))
     echo '<a href=\'' . $home . '\'>На главную</a><br/>';
 
 // Меню быстрого перехода
-if (empty($_SESSION['uid']) || $datauser['pereh'] == 1)
+if ($set_user['quick_go'])
 {
     echo "<form action='" . $home . "/go.php' method='post'><select name='adres' style='font-size:10px'><option selected='selected'>Быстрый переход </option>";
     if ($user_id)

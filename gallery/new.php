@@ -128,7 +128,7 @@ if ($totalnew != 0)
             }
             imagedestroy($im);
             imagedestroy($im1);
-            $vrf = $newf[time] + $sdvig * 3600;
+            $vrf = $newf[time] + $set_user['sdvig'] * 3600;
             $vrf1 = date("d.m.y / H:i", $vrf);
             $kom = mysql_query("select * from `gallery` where type='km' and refid='" . $newf['id'] . "';");
             $kom1 = mysql_num_rows($kom);

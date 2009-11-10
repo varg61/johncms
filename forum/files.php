@@ -90,7 +90,7 @@ if ($do || isset($_GET['new']))
         {
             $fls = filesize('./files/' . $res['filename']);
             $fls = round($fls / 1024, 0);
-            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
             echo ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="images/' . $res['filetype'] . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id=' . $res['id'] .
                 '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . '] <font color="#999999">' . $fls . 'кб.</font>';
             // Название темы
@@ -100,7 +100,7 @@ if ($do || isset($_GET['new']))
             $mass1 = mysql_fetch_array($uz);
             // Значок пола
             if ($mass1['id'])
-                echo '<img src="../theme/' . $skin . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="10" height="10"/>&nbsp;';
+                echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="10" height="10"/>&nbsp;';
             else
                 echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
             if ($user_id && $mass1['id'] && $user_id != $mass1['id'])
@@ -110,7 +110,7 @@ if ($do || isset($_GET['new']))
             {
                 echo '<b>' . $res['from'] . '</b>';
             }
-            $vrp = $res['time'] + $sdvig * 3600;
+            $vrp = $res['time'] + $set_user['sdvig'] * 3600;
             $vr = date("d.m.Y / H:i", $vrp);
             switch ($mass1['rights'])
             {
@@ -144,7 +144,7 @@ if ($do || isset($_GET['new']))
             $text = mb_substr($res['text'], 0, 200);
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
-            $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
+            $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
             echo '<b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
             ++$i;
         }
@@ -181,7 +181,7 @@ if ($do || isset($_GET['new']))
     }
     foreach ($link as $var)
     {
-        echo (is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">') . $var . '</div>';
+        echo (($i % 2) ? '<div class="list2">' : '<div class="list1">') . $var . '</div>';
         ++$i;
     }
     echo '<div class="phdr">Всего файлов: ' . $total . '</div>';

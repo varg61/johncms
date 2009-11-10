@@ -33,13 +33,11 @@ echo "\n" . '<link rel="shortcut icon" href="' . $home . '/favicon.ico" />';
 echo "\n" . '<meta name="copyright" content="Powered by JohnCMS" />'; // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
 echo "\n" . '<link rel="alternate" type="application/rss+xml" title="RSS | Новости ресурса" href="' . $home . '/rss/rss.php" />';
 echo "\n" . '<title>' . $textl . '</title>';
-if ($skin == "")
-    $skin = $skindef;
-echo "\n" . '<link rel="stylesheet" href="' . $home . '/theme/' . $skin . '/style.css" type="text/css" />';
+echo "\n" . '<link rel="stylesheet" href="' . $home . '/theme/' . $set_user['skin'] . '/style.css" type="text/css" />';
 echo "\n" . '</head><body>';
 
 // Выводим логотип
-echo '<div><img src="' . $home . '/theme/' . $skin . '/images/logo.gif" alt=""/></div>';
+echo '<div><img src="' . $home . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></div>';
 
 // Выводим верхний блок с приветствием
 echo '<div class="header">Привет ' . ($user_id ? '<b> ' . $login . '</b>!' : 'прохожий!') . '</div>';
@@ -60,7 +58,7 @@ if ($user_id)
 {
     // Фиксируем местоположение авторизованных
     $movings = $datauser['movings'];
-    if ($lastdate < ($realtime - 300))
+    if ($datauser['lastdate'] < ($realtime - 300))
     {
         $movings = 0;
         $sql .= "`sestime` = '$realtime',";
@@ -75,8 +73,8 @@ if ($user_id)
     if ($datauser['browser'] != $agn)
         $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
     $totalonsite = $datauser['total_on_site'];
-    if ($lastdate > ($realtime - 300))
-        $totalonsite = $totalonsite + $realtime - $lastdate;
+    if ($datauser['lastdate'] > ($realtime - 300))
+        $totalonsite = $totalonsite + $realtime - $datauser['lastdate'];
     mysql_query("UPDATE `users` SET $sql
     `total_on_site` = '$totalonsite',
     `lastdate` = '$realtime'

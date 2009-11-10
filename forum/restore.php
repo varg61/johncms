@@ -31,7 +31,7 @@ if (mysql_num_rows($req))
         header('Location: index.php?id=' . $id);
     } else
     {
-        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($upfp ? ">=" : "<=") . " '" . $id . "'"), 0) / $kmess);
+        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $id . "'"), 0) / $kmess);
         header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
     }
 } else

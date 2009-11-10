@@ -34,7 +34,7 @@ if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_lib_comm'] || $dostadm))
     }
     // Проверка на спам
     $old = ($rights > 0 || $dostsadm = 1) ? 10 : 60;
-    if ($lastpost > ($realtime - $old))
+    if ($datauser['lastpost'] > ($realtime - $old))
     {
         require_once ("../incfiles/head.php");
         echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="?act=komm&amp;id=' . $id . '">Назад</a></p>';

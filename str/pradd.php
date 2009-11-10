@@ -41,7 +41,7 @@ if ($user_id)
             // Проверка на спам
             $old = ($rights > 0 || $dostsadm = 1) ? 10:
             30;
-            if ($lastpost > ($realtime - $old))
+            if ($datauser['lastpost'] > ($realtime - $old))
             {
                 require_once ("../incfiles/head.php");
                 echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='privat.php'>Назад</a></p>";
@@ -249,7 +249,7 @@ if ($user_id)
             // Проверка на спам
             $old = ($rights > 0 || $dostsadm = 1) ? 10:
             30;
-            if ($lastpost > ($realtime - $old))
+            if ($datauser['lastpost'] > ($realtime - $old))
             {
                 require_once ("../incfiles/head.php");
                 echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='privat.php'>Назад</a></p>";
@@ -315,11 +315,8 @@ if ($user_id)
             }
             echo " <br/>Тема:<br/><input type='text' name='tem' value='" . $tema . "'/><br/> Cообщение:<br/><textarea rows='5' name='msg'></textarea><br/>Прикрепить файл(max. $flsz kb):<br/><input type='file' name='fail'/><hr/>Прикрепить файл(Opera Mini):<br/><input name='fail1' value =''/>&nbsp;<br/>
 <a href='op:fileselect'>Выбрать файл</a><hr/>";
-
-            if ($offtr != 1)
-            {
-                echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-            }
+            if ($set_user['translit'])
+                echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             echo "<input type='hidden' name='idm' value='" . $id . "'/><input type='submit' value='Отправить' /></form>";
             echo "<a href='pradd.php?act=trans'>Транслит</a><br/><a href='smile.php'>Смайлы</a><br/>";
             break;
@@ -407,7 +404,7 @@ if ($user_id)
                     }
                     $mas = mysql_fetch_array(@mysql_query("select * from `users` where `name`='" . $massiv['author'] . "';"));
                     echo "$div<input type='checkbox' name='delch[]' value='" . $massiv['id'] . "'/><a href='pradd.php?id=" . $massiv['id'] . "&amp;act=readmess'>От $massiv[author]</a>";
-                    $vrp = $massiv['time'] + $sdvig * 3600;
+                    $vrp = $massiv['time'] + $set_user['sdvig'] * 3600;
                     echo "(" . date("d.m.y H:i", $vrp) . ")<br/>Тема: $massiv[temka]<br/>";
                     if (!empty($massiv['attach']))
                     {
@@ -568,12 +565,10 @@ if ($user_id)
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='" . $massiv1['author'] . "';"));
             $text = $massiv1['text'];
             $text = tags($text);
-            if ($offsm != 1)
-            {
+            if ($set_user['smileys'])
                 $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
-            }
             echo "<p>От <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
-            $vrp = $massiv1['time'] + $sdvig * 3600;
+            $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
             echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
             if (!empty($massiv1['attach']))
             {
@@ -663,7 +658,7 @@ if ($user_id)
                     {
                         $div = "<div class='b'>";
                     }
-                    $vpr = $massiv['time'] + $sdvig * 3600;
+                    $vpr = $massiv['time'] + $set_user['sdvig'] * 3600;
                     echo "$div<input type='checkbox' name='delch[]' value='" . $massiv['id'] . "'/><a href='pradd.php?act=readout&amp;id=" . $massiv['id'] . "'>Для: $massiv[user]</a> (" . date("d.m.y H:i", $vpr) . ")<br/>Тема: $massiv[temka]<br/>";
                     if (!empty($massiv['attach']))
                     {
@@ -762,12 +757,10 @@ if ($user_id)
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='$massiv1[user]';"));
             $text = $massiv1['text'];
             $text = tags($text);
-            if ($offsm != 1)
-            {
+            if ($set_user['smileys'])
                 $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
-            }
             echo "<p>Для <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
-            $vrp = $massiv1['time'] + $sdvig * 3600;
+            $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
             echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
             if (!empty($massiv1['attach']))
             {

@@ -133,15 +133,19 @@ switch ($do)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица `forum_vote_us` создана.<br />';
         // Таблица `users`
-        mysql_query("ALTER TABLE `users` DROP `offpg`");
-        mysql_query("ALTER TABLE `users` DROP `offgr`");
-        mysql_query("ALTER TABLE `users` ADD `postclip` TINYINT( 2 ) NOT NULL DEFAULT '2' AFTER `farea`");
-        mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
-        mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
-        mysql_query("ALTER TABLE `users` ADD `movings` INT NOT NULL DEFAULT '0'");
-        mysql_query("ALTER TABLE `users` ADD `place` VARCHAR( 30 ) NOT NULL");
-        mysql_query("ALTER TABLE `users` ADD INDEX ( `place` )");
-        mysql_query("ALTER TABLE `users` ADD `postcut` SMALLINT NOT NULL DEFAULT '1' AFTER `postclip`");
+        @mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
+        @mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
+        @mysql_query("ALTER TABLE `users` ADD `movings` INT NOT NULL DEFAULT '0'");
+        @mysql_query("ALTER TABLE `users` ADD `place` VARCHAR( 30 ) NOT NULL");
+        @mysql_query("ALTER TABLE `users` ADD INDEX ( `place` )");
+        @mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL");
+        @mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL");
+        @mysql_query("ALTER TABLE `users` ADD `set_chat` TEXT NOT NULL");
+        $drop = array('nmenu', 'kolanywhwere', 'kmess', 'sdvig', 'pereh', 'offsm', 'offtr', 'digest', 'skin', 'farea', 'upfp', 'postclip', 'postcut', 'chmes', 'carea', 'timererfesh', 'nastroy');
+        foreach ($drop as $val)
+        {
+            @mysql_query("ALTER TABLE `users` DROP `$val`");
+        }
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
         $array = array('fmod', 'gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');
@@ -259,10 +263,10 @@ switch ($do)
                 else
                     $type = 9;
                 // Получаем ID подкатегории
-                $req1 = mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
+                $req1 = mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
                 $res1 = mysql_fetch_array($req1);
                 // Получаем ID категории
-                $req2 = mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res1['refid'] . "'");
+                $req2 = mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res1['refid'] . "' LIMIT 1");
                 $res2 = mysql_fetch_array($req2);
                 // Переносим информацию о файлах в новую таблицу
                 mysql_query("INSERT INTO `cms_forum_files` SET
@@ -319,7 +323,7 @@ switch ($do)
         echo '<li>Учтите, что обновление возможно только для оригинальной (без модов) системы <b>JohnCMS 2.4.0</b><br />Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.<br />Установка данного обновления на модифицированную систему может привести к полной неработоспособности сайта.</li>';
         echo '<li>Некоторые этапы обновления могут занимать довольно продолжительное время (несколько минут), которое зависит от размера базы данных сайта и скорости сервера хостинга.</li>';
         echo '<li>Перед началом процедуры обновления, ОБЯЗАТЕЛЬНО сделайте резервную копию базы данных.<br />Если по какой то причине обновление не пройдет до конца, Вам придется восстанавливать базу из резервной копии.</li>';
-        echo '<li>В течение всего периода работы данного инсталлятора, НЕЛЬЗЯ нажимать кнопки браузена "Назад" и "Обновить", иначе может быть нарушена целостность данных.</li>';
+        echo '<li>В течение всего периода работы инсталлятора, НЕЛЬЗЯ нажимать кнопки браузера "Назад" и "Обновить", иначе может быть нарушена целостность данных.</li>';
         echo '<li>Если Вы нажмете ссылку "Продолжить", то отмена изменений будет невозможна без восстановления из резервной копии.</li>';
         echo '</ul><hr />Вы уверены? У Вас есть резервная копия базы данных?<br /><a href="update.php?do=step1">Начать обновление</a>';
 }

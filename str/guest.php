@@ -100,7 +100,7 @@ switch ($act)
         if ($user_id)
         {
             $old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
-            $spam = $lastpost > ($realtime - $old) ? 1 : false;
+            $spam = $datauser['lastpost'] > ($realtime - $old) ? 1 : false;
         } else
         {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `soft`='" . mysql_real_escape_string($agn) . "' AND `time` >='" . ($realtime - 30) . "' AND `ip` ='" . $ipl . "' AND `adm`='" . $admset . "'");
@@ -295,10 +295,8 @@ switch ($act)
                 echo "Имя(max. 25):<br/><input type='text' name='name' maxlength='25'/><br/>";
             }
             echo 'Сообщение(max. 500):<br/><textarea cols="20" rows="2" name="msg"></textarea><br/>';
-            if ($offtr != 1)
-            {
-                echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-            }
+            if ($set_user['translit'])
+                echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             if (!$user_id)
             {
                 // CAPTCHA для гостей
@@ -335,11 +333,11 @@ switch ($act)
             }
             while ($res = mysql_fetch_array($req))
             {
-                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                 if ($res['user_id'] != "0")
                 {
                     if ($res['sex'])
-                        echo '<img src="../theme/' . $skin . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
                     else
                         echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
                     // Ник юзера и ссылка на Анкету
@@ -380,7 +378,7 @@ switch ($act)
                     // Ник Гостя
                     echo '<b>Гость ' . checkout($res['name']) . '</b>';
                 }
-                $vrp = $res['time'] + $sdvig * 3600;
+                $vrp = $res['time'] + $set_user['sdvig'] * 3600;
                 $vr = date("d.m.y / H:i", $vrp);
                 echo ' <font color="#999999">(' . $vr . ')</font><br/>';
                 if (!empty($res['status']))
@@ -389,10 +387,8 @@ switch ($act)
                 {
                     // Для зарегистрированных показываем ссылки и смайлы
                     $text = checkout($res['text'], 1, 1);
-                    if ($offsm != 1)
-                    {
+                    if ($set_user['smileys'])
                         $text = smileys($text, ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= 1) ? 1 : 0);
-                    }
                 } else
                 {
                     // Для гостей фильтруем ссылки
@@ -403,7 +399,7 @@ switch ($act)
                 // Если пост редактировался, показываем кто и когда
                 if ($res['edit_count'] >= 1)
                 {
-                    $diz = $res['edit_time'] + $sdvig * 3600;
+                    $diz = $res['edit_time'] + $set_user['sdvig'] * 3600;
                     $dizm = date("d.m.y /H:i", $diz);
                     echo "<br /><small><font color='#999999'>Посл. изм. <b>$res[edit_who]</b>  ($dizm)<br />Всего изм.:<b> $res[edit_count]</b></font></small>";
                 }
@@ -411,12 +407,10 @@ switch ($act)
                 if (!empty($res['otvet']))
                 {
                     $otvet = checkout($res['otvet'], 1, 1);
-                    $vrp1 = $res['otime'] + $sdvig * 3600;
+                    $vrp1 = $res['otime'] + $set_user['sdvig'] * 3600;
                     $vr1 = date("d.m.Y / H:i", $vrp1);
-                    if ($offsm != 1)
-                    {
+                    if ($set_user['smileys'])
                         $otvet = smileys($otvet, 1);
-                    }
                     echo '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
                 // Ссылки на Модерские функции

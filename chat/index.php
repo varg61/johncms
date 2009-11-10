@@ -36,6 +36,21 @@ if ($error)
     exit;
 }
 
+////////////////////////////////////////////////////////////
+// Настройки Чата                                         //
+////////////////////////////////////////////////////////////
+$set_chat = array();
+$set_chat = unserialize($datauser['set_chat']);
+if (empty($set_chat))
+{
+    $set_chat['refresh'] = 20;
+    $set_chat['chmes'] = 10;
+    $set_chat['carea'] = 0;
+    $set_chat['carea_w'] = 20;
+    $set_chat['carea_h'] = 2;
+    $set_chat['mood'] = 'нейтральное';
+}
+
 // Фиксируем местонахождение пользователя
 $where = !empty($id) ? 'chat,' . $id : 'chat';
 mysql_query("INSERT INTO `count` SET
@@ -51,7 +66,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Очищаем комнату                                        //
         ////////////////////////////////////////////////////////////
-		if ($dostcmod == 1 && $id)
+        if ($dostcmod == 1 && $id)
         {
             $typ = mysql_query("SELECT * FROM `chat` WHERE `id` = '" . $id . "' LIMIT 1");
             $ms = mysql_fetch_array($typ);
@@ -79,7 +94,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-		require_once ("../incfiles/head.php");
+        require_once ("../incfiles/head.php");
         echo "<b>Модераторы чата</b><br/>";
         $mod = mysql_query("select * from `users` where rights='2';");
         $mod2 = mysql_num_rows($mod);
@@ -116,7 +131,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-		require_once ("../incfiles/head.php");
+        require_once ("../incfiles/head.php");
         include ("../pages/trans.$ras_pages");
         echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
         require_once ("../incfiles/end.php");
@@ -126,7 +141,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-		if (empty($id))
+        if (empty($id))
         {
             require_once ("../incfiles/head.php");
             echo "Ошибка!<br/><a href='?'>В чат</a><br/>";
@@ -137,7 +152,7 @@ switch ($act)
         // Проверка на спам
         $old = ($rights > 0 || $dostsadm = 1) ? 5:
         10;
-        if ($lastpost > ($realtime - $old))
+        if ($datauser['lastpost'] > ($realtime - $old))
         {
             require_once ("../incfiles/head.php");
             echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="index.php?id=' . $id . '">Назад</a></p>';
@@ -236,11 +251,9 @@ switch ($act)
                     require_once ("chat_header.php");
                     echo 'Добавление сообщения<br />(max. 500)';
                     echo '<div class="title1">' . $type1['text'] . '</div>';
-                    echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='40' rows='3' title='Введите текст сообщения' name='msg'></textarea><br/>";
-                    if ($offtr != 1)
-                    {
+                    echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='" . $set_chat['carea_w'] . "' rows='" . $set_chat['carea_h'] . "' title='Введите текст сообщения' name='msg'></textarea><br/>";
+                    if ($set_user['translit'])
                         echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-                    }
                     echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form>";
                     echo "<div class='title2'><a href='index.php?act=trans'>Транслит</a> | <a href='../str/smile.php'>Смайлы</a><br/>";
                     echo "</div><br />[0] <a href='index.php?id=" . $id . "' accesskey='0'>Назад</a>";
@@ -251,7 +264,7 @@ switch ($act)
                 ////////////////////////////////////////////////////////////
                 //
                 ////////////////////////////////////////////////////////////
-				$th = $type1['refid'];
+                $th = $type1['refid'];
                 $th2 = mysql_query("select * from `chat` where id= '" . $th . "';");
                 $th1 = mysql_fetch_array($th2);
                 if (isset($_POST['submit']))
@@ -425,10 +438,8 @@ switch ($act)
                     }
                     echo "Добавление сообщения в комнату <b>$th1[text]</b><br />для <b>$type1[from]</b>(max. 500):<br/><form action='index.php?act=say&amp;id=" . $id . "' method='post'>";
                     echo "<textarea cols='40' rows='3' title='Введите ответ' name='msg'></textarea><br/>";
-                    if ($offtr != 1)
-                    {
+                    if ($set_user['translit'])
                         echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
-                    }
                     echo '<select name="priv">';
                     echo '<option value="0">Всем</option>';
                     echo '<option value="1">Приватно</option>';
@@ -485,7 +496,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-		$_SESSION['intim'] = "";
+        $_SESSION['intim'] = "";
         header("location: $home/chat/index.php?id=$id");
         break;
 
@@ -493,7 +504,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-		$parol = check($_POST['parol']);
+        $parol = check($_POST['parol']);
         $_SESSION['intim'] = $parol;
         mysql_query("update `users` set alls='" . $parol . "' where id='" . intval($_SESSION['uid']) . "';");
         header("location: $home/chat/index.php?id=$id");
@@ -503,7 +514,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-		if ($id)
+        if ($id)
         {
             // Отображаем комнату Чата
             require_once ('room.php');

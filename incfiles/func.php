@@ -101,19 +101,16 @@ function forum_new()
 ////////////////////////////////////////////////////////////
 function dnews()
 {
-    if (!empty($_SESSION['uid']))
+    global $set_user;
+    $req = mysql_query("SELECT `time` FROM `news` ORDER BY `time` DESC LIMIT 1");
+    if (mysql_num_rows($req))
     {
-        global $sdvig;
+        $res = mysql_fetch_array($req);
+        return date("H:i/d.m.y", $res['time'] + $set_user['sdvig'] * 3600);
     } else
     {
-        global $sdvigclock;
-        $sdvig = $sdvigclock;
+        return false;
     }
-    $req = mysql_query("SELECT `time` FROM `news` ORDER BY `time` DESC LIMIT 1");
-    $res = mysql_fetch_array($req);
-    $vrn = $res['time'] + $sdvig * 3600;
-    $vrn1 = date("H:i/d.m.y", $vrn);
-    return $vrn1;
 }
 
 ////////////////////////////////////////////////////////////
@@ -561,13 +558,25 @@ function smileys($str, $adm = 0)
 ////////////////////////////////////////////////////////////
 // Сообщения об ошибках                                   //
 ////////////////////////////////////////////////////////////
-function display_error($error = array())
+function display_error($error = false)
 {
-    $out = '<div class="rmenu"><p>ОШИБКА!<br />';
-    foreach ($error as $val)
-        $out .= '<div>' . $val . '</div>';
-    $out .= '</p></div>';
-    return $out;
+    if ($error)
+    {
+        $out = '<div class="rmenu"><p>ОШИБКА!';
+        if (is_array($error))
+        {
+            foreach ($error as $val)
+                $out .= '<div>' . $val . '</div>';
+        } else
+        {
+            $out .= '<br />' . $error;
+        }
+        $out .= '</p></div>';
+        return $out;
+    } else
+    {
+        return false;
+    }
 }
 
 /*

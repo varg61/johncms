@@ -130,7 +130,7 @@ if ($user_id)
                     echo "<a href='index.php?id=" . $arr['id'] . "'><font color='" . $cntem . "'>$arr[text]</font></a><font color='" . $ccolp . "'>[$colmes1]</font>";
                     if ($cpg > 1)
                     {
-                        if (((empty($_SESSION['uid'])) && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ((!empty($_SESSION['uid'])) && $upfp == 1))
+                        if ((!$user_id && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ($user_id && $set_forum['upfp']))
                         {
                             echo "<a href='index.php?id=$arr[id]&amp;page=$cpg'>[&lt;&lt;]</a>";
                         } else
@@ -200,10 +200,11 @@ if ($user_id)
                         echo '<img src="../images/dl.gif" alt=""/>';
                     else
                         echo '<img src="../images/np.gif" alt=""/>';
-                    if($res['realid'] == 1)  echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
-                   echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $upfp && $datauser['postclip'] ? '&amp;clip' : '') . ($upfp && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
+                    if ($res['realid'] == 1)
+                        echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
+                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
                     if ($cpg > 1)
-                        echo '<a href="index.php?id=' . $res['id'] . (!$upfp && $datauser['postclip'] ? '&amp;clip' : '') . ($upfp ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
+                        echo '<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
                     echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
                     echo $res['from'];
                     if ($colmes1 > 1)
@@ -247,7 +248,8 @@ if ($user_id)
         $nam = mysql_fetch_array($nikuser);
         echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
         echo '<img src="../images/' . ($arr['edit'] == 1 ? 'tz' : 'np') . '.gif" alt=""/>';
-        if($arr['realid'] == 1)  echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
+        if ($arr['realid'] == 1)
+            echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
         echo '&nbsp;<a href="index.php?id=' . $arr['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $arr['text'] . '</a>&nbsp;[' . $colmes1 . ']';
         if ($cpg > 1)
             echo '&nbsp;<a href="index.php?id=' . $arr['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';

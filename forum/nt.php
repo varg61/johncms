@@ -23,7 +23,7 @@ if (!$id || !$user_id || $ban['1'] || $ban['11'])
 }
 // Проверка на спам
 $old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
-if ($lastpost > ($realtime - $old))
+if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");
     echo '<div class="rmenu"><p>АНТИФЛУД!<br />Вы не можете так часто писать, порог ' . $old . ' секунд<br/><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
@@ -129,7 +129,7 @@ if (isset($_POST['submit']))
     echo '<div class="gmenu"><p>Название(max. 100):<br/><input type="text" size="20" maxlength="100" name="th"/><br/>';
     echo 'Сообщение:<br/><textarea cols="20" rows="3" name="msg"></textarea><br />';
     echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл';
-    if (!$offtr)
+    if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения';
     echo '</p><p><input type="submit" name="submit" value="Отправить"/></p></div></form>';
     echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';

@@ -298,7 +298,7 @@ if (in_array($act, $do))
                         imagedestroy($im);
                         imagedestroy($im1);
                         $fotsz = filesize("foto/$ms[name]");
-                        $vrf = $fot1['time'] + $sdvig * 3600;
+                        $vrf = $fot1['time'] + $set_user['sdvig'] * 3600;
                         $vrf1 = date("d.m.y / H:i", $vrf);
                         echo '</a>';
                         if (!empty($fot1['text']))
@@ -471,7 +471,7 @@ if (in_array($act, $do))
                 $sizs = GetImageSize("foto/$ms[name]");
                 $fwidth = $sizs[0];
                 $fheight = $sizs[1];
-                $vrf = $ms[time] + $sdvig * 3600;
+                $vrf = $ms[time] + $set_user['sdvig'] * 3600;
                 $vrf1 = date("d.m.y / H:i", $vrf);
                 echo "<p>Подпись: $ms[text]<br/>";
                 if ($set['mod_gal_comm'] || $dostadm)
