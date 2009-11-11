@@ -148,7 +148,10 @@ switch ($act)
 		`soft`='" . mysql_real_escape_string($agn) . "'");
         // Фиксируем время последнего поста (антиспам)
         if ($user_id)
-            mysql_query("UPDATE `users` SET `lastpost` = '" . $realtime . "' WHERE `id` = '" . $user_id . "'");
+        {
+            $postguest = $datauser['postguest'] + 1;
+            mysql_query("UPDATE `users` SET `postguest` = '$postguest', `lastpost` = '" . $realtime . "' WHERE `id` = '" . $user_id . "'");
+        }
         header("location: guest.php");
         break;
 

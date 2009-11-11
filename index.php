@@ -36,6 +36,25 @@ switch ($mod)
         echo '<p>Ошибка 404: файл не найден!!!</p>';
         break;
 
+    case 'users':
+        echo '<div class="phdr"><b>Актив Сайта</b></div>';
+        echo '<div class="menu"><a href="str/users_search.php">Поиск юзера</a></div>';
+        echo '<div class="menu"><a href="str/users.php">Список юзеров</a> (' . kuser() . ')</div>';
+        echo '<div class="menu"><a href="str/brd.php">Именинники</a> (' . brth() . ')</div>';
+        echo '<div class="menu"><a href="str/users_top.php">Топ активности</a></div>';
+        echo '<div class="phdr"><a href="str/moders.php">Администрация</a></div>';
+        break;
+
+    case 'info':
+        ////////////////////////////////////////////////////////////
+        // Информационный блок                                    //
+        ////////////////////////////////////////////////////////////
+        echo '<div class="phdr"><b>Информация</b></div>';
+        echo '<div class="menu"><a href="str/smile.php?">Смайлы</a></div>';
+        echo '<div class="menu"><a href="read.php?">FAQ (ЧаВо)</a></div>';
+        $_SESSION['refsm'] = '../index.php?do=info';
+        break;
+
     case 'ban':
         ////////////////////////////////////////////////////////////
         // Подробности бана                                       //
@@ -60,7 +79,7 @@ switch ($mod)
 
     case 'cab':
         echo '<div class="phdr">Личный кабинет</div>';
-        echo '<div class="menu"><a href="str/my_act.php">Моя активность</a></div>';
+        echo '<div class="menu"><a href="str/my_stat.php">Моя активность</a></div>';
         echo '<div class="gmenu"><a href="str/privat.php">Личная почта</a></div>';
         if ($dostmod == 1)
         {

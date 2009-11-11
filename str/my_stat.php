@@ -16,8 +16,8 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'anketa';
-$textl = 'Моя статистика';
+$headmod = 'mystat';
+$textl = 'Личная статистика';
 require_once ('../incfiles/core.php');
 require_once ('../incfiles/head.php');
 
@@ -32,9 +32,10 @@ $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user' LIMIT 1");
 if (mysql_num_rows($req))
 {
     $res = mysql_fetch_assoc($req);
-    echo '<div class="phdr"><b>' . ($id ? 'Активность пользователя' : 'Моя активность') . '</b></div>';
-    echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
+    echo '<div class="phdr"><b>Статистика</b></div>';
+    echo '<div class="menu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;' . ($id ? 'А' : 'Моя а') . 'ктивность</h3><ul>';
     echo '<li>Сообщений в Форуме: ' . $res['postforum'] . '</li>';
+    //TODO: Дописать статистику по гостевой
     echo '<li>Сообщений в Гостевой: ' . $res['postguest'] . '</li>';
     echo '<li>Сообщений в Чате: ' . $res['postchat'] . '</li>';
     echo '<li>Ответов в Викторине: ' . $res['otvetov'] . '</li>';
@@ -44,6 +45,7 @@ if (mysql_num_rows($req))
     // Если были нарушения, то показываем их
     if ($total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '$user'"), 0))
         echo '<div class="rmenu">Нарушения: <a href="anketa.php?act=ban&amp;user=' . $user . '">' . $total . '</a></div>';
+    echo '<div class="phdr"><a href="users_top.php">Топ 10 активности</a></div>';
 } else
 {
     echo display_error('Такого пользователя нет');

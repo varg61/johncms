@@ -288,7 +288,7 @@ if (in_array($act, $do))
                 echo '<p><a href="index.php?act=edit&amp;id=' . $id . '">Редактировать</a><br/>';
                 echo '<a href="index.php?act=del&amp;id=' . $id . '">Удалить статью</a></p>';
             }
-            // Ссылка на коментарии
+            // Ссылка на комментарии
 			if ($set['mod_lib_comm'] || $dostadm)
             {
                 $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = '" . $id . "'");

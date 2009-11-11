@@ -28,7 +28,7 @@ $search = $search ? $search : rawurldecode(trim($_GET['search']));
 $search_t = isset($_REQUEST['t']) ? 1 : 0;
 
 echo '<div class="phdr"><b>Поиск пользователя</b></div>';
-echo '<form action="user_search.php" method="post"><div class="gmenu"><p>';
+echo '<form action="users_search.php" method="post"><div class="gmenu"><p>';
 echo 'Кого ищем?<br /><input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
 echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;Строгий поиск<br/>';
@@ -104,10 +104,10 @@ if ($search && !$error)
     if ($total > $kmess)
     {
         // Навигация по страницам
-        echo '<p>' . pagenav('user_search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="user_search.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+        echo '<p>' . pagenav('users_search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p><form action="users_search.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="user_search.php">Новый поиск</a></p>';
+    echo '<p><a href="users_search.php">Новый поиск</a></p>';
 } else
 {
     // Выводим сообщение об ошибке

@@ -133,6 +133,7 @@ switch ($do)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица `forum_vote_us` создана.<br />';
         // Таблица `users`
+        @mysql_query("ALTER TABLE `users` ADD `postguest` INT NOT NULL DEFAULT '0' AFTER `postforum`");
         @mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
         @mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
         @mysql_query("ALTER TABLE `users` ADD `movings` INT NOT NULL DEFAULT '0'");

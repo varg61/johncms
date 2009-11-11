@@ -24,7 +24,7 @@ if (!$id)
 }
 if (!$set['mod_gal_comm'] && !$dostadm)
 {
-    echo '<p>Коментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
+    echo '<p>Комментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
     require_once ('../incfiles/end.php');
     exit;
 }

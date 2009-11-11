@@ -88,7 +88,7 @@ if ($dostadm)
 	<input type="radio" value="2" name="lib" ' . ($set['mod_lib'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыта<br />
 	<input type="radio" value="1" name="lib" ' . ($set['mod_lib'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;авторизованным<br />
 	<input type="radio" value="0" name="lib" ' . (!$set['mod_lib'] ? 'checked="checked"' : '') . '/>&nbsp;закрыта<br />
-	<input name="libcomm" type="checkbox" value="1" ' . ($set['mod_lib_comm'] ? 'checked="checked"' : '') . ' />&nbsp;коментарии</div></p>';
+	<input name="libcomm" type="checkbox" value="1" ' . ($set['mod_lib_comm'] ? 'checked="checked"' : '') . ' />&nbsp;комментарии</div></p>';
     // Доступ к Галерее
     if ($set['mod_gal'] == 2)
         $img = 'green';
@@ -100,7 +100,7 @@ if ($dostadm)
 	<input type="radio" value="2" name="gal" ' . ($set['mod_gal'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыта<br />
 	<input type="radio" value="1" name="gal" ' . ($set['mod_gal'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;авторизованным<br />
 	<input type="radio" value="0" name="gal" ' . (!$set['mod_gal'] ? 'checked="checked"' : '') . '/>&nbsp;закрыта<br />
-	<input name="galcomm" type="checkbox" value="1" ' . ($set['mod_gal_comm'] ? 'checked="checked"' : '') . ' />&nbsp;коментарии</div></p>';
+	<input name="galcomm" type="checkbox" value="1" ' . ($set['mod_gal_comm'] ? 'checked="checked"' : '') . ' />&nbsp;комментарии</div></p>';
     // Доступ к Загрузкам
     if ($set['mod_down'] == 2)
         $img = 'green';
@@ -112,7 +112,7 @@ if ($dostadm)
 	<input type="radio" value="2" name="down" ' . ($set['mod_down'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыты<br />
 	<input type="radio" value="1" name="down" ' . ($set['mod_down'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;авторизованным<br />
 	<input type="radio" value="0" name="down" ' . (!$set['mod_down'] ? 'checked="checked"' : '') . '/>&nbsp;закрыты<br />
-	<input name="downcomm" type="checkbox" value="1" ' . ($set['mod_down_comm'] ? 'checked="checked"' : '') . ' />&nbsp;коментарии</div></p></div>';
+	<input name="downcomm" type="checkbox" value="1" ' . ($set['mod_down_comm'] ? 'checked="checked"' : '') . ' />&nbsp;комментарии</div></p></div>';
     // Доступ к Регистрации
     if ($set['mod_reg'] == 2)
         $img = 'green';
@@ -124,7 +124,7 @@ if ($dostadm)
 	<input type="radio" value="2" name="reg" ' . ($set['mod_reg'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;открыта<br />
 	<input type="radio" value="1" name="reg" ' . ($set['mod_reg'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;с модерацией<br />
 	<input type="radio" value="0" name="reg" ' . (!$set['mod_reg'] ? 'checked="checked"' : '') . '/>&nbsp;закрыта</div></div>';
-    echo '<div class="phdr"><small>У Администратора всегда остается доступ ко всем закрытым модулям и коментариям.</small></div>';
+    echo '<div class="phdr"><small>У Администратора всегда остается доступ ко всем закрытым модулям и комментариям.</small></div>';
 	echo '<p><input type="submit" name="submit" id="button" value="Запомнить" /></p>';
     echo '<p><a href="main.php">В админку</a></p>';
     echo '</form>';

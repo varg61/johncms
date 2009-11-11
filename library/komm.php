@@ -24,7 +24,7 @@ if (!$id)
 }
 if (!$set['mod_lib_comm'] && !$dostadm)
 {
-    echo '<p>Коментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
+    echo '<p>Комментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
     require_once ('../incfiles/end.php');
     exit;
 }
@@ -46,7 +46,7 @@ if ($user_id && !$ban['1'] && !$ban['10'])
 {
     echo '<div class="gmenu"><a href="index.php?act=addkomm&amp;id=' . $id . '">Написать</a></div>';
 }
-// Запрос списка коментариев
+// Запрос списка комментариев
 $mess = mysql_query("SELECT * FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
 while ($mass = mysql_fetch_array($mess))
 {

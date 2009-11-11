@@ -24,7 +24,7 @@ if ($_GET['id'] == "")
 }
 if (!$set['mod_down_comm'] || !$dostadm)
 {
-    echo '<p>Коментарии закрыты<br/><a href="index.php">К загрузкам</a></p>';
+    echo '<p>Комментарии закрыты<br/><a href="index.php">К загрузкам</a></p>';
     require_once ('../incfiles/end.php');
     exit;
 }

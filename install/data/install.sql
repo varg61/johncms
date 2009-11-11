@@ -363,6 +363,7 @@ CREATE TABLE `users` (
   `sex` varchar(2) NOT NULL default '',
   `komm` int(10) NOT NULL default '0',
   `postforum` int(10) NOT NULL default '0',
+  `postguest` int(11) NOT NULL default '0',
   `postchat` int(10) NOT NULL default '0',
   `otvetov` int(11) NOT NULL default '0',
   `yearofbirth` int(4) NOT NULL default '0',
