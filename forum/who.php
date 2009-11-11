@@ -115,14 +115,10 @@ if ($id)
                     }
                 }
                 echo ' (' . $res['movings'] . ' - ' . $sitevr . ') ';
-                if ($do == 'guest')
-                {
-                    echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
-                    if ($dostmod)
-                        echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-                    echo '</div>';
-                }
-                echo '</div>';
+                echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
+                if ($dostmod)
+                    echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
+                echo '</div></div>';
                 ++$i;
             }
         }
@@ -275,12 +271,9 @@ if ($id)
                     }
             }
             echo '<div class="sub"><u>Находится</u>: ' . $place;
-            if ($do == 'guest')
-            {
-                echo '<br /><u>UserAgent</u>: ' . $res['browser'];
-                if ($dostmod)
-                    echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-            }
+            echo '<br /><u>UserAgent</u>: ' . $res['browser'];
+            if ($dostmod)
+                echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
             echo '</div></div>';
             ++$i;
         }

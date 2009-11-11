@@ -17,18 +17,12 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 require_once ("../incfiles/head.php");
-if (empty($_GET['id']))
+if (!$user_id || !$id)
 {
-    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once ("../incfiles/end.php");
+    header('Location: index.php');
     exit;
 }
-if (empty($_SESSION['uid']))
-{
-    echo "Вы не авторизованы!<br/>";
-    require_once ("../incfiles/end.php");
-    exit;
-}
+
 $typ = mysql_query("select * from `forum` where id='" . $id . "';");
 $ms = mysql_fetch_array($typ);
 if ($ms['type'] != "m")
@@ -68,24 +62,19 @@ if (($dostfmod == 1) || (($arr1['from'] == $login) && ($arr1['id'] == $ms['id'])
         {
             $msg = trans($msg);
         }
-        $koled = $ms['kedit'] + 1;
-        mysql_query("update `forum` set  tedit='" . $realtime . "', edit='" . $login . "', kedit='" . $koled . "', text='" . $msg . "' where id='" . $id . "';");
-        $pa = mysql_query("select * from `forum` where type='m' and refid= '" . $id . "';");
-        $pa2 = mysql_num_rows($pa);
-
-        if ((!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1))
-        {
-            $page = 1;
-        } else
-        {
-            $page = ceil($pa2 / $kmess);
-        }
-        echo '<p>Сообщение изменено.<br/><a href="index.php?id=' . $ms['refid'] . '&amp;start=' . $start . '">Продолжить</a></p>';
+        mysql_query("UPDATE `forum` SET
+        `tedit` = '$realtime',
+        `edit` = '$login',
+        `kedit` = '" . ($ms['kedit'] + 1) . "',
+        `text` = '$msg'
+        WHERE `id` = '$id'");
+        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $ms['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'"), 0) / $kmess);
+        header('Location: index.php?id=' . $ms['refid'] . '&page=' . $page);
     } else
     {
         echo '<div class="phdr"><b>Изменить сообщение</b></div>';
         echo '<div class="rmenu"><form action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
-        echo '<textarea cols="20" rows="3" name="msg">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
+        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
         if ($set_user['translit'])
             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
         echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";

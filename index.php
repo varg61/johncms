@@ -60,15 +60,15 @@ switch ($mod)
 
     case 'cab':
         echo '<div class="phdr">Личный кабинет</div>';
+        echo '<div class="menu"><a href="str/my_act.php">Моя активность</a></div>';
         echo '<div class="gmenu"><a href="str/privat.php">Личная почта</a></div>';
         if ($dostmod == 1)
         {
             $guest = gbook(2);
             echo '<div class="gmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a>' . ($guest > 0 ? ' (<span class="red">+' . $guest . '</span>)' : '') . '</div>';
         }
-        echo '<div class="menu"><a href="str/anketa.php">Ваша анкета</a></div>';
-        echo '<div class="menu"><a href="str/my_act.php">Моя активность</a></div>';
-        echo '<div class="menu"><a href="str/my_set.php">Настройки</a></div>';
+        echo '<div class="menu"><a href="str/anketa.php">Моя анкета</a></div>';
+        echo '<div class="menu"><a href="str/my_set.php">Мои Настройки</a></div>';
         if ($dostmod)
             echo '<div class="menu">Админка <a href="' . $admp . '/main.php">&gt;&gt;&gt;</a></div>';
         echo '<div class="bmenu"><a href="index.php?mod=digest">Новое на сайте</a></div>';

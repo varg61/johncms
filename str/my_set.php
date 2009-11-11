@@ -100,7 +100,7 @@ switch ($act)
         }
         closedir($dir);
         echo '</select>';
-        echo '</p><p><input type="submit" name="submit" value="Запомнить"/></p></div></form>';
+        echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
         echo '<div class="phdr"><a href="my_set.php?act=all&amp;reset">Сброс настроек</a></div>';
         echo '<p><a href="my_set.php">Меню настроек</a><br /><a href="../index.php?mod=cab">В кабинет</a></p>';
         break;

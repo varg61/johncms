@@ -101,6 +101,7 @@ if ($total)
         echo ' (' . $res['movings'] . ' - ' . $sitevr . ') ';
         if ($user_id)
         {
+            echo '<div class="sub"><u>Находится</u>:&nbsp;';
             $where = explode(",", $res['place']);
             switch ($where[0])
             {
@@ -140,7 +141,7 @@ if ($total)
                     break;
                 case 'forum':
                 case 'forums':
-                    echo '<a href="../forum/index.php">Форум</a>';
+                    echo '<a href="../forum/index.php">Форум</a> / <a href="../forum/index.php?act=who">где?...</a>';
                     break;
                 case 'chat':
                     echo '<a href="../chat/index.php">Чат</a>';
@@ -156,11 +157,12 @@ if ($total)
                     echo '<a href="../index.php">Главная</a>';
                     break;
             }
+            echo '<br /><u>UserAgent</u>:&nbsp;' . $res['browser'];
+            if ($dostmod)
+                echo '<br /><u>IP Address</u>:&nbsp;' . long2ip($res['ip']);
+            echo '</div>';
         }
-        echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
-        if ($dostmod)
-            echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-        echo '</div></div>';
+        echo '</div>';
         ++$i;
     }
 } else
