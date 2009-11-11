@@ -141,7 +141,7 @@ if ($total)
                     break;
                 case 'forum':
                 case 'forums':
-                    echo '<a href="../forum/index.php">Форум</a> / <a href="../forum/index.php?act=who">где?...</a>';
+                    echo '<a href="../forum/index.php">Форум</a> / <a href="../forum/index.php?act=who">...???</a>';
                     break;
                 case 'chat':
                     echo '<a href="../chat/index.php">Чат</a>';

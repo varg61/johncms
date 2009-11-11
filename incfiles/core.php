@@ -225,6 +225,9 @@ if ($user_id && $user_ps)
                 $set_user['smileys'] = 1;
                 $set_user['translit'] = 1;
                 $set_user['quick_go'] = 1;
+                $set_user['gzip'] = 1;
+                $set_user['online'] = 1;
+                $set_user['movings'] = 1;
                 $set_user['digest'] = 1;
                 $set_user['sdvig'] = 0;
                 $set_user['kmess'] = 10;

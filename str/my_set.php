@@ -44,6 +44,9 @@ switch ($act)
             $set_user['digest'] = isset($_POST['digest']) ? 1 : 0;
             $set_user['kmess'] = isset($_POST['kmess']) ? intval($_POST['kmess']) : 10;
             $set_user['quick_go'] = isset($_POST['quick_go']) ? 1 : 0;
+            $set_user['gzip'] = isset($_POST['gzip']) ? 1 : 0;
+            $set_user['online'] = isset($_POST['online']) ? 1 : 0;
+            $set_user['movings'] = isset($_POST['movings']) ? 1 : 0;
             if ($set_user['sdvig'] < -12)
                 $set_user['sdvig'] = -12;
             elseif ($set_user['sdvig'] > 12)
@@ -68,9 +71,13 @@ switch ($act)
         }
         if (isset($_GET['reset']) || empty($set_user))
         {
+            $set_user = array();
             $set_user['smileys'] = 1;
             $set_user['translit'] = 1;
             $set_user['quick_go'] = 1;
+            $set_user['gzip'] = 1;
+            $set_user['online'] = 1;
+            $set_user['movings'] = 1;
             $set_user['digest'] = 1;
             $set_user['sdvig'] = 0;
             $set_user['kmess'] = 10;
@@ -87,8 +94,11 @@ switch ($act)
         echo '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&nbsp;Дайджест';
         echo '</p><p><h3>Внешний вид</h3>';
         echo '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> Строк на страницу (5-99)<br />';
-        echo '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&nbsp;Меню быстрого перехода';
-        echo '</p><p>Тема оформления<br/><select name="skin">';
+        echo '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&nbsp;Меню быстрого перехода<br />';
+        echo '<input name="gzip" type="checkbox" value="1" ' . ($set_user['gzip'] ? 'checked="checked"' : '') . ' />&nbsp;Коэффициент сжатия<br />';
+        echo '<input name="online" type="checkbox" value="1" ' . ($set_user['online'] ? 'checked="checked"' : '') . ' />&nbsp;Время в Online<br />';
+        echo '<input name="movings" type="checkbox" value="1" ' . ($set_user['movings'] ? 'checked="checked"' : '') . ' />&nbsp;Счетчик переходов';
+        echo '</p><p><h3>Тема оформления</h3><select name="skin">';
         $dr = opendir('../theme');
         while ($skindef = readdir($dr))
         {
@@ -137,6 +147,7 @@ switch ($act)
         }
         if (isset($_GET['reset']) || empty($set_forum))
         {
+            $set_forum = array();
             $set_forum['farea'] = 0;
             $set_forum['upfp'] = 0;
             $set_forum['farea_w'] = 20;
@@ -208,6 +219,7 @@ switch ($act)
         }
         if (isset($_GET['reset']) || empty($set_chat))
         {
+            $set_chat = array();
             $set_chat['refresh'] = 20;
             $set_chat['chmes'] = 10;
             $set_chat['carea'] = 0;

@@ -42,10 +42,13 @@ echo '</div><div class="footer">' . usersonline() . '</div>';
 // Выводим информацию внизу страницы                      //
 ////////////////////////////////////////////////////////////
 echo '<div align="center">';
-zipcount(); // Индикатор сжатия
-timeonline(); // Время, проведенное в онлайне
-echo 'Переходов: ' . $movings; // Счетчик перемещений по сайту
 echo '<div><b>' . $copyright . '</b></div>';
+if (!$user_id || ($user_id && $set_user['gzip']))
+    zipcount(); // Индикатор сжатия
+if (!$user_id || ($user_id && $set_user['online']))
+    timeonline(); // Время, проведенное в онлайне
+if (!$user_id || ($user_id && $set_user['movings']))
+    echo 'Переходов: ' . $movings; // Счетчик перемещений по сайту
 counters(); // Счетчики каталогов
 
 ////////////////////////////////////////////////////////////
