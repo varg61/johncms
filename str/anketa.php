@@ -204,7 +204,7 @@ $res = mysql_num_rows($req);
 if ($res > 0)
     echo '<div class="rmenu">Нарушений: <a href="anketa.php?act=ban&amp;user=' . $user . '">' . $res . '</a></div>';
 
-echo '<div class="bmenu"><a href="anketa.php?act=statistic&amp;user=' . $datauser['id'] . '">Активность юзера</a></div><p>';
+echo '<div class="bmenu"><a href="my_stat.php?id=' . $datauser['id'] . '">Активность юзера</a></div><p>';
 if (!empty($_SESSION['uid']))
 {
     $contacts = mysql_query("select * from `privat` where me='" . $login . "' and cont='" . $datauser['name'] . "';");

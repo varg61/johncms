@@ -148,7 +148,7 @@ if (!empty($_SESSION['uid']))
     }
 }
 
-echo "<a href='privat.php?'>В приват</a></p>";
+echo "<a href='../index.php?mod=cab'>В кабинет</a></p>";
 require_once ("../incfiles/end.php");
 
 ?>

@@ -125,7 +125,7 @@ if ($total)
                     break;
                 case 'privat':
                 case 'pradd':
-                    echo '<a href="privat.php">Приват</a>';
+                    echo '<a href="../index.php?mod=cab">Приват</a>';
                     break;
                 case 'birth':
                     echo '<a href="brd.php">Список именинников</a>';

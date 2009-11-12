@@ -29,7 +29,7 @@ switch ($adres)
         header("location: str/usset.php");
         break;
     case "privat":
-        header("location: str/privat.php");
+        header("location: index.php?mod=cab");
         break;
     case "prof":
         header("location: str/anketa.php");

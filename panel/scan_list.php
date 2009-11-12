@@ -197,7 +197,6 @@ $good_files = array(
 '../str/news.php',
 '../str/online.php',
 '../str/pradd.php',
-'../str/privat.php',
 '../str/skl.php',
 '../str/smile.php',
 '../str/users.php',
