@@ -29,92 +29,6 @@ if (!$user_id)
 
 switch ($act)
 {
-    case 'all':
-        ////////////////////////////////////////////////////////////
-        // Общие настройки                                        //
-        ////////////////////////////////////////////////////////////
-        $set_user = array();
-        $set_user = unserialize($datauser['set_user']);
-        echo '<div class="phdr"><b>Общие настройки</b></div>';
-        if (isset($_POST['submit']))
-        {
-            $set_user['sdvig'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
-            $set_user['smileys'] = isset($_POST['smileys']) ? 1 : 0;
-            $set_user['translit'] = isset($_POST['translit']) ? 1 : 0;
-            $set_user['digest'] = isset($_POST['digest']) ? 1 : 0;
-            $set_user['kmess'] = isset($_POST['kmess']) ? intval($_POST['kmess']) : 10;
-            $set_user['quick_go'] = isset($_POST['quick_go']) ? 1 : 0;
-            $set_user['gzip'] = isset($_POST['gzip']) ? 1 : 0;
-            $set_user['online'] = isset($_POST['online']) ? 1 : 0;
-            $set_user['movings'] = isset($_POST['movings']) ? 1 : 0;
-            if ($set_user['sdvig'] < -12)
-                $set_user['sdvig'] = -12;
-            elseif ($set_user['sdvig'] > 12)
-                $set_user['sdvig'] = 12;
-            if ($set_user['kmess'] < 5)
-                $set_user['kmess'] = 5;
-            elseif ($set_user['kmess'] > 99)
-                $set_user['kmess'] = 99;
-            $set_user['skin'] = isset($_POST['skin']) ? check(trim($_POST['skin'])) : 'default';
-            $arr = array();
-            $dir = opendir('../theme');
-            while ($skindef = readdir($dir))
-            {
-                if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn'))
-                    $arr[] = str_replace('.css', '', $skindef);
-            }
-            closedir($dir);
-            if (!in_array($set_user['skin'], $arr))
-                $set_user['skin'] = 'default';
-            mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Настройки сохранены</div>';
-        }
-        if (isset($_GET['reset']) || empty($set_user))
-        {
-            $set_user = array();
-            $set_user['smileys'] = 1;
-            $set_user['translit'] = 1;
-            $set_user['quick_go'] = 1;
-            $set_user['gzip'] = 1;
-            $set_user['online'] = 1;
-            $set_user['movings'] = 1;
-            $set_user['digest'] = 1;
-            $set_user['sdvig'] = 0;
-            $set_user['kmess'] = 10;
-            $set_user['skin'] = 'default';
-            mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Установлены настройки по умолчанию</div>';
-        }
-        echo '<form action="my_set.php?act=all" method="post" ><div class="menu"><p><h3>Настройка времени</h3>';
-        echo '<input type="text" name="sdvig" size="2" maxlength="2" value="' . $set_user['sdvig'] . '"/> Сдвиг времени (+-12)<br />';
-        echo '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> Системное время';
-        echo '</p><p><h3>Функции системы</h3>';
-        echo '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&nbsp;Смайлы<br/>';
-        echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&nbsp;Транслит<br/>';
-        echo '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&nbsp;Дайджест';
-        echo '</p><p><h3>Внешний вид</h3>';
-        echo '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> Строк на страницу (5-99)<br />';
-        echo '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&nbsp;Меню быстрого перехода<br />';
-        echo '<input name="gzip" type="checkbox" value="1" ' . ($set_user['gzip'] ? 'checked="checked"' : '') . ' />&nbsp;Коэффициент сжатия<br />';
-        echo '<input name="online" type="checkbox" value="1" ' . ($set_user['online'] ? 'checked="checked"' : '') . ' />&nbsp;Время в Online<br />';
-        echo '<input name="movings" type="checkbox" value="1" ' . ($set_user['movings'] ? 'checked="checked"' : '') . ' />&nbsp;Счетчик переходов';
-        echo '</p><p><h3>Тема оформления</h3><select name="skin">';
-        $dr = opendir('../theme');
-        while ($skindef = readdir($dr))
-        {
-            if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn'))
-            {
-                $skindef = str_replace('.css', '', $skindef);
-                echo '<option' . ($set_user['skin'] == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
-            }
-        }
-        closedir($dir);
-        echo '</select>';
-        echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-        echo '<div class="phdr"><a href="my_set.php?act=all&amp;reset">Сброс настроек</a></div>';
-        echo '<p><a href="my_set.php">Меню настроек</a><br /><a href="../index.php?mod=cab">В кабинет</a></p>';
-        break;
-
     case 'forum':
         ////////////////////////////////////////////////////////////
         // Настройки форума                                       //
@@ -122,6 +36,7 @@ switch ($act)
         $set_forum = array();
         $set_forum = unserialize($datauser['set_forum']);
         echo '<div class="phdr"><b>Настройки Форума</b></div>';
+        echo '<div class="bmenu"><small>Данные настройки влияют на отображение информации Форума</small></div>';
         if (isset($_POST['submit']))
         {
             $set_forum['farea'] = isset($_POST['farea']) ? 1 : 0;
@@ -174,7 +89,7 @@ switch ($act)
         echo '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&nbsp;не обрезать<br />';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
         echo '<div class="phdr"><a href="my_set.php?act=forum&amp;reset">Сброс настроек</a></div>';
-        echo '<p><a href="my_set.php">Меню настроек</a><br /><a href="../index.php?mod=cab">В кабинет</a><br /><a href="../forum">В форум</a></p>';
+        echo '<p><a href="../forum">В форум</a><br /><a href="../index.php?mod=cab">В кабинет</a></p>';
         break;
 
     case 'chat':
@@ -187,6 +102,7 @@ switch ($act)
         $set_chat = array();
         $set_chat = unserialize($datauser['set_chat']);
         echo '<div class="phdr"><b>Настройки Чата</b></div>';
+        echo '<div class="bmenu"><small>Индивидуальная настройка Чата</small></div>';
         if (isset($_POST['submit']))
         {
             $set_chat['refresh'] = isset($_POST['refresh']) ? intval($_POST['refresh']) : 20;
@@ -248,20 +164,94 @@ switch ($act)
             echo 'Или укажите свое:<br/><input type="text" name="mood_adm" value="' . (in_array($set_chat['mood'], $mood) ? '' : $set_chat['mood']) . '"/><br/>';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
         echo '<div class="phdr"><a href="my_set.php?act=chat&amp;reset">Сброс настроек</a></div>';
-        echo '<p><a href="my_set.php">Меню настроек</a><br /><a href="../index.php?mod=cab">В кабинет</a><br /><a href="../chat">В чат</a></p>';
+        echo '<p><a href="../chat">В чат</a><br /><a href="../index.php?mod=cab">В кабинет</a></p>';
         break;
 
     default:
         ////////////////////////////////////////////////////////////
-        // Меню настроек юзера                                    //
+        // Общие настройки                                        //
         ////////////////////////////////////////////////////////////
-        echo '<div class="phdr"><b>Личные настройки</b></div>';
-        echo '<div class="menu"><a href="my_set.php?act=all">Общие</a><br /><small>Данные настройки влияют на весь сайт и его модули.</small></div>';
-        echo '<div class="menu"><a href="my_set.php?act=forum">Форум</a><br /><small>Настройка отображения информации на Форуме.</small></div>';
-        echo '<div class="menu"><a href="my_set.php?act=chat">Чат</a><br /><small>Индивидуальная настройка Чата.</small></div>';
-        echo '<div class="phdr"><small>Совет: Вы всегда можете вернуть настройки по умлчанию, нажав ссылку &quot;Сброс настроек&quot;</small></div>';
+        $set_user = array();
+        $set_user = unserialize($datauser['set_user']);
+        echo '<div class="phdr"><b>Общие настройки</b></div>';
+        echo '<div class="bmenu"><small>Данные настройки влияют на весь сайт и все его модули</small></div>';
+        if (isset($_POST['submit']))
+        {
+            $set_user['sdvig'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
+            $set_user['smileys'] = isset($_POST['smileys']) ? 1 : 0;
+            $set_user['translit'] = isset($_POST['translit']) ? 1 : 0;
+            $set_user['digest'] = isset($_POST['digest']) ? 1 : 0;
+            $set_user['kmess'] = isset($_POST['kmess']) ? intval($_POST['kmess']) : 10;
+            $set_user['quick_go'] = isset($_POST['quick_go']) ? 1 : 0;
+            $set_user['gzip'] = isset($_POST['gzip']) ? 1 : 0;
+            $set_user['online'] = isset($_POST['online']) ? 1 : 0;
+            $set_user['movings'] = isset($_POST['movings']) ? 1 : 0;
+            if ($set_user['sdvig'] < -12)
+                $set_user['sdvig'] = -12;
+            elseif ($set_user['sdvig'] > 12)
+                $set_user['sdvig'] = 12;
+            if ($set_user['kmess'] < 5)
+                $set_user['kmess'] = 5;
+            elseif ($set_user['kmess'] > 99)
+                $set_user['kmess'] = 99;
+            $set_user['skin'] = isset($_POST['skin']) ? check(trim($_POST['skin'])) : 'default';
+            $arr = array();
+            $dir = opendir('../theme');
+            while ($skindef = readdir($dir))
+            {
+                if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn'))
+                    $arr[] = str_replace('.css', '', $skindef);
+            }
+            closedir($dir);
+            if (!in_array($set_user['skin'], $arr))
+                $set_user['skin'] = 'default';
+            mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
+            echo '<div class="rmenu">Настройки сохранены</div>';
+        }
+        if (isset($_GET['reset']) || empty($set_user))
+        {
+            $set_user = array();
+            $set_user['smileys'] = 1;
+            $set_user['translit'] = 1;
+            $set_user['quick_go'] = 1;
+            $set_user['gzip'] = 1;
+            $set_user['online'] = 1;
+            $set_user['movings'] = 1;
+            $set_user['digest'] = 1;
+            $set_user['sdvig'] = 0;
+            $set_user['kmess'] = 10;
+            $set_user['skin'] = 'default';
+            mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
+            echo '<div class="rmenu">Установлены настройки по умолчанию</div>';
+        }
+        echo '<form action="my_set.php" method="post" ><div class="menu"><p><h3>Настройка времени</h3>';
+        echo '<input type="text" name="sdvig" size="2" maxlength="2" value="' . $set_user['sdvig'] . '"/> Сдвиг времени (+-12)<br />';
+        echo '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> Системное время';
+        echo '</p><p><h3>Функции системы</h3>';
+        echo '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&nbsp;Смайлы<br/>';
+        echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&nbsp;Транслит<br/>';
+        echo '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&nbsp;Дайджест';
+        echo '</p><p><h3>Внешний вид</h3>';
+        echo '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> Строк на страницу (5-99)<br />';
+        echo '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&nbsp;Меню быстрого перехода<br />';
+        echo '<input name="gzip" type="checkbox" value="1" ' . ($set_user['gzip'] ? 'checked="checked"' : '') . ' />&nbsp;Коэффициент сжатия<br />';
+        echo '<input name="online" type="checkbox" value="1" ' . ($set_user['online'] ? 'checked="checked"' : '') . ' />&nbsp;Время в Online<br />';
+        echo '<input name="movings" type="checkbox" value="1" ' . ($set_user['movings'] ? 'checked="checked"' : '') . ' />&nbsp;Счетчик переходов';
+        echo '</p><p><h3>Тема оформления</h3><select name="skin">';
+        $dr = opendir('../theme');
+        while ($skindef = readdir($dr))
+        {
+            if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn'))
+            {
+                $skindef = str_replace('.css', '', $skindef);
+                echo '<option' . ($set_user['skin'] == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
+            }
+        }
+        closedir($dir);
+        echo '</select>';
+        echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
+        echo '<div class="phdr"><a href="my_set.php?reset">Сброс настроек</a></div>';
         echo '<p><a href="../index.php?mod=cab">В кабинет</a></p>';
-        break;
 }
 
 require_once ('../incfiles/end.php');

@@ -138,7 +138,7 @@ if ($id)
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
     if ($total)
     {
-        $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%' ORDER BY `movings` DESC LIMIT $start, $kmess");
+        $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%' ORDER BY " . ($do == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req))
         {
             echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
@@ -156,60 +156,6 @@ if ($id)
                     echo ' (' . $user_rights[$res['rights']] . ')';
                 }
             }
-            $svr = $realtime - $res['sestime'];
-            if ($svr >= "3600")
-            {
-                $hvr = ceil($svr / 3600) - 1;
-                if ($hvr < 10)
-                {
-                    $hvr = "0$hvr";
-                }
-                $svr1 = $svr - $hvr * 3600;
-                $mvr = ceil($svr1 / 60) - 1;
-                if ($mvr < 10)
-                {
-                    $mvr = "0$mvr";
-                }
-                $ivr = $svr1 - $mvr * 60;
-                if ($ivr < 10)
-                {
-                    $ivr = "0$ivr";
-                }
-                if ($ivr == "60")
-                {
-                    $ivr = "59";
-                }
-                $sitevr = "$hvr:$mvr:$ivr";
-            } else
-            {
-                if ($svr >= "60")
-                {
-                    $mvr = ceil($svr / 60) - 1;
-                    if ($mvr < 10)
-                    {
-                        $mvr = "0$mvr";
-                    }
-                    $ivr = $svr - $mvr * 60;
-                    if ($ivr < 10)
-                    {
-                        $ivr = "0$ivr";
-                    }
-                    if ($ivr == "60")
-                    {
-                        $ivr = "59";
-                    }
-                    $sitevr = "00:$mvr:$ivr";
-                } else
-                {
-                    $ivr = $svr;
-                    if ($ivr < 10)
-                    {
-                        $ivr = "0$ivr";
-                    }
-                    $sitevr = "00:00:$ivr";
-                }
-            }
-            echo ' (' . $res['movings'] . ' - ' . $sitevr . ') ';
             // Вычисляем местоположение
             $place = '';
             switch ($res['place'])
@@ -270,11 +216,15 @@ if ($id)
                         }
                     }
             }
-            echo '<div class="sub"><u>Находится</u>: ' . $place;
-            echo '<br /><u>UserAgent</u>: ' . $res['browser'];
-            if ($dostmod)
-                echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-            echo '</div></div>';
+            echo ' &gt;&gt; ' . $place;
+            if ($do == 'guest' || $dostmod)
+            {
+                echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
+                if ($dostmod)
+                    echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
+                echo '</div>';
+            }
+            echo '</div>';
             ++$i;
         }
     } else

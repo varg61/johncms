@@ -86,8 +86,7 @@ if (mysql_num_rows($req_u))
                 echo '<a href="my_stat.php?act=go&amp;do=f&amp;doid=' . $res_m['id'] . '">' . $res_t['text'] . '</a>';
                 echo ' <span class="gray">(' . date("d.m.Y / H:i", $res_m['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                 $text = mb_substr($res_m['text'], 0, 500);
-                $text = checkout($text, 0, 0);
-                $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
+                $text = checkout($text, 2, 1);
                 echo '<div class="sub">' . $text . '</div>';
                 echo '</div>';
                 ++$i;

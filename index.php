@@ -93,9 +93,15 @@ switch ($mod)
         }
         echo '<div class="phdr"><b>Личный кабинет</b></div>';
         // Блок статистики
-        echo '<div class="gmenu"><p><h3><img src="images/rate.gif" width="16" height="16" class="left" />&nbsp;Моя активность</h3><ul>';
+        echo '<div class="gmenu"><p><h3><img src="images/rate.gif" width="16" height="16" class="left" />&nbsp;Мои активы</h3><ul>';
         echo '<li><a href="str/my_stat.php?act=forum">Последние записи</a></li>';
-        echo '<li><a href="str/my_stat.php">Статистика</a></li>';
+        echo '<li><a href="str/my_stat.php">Моя Статистика</a></li>';
+        if ($dostmod)
+        {
+            $guest = gbook(2);
+            echo '<li><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a> (<span class="red">' . $guest . '</span>)</li>';
+            echo '<li><a href="' . $admp . '/main.php">[<b>Админка</b>]</a></li>';
+        }
         echo '</ul></p></div>';
         echo '<div class="menu"><p><h3><img src="images/mail.png" width="16" height="16" class="left" />&nbsp;Моя почта</h3><ul>';
         // Блок почты
@@ -112,7 +118,7 @@ switch ($mod)
         if (!$ban['1'] && !$ban['3'])
             echo '<p><form action="str/pradd.php?act=write" method="post"><input type="submit" value=" Написать " /></form></p>';
         // Блок контактов
-        echo '</ul></p><p><h3><img src="images/contacts.png" width="16" height="16" class="left" />&nbsp;Мои контакты</h3><ul>';
+        echo '</ul><h3><img src="images/contacts.png" width="16" height="16" class="left" />&nbsp;Мои контакты</h3><ul>';
         $count_contacts = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `me` = '$login' AND `cont` != ''"), 0);
         echo '<li><a href="str/cont.php">Контакты</a>&nbsp;(' . $count_contacts . ')</li>';
         $count_ignor = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `me` = '$login' AND `ignor` != ''"), 0);
@@ -120,17 +126,11 @@ switch ($mod)
         echo '</ul></p></div>';
         // Блок настроек
         echo '<div class="bmenu"><p><h3><img src="images/settings.png" width="16" height="16" class="left" />&nbsp;Мои настройки</h3><ul>';
-        echo '<li><a href="str/my_set.php">Установки</a></li>';
-        echo '<li><a href="str/anketa.php">Анкета</a></li>';
+        echo '<li><a href="str/anketa.php">Моя анкета</a></li>';
+        echo '<li><a href="str/my_set.php">Общие настройки</a></li>';
+        echo '<li><a href="str/my_set.php?act=forum">Форум</a></li>';
+        echo '<li><a href="str/my_set.php?act=chat">Чат</a></li>';
         echo '</ul></p></div>';
-        if ($dostmod == 1)
-        {
-            $guest = gbook(2);
-            echo '<div class="rmenu"><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a>' . ($guest > 0 ? ' (<span class="red">+' . $guest . '</span>)' : '');
-            if ($dostmod)
-                echo '<br />Админка <a href="' . $admp . '/main.php">&gt;&gt;&gt;</a>';
-            echo '</div>';
-        }
         break;
 
     case 'digest':
