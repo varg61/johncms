@@ -44,7 +44,7 @@ if (mysql_num_rows($req))
             if (mysql_num_rows($req_u))
             {
                 $res_u = mysql_fetch_assoc($req_u);
-                if ($res['rights'] > $datauser['rights'])
+                if ($res_u['rights'] > $datauser['rights'])
                     $error = 'Вы не можете менять пост старшего Вас по должности<br /><a href="' . $link . '">Назад</a>';
             }
         }

@@ -65,28 +65,29 @@ if (mysql_num_rows($req_u))
             break;
 
         case 'forum':
-            echo '<p>Форум | <a href="my_stat.php?act=guest">Гостевая</a> | <a href="my_stat.php?act=chat">Чат</a> | <a href="my_stat.php?act=kom">Комментарии</a></p>';
+            echo '<p>Форум | <a href="my_stat.php?act=guest">Гостевая</a> | <a href="my_stat.php?act=kom">Комментарии</a></p>';
             echo '<div class="phdr"><b>Последняя активность на Форуме</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: ' . $res_u['name'] . '</div>';
-            $req = mysql_query("SELECT `refid`, MAX(time) FROM `forum` WHERE `user_id` = '$user' AND `type` = 'm' GROUP BY `refid` ORDER BY `time` DESC LIMIT 10");
+            $req = mysql_query("SELECT `refid`, MAX(time) FROM `forum` WHERE `user_id` = '$user' AND `type` = 'm'" . ($dostadm == 1 ? '' : " AND `close` != '1'") . " GROUP BY `refid` ORDER BY `time` DESC LIMIT 10");
             while ($res = mysql_fetch_assoc($req))
             {
                 $arrid = $res['MAX(time)'];
                 $arr[$arrid] = $res['refid'];
             }
             krsort($arr);
-            foreach ($arr as  $key => $val)
+            foreach ($arr as $key => $val)
             {
                 $req_t = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $val . "' AND `type` = 't' LIMIT 1");
                 $res_t = mysql_fetch_assoc($req_t);
                 $req_m = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $val . "' AND `user_id` = '$user' AND`type` = 'm' ORDER BY `id` DESC LIMIT 1");
                 $res_m = mysql_fetch_assoc($req_m);
                 echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-                echo '<a href="my_stat.php?act=go&amp;do=f&amp;doid=' . $res_m['id'] . '">' . $res_t['text'] . '</a>';
-                echo ' <span class="gray">(' . date("d.m.Y / H:i", $res_m['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                echo '<span class="gray">(' . date("d.m.Y / H:i", $res_m['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                echo ' <a href="my_stat.php?act=go&amp;do=f&amp;doid=' . $res_m['id'] . '">' . $res_t['text'] . '</a>';
                 $text = mb_substr($res_m['text'], 0, 500);
-                $text = checkout($text, 2, 1);
+                $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
+                $text = checkout($text, 1, 1);
                 echo '<div class="sub">' . $text . '</div>';
                 echo '</div>';
                 ++$i;
@@ -95,21 +96,29 @@ if (mysql_num_rows($req_u))
             break;
 
         case 'guest':
-            echo '<p><a href="my_stat.php?act=forum">Форум</a> | Гостевая | <a href="my_stat.php?act=chat">Чат</a> | <a href="my_stat.php?act=kom">Комментарии</a></p>';
+            echo '<p><a href="my_stat.php?act=forum">Форум</a> | Гостевая | <a href="my_stat.php?act=kom">Комментарии</a></p>';
             echo '<div class="phdr"><b>Последняя активность в Гостевой</b></div>';
-            echo display_error('Данный модуль еще не готов :-)');
-            echo '<div class="phdr"><a href="my_stat.php">Статистика</a></div>';
-            break;
-
-        case 'chat':
-            echo '<p><a href="my_stat.php?act=forum">Форум</a> | <a href="my_stat.php?act=guest">Гостевая</a> | Чат | <a href="my_stat.php?act=kom">Комментарии</a></p>';
-            echo '<div class="phdr"><b>Последняя активность в Чате</b></div>';
-            echo display_error('Данный модуль еще не готов :-)');
-            echo '<div class="phdr"><a href="my_stat.php">Статистика</a></div>';
+            $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '$user' AND `adm` = '0' ORDER BY `id` DESC LIMIT 10");
+            if (mysql_num_rows($req))
+            {
+                while ($res = mysql_fetch_array($req))
+                {
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                    $text = checkout($res['text'], 1, 1);
+                    echo '<div class="sub">' . $text . '</div>';
+                    echo '</div>';
+                    ++$i;
+                }
+            } else
+            {
+                echo '<div class="menu"><p>Список пуст</p></div>';
+            }
+            echo '<div class="phdr"><a href="guest.php">В Гостевую</a></div>';
             break;
 
         case 'kom':
-            echo '<p><a href="my_stat.php?act=forum">Форум</a> | <a href="my_stat.php?act=guest">Гостевая</a> | <a href="my_stat.php?act=chat">Чат</a> | Комментарии</p>';
+            echo '<p><a href="my_stat.php?act=forum">Форум</a> | <a href="my_stat.php?act=guest">Гостевая</a> | Комментарии</p>';
             echo '<div class="phdr"><b>Последняя активность в комментариях</b></div>';
             echo display_error('Данный модуль еще не готов :-)');
             echo '<div class="phdr"><a href="my_stat.php">Статистика</a></div>';
