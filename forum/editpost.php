@@ -76,6 +76,13 @@ if (!$error)
             ////////////////////////////////////////////////////////////
             // Восстановление удаленного поста                        //
             ////////////////////////////////////////////////////////////
+            $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            if (mysql_num_rows($req_u))
+            {
+                // Добавляем один балл к счетчику постов юзера
+                $res_u = mysql_fetch_assoc($req_u);
+                mysql_query("UPDATE `users` SET `postforum` = '" . ($res_u['postforum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            }
             mysql_query("UPDATE `forum` SET `close` = '0' WHERE `id` = '$id' LIMIT 1");
             header('Location: ' . $link);
             break;
