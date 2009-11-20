@@ -200,7 +200,7 @@ if (!empty($_SESSION['uid']))
     }
 }
 
-echo "<a href='../index.php?mod=cab'>В кабинет</a></p>";
+echo "<a href='../index.php?act=cab'>В кабинет</a></p>";
 require_once ("../incfiles/end.php");
 
 ?>

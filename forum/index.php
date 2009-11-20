@@ -21,20 +21,15 @@ require_once ('../incfiles/core.php');
 ////////////////////////////////////////////////////////////
 // Настройки форума                                       //
 ////////////////////////////////////////////////////////////
-$set_forum = array();
 if ($user_id)
     $set_forum = unserialize($datauser['set_forum']);
-if (empty($set_forum))
-{
-    // Настроки по-умолчанию
-    $set_forum['farea'] = 0;
-    $set_forum['upfp'] = 0;
-    $set_forum['farea_w'] = 20;
-    $set_forum['farea_h'] = 4;
-    $set_forum['postclip'] = 1;
-    $set_forum['postcut'] = 2;
-}
-// Список расширений, разрешенных к выгрузке файлов
+// Настроки по-умолчанию
+if (!isset($set_forum) || empty($set_forum))
+    $set_forum = array('farea' => 0, 'upfp' => 0, 'farea_w' => 20, 'farea_h' => 4, 'postclip' => 1, 'postcut' => 2);
+
+////////////////////////////////////////////////////////////
+// Список расширений файлов, разрешенных к выгрузке       //
+////////////////////////////////////////////////////////////
 // Файлы Windows
 $ext_win = array('exe', 'msi');
 // Файлы Java
@@ -79,16 +74,16 @@ if (empty($id))
 } else
 {
     $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1;");
-    $res = mysql_fetch_array($req);
+    $res = mysql_fetch_assoc($req);
     $hdr = strtr($res['text'], array('&quot;' => '', '&amp;' => '', '&lt;' => '', '&gt;' => '', '&#039;' => ''));
     $hdr = mb_substr($hdr, 0, 30);
     $hdr = checkout($hdr);
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
 
-$do = array('new', 'who', 'addfile', 'file', 'users', 'moders', 'addvote', 'editvote', 'delvote', 'vote', 'per', 'ren', 'deltema', 'vip', 'close', 'delpost', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans',
-    'massdel', 'files', 'filter', 'restore');
-if (in_array($act, $do))
+$array = array('new', 'who', 'addfile', 'file', 'users', 'moders', 'addvote', 'editvote', 'delvote', 'vote', 'per', 'ren', 'deltema', 'vip', 'close', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel',
+    'files', 'filter', 'restore');
+if (in_array($act, $array) && file_exists($act . '.php'))
 {
     require_once ($act . '.php');
 } else
@@ -108,7 +103,7 @@ if (in_array($act, $do))
     if ($user_id)
     {
         $unread = forum_new();
-        echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($unread ? '(<span class="red">+<b>' . $unread . '</b></span>)' : '') . '</p>';
+        echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($unread ? '<span class="red">(<b>' . $unread . '</b>)</span>' : '') . '</p>';
     } else
     {
         echo '<p><a href="index.php?act=new">Последние 10 тем</a></p>';
@@ -116,7 +111,7 @@ if (in_array($act, $do))
     if ($id)
     {
         $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1");
-        $type1 = mysql_fetch_array($type);
+        $type1 = mysql_fetch_assoc($type);
         $tip = $type1['type'];
         switch ($tip)
         {
@@ -129,7 +124,7 @@ if (in_array($act, $do))
                 echo '</div>';
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
-                while ($mass1 = mysql_fetch_array($req))
+                while ($mass1 = mysql_fetch_assoc($req))
                 {
                     echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $mass1['id'] . "'"), 0);
@@ -153,7 +148,7 @@ if (in_array($act, $do))
                 $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='$id'" . ($dostadm ? '' : " AND `close`!='1'"));
                 $coltem = mysql_result($qz, 0);
                 $forum = mysql_query("SELECT * FROM `forum` WHERE `type`='f' AND `id`='" . $type1['refid'] . "'");
-                $forum1 = mysql_fetch_array($forum);
+                $forum1 = mysql_fetch_assoc($forum);
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $type1['refid'] . '">' . $forum1['text'] . '</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
@@ -161,12 +156,12 @@ if (in_array($act, $do))
                 {
                     echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . $id . '" method="post"><input type="submit" value="Новая тема" /></form></div>';
                 }
-                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($dostadm == 1 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
-                while ($mass = mysql_fetch_array($q1))
+                $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($dostadm ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
+                while ($mass = mysql_fetch_assoc($q1))
                 {
                     echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "' ORDER BY `time` DESC LIMIT 1");
-                    $nam = mysql_fetch_array($nikuser);
+                    $nam = mysql_fetch_assoc($nikuser);
                     $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
                     $colmes1 = mysql_result($colmes, 0);
                     $cpg = ceil($colmes1 / $kmess);
@@ -241,7 +236,7 @@ if (in_array($act, $do))
                     $req = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
                     if (mysql_num_rows($req) > 0)
                     {
-                        $res = mysql_fetch_array($req);
+                        $res = mysql_fetch_assoc($req);
                         if ($type1['time'] > $res['time'])
                             mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id`='$id' AND `user_id` = '$user_id'");
                     } else
@@ -259,8 +254,8 @@ if (in_array($act, $do))
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0);
                 // Панель навигации
-                $razd = mysql_fetch_array(mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
-                $frm = mysql_fetch_array(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
+                $razd = mysql_fetch_assoc(mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
+                $frm = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
                 echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
                 echo '<div class="phdr"><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
@@ -276,14 +271,14 @@ if (in_array($act, $do))
                     if (isset($_GET['clip']))
                         $clip_forum = '&amp;clip';
                     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
-                    $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
+                    $topic_vote = mysql_fetch_assoc(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
                     echo '<div  class="gmenu"><b>' . checkout($topic_vote['name']) . '</b><br />';
                     $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "' ORDER BY `id` ASC");
                     if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0)
                     {
                         // Выводим форму с опросами
                         echo '<form action="index.php?act=vote&amp;id=' . $id . '" method="post">';
-                        while ($vote = mysql_fetch_array($vote_result))
+                        while ($vote = mysql_fetch_assoc($vote_result))
                         {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . checkout($vote['name']) . '<br />';
                         }
@@ -292,7 +287,7 @@ if (in_array($act, $do))
                     {
                         // Выводим результаты голосования
                         echo '<small>';
-                        while ($vote = mysql_fetch_array($vote_result))
+                        while ($vote = mysql_fetch_assoc($vote_result))
                         {
                             $count_vote = round(100 / $topic_vote['count'] * $vote['count']);
                             echo checkout($vote['name']) . ' [' . $vote['count'] . ']<br />';
@@ -316,7 +311,7 @@ if (in_array($act, $do))
                     $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
                     WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . " ORDER BY `forum`.`id` LIMIT 1");
-                    $postres = mysql_fetch_array($postreq);
+                    $postres = mysql_fetch_assoc($postreq);
                     echo '<div class="clip">';
                     if ($postres['sex'])
                         echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'f') . ($postres['datereg'] > $realtime - 86400 ? '_new.gif" width="14"' : '.gif" width="10"') . ' height="10"/>&nbsp;';
@@ -370,9 +365,10 @@ if (in_array($act, $do))
                 }
                 if ($dostfmod)
                     echo '<form action="index.php?act=massdel" method="post">';
-                while ($res = mysql_fetch_array($req))
+                $i = 1;
+                while ($res = mysql_fetch_assoc($req))
                 {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
                     if ($res['sex'])
                         echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
                     else
@@ -443,28 +439,25 @@ if (in_array($act, $do))
                     $freq = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "'");
                     if (mysql_num_rows($freq) > 0)
                     {
-                        $fres = mysql_fetch_array($freq);
+                        $fres = mysql_fetch_assoc($freq);
                         $fls = round(filesize('./files/' . $fres['filename']) / 1024, 2);
                         echo '<br /><span class="gray">Прикреплённый файл:<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a> (' . $fls . ' кб.)<br/>';
                         echo 'Скачано: ' . $fres['dlcount'] . ' раз.</span>';
                     }
-                    if ($dostfmod || (($arr1['from'] == $login) && ($arr1['id'] == $res['id']) && ($res['time'] > $tpp)))
+                    if ($dostmod || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > $realtime - 300) || ($res['user_id'] == $user_id && $set_forum['upfp'] && $start == 0 && $i == 1 && $res['time'] > $realtime -
+                        300))
                     {
-                        echo '<br /><a href="index.php?act=editpost&amp;id=' . $res['id'] . '&amp;start=' . $start . '">Изменить</a>';
-                    }
-                    if ($dostfmod)
-                    {
-                        echo '<br />';
-                        if ($res['close'])
-                        {
-                            //TODO: Написать чистку темы от удаленных постов
-                            echo '<a href="index.php?act=restore&amp;id=' . $res['id'] . '">Восстановить</a><br />';
-                        } else
-                        {
+                        // Ссылки на редактирование / удаление постов
+                        echo '<div class="sub">';
+                        if ($dostfmod)
                             echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>&nbsp;';
-                            echo '<a href="?act=delpost&amp;id=' . $res['id'] . '&amp;start=' . $start . '">Удалить</a><br/>';
-                        }
-                        echo '<span class="gray">' . $res['ip'] . ' - ' . $res['soft'] . '</span><br/>';
+                        echo '<a href="index.php?act=editpost&amp;id=' . $res['id'] . '">Изменить</a> | ';
+                        if ($dostsadm && $res['close'] == 1)
+                            echo '<a href="index.php?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">Восстановить</a> | ';
+                        echo '<a href="index.php?act=editpost&amp;do=del&amp;id=' . $res['id'] . '">Удалить</a>';
+                        if ($dostmod)
+                            echo '<br /><span class="gray">' . $res['ip'] . ' - ' . $res['soft'] . '</span>';
+                        echo '</div>';
                     }
                     echo '</div>';
                     ++$i;
@@ -473,14 +466,6 @@ if (in_array($act, $do))
                 {
                     echo '<div class="rmenu"><input type="submit" value=" Удалить "/></div>';
                     echo '</form>';
-                }
-                if (!$dostfmod && $tip == 't')
-                {
-                    // Изменение последнего поста для обычного юзера
-                    $lp = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm' AND `refid` = '$id' ORDER BY `time` DESC LIMIT 1");
-                    $arr1 = mysql_fetch_array($lp);
-                    if ($arr1['user_id'] == $user_id && $arr1['time'] > ($realtime - 300))
-                        echo (is_integer($i / 2) ? '<div class="list2">' : '<div class="list1">') . '<a href="index.php?act=editpost&amp;id=' . $arr1['id'] . '&amp;start=' . $start . '">Изменить</a></div>';
                 }
                 // Нижнее поле "Написать"
                 if (($user_id && !$type1['edit'] && !$set_forum['upfp']) || ($dostadm && !$set_forum['upfp']))

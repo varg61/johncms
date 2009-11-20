@@ -137,7 +137,7 @@ if (mysql_num_rows($req_u))
 {
     echo display_error('Такого пользователя нет');
 }
-echo '<p><a href="users_top.php">Топ 10 активности</a><br /><a href="../index.php?mod=cab">В кабинет</a></p>';
+echo '<p><a href="users_top.php">Топ 10 активности</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
 
 require_once ('../incfiles/end.php');
 

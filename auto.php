@@ -84,6 +84,6 @@ if ($_POST['mem'] == 1)
 $_SESSION['uid'] = $user_id;
 $_SESSION['ups'] = $user_ps;
 mysql_query("UPDATE `users` SET `sestime` = '$realtime' WHERE `id` = '$user_id'");
-header("Location: index.php?mod=digest");
+header("Location: index.php?act=digest");
 
 ?>

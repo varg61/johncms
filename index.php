@@ -24,10 +24,9 @@ $rootpath = '';
 require_once ('incfiles/core.php');
 require_once ('incfiles/head.php');
 
-$mod = isset($_GET['mod']) ? trim($_GET['mod']) : '';
 if (isset($_GET['err']))
-    $mod = 404;
-switch ($mod)
+    $act = 404;
+switch ($act)
 {
     case '404':
         ////////////////////////////////////////////////////////////
@@ -40,7 +39,19 @@ switch ($mod)
         echo '<div class="phdr"><b>Актив Сайта</b></div>';
         echo '<div class="menu"><a href="str/users_search.php">Поиск юзера</a></div>';
         echo '<div class="menu"><a href="str/users.php">Список юзеров</a> (' . kuser() . ')</div>';
-        echo '<div class="menu"><a href="str/brd.php">Именинники</a> (' . brth() . ')</div>';
+        $mon = date("m", $realtime);
+        if (substr($mon, 0, 1) == 0)
+        {
+            $mon = str_replace("0", "", $mon);
+        }
+        $day = date("d", $realtime);
+        if (substr($day, 0, 1) == 0)
+        {
+            $day = str_replace("0", "", $day);
+        }
+        $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . $day . "' AND `monthb` = '" . $mon . "' AND `preg` = '1'"), 0);
+        if ($brth)
+            echo '<div class="menu"><a href="str/brd.php">Именинники</a> (' . $brth . ')</div>';
         echo '<div class="menu"><a href="str/users_top.php">Топ активности</a></div>';
         echo '<div class="phdr"><a href="str/moders.php">Администрация</a></div>';
         break;
@@ -52,7 +63,8 @@ switch ($mod)
         echo '<div class="phdr"><b>Информация</b></div>';
         echo '<div class="menu"><a href="str/smile.php?">Смайлы</a></div>';
         echo '<div class="menu"><a href="read.php?">FAQ (ЧаВо)</a></div>';
-        $_SESSION['refsm'] = '../index.php?do=info';
+        //TODO: Разобраться с сессией, по возможности удалить
+        $_SESSION['refsm'] = '../index.php?act=info';
         break;
 
     case 'ban':
@@ -61,7 +73,7 @@ switch ($mod)
         ////////////////////////////////////////////////////////////
         if (!$user_id)
         {
-            header('Location: index.php?mod=404');
+            header('Location: index.php?act=404');
             exit;
         }
         require_once ('incfiles/ban.php');
@@ -88,7 +100,7 @@ switch ($mod)
         ////////////////////////////////////////////////////////////
         if (!$user_id)
         {
-            header('Location: index.php?mod=404');
+            header('Location: index.php?act=404');
             exit;
         }
         echo '<div class="phdr"><b>Личный кабинет</b></div>';
@@ -100,7 +112,7 @@ switch ($mod)
         {
             $guest = gbook(2);
             echo '<li><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a> (<span class="red">' . $guest . '</span>)</li>';
-            echo '<li><a href="' . $admp . '/main.php">[<b>Админка</b>]</a></li>';
+            echo '<li><a href="panel/main.php">[<b>Админка</b>]</a></li>';
         }
         echo '</ul></p></div>';
         echo '<div class="menu"><p><h3><img src="images/mail.png" width="16" height="16" class="left" />&nbsp;Моя почта</h3><ul>';
@@ -139,7 +151,7 @@ switch ($mod)
         ////////////////////////////////////////////////////////////
         if (!$user_id)
         {
-            header('Location: index.php?mod=404');
+            header('Location: index.php?act=404');
             exit;
         }
         echo '<div class="phdr">Дайджест</div>';
@@ -160,9 +172,9 @@ switch ($mod)
             if ($newusers_total > 0)
                 echo '<li><a href="str/users.php">Новые посетители</a> (' . $newusers_total . ')</li>';
             if ($reg_total > 0)
-                echo '<li><a href="panel/preg.php">На регистрации</a> (' . $reg_total . ')</li>';
+                echo '<li><a href="admin/users_reg.php">На регистрации</a> (' . $reg_total . ')</li>';
             if ($ban_total > 0)
-                echo '<li><a href="panel/zaban.php">Имеют Бан</a> (' . $ban_total . ')</li>';
+                echo '<li><a href="admin/zaban.php">Имеют Бан</a> (' . $ban_total . ')</li>';
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
             if ($total_libmod > 0)
                 echo '<li><a href="library/index.php?act=moder">Мод. Библиотеки</a> (' . $total_libmod . ')</li>';

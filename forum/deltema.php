@@ -39,7 +39,7 @@ if ($dostfmod == 1)
     {
         // Удаляем прикрепленные файлы
         $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '$id'");
-        if (mysql_num_rows($req1) > 0)
+        if (mysql_num_rows($req1))
         {
             while ($res1 = mysql_fetch_array($req1))
             {
@@ -49,9 +49,9 @@ if ($dostfmod == 1)
             mysql_query("OPTIMIZE TABLE `cms_forum_files`");
         }
         // Удаляем посты топика
-        mysql_query("DELETE FROM `forum` WHERE `refid` = '" . $id . "'");
+        mysql_query("DELETE FROM `forum` WHERE `refid` = '$id'");
         // Удаляем топик
-        mysql_query("DELETE FROM `forum` WHERE `id`='" . $id . "'");
+        mysql_query("DELETE FROM `forum` WHERE `id`='$id'");
         header('Location: ?id=' . $res['refid']);
     } elseif (isset($_GET['hid']) || isset($_GET['yes']) && $dostsadm != 1)
     {
@@ -76,7 +76,7 @@ if ($dostfmod == 1)
     {
         echo '<a href="?act=deltema&amp;id=' . $id . '&amp;hid">Скрыть</a><br />';
     }
-    echo '<a href="?id=' . $res['refid'] . '">Отмена</a></p>';
+    echo '<a href="?id=' . $id . '">Отмена</a></p>';
 } else
 {
     echo '<p>Доступ закрыт!!!</p>';

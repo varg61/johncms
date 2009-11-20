@@ -113,7 +113,7 @@ switch ($act)
         echo '<div class="phdr"><a href="../forum/index.php">В Форум</a></div>';
 }
 
-echo '<p><a href="../index.php?mod=users">Актив Сайта</a></p>';
+echo '<p><a href="../index.php?act=users">Актив Сайта</a></p>';
 require_once ('../incfiles/end.php');
 
 ?>

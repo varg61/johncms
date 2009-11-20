@@ -56,7 +56,7 @@ if ($user_id)
             $ign1 = mysql_num_rows($ign);
             if ($ign1 != 0)
             {
-                echo "Вы не можете отправить письмо для $foruser ,поскольку находитесь в его игнор-листе!!!<br/><a href='../index.php?mod=cab'>В приват</a><br/>";
+                echo "Вы не можете отправить письмо для $foruser ,поскольку находитесь в его игнор-листе!!!<br/><a href='../index.php?act=cab'>В приват</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
             }
@@ -252,7 +252,7 @@ if ($user_id)
             if ($datauser['lastpost'] > ($realtime - $old))
             {
                 require_once ("../incfiles/head.php");
-                echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='../index.php?mod=cab'>Назад</a></p>";
+                echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='../index.php?act=cab'>Назад</a></p>";
                 require_once ("../incfiles/end.php");
                 exit;
             }
@@ -268,7 +268,7 @@ if ($user_id)
                 $ign1 = mysql_num_rows($ign);
                 if ($ign1 != 0)
                 {
-                    echo "Вы не можете отправить письмо для $adresat ,поскольку находитесь в его игнор-листе!!!<br/><a href='../index.php?mod=cab'>В приват</a><br/>";
+                    echo "Вы не можете отправить письмо для $adresat ,поскольку находитесь в его игнор-листе!!!<br/><a href='../index.php?act=cab'>В приват</a><br/>";
                     require_once ("../incfiles/end.php");
                     exit;
                 }
@@ -775,7 +775,7 @@ if ($user_id)
             echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
             break;
     }
-    echo "<p><a href='../index.php?mod=cab'>В кабинет</a><br/>";
+    echo "<p><a href='../index.php?act=cab'>В кабинет</a><br/>";
     echo "<a href='pradd.php?act=write'>Написать</a></p>";
 }
 

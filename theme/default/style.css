@@ -23,8 +23,8 @@ body{
 }
 
 p{
-  margin-top: 4px;
-  margin-bottom: 4px;
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 
 form{
@@ -111,6 +111,7 @@ ul{
   border-left: 4px solid #9acd32;
   color: #757575;
   font-size: x-small;
+  margin-top: 4px;
   margin-left: 2px;
   padding-left: 4px;
 }
@@ -123,7 +124,7 @@ ul{
 }
 
 .gray{
-  color: gray;
+  color: #586776;
 }
 
 .green{

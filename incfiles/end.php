@@ -14,14 +14,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-defined('_IN_JOHNCMS') or die('Error:restricted access');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Выводим рекламу MOBILEADS.RU
 if (isset($_SESSION['mad_links']) && $_SESSION['mad_time'] > ($realtime - 60 * 15))
     echo '<div class="gmenu">' . $_SESSION['mad_links'] . '</div>';
 
 echo '</div><div class="fmenu">';
-if ($headmod != "mainpage" || isset($_GET['do']) || isset($_GET['mod']))
+if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act))
     echo '<a href=\'' . $home . '\'>На главную</a><br/>';
 
 // Меню быстрого перехода

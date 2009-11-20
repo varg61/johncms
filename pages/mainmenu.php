@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-defined('_IN_JOHNCMS') or die('Error:restricted access');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 ////////////////////////////////////////////////////////////
 // Главное меню сайта                                     //
@@ -25,8 +25,8 @@ $mp = new mainpage();
 echo $mp->news;
 echo '<div class="bmenu">Информация</div>';
 echo '<div class="menu"><a href="str/news.php">Архив новостей</a> (' . $mp->newscount . ')</div>';
-echo '<div class="menu"><a href="index.php?mod=info">Доп. информация</a></div>';
-echo '<div class="menu"><a href="index.php?mod=users">Актив Сайта</a></div>';
+echo '<div class="menu"><a href="index.php?act=info">Доп. информация</a></div>';
+echo '<div class="menu"><a href="index.php?act=users">Актив Сайта</a></div>';
 echo '<div class="bmenu">Общение</div>';
 echo '<div class="menu"><a href="str/guest.php">Гостевая</a> (' . gbook() . ')</div>';
 echo '<div class="menu"><a href="forum/">Форум</a> (' . wfrm() . ')</div>';

@@ -16,71 +16,186 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../incfiles/head.php");
+require_once ('../incfiles/head.php');
+
 if (!$user_id || !$id)
 {
-    header('Location: index.php');
+    echo display_error('Неправильные данные');
+    require_once ('../incfiles/end.php');
     exit;
 }
-
-$typ = mysql_query("select * from `forum` where id='" . $id . "';");
-$ms = mysql_fetch_array($typ);
-if ($ms['type'] != "m")
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'm' " . ($dostadm ? "" : " AND `close` != '1'") . " LIMIT 1");
+if (mysql_num_rows($req))
 {
-    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once ("../incfiles/end.php");
-    exit;
-}
-
-$lp = mysql_query("select * from `forum` where type='m' and refid='" . $ms['refid'] . "'  order by time desc ;");
-while ($arr = mysql_fetch_array($lp))
-{
-    $idpp[] = $arr['id'];
-}
-$idpr = $idpp[0];
-$tpp = $realtime - 300;
-$lp1 = mysql_query("select * from `forum` where id='" . $idpr . "';");
-$arr1 = mysql_fetch_array($lp1);
-if (($dostfmod != 1) && (($ms['from'] != $login) || ($arr1['id'] != $ms['id']) || ($ms['time'] < $tpp)))
-{
-    echo "Ошибка!Вероятно,прошло более 5 минут со времени написания поста,или он уже не последний<br/><a href='?id=" . $ms['refid'] . "'>В тему</a><br/>";
-    require_once ("../incfiles/end.php");
-    exit;
-}
-if (($dostfmod == 1) || (($arr1['from'] == $login) && ($arr1['id'] == $ms['id']) && ($ms['time'] > $tpp)))
-{
-    if (isset($_POST['submit']))
+    ////////////////////////////////////////////////////////////
+    // Предварительные проверки                               //
+    ////////////////////////////////////////////////////////////
+    $res = mysql_fetch_assoc($req);
+    $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'"), 0) / $kmess);
+    $posts = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `close` != '1'"), 0);
+    $link = 'index.php?id=' . $res['refid'] . '&amp;page=' . $page;
+    $error = false;
+    if ($dostfmod)
     {
-        if (empty($_POST['msg']))
+        // Проверка для Администрации
+        if ($res['user_id'] != $user_id)
         {
-            echo "Вы не ввели сообщение!<br/><a href='?act=editpost&amp;id=" . $id . "'>Повторить</a><br/>";
-            require_once ("../incfiles/end.php");
-            exit;
+            $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            if (mysql_num_rows($req_u))
+            {
+                $res_u = mysql_fetch_assoc($req_u);
+                if ($res['rights'] > $datauser['rights'])
+                    $error = 'Вы не можете менять пост старшего Вас по должности<br /><a href="' . $link . '">Назад</a>';
+            }
         }
-        $msg = mysql_real_escape_string(trim($_POST['msg']));
-        if ($_POST['msgtrans'] == 1)
-        {
-            $msg = trans($msg);
-        }
-        mysql_query("UPDATE `forum` SET
-        `tedit` = '$realtime',
-        `edit` = '$login',
-        `kedit` = '" . ($ms['kedit'] + 1) . "',
-        `text` = '$msg'
-        WHERE `id` = '$id'");
-        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $ms['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'"), 0) / $kmess);
-        header('Location: index.php?id=' . $ms['refid'] . '&page=' . $page);
     } else
     {
-        echo '<div class="phdr"><b>Изменить сообщение</b></div>';
-        echo '<div class="rmenu"><form action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
-        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
-        if ($set_user['translit'])
-            echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
-        echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
-        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
-        echo '<p><a href="index.php?id=' . $ms['refid'] . '&amp;start=' . $start . '">Назад</a></p>';
+        // Проверка для обычных юзеров
+        if ($res['user_id'] != $user_id)
+            $error = 'Вы пытаетесь изменить чужой пост<br /><a href="' . $link . '">Назад</a>';
+        if (!$error)
+        {
+            $req_m = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['refid'] . "' ORDER BY `id` DESC LIMIT 1");
+            $res_m = mysql_fetch_assoc($req_m);
+            if ($res_m['user_id'] != $user_id)
+                $error = 'Ваш пост уже не последний и Вы не можете его менять<br /><a href="' . $link . '">Назад</a>';
+            elseif ($res['time'] < $realtime - 300)
+                $error = 'С момента создания поста прошло более 5 минут и Вы не можете его редактировать<br /><a href="' . $link . '">Назад</a>';
+        }
     }
+} else
+{
+    $error = 'Пост не существует, или был удален<br /><a href="index.php">Форум</a>';
 }
+
+if (!$error)
+{
+    switch ($do)
+    {
+        case 'restore':
+            ////////////////////////////////////////////////////////////
+            // Восстановление удаленного поста                        //
+            ////////////////////////////////////////////////////////////
+            mysql_query("UPDATE `forum` SET `close` = '0' WHERE `id` = '$id' LIMIT 1");
+            header('Location: ' . $link);
+            break;
+
+        case 'delete':
+            $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            if (mysql_num_rows($req_u))
+            {
+                // Вычитаем один балл из счетчика постов юзера
+                $res_u = mysql_fetch_assoc($req_u);
+                $postforum = $res_u['postforum'] > 0 ? $res_u['postforum'] - 1 : 0;
+                mysql_query("UPDATE `users` SET `postforum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            }
+            if ($dostsadm && !isset($_GET['hide']))
+            {
+                ////////////////////////////////////////////////////////////
+                // Удаление поста (для Супервизоров)                      //
+                ////////////////////////////////////////////////////////////
+                if ($posts == 1)
+                {
+                    // Пересылка на удаление всей темы
+                    header('Location: index.php?act=deltema&id=' . $res['refid']);
+                } else
+                {
+                    // Если есть прикрепленный файл, удаляем его
+                    $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
+                    if (mysql_num_rows($req_f))
+                    {
+                        $res_f = mysql_fetch_assoc($req_f);
+                        unlink('files/' . $res_f['filename']);
+                        mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
+                    }
+                    // Формируем ссылку на нужную страницу темы
+                    $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">" : "<") . " '$id'"), 0) / $kmess);
+                    $link = 'index.php?id=' . $res['refid'] . '&page=' . $page;
+                    mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
+                    header('Location: ' . $link);
+                }
+            } else
+            {
+                ////////////////////////////////////////////////////////////
+                // Скрытие поста                                          //
+                ////////////////////////////////////////////////////////////
+                $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
+                if (mysql_num_rows($req_f))
+                {
+                    // Если есть прикрепленный файл, скрываем его
+                    mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = '$id' LIMIT 1");
+                }
+                if ($posts == 1)
+                {
+                    // Если это был последний пост темы, то скрываем саму тему
+                    $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
+                    $link = 'index.php?id=' . $res_l['refid'];
+                    mysql_query("UPDATE `forum` SET `close` = '1' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't' LIMIT 1");
+                    header('Location: ' . $link);
+                } else
+                {
+                    mysql_query("UPDATE `forum` SET `close` = '1' WHERE `id` = '$id' LIMIT 1");
+                }
+                header('Location: ' . $link);
+            }
+            break;
+
+        case 'del': ////////////////////////////////////////////////////////////
+            // Удаление поста, предварительное напоминание            //
+            ////////////////////////////////////////////////////////////
+            echo '<div class="phdr"><b>Форум:</b> удалить сообщение</div>';
+            echo '<div class="rmenu"><p>';
+            if ($posts == 1)
+                echo 'ВНИМАНИЕ!<br />Это последний пост темы. В случае его удаления, будет ' . ($dostadm ? 'скрыта' : 'удалена') . ' сама тема<br />';
+            echo 'Вы действительно хотите удалить?';
+            echo '</p><p><a href="' . $link . '">Не удалять</a> | <a href="index.php?act=editpost&amp;do=delete&amp;id=' . $id . '">Удалить</a>';
+            if ($dostsadm)
+                echo ' | <a href="index.php?act=editpost&amp;do=delete&amp;hide&amp;id=' . $id . '">Скрыть</a>';
+            echo '</p></div>';
+            echo '<div class="phdr"><small>В случае удаления, из счетчика постов форума будет вычтен один балл</small></div>';
+            break;
+
+        default: ////////////////////////////////////////////////////////////
+            // Редактирование поста                                   //
+            ////////////////////////////////////////////////////////////
+            if (isset($_POST['submit']))
+            {
+                if (empty($_POST['msg']))
+                {
+                    echo display_error('Вы не ввели сообщение!<br/><a href="index.php?act=editpost&amp;id=' . $id . '">Повторить</a>');
+                    require_once ('../incfiles/end.php');
+                    exit;
+                }
+                $msg = mysql_real_escape_string(trim($_POST['msg']));
+                if ($_POST['msgtrans'] == 1)
+                {
+                    $msg = trans($msg);
+                }
+                mysql_query("UPDATE `forum` SET
+                `tedit` = '$realtime',
+                `edit` = '$login',
+                `kedit` = '" . ($res['kedit'] + 1) . "',
+                `text` = '$msg'
+                WHERE `id` = '$id'");
+                header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
+            } else
+            {
+                echo '<div class="phdr"><b>Форум:</b> изменить сообщение</div>';
+                echo '<div class="rmenu"><form action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
+                echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
+                if ($set_user['translit'])
+                    echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
+                echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
+                echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+                echo '<p><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">Назад</a></p>';
+            }
+    }
+} else
+{
+    // Выводим сообщения об ошибках
+    echo display_error($error);
+}
+
+require_once ('../incfiles/end.php');
 
 ?>

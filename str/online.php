@@ -124,7 +124,7 @@ if ($total)
                     break;
                 case 'privat':
                 case 'pradd':
-                    echo '<a href="../index.php?mod=cab">Приват</a>';
+                    echo '<a href="../index.php?act=cab">Приват</a>';
                     break;
                 case 'birth':
                     echo '<a href="brd.php">Список именинников</a>';
@@ -158,10 +158,10 @@ if ($total)
             }
             if ($act == 'guest' || $dostmod)
             {
-                echo '<div class="sub"><u>UserAgent</u>:&nbsp;' . $res['browser'];
+                echo '<div class="sub"><span class="gray"><u>UserAgent</u>:&nbsp;' . $res['browser'];
                 if ($dostmod)
                     echo '<br /><u>IP Address</u>:&nbsp;' . long2ip($res['ip']);
-                echo '</div>';
+                echo '</span></div>';
             }
         }
         echo '</div>';

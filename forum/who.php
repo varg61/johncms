@@ -29,7 +29,7 @@ if (!$user_id)
 
 // Ссылка на Новые темы
 $unread = forum_new();
-echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($unread ? '(<span class="red">+<b>' . $unread . '</b></span>)' : '') . '</p>';
+echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($unread ? '<span class="red">(<b>' . $unread . '</b>)</span>' : '') . '</p>';
 $do = isset($_GET['do']) ? $_GET['do'] : '';
 
 if ($id)
@@ -118,10 +118,14 @@ if ($id)
                     }
                 }
                 echo ' (' . $res['movings'] . ' - ' . $sitevr . ') ';
-                echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
-                if ($dostmod)
-                    echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-                echo '</div></div>';
+                if ($do == 'guest' || $dostmod)
+                {
+                    echo '<div class="sub"><span class="gray"><u>UserAgent</u>: ' . $res['browser'];
+                    if ($dostmod)
+                        echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
+                    echo '</span></div>';
+                }
+                echo '</div>';
                 ++$i;
             }
         }
@@ -222,10 +226,10 @@ if ($id)
             echo ' &gt;&gt; ' . $place;
             if ($do == 'guest' || $dostmod)
             {
-                echo '<div class="sub"><u>UserAgent</u>: ' . $res['browser'];
+                echo '<div class="sub"><span class="gray"><u>UserAgent</u>: ' . $res['browser'];
                 if ($dostmod)
                     echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-                echo '</div>';
+                echo '</span></div>';
             }
             echo '</div>';
             ++$i;

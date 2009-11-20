@@ -19,6 +19,8 @@ defined('_IN_JOHNCMS') or die('Error:restricted access');
 Error_Reporting(E_ALL & ~ E_NOTICE);
 Error_Reporting(ERROR | WARNING);
 mb_internal_encoding('UTF-8');
+@ini_set('arg_separator.output','&amp;');
+@ini_set('session.use_trans_sid','0');
 
 if (!isset($rootpath))
     $rootpath = '../';
@@ -58,6 +60,7 @@ $id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false; // Иден
 $page = isset($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1; // Номер страницы
 $start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0; // Для постраничной навигации
 $act = isset($_GET['act']) ? trim($_GET['act']) : ''; // Выбор действия
+$do = isset($_GET['do']) ? trim($_GET['do']) : ''; // Выбор действия
 $agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES); // User Agent
 
 ////////////////////////////////////////////////////////////

@@ -89,7 +89,7 @@ switch ($act)
         echo '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&nbsp;не обрезать<br />';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
         echo '<div class="phdr"><a href="my_set.php?act=forum&amp;reset">Сброс настроек</a></div>';
-        echo '<p><a href="../forum">В форум</a><br /><a href="../index.php?mod=cab">В кабинет</a></p>';
+        echo '<p><a href="../forum">В форум</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
         break;
 
     case 'chat':
@@ -164,7 +164,7 @@ switch ($act)
             echo 'Или укажите свое:<br/><input type="text" name="mood_adm" value="' . (in_array($set_chat['mood'], $mood) ? '' : $set_chat['mood']) . '"/><br/>';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
         echo '<div class="phdr"><a href="my_set.php?act=chat&amp;reset">Сброс настроек</a></div>';
-        echo '<p><a href="../chat">В чат</a><br /><a href="../index.php?mod=cab">В кабинет</a></p>';
+        echo '<p><a href="../chat">В чат</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
         break;
 
     default:
@@ -224,7 +224,7 @@ switch ($act)
             mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
             echo '<div class="rmenu">Установлены настройки по умолчанию</div>';
         }
-        echo '<form action="my_set.php" method="post" ><div class="menu"><p><h3>Настройка времени</h3>';
+        echo '<form action="my_set.php" method="post" ><div class="menu"><p><h3>Настройка часов</h3>';
         echo '<input type="text" name="sdvig" size="2" maxlength="2" value="' . $set_user['sdvig'] . '"/> Сдвиг времени (+-12)<br />';
         echo '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> Системное время';
         echo '</p><p><h3>Функции системы</h3>';
@@ -251,7 +251,7 @@ switch ($act)
         echo '</select>';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
         echo '<div class="phdr"><a href="my_set.php?reset">Сброс настроек</a></div>';
-        echo '<p><a href="../index.php?mod=cab">В кабинет</a></p>';
+        echo '<p><a href="../index.php?act=cab">В кабинет</a></p>';
 }
 
 require_once ('../incfiles/end.php');

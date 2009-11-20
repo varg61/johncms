@@ -419,8 +419,9 @@ switch ($act)
                 // Ссылки на Модерские функции
                 if ($dostsmod == 1)
                 {
-                    echo '<div class="func"><a href="guest.php?act=otvet&amp;id=' . $res['id'] . '">Отв.</a> | <a href="guest.php?act=edit&amp;id=' . $res['id'] . '">Изм.</a> | <a href="guest.php?act=delpost&amp;id=' . $res['id'] . '">Удалить</a><br/>';
-                    echo long2ip($res['ip']) . ' - ' . $res['soft'] . '</div>';
+                    echo '<div class="sub"><a href="guest.php?act=otvet&amp;id=' . $res['id'] . '">Ответить</a> | <a href="guest.php?act=edit&amp;id=' . $res['id'] . '">Изменить</a> | <span class="red"><a href="guest.php?act=delpost&amp;id=' . $res['id'] .
+                        '">Удалить</a></span><br/>';
+                    echo '<span class="gray">' . long2ip($res['ip']) . ' - ' . $res['soft'] . '</span></div>';
                 }
                 echo "</div>";
                 ++$i;
