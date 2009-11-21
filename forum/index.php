@@ -124,15 +124,15 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                 echo '</div>';
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
-                while ($mass1 = mysql_fetch_assoc($req))
+                while ($res = mysql_fetch_assoc($req))
                 {
                     echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-                    $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $mass1['id'] . "'"), 0);
-                    echo '<a href="?id=' . $mass1['id'] . '">' . $mass1['text'] . '</a>';
+                    $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
+                    echo '<a href="?id=' . $res['id'] . '">' . $res['text'] . '</a>';
                     if ($coltem)
                         echo " [$coltem]";
-                    if (!empty($mass1['soft']))
-                        echo '<br /><span class="gray"><small>' . $mass1['soft'] . '</small></span><br />';
+                    if (!empty($res['soft']))
+                        echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
                     echo '</div>';
                     ++$i;
                 }
@@ -544,7 +544,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
             if (!empty($res['soft']))
-                echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
+                echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
             echo '</div>';
             ++$i;
         }

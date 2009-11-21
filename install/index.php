@@ -16,11 +16,8 @@
 
 define('_IN_JOHNCMS', 1);
 
-header("Cache-Control: no-cache, must-revalidate");
-header("Content-type: application/xhtml+xml; charset=UTF-8");
-echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
-<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>
-<head><meta http-equiv='content-type' content='application/xhtml+xml; charset=utf-8'/>";
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
+echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
 echo "<title>JohnCMS 3.0 - Установка</title>
 <style type='text/css'>
 body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}

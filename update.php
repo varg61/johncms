@@ -16,13 +16,10 @@
 
 define('_IN_JOHNCMS', 1);
 
-header("Cache-Control: no-cache, must-revalidate");
-header("Content-type: application/xhtml+xml; charset=UTF-8");
-echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
-<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>
-<head><meta http-equiv='content-type' content='application/xhtml+xml; charset=utf-8'/>";
-echo "<title>JohnCMS 3.0 - обновление</title>
-<style type='text/css'>
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
+echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
+echo '<title>JohnCMS 3.0 - обновление</title>
+<style type="text/css">
 body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}
 h2{ margin: 0; padding: 0; padding-bottom: 4px; }
 ul{ margin:0; padding-left:20px; }
@@ -31,12 +28,12 @@ li { padding-bottom: 6px; }
 .green{ color: #009933; font-weight: bold; }
 .gray{ color: #FF0000; font: small; }
 </style>
-</head><body>";
+</head><body>';
 echo '<h2 class="green">JohnCMS v.3.0.0</h2>Обновление с версии 2.4.0<hr />';
 
 // Подключаемся к базе данных
-require_once ("incfiles/db.php");
-require_once ("incfiles/func.php");
+require_once ('incfiles/db.php');
+require_once ('incfiles/func.php');
 $connect = mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server</body></html>');
 mysql_select_db($db_name) or die('cannot connect to db');
 mysql_query("SET NAMES 'utf8'", $connect);
@@ -54,8 +51,8 @@ switch ($do)
         $cherr = '';
         $err = false;
         // Проверка прав доступа к папкам
-        $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/',
-            'download/mp3temp/', 'download/upl/');
+        $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/', 'download/mp3temp/',
+            'download/upl/');
         foreach ($arr as $v)
         {
             if (permissions($v) < 777)
