@@ -32,10 +32,11 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Сообщение об ошибке 404                                //
         ////////////////////////////////////////////////////////////
-        echo '<p>Ошибка 404: файл не найден!!!</p>';
+        echo display_error('Запрошенная Вами страница отсутствует');
         break;
 
     case 'users':
+        //TODO: Сделать переключатель доступа из Админки, показвать, или нет Актив гостям
         echo '<div class="phdr"><b>Актив Сайта</b></div>';
         echo '<div class="menu"><a href="str/users_search.php">Поиск юзера</a></div>';
         echo '<div class="menu"><a href="str/users.php">Список юзеров</a> (' . kuser() . ')</div>';
@@ -73,7 +74,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         if (!$user_id)
         {
-            header('Location: index.php?act=404');
+            echo display_error('Только для зарегистрированных');
             exit;
         }
         require_once ('incfiles/ban.php');
@@ -100,7 +101,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         if (!$user_id)
         {
-            header('Location: index.php?act=404');
+            echo display_error('Только для зарегистрированных');
             exit;
         }
         echo '<div class="phdr"><b>Личный кабинет</b></div>';
@@ -151,7 +152,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         if (!$user_id)
         {
-            header('Location: index.php?act=404');
+            echo display_error('Только для зарегистрированных');
             exit;
         }
         echo '<div class="phdr">Дайджест</div>';

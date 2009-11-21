@@ -17,7 +17,7 @@
 define('_IN_JOHNCMS', 1);
 
 $headmod = 'sitetop';
-$textl = 'Топ 10 сайта';
+$textl = 'Топ активности сайта';
 require_once ('../incfiles/core.php');
 require_once ('../incfiles/head.php');
 

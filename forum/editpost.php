@@ -88,13 +88,16 @@ if (!$error)
             break;
 
         case 'delete':
-            $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
-            if (mysql_num_rows($req_u))
+            if ($res['close'] != 1)
             {
-                // Вычитаем один балл из счетчика постов юзера
-                $res_u = mysql_fetch_assoc($req_u);
-                $postforum = $res_u['postforum'] > 0 ? $res_u['postforum'] - 1 : 0;
-                mysql_query("UPDATE `users` SET `postforum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                if (mysql_num_rows($req_u))
+                {
+                    // Вычитаем один балл из счетчика постов юзера
+                    $res_u = mysql_fetch_assoc($req_u);
+                    $postforum = $res_u['postforum'] > 0 ? $res_u['postforum'] - 1 : 0;
+                    mysql_query("UPDATE `users` SET `postforum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                }
             }
             if ($dostsadm && !isset($_GET['hide']))
             {
