@@ -76,12 +76,15 @@ function timeonline()
         echo '<div>В онлайне: ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
 }
 
-function forum_new()
+function forum_new($mod = 0)
 {
     ////////////////////////////////////////////////////////////
     // Счетчик непрочитанных тем на форуме                    //
     ////////////////////////////////////////////////////////////
-    global $user_id, $realtime, $dostadm;
+    // $mod = 0   Возвращает число непрочитанных тем          //
+    // $mod = 1   Выводит ссылки на непрочитанное             //
+    ////////////////////////////////////////////////////////////
+    global $user_id, $dostadm;
     if ($user_id)
     {
         $req = mysql_query("SELECT COUNT(*) FROM `forum`
@@ -89,10 +92,17 @@ function forum_new()
         WHERE `forum`.`type`='t'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . "
         AND (`cms_forum_rdm`.`topic_id` Is Null
         OR `forum`.`time` > `cms_forum_rdm`.`time`)");
-        return mysql_result($req, 0);
+        $total = mysql_result($req, 0);
+        if ($mod)
+            echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '') . '</p>';
+        else
+            return $total;
     } else
     {
-        return false;
+        if ($mod)
+            echo '<p><a href="index.php?act=new">Последние 10 тем</a></p>';
+        else
+            return false;
     }
 }
 

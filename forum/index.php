@@ -99,15 +99,6 @@ if (in_array($act, $array) && file_exists($act . '.php'))
         if (isset($_GET['newdown']))
             $_SESSION['uppost'] = 0;
     }
-    // Ссылка на Новые темы
-    if ($user_id)
-    {
-        $unread = forum_new();
-        echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($unread ? '<span class="red">(<b>' . $unread . '</b>)</span>' : '') . '</p>';
-    } else
-    {
-        echo '<p><a href="index.php?act=new">Последние 10 тем</a></p>';
-    }
     if ($id)
     {
         $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1");
@@ -119,6 +110,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                 ////////////////////////////////////////////////////////////
                 // Список Разделов форума                                 //
                 ////////////////////////////////////////////////////////////
+                forum_new(1);
                 echo '<div class="phdr">';
                 echo '<a href="index.php">Форум</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
@@ -145,6 +137,8 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                 ////////////////////////////////////////////////////////////
                 // Список тем                                             //
                 ////////////////////////////////////////////////////////////
+                // Ссылка на непрочитанное
+                forum_new(1);
                 $qz = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='$id'" . ($dostadm ? '' : " AND `close`!='1'"));
                 $coltem = mysql_result($qz, 0);
                 $forum = mysql_query("SELECT * FROM `forum` WHERE `type`='f' AND `id`='" . $type1['refid'] . "'");
@@ -245,6 +239,8 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                         mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id` = '$id', `user_id` = '$user_id', `time` = '$realtime'");
                     }
                 }
+                // Ссылка на непрочитанное
+                forum_new(1);
                 if ($dostsadm != 1 && $type1['close'] == 1)
                 {
                     echo '<div class="rmenu"><p>Тема удалена!<br/><a href="?id=' . $type1['refid'] . '">В раздел</a></p></div>';
@@ -535,6 +531,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
         ////////////////////////////////////////////////////////////
         // Список Категорий форума                                //
         ////////////////////////////////////////////////////////////
+        forum_new(1);
         echo '<div class="phdr">';
         echo '<b>Форум</b></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");

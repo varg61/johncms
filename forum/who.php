@@ -28,8 +28,8 @@ if (!$user_id)
 }
 
 // Ссылка на Новые темы
-$unread = forum_new();
-echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($unread ? '<span class="red">(<b>' . $unread . '</b>)</span>' : '') . '</p>';
+forum_new(1);
+
 $do = isset($_GET['do']) ? $_GET['do'] : '';
 
 if ($id)

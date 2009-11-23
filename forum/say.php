@@ -124,15 +124,6 @@ switch ($tip)
             mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             // Вычисляем, на какую страницу попадает добавляемый пост
             $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
-            //блок, фиксирующий факт прочтения топика
-            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id'");
-            if (mysql_result($req, 0) == 1)
-            {
-                mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id` = '$id' AND `user_id` = '$user_id'");
-            } else
-            {
-                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id` = '$id', `user_id` = '$user_id', `time` = '$realtime'");
-            }
             if ($_POST['addfiles'] == 1)
                 header("Location: index.php?id=$fadd&act=addfile");
             else
@@ -262,17 +253,6 @@ switch ($tip)
             mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             // Вычисляем, на какую страницу попадает добавляемый пост
             $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
-            //блок, фиксирующий факт прочтения топика
-            $req = mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `topic_id`='$th' AND `user_id`='$user_id'");
-            if (mysql_result($req, 0) == 1)
-            {
-                // Обновляем время метки о прочтении
-                mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id` = '$th' AND `user_id` = '$user_id'");
-            } else
-            {
-                // Ставим метку о прочтении
-                mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id` = '$th', `user_id` = '$user_id', `time` = '$realtime'");
-            }
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1)
             {
