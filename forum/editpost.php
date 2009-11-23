@@ -104,24 +104,24 @@ if (!$error)
                 ////////////////////////////////////////////////////////////
                 // Удаление поста (для Супервизоров)                      //
                 ////////////////////////////////////////////////////////////
-                if ($posts == 1)
+                // Если есть прикрепленный файл, удаляем его
+                $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
+                if (mysql_num_rows($req_f))
+                {
+                    $res_f = mysql_fetch_assoc($req_f);
+                    unlink('files/' . $res_f['filename']);
+                    mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
+                }
+                // Формируем ссылку на нужную страницу темы
+                $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">" : "<") . " '$id'"), 0) / $kmess);
+                $link = 'index.php?id=' . $res['refid'] . '&page=' . $page;
+                mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
+                if ($posts < 2)
                 {
                     // Пересылка на удаление всей темы
                     header('Location: index.php?act=deltema&id=' . $res['refid']);
                 } else
                 {
-                    // Если есть прикрепленный файл, удаляем его
-                    $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
-                    if (mysql_num_rows($req_f))
-                    {
-                        $res_f = mysql_fetch_assoc($req_f);
-                        unlink('files/' . $res_f['filename']);
-                        mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
-                    }
-                    // Формируем ссылку на нужную страницу темы
-                    $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">" : "<") . " '$id'"), 0) / $kmess);
-                    $link = 'index.php?id=' . $res['refid'] . '&page=' . $page;
-                    mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
                     header('Location: ' . $link);
                 }
             } else
