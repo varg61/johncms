@@ -92,6 +92,10 @@ switch ($do)
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
+        // Таблица Гостевой
+        mysql_query("ALTER TABLE `guest` DROP `soft`");
+        mysql_query("ALTER TABLE `guest` ADD `browser` TINYTEXT NOT NULL AFTER `ip`");
+        echo '<span class="green">OK</span> таблица `guest` обновлена.<br />';
         // Таблицы счетчика гостей
         mysql_query("DROP TABLE `count`");
         mysql_query("DROP TABLE IF EXISTS `cms_guests`");
@@ -130,19 +134,19 @@ switch ($do)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица `forum_vote_us` создана.<br />';
         // Таблица `users`
-        @mysql_query("ALTER TABLE `users` ADD `postguest` INT NOT NULL DEFAULT '0' AFTER `postforum`");
-        @mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
-        @mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
-        @mysql_query("ALTER TABLE `users` ADD `movings` INT NOT NULL DEFAULT '0'");
-        @mysql_query("ALTER TABLE `users` ADD `place` VARCHAR( 30 ) NOT NULL");
-        @mysql_query("ALTER TABLE `users` ADD INDEX ( `place` )");
-        @mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL");
-        @mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL");
-        @mysql_query("ALTER TABLE `users` ADD `set_chat` TEXT NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `postguest` INT NOT NULL DEFAULT '0' AFTER `postforum`");
+        mysql_query("ALTER TABLE `users` ADD `rest_code` varchar(32) NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `rest_time` int(11) NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `movings` INT NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `users` ADD `place` VARCHAR( 30 ) NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD INDEX ( `place` )");
+        mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `set_chat` TEXT NOT NULL");
         $drop = array('nmenu', 'kolanywhwere', 'kmess', 'sdvig', 'pereh', 'offsm', 'offtr', 'digest', 'skin', 'farea', 'upfp', 'postclip', 'postcut', 'chmes', 'carea', 'timererfesh', 'nastroy');
         foreach ($drop as $val)
         {
-            @mysql_query("ALTER TABLE `users` DROP `$val`");
+            mysql_query("ALTER TABLE `users` DROP `$val`");
         }
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`

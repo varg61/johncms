@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-defined('_IN_JOHNCMS') or die('Error:restricted access');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 function counters()
 {
@@ -257,7 +257,7 @@ function tags($var = '')
 }
 function highlight($php)
 {
-    // Слудебная функция подсветки PHP кода (прислал FlySelf)
+    // Служебная функция подсветки PHP кода (прислал FlySelf)
     $php = strtr($php, array('<br />' => '', '\\' => 'slash_JOHNCMS'));
     $php = html_entity_decode(trim($php), ENT_QUOTES, 'UTF-8');
     $php = substr($php, 0, 2) != "<?" ? $php = "<?php\n" . $php . "\n?>" : $php;
@@ -384,7 +384,7 @@ function timecount($var)
         $str = '1 день';
     } else
     {
-        $str = gmdate('H:i:s', round($var));
+        $str = gmdate('G:i:s', $var);
     }
     return $str;
 }
@@ -568,6 +568,63 @@ function display_error($error = false)
     }
 }
 
+function rus_lat($str)
+{
+    ////////////////////////////////////////////////////////////
+    // Транслитерация с Русского в латиницу                   //
+    ////////////////////////////////////////////////////////////
+    $str = strtr($str, array('а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'e', 'ж' => 'j', 'з' => 'z', 'и' => 'i', 'й' => 'i', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r',
+        'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch', 'ъ' => "", 'ы' => 'y', 'ь' => "", 'э' => 'ye', 'ю' => 'yu', 'я' => 'ya'));
+    return $str;
+}
+
+function show_user($user = array(), $status = 0, $ip = 0, $str = '', $text = '', $sub = '')
+{
+    ////////////////////////////////////////////////////////////
+    // Отображение пользователей                              //
+    ////////////////////////////////////////////////////////////
+    // $user (array)     - массив запроса в таблицу `users`   //
+    // $status (boolean) - показать статус                    //
+    // $ip (boolean)     - показать IP и UserAgent            //
+    // $str (string)     - строка выводится после Ника юзера  //
+    // $text (string)    - выводится после строки со статусом //
+    // $sub (string)     - строка выводится в области "sub"   //
+    ////////////////////////////////////////////////////////////
+    global $set_user, $realtime, $user_id;
+    if (!$user['id'])
+    {
+        $out = '<b>Гость</b>';
+        if (!empty($user['name']))
+            $out .= ': ' . $user['name'];
+    } else
+    {
+        if ($user['sex'])
+            $out = '<img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'f') . ($user['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+        else
+            $out = '<img src="../images/del.png" width="12" height="12" />&nbsp;';
+        $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="anketa.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
+        $rights = array(0 => '', 1 => 'Kil', 2 => 'Mod', 3 => 'Mod', 4 => 'Mod', 5 => 'Mod', 6 => 'Smd', 7 => 'Adm', 9 => 'SV!');
+        $out .= ' ' . $rights[$user['rights']];
+    }
+    $out .= ($realtime > $user['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+    if (!empty($str))
+        $out .= ' ' . $str;
+    if ($status && !empty($user['status']))
+        $out .= '<div class="status">' . (file_exists('../theme/' . $set_user['skin'] . '/images/star.gif') ? '<img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&nbsp;' : '') . $user['status'] . '</div>';
+    if ($text)
+        $out .= '<div>' . $text . '</div>';
+    if ($sub || $ip)
+    {
+        $out .= '<div class="sub">';
+        if (!empty($sub))
+            $out .= $sub;
+        if ($ip)
+            $out .= '<div class="gray"><u>UserAgent</u>:&nbsp;' . $user['browser'] . '<br /><u>IP Address</u>:&nbsp;' . long2ip($user['ip']) . '</div>';
+        $out .= '</div>';
+    }
+    return $out;
+}
+
 /*
 ################################################################################
 ##                                                                            ##
@@ -614,13 +671,6 @@ function format($name)
     $f2 = substr($name, $f1 + 1, 999);
     $fname = strtolower($f2);
     return $fname;
-}
-
-function rus_lat($str)
-{
-    $str = strtr($str, array('а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'e', 'ж' => 'j', 'з' => 'z', 'и' => 'i', 'й' => 'i', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r',
-        'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch', 'ъ' => "", 'ы' => 'y', 'ь' => "", 'э' => 'ye', 'ю' => 'yu', 'я' => 'ya'));
-    return $str;
 }
 
 ?>

@@ -82,7 +82,7 @@ if ($user_id)
 } else
 {
     // Фиксируем местоположение гостей
-    $sid = md5("$ipl,$agn");
+    $sid = md5($ipl . $agn);
     $movings = 0;
     $req = mysql_query("SELECT * FROM `cms_guests` WHERE `session_id` = '$sid' LIMIT 1");
     if (mysql_num_rows($req))

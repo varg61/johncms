@@ -24,54 +24,11 @@ require_once ("../incfiles/head.php");
 echo '<div class="phdr"><b>Список пользователей</b></div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0);
-$req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT " . $start . "," . $kmess);
+$req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT $start, $kmess");
 while ($res = mysql_fetch_array($req))
 {
-    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-    if ($res['sex'])
-        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-    else
-        echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
-    if (!$user_id || $user_id == $res['id'])
-    {
-        print '<b>' . $res['name'] . '</b>';
-    } else
-    {
-        print "<a href='anketa.php?user=" . $res['id'] . "'>$res[name]</a>";
-    }
-    switch ($res['rights'])
-    {
-        case 7:
-            echo ' Adm ';
-            break;
-        case 6:
-            echo ' Smd ';
-            break;
-        case 5:
-            echo ' Mod ';
-            break;
-        case 4:
-            echo ' Mod ';
-            break;
-        case 3:
-            echo ' Mod ';
-            break;
-        case 2:
-            echo ' Mod ';
-            break;
-        case 1:
-            echo ' Kil ';
-            break;
-    }
-    $ontime = $res['lastdate'];
-    $ontime2 = $ontime + 300;
-    if ($realtime > $ontime2)
-    {
-        echo '<span class="red"> [Off]</span><br/>';
-    } else
-    {
-        echo '<span class="green"> [ON]</span><br/>';
-    }
+    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+    echo show_user($res, 1, ($dostsmod ? 1 : 0));
     echo '</div>';
     ++$i;
 }

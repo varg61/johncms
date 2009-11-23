@@ -50,81 +50,7 @@ if ($id)
             while ($res = mysql_fetch_assoc($req))
             {
                 echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-                if ($do == 'guest')
-                {
-                    echo '<b>Гость</b>';
-                } else
-                {
-                    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-                    echo ($user_id && $user_id != $res['id'] ? '<a href="../str/anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
-                    // Метка должности
-                    if ($res['rights'])
-                    {
-                        $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
-                        echo ' (' . $user_rights[$res['rights']] . ')';
-                    }
-                }
-                $svr = $realtime - $res['sestime'];
-                if ($svr >= "3600")
-                {
-                    $hvr = ceil($svr / 3600) - 1;
-                    if ($hvr < 10)
-                    {
-                        $hvr = "0$hvr";
-                    }
-                    $svr1 = $svr - $hvr * 3600;
-                    $mvr = ceil($svr1 / 60) - 1;
-                    if ($mvr < 10)
-                    {
-                        $mvr = "0$mvr";
-                    }
-                    $ivr = $svr1 - $mvr * 60;
-                    if ($ivr < 10)
-                    {
-                        $ivr = "0$ivr";
-                    }
-                    if ($ivr == "60")
-                    {
-                        $ivr = "59";
-                    }
-                    $sitevr = "$hvr:$mvr:$ivr";
-                } else
-                {
-                    if ($svr >= "60")
-                    {
-                        $mvr = ceil($svr / 60) - 1;
-                        if ($mvr < 10)
-                        {
-                            $mvr = "0$mvr";
-                        }
-                        $ivr = $svr - $mvr * 60;
-                        if ($ivr < 10)
-                        {
-                            $ivr = "0$ivr";
-                        }
-                        if ($ivr == "60")
-                        {
-                            $ivr = "59";
-                        }
-                        $sitevr = "00:$mvr:$ivr";
-                    } else
-                    {
-                        $ivr = $svr;
-                        if ($ivr < 10)
-                        {
-                            $ivr = "0$ivr";
-                        }
-                        $sitevr = "00:00:$ivr";
-                    }
-                }
-                echo ' (' . $res['movings'] . ' - ' . $sitevr . ') ';
-                if ($do == 'guest' || $dostmod)
-                {
-                    echo '<div class="sub"><span class="gray"><u>UserAgent</u>: ' . $res['browser'];
-                    if ($dostmod)
-                        echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-                    echo '</span></div>';
-                }
+                echo show_user($res, 0, ($act == 'guest' || $dostmod ? 1 : 0));
                 echo '</div>';
                 ++$i;
             }
@@ -149,20 +75,6 @@ if ($id)
         while ($res = mysql_fetch_assoc($req))
         {
             echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-            if ($do == 'guest')
-            {
-                echo '<b>Гость</b>';
-            } else
-            {
-                echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-                echo ($user_id && $user_id != $res['id'] ? '<a href="../str/anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b>&nbsp;</a>' : '<b>' . $res['name'] . '</b>');
-                // Метка должности
-                if ($res['rights'])
-                {
-                    $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
-                    echo ' (' . $user_rights[$res['rights']] . ')';
-                }
-            }
             // Вычисляем местоположение
             $place = '';
             switch ($res['place'])
@@ -223,14 +135,7 @@ if ($id)
                         }
                     }
             }
-            echo ' &gt;&gt; ' . $place;
-            if ($do == 'guest' || $dostmod)
-            {
-                echo '<div class="sub"><span class="gray"><u>UserAgent</u>: ' . $res['browser'];
-                if ($dostmod)
-                    echo '<br /><u>IP Address</u>: ' . long2ip($res['ip']);
-                echo '</span></div>';
-            }
+            echo show_user($res, 0, ($act == 'guest' || $dostmod ? 1 : 0), ' &gt;&gt; ' . $place);
             echo '</div>';
             ++$i;
         }

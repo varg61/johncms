@@ -60,39 +60,8 @@ if ($search && !$error)
         $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . $search_db . "' ORDER BY `name` ASC LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req))
         {
-            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            echo $res['datereg'] > $realtime - 86400 ? '<img src="../images/add.gif" alt=""/>&nbsp;' : '';
-            echo '<img src="../images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""/>&nbsp;';
-            if (!empty($user_id) && ($user_id != $res['id']))
-            {
-                echo '<a href="anketa.php?user=' . $res['id'] . '"><b>' . $res['name'] . '</b></a> ';
-            } else
-            {
-                echo '<b>' . $res['name'] . '</b>';
-            }
-            switch ($res['rights'])
-            {
-                case 7:
-                    echo ' Adm ';
-                    break;
-                case 6:
-                    echo ' Smd ';
-                    break;
-                case 2:
-                    echo ' Mod ';
-                    break;
-                case 1:
-                    echo ' Kil ';
-                    break;
-            }
-            $ontime = $res['lastdate'] + 300;
-            if ($realtime > $ontime)
-            {
-                echo '<font color="#FF0000"> [Off]</font>';
-            } else
-            {
-                echo '<font color="#00AA00"> [ON]</font>';
-            }
+            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            echo show_user($res, 1, ($dostsmod ? 1 : 0));
             echo '</div>';
             ++$i;
         }

@@ -429,10 +429,10 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                             $text = smileys($text, $res['rights'] ? 1 : 0);
                         echo $text;
                     }
-                    if ($res['kedit'] > 0)
+                    if ($res['kedit'])
                     {
-                        $diz = $res['tedit'] + $set_user['sdvig'] * 3600;
-                        $dizm = date("d.m /H:i", $diz);
+                        // Если пост редактировался, показываем кем и когда
+                        $dizm = date("d.m /H:i", $res['tedit'] + $set_user['sdvig'] * 3600);
                         echo '<br /><span class="gray"><small>Изм. <b>' . $res['edit'] . '</b> (' . $dizm . ') <b>[' . $res['kedit'] . ']</b></small></span>';
                     }
                     // Если есть прикрепленный файл, выводим его описание

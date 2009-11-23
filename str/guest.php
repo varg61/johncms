@@ -92,7 +92,6 @@ switch ($act)
             require_once ("../incfiles/end.php");
             exit;
         }
-        $agn = strtok($agn, ' ');
         // Задаем куда вставляем, в Админ клуб (1), или в Гастивуху (0)
         $admset = isset($_SESSION['ga']) ? 1:
         0;
@@ -120,7 +119,7 @@ switch ($act)
             $from = $login;
         } else
         {
-            $from = $name;
+            $from = check($name);
             $user_id = 0;
         }
         $msg = trim($_POST['msg']);
@@ -142,10 +141,10 @@ switch ($act)
 		`adm`='" . $admset . "',
 		`time`='" . $realtime . "',
 		`user_id`='" . $user_id . "',
-		`name`='" . mysql_real_escape_string($from) . "',
+		`name`='" . $from . "',
 		`text`='" . mysql_real_escape_string($msg) . "',
 		`ip`='" . $ipl . "',
-		`soft`='" . mysql_real_escape_string($agn) . "'");
+		`browser`='" . mysql_real_escape_string($agn) . "'");
         // Фиксируем время последнего поста (антиспам)
         if ($user_id)
         {
@@ -331,99 +330,52 @@ switch ($act)
             } else
             {
                 // Запрос для обычной Гастивухи
-                $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id` AS `uid`
+                $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
 				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
             }
-            while ($res = mysql_fetch_array($req))
+            while ($res = mysql_fetch_assoc($req))
             {
+                $text = '';
                 echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-                if ($res['user_id'] != "0")
+                if (empty($res['id']))
                 {
-                    if ($res['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-                    else
-                        echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
-                    // Ник юзера и ссылка на Анкету
-                    if (!empty($user_id) && ($user_id != $res['user_id']))
-                    {
-                        echo '<a href="anketa.php?user=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a> ';
-                    } else
-                    {
-                        echo '<b>' . $res['name'] . '</b>';
-                    }
-                    // Должность
-                    switch ($res['rights'])
-                    {
-                        case 7:
-                            echo ' Adm ';
-                            break;
-                        case 6:
-                            echo ' Smd ';
-                            break;
-                        case 2:
-                            echo ' Mod ';
-                            break;
-                        case 1:
-                            echo ' Kil ';
-                            break;
-                    }
-                    // Онлайн / Офлайн
-                    $ontime = $res['lastdate'] + 300;
-                    if ($realtime > $ontime)
-                    {
-                        echo '<font color="#FF0000"> [Off]</font>';
-                    } else
-                    {
-                        echo '<font color="#00AA00"> [ON]</font>';
-                    }
-                } else
-                {
-                    // Ник Гостя
-                    echo '<b>Гость ' . checkout($res['name']) . '</b>';
+                    // Запрос по гостям
+                    $req_g = mysql_query("SELECT `lastdate` FROM `cms_guests` WHERE `session_id` = '" . md5($res['ip'] . $res['browser']) . "' LIMIT 1");
+                    $res_g = mysql_fetch_assoc($req_g);
+                    $res['lastdate'] = $res_g['lastdate'];
                 }
-                $vrp = $res['time'] + $set_user['sdvig'] * 3600;
-                $vr = date("d.m.y / H:i", $vrp);
-                echo ' <font color="#999999">(' . $vr . ')</font><br/>';
-                if (!empty($res['status']))
-                    echo '<div class="status"><img src="../images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
-                if ($res['user_id'] != "0")
+                // Время создания поста
+                $text = ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                if ($res['user_id'])
                 {
                     // Для зарегистрированных показываем ссылки и смайлы
-                    $text = checkout($res['text'], 1, 1);
+                    $post = checkout($res['text'], 1, 1);
                     if ($set_user['smileys'])
-                        $text = smileys($text, ($res['name'] == $nickadmina || $res['name'] == $nickadmina2 || $res['rights'] >= 1) ? 1 : 0);
+                        $post = smileys($post, $res['rights'] >= 1 ? 1 : 0);
                 } else
                 {
                     // Для гостей фильтруем ссылки
-                    $text = antilink(checkout($res['text'], 0, 2));
+                    $post = antilink(checkout($res['text'], 0, 2));
                 }
-                // Отображаем текст поста
-                echo $text;
-                // Если пост редактировался, показываем кто и когда
-                if ($res['edit_count'] >= 1)
+                if ($res['edit_count'])
                 {
-                    $diz = $res['edit_time'] + $set_user['sdvig'] * 3600;
-                    $dizm = date("d.m.y /H:i", $diz);
-                    echo "<br /><small><font color='#999999'>Посл. изм. <b>$res[edit_who]</b>  ($dizm)<br />Всего изм.:<b> $res[edit_count]</b></font></small>";
+                    // Если пост редактировался, показываем кем и когда
+                    $dizm = date("d.m /H:i", $res['edit_time'] + $set_user['sdvig'] * 3600);
+                    $post .= '<br /><span class="gray"><small>Изм. <b>' . $res['edit_who'] . '</b> (' . $dizm . ') <b>[' . $res['edit_count'] . ']</b></small></span>';
                 }
-                // Ответ Модера
                 if (!empty($res['otvet']))
                 {
+                    // Ответ Администрации
                     $otvet = checkout($res['otvet'], 1, 1);
                     $vrp1 = $res['otime'] + $set_user['sdvig'] * 3600;
                     $vr1 = date("d.m.Y / H:i", $vrp1);
                     if ($set_user['smileys'])
                         $otvet = smileys($otvet, 1);
-                    echo '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
+                    $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
-                // Ссылки на Модерские функции
-                if ($dostsmod == 1)
-                {
-                    echo '<div class="sub"><a href="guest.php?act=otvet&amp;id=' . $res['id'] . '">Ответить</a> | <a href="guest.php?act=edit&amp;id=' . $res['id'] . '">Изменить</a> | <span class="red"><a href="guest.php?act=delpost&amp;id=' . $res['id'] .
-                        '">Удалить</a></span><br/>';
-                    echo '<span class="gray">' . long2ip($res['ip']) . ' - ' . $res['soft'] . '</span></div>';
-                }
-                echo "</div>";
+                $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a> | <a href="guest.php?act=edit&amp;id=' . $res['gid'] . '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>';
+                echo show_user($res, 1, ($dostmod ? 1 : 0), $text, $post, ($dostmod ? $subtext : ''));
+                echo '</div>';
                 ++$i;
             }
             echo '<div class="phdr">Всего сообщений: ' . $colmes . '</div>';
