@@ -38,7 +38,7 @@ if ($user_id)
     $do = isset($_GET['do']) ? $_GET['do'] : '';
     switch ($do)
     {
-        case "reset":
+        case 'reset':
             ////////////////////////////////////////////////////////////
             // Отмечаем все темы как прочитанные                      //
             ////////////////////////////////////////////////////////////
@@ -67,14 +67,14 @@ if ($user_id)
             break;
 
         case 'select':
-            echo '<div class="phdr">Показать за период</div>';
+            echo '<div class="phdr"><b>Показать за период</b></div>';
             echo '<div class="menu"><p><form action="index.php?act=new&amp;do=all" method="post">Период(в часах):<br/>';
-            echo '<input type="text" maxlength="4" name="vr" value="24" size="3"/>';
+            echo '<input type="text" maxlength="3" name="vr" value="24" size="3"/>';
             echo '<input type="hidden" name="act" value="all"/><input type="submit" name="submit" value="Показать"/></form></p></div>';
-            echo '<div class="bmenu"><a href="index.php?act=new">Назад</a></div>';
+            echo '<div class="phdr"><a href="index.php?act=new">Назад</a></div>';
             break;
 
-        case "all":
+        case 'all':
             $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])):
             null;
             if (!$vr)
@@ -94,7 +94,7 @@ if ($user_id)
             $count = mysql_result($req, 0);
             if ($count > 0)
             {
-                echo '<div class="phdr">Все за период ' . $vr . ' часов</div>';
+                echo '<div class="phdr"><b>Все за период ' . $vr . ' часов</b></div>';
                 if ($dostsadm == 1)
                 {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
@@ -103,54 +103,39 @@ if ($user_id)
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
                 }
                 $i = 0;
-                while ($arr = mysql_fetch_array($req))
+                while ($res = mysql_fetch_array($req))
                 {
-                    $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $arr['refid'] . "'");
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "'");
                     $razd = mysql_fetch_array($q3);
-                    $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "'");
+                    $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("select `id` from `forum` where type='m' and close!='1' and refid='" . $arr['id'] . "' order by time desc");
-                    $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $arr['id'] . "'ORDER BY time DESC LIMIT 1");
+                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
                     $cpg = ceil($colmes1 / $kmess);
-                    $colmes1 = $colmes1 - 1;
-                    if ($colmes1 < 0)
-                    {
-                        $colmes1 = 0;
-                    }
-                    $nam = mysql_fetch_array($nikuser);
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                    if ($arr['edit'] == 1)
-                    {
-                        echo "<img src='../images/tz.gif' alt=''/>";
-                    } else
-                    {
-                        echo "<img src='../images/np.gif' alt=''/>";
-                    }
-                    echo "<a href='index.php?id=" . $arr['id'] . "'><font color='" . $cntem . "'>$arr[text]</font></a><font color='" . $ccolp . "'>[$colmes1]</font>";
+                    $nick = mysql_fetch_array($colmes);
+                    if ($res['edit'])
+                        echo '<img src="../images/tz.gif" alt=""/>';
+                    elseif ($res['close'])
+                        echo '<img src="../images/dl.gif" alt=""/>';
+                    else
+                        echo '<img src="../images/np.gif" alt=""/>';
+                    if ($res['realid'] == 1)
+                        echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
+                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&nbsp;[' . $colmes1 . ']';
                     if ($cpg > 1)
+                        echo '<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
+                    echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
+                    echo $res['from'];
+                    if ($colmes1 > 1)
                     {
-                        if ((!$user_id && (!empty($_SESSION['uppost'])) && ($_SESSION['uppost'] == 1)) || ($user_id && $set_forum['upfp']))
-                        {
-                            echo "<a href='index.php?id=$arr[id]&amp;page=$cpg'>[&lt;&lt;]</a>";
-                        } else
-                        {
-                            echo "<a href='index.php?id=$arr[id]&amp;page=$cpg'>[&gt;&gt;]</a>";
-                        }
+                        echo '&nbsp;/&nbsp;' . $nick['from'];
                     }
-                    echo "<br/>";
-                    echo "<font color='" . $cdtim . "'>(" . date("H:i /d.m.y", $arr['time']) . ")</font><br/><font color='" . $cssip . "'>[$arr[from]</font>";
-                    if (!empty($nam['from']))
-                    {
-                        echo "<font color='" . $cssip . "'>/$nam[from]</font>";
-                    }
-                    echo "<font color='" . $cssip . "'>]</font><br/>";
-                    echo "$frm[text]/$razd[text]";
-                    echo "</div>";
-
-                    $i++;
+                    echo ' <font color="#777777">' . date("d.m.y / H:i", $nick['time']) . '</font>';
+                    echo '</div></div>';
+                    ++$i;
                 }
-                echo '<div class="bmenu">Всего: ' . $count . '</div>';
+                echo '<div class="phdr">Всего: ' . $count . '</div>';
                 if ($count > $kmess)
                 {
                     echo '<p>' . pagenav('index.php?act=new&amp;do=all&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</p>';
