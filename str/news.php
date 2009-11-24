@@ -54,12 +54,12 @@ switch ($do)
                     exit;
                 }
                 $name = check($_POST['name']);
-                $text = mysql_real_escape_string(trim($_POST['text']));
+                $text = trim($_POST['text']);
                 if (!empty($_POST['pf']) && ($_POST['pf'] != '0'))
                 {
                     $pf = intval($_POST['pf']);
                     $rz = $_POST['rz'];
-                    $pr = mysql_query("select * from `forum` where type='r' and refid= '" . $pf . "';");
+                    $pr = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$pf' AND `type` = 'r'");
                     while ($pr1 = mysql_fetch_array($pr))
                     {
                         $arr[] = $pr1['id'];
@@ -68,16 +68,28 @@ switch ($do)
                     {
                         if (in_array($v, $arr))
                         {
-                            mysql_query("insert into `forum` values(0,'" . $v . "','t','" . $realtime . "','" . $login . "','','','','','" . $name . "','','','1','','','','','');");
-                            $tem = mysql_query("select * from `forum` where type='t' and time='" . $realtime . "' and refid= '" . $v . "';");
-                            $tem1 = mysql_fetch_array($tem);
-                            $agn = strtok($agn, ' ');
-                            mysql_query("insert into `forum` values(0,'" . $tem1['id'] . "','m','" . $realtime . "','" . $login . "','','','" . $ipp . "','" . $agn . "','" . $text . "','','','','','','','','');");
+                            mysql_query("INSERT INTO `forum` SET
+                            `refid` = '$v',
+                            `type` = 't',
+                            `time` = '$realtime',
+                            `user_id` = '$user_id',
+                            `from` = '$login',
+                            `text` = '$name'");
+                            $rid = mysql_insert_id();
+                            mysql_query("INSERT INTO `forum` SET
+                            `refid` = '$rid',
+                            `type` = 'm',
+                            `time` = '$realtime',
+                            `user_id` = '$user_id',
+                            `from` = '$login',
+                            `ip` = '$ipp',
+                            `soft` = '" . mysql_real_escape_string($agn) . "',
+                            `text` = '" . mysql_real_escape_string($text) . "'");
                         }
                     }
                 }
-                mysql_query("insert into `news` values(0,'" . $realtime . "','" . $login . "','" . $name . "','" . $text . "','" . $tem1[id] . "');");
-                mysql_query("UPDATE `users` SET `lastpost` = '" . $realtime . "' WHERE `id` = '" . $user_id . "'");
+                mysql_query("insert into `news` values(0,'$realtime','$login','$name','" . mysql_real_escape_string($text) . "','$rid')");
+                mysql_query("UPDATE `users` SET `lastpost` = '$realtime' WHERE `id` = '$user_id'");
                 echo "Новость добавлена.<p><a href='news.php'>Продолжить</a></p>";
             } else
             {
@@ -90,7 +102,7 @@ switch ($do)
                 while ($fr1 = mysql_fetch_array($fr))
                 {
                     echo "<input type='radio' name='pf' value='" . $fr1['id'] . "'/>$fr1[text]<select name='rz[]'>";
-                    $pr = mysql_query("select * from `forum` where type='r' and refid= '" . $fr1['id'] . "';");
+                    $pr = mysql_query("select * from `forum` where type='r' and refid= '" . $fr1['id'] . "'");
                     while ($pr1 = mysql_fetch_array($pr))
                     {
                         echo '<option value="' . $pr1['id'] . '">' . $pr1['text'] . '</option>';

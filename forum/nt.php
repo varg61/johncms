@@ -62,17 +62,17 @@ if (isset($_POST['submit']))
         if (mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '$id' AND `text` = '$th'"), 0) > 0)
             $error = 'Тема с таким названием уже есть в этом разделе';
         // Проверяем, не повторяется ли сообщение?
-		$req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC");
+        $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC");
         if (mysql_num_rows($req) > 0)
         {
             $res = mysql_fetch_array($req);
-            if($msg == $res['text'])
-            $error = 'Такое сообщение уже было';
+            if ($msg == $res['text'])
+                $error = 'Такое сообщение уже было';
         }
     }
     if (!$error)
     {
-        // Добавляем заголовок темы
+        // Добавляем тему
         mysql_query("INSERT INTO `forum` SET
 		`refid` = '$id',
 		`type` = 't',
@@ -81,9 +81,7 @@ if (isset($_POST['submit']))
 		`from` = '$login',
 		`text` = '$th'");
         $rid = mysql_insert_id();
-        $agn = strtok($agn, ' ');
         // Добавляем текст поста
-        //TODO: Добавить user_id
         mysql_query("INSERT INTO `forum` SET
 		`refid` = '$rid',
 		`type` = 'm',
@@ -91,7 +89,7 @@ if (isset($_POST['submit']))
 		`user_id` = '$user_id',
 		`from` = '$login',
 		`ip` = '$ipp',
-		`soft` = '$agn',
+		`soft` = '" . mysql_real_escape_string($agn) . "',
 		`text` = '" . mysql_real_escape_string($msg) . "'");
         $postid = mysql_insert_id();
         // Записываем счетчик постов юзера
