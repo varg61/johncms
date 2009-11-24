@@ -287,7 +287,7 @@ switch ($tip)
             {
                 // Форма с цитатой
                 echo '<div class="menu"><b>Автор:</b> ' . $type1['from'] . '</div>';
-                echo '<div class="menu"><b>Цитата:</b><br/><textarea cols="24" rows="4" name="citata">' . $qt . '</textarea>';
+                echo '<div class="menu"><b>Цитата:</b><br/><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="citata">' . $qt . '</textarea>';
                 echo '<br /><small>Допустимо макс. 200 символов.<br />Весь лишний текст обрезается.</small></div>';
             } else
             {
@@ -301,7 +301,7 @@ switch ($tip)
                 echo '<small>Выбранный текст будет вставлен перед Вашим текстом, который Вы напишите ниже.</small>';
                 echo '</div>';
             }
-            echo '<div class="gmenu"><b>Сообщение:</b><br/><textarea cols="24" rows="4" name="msg"></textarea><br/>';
+            echo '<div class="gmenu"><b>Сообщение:</b><br/><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';

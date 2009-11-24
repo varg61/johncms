@@ -59,9 +59,9 @@ elseif ($set['mod_forum'] == 1 && !$user_id)
     $error = 'Доступ на форум открыт только <a href="../in.php">авторизованным</a> посетителям';
 if ($error)
 {
-    require_once ("../incfiles/head.php");
+    require_once ('../incfiles/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once ("../incfiles/end.php");
+    require_once ('../incfiles/end.php');
     exit;
 }
 
@@ -88,7 +88,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
     require_once ($act . '.php');
 } else
 {
-    require_once ("../incfiles/head.php");
+    require_once ('../incfiles/head.php');
     // Если форум закрыт, то для Админов выводим напоминание
     if (!$set['mod_forum'])
         echo '<p><font color="#FF0000"><b>Форум закрыт!</b></font></p>';
@@ -254,7 +254,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                 $frm = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
                 echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
-                echo '<div class="phdr"><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
+                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
                 if ($type1['close'])
                     echo '<div class="rmenu"><b>Тема удалена</b></div>';
                 if ($type1['edit'])

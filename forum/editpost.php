@@ -114,7 +114,6 @@ if (!$error)
                 }
                 // Формируем ссылку на нужную страницу темы
                 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">" : "<") . " '$id'"), 0) / $kmess);
-                $link = 'index.php?id=' . $res['refid'] . '&page=' . $page;
                 mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
                 if ($posts < 2)
                 {
@@ -122,7 +121,7 @@ if (!$error)
                     header('Location: index.php?act=deltema&id=' . $res['refid']);
                 } else
                 {
-                    header('Location: ' . $link);
+                    header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
                 }
             } else
             {
@@ -139,14 +138,13 @@ if (!$error)
                 {
                     // Если это был последний пост темы, то скрываем саму тему
                     $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
-                    $link = 'index.php?id=' . $res_l['refid'];
                     mysql_query("UPDATE `forum` SET `close` = '1' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't' LIMIT 1");
-                    header('Location: ' . $link);
+                    header('Location: index.php?id=' . $res_l['refid']);
                 } else
                 {
                     mysql_query("UPDATE `forum` SET `close` = '1' WHERE `id` = '$id' LIMIT 1");
+                    header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
                 }
-                header('Location: ' . $link);
             }
             break;
 
@@ -197,7 +195,7 @@ if (!$error)
                     echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
                 echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
                 echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
-                echo '<p><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">Назад</a></p>';
+                echo '<p><a href="' . $link . '">Назад</a></p>';
             }
     }
 } else

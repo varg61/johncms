@@ -281,7 +281,7 @@ if ($user_id && $user_ps)
 
             // Если юзера не было на сайте более 1-го часа , показываем дайджест
             if ($datauser['lastdate'] < ($realtime - 3600) && $set_user['digest'] && $headmod == 'mainpage')
-                header("Location: " . $home . "/index.php?mod=digest&last=" . $datauser['lastdate']);
+                header('Location: ' . $home . '/index.php?act=digest&last=' . $datauser['lastdate']);
         } else
         {
             // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки
