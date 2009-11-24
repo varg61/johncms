@@ -325,7 +325,7 @@ switch ($act)
             {
                 // Запрос для Админ клуба
                 echo '<div class="rmenu"><b>АДМИН-КЛУБ</b></div>';
-                $req = mysql_query("SELECT `guest`.*, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id` AS `uid`
+                $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
 				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
             } else
             {
@@ -374,7 +374,7 @@ switch ($act)
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
                 $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a> | <a href="guest.php?act=edit&amp;id=' . $res['gid'] . '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>';
-                echo show_user($res, 1, ($dostmod ? 1 : 0), $text, $post, ($dostmod ? $subtext : ''));
+                echo show_user($res, 1, ($dostsmod ? 1 : 0), $text, $post, ($dostsmod ? $subtext : ''));
                 echo '</div>';
                 ++$i;
             }
