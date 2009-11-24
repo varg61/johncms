@@ -156,7 +156,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                     echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "' ORDER BY `time` DESC LIMIT 1");
                     $nam = mysql_fetch_assoc($nikuser);
-                    $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($dostadm == 1 ? '' : " AND `close` != '1'"));
+                    $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($dostadm ? '' : " AND `close` != '1'"));
                     $colmes1 = mysql_result($colmes, 0);
                     $cpg = ceil($colmes1 / $kmess);
                     // Выводим список тем
@@ -248,7 +248,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                     exit;
                 }
                 // Счетчик постов темы
-                $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0);
+                $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($dostadm ? '' : " AND `close` != '1'")), 0);
                 // Панель навигации
                 $razd = mysql_fetch_assoc(mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
                 $frm = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
@@ -306,7 +306,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                 {
                     $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-                    WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . " ORDER BY `forum`.`id` LIMIT 1");
+                    WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . " ORDER BY `forum`.`id` LIMIT 1");
                     $postres = mysql_fetch_assoc($postreq);
                     echo '<div class="clip">';
                     if ($postres['sex'])

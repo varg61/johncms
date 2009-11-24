@@ -16,11 +16,11 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../incfiles/head.php");
+require_once ('../incfiles/head.php');
 $delf = opendir("temtemp");
 while ($tt = readdir($delf))
 {
-    if ($tt != "." && $tt != ".." && $tt != "index.php")
+    if ($tt != "." && $tt != ".." && $tt != 'index.php')
     {
         $tm[] = $tt;
     }
@@ -54,7 +54,7 @@ if ($tip != "t")
 }
 if (isset($_POST['submit']))
 {
-    $tema = mysql_query("select * from `forum` where type='m' and refid= '" . $id . "' order by time ASC;");
+    $tema = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'm'" . ($dostadm ? '' : " AND `close` != '1'") . " ORDER BY `id` ASC");
     $mod = intval($_POST['mod']);
     switch ($mod)
     {
@@ -63,7 +63,7 @@ if (isset($_POST['submit']))
             // Сохраняем тему в текстовом формате                     //
             ////////////////////////////////////////////////////////////
             $text = $type1['text'] . "\r\n\r\n";
-            while ($arr = mysql_fetch_array($tema))
+            while ($arr = mysql_fetch_assoc($tema))
             {
                 $txt_tmp = str_replace("[c]", "Цитата:{", $arr['text']);
                 $txt_tmp = str_replace("[/c]", "}-Ответ:", $txt_tmp);

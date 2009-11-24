@@ -51,8 +51,8 @@ switch ($do)
         $cherr = '';
         $err = false;
         // Проверка прав доступа к папкам
-        $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/', 'download/mp3temp/',
-            'download/upl/');
+        $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/',
+            'download/mp3temp/', 'download/upl/');
         foreach ($arr as $v)
         {
             if (permissions($v) < 777)
