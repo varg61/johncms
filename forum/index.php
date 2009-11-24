@@ -241,7 +241,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                 }
                 // Ссылка на непрочитанное
                 forum_new(1);
-                if ($dostsadm != 1 && $type1['close'] == 1)
+                if ($dostadm != 1 && $type1['close'] == 1)
                 {
                     echo '<div class="rmenu"><p>Тема удалена!<br/><a href="?id=' . $type1['refid'] . '">В раздел</a></p></div>';
                     require_once ("../incfiles/end.php");
@@ -440,7 +440,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                         echo '<br /><span class="gray">Прикреплённый файл:<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a> (' . $fls . ' кб.)<br/>';
                         echo 'Скачано: ' . $fres['dlcount'] . ' раз.</span>';
                     }
-                    if ($dostmod || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > $realtime - 300) || ($res['user_id'] == $user_id && $set_forum['upfp'] && $start == 0 && $i == 1 && $res['time'] > $realtime -
+                    if ($dostfmod || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > $realtime - 300) || ($res['user_id'] == $user_id && $set_forum['upfp'] && $start == 0 && $i == 1 && $res['time'] > $realtime -
                         300))
                     {
                         // Ссылки на редактирование / удаление постов
@@ -448,10 +448,10 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                         if ($dostfmod)
                             echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>&nbsp;';
                         echo '<a href="index.php?act=editpost&amp;id=' . $res['id'] . '">Изменить</a> | ';
-                        if ($dostsadm && $res['close'] == 1)
+                        if ($dostadm && $res['close'] == 1)
                             echo '<a href="index.php?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">Восстановить</a> | ';
                         echo '<a href="index.php?act=editpost&amp;do=del&amp;id=' . $res['id'] . '">Удалить</a>';
-                        if ($dostmod)
+                        if ($dostfmod)
                             echo '<br /><span class="gray">' . $res['ip'] . ' - ' . $res['soft'] . '</span>';
                         echo '</div>';
                     }
@@ -500,8 +500,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                     // Удалить - восстановить тему
                     if ($type1['close'] == 1)
                         echo "<a href='index.php?act=restore&amp;id=" . $id . "'>Восстановить тему</a><br/>";
-                    else
-                        echo "<a href='index.php?act=deltema&amp;id=" . $id . "'>Удалить тему</a><br/>";
+                    echo "<a href='index.php?act=deltema&amp;id=" . $id . "'>Удалить тему</a><br/>";
                     if ($type1['vip'] == 1)
                         echo "<a href='index.php?act=vip&amp;id=" . $id . "'>Открепить тему</a>";
                     else
