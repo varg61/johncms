@@ -153,7 +153,7 @@ if ($user['mailact'] == 1)
     }
 }
 if (!empty($user['icq']))
-    $out .= '<li><span class="gray"><u>ICQ</u>:</span>&nbsp;<img src="http://web.icq.com/whitepages/online?icq=' . $user['icq'] . '&amp;img=5" width="12" height="12" alt=""/>&nbsp;' . $user['icq'] . '</li>';
+    $out .= '<li><span class="gray"><u>ICQ</u>:</span>&nbsp;<img src="http://web.icq.com/whitepages/online?icq='.$user['icq'].'&amp;img=5" width="18" height="18" alt="icq" align="middle"/>&nbsp;' . $user['icq'] . '</li>';
 if (!empty($user['skype']))
     $out .= '<li><span class="gray"><u>Skype</u>:</span>&nbsp;' . $user['skype'] . '</li>';
 if (!empty($user['jabber']))
