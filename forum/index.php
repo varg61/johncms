@@ -372,8 +372,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                     // Ник юзера и ссылка на его анкету
                     if ($user_id && $user_id != $res['user_id'])
                     {
-                        echo '<a href="../str/anketa.php?user=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
-                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a> ';
+                        echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
                     } else
                     {
                         echo '<b>' . $res['from'] . '</b> ';
@@ -382,9 +381,16 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                     $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
                     echo $user_rights[$res['rights']];
                     // Метка Онлайн / Офлайн
-                    echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+                    echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
+                    // Ссылки на бан, ответ и цитирование
+                    if ($user_id && $user_id != $res['user_id'])
+                    {
+                        if ($dostfmod)
+                            echo '<span class="red"><a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '">[б]</a></span>&nbsp;';
+                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '">[о]</a>&nbsp;<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt">[ц]</a> ';
+                    }
                     // Время поста
-                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
+                    echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br />';
                     // Статус юзера
                     if (!empty($res['status']))
                         echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';

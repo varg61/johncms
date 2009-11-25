@@ -16,10 +16,20 @@
 
 define('_IN_JOHNCMS', 1);
 
+exit;
+
 $headmod = 'userban';
 $textl = 'Список нарушений';
 require_once ('../incfiles/core.php');
 require_once ('../incfiles/head.php');
+
+if (!$user_id)
+{
+    require_once ('../incfiles/head.php');
+    display_error('Только для зарегистрированных посетителей');
+    require_once ('../incfiles/end.php');
+    exit;
+}
 
 if ($act == "ban")
 {
@@ -69,10 +79,9 @@ if ($act == "bandet")
     // Детали отдельного бана                                 //
     ////////////////////////////////////////////////////////////
     require_once ('../incfiles/ban.php');
-    $id = isset($_GET['id']) ? intval($_GET['id']) : '';
     $req = mysql_query("SELECT `cms_ban_users`.*, `users`.`name`, `users`.`name_lat`
-			FROM `cms_ban_users` LEFT JOIN `users` ON `cms_ban_users`.`user_id` = `users`.`id`
-			WHERE `cms_ban_users`.`id`='" . $id . "';");
+    FROM `cms_ban_users` LEFT JOIN `users` ON `cms_ban_users`.`user_id` = `users`.`id`
+    WHERE `cms_ban_users`.`id`='" . $id . "';");
     if (mysql_num_rows($req) != 0)
     {
         $res = mysql_fetch_array($req);

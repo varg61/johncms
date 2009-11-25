@@ -16,26 +16,126 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'userban';
-$textl = 'Список нарушений';
+$headmod = 'anketa';
+$textl = 'Редактирование Анкеты';
 require_once ('../incfiles/core.php');
 require_once ('../incfiles/head.php');
 
-if ($user == $user_id)
+if (!$user_id)
+{
+    display_error('Только для зарегистрированных посетителей');
+    require_once ('../incfiles/end.php');
+    exit;
+}
+
+if ($id && $id != $user_id && $dostadm)
+{
+    // Если был запрос на юзера, то получаем его данные
+    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
+    if (mysql_num_rows($req))
+    {
+        $user = mysql_fetch_assoc($req);
+        if ($user['rights'] > $datauser['rights'])
+        {
+            // Если не хватает прав, выводим ошибку
+            echo display_error('Вы не можете редактировать анкету старшего Вас по должности');
+            require_once ('../incfiles/end.php');
+            exit;
+        }
+    } else
+    {
+        echo display_error('Такого пользователя не существует');
+        require_once ('../incfiles/end.php');
+        exit;
+    }
+} else
+{
+    $id = false;
+    $user = $datauser;
+}
+//TODO: Добавить имя того, кого редактируем
+echo '<div class="phdr"><b>Редактирование ' . ($id && $id != $user_id ? '' : 'личной ') . 'анкеты</b></div>';
+if (isset($_POST['submit']))
+{
+    $error = array();
+    $user['imname'] = isset($_POST['imname']) ? check(mb_substr($_POST['imname'], 0, 25)) : '';
+    $user['live'] = isset($_POST['live']) ? check(mb_substr($_POST['live'], 0, 50)) : '';
+    $user['dayb'] = isset($_POST['dayb']) ? intval($_POST['dayb']) : 0;
+    $user['monthb'] = isset($_POST['monthb']) ? intval($_POST['monthb']) : 0;
+    $user['yearofbirth'] = isset($_POST['yearofbirth']) ? intval($_POST['yearofbirth']) : 0;
+    $user['about'] = isset($_POST['about']) ? check(mb_substr($_POST['about'], 0, 500)) : '';
+    $user['mibile'] = isset($_POST['mibile']) ? check(mb_substr($_POST['mibile'], 0, 40)) : '';
+    //TODO: Разобраться с проверкой майла
+    $user['mail'] = isset($_POST['mail']) ? check(mb_substr($_POST['mail'], 0, 40)) : '';
+    $user['icq'] = isset($_POST['icq']) ? intval($_POST['icq']) : 0;
+    $user['skype'] = isset($_POST['skype']) ? check(mb_substr($_POST['skype'], 0, 40)) : '';
+    $user['jabber'] = isset($_POST['jabber']) ? check(mb_substr($_POST['jabber'], 0, 40)) : '';
+    $user['www'] = isset($_POST['www']) ? check(mb_substr($_POST['www'], 0, 40)) : '';
+    if ($user['dayb'] || $user['monthb'] || $user['yearofbirth'])
+    {
+        if ($user['dayb'] < 1 || $user['dayb'] > 31 || $user['monthb'] < 1 || $user['monthb'] > 12)
+            $error[] = 'Дата рождения указана неправильно';
+    }
+    if ($user['icq'] && ($user['icq'] < 10000 || $user['icq'] > 999999999))
+        $error[] = 'Номер ICQ должен состоять минимум из 5 цифр и максимум из 10';
+    if (!$error)
+    {
+        mysql_query("UPDATE `users` SET
+        `imname` = '" . $user['imname'] . "',
+        `live` = '" . $user['live'] . "',
+        `dayb` = '" . $user['dayb'] . "',
+        `monthb` = '" . $user['monthb'] . "',
+        `yearofbirth` = '" . $user['yearofbirth'] . "',
+        `about` = '" . $user['about'] . "',
+        `mibile` = '" . $user['mibile'] . "',
+        `mail` = '" . $user['mail'] . "',
+        `icq` = '" . $user['icq'] . "',
+        `skype` = '" . $user['skype'] . "',
+        `jabber` = '" . $user['jabber'] . "',
+        `www` = '" . $user['www'] . "'
+        WHERE `id` = '" . $user['id'] . "'");
+        echo '<div class="gmenu">Данные сохранены</div>';
+    } else
+    {
+        echo display_error($error);
+    }
+}
+echo '<form action="my_data.php?id=' . $user['id'] . '" method="post"><div class="menu">';
+// Личные данные
+echo '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>';
+echo '<li><u>Имя</u><br /><input type="text" value="' . $user['imname'] . '" name="imname" /></li>';
+echo '<li><u>Дата рождения</u> (д.м.г)<br />';
+echo '<input type="text" value="' . $user['dayb'] . '" size="2" maxlength="2" name="dayb" />.';
+echo '<input type="text" value="' . $user['monthb'] . '" size="2" maxlength="2" name="monthb" />.';
+echo '<input type="text" value="' . $user['yearofbirth'] . '" size="4" maxlength="4" name="yearofbirth" /></li>';
+echo '<li><u>Город</u><br /><input type="text" value="' . $user['live'] . '" name="live" /></li>';
+echo '<li><u>О себе</u><br /><textarea cols="20" rows="4" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></li>';
+echo '</ul></p>';
+// Связь
+echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&nbsp;Связь</h3><ul>';
+echo '<li><u>Тел. номер</u><br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /></li>';
+echo '<li><u>E-mail</u><br /><input type="text" value="' . $user['mail'] . '" name="mail" /></li>';
+echo '<li><u>ICQ</u><br /><input type="text" value="' . $user['icq'] . '" name="icq" size="10" maxlength="10" /></li>';
+echo '<li><u>Skype</u><br /><input type="text" value="' . $user['skype'] . '" name="skype" /></li>';
+echo '<li><u>Jabber</u><br /><input type="text" value="' . $user['jabber'] . '" name="jabber" /></li>';
+echo '<li><u>Сайт</u><br /><input type="text" value="' . $user['www'] . '" name="www" /></li>';
+echo '</ul></p></div>';
+// Административные функции
+if ($dostadm)
+{
+    echo '<div class="rmenu">';
+    echo '</div>';
+}
+echo '<div class="gmenu"><input type="submit" value="Сохранить" name="submit" /></div>';
+echo '</form>';
+echo '<div class="phdr">&nbsp;</div>';
+echo '<p><a href="anketa.php' . ($id ? '?id=' . $id : '') . '">В анкету</a></p>';
+require_once ('../incfiles/end.php');
+
+if ($user111)
 {
     switch ($act)
     {
-        case 'name':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editname' method='post'>Изменить имя(max. 15):<br/><input type='text' name='nname' value='" . $arr['imname'] .
-                "'/><br/><input type='submit'  value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editname':
-            $var = check(mb_substr(trim($_POST['nname']), 0, 20));
-            mysql_query("UPDATE `users` SET `imname` = '$var' WHERE `id` = '$user_id'");
-            echo '<p>Принято: ' . $var . '<br/><a href="anketa.php?user=' . $user_id . '">Продолжить</a></p>';
-            break;
-
         case 'par':
             echo '<div class="phdr">Смена пароля</div>';
             echo '<form action="anketa.php?user=' . $user_id . '&amp;act=editpar" method="post">';
@@ -90,117 +190,6 @@ if ($user == $user_id)
             unset($_SESSION['ups']);
             setcookie('cuid', '');
             setcookie('cups', '');
-            break;
-
-        case 'gor':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editgor' method='post'>Изменить город(max. 20):<br/><input type='text' name='ngor' value='" . $arr['live'] .
-                "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editgor':
-            $var = check(mb_substr(trim($_POST['ngor']), 0, 20));
-            mysql_query("UPDATE `users` SET `live` = '$var' WHERE `id` = '$user_id'");
-            echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-            break;
-
-        case 'inf':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editinf' method='post'>Изменить инфу(max. 500):<br/><textarea cols=\"20\" rows=\"4\" name=\"ninf\">" . $arr['about'] .
-                "</textarea><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editinf':
-            $var = check(mb_substr(trim($_POST['ninf']), 0, 500));
-            mysql_query("UPDATE `users` SET `about` = '$var' WHERE `id` = '$user_id'");
-            echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-            break;
-
-        case 'icq':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editicq' method='post'>Изменить ICQ:<br/><input type='text' name='nicq' value='" . $arr['icq'] . "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" .
-                $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editicq':
-            $var = intval(substr($_POST['nicq'], 0, 9));
-            mysql_query("UPDATE `users` SET `icq` = '$var' WHERE `id` = '$user_id'");
-            echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-            break;
-
-        case 'skype':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editskype' method='post'>Изменить Skype(max. 30):<br/><input type='text' name='skype' value='" . $arr['skype'] .
-                "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editskype':
-            $var = check(mb_substr(trim($_POST['skype']), 0, 30));
-            mysql_query("UPDATE `users` SET `skype` = '$var' WHERE `id` = '$user_id'");
-            echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-            break;
-
-        case 'jabber':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editjabber' method='post'>Изменить Jabber(max. 30):<br/><input type='text' name='jabber' value='" . $arr['jabber'] .
-                "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editjabber':
-            $var = check(mb_substr(trim($_POST['jabber']), 0, 30));
-            mysql_query("UPDATE `users` SET `jabber` = '$var' WHERE `id` = '$user_id'");
-            echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-            break;
-
-        case 'mobila':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editmobila' method='post'>Изменить номер телефона (max.20):<br/><input type='text' name='nmobila' value='" . $arr['mibile'] .
-                "' /><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editmobila':
-            $var = check(mb_substr(trim($_POST['nmobila']), 0, 20));
-            mysql_query("update `users` set `mibile` = '$var' where id='$user_id'");
-            echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-            break;
-
-        case 'dr':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editdr' method='post'>Изменить дату рождения:<br/><select name='user_day' class='textbox'><option>$arr[dayb]</option>";
-            $i = 1;
-            while ($i <= 31)
-            {
-                echo "<option value='" . $i . "'>$i</option>";
-                ++$i;
-            }
-            $mnt = $arr['monthb'];
-            echo "</select><select name='user_month' class='textbox'><option value='" . $mnt . "'>$mesyac[$mnt]</option>";
-            $i = 1;
-            while ($i <= 12)
-            {
-                echo "<option value='" . $i . "'>$mesyac[$i]</option>";
-                ++$i;
-            }
-            echo "</select><select name='user_year' class='textbox'><option>$arr[yearofbirth]</option>";
-            $i = 1950;
-            while ($i <= 2000)
-            {
-                echo "<option value='" . $i . "'>$i</option>";
-                ++$i;
-            }
-            echo "</select><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editdr':
-            $user_day = intval($_POST['user_day']);
-            $user_month = intval($_POST['user_month']);
-            $user_year = intval($_POST['user_year']);
-            mysql_query("update `users` set dayb='" . $user_day . "', monthb='" . $user_month . "' ,yearofbirth='" . $user_year . "' where id='" . $_SESSION['uid'] . "';");
-            echo "Принято: $user_day $mesyac[$user_month] $user_year<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-            break;
-
-        case 'site':
-            echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editsite' method='post'>Изменить сайт(max. 50):<br/><input type='text' name='nsite' value='" . (empty($arr['www']) ? 'http://' : $arr['www']) .
-                "'/><br/><input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            break;
-
-        case 'editsite':
-            $var = check(mb_substr(trim($_POST['nsite']), 0, 50));
-            mysql_query("UPDATE `users` SET `www` = '$var' WHERE `id` = '$user_id'");
-            echo "Принято: $var<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
             break;
 
         case 'mail':
@@ -354,7 +343,5 @@ if ($user == $user_id)
             break;
     }
 }
-
-require_once ('../incfiles/end.php');
 
 ?>

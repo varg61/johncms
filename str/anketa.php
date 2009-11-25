@@ -17,70 +17,65 @@
 define('_IN_JOHNCMS', 1);
 
 $headmod = 'anketa';
-$textl = 'Анкета';
 require_once ('../incfiles/core.php');
 
 if (!$user_id)
 {
-    header('Location: ../index.php');
+    require_once ('../incfiles/head.php');
+    display_error('Только для зарегистрированных посетителей');
+    require_once ('../incfiles/end.php');
     exit;
 }
 
-require_once ('../incfiles/head.php');
-$user = isset($_GET['user']) ? intval($_GET['user']) : '';
-
-if ($user)
+if ($id && $id != $user_id)
 {
     // Если был запрос на юзера, то получаем его данные
-    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
     if (mysql_num_rows($req))
     {
-        $datauser = mysql_fetch_assoc($req);
+        $user = mysql_fetch_assoc($req);
+        $textl = 'Анкета: ' . $user['name'];
     } else
     {
+        require_once ('../incfiles/head.php');
         echo display_error('Такого пользователя не существует');
         require_once ("../incfiles/end.php");
         exit;
     }
+} else
+{
+    $textl = 'Личная анкета';
+    $user = $datauser;
 }
+
+require_once ('../incfiles/head.php');
 
 ////////////////////////////////////////////////////////////
 // Выводим анкету пользователя                            //
 ////////////////////////////////////////////////////////////
-echo '<div class="phdr"><b>' . ($user ? 'Анкета пользователя' : 'Моя анкета') . '</b></div>';
-if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon)
+echo '<div class="phdr"><b>' . ($id ? 'Анкета пользователя' : 'Моя анкета') . '</b></div>';
+if ($user['dayb'] == $day && $user['monthb'] == $mon)
 {
     echo '<div class="gmenu">ИМЕНИНЫ!!!</div>';
 }
-echo '<div class="menu"><img src="../theme/' . $set_user['skin'] . '/images/' . ($datauser['sex'] == 'm' ? 'm' : 'f') . ($datauser['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
-echo '<b>' . $datauser['name'] . '</b> (id: ' . $datauser['id'] . ')';
-$ontime = $datauser['lastdate'];
-$ontime2 = $ontime + 300;
-$preg = $datauser['preg'];
-$regadm = $datauser['regadm'];
-if ($realtime > $ontime2)
+echo '<div class="gmenu"><p><h3><img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'f') . ($user['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') .
+    ' height="16" class="left"/>&nbsp;';
+echo '<b>' . $user['name'] . '</b> (id: ' . $user['id'] . ')';
+if ($realtime > $user['lastdate'] + 300)
 {
     echo '<span class="red"> [Off]</span>';
-    if ($datauser['sex'] == "m")
-    {
-        $lastvisit = 'был: ';
-    }
-    if ($datauser['sex'] == "zh")
-    {
-        $lastvisit = 'была: ';
-    }
-    $lastvisit = $lastvisit . date("d.m.Y (H:i)", $datauser['lastdate']);
+    $lastvisit = date("d.m.Y (H:i)", $user['lastdate']);
 } else
 {
     echo '<span class="green"> [ON]</span>';
 }
-if (!empty($datauser['status']))
-    echo '<br /><img src="../images/star.gif" alt=""/>&nbsp;<span class="status">' . $datauser['status'] . '</span>';
-echo '</div>';
-echo '<div class="menu"><u>Логин</u>: <b>' . $datauser['name_lat'] . '</b></div>';
-if ($datauser['rights'] != 0)
+echo '</h3><ul>';
+if (!empty($user['status']))
+    echo '<li><span class="gray"><u>Статус</u>: </span>' . $user['status'] . '</li>';
+echo '<li><span class="gray"><u>Логин</u>:</span> <b>' . $user['name_lat'] . '</b></li>';
+if ($user['rights'] != 0)
 {
-    echo '<div class="menu"><u>Должность</u>: ';
+    echo '<li><span class="gray"><u>Должность</u>:</span> ';
     switch ($datauser['rights'])
     {
         case 1:
@@ -105,156 +100,140 @@ if ($datauser['rights'] != 0)
             echo 'Админ';
             break;
     }
-    echo '</div>';
+    echo '</li>';
 }
 if (isset($lastvisit))
-    echo '<div class="menu">Последний раз ' . $lastvisit . '</div>';
-echo '<div class="bmenu">Личные данные</div>';
-echo '<div class="menu"><u>Имя</u>: ' . $datauser['imname'] . '</div>';
-if (!empty($datauser['dayb']))
+    echo '<li><span class="gray"><u>Последний визит</u>:</span> ' . $lastvisit . '</li>';
+if ($dostmod)
 {
-    echo '<div class="menu"><u>Дата рождения</u>: ' . $datauser['dayb'] . '&nbsp;' . $mesyac[$datauser['monthb']] . '&nbsp;' . $datauser['yearofbirth'] . '</div>';
+    echo '<li><span class="gray"><u>UserAgent</u>:</span> ' . $user['browser'] . '</li>';
+    echo '<li><span class="gray"><u>Адрес IP</u>:</span> ' . long2ip($user['ip']) . '</li>';
+    if ($user['immunity'])
+        echo '<li><span class="green"><b>ИММУНИТЕТ</b></span></li>';
 }
-if (!empty($datauser['live']))
-{
-    echo '<div class="menu"><u>Город</u>: ' . $datauser['live'] . '</div>';
-}
-if (!empty($datauser['about']))
-{
-    echo '<div class="menu"><u>О себе</u>: ' . smileys(tags($datauser['about'])) . '</div>';
-}
-$req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $datauser['name'] . "' LIMIT 1;");
-if (mysql_num_rows($req) == 1)
+echo '</ul></p></div><div class="menu">';
+// Личные данные
+$out = '';
+$req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $user['name'] . "' LIMIT 1;");
+if (mysql_num_rows($req))
 {
     $res = mysql_fetch_array($req);
-    echo '<div class="gmenu"><a href="../gallery/index.php?id=' . $res['id'] . '">Личный альбом</a></div>';
+    $out .= '<li><a href="../gallery/index.php?id=' . $res['id'] . '">Личный альбом</a></li>';
 }
-echo '<div class="bmenu">Связь</div>';
-if (!empty($datauser['mibile']))
-    echo '<div class="menu"><u>Тел. номер</u>: ' . $datauser['mibile'] . '</div>';
-if ($datauser['mailact'] == 1)
+if (!empty($user['imname']))
+    $out .= '<li><span class="gray"><u>Имя</u>:</span> ' . $user['imname'] . '</li>';
+if (!empty($user['dayb']))
+    $out .= '<li><span class="gray"><u>Дата рождения</u>:</span> ' . $user['dayb'] . '&nbsp;' . $mesyac[$user['monthb']] . '&nbsp;' . $user['yearofbirth'] . '</li>';
+if (!empty($user['live']))
+    $out .= '<li><span class="gray"><u>Город</u>:</span> ' . $user['live'] . '</li>';
+if (!empty($user['about']))
+    $out .= '<li><span class="gray"><u>О себе</u>:<br /></span> ' . smileys(tags($user['about'])) . '</li>';
+if (!empty($out))
 {
-    if (!empty($datauser['mail']))
+    echo '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>';
+    echo $out;
+    echo '</ul></p>';
+}
+// Связь
+$out = '';
+if (!empty($user['mibile']))
+    $out .= '<li><span class="gray"><u>Тел. номер</u>:</span> ' . $user['mibile'] . '</li>';
+if ($user['mailact'] == 1)
+{
+    if (!empty($user['mail']))
     {
-        echo '<div class="menu"><u>E-mail</u>: ';
-        if ($datauser['mailvis'] == 1)
+        $out .= '<li><span class="gray"><u>E-mail</u>:</span> ';
+        if ($user['mailvis'] == 1)
         {
-            echo $datauser['mail'] . '</div>';
+            $out .= $user['mail'] . '</li>';
         } else
         {
-            echo 'скрыт</div>';
+            $out .= 'скрыт</li>';
         }
     }
 }
-if (!empty($datauser['icq']))
-    echo '<div class="menu"><u>ICQ</u>:&nbsp;<img src="http://web.icq.com/whitepages/online?icq=' . $datauser['icq'] . '&amp;img=5" width="12" height="12" alt=""/>&nbsp;' . $datauser['icq'] . '</div> ';
-if (!empty($datauser['skype']))
-    echo '<div class="menu"><u>Skype</u>:&nbsp;' . $datauser['skype'] . '</div> ';
-if (!empty($datauser['jabber']))
-    echo '<div class="menu"><u>Jabber</u>:&nbsp;' . $datauser['jabber'] . '</div> ';
-if (!empty($datauser['www']))
+if (!empty($user['icq']))
+    $out .= '<li><span class="gray"><u>ICQ</u>:</span>&nbsp;<img src="http://web.icq.com/whitepages/online?icq=' . $user['icq'] . '&amp;img=5" width="12" height="12" alt=""/>&nbsp;' . $user['icq'] . '</li>';
+if (!empty($user['skype']))
+    $out .= '<li><span class="gray"><u>Skype</u>:</span>&nbsp;' . $user['skype'] . '</li>';
+if (!empty($user['jabber']))
+    $out .= '<li><span class="gray"><u>Jabber</u>:</span>&nbsp;' . $user['jabber'] . '</li>';
+if (!empty($user['www']))
+    $out .= '<li><span class="gray"><u>Сайт</u>:</span> ' . tags($user['www']) . '</li>';
+if (!empty($out))
 {
-    //$sait = str_replace("http://", "", $datauser['www']);
-    echo '<div class="menu"><u>Сайт</u>: ' . tags($datauser['www']) . '</div>';
+    echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&nbsp;Связь</h3><ul>';
+    echo $out;
+    echo '</ul></p>';
 }
-echo '<div class="bmenu">Статистика</div><div class="menu">';
-if ($datauser['sex'] == "m")
+// Статистика
+echo '<p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
+if ($dostadm)
 {
-    echo "Зарегистрирован";
+    if (!$user['preg'] && empty($user['regadm']))
+        echo '<li>Ожидает подтверждения регистрации</li>';
+    elseif (!$user['preg'] && !empty($user['regadm']))
+        echo '<li>Регистрацию отклонил ' . $user['regadm'] . '</li>';
+    elseif ($user['preg'] && !empty($user['regadm']))
+        echo '<li>Регистрацию подтвердил ' . $user['regadm'] . '</li>';
+    else
+        echo '<li>Свободная регистрация</li>';
 }
-if ($datauser['sex'] == "zh")
-{
-    echo "Зарегистрирована";
-}
-echo ': ' . date("d.m.Y", $datauser['datereg']);
-if ($dostadm == "1")
-{
-    echo '<br />';
-    if ($preg == 0 && $regadm == "")
-    {
-        echo "Ожидает подтверждения регистрации<br/>";
-    }
-    if ($preg == 0 && $regadm != "")
-    {
-        echo "Регистрацию отклонил $regadm<br/>";
-    }
-    if ($preg == 1 && $regadm != "")
-    {
-        echo "Регистрацию подтвердил $regadm<br/>";
-    }
-    if ($preg == 1 && $regadm == "")
-    {
-        echo "Регистрация без подтверждения<br/>";
-    }
-}
-echo '</div><div class="menu">';
-if ($datauser['sex'] == "m")
-{
-    echo 'Всего пробыл';
-}
-if ($datauser['sex'] == "zh")
-{
-    echo 'Всего пробыла';
-}
-echo ' на сайте: ' . timecount($datauser['total_on_site']) . '</div>';
-
+echo '<li><span class="gray"><u>' . ($user['sex'] == 'm' ? 'Зарегистрирован' : 'Зарегистрирована') . '</u>:</span> ' . date("d.m.Y", $user['datereg']) . '</li>';
+echo '<li><span class="gray"><u>' . ($user['sex'] == 'm' ? 'Пробыл' : 'Пробыла') . ' на сайте</u>:</span> ' . timecount($user['total_on_site']) . '</li>';
+echo '<li><a href="my_stat.php?id=' . $user['id'] . '">Статистика активности</a></li>';
+echo '<li><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Последние записи</a></li>';
 // Если были нарушения, показываем ссылку на их историю
-$req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user . "';");
-$res = mysql_num_rows($req);
-if ($res > 0)
-    echo '<div class="rmenu">Нарушений: <a href="anketa.php?act=ban&amp;user=' . $user . '">' . $res . '</a></div>';
-
-echo '<div class="bmenu"><a href="my_stat.php?id=' . $datauser['id'] . '">Активность юзера</a></div><p>';
-if (!empty($_SESSION['uid']))
+$ban = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+if ($ban)
+    echo '<li><a href="my_ban.php?act=ban">Нарушения</a>&nbsp;<span class="red">(' . $ban . ')</span></li>';
+echo '</ul></p></div>';
+echo '<div class="phdr">' . (!$id || $id == $user_id || $dostadm ? '<a href="my_data.php' . ($id ? '?id=' . $id : '') . '">Редактировать</a>' : '&nbsp;');
+if ($dostmod)
 {
-    $contacts = mysql_query("select * from `privat` where me='" . $login . "' and cont='" . $datauser['name'] . "';");
-    $conts = mysql_num_rows($contacts);
-    if ($conts != 1)
-    {
-        echo "<a href='cont.php?act=edit&amp;id=" . $user . "&amp;add=1'>Добавить в контакты</a><br/>";
-    } else
-    {
-        echo "<a href='cont.php?act=edit&amp;id=" . $user . "'>Удалить из контактов</a><br/>";
-    }
-    $igns = mysql_query("select * from `privat` where me='" . $login . "' and ignor='" . $datauser['name'] . "';");
-    $ignss = mysql_num_rows($igns);
-    if ($igns != 1)
-    {
-        if ($datauser['rights'] == 0 && $datauser['name'] != $nickadmina && $datauser['name'] != $nickadmina)
-        {
-            echo "<a href='ignor.php?act=edit&amp;id=" . $user . "&amp;add=1'>Добавить в игнор</a><br/>";
-        }
-    } else
-    {
-        echo "<a href='ignor.php?act=edit&amp;id=" . $user . "'>Удалить из игнора</a><br/>";
-    }
-    echo "<a href='pradd.php?act=write&amp;adr=" . $datauser['id'] . "'>Написать в приват</a></p>";
-}
-
-if ($dostmod == 1)
-{
-    echo '<p>IP: ' . long2ip($datauser['ip']) . '<br/>Browser: ' . $datauser['browser'] . '</p><p>';
-    if ($datauser['immunity'] == 1)
-    {
-        echo '[!]&nbsp;Иммунитет<br />';
-    } else
+    if ($id && !$user['immunity'] && $id != $user_id)
     {
         if ($dostsmod == 1)
         {
-            echo "<a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $datauser['id'] . "'>Банить</a><br/>";
+            echo ' | <a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $user['id'] . '">Банить</a>';
         } elseif ($dostfmod == 1 && isset($_GET['fid']))
         {
             $fid = intval($_GET['fid']);
-            echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $datauser['id'] . '&amp;fid=' . $fid . '">Пнуть из форума</a><br/>';
+            echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $user['id'] . '&amp;fid=' . $fid . '">Пнуть из форума</a><br/>';
+        }
+        if ($dostadm)
+        {
+            echo ' | <a href="../' . $admp . '/editusers.php?act=del&amp;user=' . $user['id'] . '">Удалить</a><br/>';
         }
     }
-    if ($dostadm == "1")
+}
+echo '</div>';
+if ($id && $id != $user_id)
+{
+    echo '<p>';
+    // Контакты
+    $contacts = mysql_query("select * from `privat` where me='" . $login . "' and cont='" . $user['name'] . "'");
+    $conts = mysql_num_rows($contacts);
+    if ($conts != 1)
+        echo "<a href='cont.php?act=edit&amp;id=" . $id . "&amp;add=1'>Добавить в контакты</a><br/>";
+    else
+        echo "<a href='cont.php?act=edit&amp;id=" . $id . "'>Удалить из контактов</a><br/>";
+    // Игнор
+    $igns = mysql_query("select * from `privat` where me='" . $login . "' and ignor='" . $user['name'] . "'");
+    $ignss = mysql_num_rows($igns);
+    if ($igns != 1)
     {
-        echo "<a href='../" . $admp . "/editusers.php?act=edit&amp;user=" . $datauser['id'] . "'>Редактировать</a><br/><a href='../" . $admp . "/editusers.php?act=del&amp;user=" . $datauser['id'] . "'>Удалить</a><br/>";
+        if ($user['rights'] == 0 && $user['name'] != $nickadmina && $user['name'] != $nickadmina)
+        {
+            echo "<a href='ignor.php?act=edit&amp;id=" . $id . "&amp;add=1'>Добавить в игнор</a><br/>";
+        }
+    } else
+    {
+        echo "<a href='ignor.php?act=edit&amp;id=" . $id . "'>Удалить из игнора</a><br/>";
     }
-    echo '</p>';
+    echo "<a href='pradd.php?act=write&amp;adr=" . $user['id'] . "'>Написать в приват</a></p>";
 }
 
-require_once ("../incfiles/end.php");
+require_once ('../incfiles/end.php');
 
 ?>

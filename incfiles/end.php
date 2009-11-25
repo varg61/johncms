@@ -64,6 +64,7 @@ ob_end_flush();
 // Блок Mobileads.ru
 if (!isset($_SESSION['mad_time']) || $_SESSION['mad_time'] < ($realtime - 60 * 3))
 {
+    $out = '';
     $mad_socketTimeout = 2; // таймаут соединения с сервером mobileads.ru
     ini_set("default_socket_timeout", $mad_socketTimeout);
     $mad_siteId = 2106;

@@ -67,7 +67,7 @@ if ($dostadm == 1)
                     echo "<a href='main.php'>В админку</a><br/>";
                 } else
                 {
-                    echo "Вы уверены в удалении юзера $arr1[name]?<br/><a href='editusers.php?act=del&amp;user=" . $user . "&amp;yes'>Да</a> | <a href='../str/anketa.php?user=" . $user . "'>Нет</a><br/>";
+                    echo '<div class="rmenu"><p>Вы действительно хотите удалить юзера <b>'.$arr1['name'].'</b>?<br/><a href="editusers.php?act=del&amp;user=' . $user . '&amp;yes">Да</a> | <a href="../str/anketa.php?id=' . $user . '">Нет</a></p></div>';
                 }
             } else
             {
