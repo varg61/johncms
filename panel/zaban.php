@@ -375,7 +375,7 @@ if ($dostmod == 1)
                     echo '<div class="menu"><textarea cols="20" rows="4" name="reason"></textarea></div>';
                     echo '<div class="bmenu"><input type="submit" name="submit" value="Банить"/></div>';
                     echo '</form>';
-                    echo '<p><a href="../str/anketa.php?user=' . $id . '">Отмена</a></p>';
+                    echo '<p><a href="../str/anketa.php?id=' . $id . '">Отмена</a></p>';
                 }
             }
             break;

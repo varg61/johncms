@@ -71,11 +71,11 @@ if ($realtime > $user['lastdate'] + 300)
 }
 echo '</h3><ul>';
 if (!empty($user['status']))
-    echo '<li><span class="gray"><u>Статус</u>: </span>' . $user['status'] . '</li>';
-echo '<li><span class="gray"><u>Логин</u>:</span> <b>' . $user['name_lat'] . '</b></li>';
+    echo '<li><span class="gray">Статус: </span>' . $user['status'] . '</li>';
+echo '<li><span class="gray">Логин:</span> <b>' . $user['name_lat'] . '</b></li>';
 if ($user['rights'] != 0)
 {
-    echo '<li><span class="gray"><u>Должность</u>:</span> ';
+    echo '<li><span class="gray">Должность:</span> ';
     switch ($datauser['rights'])
     {
         case 1:
@@ -103,11 +103,11 @@ if ($user['rights'] != 0)
     echo '</li>';
 }
 if (isset($lastvisit))
-    echo '<li><span class="gray"><u>Последний визит</u>:</span> ' . $lastvisit . '</li>';
+    echo '<li><span class="gray">Последний визит:</span> ' . $lastvisit . '</li>';
 if ($dostmod)
 {
-    echo '<li><span class="gray"><u>UserAgent</u>:</span> ' . $user['browser'] . '</li>';
-    echo '<li><span class="gray"><u>Адрес IP</u>:</span> ' . long2ip($user['ip']) . '</li>';
+    echo '<li><span class="gray">UserAgent:</span> ' . $user['browser'] . '</li>';
+    echo '<li><span class="gray">Адрес IP:</span> ' . long2ip($user['ip']) . '</li>';
     if ($user['immunity'])
         echo '<li><span class="green"><b>ИММУНИТЕТ</b></span></li>';
 }
@@ -121,13 +121,13 @@ if (mysql_num_rows($req))
     $out .= '<li><a href="../gallery/index.php?id=' . $res['id'] . '">Личный альбом</a></li>';
 }
 if (!empty($user['imname']))
-    $out .= '<li><span class="gray"><u>Имя</u>:</span> ' . $user['imname'] . '</li>';
+    $out .= '<li><span class="gray">Имя:</span> ' . $user['imname'] . '</li>';
 if (!empty($user['dayb']))
-    $out .= '<li><span class="gray"><u>Дата рождения</u>:</span> ' . $user['dayb'] . '&nbsp;' . $mesyac[$user['monthb']] . '&nbsp;' . $user['yearofbirth'] . '</li>';
+    $out .= '<li><span class="gray">Дата рождения:</span> ' . $user['dayb'] . '&nbsp;' . $mesyac[$user['monthb']] . '&nbsp;' . $user['yearofbirth'] . '</li>';
 if (!empty($user['live']))
-    $out .= '<li><span class="gray"><u>Город</u>:</span> ' . $user['live'] . '</li>';
+    $out .= '<li><span class="gray">Город:</span> ' . $user['live'] . '</li>';
 if (!empty($user['about']))
-    $out .= '<li><span class="gray"><u>О себе</u>:<br /></span> ' . smileys(tags($user['about'])) . '</li>';
+    $out .= '<li><span class="gray">О себе:<br /></span> ' . smileys(tags($user['about'])) . '</li>';
 if (!empty($out))
 {
     echo '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>';
@@ -137,12 +137,12 @@ if (!empty($out))
 // Связь
 $out = '';
 if (!empty($user['mibile']))
-    $out .= '<li><span class="gray"><u>Тел. номер</u>:</span> ' . $user['mibile'] . '</li>';
+    $out .= '<li><span class="gray">Тел. номер:</span> ' . $user['mibile'] . '</li>';
 if ($user['mailact'] == 1)
 {
     if (!empty($user['mail']))
     {
-        $out .= '<li><span class="gray"><u>E-mail</u>:</span> ';
+        $out .= '<li><span class="gray">E-mail:</span> ';
         if ($user['mailvis'] == 1)
         {
             $out .= $user['mail'] . '</li>';
@@ -153,13 +153,13 @@ if ($user['mailact'] == 1)
     }
 }
 if (!empty($user['icq']))
-    $out .= '<li><span class="gray"><u>ICQ</u>:</span>&nbsp;<img src="http://web.icq.com/whitepages/online?icq='.$user['icq'].'&amp;img=5" width="18" height="18" alt="icq" align="middle"/>&nbsp;' . $user['icq'] . '</li>';
+    $out .= '<li><span class="gray">ICQ:</span>&nbsp;<img src="http://web.icq.com/whitepages/online?icq=' . $user['icq'] . '&amp;img=5" width="18" height="18" alt="icq" align="middle"/>&nbsp;' . $user['icq'] . '</li>';
 if (!empty($user['skype']))
-    $out .= '<li><span class="gray"><u>Skype</u>:</span>&nbsp;' . $user['skype'] . '</li>';
+    $out .= '<li><span class="gray">Skype:</span>&nbsp;' . $user['skype'] . '</li>';
 if (!empty($user['jabber']))
-    $out .= '<li><span class="gray"><u>Jabber</u>:</span>&nbsp;' . $user['jabber'] . '</li>';
+    $out .= '<li><span class="gray">Jabber:</span>&nbsp;' . $user['jabber'] . '</li>';
 if (!empty($user['www']))
-    $out .= '<li><span class="gray"><u>Сайт</u>:</span> ' . tags($user['www']) . '</li>';
+    $out .= '<li><span class="gray">Сайт:</span> ' . tags($user['www']) . '</li>';
 if (!empty($out))
 {
     echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&nbsp;Связь</h3><ul>';
@@ -179,8 +179,8 @@ if ($dostadm)
     else
         echo '<li>Свободная регистрация</li>';
 }
-echo '<li><span class="gray"><u>' . ($user['sex'] == 'm' ? 'Зарегистрирован' : 'Зарегистрирована') . '</u>:</span> ' . date("d.m.Y", $user['datereg']) . '</li>';
-echo '<li><span class="gray"><u>' . ($user['sex'] == 'm' ? 'Пробыл' : 'Пробыла') . ' на сайте</u>:</span> ' . timecount($user['total_on_site']) . '</li>';
+echo '<li><span class="gray">' . ($user['sex'] == 'm' ? 'Зарегистрирован' : 'Зарегистрирована') . ':</span> ' . date("d.m.Y", $user['datereg']) . '</li>';
+echo '<li><span class="gray">' . ($user['sex'] == 'm' ? 'Пробыл' : 'Пробыла') . ' на сайте:</span> ' . timecount($user['total_on_site']) . '</li>';
 echo '<li><a href="my_stat.php?id=' . $user['id'] . '">Статистика активности</a></li>';
 echo '<li><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Последние записи</a></li>';
 // Если были нарушения, показываем ссылку на их историю
@@ -193,9 +193,11 @@ if ($dostmod)
 {
     if ($id && !$user['immunity'] && $id != $user_id)
     {
+        if ($dostadm)
+            echo ' | ';
         if ($dostsmod == 1)
         {
-            echo ' | <a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $user['id'] . '">Банить</a>';
+            echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $user['id'] . '">Банить</a>';
         } elseif ($dostfmod == 1 && isset($_GET['fid']))
         {
             $fid = intval($_GET['fid']);

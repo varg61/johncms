@@ -140,6 +140,7 @@ switch ($act)
         // Блок настроек
         echo '<div class="bmenu"><p><h3><img src="images/settings.png" width="16" height="16" class="left" />&nbsp;Мои настройки</h3><ul>';
         echo '<li><a href="str/anketa.php">Моя анкета</a></li>';
+        echo '<li><a href="str/my_pass.php">Сменить пароль</a></li>';
         echo '<li><a href="str/my_set.php">Общие настройки</a></li>';
         echo '<li><a href="str/my_set.php?act=forum">Форум</a></li>';
         echo '<li><a href="str/my_set.php?act=chat">Чат</a></li>';
