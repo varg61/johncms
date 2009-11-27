@@ -23,6 +23,8 @@ $auto_pass = isset($_GET['p']) ? check($_GET['p']) : false;
 $form_login = isset($_POST['n']) ? check($_POST['n']) : false;
 $form_pass = isset($_POST['p']) ? check($_POST['p']) : false;
 
+sleep(6);
+
 if ($form_login && $form_pass)
 {
     // Если Логин через форму

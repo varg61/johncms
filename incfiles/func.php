@@ -164,7 +164,7 @@ function dload()
     $old = $realtime - (3 * 24 * 3600);
     $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0);
     if ($new > 0)
-        $total .= '/<span class="red">+' . $new . '</span>';
+        $total .= '&nbsp;/&nbsp;<span class="red"><a href="/download/?act=new">+' . $new . '</a></span>';
     return $total;
 }
 
@@ -183,7 +183,7 @@ function fgal($mod = 0)
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft'"), 0);
         $out = $total;
         if ($new > 0)
-            $out .= '/<span class="red">+' . $new . '</span>';
+            $out .= '&nbsp;/&nbsp;<span class="red"><a href="/gallery/index.php?act=new">+' . $new . '</a></span>';
     } else
     {
         $out = $new;
@@ -202,7 +202,7 @@ function stlib()
     $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
     $out = $countf;
     if ($countf1 > 0)
-        $out = $out . '/<span class="red">+' . $countf1 . '</span>';
+        $out = $out . '&nbsp;/&nbsp;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
     $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
     if ($dostlmod == '1' && ($countm > 0))
         $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> Мод:$countm</font></a>";

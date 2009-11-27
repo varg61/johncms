@@ -73,33 +73,11 @@ echo '</h3><ul>';
 if (!empty($user['status']))
     echo '<li><span class="gray">Статус: </span>' . $user['status'] . '</li>';
 echo '<li><span class="gray">Логин:</span> <b>' . $user['name_lat'] . '</b></li>';
-if ($user['rights'] != 0)
+if ($user['rights'])
 {
     echo '<li><span class="gray">Должность:</span> ';
-    switch ($datauser['rights'])
-    {
-        case 1:
-            echo 'Киллер';
-            break;
-        case 2:
-            echo 'Модер чата';
-            break;
-        case 3:
-            echo 'Модер форума';
-            break;
-        case 4:
-            echo 'Зам. админа по загрузкам';
-            break;
-        case 5:
-            echo 'Зам. админа по библиотеке';
-            break;
-        case 6:
-            echo 'Супермодератор';
-            break;
-        case 7:
-            echo 'Админ';
-            break;
-    }
+    $rights = array(1 => 'Киллер', 2 => 'Модер Чата', 3 => 'Модер Форума', 4 => 'Модер Загрузок', 5 => 'Модер Библиотеки', 6 => 'Супермодератор', 7 => 'Администратор', 9 => 'Супервизор');
+    echo '<span class="red"><b>' . $rights[$user['rights']] . '</b></span>';
     echo '</li>';
 }
 if (isset($lastvisit))

@@ -67,6 +67,7 @@ echo '<div class="phdr"><b>Редактирование ' . ($id && $id != $user
 if (isset($_POST['submit']))
 {
     $error = array();
+    // Данные юзера
     $user['imname'] = isset($_POST['imname']) ? check(mb_substr($_POST['imname'], 0, 25)) : '';
     $user['live'] = isset($_POST['live']) ? check(mb_substr($_POST['live'], 0, 50)) : '';
     $user['dayb'] = isset($_POST['dayb']) ? intval($_POST['dayb']) : 0;
@@ -80,6 +81,12 @@ if (isset($_POST['submit']))
     $user['skype'] = isset($_POST['skype']) ? check(mb_substr($_POST['skype'], 0, 40)) : '';
     $user['jabber'] = isset($_POST['jabber']) ? check(mb_substr($_POST['jabber'], 0, 40)) : '';
     $user['www'] = isset($_POST['www']) ? check(mb_substr($_POST['www'], 0, 40)) : '';
+    // Данные юзера (для Администраторов)
+    $user['immunity'] = isset($_POST['immunity']) ? 1 : 0;
+    $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
+    $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : 0;
+    if ($user['id'] == $user_id) // Запрещаем менять самому себе должность
+        $user['rights'] = $datauser['rights'];
     if ($user['dayb'] || $user['monthb'] || $user['yearofbirth'])
     {
         if ($user['dayb'] < 1 || $user['dayb'] > 31 || $user['monthb'] < 1 || $user['monthb'] > 12)
@@ -102,7 +109,15 @@ if (isset($_POST['submit']))
         `skype` = '" . $user['skype'] . "',
         `jabber` = '" . $user['jabber'] . "',
         `www` = '" . $user['www'] . "'
-        WHERE `id` = '" . $user['id'] . "'");
+        WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+        if ($dostadm)
+        {
+            mysql_query("UPDATE `users` SET
+            `immunity` = '" . $user['immunity'] . "',
+            `sex` = '" . $user['sex'] . "',
+            `rights` = '" . $user['rights'] . "'
+            WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+        }
         echo '<div class="gmenu">Данные сохранены</div>';
     } else
     {
@@ -141,141 +156,30 @@ if ($dostadm)
     echo '<input type="radio" value="m" name="sex" ' . ($user['sex'] == 'm' ? 'checked="checked"' : '') . '/>&nbsp;Мужской<br />';
     echo '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&nbsp;Женский</li>';
     echo '</ul></p>';
-    echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&nbsp;Должность на сайте</h3><ul>';
-    echo '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&nbsp;<b>Обычный юзер</b><br />';
-    echo '<input type="radio" value="1" name="rights" ' . ($user['rights'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;Киллер<br />';
-    echo '<input type="radio" value="2" name="rights" ' . ($user['rights'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;Модер чата<br />';
-    echo '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&nbsp;Модер форума<br />';
-    echo '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&nbsp;Модер по загрузкам<br />';
-    echo '<input type="radio" value="5" name="rights" ' . ($user['rights'] == 5 ? 'checked="checked"' : '') . '/>&nbsp;Модер библиотеки<br />';
-    echo '<input type="radio" value="6" name="rights" ' . ($user['rights'] == 6 ? 'checked="checked"' : '') . '/>&nbsp;Супермодератор<br />';
-    if ($dostsadm)
+    if ($user['id'] != $user_id)
     {
-        echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&nbsp;Администратор<br />';
-        echo '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&nbsp;<span class="red"><b>Супервизор</b></span><br />';
+        echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&nbsp;Должность на сайте</h3><ul>';
+        echo '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&nbsp;<b>Обычный юзер</b><br />';
+        echo '<input type="radio" value="1" name="rights" ' . ($user['rights'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;Киллер<br />';
+        echo '<input type="radio" value="2" name="rights" ' . ($user['rights'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;Модер чата<br />';
+        echo '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&nbsp;Модер форума<br />';
+        echo '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&nbsp;Модер по загрузкам<br />';
+        echo '<input type="radio" value="5" name="rights" ' . ($user['rights'] == 5 ? 'checked="checked"' : '') . '/>&nbsp;Модер библиотеки<br />';
+        echo '<input type="radio" value="6" name="rights" ' . ($user['rights'] == 6 ? 'checked="checked"' : '') . '/>&nbsp;Супермодератор<br />';
+        if ($dostsadm)
+        {
+            echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&nbsp;Администратор<br />';
+            echo '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&nbsp;<span class="red"><b>Супервизор</b></span><br />';
+        }
+        echo '</ul></p>';
     }
-    echo '</ul></p></div>';
+    echo '</div>';
 }
 echo '<div class="gmenu"><input type="submit" value="Сохранить" name="submit" /></div>';
 echo '</form>';
 echo '<div class="phdr">&nbsp;</div>';
 echo '<p><a href="anketa.php' . ($id ? '?id=' . $id : '') . '">В анкету</a></p>';
+
 require_once ('../incfiles/end.php');
-
-exit;
-
-switch ($act111)
-{
-    case 'mail':
-        if ($arr['mailact'] == 0)
-        {
-            echo 'Ваш адрес e-mail необходимо<a href="anketa.php?act=activmail&amp;user=' . $user_id . '"> активировать</a><br/>
-(<a href="anketa.php?act=helpactiv&amp;user=' . $user_id . '">Зачем это нужно?</a>)<br/>';
-        }
-        echo "<form action='anketa.php?user=" . $user_id . "&amp;act=editmail' method='post'>Изменить E-mail(max. 50):<br/><input type='text' name='nmail' value='" . $arr['mail'] . "'/><br/>";
-        if ($arr['mailact'] == 1)
-        {
-            switch ($arr['mailvis'])
-            {
-                case 1:
-                    echo "<input type='checkbox' name='nmailvis' value='0'/>Скрыть<br/>";
-                    break;
-                case 0:
-                    echo "<input type='checkbox' name='nmailvis' value='1'/>Показать<br/>";
-                    break;
-            }
-        }
-        echo "<input type='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-        if ($arr['mailact'] == 0)
-        {
-            echo "<a href='anketa.php?act=activmail&amp;user=" . $user_id . "&amp;continue'>Продолжить активацию</a><br/>";
-        }
-        break;
-
-    case 'helpactiv':
-        include ("../pages/actmail.$ras_pages");
-        echo "<a href='anketa.php?act=mail'>Назад</a><br/>";
-        break;
-
-    case 'editmail':
-        $nmail = htmlspecialchars($_POST['nmail']);
-        if (!eregi("^[a-z0-9\._-]+@[a-z0-9\._-]+\.[a-z]{2,4}\$", $nmail))
-        {
-            echo "Некорректный формат e-mail адреса!";
-            echo "<a href='anketa.php?action=mail'>Повторить</a><br/>";
-            require_once ("../incfiles/end.php");
-            exit;
-        }
-        $nmail = mb_substr($nmail, 0, 50);
-        $nmailvis = intval($_POST['nmailvis']);
-        if ($nmail != $arr['mail'])
-        {
-            $nmailact = 0;
-        } else
-        {
-            $nmailact = $arr['mailact'];
-        }
-        mysql_query("UPDATE `users` SET
-				`mail`='" . mysql_real_escape_string($nmail) . "',
-				`mailvis`='" . $nmailvis . "',
-				`mailact`='" . $nmailact . "'
-				where `id`='" . $user_id . "';");
-        echo "Принято: $nmail<br/><a href='anketa.php?user=" . $user_id . "'>Продолжить</a><br/>";
-        break;
-
-    case 'activmail':
-        if (isset($_GET['continue']))
-        {
-            if (isset($_POST['submit']))
-            {
-                if (intval($_POST['provact']) == $arr[kod])
-                {
-
-                    mysql_query("update `users` set `mailact`='1' where `id`='" . $user_id . "';");
-                    unset($_SESSION['activ']);
-                    echo "E-mail адрес успешно активирован<br/>";
-                    echo "<a href='anketa.php?user=" . $user_id . "'>В анкету</a><br/>";
-                } else
-                {
-                    echo "Неверный код<br/>";
-                    echo "<a href='anketa.php?act=activmail&amp;user=" . $user_id . "&amp;continue'>Повторить</a><br/>";
-                }
-            } else
-            {
-                echo "<form action='anketa.php?user=" . $user_id .
-                    "&amp;act=activmail&amp;continue' method='post'>Код активации:<br/><input type='text' name='provact'/><br/><input type='submit' name='submit' value='ok'/></form><br/><a href='anketa.php?user=" . $user_id . "'>Назад</a><br/>";
-            }
-            require ("../incfiles/end.php");
-            exit;
-        }
-        if ($_SESSION['activ'] != 1)
-        {
-            require_once ('../incfiles/char.php');
-            $mailcode = rand(100000, 999999);
-            $subject = "E-mail activation";
-            $mail = "Здравствуйте " . $login . "\r\nКод для активации e-mail адреса " . $mailcode . "\r\nТеперь Вы можете продолжить активацию\r\n";
-            $subject = utfwin($subject);
-            $name = utfwin($name);
-            $mail = utfwin($mail);
-            $name = convert_cyr_string($name, 'w', 'k');
-            $subject = convert_cyr_string($subject, 'w', 'k');
-            $mail = convert_cyr_string($mail, 'w', 'k');
-            $adds = "From: <" . $emailadmina . ">\n";
-            $adds .= "X-sender: <" . $emailadmina . ">\n";
-            $adds .= "Content-Type: text/plain; charset=koi8-r\n";
-            $adds .= "MIME-Version: 1.0\r\n";
-            $adds .= "Content-Transfer-Encoding: 8bit\r\n";
-            $adds .= "X-Mailer: PHP v." . phpversion();
-            mail($arr['mail'], $subject, $mail, $adds);
-            mysql_query("update `users` set `kod`='" . $mailcode . "' where `id`='" . $user_id . "';");
-            echo 'Код для активации выслан по указанному адресу<br/>';
-            $_SESSION['activ'] = 1;
-        } else
-        {
-            echo "Код для активации уже выслан<br/>";
-        }
-        echo "<a href='anketa.php?user=" . $user_id . "'>В анкету</a><br/>";
-        break;
-}
 
 ?>
