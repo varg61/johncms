@@ -75,8 +75,8 @@ if (isset($_POST['submit']))
     $user['yearofbirth'] = isset($_POST['yearofbirth']) ? intval($_POST['yearofbirth']) : 0;
     $user['about'] = isset($_POST['about']) ? check(mb_substr($_POST['about'], 0, 500)) : '';
     $user['mibile'] = isset($_POST['mibile']) ? check(mb_substr($_POST['mibile'], 0, 40)) : '';
-    //TODO: Разобраться с проверкой майла
     $user['mail'] = isset($_POST['mail']) ? check(mb_substr($_POST['mail'], 0, 40)) : '';
+    $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
     $user['icq'] = isset($_POST['icq']) ? intval($_POST['icq']) : 0;
     $user['skype'] = isset($_POST['skype']) ? check(mb_substr($_POST['skype'], 0, 40)) : '';
     $user['jabber'] = isset($_POST['jabber']) ? check(mb_substr($_POST['jabber'], 0, 40)) : '';
@@ -105,6 +105,7 @@ if (isset($_POST['submit']))
         `about` = '" . $user['about'] . "',
         `mibile` = '" . $user['mibile'] . "',
         `mail` = '" . $user['mail'] . "',
+        `mailvis` = '" . $user['mailvis'] . "',
         `icq` = '" . $user['icq'] . "',
         `skype` = '" . $user['skype'] . "',
         `jabber` = '" . $user['jabber'] . "',
@@ -138,7 +139,9 @@ echo '</ul></p>';
 // Связь
 echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&nbsp;Связь</h3><ul>';
 echo '<li><u>Тел. номер</u><br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /></li>';
-echo '<li><u>E-mail</u><br /><input type="text" value="' . $user['mail'] . '" name="mail" /></li>';
+echo '<li><u>E-mail</u><br />Внимание! Правильно указывайте свой адрес электронной почты!<br />Именно на него будет высылаться Ваш пароль.<br />';
+echo '<input type="text" value="' . $user['mail'] . '" name="mail" /><br />';
+echo '<input name="mailvis" type="checkbox" value="1" ' . ($user['mailvis'] ? 'checked="checked"' : '') . ' />&nbsp;Показывать в Анкете</li>';
 echo '<li><u>ICQ</u><br /><input type="text" value="' . $user['icq'] . '" name="icq" size="10" maxlength="10" /></li>';
 echo '<li><u>Skype</u><br /><input type="text" value="' . $user['skype'] . '" name="skype" /></li>';
 echo '<li><u>Jabber</u><br /><input type="text" value="' . $user['jabber'] . '" name="jabber" /></li>';

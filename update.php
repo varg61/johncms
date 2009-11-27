@@ -143,7 +143,8 @@ switch ($do)
         mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL");
         mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL");
         mysql_query("ALTER TABLE `users` ADD `set_chat` TEXT NOT NULL");
-        $drop = array('nmenu', 'kolanywhwere', 'kmess', 'sdvig', 'pereh', 'offsm', 'offtr', 'digest', 'skin', 'farea', 'upfp', 'postclip', 'postcut', 'chmes', 'carea', 'timererfesh', 'nastroy');
+        mysql_query("ALTER TABLE `users` CHANGE `mailvis` `mailvis` BOOL NOT NULL DEFAULT '1'");
+        $drop = array('cctx', 'pfon', 'mailact', 'nmenu', 'kolanywhwere', 'kmess', 'sdvig', 'pereh', 'offsm', 'offtr', 'digest', 'skin', 'farea', 'upfp', 'postclip', 'postcut', 'chmes', 'carea', 'timererfesh', 'nastroy');
         foreach ($drop as $val)
         {
             mysql_query("ALTER TABLE `users` DROP `$val`");

@@ -116,19 +116,10 @@ if (!empty($out))
 $out = '';
 if (!empty($user['mibile']))
     $out .= '<li><span class="gray">Тел. номер:</span> ' . $user['mibile'] . '</li>';
-if ($user['mailact'] == 1)
+if (!empty($user['mail']) && (($id && $user['mailvis']) || !$id || $dostadm))
 {
-    if (!empty($user['mail']))
-    {
-        $out .= '<li><span class="gray">E-mail:</span> ';
-        if ($user['mailvis'] == 1)
-        {
-            $out .= $user['mail'] . '</li>';
-        } else
-        {
-            $out .= 'скрыт</li>';
-        }
-    }
+    $out .= '<li><span class="gray">E-mail:</span> ' . $user['mail'];
+    $out .= ($user['mailvis'] ? '' : '<span class="gray"> [скрыт]</span>') . '</li>';
 }
 if (!empty($user['icq']))
     $out .= '<li><span class="gray">ICQ:</span>&nbsp;<img src="http://web.icq.com/whitepages/online?icq=' . $user['icq'] . '&amp;img=5" width="18" height="18" alt="icq" align="middle"/>&nbsp;' . $user['icq'] . '</li>';
