@@ -27,13 +27,19 @@ if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act))
 // Меню быстрого перехода
 if ($set_user['quick_go'])
 {
-    echo "<form action='" . $home . "/go.php' method='post'><select name='adres' style='font-size:10px'><option selected='selected'>Быстрый переход </option>";
-    if ($user_id)
-    {
-        echo "<option value='privat'>Приват</option><option value='set'>Настройки</option><option value='prof'>Анкета</option><option value='chat'>Чат</option>";
-    }
-    echo "<option value='guest'>Гостевая</option><option value='forum'>Форум</option>";
-    echo "<option value='news'>Новости</option><option value='gallery'>Галерея</option><option value='down'>Загрузки</option><option value='lib'>Библиотека</option><option value='gazen'>Ф Газенвагенъ</option></select><input style='font-size:9px' type='submit' value='Go!'/></form>";
+    echo '<form action="' . $home . '/go.php" method="post">';
+    echo '<div><select name="adres" style="font-size:x-small">
+	<option selected="selected">Быстрый переход</option>
+	<option value="guest">Гостевая</option>
+	<option value="forum">Форум</option>
+    <option value="news">Новости</option>
+    <option value="gallery">Галерея</option>
+    <option value="down">Загрузки</option>
+    <option value="lib">Библиотека</option>
+    <option value="chat">Чат</option>
+    <option value="gazen">Газенвагенъ</option>
+    </select><input type="submit" value="Go!" style="font-size:x-small"/>';
+    echo '</div></form>';
 }
 // Счетчик посетителей онлайн
 echo '</div><div class="footer">' . usersonline() . '</div>';
@@ -41,8 +47,8 @@ echo '</div><div class="footer">' . usersonline() . '</div>';
 ////////////////////////////////////////////////////////////
 // Выводим информацию внизу страницы                      //
 ////////////////////////////////////////////////////////////
-echo '<div align="center">';
-echo '<div><b>' . $copyright . '</b></div>';
+echo '<div style="text-align:center">';
+echo '<p><b>' . $copyright . '</b></p>';
 if (!$user_id || ($user_id && $set_user['gzip']))
     zipcount(); // Индикатор сжатия
 if (!$user_id || ($user_id && $set_user['online']))

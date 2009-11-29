@@ -24,18 +24,18 @@ $rootpath = '';
 require_once ('incfiles/core.php');
 require_once ('incfiles/head.php');
 
-if (isset($_GET['err']))
+if (isset ($_GET['err']))
     $act = 404;
 switch ($act)
 {
-    case '404':
+    case '404' :
         ////////////////////////////////////////////////////////////
         // Сообщение об ошибке 404                                //
         ////////////////////////////////////////////////////////////
         echo display_error('Запрошенная Вами страница отсутствует');
         break;
 
-    case 'users':
+    case 'users' :
         //TODO: Сделать переключатель доступа из Админки, показвать, или нет Актив гостям
         echo '<div class="phdr"><b>Актив Сайта</b></div>';
         echo '<div class="menu"><a href="str/users_search.php">Поиск юзера</a></div>';
@@ -57,7 +57,7 @@ switch ($act)
         echo '<div class="phdr"><a href="str/moders.php">Администрация</a></div>';
         break;
 
-    case 'info':
+    case 'info' :
         ////////////////////////////////////////////////////////////
         // Информационный блок                                    //
         ////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ switch ($act)
         $_SESSION['refsm'] = '../index.php?act=info';
         break;
 
-    case 'ban':
+    case 'ban' :
         ////////////////////////////////////////////////////////////
         // Подробности бана                                       //
         ////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ switch ($act)
             {
                 echo '<div class="menu"><b>' . $ban_term[$res['ban_type']] . '</b><br />' . $ban_desc[$res['ban_type']] . '</div>';
                 echo '<div class="menu"><u>Причина</u>: ';
-                if (!empty($res['ban_ref']))
+                if (!empty ($res['ban_ref']))
                     echo 'Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $res['ban_ref'] . '">на форуме</a><br />';
                 echo $res['ban_reason'] . '</div>';
                 echo '<div class="menu"><u>Срок:</u> ' . timecount($res['ban_time'] - $res['ban_while']) . '</div>';
@@ -95,7 +95,7 @@ switch ($act)
         }
         break;
 
-    case 'cab':
+    case 'cab' :
         ////////////////////////////////////////////////////////////
         // Личный кабинет                                         //
         ////////////////////////////////////////////////////////////
@@ -124,10 +124,8 @@ switch ($act)
         $count_sentmail = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `author` = '$login' AND `type` = 'out'"), 0);
         $count_sentunread = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `author` = '$login' AND `type` = 'out' AND `chit` = 'no'"), 0);
         echo '<li><a href="str/pradd.php?act=out">Отправленные</a>&nbsp;(' . $count_sentmail . ($count_sentunread ? '&nbsp;/&nbsp;<span class="red">' . $count_sentunread . '</span>' : '') . ')</li>';
-        //echo '<li>Уведомления</li>';
         $count_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `attach` != ''"), 0);
         echo '<li><a href="str/pradd.php?act=files">Файлы</a>&nbsp;(' . $count_files . ')</li>';
-        //echo '<li>Чаты</li>';
         if (!$ban['1'] && !$ban['3'])
             echo '<p><form action="str/pradd.php?act=write" method="post"><input type="submit" value=" Написать " /></form></p>';
         // Блок контактов
@@ -147,7 +145,7 @@ switch ($act)
         echo '</ul></p></div>';
         break;
 
-    case 'digest':
+    case 'digest' :
         ////////////////////////////////////////////////////////////
         // Дайджест                                               //
         ////////////////////////////////////////////////////////////
@@ -174,9 +172,9 @@ switch ($act)
             if ($newusers_total > 0)
                 echo '<li><a href="str/users.php">Новые посетители</a> (' . $newusers_total . ')</li>';
             if ($reg_total > 0)
-                echo '<li><a href="admin/users_reg.php">На регистрации</a> (' . $reg_total . ')</li>';
+                echo '<li><a href="' . $admp . '/users_reg.php">На регистрации</a> (' . $reg_total . ')</li>';
             if ($ban_total > 0)
-                echo '<li><a href="admin/zaban.php">Имеют Бан</a> (' . $ban_total . ')</li>';
+                echo '<li><a href="' . $admp . '/zaban.php">Имеют Бан</a> (' . $ban_total . ')</li>';
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
             if ($total_libmod > 0)
                 echo '<li><a href="library/index.php?act=moder">Мод. Библиотеки</a> (' . $total_libmod . ')</li>';
@@ -209,12 +207,11 @@ switch ($act)
         if (!$total_news && !$total_forum && !$total_guest && !$total_gal && !$total_lib)
             echo 'Новостей нет';
         // Дата последнего посещения
-        $last = isset($_GET['last']) ? intval($_GET['last']):
-        $datauser['lastdate'];
+        $last = isset ($_GET['last']) ? intval($_GET['last']) : $datauser['lastdate'];
         echo '</ul></div><div class="phdr">Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</div>';
         break;
 
-    default:
+    default :
         ////////////////////////////////////////////////////////////
         // Главное меню сайта                                     //
         ////////////////////////////////////////////////////////////
