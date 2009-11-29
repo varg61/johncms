@@ -40,7 +40,7 @@ if ($topic_vote == 0)
             print '<b>' . $res['name'] . '</b> ';
         } else
         {
-            print "<a href='../str/anketa.php?user=" . $res['id'] . "'>$res[name]</a> ";
+            print "<a href='../str/anketa.php?id=" . $res['id'] . "'>$res[name]</a> ";
         }
         $user_rights = array(1 => 'Kil', 3 => 'Mod', 6 => 'Smd', 7 => 'Adm', 8 => 'SV');
         echo $user_rights[$res['rights']];

@@ -104,7 +104,7 @@ switch ($act)
             {
                 if ($login != $mod1['name'])
                 {
-                    echo "<a href='../str/anketa.php?user=" . $mod1['id'] . "'><font color='" . $conik . "'>$mod1[name]</font></a>";
+                    echo "<a href='../str/anketa.php?id=" . $mod1['id'] . "'><font color='" . $conik . "'>$mod1[name]</font></a>";
                 } else
                 {
                     echo "<font color='" . $csnik . "'>$mod1[name]</font>";
@@ -364,7 +364,7 @@ switch ($act)
                     if ($ruz != 0)
                     {
                         $udat = mysql_fetch_array($user);
-                        echo "<a href='../str/anketa.php?user=" . $udat['id'] . "'><b>$type1[from]</b></a>";
+                        echo "<a href='../str/anketa.php?id=" . $udat['id'] . "'><b>$type1[from]</b></a>";
                         echo " (id: $udat[id])";
                         $ontime = $udat['lastdate'];
                         $ontime2 = $ontime + 300;

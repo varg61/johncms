@@ -149,7 +149,7 @@ if (mysql_num_rows($req_u))
             echo '</ul></p></div>';
             // Если были нарушения, то показываем их
             if ($total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '$user'"), 0))
-                echo '<div class="rmenu">Нарушения: <a href="anketa.php?act=ban&amp;user=' . $user . '">' . $total . '</a></div>';
+                echo '<div class="rmenu">Нарушения: <a href="anketa.php?act=ban&amp;id=' . $user . '">' . $total . '</a></div>';
             echo '<div class="phdr"><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Последние записи</a></div>';
     }
 } else

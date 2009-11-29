@@ -200,7 +200,7 @@ if ($dostmod == 1)
                 echo '<div class="phdr">Бан детально</div>';
                 if (isset($_GET['ok']))
                     echo '<div class="rmenu">Юзер забанен</div>';
-                echo '<div class="menu">Ник: <a href="../str/anketa.php?user=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a></div>';
+                echo '<div class="menu">Ник: <a href="../str/anketa.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a></div>';
                 echo '<div class="menu">Тип бана: <b>' . $ban_term[$res['ban_type']] . '</b><br />';
                 echo $ban_desc[$res['ban_type']] . '</div>';
                 echo '<div class="menu">Забанил: ' . $res['ban_who'] . '</div>';
@@ -333,7 +333,7 @@ if ($dostmod == 1)
                 {
                     // Форма ввода Бана
                     echo '<div class="phdr">Кого наказываем?</div>';
-                    echo '<div class="gmenu">Ник: <a href="../str/anketa.php?user=' . $id . '"><b>' . $res['name'] . '</b></a>';
+                    echo '<div class="gmenu">Ник: <a href="../str/anketa.php?id=' . $id . '"><b>' . $res['name'] . '</b></a>';
                     echo '</div><form action="zaban.php?do=ban&amp;id=' . $id . '" method="post">';
                     echo '<div class="rmenu"><b>Тип Бана:</b>&nbsp;<a href="zaban.php?do=help&amp;id=' . $id . '">[?]</a></div>';
                     if ($dostsmod == 1)

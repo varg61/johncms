@@ -105,7 +105,7 @@ if ($do || isset($_GET['new']))
                 echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
             if ($user_id && $mass1['id'] && $user_id != $mass1['id'])
             {
-                echo '<a href="../str/anketa.php?user=' . $mass1['id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
+                echo '<a href="../str/anketa.php?id=' . $mass1['id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
             } else
             {
                 echo '<b>' . $res['from'] . '</b>';

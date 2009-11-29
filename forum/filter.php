@@ -66,7 +66,7 @@ switch ($do)
             {
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                 echo '<input type="checkbox" name="users[]" value="' . $res['user_id'] . '"/>&nbsp;';
-                echo '<a href="../str/anketa.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> [' . $res['count'] . ']</div>';
+                echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '">' . $res['from'] . '</a> [' . $res['count'] . ']</div>';
                 ++$i;
             }
             echo '<div class="phdr"><small>Отметьте нужных авторов и нажмите кнопку &quot;Фильтровать&quot;<br />Фильтрация позволит отображать посты только от выбранных авторов.</small></div>';

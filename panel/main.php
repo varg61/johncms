@@ -137,7 +137,7 @@ if ($dostmod == 1)
                 exit;
             }
             $res = mysql_fetch_array($req);
-            header("location: ../str/anketa.php?user=$res[id]");
+            header("location: ../str/anketa.php?id=$res[id]");
             break;
 
         case 'search':

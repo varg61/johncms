@@ -30,7 +30,7 @@ if ($adm2 != 0)
         $udat = mysql_fetch_array($user);
         if ((!empty($_SESSION['uid'])) && ($login != $udat[name]))
         {
-            echo "<a href='anketa.php?user=" . $udat[id] . "'>$udat[name]</a>";
+            echo "<a href='anketa.php?id=" . $udat[id] . "'>$udat[name]</a>";
         } else
         {
             echo "&nbsp;&nbsp;$udat[name]";
@@ -58,7 +58,7 @@ if ($smd2 != 0)
         $udat = mysql_fetch_array($user);
         if ((!empty($_SESSION['uid'])) && ($login != $udat[name]))
         {
-            echo "&nbsp;&nbsp;<a href='anketa.php?user=" . $udat[id] . "'>$udat[name]</a>";
+            echo "&nbsp;&nbsp;<a href='anketa.php?id=" . $udat[id] . "'>$udat[name]</a>";
         } else
         {
             echo "&nbsp;&nbsp;$udat[name]";
@@ -88,7 +88,7 @@ if ($lmd2 != 0)
         $udat = mysql_fetch_array($user);
         if ((!empty($_SESSION['uid'])) && ($login != $udat['name']))
         {
-            echo "&nbsp;&nbsp;<a href='anketa.php?user=" . $udat['id'] . "'>$udat[name]</a>";
+            echo "&nbsp;&nbsp;<a href='anketa.php?id=" . $udat['id'] . "'>$udat[name]</a>";
         } else
         {
             echo "&nbsp;&nbsp;$udat[name]";
@@ -118,7 +118,7 @@ if ($dmd2 != 0)
         $udat = mysql_fetch_array($user);
         if ((!empty($_SESSION['uid'])) && ($login != $udat['name']))
         {
-            echo "&nbsp;&nbsp;<a href='anketa.php?user=" . $udat['id'] . "'>$udat[name]</a>";
+            echo "&nbsp;&nbsp;<a href='anketa.php?id=" . $udat['id'] . "'>$udat[name]</a>";
         } else
         {
             echo "&nbsp;&nbsp;$udat[name]";
@@ -148,7 +148,7 @@ if ($fmd2 != 0)
         $udat = mysql_fetch_array($user);
         if ((!empty($_SESSION['uid'])) && ($login != $udat['name']))
         {
-            echo "&nbsp;&nbsp;<a href='anketa.php?user=" . $udat['id'] . "'>$udat[name]</a>";
+            echo "&nbsp;&nbsp;<a href='anketa.php?id=" . $udat['id'] . "'>$udat[name]</a>";
         } else
         {
             echo "&nbsp;&nbsp;$udat[name]";
@@ -178,7 +178,7 @@ if ($cmd2 != 0)
         $udat = mysql_fetch_array($user);
         if ((!empty($_SESSION['uid'])) && ($login != $udat['name']))
         {
-            echo "&nbsp;&nbsp;<a href='anketa.php?user=" . $udat['id'] . "'>$udat[name]</a>";
+            echo "&nbsp;&nbsp;<a href='anketa.php?id=" . $udat['id'] . "'>$udat[name]</a>";
         } else
         {
             echo "&nbsp;&nbsp;$udat[name]";
@@ -208,7 +208,7 @@ if ($kmd2 != 0)
         $udat = mysql_fetch_array($user);
         if ((!empty($_SESSION['uid'])) && ($login != $udat['name']))
         {
-            echo "&nbsp;&nbsp;<a href='anketa.php?user=" . $udat['id'] . "'>$udat[name]</a>";
+            echo "&nbsp;&nbsp;<a href='anketa.php?id=" . $udat['id'] . "'>$udat[name]</a>";
         } else
         {
             echo "&nbsp;&nbsp;$udat[name]";

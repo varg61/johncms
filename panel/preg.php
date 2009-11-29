@@ -53,7 +53,7 @@ if ($dostadm == 1)
             {
                 if ($i <= $page * 10 & $i >= ($page - 1) * 10)
                 {
-                    echo '<div class="menu"><a href="../str/anketa.php?user=' . $reg1['id'] . '">' . $reg1['name'] . '</a>   [<a href="?act=prin&amp;user=' . $reg1['id'] . '">Принять</a>|<a href="?act=otkl&amp;user=' . $reg1['id'] . '">Отклонить</a>]';
+                    echo '<div class="menu"><a href="../str/anketa.php?id=' . $reg1['id'] . '">' . $reg1['name'] . '</a>   [<a href="?act=prin&amp;user=' . $reg1['id'] . '">Принять</a>|<a href="?act=otkl&amp;user=' . $reg1['id'] . '">Отклонить</a>]';
                     if ($reg1['regadm'] !== "")
                     {
                         print '<br />Отклонил <b>' . $reg1['regadm'] . '</b>';

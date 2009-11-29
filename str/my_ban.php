@@ -69,7 +69,7 @@ if ($act == "ban")
         echo '</div>';
     }
     echo '<div class="bmenu">Всего нарушений: ' . $total . '</div>';
-    echo '<p><a href="anketa.php?user=' . $user . '">В анкету</a></p>';
+    echo '<p><a href="anketa.php?id=' . $user . '">В анкету</a></p>';
     require_once ("../incfiles/end.php");
     exit;
 }
@@ -88,7 +88,7 @@ if ($act == "bandet")
         echo '<div class="phdr">Бан детально</div>';
         if (isset($_GET['ok']))
             echo '<div class="rmenu">Юзер забанен</div>';
-        echo '<div class="menu">Ник: <a href="../str/anketa.php?user=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a></div>';
+        echo '<div class="menu">Ник: <a href="../str/anketa.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a></div>';
         echo '<div class="menu">Тип бана: <b>' . $ban_term[$res['ban_type']] . '</b><br />';
         echo $ban_desc[$res['ban_type']] . '</div>';
         echo '<div class="menu">Забанил: ' . $res['ban_who'] . '</div>';
@@ -104,7 +104,7 @@ if ($act == "bandet")
             echo '<div><a href="../' . $admp . '/zaban.php?do=razban&amp;id=' . $id . '">Разбанить</a></div>';
         if ($dostadm == 1)
             echo '<div><a href="../' . $admp . '/zaban.php?do=delban&amp;id=' . $id . '">Удалить бан</a></div>';
-        echo '</p><p><a href="anketa.php?act=ban&amp;user=' . $res['user_id'] . '">Назад</a></p>';
+        echo '</p><p><a href="anketa.php?act=ban&amp;id=' . $res['user_id'] . '">Назад</a></p>';
     } else
     {
         echo 'Ошибка';

@@ -315,7 +315,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                         echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
                     if ($user_id && $user_id != $postres['user_id'])
                     {
-                        echo '<a href="../str/anketa.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ';
+                        echo '<a href="../str/anketa.php?id=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ';
                         echo '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a> ';
                     } else
                     {

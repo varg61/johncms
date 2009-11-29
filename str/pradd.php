@@ -759,7 +759,7 @@ if ($user_id)
             $text = tags($text);
             if ($set_user['smileys'])
                 $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
-            echo "<p>Для <a href='anketa.php?user=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
+            echo "<p>Для <a href='anketa.php?id=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
             $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
             echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
             if (!empty($massiv1['attach']))

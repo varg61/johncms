@@ -36,7 +36,7 @@ if (empty($_GET['id']))
                 {
                     if ((!empty($_SESSION['uid'])) && ($login != $mod1['from']))
                     {
-                        echo "<a href='../str/anketa.php?user=" . $uz1['id'] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
+                        echo "<a href='../str/anketa.php?id=" . $uz1['id'] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
                     } else
                     {
                         echo $mod1['from'];
@@ -98,7 +98,7 @@ if (empty($_GET['id']))
             {
                 if ((!empty($_SESSION['uid'])) && ($login != $mod1['from']))
                 {
-                    echo "<a href='../str/anketa.php?user=" . $uz1['id'] . "'>$mod1[from]</a>";
+                    echo "<a href='../str/anketa.php?id=" . $uz1['id'] . "'>$mod1[from]</a>";
                 } else
                 {
                     echo $mod1['from'];

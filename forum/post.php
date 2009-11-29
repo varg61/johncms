@@ -42,7 +42,7 @@ else
 // Ник юзера и ссылка на его анкету
 if ($user_id && $user_id != $res['user_id'])
 {
-    echo '<a href="../str/anketa.php?user=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
+    echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
     echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a>';
 } else
 {
