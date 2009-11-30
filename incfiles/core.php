@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-defined('_IN_JOHNCMS') or die('Error:restricted access');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 Error_Reporting(E_ALL & ~ E_NOTICE);
 Error_Reporting(ERROR | WARNING);
@@ -139,8 +139,6 @@ $set = array();
 while ($res = mysql_fetch_row($req))
     $set[$res[0]] = $res[1];
 mysql_free_result($req);
-$nickadmina = $set['nickadmina']; // Ник 1-го админа
-$nickadmina2 = $set['nickadmina2']; // Ник 2-го (скрытого) админа
 $emailadmina = $set['emailadmina']; // E-mail администратора
 $sdvigclock = $set['sdvigclock']; // Временной сдвиг по умолчанию для системы
 $copyright = $set['copyright']; // Коприайт сайта
@@ -213,7 +211,7 @@ elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
 ////////////////////////////////////////////////////////////
 if ($user_id && $user_ps)
 {
-    $req = mysql_query("SELECT * FROM `users` WHERE `id`='" . $user_id . "' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user_id' LIMIT 1");
     if (mysql_num_rows($req))
     {
         $datauser = mysql_fetch_assoc($req);
@@ -260,23 +258,23 @@ if ($user_id && $user_ps)
             }
 
             // Установка административного доступа
-            if ($login == $nickadmina || $login == $nickadmina2)
-                $dostsadm = 1; //Суперадмин
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7)
+            if ($rights == 9)
+                $dostsadm = 1; // Супервизор
+            if ($rights >= 7)
                 $dostadm = 1; // Админ
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6)
+            if ($rights >= 6)
                 $dostsmod = 1; // Старший модер
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 5)
+            if ($rights == 5 || $rights >= 6)
                 $dostlmod = 1; // Модер библиотеки
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 4)
+            if ($rights == 4 || $rights >= 6)
                 $dostdmod = 1; // Модер по загрузкам
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 3)
+            if ($rights == 3 || $rights >= 6)
                 $dostfmod = 1; // Модер форума
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 7 || $rights == 6 || $rights == 2)
+            if ($rights == 2 || $rights >= 6)
                 $dostcmod = 1; // Модер Чата
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights == 1 || $rights == 7 || $rights == 6)
+            if ($rights == 1 || $rights >= 6)
                 $dostkmod = 1; // Киллер
-            if ($login == $nickadmina || $login == $nickadmina2 || $rights >= 1)
+            if ($rights >= 1)
                 $dostmod = 1;
 
             // Если юзера не было на сайте более 1-го часа , показываем дайджест
@@ -308,11 +306,12 @@ if ($user_id && $user_ps)
 require_once ($rootpath . 'incfiles/func.php');
 
 // Актуализация переменных
-$start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
+$start = isset($_REQUEST['page']) ? $page * $kmess - $kmess : $start;
 
 // Буфферизация вывода
-if ($set['gzip'] == 1)
+if ($set['gzip'] && @extension_loaded('zlib'))
 {
+    @ini_set('zlib.output_compression_level', 3);
     ob_start('ob_gzhandler');
 } else
 {

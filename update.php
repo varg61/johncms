@@ -93,6 +93,7 @@ switch ($do)
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
         // Таблица Гостевой
+        mysql_query("ALTER TABLE `guest` DROP `gost`");
         mysql_query("ALTER TABLE `guest` DROP `soft`");
         mysql_query("ALTER TABLE `guest` ADD `browser` TINYTEXT NOT NULL AFTER `ip`");
         echo '<span class="green">OK</span> таблица `guest` обновлена.<br />';
@@ -151,7 +152,7 @@ switch ($do)
         }
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
-        $array = array('fmod', 'gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');
+        $array = array('nickadmina', 'nickadmina2', 'rashstr', 'fmod', 'gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');
         foreach ($array as $val)
         {
             mysql_query("DELETE FROM `cms_settings` WHERE `key` = '$val' LIMIT 1");

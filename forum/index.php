@@ -366,9 +366,9 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                 {
                     echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
                     if ($res['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . ($res['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&nbsp;';
                     else
-                        echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
+                        echo '<img src="../images/del.png" width="12" height="12" align="middle" />&nbsp;';
                     // Ник юзера и ссылка на его анкету
                     if ($user_id && $user_id != $res['user_id'])
                     {
@@ -393,7 +393,7 @@ if (in_array($act, $array) && file_exists($act . '.php'))
                     echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br />';
                     // Статус юзера
                     if (!empty($res['status']))
-                        echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
+                        echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle"/>&nbsp;' . $res['status'] . '</div>';
                     if ($res['close'])
                     {
                         echo '<span class="red">Пост удалён!</span><br/>';

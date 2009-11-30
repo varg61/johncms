@@ -609,9 +609,9 @@ function show_user($user = array(), $status = 0, $ip = 0, $str = '', $text = '',
     } else
     {
         if ($user['sex'])
-            $out = '<img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'f') . ($user['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') . ' height="16"/>&nbsp;';
+            $out = '<img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&nbsp;';
         else
-            $out = '<img src="../images/del.png" width="12" height="12" />&nbsp;';
+            $out = '<img src="../images/del.png" width="12" height="12" align="middle" />&nbsp;';
         $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="../str/anketa.php?id=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
         $rights = array(0 => '', 1 => 'Kil', 2 => 'Mod', 3 => 'Mod', 4 => 'Mod', 5 => 'Mod', 6 => 'Smd', 7 => 'Adm', 9 => 'SV!');
         $out .= ' ' . $rights[$user['rights']];
@@ -620,7 +620,7 @@ function show_user($user = array(), $status = 0, $ip = 0, $str = '', $text = '',
     if (!empty($str))
         $out .= ' ' . $str;
     if ($status && !empty($user['status']))
-        $out .= '<div class="status">' . (file_exists('../theme/' . $set_user['skin'] . '/images/star.gif') ? '<img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&nbsp;' : '') . $user['status'] . '</div>';
+        $out .= '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&nbsp;' . $user['status'] . '</div>';
     if ($text)
         $out .= '<div>' . $text . '</div>';
     if ($sub || $ip)

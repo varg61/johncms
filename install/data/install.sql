@@ -232,24 +232,23 @@ DROP TABLE IF EXISTS `guest`;
 CREATE TABLE `guest` (
   `id` int(11) NOT NULL auto_increment,
   `adm` tinyint(1) NOT NULL default '0',
-  `time` int(15) NOT NULL default '0',
-  `user_id` int(11) NOT NULL default '0',
-  `name` varchar(25) NOT NULL default '',
+  `time` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(25) NOT NULL,
   `text` text NOT NULL,
-  `ip` int(11) NOT NULL default '0',
+  `ip` int(11) NOT NULL,
   `browser` tinytext NOT NULL,
-  `gost` binary(1) NOT NULL default '\0',
-  `admin` varchar(25) NOT NULL default '',
+  `admin` varchar(25) NOT NULL,
   `otvet` text NOT NULL,
-  `otime` int(15) NOT NULL default '0',
-  `edit_who` varchar(20) NOT NULL default '',
-  `edit_time` int(11) NOT NULL default '0',
+  `otime` int(11) NOT NULL,
+  `edit_who` varchar(20) NOT NULL,
+  `edit_time` int(11) NOT NULL,
   `edit_count` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `time` (`time`),
-  KEY `ip` (`ip`),
   KEY `adm` (`adm`),
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+  KEY `time` (`time`),
+  KEY `ip` (`ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Структура таблицы `lib`
@@ -332,7 +331,6 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('sdvigclock', '0'),
 ('copyright', 'JohnCMS'),
 ('homeurl', ''),
-('rashstr', 'txt'),
 ('admp', 'panel'),
 ('flsz', '2000'),
 ('gzip', '1'),

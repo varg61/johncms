@@ -58,8 +58,7 @@ if ($user['dayb'] == $day && $user['monthb'] == $mon)
 {
     echo '<div class="gmenu">ИМЕНИНЫ!!!</div>';
 }
-echo '<div class="gmenu"><p><h3><img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'f') . ($user['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') .
-    ' height="16" class="left"/>&nbsp;';
+echo '<div class="gmenu"><p><h3><img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" class="left" />&nbsp;';
 echo '<b>' . $user['name'] . '</b> (id: ' . $user['id'] . ')';
 if ($realtime > $user['lastdate'] + 300)
 {

@@ -53,8 +53,9 @@ switch ($act)
         $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . $day . "' AND `monthb` = '" . $mon . "' AND `preg` = '1'"), 0);
         if ($brth)
             echo '<div class="menu"><a href="str/brd.php">Именинники</a> (' . $brth . ')</div>';
+        echo '<div class="menu"><a href="str/moders.php">Администрация</a></div>';
         echo '<div class="menu"><a href="str/users_top.php">Топ активности</a></div>';
-        echo '<div class="phdr"><a href="str/moders.php">Администрация</a></div>';
+        echo '<div class="phdr">&nbsp;</div>';
         break;
 
     case 'info' :
