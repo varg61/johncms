@@ -92,7 +92,7 @@ if ($dostmod)
 echo '</ul></p></div><div class="menu">';
 // Личные данные
 $out = '';
-$req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $user['name'] . "' LIMIT 1;");
+$req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $user['name'] . "' LIMIT 1");
 if (mysql_num_rows($req))
 {
     $res = mysql_fetch_array($req);
@@ -158,25 +158,14 @@ if ($ban)
     echo '<li><a href="my_ban.php?act=ban' . ($id && $id != $user_id ? '&amp;id=' . $user['id'] : '') . '">Нарушения</a>&nbsp;<span class="red">(' . $ban . ')</span></li>';
 echo '</ul></p></div>';
 echo '<div class="phdr">' . (!$id || $id == $user_id || $dostadm ? '<a href="my_data.php' . ($id ? '?id=' . $id : '') . '">Редактировать</a>' : '&nbsp;');
-if ($dostmod)
+if ($id && !$user['immunity'] && $id != $user_id)
 {
-    if ($id && !$user['immunity'] && $id != $user_id)
-    {
-        if ($dostadm)
-            echo ' | ';
-        if ($dostsmod == 1)
-        {
-            echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $user['id'] . '">Банить</a>';
-        } elseif ($dostfmod == 1 && isset($_GET['fid']))
-        {
-            $fid = intval($_GET['fid']);
-            echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $user['id'] . '&amp;fid=' . $fid . '">Пнуть из форума</a><br/>';
-        }
-        if ($dostadm)
-        {
-            echo ' | <a href="../' . $admp . '/editusers.php?act=del&amp;user=' . $user['id'] . '">Удалить</a><br/>';
-        }
-    }
+    if ($dostadm)
+        echo ' | ';
+    if ($dostsmod)
+        echo '<a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $user['id'] . '">Банить</a>';
+    if ($dostadm)
+        echo ' | <a href="../' . $admp . '/users_del.php?id=' . $user['id'] . '">Удалить</a><br/>';
 }
 echo '</div>';
 if ($id && $id != $user_id)

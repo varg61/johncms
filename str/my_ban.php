@@ -58,28 +58,31 @@ if ($act == "ban")
     ////////////////////////////////////////////////////////////
     require_once ('../incfiles/ban.php');
     echo '<div class="phdr"><b>История нарушений</b></div>';
-    echo '<div class="gmenu"><img src="../images/' . ($user['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""/>&nbsp;<b>' . $user['name'] . '</b> (id: ' . $user['id'] . ')';
-    $ontime = $user['lastdate'];
-    $ontime2 = $ontime + 300;
-    $preg = $user['preg'];
-    $regadm = $user['regadm'];
-    if ($realtime > $ontime2)
+    if ($user['id'] != $user_id)
     {
-        echo '<font color="#FF0000"> [Off]</font>';
-        if ($user['sex'] == "m")
+        echo '<div class="gmenu"><img src="../images/' . ($user['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""/>&nbsp;<b>' . $user['name'] . '</b> (id: ' . $user['id'] . ')';
+        $ontime = $user['lastdate'];
+        $ontime2 = $ontime + 300;
+        $preg = $user['preg'];
+        $regadm = $user['regadm'];
+        if ($realtime > $ontime2)
         {
-            $lastvisit = 'был: ';
-        }
-        if ($user['sex'] == "zh")
+            echo '<font color="#FF0000"> [Off]</font>';
+            if ($user['sex'] == "m")
+            {
+                $lastvisit = 'был: ';
+            }
+            if ($user['sex'] == "zh")
+            {
+                $lastvisit = 'была: ';
+            }
+            $lastvisit = $lastvisit . date("d.m.Y (H:i)", $user['lastdate']);
+        } else
         {
-            $lastvisit = 'была: ';
+            echo '<font color="#00AA00"> [ON]</font>';
         }
-        $lastvisit = $lastvisit . date("d.m.Y (H:i)", $user['lastdate']);
-    } else
-    {
-        echo '<font color="#00AA00"> [ON]</font>';
+        echo '</div>';
     }
-    echo '</div>';
     $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user['id'] . "' ORDER BY `ban_while` DESC;");
     $total = mysql_num_rows($req);
     while ($res = mysql_fetch_array($req))

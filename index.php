@@ -68,33 +68,6 @@ switch ($act)
         $_SESSION['refsm'] = '../index.php?act=info';
         break;
 
-    case 'ban' :
-        ////////////////////////////////////////////////////////////
-        // Подробности бана                                       //
-        ////////////////////////////////////////////////////////////
-        if (!$user_id)
-        {
-            echo display_error('Только для зарегистрированных');
-            exit;
-        }
-        require_once ('incfiles/ban.php');
-        echo '<div class="phdr">У Вас есть следующие наказания:</div>';
-        $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user_id . "' AND `ban_time`>'" . $realtime . "';");
-        if (mysql_num_rows($req) != 0)
-        {
-            while ($res = mysql_fetch_array($req))
-            {
-                echo '<div class="menu"><b>' . $ban_term[$res['ban_type']] . '</b><br />' . $ban_desc[$res['ban_type']] . '</div>';
-                echo '<div class="menu"><u>Причина</u>: ';
-                if (!empty ($res['ban_ref']))
-                    echo 'Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $res['ban_ref'] . '">на форуме</a><br />';
-                echo $res['ban_reason'] . '</div>';
-                echo '<div class="menu"><u>Срок:</u> ' . timecount($res['ban_time'] - $res['ban_while']) . '</div>';
-                echo '<div class="bmenu">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div>';
-            }
-        }
-        break;
-
     case 'cab' :
         ////////////////////////////////////////////////////////////
         // Личный кабинет                                         //

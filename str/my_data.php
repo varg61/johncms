@@ -30,27 +30,25 @@ if (!$user_id)
 
 if ($id && $id != $user_id && $dostadm)
 {
-// Если был запрос на юзера, то получаем его данные
+    // Если был запрос на юзера, то получаем его данные
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
     if (mysql_num_rows($req))
     {
         $user = mysql_fetch_assoc($req);
         if ($user['rights'] > $datauser['rights'])
         {
-        // Если не хватает прав, выводим ошибку
+            // Если не хватает прав, выводим ошибку
             echo display_error('Вы не можете редактировать анкету старшего Вас по должности');
             require_once ('../incfiles/end.php');
             exit;
         }
-    }
-    else
+    } else
     {
         echo display_error('Такого пользователя не существует');
         require_once ('../incfiles/end.php');
         exit;
     }
-}
-else
+} else
 {
     $id = false;
     $user = $datauser;
@@ -58,7 +56,7 @@ else
 
 if ($id && $dostadm && $act == 'reset')
 {
-// Сброс настроек
+    // Сброс настроек
     mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['id'] . "'");
     echo '<div class="gmenu"><p>Для пользователя <b>' . $user['name'] . '</b> установлены настройки по умолчанию<br /><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></p></div>';
     require_once ('../incfiles/end.php');
@@ -66,29 +64,29 @@ if ($id && $dostadm && $act == 'reset')
 }
 //TODO: Добавить имя того, кого редактируем
 echo '<div class="phdr"><b>Редактирование ' . ($id && $id != $user_id ? '' : 'личной ') . 'анкеты</b></div>';
-if (isset ($_POST['submit']))
+if (isset($_POST['submit']))
 {
     $error = array();
     // Данные юзера
-    $user['imname'] = isset ($_POST['imname']) ? check(mb_substr($_POST['imname'], 0, 25)) : '';
-    $user['live'] = isset ($_POST['live']) ? check(mb_substr($_POST['live'], 0, 50)) : '';
-    $user['dayb'] = isset ($_POST['dayb']) ? intval($_POST['dayb']) : 0;
-    $user['monthb'] = isset ($_POST['monthb']) ? intval($_POST['monthb']) : 0;
-    $user['yearofbirth'] = isset ($_POST['yearofbirth']) ? intval($_POST['yearofbirth']) : 0;
-    $user['about'] = isset ($_POST['about']) ? check(mb_substr($_POST['about'], 0, 500)) : '';
-    $user['mibile'] = isset ($_POST['mibile']) ? check(mb_substr($_POST['mibile'], 0, 40)) : '';
-    $user['mail'] = isset ($_POST['mail']) ? check(mb_substr($_POST['mail'], 0, 40)) : '';
-    $user['mailvis'] = isset ($_POST['mailvis']) ? 1 : 0;
-    $user['icq'] = isset ($_POST['icq']) ? intval($_POST['icq']) : 0;
-    $user['skype'] = isset ($_POST['skype']) ? check(mb_substr($_POST['skype'], 0, 40)) : '';
-    $user['jabber'] = isset ($_POST['jabber']) ? check(mb_substr($_POST['jabber'], 0, 40)) : '';
-    $user['www'] = isset ($_POST['www']) ? check(mb_substr($_POST['www'], 0, 40)) : '';
+    $user['imname'] = isset($_POST['imname']) ? check(mb_substr($_POST['imname'], 0, 25)) : '';
+    $user['live'] = isset($_POST['live']) ? check(mb_substr($_POST['live'], 0, 50)) : '';
+    $user['dayb'] = isset($_POST['dayb']) ? intval($_POST['dayb']) : 0;
+    $user['monthb'] = isset($_POST['monthb']) ? intval($_POST['monthb']) : 0;
+    $user['yearofbirth'] = isset($_POST['yearofbirth']) ? intval($_POST['yearofbirth']) : 0;
+    $user['about'] = isset($_POST['about']) ? check(mb_substr($_POST['about'], 0, 500)) : '';
+    $user['mibile'] = isset($_POST['mibile']) ? check(mb_substr($_POST['mibile'], 0, 40)) : '';
+    $user['mail'] = isset($_POST['mail']) ? check(mb_substr($_POST['mail'], 0, 40)) : '';
+    $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
+    $user['icq'] = isset($_POST['icq']) ? intval($_POST['icq']) : 0;
+    $user['skype'] = isset($_POST['skype']) ? check(mb_substr($_POST['skype'], 0, 40)) : '';
+    $user['jabber'] = isset($_POST['jabber']) ? check(mb_substr($_POST['jabber'], 0, 40)) : '';
+    $user['www'] = isset($_POST['www']) ? check(mb_substr($_POST['www'], 0, 40)) : '';
     // Данные юзера (для Администраторов)
-    $user['name'] = isset ($_POST['name']) ? check(mb_substr($_POST['name'], 0, 20)) : $user['name'];
-    $user['status'] = isset ($_POST['status']) ? check(mb_substr($_POST['status'], 0, 50)) : '';
-    $user['immunity'] = isset ($_POST['immunity']) ? 1 : 0;
-    $user['sex'] = isset ($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
-    $user['rights'] = isset ($_POST['rights']) ? abs(intval($_POST['rights'])) : 0;
+    $user['name'] = isset($_POST['name']) ? check(mb_substr($_POST['name'], 0, 20)) : $user['name'];
+    $user['status'] = isset($_POST['status']) ? check(mb_substr($_POST['status'], 0, 50)) : '';
+    $user['immunity'] = isset($_POST['immunity']) ? 1 : 0;
+    $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
+    $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : 0;
     // Проводим необходимые проверки
     if ($user['id'] == $user_id)
         $user['rights'] = $datauser['rights'];
@@ -132,8 +130,7 @@ if (isset ($_POST['submit']))
             WHERE `id` = '" . $user['id'] . "' LIMIT 1");
         }
         echo '<div class="gmenu">Данные сохранены</div>';
-    }
-    else
+    } else
     {
         echo display_error($error);
     }
@@ -146,8 +143,7 @@ if ($dostadm)
 {
     echo '<li><span class="gray">Ник: (мин.2, макс. 20)</span><br /><input type="text" value="' . $user['name'] . '" name="name" /></li>';
     echo '<li><span class="gray">Статус: (макс. 50)</span><br /><input type="text" value="' . $user['status'] . '" name="status" /></li>';
-}
-else
+} else
 {
     echo '<li><span class="gray">Ник:</span> <b>' . $user['name'] . '</b></li>';
     echo '<li><span class="gray">Статус:</span> ' . $user['status'] . '</li>';
