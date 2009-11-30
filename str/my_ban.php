@@ -16,12 +16,9 @@
 
 define('_IN_JOHNCMS', 1);
 
-exit;
-
 $headmod = 'userban';
 $textl = 'Список нарушений';
 require_once ('../incfiles/core.php');
-require_once ('../incfiles/head.php');
 
 if (!$user_id)
 {
@@ -31,49 +28,72 @@ if (!$user_id)
     exit;
 }
 
+if ($id && $id != $user_id)
+{
+    // Если был запрос на юзера, то получаем его данные
+    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
+    if (mysql_num_rows($req))
+    {
+        $user = mysql_fetch_assoc($req);
+        $textl = 'Список нарушений: ' . $user['name'];
+    } else
+    {
+        require_once ('../incfiles/head.php');
+        echo display_error('Такого пользователя не существует');
+        require_once ("../incfiles/end.php");
+        exit;
+    }
+} else
+{
+    $textl = 'Личная анкета';
+    $user = $datauser;
+}
+
+require_once ('../incfiles/head.php');
+
 if ($act == "ban")
 {
     ////////////////////////////////////////////////////////////
     // Список нарушений                                       //
     ////////////////////////////////////////////////////////////
     require_once ('../incfiles/ban.php');
-    echo '<div class="phdr">История нарушений</div>';
-    echo '<div class="gmenu"><img src="../images/' . ($arr['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""/>&nbsp;<b>' . $arr['name'] . '</b> (id: ' . $arr['id'] . ')';
-    $ontime = $arr['lastdate'];
+    echo '<div class="phdr"><b>История нарушений</b></div>';
+    echo '<div class="gmenu"><img src="../images/' . ($user['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""/>&nbsp;<b>' . $user['name'] . '</b> (id: ' . $user['id'] . ')';
+    $ontime = $user['lastdate'];
     $ontime2 = $ontime + 300;
-    $preg = $arr['preg'];
-    $regadm = $arr['regadm'];
+    $preg = $user['preg'];
+    $regadm = $user['regadm'];
     if ($realtime > $ontime2)
     {
         echo '<font color="#FF0000"> [Off]</font>';
-        if ($arr['sex'] == "m")
+        if ($user['sex'] == "m")
         {
             $lastvisit = 'был: ';
         }
-        if ($arr['sex'] == "zh")
+        if ($user['sex'] == "zh")
         {
             $lastvisit = 'была: ';
         }
-        $lastvisit = $lastvisit . date("d.m.Y (H:i)", $arr['lastdate']);
+        $lastvisit = $lastvisit . date("d.m.Y (H:i)", $user['lastdate']);
     } else
     {
         echo '<font color="#00AA00"> [ON]</font>';
     }
     echo '</div>';
-    $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user . "' ORDER BY `ban_while` DESC;");
+    $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user['id'] . "' ORDER BY `ban_while` DESC;");
     $total = mysql_num_rows($req);
     while ($res = mysql_fetch_array($req))
     {
         echo '<div class="' . ($res['ban_time'] > $realtime ? 'rmenu' : 'menu') . '">';
-        echo '<a href="anketa.php?act=bandet&amp;id=' . $res['id'] . '">' . date("d.m.Y", $res['ban_while']) . '</a> <b>' . $ban_term[$res['ban_type']] . '</b>';
+        echo '<a href="my_ban.php?act=details&amp;id=' . $res['id'] . '">' . date("d.m.Y", $res['ban_while']) . '</a> <b>' . $ban_term[$res['ban_type']] . '</b>';
         echo '</div>';
     }
-    echo '<div class="bmenu">Всего нарушений: ' . $total . '</div>';
-    echo '<p><a href="anketa.php?id=' . $user . '">В анкету</a></p>';
+    echo '<div class="phdr">Всего нарушений: ' . $total . '</div>';
+    echo '<p><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></p>';
     require_once ("../incfiles/end.php");
     exit;
 }
-if ($act == "bandet")
+if ($act == "details")
 {
     ////////////////////////////////////////////////////////////
     // Детали отдельного бана                                 //
@@ -81,11 +101,11 @@ if ($act == "bandet")
     require_once ('../incfiles/ban.php');
     $req = mysql_query("SELECT `cms_ban_users`.*, `users`.`name`, `users`.`name_lat`
     FROM `cms_ban_users` LEFT JOIN `users` ON `cms_ban_users`.`user_id` = `users`.`id`
-    WHERE `cms_ban_users`.`id`='" . $id . "';");
+    WHERE `cms_ban_users`.`id`='" . $id . "'");
     if (mysql_num_rows($req) != 0)
     {
         $res = mysql_fetch_array($req);
-        echo '<div class="phdr">Бан детально</div>';
+        echo '<div class="phdr"><b>Бан детально</b></div>';
         if (isset($_GET['ok']))
             echo '<div class="rmenu">Юзер забанен</div>';
         echo '<div class="menu">Ник: <a href="../str/anketa.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a></div>';
@@ -99,12 +119,12 @@ if ($act == "bandet")
             echo '<div class="menu">Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $res['ban_ref'] . '">на форуме</a></div>';
         if (!empty($res['ban_reason']))
             echo '<div class="menu">' . $res['ban_reason'] . '</div>';
-        echo '<div class="bmenu">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div><p>';
+        echo '<div class="phdr">Осталось: ' . timecount($res['ban_time'] - $realtime) . '</div><p>';
         if ($dostkmod == 1 && $res['ban_time'] > $realtime)
             echo '<div><a href="../' . $admp . '/zaban.php?do=razban&amp;id=' . $id . '">Разбанить</a></div>';
         if ($dostadm == 1)
             echo '<div><a href="../' . $admp . '/zaban.php?do=delban&amp;id=' . $id . '">Удалить бан</a></div>';
-        echo '</p><p><a href="anketa.php?act=ban&amp;id=' . $res['user_id'] . '">Назад</a></p>';
+        echo '</p><p><a href="my_ban.php?act=ban&amp;id=' . $res['user_id'] . '">Назад</a></p>';
     } else
     {
         echo 'Ошибка';

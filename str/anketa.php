@@ -155,7 +155,7 @@ echo '<li><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">�
 // Если были нарушения, показываем ссылку на их историю
 $ban = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 if ($ban)
-    echo '<li><a href="my_ban.php?act=ban">Нарушения</a>&nbsp;<span class="red">(' . $ban . ')</span></li>';
+    echo '<li><a href="my_ban.php?act=ban' . ($id && $id != $user_id ? '&amp;id=' . $user['id'] : '') . '">Нарушения</a>&nbsp;<span class="red">(' . $ban . ')</span></li>';
 echo '</ul></p></div>';
 echo '<div class="phdr">' . (!$id || $id == $user_id || $dostadm ? '<a href="my_data.php' . ($id ? '?id=' . $id : '') . '">Редактировать</a>' : '&nbsp;');
 if ($dostmod)
