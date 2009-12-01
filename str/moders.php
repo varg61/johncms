@@ -25,12 +25,11 @@ echo '<div class="phdr"><b>Администрация ресурса</b></div>';
 // Супервизоры
 $req = mysql_query("SELECT * FROM `users` WHERE `rights` = '9'");
 if (mysql_num_rows($req)) {
-    $i = 0;
     echo '<div class="bmenu">Супервизоры</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($sw % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$sw;
     }
 }
 // Администраторы
@@ -39,9 +38,9 @@ if (mysql_num_rows($req)) {
     $i = 0;
     echo '<div class="bmenu">Администраторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($adm % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$adm;
     }
 }
 // Старшие Модераторы
@@ -50,9 +49,9 @@ if (mysql_num_rows($req)) {
     $i = 0;
     echo '<div class="bmenu">Старшие Модераторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($smd % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$smd;
     }
 }
 // Модераторы Библиотеки
@@ -61,9 +60,9 @@ if (mysql_num_rows($req)) {
     $i = 0;
     echo '<div class="bmenu">Модераторы Библиотеки</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($lmod % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$lmod;
     }
 }
 // Модераторы Загрузок
@@ -72,9 +71,9 @@ if (mysql_num_rows($req)) {
     $i = 0;
     echo '<div class="bmenu">Модераторы Загрузок</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($dmod % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$dmod;
     }
 }
 // Модераторы Форума
@@ -83,9 +82,9 @@ if (mysql_num_rows($req)) {
     $i = 0;
     echo '<div class="bmenu">Модераторы Форума</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($fmod % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$fmod;
     }
 }
 // Модераторы Чата
@@ -94,9 +93,9 @@ if (mysql_num_rows($req)) {
     $i = 0;
     echo '<div class="bmenu">Модераторы Чата</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($cmod % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$cmod;
     }
 }
 // Киллеры
@@ -105,12 +104,12 @@ if (mysql_num_rows($req)) {
     $i = 0;
     echo '<div class="bmenu">Киллеры</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo ($kil % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';
-        ++$i;
+        ++$kil;
     }
 }
-echo '<div class="phdr">&nbsp;</div>';
+echo '<div class="phdr">Всего: ' . ($sw + $adm + $smd + $lmod + $dmod + $fmod + $cmod + $kil) . '</div>';
 echo '<p><a href="../index.php?act=users">Актив сайта</a></p>';
 require_once ("../incfiles/end.php");
 

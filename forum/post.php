@@ -33,10 +33,9 @@ $res = mysql_fetch_array($req);
 // Запрос темы
 $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
 echo '<div class="phdr"><b>Тема:</b> ' . $them['text'] . '</div><div class="menu">';
-echo $res['datereg'] > $realtime - 86400 ? '<img src="../theme/' . $set_user['skin'] . '/images/add.gif" alt=""/>&nbsp;' : '';
 // Значок пола
 if ($res['sex'])
-    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="16" height="16"/>&nbsp;';
+    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png" alt=""  width="16" height="16"/>&nbsp;';
 else
     echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
 // Ник юзера и ссылка на его анкету

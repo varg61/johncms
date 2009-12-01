@@ -613,7 +613,7 @@ function show_user($user = array(), $status = 0, $ip = 0, $str = '', $text = '',
         else
             $out = '<img src="../images/del.png" width="12" height="12" align="middle" />&nbsp;';
         $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="../str/anketa.php?id=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
-        $rights = array(0 => '', 1 => 'Kil', 2 => 'Mod', 3 => 'Mod', 4 => 'Mod', 5 => 'Mod', 6 => 'Smd', 7 => 'Adm', 9 => 'SV!');
+        $rights = array(0 => '', 1 => '(Kil)', 2 => '(Mod C)', 3 => '(Mod F)', 4 => '(Mod D)', 5 => '(Mod L)', 6 => '(Smd)', 7 => '(Adm)', 9 => '(SV!)');
         $out .= ' ' . $rights[$user['rights']];
     }
     $out .= ($realtime > $user['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
