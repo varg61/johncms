@@ -90,7 +90,7 @@ if ($total)
                     break;
             }
         }
-        echo show_user($res, 0, ($act == 'guest' || $dostmod ? 1 : 0), ' (' . $res['movings'] . ' - '. timecount($realtime - $res['sestime']) . ') ' . $place);
+        echo show_user($res, 0, ($act == 'guest' || ($rights >= 1 && $rights >= $res['rights']) ? 1 : 0), ' (' . $res['movings'] . ' - '. timecount($realtime - $res['sestime']) . ') ' . $place);
         echo '</div>';
         ++$i;
     }

@@ -28,7 +28,7 @@ if (!$user_id)
     exit;
 }
 
-if ($id && $id != $user_id && $dostadm)
+if ($id && $id != $user_id && $rights >= 7)
 {
     // Если был запрос на юзера, то получаем его данные
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
@@ -103,7 +103,7 @@ switch ($act)
     default:
         echo '<div class="phdr"><b>Меняем пароль:</b> ' . $user['name'] . '</div>';
         echo '<form action="my_pass.php?act=change" method="post">';
-        if (!$id || !$dostadm)
+        if (!$id || $rights < 7)
             echo '<div class="menu"><p>Введите старый пароль:<br /><input type="password" name="oldpass" /></p></div>';
         echo '<div class="gmenu"><p>Введите новый пароль:<br /><input type="password" name="newpass" /><br />Повторите пароль:<br /><input type="password" name="newconf" />';
         echo '</p><p><input type="checkbox" value="1" name="autologin" />&nbsp;Показать ссылку на Автологин';

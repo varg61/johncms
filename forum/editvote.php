@@ -15,7 +15,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if ($dostfmod == 1)
+if ($rights == 3 || $rights >= 6)
 {
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote` WHERE `type`='1' AND `topic`='$id'"), 0);
     require_once ("../incfiles/head.php");

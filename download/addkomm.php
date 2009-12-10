@@ -14,7 +14,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_down_comm'] || $dostadm))
+if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_down_comm'] || $rights < 7))
 {
     if ($_GET['id'] == "")
     {

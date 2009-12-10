@@ -62,7 +62,7 @@ switch ($act)
         break;
 
     case 'adm':
-        if ($dostmod != 1)
+        if ($rights < 1)
         {
             echo 'Ошибка!<br/><a href="smile.php">В категории</a><br/>';
             require_once ('../incfiles/end.php');
@@ -109,7 +109,7 @@ switch ($act)
             echo '<a href="smile.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'smileys/user/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> (' . (int)count(glob($dir[$i] .
                 '/*.gif')) . ')</div>';
         }
-        if ($dostmod == 1)
+        if ($rights >= 1)
         {
             echo '<div class="gmenu"><p><a href="smile.php?act=adm">Для администрации</a> (' . (int)count(glob($rootpath . 'smileys/admin/*.gif')) . ')</p></div>';
         }

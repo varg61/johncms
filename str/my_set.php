@@ -128,7 +128,7 @@ switch ($act)
                 $set_chat['carea_h'] = 1;
             elseif ($set_chat['carea_h'] > 9)
                 $set_chat['carea_h'] = 9;
-            if ($dostadm && !empty($mood_adm))
+            if ($rights >= 7 && !empty($mood_adm))
                 $set_chat['mood'] = $mood_adm;
             mysql_query("UPDATE `users` SET `set_chat` = '" . mysql_real_escape_string(serialize($set_chat)) . "' WHERE `id` = '$user_id' LIMIT 1");
             echo '<div class="rmenu">Настройки сохранены</div>';
@@ -160,7 +160,7 @@ switch ($act)
             echo '<option' . ($set_chat['mood'] == $val ? ' selected="selected">' : '>') . $val . '</option>';
         }
         echo '</select><br/>';
-        if ($dostadm)
+        if ($rights >= 7)
             echo 'Или укажите свое:<br/><input type="text" name="mood_adm" value="' . (in_array($set_chat['mood'], $mood) ? '' : $set_chat['mood']) . '"/><br/>';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
         echo '<div class="phdr"><a href="my_set.php?act=chat&amp;reset">Сброс настроек</a></div>';

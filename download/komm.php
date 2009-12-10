@@ -22,7 +22,7 @@ if ($_GET['id'] == "")
     require_once ('../incfiles/end.php');
     exit;
 }
-if (!$set['mod_down_comm'] || !$dostadm)
+if (!$set['mod_down_comm'] || $rights < 7)
 {
     echo '<p>Комментарии закрыты<br/><a href="index.php">К загрузкам</a></p>';
     require_once ('../incfiles/end.php');
@@ -125,7 +125,7 @@ while ($mass = mysql_fetch_array($mess))
             $tekst = $mass['text'];
         }
         echo "$tekst<br/>";
-        if ($dostdmod == 1)
+        if ($rights == 4 || $rights >= 6)
         {
             echo "$mass[ip] - $mass[soft]<br/><a href='index.php?act=delmes&amp;id=" . $mass['id'] . "'>(Удалить)</a><br/>";
         }

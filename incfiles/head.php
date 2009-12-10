@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$headmod = isset($headmod) ? mysql_real_escape_string($headmod) : '';
+$headmod = isset ($headmod) ? mysql_real_escape_string($headmod) : '';
 if ($headmod == 'mainpage')
     $textl = $copyright;
 
@@ -30,7 +30,11 @@ echo "\n" . '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http
 echo "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">';
 echo "\n" . '<head><meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>';
 echo "\n" . '<link rel="shortcut icon" href="' . $home . '/favicon.ico" />';
-echo "\n" . '<meta name="copyright" content="Powered by JohnCMS" />'; // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
+echo "\n" . '<meta name="copyright" content="Powered by JohnCMS" />';// ВНИМАНИЕ!!! Данный копирайт удалять нельзя
+if (!empty ($set['meta_key']))
+    echo "\n" . '<meta name="keywords" content="' . $set['meta_key'] . '" />';
+if (!empty ($set['meta_desc']))
+    echo "\n" . '<meta name="description" content="' . $set['meta_desc'] . '" />';
 echo "\n" . '<link rel="alternate" type="application/rss+xml" title="RSS | Новости ресурса" href="' . $home . '/rss/rss.php" />';
 echo "\n" . '<title>' . $textl . '</title>';
 echo "\n" . '<link rel="stylesheet" href="' . $home . '/theme/' . $set_user['skin'] . '/style.css" type="text/css" />';
@@ -54,17 +58,14 @@ echo '<div class="maintxt">';
 // Фиксация местоположений посетителей                    //
 ////////////////////////////////////////////////////////////
 $sql = '';
-if ($user_id)
-{
+if ($user_id) {
     // Фиксируем местоположение авторизованных
     $movings = $datauser['movings'];
-    if ($datauser['lastdate'] < ($realtime - 300))
-    {
+    if ($datauser['lastdate'] < ($realtime - 300)) {
         $movings = 0;
         $sql .= "`sestime` = '$realtime',";
     }
-    if ($datauser['place'] != $headmod)
-    {
+    if ($datauser['place'] != $headmod) {
         $movings = $movings + 1;
         $sql .= "`movings` = '$movings', `place` = '$headmod',";
     }
@@ -79,19 +80,17 @@ if ($user_id)
     `total_on_site` = '$totalonsite',
     `lastdate` = '$realtime'
     WHERE `id` = '$user_id'");
-} else
-{
+}
+else {
     // Фиксируем местоположение гостей
     $sid = md5($ipl . $agn);
     $movings = 0;
     $req = mysql_query("SELECT * FROM `cms_guests` WHERE `session_id` = '$sid' LIMIT 1");
-    if (mysql_num_rows($req))
-    {
+    if (mysql_num_rows($req)) {
         // Если есть в базе, то обновляем данные
         $res = mysql_fetch_assoc($req);
         $movings = $res['movings'];
-        if ($res['sestime'] < ($realtime - 300))
-        {
+        if ($res['sestime'] < ($realtime - 300)) {
             $movings = 0;
             $sql .= "`sestime` = '$realtime',";
         }
@@ -99,16 +98,15 @@ if ($user_id)
             $sql .= "`ip` = '$ipl',";
         if ($res['browser'] != $agn)
             $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
-        if ($res['place'] != $headmod)
-        {
+        if ($res['place'] != $headmod) {
             $movings = $movings + 1;
             $sql .= "`movings` = '$movings', `place` = '$headmod',";
         }
         mysql_query("UPDATE `cms_guests` SET $sql
         `lastdate` = '$realtime'
         WHERE `session_id` = '$sid'");
-    } else
-    {
+    }
+    else {
         // Если еще небыло в базе, то добавляем запись
         mysql_query("INSERT INTO `cms_guests` SET
         `session_id` = '$sid',
@@ -121,16 +119,14 @@ if ($user_id)
 }
 
 // Выводим сообщение о Бане
-if (isset($ban))
-    echo '<div class="alarm">БАН&nbsp;<a href="' . $home . '/str/my_ban.php?act=ban">Подробно</a></div>';
+if (isset ($ban))
+    echo '<div class="alarm">БАН&nbsp;<a href="' . $home . '/str/users_ban.php">Подробно</a></div>';
 
 // Проверяем, есть ли новые письма
-if ($headmod != "pradd")
-{
+if ($headmod != "pradd") {
     $newl = mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'");
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
-    if ($countnew > 0)
-    {
+    if ($countnew > 0) {
         echo "<div class=\"rmenu\" style='text-align: center'><a href='$home/str/pradd.php?act=in&amp;new'><b><font color='red'>Вам письмо: $countnew</font></b></a></div>";
     }
 }

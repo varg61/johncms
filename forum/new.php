@@ -84,7 +84,7 @@ if ($user_id)
                 exit;
             }
             $vr1 = $realtime - $vr * 3600;
-            if ($dostsadm == 1)
+            if ($rights == 9)
             {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "'");
             } else
@@ -95,7 +95,7 @@ if ($user_id)
             if ($count > 0)
             {
                 echo '<div class="phdr"><b>Все за период ' . $vr . ' часов</b></div>';
-                if ($dostsadm == 1)
+                if ($rights == 9)
                 {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
                 } else
@@ -110,7 +110,7 @@ if ($user_id)
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
                     $cpg = ceil($colmes1 / $kmess);
                     $nick = mysql_fetch_array($colmes);
@@ -163,7 +163,7 @@ if ($user_id)
                 echo '<div class="phdr"><b>Непрочитанное</b></div>';
                 $req = mysql_query("SELECT * FROM `forum`
                 LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
-                WHERE `forum`.`type`='t'" . ($dostadm ? "" : " AND `forum`.`close` != '1'") . "
+                WHERE `forum`.`type`='t'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                 AND (`cms_forum_rdm`.`topic_id` Is Null
                 OR `forum`.`time` > `cms_forum_rdm`.`time`)
                 ORDER BY `forum`.`time` DESC
@@ -175,7 +175,7 @@ if ($user_id)
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($dostadm ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
                     $cpg = ceil($colmes1 / $kmess);
                     $nick = mysql_fetch_array($colmes);

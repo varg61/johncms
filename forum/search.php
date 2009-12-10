@@ -55,7 +55,7 @@ if ($search && !$error)
     echo '<div class="bmenu">Результаты поиска</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum`
     WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "')
-    AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($dostadm == 1 ? "" : " AND `close` != '1'")), 0);
+    AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
     if ($total)
     {
         $req = mysql_query("SELECT * FROM `forum` WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "') AND `type` = '" . ($search_t ? 't' : 'm') . "' LIMIT $start, $kmess");

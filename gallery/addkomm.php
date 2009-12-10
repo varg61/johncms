@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_gal_comm'] || $dostadm))
+if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_gal_comm'] || $rights >= 7))
 {
     if ($_GET['id'] == "")
     {
@@ -26,7 +26,7 @@ if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_gal_comm'] || $dostadm))
     }
 
     // Проверка на спам
-    $old = ($rights > 0 || $dostsadm = 1) ? 10 : 60;
+    $old = ($rights > 0) ? 10 : 60;
     if ($datauser['lastpost'] > ($realtime - $old))
     {
         require_once ("../incfiles/head.php");

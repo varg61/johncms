@@ -14,7 +14,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if (($dostdmod == 1) && (!empty($_GET['cat'])))
+if (($rights == 4 || $rights >= 6) && (!empty($_GET['cat'])))
 {
     $cat = $_GET['cat'];
     $delcat = mysql_query("select * from `download` where type = 'cat' and refid = '" . $cat . "';");

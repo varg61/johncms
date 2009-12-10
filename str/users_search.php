@@ -28,7 +28,7 @@ $search = $search ? $search : rawurldecode(trim($_GET['search']));
 
 echo '<div class="phdr"><b>Поиск пользователя</b></div>';
 echo '<form action="users_search.php" method="post"><div class="gmenu"><p>';
-echo 'Кого ищем?<br /><input type="text" name="search" value="' . checkout($search) . '" />';
+echo '<input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
 echo '</p></div></form>';
 
@@ -58,7 +58,7 @@ if ($search && !$error)
         while ($res = mysql_fetch_array($req))
         {
             echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-            echo show_user($res, 1, ($dostsmod ? 1 : 0));
+            echo show_user($res, 1, ($rights >= 6 ? 1 : 0));
             echo '</div>';
             ++$i;
         }
@@ -71,7 +71,7 @@ if ($search && !$error)
     {
         // Навигация по страницам
         echo '<p>' . pagenav('users_search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="users_search.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+        echo '<p><form action="users_search.php" method="post"><input type="hidden" name="search" value="' . checkout($search) . '" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
     echo '<p><a href="users_search.php">Новый поиск</a></p>';
 } else

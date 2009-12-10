@@ -29,7 +29,7 @@ if (empty($_GET['id']))
 }
 
 // Проверка на спам
-$old = ($rights > 0 || $dostsadm = 1) ? 10 : 60;
+$old = ($rights > 0) ? 10 : 60;
 if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");
@@ -48,7 +48,7 @@ if ($ms['type'] != "al")
 }
 $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refid'] . "';");
 $rz1 = mysql_fetch_array($rz);
-if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || ($dostsmod == 1))
+if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || $rights >= 6)
 {
     $dopras = array("gif", "jpg", "png");
     $tff = implode(" ,", $dopras);

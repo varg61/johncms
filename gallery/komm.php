@@ -22,7 +22,7 @@ if (!$id)
     require_once ('../incfiles/end.php');
     exit;
 }
-if (!$set['mod_gal_comm'] && !$dostadm)
+if (!$set['mod_gal_comm'] && $rights < 7)
 {
     echo '<p>Комментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
     require_once ('../incfiles/end.php');
@@ -111,7 +111,7 @@ while ($mass = mysql_fetch_array($mess))
         if ($set_user['smileys'])
             $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
         echo $text . '<br/>';
-        if ($dostsmod == 1)
+        if ($rights >= 6)
         {
             echo '<div class="func"><a href="index.php?act=delmes&amp;id=' . $mass['id'] . '">Удалить</a><br />' . $mass['ip'] . ' - ' . $mass['soft'] . '</div>';
         }

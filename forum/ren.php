@@ -15,7 +15,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($dostfmod == 1)
+if ($rights == 3 || $rights >= 6)
 {
     if (empty($_GET['id']))
     {

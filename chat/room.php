@@ -177,7 +177,7 @@ switch ($tip)
             $als = mysql_query("select * from `users` where name='" . $mass['from'] . "';");
             $als1 = mysql_fetch_array($als);
             $psw = $als1['alls'];
-            if (($mass['dpar'] != 1 || $mass['to'] == $login || $mass['from'] == $login || $dostsadm == 1) && ($ign1 == 0 || $dostcmod == 1))
+            if (($mass['dpar'] != 1 || $mass['to'] == $login || $mass['from'] == $login || $rights == 9) && ($ign1 == 0 || $rights == 2 || $rights >= 6))
             {
                 if ($type1['dpar'] != 'in' || $psw == $datauser['alls'])
                 {
@@ -259,7 +259,7 @@ switch ($tip)
                     ++$lr;
                 }
             }
-            if (($mass['dpar'] != 1 || $mass['to'] == $login || $mass['from'] == $login || $dostsadm == 1) && ($ign1 == 0 || $dostcmod == 1))
+            if (($mass['dpar'] != 1 || $mass['to'] == $login || $mass['from'] == $login || $rights == 9) && ($ign1 == 0 || $rights == 2 || $rights >= 6))
             {
                 if ($type1['dpar'] != "in" || $psw == $datauser['alls'])
                 {
@@ -281,7 +281,7 @@ switch ($tip)
         {
             echo '[3] <a href="index.php?act=chpas&amp;id=' . $id . '" accesskey="3">Сменить пароль</a><br/>';
         }
-        if ($dostcmod == 1)
+        if ($rights == 2 || $rights >= 6)
         {
             echo '[5] <a href="index.php?act=room&amp;id=' . $id . '" accesskey="5">Очистить комнату</a><br/>';
         }

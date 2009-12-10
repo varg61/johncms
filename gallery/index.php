@@ -23,7 +23,7 @@ require_once ("../incfiles/head.php");
 
 // Ограничиваем доступ к Галерее
 $error = '';
-if (!$set['mod_gal'] && !$dostadm)
+if (!$set['mod_gal'] && $rights < 7)
     $error = 'Галерея закрыта';
 elseif ($set['mod_gal'] == 1 && !$user_id)
     $error = 'Доступ в Галерею открыт только <a href="../in.php">авторизованным</a> посетителям';
@@ -159,7 +159,7 @@ if (in_array($act, $do))
                         echo "<a href='index.php?act=album&amp;id=" . $id . "'>Создать свой альбом</a><br/>";
                     }
                 }
-                if ($dostsmod == 1)
+                if ($rights >= 6)
                 {
                     echo "<a href='index.php?act=cral&amp;id=" . $id . "'>Создать новый альбом</a><br/>";
                     echo "<a href='index.php?act=del&amp;id=" . $id . "'>Удалить раздел</a><br/>";
@@ -303,13 +303,13 @@ if (in_array($act, $do))
                         echo '</a>';
                         if (!empty($fot1['text']))
                             echo "$fot1[text]<br/>";
-                        if ($set['mod_gal_comm'] || $dostadm)
+                        if ($set['mod_gal_comm'] || $rights >= 7)
                         {
                             $comm = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'km' AND `refid` = '" . $fot1['id'] . "'"), 0);
                             if ($comm > 0)
                                 echo '<a href="index.php?act=komm&amp;id=' . $fot1['id'] . '">Комментарии</a> (' . $comm . ')<br/>';
                         }
-                        if ($dostsmod == 1)
+                        if ($rights >= 6)
                         {
                             echo "<a href='index.php?act=edf&amp;id=" . $fot1['id'] . "'>Изменить</a> | <a href='index.php?act=delf&amp;id=" . $fot1['id'] . "'>Удалить</a><br/>";
                         }
@@ -392,11 +392,11 @@ if (in_array($act, $do))
                 }
                 $rz = mysql_query("select * from `gallery` where type='rz' and  id='" . $ms['refid'] . "';");
                 $rz1 = mysql_fetch_array($rz);
-                if (($user_id && $rz1['user'] == 1 && $ms['text'] == $login && !$ban['1'] && !$ban['14']) || $dostsmod == 1)
+                if (($user_id && $rz1['user'] == 1 && $ms['text'] == $login && !$ban['1'] && !$ban['14']) || $rights >= 6)
                 {
                     echo "<a href='index.php?act=upl&amp;id=" . $id . "'>Выгрузить фото</a><br/>";
                 }
-                if ($dostsmod == 1)
+                if ($rights >= 6)
                 {
                     echo "<a href='index.php?act=del&amp;id=" . $id . "'>Удалить альбом</a><br/>";
                     echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить альбом</a><br/>";
@@ -474,7 +474,7 @@ if (in_array($act, $do))
                 $vrf = $ms[time] + $set_user['sdvig'] * 3600;
                 $vrf1 = date("d.m.y / H:i", $vrf);
                 echo "<p>Подпись: $ms[text]<br/>";
-                if ($set['mod_gal_comm'] || $dostadm)
+                if ($set['mod_gal_comm'] || $rights >= 7)
                 {
                     $comm = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'km' AND `refid` = '" . $id . "'"), 0);
                     echo '<a href="index.php?act=komm&amp;id=' . $id . '">Комментарии</a> (' . $comm . ')<br/>';
@@ -512,7 +512,7 @@ if (in_array($act, $do))
         {
             echo "Разделы не созданы!<br/>";
         }
-        if ($dostsmod == 1)
+        if ($rights >= 6)
         {
             echo "<a href='index.php?act=razd'>Создать раздел</a><br/>";
         }

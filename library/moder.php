@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($dostlmod == 1)
+if ($rights == 5 || $rights >= 6)
 {
     echo '<div class="phdr">Модерация статей</div>';
     if ($id && (isset($_GET['yes'])))

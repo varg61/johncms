@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if (!$dostfmod || !$id)
+if (($rights != 3 && $rights < 6) || !$id)
 {
     header('Location: index.php');
     exit;

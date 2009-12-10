@@ -22,7 +22,7 @@ if (!$id || !$user_id || $ban['1'] || $ban['11'])
     exit;
 }
 // Проверка на спам
-$old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
+$old = ($rights > 0) ? 10 : 30;
 if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");

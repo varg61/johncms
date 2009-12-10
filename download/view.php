@@ -301,7 +301,7 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3"))
         imagedestroy($im1);
     }
 }
-if (($dostdmod == 1) && (!empty($_GET['file'])))
+if (($rights == 4 || $rights >= 6) && (!empty($_GET['file'])))
 {
     echo "<hr/>";
     if ((!in_array($prg, $graf)) && ($prg != "mp3"))
@@ -320,7 +320,7 @@ if ($prg == "zip")
 {
     echo "<a href='?act=zip&amp;file=" . $file . "'>Открыть архив</a><br/>";
 }
-if ($set['mod_down_comm'] || $dostadm)
+if ($set['mod_down_comm'] || $rights >= 7)
 {
     $totalkomm = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'komm' AND `refid` = '$file'"), 0);
     echo "<a href='?act=down&amp;id=" . $file . "'>Скачать</a><br/><a href='?act=komm&amp;id=" . $file . "'>Комментарии ($totalkomm)</a><br/>";

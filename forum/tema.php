@@ -54,7 +54,7 @@ if ($tip != "t")
 }
 if (isset($_POST['submit']))
 {
-    $tema = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'm'" . ($dostadm ? '' : " AND `close` != '1'") . " ORDER BY `id` ASC");
+    $tema = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `id` ASC");
     $mod = intval($_POST['mod']);
     switch ($mod)
     {

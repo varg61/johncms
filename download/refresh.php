@@ -15,7 +15,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once ("../incfiles/head.php");
-if ($dostdmod == 1)
+if ($rights == 4 || $rights >= 6)
 {
     $dropen = opendir("$loadroot");
     while (($file1 = readdir($dropen)))

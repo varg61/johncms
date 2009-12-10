@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($dostfmod == 1)
+if ($rights == 3 || $rights >= 6)
 {
     if (empty($_GET['id']))
     {
@@ -35,7 +35,7 @@ if ($dostfmod == 1)
         require_once ("../incfiles/end.php");
         exit;
     }
-    if (isset($_GET['yes']) && $dostsadm == 1)
+    if (isset($_GET['yes']) && $rights == 9)
     {
         // Удаляем прикрепленные файлы
         $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '$id'");
@@ -53,7 +53,7 @@ if ($dostfmod == 1)
         // Удаляем топик
         mysql_query("DELETE FROM `forum` WHERE `id`='$id'");
         header('Location: ?id=' . $res['refid']);
-    } elseif (isset($_GET['hid']) || isset($_GET['yes']) && $dostsadm != 1)
+    } elseif (isset($_GET['hid']) || isset($_GET['yes']) && $rights < 9)
     {
         // Скрываем топик
         mysql_query("UPDATE `forum` SET `close` = '1' WHERE `id` = '" . $id . "' LIMIT 1");
@@ -72,7 +72,7 @@ if ($dostfmod == 1)
     require_once ("../incfiles/head.php");
     echo '<p>Вы действительно хотите удалить тему?</p>';
     echo '<p><a href="?act=deltema&amp;id=' . $id . '&amp;yes">Удалить</a><br />';
-    if (($dostsadm == 1) && ($res['close'] != 1))
+    if ($rights == 9 && $res['close'] != 1)
     {
         echo '<a href="?act=deltema&amp;id=' . $id . '&amp;hid">Скрыть</a><br />';
     }

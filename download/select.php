@@ -19,7 +19,7 @@ if (!empty($_GET['cat']))
 {
     $cat = $_GET['cat'];
     provcat($cat);
-    if ($dostdmod == 1)
+    if ($rights == 4 || $rights >= 6)
     {
         echo "<form action='?act=upl' method='post' enctype='multipart/form-data'>
          Выберите файл(max $flsz кб.):<br/>

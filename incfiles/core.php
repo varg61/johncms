@@ -19,36 +19,28 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Error_Reporting(E_ALL & ~ E_NOTICE);
 Error_Reporting(ERROR | WARNING);
 mb_internal_encoding('UTF-8');
-@ini_set('arg_separator.output','&amp;');
-@ini_set('session.use_trans_sid','0');
+@ ini_set('arg_separator.output', '&amp;');
+@ ini_set('session.use_trans_sid', '0');
 
-if (!isset($rootpath))
+if (!isset ($rootpath))
     $rootpath = '../';
 
-////////////////////////////////////////////////////////////
-// Удаляем слэши, если открыт magic_quotes_gpc            //
-////////////////////////////////////////////////////////////
-if (get_magic_quotes_gpc())
-{
-    $in = array(&$_GET, &$_POST, &$_COOKIE);
-    while (list($k, $v) = each($in))
-    {
-        foreach ($v as $key => $val)
-        {
-            if (!is_array($val))
-            {
+if (get_magic_quotes_gpc()) {
+    // Удаляем слэши, если открыт magic_quotes_gpc
+    $in = array(& $_GET, & $_POST, & $_COOKIE);
+    while (list($k, $v) = each($in)) {
+        foreach ($v as $key => $val) {
+            if (!is_array($val)) {
                 $in[$k][$key] = stripslashes($val);
                 continue;
             }
-            $in[] = &$in[$k][$key];
+            $in[] = & $in[$k][$key];
         }
     }
-    unset($in);
-    if (!empty($_FILES))
-    {
-        foreach ($_FILES as $k => $v)
-        {
-            $_FILES[$k]['name'] = stripslashes((string )$v['name']);
+    unset ($in);
+    if (!empty ($_FILES)) {
+        foreach ($_FILES as $k => $v) {
+            $_FILES[$k]['name'] = stripslashes((string) $v['name']);
         }
     }
 }
@@ -56,12 +48,12 @@ if (get_magic_quotes_gpc())
 ////////////////////////////////////////////////////////////
 // Получаем и фильтруем основные переменные для системы   //
 ////////////////////////////////////////////////////////////
-$id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false; // Идентификатор
-$page = isset($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1; // Номер страницы
-$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0; // Для постраничной навигации
-$act = isset($_GET['act']) ? trim($_GET['act']) : ''; // Выбор действия
-$do = isset($_GET['do']) ? trim($_GET['do']) : ''; // Выбор действия
-$agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES); // User Agent
+$id = isset ($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false;
+$page = isset ($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1;
+$start = isset ($_GET['start']) ? abs(intval($_GET['start'])) : 0;
+$act = isset ($_GET['act']) ? trim($_GET['act']) : '';
+$mod = isset ($_GET['mod']) ? trim($_GET['mod']) : '';
+$agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES);
 
 ////////////////////////////////////////////////////////////
 // 1) Получаем реальный IP                                //
@@ -71,7 +63,7 @@ require_once ($rootpath . 'incfiles/class_ipinit.php');
 $ipinit = new ipinit();
 $ipl = $ipinit->ip;
 $ipp = long2ip($ipl);
-unset($ipinit);
+unset ($ipinit);
 
 // Стартуем сессию
 session_name("SESID");
@@ -81,36 +73,33 @@ session_start();
 // Подключаемся к базе данных                             //
 ////////////////////////////////////////////////////////////
 require_once ($rootpath . 'incfiles/db.php');
-$connect = @mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server');
-@mysql_select_db($db_name) or die('cannot connect to db');
-@mysql_query("SET NAMES 'utf8'", $connect);
+$connect = @ mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server');
+@ mysql_select_db($db_name) or die('cannot connect to db');
+@ mysql_query("SET NAMES 'utf8'", $connect);
 
 ////////////////////////////////////////////////////////////
 // Проверяем адрес IP на Бан                              //
 ////////////////////////////////////////////////////////////
 $req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . $ipl . "' BETWEEN `ip1` AND `ip2` LIMIT 1;") or die('Error: table "cms_ban_ip"');
-if (mysql_num_rows($req) > 0)
-{
+if (mysql_num_rows($req) > 0) {
     $res = mysql_fetch_array($req);
-    switch ($res['ban_type'])
-    {
-        case 2:
-            // Редирект по ссылке
-            if (!empty($res['link']))
-            {
+    switch ($res['ban_type']) {
+        case 2 :
+            if (!empty ($res['link'])) {
+                // Редирект по ссылке
                 header("Location: " . $res['link']);
                 exit;
-            } else
-            {
+            }
+            else {
                 header("Location: http://gazenwagen.com");
                 exit;
             }
             break;
-        case 3:
+        case 3 :
             // Закрытие регистрации
             $regban = true;
             break;
-        default:
+        default :
             // Полный запрет доступа к сайту
             header("HTTP/1.0 404 Not Found");
             exit;
@@ -122,6 +111,7 @@ if (mysql_num_rows($req) > 0)
 ////////////////////////////////////////////////////////////
 $user_id = false;
 $user_ps = false;
+// Временно оставляем старые переменные
 $dostsadm = 0;
 $dostadm = 0;
 $dostsmod = 0;
@@ -133,27 +123,26 @@ $dostkmod = 0;
 $dostmod = 0;
 $rights = 0;
 
-// Основные настройки системы
+// Задаем настройки системы
 $req = mysql_query("SELECT * FROM `cms_settings`;");
 $set = array();
-while ($res = mysql_fetch_row($req))
-    $set[$res[0]] = $res[1];
+while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
 mysql_free_result($req);
-$emailadmina = $set['emailadmina']; // E-mail администратора
-$sdvigclock = $set['sdvigclock']; // Временной сдвиг по умолчанию для системы
-$copyright = $set['copyright']; // Коприайт сайта
-$home = $set['homeurl']; // Домашняя страница
-$ras_pages = $set['rashstr']; // Расширение текстовых страниц
-$admp = $set['admp']; // Папка с Админкой
-$flsz = $set['flsz']; // Максимальный размер файлов
+$emailadmina = $set['emailadmina'];// E-mail администратора
+$sdvigclock = $set['sdvigclock'];// Временной сдвиг по умолчанию для системы
+$copyright = $set['copyright'];// Коприайт сайта
+$home = $set['homeurl'];// Домашняя страница
+$ras_pages = 'txt';// Расширение текстовых страниц
+$admp = $set['admp'];// Папка с Админкой
+$flsz = $set['flsz'];// Максимальный размер файлов
 
 // Пользовательские параметры для Гостей
 $set_user = array();
-$set_user['sdvig'] = 0; // Временной сдвиг
-$set_user['smileys'] = 1; // Включить(1) выключить(0) смайлы
-$set_user['kmess'] = 10; // Число сообщений на страницу
-$set_user['quick_go'] = 1; // Быстрый переход
-$set_user['skin'] = $set['skindef']; // Тема оформления
+$set_user['sdvig'] = 0;// Временной сдвиг
+$set_user['smileys'] = 1;// Включить(1) выключить(0) смайлы
+$set_user['kmess'] = 10;// Число сообщений на страницу
+$set_user['quick_go'] = 1;// Быстрый переход
+$set_user['skin'] = $set['skindef'];// Тема оформления
 $kmess = $set_user['kmess'];
 
 ////////////////////////////////////////////////////////////
@@ -162,13 +151,11 @@ $kmess = $set_user['kmess'];
 date_default_timezone_set('Europe/Moscow');
 $realtime = time() + $sdvigclock * 3600;
 $mon = date("m", $realtime);
-if (substr($mon, 0, 1) == 0)
-{
+if (substr($mon, 0, 1) == 0) {
     $mon = str_replace("0", "", $mon);
 }
 $day = date("d", $realtime);
-if (substr($day, 0, 1) == 0)
-{
+if (substr($day, 0, 1) == 0) {
     $day = str_replace("0", "", $day);
 }
 $mesyac = array(1 => "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря");
@@ -176,8 +163,7 @@ $mesyac = array(1 => "января", "февраля", "марта", "апрел
 ////////////////////////////////////////////////////////////
 // Автоочистка системы                                    //
 ////////////////////////////////////////////////////////////
-if ($set['clean_time'] <= ($realtime - 43200))
-{
+if ($set['clean_time'] <= ($realtime - 43200)) {
     // Очищаем таблицу `cms_guests`
     mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($realtime - 600) . "'");
     mysql_query("OPTIMIZE TABLE `cms_guests`");
@@ -188,8 +174,7 @@ if ($set['clean_time'] <= ($realtime - 43200))
 ////////////////////////////////////////////////////////////
 // Авторизация по сессии                                  //
 ////////////////////////////////////////////////////////////
-if (isset($_SESSION['uid']) && isset($_SESSION['ups']))
-{
+if (isset ($_SESSION['uid']) && isset ($_SESSION['ups'])) {
     $user_id = intval($_SESSION['uid']);
     $user_ps = $_SESSION['ups'];
 }
@@ -197,8 +182,7 @@ if (isset($_SESSION['uid']) && isset($_SESSION['ups']))
 ////////////////////////////////////////////////////////////
 // Авторизация по COOKIE                                  //
 ////////////////////////////////////////////////////////////
-elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
-{
+elseif (isset ($_COOKIE['cuid']) && isset ($_COOKIE['cups'])) {
     $user_id = intval(base64_decode($_COOKIE['cuid']));
     $_SESSION['uid'] = $user_id;
     $user_ps = md5(md5(base64_decode($_COOKIE['cups'])));
@@ -209,19 +193,15 @@ elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
 ////////////////////////////////////////////////////////////
 // Запрос в базе данных по юзеру                          //
 ////////////////////////////////////////////////////////////
-if ($user_id && $user_ps)
-{
+if ($user_id && $user_ps) {
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user_id' LIMIT 1");
-    if (mysql_num_rows($req))
-    {
+    if (mysql_num_rows($req)) {
         $datauser = mysql_fetch_assoc($req);
-        if ($user_ps === $datauser['password'])
-        {
+        if ($user_ps === $datauser['password']) {
             // Получаем общие настройки пользователя
             $set_user = array();
             $set_user = unserialize($datauser['set_user']);
-            if (empty($set_user))
-            {
+            if (empty ($set_user)) {
                 // Задаем пользовательские настройки по-умолчанию
                 $set_user['smileys'] = 1;
                 $set_user['translit'] = 1;
@@ -234,67 +214,39 @@ if ($user_id && $user_ps)
                 $set_user['kmess'] = 10;
                 $set_user['skin'] = 'default';
             }
-            $kmess = (int)$set_user['kmess']; // Число сообщений на страницу
+            $kmess = (int) $set_user['kmess'];            // Число сообщений на страницу
             // Получаем данные пользователя
-            $login = $datauser['name']; // Логин (Ник) пользователя
+            $login = $datauser['name'];            // Логин (Ник) пользователя
             $rights = $datauser['rights'];
 
             ////////////////////////////////////////////////////////////
             // Проверка юзера на бан                                  //
             ////////////////////////////////////////////////////////////
-            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user_id . "' AND `ban_time`>'" . $realtime . "';") or die('Error: table "cms_ban_users"');
-            if (mysql_num_rows($req) != 0)
-            {
+            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '$user_id' AND `ban_time` > '$realtime'") or die('Error: table "cms_ban_users"');
+            if (mysql_num_rows($req)) {
                 $rights = 0;
                 $ban = array();
-                while ($res = mysql_fetch_row($req))
-                    $ban[$res[4]] = 1;
+                while ($res = mysql_fetch_row($req)) $ban[$res[4]] = 1;
                 mysql_free_result($req);
-                if (isset($ban['9']))
-                {
-                    header("HTTP/1.0 404 Not Found");
-                    exit;
-                }
             }
-
-            // Установка административного доступа
-            if ($rights == 9)
-                $dostsadm = 1; // Супервизор
-            if ($rights >= 7)
-                $dostadm = 1; // Админ
-            if ($rights >= 6)
-                $dostsmod = 1; // Старший модер
-            if ($rights == 5 || $rights >= 6)
-                $dostlmod = 1; // Модер библиотеки
-            if ($rights == 4 || $rights >= 6)
-                $dostdmod = 1; // Модер по загрузкам
-            if ($rights == 3 || $rights >= 6)
-                $dostfmod = 1; // Модер форума
-            if ($rights == 2 || $rights >= 6)
-                $dostcmod = 1; // Модер Чата
-            if ($rights == 1 || $rights >= 6)
-                $dostkmod = 1; // Киллер
-            if ($rights >= 1)
-                $dostmod = 1;
-
             // Если юзера не было на сайте более 1-го часа , показываем дайджест
             if ($datauser['lastdate'] < ($realtime - 3600) && $set_user['digest'] && $headmod == 'mainpage')
                 header('Location: ' . $home . '/index.php?act=digest&last=' . $datauser['lastdate']);
-        } else
-        {
+        }
+        else {
             // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки
-            unset($_SESSION['uid']);
-            unset($_SESSION['ups']);
+            unset ($_SESSION['uid']);
+            unset ($_SESSION['ups']);
             setcookie('cuid', '');
             setcookie('cups', '');
             $user_id = false;
             $user_ps = false;
         }
-    } else
-    {
+    }
+    else {
         // Если юзер не найден, уничтожаем переменные сессии и чистим куки
-        unset($_SESSION['uid']);
-        unset($_SESSION['ups']);
+        unset ($_SESSION['uid']);
+        unset ($_SESSION['ups']);
         setcookie('cuid', '');
         setcookie('cups', '');
         $user_id = false;
@@ -302,19 +254,18 @@ if ($user_id && $user_ps)
     }
 }
 
-// Подключаем дополнительные файлы
+// Подключаем файл функций
 require_once ($rootpath . 'incfiles/func.php');
 
 // Актуализация переменных
-$start = isset($_REQUEST['page']) ? $page * $kmess - $kmess : $start;
+$start = isset ($_REQUEST['page']) ? $page * $kmess - $kmess : $start;
 
 // Буфферизация вывода
-if ($set['gzip'] && @extension_loaded('zlib'))
-{
-    @ini_set('zlib.output_compression_level', 3);
+if ($set['gzip'] && @ extension_loaded('zlib')) {
+    @ ini_set('zlib.output_compression_level', 3);
     ob_start('ob_gzhandler');
-} else
-{
+}
+else {
     ob_start();
 }
 

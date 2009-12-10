@@ -39,7 +39,7 @@ if ($user_id)
             ////////////////////////////////////////////////////////////
 
             // Проверка на спам
-            $old = ($rights > 0 || $dostsadm = 1) ? 10:
+            $old = ($rights > 0) ? 10:
             30;
             if ($datauser['lastpost'] > ($realtime - $old))
             {
@@ -247,7 +247,7 @@ if ($user_id)
                 exit;
 
             // Проверка на спам
-            $old = ($rights > 0 || $dostsadm = 1) ? 10:
+            $old = ($rights > 0) ? 10:
             30;
             if ($datauser['lastpost'] > ($realtime - $old))
             {

@@ -26,8 +26,7 @@ require_once ('incfiles/head.php');
 
 if (isset ($_GET['err']))
     $act = 404;
-switch ($act)
-{
+switch ($act) {
     case '404' :
         ////////////////////////////////////////////////////////////
         // Сообщение об ошибке 404                                //
@@ -41,13 +40,11 @@ switch ($act)
         echo '<div class="menu"><a href="str/users_search.php">Поиск юзера</a></div>';
         echo '<div class="menu"><a href="str/users.php">Список юзеров</a> (' . kuser() . ')</div>';
         $mon = date("m", $realtime);
-        if (substr($mon, 0, 1) == 0)
-        {
+        if (substr($mon, 0, 1) == 0) {
             $mon = str_replace("0", "", $mon);
         }
         $day = date("d", $realtime);
-        if (substr($day, 0, 1) == 0)
-        {
+        if (substr($day, 0, 1) == 0) {
             $day = str_replace("0", "", $day);
         }
         $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . $day . "' AND `monthb` = '" . $mon . "' AND `preg` = '1'"), 0);
@@ -73,8 +70,7 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Личный кабинет                                         //
         ////////////////////////////////////////////////////////////
-        if (!$user_id)
-        {
+        if (!$user_id) {
             echo display_error('Только для зарегистрированных');
             exit;
         }
@@ -83,11 +79,10 @@ switch ($act)
         echo '<div class="gmenu"><p><h3><img src="images/rate.gif" width="16" height="16" class="left" />&nbsp;Мои активы</h3><ul>';
         echo '<li><a href="str/my_stat.php?act=forum">Последние записи</a></li>';
         echo '<li><a href="str/my_stat.php">Моя Статистика</a></li>';
-        if ($dostmod)
-        {
+        if ($rights >= 6) {
             $guest = gbook(2);
             echo '<li><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a> (<span class="red">' . $guest . '</span>)</li>';
-            echo '<li><a href="panel/main.php">[<b>Админка</b>]</a></li>';
+            echo '<li><span class="red"><a href="' . $admp . '/index.php"><b>Админ панель</b></a></span></li>';
         }
         echo '</ul></p></div>';
         echo '<div class="menu"><p><h3><img src="images/mail.png" width="16" height="16" class="left" />&nbsp;Моя почта</h3><ul>';
@@ -123,21 +118,18 @@ switch ($act)
         ////////////////////////////////////////////////////////////
         // Дайджест                                               //
         ////////////////////////////////////////////////////////////
-        if (!$user_id)
-        {
+        if (!$user_id) {
             echo display_error('Только для зарегистрированных');
             exit;
         }
         echo '<div class="phdr">Дайджест</div>';
         echo '<div class="gmenu"><p>Привет, <b>' . $login . '</b><br/>Добро пожаловать на ' . $copyright . '!<br /><a href="index.php">Войти на сайт</a></p></div>';
         // Поздравление с днем рождения
-        if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon)
-        {
+        if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon) {
             echo '<div class="rmenu"><p>С ДНЁМ РОЖДЕНИЯ!!!</p></div>';
         }
         // Дайджест Администратора
-        if ($dostmod)
-        {
+        if ($rights >= 1) {
             $newusers_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "' AND `preg` = '1'"), 0);
             $reg_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg` = 0"), 0);
             $ban_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "'"), 0);
@@ -146,7 +138,7 @@ switch ($act)
             if ($newusers_total > 0)
                 echo '<li><a href="str/users.php">Новые посетители</a> (' . $newusers_total . ')</li>';
             if ($reg_total > 0)
-                echo '<li><a href="' . $admp . '/users_reg.php">На регистрации</a> (' . $reg_total . ')</li>';
+                echo '<li><a href="' . $admp . '/index.php?act=usr_reg">На регистрации</a> (' . $reg_total . ')</li>';
             if ($ban_total > 0)
                 echo '<li><a href="' . $admp . '/zaban.php">Имеют Бан</a> (' . $ban_total . ')</li>';
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);

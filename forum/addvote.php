@@ -15,13 +15,14 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if ($dostfmod == 1)
+if ($rights == 3 || $rights >= 6)
 {
 $topic = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `id`='$id' AND `edit` != '1'"), 0);
 $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote` WHERE `type`='1' AND `topic`='$id'"), 0);
 require_once ("../incfiles/head.php");
 if($topic_vote != 0 || $topic == 0)
-{echo'Ошибка!!!<br /> <a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">назад</a>';
+{
+echo'Ошибка!!!<br /> <a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">назад</a>';
 require_once ("../incfiles/end.php");
 exit;
 }
@@ -47,7 +48,8 @@ if ( empty($text) ) { continue; }
   else echo'Ошибка добавления опроса<br /><a href="?act=addvote&amp;id='.$id.'">повторить</a>';
 }
 else
-{echo '<form action="index.php?act=addvote&amp;id=' . $id . '" method="post">';
+{
+echo '<form action="index.php?act=addvote&amp;id=' . $id . '" method="post">';
 echo '<br />Опрос(max. 150):<br/><input type="text" size="20" maxlength="150" name="name_vote" value="'. htmlentities($_POST['name_vote'], ENT_QUOTES, 'UTF-8') .'"/><br/>';
 if (isset($_POST['plus'])) ++$_POST['count_vote']; elseif(isset($_POST['minus'])) --$_POST['count_vote'];
 if ($_POST['count_vote'] < 2 || empty($_POST['count_vote'])) $_POST['count_vote'] = 2;

@@ -22,14 +22,13 @@ require_once ("../incfiles/core.php");
 
 // Ограничиваем доступ к Чату
 $error = '';
-if (!$set['mod_chat'] && !$dostadm)
+if (!$set['mod_chat'] && !$rights < 7)
     $error = 'Чат закрыт';
 elseif ($ban['1'] || $ban['12'])
     $error = 'Для Вас доступ в Чат закрыт';
 elseif (!$user_id)
     $error = 'Доступ в Чат открыт только <a href="../in.php">авторизованным</a> посетителям';
-if ($error)
-{
+if ($error) {
     require_once ("../incfiles/head.php");
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
     require_once ("../incfiles/end.php");
@@ -41,8 +40,7 @@ if ($error)
 ////////////////////////////////////////////////////////////
 $set_chat = array();
 $set_chat = unserialize($datauser['set_chat']);
-if (empty($set_chat))
-{
+if (empty ($set_chat)) {
     $set_chat['refresh'] = 20;
     $set_chat['chmes'] = 10;
     $set_chat['carea'] = 0;
@@ -52,7 +50,7 @@ if (empty($set_chat))
 }
 
 // Фиксируем местонахождение пользователя
-$where = !empty($id) ? 'chat,' . $id : 'chat';
+$where = !empty ($id) ? 'chat,' . $id : 'chat';
 mysql_query("INSERT INTO `count` SET
 	`ip`='" . $ipp . "',
 	`browser`='" . mysql_real_escape_string($agn) . "',
@@ -60,29 +58,25 @@ mysql_query("INSERT INTO `count` SET
 	`where`='" . $where . "',
 	`name`='" . $login . "';");
 
-switch ($act)
-{
-    case "room":
+switch ($act) {
+    case "room" :
         ////////////////////////////////////////////////////////////
         // Очищаем комнату                                        //
         ////////////////////////////////////////////////////////////
-        if ($dostcmod == 1 && $id)
-        {
+        if (($rights == 2 || $rights >= 6) && $id) {
             $typ = mysql_query("SELECT * FROM `chat` WHERE `id` = '" . $id . "' LIMIT 1");
             $ms = mysql_fetch_array($typ);
-            if ($ms['type'] != "r")
-            {
+            if ($ms['type'] != "r") {
                 require_once ("../incfiles/head.php");
                 echo "Ошибка!<br/><a href='index.php?'>В чат</a><br/>";
                 require_once ("../incfiles/end.php");
                 exit;
             }
-            if (isset($_GET['yes']))
-            {
+            if (isset ($_GET['yes'])) {
                 mysql_query("DELETE FROM `chat` WHERE `refid` = '" . $id . "'");
                 header("Location: $home/chat/index.php?id=$id");
-            } else
-            {
+            }
+            else {
                 require_once ("../incfiles/head.php");
                 echo '<p>Вы действительно хотите очистить комнату?<br/><a href="index.php?act=room&amp;id=' . $id . '&amp;yes">Да</a> | <a href="index.php?id=' . $id . '">Нет</a></p>';
             }
@@ -90,7 +84,7 @@ switch ($act)
         require_once ("../incfiles/end.php");
         break;
 
-    case "moders":
+    case "moders" :
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
@@ -98,36 +92,32 @@ switch ($act)
         echo "<b>Модераторы чата</b><br/>";
         $mod = mysql_query("select * from `users` where rights='2';");
         $mod2 = mysql_num_rows($mod);
-        if ($mod2 != 0)
-        {
-            while ($mod1 = mysql_fetch_array($mod))
-            {
-                if ($login != $mod1['name'])
-                {
+        if ($mod2 != 0) {
+            while ($mod1 = mysql_fetch_array($mod)) {
+                if ($login != $mod1['name']) {
                     echo "<a href='../str/anketa.php?id=" . $mod1['id'] . "'><font color='" . $conik . "'>$mod1[name]</font></a>";
-                } else
-                {
+                }
+                else {
                     echo "<font color='" . $csnik . "'>$mod1[name]</font>";
                 }
                 $ontime = $mod1['lastdate'];
                 $ontime2 = $ontime + 300;
-                if ($realtime > $ontime2)
-                {
+                if ($realtime > $ontime2) {
                     echo '<font color="#FF0000"> [Off]</font>';
-                } else
-                {
+                }
+                else {
                     echo '<font color="#00AA00"> [ON]</font>';
                 }
             }
-        } else
-        {
+        }
+        else {
             echo "Не назначены<br/>";
         }
         echo "<a href='index.php?id=" . $id . "'>Назад</a><br/>";
         require_once ("../incfiles/end.php");
         break;
 
-    case "trans":
+    case "trans" :
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
@@ -137,12 +127,11 @@ switch ($act)
         require_once ("../incfiles/end.php");
         break;
 
-    case "say":
+    case "say" :
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-        if (empty($id))
-        {
+        if (empty ($id)) {
             require_once ("../incfiles/head.php");
             echo "Ошибка!<br/><a href='?'>В чат</a><br/>";
             require_once ("../incfiles/end.php");
@@ -150,10 +139,8 @@ switch ($act)
         }
 
         // Проверка на спам
-        $old = ($rights > 0 || $dostsadm = 1) ? 5:
-        10;
-        if ($datauser['lastpost'] > ($realtime - $old))
-        {
+        $old = ($rights) ? 5 : 10;
+        if ($datauser['lastpost'] > ($realtime - $old)) {
             require_once ("../incfiles/head.php");
             echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="index.php?id=' . $id . '">Назад</a></p>';
             require_once ("../incfiles/end.php");
@@ -162,13 +149,10 @@ switch ($act)
         $type = mysql_query("SELECT * FROM `chat` WHERE `id` = '" . $id . "' LIMIT 1");
         $type1 = mysql_fetch_array($type);
         $tip = $type1['type'];
-        switch ($tip)
-        {
-            case "r":
-                if (isset($_POST['submit']))
-                {
-                    if (empty($_POST['msg']))
-                    {
+        switch ($tip) {
+            case "r" :
+                if (isset ($_POST['submit'])) {
+                    if (empty ($_POST['msg'])) {
                         require_once ("../incfiles/head.php");
                         echo "Вы не ввели сообщение!<br/><a href='index.php?act=say&amp;id=" . $id . "'>Повторить</a><br/>";
                         require_once ("../incfiles/end.php");
@@ -177,28 +161,24 @@ switch ($act)
                     // Принимаем сообщение и записываем в базу
                     $msg = check(trim($_POST['msg']));
                     $msg = mb_substr($msg, 0, 500);
-                    if ($_POST['msgtrans'] == 1)
-                    {
+                    if ($_POST['msgtrans'] == 1) {
                         $msg = trans($msg);
                     }
                     $agn = strtok($agn, ' ');
                     mysql_query("insert into `chat` values(0,'" . $id . "','','m','" . $realtime . "','" . $login . "','','0','" . $msg . "','" . $ipp . "','" . mysql_real_escape_string($agn) . "','','');");
-                    if (empty($datauser['postchat']))
-                    {
+                    if (empty ($datauser['postchat'])) {
                         $fpst = 1;
-                    } else
-                    {
+                    }
+                    else {
                         $fpst = $datauser['postchat'] + 1;
                     }
                     mysql_query("UPDATE `users` SET
 						`postchat` = '" . $fpst . "',
 						`lastpost` = '" . $realtime . "'
 						WHERE `id` = '" . $user_id . "';");
-                    if ($type1['dpar'] == "vik")
-                    {
+                    if ($type1['dpar'] == "vik") {
                         $protv = mysql_query("select * from `chat` where dpar='vop' and type='m' order by time desc;");
-                        while ($protv2 = mysql_fetch_array($protv))
-                        {
+                        while ($protv2 = mysql_fetch_array($protv)) {
                             $prr[] = $protv2['id'];
                         }
                         $pro = mysql_query("select * from `chat` where dpar='vop' and type='m' and id='" . $prr[0] . "';");
@@ -208,33 +188,29 @@ switch ($act)
                         $vopr = mysql_query("select * from `vik` where id='" . $ans . "';");
                         $vopr1 = mysql_fetch_array($vopr);
                         $answer = $vopr1['otvet'];
-                        if (!empty($msg) && !empty($answer) && $protv1['otv'] != 1)
-                        {
-                            if (preg_match("/$answer/i", "$msg"))
-                            {
+                        if (!empty ($msg) && !empty ($answer) && $protv1['otv'] != 1) {
+                            if (preg_match("/$answer/i", "$msg")) {
                                 $itg = $datauser['otvetov'] + 1;
-                                switch ($protv1['otv'])
-                                {
-                                    case "2":
+                                switch ($protv1['otv']) {
+                                    case "2" :
                                         $pods = ", не используя подсказок";
                                         $bls = 5;
                                         break;
-                                    case "3":
+                                    case "3" :
                                         $pods = ", используя одну подсказку";
                                         $bls = 3;
                                         break;
-                                    case "4":
+                                    case "4" :
                                         $pods = ", используя две подсказки";
                                         $bls = 2;
                                         break;
                                 }
                                 $balans = $datauser['balans'] + $bls;
                                 $otvtime = $realtime - $protv1['time'];
-                                if ($datauser['sex'] == "m")
-                                {
+                                if ($datauser['sex'] == "m") {
                                     $tx = "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
-                                } else
-                                {
+                                }
+                                else {
                                     $tx = "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
                                 }
                                 $mtim = $realtime + 1;
@@ -246,8 +222,8 @@ switch ($act)
                         }
                     }
                     header("location: $home/chat/index.php?id=$id");
-                } else
-                {
+                }
+                else {
                     require_once ("chat_header.php");
                     echo 'Добавление сообщения<br />(max. 500)';
                     echo '<div class="title1">' . $type1['text'] . '</div>';
@@ -260,27 +236,24 @@ switch ($act)
                 }
                 break;
 
-            case "m":
+            case "m" :
                 ////////////////////////////////////////////////////////////
                 //
                 ////////////////////////////////////////////////////////////
                 $th = $type1['refid'];
                 $th2 = mysql_query("select * from `chat` where id= '" . $th . "';");
                 $th1 = mysql_fetch_array($th2);
-                if (isset($_POST['submit']))
-                {
+                if (isset ($_POST['submit'])) {
                     $flt = $realtime - 10;
                     $af = mysql_query("select * from `chat` where type='m' and time>'" . $flt . "' and `from`= '" . $login . "';");
                     $af1 = mysql_num_rows($af);
-                    if ($af1 != 0)
-                    {
+                    if ($af1 != 0) {
                         require_once ("../incfiles/head.php");
                         echo "Антифлуд!Вы не можете так часто добавлять сообщения<br/>Порог 10 секунд<br/><a href='index.php?id=" . $th . "'>Назад</a><br/>";
                         require_once ("../incfiles/end.php");
                         exit;
                     }
-                    if (empty($_POST['msg']))
-                    {
+                    if (empty ($_POST['msg'])) {
                         require_once ("../incfiles/head.php");
                         echo "Вы не ввели сообщение!<br/><a href='index.php?act=say&amp;id=" . $id . "'>Повторить</a><br/>";
                         require_once ("../incfiles/end.php");
@@ -291,24 +264,20 @@ switch ($act)
                     $nas = check($_POST['nas']);
                     $msg = check(trim($_POST['msg']));
                     $msg = mb_substr($msg, 0, 500);
-                    if ($_POST['msgtrans'] == 1)
-                    {
+                    if ($_POST['msgtrans'] == 1) {
                         $msg = trans($msg);
                     }
                     mysql_query("insert into `chat` values(0,'" . $th . "','','m','" . $realtime . "','" . $login . "','" . $to . "','" . $priv . "','" . $msg . "','" . $ipp . "','" . mysql_real_escape_string($agn) . "','" . $nas . "','');");
-                    if (empty($datauser['postchat']))
-                    {
+                    if (empty ($datauser['postchat'])) {
                         $fpst = 1;
-                    } else
-                    {
+                    }
+                    else {
                         $fpst = $datauser['postchat'] + 1;
                     }
                     mysql_query("update `users` set  postchat='" . $fpst . "' where id='" . intval($_SESSION['uid']) . "';");
-                    if ($th1[dpar] == "vik")
-                    {
+                    if ($th1[dpar] == "vik") {
                         $protv = mysql_query("select * from `chat` where dpar='vop' and type='m' order by time desc;");
-                        while ($protv2 = mysql_fetch_array($protv))
-                        {
+                        while ($protv2 = mysql_fetch_array($protv)) {
                             $prr[] = $protv2['id'];
                         }
                         $pro = mysql_query("select * from `chat` where dpar='vop' and type='m' and id='" . $prr[0] . "';");
@@ -318,33 +287,29 @@ switch ($act)
                         $vopr = mysql_query("select * from `vik` where id='" . $ans . "';");
                         $vopr1 = mysql_fetch_array($vopr);
                         $answer = $vopr1['otvet'];
-                        if (!empty($msg) && !empty($answer) && $protv1['otv'] != 1)
-                        {
-                            if (preg_match("/$answer/i", "$msg"))
-                            {
+                        if (!empty ($msg) && !empty ($answer) && $protv1['otv'] != 1) {
+                            if (preg_match("/$answer/i", "$msg")) {
                                 $itg = $datauser['otvetov'] + 1;
-                                switch ($protv1['otv'])
-                                {
-                                    case "2":
+                                switch ($protv1['otv']) {
+                                    case "2" :
                                         $pods = ", не используя подсказок";
                                         $bls = 5;
                                         break;
-                                    case "3":
+                                    case "3" :
                                         $pods = ", используя одну подсказку";
                                         $bls = 3;
                                         break;
-                                    case "4":
+                                    case "4" :
                                         $pods = ", используя две подсказки";
                                         $bls = 2;
                                         break;
                                 }
                                 $balans = $datauser['balans'] + $bls;
                                 $otvtime = $realtime - $protv1['time'];
-                                if ($datauser['sex'] == "m")
-                                {
+                                if ($datauser['sex'] == "m") {
                                     $tx = "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
-                                } else
-                                {
+                                }
+                                else {
                                     $tx = "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
                                 }
                                 $mtim = $realtime + 1;
@@ -356,82 +321,72 @@ switch ($act)
                         }
                     }
                     header("location: $home/chat/index.php?id=$th");
-                } else
-                {
+                }
+                else {
                     require_once ("chat_header.php");
                     $user = mysql_query("select * from `users` where name='" . $type1['from'] . "';");
                     $ruz = mysql_num_rows($user);
-                    if ($ruz != 0)
-                    {
+                    if ($ruz != 0) {
                         $udat = mysql_fetch_array($user);
                         echo "<a href='../str/anketa.php?id=" . $udat['id'] . "'><b>$type1[from]</b></a>";
                         echo " (id: $udat[id])";
                         $ontime = $udat['lastdate'];
                         $ontime2 = $ontime + 300;
-                        if ($realtime > $ontime2)
-                        {
+                        if ($realtime > $ontime2) {
                             echo "<font color='" . $coffs . "'> [Off]</font><br/>";
-                        } else
-                        {
+                        }
+                        else {
                             echo "<font color='" . $cons . "'> [ON]</font><br/>";
                         }
-                        if ($udat['dayb'] == $day && $udat['monthb'] == $mon)
-                        {
+                        if ($udat['dayb'] == $day && $udat['monthb'] == $mon) {
                             echo "<font color='" . $cdinf . "'>ИМЕНИННИК!!!</font><br/>";
                         }
-                        switch ($udat['rights'])
-                        {
-                            case 7:
+                        switch ($udat['rights']) {
+                            case 7 :
                                 echo ' Админ ';
                                 break;
-                            case 6:
+                            case 6 :
                                 echo ' Супермодер ';
                                 break;
-                            case 5:
+                            case 5 :
                                 echo ' Зам. админа по библиотеке ';
                                 break;
-                            case 4:
+                            case 4 :
                                 echo ' Зам. админа по загрузкам ';
                                 break;
-                            case 3:
+                            case 3 :
                                 echo ' Модер форума ';
                                 break;
-                            case 2:
+                            case 2 :
                                 echo ' Модер чата ';
                                 break;
-                            case 1:
+                            case 1 :
                                 echo ' Киллер ';
                                 break;
-                            default:
+                            default :
                                 echo ' юзер ';
                                 break;
                         }
                         echo '<br/>';
-                        if (!empty($udat['status']))
-                        {
+                        if (!empty ($udat['status'])) {
                             echo $udat['status'] . '<br/>';
                         }
-                        if ($udat['sex'] == "m")
-                        {
+                        if ($udat['sex'] == "m") {
                             echo "Парень<br/>";
                         }
-                        if ($udat['sex'] == "zh")
-                        {
+                        if ($udat['sex'] == "zh") {
                             echo "Девушка<br/>";
                         }
-                        if (!empty($udat['balans']))
-                        {
+                        if (!empty ($udat['balans'])) {
                             echo "Игровой баланс: $udat[balans] баллов<br/>";
                         }
-                        if ($udat['ban'] == "1" && $udat['bantime'] > $realtime || $udat['ban'] == "2")
-                        {
+                        if ($udat['ban'] == "1" && $udat['bantime'] > $realtime || $udat['ban'] == "2") {
                             echo "<font color='" . $cdinf . "'>Бан!</font><br/>";
                         }
-                        if (empty($udat['nastroy']))
-                        {
+                        if (empty ($udat['nastroy'])) {
                             $nstr = "без настроения";
-                        } else
-                        {
+                        }
+                        else {
                             $nstr = $udat['nastroy'];
                         }
                         echo "Настроение: $udat[nastroy]<br/>";
@@ -472,11 +427,9 @@ switch ($act)
 </select><br/>";
                     echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form>";
                     echo "<a href='index.php?act=trans'>Транслит</a><br/><a href='../str/smile.php'>Смайлы</a><br/>";
-                    if ($ruz != 0)
-                    {
+                    if ($ruz != 0) {
                         echo "<br/><a href='../str/pradd.php?act=write&amp;adr=" . $udat['id'] . "'>Написать в приват</a><br/>";
-                        if ($dostcmod == 1)
-                        {
+                        if (($rights == 2 || $rights >= 6)) {
                             echo "<a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $udat['id'] . "&amp;chat'>Пнуть</a><br/>";
                         }
                     }
@@ -484,7 +437,7 @@ switch ($act)
                 }
                 break;
 
-            default:
+            default :
                 require_once ("../incfiles/head.php");
                 echo "Ошибка!<br/>&#187;<a href='?'>В чат</a><br/>";
                 break;
@@ -492,7 +445,7 @@ switch ($act)
         require_once ('chat_footer.php');
         break;
 
-    case "chpas":
+    case "chpas" :
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
@@ -500,7 +453,7 @@ switch ($act)
         header("location: $home/chat/index.php?id=$id");
         break;
 
-    case "pass":
+    case "pass" :
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
@@ -510,16 +463,15 @@ switch ($act)
         header("location: $home/chat/index.php?id=$id");
         break;
 
-    default:
+    default :
         ////////////////////////////////////////////////////////////
         //
         ////////////////////////////////////////////////////////////
-        if ($id)
-        {
+        if ($id) {
             // Отображаем комнату Чата
             require_once ('room.php');
-        } else
-        {
+        }
+        else {
             // Отображаем прихожую Чата
             require_once ('hall.php');
         }

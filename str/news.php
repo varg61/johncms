@@ -28,7 +28,7 @@ switch ($do)
         ////////////////////////////////////////////////////////////
         // Добавление новости                                     //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1)
+        if ($rights >= 6)
         {
             echo '<div class="phdr">Добавить новость</div>';
             $old = 20;
@@ -121,7 +121,7 @@ switch ($do)
         ////////////////////////////////////////////////////////////
         // Редактирование новости                                 //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1)
+        if ($rights >= 6)
         {
             echo '<div class="phdr">Редактирование новости</div>';
             if (empty($_GET['id']))
@@ -168,7 +168,7 @@ switch ($do)
         ////////////////////////////////////////////////////////////
         // Чистка новостей                                        //
         ////////////////////////////////////////////////////////////
-        if ($dostadm == 1)
+        if ($rights >= 7)
         {
             echo '<div class="phdr">Чистка новостей</div>';
             if (isset($_POST['submit']))
@@ -216,7 +216,7 @@ switch ($do)
         ////////////////////////////////////////////////////////////
         // Удаление новости                                       //
         ////////////////////////////////////////////////////////////
-        if ($dostsmod == 1)
+        if ($rights >= 6)
         {
             echo '<div class="phdr">Удалить новость</div>';
             if (isset($_GET['yes']))
@@ -260,7 +260,7 @@ switch ($do)
                 if ($komm >= 0)
                     echo '<a href="../forum/?id=' . $nw1['kom'] . '">Обсудить на форуме (' . $komm . ')</a><br/>';
             }
-            if ($dostsmod == 1)
+            if ($rights >= 6)
             {
                 echo '<a href="news.php?do=edit&amp;id=' . $nw1['id'] . '">Изменить</a> | <a href="news.php?do=del&amp;id=' . $nw1['id'] . '">Удалить</a>';
             }
@@ -275,10 +275,10 @@ switch ($do)
             echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
         echo '</p>';
-        if ($dostsmod == 1)
+        if ($rights >= 6)
         {
             echo '<p><a href="news.php?do=add">Добавить новость</a>';
-            if ($dostadm == 1)
+            if ($rights >= 7)
                 echo '<br /><a href="news.php?do=clean">Чистка новостей</a>';
             echo '</p>';
         }

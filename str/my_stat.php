@@ -69,7 +69,7 @@ if (mysql_num_rows($req_u))
             echo '<div class="phdr"><b>Последняя активность на Форуме</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';
-            $req = mysql_query("SELECT `refid`, MAX(time) FROM `forum` WHERE `user_id` = '$user' AND `type` = 'm'" . ($dostadm == 1 ? '' : " AND `close` != '1'") . " GROUP BY `refid` ORDER BY `time` DESC LIMIT 10");
+            $req = mysql_query("SELECT `refid`, MAX(time) FROM `forum` WHERE `user_id` = '$user' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close` != '1'") . " GROUP BY `refid` ORDER BY `time` DESC LIMIT 10");
             if (mysql_num_rows($req))
             {
                 while ($res = mysql_fetch_assoc($req))

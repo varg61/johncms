@@ -38,59 +38,54 @@ $connect = mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to
 mysql_select_db($db_name) or die('cannot connect to db');
 mysql_query("SET NAMES 'utf8'", $connect);
 
-$do = isset($_GET['do']) ? $_GET['do'] : '';
-switch ($do)
-{
-    case 'step1':
-        echo '<h2>Проверка прав доступа</h2><ul>';
-        // Проверка прав доступа к файлам и папкам
-        function permissions($filez) {
-            $filez = @decoct(@fileperms($filez)) % 1000;
-            return $filez;
-        }
-        $cherr = '';
-        $err = false;
-        // Проверка прав доступа к папкам
-        $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/',
-            'download/mp3temp/', 'download/upl/');
-        foreach ($arr as $v)
-        {
-            if (permissions($v) < 777)
-            {
-                $cherr = $cherr . '<div class="smenu"><span class="red">Ошибка!</span> - ' . $v . '<br /><span class="gray">Необходимо установить права доступа 777.</span></div>';
-                $err = 1;
-            } else
-            {
-                $cherr = $cherr . '<div class="smenu"><span class="green">Oк</span> - ' . $v . '</div>';
+$do
+    = isset ($_GET['do']) ? $_GET['do'] : '';
+switch ($do
+        ) {
+        case 'step1' :
+            echo '<h2>Проверка прав доступа</h2><ul>';
+            // Проверка прав доступа к файлам и папкам
+            function permissions($filez) {
+                $filez = @ decoct(@ fileperms($filez)) % 1000;
+                return $filez;
             }
-        }
-        // Проверка прав доступа к файлам
-        $arr = array('library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF');
-        foreach ($arr as $v)
-        {
-            if (permissions($v) < 666)
-            {
-                $cherr = $cherr . '<div class="smenu"><span class="red">Ошибка!</span> - ' . $v . '<br/><span class="gray">Необходимо установить права доступа 666.</span></div>';
-                $err = 1;
-            } else
-            {
-                $cherr = $cherr . '<div class="smenu"><span class="green">Ок</span> - ' . $v . '</div>';
+            $cherr = '';
+            $err = false;
+            // Проверка прав доступа к папкам
+            $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/', 'download/mp3temp/', 'download/upl/');
+            foreach ($arr as $v) {
+                if (permissions($v) < 777) {
+                    $cherr = $cherr . '<div class="smenu"><span class="red">Ошибка!</span> - ' . $v . '<br /><span class="gray">Необходимо установить права доступа 777.</span></div>';
+                    $err = 1;
+                }
+                else {
+                    $cherr = $cherr . '<div class="smenu"><span class="green">Oк</span> - ' . $v . '</div>';
+                }
             }
-        }
-        echo '<div>';
-        echo $cherr;
-        echo '</div></ul><hr />';
-        if ($err)
-        {
-            echo '<span class="red">Внимание!</span> Имеются критические ошибки!<br />Вы не сможете продолжить инсталляцию, пока не устраните их.';
-            echo '<p clss="step"><a class="button" href="index.php?act=check">Проверить заново</a></p>';
-        } else
-        {
-            echo '<span class="green">Отлично!</span><br />Все настройки правильные.<p><a class="button" href="update.php?do=step2">Продолжить</a></p>';
-        }
-        break;
+            // Проверка прав доступа к файлам
+            $arr = array('library/java/textfile.txt', 'library/java/META-INF/MANIFEST.MF');
+            foreach ($arr as $v) {
+                if (permissions($v) < 666) {
+                    $cherr = $cherr . '<div class="smenu"><span class="red">Ошибка!</span> - ' . $v . '<br/><span class="gray">Необходимо установить права доступа 666.</span></div>';
+                    $err = 1;
+                }
+                else {
+                    $cherr = $cherr . '<div class="smenu"><span class="green">Ок</span> - ' . $v . '</div>';
+                }
+            }
+            echo '<div>';
+            echo $cherr;
+            echo '</div></ul><hr />';
+            if ($err) {
+                echo '<span class="red">Внимание!</span> Имеются критические ошибки!<br />Вы не сможете продолжить инсталляцию, пока не устраните их.';
+                echo '<p clss="step"><a class="button" href="index.php?act=check">Проверить заново</a></p>';
+            }
+            else {
+                echo '<span class="green">Отлично!</span><br />Все настройки правильные.<p><a class="button" href="update.php?do=step2">Продолжить</a></p>';
+            }
+            break;
 
-    case 'step2':
+        case 'step2' :
         echo '<h2>Подготовка таблиц</h2>';
         // Таблица Гостевой
         mysql_query("ALTER TABLE `guest` DROP `gost`");
@@ -146,25 +141,23 @@ switch ($do)
         mysql_query("ALTER TABLE `users` ADD `set_chat` TEXT NOT NULL");
         mysql_query("ALTER TABLE `users` CHANGE `mailvis` `mailvis` BOOL NOT NULL DEFAULT '1'");
         $drop = array('cctx', 'pfon', 'mailact', 'nmenu', 'kolanywhwere', 'kmess', 'sdvig', 'pereh', 'offsm', 'offtr', 'digest', 'skin', 'farea', 'upfp', 'postclip', 'postcut', 'chmes', 'carea', 'timererfesh', 'nastroy');
-        foreach ($drop as $val)
-        {
+        foreach ($drop as $val) {
             mysql_query("ALTER TABLE `users` DROP `$val`");
         }
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `cms_settings`
         $array = array('nickadmina', 'nickadmina2', 'rashstr', 'fmod', 'gb', 'rmod', 'mod_reg_msg', 'mod_forum_msg', 'mod_chat_msg', 'mod_guest_msg', 'mod_lib_msg', 'mod_gal_msg', 'mod_down_msg');
-        foreach ($array as $val)
-        {
+        foreach ($array as $val) {
+            // Удаляем ненужные поля
             mysql_query("DELETE FROM `cms_settings` WHERE `key` = '$val' LIMIT 1");
         }
-        $array = array('mod_lib_comm', 'mod_gal_comm', 'mod_down_comm');
-        foreach ($array as $val)
-        {
+        $array = array('mod_lib_comm', 'mod_gal_comm', 'mod_down_comm', 'meta_key', 'meta_desc');
+        foreach ($array as $val) {
+            // Вставляем новые поля
             mysql_query("INSERT INTO `cms_settings` SET `key` = '$val', `val` = '1'");
         }
         $array = array('mod_reg', 'mod_forum', 'mod_chat', 'mod_guest', 'mod_lib', 'mod_gal', 'mod_down');
-        foreach ($array as $val)
-        {
+        foreach ($array as $val) {
             mysql_query("UPDATE `cms_settings` SET `val` = '2' WHERE `key` = '$val'");
         }
         echo '<span class="green">OK</span> таблица `cms_settings` обновлена.<br />';
@@ -202,20 +195,17 @@ switch ($do)
         echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
         break;
 
-    case 'step3':
+    case 'step3' :
         echo '<h2>Очистка форума</h2>';
         // Очистка форума
         $i = 0;
         $f = 0;
         $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'm'");
-        while ($res = mysql_fetch_array($req))
-        {
+        while ($res = mysql_fetch_array($req)) {
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '" . $res['refid'] . "'"), 0);
-            if ($count == 0)
-            {
+            if ($count == 0) {
                 // Если есть файл, удаляем
-                if (!empty($res['attach']) && file_exists('forum/files/' . $res['attach']))
-                {
+                if (!empty ($res['attach']) && file_exists('forum/files/' . $res['attach'])) {
                     unlink('forum/files/' . $res['attach']);
                     ++$f;
                 }
@@ -229,7 +219,7 @@ switch ($do)
         echo '<hr /><a href="update.php?do=step4">Продолжить</a>';
         break;
 
-    case 'step4':
+    case 'step4' :
         echo '<h2>Перенос файлов форума</h2>';
         // Перечисляем типы файлов, разрешенных к выгрузке на форуме
         $ext_win = array('exe', 'msi');
@@ -242,10 +232,8 @@ switch ($do)
         $ext_audio = array('mp3', 'amr');
         // Переносим данные в новую таблицу
         $req = mysql_query("SELECT * FROM `forum` WHERE `attach` != ''");
-        while ($res = mysql_fetch_array($req))
-        {
-            if (file_exists('forum/files/' . $res['attach']))
-            {
+        while ($res = mysql_fetch_array($req)) {
+            if (file_exists('forum/files/' . $res['attach'])) {
                 $ext = explode('.', $res['attach']);
                 $ext = strtolower($ext[1]);
                 if (in_array($ext, $ext_win))
@@ -294,7 +282,7 @@ switch ($do)
         echo '<hr /><a href="update.php?do=step5">Продолжить</a>';
         break;
 
-    case 'step5':
+    case 'step5' :
         echo '<h2>Конвертирование User ID</h2>';
         // Временно ставим индекс
         mysql_query("ALTER TABLE `users` ADD INDEX ( `name` )");
@@ -302,8 +290,7 @@ switch ($do)
         $req = mysql_query("SELECT `forum`.`id`, `forum`.`from`, `users`.`id` AS `uid`
 		FROM `forum` LEFT JOIN `users` ON `forum`.`from` = `users`.`name`
 		WHERE `forum`.`type` = 't' OR `forum`.`type` = 'm'");
-        while ($res = mysql_fetch_array($req))
-        {
+        while ($res = mysql_fetch_array($req)) {
             mysql_query("UPDATE `forum` SET `user_id` = '" . $res['uid'] . "' WHERE `id` = '" . $res['id'] . "' LIMIT 1");
         }
         echo '<span class="green">OK</span> форум готов<br />';
@@ -312,7 +299,7 @@ switch ($do)
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
-    case 'final':
+    case 'final' :
         echo '<h2 class="green">Поздравляем!</h2>Процедура обновления успешно завершена.<br /><br /><h2 class="red">Не забудьте удалить!!!</h2>';
         echo '<div>/update.php</div>';
         echo '<div>/forum/fmoder.php</div>';
@@ -322,7 +309,7 @@ switch ($do)
         echo '<hr /><a href="../../index.php">На сайт</a>';
         break;
 
-    default:
+    default :
         echo '<h2><span class="red">ВНИМАНИЕ!</span></h2><ul>';
         echo '<li>Учтите, что обновление возможно только для оригинальной (без модов) системы <b>JohnCMS 2.4.0</b><br />Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.<br />Установка данного обновления на модифицированную систему может привести к полной неработоспособности сайта.</li>';
         echo '<li>Некоторые этапы обновления могут занимать довольно продолжительное время (несколько минут), которое зависит от размера базы данных сайта и скорости сервера хостинга.</li>';

@@ -14,46 +14,39 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNADM') or die('Error: restricted access');
 
-require_once ('../incfiles/core.php');
-if (!$dostsadm)
+if ($rights != 9)
     die('Error: restricted access');
-$textl = 'Удаление пользователя';
-require_once ('../incfiles/head.php');
 
 $error = false;
-if ($id && $id != $user_id)
-{
+if ($id && $id != $user_id) {
     // Получаем данные юзера
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
-    if (mysql_num_rows($req))
-    {
+    if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
         if ($user['rights'] > $datauser['rights'])
             $error = 'Вы не можете удалять старшего Вас по должности';
         if ($user['immunity'])
             $error = 'Данный пользователь имеет иммунитет.';
-    } else
-    {
+    }
+    else {
         $error = 'Такого пользователя не существует';
     }
-} else
-{
+}
+else {
     $error = 'Не указан пользователь';
 }
 
-if (!$error)
-{
+if (!$error) {
     //TODO: После доработки модулей, переделать запросы на User ID и чистку Чата
     $req_a = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `user` = '1' AND `avtor` = '" . $user['name'] . "' LIMIT 1");
-    if (mysql_num_rows($req_a))
-    {
+    if (mysql_num_rows($req_a)) {
         $res_a = mysql_fetch_assoc($req_a);
         $album = 1;
         $images_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "' AND `type` = 'ft'"), 0);
-    } else
-    {
+    }
+    else {
         $album = 0;
         $images_count = 0;
     }
@@ -64,52 +57,16 @@ if (!$error)
     $guest_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     $forumt_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 't' AND `close` != '1'"), 0);
     $forump_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'  AND `close` != '1'"), 0);
-    echo '<div class="phdr"><b>' . ($act == 'del' ? 'У' : 'Запрос на у') . 'даление пользователя</b></div>';
+    echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Удаление пользователя</div>';
     // Выводим краткие данные
-    echo '<div class="rmenu"><p><h3><img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'f') . ($user['datereg'] > $realtime - 86400 ? '_new.gif" width="20"' : '.gif" width="16"') .
-        ' height="16" class="left"/>&nbsp;';
-    echo '<b>' . $user['name'] . '</b> (id: ' . $user['id'] . ')';
-    if ($realtime > $user['lastdate'] + 300)
-    {
-        echo '<span class="red"> [Off]</span>';
-        $lastvisit = date("d.m.Y (H:i)", $user['lastdate']);
-    } else
-    {
-        echo '<span class="green"> [ON]</span>';
-    }
-    echo '</h3><ul>';
-    echo '<li><span class="gray">Логин:</span> <b>' . $user['name_lat'] . '</b></li>';
-    if ($user['rights'])
-    {
-        echo '<li><span class="gray">Должность:</span> ';
-        $rights = array(1 => 'Киллер', 2 => 'Модер Чата', 3 => 'Модер Форума', 4 => 'Модер Загрузок', 5 => 'Модер Библиотеки', 6 => 'Супермодератор', 7 => 'Администратор', 9 => 'Супервизор');
-        echo '<span class="red"><b>' . $rights[$user['rights']] . '</b></span>';
-        echo '</li>';
-    }
-    if (isset($lastvisit))
-        echo '<li><span class="gray">Последний визит:</span> ' . $lastvisit . '</li>';
-    if ($dostmod)
-    {
-        echo '<li><span class="gray">UserAgent:</span> ' . $user['browser'] . '</li>';
-        echo '<li><span class="gray">Адрес IP:</span> ' . long2ip($user['ip']) . '</li>';
-        if ($user['immunity'])
-            echo '<li><span class="green"><b>ИММУНИТЕТ</b></span></li>';
-    }
-    echo '</ul></p></div>';
-    switch ($act)
-    {
-        case 'del':
-            echo '<div class="menu"><p><h3>Чистка активности</h3><ul>';
-            ////////////////////////////////////////////////////////////
-            // Удаляем личный альбом                                  //
-            ////////////////////////////////////////////////////////////
-            if ($album && isset($_POST['gallery']))
-            {
-                if ($images_count)
-                {
+    echo '<div class="rmenu"><p>' . show_user($user, 0, 1) . '</p></div>';
+    switch ($mod) {
+        case 'del' :
+            // Удаляем личный альбом
+            if ($album && isset ($_POST['gallery'])) {
+                if ($images_count) {
                     $req = mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "' AND `type` = 'ft'");
-                    while ($res = mysql_fetch_assoc($req))
-                    {
+                    while ($res = mysql_fetch_assoc($req)) {
                         if (file_exists('../gallery/foto/' . $res['name']))
                             unlink('../gallery/foto/' . $res['name']);
                     }
@@ -117,80 +74,54 @@ if (!$error)
                 mysql_query("DELETE FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "'");
                 mysql_query("DELETE FROM `gallery` WHERE `id` = '" . $res_a['id'] . "'");
                 mysql_query("OPTIMIZE TABLE `gallery`");
-                echo '<li>Личный альбом удален</li>';
             }
-            ////////////////////////////////////////////////////////////
-            // Удаляем почту                                          //
-            ////////////////////////////////////////////////////////////
+            // Удаляем почту
             mysql_query("DELETE FROM `privat` WHERE `user` = '" . $user['name'] . "'");
             mysql_query("DELETE FROM `privat` WHERE `author` = '" . $user['name'] . "' AND `type` = 'out' AND `chit` = 'no'");
             mysql_query("OPTIMIZE TABLE `privat`");
-            echo '<li>Письма удалены</li>';
-            ////////////////////////////////////////////////////////////
-            // Удаляем комментарии                                    //
-            ////////////////////////////////////////////////////////////
-            if ($comm_count && isset($_POST['comments']))
-            {
-                if ($comm_gal)
-                {
+            // Удаляем комментарии
+            if ($comm_count && isset ($_POST['comments'])) {
+                if ($comm_gal) {
                     // Удаляем из Галреи
                     mysql_query("DELETE FROM `gallery` WHERE `avtor` = '" . $user['name'] . "' AND `type` = 'km'");
                     mysql_query("OPTIMIZE TABLE `gallery`");
                 }
-                if ($comm_lib)
-                {
+                if ($comm_lib) {
                     // Удаляем из Библиотеки
                     mysql_query("DELETE FROM `lib` WHERE `avtor` = '" . $user['name'] . "' AND `type` = 'komm'");
                     mysql_query("OPTIMIZE TABLE `lib`");
                 }
-                if ($comm_dl)
-                {
+                if ($comm_dl) {
                     // Удаляем из Загрузок
                     mysql_query("DELETE FROM `download` WHERE `avtor` = '" . $user['name'] . "' AND `type` = 'komm'");
                     mysql_query("OPTIMIZE TABLE `download`");
                 }
-                echo '<li>Комментарии удалены</li>';
             }
-            ////////////////////////////////////////////////////////////
-            // Удаляем посты в Гостевой                               //
-            ////////////////////////////////////////////////////////////
-            if ($guest_count && isset($_POST['guest']))
-            {
+            // Удаляем посты в Гостевой
+            if ($guest_count && isset ($_POST['guest'])) {
                 mysql_query("DELETE FROM `guest` WHERE `user_id` = '" . $user['id'] . "'");
                 mysql_query("OPTIMIZE TABLE `guest`");
-                echo '<li>Посты из Гостевой удалены</li>';
             }
-            ////////////////////////////////////////////////////////////
-            // Скрываем темы на форуме                                //
-            ////////////////////////////////////////////////////////////
-            if ($forumt_count && isset($_POST['forumt']))
-            {
+            // Скрываем темы на форуме
+            if ($forumt_count && isset ($_POST['forumt'])) {
                 mysql_query("UPDATE `forum` SET `close` = '1' WHERE `type` = 't' AND `user_id` = '" . $user['id'] . "'");
-                echo '<li>Темы Форума скрыты</li>';
             }
-            ////////////////////////////////////////////////////////////
-            // Скрываем посты на форуме                               //
-            ////////////////////////////////////////////////////////////
-            if (isset($_POST['forump']))
-            {
+            // Скрываем посты на форуме
+            if (isset ($_POST['forump'])) {
                 mysql_query("UPDATE `forum` SET `close` = '1' WHERE `type` = 'm' AND `user_id` = '" . $user['id'] . "'");
-                echo '<li>Посты Форума скрыты</li>';
             }
-            ////////////////////////////////////////////////////////////
-            // Удаляем пользователя                                   //
-            ////////////////////////////////////////////////////////////
+            // Удаляем пользователя
             mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
             mysql_query("OPTIMIZE TABLE `cms_ban_users`");
             mysql_query("DELETE FROM `users` WHERE `id` = '" . $user['id'] . "' LIMIT 1");
-            echo '</ul></p></div><div class="rmenu"><p><h3>Пользователь удален!</h3></p></div>';
-            echo '<div class="phdr"><a href="../str/users.php">Список пользователей</a> | <a href="main.php">В Админку</a></div>';
+            echo '<div class="rmenu"><p><h3>Пользователь удален!</h3></p></div>';
             break;
 
-        default:
+        default :
             ////////////////////////////////////////////////////////////
             // Форма параметров удаления                              //
             ////////////////////////////////////////////////////////////
-            echo '<form action="users_del.php?act=del&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p><h3>Чистка активности</h3>';
+            echo '<form action="index.php?act=usr_del&amp;mod=del&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p><h3>Чистка активности</h3>';
             if ($album)
                 echo '<div><input type="checkbox" value="1" name="gallery" checked="checked" />&nbsp;Галерея, удалить альбом <span class="red">(' . $images_count . ')</span></div>';
             if ($comm_count)
@@ -206,13 +137,12 @@ if (!$error)
             echo '</p></div><div class="rmenu"><p>Вы действительно хотите удалить данного пользователя?';
             echo '</p><p><input type="submit" value="Удалить" name="submit" />';
             echo '</p></div></form>';
-            echo '<div class="phdr"><a href="../str/anketa.php?id=' . $user['id'] . '">Отмена</a></div>';
+            echo '<div class="phdr"><a href="../str/anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
     }
-} else
-{
+}
+else {
     echo display_error($error);
 }
-
-require_once ('../incfiles/end.php');
+echo '<p><a href="index.php?act=usr_list">Список пользователей</a><br /><a href="index.php">Админ панель</a></p>';
 
 ?>

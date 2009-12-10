@@ -22,7 +22,7 @@ if (!$id)
     require_once ('../incfiles/end.php');
     exit;
 }
-if (!$set['mod_lib_comm'] && !$dostadm)
+if (!$set['mod_lib_comm'] && $rights < 7)
 {
     echo '<p>Комментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
     require_once ('../incfiles/end.php');
@@ -95,7 +95,7 @@ while ($mass = mysql_fetch_array($mess))
         $tekst = $mass['text'];
     }
     echo "$tekst<br/>";
-    if ($dostlmod == 1)
+    if ($rights == 5 || $rights >= 6)
     {
         echo long2ip($mass['ip']) . " - $mass[soft]<br/><a href='index.php?act=del&amp;id=" . $mass['id'] . "'>(Удалить)</a>";
     }

@@ -24,7 +24,7 @@ if ($_GET['id'] == "")
 }
 
 // Проверка на спам
-$old = ($rights > 0 || $dostsadm = 1) ? 5 : 60;
+$old = ($rights > 0) ? 5 : 60;
 if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");
@@ -43,7 +43,7 @@ if ($id != 0 && $ms['type'] != "cat")
 }
 if ($ms['ip'] == 0)
 {
-    if ($dostlmod == 1 || ($ms['soft'] == 1 && !empty($_SESSION['uid'])))
+    if (($rights == 5 || $rights >= 6) || ($ms['soft'] == 1 && !empty($_SESSION['uid'])))
     {
         if (isset($_POST['submit']))
         {
@@ -67,7 +67,7 @@ if ($ms['ip'] == 0)
             {
                 $anons = mb_substr($text, 0, 100);
             }
-            if ($dostlmod == 1)
+            if ($rights == 5 || $rights >= 6)
             {
                 $md = 1;
             } else

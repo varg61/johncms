@@ -85,7 +85,7 @@ if ($do || isset($_GET['new']))
 		FROM `cms_forum_files`
 		LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
 		LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
-		WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($dostadm ? '' : " AND `del` != '1'") . $sql . " ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+		WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql . " ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req))
         {
             $fls = filesize('./files/' . $res['filename']);
@@ -165,14 +165,14 @@ if ($do || isset($_GET['new']))
     ////////////////////////////////////////////////////////////
     // Выводим список разделов, в которых есть файлы          //
     ////////////////////////////////////////////////////////////
-    $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . ($dostadm ? '' : " AND `del` != '1'") . $sql), 0);
+    $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
     echo '<p>' . ($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">Новые файлы (' . $countnew . ')</a>' : 'Новых файлов нет') . '</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array();
     $total = 0;
     for ($i = 1; $i < 10; $i++)
     {
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . ($dostadm ? '' : " AND `del` != '1'") . $sql), 0);
+        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0)
         {
             $link[] = '<img src="images/' . $i . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&nbsp;(' . $count . ')';

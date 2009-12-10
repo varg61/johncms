@@ -325,14 +325,14 @@ CREATE TABLE `cms_settings` (
 -- Дамп данных таблицы `cms_settings`
 --
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
-('nickadmina', ''),
-('emailadmina', ''),
-('nickadmina2', ''),
+('emailadmina', 'alkatraz@batumi.biz'),
+('meta_key', ''),
+('meta_desc', ''),
 ('sdvigclock', '0'),
 ('copyright', 'JohnCMS'),
 ('homeurl', ''),
 ('admp', 'panel'),
-('flsz', '2000'),
+('flsz', '1000'),
 ('gzip', '1'),
 ('clean_time', ''),
 ('mod_reg', '2'),
@@ -340,12 +340,13 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('mod_chat', '2'),
 ('mod_guest', '2'),
 ('mod_lib', '2'),
-('mod_lib_comm', '1'),
 ('mod_gal', '2'),
-('mod_gal_comm', '1'),
-('mod_down', '2'),
 ('mod_down_comm', '1'),
-('skindef', 'default');
+('mod_down', '2'),
+('mod_lib_comm', '1'),
+('mod_gal_comm', '1'),
+('skindef', 'default'),
+('news', '');
 
 --
 -- Структура таблицы `users`

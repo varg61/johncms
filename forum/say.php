@@ -22,7 +22,7 @@ if (!$id || !$user_id || $ban['1'] || $ban['11'])
     exit;
 }
 // Проверка на спам
-$old = ($rights > 0 || $dostsadm = 1) ? 10 : 30;
+$old = ($rights > 0) ? 10 : 30;
 if ($datauser['lastpost'] > ($realtime - $old))
 {
     require_once ("../incfiles/head.php");
@@ -72,7 +72,7 @@ switch ($tip)
         // Добавление простого сообщения                          //
         ////////////////////////////////////////////////////////////
         // Проверка, закрыта ли тема
-        if (($type1['edit'] == 1 || $type1['close'] == 1) && !$dostadm)
+        if (($type1['edit'] == 1 || $type1['close'] == 1) && $rights < 7)
         {
             require_once ('../incfiles/head.php');
             echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">Назад</a></p></div>';
@@ -123,7 +123,7 @@ switch ($tip)
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             // Вычисляем, на какую страницу попадает добавляемый пост
-            $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$id'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
+            $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0) / $kmess);
             if ($_POST['addfiles'] == 1)
                 header("Location: index.php?id=$fadd&act=addfile");
             else
@@ -163,7 +163,7 @@ switch ($tip)
         $th = $type1['refid'];
         $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
-        if (($th1['edit'] == 1 || $th1['close'] == 1) && !$dostadm)
+        if (($th1['edit'] == 1 || $th1['close'] == 1) && $rights < 7)
         {
             require_once ('../incfiles/head.php');
             echo '<div class="rmenu"><p>ОШИБКА!<br />Вы не можете писать в закрытую тему<br /><a href="index.php?id=' . $id . '">Назад</a></p></div>';
@@ -252,7 +252,7 @@ switch ($tip)
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET `postforum`='" . ($datauser['postforum'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             // Вычисляем, на какую страницу попадает добавляемый пост
-            $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . ($dostadm == 1 ? '' : " AND `close` != '1'")), 0) / $kmess);
+            $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0) / $kmess);
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1)
             {

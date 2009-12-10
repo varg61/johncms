@@ -22,7 +22,7 @@ require_once ("../incfiles/core.php");
 
 // Ограничиваем доступ к Библиотеке
 $error = '';
-if (!$set['mod_lib'] && !$dostadm)
+if (!$set['mod_lib'] && $rights < 7)
     $error = 'Библиотека закрыта';
 elseif ($set['mod_lib'] == 1 && !$user_id)
     $error = 'Доступ в Библиотеку открыт только <a href="../in.php">авторизованным</a> посетителям';
@@ -59,7 +59,7 @@ if (in_array($act, $do))
     if (!$id)
     {
         echo '<div class="phdr"><b>Библиотека</b></div>';
-        if ($dostlmod == 1)
+        if ($rights == 5 || $rights >= 6)
         {
             // Считаем число статей, ожидающих модерацию
             $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'");
@@ -145,7 +145,7 @@ if (in_array($act, $do))
                 echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
             }
-            if ($dostlmod == 1 && $id != 0)
+            if (($rights == 5 || $rights >= 6) && $id != 0)
             {
                 $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . $id . "'");
                 $ct1 = mysql_num_rows($ct);
@@ -155,17 +155,17 @@ if (in_array($act, $do))
                 }
                 echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить категорию</a><br/>";
             }
-            if ($dostlmod == 1 && ($zag['ip'] == 1 || $id == 0))
+            if (($rights == 5 || $rights >= 6) && ($zag['ip'] == 1 || $id == 0))
             {
                 echo "<a href='index.php?act=mkcat&amp;id=" . $id . "'>Создать категорию</a><br/>";
             }
             if ($zag['ip'] == 0 && $id != 0)
             {
-                if ($dostlmod == 1 || ($zag['soft'] == 1 && !empty($_SESSION['uid'])))
+                if (($rights == 5 || $rights >= 6) || ($zag['soft'] == 1 && !empty($_SESSION['uid'])))
                 {
                     echo "<a href='index.php?act=write&amp;id=" . $id . "'>Написать статью</a><br/>";
                 }
-                if ($dostlmod == 1)
+                if ($rights == 5 || $rights >= 6)
                 {
                     echo "<a href='index.php?act=load&amp;id=" . $id . "'>Выгрузить статью</a><br/>";
                 }
@@ -283,13 +283,13 @@ if (in_array($act, $do))
                 echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $pages, 1) . '</p>';
                 echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
             }
-            if ($dostlmod == 1)
+            if ($rights == 5 || $rights >= 6)
             {
                 echo '<p><a href="index.php?act=edit&amp;id=' . $id . '">Редактировать</a><br/>';
                 echo '<a href="index.php?act=del&amp;id=' . $id . '">Удалить статью</a></p>';
             }
             // Ссылка на комментарии
-			if ($set['mod_lib_comm'] || $dostadm)
+			if ($set['mod_lib_comm'] || $rights >= 7)
             {
                 $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = '" . $id . "'");
                 $km1 = mysql_num_rows($km);

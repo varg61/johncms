@@ -27,7 +27,7 @@ $loadroot = "$filesroot/files";
 
 // Ограничиваем доступ к Загрузкам
 $error = '';
-if (!$set['mod_down'] && !$dostadm)
+if (!$set['mod_down'] && $rights < 7)
     $error = 'Загрузки закрыты';
 elseif ($set['mod_down'] == 1 && !$user_id)
     $error = 'Доступ к загрузкам открыт только <a href="../in.php">авторизованным</a> посетителям';
@@ -189,7 +189,7 @@ if (in_array($act, $do))
         echo '<p>' . pagenav('index.php?cat=' . $cat . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
-    if ($dostdmod == 1)
+    if ($rights == 4 || $rights >= 6)
     {
         ////////////////////////////////////////////////////////////
         // Выводим ссылки на модерские функции                    //

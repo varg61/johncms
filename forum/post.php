@@ -27,7 +27,7 @@ $s = intval($_GET['s']);
 // Запрос сообщения
 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-WHERE `forum`.`type` = 'm' AND `forum`.`id` = '$id'" . ($dostadm == 1 ? "" : " AND `forum`.`close` != '1'") . " LIMIT 1");
+WHERE `forum`.`type` = 'm' AND `forum`.`id` = '$id'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . " LIMIT 1");
 $res = mysql_fetch_array($req);
 
 // Запрос темы
