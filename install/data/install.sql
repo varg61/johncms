@@ -1,4 +1,26 @@
 --
+-- Структура таблицы `cms_ads`
+--
+DROP TABLE IF EXISTS `cms_ads`;
+CREATE TABLE `cms_ads` (
+  `id` int(11) NOT NULL auto_increment,
+  `type` int(2) NOT NULL,
+  `view` int(2) NOT NULL,
+  `layout` int(2) NOT NULL,
+  `count` int(11) NOT NULL,
+  `count_link` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `link` text NOT NULL,
+  `to` int(10) NOT NULL default '0',
+  `color` varchar(10) NOT NULL,
+  `time` int(11) NOT NULL,
+  `day` int(11) NOT NULL,
+  `font` int(2) NOT NULL,
+  `mesto` int(2) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
 -- Структура таблицы `cms_ban_ip`
 --
 DROP TABLE IF EXISTS `cms_ban_ip`;

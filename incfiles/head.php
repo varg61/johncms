@@ -40,6 +40,34 @@ echo "\n" . '<title>' . $textl . '</title>';
 echo "\n" . '<link rel="stylesheet" href="' . $home . '/theme/' . $set_user['skin'] . '/style.css" type="text/css" />';
 echo "\n" . '</head><body>';
 
+////////////////////////////////////////////////////////////
+// Рекламный модуль от FlySelf                            //
+////////////////////////////////////////////////////////////
+$view = $user_id ? 2 : 1;
+$layout = ($headmod == 'mainpage' && !$act) ? 1 : 2;
+$req = mysql_query("SELECT * FROM `cms_ads` WHERE `to` = '0' AND (`layout` = '$layout' or `layout` = '0') AND (`view` = '$view' or `view` = '0') ORDER BY  `mesto` ASC");
+if (mysql_num_rows($req) > 0)
+{
+    $array = array(2 => 'font-weight: bold;', 3 => 'font-style:italic;', 4 => 'text-decoration:underline;', 5 => 'font-weight: bold;font-style:italic;', 6 => 'font-weight: bold;text-decoration:underline;', 7 => 'font-style:italic;text-decoration:underline;', 9 => 'font-weight: bold;font-style:italic;text-decoration:underline;');
+    $cms_ads = array();
+    while ($res = mysql_fetch_array($req))
+    {
+        $name = explode("|", $res['name']);
+        $name = htmlentities($name[mt_rand(0, (count($name) - 1))], ENT_QUOTES, 'UTF-8');
+        if (!empty($res['color']))
+            $name = '<span style="color:#' . $res['color'] . '">' . $name . '</span>';
+        if (!empty($res['font']))
+            $name = '<span style="' . $array[$res['font']] . '">' . $name . '</span>';
+        $cms_ads[$res['type']] .= '<a href="' . $home . '/str/redirect.php?id=' . $res['id'] . '">' . $name . '</a><br/>';
+        if (($res['day'] != 0 && $realtime >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
+            mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $res['id'] . "'");
+    }
+}
+
+// Рекламный блок сайта
+if(!empty($cms_ads[0]))
+    echo $cms_ads[0];
+
 // Выводим логотип
 echo '<div><img src="' . $home . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></div>';
 
@@ -53,6 +81,10 @@ echo ($user_id && $_GET['mod'] != 'cab') ? '<a href="' . $home . '/index.php?act
 echo $user_id ? '<a href="' . $home . '/exit.php">Выход</a>' : '<a href="' . $home . '/in.php">Вход</a> | <a href="' . $home . '/registration.php">Регистрация</a>';
 echo '</div>';
 echo '<div class="maintxt">';
+
+// Рекламный блок сайта
+if(!empty($cms_ads[1]))
+    echo '<div class="gmenu">' . $cms_ads[1] . '</div>';
 
 ////////////////////////////////////////////////////////////
 // Фиксация местоположений посетителей                    //

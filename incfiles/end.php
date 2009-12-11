@@ -16,9 +16,13 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-// Выводим рекламу MOBILEADS.RU
+// Рекламный блок MOBILEADS.RU
 if (isset($_SESSION['mad_links']) && $_SESSION['mad_time'] > ($realtime - 60 * 15))
     echo '<div class="gmenu">' . $_SESSION['mad_links'] . '</div>';
+
+// Рекламный блок сайта
+if(!empty($cms_ads[2]))
+    echo '<div class="gmenu">' . $cms_ads[2] . '</div>';
 
 echo '</div><div class="fmenu">';
 if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act))
@@ -56,6 +60,10 @@ if (!$user_id || ($user_id && $set_user['online']))
 if (!$user_id || ($user_id && $set_user['movings']))
     echo 'Переходов: ' . $movings; // Счетчик перемещений по сайту
 counters(); // Счетчики каталогов
+
+// Рекламный блок сайта
+if(!empty($cms_ads[3]))
+    echo $cms_ads[3];
 
 ////////////////////////////////////////////////////////////
 // ВНИМАНИЕ!!!                                            //

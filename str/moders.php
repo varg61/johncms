@@ -22,10 +22,10 @@ require_once ('../incfiles/head.php');
 
 echo '<div class="phdr"><b>Администрация ресурса</b></div>';
 
-// Супервизоры
+// Супервайзоры
 $req = mysql_query("SELECT * FROM `users` WHERE `rights` = '9'");
 if (mysql_num_rows($req)) {
-    echo '<div class="bmenu">Супервизоры</div>';
+    echo '<div class="bmenu">Супервайзоры</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($sw % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 1) . '</div>';

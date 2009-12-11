@@ -19,7 +19,7 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Список должностных лиц</div>';
 $req = mysql_query("SELECT * FROM `users` WHERE `rights` = '9' ORDER BY `name` ASC");
 if (mysql_num_rows) {
-    echo '<div class="bmenu">Супервизоры</div>';
+    echo '<div class="bmenu">Супервайзоры</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($sw % 2) ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 0, 2, 0, 0);

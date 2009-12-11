@@ -27,7 +27,7 @@ if ($rights < 6) {
 }
 
 require_once ('../incfiles/head.php');
-$array = array('usr_reg', 'usr_adm', 'usr_list', 'usr_del', 'usr_ban', 'usr_search_nick', 'usr_search_ip', 'mod_counters', 'mod_news', 'mod_forum', 'mod_chat', 'sys_set', 'sys_smileys', 'sys_access', 'sys_antispy', 'sys_ipban');
+$array = array('usr_reg', 'usr_adm', 'usr_list', 'usr_del', 'usr_ban', 'usr_search_nick', 'usr_search_ip', 'mod_ads', 'mod_counters', 'mod_news', 'mod_forum', 'mod_chat', 'sys_set', 'sys_smileys', 'sys_access', 'sys_antispy', 'sys_ipban');
 if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once ($act . '.php');
 }
@@ -53,7 +53,7 @@ else {
     // Блок модулей
     if ($rights >= 7) {
         echo '<p><h3><img src="../images/modules.png" width="16" height="16" class="left" />&nbsp;Модули</h3><ul>';
-        //echo '<li><a href="">Реклама</a></li>';
+        echo '<li><a href="index.php?act=mod_ads">Реклама</a></li>';
         echo '<li><a href="index.php?act=mod_counters">Счетчики</a></li>';
         echo '<li><a href="index.php?act=mod_news">Новости</a></li>';
         echo '<li><a href="index.php?act=mod_forum">Форум</a></li>';

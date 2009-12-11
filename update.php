@@ -87,6 +87,26 @@ switch ($do
 
         case 'step2' :
         echo '<h2>Подготовка таблиц</h2>';
+        // Таблица рекламы
+        mysql_query("DROP TABLE IF EXISTS `cms_ads`");
+        mysql_query("CREATE TABLE `cms_ads` (
+        `id` int(11) NOT NULL auto_increment,
+        `type` int(2) NOT NULL,
+        `view` int(2) NOT NULL,
+        `layout` int(2) NOT NULL,
+        `count` int(11) NOT NULL,
+        `count_link` int(11) NOT NULL,
+        `name` text NOT NULL,
+        `link` text NOT NULL,
+        `to` int(10) NOT NULL default '0',
+        `color` varchar(10) NOT NULL,
+        `time` int(11) NOT NULL,
+        `day` int(11) NOT NULL,
+        `font` int(2) NOT NULL,
+        `mesto` int(2) NOT NULL,
+        PRIMARY KEY  (`id`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+        echo '<span class="green">OK</span> таблица `cms_ads` создана.<br />';
         // Таблица Гостевой
         mysql_query("ALTER TABLE `guest` DROP `gost`");
         mysql_query("ALTER TABLE `guest` DROP `soft`");

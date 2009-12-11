@@ -252,7 +252,7 @@ switch ($act) {
             echo '<p>' . ($total ? '<a href="users_ban.php?id=' . $user['id'] . '">История нарушений</a><br />' : '') . '<a href="../' . $admp . '/index.php?act=usr_ban">Бан панель</a></p>';
         }
         else {
-            echo display_error('Очищать историю нарушений могут только Супервизоры');
+            echo display_error('Очищать историю нарушений могут только Супервайзоры');
         }
         break;
 
