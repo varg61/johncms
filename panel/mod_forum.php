@@ -665,7 +665,7 @@ switch ($mod) {
         $total_msg_del = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'"), 0);
         $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
         $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote` WHERE `type` = '1'"), 0);
-        echo '<div class="phdr"><a href="index.php"><b>Админ танель</b></a> | Управление форумом</div>';
+        echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Управление форумом</div>';
         echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
         echo '<li>Категории:&nbsp;' . $total_cat . '</li>';
         echo '<li>Разделы:&nbsp;' . $total_sub . '</li>';
