@@ -78,7 +78,7 @@ switch ($mod) {
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_array($req)) {
                 echo '<div class="' . ($res['bantime'] > $realtime ? 'r' : '') . 'menu">';
-                echo show_user($res, 0, 1, ' [' . $res['bancount'] . ']');
+                echo show_user($res, 0, 2, ' [' . $res['bancount'] . ']&nbsp;<a href="../str/users_ban.php?id='.$res['id'].'">&gt;&gt;</a>');
                 echo '</div>';
             }
         }
