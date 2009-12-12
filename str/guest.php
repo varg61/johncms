@@ -129,7 +129,8 @@ switch ($act) {
 		`user_id`='" . $user_id . "',
 		`name`='" . $from . "',
 		`text`='" . mysql_real_escape_string($msg) . "',
-		`ip`='" . $ipl . "',
+		`ip`='" . $ipl .
+        "',
 		`browser`='" . mysql_real_escape_string($agn) . "'");
         // Фиксируем время последнего поста (антиспам)
         if ($user_id) {
@@ -161,7 +162,8 @@ switch ($act) {
                 }
                 $text = htmlentities($ps1['text'], ENT_QUOTES, 'UTF-8');
                 $otv = htmlentities($ps1['otvet'], ENT_QUOTES, 'UTF-8');
-                echo "Пост в гостевой:<br /><b>$ps1[name]:</b> $text&quot;<br/><br/><form action='guest.php?act=otvet&amp;id=" . $id . "' method='post'>Ответ:<br/><textarea rows='3' name='otv'>$otv</textarea><br/><input type='submit' name='submit' value='Ok!'/><br/></form><a href='guest.php?'>В гостевую</a><br/>";
+                echo "Пост в гостевой:<br /><b>$ps1[name]:</b> $text&quot;<br/><br/><form action='guest.php?act=otvet&amp;id=" . $id .
+                "' method='post'>Ответ:<br/><textarea rows='3' name='otv'>$otv</textarea><br/><input type='submit' name='submit' value='Ok!'/><br/></form><a href='guest.php?'>В гостевую</a><br/>";
             }
         }
         break;
@@ -190,7 +192,8 @@ switch ($act) {
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
                 echo '<div class="phdr"><b>Гостевая</b>: редактируем пост</div>';
                 echo '<div class="rmenu"><form action="guest.php?act=edit&amp;id=' . $id . '" method="post">
-				<textarea rows="3" name="msg">' . $text . '</textarea><br/>
+				<textarea rows="3" name="msg">' . $text .
+                '</textarea><br/>
 				<input type="submit" name="submit" value="Отправить"/></form></div>';
                 echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
                 echo '<p><a href="guest.php">Назад</a></p>';
@@ -294,13 +297,17 @@ switch ($act) {
             if (isset ($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1")) {
                 // Запрос для Админ клуба
                 echo '<div class="rmenu"><b>АДМИН-КЛУБ</b></div>';
-                $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
-				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+                $req = mysql_query(
+                "SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
+				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='1' ORDER BY `time` DESC LIMIT "
+                . $start . "," . $kmess);
             }
             else {
                 // Запрос для обычной Гастивухи
-                $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
-				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+                $req = mysql_query(
+                "SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
+				FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT "
+                . $start . "," . $kmess);
             }
             while ($res = mysql_fetch_assoc($req)) {
                 $text = '';
@@ -337,7 +344,8 @@ switch ($act) {
                         $otvet = smileys($otvet, 1);
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
-                $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a>' . ($rights >= 6 && $rights >= $res['rights'] ? ' | <a href="guest.php?act=edit&amp;id=' . $res['gid'] . '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>' : '');
+                $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a>' . ($rights >= 6 && $rights >= $res['rights'] ? ' | <a href="guest.php?act=edit&amp;id=' . $res['gid'] .
+                '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>' : '');
                 echo show_user($res, 1, ($rights >= 6 && $rights >= $res['rights'] ? 1 : 0), $text, $post, ($rights >= 6 ? $subtext : ''));
                 echo '</div>';
                 ++$i;

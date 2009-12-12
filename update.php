@@ -18,7 +18,8 @@ define('_IN_JOHNCMS', 1);
 
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
 echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
-echo '<title>JohnCMS 3.0 - обновление</title>
+echo
+'<title>JohnCMS 3.0 - обновление</title>
 <style type="text/css">
 body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}
 h2{ margin: 0; padding: 0; padding-bottom: 4px; }
@@ -52,7 +53,8 @@ switch ($do
             $cherr = '';
             $err = false;
             // Проверка прав доступа к папкам
-            $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/', 'download/screen/', 'download/mp3temp/', 'download/upl/');
+            $arr = array('cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/',
+            'download/screen/', 'download/mp3temp/', 'download/upl/');
             foreach ($arr as $v) {
                 if (permissions($v) < 777) {
                     $cherr = $cherr . '<div class="smenu"><span class="red">Ошибка!</span> - ' . $v . '<br /><span class="gray">Необходимо установить права доступа 777.</span></div>';
@@ -89,7 +91,8 @@ switch ($do
         echo '<h2>Подготовка таблиц</h2>';
         // Таблица рекламы
         mysql_query("DROP TABLE IF EXISTS `cms_ads`");
-        mysql_query("CREATE TABLE `cms_ads` (
+        mysql_query(
+        "CREATE TABLE `cms_ads` (
         `id` int(11) NOT NULL auto_increment,
         `type` int(2) NOT NULL,
         `view` int(2) NOT NULL,
@@ -105,7 +108,8 @@ switch ($do
         `font` int(2) NOT NULL,
         `mesto` int(2) NOT NULL,
         PRIMARY KEY  (`id`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;"
+        );
         echo '<span class="green">OK</span> таблица `cms_ads` создана.<br />';
         // Таблица Гостевой
         mysql_query("ALTER TABLE `guest` DROP `gost`");
@@ -115,7 +119,8 @@ switch ($do
         // Таблицы счетчика гостей
         mysql_query("DROP TABLE `count`");
         mysql_query("DROP TABLE IF EXISTS `cms_guests`");
-        mysql_query("CREATE TABLE `cms_guests` (
+        mysql_query(
+        "CREATE TABLE `cms_guests` (
         `session_id` char(32) NOT NULL,
         `ip` int(11) NOT NULL,
         `browser` tinytext NOT NULL,
@@ -126,11 +131,13 @@ switch ($do
         PRIMARY KEY  (`session_id`),
         KEY `time` (`lastdate`),
         KEY `place` (`place`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
+        );
         echo '<span class="green">OK</span> таблица `cms_guests` создана.<br />';
         // Таблицы голосований
         mysql_query("DROP TABLE IF EXISTS `forum_vote`");
-        mysql_query("CREATE TABLE `forum_vote` (
+        mysql_query(
+        "CREATE TABLE `forum_vote` (
         `id` int(11) NOT NULL auto_increment,
         `type` int(2) NOT NULL default '0',
         `time` int(11) NOT NULL default '0',
@@ -138,16 +145,19 @@ switch ($do
         `name` varchar(200) NOT NULL,
         `count` int(11) NOT NULL,
         PRIMARY KEY  (`id`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8"
+        );
         echo '<span class="green">OK</span> таблица `forum_vote` создана.<br />';
         mysql_query("DROP TABLE IF EXISTS `forum_vote_us`");
-        mysql_query("CREATE TABLE `forum_vote_us` (
+        mysql_query(
+        "CREATE TABLE `forum_vote_us` (
         `id` int(11) NOT NULL auto_increment,
         `user` int(11) NOT NULL default '0',
         `topic` int(11) NOT NULL,
         `vote` int(11) NOT NULL,
         PRIMARY KEY  (`id`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8"
+        );
         echo '<span class="green">OK</span> таблица `forum_vote_us` создана.<br />';
         // Таблица `users`
         mysql_query("ALTER TABLE `users` ADD `postguest` INT NOT NULL DEFAULT '0' AFTER `postforum`");
@@ -193,8 +203,10 @@ switch ($do
         mysql_query("ALTER TABLE `forum` DROP INDEX `from`");
         mysql_query("TRUNCATE TABLE `cms_forum_rdm`");
         mysql_query("ALTER TABLE `forum` ADD FULLTEXT ( `text` )");
+        mysql_query("DELETE FROM `forum` WHERE `type` = 'n'");
         echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
-        mysql_query("CREATE TABLE IF NOT EXISTS `cms_forum_files` (
+        mysql_query(
+        "CREATE TABLE IF NOT EXISTS `cms_forum_files` (
         `id` int(11) NOT NULL auto_increment,
         `cat` int(11) NOT NULL,
         `subcat` int(11) NOT NULL,
@@ -210,7 +222,8 @@ switch ($do
         KEY `subcat` (`subcat`),
         KEY `topic` (`topic`),
         KEY `post` (`post`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8"
+        );
         echo '<span class="green">OK</span> таблица `cms_forum_files` создана.<br />';
         echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
         break;
@@ -286,7 +299,8 @@ switch ($do
 				`subcat` = '" . $res1['refid'] . "',
 				`topic` = '" . $res['refid'] . "',
 				`post` = '" . $res['id'] . "',
-				`time` = '" . $res['time'] . "',
+				`time` = '" . $res[
+                'time'] . "',
 				`filename` = '" . mysql_real_escape_string($res['attach']) . "',
 				`filetype` = '$type',
 				`dlcount` = '" . $res['dlcount'] . "',
@@ -323,7 +337,8 @@ switch ($do
         echo '<h2 class="green">Поздравляем!</h2>Процедура обновления успешно завершена.<br /><br /><h2 class="red">Не забудьте удалить!!!</h2>';
         echo '<div>/update.php</div>';
         echo '<div>/forum/fmoder.php</div>';
-        echo '<div>/sm <small>(Удаляем весь каталог). Если были нужные смайлы, то перенесите в новый каталог) Если вы добавляли новые смайлы, то не забудьте через админку "Обновить кэш смайлов"</small></div>';
+        echo
+        '<div>/sm <small>(Удаляем весь каталог). Если были нужные смайлы, то перенесите в новый каталог) Если вы добавляли новые смайлы, то не забудьте через админку "Обновить кэш смайлов"</small></div>';
         echo '<div></div>';
         echo '<div></div>';
         echo '<hr /><a href="../../index.php">На сайт</a>';
@@ -331,10 +346,14 @@ switch ($do
 
     default :
         echo '<h2><span class="red">ВНИМАНИЕ!</span></h2><ul>';
-        echo '<li>Учтите, что обновление возможно только для оригинальной (без модов) системы <b>JohnCMS 2.4.0</b><br />Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.<br />Установка данного обновления на модифицированную систему может привести к полной неработоспособности сайта.</li>';
-        echo '<li>Некоторые этапы обновления могут занимать довольно продолжительное время (несколько минут), которое зависит от размера базы данных сайта и скорости сервера хостинга.</li>';
-        echo '<li>Перед началом процедуры обновления, <b>ОБЯЗАТЕЛЬНО</b> сделайте резервную копию базы данных.<br />Если по какой то причине обновление не пройдет до конца, Вам придется восстанавливать базу из резервной копии.</li>';
-        echo '<li>В течение всего периода работы инсталлятора, НЕЛЬЗЯ нажимать кнопки браузера "Назад" и "Обновить", иначе может быть нарушена целостность данных.</li>';
+        echo
+        '<li>Учтите, что обновление возможно только для оригинальной (без модов) системы <b>JohnCMS 2.4.0</b><br />Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.<br />Установка данного обновления на модифицированную систему может привести к полной неработоспособности сайта.</li>';
+        echo
+        '<li>Некоторые этапы обновления могут занимать довольно продолжительное время (несколько минут), которое зависит от размера базы данных сайта и скорости сервера хостинга.</li>';
+        echo
+        '<li>Перед началом процедуры обновления, <b>ОБЯЗАТЕЛЬНО</b> сделайте резервную копию базы данных.<br />Если по какой то причине обновление не пройдет до конца, Вам придется восстанавливать базу из резервной копии.</li>';
+        echo
+        '<li>В течение всего периода работы инсталлятора, НЕЛЬЗЯ нажимать кнопки браузера "Назад" и "Обновить", иначе может быть нарушена целостность данных.</li>';
         echo '<li>Если Вы нажмете ссылку "Продолжить", то отмена изменений будет невозможна без восстановления из резервной копии.</li>';
         echo '</ul><hr />Вы уверены? У Вас есть резервная копия базы данных?<br /><a href="update.php?do=step1">Начать обновление</a>';
 }

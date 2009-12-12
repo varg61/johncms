@@ -21,8 +21,7 @@ $color3 = imagecolorallocate($vote_img, 255, 102, 102);
 $color4 = imagecolorallocate($vote_img, 255, 51, 51);
 $color5 = imagecolorallocate($vote_img, 255, 102, 102);
 $color6 = imagecolorallocate($vote_img, 0, 0, 0);
-if ($vote > 0)
-{
+if ($vote > 0) {
     imagefilledrectangle($vote_img, 1, 1, $vote, 2, $color);
     imagefilledrectangle($vote_img, 1, 1, $vote, 2, $color);
     imagefilledrectangle($vote_img, 1, 3, $vote, 4, $color2);

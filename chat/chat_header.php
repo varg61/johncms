@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -36,8 +37,7 @@ echo "\n" . '<link rel="stylesheet" href="' . $home . '/chat/style.css" type="te
 echo '</head><body><div>';
 $newl = mysql_query("select * from `privat` where user = '" . $login . "' and type = 'in' and chit = 'no';");
 $countnew = mysql_num_rows($newl);
-if ($countnew > 0)
-{
+if ($countnew > 0) {
     echo "<div><a href='$home/str/pradd.php?act=in&amp;new'><b><font color='red'>Вам письмо: $countnew</font></b></a></div>";
 }
 

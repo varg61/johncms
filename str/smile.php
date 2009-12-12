@@ -23,11 +23,9 @@ $textl = 'Смайлы';
 require_once ('../incfiles/core.php');
 require_once ('../incfiles/head.php');
 
-switch ($act)
-{
-    case 'cat':
-        if (!is_dir($rootpath . 'smileys/user/' . $id))
-        {
+switch ($act) {
+    case 'cat' :
+        if (!is_dir($rootpath . 'smileys/user/' . $id)) {
             echo $id;
             echo '<p>Ошибка!<br/><a href="smile.php">В категории</a></p>';
             require_once ('../incfiles/end.php');
@@ -39,31 +37,27 @@ switch ($act)
         $end = $start + $kmess;
         if ($end > $total)
             $end = $total;
-        if ($total > 0)
-        {
-            for ($i = $start; $i < $end; $i++)
-            {
-                $smile = preg_replace('#^' . $rootpath . 'smileys/user/' . $id . '/(.*?).gif$#isU', '$1', $array[$i], 1);
+        if ($total > 0) {
+            for ($i = $start; $i < $end; $i++) {
+                $smile = preg_replace('#^' . $rootpath . 'smileys/user/' . $id . '/(.*?).gif$#isU', '$1', $array [$i], 1);
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                echo '<img src="' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
+                echo '<img src="' . $array [$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
             }
-        } else
-        {
+        }
+        else {
             echo 'Смайлов в категории нет!<br/>';
         }
         echo '<div class="phdr">Всего: ' . $total . '</div>';
-        if ($total > $kmess)
-        {
+        if ($total > $kmess) {
             echo '<p>' . pagenav('smile.php?act=cat&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="smile.php" method="get"><input type="hidden" value="cat" name="act" /><input type="hidden" value="' . $id .
-                '" name="id" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+            '" name="id" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="smile.php">В категории</a></p>';
         break;
 
-    case 'adm':
-        if ($rights < 1)
-        {
+    case 'adm' :
+        if ($rights < 1) {
             echo 'Ошибка!<br/><a href="smile.php">В категории</a><br/>';
             require_once ('../incfiles/end.php');
             exit;
@@ -71,47 +65,41 @@ switch ($act)
         echo '<div class="phdr"><b>Смайлы:</b> Для администрации</div>';
         $array = glob($rootpath . 'smileys/admin/*.gif');
         $total = count($array);
-        if ($total > 0)
-        {
+        if ($total > 0) {
             $end = $start + $kmess;
             if ($end > $total)
                 $end = $total;
-            for ($i = $start; $i < $end; $i++)
-            {
-                $smile = preg_replace('#^' . $rootpath . 'smileys/admin/(.*?).gif$#isU', '$1', $array[$i], 1);
+            for ($i = $start; $i < $end; $i++) {
+                $smile = preg_replace('#^' . $rootpath . 'smileys/admin/(.*?).gif$#isU', '$1', $array [$i], 1);
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                echo '<img src="' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
+                echo '<img src="' . $array [$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
             }
-        } else
-        {
+        }
+        else {
             echo 'Смайлов в категории нет!<br/>';
         }
         echo '<div class="phdr">Всего: ' . $total . '</div>';
-        if ($total > $kmess)
-        {
+        if ($total > $kmess) {
             echo '<p>' . pagenav('smile.php?act=adm&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="smile.php" method="get"><input type="hidden" value="adm" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="smile.php">В категории</a></p>';
         break;
 
-    default:
-        if (empty($_SESSION['refsm']))
-        {
+    default :
+        if (empty ($_SESSION['refsm'])) {
             $_SESSION['refsm'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
         }
         echo '<div class="phdr"><b>Каталог смайлов</b></div>';
-		$dir = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
+        $dir = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
         $total_dir = count($dir);
-        for ($i = 0; $i < $total_dir; $i++)
-        {
+        for ($i = 0; $i < $total_dir; $i++) {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            echo '<a href="smile.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'smileys/user/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> (' . (int)count(glob($dir[$i] .
-                '/*.gif')) . ')</div>';
+            echo '<a href="smile.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'smileys/user/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> (' . (int) count(
+            glob($dir[$i] . '/*.gif')) . ')</div>';
         }
-        if ($rights >= 1)
-        {
-            echo '<div class="gmenu"><p><a href="smile.php?act=adm">Для администрации</a> (' . (int)count(glob($rootpath . 'smileys/admin/*.gif')) . ')</p></div>';
+        if ($rights >= 1) {
+            echo '<div class="gmenu"><p><a href="smile.php?act=adm">Для администрации</a> (' . (int) count(glob($rootpath . 'smileys/admin/*.gif')) . ')</p></div>';
         }
         echo '<div class="bmenu"><a href="' . $_SESSION['refsm'] . '">Назад</a></div>';
         break;

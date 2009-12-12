@@ -21,15 +21,14 @@ $textl = 'Мои настройки';
 require_once ('../incfiles/core.php');
 require_once ('../incfiles/head.php');
 
-if (!$user_id)
-{
-    header('Location: ../index.php');
+if (!$user_id) {
+    echo display_error('Только для авторизованных');
+    require_once ('../incfiles/end.php');
     exit;
 }
 
-switch ($act)
-{
-    case 'forum':
+switch ($act) {
+    case 'forum' :
         ////////////////////////////////////////////////////////////
         // Настройки форума                                       //
         ////////////////////////////////////////////////////////////
@@ -37,14 +36,13 @@ switch ($act)
         $set_forum = unserialize($datauser['set_forum']);
         echo '<div class="phdr"><b>Настройки Форума</b></div>';
         echo '<div class="bmenu"><small>Данные настройки влияют на отображение информации Форума</small></div>';
-        if (isset($_POST['submit']))
-        {
-            $set_forum['farea'] = isset($_POST['farea']) ? 1 : 0;
-            $set_forum['upfp'] = isset($_POST['upfp']) ? 1 : 0;
-            $set_forum['farea_w'] = isset($_POST['farea_w']) ? intval($_POST['farea_w']) : 20;
-            $set_forum['farea_h'] = isset($_POST['farea_h']) ? intval($_POST['farea_h']) : 2;
-            $set_forum['postclip'] = isset($_POST['postclip']) ? intval($_POST['postclip']) : 1;
-            $set_forum['postcut'] = isset($_POST['postcut']) ? intval($_POST['postcut']) : 1;
+        if (isset ($_POST['submit'])) {
+            $set_forum['farea'] = isset ($_POST['farea']) ? 1 : 0;
+            $set_forum['upfp'] = isset ($_POST['upfp']) ? 1 : 0;
+            $set_forum['farea_w'] = isset ($_POST['farea_w']) ? intval($_POST['farea_w']) : 20;
+            $set_forum['farea_h'] = isset ($_POST['farea_h']) ? intval($_POST['farea_h']) : 2;
+            $set_forum['postclip'] = isset ($_POST['postclip']) ? intval($_POST['postclip']) : 1;
+            $set_forum['postcut'] = isset ($_POST['postcut']) ? intval($_POST['postcut']) : 1;
             if ($set_forum['postclip'] < 0 || $set_forum['postclip'] > 2)
                 $set_forum['postclip'] = 1;
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
@@ -60,8 +58,7 @@ switch ($act)
             mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id' LIMIT 1");
             echo '<div class="rmenu">Настройки сохранены</div>';
         }
-        if (isset($_GET['reset']) || empty($set_forum))
-        {
+        if (isset ($_GET['reset']) || empty ($set_forum)) {
             $set_forum = array();
             $set_forum['farea'] = 0;
             $set_forum['upfp'] = 0;
@@ -92,26 +89,26 @@ switch ($act)
         echo '<p><a href="../forum">В форум</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
         break;
 
-    case 'chat':
+    case 'chat' :
         ////////////////////////////////////////////////////////////
         // Настройки Чата                                         //
         ////////////////////////////////////////////////////////////
-        $mood = array("нейтральное", "бодрое", "прекрасное", "весёлое", "унылое", "ангельское", "агрессивное", "удивленное", "злое", "сердитое", "сонное", "озлобленное", "скучающее", "оживлённое", "угрюмое", "размышляющее", "занятое", "нахальное",
-            "холодное", "смущённое", "крутое", "дьявольское", "сварливое", "счастливое", "горячее", "влюблённое", "невинное", "вдохновлённое", "одинокое", "скрытое", "задумчивое", "психоделическое", "расслабленое", "грустное", "испуганное",
-            "шокированное", "потрясенное", "хитрое", "усталое", "утомленное");
+        $mood = array("нейтральное", "бодрое", "прекрасное", "весёлое", "унылое", "ангельское", "агрессивное", "удивленное", "злое", "сердитое",
+        "сонное", "озлобленное", "скучающее", "оживлённое", "угрюмое", "размышляющее", "занятое", "нахальное", "холодное", "смущённое", "крутое",
+        "дьявольское", "сварливое", "счастливое", "горячее", "влюблённое", "невинное", "вдохновлённое", "одинокое", "скрытое", "задумчивое",
+        "психоделическое", "расслабленое", "грустное", "испуганное", "шокированное", "потрясенное", "хитрое", "усталое", "утомленное");
         $set_chat = array();
         $set_chat = unserialize($datauser['set_chat']);
         echo '<div class="phdr"><b>Настройки Чата</b></div>';
         echo '<div class="bmenu"><small>Индивидуальная настройка Чата</small></div>';
-        if (isset($_POST['submit']))
-        {
-            $set_chat['refresh'] = isset($_POST['refresh']) ? intval($_POST['refresh']) : 20;
-            $set_chat['chmes'] = isset($_POST['chmes']) ? intval($_POST['chmes']) : 10;
-            $set_chat['carea'] = isset($_POST['carea']) ? 1 : 0;
-            $set_chat['carea_w'] = isset($_POST['carea_w']) ? intval($_POST['carea_w']) : 20;
-            $set_chat['carea_h'] = isset($_POST['carea_h']) ? intval($_POST['carea_h']) : 2;
-            $set_chat['mood'] = (isset($_POST['mood']) && in_array(trim($_POST['mood']), $mood)) ? trim($_POST['mood']) : 'нейтральное';
-            $mood_adm = isset($_POST['mood_adm']) ? check(mb_substr(trim($_POST['mood_adm']), 0, 30)) : '';
+        if (isset ($_POST['submit'])) {
+            $set_chat['refresh'] = isset ($_POST['refresh']) ? intval($_POST['refresh']) : 20;
+            $set_chat['chmes'] = isset ($_POST['chmes']) ? intval($_POST['chmes']) : 10;
+            $set_chat['carea'] = isset ($_POST['carea']) ? 1 : 0;
+            $set_chat['carea_w'] = isset ($_POST['carea_w']) ? intval($_POST['carea_w']) : 20;
+            $set_chat['carea_h'] = isset ($_POST['carea_h']) ? intval($_POST['carea_h']) : 2;
+            $set_chat['mood'] = (isset ($_POST['mood']) && in_array(trim($_POST['mood']), $mood)) ? trim($_POST['mood']) : 'нейтральное';
+            $mood_adm = isset ($_POST['mood_adm']) ? check(mb_substr(trim($_POST['mood_adm']), 0, 30)) : '';
             if ($set_chat['refresh'] < 10)
                 $set_chat['refresh'] = 10;
             elseif ($set_chat['refresh'] > 99)
@@ -128,13 +125,12 @@ switch ($act)
                 $set_chat['carea_h'] = 1;
             elseif ($set_chat['carea_h'] > 9)
                 $set_chat['carea_h'] = 9;
-            if ($rights >= 7 && !empty($mood_adm))
+            if ($rights >= 7 && !empty ($mood_adm))
                 $set_chat['mood'] = $mood_adm;
             mysql_query("UPDATE `users` SET `set_chat` = '" . mysql_real_escape_string(serialize($set_chat)) . "' WHERE `id` = '$user_id' LIMIT 1");
             echo '<div class="rmenu">Настройки сохранены</div>';
         }
-        if (isset($_GET['reset']) || empty($set_chat))
-        {
+        if (isset ($_GET['reset']) || empty ($set_chat)) {
             $set_chat = array();
             $set_chat['refresh'] = 20;
             $set_chat['chmes'] = 10;
@@ -155,8 +151,7 @@ switch ($act)
         echo '</p><p><h3>Ваше настроение</h3>';
         echo '';
         echo 'Выберите настроение:<br/><select name="mood">';
-        foreach ($mood as $val)
-        {
+        foreach ($mood as $val) {
             echo '<option' . ($set_chat['mood'] == $val ? ' selected="selected">' : '>') . $val . '</option>';
         }
         echo '</select><br/>';
@@ -167,7 +162,7 @@ switch ($act)
         echo '<p><a href="../chat">В чат</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
         break;
 
-    default:
+    default :
         ////////////////////////////////////////////////////////////
         // Общие настройки                                        //
         ////////////////////////////////////////////////////////////
@@ -175,30 +170,28 @@ switch ($act)
         $set_user = unserialize($datauser['set_user']);
         echo '<div class="phdr"><b>Общие настройки</b></div>';
         echo '<div class="bmenu"><small>Данные настройки влияют на весь сайт и все его модули</small></div>';
-        if (isset($_POST['submit']))
-        {
-            $set_user['sdvig'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
-            $set_user['smileys'] = isset($_POST['smileys']) ? 1 : 0;
-            $set_user['translit'] = isset($_POST['translit']) ? 1 : 0;
-            $set_user['digest'] = isset($_POST['digest']) ? 1 : 0;
-            $set_user['kmess'] = isset($_POST['kmess']) ? intval($_POST['kmess']) : 10;
-            $set_user['quick_go'] = isset($_POST['quick_go']) ? 1 : 0;
-            $set_user['gzip'] = isset($_POST['gzip']) ? 1 : 0;
-            $set_user['online'] = isset($_POST['online']) ? 1 : 0;
-            $set_user['movings'] = isset($_POST['movings']) ? 1 : 0;
-            if ($set_user['sdvig'] < -12)
-                $set_user['sdvig'] = -12;
+        if (isset ($_POST['submit'])) {
+            $set_user['sdvig'] = isset ($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
+            $set_user['smileys'] = isset ($_POST['smileys']) ? 1 : 0;
+            $set_user['translit'] = isset ($_POST['translit']) ? 1 : 0;
+            $set_user['digest'] = isset ($_POST['digest']) ? 1 : 0;
+            $set_user['kmess'] = isset ($_POST['kmess']) ? intval($_POST['kmess']) : 10;
+            $set_user['quick_go'] = isset ($_POST['quick_go']) ? 1 : 0;
+            $set_user['gzip'] = isset ($_POST['gzip']) ? 1 : 0;
+            $set_user['online'] = isset ($_POST['online']) ? 1 : 0;
+            $set_user['movings'] = isset ($_POST['movings']) ? 1 : 0;
+            if ($set_user['sdvig'] < - 12)
+                $set_user['sdvig'] = - 12;
             elseif ($set_user['sdvig'] > 12)
                 $set_user['sdvig'] = 12;
             if ($set_user['kmess'] < 5)
                 $set_user['kmess'] = 5;
             elseif ($set_user['kmess'] > 99)
                 $set_user['kmess'] = 99;
-            $set_user['skin'] = isset($_POST['skin']) ? check(trim($_POST['skin'])) : 'default';
+            $set_user['skin'] = isset ($_POST['skin']) ? check(trim($_POST['skin'])) : 'default';
             $arr = array();
             $dir = opendir('../theme');
-            while ($skindef = readdir($dir))
-            {
+            while ($skindef = readdir($dir)) {
                 if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn'))
                     $arr[] = str_replace('.css', '', $skindef);
             }
@@ -208,8 +201,7 @@ switch ($act)
             mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
             echo '<div class="rmenu">Настройки сохранены</div>';
         }
-        if (isset($_GET['reset']) || empty($set_user))
-        {
+        if (isset ($_GET['reset']) || empty ($set_user)) {
             $set_user = array();
             $set_user['smileys'] = 1;
             $set_user['translit'] = 1;
@@ -239,10 +231,8 @@ switch ($act)
         echo '<input name="movings" type="checkbox" value="1" ' . ($set_user['movings'] ? 'checked="checked"' : '') . ' />&nbsp;Счетчик переходов';
         echo '</p><p><h3>Тема оформления</h3><select name="skin">';
         $dr = opendir('../theme');
-        while ($skindef = readdir($dr))
-        {
-            if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn'))
-            {
+        while ($skindef = readdir($dr)) {
+            if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn')) {
                 $skindef = str_replace('.css', '', $skindef);
                 echo '<option' . ($set_user['skin'] == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
             }

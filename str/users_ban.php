@@ -109,7 +109,8 @@ switch ($act) {
                     // Заносим в базу
                     mysql_query("INSERT INTO `cms_ban_users` SET
 					`user_id` = '$id',
-					`ban_time` = '" . ($realtime + $timeval) . "',
+					`ban_time` = '" . ($realtime + $timeval) .
+                    "',
 					`ban_while` = '$realtime',
 					`ban_type` = '$term',
 					`ban_who` = '$login',
@@ -311,7 +312,8 @@ switch ($act) {
             echo '<div class="menu"><p>Список пуст</p></div>';
         }
         echo '<div class="phdr">Всего нарушений: ' . $total . '</div>';
-        echo '<p>' . ($rights == 9 && $total ? '<a href="users_ban.php?act=delhist&amp;id=' . $user['id'] . '">Очистить историю</a><br />' : '') . ($rights >= 6 ? '<a href="../' . $admp . '/index.php?act=usr_ban">Бан панель</a>' : '') . '</p>';
+        echo '<p>' . ($rights == 9 && $total ? '<a href="users_ban.php?act=delhist&amp;id=' . $user['id'] . '">Очистить историю</a><br />' : '') . ($rights >= 6 ? '<a href="../' . $admp .
+        '/index.php?act=usr_ban">Бан панель</a>' : '') . '</p>';
 }
 
 require_once ('../incfiles/end.php');

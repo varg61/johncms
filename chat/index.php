@@ -208,10 +208,12 @@ switch ($act) {
                                 $balans = $datauser['balans'] + $bls;
                                 $otvtime = $realtime - $protv1['time'];
                                 if ($datauser['sex'] == "m") {
-                                    $tx = "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
+                                    $tx =
+                                    "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
                                 }
                                 else {
-                                    $tx = "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
+                                    $tx =
+                                    "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
                                 }
                                 $mtim = $realtime + 1;
                                 mysql_query("INSERT INTO `chat` VALUES(
@@ -227,7 +229,8 @@ switch ($act) {
                     require_once ("chat_header.php");
                     echo 'Добавление сообщения<br />(max. 500)';
                     echo '<div class="title1">' . $type1['text'] . '</div>';
-                    echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='" . $set_chat['carea_w'] . "' rows='" . $set_chat['carea_h'] . "' title='Введите текст сообщения' name='msg'></textarea><br/>";
+                    echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='" . $set_chat['carea_w'] . "' rows='" . $set_chat['carea_h'] .
+                    "' title='Введите текст сообщения' name='msg'></textarea><br/>";
                     if ($set_user['translit'])
                         echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
                     echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form>";
@@ -267,7 +270,8 @@ switch ($act) {
                     if ($_POST['msgtrans'] == 1) {
                         $msg = trans($msg);
                     }
-                    mysql_query("insert into `chat` values(0,'" . $th . "','','m','" . $realtime . "','" . $login . "','" . $to . "','" . $priv . "','" . $msg . "','" . $ipp . "','" . mysql_real_escape_string($agn) . "','" . $nas . "','');");
+                    mysql_query("insert into `chat` values(0,'" . $th . "','','m','" . $realtime . "','" . $login . "','" . $to . "','" . $priv . "','" . $msg . "','" . $ipp . "','" . mysql_real_escape_string($agn) . "','" . $nas . "','');"
+                    );
                     if (empty ($datauser['postchat'])) {
                         $fpst = 1;
                     }
@@ -307,10 +311,12 @@ switch ($act) {
                                 $balans = $datauser['balans'] + $bls;
                                 $otvtime = $realtime - $protv1['time'];
                                 if ($datauser['sex'] == "m") {
-                                    $tx = "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
+                                    $tx =
+                                    "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
                                 }
                                 else {
-                                    $tx = "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
+                                    $tx =
+                                    "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
                                 }
                                 $mtim = $realtime + 1;
                                 mysql_query("INSERT INTO `chat` VALUES(
@@ -399,7 +405,8 @@ switch ($act) {
                     echo '<option value="0">Всем</option>';
                     echo '<option value="1">Приватно</option>';
                     echo '</select><br/>';
-                    echo "Эмоции:<br/><select name='nas'>
+                    echo
+                    "Эмоции:<br/><select name='nas'>
 <option value=''>Бeз эмoций</option>
 <option value='[Paдocтнo] '>Paдocтнo</option>
 <option value='[Пeчaльнo] '>Пeчaльнo</option>

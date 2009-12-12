@@ -79,7 +79,8 @@ else {
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
 
-$array = array('new', 'who', 'addfile', 'file', 'users', 'moders', 'addvote', 'editvote', 'delvote', 'vote', 'per', 'ren', 'deltema', 'vip', 'close', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel', 'files', 'filter', 'restore');
+$array = array('new', 'who', 'addfile', 'file', 'users', 'moders', 'addvote', 'editvote', 'delvote', 'vote', 'per', 'ren', 'deltema', 'vip', 'close', 'editpost', 'nt', 'tema', 'loadtem', 'say', 'post', 'read', 'faq', 'trans', 'massdel',
+'files', 'filter', 'restore');
 if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once ($act . '.php');
 }
@@ -234,7 +235,8 @@ else {
                 $frm = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
                 echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
-                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] . '</b></div>';
+                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] .
+                '</b></div>';
                 if ($type1['close'])
                     echo '<div class="rmenu"><b>Тема удалена</b></div>';
                 if ($type1['edit'])
@@ -255,7 +257,8 @@ else {
                         while ($vote = mysql_fetch_assoc($vote_result)) {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . checkout($vote['name']) . '<br />';
                         }
-                        echo '<p><input type="submit" name="submit" value="Голосовать"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum . '">Результаты</a></p></form></div>';
+                        echo '<p><input type="submit" name="submit" value="Голосовать"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum .
+                        '">Результаты</a></p></form></div>';
                     }
                     else {
                         // Выводим результаты голосования
@@ -279,9 +282,11 @@ else {
                 // Фиксация первого поста в теме                          //
                 ////////////////////////////////////////////////////////////
                 if (($set_forum['postclip'] == 2 && ($set_forum['upfp'] ? $start < (ceil($colmes - $kmess)) : $start > 0)) || isset ($_GET['clip'])) {
-                    $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
+                    $postreq = mysql_query(
+                    "SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-                    WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . " ORDER BY `forum`.`id` LIMIT 1");
+                    WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'"
+                    . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . " ORDER BY `forum`.`id` LIMIT 1");
                     $postres = mysql_fetch_assoc($postreq);
                     echo '<div class="clip">';
                     if ($postres['sex'])
@@ -315,9 +320,11 @@ else {
                 else
                     $order = ((empty ($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 // Запрос в базу
-                $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
+                $req = mysql_query(
+                "SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 				FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order LIMIT $start, $kmess");
+				WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'"
+                . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order LIMIT $start, $kmess");
                 // Верхнее поле "Написать"
                 if (($user_id && !$type1['edit'] && $set_forum['upfp']) || ($rights >= 7 && $set_forum['upfp'])) {
                     echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
@@ -408,7 +415,8 @@ else {
                         echo '<br /><span class="gray">Прикреплённый файл:<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a> (' . $fls . ' кб.)<br/>';
                         echo 'Скачано: ' . $fres['dlcount'] . ' раз.</span>';
                     }
-                    if ((($rights == 3 || $rights >= 6) && $rights >= $res['rights']) || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > $realtime - 300) || ($res['user_id'] == $user_id && $set_forum['upfp'] && $start == 0 && $i == 1 && $res['time'] > $realtime - 300)) {
+                    if ((($rights == 3 || $rights >= 6) && $rights >= $res['rights']) || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > $realtime - 300) || ($res['user_id'] == $user_id && $set_forum
+                        ['upfp'] && $start == 0 && $i == 1 && $res['time'] > $realtime - 300)) {
                         // Ссылки на редактирование / удаление постов
                         echo '<div class="sub">';
                         if ($rights == 3 || $rights >= 6)
@@ -440,7 +448,8 @@ else {
                     echo '<input type="submit" name="submit" value="Написать"/>';
                     echo '</form></div>';
                 }
-                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $set_user['skin'] . '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
+                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $set_user['skin'] .
+                '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
@@ -450,7 +459,8 @@ else {
                 }
                 if ($rights == 3 || $rights >= 6) {
                     echo '<p><div class="func">';
-                    echo $topic_vote > 0 ? '<a href="index.php?act=editvote&amp;id=' . $id . '">Изменить опрос</a><br/><a href="index.php?act=delvote&amp;id=' . $id . '">Удалить опрос</a><br/>' : '<a href="index.php?act=addvote&amp;id=' . $id . '">Добавить опрос</a><br/>';
+                    echo $topic_vote > 0 ? '<a href="index.php?act=editvote&amp;id=' . $id . '">Изменить опрос</a><br/><a href="index.php?act=delvote&amp;id=' . $id . '">Удалить опрос</a><br/>' :
+                    '<a href="index.php?act=addvote&amp;id=' . $id . '">Добавить опрос</a><br/>';
                     echo "<a href='index.php?act=ren&amp;id=" . $id . "'>Переименовать тему</a><br/>";
                     // Закрыть - открыть тему
                     if ($type1['edit'] == 1)

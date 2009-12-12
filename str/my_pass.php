@@ -21,51 +21,42 @@ $textl = 'Смена пароля';
 require_once ('../incfiles/core.php');
 require_once ('../incfiles/head.php');
 
-if (!$user_id)
-{
+if (!$user_id) {
     display_error('Только для зарегистрированных посетителей');
     require_once ('../incfiles/end.php');
     exit;
 }
 
-if ($id && $id != $user_id && $rights >= 7)
-{
+if ($id && $id != $user_id && $rights >= 7) {
     // Если был запрос на юзера, то получаем его данные
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
-    if (mysql_num_rows($req))
-    {
+    if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
-        if ($user['rights'] > $datauser['rights'])
-        {
+        if ($user['rights'] > $datauser['rights']) {
             // Если не хватает прав, выводим ошибку
             echo display_error('Вы не можете менять пароль старшего Вас по должности');
             require_once ('../incfiles/end.php');
             exit;
         }
-    } else
-    {
+    }
+    else {
         echo display_error('Такого пользователя не существует');
         require_once ('../incfiles/end.php');
         exit;
     }
-} else
-{
+}
+else {
     $id = false;
     $user = $datauser;
 }
 
-switch ($act)
-{
-    case 'change':
+switch ($act) {
+    case 'change' :
         $error = array();
-        $oldpass = isset($_POST['oldpass']) ? trim($_POST['oldpass']):
-        '';
-        $newpass = isset($_POST['newpass']) ? trim($_POST['newpass']):
-        '';
-        $newconf = isset($_POST['newconf']) ? trim($_POST['newconf']):
-        '';
-        $autologin = isset($_POST['autologin']) ? 1:
-        0;
+        $oldpass = isset ($_POST['oldpass']) ? trim($_POST['oldpass']) : '';
+        $newpass = isset ($_POST['newpass']) ? trim($_POST['newpass']) : '';
+        $newconf = isset ($_POST['newconf']) ? trim($_POST['newconf']) : '';
+        $autologin = isset ($_POST['autologin']) ? 1 : 0;
         if (!$oldpass || !$newpass || !$newconf)
             $error[] = 'Нужно заполнить все поля формы';
         if (md5(md5($oldpass)) !== $user['password'] && !$error)
@@ -76,23 +67,22 @@ switch ($act)
             $error[] = 'Недопустимые символы в новом пароле';
         if (!$error && (strlen($newpass) < 3 || strlen($newpass) > 10))
             $error[] = 'Длина пароля должна быть минимум 3 и максимум 10 символов';
-        if (!$error)
-        {
+        if (!$error) {
             // Записываем в базу
             mysql_query("UPDATE `users` SET `password` = '" . mysql_real_escape_string(md5(md5($newpass))) . "' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
             // Проверяем и записываем COOKIES
-            if (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
+            if (isset ($_COOKIE['cuid']) && isset ($_COOKIE['cups']))
                 setcookie('cups', base64_encode($newpass), time() + 3600 * 24 * 365);
             echo '<div class="gmenu"><p><b>Пароль успешно изменен</b><br />';
-            if ($autologin)
-            {
+            if ($autologin) {
                 // Показываем ссылку на Автологин
                 echo '</p><p>Ссылка на Автологин:<br /><input type="text" value="' . $home . '/auto.php?id=' . $user['id'] . '&amp;p=' . $newpass . '" /><br />';
-                echo '</p><p><b>Внимание!</b><br />В целях безопасности, никогда не используйте Автологин в ненадежных местах (интернет-кафе, чужие компьютеы и др.)';
+                echo
+                '</p><p><b>Внимание!</b><br />В целях безопасности, никогда не используйте Автологин в ненадежных местах (интернет-кафе, чужие компьютеы и др.)';
             }
             echo '</p></div>';
-        } else
-        {
+        }
+        else {
             $error[] = '<div><a href="my_pass.php">Повторить</a></div>';
             echo display_error($error);
             echo $datauser['password'] . '<br />';
@@ -100,7 +90,7 @@ switch ($act)
         }
         break;
 
-    default:
+    default :
         echo '<div class="phdr"><b>Меняем пароль:</b> ' . $user['name'] . '</div>';
         echo '<form action="my_pass.php?act=change" method="post">';
         if (!$id || $rights < 7)

@@ -164,7 +164,8 @@ if (!$error) {
                 mysql_query("UPDATE `forum` SET
                 `tedit` = '$realtime',
                 `edit` = '$login',
-                `kedit` = '" . ($res['kedit'] + 1) . "',
+                `kedit` = '" . ($res['kedit'] + 1) .
+                "',
                 `text` = '$msg'
                 WHERE `id` = '$id'");
                 header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);

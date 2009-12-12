@@ -1,4 +1,5 @@
 <?php
+
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -19,30 +20,28 @@ $rootpath = '';
 require_once ("incfiles/core.php");
 
 // Получение данных
-$auto_pass = isset($_GET['p']) ? check($_GET['p']) : false;
-$form_login = isset($_POST['n']) ? check($_POST['n']) : false;
-$form_pass = isset($_POST['p']) ? check($_POST['p']) : false;
+$auto_pass = isset ($_GET['p']) ? check($_GET['p']) : false;
+$form_login = isset ($_POST['n']) ? check($_POST['n']) : false;
+$form_pass = isset ($_POST['p']) ? check($_POST['p']) : false;
 
 sleep(6);
 
-if ($form_login && $form_pass)
-{
+if ($form_login && $form_pass) {
     // Если Логин через форму
-	$user_ps = md5(md5($form_pass));
-	$req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . rus_lat(mb_strtolower($form_login)) . "' LIMIT 1");
-} elseif ($id && $auto_pass)
-{
+    $user_ps = md5(md5($form_pass));
+    $req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . rus_lat(mb_strtolower($form_login)) . "' LIMIT 1");
+}
+elseif ($id && $auto_pass) {
     $user_ps = md5(md5($auto_pass));
-	$req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
-} else
-{
+    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
+}
+else {
     header("Location: in.php?msg=1");
     exit;
 }
 
 // Проверка Логина
-if (mysql_num_rows($req) == 0)
-{
+if (mysql_num_rows($req) == 0) {
     header("Location: in.php?msg=2");
     exit;
 }
@@ -50,22 +49,19 @@ if (mysql_num_rows($req) == 0)
 $res = mysql_fetch_array($req);
 
 // Проверка пароля
-if ($res['password'] != $user_ps)
-{
+if ($res['password'] != $user_ps) {
     header("Location: in.php?msg=2");
     exit;
 }
 
 // Если регистрация еще не подтверждена
-if ($res['preg'] == "0" && $res['regadm'] == "")
-{
+if ($res['preg'] == "0" && $res['regadm'] == "") {
     header("Location: in.php?msg=3");
     exit;
 }
 
 // Если регистрация отклонена
-if ($res['preg'] == "0" && $res['regadm'] !== "")
-{
+if ($res['preg'] == "0" && $res['regadm'] !== "") {
     $_SESSION['otkl'] = $res['regadm'];
     header("Location: in.php?msg=4");
     exit;
@@ -74,8 +70,7 @@ if ($res['preg'] == "0" && $res['regadm'] !== "")
 $user_id = $res['id'];
 
 // Установка данных COOKIE
-if ($_POST['mem'] == 1)
-{
+if ($_POST['mem'] == 1) {
     $cuid = base64_encode($user_id);
     $cups = base64_encode($form_pass);
     setcookie("cuid", $cuid, time() + 3600 * 24 * 365);

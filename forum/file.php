@@ -17,34 +17,30 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $error = false;
-if ($id)
-{
+if ($id) {
     $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = '" . $id . "' LIMIT 1");
-    if (mysql_num_rows($req) > 0)
-    {
+    if (mysql_num_rows($req) > 0) {
         $res = mysql_fetch_array($req);
-        if (file_exists('./files/' . $res['filename']))
-        {
+        if (file_exists('./files/' . $res['filename'])) {
             $dlcount = $res['dlcount'] + 1;
             mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '" . $dlcount . "' WHERE `id` = '" . $id . "'");
             header('location: ./files/' . $res['filename']);
-        } else
-        {
+        }
+        else {
             $error = 'Файла не существует';
         }
-    } else
-    {
+    }
+    else {
         $error = 'Файла не существует';
     }
-    if ($error)
-    {
+    if ($error) {
         require_once ("../incfiles/head.php");
         echo '<p><b>ОШИБКА!</b><br/>' . $error . '<a href="index.php">В форум</a></p>';
         require_once ("../incfiles/end.php");
         exit;
     }
-} else
-{
+}
+else {
     header('location: index.php');
 }
 
