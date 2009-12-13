@@ -57,9 +57,18 @@ if ($id && $rights >= 7 && $act == 'reset') {
     require_once ('../incfiles/end.php');
     exit;
 }
-//TODO: Добавить имя того, кого редактируем
-echo '<div class="phdr"><b>Редактирование ' . ($id && $id != $user_id ? '' : 'личной ') . 'анкеты</b></div>';
-if (isset ($_POST['submit'])) {
+echo '<div class="phdr"><a href="anketa.php?id='.$user['id'].'"><b>' . ($id && $id != $user_id ? 'Анкета' : 'Личная анкета') . '</b></a> | Редактирование</div>';
+if (isset ($_GET['delavatar'])) {
+    // Удаляем аватар
+    @ unlink('../files/avatar/' . $user['id'] . '.jpg');
+}
+elseif (isset ($_GET['delphoto'])) {
+    // Удаляем фото
+    @ unlink('../files/photo/' . $user['id'] . '.jpg');
+    @ unlink('../files/photo/' . $user['id'] . '_small.jpg');
+    echo '<div class="rmenu">Фотография удалена</div>';
+}
+elseif (isset ($_POST['submit'])) {
     $error = array();
     // Данные юзера
     $user['imname'] = isset ($_POST['imname']) ? check(mb_substr($_POST['imname'], 0, 25)) : '';
@@ -132,15 +141,30 @@ if (isset ($_POST['submit'])) {
 echo '<form action="my_data.php?id=' . $user['id'] . '" method="post">';
 // Логин
 echo '<div class="gmenu"><p><ul>';
-echo '<li><span class="gray">Логин:</span> <b>' . $user['name_lat'] . '</b></li>';
+echo '<li>Логин: <b>' . $user['name_lat'] . '</b></li>';
 if ($rights >= 7) {
-    echo '<li><span class="gray">Ник: (мин.2, макс. 20)</span><br /><input type="text" value="' . $user['name'] . '" name="name" /></li>';
-    echo '<li><span class="gray">Статус: (макс. 50)</span><br /><input type="text" value="' . $user['status'] . '" name="status" /></li>';
+    echo '<li>Ник: (мин.2, макс. 20)<br /><input type="text" value="' . $user['name'] . '" name="name" /></li>';
+    echo '<li>Статус: (макс. 50)<br /><input type="text" value="' . $user['status'] . '" name="status" /></li>';
 }
 else {
     echo '<li><span class="gray">Ник:</span> <b>' . $user['name'] . '</b></li>';
     echo '<li><span class="gray">Статус:</span> ' . $user['status'] . '</li>';
 }
+echo '<li>Аватар:<br />';
+$link = '';
+if (file_exists(('../files/avatar/' . $user['id'] . '.jpg'))) {
+    echo '<img src="../files/avatar/' . $user['id'] . '.jpg" width="32" height="32" alt="' . $user['name'] . '" /><br />';
+    $link = ' | <a href="my_data.php?delavatar">Удалить</a>';
+}
+echo '<small><a href="">Выгрузить</a> | <a href="">Выбрать</a>' . $link . '</small></li>';
+// Фотография
+echo '<li>Фотография:<br />';
+$link = '';
+if (file_exists(('../files/photo/' . $user['id'] . '_small.jpg'))) {
+    echo '<a href="../files/photo/'.$user['id'].'.jpg"><img src="../files/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
+    $link = ' | <a href="my_data.php?delphoto">Удалить</a>';
+}
+echo '<small><a href="my_images.php?act=up_photo&amp;id='.$user['id'].'">Выгрузить</a>' . $link . '</small></li>';
 echo '</ul></p></div>';
 // Личные данные
 echo '<div class="menu"><p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>';
