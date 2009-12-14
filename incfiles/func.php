@@ -555,9 +555,10 @@ function show_user($user = array(), $status = 0, $ip = 0, $str = '', $text = '',
         $out = '<b>Гость</b>';
         if (!empty ($user['name']))
             $out .= ': ' . $user['name'];
+        if (!empty ($str))
+            $out .= ' ' . $str;
     }
     else {
-        ###########################
         if ($set_user['avatar']) {
             $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
             if (file_exists(('../files/avatar/' . $user['id'] . '.png')))
@@ -580,7 +581,6 @@ function show_user($user = array(), $status = 0, $ip = 0, $str = '', $text = '',
             $out .= '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&nbsp;' . $user['status'] . '</div>';
         if ($set_user['avatar'])
             $out .= '</td></tr></table>';
-        ###########################
     }
     if ($text)
         $out .= '<div>' . $text . '</div>';
