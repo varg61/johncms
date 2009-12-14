@@ -53,6 +53,41 @@ else {
 
 switch ($act) {
     case 'up_avatar' :
+        echo '<div class="phdr"><b>Выгружаем аватар</b></div>';
+        if (isset ($_POST['submit'])) {
+            $handle = new upload($_FILES['imagefile']);
+            if ($handle->uploaded) {
+                // Обрабатываем фото
+                $handle->file_new_name_body = $user['id'];
+                $handle->allowed = array('image/jpeg', 'image/gif', 'image/png');
+                $handle->file_max_size = 1024 * $flsz;
+                $handle->file_overwrite = true;
+                $handle->image_resize = true;
+                $handle->image_x = 32;
+                $handle->image_y = 32;
+                $handle->image_convert = 'png';
+                $handle->process('../files/avatar/');
+                if ($handle->processed) {
+                        echo '<div class="gmenu"><p>Аватар загружен<br /><a href="my_data.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
+                        echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
+                }
+                else {
+                    echo display_error($handle->error);
+                }
+                $handle->clean();
+            }
+        }
+        else {
+            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '"><div class="menu"><p>';
+            echo 'Выберите изображение:<br /><input type="file" name="imagefile" value="" />';
+            echo '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" />';
+            echo '</p><p><input type="submit" name="submit" value="Выгрузить" />';
+            echo '</p></div></form>';
+            echo '<div class="phdr"><small>Для выгрузки разрешены файлы JPG, JPEG, PNG, GIF<br />Размер файла не должен превышать ' . $flsz . 'кб.<br />';
+            echo 'Вне зависимости от разрешения исходного файла, он будет преобразован в размер 32х32<br />';
+            echo 'Новое изображение заменит старое (если оно было)';
+            echo 'Для лучшего результата, исходное изображение долдно иметь равное соотношение сторон</small></div>';
+        }
         break;
 
     case 'up_photo' :
@@ -94,7 +129,7 @@ switch ($act) {
             }
         }
         else {
-            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_photo&amp;id='.$user['id'].'"><div class="menu"><p>';
+            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_photo&amp;id=' . $user['id'] . '"><div class="menu"><p>';
             echo 'Выберите изображение:<br /><input type="file" name="imagefile" value="" />';
             echo '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" />';
             echo '</p><p><input type="submit" name="submit" value="Выгрузить" />';

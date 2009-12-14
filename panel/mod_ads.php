@@ -444,7 +444,7 @@ switch ($from) {
             $_SESSION['abs_link'] = 1;
         elseif (isset ($_GET['up_1']))
             $_SESSION['abs_link'] = 0;
-        echo '<div class="phdr"><b>Активные ссылки</b></div><div class="b">';
+        echo '<div class="phdr"><b>Активные ссылки</b></div><div class="bmenu">';
         $sort = $_SESSION['abs_link'] ? intval($_SESSION['abs_link']) : 0;
         switch ($sort) {
             case '3' :
@@ -505,7 +505,7 @@ switch ($from) {
             echo '<p>' . pagenav('index.php?from=active&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="from" value="active"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
-        echo '<a href="index.php?act=mod_ads&amp;">Назад</a>';
+        echo '<p><a href="index.php?act=mod_ads&amp;">Назад</a></p>';
         break;
 
     case 'noactive' :
@@ -520,7 +520,7 @@ switch ($from) {
                 else
                     if (isset ($_GET['up_1']))
                         $_SESSION['abs_link'] = 0;
-                    echo '<div class="phdr"><b>Активные ссылки</b></div><div class="b">';
+                    echo '<div class="phdr"><b>Активные ссылки</b></div><div class="bmenu">';
         $sort = $_SESSION['abs_link'] ? intval($_SESSION['abs_link']) : 0;
         switch ($sort) {
             case '3' :
@@ -582,7 +582,7 @@ switch ($from) {
             echo '<p>' . pagenav('index.php?from=noactive&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="from" value="noactive"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
-        echo '<a href="index.php?act=mod_ads&amp;">Назад</a>';
+        echo '<p><a href="index.php?act=mod_ads&amp;">Назад</a></p>';
         break;
 
     case 'clean' :

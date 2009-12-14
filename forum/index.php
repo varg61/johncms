@@ -342,6 +342,15 @@ else {
                 $i = 1;
                 while ($res = mysql_fetch_assoc($req)) {
                     echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+                    ###########################
+                    if ($set_user['avatar']) {
+                        echo '<table cellpadding="0" cellspacing="0"><tr><td>';
+                        if (file_exists(('../files/avatar/' . $res['user_id'] . '.png')))
+                            echo '<img src="../files/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
+                        else
+                            echo '<img src="../images/empty.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
+                        echo '</td><td>';
+                    }
                     if ($res['sex'])
                         echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&nbsp;';
                     else
@@ -369,6 +378,9 @@ else {
                     // Статус юзера
                     if (!empty ($res['status']))
                         echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle"/>&nbsp;' . $res['status'] . '</div>';
+                    if ($set_user['avatar'])
+                        echo '</td></tr></table>';
+                    ###########################
                     if ($res['close']) {
                         echo '<span class="red">Пост удалён!</span><br/>';
                     }

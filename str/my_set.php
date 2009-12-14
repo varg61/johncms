@@ -172,6 +172,7 @@ switch ($act) {
         echo '<div class="bmenu"><small>Данные настройки влияют на весь сайт и все его модули</small></div>';
         if (isset ($_POST['submit'])) {
             $set_user['sdvig'] = isset ($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
+            $set_user['avatar'] = isset ($_POST['avatar']) ? 1 : 0;
             $set_user['smileys'] = isset ($_POST['smileys']) ? 1 : 0;
             $set_user['translit'] = isset ($_POST['translit']) ? 1 : 0;
             $set_user['digest'] = isset ($_POST['digest']) ? 1 : 0;
@@ -203,6 +204,7 @@ switch ($act) {
         }
         if (isset ($_GET['reset']) || empty ($set_user)) {
             $set_user = array();
+            $set_user['avatar'] = 1;
             $set_user['smileys'] = 1;
             $set_user['translit'] = 1;
             $set_user['quick_go'] = 1;
@@ -220,6 +222,7 @@ switch ($act) {
         echo '<input type="text" name="sdvig" size="2" maxlength="2" value="' . $set_user['sdvig'] . '"/> Сдвиг времени (+-12)<br />';
         echo '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> Системное время';
         echo '</p><p><h3>Функции системы</h3>';
+        echo '<input name="avatar" type="checkbox" value="1" ' . ($set_user['avatar'] ? 'checked="checked"' : '') . ' />&nbsp;Аватары<br/>';
         echo '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&nbsp;Смайлы<br/>';
         echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&nbsp;Транслит<br/>';
         echo '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&nbsp;Дайджест';

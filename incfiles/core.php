@@ -144,6 +144,7 @@ $set_user['sdvig'] = 0;// Временной сдвиг
 $set_user['smileys'] = 1;// Включить(1) выключить(0) смайлы
 $set_user['kmess'] = 10;// Число сообщений на страницу
 $set_user['quick_go'] = 1;// Быстрый переход
+$set_user['avatar'] = 1;// Аватары
 $set_user['skin'] = $set['skindef'];// Тема оформления
 $kmess = $set_user['kmess'];
 
@@ -205,6 +206,7 @@ if ($user_id && $user_ps) {
             $set_user = unserialize($datauser['set_user']);
             if (empty ($set_user)) {
                 // Задаем пользовательские настройки по-умолчанию
+                $set_user['avatar'] = 1;
                 $set_user['smileys'] = 1;
                 $set_user['translit'] = 1;
                 $set_user['quick_go'] = 1;

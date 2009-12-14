@@ -60,7 +60,8 @@ if ($id && $rights >= 7 && $act == 'reset') {
 echo '<div class="phdr"><a href="anketa.php?id='.$user['id'].'"><b>' . ($id && $id != $user_id ? 'Анкета' : 'Личная анкета') . '</b></a> | Редактирование</div>';
 if (isset ($_GET['delavatar'])) {
     // Удаляем аватар
-    @ unlink('../files/avatar/' . $user['id'] . '.jpg');
+    @ unlink('../files/avatar/' . $user['id'] . '.png');
+    echo '<div class="rmenu">Аватар удален</div>';
 }
 elseif (isset ($_GET['delphoto'])) {
     // Удаляем фото
@@ -152,11 +153,11 @@ else {
 }
 echo '<li>Аватар:<br />';
 $link = '';
-if (file_exists(('../files/avatar/' . $user['id'] . '.jpg'))) {
-    echo '<img src="../files/avatar/' . $user['id'] . '.jpg" width="32" height="32" alt="' . $user['name'] . '" /><br />';
+if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
+    echo '<img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
     $link = ' | <a href="my_data.php?delavatar">Удалить</a>';
 }
-echo '<small><a href="">Выгрузить</a> | <a href="">Выбрать</a>' . $link . '</small></li>';
+echo '<small><a href="my_images.php?act=up_avatar&amp;id='.$user['id'].'">Выгрузить</a> | <a href="">Выбрать</a>' . $link . '</small></li>';
 // Фотография
 echo '<li>Фотография:<br />';
 $link = '';
