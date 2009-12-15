@@ -101,25 +101,25 @@ if ($search && !$error) {
     // Выводим результаты поиска                              //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr">Результаты запроса</div>';
-    //$req = mysql_query("SELECT COUNT(*) FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "'");
-    //$total = mysql_result($req, 0);
-    //if ($total > 0) {
-    $req = mysql_query("SELECT * FROM `users` WHERE `ip` BETWEEN $ip1 AND $ip2 ORDER BY `name` ASC LIMIT $start, $kmess");
-    while ($res = mysql_fetch_array($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, 1, ($rights >= 6 ? 2 : 0));
-        echo '</div>';
-        ++$i;
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `ip` BETWEEN $ip1 AND $ip2"), 0);
+    if ($total) {
+        $req = mysql_query("SELECT * FROM `users` WHERE `ip` BETWEEN $ip1 AND $ip2 ORDER BY `name` ASC LIMIT $start, $kmess");
+        while ($res = mysql_fetch_array($req)) {
+            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            echo show_user($res, 1, ($rights >= 6 ? 2 : 0));
+            echo '</div>';
+            ++$i;
+        }
     }
-    //}
-    //else {
-    //    echo '<div class="menu"><p>По Вашему запросу ничего не найдено</p></div>';
-    //}
+    else {
+        echo '<div class="menu"><p>По Вашему запросу ничего не найдено</p></div>';
+    }
     echo '<div class="phdr">Всего найдено: ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
         echo '<p>' . pagenav('index.php?act=usr_search_ip&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="index.php?act=usr_search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) . '" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+        echo '<p><form action="index.php?act=usr_search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) .
+        '" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
     echo '<p><a href="index.php?act=usr_search_ip">Новый поиск</a></p>';
 }

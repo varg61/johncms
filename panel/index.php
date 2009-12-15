@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-@ini_set("max_execution_time", "600");
+@ ini_set("max_execution_time", "600");
 define('_IN_JOHNCMS', 1);
 define('_IN_JOHNADM', 1);
 
@@ -54,7 +54,8 @@ else {
     if ($rights >= 7) {
         echo '<p><h3><img src="../images/modules.png" width="16" height="16" class="left" />&nbsp;Модули</h3><ul>';
         echo '<li><a href="index.php?act=mod_ads">Реклама</a></li>';
-        echo '<li><a href="index.php?act=mod_counters">Счетчики</a></li>';
+        if ($rights == 9)
+            echo '<li><a href="index.php?act=mod_counters">Счетчики</a></li>';
         echo '<li><a href="index.php?act=mod_news">Новости</a></li>';
         echo '<li><a href="index.php?act=mod_forum">Форум</a></li>';
         echo '<li><a href="index.php?act=mod_chat">Чат</a></li>';
@@ -64,14 +65,16 @@ else {
     // Блок системных настроек
     if ($rights >= 7) {
         echo '<div class="bmenu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;Система</h3><ul>';
-        echo '<li><a href="index.php?act=sys_set">Настройки сайта</a></li>';
+        if ($rights == 9)
+            echo '<li><a href="index.php?act=sys_set">Настройки сайта</a></li>';
         echo '<li><a href="index.php?act=sys_smileys">Обновить смайлы</a></li>';
         //echo '<li><a href="">Очистка</a></li>';
         echo '</ul></p>';
         echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&nbsp;Безопасность</h3><ul>';
         echo '<li><a href="index.php?act=sys_access">Права доступа</a></li>';
         echo '<li><a href="index.php?act=sys_antispy">Сканер антишпион</a></li>';
-        echo '<li><a href="index.php?act=sys_ipban">Бан по IP</a></li>';
+        if ($rights == 9)
+            echo '<li><a href="index.php?act=sys_ipban">Бан по IP</a></li>';
         echo '</ul></p></div>';
     }
 }

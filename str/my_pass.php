@@ -85,8 +85,6 @@ switch ($act) {
         else {
             $error[] = '<div><a href="my_pass.php">Повторить</a></div>';
             echo display_error($error);
-            echo $datauser['password'] . '<br />';
-            echo md5(md5($oldpass));
         }
         break;
 

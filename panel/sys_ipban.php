@@ -16,7 +16,7 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
-if ($rights < 7)
+if ($rights < 9)
     die('Error: restricted access');
 
 switch ($mod) {

@@ -57,7 +57,7 @@ if ($id && $rights >= 7 && $act == 'reset') {
     require_once ('../incfiles/end.php');
     exit;
 }
-echo '<div class="phdr"><a href="anketa.php?id='.$user['id'].'"><b>' . ($id && $id != $user_id ? 'Анкета' : 'Личная анкета') . '</b></a> | Редактирование</div>';
+echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? 'Анкета' : 'Личная анкета') . '</b></a> | Редактирование</div>';
 if (isset ($_GET['delavatar'])) {
     // Удаляем аватар
     @ unlink('../files/avatar/' . $user['id'] . '.png');
@@ -94,11 +94,13 @@ elseif (isset ($_POST['submit'])) {
     // Проводим необходимые проверки
     if ($user['id'] == $user_id)
         $user['rights'] = $datauser['rights'];
-    if (mb_strlen($user['name']) < 2)
-        $error[] = 'Минимальная длина Ника - 2 символа';
-    $lat_nick = rus_lat(mb_strtolower($user['name']));
-    if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
-        $error[] = 'Недопустимые символы в Нике<br/>';
+    if ($rights >= 7) {
+        if (mb_strlen($user['name']) < 2)
+            $error[] = 'Минимальная длина Ника - 2 символа';
+        $lat_nick = rus_lat(mb_strtolower($user['name']));
+        if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
+            $error[] = 'Недопустимые символы в Нике<br/>';
+    }
     if ($user['dayb'] || $user['monthb'] || $user['yearofbirth']) {
         if ($user['dayb'] < 1 || $user['dayb'] > 31 || $user['monthb'] < 1 || $user['monthb'] > 12)
             $error[] = 'Дата рождения указана неправильно';
@@ -157,15 +159,15 @@ if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
     echo '<img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
     $link = ' | <a href="my_data.php?delavatar">Удалить</a>';
 }
-echo '<small><a href="my_images.php?act=up_avatar&amp;id='.$user['id'].'">Выгрузить</a> | <a href="">Выбрать</a>' . $link . '</small></li>';
+echo '<small><a href="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '">Выгрузить</a> | <a href="">Выбрать</a>' . $link . '</small></li>';
 // Фотография
 echo '<li>Фотография:<br />';
 $link = '';
 if (file_exists(('../files/photo/' . $user['id'] . '_small.jpg'))) {
-    echo '<a href="../files/photo/'.$user['id'].'.jpg"><img src="../files/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
+    echo '<a href="../files/photo/' . $user['id'] . '.jpg"><img src="../files/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
     $link = ' | <a href="my_data.php?delphoto">Удалить</a>';
 }
-echo '<small><a href="my_images.php?act=up_photo&amp;id='.$user['id'].'">Выгрузить</a>' . $link . '</small></li>';
+echo '<small><a href="my_images.php?act=up_photo&amp;id=' . $user['id'] . '">Выгрузить</a>' . $link . '</small></li>';
 echo '</ul></p></div>';
 // Личные данные
 echo '<div class="menu"><p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>';
