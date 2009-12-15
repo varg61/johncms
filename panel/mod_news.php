@@ -66,7 +66,7 @@ if (!empty ($set['news'])) {
 else {
     $settings = serialize(array('view' => '1', 'size' => '200', 'quantity' => '5', 'days' => '3', 'breaks' => '1', 'smileys' => '0', 'tags' => '0', 'kom' => '1'));
     mysql_query("INSERT INTO `cms_settings` SET `key` = 'news', `val` = '" . $settings . "'");
-    echo '<div class="menu"><p>Настройки модуля не заданы, будут использованы значения по умолчанию.<br /></p></div><div class="bmenu"><a href="news.php">Продолжить</a></div>';
+    echo '<div class="menu"><p>Настройки модуля не заданы, будут использованы значения по умолчанию.<br /></p></div><div class="bmenu"><a href="index.php?act=mod_news">Продолжить</a></div>';
 }
 
 echo '<p><a href="index.php">Админ панель</a></p>';

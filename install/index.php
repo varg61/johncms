@@ -80,7 +80,7 @@ switch ($_GET['act']) {
 			`lastdate`='" . time() . "',
 			`mail`='" . mysql_real_escape_string($meil) . "',
 			`www`='" . mysql_real_escape_string($hom) . "',
-			`rights`='7',
+			`rights`='9',
 			`ip`='" . $ip .
             "',
 			`browser`='" . mysql_real_escape_string($brow) . "',
@@ -89,7 +89,6 @@ switch ($_GET['act']) {
             echo '<span class="green">Oк</span> - администратор настроен<br />';
 
             // Импорт настроек
-            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($log) . "' WHERE `key`='nickadmina';");
             mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($meil) . "' WHERE `key`='emailadmina';");
             mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(trim($_POST['wcopyright'])) . "' WHERE `key`='copyright';");
             mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($hom) . "' WHERE `key`='homeurl';");

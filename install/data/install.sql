@@ -347,7 +347,7 @@ CREATE TABLE `cms_settings` (
 -- Дамп данных таблицы `cms_settings`
 --
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
-('emailadmina', 'alkatraz@batumi.biz'),
+('emailadmina', ''),
 ('meta_key', ''),
 ('meta_desc', ''),
 ('sdvigclock', '0'),
@@ -367,8 +367,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('mod_down', '2'),
 ('mod_lib_comm', '1'),
 ('mod_gal_comm', '1'),
-('skindef', 'default'),
-('news', '');
+('skindef', 'default');
 
 --
 -- Структура таблицы `users`

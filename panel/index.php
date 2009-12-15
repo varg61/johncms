@@ -42,7 +42,7 @@ else {
         echo '<li><span class="red"><b><a href="index.php?act=usr_reg">На регистрации</a>&nbsp;(' . $regtotal . ')</b></span></li>';
     echo '<li><a href="index.php?act=usr_adm">Администрация</a>&nbsp;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>';
     //TODO: Написать показ числа новых
-    echo '<li><a href="index.php?act=usr_list">Пользователи</a>&nbsp;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` = '0'"), 0) . ')</li>';
+    echo '<li><a href="index.php?act=usr_list">Пользователи</a>&nbsp;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>';
     $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '$realtime'"), 0);
     echo '<li><a href="index.php?act=usr_ban">Бан-панель</a>&nbsp;(' . $bantotal . ')</li>';
     echo '</ul></p><p><h3><img src="../images/search.png" width="16" height="16" class="left" />&nbsp;Поиск</h3><ul>';
