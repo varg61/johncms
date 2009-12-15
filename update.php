@@ -53,8 +53,8 @@ switch ($do
             $cherr = '';
             $err = false;
             // Проверка прав доступа к папкам
-            $arr = array('files/avatar/', 'files/photo/', 'cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/', 'download/graftemp/',
-            'download/screen/', 'download/mp3temp/', 'download/upl/');
+            $arr = array('files/avatar/', 'files/photo/', 'cache/', 'incfiles/', 'gallery/foto/', 'gallery/temp/', 'library/files/', 'library/temp/', 'pratt/', 'forum/files/', 'forum/temtemp/', 'download/arctemp/', 'download/files/',
+            'download/graftemp/', 'download/screen/', 'download/mp3temp/', 'download/upl/');
             foreach ($arr as $v) {
                 if (permissions($v) < 777) {
                     $cherr = $cherr . '<div class="smenu"><span class="red">Ошибка!</span> - ' . $v . '<br /><span class="gray">Необходимо установить права доступа 777.</span></div>';
@@ -88,6 +88,37 @@ switch ($do
             break;
 
         case 'step2' :
+        echo '<h2>Конвертируем Суперадминов</h2>';
+        $req = mysql_query("SELECT * FROM `cms_settings`;");
+        $tmp = array();
+        while ($res = mysql_fetch_row($req)) $tmp[$res[0]] = $res[1];
+        echo 'В системе были заданы следующие Суерадмины:<br />';
+        if (!empty ($tmp['nickadmina'])) {
+            $req = mysql_query("SELECT `id` FROM `users` WHERE `name` = '" . mysql_real_escape_string($tmp['nickadmina']) . "' LIMIT 1");
+            if (mysql_num_rows($req)) {
+                $res = mysql_fetch_assoc($req);
+                mysql_query("UPDATE `users` SET `rights` = '9' WHERE `id` = '".$res['id']."' LIMIT 1");
+                echo '<b>' . $tmp['nickadmina'] . '</b> - <span class="green">сконвертирован</span><br />';
+            }
+            else {
+                echo '<b>' . $tmp['nickadmina'] . '</b> - <span class="red">такого юзера нет</span><br />';
+            }
+        }
+        if (!empty ($tmp['nickadmina2'])) {
+            $req = mysql_query("SELECT `id` FROM `users` WHERE `name` = '" . mysql_real_escape_string($tmp['nickadmina2']) . "' LIMIT 1");
+            if (mysql_num_rows($req)) {
+                $res = mysql_fetch_assoc($req);
+                mysql_query("UPDATE `users` SET `rights` = '9' WHERE `id` = '".$res['id']."' LIMIT 1");
+                echo '<b>' . $tmp['nickadmina2'] . '</b> - <span class="green">сконвертирован</span><br />';
+            }
+            else {
+                echo '<b>' . $tmp['nickadmina2'] . '</b> - <span class="red">такого юзера нет</span><br />';
+            }
+        }
+        echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
+        break;
+
+    case 'step3' :
         echo '<h2>Подготовка таблиц</h2>';
         // Таблица рекламы
         mysql_query("DROP TABLE IF EXISTS `cms_ads`");
@@ -225,10 +256,10 @@ switch ($do
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8"
         );
         echo '<span class="green">OK</span> таблица `cms_forum_files` создана.<br />';
-        echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
+        echo '<hr /><a href="update.php?do=step4">Продолжить</a>';
         break;
 
-    case 'step3' :
+    case 'step4' :
         echo '<h2>Очистка форума</h2>';
         // Очистка форума
         $i = 0;
@@ -243,16 +274,16 @@ switch ($do
                     ++$f;
                 }
                 // Удаляем запись из базы
-                mysql_query("DELETE FROM `forum` WHERE `id` = '" . $res['id'] . "'");
+                mysql_query("DELETE FROM `forum` WHERE `id` = '" . $res['id'] . "' LIMIT 1");
                 ++$i;
             }
         }
         mysql_query("DELETE FROM `forum` WHERE `type` = 'l'");
         echo '<span class="green">OK</span> Форум очищен, удалено <span class="red">' . $i . '</span> мертвых записей из базы и <span class="red">' . $f . '</span> файлов.<br />';
-        echo '<hr /><a href="update.php?do=step4">Продолжить</a>';
+        echo '<hr /><a href="update.php?do=step5">Продолжить</a>';
         break;
 
-    case 'step4' :
+    case 'step5' :
         echo '<h2>Перенос файлов форума</h2>';
         // Перечисляем типы файлов, разрешенных к выгрузке на форуме
         $ext_win = array('exe', 'msi');
@@ -313,10 +344,10 @@ switch ($do
         echo '<span class="green">OK</span> старые данные удалены.<br />';
         mysql_query("OPTIMIZE TABLE `forum`");
         echo '<span class="green">OK</span> таблица оптимизирована.<br />';
-        echo '<hr /><a href="update.php?do=step5">Продолжить</a>';
+        echo '<hr /><a href="update.php?do=step6">Продолжить</a>';
         break;
 
-    case 'step5' :
+    case 'step6' :
         echo '<h2>Конвертирование User ID</h2>';
         // Временно ставим индекс
         mysql_query("ALTER TABLE `users` ADD INDEX ( `name` )");
