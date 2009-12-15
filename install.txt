@@ -21,6 +21,9 @@
 1) Распаковываем архив
 2) Заливаем все распакованные файлы на хостинг
 3) Выставляем права доступа 777:
+   /cache
+   /files/avatar
+   /files/photo
    /incfiles
    /gallery/foto
    /gallery/temp
@@ -36,8 +39,6 @@
    /download/mp3temp/
    /download/upl/
 4) Выставляем права доступа 666:
-   /flood.dat
-   /panel/filebase.dat
    /library/java/textfile.txt
    /library/java/META-INF/MANIFEST.MF
 5) Запускаем инсталлятор по адресу http://ваш_сайт/install

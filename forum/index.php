@@ -342,7 +342,6 @@ else {
                 $i = 1;
                 while ($res = mysql_fetch_assoc($req)) {
                     echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
-                    ###########################
                     if ($set_user['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
                         if (file_exists(('../files/avatar/' . $res['user_id'] . '.png')))
@@ -369,8 +368,8 @@ else {
                     echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
                     // Ссылки на бан, ответ и цитирование
                     if ($user_id && $user_id != $res['user_id']) {
-                        if ($rights == 3 || $rights >= 6)
-                            echo '<span class="red"><a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '">[б]</a></span>&nbsp;';
+                        //if ($rights == 3 || $rights >= 6)
+                            //echo '<span class="red"><a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '">[б]</a></span>&nbsp;';
                         echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '">[о]</a>&nbsp;<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt">[ц]</a> ';
                     }
                     // Время поста
