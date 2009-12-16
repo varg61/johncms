@@ -96,7 +96,7 @@ switch ($act) {
 
     default :
         echo '<div class="phdr"><b>Меняем пароль:</b> ' . $user['name'] . '</div>';
-        echo '<form action="my_pass.php?act=change" method="post">';
+        echo '<form action="my_pass.php?act=change' . ($id ? '&amp;id=' . $id : '') . '" method="post">';
         if (!$id || $rights < 7)
             echo '<div class="menu"><p>Введите старый пароль:<br /><input type="password" name="oldpass" /></p></div>';
         echo '<div class="gmenu"><p>Введите новый пароль:<br /><input type="password" name="newpass" /><br />Повторите пароль:<br /><input type="password" name="newconf" />';
