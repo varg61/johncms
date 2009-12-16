@@ -1,5 +1,4 @@
 <?php
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -15,12 +14,12 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
 $r = intval($_GET['r']);
-if (is_file("$filesroot/mp3temp/$r.mp3")) {
+if (is_file("$filesroot/mp3temp/$r.mp3"))
+{
     header("location: $filesroot/mp3temp/$r.mp3");
-}
-else {
+} else
+{
     require_once ("../incfiles/head.php");
     echo "Ошибка!<br/>&#187;<a href='?'>В загрузки</a><br/>";
 }

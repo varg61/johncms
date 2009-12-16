@@ -1,87 +1,86 @@
 <?php
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
-// ĞÑ„Ğ¸Ñ†Ğ¸Ğ°Ğ»ÑŒĞ½Ñ‹Ğ¹ ÑĞ°Ğ¹Ñ‚ ÑĞ°Ğ¹Ñ‚ Ğ¿Ñ€Ğ¾ĞµĞºÑ‚Ğ°:      http://johncms.com                     //
-// Ğ”Ğ¾Ğ¿Ğ¾Ğ»Ğ½Ğ¸Ñ‚ĞµĞ»ÑŒĞ½Ñ‹Ğ¹ ÑĞ°Ğ¹Ñ‚ Ğ¿Ğ¾Ğ´Ğ´ĞµÑ€Ğ¶ĞºĞ¸:      http://gazenwagen.com                  //
+// Îôèöèàëüíûé ñàéò ñàéò ïğîåêòà:      http://johncms.com                     //
+// Äîïîëíèòåëüíûé ñàéò ïîääåğæêè:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS core team:                                                         //
-// Ğ•Ğ²Ğ³ĞµĞ½Ğ¸Ğ¹ Ğ ÑĞ±Ğ¸Ğ½Ğ¸Ğ½ aka john77          john77@gazenwagen.com                  //
-// ĞĞ»ĞµĞ³ ĞšĞ°ÑÑŒÑĞ½Ğ¾Ğ² aka AlkatraZ          alkatraz@gazenwagen.com                //
+// Åâãåíèé Ğÿáèíèí aka john77          john77@gazenwagen.com                  //
+// Îëåã Êàñüÿíîâ aka AlkatraZ          alkatraz@gazenwagen.com                //
 //                                                                            //
-// Ğ˜Ğ½Ñ„Ğ¾Ñ€Ğ¼Ğ°Ñ†Ğ¸Ñ Ğ¾ Ğ²ĞµÑ€ÑĞ¸ÑÑ… ÑĞ¼Ğ¾Ñ‚Ñ€Ğ¸Ñ‚Ğµ Ğ² Ğ¿Ñ€Ğ¸Ğ»Ğ°Ğ³Ğ°ĞµĞ¼Ğ¾Ğ¼ Ñ„Ğ°Ğ¹Ğ»Ğµ version.txt              //
+// Èíôîğìàöèş î âåğñèÿõ ñìîòğèòå â ïğèëàãàåìîì ôàéëå version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-class ipinit {
-    public $ip;    // IP Ğ°Ğ´Ñ€ĞµÑ Ğ² LONG Ñ„Ğ¾Ñ€Ğ¼Ğ°Ñ‚Ğµ
-    public $flood_chk = 1;    // Ğ’ĞºĞ»ÑÑ‡ĞµĞ½Ğ¸Ğµ - Ğ²Ñ‹ĞºĞ»ÑÑ‡ĞµĞ½Ğ¸Ğµ Ñ„ÑƒĞ½ĞºÑ†Ğ¸Ğ¸ IP Ğ°Ğ½Ñ‚Ğ¸Ñ„Ğ»ÑƒĞ´Ğ°
-    public $flood_interval = '120';    // Ğ˜Ğ½Ñ‚ĞµÑ€Ğ²Ğ°Ğ» Ğ²Ñ€ĞµĞ¼ĞµĞ½Ğ¸ Ğ² ÑĞµĞºÑƒĞ½Ğ´Ğ°Ñ…
-    public $flood_limit = '50';    // Ğ§Ğ¸ÑĞ»Ğ¾ Ñ€Ğ°Ğ·Ñ€ĞµÑˆĞµĞ½Ğ½Ñ‹Ñ… Ğ·Ğ°Ğ¿Ñ€Ğ¾ÑĞ¾Ğ² Ğ·Ğ° Ğ¸Ğ½Ñ‚ĞµÑ€Ğ²Ğ°Ğ»
-    public $flood_file = 'http_antiflood.dat';    // Ğ Ğ°Ğ±Ğ¾Ñ‡Ğ¸Ğ¹ Ñ„Ğ°Ğ¹Ğ» Ñ„ÑƒĞ½ĞºÑ†Ğ¸Ğ¸
-    private $requests;    // Ğ§Ğ¸ÑĞ»Ğ¾ Ğ·Ğ°Ğ¿Ñ€Ğ¾ÑĞ¾Ğ² Ñ IP Ğ°Ğ´Ñ€ĞµÑĞ° Ğ·Ğ° Ğ¿ĞµÑ€Ğ¸Ğ¾Ğ´ Ğ²Ñ€ĞµĞ¼ĞµĞ½Ğ¸
+class ipinit
+{
+    var $ip; // IP àäğåñ â LONG ôîğìàòå
+    var $flood_chk = '1'; // Âêëş÷åíèå - âûêëş÷åíèå ôóíêöèè IP àíòèôëóäà
+    var $flood_interval = '60'; // Èíòåğâàë âğåìåíè
+    var $flood_limit = '20'; // ×èñëî ğàçğåøåííûõ çàïğîñîâ çà èíòåğâàë
+    var $flood_file = 'flood.dat'; // Ğàáî÷èé ôàéë ôóíêöèè
+    var $requests; // ×èñëî çàïğîñîâ ñ IP àäğåñà çà ïåğèîä âğåìåíè
 
-    function __construct() {
-        $this->ip = $this->getip();
-        // ĞŸÑ€Ğ¾Ğ²ĞµÑ€ĞºĞ° Ğ°Ğ´Ñ€ĞµÑĞ° IP Ğ½Ğ° HTTP Ñ„Ğ»ÑƒĞ´
-        if ($this->flood_chk) {
-            $this->requests = $this->reqcount();
+    function ipinit()
+    {
+        // Ïîëó÷åíèå ğåàëüíîãî IP àäğåñà
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+        {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_VIA']))
+        {
+            $ip = $_SERVER['HTTP_VIA'];
+        } elseif (isset($_SERVER['REMOTE_ADDR']))
+        {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else
+        {
+            die('Unknown IP');
+        }
+        $this->ip = ip2long($ip);
+
+        // Ïğîâåğêà àäğåñà IP íà HTTP ôëóä
+        if ($this->flood_chk)
+        {
+            $this->reqcount();
             if ($this->requests > $this->flood_limit)
                 die('Flood!!!');
         }
     }
 
-    // ĞŸĞ¾Ğ»ÑƒÑ‡Ğ°ĞµĞ¼ Ñ€ĞµĞ°Ğ»ÑŒĞ½Ñ‹Ğ¹ Ğ°Ğ´Ñ€ĞµÑ IP
-    private function getip() {
-        $ip1 = isset ($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
-        $ip2 = isset ($_SERVER['HTTP_VIA']) ? ip2long($_SERVER['HTTP_VIA']) : false;
-        $ip3 = isset ($_SERVER['REMOTE_ADDR']) ? ip2long($_SERVER['REMOTE_ADDR']) : false;
-        if ($ip1 && $ip1 > 184549376) {
-            return $ip1;
-        }
-        elseif ($ip2 && $ip2 > 184549376) {
-            return $ip2;
-        }
-        elseif ($ip3) {
-            return $ip3;
-        }
-        else {
-            die('Unknown IP');
-        }
-    }
-
-    // Ğ¡Ñ‡ĞµÑ‚Ñ‡Ğ¸Ğº Ñ‡Ğ¸ÑĞ»Ğ° Ğ¾Ğ±Ñ€Ğ°Ñ‰ĞµĞ½Ğ¸Ğ¹ Ñ Ğ´Ğ°Ğ½Ğ½Ğ¾Ğ³Ğ¾ IP
-    private function reqcount() {
+    function reqcount()
+    {
         global $rootpath;
-        $tmp = array();
+		$tmp = array();
         $requests = 1;
-        if (!file_exists($rootpath . 'cache/' . $this->flood_file))
-            $in = fopen($rootpath . 'cache/' . $this->flood_file, "w+");
-        else
-            $in = fopen($rootpath . 'cache/' . $this->flood_file, "r+");
+        $in = fopen($rootpath . $this->flood_file, "r+");
         flock($in, LOCK_EX) or die("Cannot flock ANTIFLOOD file.");
         $now = time();
-        while ($block = fread($in, 8)) {
+        while ($block = fread($in, 8))
+        {
             $arr = unpack("Lip/Ltime", $block);
-            if (($now - $arr['time']) > $this->flood_interval) {
+            if (($now - $arr['time']) > $this->flood_interval)
+            {
                 continue;
             }
-            if ($arr['ip'] == $this->ip) {
+            if ($arr['ip'] == $this->ip)
+            {
                 $requests++;
             }
             $tmp[] = $arr;
         }
         fseek($in, 0);
         ftruncate($in, 0);
-        for ($i = 0; $i < count($tmp); $i++) {
+        for ($i = 0; $i < count($tmp); $i++)
+        {
             fwrite($in, pack('LL', $tmp[$i]['ip'], $tmp[$i]['time']));
         }
         fwrite($in, pack('LL', $this->ip, $now));
         fclose($in);
-        return $requests;
+        $this->requests = $requests;
     }
 }
 

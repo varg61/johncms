@@ -1,5 +1,4 @@
 <?php
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -16,61 +15,68 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($rights == 3 || $rights >= 6) {
-    if (empty ($_GET['id'])) {
+if ($dostfmod == 1)
+{
+    if (empty($_GET['id']))
+    {
         require_once ("../incfiles/head.php");
         echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
         require_once ("../incfiles/end.php");
         exit;
     }
-    // Проверяем, существует ли тема
-    $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $id . "'");
-    $res = mysql_fetch_array($req);
-    if ($res['type'] != 't') {
-        require_once ("../incfiles/head.php");
-        echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-        require_once ("../incfiles/end.php");
-        exit;
-    }
-    if (isset ($_GET['yes']) && $rights == 9) {
-        // Удаляем прикрепленные файлы
-        $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '$id'");
-        if (mysql_num_rows($req1)) {
-            while ($res1 = mysql_fetch_array($req1)) {
-                unlink('files/' . $res1['filename']);
-            }
-            mysql_query("DELETE FROM `cms_forum_files` WHERE `topic` = '$id'");
-            mysql_query("OPTIMIZE TABLE `cms_forum_files`");
-        }
-        // Удаляем посты топика
-        mysql_query("DELETE FROM `forum` WHERE `refid` = '$id'");
-        // Удаляем топик
-        mysql_query("DELETE FROM `forum` WHERE `id`='$id'");
-        header('Location: ?id=' . $res['refid']);
-    }
-    elseif (isset ($_GET['hid']) || isset ($_GET['yes']) && $rights < 9) {
-        // Скрываем топик
-        mysql_query("UPDATE `forum` SET `close` = '1' WHERE `id` = '" . $id . "' LIMIT 1");
-        // Скрываем прикрепленные файлы
-        $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '$id'");
-        if (mysql_num_rows($req1) > 0) {
-            while ($res1 = mysql_fetch_array($req1)) {
-                mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `id` = '" . $res1['id'] . "'");
-            }
-        }
-        header('Location: ?id=' . $res['refid']);
-    }
+    $id = intval(check($_GET['id']));
 
-    require_once ("../incfiles/head.php");
-    echo '<p>Вы действительно хотите удалить тему?</p>';
-    echo '<p><a href="?act=deltema&amp;id=' . $id . '&amp;yes">Удалить</a><br />';
-    if ($rights == 9 && $res['close'] != 1) {
-        echo '<a href="?act=deltema&amp;id=' . $id . '&amp;hid">Скрыть</a><br />';
+    $typ = mysql_query("select * from `forum` where id='" . $id . "';");
+    $ms = mysql_fetch_array($typ);
+    if ($ms[type] != "t")
+    {
+        require_once ("../incfiles/head.php");
+        echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
+        require_once ("../incfiles/end.php");
+        exit;
     }
-    echo '<a href="?id=' . $id . '">Отмена</a></p>';
-}
-else {
-    echo '<p>Доступ закрыт!!!</p>';
+    if (isset($_GET['yes']))
+    {
+        if ($dostsadm == 1)
+        {
+            $delp = mysql_query("select * from `forum` where type='m' and refid='" . $id . "';");
+            while ($arrd = mysql_fetch_array($delp))
+            {
+                if (!empty($arrd[attach]))
+                {
+                    unlink("files/$arrd[attach]");
+                }
+                mysql_query("delete from `forum` where `id`='" . $arrd[id] . "';");
+            }
+
+            mysql_query("delete from `forum` where `id`='" . $id . "';");
+
+
+        } else
+        {
+            mysql_query("update `forum` set  close='1' where id='" . $id . "';");
+        }
+        header("Location: ?id=$ms[refid]");
+    }
+    if (isset($_GET['hid']))
+    {
+        if ($dostsadm == 1)
+        {
+            mysql_query("update `forum` set  close='1' where id='" . $id . "';");
+        }
+        header("Location: ?id=$ms[refid]");
+    }
+    require_once ("../incfiles/head.php");
+    echo "Вы действительно хотите удалить тему?<br/>";
+    echo "<a href='?act=deltema&amp;id=" . $id . "&amp;yes'>Удалить</a>";
+    if (($dostsadm == 1) && ($ms[close] != 1))
+    {
+        echo "|<a href='?act=deltema&amp;id=" . $id . "&amp;hid'>Скрыть</a>";
+    }
+    echo "|<a href='?id=" . $ms[refid] . "'>Отмена</a><br/>";
+} else
+{
+    echo "Доступ закрыт!!!<br>";
 }
 
 ?>
