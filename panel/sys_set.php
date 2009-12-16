@@ -54,7 +54,7 @@ $dr = opendir('../theme');
 while ($skindef = readdir($dr)) {
     if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn')) {
         $skindef = str_replace('.css', '', $skindef);
-        echo '<option' . ($set_user['skin'] == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
+        echo '<option' . ($set['skindef'] == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
     }
 }
 closedir($dir);
