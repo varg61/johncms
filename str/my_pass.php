@@ -57,9 +57,15 @@ switch ($act) {
         $newpass = isset ($_POST['newpass']) ? trim($_POST['newpass']) : '';
         $newconf = isset ($_POST['newconf']) ? trim($_POST['newconf']) : '';
         $autologin = isset ($_POST['autologin']) ? 1 : 0;
-        if (!$oldpass || !$newpass || !$newconf)
-            $error[] = 'Нужно заполнить все поля формы';
-        if (md5(md5($oldpass)) !== $user['password'] && !$error)
+        if ($rights >= 7) {
+            if (!$newpass || !$newconf)
+                $error[] = 'Нужно заполнить все поля формы';
+        }
+        else {
+            if (!$oldpass || !$newpass || !$newconf)
+                $error[] = 'Нужно заполнить все поля формы';
+        }
+        if (!$error && $rights < 7 && md5(md5($oldpass)) !== $user['password'])
             $error[] = 'Старый пароль введен неверно';
         if ($newpass != $newconf)
             $error[] = 'Подтверждение нового пароля введено неверно';
