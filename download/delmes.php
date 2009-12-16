@@ -1,5 +1,4 @@
 <?php
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -15,9 +14,10 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
-if ($rights == 4 || $rights >= 6) {
-    if ($_GET['id'] == "") {
+if ($dostdmod == 1)
+{
+    if ($_GET['id'] == "")
+    {
         require_once ("../incfiles/head.php");
         echo "Ошибка<br/><a href='index.php?'>К категориям</a><br/>";
         require_once ('../incfiles/end.php');
@@ -26,7 +26,8 @@ if ($rights == 4 || $rights >= 6) {
     $id = intval(trim($_GET['id']));
     $typ = mysql_query("select * from `download` where id='" . $id . "';");
     $ms = mysql_fetch_array($typ);
-    if ($ms[type] != "komm") {
+    if ($ms[type] != "komm")
+    {
         require_once ("../incfiles/head.php");
         echo "Ошибка<br/><a href='index.php?'>К категориям</a><br/>";
         require_once ('../incfiles/end.php');
@@ -34,8 +35,8 @@ if ($rights == 4 || $rights >= 6) {
     }
     mysql_query("delete from `download` where `id`='" . $id . "';");
     header("location: index.php?act=komm&id=$ms[refid]");
-}
-else {
+} else
+{
     require_once ("../incfiles/head.php");
     echo "Нет доступа!<br/><a href='index.php?'>К категориям</a><br/>";
 }

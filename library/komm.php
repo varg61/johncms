@@ -1,5 +1,4 @@
 <?php
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                                                                    //
@@ -16,90 +15,147 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if (!$id) {
-    echo '<p>Не выбрана статья<br/><a href="index.php">В библиотеку</a></p>';
+if ($_GET['id'] == "")
+{
+    echo "Не выбрана статья<br/><a href='?'>К категориям</a><br/>";
     require_once ('../incfiles/end.php');
     exit;
 }
-if (!$set['mod_lib_comm'] && $rights < 7) {
-    echo '<p>Комментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
-    require_once ('../incfiles/end.php');
-    exit;
+$id = intval($_GET['id']);
+$messz = mysql_query("select `id` from `lib` where type='komm' and refid='" . $id . "'  ;");
+$countm = mysql_num_rows($messz);
+$ba = ceil($countm / $kmess);
+$fayl = mysql_query("select `name` from `lib` where type='bk' and id='" . $id . "';");
+$fayl1 = mysql_fetch_array($fayl);
+echo "<p>Комментируем статью:<br /><b>$fayl1[name]</b><br/>";
+if ($user_id && !$ban['1'] && !$ban['10'])
+{
+    echo "</p><p><a href='index.php?act=addkomm&amp;id=" . $id . "'>Написать</a>";
 }
-// Запрос имени статьи
-$req = mysql_query("SELECT `name` FROM `lib` WHERE `type` = 'bk' AND `id` = '" . $id . "' LIMIT 1");
-if (mysql_num_rows($req) != 1) {
-    // если статья не существует, останавливаем скрипт
-    echo '<p>Не выбрана статья<br/><a href="index.php">К категориям</a></p>';
-    require_once ('../incfiles/end.php');
-    exit;
+echo '</p><hr/>';
+if (empty($_GET['page']))
+{
+    $page = 1;
+} else
+{
+    $page = intval($_GET['page']);
 }
-$article = mysql_fetch_array($req);
-// Запрос числа каментов
-$req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "'");
-$countm = mysql_result($req, 0);
-echo '<div class="phdr">Комментируем статью:<br /><b>' . htmlentities($article['name'], ENT_QUOTES, 'UTF-8') . '</b></div>';
-if ($user_id && !$ban['1'] && !$ban['10']) {
-    echo '<div class="gmenu"><a href="index.php?act=addkomm&amp;id=' . $id . '">Написать</a></div>';
+if ($page < 1)
+{
+    $page = 1;
 }
-// Запрос списка комментариев
-$mess = mysql_query("SELECT * FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
-while ($mass = mysql_fetch_array($mess)) {
-    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-    $uz = mysql_query("select * from `users` where name='" . check($mass['avtor']) . "';");
-    $mass1 = mysql_fetch_array($uz);
-    if ((!empty ($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id'])) {
-        echo "<a href='../str/anketa.php?id=" . $mass1['id'] . "'>$mass[avtor]</a>";
+if ($page > $ba)
+{
+    $page = $ba;
+}
+$start = $page * $kmess - $kmess;
+if ($countm < $start + $kmess)
+{
+    $end = $countm;
+} else
+{
+    $end = $start + $kmess;
+}
+$mess = mysql_query("select * from `lib` where type='komm' and refid='" . $id . "' order by time desc LIMIT " . $start . "," . $end . ";");
+while ($mass = mysql_fetch_array($mess))
+{
+    $d = $i / 2;
+    $d1 = ceil($d);
+    $d2 = $d1 - $d;
+    $d3 = ceil($d2);
+    if ($d3 == 0)
+    {
+        $div = "<div class='c'>";
+    } else
+    {
+        $div = "<div class='b'>";
     }
-    else {
-        echo $mass['avtor'];
+    $uz = @mysql_query("select * from `users` where name='" . check($mass['avtor']) . "';");
+    $mass1 = @mysql_fetch_array($uz);
+    echo "$div";
+    if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id']))
+    {
+        echo "<a href='anketa.php?user=" . $mass1['id'] . "'>$mass[avtor]</a>";
+    } else
+    {
+        echo "$mass[avtor]";
     }
-    $vr = $mass['time'] + $set_user['sdvig'] * 3600;
+    $vr = $mass['time'] + $sdvig * 3600;
     $vr1 = date("d.m.Y / H:i", $vr);
-    switch ($mass1['rights']) {
-        case 7 :
+    switch ($mass1['rights'])
+    {
+        case 7:
             echo ' Adm ';
             break;
-        case 6 :
+        case 6:
             echo ' Smd ';
             break;
-        case 5 :
+        case 5:
             echo ' Mod ';
             break;
-        case 1 :
+        case 1:
             echo ' Kil ';
             break;
     }
     $ontime = $mass1['lastdate'];
     $ontime2 = $ontime + 300;
-    if ($realtime > $ontime2) {
+    if ($realtime > $ontime2)
+    {
         echo '<font color="#FF0000"> [Off]</font>';
-    }
-    else {
+    } else
+    {
         echo '<font color="#00AA00"> [ON]</font>';
     }
     echo "($vr1)<br/>";
-    if ($set_user['smileys']) {
-        $tekst = smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
-    }
-    else {
+    if ($offsm != 1 && $offgr != 1)
+    {
+        $tekst = smiles($mass['text']);
+        $tekst = smilescat($tekst);
+        if ($mass['from'] == nickadmina || $mass['from'] == nickadmina2 || $mass1['rights'] >= 1)
+        {
+            $tekst = smilesadm($tekst);
+        }
+    } else
+    {
         $tekst = $mass['text'];
     }
     echo "$tekst<br/>";
-    if ($rights == 5 || $rights >= 6) {
+    if ($dostlmod == 1)
+    {
         echo long2ip($mass['ip']) . " - $mass[soft]<br/><a href='index.php?act=del&amp;id=" . $mass['id'] . "'>(Удалить)</a>";
     }
-    echo '</div>';
+    echo "</div>";
     ++$i;
 }
-echo '<div class="phdr">Всего каментов: ' . $countm . '</div>';
-// Навигация по страницам
-if ($countm > $kmess) {
-    echo '<p>' . pagenav('index.php?act=komm&amp;id=' . $id . '&amp;', $start, $countm, $kmess) . '</p>';
-    echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="komm"/><input type="hidden" name="id" value="' . $id .
-    '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+echo "<hr/><p>";
+if ($countm > $kmess)
+{
+    if ($offpg != 1)
+    {
+        echo "Страницы:<br/>";
+    } else
+    {
+        echo "Страниц: $ba<br/>";
+    }
+    if ($start != 0)
+    {
+        echo '<a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
+    }
+    if ($offpg != 1)
+    {
+        navigate('index.php?act=komm&amp;id=' . $id . '', $countm, $kmess, $start, $page);
+    } else
+    {
+        echo "<b>[$page]</b>";
+    }
+    if ($countm > $start + $kmess)
+    {
+        echo ' <a href="index.php?act=komm&amp;id=' . $id . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
+    }
+    echo "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='id' value='" . $id .
+        "'/><input type='hidden' name='act' value='komm'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
 }
-
-echo '<p><a href="?id=' . $id . '">К статье</a></p>';
+echo "Всего комментариев: $countm";
+echo '<br/><a href="?id=' . $id . '">К статье</a></p>';
 
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -15,14 +14,14 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
 require_once ("../incfiles/head.php");
-if (!empty ($_GET['cat'])) {
+if (!empty($_GET['cat']))
+{
     $cat = $_GET['cat'];
     provcat($cat);
-    if ($rights == 4 || $rights >= 6) {
-        echo
-        "<form action='?act=upl' method='post' enctype='multipart/form-data'>
+    if ($dostdmod == 1)
+    {
+        echo "<form action='?act=upl' method='post' enctype='multipart/form-data'>
          Выберите файл(max $flsz кб.):<br/>
          <input type='file' name='fail'/><br/>
          Скриншот:<br/>
@@ -35,17 +34,16 @@ if (!empty ($_GET['cat'])) {
        <textarea name='opis'></textarea><br/>
          Сохранить как(без расширения):<br/>
          <input type='text' name='newname'/><br/>
-<input type='hidden' name='cat' value='"
-        . $cat . "'/>
+<input type='hidden' name='cat' value='" . $cat . "'/>
          <input type='submit' value='Загрузить'/><br/>
          </form>";
-    }
-    else {
+    } else
+    {
         echo "Нет доступа!<br/>";
     }
     echo "&#187;<a href='?cat=" . $cat . "'>Вернуться</a><br/>";
-}
-else {
+} else
+{
     echo "Ошибка:не выбрана категория<br/>";
 }
 

@@ -1,5 +1,4 @@
 <?php
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                             Content Management System              //
@@ -16,24 +15,39 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($rights == 3 || $rights >= 6) {
-    if (empty ($_GET['id'])) {
+if ($dostfmod == 1)
+{
+    if (empty($_GET['id']))
+    {
         require_once ("../incfiles/head.php");
         echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
         require_once ("../incfiles/end.php");
         exit;
     }
-    $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '" . $id . "' AND `type` = 't'");
-    if (mysql_result($req, 0) > 0) {
-        mysql_query("UPDATE `forum` SET  `vip` = '" . (isset ($_GET['vip']) ? '1' : '0') . "' WHERE `id` = '" . $id . "'");
-        header('Location: index.php?id=' . $id);
-    }
-    else {
+    $id = intval(check($_GET['id']));
+
+    $typ = mysql_query("select * from `forum` where id='" . $id . "';");
+    $ms = mysql_fetch_array($typ);
+    if ($ms[type] != "t")
+    {
         require_once ("../incfiles/head.php");
-        echo '<p>ОШИБКА!<br/><a href="index.php">Назад</a></p>';
+        echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
         require_once ("../incfiles/end.php");
         exit;
     }
+    if (isset($_GET['vip']))
+    {
+        mysql_query("update `forum` set  vip='1' where id='" . $id . "';");
+        header("Location: index.php?id=$id");
+    } else
+    {
+        mysql_query("update `forum` set  vip='0' where id='" . $id . "';");
+        header("Location: index.php?id=$id");
+    }
+} else
+{
+    require_once ("../incfiles/head.php");
+    echo "Доступ закрыт!!!<br>";
 }
 
 ?>
