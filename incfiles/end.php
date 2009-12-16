@@ -80,7 +80,9 @@ if (!isset ($_SESSION['mad_time']) || $_SESSION['mad_time'] < ($realtime - 60 * 
     $out = '';
     $mad_socketTimeout = 2;    // таймаут соединения с сервером mobileads.ru
     ini_set("default_socket_timeout", $mad_socketTimeout);
-    $mad_siteId = 2106;
+    #######################
+    // В строке ниже, укажите ID своего сайта
+    $mad_siteId = 0;
     $mad_pageEncoding = "UTF-8";    // устанавливаем кодировку страницы
     $mad_ua = urlencode(@ $_SERVER['HTTP_USER_AGENT']);
     $mad_ip = urlencode(@ $_SERVER['REMOTE_ADDR']);

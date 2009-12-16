@@ -610,7 +610,7 @@ switch ($from) {
         else {
             echo '<p><b>Чистим список</b></p>';
             echo '<u>Что чистим?</u>';
-            echo '<form id="clean" method="post" action="ads.php?from=clean">';
+            echo '<form id="clean" method="post" action="index.php?act=mod_ads&amp;from=clean">';
             echo '<input type="radio" name="cl" value="0" checked="checked" />Скрытые<br />';
             echo '<input type="radio" name="cl" value="1" />Активные<br />';
             echo '<input type="radio" name="cl" value="2" />Очищаем все<br />';

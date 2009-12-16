@@ -94,7 +94,7 @@ switch ($act) {
         $count_sentunread = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `author` = '$login' AND `type` = 'out' AND `chit` = 'no'"), 0);
         echo '<li><a href="str/pradd.php?act=out">Отправленные</a>&nbsp;(' . $count_sentmail . ($count_sentunread ? '&nbsp;/&nbsp;<span class="red">' . $count_sentunread . '</span>' : '') . ')</li>';
         $count_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `attach` != ''"), 0);
-        echo '<li><a href="str/pradd.php?act=files">Файлы</a>&nbsp;(' . $count_files . ')</li>';
+        //echo '<li><a href="str/pradd.php?act=files">Файлы</a>&nbsp;(' . $count_files . ')</li>';
         if (!$ban['1'] && !$ban['3'])
             echo '<p><form action="str/pradd.php?act=write" method="post"><input type="submit" value=" Написать " /></form></p>';
         // Блок контактов
@@ -140,7 +140,7 @@ switch ($act) {
             if ($reg_total > 0)
                 echo '<li><a href="' . $admp . '/index.php?act=usr_reg">На регистрации</a> (' . $reg_total . ')</li>';
             if ($ban_total > 0)
-                echo '<li><a href="' . $admp . '/zaban.php">Имеют Бан</a> (' . $ban_total . ')</li>';
+                echo '<li><a href="' . $admp . '/index.php?act=usr_ban">Имеют Бан</a> (' . $ban_total . ')</li>';
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
             if ($total_libmod > 0)
                 echo '<li><a href="library/index.php?act=moder">Мод. Библиотеки</a> (' . $total_libmod . ')</li>';

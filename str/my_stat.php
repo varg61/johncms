@@ -36,8 +36,7 @@ if (mysql_num_rows($req_u)) {
             $do
                 = isset ($_GET['do']) ? trim($_GET['do']) : '';
             $doid = isset ($_GET['doid']) ? abs(intval($_GET['doid'])) : '';
-            switch ($do
-                    ) {
+            switch ($do) {
                     case 'f' :
                         // Переход на нужную страницу Форума
                         $set_forum = array();
@@ -60,7 +59,7 @@ if (mysql_num_rows($req_u)) {
             break;
 
         case 'forum' :
-            echo '<p>Форум | <a href="my_stat.php?act=guest' . ($id ? '&amp;id=' . $id : '') . '">Гостевая</a> | <a href="my_stat.php?act=kom' . ($id ? '&amp;id=' . $id : '') . '">Комментарии</a></p>';
+            echo '<p>Форум | <a href="my_stat.php?act=guest' . ($id ? '&amp;id=' . $id : '') . '">Гостевая</a></p>';
             echo '<div class="phdr"><b>Последняя активность на Форуме</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';
@@ -94,7 +93,7 @@ if (mysql_num_rows($req_u)) {
             break;
 
         case 'guest' :
-            echo '<p><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Форум</a> | Гостевая | <a href="my_stat.php?act=kom' . ($id ? '&amp;id=' . $id : '') . '">Комментарии</a></p>';
+            echo '<p><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Форум</a> | Гостевая</p>';
             echo '<div class="phdr"><b>Последняя активность в Гостевой</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';
@@ -113,15 +112,6 @@ if (mysql_num_rows($req_u)) {
                 echo '<div class="menu"><p>Список пуст</p></div>';
             }
             echo '<div class="phdr"><a href="guest.php">В Гостевую</a></div>';
-            break;
-
-        case 'kom' :
-            echo '<p><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Форум</a> | <a href="my_stat.php?act=guest' . ($id ? '&amp;id=' . $id : '') . '">Гостевая</a> | Комментарии</p>';
-            echo '<div class="phdr"><b>Последняя активность в комментариях</b></div>';
-            if ($id)
-                echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';
-            echo display_error('Данный модуль еще не готов :-)');
-            echo '<div class="phdr"><a href="my_stat.php">Статистика</a></div>';
             break;
 
         default :
