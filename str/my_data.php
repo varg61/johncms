@@ -148,7 +148,7 @@ echo '<li>Логин: <b>' . $user['name_lat'] . '</b></li>';
 if ($rights >= 7) {
     echo '<li>Ник: (мин.2, макс. 20)<br /><input type="text" value="' . $user['name'] . '" name="name" /></li>';
     echo '<li>Статус: (макс. 50)<br /><input type="text" value="' . $user['status'] . '" name="status" /></li>';
-    echo '<li><a href="my_pass.php?id='.$id.'">Сменить пароль</a></li>';
+    echo '<li><a href="my_pass.php?id=' . $id . '">Сменить пароль</a></li>';
 }
 else {
     echo '<li><span class="gray">Ник:</span> <b>' . $user['name'] . '</b></li>';
@@ -160,7 +160,7 @@ if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
     echo '<img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
     $link = ' | <a href="my_data.php?delavatar">Удалить</a>';
 }
-echo '<small><a href="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '">Выгрузить</a> | <a href="">Выбрать</a>' . $link . '</small></li>';
+echo '<small><a href="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '">Выгрузить</a> | <a href="avatar.php">Выбрать</a>' . $link . '</small></li>';
 // Фотография
 echo '<li>Фотография:<br />';
 $link = '';
