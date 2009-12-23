@@ -66,8 +66,8 @@ else {
 }
 echo '</h3><ul>';
 // Показываем аватар (если есть)
-if (file_exists(('../files/avatar/' . $user['id'] . '.jpg'))) {
-    echo '<li>Аватар:<br /><img src="../files/avatar/' . $user['id'] . '.jpg" width="32" height="32" alt="' . $user['name'] . '" /></li>';
+if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
+    echo '<li>Аватар:<br /><img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /></li>';
 }
 // Показываем фотографию (если есть)
 if (file_exists(('../files/photo/' . $user['id'] . '_small.jpg'))) {
