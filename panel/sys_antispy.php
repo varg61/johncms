@@ -43,7 +43,7 @@ class scaner {
     '../str/moders.php', '../str/my_data.php', '../str/my_pass.php', '../str/my_set.php', '../str/my_stat.php', '../str/news.php', '../str/online.php', '../str/pradd.php', '../str/skl.php', '../str/smile.php', '../str/users.php',
     '../str/users_ban.php', '../str/users_search.php', '../str/users_top.php', '../panel/index.php', '../panel/mod_chat.php', '../panel/mod_counters.php', '../panel/mod_news.php', '../panel/sys_access.php', '../panel/sys_antispy.php',
     '../panel/sys_smileys.php', '../panel/usr_adm.php', '../panel/usr_ban.php', '../panel/usr_del.php', '../panel/usr_list.php', '../panel/usr_reg.php', '../panel/usr_search_ip.php', '../panel/usr_search_nick.php', '../panel/sys_ipban.php',
-    '../panel/mod_forum.php', '../panel/sys_set.php', '../incfiles/class_upload.php', '../str/my_images.php', '../str/redirect.php', '../panel/mod_ads.php');
+    '../panel/mod_forum.php', '../panel/sys_set.php', '../incfiles/class_upload.php', '../str/my_images.php', '../str/redirect.php', '../panel/mod_ads.php', '../str/avatar.php');
 
     public $snap_base = 'scan_snapshot.dat';
     public $snap_files = array();

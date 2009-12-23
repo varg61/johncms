@@ -59,6 +59,7 @@ switch ($act) {
             if ($handle->uploaded) {
                 // Обрабатываем фото
                 $handle->file_new_name_body = $user['id'];
+                //$handle->mime_check = false;
                 $handle->allowed = array('image/jpeg', 'image/gif', 'image/png');
                 $handle->file_max_size = 1024 * $flsz;
                 $handle->file_overwrite = true;
@@ -97,6 +98,7 @@ switch ($act) {
             if ($handle->uploaded) {
                 // Обрабатываем фото
                 $handle->file_new_name_body = $user['id'];
+                //$handle->mime_check = false;
                 $handle->allowed = array('image/jpeg', 'image/gif', 'image/png');
                 $handle->file_max_size = 1024 * $flsz;
                 $handle->file_overwrite = true;
