@@ -294,7 +294,7 @@ if ($user_id) {
                 $dc = $_SESSION['dc'];
                 $prd = $_SESSION['prd'];
                 foreach ($dc as $delid) {
-                    mysql_query("DELETE FROM `privat` WHERE `user` = '$login' AND `id`='" . intval($delid) . "'");
+                    mysql_query("DELETE FROM `privat` WHERE (`user` = '$login' OR `author` = '$login') AND `id`='" . intval($delid) . "'");
                 }
                 echo "Отмеченные письма удалены<br/><a href='" . $prd . "'>Назад</a><br/>";
             }
@@ -529,6 +529,7 @@ if ($user_id) {
                 }
             }
             mysql_query("DELETE FROM `privat` WHERE `user` = '$login' AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");
+            mysql_query("DELETE FROM `privat` WHERE `author` = '$login' AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");
             echo 'Сообщение удалено!<br/>';
             break;
 
