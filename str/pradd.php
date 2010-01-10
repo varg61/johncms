@@ -294,7 +294,7 @@ if ($user_id) {
                 $dc = $_SESSION['dc'];
                 $prd = $_SESSION['prd'];
                 foreach ($dc as $delid) {
-                    mysql_query("DELETE FROM `privat` WHERE `user` = '" . $login . "' AND `id`='" . intval($delid) . "'");
+                    mysql_query("DELETE FROM `privat` WHERE `user` = '$login' AND `id`='" . intval($delid) . "'");
                 }
                 echo "Отмеченные письма удалены<br/><a href='" . $prd . "'>Назад</a><br/>";
             }
@@ -465,17 +465,16 @@ if ($user_id) {
             // Удаление всех входящих писем                           //
             ////////////////////////////////////////////////////////////
             require_once ("../incfiles/head.php");
-            $mess1 = mysql_query("select * from `privat` where user='" . $login . "' and type='in';");
+            $mess1 = mysql_query("select * from `privat` where user='$login' and type='in'");
             while ($mas1 = mysql_fetch_array($mess1)) {
-                $delid = $mas1['id'];
                 $delfile = $mas1['attach'];
                 if (!empty ($delfile)) {
                     if (file_exists("../pratt/$delfile")) {
                         unlink("../pratt/$delfile");
                     }
                 }
-                mysql_query("delete from `privat` where `id`='" . intval($delid) . "';");
             }
+            mysql_query("DELETE FROM `privat` WHERE `user` = '$login' AND `type` = 'in'");
             echo "Входящие письма удалены<br/>";
             break;
 
@@ -520,8 +519,8 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Удаление отдельного сообщения                          //
             ////////////////////////////////////////////////////////////
-            require_once ("../incfiles/head.php");
-            $mess1 = mysql_query("select * from `privat` where id='" . intval($_GET['del']) . "' and type='in';");
+            require_once ('../incfiles/head.php');
+            $mess1 = mysql_query("SELECT * FROM `privat` WHERE `user` = '$login' AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");
             $mas1 = mysql_fetch_array($mess1);
             $delfile = $mas1['attach'];
             if (!empty ($delfile)) {
@@ -529,8 +528,8 @@ if ($user_id) {
                     unlink("../pratt/$delfile");
                 }
             }
-            mysql_query("delete from `privat` where `id`='" . intval($_GET['del']) . "';");
-            echo "Сообщение удалено!<br/>";
+            mysql_query("DELETE FROM `privat` WHERE `user` = '$login' AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");
+            echo 'Сообщение удалено!<br/>';
             break;
 
         case 'delout' :
