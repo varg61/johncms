@@ -528,8 +528,7 @@ if ($user_id) {
                     unlink("../pratt/$delfile");
                 }
             }
-            mysql_query("DELETE FROM `privat` WHERE `user` = '$login' AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");
-            mysql_query("DELETE FROM `privat` WHERE `author` = '$login' AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");
+            mysql_query("DELETE FROM `privat` WHERE (`user` = '$login' OR `author` = '$login') AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");
             echo 'Сообщение удалено!<br/>';
             break;
 

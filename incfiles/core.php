@@ -17,7 +17,6 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 Error_Reporting(E_ALL & ~ E_NOTICE);
-Error_Reporting(ERROR | WARNING);
 mb_internal_encoding('UTF-8');
 @ ini_set('arg_separator.output', '&amp;');
 @ ini_set('session.use_trans_sid', '0');
