@@ -368,8 +368,6 @@ else {
                     echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
                     // Ссылки на бан, ответ и цитирование
                     if ($user_id && $user_id != $res['user_id']) {
-                        //if ($rights == 3 || $rights >= 6)
-                            //echo '<span class="red"><a href="../' . $admp . '/zaban.php?do=ban&amp;id=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '">[б]</a></span>&nbsp;';
                         echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '">[о]</a>&nbsp;<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt">[ц]</a> ';
                     }
                     // Время поста
@@ -379,7 +377,6 @@ else {
                         echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle"/>&nbsp;' . $res['status'] . '</div>';
                     if ($set_user['avatar'])
                         echo '</td></tr></table>';
-                    ###########################
                     if ($res['close']) {
                         echo '<span class="red">Пост удалён!</span><br/>';
                     }
@@ -423,7 +420,18 @@ else {
                     if (mysql_num_rows($freq) > 0) {
                         $fres = mysql_fetch_assoc($freq);
                         $fls = round(filesize('./files/' . $fres['filename']) / 1024, 2);
-                        echo '<br /><span class="gray">Прикреплённый файл:<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a> (' . $fls . ' кб.)<br/>';
+                        echo '<br /><span class="gray">Прикреплённый файл:';
+                        // Предпросмотр изображений
+                        $att_ext = strtolower(format('./files/' . $fres['filename']));
+                        $pic_ext = array('gif', 'jpg', 'jpeg', 'png');
+                        if (in_array($att_ext, $pic_ext)) {
+                            echo '<div><a href="index.php?act=file&amp;id=' . $fres['id'] . '">';
+                            echo '<img src="thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="Нажмите для просмотра изображения" /></a></div>';
+                        }
+                        else {
+                            echo '<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
+                        }
+                        echo ' (' . $fls . ' кб.)<br/>';
                         echo 'Скачано: ' . $fres['dlcount'] . ' раз.</span>';
                     }
                     if ((($rights == 3 || $rights >= 6) && $rights >= $res['rights']) || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > $realtime - 300) || ($res['user_id'] == $user_id && $set_forum
