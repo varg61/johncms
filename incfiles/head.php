@@ -16,6 +16,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+$mod = isset($_GET['mod']) ? trim($_GET['mod']) : '';
 $headmod = isset ($headmod) ? mysql_real_escape_string($headmod) : '';
 if ($headmod == 'mainpage')
     $textl = $copyright;
@@ -76,7 +77,7 @@ echo '<div class="header">Привет ' . ($user_id ? '<b> ' . $login . '</b>!'
 // Выводим меню пользователя
 echo '<div class="tmn">';
 echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $home . '\'>На главную</a> | ' : '';
-echo ($user_id && $_GET['mod'] != 'cab') ? '<a href="' . $home . '/index.php?act=cab">Личное</a> | ' : '';
+echo ($user_id && $mod != 'cab') ? '<a href="' . $home . '/index.php?act=cab">Личное</a> | ' : '';
 echo $user_id ? '<a href="' . $home . '/exit.php">Выход</a>' : '<a href="' . $home . '/in.php">Вход</a> | <a href="' . $home . '/registration.php">Регистрация</a>';
 echo '</div>';
 echo '<div class="maintxt">';
@@ -155,7 +156,7 @@ if (isset ($ban))
     echo '<div class="alarm">БАН&nbsp;<a href="' . $home . '/str/users_ban.php">Подробно</a></div>';
 
 // Проверяем, есть ли новые письма
-if ($headmod != "pradd") {
+if ($headmod != "pradd" && $user_id) {
     $newl = mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'");
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
     if ($countnew > 0) {
