@@ -74,7 +74,7 @@ session_start();
 // Подключаемся к базе данных                             //
 ////////////////////////////////////////////////////////////
 require_once ($rootpath . 'incfiles/db.php');
-$connect = @ mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server');
+$connect = @ mysql_pconnect($db_host, $db_user, $db_pass) or die('cannot connect to server');
 @ mysql_select_db($db_name) or die('cannot connect to db');
 @ mysql_query("SET NAMES 'utf8'", $connect);
 
