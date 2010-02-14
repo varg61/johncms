@@ -90,8 +90,11 @@ if (!empty ($cms_ads[1]))
 // Фиксация местоположений посетителей                    //
 ////////////////////////////////////////////////////////////
 $sql = '';
-if ($user_id) {
-    // Фиксируем местоположение авторизованных
+$set_karma = unserialize($set['karma']);
+if ($user_id) {	// Фиксируем местоположение авторизованных
+    if($set_karma['on'] && $datauser['karma_time'] <= ($realtime-86400)) {
+       $sql = "`karma_time` = '$realtime', ";
+    }
     $movings = $datauser['movings'];
     if ($datauser['lastdate'] < ($realtime - 300)) {
         $movings = 0;

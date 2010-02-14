@@ -79,6 +79,8 @@ if (!$error) {
             mysql_query("DELETE FROM `privat` WHERE `user` = '" . $user['name'] . "'");
             mysql_query("DELETE FROM `privat` WHERE `author` = '" . $user['name'] . "' AND `type` = 'out' AND `chit` = 'no'");
             mysql_query("OPTIMIZE TABLE `privat`");
+           // Удаляем карму
+            mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "'");
             // Удаляем комментарии
             if ($comm_count && isset ($_POST['comments'])) {
                 if ($comm_gal) {

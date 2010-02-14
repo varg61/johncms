@@ -166,12 +166,17 @@ switch ($act) {
         $total_gal = fgal(1);
         if ($total_gal > 0)
             echo '<li><a href="gallery/index.php?act=new">Галерея</a> (' . $total_gal . ')</li>';
+        if($set_karma['on']) {
+           $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
+           if ($total_karma > 0)
+               echo '<li><a href="str/karma.php?act=new">Новые отзывы</a> (' . $total_karma . ')</li>';
+        }
         $old = $realtime - (3 * 24 * 3600);
         $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . $old), 0);
         if ($total_lib > 0)
             echo '<li><a href="library/index.php?act=new">Библиотека</a> (' . $total_lib . ')</li>';
         // Если нового нет, выводим сообщение
-        if (!$total_news && !$total_forum && !$total_guest && !$total_gal && !$total_lib)
+        if (!$total_news && !$total_forum && !$total_guest && !$total_gal && !$total_lib && !$total_karma)
             echo 'Новостей нет';
         // Дата последнего посещения
         $last = isset ($_GET['last']) ? intval($_GET['last']) : $datauser['lastdate'];

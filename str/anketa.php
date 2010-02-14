@@ -92,6 +92,35 @@ if ($rights >= 1 && $rights >= $user['rights']) {
         echo '<li><span class="green"><b>ИММУНИТЕТ</b></span></li>';
 }
 echo '</ul></p></div><div class="menu">';
+// Блок Кармы
+if($set_karma['on']) {
+   $exp = explode('|', $user['plus_minus']);
+   if($exp[0] > $exp[1]) {
+      $karma = $exp[1] ? ceil($exp[0]/$exp[1]) : $exp[0];
+      $images = $karma > 10 ? '2' : '1';
+   }
+   else if($exp[1] > $exp[0]) {
+      $karma = $exp[0] ? ceil($exp[1]/$exp[0]) : $exp[1];
+      $images = $karma > 10 ? '-2' : '-1';
+   }
+   else {
+     $images = 0;
+   }
+   echo '<p><h3><img src="../images/k_' . $images . '.gif"/>&nbsp;Карма <a href="karma.php?id=' . $id . '">' . $user['karma'] . '</a> (<span class="green">' . $exp[0] . '</span>/<span class="red">' . $exp[1] . '</span>)</h3><ul>';
+   if ($id) {
+       $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '" . $datauser['karma_time'] . "'"), 0);
+       $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '$id' AND `time` > '" . ($realtime - 86400) . "'"), 0);
+       if ($datauser['postforum'] >= $set_karma['forum'] &&  $datauser['total_on_site'] >= $set_karma['karma_time'] && ($set_karma['karma_points'] - $sum) > 0 && !$count) {
+           echo '<li><a href="karma.php?act=user&amp;id=' . $id . '">Отдать голос</a></li>';
+       }
+   }
+   else {
+       $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
+       if ($total_karma > 0)
+           echo '<li><a href="karma.php?act=new">Новые отзывы</a> (' . $total_karma . ')</li>';
+   }
+   echo'</ul></p>';
+}
 // Личные данные
 $out = '';
 $req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $user['name'] . "' LIMIT 1");
