@@ -153,6 +153,7 @@ CREATE TABLE `forum` (
   `soft` text NOT NULL,
   `text` text NOT NULL,
   `close` tinyint(1) NOT NULL default '0',
+  `close_who` varchar(25) NOT NULL,
   `vip` tinyint(1) NOT NULL default '0',
   `edit` text NOT NULL,
   `tedit` int(11) NOT NULL default '0',
@@ -161,6 +162,7 @@ CREATE TABLE `forum` (
   KEY `refid` (`refid`),
   KEY `type` (`type`),
   KEY `time` (`time`),
+  KEY `close` (`close`),
   KEY `user_id` (`user_id`),
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
@@ -423,10 +425,33 @@ CREATE TABLE `users` (
   `set_user` text NOT NULL,
   `set_forum` text NOT NULL,
   `set_chat` text NOT NULL,
+  `karma` int(11) NOT NULL default '0',
+  `karma_time` int(11) NOT NULL default '0',
+  `plus_minus` varchar(40) NOT NULL default '0|0',
+  `karma_off` int(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `name_lat` (`name_lat`),
   KEY `lastdate` (`lastdate`),
   KEY `place` (`place`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `karma_users`
+--
+DROP TABLE IF EXISTS `karma_users`;
+CREATE TABLE `karma_users` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `karma_user` int(11) NOT NULL,
+  `points` int(2) NOT NULL,
+  `type` int(1) NOT NULL,
+  `time` int(11) NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `karma_user` (`karma_user`),
+  KEY `type` (`type`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
