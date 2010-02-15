@@ -91,9 +91,11 @@ if ($rights >= 1 && $rights >= $user['rights']) {
     if ($user['immunity'])
         echo '<li><span class="green"><b>ИММУНИТЕТ</b></span></li>';
 }
-echo '</ul></p></div><div class="menu">';
+echo '</ul></p></div>';
+
 // Блок Кармы
 if($set_karma['on']) {
+   echo '<div class="list2">';
    $exp = explode('|', $user['plus_minus']);
    if($exp[0] > $exp[1]) {
       $karma = $exp[1] ? ceil($exp[0]/$exp[1]) : $exp[0];
@@ -106,22 +108,26 @@ if($set_karma['on']) {
    else {
      $images = 0;
    }
-   echo '<p><h3><img src="../images/k_' . $images . '.gif"/>&nbsp;Карма <a href="karma.php?id=' . $id . '">' . $user['karma'] . '</a> (<span class="green">' . $exp[0] . '</span>/<span class="red">' . $exp[1] . '</span>)</h3><ul>';
+   echo '<table  width="100%"><tr><td width="22" valign="top"><img src="../images/k_' . $images . '.gif"/></td><td>';
+   echo '<b>Карма (' . $user['karma'] . ')</b><div class="sub">
+   <span class="green"><a href="karma.php?id=' . $id . '&amp;type=1">За ('.$exp[0].')</a></span> | <span class="red"><a href="karma.php?id=' . $id . '&amp;type=2">Против ('.$exp[1].')</a></span>';
    if ($id) {
        $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '" . $datauser['karma_time'] . "'"), 0);
        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '$id' AND `time` > '" . ($realtime - 86400) . "'"), 0);
        if ($datauser['postforum'] >= $set_karma['forum'] &&  $datauser['total_on_site'] >= $set_karma['karma_time'] && ($set_karma['karma_points'] - $sum) > 0 && !$count) {
-           echo '<li><a href="karma.php?act=user&amp;id=' . $id . '">Отдать голос</a></li>';
+           echo '<br /><a href="karma.php?act=user&amp;id=' . $id . '">Отдать голос</a>';
        }
    }
    else {
        $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
        if ($total_karma > 0)
-           echo '<li><a href="karma.php?act=new">Новые отзывы</a> (' . $total_karma . ')</li>';
+           echo '<br /><a href="karma.php?act=new">Новые отзывы</a> (' . $total_karma . ')';
    }
-   echo'</ul></p>';
+   echo '</div></td></tr></table></div>';
 }
+
 // Личные данные
+echo '<div class="menu">';
 $out = '';
 $req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $user['name'] . "' LIMIT 1");
 if (mysql_num_rows($req)) {
