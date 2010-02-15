@@ -18,7 +18,19 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 
 if ($rights < 7)
     die('Error: restricted access');
-
+if ($rights == 9 && $do == 'clean') {
+    if (isset($_GET['yes'])) {
+        mysql_query("TRUNCATE TABLE `karma_users`");
+        mysql_query("OPTIMIZE TABLE `karma_users`");
+        mysql_query("UPDATE `users` SET `karma`='0', `plus_minus`='0|0'");
+        mysql_query("OPTIMIZE TABLE `users`");
+        echo '<div class="gmenu">Карма сброшена</div>';
+    }
+    else {
+        echo '<div class="rmenu"><p>Вы действительно хотите cбросить карму?<br/>';
+        echo '<a href="index.php?act=mod_karma&amp;do=clean&amp;yes">Удалить</a> | <a href="index.php?act=mod_karma">Отмена</a></p></div>';
+    }
+}
 echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Карма</div>';
 $settings = unserialize($set['karma']);
 if (isset($_POST['submit'])) {
@@ -27,6 +39,7 @@ if (isset($_POST['submit'])) {
     $settings['forum'] = isset($_POST['forum']) ? abs(intval($_POST['forum'])) : 0;
     $settings['time'] = isset($_POST['time']) ? abs(intval($_POST['time'])) : 0;
     $settings['on'] = isset($_POST['on']) ? 1 : 0;
+    $settings['adm'] = isset($_POST['adm']) ? 1 : 0;
     $settings['karma_time'] = $settings['time'] ? $settings['karma_time'] * 3600 : $settings['karma_time'] * 86400;
     mysql_query("UPDATE `cms_settings` SET `val` = '" . mysql_real_escape_string(serialize($settings)) . "' WHERE `key` = 'karma'");
     echo '<div class="rmenu">Настройки сохранены</div>';
@@ -38,9 +51,10 @@ echo '<p><h3>Ограничения для голосования</h3><input typ
         <input type="text" name="karma_time" value="' . $settings['karma_time'] . '" size="4"/>&nbsp;Провел на сайте<br />';
 echo '&nbsp;<input name="time" type="radio" value="1"' . ($settings['time'] ? ' checked="checked"' : '') . '/>&nbsp;Часов<br />';
 echo '&nbsp;<input name="time" type="radio" value="0"' . (!$settings['time'] ? ' checked="checked"' : '') . '/>&nbsp;Дней</p>';
-echo '<p><h3>Активация</h3><input type="checkbox" name="on"' . ($settings['on'] ? ' checked="checked"' : '') . '/> Включить</p>';
+echo '<p><h3>Основные настройки</h3><input type="checkbox" name="on"' . ($settings['on'] ? ' checked="checked"' : '') . '/> Включить модуль<br />';
+echo '<input type="checkbox" name="adm"' . ($settings['adm'] ? ' checked="checked"' : '') . '/> Запретить голосовать за администрацию</p>';
 echo '<p><input type="submit" value="Запомнить" name="submit" /></p></div>';
-echo '</form><div class="phdr"><br /></div>';
+echo '</form><div class="phdr">' . ($rights == 9 ? '<a href="index.php?act=mod_karma&amp;do=clean">Сбросить карму</a>' : '<br />') . '</div>';
 echo '<p><a href="index.php">Админ панель</a></p>';
 
 ?>

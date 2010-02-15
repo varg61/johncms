@@ -93,6 +93,7 @@ switch ($do) {
         mysql_query("ALTER TABLE `users` ADD `karma` int(11) NOT NULL default '0'");
         mysql_query("ALTER TABLE `users` ADD `karma_time` int(11) NOT NULL default '0'");
         mysql_query("ALTER TABLE `users` ADD `plus_minus` varchar(40) NOT NULL default '0|0'");
+        mysql_query("ALTER TABLE `users` ADD `karma_off` int(1) NOT NULL");
         echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица `karma_users`
         mysql_query("DROP TABLE IF EXISTS `karma_users`");

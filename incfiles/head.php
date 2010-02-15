@@ -92,7 +92,7 @@ if (!empty ($cms_ads[1]))
 $sql = '';
 $set_karma = unserialize($set['karma']);
 if ($user_id) {	// Фиксируем местоположение авторизованных
-    if($set_karma['on'] && $datauser['karma_time'] <= ($realtime-86400)) {
+    if(!$datauser['karma_off'] && $set_karma['on'] && $datauser['karma_time'] <= ($realtime-86400)) {
        $sql = "`karma_time` = '$realtime', ";
     }
     $movings = $datauser['movings'];
