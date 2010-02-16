@@ -151,7 +151,7 @@ if ($set_karma['on'] && $user_id) {
             }
             echo '<div class="phdr">Новых отзывов: ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . pagenav('karma.php?act=new&amp', $start, $total, $kmess) . '</p>';
+                echo '<p>' . pagenav('karma.php?act=new&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="karma.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
             }
             echo '<div class="list2"><a href="anketa.php?">Моя анкета</a></div>';
@@ -211,7 +211,7 @@ if ($set_karma['on'] && $user_id) {
             }
             echo '<div class="phdr">Всего отзывов: ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . pagenav('karma.php?id=' . $id . '&amp;type=' . $type . '&amp', $start, $total, $kmess) . '</p>';
+                echo '<p>' . pagenav('karma.php?id=' . $id . '&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="karma.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="hidden" name="type" value="' . $type
                     . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
             }
