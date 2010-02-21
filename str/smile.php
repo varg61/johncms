@@ -33,13 +33,15 @@ switch ($act) {
         }
         echo '<div class="phdr"><b>Смайлы:</b> ' . htmlentities(file_get_contents($rootpath . 'smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
         $array = glob($rootpath . 'smileys/user/' . $id . '/*.gif');
+        $array = array_merge($array, glob($rootpath . 'smileys/user/' . $id . '/*.jpg'));
+        $array = array_merge($array, glob($rootpath . 'smileys/user/' . $id . '/*.png'));
         $total = count($array);
         $end = $start + $kmess;
         if ($end > $total)
             $end = $total;
         if ($total > 0) {
             for ($i = $start; $i < $end; $i++) {
-                $smile = preg_replace('#^' . $rootpath . 'smileys/user/' . $id . '/(.*?).gif$#isU', '$1', $array [$i], 1);
+                $smile = preg_replace('#^' . $rootpath . 'smileys/user/' . $id . '/(.*?).(jpg|gif|png)$#isU', '$1', $array [$i], 1);
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                 echo '<img src="' . $array [$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
             }
