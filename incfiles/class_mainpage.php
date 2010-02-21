@@ -37,7 +37,7 @@ class mainpage {
             $reqtime = $realtime - ($this->settings['days'] * 86400);
             $req = mysql_query("SELECT * FROM `news` WHERE `time` > '" . $reqtime . "' ORDER BY `time` DESC LIMIT " . $this->settings['quantity']);
             if (mysql_num_rows($req) > 0) {
-                $news = '<div class="bmenu">Новости</div>';
+                $news = '<div class="phdr"><b>Новости</b></div>';
                 while ($res = mysql_fetch_array($req)) {
                     $text = $res['text'];
                     // Если текст больше заданного предела, обрезаем

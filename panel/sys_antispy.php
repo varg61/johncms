@@ -24,7 +24,7 @@ class scaner {
     // Класс сканера                                          //
     ////////////////////////////////////////////////////////////
     public $scan_folders = array('', '/cache', '/chat', '/download', '/forum', '/gallery', '/incfiles', '/library', '/pages', '/pratt', '/rss', '/smileys', '/str', '/theme', '/panel', '/install');
-    public $good_files = array('../.htaccess', '../auto.php', '../code.php', '../exit.php', '../go.php', '../in.php', '../index.php', '../read.php', '../registration.php', '../cache/.htaccess', '../chat/chat_footer.php',
+    public $good_files = array('../.htaccess', '../login.php', '../code.php', '../exit.php', '../go.php', '../index.php', '../read.php', '../registration.php', '../cache/.htaccess', '../chat/chat_footer.php',
     '../chat/chat_header.php', '../chat/hall.php', '../chat/index.php', '../chat/room.php', '../chat/who.php', '../download/addkomm.php', '../download/arc.php', '../download/arctemp/index.php', '../download/cut.php',
     '../download/delcat.php', '../download/delmes.php', '../download/dfile.php', '../download/down.php', '../download/files/.htaccess', '../download/files/index.php', '../download/fonts/index.php', '../download/graftemp/index.php',
     '../download/img/index.php', '../download/import.php', '../download/index.php', '../download/komm.php', '../download/makdir.php', '../download/mp3.php', '../download/mp3temp/index.php', '../download/new.php', '../download/opis.php',
