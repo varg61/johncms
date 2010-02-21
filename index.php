@@ -73,6 +73,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         if (!$user_id) {
             echo display_error('Только для зарегистрированных');
+            require_once ('incfiles/end.php');
             exit;
         }
         echo '<div class="phdr"><b>Личный кабинет</b></div>';
@@ -121,6 +122,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         if (!$user_id) {
             echo display_error('Только для зарегистрированных');
+            require_once ('incfiles/end.php');
             exit;
         }
         echo '<div class="phdr">Дайджест</div>';
@@ -190,6 +192,6 @@ switch ($act) {
         include_once 'pages/mainmenu.php';
 }
 
-require_once ("incfiles/end.php");
+require_once ('incfiles/end.php');
 
 ?>

@@ -187,7 +187,7 @@ if (isset ($_SESSION['uid']) && isset ($_SESSION['ups'])) {
 elseif (isset ($_COOKIE['cuid']) && isset ($_COOKIE['cups'])) {
     $user_id = intval(base64_decode($_COOKIE['cuid']));
     $_SESSION['uid'] = $user_id;
-    $user_ps = md5(md5(base64_decode($_COOKIE['cups'])));
+    $user_ps = md5($_COOKIE['cups']);
     $_SESSION['ups'] = $user_ps;
     $cookauth = true;
 }

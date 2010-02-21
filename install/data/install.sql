@@ -381,6 +381,7 @@ CREATE TABLE `users` (
   `name` varchar(25) NOT NULL default '',
   `name_lat` varchar(40) NOT NULL default '',
   `password` varchar(32) NOT NULL default '',
+  `failed_login` tinyint(4) NOT NULL default '0',
   `imname` varchar(25) NOT NULL default '',
   `sex` varchar(2) NOT NULL default '',
   `komm` int(10) NOT NULL default '0',

@@ -83,7 +83,7 @@ if ($set_karma['on'] && $user_id) {
                     }
                 }
             } else {
-                echo display_error('Вам запрежено отдавать голоса за пользователей<br /><a href="anketa.php?id=' . $id . '">Вернуться</a>');
+                echo display_error('Вам запрещено отдавать голоса за пользователей<br /><a href="anketa.php?id=' . $id . '">Вернуться</a>');
             }
             break;
 
