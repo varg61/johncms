@@ -78,7 +78,7 @@ switch ($act) {
             mysql_query("UPDATE `users` SET `password` = '" . mysql_real_escape_string(md5(md5($newpass))) . "' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
             // Проверяем и записываем COOKIES
             if (isset ($_COOKIE['cuid']) && isset ($_COOKIE['cups']))
-                setcookie('cups', base64_encode($newpass), time() + 3600 * 24 * 365);
+                setcookie('cups', md5($newpass), time() + 3600 * 24 * 365);
             echo '<div class="gmenu"><p><b>Пароль успешно изменен</b><br />';
             if ($autologin) {
                 // Показываем ссылку на Автологин
