@@ -106,11 +106,11 @@ if (!$error) {
             }
             // Скрываем темы на форуме
             if ($forumt_count && isset ($_POST['forumt'])) {
-                mysql_query("UPDATE `forum` SET `close` = '1' WHERE `type` = 't' AND `user_id` = '" . $user['id'] . "'");
+                mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `type` = 't' AND `user_id` = '" . $user['id'] . "'");
             }
             // Скрываем посты на форуме
             if (isset ($_POST['forump'])) {
-                mysql_query("UPDATE `forum` SET `close` = '1' WHERE `type` = 'm' AND `user_id` = '" . $user['id'] . "'");
+                mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `type` = 'm' AND `user_id` = '" . $user['id'] . "'");
             }
             // Удаляем пользователя
             mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
