@@ -36,6 +36,7 @@ switch ($act) {
                 $array[] = $file;
             }
         }
+        closedir($dir);
         $total = count($array);
         $end = $start + $kmess;
         if ($end > $total)
@@ -72,6 +73,7 @@ switch ($act) {
                 $array[] = $file;
             }
         }
+        closedir($dir);
         $total = count($array);
         if ($total > 0) {
             $end = $start + $kmess;
