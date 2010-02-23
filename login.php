@@ -31,10 +31,10 @@ if ($user_pass && !$user_login && !$id)
     $error[] = 'Вы не ввели имя';
 if (($user_login || $id) && !$user_pass)
     $error[] = 'Вы не ввели пароль';
-if ($user_login && (mb_strlen($user_login) < 2 || mb_strlen($user_login) > 15))
-    $error[] = 'Допустимая длина имени не менее 2 и не более 15 символов';
-if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 10))
-    $error[] = 'Допустимая длина пароля не менее 3 и не более 10 символов';
+if ($user_login && (mb_strlen($user_login) < 2 || mb_strlen($user_login) > 20))
+    $error[] = 'Допустимая длина имени не менее 2 и не более 20 символов';
+if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 15))
+    $error[] = 'Допустимая длина пароля не менее 3 и не более 15 символов';
 if (!$error && $user_pass && ($user_login || $id)) {
     // Запрос в базу на юзера
     $sql = $id ? "`id` = '$id'" : "`name_lat`='" . rus_lat(mb_strtolower($user_login)) . "'";
