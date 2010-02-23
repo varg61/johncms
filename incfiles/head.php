@@ -161,7 +161,6 @@ if (isset ($ban))
 
 // Проверяем, есть ли новые письма
 if ($headmod != "pradd" && $user_id) {
-    $newl = mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'");
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
     if ($countnew > 0) {
         echo "<div class=\"rmenu\" style='text-align: center'><a href='$home/str/pradd.php?act=in&amp;new'><b><font color='red'>Вам письмо: $countnew</font></b></a></div>";
