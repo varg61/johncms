@@ -30,6 +30,7 @@ switch ($act) {
             exit;
         }
         echo '<div class="phdr"><b>Смайлы:</b> ' . htmlentities(file_get_contents($rootpath . 'smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
+        $array = array();
         $dir = opendir('../smileys/user/' . $id);
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
@@ -66,7 +67,7 @@ switch ($act) {
             exit;
         }
         echo '<div class="phdr"><b>Смайлы:</b> Для администрации</div>';
-
+        $array = array();
         $dir = opendir('../smileys/admin');
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
