@@ -477,7 +477,7 @@ if ($user_id) {
                 else {
                     echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                 }
-                echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>Для: <a href="pradd.php?id=' . $res['id'] . '&amp;act=readmess">' . $res['user'] . '</a>';
+                echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>Для: <a href="pradd.php?id=' . $res['id'] . '&amp;act=readout">' . $res['user'] . '</a>';
                 $vrp = $res['time'] + $set_user['sdvig'] * 3600;
                 echo '&nbsp;<span class="gray">(' . date("d.m.y H:i", $vrp) . ')<br/>Тема:</span> ' . $res['temka'] . '<br/>';
                 if (!empty ($res['attach'])) {
