@@ -19,7 +19,7 @@ define('_IN_JOHNCMS', 1);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
 echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
 echo
-"<title>JohnCMS 3.0 - Установка</title>
+"<title>JohnCMS 3.1.0 - Установка</title>
 <style type='text/css'>
 body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}
 h2{ margin: 0; padding: 0; padding-bottom: 4px; }
@@ -30,7 +30,7 @@ li { padding-bottom: 6px; }
 .gray{ color: #999999; font: small; }
 </style>
 </head><body>";
-echo '<h2 class="green">JohnCMS v.3.0.0</h2>Установка системы<hr />';
+echo '<h2 class="green">JohnCMS v.3.1.0</h2>Установка системы<hr />';
 
 switch ($_GET['act']) {
     case 'set' :

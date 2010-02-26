@@ -349,12 +349,13 @@ CREATE TABLE `cms_settings` (
 -- Дамп данных таблицы `cms_settings`
 --
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
+('meta_desc', ''),
 ('emailadmina', ''),
 ('meta_key', ''),
-('meta_desc', ''),
 ('sdvigclock', '0'),
-('copyright', 'JohnCMS'),
+('copyright', 'JohnCMS 3.1.0'),
 ('homeurl', ''),
+('karma', 'a:6:{s:12:"karma_points";i:5;s:10:"karma_time";i:86400;s:5:"forum";i:50;s:4:"time";i:0;s:2:"on";i:1;s:3:"adm";i:0;}'),
 ('admp', 'panel'),
 ('flsz', '1000'),
 ('gzip', '1'),
@@ -369,7 +370,8 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('mod_down', '2'),
 ('mod_lib_comm', '1'),
 ('mod_gal_comm', '1'),
-('skindef', 'default');
+('skindef', 'default'),
+('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:500;s:8:"quantity";i:2;s:4:"days";i:5;s:6:"breaks";i:1;s:7:"smileys";i:0;s:4:"tags";i:1;s:3:"kom";i:1;}');
 
 --
 -- Структура таблицы `users`
@@ -411,8 +413,6 @@ CREATE TABLE `users` (
   `mailvis` tinyint(1) NOT NULL default '1',
   `dayb` int(2) NOT NULL default '0',
   `monthb` int(2) NOT NULL default '0',
-  `plus` int(3) NOT NULL default '0',
-  `minus` int(3) NOT NULL default '0',
   `vrrat` int(11) NOT NULL default '0',
   `alls` varchar(25) NOT NULL default '',
   `balans` int(11) NOT NULL default '0',

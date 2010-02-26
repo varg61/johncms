@@ -34,12 +34,6 @@ class ipinit {
         }
     }
 
-    function getIPfromXForwarded() {
-        $ipString = @ getenv("HTTP_X_FORWARDED_FOR");
-        $addr = explode(",", $ipString);
-        return $addr[sizeof($addr) - 1];
-    }
-
     // Получаем реальный адрес IP
     private function getip() {
         if (isset ($_SERVER['HTTP_X_FORWARDED_FOR'])) {
