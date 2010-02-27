@@ -155,9 +155,9 @@ echo '<li>Аватар:<br />';
 $link = '';
 if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
     echo '<img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
-    $link = ' | <a href="my_data.php?delavatar">Удалить</a>';
+    $link = ' | <a href="my_data.php?id=' . $user['id'] . '&amp;delavatar">Удалить</a>';
 }
-echo '<small><a href="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '">Выгрузить</a> | <a href="avatar.php">Выбрать</a>' . $link . '</small></li>';
+echo '<small><a href="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '">Выгрузить</a> | <a href="avatar.php?id=' . $user['id'] . '">Выбрать</a>' . $link . '</small></li>';
 // Фотография
 echo '<li>Фотография:<br />';
 $link = '';

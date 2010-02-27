@@ -71,9 +71,9 @@ if ($set_karma['on'] && $user_id) {
                         mysql_query("UPDATE `users` SET `karma`='$karma', `plus_minus`='$plus_minus' WHERE `id` = '$id' LIMIT 1");
                         echo '<div class="gmenu">Выполнено!<br /><a href="anketa.php?id=' . $id . '">Продолжить</a></div>';
                     } else {
-                        echo '<div class="phdr"><b>Отдамаем голос за ' . $res['name'] . '</b></div><form action="karma.php?act=user&amp;id=' . $id
+                        echo '<div class="phdr"><b>Отдаем голос за ' . $res['name'] . '</b></div><form action="karma.php?act=user&amp;id=' . $id
                             . '" method="post"><div class="gmenu"><b>Тип голоса:</b><br />
-                            <input name="type" type="radio" value="1" checked="checked"/> Положительный<br /><input name="type" type="radio" value="0"/> Отрицательный<br /><b>Колличество голосов:</b><br /><select size="1" name="points">';
+                            <input name="type" type="radio" value="1" checked="checked"/> Положительный<br /><input name="type" type="radio" value="0"/> Отрицательный<br /><b>Количество голосов:</b><br /><select size="1" name="points">';
                         for ($i = 1; $i < ($set_karma['karma_points'] - $sum + 1); $i++) {
                             echo '<option value="' . $i . '">' . $i . '</option>';
                         }
