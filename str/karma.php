@@ -106,7 +106,7 @@ if ($set_karma['on'] && $user_id) {
                         }
                         mysql_query("DELETE FROM `karma_users` WHERE `id` = '$del' LIMIT 1");
                         mysql_query("UPDATE `users` SET `karma`='$karma', `plus_minus`='$plus_minus' WHERE `id` = '$id' LIMIT 1");
-                        header('Location: karma.php?id=' . $id . '&amp;type=' . $type);
+                        header('Location: karma.php?id=' . $id . '&type=' . $type);
                     } else {
                         echo '<p>Вы действительно хотите удалить отзыв?<br/>';
                         echo '<a href="karma.php?act=delete&amp;id=' . $id . '&amp;del='.$del.'&amp;type=' . $type . '&amp;yes">Удалить</a> | <a href="karma.php?id=' . $id . '&amp;type=' . $type . '">Отмена</a></p>';
