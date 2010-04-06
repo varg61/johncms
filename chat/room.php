@@ -99,7 +99,7 @@ if (mysql_num_rows($req)) {
     if ($total > $set_chat['chmes'])
         echo '[4] <a href="" accesskey="4">История сообщений</a><br/>';
     if ($rights == 2 || $rights >= 6)
-        echo '[5] <a href="index.php?act=room&amp;id=' . $id . '" accesskey="5">Очистить комнату</a><br/>';
+        echo '[5] <a href="index.php?act=clean&amp;id=' . $id . '" accesskey="5">Очистить комнату</a><br/>';
     echo '</p>';
     require_once ('../incfiles/end.php');
 }
