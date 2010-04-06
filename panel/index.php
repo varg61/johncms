@@ -21,7 +21,7 @@ define('_IN_JOHNADM', 1);
 $textl = 'Админ панель';
 require_once ('../incfiles/core.php');
 
-if ($rights < 6) {
+if ($rights < 1) {
     header('Location: http://gazenwagen.com/?err');
     exit;
 }
