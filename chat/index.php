@@ -17,234 +17,228 @@
 define('_IN_JOHNCMS', 1);
 
 $textl = 'Чат';
-$headmod = 'chat';
-require_once ("../incfiles/core.php");
+require_once ('../incfiles/core.php');
+$headmod = $id ? 'chat,' . $id : 'chat';
 
 // Ограничиваем доступ к Чату
 $error = '';
-if (!$set['mod_chat'] && !$rights < 7)
+if (!$set['mod_chat'] && !$dostadm)
     $error = 'Чат закрыт';
 elseif ($ban['1'] || $ban['12'])
     $error = 'Для Вас доступ в Чат закрыт';
 elseif (!$user_id)
     $error = 'Доступ в Чат открыт только <a href="../in.php">авторизованным</a> посетителям';
 if ($error) {
-    require_once ("../incfiles/head.php");
+    require_once ('../incfiles/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once ("../incfiles/end.php");
+    require_once ('../incfiles/end.php');
     exit;
 }
 
-////////////////////////////////////////////////////////////
-// Настройки Чата                                         //
-////////////////////////////////////////////////////////////
-$set_chat = array();
+// Пользовательские настройки Чата
 $set_chat = unserialize($datauser['set_chat']);
-if (empty ($set_chat)) {
-    $set_chat['refresh'] = 20;
-    $set_chat['chmes'] = 10;
-    $set_chat['carea'] = 0;
-    $set_chat['carea_w'] = 20;
-    $set_chat['carea_h'] = 2;
-    $set_chat['mood'] = 'нейтральное';
-}
-
-// Фиксируем местонахождение пользователя
-$where = !empty ($id) ? 'chat,' . $id : 'chat';
-mysql_query("INSERT INTO `count` SET
-	`ip`='" . $ipp . "',
-	`browser`='" . mysql_real_escape_string($agn) . "',
-	`time`='" . $realtime . "',
-	`where`='" . $where . "',
-	`name`='" . $login . "';");
+if (empty ($set_chat))
+    $set_chat = array('refresh' => 20, 'chmes' => 10, 'carea' => 0, 'carea_w' => 20, 'carea_h' => 2, 'mood' => 'нейтральное');
 
 switch ($act) {
-    case "room" :
+    case 'room' :
         ////////////////////////////////////////////////////////////
         // Очищаем комнату                                        //
         ////////////////////////////////////////////////////////////
-        if (($rights == 2 || $rights >= 6) && $id) {
-            $typ = mysql_query("SELECT * FROM `chat` WHERE `id` = '" . $id . "' LIMIT 1");
+        if ($id && ($rights > 5 || $rights == 2)) {
+            $typ = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id' LIMIT 1");
             $ms = mysql_fetch_array($typ);
             if ($ms['type'] != "r") {
-                require_once ("../incfiles/head.php");
-                echo "Ошибка!<br/><a href='index.php?'>В чат</a><br/>";
-                require_once ("../incfiles/end.php");
+                require_once ('../incfiles/head.php');
+                echo 'Ошибка!<br/><a href="index.php">В чат</a><br/>';
+                require_once ('../incfiles/end.php');
                 exit;
             }
             if (isset ($_GET['yes'])) {
-                mysql_query("DELETE FROM `chat` WHERE `refid` = '" . $id . "'");
+                mysql_query("DELETE FROM `chat` WHERE `refid` = '$id'");
                 header("Location: $home/chat/index.php?id=$id");
             }
             else {
-                require_once ("../incfiles/head.php");
-                echo '<p>Вы действительно хотите очистить комнату?<br/><a href="index.php?act=room&amp;id=' . $id . '&amp;yes">Да</a> | <a href="index.php?id=' . $id . '">Нет</a></p>';
+                require_once ('../incfiles/head.php');
+                echo '<div class="rmenu"><p>Вы действительно хотите очистить комнату?<br/><a href="index.php?act=room&amp;id=' . $id . '&amp;yes">Да</a> | <a href="index.php?id=' . $id . '">Нет</a></p></div>';
+                require_once ('../incfiles/end.php');
             }
         }
-        require_once ("../incfiles/end.php");
         break;
 
-    case "moders" :
+    case 'moders' :
         ////////////////////////////////////////////////////////////
-        //
+        // Список модераторов Чата                                //
         ////////////////////////////////////////////////////////////
         require_once ("../incfiles/head.php");
-        echo "<b>Модераторы чата</b><br/>";
+        echo '<div class="phdr"><b>Модераторы чата</b></div>';
         $mod = mysql_query("select * from `users` where rights='2';");
         $mod2 = mysql_num_rows($mod);
         if ($mod2 != 0) {
             while ($mod1 = mysql_fetch_array($mod)) {
                 if ($login != $mod1['name']) {
-                    echo "<a href='../str/anketa.php?id=" . $mod1['id'] . "'><font color='" . $conik . "'>$mod1[name]</font></a>";
+                    echo "<a href='../str/anketa.php?user=" . $mod1['id'] . "'>$mod1[name]</a>";
                 }
                 else {
-                    echo "<font color='" . $csnik . "'>$mod1[name]</font>";
+                    echo "$mod1[name]";
                 }
                 $ontime = $mod1['lastdate'];
                 $ontime2 = $ontime + 300;
                 if ($realtime > $ontime2) {
-                    echo '<font color="#FF0000"> [Off]</font>';
+                    echo '<span class="red"> [Off]</span>';
                 }
                 else {
-                    echo '<font color="#00AA00"> [ON]</font>';
+                    echo '<span class="green"> [ON]</span>';
                 }
             }
         }
         else {
-            echo "Не назначены<br/>";
+            echo '<div class="menu"><p>Не назначены</p></div>';
         }
-        echo "<a href='index.php?id=" . $id . "'>Назад</a><br/>";
-        require_once ("../incfiles/end.php");
+        echo '<div class="phdr"><a href="index.php">Назад</a></div>';
+        require_once ('../incfiles/end.php');
         break;
 
-    case "trans" :
+    case 'trans' :
         ////////////////////////////////////////////////////////////
-        //
+        // Транслит (подсказки)                                   //
         ////////////////////////////////////////////////////////////
-        require_once ("../incfiles/head.php");
+        require_once ('../incfiles/head.php');
         include ("../pages/trans.$ras_pages");
         echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
-        require_once ("../incfiles/end.php");
+        require_once ('../incfiles/end.php');
         break;
 
-    case "say" :
-        ////////////////////////////////////////////////////////////
-        //
-        ////////////////////////////////////////////////////////////
+    case 'say' :
+        $chat = 1;
         if (empty ($id)) {
-            require_once ("../incfiles/head.php");
-            echo "Ошибка!<br/><a href='?'>В чат</a><br/>";
-            require_once ("../incfiles/end.php");
+            require_once ('../incfiles/head.php');
+            echo 'Ошибка!<br/><a href="index.php">В чат</a><br/>';
+            require_once ('../incfiles/end.php');
             exit;
         }
 
         // Проверка на спам
-        $old = ($rights) ? 5 : 10;
-        if ($datauser['lastpost'] > ($realtime - $old)) {
-            require_once ("../incfiles/head.php");
+        $old = ($rights > 0 || $dostsadm = 1) ? 5 : 10;
+        if ($lastpost > ($realtime - $old)) {
+            require_once ('../incfiles/head.php');
             echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="index.php?id=' . $id . '">Назад</a></p>';
-            require_once ("../incfiles/end.php");
+            require_once ('../incfiles/end.php');
             exit;
         }
-        $type = mysql_query("SELECT * FROM `chat` WHERE `id` = '" . $id . "' LIMIT 1");
+        $type = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id' LIMIT 1");
         $type1 = mysql_fetch_array($type);
         $tip = $type1['type'];
         switch ($tip) {
-            case "r" :
+            case 'r' :
+                ////////////////////////////////////////////////////////////
+                // Добавление обычного сообщения                          //
+                ////////////////////////////////////////////////////////////
                 if (isset ($_POST['submit'])) {
                     if (empty ($_POST['msg'])) {
-                        require_once ("../incfiles/head.php");
-                        echo "Вы не ввели сообщение!<br/><a href='index.php?act=say&amp;id=" . $id . "'>Повторить</a><br/>";
-                        require_once ("../incfiles/end.php");
+                        require_once ('../incfiles/head.php');
+                        echo '<div class="rmenu"><p>Вы не ввели сообщение!<br/><a href="index.php?act=say&amp;id=' . $id . '">Повторить</a></p></div>';
+                        require_once ('../incfiles/end.php');
                         exit;
                     }
-                    // Принимаем сообщение и записываем в базу
-                    $msg = check(trim($_POST['msg']));
-                    $msg = mb_substr($msg, 0, 500);
-                    if ($_POST['msgtrans'] == 1) {
+                    // Принимаем и проверяем сообщение
+                    $msg = check(mb_substr($_POST['msg'], 0, 500));
+                    if ($_POST['msgtrans'])
                         $msg = trans($msg);
-                    }
-                    $agn = strtok($agn, ' ');
-                    mysql_query("insert into `chat` values(0,'" . $id . "','','m','" . $realtime . "','" . $login . "','','0','" . $msg . "','" . $ipp . "','" . mysql_real_escape_string($agn) . "','','');");
-                    if (empty ($datauser['postchat'])) {
-                        $fpst = 1;
-                    }
-                    else {
-                        $fpst = $datauser['postchat'] + 1;
-                    }
-                    mysql_query("UPDATE `users` SET
-						`postchat` = '" . $fpst . "',
-						`lastpost` = '" . $realtime . "'
-						WHERE `id` = '" . $user_id . "';");
-                    if ($type1['dpar'] == "vik") {
-                        $protv = mysql_query("select * from `chat` where dpar='vop' and type='m' order by time desc;");
-                        while ($protv2 = mysql_fetch_array($protv)) {
-                            $prr[] = $protv2['id'];
+                    // Проверяем на повтор сообщений
+                    $req = mysql_query("SELECT * FROM `chat` WHERE `refid` = '$id' AND `user_id` = '$user_id' ORDER BY `time` DESC LIMIT 1");
+                    if (mysql_num_rows($req)) {
+                        $res = mysql_fetch_array($req);
+                        if (stripslashes($msg) == $res['text']) {
+                            header("location: $home/chat/index.php?id=$id");
+                            exit;
                         }
-                        $pro = mysql_query("select * from `chat` where dpar='vop' and type='m' and id='" . $prr[0] . "';");
-                        $protv1 = mysql_fetch_array($pro);
-                        $prr = array();
-                        $ans = $protv1['realid'];
-                        $vopr = mysql_query("select * from `vik` where id='" . $ans . "';");
-                        $vopr1 = mysql_fetch_array($vopr);
-                        $answer = $vopr1['otvet'];
-                        if (!empty ($msg) && !empty ($answer) && $protv1['otv'] != 1) {
-                            if (preg_match("/$answer/i", "$msg")) {
-                                $itg = $datauser['otvetov'] + 1;
-                                switch ($protv1['otv']) {
-                                    case "2" :
-                                        $pods = ", не используя подсказок";
-                                        $bls = 5;
-                                        break;
-                                    case "3" :
-                                        $pods = ", используя одну подсказку";
-                                        $bls = 3;
-                                        break;
-                                    case "4" :
-                                        $pods = ", используя две подсказки";
-                                        $bls = 2;
-                                        break;
+                    }
+                    // Задаем цвет Ника
+                    $usr = '<span style="color: black">' . $login . '</span>';
+                    switch ($rights) {
+                        case 7 :
+                            $usr .= ' <b>[Adm]</b>';
+                            break;
+                        case 6 :
+                            $usr .= ' <b>[Smd]</b>';
+                            break;
+                    }
+                    // Записываем сообщение в базу
+                    mysql_query("INSERT INTO `chat` SET
+                    `refid` = '$id',
+                    `type` = 'm',
+                    `time` = '$realtime',
+                    `user_id` = '$user_id',
+                    `from` = '" . mysql_real_escape_string($usr) . "',
+                    `text` = '$msg',
+                    `ip` = '$ipl',
+                    `soft` = '" . mysql_real_escape_string(strtok($agn, ' ')) . "'");
+                    // Обновляем статистику юзера
+                    mysql_query("UPDATE `users` SET
+                    `postchat` = '" . ($datauser['postchat'] + 1) . "',
+                    `lastpost` = '$realtime'
+                    WHERE `id` = '$user_id'");
+                    // Если Викторина, то проверяем ответы на вопросы
+                    if ($type1['dpar'] == 'vik') {
+                        $quiz_req = mysql_query("SELECT * FROM `chat` WHERE `dpar` = 'vop' ORDER BY `id` DESC LIMIT 1");
+                        if (mysql_num_rows($quiz_req)) {
+                            $quiz_res = mysql_fetch_array($quiz_req);
+                            $len = mb_strlen($quiz_res['soft']);
+                            if (mb_stristr(stripslashes($msg), $quiz_res['soft']) && $quiz_res['time'] > ($realtime - 150) && $quiz_res['realid'] > 1) {
+                                if ($quiz_res['realid'] == 2) {
+                                    $pods = ' без подсказок';
+                                    $bls = 3;
                                 }
-                                $balans = $datauser['balans'] + $bls;
-                                $otvtime = $realtime - $protv1['time'];
-                                if ($datauser['sex'] == "m") {
-                                    $tx =
-                                    "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
+                                elseif ($quiz_res['realid'] == 3 || $len < 5 && $quiz_res['realid'] == 4) {
+                                    $pods = ', используя одну подсказку';
+                                    $bls = 2;
                                 }
                                 else {
-                                    $tx =
-                                    "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
+                                    $pods = ', используя две подсказки';
+                                    $bls = 1;
                                 }
-                                $mtim = $realtime + 1;
-                                mysql_query("INSERT INTO `chat` VALUES(
-'0','" . $id . "','','m','" . $mtim . "','Умник','" . $login . "','', '" . $tx . "', '127.0.0.1', 'Nokia3310', '','');");
-                                mysql_query("update `chat` set otv='1' where id='" . $protv1['id'] . "';");
-                                mysql_query("update `users` set otvetov='" . $itg . "',balans='" . $balans . "' where id='" . intval($_SESSION['uid']) . "';");
+                                $itg = $datauser['otvetov'] + 1;
+                                $balans = $datauser['balans'] + $bls;
+                                $tx = '<b>ОТЛИЧНО!!!</b> <span class="red">[+' . $bls . ' бал.]</span><br />';
+                                $tx .= '<span class="green"><b>' . $login . '</b></span> дал' . ($datauser['sex'] == 'zh' ? 'а' : '') . ' правильный ответ' . $pods . '<br /><small>';
+                                //$tx .= 'Потрачено секунд: <b>' . ($realtime - $quiz_res['time']) . '</b><br />';
+                                $tx .= 'Всего правильных ответов: <b>' . $itg . '</b><br />';
+                                $tx .= 'Игровой баланс: <b>' . $balans . '</b> баллов.';
+                                $tx .= '</small>';
+                                mysql_query("INSERT INTO `chat` SET
+                                `refid` = '$id',
+                                `type` = 'm',
+                                `time` = '$realtime',
+                                `from` = 'Умник',
+                                `text` = '$tx'");
+                                mysql_query("UPDATE `chat` SET `realid` = '1', `time` = '$realtime' WHERE `id` = '" . $quiz_res['id'] . "'");
+                                mysql_query("UPDATE `users` SET `otvetov` = '$itg', `balans` = '$balans' WHERE `id` = '$user_id'");
                             }
                         }
                     }
                     header("location: $home/chat/index.php?id=$id");
                 }
                 else {
-                    require_once ("chat_header.php");
-                    echo 'Добавление сообщения<br />(max. 500)';
-                    echo '<div class="title1">' . $type1['text'] . '</div>';
-                    echo "<form action='index.php?act=say&amp;id=" . $id . "' method='post'><textarea cols='" . $set_chat['carea_w'] . "' rows='" . $set_chat['carea_h'] .
-                    "' title='Введите текст сообщения' name='msg'></textarea><br/>";
-                    if ($set_user['translit'])
-                        echo "<input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения<br/>";
-                    echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form>";
-                    echo "<div class='title2'><a href='index.php?act=trans'>Транслит</a> | <a href='../str/smile.php'>Смайлы</a><br/>";
-                    echo "</div><br />[0] <a href='index.php?id=" . $id . "' accesskey='0'>Назад</a>";
+                    require_once ('../incfiles/head.php');
+                    echo '<div class="phdr">Добавляем сообщение</div>';
+                    echo '<form action="index.php?act=say&amp;id=' . $id . '" method="post"><div class="gmenu"><p>';
+                    echo '<textarea cols="' . $set_chat['carea_w'] . '" rows="' . $set_chat['carea_h'] . '" name="msg"></textarea><br/>';
+                    if ($offtr != 1) {
+                        echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
+                    }
+                    echo '</p><p><input type="submit" name="submit" value="Написать"/></p></div></form>';
+                    echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+                    echo '<p>[0] <a href="index.php?id=' . $id . '" accesskey="0">Назад</a></p>';
                 }
                 break;
 
-            case "m" :
+            case 'm' :
                 ////////////////////////////////////////////////////////////
-                //
+                // Добавление сообщения для юзера                         //
                 ////////////////////////////////////////////////////////////
                 $th = $type1['refid'];
-                $th2 = mysql_query("select * from `chat` where id= '" . $th . "';");
+                $th2 = mysql_query("SELECT * FROM `chat` WHERE `id` = '$th'");
                 $th1 = mysql_fetch_array($th2);
                 if (isset ($_POST['submit'])) {
                     $flt = $realtime - 10;
@@ -265,178 +259,62 @@ switch ($act) {
                     $to = $type1['from'];
                     $priv = intval($_POST['priv']);
                     $nas = check($_POST['nas']);
-                    $msg = check(trim($_POST['msg']));
-                    $msg = mb_substr($msg, 0, 500);
-                    if ($_POST['msgtrans'] == 1) {
+                    // Принимаем и проверяем сообщение
+                    $msg = check(mb_substr($_POST['msg'], 0, 500));
+                    if ($_POST['msgtrans'])
                         $msg = trans($msg);
-                    }
-                    mysql_query("insert into `chat` values(0,'" . $th . "','','m','" . $realtime . "','" . $login . "','" . $to . "','" . $priv . "','" . $msg . "','" . $ipp . "','" . mysql_real_escape_string($agn) . "','" . $nas . "','');"
-                    );
-                    if (empty ($datauser['postchat'])) {
-                        $fpst = 1;
-                    }
-                    else {
-                        $fpst = $datauser['postchat'] + 1;
-                    }
-                    mysql_query("update `users` set  postchat='" . $fpst . "' where id='" . intval($_SESSION['uid']) . "';");
-                    if ($th1[dpar] == "vik") {
-                        $protv = mysql_query("select * from `chat` where dpar='vop' and type='m' order by time desc;");
-                        while ($protv2 = mysql_fetch_array($protv)) {
-                            $prr[] = $protv2['id'];
-                        }
-                        $pro = mysql_query("select * from `chat` where dpar='vop' and type='m' and id='" . $prr[0] . "';");
-                        $protv1 = mysql_fetch_array($pro);
-                        $prr = array();
-                        $ans = $protv1['realid'];
-                        $vopr = mysql_query("select * from `vik` where id='" . $ans . "';");
-                        $vopr1 = mysql_fetch_array($vopr);
-                        $answer = $vopr1['otvet'];
-                        if (!empty ($msg) && !empty ($answer) && $protv1['otv'] != 1) {
-                            if (preg_match("/$answer/i", "$msg")) {
-                                $itg = $datauser['otvetov'] + 1;
-                                switch ($protv1['otv']) {
-                                    case "2" :
-                                        $pods = ", не используя подсказок";
-                                        $bls = 5;
-                                        break;
-                                    case "3" :
-                                        $pods = ", используя одну подсказку";
-                                        $bls = 3;
-                                        break;
-                                    case "4" :
-                                        $pods = ", используя две подсказки";
-                                        $bls = 2;
-                                        break;
-                                }
-                                $balans = $datauser['balans'] + $bls;
-                                $otvtime = $realtime - $protv1['time'];
-                                if ($datauser['sex'] == "m") {
-                                    $tx =
-                                    "молодец! Ты угадал правильный ответ:  $answer за $otvtime секунд $pods ,и заработал $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
-                                }
-                                else {
-                                    $tx =
-                                    "молодец! Ты угадала правильный ответ:  $answer за $otvtime секунд $pods ,и заработала $bls баллов. Всего правильных ответов:<b>$itg</b>, твой игровой баланс $balans баллов.";
-                                }
-                                $mtim = $realtime + 1;
-                                mysql_query("INSERT INTO `chat` VALUES(
-'0','" . $th . "','','m','" . $mtim . "','Умник','" . $login . "','', '" . $tx . "', '127.0.0.1', 'Nokia3310', '','');");
-                                mysql_query("update `chat` set otv='1' where id='" . $protv1['id'] . "';");
-                                mysql_query("update `users` set otvetov='" . $itg . "',balans='" . $balans . "' where id='" . intval($_SESSION['uid']) . "';");
-                            }
+                    if (!empty ($nas))
+                        $msg = '<span class="gray">*' . $nas . '*</span> ' . $msg;
+                    // Проверяем на повтор сообщений
+                    $req = mysql_query("SELECT * FROM `chat` WHERE `refid` = '$th' AND `user_id` = '$user_id' ORDER BY `time` DESC LIMIT 1");
+                    if (mysql_num_rows($req)) {
+                        $res = mysql_fetch_array($req);
+                        if (stripslashes($msg) == $res['text']) {
+                            header("location: $home/chat/index.php?id=$id");
+                            exit;
                         }
                     }
+                    // Записываем сообщение в базу
+                    mysql_query("INSERT INTO `chat` SET
+                    `refid` = '$th',
+                    `type` = 'm',
+                    `time` = '$realtime',
+                    `user_id` = '$user_id',
+                    `from` = '$login',
+                    `text` = '$msg',
+                    `ip` = '$ipl',
+                    `soft` = '" . mysql_real_escape_string(strtok($agn, ' ')) . "'");
+                    // Обновляем статистику юзера
+                    mysql_query("UPDATE `users` SET
+                    `postchat` = '" . ($datauser['postchat'] + 1) . "',
+                    `lastpost` = '$realtime'
+                    WHERE `id` = '$user_id'");
                     header("location: $home/chat/index.php?id=$th");
                 }
                 else {
-                    require_once ("chat_header.php");
-                    $user = mysql_query("select * from `users` where name='" . $type1['from'] . "';");
-                    $ruz = mysql_num_rows($user);
-                    if ($ruz != 0) {
-                        $udat = mysql_fetch_array($user);
-                        echo "<a href='../str/anketa.php?id=" . $udat['id'] . "'><b>$type1[from]</b></a>";
-                        echo " (id: $udat[id])";
-                        $ontime = $udat['lastdate'];
-                        $ontime2 = $ontime + 300;
-                        if ($realtime > $ontime2) {
-                            echo "<font color='" . $coffs . "'> [Off]</font><br/>";
-                        }
-                        else {
-                            echo "<font color='" . $cons . "'> [ON]</font><br/>";
-                        }
-                        if ($udat['dayb'] == $day && $udat['monthb'] == $mon) {
-                            echo "<font color='" . $cdinf . "'>ИМЕНИННИК!!!</font><br/>";
-                        }
-                        switch ($udat['rights']) {
-                            case 7 :
-                                echo ' Админ ';
-                                break;
-                            case 6 :
-                                echo ' Супермодер ';
-                                break;
-                            case 5 :
-                                echo ' Зам. админа по библиотеке ';
-                                break;
-                            case 4 :
-                                echo ' Зам. админа по загрузкам ';
-                                break;
-                            case 3 :
-                                echo ' Модер форума ';
-                                break;
-                            case 2 :
-                                echo ' Модер чата ';
-                                break;
-                            case 1 :
-                                echo ' Киллер ';
-                                break;
-                            default :
-                                echo ' юзер ';
-                                break;
-                        }
-                        echo '<br/>';
-                        if (!empty ($udat['status'])) {
-                            echo $udat['status'] . '<br/>';
-                        }
-                        if ($udat['sex'] == "m") {
-                            echo "Парень<br/>";
-                        }
-                        if ($udat['sex'] == "zh") {
-                            echo "Девушка<br/>";
-                        }
-                        if (!empty ($udat['balans'])) {
-                            echo "Игровой баланс: $udat[balans] баллов<br/>";
-                        }
-                        if ($udat['ban'] == "1" && $udat['bantime'] > $realtime || $udat['ban'] == "2") {
-                            echo "<font color='" . $cdinf . "'>Бан!</font><br/>";
-                        }
-                        if (empty ($udat['nastroy'])) {
-                            $nstr = "без настроения";
-                        }
-                        else {
-                            $nstr = $udat['nastroy'];
-                        }
-                        echo "Настроение: $udat[nastroy]<br/>";
-                    }
-                    echo "Добавление сообщения в комнату <b>$th1[text]</b><br />для <b>$type1[from]</b>(max. 500):<br/><form action='index.php?act=say&amp;id=" . $id . "' method='post'>";
-                    echo "<textarea cols='40' rows='3' title='Введите ответ' name='msg'></textarea><br/>";
-                    if ($set_user['translit'])
+                    require_once ('../incfiles/head.php');
+                    echo '<div class="phdr">Написать</div>';
+                    echo 'Кому: <a href="../str/anketa.php?user=' . $type1['user_id'] . '"><b>' . $type1['from'] . '</b></a>';
+                    $user = mysql_fetch_array(mysql_query("SELECT * FROM `users` WHERE `id` = '" . $type1['user_id'] . "'"));
+                    if (!empty ($user['nastroy']))
+                        echo '<br />Настроение: ' . $user['nastroy'];
+                    echo '<form action="index.php?act=say&amp;id=' . $id . '" method="post"><div class="gmenu">';
+                    echo '<p><input type="checkbox" value="1" name="priv" checked="checked"/>&nbsp;Приватно<br />';
+                    // Список эмоций
+                    $emo = array('Шёпoтoм', 'Paдocтнo', 'Пeчaльнo', 'Удивлённo', 'Лacкoвo', 'Cмyщённo', 'Oбижeннo', 'Нacтойчивo', 'Испуганно', 'Злобно', 'Задумчиво', 'Откровенно');
+                    echo '<select name="nas"><option value="">Бeз эмoций</option>';
+                    foreach ($emo as $val)
+                        echo '<option value="' . $val . '">' . $val . '</option>';
+                    echo '</select></p>';
+                    echo 'Сообщение (макс. 500 символов)<br /><textarea cols="40" rows="3" name="msg"></textarea><br/>';
+                    if ($offtr != 1) {
                         echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
-                    echo '<select name="priv">';
-                    echo '<option value="0">Всем</option>';
-                    echo '<option value="1">Приватно</option>';
-                    echo '</select><br/>';
-                    echo
-                    "Эмоции:<br/><select name='nas'>
-<option value=''>Бeз эмoций</option>
-<option value='[Paдocтнo] '>Paдocтнo</option>
-<option value='[Пeчaльнo] '>Пeчaльнo</option>
-<option value='[Удивлённo] '>Удивлённo</option>
-<option value='[Лacкoвo] '>Лacкoвo</option>
-<option value='[Смyщённo] '>Cмyщённo</option>
-<option value='[Koкeтливo] '>Koкeтливo</option>
-<option value='[Oбижeннo] '>Oбижeннo</option>
-<option value='[Нacтoйчивo] '>Нacтойчивo</option>
-<option value='[Шёпoтoм] '>Шёпoтoм</option>
-<option value='[Агрессивно] '>Агрессивно</option>
-<option value='[Шокированно] '>Шокированно</option>
-<option value='[Огорченно] '>Огорченно</option>
-<option value='[Издевательски] '>Издевательски</option>
-<option value='[Испацтула] '>Испацтула</option>
-<option value='[Нагло] '>Нагло</option>
-<option value='[Испуганно] '>Испуганно</option>
-<option value='[Злобно] '>Злобно</option>
-<option value='[Улыбаясь] '>Улыбаясь</option>
-<option value='[Подмигивая] '>Подмигивая</option>
-<option value='[Удрученно] '>Удрученно</option>
-<option value='[Устало] '>Устало</option>
-<option value='[Задумчиво] '>Задумчиво</option>
-<option value='[Откровенно] '>Откровенно</option>
-</select><br/>";
-                    echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/><br/></form>";
+                    }
+                    echo '<input type="submit" title="Нажмите для отправки" name="submit" value="Отправить"/></div></form>';
                     echo "<a href='index.php?act=trans'>Транслит</a><br/><a href='../str/smile.php'>Смайлы</a><br/>";
                     if ($ruz != 0) {
                         echo "<br/><a href='../str/pradd.php?act=write&amp;adr=" . $udat['id'] . "'>Написать в приват</a><br/>";
-                        if (($rights == 2 || $rights >= 6)) {
+                        if ($dostcmod == 1) {
                             echo "<a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $udat['id'] . "&amp;chat'>Пнуть</a><br/>";
                         }
                     }
@@ -449,7 +327,7 @@ switch ($act) {
                 echo "Ошибка!<br/>&#187;<a href='?'>В чат</a><br/>";
                 break;
         }
-        require_once ('chat_footer.php');
+        require_once ('../incfiles/end.php');
         break;
 
     case "chpas" :
@@ -476,6 +354,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         if ($id) {
             // Отображаем комнату Чата
+            $chat = 2;
             require_once ('room.php');
         }
         else {
