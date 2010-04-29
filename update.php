@@ -17,7 +17,7 @@
 define('_IN_JOHNCMS', 1);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
 echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
-echo '<title>JohnCMS 4.0.0 - обновление</title>
+echo '<title>JohnCMS 3.1.0 - обновление</title>
 <style type="text/css">
 body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}
 h2{ margin: 0; padding: 0; padding-bottom: 4px; }
@@ -28,7 +28,7 @@ li { padding-bottom: 6px; }
 .gray{ color: #FF0000; font: small; }
 </style>
 </head><body>';
-echo '<h2 class="green">JohnCMS 4.0.0</h2>Обновление с версии 3.1.1<hr />';
+echo '<h2 class="green">JohnCMS v.3.1.0</h2>Обновление с версии 3.0.0<hr />';
 
 // Подключаемся к базе данных
 require_once('incfiles/db.php');
@@ -102,17 +102,46 @@ switch ($do) {
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
-        // Таблица Чата
-        mysql_query("TRUNCATE TABLE `chat`");
-        mysql_query("ALTER TABLE `chat` DROP INDEX `to`");
-        mysql_query("ALTER TABLE `chat` DROP INDEX `from`");
-        mysql_query("ALTER TABLE `chat` DROP INDEX `time`");
-        mysql_query("ALTER TABLE `chat` DROP `nas`");
-        mysql_query("ALTER TABLE `chat` DROP `otv`");
-        mysql_query("ALTER TABLE `chat` DROP `from`");
-        mysql_query("ALTER TABLE `chat` ADD `user_id` INT NOT NULL AFTER `time`");
-        mysql_query("ALTER TABLE `chat` ADD `from` TEXT NOT NULL AFTER `user_id`");
-        echo '<span class="green">OK</span> таблица `chat` обновлена.<br />';
+        // Таблица `forum`
+        mysql_query("ALTER TABLE `forum` ADD `close_who` VARCHAR( 25 ) NOT NULL AFTER `close`");
+        echo '<span class="green">OK</span> таблица `forum` обновлена.<br />';
+        // Таблица `users`
+        mysql_query("ALTER TABLE `users` DROP `plus`");
+        mysql_query("ALTER TABLE `users` DROP `minus`");
+        mysql_query("ALTER TABLE `users` ADD `karma` int(11) NOT NULL default '0'");
+        mysql_query("ALTER TABLE `users` ADD `karma_time` int(11) NOT NULL default '0'");
+        mysql_query("ALTER TABLE `users` ADD `plus_minus` varchar(40) NOT NULL default '0|0'");
+        mysql_query("ALTER TABLE `users` ADD `karma_off` int(1) NOT NULL");
+        mysql_query("ALTER TABLE `users` ADD `failed_login` TINYINT NOT NULL DEFAULT '0' AFTER `password`");
+        echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
+        // Таблица `karma_users`
+        mysql_query("DROP TABLE IF EXISTS `karma_users`");
+        mysql_query("CREATE TABLE `karma_users` (
+        `id` int(11) NOT NULL auto_increment,
+        `user_id` int(11) NOT NULL,
+        `name` varchar(50) NOT NULL,
+        `karma_user` int(11) NOT NULL,
+        `points` int(2) NOT NULL,
+        `type` int(1) NOT NULL,
+        `time` int(11) NOT NULL,
+        `text` text NOT NULL,
+        PRIMARY KEY  (`id`),
+        KEY `user_id` (`user_id`),
+        KEY `karma_user` (`karma_user`),
+        KEY `type` (`type`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        echo '<span class="green">OK</span> таблица `karma_users` создана.<br />';
+        // Настройки системы
+        $newarr = array (
+            'karma_points' => '5',
+            'karma_time' => '86400',
+            'forum' => '20',
+            'time' => '0',
+            'on' => '1'
+        );
+        $newset = serialize($newarr);
+        mysql_query("INSERT INTO `cms_settings` SET `key` = 'karma', `val` = '$newset'");
+        echo '<span class="green">OK</span> настройки сохранены.<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
@@ -124,7 +153,8 @@ switch ($do) {
 
     default:
         echo '<h2><span class="red">ВНИМАНИЕ!</span></h2><ul>';
-        echo '<li>Учтите, что обновление возможно только для оригинальной (без модов) системы <b>JohnCMS 3.1.1</b><br />Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.<br />Установка данного обновления на модифицированную систему может привести к полной неработоспособности сайта.</li>';
+        echo
+            '<li>Учтите, что обновление возможно только для оригинальной (без модов) системы <b>JohnCMS 3.0.0</b><br />Если Вы используете какие-либо моды, то возможность обновления обязательно согласуйте с их авторами.<br />Установка данного обновления на модифицированную систему может привести к полной неработоспособности сайта.</li>';
         echo '<li>Некоторые этапы обновления могут занимать довольно продолжительное время (несколько минут), которое зависит от размера базы данных сайта и скорости сервера хостинга.</li>';
         echo '<li>Перед началом процедуры обновления, <b>ОБЯЗАТЕЛЬНО</b> сделайте резервную копию базы данных.<br />Если по какой то причине обновление не пройдет до конца, Вам придется восстанавливать базу из резервной копии.</li>';
         echo '<li>В течение всего периода работы инсталлятора, НЕЛЬЗЯ нажимать кнопки браузера "Назад" и "Обновить", иначе может быть нарушена целостность данных.</li>';
