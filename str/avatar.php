@@ -30,28 +30,28 @@ switch ($act) {
         if ($_GET['ava'] && intval($_GET['cat'])) {
             $ava = intval($_GET['ava']);
             $cat = intval($_GET['cat']);
-            $av = '../avatars/' . $cat . '/' . $ava . '.png';
+            $av = '../images/avatars/' . $cat . '/' . $ava . '.png';
             copy($av, '../files/avatar/' . $user_id . '.png');
         }
         echo '<p>Аватар успешно установлен!<br /><a href="my_data.php?id=' . $user_id . '">Продолжить</a><br/><a href="avatar.php">В категории</a></p>';
         break;
 
     case 'cat':
-        if (!is_dir($rootpath . 'avatars/' . $id)) {
+        if (!is_dir($rootpath . 'images/avatars/' . $id)) {
             echo $id;
             echo '<p>Ошибка!<br/><a href="avatar.php">В категории</a></p>';
             require_once('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr">Аватары: <b>' . htmlentities(file_get_contents($rootpath . 'avatars/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</b></div>';
-        $array = glob($rootpath . 'avatars/' . $id . '/*.png');
+        echo '<div class="phdr"><a href="avatar.php"><b>Аватары</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/avatars/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
+        $array = glob($rootpath . 'images/avatars/' . $id . '/*.png');
         $total = count($array);
         $end = $start + $kmess;
         if ($end > $total)
             $end = $total;
         if ($total > 0) {
             for ($i = $start; $i < $end; $i++) {
-                $ava = preg_replace('#^' . $rootpath . 'avatars/' . $id . '/(.*?).png$#isU', '$1', $array[$i], 1);
+                $ava = preg_replace('#^' . $rootpath . 'images/avatars/' . $id . '/(.*?).png$#isU', '$1', $array[$i], 1);
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                 echo '<img src="' . $array[$i] . '" alt="" /> - <a href="avatar.php?act=choice&amp;cat=' . $id . '&amp;ava=' . $ava . '">Выбрать</a></div>';
             }
@@ -72,11 +72,11 @@ switch ($act) {
             $_SESSION['refsm'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
         }
         echo '<div class="phdr"><b>Каталог аватаров</b></div>';
-        $dir = glob($rootpath . 'avatars/*', GLOB_ONLYDIR);
+        $dir = glob($rootpath . 'images/avatars/*', GLOB_ONLYDIR);
         $total_dir = count($dir);
         for ($i = 0; $i < $total_dir; $i++) {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            echo '<a href="avatar.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'avatars/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> ('
+            echo '<a href="avatar.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'images/avatars/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> ('
                 . (int)count(glob($dir[$i] . '/*.png')) . ')</div>';
         }
         echo '<div class="phdr"><a href="' . $_SESSION['refsm'] . '">Назад</a></div>';
