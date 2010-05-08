@@ -586,7 +586,7 @@ function smileys($str, $adm = 0) {
     if ($adm == 2) {
         // Обрабатываем простые смайлы
         $array1 = array ();
-        $path = $rootpath . 'smileys/simply/';
+        $path = $rootpath . 'images/smileys/simply/';
         $dir = opendir($path);
         while ($file = readdir($dir)) {
             $name = explode(".", $file);
@@ -599,7 +599,7 @@ function smileys($str, $adm = 0) {
         // Обрабатываем Админские смайлы
         $array2 = array ();
         $array3 = array ();
-        $path = $rootpath . 'smileys/admin/';
+        $path = $rootpath . 'images/smileys/admin/';
         $dir = opendir($path);
         while ($file = readdir($dir)) {
             $name = explode(".", $file);
@@ -612,7 +612,7 @@ function smileys($str, $adm = 0) {
         // Обрабатываем смайлы в каталогах
         $array4 = array ();
         $array5 = array ();
-        $cat = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
+        $cat = glob($rootpath . 'images/smileys/user/*', GLOB_ONLYDIR);
         $total = count($cat);
         for ($i = 0; $i < $total; $i++) {
             $dir = opendir($cat[$i]);

@@ -21,15 +21,14 @@ require_once('../incfiles/head.php');
 
 switch ($act) {
     case 'cat':
-        if (!is_dir($rootpath . 'smileys/user/' . $id)) {
-            echo $id;
+        if (!is_dir($rootpath . 'images/smileys/user/' . $id)) {
             echo '<p>Ошибка!<br/><a href="smile.php">В категории</a></p>';
             require_once('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr"><b>Смайлы:</b> ' . htmlentities(file_get_contents($rootpath . 'smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
+        echo '<div class="phdr"><a href="smile.php"><b>Смайлы</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
         $array = array ();
-        $dir = opendir('../smileys/user/' . $id);
+        $dir = opendir('../images/smileys/user/' . $id);
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
                 $array[] = $file;
@@ -44,7 +43,7 @@ switch ($act) {
             for ($i = $start; $i < $end; $i++) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                echo '<img src="../smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
+                echo '<img src="../images/smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
             }
         } else {
             echo 'Смайлов в категории нет!<br/>';
@@ -64,9 +63,9 @@ switch ($act) {
             require_once('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr"><b>Смайлы:</b> Для администрации</div>';
+        echo '<div class="phdr"><a href="smile.php"><b>Смайлы</b></a> | Для администрации</div>';
         $array = array ();
-        $dir = opendir('../smileys/admin');
+        $dir = opendir('../images/smileys/admin');
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
                 $array[] = $file;
@@ -81,7 +80,7 @@ switch ($act) {
             for ($i = $start; $i < $end; $i++) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                echo '<img src="../smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
+                echo '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
             }
         } else {
             echo 'Смайлов в категории нет!<br/>';
@@ -99,17 +98,17 @@ switch ($act) {
             $_SESSION['refsm'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
         }
         echo '<div class="phdr"><b>Каталог смайлов</b></div>';
-        $dir = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
+        $dir = glob($rootpath . 'images/smileys/user/*', GLOB_ONLYDIR);
         $total_dir = count($dir);
         for ($i = 0; $i < $total_dir; $i++) {
             echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-            echo '<a href="smile.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'smileys/user/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> ('
+            echo '<a href="smile.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'images/smileys/user/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> ('
                 . (int)count(glob($dir[$i] . '/*.gif')) . ')</div>';
         }
         if ($rights >= 1) {
-            echo '<div class="gmenu"><p><a href="smile.php?act=adm">Для администрации</a> (' . (int)count(glob($rootpath . 'smileys/admin/*.gif')) . ')</p></div>';
+            echo '<div class="gmenu"><a href="smile.php?act=adm">Для администрации</a> (' . (int)count(glob($rootpath . 'images/smileys/admin/*.gif')) . ')</div>';
         }
-        echo '<div class="bmenu"><a href="' . $_SESSION['refsm'] . '">Назад</a></div>';
+        echo '<div class="phdr"><a href="' . $_SESSION['refsm'] . '">Назад</a></div>';
         break;
 }
 
