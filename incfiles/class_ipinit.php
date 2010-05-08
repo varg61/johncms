@@ -48,10 +48,10 @@ class ipinit {
         global $rootpath;
         $tmp = array ();
         $requests = 1;
-        if (!file_exists($rootpath . 'cache/' . $this->flood_file))
-            $in = fopen($rootpath . 'cache/' . $this->flood_file, "w+");
+        if (!file_exists($rootpath . 'files/cache/' . $this->flood_file))
+            $in = fopen($rootpath . 'files/cache/' . $this->flood_file, "w+");
         else
-            $in = fopen($rootpath . 'cache/' . $this->flood_file, "r+");
+            $in = fopen($rootpath . 'files/cache/' . $this->flood_file, "r+");
         flock($in, LOCK_EX) or die("Cannot flock ANTIFLOOD file.");
         $now = time();
         while ($block = fread($in, 8)) {

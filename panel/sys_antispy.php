@@ -244,8 +244,8 @@ class scaner {
     }
     function snapscan() {
         // Сканирование по образу
-        if (file_exists('../cache/' . $this->snap_base)) {
-            $filecontents = file('../cache/' . $this->snap_base);
+        if (file_exists('../files/cache/' . $this->snap_base)) {
+            $filecontents = file('../files/cache/' . $this->snap_base);
             foreach ($filecontents as $name => $value) {
                 $filecontents[$name] = explode("|", trim($value));
                 $this->track_files[$filecontents[$name][0]] = $filecontents[$name][1];
@@ -268,10 +268,10 @@ class scaner {
         foreach ($this->snap_files as $idx => $data) {
             $filecontents .= $data['file_path'] . "|" . $data['file_crc'] . "\r\n";
         }
-        $filehandle = fopen('../cache/' . $this->snap_base, "w+");
+        $filehandle = fopen('../files/cache/' . $this->snap_base, "w+");
         fwrite($filehandle, $filecontents);
         fclose($filehandle);
-        @chmod('../cache/' . $this->snap_base, 0666);
+        @chmod('../files/cache/' . $this->snap_base, 0666);
     }
     function scan_files($dir, $snap = false) {
         // Служебная функция сканирования
