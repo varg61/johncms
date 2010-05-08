@@ -20,7 +20,7 @@ if (!$user_id || $ban['1'] || $ban['14']) {
 }
 if (empty($_GET['id'])) {
     echo "Ошибка!<br/><a href='index.php'>В галерею</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 // Проверка на флуд
@@ -36,7 +36,7 @@ $type = mysql_query("select * from `gallery` where id='" . $id . "';");
 $ms = mysql_fetch_array($type);
 if ($ms['type'] != "al") {
     echo "Ошибка!<br/><a href='index.php'>В галерею</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refid'] . "';");

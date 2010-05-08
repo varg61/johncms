@@ -296,7 +296,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 forum_new(1);
                 if ($rights < 7 && $type1['close'] == 1) {
                     echo '<div class="rmenu"><p>Тема удалена!<br/><a href="?id=' . $type1['refid'] . '">В раздел</a></p></div>';
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 // Счетчик постов темы

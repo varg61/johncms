@@ -14,10 +14,10 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 if (empty($_GET['id'])) {
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 $s = intval($_GET['s']);

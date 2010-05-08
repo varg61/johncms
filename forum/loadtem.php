@@ -15,9 +15,9 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (empty($_GET['n'])) {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 $n = $_GET['n'];
@@ -32,9 +32,9 @@ while ($f = readdir($o)) {
 }
 $tt = count($a);
 if (!in_array($n, $b)) {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 for ($i = 0; $i < $tt; $i++) {

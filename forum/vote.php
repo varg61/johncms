@@ -19,10 +19,10 @@ if ($user_id) {
     $vote = abs(intval($_POST['vote']));
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote` WHERE `type`='2' AND `id`='$vote' AND `topic`='$id'"), 0);
     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     if ($topic_vote == 0 || $vote_user > 0 || $topic == 0) {
         echo 'Ошибка голосования <br /> <a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">назад</a>';
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
     mysql_query("INSERT INTO `forum_vote_us` SET `topic` = '$id', `user` = '$user_id', `vote` = '$vote'");

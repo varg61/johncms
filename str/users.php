@@ -17,7 +17,7 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'users';
 $textl = 'Юзеры';
 require_once("../incfiles/core.php");
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 echo '<div class="phdr"><b>Список пользователей</b></div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0);
@@ -34,6 +34,6 @@ if ($total > $kmess) {
 }
 echo '<a href="users_search.php">Поиск пользователя</a><br /><a href="' . $_SESSION['refsm'] . '">Назад</a></p>';
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

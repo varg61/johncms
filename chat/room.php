@@ -27,7 +27,7 @@ if (mysql_num_rows($req)) {
             echo 'Пароль (max. 10):<br/><input type="text" name="parol" size="10" maxlength="10"/>';
             echo '<input type="submit" name="submit" value="Ok!"/></form>';
             echo '<p><a href="index.php">Прихожая</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
     } else {

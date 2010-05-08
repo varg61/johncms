@@ -560,7 +560,7 @@ switch ($mod) {
         if (isset($_POST['submit'])) {
             if (!$id) {
                 echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             if (isset($_POST['moder'])) {
@@ -593,7 +593,7 @@ switch ($mod) {
                 $ms = mysql_fetch_array($typ);
                 if ($ms['type'] != "f") {
                     echo "Ошибка!<br/><a href='forum.php?'>В управление форумом</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 echo '<div class="phdr"><b>Назначение модеров</b> в категорию ' . $ms['text'] . '</div>';

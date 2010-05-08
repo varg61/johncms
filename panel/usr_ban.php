@@ -87,6 +87,6 @@ switch ($mod) {
         echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">Амнистия</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
 }
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

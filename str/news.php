@@ -17,7 +17,7 @@ define('_IN_JOHNCMS', 1);
 $textl = 'Новости ресурса';
 $headmod = "news";
 require_once("../incfiles/core.php");
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 
 switch ($do) {
     case 'add':
@@ -29,18 +29,18 @@ switch ($do) {
             $old = 20;
             if ($datauser['lastpost'] > ($realtime - $old)) {
                 echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="news.php">Назад</a></p>';
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             if (isset($_POST['submit'])) {
                 if (empty($_POST['name'])) {
                     echo "Вы не ввели заголовок<br/><a href='news.php?act=new'>Повторить</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 if (empty($_POST['text'])) {
                     echo "Вы не ввели текст<br/><a href='news.php?act=new'>Повторить</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 $name = check($_POST['name']);
@@ -109,18 +109,18 @@ switch ($do) {
             echo '<div class="phdr">Редактирование новости</div>';
             if (empty($_GET['id'])) {
                 echo "Ошибка!<br/><a href='news.php'>К новостям</a><br>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             if (isset($_POST['submit'])) {
                 if (empty($_POST['name'])) {
                     echo "Вы не ввели заголовок<br/><a href='news.php?act=edit&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 if (empty($_POST['text'])) {
                     echo "Вы не ввели текст<br/><a href='news.php?act=edit&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 $name = check($_POST['name']);
@@ -246,6 +246,6 @@ switch ($do) {
         }
 }
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

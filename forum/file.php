@@ -30,9 +30,9 @@ if ($id) {
         $error = 'Файла не существует';
     }
     if ($error) {
-        require_once("../incfiles/head.php");
+        require_once('../incfiles/head.php');
         echo '<p><b>ОШИБКА!</b><br/>' . $error . '<a href="index.php">В форум</a></p>';
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
 } else {

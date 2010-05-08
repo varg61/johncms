@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = 'Форум-новые';
 $headmod = 'forumnew';
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 echo '<p><a href="index.php">Вернуться в форум</a></p>';
 unset($_SESSION['fsort_id']);
 unset($_SESSION['fsort_users']);
@@ -71,7 +71,7 @@ if ($user_id) {
             $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : null;
             if (!$vr) {
                 echo "Вы не ввели время!<br/><a href='index.php?act=new&amp;do=all'>Повторить</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $vr1 = $realtime - $vr * 3600;
@@ -228,6 +228,6 @@ if ($user_id) {
     }
 }
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

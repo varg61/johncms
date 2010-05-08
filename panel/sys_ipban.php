@@ -31,7 +31,7 @@ switch ($mod) {
             $reason = isset($_POST['reason']) ? htmlentities(trim($_POST['reason']), ENT_QUOTES, 'UTF-8') : '';
             if (empty($ip)) {
                 echo '<p>ОШИБКА!<br />Не введен адрес IP<br /><a href="index.php?act=sys_ipban&amp;mod=new">Назад</a></p>';
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             if (strstr($ip, '-')) {
@@ -110,7 +110,7 @@ switch ($mod) {
                     }
                     echo '<div class="phdr">Всего: ' . $total . '</div>';
                     echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">Админ панель</a></p>';
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
             }
@@ -199,7 +199,7 @@ switch ($mod) {
         $reason = isset($_POST['reason']) ? trim($_POST['reason']) : '';
         if (!$ip1 || !$ip2) {
             echo '<p>ОШИБКА!<br />Адрес IP не указан<br /><a href="index.php">Админ панель</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         mysql_query("INSERT INTO `cms_ban_ip` SET
@@ -243,19 +243,19 @@ switch ($mod) {
             $ip = ip2long($_POST['ip']);
             if (!$ip) {
                 echo '<p>ОШИБКА!<br />Адрес IP введен неверно<br /><a href="index.php">В Админку</a></p>';
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE '" . $ip . "' BETWEEN `ip1` AND `ip2` LIMIT 1");
         } else {
             echo '<p>ОШИБКА!<br /><a href="index.php">В Админку</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         if (mysql_num_rows($req) != 1) {
             echo '<p>Такого адреса нет в базе.</p>';
             echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">В Админку</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         } else {
             $res = mysql_fetch_array($req);
@@ -300,7 +300,7 @@ switch ($mod) {
                 if (mysql_num_rows($req) != 1) {
                     echo '<p>Такого адреса нет в базе.</p>';
                     echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">Админ панель</a></p>';
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 } else {
                     echo '<p>Вы действительно хотите разбанить адрес?</p>';

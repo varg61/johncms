@@ -109,7 +109,7 @@ switch ($mod) {
         ////////////////////////////////////////////////////////////
         if (!$id) {
             echo '<p><b>Ошибка!</b><br/><a href="index.php?act=mod_counters">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
@@ -117,7 +117,7 @@ switch ($mod) {
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
                 echo '<p>Счетчик удален!<br/><a href="index.php?act=mod_counters">Продолжить</a></p>';
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             } else {
                 echo '<form action="index.php?act=mod_counters&amp;mod=del&amp;id=' . $id . '" method="post">';
@@ -129,7 +129,7 @@ switch ($mod) {
             }
         } else {
             echo '<p><b>Ошибка!</b><br/>Счетчика не существует<br /><a href="index.php?act=mod_counters">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         break;
@@ -146,7 +146,7 @@ switch ($mod) {
             $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
             if (empty($name) || empty($link1)) {
                 echo display_error('Не заполнены обязательные поля<br /><a href="index.php?act=mod_counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">Назад</a>');
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             echo '<div class="phdr"><b>Предварительный просмотр</b></div>';
@@ -180,7 +180,7 @@ switch ($mod) {
                     $switch = 1;
                 } else {
                     echo '<p><b>Ошибка!</b><br/><a href="counters.php">Назад</a></p>';
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
             }
@@ -212,7 +212,7 @@ switch ($mod) {
         $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
         if (empty($name) || empty($link1)) {
             echo '<p><b>Ошибка!</b><br/>Не заполнены обязательные поля<br /><a href="index.php?act=mod_counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         if ($id) {
@@ -220,7 +220,7 @@ switch ($mod) {
             $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
             if (mysql_num_rows($req) != 1) {
                 echo display_error('Неверные данные');
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             mysql_query("UPDATE `cms_counters` SET

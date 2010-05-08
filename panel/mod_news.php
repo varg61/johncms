@@ -30,7 +30,7 @@ if (!empty($set['news'])) {
         $kom = isset($_POST['kom']) ? intval($_POST['kom']) : 0;
         if ($view < 0 || $view > 3 || $size < 50 || $size > 500 || $quantity < 1 || $quantity > 15 || $days < 0 || $days > 15 || $breaks < 0 || $breaks > 1) {
             echo '<p>ОШИБКА<br />Значения полей выходят за допустимые пределы<br /><a href="news.php">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         $settings = array (

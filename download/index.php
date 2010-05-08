@@ -18,7 +18,7 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'load';
 $textl = 'Загрузки';
-require_once ("../incfiles/core.php");
+require_once ('../incfiles/core.php');
 require_once ("../incfiles/mp3.php");
 require_once ("../incfiles/class_pclzip.php");
 $filesroot = "../download";

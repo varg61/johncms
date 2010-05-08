@@ -17,7 +17,7 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'contacts';
 $textl = 'Контакты';
 require_once("../incfiles/core.php");
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 
 if (!empty($_SESSION['uid'])) {
     if (!empty($_GET['act'])) {
@@ -45,7 +45,7 @@ if (!empty($_SESSION['uid'])) {
             } else {
                 if (empty($_GET['id'])) {
                     echo "Ошибка!<br/><a href='cont.php'>В контакты</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
 
@@ -164,6 +164,6 @@ if (!empty($_SESSION['uid'])) {
 }
 echo "<a href='../index.php?act=cab'>В кабинет</a></p>";
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

@@ -25,9 +25,9 @@ if (!$set['mod_lib'] && $rights < 7)
 elseif ($set['mod_lib'] == 1 && !$user_id)
     $error = 'Доступ в Библиотеку открыт только <a href="../in.php">авторизованным</a> посетителям';
 if ($error) {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 
@@ -41,7 +41,7 @@ if (empty($id)) {
     $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 
 $do = array (
     'java',

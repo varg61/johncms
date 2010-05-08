@@ -15,7 +15,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once ("../incfiles/core.php");
+require_once ('../incfiles/core.php');
 header('content-type: application/rss+xml');
 echo '<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel>

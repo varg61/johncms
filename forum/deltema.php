@@ -16,18 +16,18 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($rights == 3 || $rights >= 6) {
     if (empty($_GET['id'])) {
-        require_once("../incfiles/head.php");
+        require_once('../incfiles/head.php');
         echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
     // Проверяем, существует ли тема
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $id . "'");
     $res = mysql_fetch_array($req);
     if ($res['type'] != 't') {
-        require_once("../incfiles/head.php");
+        require_once('../incfiles/head.php');
         echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
     if (isset($_GET['yes']) && $rights == 9) {
@@ -58,7 +58,7 @@ if ($rights == 3 || $rights >= 6) {
         header('Location: ?id=' . $res['refid']);
     }
 
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo '<div class="phdr"><b>Форум:</b> удалить тему</div>';
     echo '<div class="rmenu"><p>Вы действительно хотите удалить?';
     echo '</p><p><a href="index.php?id=' . $id . '">Не удалять</a> | <a href="index.php?act=deltema&amp;id=' . $id . '&amp;yes">Удалить</a>';

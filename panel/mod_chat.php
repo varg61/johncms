@@ -21,14 +21,14 @@ switch ($mod) {
     case 'del':
         if (empty($_GET['id'])) {
             echo "Ошибка!<br/><a href='chat.php?'>В управление чатом</a><br/>";
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         $typ = mysql_query("select * from `chat` where id='" . $id . "';");
         $ms = mysql_fetch_array($typ);
         if ($ms['type'] != "r") {
             echo "Ошибка!<br/><a href='chat.php?'>В управление чатом</a><br/>";
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         switch ($ms['type']) {
@@ -47,7 +47,7 @@ switch ($mod) {
 
             default:
                 echo "Ошибка!<br/><a href='index.php?act=mod_chat'>В управление чатом</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
                 break;
         }
@@ -57,7 +57,7 @@ switch ($mod) {
         if (isset($_POST['submit'])) {
             if ((empty($_POST['tr'])) && (empty($_POST['nr']))) {
                 echo "Вы не ввели имя комнаты!<br/><a href='chat.php?act=crroom'>Повторить</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $nr = check($_POST['nr']);
@@ -104,20 +104,20 @@ switch ($mod) {
     case 'edit':
         if (!$id) {
             echo "Ошибка!<br/><a href='index.php?act=mod_chat'>В управление чатом</a><br/>";
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         $typ = mysql_query("select * from `chat` where id='" . $id . "';");
         $ms = mysql_fetch_array($typ);
         if ($ms['type'] != "r") {
             echo "Ошибка!<br/><a href='chat.php?'>В управление чатом</a><br/>";
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         if (isset($_POST['submit'])) {
             if ((empty($_POST['tr'])) && ((empty($_POST['nr'])) || $_POST['nr'] == "Викторина" || $_POST['nr'] == "Интим")) {
                 echo "Вы не ввели новое название!<br/><a href='chat.php?act=edit&amp;id=" . $id . "'>Повторить</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $nr = check(trim($_POST['nr']));

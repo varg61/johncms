@@ -147,15 +147,15 @@ switch ($tip) {
             $af = mysql_query("select * from `chat` where type='m' and time>'" . $flt . "' and `from`= '" . $login . "';");
             $af1 = mysql_num_rows($af);
             if ($af1 != 0) {
-                require_once("../incfiles/head.php");
+                require_once('../incfiles/head.php');
                 echo "Антифлуд!Вы не можете так часто добавлять сообщения<br/>Порог 10 секунд<br/><a href='index.php?id=" . $th . "'>Назад</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             if (empty($_POST['msg'])) {
-                require_once("../incfiles/head.php");
+                require_once('../incfiles/head.php');
                 echo "Вы не ввели сообщение!<br/><a href='index.php?act=say&amp;id=" . $id . "'>Повторить</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $to = $type1['from'];
@@ -237,7 +237,7 @@ switch ($tip) {
         break;
 
     default:
-        require_once("../incfiles/head.php");
+        require_once('../incfiles/head.php');
         echo "Ошибка!<br/>&#187;<a href='?'>В чат</a><br/>";
         break;
 }

@@ -17,7 +17,7 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'guest';
 $textl = 'Гостевая';
 require_once("../incfiles/core.php");
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 
 // Проверяем права доступа в Админ-Клуб
 if (isset($_SESSION['ga']) && $rights < 1)
@@ -29,7 +29,7 @@ $textl = isset($_SESSION['ga']) ? 'Админ-Клуб' : 'Гостевая';
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
 if (!$set['mod_guest'] && $rights < 7) {
     echo '<div class="rmenu"><p>Гостевая закрыта</p></div>';
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 switch ($act) {
@@ -343,5 +343,5 @@ switch ($act) {
         break;
 }
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 ?>

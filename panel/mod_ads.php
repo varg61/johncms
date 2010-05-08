@@ -35,7 +35,7 @@ switch ($from) {
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `id` = '" . $id . "'"), 0);
         if ($total == 0) {
             echo '<p>Вы ничего не выбрали<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         if (isset($_GET['yes'])) {
@@ -52,7 +52,7 @@ switch ($from) {
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `id` = '" . $id . "'"), 0);
         if ($total == 0) {
             echo '<p>Вы ничего не выбрали<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         if (isset($_GET['yes'])) {
@@ -69,7 +69,7 @@ switch ($from) {
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `id` = '" . $id . "'"), 0);
         if ($total == 0) {
             echo '<p>Вы ничего не выбрали для удаления<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         if (isset($_GET['yes'])) {
@@ -86,7 +86,7 @@ switch ($from) {
         $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id' LIMIT 1");
         if (!mysql_num_rows($req)) {
             echo '<p>Вы ничего не выбрали для изменения<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         if (isset($_POST['submit'])) {
@@ -116,7 +116,7 @@ switch ($from) {
                 echo '<div class="b"><b>Упс, ошибочка!</b></div>';
                 echo '<div class="c">' . $error . '</div>';
                 echo '<div class="b"><a href="index.php?act=mod_ads&amp;from=edit&amp;id=' . $id . '">Назад</a></div>';
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $link = mysql_real_escape_string(trim($_POST['link']));
@@ -220,7 +220,7 @@ switch ($from) {
                 echo '<div class="b"><b>Упс, ошибочка!</b></div>';
                 echo '<div class="c">' . $error . '</div>';
                 echo '<div class="p"><a href="index.php?act=mod_ads&amp;from=addlink">Назад</a></div>';
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $link = mysql_real_escape_string(trim($_POST['link']));
@@ -338,7 +338,7 @@ switch ($from) {
         $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id' LIMIT 1");
         if (!mysql_num_rows($req)) {
             echo '<p>Вы ничего не выбрали для просмотра<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a></p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
         $arr = mysql_fetch_array($req);

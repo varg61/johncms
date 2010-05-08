@@ -127,7 +127,7 @@ switch ($tip) {
                 if (!isset($_GET['yes'])) {
                     include('../pages/forum.txt');
                     echo "<a href='index.php?act=say&amp;id=" . $id . "&amp;yes'>Согласен</a>|<a href='index.php?id=" . $id . "'>Не согласен</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
             }
@@ -163,9 +163,9 @@ switch ($tip) {
         $vr = date("d.m.Y / H:i", $vrp);
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
-                require_once("../incfiles/head.php");
+                require_once('../incfiles/head.php');
                 echo "Вы не ввели сообщение!<br/><a href='index.php?act=say&amp;id=" . $id . "'>Повторить</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             $msg = trim($_POST['msg']);

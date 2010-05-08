@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $headmod = 'forummod';
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 if (empty($_GET['id'])) {
     echo "<font color='" . $cdinf . "'>Модераторы по подфорумам</font><hr/>";
     $f = mysql_query("select * from `forum` where type='f'  order by realid;");
@@ -72,7 +72,7 @@ if (empty($_GET['id'])) {
 
         default:
             echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
             break;
     }

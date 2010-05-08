@@ -31,7 +31,7 @@ if ($id && $id != $user_id) {
     } else {
         require_once('../incfiles/head.php');
         echo display_error('Такого пользователя не существует');
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
 } else {

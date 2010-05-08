@@ -17,7 +17,7 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'ignor';
 $textl = 'Игнор-лист';
 require_once("../incfiles/core.php");
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 
 if (!empty($_SESSION['uid'])) {
     if (!empty($_GET['act'])) {
@@ -42,7 +42,7 @@ if (!empty($_SESSION['uid'])) {
             } else {
                 if (empty($_GET['id'])) {
                     echo "Ошибка!<br/><a href='ignor.php'>В список</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 $nk = mysql_query("select * from `users` where id='" . $id . "';");
@@ -60,7 +60,7 @@ if (!empty($_SESSION['uid'])) {
             if ($add == 1) {
                 if ($addc2['rights'] >= 1 || $nik == $nickadmina || $nik == $nickadmina) {
                     echo '<p>Администрацию нельзя в игнор!!!<br/><a href="ignor.php">В список</a></p>';
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 if ($adc1 == 0) {
@@ -123,6 +123,6 @@ if (!empty($_SESSION['uid'])) {
 }
 echo "<a href='../index.php?act=cab'>В кабинет</a></p>";
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

@@ -17,14 +17,14 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights >= 6) {
     if (empty($_GET['id'])) {
         echo "Ошибка!<br/><a href='index.php'>В галерею</a><br/>";
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
     $type = mysql_query("select * from `gallery` where id='" . $id . "';");
     $ms = mysql_fetch_array($type);
     if ($ms['type'] != "rz") {
         echo "Ошибка!<br/><a href='index.php'>В галерею</a><br/>";
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
     if (isset($_POST['submit'])) {

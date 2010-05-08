@@ -34,19 +34,19 @@ if ($user_id) {
             // Проверка на спам
             $old = ($rights > 0) ? 10 : 30;
             if ($datauser['lastpost'] > ($realtime - $old)) {
-                require_once("../incfiles/head.php");
+                require_once('../incfiles/head.php');
                 echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='c'>Назад</a></p>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             if ($ban['1'] || $ban['3'])
                 exit;
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             $ign = mysql_query("select * from `privat` where me='" . $foruser . "' and ignor='" . $login . "';");
             $ign1 = mysql_num_rows($ign);
             if ($ign1 != 0) {
                 echo "Вы не можете отправить письмо для $foruser ,поскольку находитесь в его игнор-листе!!!<br/><a href='../index.php?act=cab'>В приват</a><br/>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
             if (!empty($foruser) and !empty($msg)) {
@@ -226,9 +226,9 @@ if ($user_id) {
                     "jsp"
                 );
                 if (in_array($tfl, $df)) {
-                    require_once("../incfiles/head.php");
+                    require_once('../incfiles/head.php');
                     echo "Ошибка!<br/>&#187;<a href='pradd.php'>В приват</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 if (file_exists("../pratt/$att")) {
@@ -246,12 +246,12 @@ if ($user_id) {
             // Проверка на спам
             $old = ($rights > 0) ? 10 : 30;
             if ($datauser['lastpost'] > ($realtime - $old)) {
-                require_once("../incfiles/head.php");
+                require_once('../incfiles/head.php');
                 echo "<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог $old секунд<br/><br/><a href='../index.php?act=cab'>Назад</a></p>";
-                require_once("../incfiles/end.php");
+                require_once('../incfiles/end.php');
                 exit;
             }
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             if (!empty($_GET['adr'])) {
                 $messages = mysql_query("select * from `users` where id='" . intval($_GET['adr']) . "';");
                 $user = mysql_fetch_array($messages);
@@ -261,7 +261,7 @@ if ($user_id) {
                 $ign1 = mysql_num_rows($ign);
                 if ($ign1 != 0) {
                     echo "Вы не можете отправить письмо для $adresat ,поскольку находитесь в его игнор-листе!!!<br/><a href='../index.php?act=cab'>В приват</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
             } else {
@@ -310,7 +310,7 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Удаление выбранных писем                               //
             ////////////////////////////////////////////////////////////
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             if (isset($_GET['yes'])) {
                 $dc = $_SESSION['dc'];
                 $prd = $_SESSION['prd'];
@@ -321,7 +321,7 @@ if ($user_id) {
             } else {
                 if (empty($_POST['delch'])) {
                     echo "Вы не выбрали писем для удаления<br/><a href='pradd.php?act=in'>Назад</a><br/>";
-                    require_once("../incfiles/end.php");
+                    require_once('../incfiles/end.php');
                     exit;
                 }
                 foreach ($_POST['delch'] as $v) {
@@ -338,7 +338,7 @@ if ($user_id) {
             // Список входящих писем                                  //
             ////////////////////////////////////////////////////////////
             $headmod = 'pradd';
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             if (isset($_GET['new'])) {
                 $_SESSION['refpr'] = htmlspecialchars(getenv("HTTP_REFERER"));
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
@@ -387,7 +387,7 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Удаление прочитанных писем                             //
             ////////////////////////////////////////////////////////////
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             $mess1 = mysql_query("select * from `privat` where user='" . $login . "' and type='in' and chit='yes';");
             while ($mas1 = mysql_fetch_array($mess1)) {
                 $delid = $mas1['id'];
@@ -406,7 +406,7 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Удаление всех входящих писем                           //
             ////////////////////////////////////////////////////////////
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             $mess1 = mysql_query("select * from `privat` where user='$login' and type='in'");
             while ($mas1 = mysql_fetch_array($mess1)) {
                 $delfile = $mas1['attach'];
@@ -424,7 +424,7 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Читаем входящие письма                                 //
             ////////////////////////////////////////////////////////////
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             $id = intval($_GET['id']);
             $messages1 = mysql_query("select * from `privat` where user='" . $login . "' and type='in' and id='" . $id . "';");
             $massiv1 = mysql_fetch_array($messages1);
@@ -478,7 +478,7 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Удаление отправленных писем                            //
             ////////////////////////////////////////////////////////////
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             $mess1 = mysql_query("select * from `privat` where author='$login' and type='out';");
             while ($mas1 = mysql_fetch_array($mess1)) {
                 $delid = $mas1['id'];
@@ -491,7 +491,7 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Список отправленных                                    //
             ////////////////////////////////////////////////////////////
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `author` = '$login' AND `type` = 'out'"), 0);
             $req = mysql_query("SELECT * FROM `privat` WHERE `author` = '$login' AND `type` = 'out' ORDER BY `id` DESC LIMIT $start,$kmess");
             echo '<div class="phdr"><b>Отправленные письма</b></div>';
@@ -529,7 +529,7 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Читаем исходящие письма                                //
             ////////////////////////////////////////////////////////////
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             $messages1 = mysql_query("select * from `privat` where author='" . $login . "' and type='out' and id='" . $id . "';");
             $massiv1 = mysql_fetch_array($messages1);
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='$massiv1[user]';"));
@@ -547,7 +547,7 @@ if ($user_id) {
             break;
 
         case 'trans':
-            require_once("../incfiles/head.php");
+            require_once('../incfiles/head.php');
             include("../pages/trans.$ras_pages");
             echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
             break;

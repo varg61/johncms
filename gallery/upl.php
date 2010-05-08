@@ -20,7 +20,7 @@ if (!$user_id || $ban['1'] || $ban['14']) {
 }
 if (empty($_GET['id'])) {
     echo "Ошибка!<br/><a href='index.php'>В галерею</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 
@@ -28,9 +28,9 @@ if (empty($_GET['id'])) {
 //TODO: Переделать на новый алгоритм
 $old = ($rights > 0) ? 10 : 60;
 if ($datauser['lastpost'] > ($realtime - $old)) {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo '<p><b>Антифлуд!</b><br />Порог ' . $old . ' секунд<br/><br/><a href="index.php?id=' . $id . '">Назад</a></p>';
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 
@@ -38,7 +38,7 @@ $type = mysql_query("select * from `gallery` where id='" . $id . "';");
 $ms = mysql_fetch_array($type);
 if ($ms['type'] != "al") {
     echo "Ошибка!<br/><a href='index.php'>В галерею</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refid'] . "';");

@@ -16,7 +16,7 @@ define('_IN_JOHNCMS', 1);
 
 $textl = 'Поиск пользователя';
 require_once("../incfiles/core.php");
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 
 ////////////////////////////////////////////////////////////
 // Принимаем данные, выводим форму поиска                 //
@@ -81,6 +81,6 @@ if ($search && !$error) {
     echo '</small></div>';
 }
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

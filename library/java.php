@@ -18,7 +18,7 @@ if ($user_id && $user_ps) {
     $req = mysql_query("select `name`, `text` from `lib` where `id` = '" . $id . "' and `type` = 'bk' and `moder`='1' LIMIT 1;");
     if (mysql_num_rows($req) == 0) {
         echo '<p>Статья не найдена</p>';
-        require_once("../incfiles/end.php");
+        require_once('../incfiles/end.php');
         exit;
     }
     $res = mysql_fetch_array($req);
@@ -59,7 +59,7 @@ TCBR-Platform: Generic version (all phones)';
         $list = $archive->create('java', PCLZIP_OPT_REMOVE_PATH, 'java');
         if (!file_exists('files/' . $id . '.jar')) {
             echo '<p>Ошибка создания JAR файла</p>';
-            require_once("../incfiles/end.php");
+            require_once('../incfiles/end.php');
             exit;
         }
     }

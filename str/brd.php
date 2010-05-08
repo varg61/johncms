@@ -17,7 +17,7 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'birth';
 $textl = 'Именинники';
 require_once("../incfiles/core.php");
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 
 $page = $_GET['page'];
 if ($page <= 0) {
@@ -140,6 +140,6 @@ if ($count > 10) //TODO: Переделать на новый листинг п�
 }
 echo "<hr/>Всего именинников сегодня: $count<br/>";
 
-require_once("../incfiles/end.php");
+require_once('../incfiles/end.php');
 
 ?>

@@ -14,10 +14,10 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../incfiles/head.php");
+require_once('../incfiles/head.php');
 if (!$id || !$user_id) {
     echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 // Проверяем, тот ли юзер заливает файл
@@ -25,13 +25,13 @@ $req = mysql_query("SELECT * FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1");
 $res = mysql_fetch_array($req);
 if ($res['from'] != $login) {
     echo '<p>ОШИБКА!</p>';
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 $req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = '" . $id . "'");
 if (mysql_result($req1, 0) > 0) {
     echo '<p>ОШИБКА!<br />Файл уже загружен</p>';
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 switch ($res['type']) {

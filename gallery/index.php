@@ -16,7 +16,7 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'gallery';
 $textl = 'Галерея сайта';
-require_once ("../incfiles/core.php");
+require_once ('../incfiles/core.php');
 require_once ("../incfiles/head.php");
 
 // Ограничиваем доступ к Галерее

@@ -24,9 +24,9 @@ if (!$id) {
 // Проверка на спам
 $old = ($rights > 0) ? 5 : 60;
 if ($datauser['lastpost'] > ($realtime - $old)) {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href ="index.php?id=' . $id . '">Назад</a></p>';
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 

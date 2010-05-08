@@ -33,7 +33,7 @@ for ($it = 0; $it < $totalt; $it++) {
 }
 if (empty($_GET['id'])) {
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 $type = mysql_query("select * from `forum` where id= '" . $id . "';");
@@ -41,7 +41,7 @@ $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 if ($tip != "t") {
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 if (isset($_POST['submit'])) {

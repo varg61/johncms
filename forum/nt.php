@@ -31,9 +31,9 @@ $type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 if ($tip != "r") {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 if (isset($_POST['submit'])) {
