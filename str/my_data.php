@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -18,15 +16,13 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'anketa';
 $textl = 'Редактирование Анкеты';
-require_once ('../incfiles/core.php');
-require_once ('../incfiles/head.php');
-
+require_once('../incfiles/core.php');
+require_once('../incfiles/head.php');
 if (!$user_id) {
     display_error('Только для зарегистрированных посетителей');
-    require_once ('../incfiles/end.php');
+    require_once('../incfiles/end.php');
     exit;
 }
-
 if ($id && $id != $user_id && $rights >= 7) {
     // Если был запрос на юзера, то получаем его данные
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
@@ -35,26 +31,23 @@ if ($id && $id != $user_id && $rights >= 7) {
         if ($user['rights'] > $datauser['rights']) {
             // Если не хватает прав, выводим ошибку
             echo display_error('Вы не можете редактировать анкету старшего Вас по должности');
-            require_once ('../incfiles/end.php');
+            require_once('../incfiles/end.php');
             exit;
         }
-    }
-    else {
+    } else {
         echo display_error('Такого пользователя не существует');
-        require_once ('../incfiles/end.php');
+        require_once('../incfiles/end.php');
         exit;
     }
-}
-else {
+} else {
     $id = false;
     $user = $datauser;
 }
-
 if ($id && $rights >= 7 && $act == 'reset') {
     // Сброс настроек
     mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['id'] . "'");
     echo '<div class="gmenu"><p>Для пользователя <b>' . $user['name'] . '</b> установлены настройки по умолчанию<br /><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></p></div>';
-    require_once ('../incfiles/end.php');
+    require_once('../incfiles/end.php');
     exit;
 }
 echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? 'Анкета' : 'Личная анкета') . '</b></a> | Редактирование</div>';
@@ -68,7 +61,7 @@ if (isset($_GET['delavatar'])) {
     @unlink('../files/photo/' . $user['id'] . '_small.jpg');
     echo '<div class="rmenu">Фотография удалена</div>';
 } elseif (isset($_POST['submit'])) {
-    $error = array();
+    $error = array ();
     // Данные юзера
     $user['imname'] = isset($_POST['imname']) ? check(mb_substr($_POST['imname'], 0, 25)) : '';
     $user['live'] = isset($_POST['live']) ? check(mb_substr($_POST['live'], 0, 50)) : '';
@@ -133,8 +126,7 @@ if (isset($_GET['delavatar'])) {
             WHERE `id` = '" . $user['id'] . "' LIMIT 1");
         }
         echo '<div class="gmenu">Данные сохранены</div>';
-    }
-    else {
+    } else {
         echo display_error($error);
     }
 }
@@ -146,8 +138,7 @@ if ($rights >= 7) {
     echo '<li>Ник: (мин.2, макс. 20)<br /><input type="text" value="' . $user['name'] . '" name="name" /></li>';
     echo '<li>Статус: (макс. 50)<br /><input type="text" value="' . $user['status'] . '" name="status" /></li>';
     echo '<li><a href="my_pass.php?id=' . $id . '">Сменить пароль</a></li>';
-}
-else {
+} else {
     echo '<li><span class="gray">Ник:</span> <b>' . $user['name'] . '</b></li>';
     echo '<li><span class="gray">Статус:</span> ' . $user['status'] . '</li>';
 }
@@ -221,6 +212,6 @@ echo '<div class="gmenu"><input type="submit" value="Сохранить" name="s
 echo '</form>';
 echo '<div class="phdr"><a href="anketa.php' . ($id ? '?id=' . $id : '') . '">В анкету</a></div>';
 
-require_once ('../incfiles/end.php');
+require_once('../incfiles/end.php');
 
 ?>

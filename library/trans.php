@@ -2,21 +2,19 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                                                                    //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@johncms.com                     //
-// Олег Касьянов aka AlkatraZ          alkatraz@johncms.com                   //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-include ("../pages/trans.$ras_pages");
+include("../pages/trans.$ras_pages");
 echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
 
 ?>

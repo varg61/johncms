@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -18,19 +16,17 @@ define('_IN_JOHNCMS', 1);
 
 $textl = 'Форум-поиск';
 $headmod = 'forumsearch';
-require_once ('../incfiles/core.php');
-require_once ('../incfiles/head.php');
-
+require_once('../incfiles/core.php');
+require_once('../incfiles/head.php');
 echo '<div class="phdr"><b>Поиск по форуму</b></div>';
 
 ////////////////////////////////////////////////////////////
 // Принимаем данные, выводим форму поиска                 //
 ////////////////////////////////////////////////////////////
-$search = isset ($_POST['search']) ? trim($_POST['search']) : '';
+$search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 $search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
-$search_t = isset ($_REQUEST['t']) ? 1 : 0;
-
+$search_t = isset($_REQUEST['t']) ? 1 : 0;
 echo '<div class="gmenu"><form action="search.php" method="post"><p>';
 echo '<input type="text" value="' . ($search ? checkout($search) : '') . '" name="search" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
@@ -45,7 +41,6 @@ if ($search && mb_strlen($search) < 4)
     $error = 'Общая длина поискового запроса должна быть не менее 4 букв.';
 if ($search && mb_strlen($search) > 64)
     $error = 'Общая длина поискового запроса должна быть не более 64 букв.';
-
 if ($search && !$error) {
     ////////////////////////////////////////////////////////////
     // Выводим результаты поиска                              //
@@ -53,8 +48,7 @@ if ($search && !$error) {
     echo '<div class="bmenu">Результаты поиска</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum`
     WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "')
-    AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($rights >= 7 ? "" :
-    " AND `close` != '1'")), 0);
+    AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
     if ($total) {
         $req = mysql_query("SELECT * FROM `forum` WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "') AND `type` = '" . ($search_t ? 't' : 'm') . "' LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
@@ -63,8 +57,7 @@ if ($search && !$error) {
                 $req_t = mysql_query("SELECT `id`,`text` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
                 $res_t = mysql_fetch_assoc($req_t);
                 echo '<b>' . $res_t['text'] . '</b><br />';
-            }
-            else {
+            } else {
                 $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = '" . $res['id'] . "' ORDER BY `id` ASC LIMIT 1");
                 $res_p = mysql_fetch_assoc($req_p);
                 echo '<b>' . $res['text'] . '</b><br />';
@@ -81,8 +74,7 @@ if ($search && !$error) {
             echo '</div>';
             ++$i;
         }
-    }
-    else {
+    } else {
         echo '<div class="rmenu"><p>По Вашему запросу ничего не найдено</p></div>';
     }
     echo '<div class="phdr">Всего совпадений: ' . $total . '</div>';
@@ -91,17 +83,15 @@ if ($search && !$error) {
         echo '<p>' . pagenav('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
-}
-else {
+} else {
     // Выводим сообщение об ошибке
     if ($error)
         echo '<div class="rmenu"><p>ОШИБКА!<br />' . $error . '</p></div>';
     // Инструкции для поиска
-    echo
-    '<div class="phdr"><small>Длина запроса: 4мин., 64макс.<br />Поиск нечувствителен к регистру букв<br />Результаты выводятся с сортировкой по релевантности</small></div>';
+    echo '<div class="phdr"><small>Длина запроса: 4мин., 64макс.<br />Поиск нечувствителен к регистру букв<br />Результаты выводятся с сортировкой по релевантности</small></div>';
 }
-
 echo '<p>' . ($search ? '<a href="search.php">Новый поиск</a><br />' : '') . '<a href="index.php">Вернуться в Форум</a></p>';
-require_once ('../incfiles/end.php');
+
+require_once('../incfiles/end.php');
 
 ?>

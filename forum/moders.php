@@ -2,23 +2,21 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $headmod = 'forummod';
-require_once ("../incfiles/head.php");
-if (empty ($_GET['id'])) {
+require_once("../incfiles/head.php");
+if (empty($_GET['id'])) {
     echo "<font color='" . $cdinf . "'>Модераторы по подфорумам</font><hr/>";
     $f = mysql_query("select * from `forum` where type='f'  order by realid;");
     while ($f1 = mysql_fetch_array($f)) {
@@ -30,18 +28,16 @@ if (empty ($_GET['id'])) {
                 $uz = mysql_query("select * from `users` where name='" . $mod1['from'] . "';");
                 $uz1 = mysql_fetch_array($uz);
                 if ($uz1['rights'] == 3) {
-                    if ((!empty ($_SESSION['uid'])) && ($login != $mod1['from'])) {
+                    if ((!empty($_SESSION['uid'])) && ($login != $mod1['from'])) {
                         echo "<a href='../str/anketa.php?id=" . $uz1['id'] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
-                    }
-                    else {
+                    } else {
                         echo $mod1['from'];
                     }
                     $ontime = $uz1['lastdate'];
                     $ontime2 = $ontime + 300;
                     if ($realtime > $ontime2) {
                         echo "<font color='" . $coffs . "'> [Off]</font><br/>";
-                    }
-                    else {
+                    } else {
                         echo "<font color='" . $cons . "'> [ON]</font><br/>";
                     }
                 }
@@ -49,12 +45,11 @@ if (empty ($_GET['id'])) {
             echo "<hr/>";
         }
     }
-}
-else {
+} else {
     $typ = mysql_query("select * from `forum` where id='" . $id . "';");
     $ms = mysql_fetch_array($typ);
     switch ($ms['type']) {
-        case "t" :
+        case "t":
             $q3 = mysql_query("select * from `forum` where type='r' and id='" . $ms['refid'] . "';");
             $razd = mysql_fetch_array($q3);
             $q4 = mysql_query("select * from `forum` where type='f' and id='" . $razd['refid'] . "';");
@@ -62,19 +57,22 @@ else {
             $mid = $razd['refid'];
             $pfr = $fr['text'];
             break;
-        case "r" :
+
+        case "r":
             $mid = $ms['refid'];
             $q3 = mysql_query("select * from `forum` where type='f' and id='" . $ms['refid'] . "';");
             $fr = mysql_fetch_array($q3);
             $pfr = $fr['text'];
             break;
-        case "f" :
+
+        case "f":
             $mid = $id;
             $pfr = $ms['text'];
             break;
-        default :
+
+        default:
             echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
-            require_once ("../incfiles/end.php");
+            require_once("../incfiles/end.php");
             exit;
             break;
     }
@@ -86,25 +84,22 @@ else {
             $uz = mysql_query("select * from `users` where name='" . $mod1['from'] . "';");
             $uz1 = mysql_fetch_array($uz);
             if ($uz1['rights'] == 3) {
-                if ((!empty ($_SESSION['uid'])) && ($login != $mod1['from'])) {
+                if ((!empty($_SESSION['uid'])) && ($login != $mod1['from'])) {
                     echo "<a href='../str/anketa.php?id=" . $uz1['id'] . "'>$mod1[from]</a>";
-                }
-                else {
+                } else {
                     echo $mod1['from'];
                 }
                 $ontime = $uz1['lastdate'];
                 $ontime2 = $ontime + 300;
                 if ($realtime > $ontime2) {
                     echo '<span class="red"> [Off]</span><br/>';
-                }
-                else {
+                } else {
                     echo '<span class="green"> [ON]</span><br/>';
                 }
             }
         }
         echo '<hr/>';
-    }
-    else {
+    } else {
         echo 'Не назначены<br/>';
     }
 }

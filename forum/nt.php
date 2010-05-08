@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -20,12 +18,12 @@ if (!$id || !$user_id || $ban['1'] || $ban['11']) {
     header("Location: index.php");
     exit;
 }
-// Проверка на спам
-$old = ($rights > 0) ? 10 : 30;
-if ($datauser['lastpost'] > ($realtime - $old)) {
-    require_once ("../incfiles/head.php");
-    echo '<div class="rmenu"><p>АНТИФЛУД!<br />Вы не можете так часто писать, порог ' . $old . ' секунд<br/><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p></div>';
-    require_once ("../incfiles/end.php");
+// Проверка на флуд
+$flood = antiflood();
+if ($flood) {
+    require_once('../incfiles/head.php');
+    echo display_error('Вы не можете так часто добавлять сообщения<br />Пожалуйста, подождите ' . $flood . ' сек.', '<a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a>');
+    require_once('../incfiles/end.php');
     exit;
 }
 
@@ -33,16 +31,16 @@ $type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 if ($tip != "r") {
-    require_once ("../incfiles/head.php");
+    require_once("../incfiles/head.php");
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once ("../incfiles/end.php");
+    require_once("../incfiles/end.php");
     exit;
 }
-if (isset ($_POST['submit'])) {
+if (isset($_POST['submit'])) {
     $error = false;
-    if (empty ($_POST['th']))
+    if (empty($_POST['th']))
         $error = '<div>Вы не ввели название темы</div>';
-    if (empty ($_POST['msg']))
+    if (empty($_POST['msg']))
         $error .= '<div>Вы не ввели сообщение</div>';
     if (!$error) {
         $th = mb_substr($th, 0, 100);
@@ -66,24 +64,23 @@ if (isset ($_POST['submit'])) {
     if (!$error) {
         // Добавляем тему
         mysql_query("INSERT INTO `forum` SET
-		`refid` = '$id',
-		`type` = 't',
-		`time` = '$realtime',
-		`user_id` = '$user_id',
-		`from` = '$login',
-		`text` = '$th'");
+        `refid` = '$id',
+        `type` = 't',
+        `time` = '$realtime',
+        `user_id` = '$user_id',
+        `from` = '$login',
+        `text` = '$th'");
         $rid = mysql_insert_id();
         // Добавляем текст поста
         mysql_query("INSERT INTO `forum` SET
-		`refid` = '$rid',
-		`type` = 'm',
-		`time` = '$realtime',
-		`user_id` = '$user_id',
-		`from` = '$login',
-		`ip` = '$ipp',
-		`soft` = '" . mysql_real_escape_string($agn) . "',
-		`text` = '" .
-        mysql_real_escape_string($msg) . "'");
+        `refid` = '$rid',
+        `type` = 'm',
+        `time` = '$realtime',
+        `user_id` = '$user_id',
+        `from` = '$login',
+        `ip` = '$ipp',
+        `soft` = '" . mysql_real_escape_string($agn) . "',
+        `text` = '" . mysql_real_escape_string($msg) . "'");
         $postid = mysql_insert_id();
         // Записываем счетчик постов юзера
         $fpst = $datauser['postforum'] + 1;
@@ -94,22 +91,20 @@ if (isset ($_POST['submit'])) {
             header("Location: index.php?id=$postid&act=addfile");
         else
             header("Location: index.php?id=$rid");
-    }
-    else {
+    } else {
         // Выводим сообщение об ошибке
-        require_once ('../incfiles/head.php');
+        require_once('../incfiles/head.php');
         echo '<div class="rmenu"><p>ОШИБКА!<br />' . $error . '<br /><a href="index.php?act=nt&amp;id=' . $id . '">Повторить</a></p></div>';
-        require_once ('../incfiles/end.php');
+        require_once('../incfiles/end.php');
         exit;
     }
-}
-else {
-    require_once ('../incfiles/head.php');
+} else {
+    require_once('../incfiles/head.php');
     if ($datauser['postforum'] == 0) {
-        if (!isset ($_GET['yes'])) {
-            include ('../pages/forum.txt');
+        if (!isset($_GET['yes'])) {
+            include('../pages/forum.txt');
             echo "<a href='index.php?act=nt&amp;id=" . $id . "&amp;yes'>Согласен</a> | <a href='index.php?id=" . $id . "'>Не согласен</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once('../incfiles/end.php');
             exit;
         }
     }

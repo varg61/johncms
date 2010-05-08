@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -18,19 +16,20 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'contacts';
 $textl = 'Контакты';
-require_once ("../incfiles/core.php");
-require_once ("../incfiles/head.php");
-if (!empty ($_SESSION['uid'])) {
-    if (!empty ($_GET['act'])) {
+require_once("../incfiles/core.php");
+require_once("../incfiles/head.php");
+
+if (!empty($_SESSION['uid'])) {
+    if (!empty($_GET['act'])) {
         $act = $_GET['act'];
     }
     switch ($act) {
-        case "trans" :
-            include ("../pages/trans.$ras_pages");
+        case "trans":
+            include("../pages/trans.$ras_pages");
             echo '<p><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
             break;
 
-        case "add" :
+        case "add":
             echo "<form action='cont.php?act=edit&amp;add=1' method='post'>Введите ник<br/>";
             echo "<input type='text' name='nik' value='' /><br/>
  <input type='submit' value='Добавить' />
@@ -38,17 +37,15 @@ if (!empty ($_SESSION['uid'])) {
             echo "<p><a href='?'>В список</a><br/>";
             break;
 
-        case "edit" :
-            if (!empty ($_POST['nik'])) {
+        case "edit":
+            if (!empty($_POST['nik'])) {
                 $nik = check($_POST['nik']);
-            }
-            elseif (!empty ($_GET['nik'])) {
+            }  elseif (!empty($_GET['nik'])) {
                 $nik = check($_GET['nik']);
-            }
-            else {
-                if (empty ($_GET['id'])) {
+            } else {
+                if (empty($_GET['id'])) {
                     echo "Ошибка!<br/><a href='cont.php'>В контакты</a><br/>";
-                    require_once ("../incfiles/end.php");
+                    require_once("../incfiles/end.php");
                     exit;
                 }
 
@@ -57,7 +54,7 @@ if (!empty ($_SESSION['uid'])) {
                 $nk1 = mysql_fetch_array($nk);
                 $nik = $nk1['name'];
             }
-            if (!empty ($_GET['add'])) {
+            if (!empty($_GET['add'])) {
                 $add = intval($_GET['add']);
             }
             $adc = mysql_query("select * from `privat` where me='" . $login . "' and cont='" . $nik . "';");
@@ -69,34 +66,29 @@ if (!empty ($_SESSION['uid'])) {
                     if ($addc1 == 1) {
                         mysql_query("insert into `privat` values(0,'" . $foruser . "','','" . $realtime . "','','','','','0','" . $login . "','" . $nik . "','','');");
                         echo "Контакт добавлен<br/>";
-                    }
-                    else {
+                    } else {
                         echo "Данный логин отсутствует в базе данных<br/>";
                     }
-                }
-                else {
+                } else {
                     echo "Данный логин уже есть в Ваших контактах<br/>";
                 }
-            }
-            else {
+            } else {
                 if ($adc1 == 1) {
                     if ($addc1 == 1) {
                         mysql_query("delete from `privat` where me='" . $login . "' and cont='" . $nik . "';");
                         echo "Контакт удалён<br/>";
-                    }
-                    else {
+                    } else {
                         echo "Данный логин отсутствует в базе данных<br/>";
                     }
-                }
-                else {
+                } else {
                     echo "Этого логина нет в Ваших контактах<br/>";
                 }
             }
             echo "<p><a href='?'>В контакты</a><br />";
             break;
 
-        case "write" :
-            if (!empty ($_GET['user'])) {
+        case "write":
+            if (!empty($_GET['user'])) {
                 $messages = mysql_query("select * from `users` where id='" . intval($_GET['user']) . "';");
                 $userr = mysql_fetch_array($messages);
                 $adresat = $userr['name'];
@@ -104,7 +96,7 @@ if (!empty ($_SESSION['uid'])) {
                 $ctim = mysql_fetch_array($contime);
                 $dtime = date("d.m.Y / H:i", $ctim['time']);
                 echo "<form action='pradd.php?act=send' method='post' enctype='multipart/form-data'>
-	 Для: $adresat<br/>";
+     Для: $adresat<br/>";
                 echo "Имя: $userr[imname]<br/>";
                 if ($userr['sex'] == "m") {
                     echo "Парень<br/>";
@@ -114,26 +106,24 @@ if (!empty ($_SESSION['uid'])) {
                 }
                 echo "Дата добавления: $dtime<br/>";
                 if ($userr['mailact'] == 1) {
-                    if (!empty ($userr['icq'])) {
+                    if (!empty($userr['icq'])) {
                         echo '<img src="http://web.icq.com/whitepages/online?icq=' . $userr['icq'] . '&amp;img=5" alt=""/> ICQ:' . $userr['icq'] . ' <br/> ';
                     }
-                    if (!empty ($userr['mail'])) {
+                    if (!empty($userr['mail'])) {
                         echo "E-mail:";
                         if ($userr['mailvis'] == 1) {
                             echo "$userr[mail]<br/>";
-                        }
-                        else {
+                        } else {
                             echo "скрыт<br/>";
                         }
                     }
                 }
-                if (!empty ($userr['www']) && $userr['www'] !== "http://" && stristr($userr['www'], "http://")) {
+                if (!empty($userr['www']) && $userr['www'] !== "http://" && stristr($userr['www'], "http://")) {
                     echo "Сайт: <a href='" . $userr['www'] . "'>" . $userr['www'] . "</a><br/>";
                 }
-
                 echo "<input type='hidden' name='foruser' value='" . $adresat . "' />";
                 echo
-                " <br />Тема:<br />
+                    " <br />Тема:<br />
 <input type='text' name='tem' value='' />
 
 <br /> Cообщение:<br />
@@ -146,13 +136,12 @@ if (!empty ($_SESSION['uid'])) {
       <input type='submit' value='Отправить' />
   </form>";
                 echo "<p><a href='cont.php?act=trans'>Транслит</a><br /><a href='smile.php'>Смайлы</a><br /><a href='?'>В список</a><br />";
-            }
-            else {
+            } else {
                 echo '<p>Ошибка-не указан адресат<br/>';
             }
             break;
 
-        default :
+        default:
             echo '<div class="phdr">Контакты</div>';
             $contacts = mysql_query("select * from `privat` where me='$login' and cont!='';");
             $colcon = mysql_num_rows($contacts);
@@ -164,19 +153,17 @@ if (!empty ($_SESSION['uid'])) {
                 $ontime2 = $ontime + 300;
                 if ($realtime > $ontime2) {
                     echo '<font color="#FF0000"> [Off]</font>';
-                }
-                else {
+                } else {
                     echo '<font color="#00AA00"> [ON]</font>';
                 }
                 echo ' <a href="cont.php?act=edit&amp;id=' . $mass1['id'] . '">[X]</a></div>';
             }
-
             echo '<p><a href="?act=add">Добавить контакт</a><br />';
             break;
     }
 }
-
 echo "<a href='../index.php?act=cab'>В кабинет</a></p>";
-require_once ("../incfiles/end.php");
+
+require_once("../incfiles/end.php");
 
 ?>

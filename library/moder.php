@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                                                                    //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@johncms.com                     //
-// Олег Касьянов aka AlkatraZ          alkatraz@johncms.com                   //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -18,16 +16,16 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($rights == 5 || $rights >= 6) {
     echo '<div class="phdr">Модерация статей</div>';
-    if ($id && (isset ($_GET['yes']))) {
-        mysql_query("UPDATE `lib` SET `moder` = '1' , `time` = '" . $realtime . "' WHERE `id` = '" . $id . "'");
-        $req = mysql_query("SELECT `name` FROM `lib` WHERE `id` = '" . $id . "'");
+    if ($id && (isset($_GET['yes']))) {
+        mysql_query("UPDATE `lib` SET `moder` = '1' , `time` = '$realtime' WHERE `id` = '$id'");
+        $req = mysql_query("SELECT `name` FROM `lib` WHERE `id` = '$id'");
         $res = mysql_fetch_array($req);
         echo '<div class="rmenu">Статья <b>' . $res['name'] . '</b> добавлена в базу</div>';
     }
-    if (isset ($_GET['all'])) {
+    if (isset($_GET['all'])) {
         $req = mysql_query("SELECT `id` FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'");
         while ($res = mysql_fetch_array($req)) {
-            mysql_query("UPDATE `lib` SET `moder` = '1', `time` = '" . $realtime . "' WHERE `id` = '" . $res['id'] . "'");
+            mysql_query("UPDATE `lib` SET `moder` = '1', `time` = '$realtime' WHERE `id` = '" . $res['id'] . "'");
         }
         echo '<p>Все файлы добавлены в базу</p>';
     }
@@ -60,12 +58,10 @@ if ($rights == 5 || $rights >= 6) {
             echo '<p><form action="index.php" method="get"><input type="hidden" value="moder" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="index.php?act=moder&amp;all">Принять все!</a><br />';
-    }
-    else {
+    } else {
         echo '<p>';
     }
-}
-else {
+} else {
     echo "Нет доступа!<br/>";
 }
 echo '<a href="?">В библиотеку</a></p>';

@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS v.1.1.0                     30.05.2008                             //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Плагиат и удаление копирайтов заруганы на ближайших родственников!!!       //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -19,7 +17,7 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 if ($rights < 9)
     die('Error: restricted access');
 
-    switch ($mod) {
+switch ($mod) {
     case 'new':
         ////////////////////////////////////////////////////////////
         // Баним IP адрес. Форма ввода данных и обработка         //
@@ -36,7 +34,6 @@ if ($rights < 9)
                 require_once("../incfiles/end.php");
                 exit;
             }
-
             if (strstr($ip, '-')) {
                 ////////////////////////////////////////////////////////////
                 // Обрабатываем диапазон адресов                          //
@@ -84,7 +81,6 @@ if ($rights < 9)
                     $ip2 = $ip1;
                 }
             }
-
             if (!$error) {
                 ////////////////////////////////////////////////////////////
                 // Проверка на конфликты адресов                          //

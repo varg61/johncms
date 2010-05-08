@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -18,16 +16,14 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'anketa';
 $textl = 'Редактирование Анкеты';
-require_once ('../incfiles/core.php');
-require_once ('../incfiles/head.php');
-require_once ('../incfiles/class_upload.php');
-
+require_once('../incfiles/core.php');
+require_once('../incfiles/head.php');
+require_once('../incfiles/class_upload.php');
 if (!$user_id) {
     display_error('Только для зарегистрированных посетителей');
-    require_once ('../incfiles/end.php');
+    require_once('../incfiles/end.php');
     exit;
 }
-
 if ($id && $id != $user_id && $rights >= 7) {
     // Если был запрос на юзера, то получаем его данные
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
@@ -36,31 +32,32 @@ if ($id && $id != $user_id && $rights >= 7) {
         if ($user['rights'] > $datauser['rights']) {
             // Если не хватает прав, выводим ошибку
             echo display_error('Вы не можете редактировать анкету старшего Вас по должности');
-            require_once ('../incfiles/end.php');
+            require_once('../incfiles/end.php');
             exit;
         }
-    }
-    else {
+    } else {
         echo display_error('Такого пользователя не существует');
-        require_once ('../incfiles/end.php');
+        require_once('../incfiles/end.php');
         exit;
     }
-}
-else {
+} else {
     $id = false;
     $user = $datauser;
 }
-
 switch ($act) {
-    case 'up_avatar' :
+    case 'up_avatar':
         echo '<div class="phdr"><b>Выгружаем аватар</b></div>';
-        if (isset ($_POST['submit'])) {
+        if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
                 // Обрабатываем фото
                 $handle->file_new_name_body = $user['id'];
                 //$handle->mime_check = false;
-                $handle->allowed = array('image/jpeg', 'image/gif', 'image/png');
+                $handle->allowed = array (
+                    'image/jpeg',
+                    'image/gif',
+                    'image/png'
+                );
                 $handle->file_max_size = 1024 * $flsz;
                 $handle->file_overwrite = true;
                 $handle->image_resize = true;
@@ -71,14 +68,12 @@ switch ($act) {
                 if ($handle->processed) {
                     echo '<div class="gmenu"><p>Аватар загружен<br /><a href="my_data.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
                     echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
-                }
-                else {
+                } else {
                     echo display_error($handle->error);
                 }
                 $handle->clean();
             }
-        }
-        else {
+        } else {
             echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '"><div class="menu"><p>';
             echo 'Выберите изображение:<br /><input type="file" name="imagefile" value="" />';
             echo '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" />';
@@ -91,15 +86,19 @@ switch ($act) {
         }
         break;
 
-    case 'up_photo' :
+    case 'up_photo':
         echo '<div class="phdr"><b>Выгружаем фото</b></div>';
-        if (isset ($_POST['submit'])) {
+        if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
                 // Обрабатываем фото
                 $handle->file_new_name_body = $user['id'];
                 //$handle->mime_check = false;
-                $handle->allowed = array('image/jpeg', 'image/gif', 'image/png');
+                $handle->allowed = array (
+                    'image/jpeg',
+                    'image/gif',
+                    'image/png'
+                );
                 $handle->file_max_size = 1024 * $flsz;
                 $handle->file_overwrite = true;
                 $handle->image_resize = true;
@@ -119,18 +118,15 @@ switch ($act) {
                     if ($handle->processed) {
                         echo '<div class="gmenu"><p>Фотография загружена<br /><a href="my_data.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
                         echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
-                    }
-                    else {
+                    } else {
                         echo display_error($handle->error);
                     }
-                }
-                else {
+                } else {
                     echo display_error($handle->error);
                 }
                 $handle->clean();
             }
-        }
-        else {
+        } else {
             echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_photo&amp;id=' . $user['id'] . '"><div class="menu"><p>';
             echo 'Выберите изображение:<br /><input type="file" name="imagefile" value="" />';
             echo '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" />';
@@ -143,6 +139,6 @@ switch ($act) {
         break;
 }
 
-require_once ('../incfiles/end.php');
+require_once('../incfiles/end.php');
 
 ?>

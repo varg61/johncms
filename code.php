@@ -2,21 +2,19 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                                                                    //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@johncms.com                     //
-// Олег Касьянов aka AlkatraZ          alkatraz@johncms.com                   //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 session_name('SESID');
 session_start();
-if (!isset ($_SESSION['code']))
+if (!isset($_SESSION['code']))
     exit;
 
 // Задаем размеры изображения
@@ -29,14 +27,12 @@ $text_color = ImageColorAllocate($im, 0, 0, 0);
 $border_color = ImageColorAllocate($im, 154, 154, 154);
 
 // Генерируем помехи в виде линий
-$g1 = imagecolorallocate($im, 152, 152, 152);// Задаем цвет линий
-for ($i = 0; $i <= 100; $i += 6)
-    imageline($im, $i, 0, $i, 25, $g1);// Горизонтальные линии
-for ($i = 0; $i <= 25; $i += 5)
-    imageline($im, 0, $i, 100, $i, $g1);// Вертикальные линии
+$g1 = imagecolorallocate($im, 152, 152, 152);                       // Задаем цвет линий
+for ($i = 0; $i <= 100; $i += 6)imageline($im, $i, 0, $i, 25, $g1); // Горизонтальные линии
+for ($i = 0; $i <= 25; $i += 5)imageline($im, 0, $i, 100, $i, $g1); // Вертикальные линии
 
 // Генерируем цифровой код на основе данных сессии
-$code = substr($_SESSION["code"], 0, 4);
+$code = substr($_SESSION['code'], 0, 4);
 $x = 0;
 $stringlength = strlen($code);
 for ($i = 0; $i < $stringlength; $i++) {
@@ -51,7 +47,7 @@ for ($i = 0; $i < $stringlength; $i++) {
 ob_start();
 ImageGif($im);
 ImageDestroy($im);
-header("Content-Type: image/gif");
+header('Content-Type: image/gif');
 header('Content-Disposition: inline; filename=code.gif');
 header('Content-Length: ' . ob_get_length());
 ob_end_flush();

@@ -2,40 +2,37 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Error:restricted access');
 
-$req = mysql_query("SELECT * FROM `chat` WHERE `id`= '" . $id . "' AND `type` = 'r' LIMIT 1");
+$req = mysql_query("SELECT * FROM `chat` WHERE `id`= '$id' AND `type` = 'r' LIMIT 1");
 if (mysql_num_rows($req)) {
     $type = mysql_fetch_array($req);
     ////////////////////////////////////////////////////////////
     // Если "Интим", то выводим форму ввода пароля            //
     ////////////////////////////////////////////////////////////
     if ($type['dpar'] == 'in') {
-        if (!isset ($_SESSION['intim'])) {
-            require_once ('../incfiles/head.php');
+        if (!isset($_SESSION['intim'])) {
+            require_once('../incfiles/head.php');
             echo '<form action="index.php?act=pass&amp;id=' . $id . '" method="post"><br/>';
             echo 'Пароль (max. 10):<br/><input type="text" name="parol" size="10" maxlength="10"/>';
             echo '<input type="submit" name="submit" value="Ok!"/></form>';
             echo '<p><a href="index.php">Прихожая</a></p>';
-            require_once ("../incfiles/end.php");
+            require_once("../incfiles/end.php");
             exit;
         }
-    }
-    else {
-        if (isset ($_SESSION['intim']))
-            unset ($_SESSION['intim']);
+    } else {
+        if (isset($_SESSION['intim']))
+            unset($_SESSION['intim']);
     }
 
     ////////////////////////////////////////////////////////////
@@ -43,7 +40,7 @@ if (mysql_num_rows($req)) {
     ////////////////////////////////////////////////////////////
     $refr = rand(0, 999);
     $room = TRUE;
-    require_once ('../incfiles/head.php');
+    require_once('../incfiles/head.php');
     echo '<p>';
     if (!$set_chat['carea'])
         echo '[1] <a href="index.php?act=say&amp;id=' . $id . '" accesskey="1">Сказать</a> ';
@@ -63,7 +60,7 @@ if (mysql_num_rows($req)) {
     // Для Викторины подключаем Умника и показываем вопрос    //
     ////////////////////////////////////////////////////////////
     if ($type['dpar'] == 'vik') {
-        require_once ('quiz.php');
+        require_once('quiz.php');
         $quiz_req = mysql_query("SELECT * FROM `chat` WHERE `type` = 'v' ORDER BY `id` DESC LIMIT 1");
         $quiz_res = mysql_fetch_assoc($quiz_req);
         if ($quiz_res['realid'] > 1)
@@ -72,7 +69,7 @@ if (mysql_num_rows($req)) {
     $req = mysql_query("SELECT * FROM `chat` WHERE `refid` = '$id' AND `type` = 'm' ORDER BY `id` DESC LIMIT " . $set_chat['chmes']);
     $i = 0;
     while ($res = mysql_fetch_assoc($req)) {
-    //TODO: Написать игнор
+        //TODO: Написать игнор
         if ($res['user_id'])
             echo '<div class="list2">';
         else
@@ -81,8 +78,7 @@ if (mysql_num_rows($req)) {
         echo '<span class="gray">' . date("H:i", ($res['time'] + $sdvig * 3600)) . '</span>&nbsp;';
         if ($res['user_id'] && $res['user_id'] != $user_id) {
             echo '<b><a href="index.php?act=say&amp;id=' . $res['id'] . '">' . $res['from'] . '</a></b> &gt;&gt; ';
-        }
-        elseif ($res['user_id']) {
+        } elseif ($res['user_id']) {
             echo '<b>' . $res['from'] . '</b> &gt;&gt; ';
         }
         $text = tags($res['text']);
@@ -101,12 +97,11 @@ if (mysql_num_rows($req)) {
     if ($rights == 2 || $rights >= 6)
         echo '[5] <a href="index.php?act=clean&amp;id=' . $id . '" accesskey="5">Очистить комнату</a><br/>';
     echo '</p>';
-    require_once ('../incfiles/end.php');
-}
-else {
-    require_once ('../incfiles/head.php');
+    require_once('../incfiles/end.php');
+} else {
+    require_once('../incfiles/head.php');
     echo '<div class="rmenu"><p>ОШИБКА!<br/><a href="index.php">В Чат</a></p></div>';
-    require_once ('../incfiles/end.php');
+    require_once('../incfiles/end.php');
 }
 
 ?>

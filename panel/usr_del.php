@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -29,15 +27,12 @@ if ($id && $id != $user_id) {
             $error = 'Вы не можете удалять старшего Вас по должности';
         if ($user['immunity'])
             $error = 'Данный пользователь имеет иммунитет.';
-    }
-    else {
+    } else {
         $error = 'Такого пользователя не существует';
     }
-}
-else {
+} else {
     $error = 'Не указан пользователь';
 }
-
 if (!$error) {
     //TODO: После доработки модулей, переделать запросы на User ID и чистку Чата
     $req_a = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `user` = '1' AND `avtor` = '" . $user['name'] . "' LIMIT 1");
@@ -45,8 +40,7 @@ if (!$error) {
         $res_a = mysql_fetch_assoc($req_a);
         $album = 1;
         $images_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "' AND `type` = 'ft'"), 0);
-    }
-    else {
+    } else {
         $album = 0;
         $images_count = 0;
     }
@@ -61,9 +55,9 @@ if (!$error) {
     // Выводим краткие данные
     echo '<div class="rmenu"><p>' . show_user($user, 0, 1) . '</p></div>';
     switch ($mod) {
-        case 'del' :
+        case 'del':
             // Удаляем личный альбом
-            if ($album && isset ($_POST['gallery'])) {
+            if ($album && isset($_POST['gallery'])) {
                 if ($images_count) {
                     $req = mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "' AND `type` = 'ft'");
                     while ($res = mysql_fetch_assoc($req)) {
@@ -79,10 +73,10 @@ if (!$error) {
             mysql_query("DELETE FROM `privat` WHERE `user` = '" . $user['name'] . "'");
             mysql_query("DELETE FROM `privat` WHERE `author` = '" . $user['name'] . "' AND `type` = 'out' AND `chit` = 'no'");
             mysql_query("OPTIMIZE TABLE `privat`");
-           // Удаляем карму
+            // Удаляем карму
             mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "'");
             // Удаляем комментарии
-            if ($comm_count && isset ($_POST['comments'])) {
+            if ($comm_count && isset($_POST['comments'])) {
                 if ($comm_gal) {
                     // Удаляем из Галреи
                     mysql_query("DELETE FROM `gallery` WHERE `avtor` = '" . $user['name'] . "' AND `type` = 'km'");
@@ -100,16 +94,16 @@ if (!$error) {
                 }
             }
             // Удаляем посты в Гостевой
-            if ($guest_count && isset ($_POST['guest'])) {
+            if ($guest_count && isset($_POST['guest'])) {
                 mysql_query("DELETE FROM `guest` WHERE `user_id` = '" . $user['id'] . "'");
                 mysql_query("OPTIMIZE TABLE `guest`");
             }
             // Скрываем темы на форуме
-            if ($forumt_count && isset ($_POST['forumt'])) {
+            if ($forumt_count && isset($_POST['forumt'])) {
                 mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `type` = 't' AND `user_id` = '" . $user['id'] . "'");
             }
             // Скрываем посты на форуме
-            if (isset ($_POST['forump'])) {
+            if (isset($_POST['forump'])) {
                 mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `type` = 'm' AND `user_id` = '" . $user['id'] . "'");
             }
             // Удаляем пользователя
@@ -119,7 +113,7 @@ if (!$error) {
             echo '<div class="rmenu"><p><h3>Пользователь удален!</h3></p></div>';
             break;
 
-        default :
+        default:
             ////////////////////////////////////////////////////////////
             // Форма параметров удаления                              //
             ////////////////////////////////////////////////////////////
@@ -141,8 +135,7 @@ if (!$error) {
             echo '</p></div></form>';
             echo '<div class="phdr"><a href="../str/anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
     }
-}
-else {
+} else {
     echo display_error($error);
 }
 echo '<p><a href="index.php?act=usr_list">Список пользователей</a><br /><a href="index.php">Админ панель</a></p>';

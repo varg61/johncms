@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -18,9 +16,8 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'mystat';
 $textl = 'Личная статистика';
-require_once ('../incfiles/core.php');
-require_once ('../incfiles/head.php');
-
+require_once('../incfiles/core.php');
+require_once('../incfiles/head.php');
 if (!$user_id) {
     header('Location: ../index.php');
     exit;
@@ -31,34 +28,32 @@ $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '$user' LIMIT 1");
 if (mysql_num_rows($req_u)) {
     $res_u = mysql_fetch_assoc($req_u);
     switch ($act) {
-        case 'go' :
+        case 'go':
             // Переход к последнему посту
-            $do
-                = isset ($_GET['do']) ? trim($_GET['do']) : '';
-            $doid = isset ($_GET['doid']) ? abs(intval($_GET['doid'])) : '';
+            $do = isset($_GET['do']) ? trim($_GET['do']) : '';
+            $doid = isset($_GET['doid']) ? abs(intval($_GET['doid'])) : '';
             switch ($do) {
-                    case 'f' :
-                        // Переход на нужную страницу Форума
-                        $set_forum = array();
-                        $set_forum = unserialize($datauser['set_forum']);
-                        if (empty ($set_forum))
-                            $set_forum['upfp'] = 0;
-                        $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$doid' AND `type` = 'm' LIMIT 1");
-                        if (mysql_num_rows($req)) {
-                            $res = mysql_fetch_assoc($req);
-                            $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $doid . "'"), 0) / $kmess);
-                            header('Location: ../forum/index.php?id=' . $res['refid'] . '&page=' . $page);
-                        }
-                        else {
-                            header('Location: ../forum/index.php');
-                        }
-                        break;
+                case 'f':
+                    // Переход на нужную страницу Форума
+                    $set_forum = array ();
+                    $set_forum = unserialize($datauser['set_forum']);
+                    if (empty($set_forum))
+                        $set_forum['upfp'] = 0;
+                    $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$doid' AND `type` = 'm' LIMIT 1");
+                    if (mysql_num_rows($req)) {
+                        $res = mysql_fetch_assoc($req);
+                        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $doid . "'"), 0) / $kmess);
+                        header('Location: ../forum/index.php?id=' . $res['refid'] . '&page=' . $page);
+                    } else {
+                        header('Location: ../forum/index.php');
+                    }
+                    break;
                     default :
                     header('Location: ../index.php');
             }
             break;
 
-        case 'forum' :
+        case 'forum':
             echo '<p>Форум | <a href="my_stat.php?act=guest' . ($id ? '&amp;id=' . $id : '') . '">Гостевая</a></p>';
             echo '<div class="phdr"><b>Последняя активность на Форуме</b></div>';
             if ($id)
@@ -85,14 +80,13 @@ if (mysql_num_rows($req_u)) {
                     echo '</div>';
                     ++$i;
                 }
-            }
-            else {
+            } else {
                 echo '<div class="menu"><p>Список пуст</p></div>';
             }
             echo '<div class="phdr"><a href="../forum/index.php">В Форум</a></div>';
             break;
 
-        case 'guest' :
+        case 'guest':
             echo '<p><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Форум</a> | Гостевая</p>';
             echo '<div class="phdr"><b>Последняя активность в Гостевой</b></div>';
             if ($id)
@@ -107,14 +101,13 @@ if (mysql_num_rows($req_u)) {
                     echo '</div>';
                     ++$i;
                 }
-            }
-            else {
+            } else {
                 echo '<div class="menu"><p>Список пуст</p></div>';
             }
             echo '<div class="phdr"><a href="guest.php">В Гостевую</a></div>';
             break;
 
-        default :
+        default:
             echo '<div class="phdr"><b>' . ($id ? 'С' : 'Моя с') . 'татистика активности</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';
@@ -132,12 +125,11 @@ if (mysql_num_rows($req_u)) {
                 echo '<div class="rmenu">Нарушения: <a href="anketa.php?act=ban&amp;id=' . $user . '">' . $total . '</a></div>';
             echo '<div class="phdr"><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Последние записи</a></div>';
     }
-}
-else {
+} else {
     echo display_error('Такого пользователя нет');
 }
 echo '<p><a href="users_top.php">Топ 10 активности</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
 
-require_once ('../incfiles/end.php');
+require_once('../incfiles/end.php');
 
 ?>

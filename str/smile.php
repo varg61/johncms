@@ -2,25 +2,23 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
-////////////////////////////////////////////////////////////////////////////////
-// За основу взят модуль смайлов от Suliman, доработка AlkatraZ               //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
+
 $textl = 'Смайлы';
 
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
+
 switch ($act) {
     case 'cat':
         if (!is_dir($rootpath . 'smileys/user/' . $id)) {
@@ -30,7 +28,7 @@ switch ($act) {
             exit;
         }
         echo '<div class="phdr"><b>Смайлы:</b> ' . htmlentities(file_get_contents($rootpath . 'smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
-        $array = array();
+        $array = array ();
         $dir = opendir('../smileys/user/' . $id);
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
@@ -67,7 +65,7 @@ switch ($act) {
             exit;
         }
         echo '<div class="phdr"><b>Смайлы:</b> Для администрации</div>';
-        $array = array();
+        $array = array ();
         $dir = opendir('../smileys/admin');
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
@@ -116,4 +114,5 @@ switch ($act) {
 }
 
 require_once('../incfiles/end.php');
+
 ?>

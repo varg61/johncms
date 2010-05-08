@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                                                                    //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@johncms.com                     //
-// Олег Касьянов aka AlkatraZ          alkatraz@johncms.com                   //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -21,10 +19,15 @@ function format($name) {
     return $fname;
 }
 
-$file = isset ($_GET['file']) ? htmlspecialchars(urldecode($_GET['file'])) : NULL;
+$file = isset($_GET['file']) ? htmlspecialchars(urldecode($_GET['file'])) : NULL;
 if ($file && file_exists('./files/' . $file)) {
     $att_ext = strtolower(format('./files/' . $file));
-    $pic_ext = array('gif', 'jpg', 'jpeg', 'png');
+    $pic_ext = array (
+        'gif',
+        'jpg',
+        'jpeg',
+        'png'
+    );
     if (in_array($att_ext, $pic_ext)) {
         $sizs = GetImageSize('./files/' . $file);
         $razm = 50;
@@ -35,27 +38,27 @@ if ($file && file_exists('./files/' . $file)) {
         if (($width <= $razm) && ($height <= $razm)) {
             $tn_width = $width;
             $tn_height = $height;
-        }
-        else
-            if (($x_ratio * $height) < $razm) {
-                $tn_height = ceil($x_ratio * $height);
-                $tn_width = $razm;
-            }
-            else {
-                $tn_width = ceil($y_ratio * $width);
-                $tn_height = $razm;
+        } else if (($x_ratio * $height) < $razm) {
+            $tn_height = ceil($x_ratio * $height);
+            $tn_width = $razm;
+        } else {
+            $tn_width = ceil($y_ratio * $width);
+            $tn_height = $razm;
         }
         switch ($att_ext) {
-            case "gif" :
+            case "gif":
                 $im = ImageCreateFromGIF('./files/' . $file);
                 break;
-            case "jpg" :
+
+            case "jpg":
                 $im = ImageCreateFromJPEG('./files/' . $file);
                 break;
-            case "jpeg" :
+
+            case "jpeg":
                 $im = ImageCreateFromJPEG('./files/' . $file);
                 break;
-            case "png" :
+
+            case "png":
                 $im = ImageCreateFromPNG('./files/' . $file);
                 break;
         }
@@ -66,7 +69,7 @@ if ($file && file_exists('./files/' . $file)) {
         imageJpeg($im1, NULL, 60);
         ImageDestroy($im);
         imagedestroy($im1);
-        header("Content-Type: image/jpeg");
+        header('Content-Type: image/jpeg');
         header('Content-Disposition: inline; filename=thumbinal.jpg');
         header('Content-Length: ' . ob_get_length());
         ob_end_flush();

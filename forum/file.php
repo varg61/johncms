@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -25,22 +23,19 @@ if ($id) {
             $dlcount = $res['dlcount'] + 1;
             mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '" . $dlcount . "' WHERE `id` = '" . $id . "'");
             header('location: ./files/' . $res['filename']);
-        }
-        else {
+        } else {
             $error = 'Файла не существует';
         }
-    }
-    else {
+    } else {
         $error = 'Файла не существует';
     }
     if ($error) {
-        require_once ("../incfiles/head.php");
+        require_once("../incfiles/head.php");
         echo '<p><b>ОШИБКА!</b><br/>' . $error . '<a href="index.php">В форум</a></p>';
-        require_once ("../incfiles/end.php");
+        require_once("../incfiles/end.php");
         exit;
     }
-}
-else {
+} else {
     header('location: index.php');
 }
 

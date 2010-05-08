@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -21,8 +19,7 @@ $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 if (isset($_GET['ip']))
     $search = long2ip(intval($_GET['ip']));
-
-    echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Поиск по IP</div>';
+echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Поиск по IP</div>';
 echo '<form action="index.php?act=usr_search_ip" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
@@ -74,7 +71,6 @@ if ($search) {
         }
     }
 }
-
 if ($search && !$error) {
     ////////////////////////////////////////////////////////////
     // Выводим результаты поиска                              //

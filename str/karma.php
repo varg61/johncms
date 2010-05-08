@@ -2,24 +2,23 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
-// Модуль Кармы от FlySelf 
 */
 
 define('_IN_JOHNCMS', 1);
+
 $headmod = 'karma';
 $textl = 'Карма юзера';
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
+
 if ($set_karma['on'] && $user_id) {
     switch ($act) {
         case 'user':
@@ -222,4 +221,5 @@ if ($set_karma['on'] && $user_id) {
 }
 
 require_once('../incfiles/end.php');
+
 ?>
