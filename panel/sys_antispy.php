@@ -146,7 +146,6 @@ class scaner {
         '../gallery/upl.php',
         '../incfiles/.htaccess',
         '../incfiles/ban.php',
-        '../incfiles/char.php',
         '../incfiles/class_ipinit.php',
         '../incfiles/class_mainpage.php',
         '../incfiles/pclzip.lib.php',

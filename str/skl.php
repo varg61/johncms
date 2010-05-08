@@ -16,7 +16,6 @@ define('_IN_JOHNCMS', 1);
 
 $textl = 'Пароль';
 require_once('../incfiles/core.php');
-require_once('../incfiles/char.php');
 require_once('../incfiles/head.php');
 
 function passgen($length) {
@@ -59,7 +58,6 @@ switch ($act) {
             $mail .= "Для того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n$home/str/skl.php?act=set&id=" . $res['id'] . "&code=" . session_id() . "\n\n";
             $mail .= "Ссылка действительна в течение 1 часа\r\n";
             $mail .= "Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его";
-            //$mail = utfwin($mail);
             $adds = "From: <" . $emailadmina . ">\r\n";
             $adds .= "Content-Type: text/plain; charset=\"utf-8\"\r\n";
             if (mail($res['mail'], $subject, $mail, $adds)) {
