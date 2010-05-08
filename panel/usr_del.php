@@ -70,6 +70,7 @@ if (!$error) {
                 mysql_query("OPTIMIZE TABLE `gallery`");
             }
             // Удаляем почту
+            //TODO: Дописать удаление прикрепленных файлов, если были
             mysql_query("DELETE FROM `privat` WHERE `user` = '" . $user['name'] . "'");
             mysql_query("DELETE FROM `privat` WHERE `author` = '" . $user['name'] . "' AND `type` = 'out' AND `chit` = 'no'");
             mysql_query("OPTIMIZE TABLE `privat`");
