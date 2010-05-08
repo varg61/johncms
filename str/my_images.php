@@ -18,7 +18,7 @@ $headmod = 'anketa';
 $textl = 'Редактирование Анкеты';
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
-require_once('../incfiles/class_upload.php');
+require_once('../incfiles/lib/class.upload.php');
 if (!$user_id) {
     display_error('Только для зарегистрированных посетителей');
     require_once('../incfiles/end.php');

@@ -11,6 +11,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
+//TODO: Разобраться с подкаталогом /incfiles/lib
 defined('_IN_JOHNADM') or die('Error: restricted access');
 define('ROOT_DIR', '..');
 
@@ -72,7 +73,6 @@ class scaner {
         '../download/index.php',
         '../download/komm.php',
         '../download/makdir.php',
-        '../download/mp3.php',
         '../download/mp3temp/index.php',
         '../download/new.php',
         '../download/opis.php',
@@ -149,16 +149,16 @@ class scaner {
         '../incfiles/char.php',
         '../incfiles/class_ipinit.php',
         '../incfiles/class_mainpage.php',
-        '../incfiles/class_pclzip.php',
-        '../incfiles/class_upload.php',
+        '../incfiles/pclzip.lib.php',
+        '../incfiles/lib/class.upload.php',
         '../incfiles/core.php',
         '../incfiles/db.php',
         '../incfiles/end.php',
         '../incfiles/func.php',
         '../incfiles/head.php',
         '../incfiles/index.php',
-        '../incfiles/mp3.php',
-        '../incfiles/pear.php',
+        '../incfiles/lib/mp3.php',
+        '../incfiles/lib/pear.php',
         '../library/addkomm.php',
         '../library/del.php',
         '../library/edit.php',

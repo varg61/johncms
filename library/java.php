@@ -54,7 +54,7 @@ TCBR-Platform: Generic version (all phones)';
         fclose($files);
 
         // Создаем архив
-        require_once('../incfiles/class_pclzip.php');
+        require_once('../incfiles/lib/pclzip.lib.php');
         $archive = new PclZip('files/' . $id . '.jar');
         $list = $archive->create('java', PCLZIP_OPT_REMOVE_PATH, 'java');
         if (!file_exists('files/' . $id . '.jar')) {

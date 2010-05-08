@@ -2,15 +2,13 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -19,9 +17,9 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'load';
 $textl = 'Загрузки';
 require_once ('../incfiles/core.php');
-require_once ("../incfiles/mp3.php");
-require_once ("../incfiles/class_pclzip.php");
-$filesroot = "../download";
+require_once ('../incfiles/lib/mp3.php');
+require_once ('../incfiles/lib/pclzip.lib.php');
+$filesroot = '../download';
 $screenroot = "$filesroot/screen";
 $loadroot = "$filesroot/files";
 
