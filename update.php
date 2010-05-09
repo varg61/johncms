@@ -50,13 +50,13 @@ switch ($do) {
         $arr = array (
             'files/avatar/',
             'files/photo/',
-            'cache/',
+            'files/cache/',
             'incfiles/',
             'gallery/foto/',
             'gallery/temp/',
             'library/files/',
             'library/temp/',
-            'pratt/',
+            'files/pm/',
             'forum/files/',
             'forum/temtemp/',
             'download/arctemp/',
@@ -100,17 +100,11 @@ switch ($do) {
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
-        // Таблица Чата
-        mysql_query("TRUNCATE TABLE `chat`");
-        mysql_query("ALTER TABLE `chat` DROP INDEX `to`");
-        mysql_query("ALTER TABLE `chat` DROP INDEX `from`");
-        mysql_query("ALTER TABLE `chat` DROP INDEX `time`");
-        mysql_query("ALTER TABLE `chat` DROP `nas`");
-        mysql_query("ALTER TABLE `chat` DROP `otv`");
-        mysql_query("ALTER TABLE `chat` DROP `from`");
-        mysql_query("ALTER TABLE `chat` ADD `user_id` INT NOT NULL AFTER `time`");
-        mysql_query("ALTER TABLE `chat` ADD `from` TEXT NOT NULL AFTER `user_id`");
-        echo '<span class="green">OK</span> таблица `chat` обновлена.<br />';
+        // Таблицы голосований форума
+        mysql_query("RENAME TABLE `forum_vote` TO `cms_forum_vote`");
+        echo '<span class="green">OK</span> таблица `cms_forum_vote` обновлена.<br />';
+        mysql_query("RENAME TABLE `forum_vote_us` TO `cms_forum_vote_users`");
+        echo '<span class="green">OK</span> таблица `cms_forum_vote_users` обновлена.<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 

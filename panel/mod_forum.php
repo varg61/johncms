@@ -131,8 +131,8 @@ switch ($mod) {
                         $req_t = mysql_query("SELECT `id` FROM `forum` WHERE `refid` = '$id' AND `type` = 't'");
                         while ($res_t = mysql_fetch_assoc($req_t)) {
                             mysql_query("DELETE FROM `forum` WHERE `refid` = '" . $res_t['id'] . "'");
-                            mysql_query("DELETE FROM `forum_vote` WHERE `topic` = '" . $res_t['id'] . "'");
-                            mysql_query("DELETE FROM `forum_vote_us` WHERE `topic` = '" . $res_t['id'] . "'");
+                            mysql_query("DELETE FROM `cms_forum_vote` WHERE `topic` = '" . $res_t['id'] . "'");
+                            mysql_query("DELETE FROM `cms_forum_vote_users` WHERE `topic` = '" . $res_t['id'] . "'");
                             mysql_query("DELETE FROM `cms_forum_rdm` WHERE `topic_id` = '" . $res_t['id'] . "'");
                         }
                         // Удаляем темы
@@ -140,7 +140,7 @@ switch ($mod) {
                         // Удаляем раздел
                         mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
                         // Оптимизируем таблицы
-                        mysql_query("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `forum_vote` , `forum_vote_us`");
+                        mysql_query("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `cms_forum_vote` , `cms_forum_vote_users`");
                         echo '<div class="rmenu"><p>Раздел вместе с темами и файлами, удален<br /><a href="index.php?act=mod_forum&amp;mod=cat&amp;id=' . $res['refid'] .
                             '">В категорию</a></p></div>';
                     } else {
@@ -638,7 +638,7 @@ switch ($mod) {
         $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'"), 0);
         $total_msg_del = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'"), 0);
         $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
-        $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote` WHERE `type` = '1'"), 0);
+        $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'"), 0);
         echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Управление форумом</div>';
         echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
         echo '<li>Категории:&nbsp;' . $total_cat . '</li>';
