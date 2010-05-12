@@ -105,6 +105,11 @@ switch ($do) {
         echo '<span class="green">OK</span> таблица `cms_forum_vote` обновлена.<br />';
         mysql_query("RENAME TABLE `forum_vote_us` TO `cms_forum_vote_users`");
         echo '<span class="green">OK</span> таблица `cms_forum_vote_users` обновлена.<br />';
+        mysql_query("ALTER TABLE `users` DROP `set_user`");
+        mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `place`");
+        mysql_query("ALTER TABLE `users` DROP `set_forum`");
+        mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`");
+        echo '<span class="green">OK</span> пользовательские настройки обновлены.<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 

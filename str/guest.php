@@ -251,7 +251,7 @@ switch ($act) {
             echo '<div class="gmenu"><form action="guest.php?act=say" method="post">';
             if (!$user_id)
                 echo "Имя(max. 25):<br/><input type='text' name='name' maxlength='25'/><br/>";
-            echo 'Сообщение(max. 500):<br/><textarea cols="20" rows="2" name="msg"></textarea><br/>';
+            echo 'Сообщение(max. 500):<br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             if (!$user_id) {

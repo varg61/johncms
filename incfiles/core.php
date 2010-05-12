@@ -144,6 +144,8 @@ $set_user['smileys'] = 1;            // Включить(1) выключить(0
 $set_user['kmess'] = 10;             // Число сообщений на страницу
 $set_user['quick_go'] = 1;           // Быстрый переход
 $set_user['avatar'] = 1;             // Аватары
+$set_user['field_w'] = 20;           // Ширина текстового поля ввода
+$set_user['field_h'] = 3;            // Высота текстового поля ввода
 $set_user['skin'] = $set['skindef']; // Тема оформления
 $kmess = $set_user['kmess'];
 
@@ -226,6 +228,8 @@ if ($user_id && $user_ps) {
                 $set_user['online'] = 1;
                 $set_user['movings'] = 1;
                 $set_user['digest'] = 1;
+                $set_user['field_w'] = 20;
+                $set_user['field_h'] = 3;
                 $set_user['sdvig'] = 0;
                 $set_user['kmess'] = 10;
                 $set_user['skin'] = 'default';

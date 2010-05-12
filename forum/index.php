@@ -26,8 +26,6 @@ if (!isset($set_forum) || empty($set_forum))
     $set_forum = array (
         'farea' => 0,
         'upfp' => 0,
-        'farea_w' => 20,
-        'farea_h' => 4,
         'postclip' => 1,
         'postcut' => 2
     );
@@ -406,7 +404,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 if (($user_id && !$type1['edit'] && $set_forum['upfp']) || ($rights >= 7 && $set_forum['upfp'])) {
                     echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
-                        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
+                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
                         echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
                         if ($set_user['translit'])
                             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
@@ -549,7 +547,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 if (($user_id && !$type1['edit'] && !$set_forum['upfp']) || ($rights >= 7 && !$set_forum['upfp'])) {
                     echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
-                        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
+                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
                         echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
                         if ($set_user['translit'])
                             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';

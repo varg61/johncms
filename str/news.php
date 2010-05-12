@@ -15,8 +15,8 @@
 define('_IN_JOHNCMS', 1);
 
 $textl = 'Новости ресурса';
-$headmod = "news";
-require_once("../incfiles/core.php");
+$headmod = 'news';
+require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
 
 switch ($do) {
@@ -60,8 +60,7 @@ switch ($do) {
                             `time` = '$realtime',
                             `user_id` = '$user_id',
                             `from` = '$login',
-                            `text` = '$name'"
-                                );
+                            `text` = '$name'");
                             $rid = mysql_insert_id();
                             mysql_query("INSERT INTO `forum` SET
                             `refid` = '$rid',
@@ -70,8 +69,7 @@ switch ($do) {
                             `user_id` = '$user_id',
                             `from` = '$login',
                             `ip` = '$ipp',
-                            `soft` = '"
-                                . mysql_real_escape_string($agn) . "',
+                            `soft` = '" . mysql_real_escape_string($agn) . "',
                             `text` = '" . mysql_real_escape_string($text) . "'");
                         }
                     }
@@ -81,9 +79,9 @@ switch ($do) {
                 echo "Новость добавлена.<p><a href='news.php'>Продолжить</a></p>";
             } else {
                 echo '<form action="news.php?do=add" method="post">';
-                echo '<div class="menu"><u>Заголовок</u><br/><input type="text" name="name"/></div>';
-                echo '<div class="menu"><u>Текст</u><br/><textarea rows="4" name="text"></textarea></div>';
-                echo '<div class="menu"><u>Раздел форума для обсуждения новости</u><br/>';
+                echo '<div class="menu"><p><h3>Заголовок</h3><input type="text" name="name"/></p>';
+                echo '<p><h3>Текст</h3><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="text"></textarea></p>';
+                echo '<p><h3>Обсуждение</h3>';
                 $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
                 echo '<input type="radio" name="pf" value="0" checked="checked" />Не обсуждать<br />';
                 while ($fr1 = mysql_fetch_array($fr)) {
@@ -94,7 +92,7 @@ switch ($do) {
                     }
                     echo '</select><br/>';
                 }
-                echo '</div><div class="bmenu"><input type="submit" name="submit" value="Ok!"/></div></form><p><a href="news.php">К новостям</a></p>';
+                echo '</p></div><div class="bmenu"><input type="submit" name="submit" value="Ok!"/></div></form><p><a href="news.php">К новостям</a></p>';
             }
         } else {
             header("location: news.php");

@@ -135,7 +135,7 @@ switch ($tip) {
             if (isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $id)
                 echo '<div class="rmenu">Фильтр по авторам постов будет выключен после написания сообщения</div>';
             echo '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><div class="gmenu">';
-            echo '<b>Сообщение:</b><br /><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br />';
+            echo '<b>Сообщение:</b><br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br />';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит<br/>';
@@ -262,7 +262,7 @@ switch ($tip) {
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
                 echo '<div class="menu"><b>Автор:</b> ' . $type1['from'] . '</div>';
-                echo '<div class="menu"><b>Цитата:</b><br/><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="citata">' . $qt . '</textarea>';
+                echo '<div class="menu"><b>Цитата:</b><br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="citata">' . $qt . '</textarea>';
                 echo '<br /><small>Допустимо макс. 200 символов.<br />Весь лишний текст обрезается.</small></div>';
             } else {
                 // Форма с репликой
@@ -275,7 +275,7 @@ switch ($tip) {
                 echo '<small>Выбранный текст будет вставлен перед Вашим текстом, который Вы напишите ниже.</small>';
                 echo '</div>';
             }
-            echo '<div class="gmenu"><b>Сообщение:</b><br/><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
+            echo '<div class="gmenu"><b>Сообщение:</b><br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';

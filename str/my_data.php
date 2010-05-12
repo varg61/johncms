@@ -166,7 +166,7 @@ echo '<input type="text" value="' . $user['dayb'] . '" size="2" maxlength="2" na
 echo '<input type="text" value="' . $user['monthb'] . '" size="2" maxlength="2" name="monthb" />.';
 echo '<input type="text" value="' . $user['yearofbirth'] . '" size="4" maxlength="4" name="yearofbirth" /></li>';
 echo '<li><span class="gray">Город:</span><br /><input type="text" value="' . $user['live'] . '" name="live" /></li>';
-echo '<li><span class="gray">О себе:</span><br /><textarea cols="20" rows="4" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></li>';
+echo '<li><span class="gray">О себе:</span><br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></li>';
 echo '</ul></p>';
 // Связь
 echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&nbsp;Связь</h3><ul>';

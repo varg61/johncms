@@ -30,27 +30,17 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         $set_forum = array ();
         $set_forum = unserialize($datauser['set_forum']);
-        echo '<div class="phdr"><b>Настройки Форума</b></div>';
+        echo '<div class="phdr"><a href="../index.php?act=cab"><b>Кабинет</b></a> | Настройки Форума</div>';
         echo '<div class="bmenu"><small>Данные настройки влияют на отображение информации Форума</small></div>';
         if (isset($_POST['submit'])) {
             $set_forum['farea'] = isset($_POST['farea']) ? 1 : 0;
             $set_forum['upfp'] = isset($_POST['upfp']) ? 1 : 0;
-            $set_forum['farea_w'] = isset($_POST['farea_w']) ? intval($_POST['farea_w']) : 20;
-            $set_forum['farea_h'] = isset($_POST['farea_h']) ? intval($_POST['farea_h']) : 2;
             $set_forum['postclip'] = isset($_POST['postclip']) ? intval($_POST['postclip']) : 1;
             $set_forum['postcut'] = isset($_POST['postcut']) ? intval($_POST['postcut']) : 1;
             if ($set_forum['postclip'] < 0 || $set_forum['postclip'] > 2)
                 $set_forum['postclip'] = 1;
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
                 $set_forum['postcut'] = 1;
-            if ($set_forum['farea_w'] < 10)
-                $set_forum['farea_w'] = 10;
-            elseif ($set_forum['farea_w'] > 80)
-                $set_forum['farea_w'] = 80;
-            if ($set_forum['farea_h'] < 1)
-                $set_forum['farea_h'] = 1;
-            elseif ($set_forum['farea_h'] > 9)
-                $set_forum['farea_h'] = 9;
             mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id' LIMIT 1");
             echo '<div class="rmenu">Настройки сохранены</div>';
         }
@@ -58,8 +48,6 @@ switch ($act) {
             $set_forum = array ();
             $set_forum['farea'] = 0;
             $set_forum['upfp'] = 0;
-            $set_forum['farea_w'] = 20;
-            $set_forum['farea_h'] = 4;
             $set_forum['postclip'] = 1;
             $set_forum['postcut'] = 2;
             mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id' LIMIT 1");
@@ -67,9 +55,6 @@ switch ($act) {
         }
         echo '<form action="my_set.php?act=forum" method="post"><div class="menu"><p><h3>Основные настройки</h3>';
         echo '<input name="upfp" type="checkbox" value="1" ' . ($set_forum['upfp'] ? 'checked="checked"' : '') . ' />&nbsp;Обратная сортировка<br/>';
-        echo '</p><p><h3>Ввод сообщения</h3>';
-        echo '<input type="text" name="farea_w" size="2" maxlength="2" value="' . $set_forum['farea_w'] . '"/> Ширина формы (10-80)<br />';
-        echo '<input type="text" name="farea_h" size="2" maxlength="1" value="' . $set_forum['farea_h'] . '"/> Высота формы (1-9)<br />';
         echo '<input name="farea" type="checkbox" value="1" ' . ($set_forum['farea'] ? 'checked="checked"' : '') . ' />&nbsp;Включить поле ввода<br/>';
         echo '</p><p><h3>Закреплять 1-й пост</h3>';
         echo '<input type="radio" value="2" name="postclip" ' . ($set_forum['postclip'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;всегда<br />';
@@ -202,7 +187,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         $set_user = array ();
         $set_user = unserialize($datauser['set_user']);
-        echo '<div class="phdr"><b>Общие настройки</b></div>';
+        echo '<div class="phdr"><a href="../index.php?act=cab"><b>Кабинет</b></a> | Общие настройки</div>';
         echo '<div class="bmenu"><small>Данные настройки влияют на весь сайт и все его модули</small></div>';
         if (isset($_POST['submit'])) {
             $set_user['sdvig'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
@@ -210,7 +195,9 @@ switch ($act) {
             $set_user['smileys'] = isset($_POST['smileys']) ? 1 : 0;
             $set_user['translit'] = isset($_POST['translit']) ? 1 : 0;
             $set_user['digest'] = isset($_POST['digest']) ? 1 : 0;
-            $set_user['kmess'] = isset($_POST['kmess']) ? intval($_POST['kmess']) : 10;
+            $set_user['field_w'] = isset($_POST['field_w']) ? abs(intval($_POST['field_w'])) : 20;
+            $set_user['field_h'] = isset($_POST['field_h']) ? abs(intval($_POST['field_h'])) : 3;
+            $set_user['kmess'] = isset($_POST['kmess']) ? abs(intval($_POST['kmess'])) : 10;
             $set_user['quick_go'] = isset($_POST['quick_go']) ? 1 : 0;
             $set_user['gzip'] = isset($_POST['gzip']) ? 1 : 0;
             $set_user['online'] = isset($_POST['online']) ? 1 : 0;
@@ -223,6 +210,14 @@ switch ($act) {
                 $set_user['kmess'] = 5;
             elseif ($set_user['kmess'] > 99)
                 $set_user['kmess'] = 99;
+            if ($set_user['field_w'] < 10)
+                $set_user['field_w'] = 10;
+            elseif ($set_user['field_w'] > 80)
+                $set_user['field_w'] = 80;
+            if ($set_user['field_h'] < 1)
+                $set_user['field_h'] = 1;
+            elseif ($set_user['field_h'] > 9)
+                $set_user['field_h'] = 9;
             $set_user['skin'] = isset($_POST['skin']) ? check(trim($_POST['skin'])) : 'default';
             $arr = array ();
             $dir = opendir('../theme');
@@ -246,6 +241,8 @@ switch ($act) {
             $set_user['online'] = 1;
             $set_user['movings'] = 1;
             $set_user['digest'] = 1;
+            $set_user['field_w'] = 20;
+            $set_user['field_h'] = 3;
             $set_user['sdvig'] = 0;
             $set_user['kmess'] = 10;
             $set_user['skin'] = 'default';
@@ -260,6 +257,9 @@ switch ($act) {
         echo '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&nbsp;Смайлы<br/>';
         echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&nbsp;Транслит<br/>';
         echo '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&nbsp;Дайджест';
+        echo '</p><p><h3>Ввод текста</h3>';
+        echo '<input type="text" name="field_w" size="2" maxlength="2" value="' . $set_user['field_w'] . '"/> Ширина поля (10-80)<br />';
+        echo '<input type="text" name="field_h" size="2" maxlength="1" value="' . $set_user['field_h'] . '"/> Высота поля (1-9)<br />';
         echo '</p><p><h3>Внешний вид</h3>';
         echo '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> Строк на страницу (5-99)<br />';
         echo '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&nbsp;Меню быстрого перехода<br />';
