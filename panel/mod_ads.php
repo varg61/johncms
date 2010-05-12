@@ -429,7 +429,7 @@ switch ($from) {
         if ($total > 0) {
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `to` = '0' AND `type` = '" . $_SESSION['abs_link'] . "' ORDER BY  `mesto` ASC LIMIT " . $start . "," . $kmess);
             while ($arr = mysql_fetch_array($req)) {
-                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $name = explode("|", $arr['name']);
                 $count = count($name);
                 $name = htmlentities($name[0], ENT_QUOTES, 'UTF-8');
@@ -501,7 +501,7 @@ switch ($from) {
         if ($total > 0) {
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `to` = '1' AND `type` = '" . $_SESSION['abs_link'] . "' ORDER BY  `mesto` ASC LIMIT " . $start . "," . $kmess);
             while ($arr = mysql_fetch_array($req)) {
-                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $name = explode("|", $arr['name']);
                 $count = count($name);
                 $name = htmlentities($name[0], ENT_QUOTES, 'UTF-8');

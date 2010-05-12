@@ -285,7 +285,7 @@ switch ($act) {
             }
             while ($res = mysql_fetch_assoc($req)) {
                 $text = '';
-                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (empty($res['id'])) {
                     // Запрос по гостям
                     $req_g = mysql_query("SELECT `lastdate` FROM `cms_guests` WHERE `session_id` = '" . md5($res['ip'] . $res['browser']) . "' LIMIT 1");

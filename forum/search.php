@@ -52,7 +52,7 @@ if ($search && !$error) {
     if ($total) {
         $req = mysql_query("SELECT * FROM `forum` WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "') AND `type` = '" . ($search_t ? 't' : 'm') . "' LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
-            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             if (!$search_t) {
                 $req_t = mysql_query("SELECT `id`,`text` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
                 $res_t = mysql_fetch_assoc($req_t);

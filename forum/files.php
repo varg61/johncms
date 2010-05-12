@@ -87,7 +87,7 @@ if ($do || isset($_GET['new'])) {
         while ($res = mysql_fetch_array($req)) {
             $fls = filesize('./files/' . $res['filename']);
             $fls = round($fls / 1024, 0);
-            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             echo ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="images/' . $res['filetype'] . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id='
                 . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . '] <font color="#999999">' . $fls . 'кб.</font>';
             // Название темы
@@ -170,7 +170,7 @@ if ($do || isset($_GET['new'])) {
         }
     }
     foreach ($link as $var) {
-        echo (($i % 2) ? '<div class="list2">' : '<div class="list1">') . $var . '</div>';
+        echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . $var . '</div>';
         ++$i;
     }
     echo '<div class="phdr">Всего файлов: ' . $total . '</div>';

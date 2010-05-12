@@ -71,7 +71,7 @@ if ($rights == 3 || $rights >= 6) {
         echo '<div class="phdr">Другие категории</div>';
         $frm = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$other' ORDER BY `realid` ASC");
         while ($frm1 = mysql_fetch_assoc($frm)) {
-            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             echo '<a href="index.php?act=per&amp;id=' . $id . '&amp;other=' . $frm1['id'] . '">' . $frm1['text'] . '</a></div>';
             ++$i;
         }

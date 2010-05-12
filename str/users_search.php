@@ -54,7 +54,7 @@ if ($search && !$error) {
     if ($total > 0) {
         $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_array($req)) {
-            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             echo show_user($res, 1, ($rights >= 6 ? 1 : 0));
             echo '</div>';
             ++$i;

@@ -379,7 +379,7 @@ switch ($mod) {
             $req = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'r' ORDER BY `realid` ASC");
             if (mysql_num_rows($req)) {
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b>' . $res['text'] . '</b>';
                     echo '&nbsp;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
                     if (!empty($res['soft']))
@@ -398,7 +398,7 @@ switch ($mod) {
             echo '<div class="bmenu">Список категорий</div>';
             $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid` ASC");
             while ($res = mysql_fetch_assoc($req)) {
-                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<a href="index.php?act=mod_forum&amp;mod=cat&amp;id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a> ';
                 echo '(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $res['id'] . "'"), 0) . ')';
                 echo '&nbsp;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
@@ -467,7 +467,7 @@ switch ($mod) {
                     $subtext = '<span class="gray"><u>Фильтровать</u>:</span> ';
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=htopics&amp;rsort=' . $res['refid'] . '">по разделу</a> | ';
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=htopics&amp;usort=' . $res['user_id'] . '">по автору</a>';
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo show_user($res, 0, 0, $ttime, $text, $subtext);
                     echo '</div>';
                     ++$i;
@@ -538,7 +538,7 @@ switch ($mod) {
                     $subtext = '<span class="gray"><u>Фильтровать</u>:</span> ';
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=hposts&amp;tsort=' . $theme['id'] . '">по теме</a> | ';
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=hposts&amp;usort=' . $res['user_id'] . '">по автору</a>';
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo show_user($res, 0, 2, $posttime, $text, $subtext);
                     echo '</div>';
                     ++$i;
@@ -602,7 +602,7 @@ switch ($mod) {
                 while ($q1 = mysql_fetch_assoc($q)) {
                     $q2 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'a' AND `from` = '" . $q1['name'] . "' and `refid` = '$id'");
                     $q3 = mysql_num_rows($q2);
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     if ($q3 == 0) {
                         echo "<input type='checkbox' name='moder[]' value='" . $q1['name'] . "'/>$q1[name]";
                     } else {
@@ -618,7 +618,7 @@ switch ($mod) {
                 echo '<div class="bmenu">Выберите категорию</div>';
                 $q = mysql_query("select * from `forum` where type='f' order by realid;");
                 while ($q1 = mysql_fetch_array($q)) {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<a href="index.php?act=mod_forum&amp;mod=moders&amp;id=' . $q1['id'] . '">' . $q1['text'] . '</a></div>';
                     ++$i;
                 }

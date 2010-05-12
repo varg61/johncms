@@ -34,7 +34,7 @@ if ($rights == 5 || $rights >= 6) {
     if ($total > 0) {
         $req = mysql_query("SELECT * FROM `lib` WHERE `type` = 'bk' AND `moder` = '0' LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req)) {
-            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             $vr = $res['time'] + $set_user['sdvig'] * 3600;
             $vr = date("d.m.y / H:i", $vr);
             $tx = $res['soft'];

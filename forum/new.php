@@ -90,7 +90,7 @@ if ($user_id) {
                 }
                 $i = 0;
                 while ($res = mysql_fetch_array($req)) {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "'");
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
@@ -153,7 +153,7 @@ if ($user_id) {
                 ORDER BY `forum`.`time` DESC
                 LIMIT " . $start . "," . $kmess);
                 while ($res = mysql_fetch_array($req)) {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "'");
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
@@ -210,7 +210,7 @@ if ($user_id) {
         $colmes1 = mysql_num_rows($nikuser);
         $cpg = ceil($colmes1 / $kmess);
         $nam = mysql_fetch_array($nikuser);
-        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<img src="../images/' . ($arr['edit'] == 1 ? 'tz' : 'np') . '.gif" alt=""/>';
         if ($arr['realid'] == 1)
             echo '&nbsp;<img src="../images/rate.gif" alt=""/>';

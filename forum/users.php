@@ -29,7 +29,7 @@ if ($topic_vote == 0) {
     WHERE `cms_forum_vote_users`.`topic`='$id' ORDER BY `time` DESC LIMIT $start,$kmess");
     $set_user['avatar'] = 0;
     while ($res = mysql_fetch_array($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo show_user($res, 0, 0, '</div>');
         ++$i;
     }

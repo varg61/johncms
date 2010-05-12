@@ -136,7 +136,7 @@ if ($set_karma['on'] && $user_id) {
                 $req = mysql_query("SELECT * FROM `karma_users` WHERE `karma_user`='$user_id' AND `time` > "
                     . ($realtime - 86400) . " ORDER BY `time` DESC LIMIT $start, $kmess");
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo $res['type'] ? '<span class="green">+' . $res['points'] . '</span> ' : '<span class="red">-' . $res['points'] . '</span> ';
                     echo $user_id == $res['user_id'] || !$res['user_id'] ? '<b>' . $res['name'] . '</b>' : '<a href="anketa.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a>';
                     echo ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
@@ -194,7 +194,7 @@ if ($set_karma['on'] && $user_id) {
             if ($total) {
                 $req = mysql_query("SELECT * FROM `karma_users` WHERE `karma_user`='$id' $sql ORDER BY `time` DESC LIMIT $start, $kmess");
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo $res['type'] ? '<span class="green">+' . $res['points'] . '</span> ' : '<span class="red">-' . $res['points'] . '</span> ';
                     echo $user_id == $res['user_id'] || !$res['user_id'] ? '<b>' . $res['name'] . '</b>' : '<a href="anketa.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a>';
                     echo ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';

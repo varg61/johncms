@@ -354,7 +354,7 @@ if ($user_id) {
                 if ($res['chit'] == "no") {
                     echo '<div class="gmenu">';
                 } else {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 }
                 echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/><a href="pradd.php?id=' . $res['id'] . '&amp;act=readmess">От: ' . $res['author'] . '</a>';
                 $vrp = $res['time'] + $set_user['sdvig'] * 3600;
@@ -500,7 +500,7 @@ if ($user_id) {
                 if ($res['chit'] == "no") {
                     echo '<div class="gmenu">';
                 } else {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 }
                 echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>Для: <a href="pradd.php?id=' . $res['id'] . '&amp;act=readout">' . $res['user'] . '</a>';
                 $vrp = $res['time'] + $set_user['sdvig'] * 3600;

@@ -31,7 +31,7 @@ switch ($mod) {
             $req = mysql_query("SELECT * FROM `users` WHERE `preg` = '0' ORDER BY `id` DESC LIMIT $start,$kmess");
             while ($res = mysql_fetch_assoc($req)) {
                 $link = '<a href="index.php?act=usr_reg&amp;mod=approve&amp;id=' . $res['id'] . '">Подтвердить</a> | <span class="red"><a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">Удалить</a></span>';
-                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo show_user($res, 0, 2, ' ID:' . $res['id'], 0, $link);
                 echo '</div>';
                 ++$i;

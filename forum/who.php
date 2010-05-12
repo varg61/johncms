@@ -41,7 +41,7 @@ if ($id) {
             $req =
                 mysql_query("SELECT * FROM `" . ($do == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > $onltime AND `place` = 'forum,$id' ORDER BY " . ($do == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start, $kmess");
             while ($res = mysql_fetch_assoc($req)) {
-                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $set_user['avatar'] = 0;
                 echo show_user($res, 0, ($act == 'guest' || ($rights >= 1 && $rights >= $res['rights']) ? 1 : 0));
                 echo '</div>';
@@ -65,7 +65,7 @@ if ($id) {
     if ($total) {
         $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%' ORDER BY " . ($do == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
-            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Вычисляем местоположение
             $place = '';
             switch ($res['place']) {

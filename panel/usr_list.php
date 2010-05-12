@@ -42,7 +42,7 @@ while ($res = mysql_fetch_array($req)) {
     if ($rights >= 7)
         $link .= '<a href="../str/my_data.php?id=' . $res['id'] . '">Изменть</a> | <a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">Удалить</a> | ';
     $link .= '<a href="../str/users_ban.php?act=ban&amp;id=' . $res['id'] . '">Банить</a>';
-    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
     echo show_user($res, 0, 2, ' ID:' . $res['id'], '', $link);
     echo '</div>';
     ++$i;

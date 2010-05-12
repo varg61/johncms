@@ -52,7 +52,7 @@ switch ($act) {
         if ($total > 0) {
             for ($i = $start; $i < $end; $i++) {
                 $ava = preg_replace('#^' . $rootpath . 'images/avatars/' . $id . '/(.*?).png$#isU', '$1', $array[$i], 1);
-                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<img src="' . $array[$i] . '" alt="" /> - <a href="avatar.php?act=choice&amp;cat=' . $id . '&amp;ava=' . $ava . '">Выбрать</a></div>';
             }
         } else {
@@ -75,7 +75,7 @@ switch ($act) {
         $dir = glob($rootpath . 'images/avatars/*', GLOB_ONLYDIR);
         $total_dir = count($dir);
         for ($i = 0; $i < $total_dir; $i++) {
-            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             echo '<a href="avatar.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'images/avatars/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> ('
                 . (int)count(glob($dir[$i] . '/*.png')) . ')</div>';
         }

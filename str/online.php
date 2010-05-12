@@ -25,7 +25,7 @@ $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($act == 'guest' ? 
 if ($total) {
     $req = mysql_query("SELECT * FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY " . ($act == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         if ($user_id) {
             // Вычисляем местоположение
             $where = explode(",", $res['place']);

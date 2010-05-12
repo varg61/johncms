@@ -90,7 +90,7 @@ switch ($mod) {
                 if ($total > 0) {
                     echo '<div class="rmenu"><p>Данные записи конфликтуют с введенными Вами адресами IP</p></div>';
                     while ($res = mysql_fetch_array($req)) {
-                        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
                         echo '<a href="index.php?act=sys_ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $ip . '</a>';
                         switch ($res['ban_type']) {
@@ -334,7 +334,7 @@ switch ($mod) {
             $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
             $req = mysql_query("SELECT * FROM `cms_ban_ip` ORDER BY `id` ASC LIMIT " . $start . "," . $kmess . ";");
             while ($res = mysql_fetch_array($req)) {
-                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
                 echo '<a href="index.php?act=sys_ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $ip . '</a>';
                 switch ($res['ban_type']) {

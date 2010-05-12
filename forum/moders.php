@@ -28,6 +28,7 @@ if (empty($_GET['id'])) {
                 $uz = mysql_query("select * from `users` where name='" . $mod1['from'] . "';");
                 $uz1 = mysql_fetch_array($uz);
                 if ($uz1['rights'] == 3) {
+                    //TODO: Убрать <font>
                     if ((!empty($_SESSION['uid'])) && ($login != $mod1['from'])) {
                         echo "<a href='../str/anketa.php?id=" . $uz1['id'] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
                     } else {

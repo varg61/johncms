@@ -70,7 +70,7 @@ if (mysql_num_rows($req_u)) {
                     $res_t = mysql_fetch_assoc($req_t);
                     $req_m = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $val . "' AND `user_id` = '$user' AND`type` = 'm' ORDER BY `id` DESC LIMIT 1");
                     $res_m = mysql_fetch_assoc($req_m);
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<span class="gray">(' . date("d.m.Y / H:i", $res_m['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                     echo ' <a href="my_stat.php?act=go&amp;do=f&amp;doid=' . $res_m['id'] . '">' . $res_t['text'] . '</a>';
                     $text = mb_substr($res_m['text'], 0, 500);
@@ -94,7 +94,7 @@ if (mysql_num_rows($req_u)) {
             $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '$user' AND `adm` = '0' ORDER BY `id` DESC LIMIT 10");
             if (mysql_num_rows($req)) {
                 while ($res = mysql_fetch_array($req)) {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                     $text = checkout($res['text'], 1, 1);
                     echo '<div class="sub">' . $text . '</div>';

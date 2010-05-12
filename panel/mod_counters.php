@@ -257,7 +257,7 @@ switch ($mod) {
         $req = mysql_query("SELECT * FROM `cms_counters` ORDER BY `sort` ASC");
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_assoc($req)) {
-                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<img src="../images/' . ($res['switch'] == 1 ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&nbsp;';
                 echo '<a href="index.php?act=mod_counters&amp;mod=view&amp;id=' . $res['id'] . '"><b>' . $res['name'] . '</b></a><br />';
                 echo '<div class="sub"><a href="index.php?act=mod_counters&amp;mod=up&amp;id=' . $res['id'] . '">Вверх</a> | ';

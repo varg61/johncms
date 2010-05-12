@@ -211,8 +211,8 @@ switch ($mod) {
     ////////////////////////////////////////////////////////////
     $req = mysql_query("SELECT * FROM `chat` WHERE `type` = 'r' ORDER BY `realid`");
         while ($res = mysql_fetch_assoc($req)) {
-            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
-            echo '<b>' . $res[text] . '</b><br />';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+            echo '<b>' . $res['text'] . '</b><br />';
             echo '<div class="sub"><a href="index.php?act=mod_chat&amp;mod=up&amp;id=' . $res['id'] . '">Вверх</a> | ';
             echo '<a href="index.php?act=mod_chat&amp;mod=down&amp;id=' . $res['id'] . '">Вниз</a> | ';
             echo '<a href="index.php?act=mod_chat&amp;mod=edit&amp;id=' . $res['id'] . '">Изм.</a> | ';

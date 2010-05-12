@@ -186,7 +186,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
                     echo '<a href="?id=' . $res['id'] . '">' . $res['text'] . '</a>';
                     if ($coltem)
@@ -219,7 +219,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 }
                 $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($rights >= 7 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
                 while ($mass = mysql_fetch_assoc($q1)) {
-                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "' ORDER BY `time` DESC LIMIT 1");
                     $nam = mysql_fetch_assoc($nikuser);
                     $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($rights >= 7 ? '' : " AND `close` != '1'"));
@@ -421,7 +421,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     if ($res['close'])
                         echo '<div class="rmenu">';
                     else
-                        echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
+                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     if ($set_user['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
                         if (file_exists(('../files/avatar/' . $res['user_id'] . '.png')))
@@ -611,7 +611,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         echo '<b>Форум</b></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($res = mysql_fetch_array($req)) {
-            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
             if (!empty($res['soft']))
