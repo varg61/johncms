@@ -61,12 +61,12 @@ if ($realtime > $user['lastdate'] + 300) {
 }
 echo '</h3><ul>';
 // Показываем аватар (если есть)
-if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
-    echo '<li>Аватар:<br /><img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /></li>';
+if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
+    echo '<li>Аватар:<br /><img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /></li>';
 }
 // Показываем фотографию (если есть)
-if (file_exists(('../files/photo/' . $user['id'] . '_small.jpg')))
-    echo '<li>Фотография:<br /><a href="../files/photo/' . $user['id'] . '.jpg"><img src="../files/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a></li>';
+if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg')))
+    echo '<li>Фотография:<br /><a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a></li>';
 if (!empty($user['status']))
     echo '<li><span class="gray">Статус: </span>' . $user['status'] . '</li>';
 echo '<li><span class="gray">Логин:</span> <b>' . $user['name_lat'] . '</b></li>';

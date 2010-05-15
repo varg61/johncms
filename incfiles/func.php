@@ -735,8 +735,8 @@ function show_user($user = array (), $status = 0, $ip = 0, $str = '', $text = ''
     } else {
         if ($set_user['avatar']) {
             $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-            if (file_exists(('../files/avatar/' . $user['id'] . '.png')))
-                $out .= '<img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" />&nbsp;';
+            if (file_exists(('../files/users/avatar/' . $user['id'] . '.png')))
+                $out .= '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" />&nbsp;';
             else
                 $out .= '<img src="../images/empty.png" width="32" height="32" alt="' . $user['name'] . '" />&nbsp;';
             $out .= '</td><td>';

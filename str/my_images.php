@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // JohnCMS                Mobile Content Management System                    //
 // Project site:          http://johncms.com                                  //
+// Project site:          http://johncms.com                                  //
 // Support site:          http://gazenwagen.com                               //
 ////////////////////////////////////////////////////////////////////////////////
 // Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
@@ -64,7 +65,7 @@ switch ($act) {
                 $handle->image_x = 32;
                 $handle->image_y = 32;
                 $handle->image_convert = 'png';
-                $handle->process('../files/avatar/');
+                $handle->process('../files/users/avatar/');
                 if ($handle->processed) {
                     echo '<div class="gmenu"><p>Аватар загружен<br /><a href="my_data.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
                     echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
@@ -105,7 +106,7 @@ switch ($act) {
                 $handle->image_x = 320;
                 $handle->image_ratio_y = true;
                 $handle->image_convert = 'jpg';
-                $handle->process('../files/photo/');
+                $handle->process('../files/users/photo/');
                 if ($handle->processed) {
                     // Обрабатываем превьюшку
                     $handle->file_new_name_body = $user['id'] . '_small';
@@ -114,7 +115,7 @@ switch ($act) {
                     $handle->image_x = 100;
                     $handle->image_ratio_y = true;
                     $handle->image_convert = 'jpg';
-                    $handle->process('../files/photo/');
+                    $handle->process('../files/users/photo/');
                     if ($handle->processed) {
                         echo '<div class="gmenu"><p>Фотография загружена<br /><a href="my_data.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
                         echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></div>';

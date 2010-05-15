@@ -19,10 +19,10 @@ if ($id) {
     $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = '" . $id . "' LIMIT 1");
     if (mysql_num_rows($req) > 0) {
         $res = mysql_fetch_array($req);
-        if (file_exists('./files/' . $res['filename'])) {
+        if (file_exists('../files/forum/attach/' . $res['filename'])) {
             $dlcount = $res['dlcount'] + 1;
             mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '" . $dlcount . "' WHERE `id` = '" . $id . "'");
-            header('location: ./files/' . $res['filename']);
+            header('location: ../files/forum/attach/' . $res['filename']);
         } else {
             $error = 'Файла не существует';
         }

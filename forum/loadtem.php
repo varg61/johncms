@@ -21,7 +21,7 @@ if (empty($_GET['n'])) {
     exit;
 }
 $n = $_GET['n'];
-$o = opendir("temtemp");
+$o = opendir("../files/forum/topics");
 while ($f = readdir($o)) {
     if ($f != "." && $f != ".." && $f != "index.php" && $f != ".htaccess") {
         $ff = format($f);
@@ -41,7 +41,7 @@ for ($i = 0; $i < $tt; $i++) {
     $tf = format($a[$i]);
     $tf1 = str_replace(".$tf", "", $a[$i]);
     if ($n == $tf1) {
-        header("Location: temtemp/$n.$tf");
+        header("Location: ../files/forum/topics/$n.$tf");
     }
 }
 

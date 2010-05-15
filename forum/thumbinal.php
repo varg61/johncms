@@ -20,8 +20,8 @@ function format($name) {
 }
 
 $file = isset($_GET['file']) ? htmlspecialchars(urldecode($_GET['file'])) : NULL;
-if ($file && file_exists('./files/' . $file)) {
-    $att_ext = strtolower(format('./files/' . $file));
+if ($file && file_exists('../files/forum/attach/' . $file)) {
+    $att_ext = strtolower(format('../files/forum/attach/' . $file));
     $pic_ext = array (
         'gif',
         'jpg',
@@ -29,7 +29,7 @@ if ($file && file_exists('./files/' . $file)) {
         'png'
     );
     if (in_array($att_ext, $pic_ext)) {
-        $sizs = GetImageSize('./files/' . $file);
+        $sizs = GetImageSize('../files/forum/attach/' . $file);
         $razm = 50;
         $width = $sizs[0];
         $height = $sizs[1];
@@ -47,19 +47,19 @@ if ($file && file_exists('./files/' . $file)) {
         }
         switch ($att_ext) {
             case "gif":
-                $im = ImageCreateFromGIF('./files/' . $file);
+                $im = ImageCreateFromGIF('../files/forum/attach/' . $file);
                 break;
 
             case "jpg":
-                $im = ImageCreateFromJPEG('./files/' . $file);
+                $im = ImageCreateFromJPEG('../files/forum/attach/' . $file);
                 break;
 
             case "jpeg":
-                $im = ImageCreateFromJPEG('./files/' . $file);
+                $im = ImageCreateFromJPEG('../files/forum/attach/' . $file);
                 break;
 
             case "png":
-                $im = ImageCreateFromPNG('./files/' . $file);
+                $im = ImageCreateFromPNG('../files/forum/attach/' . $file);
                 break;
         }
         $im1 = imagecreatetruecolor($tn_width, $tn_height);

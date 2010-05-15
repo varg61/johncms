@@ -143,15 +143,15 @@ if ($user_id) {
                             exit;
                         }
                         // Проверка наличия файла с таким же именем
-                        if (file_exists("../files/pm/$fname")) {
+                        if (file_exists("../files/users/pm/$fname")) {
                             $fname = $realtime . $fname;
                         }
                         // Окончательная обработка
                         if ($do_file) {
                             // Для обычного браузера
-                            if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "../files/pm/$fname")) == true) {
+                            if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "../files/users/pm/$fname")) == true) {
                                 @chmod("$fname", 0777);
-                                @chmod("../files/pm/$fname", 0777);
+                                @chmod("../files/users/pm/$fname", 0777);
                                 echo 'Файл прикреплен!<br/>';
                             } else {
                                 echo 'Ошибка прикрепления файла.<br/>';
@@ -159,7 +159,7 @@ if ($user_id) {
                         } elseif ($do_file_mini) {
                             // Для Opera Mini
                             if (strlen($filebase64) > 0) {
-                                $FileName = "../files/pm/$fname";
+                                $FileName = "../files/users/pm/$fname";
                                 $filedata = base64_decode($filebase64);
                                 $fid = @fopen($FileName, "wb");
                                 if ($fid) {
@@ -231,8 +231,8 @@ if ($user_id) {
                     require_once('../incfiles/end.php');
                     exit;
                 }
-                if (file_exists("../files/pm/$att")) {
-                    header("location: ../files/pm/$att");
+                if (file_exists("../files/users/pm/$att")) {
+                    header("location: ../files/users/pm/$att");
                 }
             }
             break;
@@ -393,8 +393,8 @@ if ($user_id) {
                 $delid = $mas1['id'];
                 $delfile = $mas1['attach'];
                 if (!empty($delfile)) {
-                    if (file_exists("../files/pm/$delfile")) {
-                        unlink("../files/pm/$delfile");
+                    if (file_exists("../files/users/pm/$delfile")) {
+                        unlink("../files/users/pm/$delfile");
                     }
                 }
                 mysql_query("delete from `privat` where `id`='" . intval($delid) . "';");
@@ -411,8 +411,8 @@ if ($user_id) {
             while ($mas1 = mysql_fetch_array($mess1)) {
                 $delfile = $mas1['attach'];
                 if (!empty($delfile)) {
-                    if (file_exists("../files/pm/$delfile")) {
-                        unlink("../files/pm/$delfile");
+                    if (file_exists("../files/users/pm/$delfile")) {
+                        unlink("../files/users/pm/$delfile");
                     }
                 }
             }
@@ -466,8 +466,8 @@ if ($user_id) {
             $mas1 = mysql_fetch_array($mess1);
             $delfile = $mas1['attach'];
             if (!empty($delfile)) {
-                if (file_exists("../files/pm/$delfile")) {
-                    unlink("../files/pm/$delfile");
+                if (file_exists("../files/users/pm/$delfile")) {
+                    unlink("../files/users/pm/$delfile");
                 }
             }
             mysql_query("DELETE FROM `privat` WHERE (`user` = '$login' OR `author` = '$login') AND `id` = '" . intval($_GET['del']) . "' LIMIT 1");

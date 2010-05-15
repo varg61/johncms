@@ -33,20 +33,18 @@ if (!isset($set_forum) || empty($set_forum))
 ////////////////////////////////////////////////////////////
 // Список расширений файлов, разрешенных к выгрузке       //
 ////////////////////////////////////////////////////////////
-// Файлы Windows
-$ext_win = array (
-    'exe',
-    'msi'
+// Файлы архивов
+$ext_arch = array (
+    'zip',
+    'rar',
+    '7z',
+    'tar',
+    'gz'
 );
-// Файлы Java
-$ext_java = array (
-    'jar',
-    'jad'
-);
-// Файлы SIS
-$ext_sis = array (
-    'sis',
-    'sisx'
+// Звуковые файлы
+$ext_audio = array (
+    'mp3',
+    'amr'
 );
 // Файлы документов и тексты
 $ext_doc = array (
@@ -57,22 +55,23 @@ $ext_doc = array (
     'djvu',
     'xls'
 );
+// Файлы Java
+$ext_java = array (
+    'jar',
+    'jad'
+);
 // Файлы картинок
 $ext_pic = array (
     'jpg',
     'jpeg',
     'gif',
     'png',
-    'bmp',
-    'wmf'
+    'bmp'
 );
-// Файлы архивов
-$ext_zip = array (
-    'zip',
-    'rar',
-    '7z',
-    'tar',
-    'gz'
+// Файлы SIS
+$ext_sis = array (
+    'sis',
+    'sisx'
 );
 // Файлы видео
 $ext_video = array (
@@ -82,13 +81,15 @@ $ext_video = array (
     'mpeg',
     'mp4'
 );
-// Звуковые файлы
-$ext_audio = array (
-    'mp3',
-    'amr'
+// Файлы Windows
+$ext_win = array (
+    'exe',
+    'msi'
 );
 // Другие типы файлов (что не перечислены выше)
-$ext_other = array ();
+$ext_other = array (
+    'wmf'
+);
 
 ////////////////////////////////////////////////////////////
 // Ограничиваем доступ к Форуму                           //
@@ -126,34 +127,34 @@ if (empty($id)) {
 }
 
 $array = array (
-    'new',
-    'who',
     'addfile',
-    'file',
-    'users',
-    'moders',
     'addvote',
-    'editvote',
-    'delvote',
-    'vote',
-    'per',
-    'ren',
-    'deltema',
-    'vip',
     'close',
+    'deltema',
+    'delvote',
     'editpost',
-    'nt',
-    'tema',
-    'loadtem',
-    'say',
-    'post',
-    'read',
+    'editvote',
     'faq',
-    'trans',
-    'massdel',
+    'file',
     'files',
     'filter',
-    'restore'
+    'loadtem',
+    'massdel',
+    'moders',
+    'new',
+    'nt',
+    'per',
+    'post',
+    'read',
+    'ren',
+    'restore',
+    'say',
+    'tema',
+    'trans',
+    'users',
+    'who',
+    'vip',
+    'vote'
 );
 if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once($act . '.php');
@@ -315,7 +316,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 if ($type1['edit'])
                     echo '<div class="rmenu">Тема закрыта</div>';
                 ////////////////////////////////////////////////////////////
-                // Блок голосований (by FlySelf)                          //
+                // Блок голосований                                       //
                 ////////////////////////////////////////////////////////////
                 if ($type1['realid']) {
                     if (isset($_GET['clip']))
@@ -422,8 +423,8 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     if ($set_user['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
-                        if (file_exists(('../files/avatar/' . $res['user_id'] . '.png')))
-                            echo '<img src="../files/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
+                        if (file_exists(('../files/users/avatar/' . $res['user_id'] . '.png')))
+                            echo '<img src="../files/users/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
                         else
                             echo '<img src="../images/empty.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
                         echo '</td><td>';
@@ -498,10 +499,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $freq = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "'");
                     if (mysql_num_rows($freq) > 0) {
                         $fres = mysql_fetch_assoc($freq);
-                        $fls = round(filesize('./files/' . $fres['filename']) / 1024, 2);
+                        $fls = round(filesize('../files/forum/attach/' . $fres['filename']) / 1024, 2);
                         echo '<br /><span class="gray">Прикреплённый файл:';
                         // Предпросмотр изображений
-                        $att_ext = strtolower(format('./files/' . $fres['filename']));
+                        $att_ext = strtolower(format('./files/forum/attach/' . $fres['filename']));
                         $pic_ext = array (
                             'gif',
                             'jpg',

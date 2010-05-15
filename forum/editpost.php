@@ -90,7 +90,7 @@ if (!$error) {
                 $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
                 if (mysql_num_rows($req_f)) {
                     $res_f = mysql_fetch_assoc($req_f);
-                    unlink('files/' . $res_f['filename']);
+                    unlink('../files/forum/attach/' . $res_f['filename']);
                     mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
                 }
                 // Формируем ссылку на нужную страницу темы

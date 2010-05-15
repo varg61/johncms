@@ -53,12 +53,12 @@ if ($id && $rights >= 7 && $act == 'reset') {
 echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? 'Анкета' : 'Личная анкета') . '</b></a> | Редактирование</div>';
 if (isset($_GET['delavatar'])) {
     // Удаляем аватар
-    @unlink('../files/avatar/' . $user['id'] . '.png');
+    @unlink('../files/users/avatar/' . $user['id'] . '.png');
     echo '<div class="rmenu">Аватар удален</div>';
 } elseif (isset($_GET['delphoto'])) {
     // Удаляем фото
-    @unlink('../files/photo/' . $user['id'] . '.jpg');
-    @unlink('../files/photo/' . $user['id'] . '_small.jpg');
+    @unlink('../files/users/photo/' . $user['id'] . '.jpg');
+    @unlink('../files/users/photo/' . $user['id'] . '_small.jpg');
     echo '<div class="rmenu">Фотография удалена</div>';
 } elseif (isset($_POST['submit'])) {
     $error = array ();
@@ -144,16 +144,16 @@ if ($rights >= 7) {
 }
 echo '<li>Аватар:<br />';
 $link = '';
-if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
-    echo '<img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
+if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
+    echo '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
     $link = ' | <a href="my_data.php?id=' . $user['id'] . '&amp;delavatar">Удалить</a>';
 }
 echo '<small><a href="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '">Выгрузить</a> | <a href="avatar.php?id=' . $user['id'] . '">Выбрать</a>' . $link . '</small></li>';
 // Фотография
 echo '<li>Фотография:<br />';
 $link = '';
-if (file_exists(('../files/photo/' . $user['id'] . '_small.jpg'))) {
-    echo '<a href="../files/photo/' . $user['id'] . '.jpg"><img src="../files/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
+if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg'))) {
+    echo '<a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
     $link = ' | <a href="my_data.php?delphoto">Удалить</a>';
 }
 echo '<small><a href="my_images.php?act=up_photo&amp;id=' . $user['id'] . '">Выгрузить</a>' . $link . '</small></li>';

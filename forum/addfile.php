@@ -60,7 +60,7 @@ switch ($res['type']) {
             ////////////////////////////////////////////////////////////
             if ($do_file || $do_file_mini) {
                 // Список допустимых расширений файлов.
-                $al_ext = array_merge($ext_win, $ext_java, $ext_sis, $ext_doc, $ext_pic, $ext_zip, $ext_video, $ext_audio, $ext_other);
+                $al_ext = array_merge($ext_win, $ext_java, $ext_sis, $ext_doc, $ext_pic, $ext_arch, $ext_video, $ext_audio, $ext_other);
                 $ext = explode(".", $fname);
                 // Проверка на допустимый размер файла
                 if ($fsize > 1024 * $flsz) {
@@ -103,15 +103,15 @@ switch ($res['type']) {
                     exit;
                 }
                 // Проверка наличия файла с таким же именем
-                if (file_exists("files/$fname")) {
+                if (file_exists("../files/forum/attach/$fname")) {
                     $fname = $realtime . $fname;
                 }
                 // Окончательная обработка
                 if ($do_file) {
                     // Для обычного браузера
-                    if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "files/$fname")) == true) {
+                    if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "../files/forum/attach/$fname")) == true) {
                         @chmod("$fname", 0777);
-                        @chmod("files/$fname", 0777);
+                        @chmod("../files/forum/attach/$fname", 0777);
                         echo 'Файл прикреплен!<br/>';
                     } else {
                         echo 'Ошибка прикрепления файла.<br/>';
@@ -119,7 +119,7 @@ switch ($res['type']) {
                 } elseif ($do_file_mini) {
                     // Для Opera Mini
                     if (strlen($filebase64) > 0) {
-                        $FileName = "files/$fname";
+                        $FileName = "../files/forum/attach/$fname";
                         $filedata = base64_decode($filebase64);
                         $fid = @fopen($FileName, "wb");
                         if ($fid) {
@@ -148,7 +148,7 @@ switch ($res['type']) {
                     $type = 4;
                 elseif (in_array($ext, $ext_pic))
                     $type = 5;
-                elseif (in_array($ext, $ext_zip))
+                elseif (in_array($ext, $ext_arch))
                     $type = 6;
                 elseif (in_array($ext, $ext_video))
                     $type = 7;

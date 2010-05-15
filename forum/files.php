@@ -78,69 +78,32 @@ if ($do || isset($_GET['new'])) {
     ////////////////////////////////////////////////////////////
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE " . (isset($_GET['new']) ? " `time` > '$new'" : " `filetype` = '$do'") . $sql), 0);
     if ($total > 0) {
-        echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />Новые файлы за последние 24 часа' : '') . ($do ? '<br />' . $types[$do] : '') . '</div>';
-        $req = mysql_query("SELECT `cms_forum_files`.*, `forum`.`from`, `forum`.`text`, `topicname`.`text` AS `topicname`
+        // Заголовок раздела
+        echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />Новые файлы за последние 24 часа' : '') . '</div>' . ($do ? '<div class="bmenu">' . $types[$do] . '</div>' : '');
+        $req = mysql_query("SELECT `cms_forum_files`.*, `forum`.`user_id`, `forum`.`text`, `topicname`.`text` AS `topicname`
         FROM `cms_forum_files`
         LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
         LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
-        WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql . " ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+        WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql . " ORDER BY `time` DESC LIMIT $start,$kmess");
         while ($res = mysql_fetch_array($req)) {
-            $fls = filesize('./files/' . $res['filename']);
+            $fls = filesize('../files/forum/attach/' . $res['filename']);
             $fls = round($fls / 1024, 0);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="images/' . $res['filetype'] . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=file&amp;id='
-                . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>&nbsp;[' . $res['dlcount'] . '] <font color="#999999">' . $fls . 'кб.</font>';
-            // Название темы
-            echo '<div class="sub">';
-            // Выводим данные юзера, кто и когда написал пост
-            $uz = mysql_query("SELECT `id`, 'from', `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `name`='" . $res['from'] . "' LIMIT 1");
+            echo '<p>' . ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" align="left" />&nbsp;';
+            echo '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>';
+            echo ' [' . $res['dlcount'] . ']';
+            echo ' <span class="gray">' . $fls . ' кб.</span>';
+            echo '</p><div class="sub">';
+            $uz = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
             $mass1 = mysql_fetch_array($uz);
-            // Значок пола
-            if ($mass1['id'])
-                echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($mass1['sex'] == 'm' ? 'm' : 'f') . '.gif" alt=""  width="10" height="10"/>&nbsp;';
-            else
-                echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
-            if ($user_id && $mass1['id'] && $user_id != $mass1['id']) {
-                echo '<a href="../str/anketa.php?id=' . $mass1['id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
-            } else {
-                echo '<b>' . $res['from'] . '</b>';
-            }
-            $vrp = $res['time'] + $set_user['sdvig'] * 3600;
-            $vr = date("d.m.Y / H:i", $vrp);
-            switch ($mass1['rights']) {
-                case 7:
-                    echo ' Adm ';
-                    break;
-
-                case 6:
-                    echo ' Smd ';
-                    break;
-
-                case 5:
-                case 4:
-                case 3:
-                case 2:
-                    echo ' Mod ';
-                    break;
-
-                case 1:
-                    echo ' Kil ';
-                    break;
-            }
-            $ontime = $mass1['lastdate'];
-            $ontime2 = $ontime + 300;
-            if ($realtime > $ontime2) {
-                echo '<font color="#FF0000"> [Off]</font>';
-            } else {
-                echo '<font color="#00AA00"> [ON]</font>';
-            }
-            echo ' <font color="#999999">(' . $vr . ')</font><br/>';
+            $set_user['avatar'] = 0;
+            echo show_user($mass1, 0, 0, '<span class="gray">' . date("d.m.Y / H:i", ($res['time'] + $set_user['sdvig'] * 3600)) . '</span>');
             // Выводим текст поста
             $text = mb_substr($res['text'], 0, 200);
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
             $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
-            echo '<b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
+            echo '<br /><b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
             ++$i;
         }
         echo '<div class="phdr">Всего: ' . $total . '</div>';
@@ -165,7 +128,7 @@ if ($do || isset($_GET['new'])) {
     for ($i = 1; $i < 10; $i++) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0) {
-            $link[] = '<img src="images/' . $i . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&nbsp;(' . $count . ')';
+            $link[] = '<img src="../images/system/' . $i . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&nbsp;(' . $count . ')';
             $total = $total + $count;
         }
     }

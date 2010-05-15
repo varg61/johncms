@@ -124,7 +124,7 @@ switch ($mod) {
                         // Удаляем файлы
                         $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `subcat` = '$id'");
                         while ($res_f = mysql_fetch_assoc($req_f)) {
-                            unlink('../forum/files/' . $res_f['filename']);
+                            unlink('../files/forum/attach/' . $res_f['filename']);
                         }
                         mysql_query("DELETE FROM `cms_forum_files` WHERE `subcat` = '$id'");
                         // Удаляем посты, голосования и метки прочтений
@@ -442,7 +442,7 @@ switch ($mod) {
                 if (mysql_num_rows($req_f)) {
                     // Удаляем файлы
                     while ($res_f = mysql_fetch_assoc($req_f)) {
-                        unlink('../forum/files/' . $res_f['filename']);
+                        unlink('../files/forum/attach/' . $res_f['filename']);
                     }
                     mysql_query("DELETE FROM `cms_forum_files` WHERE `topic` = '" . $res['id'] . "'");
                 }
@@ -513,7 +513,7 @@ switch ($mod) {
                 if (mysql_num_rows($req_f)) {
                     $res_f = mysql_fetch_assoc($req_f);
                     // Удаляем файлы
-                    unlink('../forum/files/' . $res_f['filename']);
+                    unlink('../files/forum/attach/' . $res_f['filename']);
                     mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "' LIMIT 1");
                 }
             }
