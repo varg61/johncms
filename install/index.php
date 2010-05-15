@@ -258,17 +258,18 @@ switch ($_GET['act']) {
 
         // Проверка прав доступа к папкам
         $arr = array (
-            'files/avatar/',
-            'files/photo/',
+            'files/forum/attach/',
+            'files/forum/thumbinals/',
+            'files/forum/topics/',
+            'files/users/avatar/',
+            'files/users/photo/',
+            'files/users/pm/',
             'files/cache/',
             'incfiles/',
             'gallery/foto/',
             'gallery/temp/',
             'library/files/',
             'library/temp/',
-            'files/pm/',
-            'forum/files/',
-            'forum/temtemp/',
             'download/arctemp/',
             'download/files/',
             'download/graftemp/',
