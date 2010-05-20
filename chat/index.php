@@ -20,7 +20,7 @@ $headmod = $id ? 'chat,' . $id : 'chat';
 
 // Ограничиваем доступ к Чату
 $error = '';
-if (!$set['mod_chat'] && !$dostadm)
+if (!$set['mod_chat'] && $rights < 7)
     $error = 'Чат закрыт';
 elseif ($ban['1'] || $ban['12'])
     $error = 'Для Вас доступ в Чат закрыт';

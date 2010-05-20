@@ -22,7 +22,7 @@ if (empty($id)) {
     exit;
 }
 // Проверка на спам
-$old = ($rights > 0 || $dostsadm = 1) ? 5 : 10;
+$old = ($rights > 0) ? 5 : 10;
 if ($lastpost > ($realtime - $old)) {
     require_once('../incfiles/head.php');
     echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="index.php?id=' . $id . '">Назад</a></p>';
@@ -228,7 +228,7 @@ switch ($tip) {
             echo "<a href='index.php?act=trans'>Транслит</a><br/><a href='../str/smile.php'>Смайлы</a><br/>";
             if ($ruz != 0) {
                 echo "<br/><a href='../str/pradd.php?act=write&amp;adr=" . $udat['id'] . "'>Написать в приват</a><br/>";
-                if ($dostcmod == 1) {
+                if ($rights == 1) {
                     echo "<a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $udat['id'] . "&amp;chat'>Пнуть</a><br/>";
                 }
             }

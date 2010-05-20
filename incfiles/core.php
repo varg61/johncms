@@ -81,7 +81,7 @@ $connect = @mysql_pconnect($db_host, $db_user, $db_pass) or die('cannot connect 
 ////////////////////////////////////////////////////////////
 // Проверяем адрес IP на Бан                              //
 ////////////////////////////////////////////////////////////
-$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . $ipl . "' BETWEEN `ip1` AND `ip2` LIMIT 1;") or die('Error: table "cms_ban_ip"');
+$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '$ipl' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
 if (mysql_num_rows($req) > 0) {
     $res = mysql_fetch_array($req);
     switch ($res['ban_type']) {
@@ -110,21 +110,6 @@ if (mysql_num_rows($req) > 0) {
 ////////////////////////////////////////////////////////////
 // Основные настройки системы                             //
 ////////////////////////////////////////////////////////////
-$user_id = false;
-$user_ps = false;
-// Временно оставляем старые переменные
-$dostsadm = 0;
-$dostadm = 0;
-$dostsmod = 0;
-$dostlmod = 0;
-$dostdmod = 0;
-$dostfmod = 0;
-$dostcmod = 0;
-$dostkmod = 0;
-$dostmod = 0;
-$rights = 0;
-
-// Задаем настройки системы
 $req = mysql_query("SELECT * FROM `cms_settings`;");
 $set = array ();
 while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
@@ -141,13 +126,16 @@ $flsz = $set['flsz'];               // Максимальный размер ф�
 $set_user = array ();
 $set_user['sdvig'] = 0;              // Временной сдвиг
 $set_user['smileys'] = 1;            // Включить(1) выключить(0) смайлы
-$set_user['kmess'] = 10;             // Число сообщений на страницу
 $set_user['quick_go'] = 1;           // Быстрый переход
 $set_user['avatar'] = 1;             // Аватары
 $set_user['field_w'] = 20;           // Ширина текстового поля ввода
 $set_user['field_h'] = 3;            // Высота текстового поля ввода
 $set_user['skin'] = $set['skindef']; // Тема оформления
-$kmess = $set_user['kmess'];
+$set_user['kmess'] = 10;             // Число сообщений на страницу
+$kmess = $set_user['kmess'];         // Число сообщений на страницу для SQL запросов
+$user_id = false;
+$user_ps = false;
+$rights = 0;
 
 ////////////////////////////////////////////////////////////
 // Дата и время                                           //

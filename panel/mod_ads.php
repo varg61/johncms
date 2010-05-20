@@ -92,10 +92,6 @@ switch ($from) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['link']) || empty($_POST['name']))
                 $error = '<div>Не заполнено обязательное поле.</div>';
-            $old = ($rights > 0 || $dostsadm = 1) ? 15 : 30;
-            $spam = $lastpost > ($realtime - $old) ? 1 : false;
-            if ($spam)
-                $error = $error . '<div><b>Антифлуд!</b><br /> Порог ' . $old . ' секунд.</div>';
             if (!empty($_POST['color'])) {
                 $color = mb_substr(trim($_POST['color']), 0, 6);
                 if (preg_match("/[^\da-zA-Z_]+/", $color))
@@ -103,10 +99,10 @@ switch ($from) {
                 if (strlen($color) < 6)
                     $error = $error . '<div>Не правильно заполнено поле "цвет".</div>';
             }
-            $type = abs(intval($_POST['type']));
+            $type = intval($_POST['type']);
             if ($type > 3 || $type < 0)
                 $type = 0;
-            $mesto = mb_substr(abs(intval($_POST['mesto'])), 0, 2);
+            $mesto = abs(intval($_POST['mesto']));
             if (!empty($mesto)) {
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `mesto` = '" . $mesto . "' AND `type` = '$type' AND `id` != '$id'"), 0);
                 if ($total != 0)
@@ -196,11 +192,7 @@ switch ($from) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['link']) || empty($_POST['name']))
                 $error = '<div>Не заполнено обязательное поле.</div>';
-            $old = ($rights > 0 || $dostsadm = 1) ? 15 : 30;
-            $spam = $datauser['lastpost'] > ($realtime - $old) ? 1 : false;
-            if ($spam)
-                $error = $error . '<div><b>Антифлуд!</b><br /> Порог ' . $old . ' секунд.</div>';
-            $type = abs(intval($_POST['type']));
+            $type = intval($_POST['type']);
             if ($type > 3 || $type < 0)
                 $type = 0;
             $mesto = mb_substr(abs(intval($_POST['mesto'])), 0, 2);
