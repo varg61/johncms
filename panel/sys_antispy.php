@@ -43,7 +43,7 @@ class scaner {
     public $good_files = array (
         '../.htaccess',
         '../login.php',
-        '../code.php',
+        '../captcha.php',
         '../exit.php',
         '../go.php',
         '../index.php',

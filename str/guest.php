@@ -65,7 +65,7 @@ switch ($act) {
         $name = isset($_POST['name']) ? mb_substr(trim($_POST['name']), 0, 20) : '';
         $msg = isset($_POST['msg']) ? mb_substr(trim($_POST['msg']), 0, 5000) : '';
         $trans = isset($_POST['msgtrans']) ? 1 : 0;
-        $code = isset($_POST['code']) ? intval($_POST['code']) : rand(1000, 9999);
+        $code = isset($_POST['code']) ? trim($_POST['code']) : '';
         $from = $user_id ? $login : mysql_real_escape_string($name);
         // Транслит сообщения
         if ($trans)
@@ -79,8 +79,10 @@ switch ($act) {
             $error[] = 'Вы не ввели сообщение';
         if ($ban['1'] || $ban['13'])
             $error[] = 'Вы не можете писать в Гостевой';
-        if (!$user_id && $_SESSION['code'] != $code)
+        // CAPTCHA для гостей
+        if (!$user_id && (empty($code) || mb_strlen($code) < 4 || $code != $_SESSION['code']))
             $error[] = 'Проверочный код введен неверно';
+        unset($_SESSION['code']);
         if ($user_id) {
             // Антифлуд для зарегистрированных пользователей
             $flood = antiflood();
@@ -103,7 +105,6 @@ switch ($act) {
                 exit;
             }
         }
-        $_SESSION['code'] = rand(1000, 9999);
         if (!$error) {
             // Вставляем сообщение в базу
             mysql_query("INSERT INTO `guest` SET
@@ -131,7 +132,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         if ($rights >= 6 && $id) {
             if (isset($_POST['submit'])) {
-                $otv = mb_substr($_POST['otv'], 0, 500);
+                $otv = mb_substr($_POST['otv'], 0, 5000);
                 mysql_query("UPDATE `guest` SET
                 `admin` = '" . $login . "',
                 `otvet` = '" . mysql_real_escape_string($otv) . "',
@@ -256,13 +257,12 @@ switch ($act) {
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             if (!$user_id) {
                 // CAPTCHA для гостей
-                $_SESSION['code'] = rand(1000, 9999);
-                echo '<img src="../code.php?chk=' . rand(1000, 9999) . '" alt="Код"/><br />';
-                echo '<input type="text" size="4" maxlength="4"  name="code"/>&nbsp;введите код<br />';
+                echo '<img src="../captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />';
+                echo '<input type="text" size="5" maxlength="5"  name="code"/>&nbsp;введите код<br />';
             }
             echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
         } else {
-            echo '<div class="rmenu">Писать могут только <a href="../in.php">авторизованные</a> посетители</div>';
+            echo '<div class="rmenu">Писать могут только <a href="../login.php">авторизованные</a> посетители</div>';
         }
         if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1")) {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1'");
