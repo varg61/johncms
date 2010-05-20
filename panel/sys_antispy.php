@@ -1,17 +1,18 @@
 <?php
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-//TODO: Разобраться с подкаталогом /incfiles/lib
 defined('_IN_JOHNADM') or die('Error: restricted access');
 define('ROOT_DIR', '..');
 
@@ -43,7 +44,7 @@ class scaner {
     public $good_files = array (
         '../.htaccess',
         '../login.php',
-        '../code.php',
+        '../captcha.php',
         '../exit.php',
         '../go.php',
         '../index.php',
@@ -73,6 +74,7 @@ class scaner {
         '../download/index.php',
         '../download/komm.php',
         '../download/makdir.php',
+        '../download/mp3.php',
         '../download/mp3temp/index.php',
         '../download/new.php',
         '../download/opis.php',
@@ -146,18 +148,19 @@ class scaner {
         '../gallery/upl.php',
         '../incfiles/.htaccess',
         '../incfiles/ban.php',
+        '../incfiles/char.php',
         '../incfiles/class_ipinit.php',
         '../incfiles/class_mainpage.php',
-        '../incfiles/pclzip.lib.php',
-        '../incfiles/lib/class.upload.php',
+        '../incfiles/class_pclzip.php',
+        '../incfiles/class_upload.php',
         '../incfiles/core.php',
         '../incfiles/db.php',
         '../incfiles/end.php',
         '../incfiles/func.php',
         '../incfiles/head.php',
         '../incfiles/index.php',
-        '../incfiles/lib/mp3.php',
-        '../incfiles/lib/pear.php',
+        '../incfiles/mp3.php',
+        '../incfiles/pear.php',
         '../library/addkomm.php',
         '../library/del.php',
         '../library/edit.php',
@@ -236,27 +239,29 @@ class scaner {
     public $track_files = array ();
     private $checked_folders = array ();
     private $cache_files = array ();
+
     function scan() {
         // Сканирование на соответствие дистрибутиву
         foreach ($this->scan_folders as $data) {
             $this->scan_files(ROOT_DIR . $data);
         }
     }
+
     function snapscan() {
         // Сканирование по образу
-        if (file_exists('../files/cache/' . $this->snap_base)) {
-            $filecontents = file('../files/cache/' . $this->snap_base);
+        if (file_exists('../cache/' . $this->snap_base)) {
+            $filecontents = file('../cache/' . $this->snap_base);
             foreach ($filecontents as $name => $value) {
                 $filecontents[$name] = explode("|", trim($value));
                 $this->track_files[$filecontents[$name][0]] = $filecontents[$name][1];
             }
             $this->snap = true;
         }
-
         foreach ($this->scan_folders as $data) {
             $this->scan_files(ROOT_DIR . $data);
         }
     }
+
     function snap() {
         // Добавляем снимок надежных файлов в базу
         foreach ($this->scan_folders as $data) {
@@ -264,21 +269,20 @@ class scaner {
         //$this->scan_files(ROOT_DIR . $data);
         }
         $filecontents = "";
-
         foreach ($this->snap_files as $idx => $data) {
             $filecontents .= $data['file_path'] . "|" . $data['file_crc'] . "\r\n";
         }
-        $filehandle = fopen('../files/cache/' . $this->snap_base, "w+");
+        $filehandle = fopen('../cache/' . $this->snap_base, "w+");
         fwrite($filehandle, $filecontents);
         fclose($filehandle);
-        @chmod('../files/cache/' . $this->snap_base, 0666);
+        @chmod('../cache/' . $this->snap_base, 0666);
     }
+
     function scan_files($dir, $snap = false) {
         // Служебная функция сканирования
         if (!isset($file))
             $file = false;
         $this->checked_folders[] = $dir . '/' . $file;
-
         if ($dh = @opendir($dir)) {
             while (false !== ($file = readdir($dh))) {
                 if ($file == '.' or $file == '..' or $file == '.svn' or $file == '.DS_store') {
@@ -335,6 +339,7 @@ class scaner {
 ////////////////////////////////////////////////////////////
 echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Антишпион</div>';
 $scaner = new scaner();
+
 switch ($mod) {
     case 'scan':
         // Сканируем на соответствие дистрибутиву
@@ -402,6 +407,7 @@ switch ($mod) {
         echo '<small>Делается "снимок" всех скриптовых файлов сайта, вычисляется их контрольные суммы и запоминается в базе</small></li>';
         echo '</ul></p></div><div class="phdr">&nbsp;</div>';
 }
+
 echo '<p>' . ($mod ? '<a href="index.php?act=sys_antispy">Меню сканера</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
 
 ?>

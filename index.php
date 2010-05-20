@@ -2,36 +2,39 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
 
 $headmod = 'mainpage';
+
 // Внимание! Если файл находится в корневой папке, нужно указать $rootpath = '';
 $rootpath = '';
 
-require_once('incfiles/core.php');
-require_once('incfiles/head.php');
+require_once ('incfiles/core.php');
+require_once ('incfiles/head.php');
 
-if (isset($_GET['err']))
+if (isset ($_GET['err']))
     $act = 404;
 switch ($act) {
-    case '404':
+    case '404' :
         ////////////////////////////////////////////////////////////
         // Сообщение об ошибке 404                                //
         ////////////////////////////////////////////////////////////
         echo display_error('Запрошенная Вами страница отсутствует');
         break;
 
-    case 'users':
+    case 'users' :
         //TODO: Сделать переключатель доступа из Админки, показвать, или нет Актив гостям
         echo '<div class="phdr"><b>Актив Сайта</b></div>';
         echo '<div class="menu"><a href="str/users_search.php">Поиск юзера</a></div>';
@@ -52,7 +55,7 @@ switch ($act) {
         echo '<div class="phdr">&nbsp;</div>';
         break;
 
-    case 'info':
+    case 'info' :
         ////////////////////////////////////////////////////////////
         // Информационный блок                                    //
         ////////////////////////////////////////////////////////////
@@ -64,13 +67,13 @@ switch ($act) {
         $_SESSION['refsm'] = '../index.php?act=info';
         break;
 
-    case 'cab':
+    case 'cab' :
         ////////////////////////////////////////////////////////////
         // Личный кабинет                                         //
         ////////////////////////////////////////////////////////////
         if (!$user_id) {
             echo display_error('Только для зарегистрированных');
-            require_once('incfiles/end.php');
+            require_once ('incfiles/end.php');
             exit;
         }
         echo '<div class="phdr"><b>Личный кабинет</b></div>';
@@ -113,13 +116,13 @@ switch ($act) {
         echo '</ul></p></div>';
         break;
 
-    case 'digest':
+    case 'digest' :
         ////////////////////////////////////////////////////////////
         // Дайджест                                               //
         ////////////////////////////////////////////////////////////
         if (!$user_id) {
             echo display_error('Только для зарегистрированных');
-            require_once('incfiles/end.php');
+            require_once ('incfiles/end.php');
             exit;
         }
         echo '<div class="phdr">Дайджест</div>';
@@ -165,10 +168,10 @@ switch ($act) {
         $total_gal = fgal(1);
         if ($total_gal > 0)
             echo '<li><a href="gallery/index.php?act=new">Галерея</a> (' . $total_gal . ')</li>';
-        if ($set_karma['on']) {
-            $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
-            if ($total_karma > 0)
-                echo '<li><a href="str/karma.php?act=new">Новые отзывы</a> (' . $total_karma . ')</li>';
+        if($set_karma['on']) {
+           $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
+           if ($total_karma > 0)
+               echo '<li><a href="str/karma.php?act=new">Новые отзывы</a> (' . $total_karma . ')</li>';
         }
         $old = $realtime - (3 * 24 * 3600);
         $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . $old), 0);
@@ -178,17 +181,17 @@ switch ($act) {
         if (!$total_news && !$total_forum && !$total_guest && !$total_gal && !$total_lib && !$total_karma)
             echo 'Новостей нет';
         // Дата последнего посещения
-        $last = isset($_GET['last']) ? intval($_GET['last']) : $datauser['lastdate'];
+        $last = isset ($_GET['last']) ? intval($_GET['last']) : $datauser['lastdate'];
         echo '</ul></div><div class="phdr">Последнее посещение: ' . date("d.m.Y (H:i)", $last) . '</div>';
         break;
 
-    default:
-    ////////////////////////////////////////////////////////////
-    // Главное меню сайта                                     //
-    ////////////////////////////////////////////////////////////
-    include_once 'pages/mainmenu.php';
+    default :
+        ////////////////////////////////////////////////////////////
+        // Главное меню сайта                                     //
+        ////////////////////////////////////////////////////////////
+        include_once 'pages/mainmenu.php';
 }
 
-require_once('incfiles/end.php');
+require_once ('incfiles/end.php');
 
 ?>

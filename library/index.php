@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                                                                    //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@johncms.com                     //
+// Олег Касьянов aka AlkatraZ          alkatraz@johncms.com                   //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -16,52 +18,41 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'lib';
 $textl = 'Библиотека';
-require_once("../incfiles/core.php");
+require_once ("../incfiles/core.php");
 
 // Ограничиваем доступ к Библиотеке
 $error = '';
 if (!$set['mod_lib'] && $rights < 7)
     $error = 'Библиотека закрыта';
 elseif ($set['mod_lib'] == 1 && !$user_id)
-    $error = 'Доступ в Библиотеку открыт только <a href="../in.php">авторизованным</a> посетителям';
+    $error = 'Доступ в Библиотеку открыт только <a href="../login.php">авторизованным</a> посетителям';
 if ($error) {
-    require_once('../incfiles/head.php');
+    require_once ("../incfiles/head.php");
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once('../incfiles/end.php');
+    require_once ("../incfiles/end.php");
     exit;
 }
 
 // Заголовки библиотеки
-if (empty($id)) {
+if (empty ($id)) {
     $textl = 'Библиотека';
-} else {
+}
+else {
     $req = mysql_query("SELECT * FROM `lib` WHERE `id`= '" . $id . "' LIMIT 1;");
     $zag = mysql_fetch_array($req);
     $hdr = $zag['type'] == 'bk' ? $zag['name'] : $zag['text'];
     $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
-require_once('../incfiles/head.php');
+require_once ("../incfiles/head.php");
 
-$do = array (
-    'java',
-    'symb',
-    'search',
-    'new',
-    'moder',
-    'addkomm',
-    'komm',
-    'del',
-    'edit',
-    'load',
-    'write',
-    'mkcat',
-    'topread',
-    'trans'
-);
-if (in_array($act, $do)) {
-    require_once($act . '.php');
-} else {
+$do
+    = array('java', 'symb', 'search', 'new', 'moder', 'addkomm', 'komm', 'del', 'edit', 'load', 'write', 'mkcat', 'topread', 'trans');
+if (in_array($act, $do
+        ) ) {
+        require_once ($act . '.php');
+}
+else {
     if (!$set['mod_lib'])
         echo '<p><font color="#FF0000"><b>Библиотека закрыта!</b></font></p>';
     if (!$id) {
@@ -84,14 +75,15 @@ if (in_array($act, $do)) {
         echo '<a href="index.php?act=topread">Самые читаемые</a></p></div>';
         $id = 0;
         $tip = "cat";
-    } else {
+    }
+    else {
         $tip = $zag['type'];
         if ($tip == "cat") {
             echo '<div class="phdr"><b>' . htmlentities($zag['text'], ENT_QUOTES, 'UTF-8') . '</b></div>';
         }
     }
     switch ($tip) {
-        case 'cat':
+        case 'cat' :
             $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'cat' AND `refid` = '" . $id . "'");
             $totalcat = mysql_result($req, 0);
             $bkz = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `refid` = '" . $id . "' AND `moder`='1'");
@@ -106,21 +98,24 @@ if (in_array($act, $do)) {
                     $totalbk2 = mysql_num_rows($bk2);
                     if ($totalcat2 != 0) {
                         $kol = "$totalcat2 кат.";
-                    }  elseif ($totalbk2 != 0) {
+                    }
+                    elseif ($totalbk2 != 0) {
                         $kol = "$totalbk2 ст.";
-                    } else {
+                    }
+                    else {
                         $kol = "0";
                     }
-                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     echo '<a href="index.php?id=' . $cat1['id'] . '">' . $cat1['text'] . '</a>(' . $kol . ')</div>';
                     ++$i;
                 }
                 echo '<div class="phdr">Всего категорий: ' . $totalcat . '</div>';
-            } elseif ($totalbk > 0) {
+            }
+            elseif ($totalbk > 0) {
                 $total = $totalbk;
                 $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by `time` desc LIMIT " . $start . "," . $kmess);
                 while ($bk1 = mysql_fetch_array($bk)) {
-                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                     $vr = $bk1['time'] + $set_user['sdvig'] * 3600;
                     $vr = date("d.m.y / H:i", $vr);
                     echo $div . '<b><a href="index.php?id=' . $bk1['id'] . '">' . htmlentities($bk1['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
@@ -130,7 +125,8 @@ if (in_array($act, $do)) {
                     ++$i;
                 }
                 echo '<div class="phdr">Всего статей: ' . $totalbk . '</div>';
-            } else {
+            }
+            else {
                 $total = 0;
             }
             echo '<p>';
@@ -151,7 +147,7 @@ if (in_array($act, $do)) {
                 echo "<a href='index.php?act=mkcat&amp;id=" . $id . "'>Создать категорию</a><br/>";
             }
             if ($zag['ip'] == 0 && $id != 0) {
-                if (($rights == 5 || $rights >= 6) || ($zag['soft'] == 1 && !empty($_SESSION['uid']))) {
+                if (($rights == 5 || $rights >= 6) || ($zag['soft'] == 1 && !empty ($_SESSION['uid']))) {
                     echo "<a href='index.php?act=write&amp;id=" . $id . "'>Написать статью</a><br/>";
                 }
                 if ($rights == 5 || $rights >= 6) {
@@ -177,23 +173,26 @@ if (in_array($act, $do)) {
                     $catname = $dnamm3['text'];
                 }
                 echo "&#187;<a href='index.php?'>В библиотеку</a><br/>";
-            } else {
+            }
+            else {
                 echo "<a href='index.php?act=symb'>Настройки</a><br/>";
                 echo "<form action='?act=search' method='post'>";
-                echo "Поиск статьи: <br/><input type='text' name='srh' value=''/><br/>Метод поиска:<br/><select name='mod'><option value='1'>По названию</option><option value='2'>По тексту</option></select><br/>";
+                echo
+                "Поиск статьи: <br/><input type='text' name='srh' value=''/><br/>Метод поиска:<br/><select name='mod'><option value='1'>По названию</option><option value='2'>По тексту</option></select><br/>";
                 echo "<input type='submit' value='Найти!'/></form><br/>";
             }
             echo '</p>';
             break;
 
-        case 'bk':
+        case 'bk' :
             ////////////////////////////////////////////////////////////
             // Читаем статью                                          //
             ////////////////////////////////////////////////////////////
-            if (!empty($_SESSION['symb'])) {
+            if (!empty ($_SESSION['symb'])) {
                 $simvol = $_SESSION['symb'];
-            } else {
-                $simvol = 2000; // Число символов на страницу по умолчанию
+            }
+            else {
+                $simvol = 2000;                // Число символов на страницу по умолчанию
             }
             // Счетчик прочтений
             if ($_SESSION['lib'] != $id) {
@@ -209,12 +208,13 @@ if (in_array($act, $do)) {
             $strrpos = mb_strrpos($tx, " ");
             $pages = 1;
             // Вычисляем номер страницы
-            if (isset($_GET['page'])) {
+            if (isset ($_GET['page'])) {
                 $page = abs(intval($_GET['page']));
                 if ($page == 0)
                     $page = 1;
                 $start = $page - 1;
-            } else {
+            }
+            else {
                 $page = $start + 1;
             }
             $t_si = 0;
@@ -230,7 +230,8 @@ if (in_array($act, $do)) {
                     }
                     if ($strings[$pages] == "") {
                         $t_si = $strrpos++;
-                    } else {
+                    }
+                    else {
                         $pages++;
                     }
                 }
@@ -243,7 +244,8 @@ if (in_array($act, $do)) {
                     $prb = mb_strrpos($page_text, " ");
                     $page_text = mb_substr($page_text, 0, $prb);
                 }
-            } else {
+            }
+            else {
                 $page_text = $tx;
             }
             // Текст статьи
@@ -281,12 +283,13 @@ if (in_array($act, $do)) {
             }
             echo "&#187;<a href='index.php?'>В библиотеку</a></p>";
             break;
-            default :
-        header("location: index.php");
+
+        default :
+            header("location: index.php");
             break;
     }
 }
 
-require_once('../incfiles/end.php');
+require_once ('../incfiles/end.php');
 
 ?>

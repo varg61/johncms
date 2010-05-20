@@ -2,22 +2,25 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../incfiles/head.php');
+require_once ('../incfiles/head.php');
+
 if (!$user_id || !$id) {
     echo display_error('Неправильные данные');
-    require_once('../incfiles/end.php');
+    require_once ('../incfiles/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'm' " . ($rights >= 7 ? "" : " AND `close` != '1'") . " LIMIT 1");
@@ -40,7 +43,8 @@ if (mysql_num_rows($req)) {
                     $error = 'Вы не можете менять пост старшего Вас по должности<br /><a href="' . $link . '">Назад</a>';
             }
         }
-    } else {
+    }
+    else {
         // Проверка для обычных юзеров
         if ($res['user_id'] != $user_id)
             $error = 'Вы пытаетесь изменить чужой пост<br /><a href="' . $link . '">Назад</a>';
@@ -53,26 +57,28 @@ if (mysql_num_rows($req)) {
                 $error = 'С момента создания поста прошло более 5 минут и Вы не можете его редактировать<br /><a href="' . $link . '">Назад</a>';
         }
     }
-} else {
+}
+else {
     $error = 'Пост не существует, или был удален<br /><a href="index.php">Форум</a>';
 }
+
 if (!$error) {
     switch ($do) {
-        case 'restore':
-            ////////////////////////////////////////////////////////////
-            // Восстановление удаленного поста                        //
-            ////////////////////////////////////////////////////////////
-            $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
-            if (mysql_num_rows($req_u)) {
-                // Добавляем один балл к счетчику постов юзера
-                $res_u = mysql_fetch_assoc($req_u);
-                mysql_query("UPDATE `users` SET `postforum` = '" . ($res_u['postforum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
-            }
-            mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
-            header('Location: ' . $link);
-            break;
+            case 'restore' :
+                ////////////////////////////////////////////////////////////
+                // Восстановление удаленного поста                        //
+                ////////////////////////////////////////////////////////////
+                $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                if (mysql_num_rows($req_u)) {
+                    // Добавляем один балл к счетчику постов юзера
+                    $res_u = mysql_fetch_assoc($req_u);
+                    mysql_query("UPDATE `users` SET `postforum` = '" . ($res_u['postforum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                }
+                mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
+                header('Location: ' . $link);
+                break;
 
-        case 'delete':
+            case 'delete' :
             if ($res['close'] != 1) {
                 $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
                 if (mysql_num_rows($req_u)) {
@@ -82,7 +88,7 @@ if (!$error) {
                     mysql_query("UPDATE `users` SET `postforum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
                 }
             }
-            if ($rights == 9 && !isset($_GET['hide'])) {
+            if ($rights == 9 && !isset ($_GET['hide'])) {
                 ////////////////////////////////////////////////////////////
                 // Удаление поста (для Супервизоров)                      //
                 ////////////////////////////////////////////////////////////
@@ -90,7 +96,7 @@ if (!$error) {
                 $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
                 if (mysql_num_rows($req_f)) {
                     $res_f = mysql_fetch_assoc($req_f);
-                    unlink('../files/forum/attach/' . $res_f['filename']);
+                    unlink('files/' . $res_f['filename']);
                     mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '$id' LIMIT 1");
                 }
                 // Формируем ссылку на нужную страницу темы
@@ -99,10 +105,12 @@ if (!$error) {
                 if ($posts < 2) {
                     // Пересылка на удаление всей темы
                     header('Location: index.php?act=deltema&id=' . $res['refid']);
-                } else {
+                }
+                else {
                     header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
                 }
-            } else {
+            }
+            else {
                 ////////////////////////////////////////////////////////////
                 // Скрытие поста                                          //
                 ////////////////////////////////////////////////////////////
@@ -116,14 +124,15 @@ if (!$error) {
                     $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
                     mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't' LIMIT 1");
                     header('Location: index.php?id=' . $res_l['refid']);
-                } else {
+                }
+                else {
                     mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
                     header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
                 }
             }
             break;
 
-        case 'del': ////////////////////////////////////////////////////////////
+        case 'del' :            ////////////////////////////////////////////////////////////
             // Удаление поста, предварительное напоминание            //
             ////////////////////////////////////////////////////////////
             echo '<div class="phdr"><b>Форум:</b> удалить сообщение</div>';
@@ -138,13 +147,13 @@ if (!$error) {
             echo '<div class="phdr"><small>В случае удаления, из счетчика постов форума будет вычтен один балл</small></div>';
             break;
 
-        default: ////////////////////////////////////////////////////////////
+        default :            ////////////////////////////////////////////////////////////
             // Редактирование поста                                   //
             ////////////////////////////////////////////////////////////
-            if (isset($_POST['submit'])) {
-                if (empty($_POST['msg'])) {
+            if (isset ($_POST['submit'])) {
+                if (empty ($_POST['msg'])) {
                     echo display_error('Вы не ввели сообщение!<br/><a href="index.php?act=editpost&amp;id=' . $id . '">Повторить</a>');
-                    require_once('../incfiles/end.php');
+                    require_once ('../incfiles/end.php');
                     exit;
                 }
                 $msg = mysql_real_escape_string(trim($_POST['msg']));
@@ -155,11 +164,12 @@ if (!$error) {
                 `tedit` = '$realtime',
                 `edit` = '$login',
                 `kedit` = '" . ($res['kedit'] + 1) .
-                    "',
+                "',
                 `text` = '$msg'
                 WHERE `id` = '$id'");
                 header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
-            } else {
+            }
+            else {
                 echo '<div class="phdr"><b>Форум:</b> изменить сообщение</div>';
                 echo '<div class="rmenu"><form action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
                 echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
@@ -170,11 +180,12 @@ if (!$error) {
                 echo '<p><a href="' . $link . '">Назад</a></p>';
             }
     }
-} else {
+}
+else {
     // Выводим сообщения об ошибках
     echo display_error($error);
 }
 
-require_once('../incfiles/end.php');
+require_once ('../incfiles/end.php');
 
 ?>

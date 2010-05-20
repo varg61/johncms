@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -20,6 +22,7 @@ function counters() {
     ////////////////////////////////////////////////////////////
     global $headmod;
     $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
+
     if (mysql_num_rows($req) > 0) {
         while ($res = mysql_fetch_array($req)) {
             $link1 = ($res['mode'] == 1 || $res['mode'] == 2) ? $res['link1'] : $res['link2'];
@@ -179,7 +182,6 @@ function stlib() {
     if ($countf1 > 0)
         $out = $out . '&nbsp;/&nbsp;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
     $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
-
     if (($rights == 5 || $rights >= 6) && $countm > 0)
         $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> Мод:$countm</font></a>";
     return $out;
@@ -204,12 +206,10 @@ function gbook($mod = 0) {
         case 1:
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . ($realtime - 86400) . "'"), 0);
             break;
-
         case 2:
             if ($rights >= 1)
                 $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time` > '" . ($realtime - 86400) . "'"), 0);
             break;
-
         default:
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . ($realtime - 86400) . "'"), 0);
             if ($rights >= 1) {
@@ -243,6 +243,7 @@ function highlight($php) {
         '<br />' => '',
         '\\' => 'slash_JOHNCMS'
     ));
+
     $php = html_entity_decode(trim($php), ENT_QUOTES, 'UTF-8');
     $php = substr($php, 0, 2) != "<?" ? $php = "<?php\n" . $php . "\n?>" : $php;
     $php = highlight_string(stripslashes($php), true);
@@ -586,7 +587,7 @@ function smileys($str, $adm = 0) {
     if ($adm == 2) {
         // Обрабатываем простые смайлы
         $array1 = array ();
-        $path = $rootpath . 'images/smileys/simply/';
+        $path = $rootpath . 'smileys/simply/';
         $dir = opendir($path);
         while ($file = readdir($dir)) {
             $name = explode(".", $file);
@@ -599,7 +600,7 @@ function smileys($str, $adm = 0) {
         // Обрабатываем Админские смайлы
         $array2 = array ();
         $array3 = array ();
-        $path = $rootpath . 'images/smileys/admin/';
+        $path = $rootpath . 'smileys/admin/';
         $dir = opendir($path);
         while ($file = readdir($dir)) {
             $name = explode(".", $file);
@@ -612,7 +613,7 @@ function smileys($str, $adm = 0) {
         // Обрабатываем смайлы в каталогах
         $array4 = array ();
         $array5 = array ();
-        $cat = glob($rootpath . 'images/smileys/user/*', GLOB_ONLYDIR);
+        $cat = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
         $total = count($cat);
         for ($i = 0; $i < $total; $i++) {
             $dir = opendir($cat[$i]);
@@ -629,7 +630,7 @@ function smileys($str, $adm = 0) {
         $smileys = serialize(array_merge($array1, $array4, $array5));
         $smileys_adm = serialize(array_merge($array2, $array3));
         // Записываем в файл Кэша
-        if ($fp = fopen($rootpath . 'files/cache/smileys_cache.dat', 'w')) {
+        if ($fp = fopen($rootpath . 'cache/smileys_cache.dat', 'w')) {
             fputs($fp, $smileys . "\r\n" . $smileys_adm);
             fclose($fp);
             return $count;
@@ -638,8 +639,8 @@ function smileys($str, $adm = 0) {
         }
     } else {
         // Выдаем кэшированные смайлы
-        if (file_exists($rootpath . 'files/cache/smileys_cache.dat')) {
-            $file = file($rootpath . 'files/cache/smileys_cache.dat');
+        if (file_exists($rootpath . 'cache/smileys_cache.dat')) {
+            $file = file($rootpath . 'cache/smileys_cache.dat');
             $smileys = unserialize($file[0]);
             if ($adm)
                 $smileys = array_merge($smileys, unserialize($file[1]));
@@ -650,18 +651,18 @@ function smileys($str, $adm = 0) {
     }
 }
 
-function display_error($error = false) {
+function display_error($error = false, $link = '') {
     ////////////////////////////////////////////////////////////
     // Сообщения об ошибках                                   //
     ////////////////////////////////////////////////////////////
     if ($error) {
-        $out = '<div class="rmenu"><p>ОШИБКА!';
+        $out = '<div class="rmenu"><p><b>ОШИБКА!</b>';
         if (is_array($error)) {
             foreach ($error as $val)$out .= '<div>' . $val . '</div>';
         } else {
             $out .= '<br />' . $error;
         }
-        $out .= '</p></div>';
+        $out .= '</p><p>' . $link . '</p></div>';
         return $out;
     } else {
         return false;
@@ -735,8 +736,8 @@ function show_user($user = array (), $status = 0, $ip = 0, $str = '', $text = ''
     } else {
         if ($set_user['avatar']) {
             $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-            if (file_exists(('../files/users/avatar/' . $user['id'] . '.png')))
-                $out .= '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" />&nbsp;';
+            if (file_exists(('../files/avatar/' . $user['id'] . '.png')))
+                $out .= '<img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" />&nbsp;';
             else
                 $out .= '<img src="../images/empty.png" width="32" height="32" alt="' . $user['name'] . '" />&nbsp;';
             $out .= '</td><td>';
@@ -821,17 +822,14 @@ function antiflood() {
             $adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0 AND `lastdate` > '$onltime'"), 0);
             $limit = $adm > 0 ? $af['day'] : $af['night'];
             break;
-
         case 3:
             // День
             $limit = $af['day'];
             break;
-
         case 4:
             // Ночь
             $limit = $af['night'];
             break;
-
         default:
             // По умолчанию день / ночь
             $c_time = date('G', $realtime);
@@ -865,7 +863,6 @@ function mobileads($mad_siteId = NULL) {
         $mad_lines = @file("http://mobileads.ru/links?id=$mad_siteId&ip=$mad_ip&xip=$mad_xip&ua=$mad_ua&ref=$mad_ref");
     }
     @fclose($mad_fp); // вывод ссылок
-
     for ($malCount = 0; $malCount < count($mad_lines); $malCount += 2) {
         $linkURL = trim($mad_lines[$malCount]);
         $linkName = iconv("Windows-1251", $mad_pageEncoding, $mad_lines[$malCount + 1]);

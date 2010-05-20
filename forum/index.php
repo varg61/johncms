@@ -2,18 +2,19 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                                                                    //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@johncms.com                     //
+// Олег Касьянов aka AlkatraZ          alkatraz@johncms.com                   //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
-
 require_once('../incfiles/core.php');
 
 ////////////////////////////////////////////////////////////
@@ -26,6 +27,8 @@ if (!isset($set_forum) || empty($set_forum))
     $set_forum = array (
         'farea' => 0,
         'upfp' => 0,
+        'farea_w' => 20,
+        'farea_h' => 4,
         'postclip' => 1,
         'postcut' => 2
     );
@@ -33,18 +36,20 @@ if (!isset($set_forum) || empty($set_forum))
 ////////////////////////////////////////////////////////////
 // Список расширений файлов, разрешенных к выгрузке       //
 ////////////////////////////////////////////////////////////
-// Файлы архивов
-$ext_arch = array (
-    'zip',
-    'rar',
-    '7z',
-    'tar',
-    'gz'
+// Файлы Windows
+$ext_win = array (
+    'exe',
+    'msi'
 );
-// Звуковые файлы
-$ext_audio = array (
-    'mp3',
-    'amr'
+// Файлы Java
+$ext_java = array (
+    'jar',
+    'jad'
+);
+// Файлы SIS
+$ext_sis = array (
+    'sis',
+    'sisx'
 );
 // Файлы документов и тексты
 $ext_doc = array (
@@ -55,23 +60,22 @@ $ext_doc = array (
     'djvu',
     'xls'
 );
-// Файлы Java
-$ext_java = array (
-    'jar',
-    'jad'
-);
 // Файлы картинок
 $ext_pic = array (
     'jpg',
     'jpeg',
     'gif',
     'png',
-    'bmp'
+    'bmp',
+    'wmf'
 );
-// Файлы SIS
-$ext_sis = array (
-    'sis',
-    'sisx'
+// Файлы архивов
+$ext_zip = array (
+    'zip',
+    'rar',
+    '7z',
+    'tar',
+    'gz'
 );
 // Файлы видео
 $ext_video = array (
@@ -81,15 +85,13 @@ $ext_video = array (
     'mpeg',
     'mp4'
 );
-// Файлы Windows
-$ext_win = array (
-    'exe',
-    'msi'
+// Звуковые файлы
+$ext_audio = array (
+    'mp3',
+    'amr'
 );
 // Другие типы файлов (что не перечислены выше)
-$ext_other = array (
-    'wmf'
-);
+$ext_other = array ();
 
 ////////////////////////////////////////////////////////////
 // Ограничиваем доступ к Форуму                           //
@@ -98,7 +100,7 @@ $error = '';
 if (!$set['mod_forum'] && $rights < 7)
     $error = 'Форум закрыт';
 elseif ($set['mod_forum'] == 1 && !$user_id)
-    $error = 'Доступ на форум открыт только <a href="../in.php">авторизованным</a> посетителям';
+    $error = 'Доступ на форум открыт только <a href="../login.php">авторизованным</a> посетителям';
 if ($error) {
     require_once('../incfiles/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
@@ -127,34 +129,34 @@ if (empty($id)) {
 }
 
 $array = array (
-    'addfile',
-    'addvote',
-    'close',
-    'deltema',
-    'delvote',
-    'editpost',
-    'editvote',
-    'faq',
-    'file',
-    'files',
-    'filter',
-    'loadtem',
-    'massdel',
-    'moders',
     'new',
-    'nt',
+    'who',
+    'addfile',
+    'file',
+    'users',
+    'moders',
+    'addvote',
+    'editvote',
+    'delvote',
+    'vote',
     'per',
+    'ren',
+    'deltema',
+    'vip',
+    'close',
+    'editpost',
+    'nt',
+    'tema',
+    'loadtem',
+    'say',
     'post',
     'read',
-    'ren',
-    'restore',
-    'say',
-    'tema',
+    'faq',
     'trans',
-    'users',
-    'who',
-    'vip',
-    'vote'
+    'massdel',
+    'files',
+    'filter',
+    'restore'
 );
 if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once($act . '.php');
@@ -185,7 +187,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
                     echo '<a href="?id=' . $res['id'] . '">' . $res['text'] . '</a>';
                     if ($coltem)
@@ -218,7 +220,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 }
                 $q1 = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($rights >= 7 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
                 while ($mass = mysql_fetch_assoc($q1)) {
-                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $mass['id'] . "' ORDER BY `time` DESC LIMIT 1");
                     $nam = mysql_fetch_assoc($nikuser);
                     $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $mass['id'] . "'" . ($rights >= 7 ? '' : " AND `close` != '1'"));
@@ -295,7 +297,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 forum_new(1);
                 if ($rights < 7 && $type1['close'] == 1) {
                     echo '<div class="rmenu"><p>Тема удалена!<br/><a href="?id=' . $type1['refid'] . '">В раздел</a></p></div>';
-                    require_once('../incfiles/end.php');
+                    require_once("../incfiles/end.php");
                     exit;
                 }
                 // Счетчик постов темы
@@ -316,15 +318,15 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 if ($type1['edit'])
                     echo '<div class="rmenu">Тема закрыта</div>';
                 ////////////////////////////////////////////////////////////
-                // Блок голосований                                       //
+                // Блок голосований (by FlySelf)                          //
                 ////////////////////////////////////////////////////////////
                 if ($type1['realid']) {
                     if (isset($_GET['clip']))
                         $clip_forum = '&amp;clip';
-                    $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
-                    $topic_vote = mysql_fetch_assoc(mysql_query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
+                    $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum_vote_us` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
+                    $topic_vote = mysql_fetch_assoc(mysql_query("SELECT `name`, `time`, `count` FROM `forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
                     echo '<div  class="gmenu"><b>' . checkout($topic_vote['name']) . '</b><br />';
-                    $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic`='" . $id . "' ORDER BY `id` ASC");
+                    $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `forum_vote` WHERE `type`='2' AND `topic`='" . $id . "' ORDER BY `id` ASC");
                     if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0) {
                         // Выводим форму с опросами
                         echo '<form action="index.php?act=vote&amp;id=' . $id . '" method="post">';
@@ -405,7 +407,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 if (($user_id && !$type1['edit'] && $set_forum['upfp']) || ($rights >= 7 && $set_forum['upfp'])) {
                     echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
-                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
+                        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
                         echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
                         if ($set_user['translit'])
                             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
@@ -420,11 +422,11 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     if ($res['close'])
                         echo '<div class="rmenu">';
                     else
-                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                        echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
                     if ($set_user['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
-                        if (file_exists(('../files/users/avatar/' . $res['user_id'] . '.png')))
-                            echo '<img src="../files/users/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
+                        if (file_exists(('../files/avatar/' . $res['user_id'] . '.png')))
+                            echo '<img src="../files/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
                         else
                             echo '<img src="../images/empty.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
                         echo '</td><td>';
@@ -475,7 +477,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                                 $cut = 3000;
                                 break;
                                 default :
-                                $cut = 500;
+                            $cut = 500;
                         }
                     }
                     if ($set_forum['postcut'] && mb_strlen($text) > $cut) {
@@ -499,10 +501,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $freq = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "'");
                     if (mysql_num_rows($freq) > 0) {
                         $fres = mysql_fetch_assoc($freq);
-                        $fls = round(filesize('../files/forum/attach/' . $fres['filename']) / 1024, 2);
+                        $fls = round(filesize('./files/' . $fres['filename']) / 1024, 2);
                         echo '<br /><span class="gray">Прикреплённый файл:';
                         // Предпросмотр изображений
-                        $att_ext = strtolower(format('./files/forum/attach/' . $fres['filename']));
+                        $att_ext = strtolower(format('./files/' . $fres['filename']));
                         $pic_ext = array (
                             'gif',
                             'jpg',
@@ -548,7 +550,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 if (($user_id && !$type1['edit'] && !$set_forum['upfp']) || ($rights >= 7 && !$set_forum['upfp'])) {
                     echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
-                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
+                        echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br/>';
                         echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл<br/>';
                         if ($set_user['translit'])
                             echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
@@ -610,7 +612,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         echo '<b>Форум</b></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($res = mysql_fetch_array($req)) {
-            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
             if (!empty($res['soft']))
@@ -672,7 +674,5 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         }
     }
 }
-
-require_once('../incfiles/end.php');
-
+require_once("../incfiles/end.php");
 ?>

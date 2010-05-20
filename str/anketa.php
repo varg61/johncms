@@ -2,28 +2,27 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'anketa';
 require_once('../incfiles/core.php');
-
 if (!$user_id) {
     require_once('../incfiles/head.php');
-    display_error('Только для зарегистрированных посетителей');
+    echo display_error('Только для зарегистрированных посетителей');
     require_once('../incfiles/end.php');
     exit;
 }
-
 if ($id && $id != $user_id) {
     // Если был запрос на юзера, то получаем его данные
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
@@ -33,7 +32,7 @@ if ($id && $id != $user_id) {
     } else {
         require_once('../incfiles/head.php');
         echo display_error('Такого пользователя не существует');
-        require_once('../incfiles/end.php');
+        require_once("../incfiles/end.php");
         exit;
     }
 } else {
@@ -47,7 +46,7 @@ require_once('../incfiles/head.php');
 ////////////////////////////////////////////////////////////
 // Выводим анкету пользователя                            //
 ////////////////////////////////////////////////////////////
-echo '<div class="phdr">' . ($id ? '<b>Анкета пользователя</b>' : '<a href="../index.php?act=cab"><b>Кабинет</b></a> | Моя анкета') . '</div>';
+echo '<div class="phdr"><b>' . ($id ? 'Анкета пользователя' : 'Моя анкета') . '</b></div>';
 if ($user['dayb'] == $day && $user['monthb'] == $mon) {
     echo '<div class="gmenu">ИМЕНИНЫ!!!</div>';
 }
@@ -61,12 +60,12 @@ if ($realtime > $user['lastdate'] + 300) {
 }
 echo '</h3><ul>';
 // Показываем аватар (если есть)
-if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
-    echo '<li>Аватар:<br /><img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /></li>';
+if (file_exists(('../files/avatar/' . $user['id'] . '.png'))) {
+    echo '<li>Аватар:<br /><img src="../files/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /></li>';
 }
 // Показываем фотографию (если есть)
-if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg')))
-    echo '<li>Фотография:<br /><a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a></li>';
+if (file_exists(('../files/photo/' . $user['id'] . '_small.jpg')))
+    echo '<li>Фотография:<br /><a href="../files/photo/' . $user['id'] . '.jpg"><img src="../files/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a></li>';
 if (!empty($user['status']))
     echo '<li><span class="gray">Статус: </span>' . $user['status'] . '</li>';
 echo '<li><span class="gray">Логин:</span> <b>' . $user['name_lat'] . '</b></li>';
@@ -222,5 +221,4 @@ if ($id && $id != $user_id) {
 }
 
 require_once('../incfiles/end.php');
-
 ?>

@@ -2,23 +2,24 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
+// Модуль Кармы от FlySelf 
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'karma';
 $textl = 'Карма юзера';
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
-
 if ($set_karma['on'] && $user_id) {
     switch ($act) {
         case 'user':
@@ -105,7 +106,7 @@ if ($set_karma['on'] && $user_id) {
                         }
                         mysql_query("DELETE FROM `karma_users` WHERE `id` = '$del' LIMIT 1");
                         mysql_query("UPDATE `users` SET `karma`='$karma', `plus_minus`='$plus_minus' WHERE `id` = '$id' LIMIT 1");
-                        header('Location: karma.php?id=' . $id . '&amp;type=' . $type);
+                        header('Location: karma.php?id=' . $id . '&type=' . $type);
                     } else {
                         echo '<p>Вы действительно хотите удалить отзыв?<br/>';
                         echo '<a href="karma.php?act=delete&amp;id=' . $id . '&amp;del='.$del.'&amp;type=' . $type . '&amp;yes">Удалить</a> | <a href="karma.php?id=' . $id . '&amp;type=' . $type . '">Отмена</a></p>';
@@ -136,7 +137,7 @@ if ($set_karma['on'] && $user_id) {
                 $req = mysql_query("SELECT * FROM `karma_users` WHERE `karma_user`='$user_id' AND `time` > "
                     . ($realtime - 86400) . " ORDER BY `time` DESC LIMIT $start, $kmess");
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     echo $res['type'] ? '<span class="green">+' . $res['points'] . '</span> ' : '<span class="red">-' . $res['points'] . '</span> ';
                     echo $user_id == $res['user_id'] || !$res['user_id'] ? '<b>' . $res['name'] . '</b>' : '<a href="anketa.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a>';
                     echo ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
@@ -194,7 +195,7 @@ if ($set_karma['on'] && $user_id) {
             if ($total) {
                 $req = mysql_query("SELECT * FROM `karma_users` WHERE `karma_user`='$id' $sql ORDER BY `time` DESC LIMIT $start, $kmess");
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                     echo $res['type'] ? '<span class="green">+' . $res['points'] . '</span> ' : '<span class="red">-' . $res['points'] . '</span> ';
                     echo $user_id == $res['user_id'] || !$res['user_id'] ? '<b>' . $res['name'] . '</b>' : '<a href="anketa.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a>';
                     echo ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
@@ -221,5 +222,4 @@ if ($set_karma['on'] && $user_id) {
 }
 
 require_once('../incfiles/end.php');
-
 ?>

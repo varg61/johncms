@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -16,10 +18,10 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'load';
 $textl = 'Загрузки';
-require_once ('../incfiles/core.php');
-require_once ('../incfiles/lib/mp3.php');
-require_once ('../incfiles/lib/pclzip.lib.php');
-$filesroot = '../download';
+require_once ("../incfiles/core.php");
+require_once ("../incfiles/mp3.php");
+require_once ("../incfiles/class_pclzip.php");
+$filesroot = "../download";
 $screenroot = "$filesroot/screen";
 $loadroot = "$filesroot/files";
 
@@ -28,7 +30,7 @@ $error = '';
 if (!$set['mod_down'] && $rights < 7)
     $error = 'Загрузки закрыты';
 elseif ($set['mod_down'] == 1 && !$user_id)
-    $error = 'Доступ к загрузкам открыт только <a href="../in.php">авторизованным</a> посетителям';
+    $error = 'Доступ к загрузкам открыт только <a href="../login.php">авторизованным</a> посетителям';
 if ($error) {
     require_once ("../incfiles/head.php");
     echo '<div class="rmenu"><p>' . $error . '</p></div>';

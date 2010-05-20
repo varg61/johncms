@@ -2,33 +2,36 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+////////////////////////////////////////////////////////////////////////////////
+// За основу взят модуль смайлов от Suliman, доработка AlkatraZ               //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
-
 $textl = 'Смайлы';
 
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
-
 switch ($act) {
     case 'cat':
-        if (!is_dir($rootpath . 'images/smileys/user/' . $id)) {
+        if (!is_dir($rootpath . 'smileys/user/' . $id)) {
+            echo $id;
             echo '<p>Ошибка!<br/><a href="smile.php">В категории</a></p>';
             require_once('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr"><a href="smile.php"><b>Смайлы</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
-        $array = array ();
-        $dir = opendir('../images/smileys/user/' . $id);
+        echo '<div class="phdr"><b>Смайлы:</b> ' . htmlentities(file_get_contents($rootpath . 'smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
+        $array = array();
+        $dir = opendir('../smileys/user/' . $id);
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
                 $array[] = $file;
@@ -42,8 +45,8 @@ switch ($act) {
         if ($total > 0) {
             for ($i = $start; $i < $end; $i++) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
-                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
+                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                echo '<img src="../smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
             }
         } else {
             echo 'Смайлов в категории нет!<br/>';
@@ -63,9 +66,9 @@ switch ($act) {
             require_once('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr"><a href="smile.php"><b>Смайлы</b></a> | Для администрации</div>';
-        $array = array ();
-        $dir = opendir('../images/smileys/admin');
+        echo '<div class="phdr"><b>Смайлы:</b> Для администрации</div>';
+        $array = array();
+        $dir = opendir('../smileys/admin');
         while ($file = readdir($dir)) {
             if (($file != '.') && ($file != "..") && ($file != "name.dat") && ($file != ".svn") && ($file != "index.php")) {
                 $array[] = $file;
@@ -79,8 +82,8 @@ switch ($act) {
                 $end = $total;
             for ($i = $start; $i < $end; $i++) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
-                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
+                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                echo '<img src="../smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': или :' . trans($smile) . ':</div>';
             }
         } else {
             echo 'Смайлов в категории нет!<br/>';
@@ -98,20 +101,19 @@ switch ($act) {
             $_SESSION['refsm'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
         }
         echo '<div class="phdr"><b>Каталог смайлов</b></div>';
-        $dir = glob($rootpath . 'images/smileys/user/*', GLOB_ONLYDIR);
+        $dir = glob($rootpath . 'smileys/user/*', GLOB_ONLYDIR);
         $total_dir = count($dir);
         for ($i = 0; $i < $total_dir; $i++) {
-            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<a href="smile.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'images/smileys/user/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> ('
+            echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+            echo '<a href="smile.php?act=cat&amp;id=' . preg_replace('#^' . $rootpath . 'smileys/user/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') . '</a> ('
                 . (int)count(glob($dir[$i] . '/*.gif')) . ')</div>';
         }
         if ($rights >= 1) {
-            echo '<div class="gmenu"><a href="smile.php?act=adm">Для администрации</a> (' . (int)count(glob($rootpath . 'images/smileys/admin/*.gif')) . ')</div>';
+            echo '<div class="gmenu"><p><a href="smile.php?act=adm">Для администрации</a> (' . (int)count(glob($rootpath . 'smileys/admin/*.gif')) . ')</p></div>';
         }
-        echo '<div class="phdr"><a href="' . $_SESSION['refsm'] . '">Назад</a></div>';
+        echo '<div class="bmenu"><a href="' . $_SESSION['refsm'] . '">Назад</a></div>';
         break;
 }
 
 require_once('../incfiles/end.php');
-
 ?>

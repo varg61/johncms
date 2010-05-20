@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -23,20 +25,20 @@ if ($rights < 7) {
 // Установка прав доступа к подсистемам                   //
 ////////////////////////////////////////////////////////////
 echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Права доступа</div>';
-if (isset($_POST['submit'])) {
+if (isset ($_POST['submit'])) {
     // Записываем настройки в базу
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['reg']) ? intval($_POST['reg']) : 0) . "' WHERE `key`='mod_reg'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['forum']) ? intval($_POST['forum']) : 0) . "' WHERE `key`='mod_forum'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['chat']) ? intval($_POST['chat']) : 0) . "' WHERE `key`='mod_chat'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['guest']) ? intval($_POST['guest']) : 0) . "' WHERE `key`='mod_guest'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['lib']) ? intval($_POST['lib']) : 0) . "' WHERE `key`='mod_lib'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['gal']) ? intval($_POST['gal']) : 0) . "' WHERE `key`='mod_gal'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['down']) ? intval($_POST['down']) : 0) . "' WHERE `key`='mod_down'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['libcomm']) ? intval($_POST['libcomm']) : 0) . "' WHERE `key`='mod_lib_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['galcomm']) ? intval($_POST['galcomm']) : 0) . "' WHERE `key`='mod_gal_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['downcomm']) ? intval($_POST['downcomm']) : 0) . "' WHERE `key`='mod_down_comm'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['reg']) ? intval($_POST['reg']) : 0) . "' WHERE `key`='mod_reg'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['forum']) ? intval($_POST['forum']) : 0) . "' WHERE `key`='mod_forum'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['chat']) ? intval($_POST['chat']) : 0) . "' WHERE `key`='mod_chat'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['guest']) ? intval($_POST['guest']) : 0) . "' WHERE `key`='mod_guest'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['lib']) ? intval($_POST['lib']) : 0) . "' WHERE `key`='mod_lib'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['gal']) ? intval($_POST['gal']) : 0) . "' WHERE `key`='mod_gal'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['down']) ? intval($_POST['down']) : 0) . "' WHERE `key`='mod_down'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['libcomm']) ? intval($_POST['libcomm']) : 0) . "' WHERE `key`='mod_lib_comm'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['galcomm']) ? intval($_POST['galcomm']) : 0) . "' WHERE `key`='mod_gal_comm'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset ($_POST['downcomm']) ? intval($_POST['downcomm']) : 0) . "' WHERE `key`='mod_down_comm'");
     $req = mysql_query("SELECT * FROM `cms_settings`");
-    $set = array ();
+    $set = array();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
     mysql_free_result($req);
     echo '<div class="rmenu">Сайт настроен</div>';

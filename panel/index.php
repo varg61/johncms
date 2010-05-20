@@ -2,52 +2,36 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-@ini_set("max_execution_time", "600");
+@ ini_set("max_execution_time", "600");
 define('_IN_JOHNCMS', 1);
 define('_IN_JOHNADM', 1);
 
 $textl = 'Админ панель';
-require_once('../incfiles/core.php');
+require_once ('../incfiles/core.php');
+
 if ($rights < 1) {
     header('Location: http://gazenwagen.com/?err');
     exit;
 }
 
-require_once('../incfiles/head.php');
-$array = array (
-    'usr_reg',
-    'usr_adm',
-    'usr_list',
-    'usr_del',
-    'usr_ban',
-    'usr_search_nick',
-    'usr_search_ip',
-    'mod_ads',
-    'mod_counters',
-    'mod_news',
-    'mod_forum',
-    'mod_chat',
-    'sys_set',
-    'sys_smileys',
-    'sys_access',
-    'sys_antispy',
-    'sys_ipban',
-    'mod_karma',
-    'sys_flood'
-);
+require_once ('../incfiles/head.php');
+$array = array('usr_reg', 'usr_adm', 'usr_list', 'usr_del', 'usr_ban', 'usr_search_nick', 'usr_search_ip', 'mod_ads', 'mod_counters', 'mod_news', 'mod_forum', 'mod_chat', 'sys_set', 'sys_smileys', 'sys_access', 'sys_antispy', 'sys_ipban', 'mod_karma', 'sys_flood');
 if (in_array($act, $array) && file_exists($act . '.php')) {
-    require_once($act . '.php');
-} else {
+    require_once ($act . '.php');
+}
+else {
     ////////////////////////////////////////////////////////////
     // Главное меню админки                                   //
     ////////////////////////////////////////////////////////////
@@ -97,6 +81,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     }
 }
 
-require_once('../incfiles/end.php');
+require_once ('../incfiles/end.php');
 
 ?>

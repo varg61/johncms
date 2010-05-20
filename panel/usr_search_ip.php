@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -19,7 +21,8 @@ $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 if (isset($_GET['ip']))
     $search = long2ip(intval($_GET['ip']));
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Поиск по IP</div>';
+
+    echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Поиск по IP</div>';
 echo '<form action="index.php?act=usr_search_ip" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
@@ -71,6 +74,7 @@ if ($search) {
         }
     }
 }
+
 if ($search && !$error) {
     ////////////////////////////////////////////////////////////
     // Выводим результаты поиска                              //
@@ -80,7 +84,7 @@ if ($search && !$error) {
     if ($total) {
         $req = mysql_query("SELECT * FROM `users` WHERE `ip` BETWEEN $ip1 AND $ip2 ORDER BY `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_array($req)) {
-            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+            echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
             echo show_user($res, 1, ($rights >= 6 ? 2 : 0));
             echo '</div>';
             ++$i;

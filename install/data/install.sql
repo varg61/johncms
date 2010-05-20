@@ -202,10 +202,10 @@ CREATE TABLE `cms_forum_files` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Структура таблицы `cms_forum_vote`
+-- Структура таблицы `forum_vote`
 --
-DROP TABLE IF EXISTS `cms_forum_vote`;
-CREATE TABLE `cms_forum_vote` (
+DROP TABLE IF EXISTS `forum_vote`;
+CREATE TABLE `forum_vote` (
   `id` int(11) NOT NULL auto_increment,
   `type` int(2) NOT NULL default '0',
   `time` int(11) NOT NULL default '0',
@@ -216,10 +216,10 @@ CREATE TABLE `cms_forum_vote` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
--- Структура таблицы `cms_forum_vote_users`
+-- Структура таблицы `forum_vote_us`
 --
-DROP TABLE IF EXISTS `cms_forum_vote_users`;
-CREATE TABLE `cms_forum_vote_users` (
+DROP TABLE IF EXISTS `forum_vote_us`;
+CREATE TABLE `forum_vote_us` (
   `id` int(11) NOT NULL auto_increment,
   `user` int(11) NOT NULL default '0',
   `topic` int(11) NOT NULL,

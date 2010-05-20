@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS v.1.1.0                     30.05.2008                             //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Плагиат и удаление копирайтов заруганы на ближайших родственников!!!       //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -17,7 +19,7 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 if ($rights < 9)
     die('Error: restricted access');
 
-switch ($mod) {
+    switch ($mod) {
     case 'new':
         ////////////////////////////////////////////////////////////
         // Баним IP адрес. Форма ввода данных и обработка         //
@@ -31,9 +33,10 @@ switch ($mod) {
             $reason = isset($_POST['reason']) ? htmlentities(trim($_POST['reason']), ENT_QUOTES, 'UTF-8') : '';
             if (empty($ip)) {
                 echo '<p>ОШИБКА!<br />Не введен адрес IP<br /><a href="index.php?act=sys_ipban&amp;mod=new">Назад</a></p>';
-                require_once('../incfiles/end.php');
+                require_once("../incfiles/end.php");
                 exit;
             }
+
             if (strstr($ip, '-')) {
                 ////////////////////////////////////////////////////////////
                 // Обрабатываем диапазон адресов                          //
@@ -81,6 +84,7 @@ switch ($mod) {
                     $ip2 = $ip1;
                 }
             }
+
             if (!$error) {
                 ////////////////////////////////////////////////////////////
                 // Проверка на конфликты адресов                          //
@@ -90,7 +94,7 @@ switch ($mod) {
                 if ($total > 0) {
                     echo '<div class="rmenu"><p>Данные записи конфликтуют с введенными Вами адресами IP</p></div>';
                     while ($res = mysql_fetch_array($req)) {
-                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                         $ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
                         echo '<a href="index.php?act=sys_ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $ip . '</a>';
                         switch ($res['ban_type']) {
@@ -110,7 +114,7 @@ switch ($mod) {
                     }
                     echo '<div class="phdr">Всего: ' . $total . '</div>';
                     echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">Админ панель</a></p>';
-                    require_once('../incfiles/end.php');
+                    require_once("../incfiles/end.php");
                     exit;
                 }
             }
@@ -199,7 +203,7 @@ switch ($mod) {
         $reason = isset($_POST['reason']) ? trim($_POST['reason']) : '';
         if (!$ip1 || !$ip2) {
             echo '<p>ОШИБКА!<br />Адрес IP не указан<br /><a href="index.php">Админ панель</a></p>';
-            require_once('../incfiles/end.php');
+            require_once("../incfiles/end.php");
             exit;
         }
         mysql_query("INSERT INTO `cms_ban_ip` SET
@@ -243,19 +247,19 @@ switch ($mod) {
             $ip = ip2long($_POST['ip']);
             if (!$ip) {
                 echo '<p>ОШИБКА!<br />Адрес IP введен неверно<br /><a href="index.php">В Админку</a></p>';
-                require_once('../incfiles/end.php');
+                require_once("../incfiles/end.php");
                 exit;
             }
             $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE '" . $ip . "' BETWEEN `ip1` AND `ip2` LIMIT 1");
         } else {
             echo '<p>ОШИБКА!<br /><a href="index.php">В Админку</a></p>';
-            require_once('../incfiles/end.php');
+            require_once("../incfiles/end.php");
             exit;
         }
         if (mysql_num_rows($req) != 1) {
             echo '<p>Такого адреса нет в базе.</p>';
             echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">В Админку</a></p>';
-            require_once('../incfiles/end.php');
+            require_once("../incfiles/end.php");
             exit;
         } else {
             $res = mysql_fetch_array($req);
@@ -300,7 +304,7 @@ switch ($mod) {
                 if (mysql_num_rows($req) != 1) {
                     echo '<p>Такого адреса нет в базе.</p>';
                     echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">Админ панель</a></p>';
-                    require_once('../incfiles/end.php');
+                    require_once("../incfiles/end.php");
                     exit;
                 } else {
                     echo '<p>Вы действительно хотите разбанить адрес?</p>';
@@ -334,7 +338,7 @@ switch ($mod) {
             $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
             $req = mysql_query("SELECT * FROM `cms_ban_ip` ORDER BY `id` ASC LIMIT " . $start . "," . $kmess . ";");
             while ($res = mysql_fetch_array($req)) {
-                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
                 $ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
                 echo '<a href="index.php?act=sys_ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $ip . '</a>';
                 switch ($res['ban_type']) {

@@ -2,18 +2,19 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'online';
 $textl = 'Онлайн';
 require_once('../incfiles/core.php');
@@ -25,7 +26,7 @@ $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($act == 'guest' ? 
 if ($total) {
     $req = mysql_query("SELECT * FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY " . ($act == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
     while ($res = mysql_fetch_assoc($req)) {
-        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
         if ($user_id) {
             // Вычисляем местоположение
             $where = explode(",", $res['place']);
@@ -98,8 +99,7 @@ if ($total) {
                     break;
             }
         }
-        echo show_user($res, 0, ($act == 'guest' || ($rights >= 1) ? ($rights >= 1 ? 2 : 1) : 0),
-            ' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place);
+        echo show_user($res, 0, ($act == 'guest' || ($rights >= 1) ? ($rights >= 1 ? 2 : 1) : 0), ' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place);
         echo '</div>';
         ++$i;
     }
@@ -114,7 +114,6 @@ if ($total > 10) {
 }
 if ($user_id)
     echo '<p><a href="online.php' . ($act == 'guest' ? '">Показать авторизованных' : '?act=guest">Показать гостей') . '</a></p>';
-
 require_once('../incfiles/end.php');
 
 ?>
