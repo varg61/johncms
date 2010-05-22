@@ -109,8 +109,6 @@ if ($user_id) {
         $movings = $movings + 1;
         $sql .= "`movings` = '$movings', `place` = '$headmod',";
     }
-    if ($datauser['ip'] != $ipl)
-        $sql .= "`ip` = '$ipl',";
     if ($datauser['browser'] != $agn)
         $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
     $totalonsite = $datauser['total_on_site'];
@@ -119,7 +117,7 @@ if ($user_id) {
     mysql_query("UPDATE `users` SET $sql
     `total_on_site` = '$totalonsite',
     `lastdate` = '$realtime'
-    WHERE `id` = '$user_id'");
+    WHERE `id` = '$user_id' LIMIT 1");
 } else {
     // Фиксируем местоположение гостей
     $sid = md5($ipl . $agn);
@@ -149,8 +147,7 @@ if ($user_id) {
         mysql_query("INSERT INTO `cms_guests` SET
         `session_id` = '$sid',
         `ip` = '$ipl',
-        `browser` = '" . mysql_real_escape_string($agn) .
-            "',
+        `browser` = '" . mysql_real_escape_string($agn) . "',
         `lastdate` = '$realtime',
         `sestime` = '$realtime',
         `place` = '$headmod'");

@@ -104,6 +104,7 @@ if (isset($_POST['submit'])) {
         `lastdate` = '$realtime',
         `preg` = '$preg'");
         $usid = mysql_insert_id();
+        mysql_query("INSERT INTO `cms_users_iphistory` SET `user_id` = '$usid', `user_ip` = '$ipl', `time` = '$realtime'");
         echo "Вы зарегистрированы!<br/>";
         echo "Ваш id: " . $usid . "<br/>";
         echo "Ваш логин: " . $reg_nick . "<br/>";

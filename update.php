@@ -111,6 +111,28 @@ switch ($do) {
         mysql_query("ALTER TABLE `users` DROP `set_forum`");
         mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`");
         echo '<span class="green">OK</span> пользовательские настройки обновлены.<br />';
+        // Таблица истории IP адресов
+        mysql_query("DROP TABLE IF EXISTS `cms_users_iphistory`");
+        mysql_query("CREATE TABLE `cms_users_iphistory` (
+        `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+        `user_id` int(10) unsigned NOT NULL,
+        `user_ip` bigint(10) NOT NULL,
+        `time` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `user_id` (`user_id`,`user_ip`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+        echo '<span class="green">OK</span> таблица истории IP создана.<br />';
+        // Перенос IP адресов в таблицу истории
+        mysql_query("LOCK TABLES `users` READ, `cms_users_iphistory` WRITE");
+        $req = mysql_query("SELECT `id`, `ip`, `lastdate` FROM `users`");
+        while ($res = mysql_fetch_assoc($req)) {
+            mysql_query("INSERT INTO `cms_users_iphistory` SET
+            `user_id` = '" . $res['id'] . "',
+            `user_ip` = '" . $res['ip'] . "',
+            `time` = '" . $res['lastdate'] . "'");
+        }
+        mysql_query("UNLOCK TABLES");
+        echo '<span class="green">OK</span> IP адреса сконвертированы.<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 

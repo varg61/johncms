@@ -227,9 +227,22 @@ if ($user_id && $user_ps) {
             $login = $datauser['name']; // Логин (Ник) пользователя
             $rights = $datauser['rights'];
 
-            ////////////////////////////////////////////////////////////
-            // Проверка юзера на бан                                  //
-            ////////////////////////////////////////////////////////////
+            // Проверка IP адреса, если менялся, то фиксируем новый
+            if ($datauser['ip'] != $ipl){
+                $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '$user_id' AND `user_ip` = '$ipl' LIMIT 1");
+                if(mysql_num_rows($req)){
+                    // Если адрес в истории был, то обновляем время
+                    $res = mysql_fetch_row($req);
+                    mysql_query("UPDATE `cms_users_iphistory` SET `time` = '$realtime' WHERE `id` = '" . $res[0] . "' LIMIT 1");
+                } else {
+                    // Если адреса в истории небыло, то вставляем запись
+                    mysql_query("INSERT INTO `cms_users_iphistory` SET `user_id` = '$user_id', `user_ip` = '$ipl', `time` = '$realtime'");
+                }
+                // Обновляем текущий адрес в анкете
+                mysql_query("UPDATE `users` SET `ip` = '$ipl' WHERE `id` = '$user_id' LIMIT 1");
+            }
+            
+            // Проверка юзера на бан
             $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '$user_id' AND `ban_time` > '$realtime'") or die('Error: table "cms_ban_users"');
             if (mysql_num_rows($req)) {
                 $rights = 0;
