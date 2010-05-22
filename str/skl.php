@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -16,6 +18,7 @@ define('_IN_JOHNCMS', 1);
 
 $textl = 'Пароль';
 require_once('../incfiles/core.php');
+require_once('../incfiles/char.php');
 require_once('../incfiles/head.php');
 
 function passgen($length) {
@@ -31,11 +34,11 @@ switch ($act) {
         // Принимаем и проверяем данные
         $nick = isset($_POST['nick']) ? rus_lat(mb_strtolower(check($_POST['nick']))) : '';
         $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
-        $code = isset($_POST['code']) ? intval($_POST['code']) : '';
+        $code = isset($_POST['code']) ? trim($_POST['code']) : '';
         $error = false;
         if (!$nick || !$email || !$code)
             $error = 'Необходимо заполнить все поля формы';
-        elseif (!isset($_SESSION['code']) || $_SESSION['code'] < 1000 || $code != $_SESSION['code'])
+        elseif (!isset($_SESSION['code']) || mb_strlen($code) < 4 || $code != $_SESSION['code'])
             $error = 'Проверочный код введен неверно';
         unset($_SESSION['code']);
         if (!$error) {
@@ -117,10 +120,7 @@ switch ($act) {
         echo '<div class="menu"><form action="skl.php?act=sent" method="post">';
         echo '<p>Ваш логин:<br/><input type="text" name="nick" /><br/>';
         echo 'Ваш e-mail:<br/><input type="text" name="email" /></p>';
-
-        // CAPTCHA
-        $_SESSION['code'] = rand(1000, 9999);
-        echo '<p><img src="../code.php" alt="Код"/><br />';
+        echo '<p><img src="../captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />';
         echo '<input type="text" size="4" maxlength="4"  name="code"/>&nbsp;Введите код</p>';
         echo '<p><input type="submit" value="Отправить"/></p></form></div>';
         echo '<div class="phdr"><small>Пароль будет выслан на E-mail Адрес, указанный в Вашей анкете.<br />ВНИМЕНИЕ! Если в анкете не был указан E-mail адрес, то Вы не сможете восстановить пароль</small></div>';
@@ -128,5 +128,4 @@ switch ($act) {
 }
 
 require_once('../incfiles/end.php');
-
 ?>
