@@ -18,6 +18,7 @@ $headmod = 'sitetop';
 $textl = 'Топ активности сайта';
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
+
 function get_top($order = 'postforum') {
     $req = mysql_query("SELECT * FROM `users` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
 
@@ -25,7 +26,7 @@ function get_top($order = 'postforum') {
         $out = '';
         while ($res = mysql_fetch_assoc($req)) {
             $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $out .= show_user($res, 1, 0, ' (' . $res[$order] . ')') . '</div>';
+            $out .= show_user($res, array('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
             ++$i;
         }
         return $out;

@@ -13,17 +13,14 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'anketa';
 require_once('../incfiles/core.php');
-
 if (!$user_id) {
     require_once('../incfiles/head.php');
     display_error('Только для зарегистрированных посетителей');
     require_once('../incfiles/end.php');
     exit;
 }
-
 if ($id && $id != $user_id) {
     // Если был запрос на юзера, то получаем его данные
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
@@ -48,65 +45,45 @@ require_once('../incfiles/head.php');
 // Выводим анкету пользователя                            //
 ////////////////////////////////////////////////////////////
 echo '<div class="phdr">' . ($id ? '<b>Анкета пользователя</b>' : '<a href="../index.php?act=cab"><b>Кабинет</b></a> | Моя анкета') . '</div>';
+// Меню анкеты
+$menu = array();
+if($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights'])){
+    $menu[] = '<a href="my_data.php?id=' . $user['id'] . '">Редактировать</a>';
+    $menu[] = '<a href="../' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">Удалить</a>';
+}
+if($user['id'] != $user_id || $rights > $user['rights'])
+    $menu[] = '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">Банить</a>';
+if(!empty($menu))
+    echo '<div class="topmenu">' . show_menu($menu) . '</div>';
+// Уведомление о дне рожденья
 if ($user['dayb'] == $day && $user['monthb'] == $mon) {
     echo '<div class="gmenu">ИМЕНИНЫ!!!</div>';
 }
-echo '<div class="gmenu"><p><h3><img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" class="left" />&nbsp;';
-echo '<b>' . $user['name'] . '</b> (id: ' . $user['id'] . ')';
-if ($realtime > $user['lastdate'] + 300) {
-    echo '<span class="red"> [Off]</span>';
-    $lastvisit = date("d.m.Y (H:i)", $user['lastdate']);
-} else {
-    echo '<span class="green"> [ON]</span>';
-}
-echo '</h3><ul>';
-// Показываем аватар (если есть)
-if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
-    echo '<li>Аватар:<br /><img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /></li>';
-}
-// Показываем фотографию (если есть)
-if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg')))
-    echo '<li>Фотография:<br /><a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a></li>';
-if (!empty($user['status']))
-    echo '<li><span class="gray">Статус: </span>' . $user['status'] . '</li>';
-echo '<li><span class="gray">Логин:</span> <b>' . $user['name_lat'] . '</b></li>';
-if ($user['rights']) {
-    echo '<li><span class="gray">Должность:</span> ';
-    $rank = array (
-        1 => 'Киллер',
-        2 => 'Модер Чата',
-        3 => 'Модер Форума',
-        4 => 'Модер Загрузок',
-        5 => 'Модер Библиотеки',
-        6 => 'Супермодератор',
-        7 => 'Администратор',
-        9 => 'Супервизор'
-    );
-    echo '<span class="red"><b>' . $rank[$user['rights']] . '</b></span>';
-    echo '</li>';
-}
-if (isset($lastvisit))
-    echo '<li><span class="gray">Последний визит:</span> ' . $lastvisit . '</li>';
-if ($rights >= 1 && $rights >= $user['rights']) {
-    echo '<li><span class="gray">UserAgent:</span> ' . $user['browser'] . '</li>';
-    echo '<li><span class="gray">Адрес IP:</span> <a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></li>';
-    if ($user['immunity'])
-        echo '<li><span class="green"><b>ИММУНИТЕТ</b></span></li>';
-}
-echo '</ul></p></div>';
+// Выводим данные пользователя
+echo '<div class="list2"><p>';
+$arg = array (
+    'lastvisit' => 1,
+    'iphist' => 1,
+    'header' => '<b>ID:' . $user['id'] . '</b>'
+);
+echo show_user($user, $arg);
+echo '</p></div>';
 
 // Блок Кармы
 if ($set_karma['on']) {
-    echo '<div class="list2">';
+    if($user['karma'])
     $exp = explode('|', $user['plus_minus']);
     if ($exp[0] > $exp[1]) {
         $karma = $exp[1] ? ceil($exp[0] / $exp[1]) : $exp[0];
         $images = $karma > 10 ? '2' : '1';
+        echo '<div class="gmenu">';
     } else if ($exp[1] > $exp[0]) {
         $karma = $exp[0] ? ceil($exp[1] / $exp[0]) : $exp[1];
         $images = $karma > 10 ? '-2' : '-1';
+        echo '<div class="rmenu">';
     } else {
         $images = 0;
+        echo '<div class="menu">';
     }
     echo '<table  width="100%"><tr><td width="22" valign="top"><img src="../images/k_' . $images . '.gif"/></td><td>';
     echo '<b>Карма (' . $user['karma'] . ')</b><div class="sub">
@@ -128,8 +105,10 @@ if ($set_karma['on']) {
 }
 
 // Личные данные
-echo '<div class="menu">';
+echo '<div class="list2">';
 $out = '';
+if (file_exists('../files/users/photo/' . $user['id'] . '_small.jpg'))
+    $out .= '<li><a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a></li>';
 $req = mysql_query("select * from `gallery` where `type`='al' and `user`=1 and `avtor`='" . $user['name'] . "' LIMIT 1");
 if (mysql_num_rows($req)) {
     $res = mysql_fetch_array($req);
@@ -143,11 +122,9 @@ if (!empty($user['live']))
     $out .= '<li><span class="gray">Город:</span> ' . $user['live'] . '</li>';
 if (!empty($user['about']))
     $out .= '<li><span class="gray">О себе:<br /></span> ' . smileys(tags($user['about'])) . '</li>';
-if (!empty($out)) {
-    echo '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>';
-    echo $out;
-    echo '</ul></p>';
-}
+if (!empty($out))
+    echo '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>' . $out . '</ul></p>';
+
 // Связь
 $out = '';
 if (!empty($user['mibile']))
@@ -190,15 +167,8 @@ $ban = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `use
 if ($ban)
     echo '<li><a href="users_ban.php' . ($id && $id != $user_id ? '?id=' . $user['id'] : '') . '">Нарушения</a>&nbsp;<span class="red">(' . $ban . ')</span></li>';
 echo '</ul></p></div>';
-echo '<div class="phdr">' . (!$id || $id == $user_id || $rights >= 7 ? '<a href="my_data.php' . ($id ? '?id=' . $id : '') . '">Редактировать</a>' : '&nbsp;');
-if ($id && !$user['immunity'] && $id != $user_id && $rights > $user['rights']) {
-    if ($rights >= 7)
-        echo ' | ';
-    echo '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">Банить</a>';
-    if ($rights >= 7)
-        echo ' | <a href="../' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">Удалить</a><br/>';
-}
-echo '</div>';
+echo '<div class="phdr">&nbsp;</div>';
+
 if ($id && $id != $user_id) {
     echo '<p>';
     // Контакты
@@ -222,5 +192,4 @@ if ($id && $id != $user_id) {
 }
 
 require_once('../incfiles/end.php');
-
 ?>

@@ -30,9 +30,9 @@ switch ($mod) {
         if ($total) {
             $req = mysql_query("SELECT * FROM `users` WHERE `preg` = '0' ORDER BY `id` DESC LIMIT $start,$kmess");
             while ($res = mysql_fetch_assoc($req)) {
-                $link = '<a href="index.php?act=usr_reg&amp;mod=approve&amp;id=' . $res['id'] . '">Подтвердить</a> | <span class="red"><a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">Удалить</a></span>';
+                $link = '<b>ID:' . $res['id'] . '</b><br /><a href="index.php?act=usr_reg&amp;mod=approve&amp;id=' . $res['id'] . '">Подтвердить</a> | <a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">Удалить</a>';
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo show_user($res, 0, 2, ' ID:' . $res['id'], 0, $link);
+                echo show_user($res, array('header' => $link));
                 echo '</div>';
                 ++$i;
             }
@@ -44,7 +44,7 @@ switch ($mod) {
             echo '<p>' . pagenav('index.php?act=usr_reg&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=usr_reg" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
-        echo '<p><a href="index.php">Админ панель</a></p>';
+        echo '<p><a href="">Подтвердить всех</a><br /><a href="">Удалить всех</a><br /><a href="index.php">Админ панель</a></p>';
 }
 
 ?>

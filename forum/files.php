@@ -86,25 +86,30 @@ if ($do || isset($_GET['new'])) {
         LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
         WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql . " ORDER BY `time` DESC LIMIT $start,$kmess");
         while ($res = mysql_fetch_array($req)) {
-            $fls = filesize('../files/forum/attach/' . $res['filename']);
-            $fls = round($fls / 1024, 0);
+            $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            $res_u = mysql_fetch_array($req_u);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<p>' . ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" align="left" />&nbsp;';
-            echo '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>';
-            echo ' [' . $res['dlcount'] . ']';
-            echo ' <span class="gray">' . $fls . ' кб.</span>';
-            echo '</p><div class="sub">';
-            $uz = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `dayb`, `status`, `datereg` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
-            $mass1 = mysql_fetch_array($uz);
-            $set_user['avatar'] = 0;
-            echo show_user($mass1, 0, 0, '<span class="gray">' . date("d.m.Y / H:i", ($res['time'] + $set_user['sdvig'] * 3600)) . '</span>');
-            // Выводим текст поста
-            $text = mb_substr($res['text'], 0, 200);
-            $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-            $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
-            $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
-            echo '<br /><b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
+            $arg = array(
+            
+            );
+            echo show_user($res_u, $arg);
+            echo '</div>';
             ++$i;
+            
+            //$fls = filesize('../files/forum/attach/' . $res['filename']);
+            //$fls = round($fls / 1024, 0);
+            //echo '<p>' . ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" align="left" />&nbsp;';
+            //echo '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>';
+            //echo ' [' . $res['dlcount'] . ']';
+            //echo ' <span class="gray">' . $fls . ' кб.</span>';
+            //echo '</p><div class="sub">';
+            //echo show_user($mass1, 0, 0, '<span class="gray">' . date("d.m.Y / H:i", ($res['time'] + $set_user['sdvig'] * 3600)) . '</span>');
+            // Выводим текст поста
+            //$text = mb_substr($res['text'], 0, 200);
+            //$text = htmlentities($text, ENT_QUOTES, 'UTF-8');
+            //$text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
+            //$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
+            //echo '<br /><b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
         }
         echo '<div class="phdr">Всего: ' . $total . '</div>';
         if ($total > $kmess) {

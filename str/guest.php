@@ -13,10 +13,9 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'guest';
 $textl = 'Гостевая';
-require_once("../incfiles/core.php");
+require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
 
 // Проверяем права доступа в Админ-Клуб
@@ -48,7 +47,7 @@ switch ($act) {
         }
         break;
 
-    case "trans":
+    case 'trans':
         ////////////////////////////////////////////////////////////
         // Справка по транслиту                                   //
         ////////////////////////////////////////////////////////////
@@ -318,9 +317,18 @@ switch ($act) {
                         $otvet = smileys($otvet, 1);
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
-                $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a>' . ($rights >= 6 && $rights >= $res['rights'] ? ' | <a href="guest.php?act=edit&amp;id=' . $res['gid'] .
-                    '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>' : '');
-                echo show_user($res, 1, ($rights >= 6 && $rights >= $res['rights'] ? 1 : 0), $text, $post, ($rights >= 6 ? $subtext : ''));
+                if ($rights > 6) {
+                    $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a>' . ($rights >= $res['rights'] ? ' | <a href="guest.php?act=edit&amp;id=' . $res['gid'] .
+                        '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>' : '');
+                } else {
+                    $subtext = '';
+                }
+                $arg = array (
+                    'header' => $text,
+                    'body' => $post,
+                    'sub' => $subtext
+                );
+                echo show_user($res, $arg);
                 echo '</div>';
                 ++$i;
             }
@@ -344,4 +352,5 @@ switch ($act) {
 }
 
 require_once('../incfiles/end.php');
+
 ?>

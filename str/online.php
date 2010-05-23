@@ -13,13 +13,15 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'online';
 $textl = 'Онлайн';
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
+
+// Показываем список Online
 echo '<div class="phdr"><b>Кто на сайте</b></div>';
-echo '<div class="bmenu">Список ' . ($act == 'guest' ? 'гостей' : 'авторизованных') . '</div>';
+if ($rights > 0)
+    echo '<div class="topmenu">' . ($act == 'guest' ? '<a href="online.php">Авторизованные</a> | Гости' : 'Авторизованные | <a href="online.php?act=guest">Гости</a>') . '</div>';
 $onltime = $realtime - 300;
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime'"), 0);
 if ($total) {
@@ -98,8 +100,11 @@ if ($total) {
                     break;
             }
         }
-        echo show_user($res, 0, ($act == 'guest' || ($rights >= 1) ? ($rights >= 1 ? 2 : 1) : 0),
-            ' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place);
+        $arg = array(
+            'stshide' => 1,
+            'header' => (' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place)
+        );
+        echo show_user($res, $arg);
         echo '</div>';
         ++$i;
     }
@@ -112,8 +117,6 @@ if ($total > 10) {
     echo '<p><form action="online.php" method="get"><input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') .
         '<input type="submit" value="К странице &gt;&gt;"/></form></p>';
 }
-if ($user_id)
-    echo '<p><a href="online.php' . ($act == 'guest' ? '">Показать авторизованных' : '?act=guest">Показать гостей') . '</a></p>';
 
 require_once('../incfiles/end.php');
 

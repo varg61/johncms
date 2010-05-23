@@ -81,7 +81,7 @@ if ($search && !$error) {
         $req = mysql_query("SELECT * FROM `users` WHERE `ip` BETWEEN $ip1 AND $ip2 ORDER BY `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo show_user($res, 1, ($rights >= 6 ? 2 : 0));
+            echo show_user($res);
             echo '</div>';
             ++$i;
         }

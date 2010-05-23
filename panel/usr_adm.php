@@ -19,8 +19,8 @@ $req = mysql_query("SELECT * FROM `users` WHERE `rights` = '9' ORDER BY `name` A
 if (mysql_num_rows) {
     echo '<div class="bmenu">Супервайзоры</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($sw % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, 0, 2, 0, 0);
+        echo $sw % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$sw;
     }
@@ -29,8 +29,8 @@ $req = mysql_query("SELECT * FROM `users` WHERE `rights` = '7' ORDER BY `name` A
 if (mysql_num_rows) {
     echo '<div class="bmenu">Администраторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($adm % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, 0, 2, 0, 0);
+        echo $adm % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$adm;
     }
@@ -39,8 +39,8 @@ $req = mysql_query("SELECT * FROM `users` WHERE `rights` = '6' ORDER BY `name` A
 if (mysql_num_rows) {
     echo '<div class="bmenu">Старшие модераторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($smd % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, 0, 2, 0, 0);
+        echo $smd % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$smd;
     }
@@ -49,8 +49,8 @@ $req = mysql_query("SELECT * FROM `users` WHERE `rights` BETWEEN '1' AND '5' ORD
 if (mysql_num_rows) {
     echo '<div class="bmenu">Модераторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
-        echo ($mod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, 0, 2, 0, 0);
+        echo $mod % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$mod;
     }

@@ -468,7 +468,8 @@ switch ($mod) {
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=htopics&amp;rsort=' . $res['refid'] . '">по разделу</a> | ';
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=htopics&amp;usort=' . $res['user_id'] . '">по автору</a>';
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    echo show_user($res, 0, 0, $ttime, $text, $subtext);
+                    //TODO: Добавить показ первого поста скрытого топика
+                    echo show_user($res, array('header' => $ttime, 'body' => $text, 'sub' => $subtext));
                     echo '</div>';
                     ++$i;
                 }
@@ -539,7 +540,7 @@ switch ($mod) {
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=hposts&amp;tsort=' . $theme['id'] . '">по теме</a> | ';
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=hposts&amp;usort=' . $res['user_id'] . '">по автору</a>';
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    echo show_user($res, 0, 2, $posttime, $text, $subtext);
+                    echo show_user($res, array('header' => $posttime, 'body' => $text, 'sub' => $subtext));
                     echo '</div>';
                     ++$i;
                 }

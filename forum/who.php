@@ -132,7 +132,11 @@ if ($id) {
                         }
                     }
             }
-            echo show_user($res, 0, ($act == 'guest' || ($rights >= 1 && $rights >= $res['rights']) ? 1 : 0), '<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place);
+            $arg = array(
+                'stshide' => 1,
+                'header' => ('<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place)
+            );
+            echo show_user($res, $arg);
             echo '</div>';
             ++$i;
         }

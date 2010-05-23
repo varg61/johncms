@@ -24,7 +24,7 @@ $total = mysql_result($req, 0);
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT $start, $kmess");
 while ($res = mysql_fetch_assoc($req)) {
     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-    echo show_user($res, 1, (($rights > 1) ? 2 : 0)) . '</div>';
+    echo show_user($res) . '</div>';
     ++$i;
 }
 echo '<div class="phdr">Всего: ' . $total . '</div><p>';

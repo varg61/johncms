@@ -53,7 +53,7 @@ if (!$error) {
     $forump_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'  AND `close` != '1'"), 0);
     echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Удаление пользователя</div>';
     // Выводим краткие данные
-    echo '<div class="rmenu"><p>' . show_user($user, 0, 1) . '</p></div>';
+    echo '<div class="rmenu"><p>' . show_user($user, array('lastvisit' => 1, 'iphist' => 1)) . '</p></div>';
     switch ($mod) {
         case 'del':
             // Удаляем личный альбом
@@ -107,10 +107,15 @@ if (!$error) {
             if (isset($_POST['forump'])) {
                 mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `type` = 'm' AND `user_id` = '" . $user['id'] . "'");
             }
-            // Удаляем пользователя
+            // Удаляем историю нарушений
             mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
             mysql_query("OPTIMIZE TABLE `cms_ban_users`");
+            // Удаляем пользователя
             mysql_query("DELETE FROM `users` WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+            mysql_query("OPTIMIZE TABLE `users`");
+            // Удаляем историю IP
+            mysql_query("DELETE FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'");
+            mysql_query("OPTIMIZE TABLE `cms_users_iphistory`");
             echo '<div class="rmenu"><p><h3>Пользователь удален!</h3></p></div>';
             break;
 

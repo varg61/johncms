@@ -27,10 +27,10 @@ if ($topic_vote == 0) {
     $req = mysql_query("SELECT `cms_forum_vote_users`.*, `users`.`rights`, `users`.`lastdate`, `users`.`name`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
     FROM `cms_forum_vote_users` LEFT JOIN `users` ON `cms_forum_vote_users`.`user` = `users`.`id`
     WHERE `cms_forum_vote_users`.`topic`='$id' ORDER BY `time` DESC LIMIT $start,$kmess");
-    $set_user['avatar'] = 0;
     while ($res = mysql_fetch_array($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, 0, 0, '</div>');
+        echo show_user($res, array('iphide' => 1));
+        echo '</div>';
         ++$i;
     }
     if ($total == 0)

@@ -54,7 +54,7 @@ switch ($act) {
             echo display_error('Данный пользователь имеет Иннунитет, его банить нельзя');
         } else {
             echo '<div class="phdr"><b>Баним пользователя</b></div>';
-            echo '<div class="rmenu"><p>' . show_user($user, 0, 1) . '</p></div>';
+            echo '<div class="rmenu"><p>' . show_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 $error = false;
                 $term = isset($_POST['term']) ? intval($_POST['term']) : '';
@@ -180,7 +180,7 @@ switch ($act) {
                     $error = 'Бан уже не активен';
                 if (!$error) {
                     echo '<div class="phdr"><b>Прекращение действия Бана</b></div>';
-                    echo '<div class="gmenu"><p>' . show_user($user, 0, 1) . '</p></div>';
+                    echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
                     if (isset($_POST['submit'])) {
                         mysql_query("UPDATE `cms_ban_users` SET `ban_time` = '$realtime' WHERE `id` = '$ban' LIMIT 1");
                         echo '<div class="gmenu"><p><h3>Пользователь разбанен</h3></p></div>';
@@ -211,7 +211,7 @@ switch ($act) {
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="phdr"><b>Удаление Бана</b></div>';
-                echo '<div class="gmenu"><p>' . show_user($user, 0, 1) . '</p></div>';
+                echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
                 if (isset($_POST['submit'])) {
                     mysql_query("DELETE FROM `cms_ban_users` WHERE `id` = '$ban' LIMIT 1");
                     echo '<div class="gmenu"><p><h3>Бан удален</h3></p></div>';
@@ -234,7 +234,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         if ($rights == 9) {
             echo '<div class="phdr"><b>История нарушений</b></div>';
-            echo '<div class="gmenu"><p>' . show_user($user, 0, 1) . '</p></div>';
+            echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
                 echo '<div class="gmenu"><h3>История нарушений очищена</h3></div>';
@@ -261,7 +261,7 @@ switch ($act) {
             $res = mysql_fetch_assoc($req);
             echo '<div class="phdr"><b>История нарушений</b></div>';
             if ($user['id'] != $user_id)
-                echo '<div class="gmenu"><p>' . show_user($user, 0, ($rights >= 1 && $rights >= $user['rights'] ? 1 : 0)) . '</p></div>';
+                echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
             echo '<div class="' . ($res['ban_time'] > $realtime ? 'rmenu' : 'menu') . '"><p><h3>Подробности Бана</h3><ul>';
             if ($rights >= 1)
                 echo '<li><span class="gray">Забанил:</span> <b>' . $res['ban_who'] . '</b></li>';
@@ -290,7 +290,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         echo '<div class="phdr"><b>История нарушений</b></div>';
         if ($user['id'] != $user_id)
-            echo '<div class="gmenu"><p>' . show_user($user, 0, ($rights >= 6 ? 1 : 0)) . '</p></div>';
+            echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
         else
             echo '<div class="gmenu"><p>Мои нарушения</p></div>';
         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id`='" . $user['id'] . "' ORDER BY `ban_time` DESC");
