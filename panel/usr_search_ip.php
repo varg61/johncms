@@ -19,7 +19,7 @@ $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 if (isset($_GET['ip']))
     $search = long2ip(intval($_GET['ip']));
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Поиск по IP</div>';
+echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Поиск по истории IP</div>';
 echo '<form action="index.php?act=usr_search_ip" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
@@ -76,12 +76,15 @@ if ($search && !$error) {
     // Выводим результаты поиска                              //
     ////////////////////////////////////////////////////////////
     echo '<div class="phdr">Результаты запроса</div>';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `ip` BETWEEN $ip1 AND $ip2"), 0);
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_ip` BETWEEN $ip1 AND $ip2"), 0);
     if ($total) {
-        $req = mysql_query("SELECT * FROM `users` WHERE `ip` BETWEEN $ip1 AND $ip2 ORDER BY `name` ASC LIMIT $start, $kmess");
+        $req = mysql_query("SELECT `cms_users_iphistory`.`user_ip`, `users`.*
+        FROM `cms_users_iphistory` LEFT JOIN `users` ON `cms_users_iphistory`.`user_id` = `users`.`id`
+        WHERE `ip` BETWEEN $ip1 AND $ip2
+        ORDER BY `ip` ASC, `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo show_user($res);
+            echo show_user($res, array('iphist' => 1));
             echo '</div>';
             ++$i;
         }
