@@ -106,6 +106,13 @@ ul{
   padding: 3px 4px 3px 4px;
 }
 
+.user{
+  background-color: #C7E8D5;
+  border: 1px solid white;
+  margin: 0px;
+  padding: 3px 4px 3px 4px;
+}
+
 .gray{
   color: #586776;
 }
@@ -219,9 +226,7 @@ ul{
 }
 
 .sub a:link,.sub a:visited{
-  color: #586776;
 }
-
 
 .tmn{
   background-color: #586776;

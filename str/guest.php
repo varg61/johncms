@@ -292,7 +292,7 @@ switch ($act) {
                     $res['lastdate'] = $res_g['lastdate'];
                 }
                 // Время создания поста
-                $text = ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                $text = ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                 if ($res['user_id']) {
                     // Для зарегистрированных показываем ссылки и смайлы
                     $post = checkout($res['text'], 1, 1);

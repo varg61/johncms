@@ -60,7 +60,7 @@ if ($user['dayb'] == $day && $user['monthb'] == $mon) {
     echo '<div class="gmenu">ИМЕНИНЫ!!!</div>';
 }
 // Выводим данные пользователя
-echo '<div class="list2"><p>';
+echo '<div class="user"><p>';
 $arg = array (
     'lastvisit' => 1,
     'iphist' => 1,

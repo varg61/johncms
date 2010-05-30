@@ -25,25 +25,25 @@ if ($rights < 1) {
 
 require_once('../incfiles/head.php');
 $array = array (
-    'usr_reg',
-    'usr_adm',
-    'usr_list',
-    'usr_del',
-    'usr_ban',
-    'usr_search_nick',
-    'usr_search_ip',
     'mod_ads',
-    'mod_counters',
-    'mod_news',
-    'mod_forum',
     'mod_chat',
-    'sys_set',
-    'sys_smileys',
+    'mod_counters',
+    'mod_karma',
+    'mod_forum',
+    'mod_news',
     'sys_access',
     'sys_antispy',
+    'sys_flood',
     'sys_ipban',
-    'mod_karma',
-    'sys_flood'
+    'sys_set',
+    'sys_smileys',
+    'usr_adm',
+    'usr_ban',
+    'usr_del',
+    'usr_list',
+    'usr_reg',
+    'usr_search_ip',
+    'usr_search_nick'
 );
 if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once($act . '.php');
@@ -98,5 +98,4 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
 }
 
 require_once('../incfiles/end.php');
-
 ?>

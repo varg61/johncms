@@ -498,7 +498,7 @@ function timecount($var) {
     }  elseif ($var >= 86400) {
         $str = '1 день';
     } else {
-        $str = gmdate('G:i:s', $var);
+        $str = gmdate('G:i', $var);
     }
     return $str;
 }

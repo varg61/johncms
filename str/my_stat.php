@@ -107,6 +107,9 @@ if (mysql_num_rows($req_u)) {
             echo '<div class="phdr"><a href="guest.php">В Гостевую</a></div>';
             break;
 
+        case 'iphist':
+            break;
+        
         default:
             echo '<div class="phdr"><b>' . ($id ? 'С' : 'Моя с') . 'татистика активности</b></div>';
             if ($id)
