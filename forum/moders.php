@@ -17,33 +17,27 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'forummod';
 require_once('../incfiles/head.php');
 if (empty($_GET['id'])) {
-    echo "<font color='" . $cdinf . "'>Модераторы по подфорумам</font><hr/>";
-    $f = mysql_query("select * from `forum` where type='f'  order by realid;");
-    while ($f1 = mysql_fetch_array($f)) {
-        $mod = mysql_query("select * from `forum` where type='a' and refid='" . $f1['id'] . "';");
+    echo '<div class="phdr"><a href="index.php"><b>Форум</b></a> | Модераторы</div>';
+    $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid`");
+    while ($f1 = mysql_fetch_array($req)) {
+        $mod = mysql_query("select * from `forum` where type='a' and refid='" . $f1['id'] . "'");
         $mod2 = mysql_num_rows($mod);
         if ($mod2 != 0) {
-            echo "$f1[text]<br/><br/>";
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+            echo '<b>' . $f1['text'] . '</b><br />';
             while ($mod1 = mysql_fetch_array($mod)) {
                 $uz = mysql_query("select * from `users` where name='" . $mod1['from'] . "';");
                 $uz1 = mysql_fetch_array($uz);
                 if ($uz1['rights'] == 3) {
-                    //TODO: Убрать <font>
                     if ((!empty($_SESSION['uid'])) && ($login != $mod1['from'])) {
-                        echo "<a href='../str/anketa.php?id=" . $uz1['id'] . "'><font color='" . $conik . "'>$mod1[from]</font></a>";
+                        echo '<a href="../str/anketa.php?id=' . $uz1['id'] . '">' . $mod1['from'] . '</a>';
                     } else {
                         echo $mod1['from'];
                     }
-                    $ontime = $uz1['lastdate'];
-                    $ontime2 = $ontime + 300;
-                    if ($realtime > $ontime2) {
-                        echo "<font color='" . $coffs . "'> [Off]</font><br/>";
-                    } else {
-                        echo "<font color='" . $cons . "'> [ON]</font><br/>";
-                    }
                 }
             }
-            echo "<hr/>";
+            echo '</div>';
+            ++$i;
         }
     }
 } else {
@@ -104,6 +98,6 @@ if (empty($_GET['id'])) {
         echo 'Не назначены<br/>';
     }
 }
-echo "<a href='index.php?id=" . $id . "'>Назад</a><br/>";
+echo '<div class="phdr"><a href="index.php?id=' . $id . '">Назад</a></div>';
 
 ?>
