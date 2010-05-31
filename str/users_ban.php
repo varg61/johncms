@@ -213,7 +213,7 @@ switch ($act) {
                 if (isset($_POST['submit'])) {
                     //TODO: Написать восстановление Кармы
                     mysql_query("DELETE FROM `cms_ban_users` WHERE `id` = '$ban' LIMIT 1");
-                    echo '<div class="gmenu"><p><h3>Бан удален</h3></p></div>';
+                    echo '<div class="gmenu"><p><h3>Бан удален</h3><a href="users_ban.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
                 } else {
                     echo '<form action="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">';
                     echo '<div class="menu"><p>Удаляется бан вместе с записью в истории нарушений';
@@ -275,7 +275,7 @@ switch ($act) {
                 $remain = $res['ban_time'] - $realtime;
                 $period = $res['ban_time'] - $res['ban_while'];
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo $remain > 0 ? '<img src="../images/red.gif" width="16" height="16" align="left" />&nbsp;' : '';
+                echo '<img src="../images/' . ($remain > 0 ? 'red' : 'green') . '.gif" width="16" height="16" align="left" />&nbsp;';
                 echo '<b>' . $ban_term[$res['ban_type']] . '</b>';
                 echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>';
                 echo '<br />' . checkout($res['ban_reason']);
