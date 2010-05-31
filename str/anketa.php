@@ -47,10 +47,10 @@ require_once('../incfiles/head.php');
 echo '<div class="phdr">' . ($id ? '<b>Анкета пользователя</b>' : '<a href="../index.php?act=cab"><b>Кабинет</b></a> | Моя анкета') . '</div>';
 // Меню анкеты
 $menu = array ();
-if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights'])) {
+if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
     $menu[] = '<a href="my_data.php?id=' . $user['id'] . '">Редактировать</a>';
+if($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
     $menu[] = '<a href="../' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">Удалить</a>';
-}
 if ($user['id'] != $user_id || $rights > $user['rights'])
     $menu[] = '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">Банить</a>';
 if (!empty($menu))

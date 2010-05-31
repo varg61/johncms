@@ -211,7 +211,12 @@ switch ($act) {
                 echo '<div class="phdr"><b>Удаление Бана</b></div>';
                 echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
                 if (isset($_POST['submit'])) {
-                    //TODO: Написать восстановление Кармы
+                    mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '$id' AND `user_id` = '0' AND `time` = '" . $res['ban_while'] . "' LIMIT 1");
+                    $points = $set_karma['karma_points'] * 2;
+                    $plm = explode('|', $user['plus_minus']);
+                    $karma = $user['karma'] + $points;
+                    $plus_minus = $plm[0] . '|' . ($plm[1] - $points);
+                    mysql_query("UPDATE `users` SET `karma` = '$karma', `plus_minus` = '$plus_minus' WHERE `id` = '$id' LIMIT 1");
                     mysql_query("DELETE FROM `cms_ban_users` WHERE `id` = '$ban' LIMIT 1");
                     echo '<div class="gmenu"><p><h3>Бан удален</h3><a href="users_ban.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
                 } else {
@@ -305,5 +310,4 @@ switch ($act) {
 }
 
 require_once('../incfiles/end.php');
-
 ?>
