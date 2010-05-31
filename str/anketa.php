@@ -46,14 +46,14 @@ require_once('../incfiles/head.php');
 ////////////////////////////////////////////////////////////
 echo '<div class="phdr">' . ($id ? '<b>Анкета пользователя</b>' : '<a href="../index.php?act=cab"><b>Кабинет</b></a> | Моя анкета') . '</div>';
 // Меню анкеты
-$menu = array();
-if($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights'])){
+$menu = array ();
+if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights'])) {
     $menu[] = '<a href="my_data.php?id=' . $user['id'] . '">Редактировать</a>';
     $menu[] = '<a href="../' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">Удалить</a>';
 }
-if($user['id'] != $user_id || $rights > $user['rights'])
+if ($user['id'] != $user_id || $rights > $user['rights'])
     $menu[] = '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">Банить</a>';
-if(!empty($menu))
+if (!empty($menu))
     echo '<div class="topmenu">' . show_menu($menu) . '</div>';
 // Уведомление о дне рожденья
 if ($user['dayb'] == $day && $user['monthb'] == $mon) {
@@ -71,8 +71,8 @@ echo '</p></div>';
 
 // Блок Кармы
 if ($set_karma['on']) {
-    if($user['karma'])
-    $exp = explode('|', $user['plus_minus']);
+    if ($user['karma'])
+        $exp = explode('|', $user['plus_minus']);
     if ($exp[0] > $exp[1]) {
         $karma = $exp[1] ? ceil($exp[0] / $exp[1]) : $exp[0];
         $images = $karma > 10 ? '2' : '1';
@@ -167,29 +167,24 @@ $ban = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `use
 if ($ban)
     echo '<li><a href="users_ban.php' . ($id && $id != $user_id ? '?id=' . $user['id'] : '') . '">Нарушения</a>&nbsp;<span class="red">(' . $ban . ')</span></li>';
 echo '</ul></p></div>';
-echo '<div class="phdr">&nbsp;</div>';
-
+$menu = array ();
 if ($id && $id != $user_id) {
-    echo '<p>';
+    $menu[] = '<a href="pradd.php?act=write&amp;adr=' . $user['id'] . '">Написать</a>';
     // Контакты
     $contacts = mysql_query("select * from `privat` where me='" . $login . "' and cont='" . $user['name'] . "'");
     $conts = mysql_num_rows($contacts);
     if ($conts != 1)
-        echo "<a href='cont.php?act=edit&amp;id=" . $id . "&amp;add=1'>Добавить в контакты</a><br/>";
-    else
-        echo "<a href='cont.php?act=edit&amp;id=" . $id . "'>Удалить из контактов</a><br/>";
+        $menu[] = '<a href="cont.php?act=edit&amp;id=' . $id . '&amp;add=1">В контакты</a>';
     // Игнор
     $igns = mysql_query("select * from `privat` where me='" . $login . "' and ignor='" . $user['name'] . "'");
     $ignss = mysql_num_rows($igns);
     if ($igns != 1) {
         if ($user['rights'] == 0 && $user['name'] != $nickadmina && $user['name'] != $nickadmina) {
-            echo "<a href='ignor.php?act=edit&amp;id=" . $id . "&amp;add=1'>Добавить в игнор</a><br/>";
+            $menu[] = '<a href="ignor.php?act=edit&amp;id=' . $id . '&amp;add=1">В игнор</a>';
         }
-    } else {
-        echo "<a href='ignor.php?act=edit&amp;id=" . $id . "'>Удалить из игнора</a><br/>";
     }
-    echo '<a href="pradd.php?act=write&amp;adr=' . $user['id'] . '">Написать в приват</a></p>';
 }
-
+echo '<div class="phdr">' . show_menu($menu) . '</div>';
 require_once('../incfiles/end.php');
+
 ?>
