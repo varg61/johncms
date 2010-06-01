@@ -274,8 +274,8 @@ function highlight($php) {
     -----------------------------------------------------------------
     */
     $php = strtr($php, array (
-        '<br />' => '',
-        '\\' => 'slash_JOHNCMS'
+    '<br />' => '',
+    '\\' => 'slash_JOHNCMS'
     ));
     $php = html_entity_decode(trim($php), ENT_QUOTES, 'UTF-8');
     $php = substr($php, 0, 2) != "<?" ? $php = "<?php\n" . $php . "\n?>" : $php;
@@ -283,9 +283,9 @@ function highlight($php) {
     $php = strtr($php, array (
         'slash_JOHNCMS' => '&#92;',
         ':' => '&#58;',
-        '[' => '&#91;'
+        '[' => '&#91;',
+        '&nbsp;' => ' '
     ));
-
     return '<div class="phpcode">' . $php . '</div>';
 }
 
@@ -296,9 +296,11 @@ function url_replace($m) {
     -----------------------------------------------------------------
     */
     if (!isset($m[3]))
-        return '<a href="' . $m[1] . '">' . $m[2] . '</a>';
-    else
+        return '<a href="' . str_replace(':', '&#58;', $m[1]) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
+    else {
+        $m[3] = str_replace(':', '&#58;', $m[3]);
         return '<a href="' . $m[3] . '">' . $m[3] . '</a>';
+    }
 }
 
 function notags($var = '') {
