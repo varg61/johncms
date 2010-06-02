@@ -12,7 +12,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-//TODO: Сделать подстановку названия тем для внутренних ссылок форума
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!$id || !$user_id || $ban['1'] || $ban['11']) {
@@ -27,30 +26,33 @@ if ($flood) {
     require_once('../incfiles/end.php');
     exit;
 }
-
 $type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 if ($tip != "r") {
-    require_once('../incfiles/head.php');
+    require_once("../incfiles/head.php");
     echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once('../incfiles/end.php');
+    require_once("../incfiles/end.php");
     exit;
 }
+
 if (isset($_POST['submit'])) {
     $error = false;
-    if (empty($_POST['th']))
+    $th = isset($_POST['th']) ? trim($_POST['th']) : '';
+    $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
+    if (empty($th))
         $error = '<div>Вы не ввели название темы</div>';
-    if (empty($_POST['msg']))
+    if (mb_strlen($th) < 2)
+        $error = 'Название темы слишком короткое';
+    if (empty($msg))
         $error .= '<div>Вы не ввели сообщение</div>';
     if (!$error) {
-        $th = mb_substr($th, 0, 100);
-        $th = check($_POST['th']);
-        $msg = trim($_POST['msg']);
+        $th = check(mb_substr($th, 0, 100));
         if ($_POST['msgtrans'] == 1) {
             $th = trans($th);
             $msg = trans($msg);
         }
+        $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
         // Прверяем, есть ли уже такая тема в текущем разделе?
         if (mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '$id' AND `text` = '$th'"), 0) > 0)
             $error = 'Тема с таким названием уже есть в этом разделе';
@@ -112,7 +114,7 @@ if (isset($_POST['submit'])) {
     echo '<div class="phdr">Добавление темы</div><div class="menu">Раздел: ' . $type1['text'] . '</div>';
     echo '<form action="index.php?act=nt&amp;id=' . $id . '" method="post">';
     echo '<div class="gmenu"><p>Название(max. 100):<br/><input type="text" size="20" maxlength="100" name="th"/><br/>';
-    echo 'Сообщение:<br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br />';
+    echo 'Сообщение:<br/><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br />';
     echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл';
     if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения';
