@@ -51,7 +51,7 @@ if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
     $menu[] = '<a href="my_data.php?id=' . $user['id'] . '">Редактировать</a>';
 if($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
     $menu[] = '<a href="../' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">Удалить</a>';
-if ($user['id'] != $user_id || $rights > $user['rights'])
+if ($user['id'] != $user_id && $rights > $user['rights'])
     $menu[] = '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">Банить</a>';
 if (!empty($menu))
     echo '<div class="topmenu">' . show_menu($menu) . '</div>';

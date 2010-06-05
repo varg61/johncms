@@ -891,7 +891,7 @@ function show_user($user = array (), $arg = array()) {
             $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
             $out .= '<div><span class="gray">Последний IP:</span> <a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></div>';
         }
-        if($arg['iphist']){
+        if($ipinf && $arg['iphist']){
             $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
             //TODO: Сделать ссылку на историю IP адресов!
             $out .= '<div><span class="gray">История IP:</span> <a href="">' . $iptotal . ' адр.</a></div>';
