@@ -110,7 +110,8 @@ switch ($do) {
         mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `place`");
         mysql_query("ALTER TABLE `users` DROP `set_forum`");
         mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`");
-        echo '<span class="green">OK</span> пользовательские настройки обновлены.<br />';
+        mysql_query("ALTER TABLE `users` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
+        echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
         // Таблица истории IP адресов
         mysql_query("DROP TABLE IF EXISTS `cms_users_iphistory`");
         mysql_query("CREATE TABLE `cms_users_iphistory` (
@@ -133,6 +134,13 @@ switch ($do) {
         }
         mysql_query("UNLOCK TABLES");
         echo '<span class="green">OK</span> IP адреса сконвертированы.<br />';
+        mysql_query("ALTER TABLE `guest` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
+        echo '<span class="green">OK</span> таблица `guest` обновлена.<br />';
+        mysql_query("ALTER TABLE `cms_guests` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
+        echo '<span class="green">OK</span> таблица `cms_guests` обновлена.<br />';
+        mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip1` `ip1` BIGINT( 11 ) NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip2` `ip2` BIGINT( 11 ) NOT NULL DEFAULT '0'");
+        echo '<span class="green">OK</span> таблица `cms_ban_ip` обновлена.<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 

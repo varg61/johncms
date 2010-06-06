@@ -325,7 +325,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $topic_vote = mysql_fetch_assoc(mysql_query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
                     echo '<div  class="gmenu"><b>' . checkout($topic_vote['name']) . '</b><br />';
                     $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic`='" . $id . "' ORDER BY `id` ASC");
-                    if (!isset($_GET['vote_result']) && $user_id && $vote_user == 0) {
+                    if (!$type1['edit'] && !isset($_GET['vote_result']) && $user_id && $vote_user == 0) {
                         // Выводим форму с опросами
                         echo '<form action="index.php?act=vote&amp;id=' . $id . '" method="post">';
                         while ($vote = mysql_fetch_assoc($vote_result)) {
