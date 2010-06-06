@@ -26,7 +26,7 @@ li { padding-bottom: 6px; }
 .gray{ color: #FF0000; font: small; }
 </style>
 </head><body>';
-echo '<h2 class="green">JohnCMS 4.0.0</h2>Обновление с версии 3.2.0<hr />';
+echo '<h2 class="green">JohnCMS 4.0.0</h2>Обновление с версии 3.2.2<hr />';
 
 // Подключаемся к базе данных
 require_once('incfiles/db.php');
@@ -55,7 +55,6 @@ switch ($do) {
             'files/users/photo/',
             'files/users/pm/',
             'files/cache/',
-            'incfiles/',
             'gallery/foto/',
             'gallery/temp/',
             'library/files/',
@@ -93,7 +92,7 @@ switch ($do) {
         echo '</div></ul><hr />';
         if ($err) {
             echo '<span class="red">Внимание!</span> Имеются критические ошибки!<br />Вы не сможете продолжить инсталляцию, пока не устраните их.';
-            echo '<p clss="step"><a class="button" href="index.php?act=check">Проверить заново</a></p>';
+            echo '<p clss="step"><a class="button" href="update.php?do=step1">Проверить заново</a></p>';
         } else {
             echo '<span class="green">Отлично!</span><br />Все настройки правильные.<p><a class="button" href="update.php?do=step2">Продолжить</a></p>';
         }
@@ -117,10 +116,11 @@ switch ($do) {
         mysql_query("CREATE TABLE `cms_users_iphistory` (
         `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
         `user_id` int(10) unsigned NOT NULL,
-        `user_ip` bigint(10) NOT NULL,
+        `user_ip` bigint(11) NOT NULL,
         `time` int(10) unsigned NOT NULL,
         PRIMARY KEY (`id`),
-        UNIQUE KEY `user_id` (`user_id`,`user_ip`)
+        KEY `user_id` (`user_id`),
+        KEY `user_ip` (`user_ip`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица истории IP создана.<br />';
         // Перенос IP адресов в таблицу истории
