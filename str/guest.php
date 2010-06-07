@@ -317,7 +317,7 @@ switch ($act) {
                         $otvet = smileys($otvet, 1);
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
-                if ($rights > 6) {
+                if ($rights >= 6) {
                     $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a>' . ($rights >= $res['rights'] ? ' | <a href="guest.php?act=edit&amp;id=' . $res['gid'] .
                         '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>' : '');
                 } else {
