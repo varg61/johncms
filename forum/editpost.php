@@ -162,7 +162,7 @@ if (!$error) {
             } else {
                 echo '<div class="phdr"><b>Форум:</b> изменить сообщение</div>';
                 echo '<div class="rmenu"><form action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
-                echo '<textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
+                echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
                 if ($set_user['translit'])
                     echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
                 echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";

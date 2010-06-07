@@ -114,7 +114,7 @@ if (isset($_POST['submit'])) {
     echo '<div class="phdr">Добавление темы</div><div class="menu">Раздел: ' . $type1['text'] . '</div>';
     echo '<form action="index.php?act=nt&amp;id=' . $id . '" method="post">';
     echo '<div class="gmenu"><p>Название(max. 100):<br/><input type="text" size="20" maxlength="100" name="th"/><br/>';
-    echo 'Сообщение:<br/><textarea cols="' . $set_forum['farea_w'] . '" rows="' . $set_forum['farea_h'] . '" name="msg"></textarea><br />';
+    echo 'Сообщение:<br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br />';
     echo '<input type="checkbox" name="addfiles" value="1" /> Добавить файл';
     if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения';
