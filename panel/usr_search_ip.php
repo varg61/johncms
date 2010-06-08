@@ -75,15 +75,16 @@ if ($search && !$error) {
     ////////////////////////////////////////////////////////////
     // Выводим результаты поиска                              //
     ////////////////////////////////////////////////////////////
-    echo '<div class="phdr">Результаты запроса '.$ip1.' '.$ip2.'</div>';
+    echo '<div class="phdr">Результаты запроса</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_ip` BETWEEN $ip1 AND $ip2"), 0);
     if ($total) {
-        $req = mysql_query("SELECT `cms_users_iphistory`.`user_ip`, `users`.*
+        $req = mysql_query("SELECT `cms_users_iphistory`.`user_ip` AS `ip`, `users`.`name`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`, `users`.`browser`
         FROM `cms_users_iphistory` LEFT JOIN `users` ON `cms_users_iphistory`.`user_id` = `users`.`id`
         WHERE `cms_users_iphistory`.`user_ip` BETWEEN $ip1 AND $ip2
         ORDER BY `ip` ASC, `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+            
             echo show_user($res, array('iphist' => 1));
             echo '</div>';
             ++$i;
