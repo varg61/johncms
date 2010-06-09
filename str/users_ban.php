@@ -285,6 +285,8 @@ switch ($act) {
                 echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>';
                 echo '<br />' . checkout($res['ban_reason']);
                 echo '<div class="sub">';
+                if($rights > 0)
+                    echo '<span class="gray">Забанил:</span> ' . $res['ban_who'] . '<br />';
                 echo '<span class="gray">Срок:</span> ' . ($period < 86400000 ? timecount($period) : 'до отмены');
                 if ($remain > 0)
                     echo '<br /><span class="gray">Осталось:</span> ' . timecount($remain);
