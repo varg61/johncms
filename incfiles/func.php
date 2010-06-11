@@ -893,8 +893,7 @@ function show_user($user = array (), $arg = array()) {
         }
         if($ipinf && $arg['iphist']){
             $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-            //TODO: Сделать ссылку на историю IP адресов!
-            $out .= '<div><span class="gray">История IP:</span> <a href="">' . $iptotal . ' адр.</a></div>';
+            $out .= '<div><span class="gray">История IP:</span> <a href="' . $home . '/str/users_iphist.php?id=' . $user['id'] . '">' . $iptotal . ' адр.</a></div>';
         }
         if ($arg['footer'])
             $out .= $arg['footer'];

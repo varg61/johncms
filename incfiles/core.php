@@ -226,9 +226,15 @@ if ($user_id && $user_ps) {
             // Получаем данные пользователя
             $login = $datauser['name']; // Логин (Ник) пользователя
             $rights = $datauser['rights'];
-
             // Проверка IP адреса, если менялся, то фиксируем новый
             if ($datauser['ip'] != $ipl){
+                // Обновляем время на предыдущем адресе
+                $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '$user_id' ORDER BY `time` DESC LIMIT 1");
+                if(mysql_num_rows($req)){
+                    $res = mysql_fetch_row($req);
+                    mysql_query("UPDATE `cms_users_iphistory` SET `time` = '" . $datauser['lastdate'] . "' WHERE `id` = '" . $res[0] . "' LIMIT 1");
+                }
+                // Обрабатываем текущий адрес
                 $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '$user_id' AND `user_ip` = '$ipl' LIMIT 1");
                 if(mysql_num_rows($req)){
                     // Если адрес в истории был, то обновляем время
