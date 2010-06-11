@@ -50,7 +50,8 @@ if($total){
     while($res = mysql_fetch_assoc($req)){
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $iptime = $user['ip'] == $res['user_ip'] ? $user['lastdate'] : $res['time'];
-        echo long2ip($res['user_ip']) . ' <span class="gray">(' . date("d.m.Y / H:i", $iptime) . ')</span></div>';
+        $link = $rights > 0 ? '<a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $res['user_ip'] . '">' . long2ip($res['user_ip']) . '</a>' : long2ip($res['user_ip']);
+        echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $iptime) . ')</span></div>';
         ++$i;
     }
 }
