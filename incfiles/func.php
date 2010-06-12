@@ -737,20 +737,20 @@ function smileys($str, $adm = 0) {
     }
 }
 
-function display_error($error = false) {
+function display_error($error = false, $link = '') {
     /*
     -----------------------------------------------------------------
     Сообщения об ошибках
     -----------------------------------------------------------------
     */
     if ($error) {
-        $out = '<div class="rmenu"><p>ОШИБКА!';
+        $out = '<div class="rmenu"><p><b>ОШИБКА!</b>';
         if (is_array($error)) {
             foreach ($error as $val)$out .= '<div>' . $val . '</div>';
         } else {
             $out .= '<br />' . $error;
         }
-        $out .= '</p></div>';
+        $out .= '</p><p>' . $link . '</p></div>';
         return $out;
     } else {
         return false;

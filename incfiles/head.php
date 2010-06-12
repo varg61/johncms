@@ -76,7 +76,7 @@ if (!empty($cms_ads[0]))
 echo '<div><img src="' . $home . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></div>';
 
 // Выводим верхний блок с приветствием
-echo '<div class="header">Привет ' . ($user_id ? '<b> ' . $login . '</b>!' : 'прохожий!') . '</div>';
+echo '<div class="header">Привет ' . ($user_id ? '<b>' . $login . '</b>!' : 'прохожий!') . '</div>';
 
 // Выводим меню пользователя
 echo '<div class="tmn">';

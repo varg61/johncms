@@ -84,7 +84,6 @@ if ($search && !$error) {
         ORDER BY `ip` ASC, `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            
             echo show_user($res, array('iphist' => 1));
             echo '</div>';
             ++$i;
