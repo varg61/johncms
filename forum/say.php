@@ -237,10 +237,10 @@ switch ($tip) {
                 // Форма с репликой
                 echo '<div class="menu"><b>Кому:</b> ' . $type1['from'] . '</div>';
                 echo '<div class="menu">Выберите вариант обращения:<br />';
-                echo '<input type="radio" value="1" checked="checked" name="txt" />&nbsp;' . $type1['from'] . ',<br />';
-                echo '<input type="radio" value="2" name="txt" />&nbsp;' . $type1['from'] . ', с удовольствием тебе отвечу,<br />';
-                echo '<input type="radio" value="3" name="txt" />&nbsp;' . $type1['from'] . ', на твой пост (<a href="index.php?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) отвечу,<br />';
-                echo '<input type="radio" value="4" name="txt" />&nbsp;' . $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю!<br />';
+                echo '<input type="radio" value="1" checked="checked" name="txt" />&#160;' . $type1['from'] . ',<br />';
+                echo '<input type="radio" value="2" name="txt" />&#160;' . $type1['from'] . ', с удовольствием тебе отвечу,<br />';
+                echo '<input type="radio" value="3" name="txt" />&#160;' . $type1['from'] . ', на твой пост (<a href="index.php?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) отвечу,<br />';
+                echo '<input type="radio" value="4" name="txt" />&#160;' . $type1['from'] . ', канай отсюда редиска! Маргалы выкалю, рога поотшибаю!<br />';
                 echo '<small>Выбранный текст будет вставлен перед Вашим текстом, который Вы напишите ниже.</small>';
                 echo '</div>';
             }

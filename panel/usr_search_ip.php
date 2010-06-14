@@ -98,7 +98,7 @@ if ($search && !$error) {
         echo '<p><form action="index.php?act=usr_search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) .
             '" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="index.php?act=usr_search_ip">Новый поиск</a></p>';
+    echo '<p><a href="index.php?act=usr_search_ip">Новый поиск</a><br /><a href="index.php">Админ панель</a></p>';
 } else {
     // Выводим сообщение об ошибке
     if ($error)
@@ -107,7 +107,7 @@ if ($search && !$error) {
     echo '<div class="phdr"><small><b>Примеры запросов:</b><br /><font color="#FF0000">10.5.7.1</font> - Поиск одного адреса<br />';
     echo '<font color="#FF0000">10.5.7.1-10.5.7.100</font> - Поиск по диапазону адресов (знак маски * использовать нельзя)<br />';
     echo '<font color="#FF0000">10.5.*.*</font> - Поиск по маске. Будет найдена вся подсеть, начиная с адреса 0 и заканчивая 255';
-    echo '</small></div>';
+    echo '</small></div><p><a href="index.php">Админ панель</a></p>';
 }
 
 ?>

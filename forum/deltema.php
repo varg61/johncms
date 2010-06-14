@@ -65,7 +65,7 @@ if ($rights == 3 || $rights >= 6) {
     if ($rights == 9 && $res['close'] != 1)
         echo ' | <a href="index.php?act=deltema&amp;id=' . $id . '&amp;hid">Скрыть</a>';
     echo '</p></div>';
-    echo '<div class="phdr">&nbsp;</div>';
+    echo '<div class="phdr">&#160;</div>';
 } else {
     echo '<p>Доступ закрыт!!!</p>';
 }

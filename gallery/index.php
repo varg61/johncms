@@ -192,7 +192,7 @@ else {
                         else {
                             $div = "<div class='b'>";
                         }
-                        echo "$div&nbsp;<a href='index.php?id=" . $fot1['id'] . "'>";
+                        echo "$div&#160;<a href='index.php?id=" . $fot1['id'] . "'>";
                         $infile = "foto/$fot1[name]";
                         if (!empty ($_SESSION['frazm'])) {
                             $razm = $_SESSION['frazm'];
@@ -358,7 +358,7 @@ else {
                 break;
 
             case "ft" :
-                echo "<br/>&nbsp;";
+                echo "<br/>&#160;";
                 $infile = "foto/$ms[name]";
 
                 if (!empty ($_SESSION['frazm'])) {

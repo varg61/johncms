@@ -27,9 +27,9 @@ if (!empty ($_GET['cat'])) {
          <input type='file' name='fail'/><br/>
          Скриншот:<br/>
          <input type='file' name='screens'/><hr/>
-Для Opera Mini:<br/><input name='fail1' value =''/>&nbsp;<br/>
+Для Opera Mini:<br/><input name='fail1' value =''/>&#160;<br/>
 <a href='op:fileselect'>Выбрать файл</a>
-<br/><input name='screens1' value =''/>&nbsp;<br/>
+<br/><input name='screens1' value =''/>&#160;<br/>
 <a href='op:fileselect'>Выбрать рисунок</a><hr/>
 Описание:<br/>
        <textarea name='opis'></textarea><br/>

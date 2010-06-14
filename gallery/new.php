@@ -41,7 +41,7 @@ if ($totalnew != 0) {
             } else {
                 $div = "<div class='b'>";
             }
-            echo "$div<br/>&nbsp;<a href='index.php?id=" . $newf['id'] . "'>";
+            echo "$div<br/>&#160;<a href='index.php?id=" . $newf['id'] . "'>";
             $infile = "foto/$newf[name]";
             if (!empty($_SESSION['frazm'])) {
                 $razm = $_SESSION['frazm'];
@@ -123,7 +123,7 @@ if ($totalnew != 0) {
             $al1 = mysql_fetch_array($al);
             $rz = mysql_query("select * from `gallery` where type = 'rz' and id = '" . $al1['refid'] . "';");
             $rz1 = mysql_fetch_array($rz);
-            echo '<a href="index.php?id=' . $al1['id'] . '">' . $rz1['text'] . '&nbsp;/&nbsp;' . $al1['text'] . '</a></div>';
+            echo '<a href="index.php?id=' . $al1['id'] . '">' . $rz1['text'] . '&#160;/&#160;' . $al1['text'] . '</a></div>';
         }
         ++$i;
     }

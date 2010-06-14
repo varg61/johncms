@@ -135,7 +135,7 @@ if ($rights == 4 || $rights >= 6) {
         "' method='post' enctype='multipart/form-data'>
          Выберите файл(max. 320*320):<br/>
          <input type='file' name='screens'/><hr/>
-Для Opera Mini:<br/><input name='fail1' value =''/>&nbsp;<br/>
+Для Opera Mini:<br/><input name='fail1' value =''/>&#160;<br/>
 <a href='op:fileselect'>Выбрать файл(</a><hr/>
 <input type='submit' name='submit' value='Загрузить'/><br/>
          </form>";

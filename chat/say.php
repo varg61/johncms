@@ -201,7 +201,7 @@ switch ($tip) {
             if (!empty($user['nastroy']))
                 echo '<br />Настроение: ' . $user['nastroy'];
             echo '<form action="index.php?act=say&amp;id=' . $id . '" method="post"><div class="gmenu">';
-            echo '<p><input type="checkbox" value="1" name="priv" checked="checked"/>&nbsp;Приватно<br />';
+            echo '<p><input type="checkbox" value="1" name="priv" checked="checked"/>&#160;Приватно<br />';
             // Список эмоций
             $emo = array (
                 'Шёпoтoм',

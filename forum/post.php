@@ -32,9 +32,9 @@ $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' 
 echo '<div class="phdr"><b>Тема:</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
-    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png" alt=""  width="16" height="16"/>&nbsp;';
+    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png" alt=""  width="16" height="16"/>&#160;';
 else
-    echo '<img src="../images/del.png" width="12" height="12" />&nbsp;';
+    echo '<img src="../images/del.png" width="12" height="12" />&#160;';
 // Ник юзера и ссылка на его анкету
 if ($user_id && $user_id != $res['user_id']) {
     echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
@@ -66,7 +66,7 @@ echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '
 echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
 // Статус юзера
 if (!empty($res['status']))
-    echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&nbsp;' . $res['status'] . '</div>';
+    echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&#160;' . $res['status'] . '</div>';
 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
 $text = nl2br($text);
 $text = tags($text);

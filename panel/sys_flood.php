@@ -64,12 +64,12 @@ echo '<div class="gmenu"><p><h3>Режим работы</h3><table cellspacing="
 <tr><td valign="top"><input type="radio" name="mode" value="1" ' . ($set_af['mode'] == 1 ? 'checked="checked"' : '') . '/></td><td><b>Адаптивный</b><br /><small>Если на сайте есть кто-то из Администрации, система работает в &quot;дневном&quot; режиме, иначе переходит в &quot;ночной&quot;</small></td></tr>
 </table></p><p><input type="submit" name="save" value="Установить"/></p></div>';
 echo '<div class="menu"><p><h3>Антифлуд (секунд)</h3>';
-echo '<input name="day" size="3" value="' . $set_af['day'] . '" maxlength="3" />&nbsp;Днем<br />';
-echo '<input name="night" size="3" value="' . $set_af['night'] . '" maxlength="3" />&nbsp;Ночью';
+echo '<input name="day" size="3" value="' . $set_af['day'] . '" maxlength="3" />&#160;Днем<br />';
+echo '<input name="night" size="3" value="' . $set_af['night'] . '" maxlength="3" />&#160;Ночью';
 echo '<br /><small>Минимум 4, максимум 300 секунд</small></p>';
 echo '<p><h3>Дневной режим</h3>';
-echo '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlength="2" style="text-align:right"/>:00&nbsp;Начало дня <span class="gray">(6-12)</span><br />';
-echo '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&nbsp;Конец дня <span class="gray">(17-23)</span>';
+echo '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlength="2" style="text-align:right"/>:00&#160;Начало дня <span class="gray">(6-12)</span><br />';
+echo '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&#160;Конец дня <span class="gray">(17-23)</span>';
 echo '</p><p><input type="submit" name="submit" value="Запомнить"/></p></div></form>';
 echo '<div class="phdr"><a href="index.php?act=sys_flood&amp;reset">Сброс настроек</a></div>';
 echo '<p><a href="index.php">Админ панель</a></p>';

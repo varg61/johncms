@@ -257,7 +257,7 @@ switch ($act) {
             if (!$user_id) {
                 // CAPTCHA для гостей
                 echo '<img src="../captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />';
-                echo '<input type="text" size="5" maxlength="5"  name="code"/>&nbsp;введите код<br />';
+                echo '<input type="text" size="5" maxlength="5"  name="code"/>&#160;введите код<br />';
             }
             echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
         } else {

@@ -98,7 +98,7 @@ if ($do || isset($_GET['new'])) {
             
             //$fls = filesize('../files/forum/attach/' . $res['filename']);
             //$fls = round($fls / 1024, 0);
-            //echo '<p>' . ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" align="left" />&nbsp;';
+            //echo '<p>' . ($res['del'] ? '<img src="../images/del.png" width="16" height="16" class="left" />' : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" align="left" />&#160;';
             //echo '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a>';
             //echo ' [' . $res['dlcount'] . ']';
             //echo ' <span class="gray">' . $fls . ' кб.</span>';
@@ -133,7 +133,7 @@ if ($do || isset($_GET['new'])) {
     for ($i = 1; $i < 10; $i++) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0) {
-            $link[] = '<img src="../images/system/' . $i . '.png" width="16" height="16" class="left" />&nbsp;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&nbsp;(' . $count . ')';
+            $link[] = '<img src="../images/system/' . $i . '.png" width="16" height="16" class="left" />&#160;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
             $total = $total + $count;
         }
     }

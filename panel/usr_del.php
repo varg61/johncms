@@ -125,15 +125,15 @@ if (!$error) {
             ////////////////////////////////////////////////////////////
             echo '<form action="index.php?act=usr_del&amp;mod=del&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p><h3>Чистка активности</h3>';
             if ($album)
-                echo '<div><input type="checkbox" value="1" name="gallery" checked="checked" />&nbsp;Галерея, удалить альбом <span class="red">(' . $images_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="gallery" checked="checked" />&#160;Галерея, удалить альбом <span class="red">(' . $images_count . ')</span></div>';
             if ($comm_count)
-                echo '<div><input type="checkbox" value="1" name="comments" checked="checked" />&nbsp;Комментарии <span class="red">(' . $comm_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="comments" checked="checked" />&#160;Комментарии <span class="red">(' . $comm_count . ')</span></div>';
             if ($guest_count)
-                echo '<div><input type="checkbox" value="1" name="guest" checked="checked" />&nbsp;Гостевая <span class="red">(' . $guest_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="guest" checked="checked" />&#160;Гостевая <span class="red">(' . $guest_count . ')</span></div>';
             if ($forumt_count)
-                echo '<div><input type="checkbox" value="1" name="forumt" checked="checked" />&nbsp;Форум, темы <span class="red">(' . $forumt_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="forumt" checked="checked" />&#160;Форум, темы <span class="red">(' . $forumt_count . ')</span></div>';
             if ($forump_count)
-                echo '<div><input type="checkbox" value="1" name="forump" checked="checked" />&nbsp;Форум, посты <span class="red">(' . $forump_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="forump" checked="checked" />&#160;Форум, посты <span class="red">(' . $forump_count . ')</span></div>';
             if ($forumt_count || $forump_count)
                 echo '<small><span class="gray">При чистке форума, темы и посты переходят в режим "скрытые"</span></small>';
             echo '</p></div><div class="rmenu"><p>Вы действительно хотите удалить данного пользователя?';

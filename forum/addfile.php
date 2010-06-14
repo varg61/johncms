@@ -184,7 +184,7 @@ switch ($res['type']) {
             if (!eregi("Opera/8.01", $agent)) {
                 echo '<input type="file" name="fail"/>';
             } else {
-                echo '<input name="fail1" value =""/>&nbsp;<br/><a href="op:fileselect">Выбрать файл</a>';
+                echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">Выбрать файл</a>';
             }
             echo '</p><p><input type="submit" name="submit" value="Отправить"/></p></form></div>';
             echo '<div class="phdr">Макс. размер: ' . $flsz . 'kb</div>';

@@ -33,7 +33,7 @@ switch ($mod) {
                 }
                 $res = mysql_fetch_array($req);
                 echo '<div class="phdr"><b>Просмотр счетчика</b></div>';
-                echo '<div class="menu">' . ($res['switch'] == 1 ? '<font color="#00AA00">[ON]</font>' : '<font color="#FF0000">[OFF]</font>') . '&nbsp;<b>' . $res['name'] . '</b></div>';
+                echo '<div class="menu">' . ($res['switch'] == 1 ? '<font color="#00AA00">[ON]</font>' : '<font color="#FF0000">[OFF]</font>') . '&#160;<b>' . $res['name'] . '</b></div>';
                 echo ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><u>Вариант-1</u><br />' . $res['link1'] . '</p>';
                 echo '<p><u>Вариант-2</u><br />' . $res['link2'] . '</p>';
                 echo '<p><u>Режим отображения</u><br />';
@@ -189,10 +189,10 @@ switch ($mod) {
             echo '<div class="menu"><u>Название</u><br /><input type="text" name="name" value="' . $name . '" /></div>';
             echo '<div class="menu"><u>Вариант-1</u><br /><small>Код для Главной страницы:</small><br /><textarea rows="3" name="link1">' . $link1 . '</textarea></div>';
             echo '<div class="menu"><u>Вариант-2</u><br /><small>Код для остальных страниц:</small><br /><textarea rows="3" name="link2">' . $link2 . '</textarea></div>';
-            echo '<div class="menu"><u>Режим отображения</u><p>' . '<input type="radio" value="1" ' . ($mode == 0 || $mode == 1 ? 'checked="checked" ' : '') . 'name="mode" />&nbsp;По умолчанию<br />'
+            echo '<div class="menu"><u>Режим отображения</u><p>' . '<input type="radio" value="1" ' . ($mode == 0 || $mode == 1 ? 'checked="checked" ' : '') . 'name="mode" />&#160;По умолчанию<br />'
                 . '<div class="sub">На Главной показывается Вариант-1, на остальных страницах Вариант-2<br />Если поле "Вариант-2" не заполнено, то чсетчик будет отображаться только на Главной странице.</div></p><p>'
-                . '<input type="radio" value="2" ' . ($mode == 2 ? 'checked="checked" ' : '') . 'name="mode" />&nbsp;Вариант-1<br />' . '<input type="radio" value="3" ' . ($mode == 3 ? 'checked="checked" ' : '')
-                . 'name="mode" />&nbsp;Вариант-2</p></div>';
+                . '<input type="radio" value="2" ' . ($mode == 2 ? 'checked="checked" ' : '') . 'name="mode" />&#160;Вариант-1<br />' . '<input type="radio" value="3" ' . ($mode == 3 ? 'checked="checked" ' : '')
+                . 'name="mode" />&#160;Вариант-2</p></div>';
             echo
                 '<div class="rmenu"><small>ВНИМАНИЕ!<br />Следите за правильностью введенного кода. Он должен соответствовать стандартам XML.<br />Если после нажатия кнопки "Просмотр" возникнут ошибки XHTML, то в своем браузере нажмите кнопку "Назад", вернитесь в данную форму и откорректируйте ошибки.</small></div>';
             if ($id)
@@ -258,7 +258,7 @@ switch ($mod) {
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_assoc($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/' . ($res['switch'] == 1 ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&nbsp;';
+                echo '<img src="../images/' . ($res['switch'] == 1 ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&#160;';
                 echo '<a href="index.php?act=mod_counters&amp;mod=view&amp;id=' . $res['id'] . '"><b>' . $res['name'] . '</b></a><br />';
                 echo '<div class="sub"><a href="index.php?act=mod_counters&amp;mod=up&amp;id=' . $res['id'] . '">Вверх</a> | ';
                 echo '<a href="index.php?act=mod_counters&amp;mod=down&amp;id=' . $res['id'] . '">Вниз</a> | ';

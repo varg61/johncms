@@ -121,7 +121,7 @@ switch ($act) {
         echo '<p>Ваш логин:<br/><input type="text" name="nick" /><br/>';
         echo 'Ваш e-mail:<br/><input type="text" name="email" /></p>';
         echo '<p><img src="../captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />';
-        echo '<input type="text" size="4" maxlength="4"  name="code"/>&nbsp;Введите код</p>';
+        echo '<input type="text" size="4" maxlength="4"  name="code"/>&#160;Введите код</p>';
         echo '<p><input type="submit" value="Отправить"/></p></form></div>';
         echo '<div class="phdr"><small>Пароль будет выслан на E-mail Адрес, указанный в Вашей анкете.<br />ВНИМЕНИЕ! Если в анкете не был указан E-mail адрес, то Вы не сможете восстановить пароль</small></div>';
         break;

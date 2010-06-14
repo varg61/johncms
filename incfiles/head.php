@@ -156,7 +156,7 @@ if ($user_id) {
 
 // Выводим сообщение о Бане
 if (isset($ban))
-    echo '<div class="alarm">БАН&nbsp;<a href="' . $home . '/str/users_ban.php">Подробно</a></div>';
+    echo '<div class="alarm">БАН&#160;<a href="' . $home . '/str/users_ban.php">Подробно</a></div>';
 
 // Проверяем, есть ли новые письма
 if ($headmod != "pradd" && $user_id) {

@@ -298,7 +298,7 @@ if ($user_id) {
                 echo "<br/><input type='text' name='foruser'/>";
             }
             echo " <br/>Тема:<br/><input type='text' name='tem' value='" . $tema .
-                "'/><br/> Cообщение:<br/><textarea rows='5' name='msg'></textarea><br/>Прикрепить файл(max. $flsz kb):<br/><input type='file' name='fail'/><hr/>Прикрепить файл(Opera Mini):<br/><input name='fail1' value =''/>&nbsp;<br/>
+                "'/><br/> Cообщение:<br/><textarea rows='5' name='msg'></textarea><br/>Прикрепить файл(max. $flsz kb):<br/><input type='file' name='fail'/><hr/>Прикрепить файл(Opera Mini):<br/><input name='fail1' value =''/>&#160;<br/>
 <a href='op:fileselect'>Выбрать файл</a><hr/>";
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
@@ -358,7 +358,7 @@ if ($user_id) {
                 }
                 echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/><a href="pradd.php?id=' . $res['id'] . '&amp;act=readmess">От: ' . $res['author'] . '</a>';
                 $vrp = $res['time'] + $set_user['sdvig'] * 3600;
-                echo '&nbsp;<span class="gray">(' . date("d.m.y H:i", $vrp) . ')<br/>Тема:</span> ' . $res['temka'] . '<br/>';
+                echo '&#160;<span class="gray">(' . date("d.m.y H:i", $vrp) . ')<br/>Тема:</span> ' . $res['temka'] . '<br/>';
                 if (!empty($res['attach'])) {
                     echo "+ вложение<br/>";
                 }
@@ -504,7 +504,7 @@ if ($user_id) {
                 }
                 echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>Для: <a href="pradd.php?id=' . $res['id'] . '&amp;act=readout">' . $res['user'] . '</a>';
                 $vrp = $res['time'] + $set_user['sdvig'] * 3600;
-                echo '&nbsp;<span class="gray">(' . date("d.m.y H:i", $vrp) . ')<br/>Тема:</span> ' . $res['temka'] . '<br/>';
+                echo '&#160;<span class="gray">(' . date("d.m.y H:i", $vrp) . ')<br/>Тема:</span> ' . $res['temka'] . '<br/>';
                 if (!empty($res['attach'])) {
                     echo "+ вложение<br/>";
                 }

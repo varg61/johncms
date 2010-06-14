@@ -35,18 +35,18 @@ if (isset($_POST['submit'])) {
 }
 echo '<form action="index.php?act=sys_set" method="post"><div class="menu"><p>';
 echo '<h3>Настройка часов</h3>';
-echo '&nbsp;<input type="text" name="sdvigclock" size="2" maxlength="2" value="' . $set['sdvigclock'] . '"/> Сдвиг времени (+-12)<br />';
-echo '&nbsp;<span style="font-weight:bold; background-color:#CCC">' . date("H:i") . '</span> Системное время';
+echo '&#160;<input type="text" name="sdvigclock" size="2" maxlength="2" value="' . $set['sdvigclock'] . '"/> Сдвиг времени (+-12)<br />';
+echo '&#160;<span style="font-weight:bold; background-color:#CCC">' . date("H:i") . '</span> Системное время';
 echo '</p><p><h3>Функции системы</h3>';
-echo '&nbsp;Адрес сайта без слэша в конце:<br/>&nbsp;<input type="text" name="homeurl" value="' . htmlentities($set['homeurl']) . '"/><br/>';
-echo '&nbsp;Копирайт сайта:<br/>&nbsp;<input type="text" name="copyright" value="' . htmlentities($set['copyright'], ENT_QUOTES, 'UTF-8') . '"/><br/>';
-echo '&nbsp;E-mail сайта:<br/>&nbsp;<input name="madm" maxlength="50" value="' . htmlentities($set['emailadmina']) . '"/><br />';
-echo '&nbsp;Макс. размер файлов(кб.):<br />&nbsp;<input type="text" name="flsz" value="' . intval($set['flsz']) . '"/><br />';
-echo '&nbsp;<input name="gz" type="checkbox" value="1" ' . ($set['gzip'] ? 'checked="checked"' : '') . ' />&nbsp;GZIP сжатие';
+echo '&#160;Адрес сайта без слэша в конце:<br/>&#160;<input type="text" name="homeurl" value="' . htmlentities($set['homeurl']) . '"/><br/>';
+echo '&#160;Копирайт сайта:<br/>&#160;<input type="text" name="copyright" value="' . htmlentities($set['copyright'], ENT_QUOTES, 'UTF-8') . '"/><br/>';
+echo '&#160;E-mail сайта:<br/>&#160;<input name="madm" maxlength="50" value="' . htmlentities($set['emailadmina']) . '"/><br />';
+echo '&#160;Макс. размер файлов(кб.):<br />&#160;<input type="text" name="flsz" value="' . intval($set['flsz']) . '"/><br />';
+echo '&#160;<input name="gz" type="checkbox" value="1" ' . ($set['gzip'] ? 'checked="checked"' : '') . ' />&#160;GZIP сжатие';
 echo '</p><p><h3>META тэги</h3>';
-echo '&nbsp;Ключевые слова:<br />&nbsp;<textarea cols="20" rows="4" name="meta_key">' . $set['meta_key'] . '</textarea><br />';
-echo '&nbsp;Описание:<br />&nbsp;<textarea cols="20" rows="4" name="meta_desc">' . $set['meta_desc'] . '</textarea>';
-echo '</p><p><h3>Тема оформления</h3>&nbsp;<select name="skindef">';
+echo '&#160;Ключевые слова:<br />&#160;<textarea cols="20" rows="4" name="meta_key">' . $set['meta_key'] . '</textarea><br />';
+echo '&#160;Описание:<br />&#160;<textarea cols="20" rows="4" name="meta_desc">' . $set['meta_desc'] . '</textarea>';
+echo '</p><p><h3>Тема оформления</h3>&#160;<select name="skindef">';
 $dir = opendir('../theme');
 while ($skindef = readdir($dir)) {
     if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn')) {
@@ -57,7 +57,7 @@ while ($skindef = readdir($dir)) {
 closedir($dir);
 echo '</select>';
 echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-echo '<div class="phdr">&nbsp;</div>';
+echo '<div class="phdr">&#160;</div>';
 echo '<p><a href="index.php">Админ панель</a></p>';
 
 ?>

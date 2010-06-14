@@ -55,21 +55,21 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     -----------------------------------------------------------------
     */
     echo '<div class="phdr"><b>Админ панель</b></div>';
-    echo '<div class="user"><p><h3><img src="../images/users.png" width="16" height="16" class="left" />&nbsp;Пользователи</h3><ul>';
+    echo '<div class="user"><p><h3><img src="../images/users.png" width="16" height="16" class="left" />&#160;Пользователи</h3><ul>';
     $regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg`='0'"), 0);
     if ($regtotal)
-        echo '<li><span class="red"><b><a href="index.php?act=usr_reg">На регистрации</a>&nbsp;(' . $regtotal . ')</b></span></li>';
-    echo '<li><a href="index.php?act=usr_adm">Администрация</a>&nbsp;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>';
+        echo '<li><span class="red"><b><a href="index.php?act=usr_reg">На регистрации</a>&#160;(' . $regtotal . ')</b></span></li>';
+    echo '<li><a href="index.php?act=usr_adm">Администрация</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>';
     //TODO: Написать показ числа новых
-    echo '<li><a href="index.php?act=usr_list">Пользователи</a>&nbsp;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>';
+    echo '<li><a href="index.php?act=usr_list">Пользователи</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>';
     $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '$realtime'"), 0);
-    echo '<li><a href="index.php?act=usr_ban">Бан-панель</a>&nbsp;(' . $bantotal . ')</li>';
+    echo '<li><a href="index.php?act=usr_ban">Бан-панель</a>&#160;(' . $bantotal . ')</li>';
     echo '<li><a href="index.php?act=usr_search_nick"><b>Поиск</b></a></li>';
     echo '</ul></p></div>';
     echo '<div class="list2">';
     // Блок модулей
     if ($rights >= 7) {
-        echo '<p><h3><img src="../images/modules.png" width="16" height="16" class="left" />&nbsp;Модули</h3><ul>';
+        echo '<p><h3><img src="../images/modules.png" width="16" height="16" class="left" />&#160;Модули</h3><ul>';
         echo '<li><a href="index.php?act=mod_ads">Реклама</a></li>';
         if ($rights == 9)
             echo '<li><a href="index.php?act=mod_counters">Счетчики</a></li>';
@@ -82,20 +82,20 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     // Блок системных настроек
     if ($rights >= 7) {
         if ($rights == 9) {
-            echo '<p><h3><img src="../images/network.png" width="16" height="16" class="left" />&nbsp;IP адреса</h3><ul>';
+            echo '<p><h3><img src="../images/network.png" width="16" height="16" class="left" />&#160;IP адреса</h3><ul>';
             //TODO: Разобраться с правами доступа к поиску для модеров
             echo '<li><a href="index.php?act=usr_search_ip">Поиск по IP</a></li>';
             echo '<li><a href="index.php?act=sys_ipop">Список операторов</a></li>';
             echo '<li><a href="index.php?act=sys_ipban">Бан по IP</a></li>';
             echo '</ul></p>';
         }
-        echo '<p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;Система</h3><ul>';
+        echo '<p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;Система</h3><ul>';
         if ($rights == 9)
             echo '<li><a href="index.php?act=sys_set">Настройки сайта</a></li>';
         echo '<li><a href="index.php?act=sys_smileys">Обновить смайлы</a></li>';
         echo '</ul></p>';
         echo '</div><div class="bmenu">';
-        echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&nbsp;Безопасность</h3><ul>';
+        echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&#160;Безопасность</h3><ul>';
         echo '<li><a href="index.php?act=sys_flood">Антифлуд</a></li>';
         echo '<li><a href="index.php?act=sys_access">Права доступа</a></li>';
         echo '<li><a href="index.php?act=sys_antispy">Сканер антишпион</a></li>';

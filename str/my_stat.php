@@ -114,7 +114,7 @@ if (mysql_num_rows($req_u)) {
             echo '<div class="phdr"><b>' . ($id ? 'С' : 'Моя с') . 'татистика активности</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';
-            echo '<div class="menu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Активность на сайте</h3><ul>';
+            echo '<div class="menu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;Активность на сайте</h3><ul>';
             echo '<li>Сообщений в Форуме: ' . $res_u['postforum'] . '</li>';
             //TODO: Дописать статистику по гостевой
             echo '<li>Сообщений в Гостевой: ' . $res_u['postguest'] . '</li>';

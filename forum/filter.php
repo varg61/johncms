@@ -56,7 +56,7 @@ switch ($do) {
             echo '<div class="phdr">Фильтрация постов</div>';
             while ($res = mysql_fetch_array($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<input type="checkbox" name="users[]" value="' . $res['user_id'] . '"/>&nbsp;';
+                echo '<input type="checkbox" name="users[]" value="' . $res['user_id'] . '"/>&#160;';
                 echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '">' . $res['from'] . '</a> [' . $res['count'] . ']</div>';
                 ++$i;
             }

@@ -150,7 +150,7 @@ switch ($mod) {
                         $ref = $cat ? $cat : $res['refid'];
                         $req_r = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$ref' AND `id` != '$id' AND `type` = 'r' ORDER BY `realid` ASC");
                         while ($res_r = mysql_fetch_assoc($req_r)) {
-                            echo '<input type="radio" name="subcat" value="' . $res_r['id'] . '" />&nbsp;' . $res_r['text'] . '<br />';
+                            echo '<input type="radio" name="subcat" value="' . $res_r['id'] . '" />&#160;' . $res_r['text'] . '<br />';
                         }
                         echo '</p><p><h3>Другая категория</h3><ul>';
                         $req_c = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$ref' ORDER BY `realid` ASC");
@@ -381,7 +381,7 @@ switch ($mod) {
                 while ($res = mysql_fetch_assoc($req)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b>' . $res['text'] . '</b>';
-                    echo '&nbsp;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
+                    echo '&#160;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
                     if (!empty($res['soft']))
                         echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                     echo '<div class="sub"><a href="index.php?act=mod_forum&amp;mod=up&amp;id=' . $res['id'] . '">Вверх</a> | <a href="index.php?act=mod_forum&amp;mod=down&amp;id=' . $res['id'] .
@@ -401,7 +401,7 @@ switch ($mod) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<a href="index.php?act=mod_forum&amp;mod=cat&amp;id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a> ';
                 echo '(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $res['id'] . "'"), 0) . ')';
-                echo '&nbsp;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
+                echo '&#160;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
                 if (!empty($res['soft']))
                     echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                 echo '<div class="sub"><a href="index.php?act=mod_forum&amp;mod=up&amp;id=' . $res['id'] . '">Вверх</a> | <a href="index.php?act=mod_forum&amp;mod=down&amp;id=' . $res['id'] .
@@ -641,15 +641,15 @@ switch ($mod) {
         $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
         $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'"), 0);
         echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Управление форумом</div>';
-        echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
-        echo '<li>Категории:&nbsp;' . $total_cat . '</li>';
-        echo '<li>Разделы:&nbsp;' . $total_sub . '</li>';
-        echo '<li>Темы:&nbsp;' . $total_thm . '&nbsp;/&nbsp;<span class="red">' . $total_thm_del . '</span></li>';
-        echo '<li>Посты:&nbsp;' . $total_msg . '&nbsp;/&nbsp;<span class="red">' . $total_msg_del . '</span></li>';
-        echo '<li>Файлы:&nbsp;' . $total_files . '</li>';
-        echo '<li>Голосования:&nbsp;' . $total_votes . '</li>';
+        echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;Статистика</h3><ul>';
+        echo '<li>Категории:&#160;' . $total_cat . '</li>';
+        echo '<li>Разделы:&#160;' . $total_sub . '</li>';
+        echo '<li>Темы:&#160;' . $total_thm . '&#160;/&#160;<span class="red">' . $total_thm_del . '</span></li>';
+        echo '<li>Посты:&#160;' . $total_msg . '&#160;/&#160;<span class="red">' . $total_msg_del . '</span></li>';
+        echo '<li>Файлы:&#160;' . $total_files . '</li>';
+        echo '<li>Голосования:&#160;' . $total_votes . '</li>';
         echo '</ul></p></div>';
-        echo '<div class="menu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;Управление</h3><ul>';
+        echo '<div class="menu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;Управление</h3><ul>';
         echo '<li><a href="index.php?act=mod_forum&amp;mod=cat"><b>Структура форума</b></a></li>';
         echo '<li><a href="index.php?act=mod_forum&amp;mod=hposts">Скрытые посты</a> (' . $total_msg_del . ')</li>';
         echo '<li><a href="index.php?act=mod_forum&amp;mod=htopics">Скрытые темы</a> (' . $total_thm_del . ')</li>';

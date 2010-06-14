@@ -129,7 +129,7 @@ if (!empty($_SESSION['uid'])) {
 <br /> Cообщение:<br />
         <textarea rows='5' name='msg'></textarea><br/>Прикрепить файл:<br />
          <input type='file' name='fail'/><hr/>
-Прикрепить файл(Opera Mini):<br/><input name='fail1' value =''/>&nbsp;<br/>
+Прикрепить файл(Opera Mini):<br/><input name='fail1' value =''/>&#160;<br/>
 <a href='op:fileselect'>Выбрать файл</a><hr/>
         <input type='checkbox' name='msgtrans' value='1' /> Транслит сообщения
       <br/>

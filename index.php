@@ -49,7 +49,7 @@ switch ($act) {
             echo '<div class="menu"><a href="str/brd.php">Именинники</a> (' . $brth . ')</div>';
         echo '<div class="menu"><a href="str/moders.php">Администрация</a></div>';
         echo '<div class="menu"><a href="str/users_top.php">Топ активности</a></div>';
-        echo '<div class="phdr">&nbsp;</div>';
+        echo '<div class="phdr">&#160;</div>';
         break;
 
     case 'info':
@@ -75,7 +75,7 @@ switch ($act) {
         }
         echo '<div class="phdr"><b>Личный кабинет</b></div>';
         // Блок статистики
-        echo '<div class="gmenu"><p><h3><img src="images/rate.gif" width="16" height="16" class="left" />&nbsp;Мои активы</h3><ul>';
+        echo '<div class="gmenu"><p><h3><img src="images/rate.gif" width="16" height="16" class="left" />&#160;Мои активы</h3><ul>';
         echo '<li><a href="str/my_stat.php?act=forum">Последние записи</a></li>';
         echo '<li><a href="str/my_stat.php">Моя Статистика</a></li>';
         if ($rights >= 1) {
@@ -84,27 +84,27 @@ switch ($act) {
             echo '<li><span class="red"><a href="' . $admp . '/index.php"><b>Админ панель</b></a></span></li>';
         }
         echo '</ul></p></div>';
-        echo '<div class="menu"><p><h3><img src="images/mail.png" width="16" height="16" class="left" />&nbsp;Моя почта</h3><ul>';
+        echo '<div class="menu"><p><h3><img src="images/mail.png" width="16" height="16" class="left" />&#160;Моя почта</h3><ul>';
         // Блок почты
         $count_mail = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in'"), 0);
         $count_newmail = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '" . $login . "' AND `type` = 'in' AND `chit` = 'no'"), 0);
-        echo '<li><a href="str/pradd.php?act=in">Входящие</a>&nbsp;(' . $count_mail . ($count_newmail ? '&nbsp;/&nbsp;<span class="red"><a href="str/pradd.php?act=in&amp;new">+' . $count_newmail . '</a></span>' : '') . ')</li>';
+        echo '<li><a href="str/pradd.php?act=in">Входящие</a>&#160;(' . $count_mail . ($count_newmail ? '&#160;/&#160;<span class="red"><a href="str/pradd.php?act=in&amp;new">+' . $count_newmail . '</a></span>' : '') . ')</li>';
         $count_sentmail = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `author` = '$login' AND `type` = 'out'"), 0);
         $count_sentunread = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `author` = '$login' AND `type` = 'out' AND `chit` = 'no'"), 0);
-        echo '<li><a href="str/pradd.php?act=out">Отправленные</a>&nbsp;(' . $count_sentmail . ($count_sentunread ? '&nbsp;/&nbsp;<span class="red">' . $count_sentunread . '</span>' : '') . ')</li>';
+        echo '<li><a href="str/pradd.php?act=out">Отправленные</a>&#160;(' . $count_sentmail . ($count_sentunread ? '&#160;/&#160;<span class="red">' . $count_sentunread . '</span>' : '') . ')</li>';
         $count_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `attach` != ''"), 0);
-        //echo '<li><a href="str/pradd.php?act=files">Файлы</a>&nbsp;(' . $count_files . ')</li>';
+        //echo '<li><a href="str/pradd.php?act=files">Файлы</a>&#160;(' . $count_files . ')</li>';
         if (!$ban['1'] && !$ban['3'])
             echo '<p><form action="str/pradd.php?act=write" method="post"><input type="submit" value=" Написать " /></form></p>';
         // Блок контактов
-        echo '</ul><h3><img src="images/contacts.png" width="16" height="16" class="left" />&nbsp;Мои контакты</h3><ul>';
+        echo '</ul><h3><img src="images/contacts.png" width="16" height="16" class="left" />&#160;Мои контакты</h3><ul>';
         $count_contacts = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `me` = '$login' AND `cont` != ''"), 0);
-        echo '<li><a href="str/cont.php">Контакты</a>&nbsp;(' . $count_contacts . ')</li>';
+        echo '<li><a href="str/cont.php">Контакты</a>&#160;(' . $count_contacts . ')</li>';
         $count_ignor = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `me` = '$login' AND `ignor` != ''"), 0);
-        echo '<li><a href="str/ignor.php">Игнор</a>&nbsp;(' . $count_ignor . ')</li>';
+        echo '<li><a href="str/ignor.php">Игнор</a>&#160;(' . $count_ignor . ')</li>';
         echo '</ul></p></div>';
         // Блок настроек
-        echo '<div class="bmenu"><p><h3><img src="images/settings.png" width="16" height="16" class="left" />&nbsp;Мои настройки</h3><ul>';
+        echo '<div class="bmenu"><p><h3><img src="images/settings.png" width="16" height="16" class="left" />&#160;Мои настройки</h3><ul>';
         echo '<li><a href="str/anketa.php">Моя анкета</a></li>';
         echo '<li><a href="str/my_pass.php">Сменить пароль</a></li>';
         echo '<li><a href="str/my_set.php">Общие настройки</a></li>';

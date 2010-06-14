@@ -159,7 +159,7 @@ if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg'))) {
 echo '<small><a href="my_images.php?act=up_photo&amp;id=' . $user['id'] . '">Выгрузить</a>' . $link . '</small></li>';
 echo '</ul></p></div>';
 // Личные данные
-echo '<div class="menu"><p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>';
+echo '<div class="menu"><p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&#160;Личные данные</h3><ul>';
 echo '<li><span class="gray">Имя:</span><br /><input type="text" value="' . $user['imname'] . '" name="imname" /></li>';
 echo '<li><span class="gray">Дата рождения (д.м.г)</span><br />';
 echo '<input type="text" value="' . $user['dayb'] . '" size="2" maxlength="2" name="dayb" />.';
@@ -169,11 +169,11 @@ echo '<li><span class="gray">Город:</span><br /><input type="text" value="'
 echo '<li><span class="gray">О себе:</span><br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></li>';
 echo '</ul></p>';
 // Связь
-echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&nbsp;Связь</h3><ul>';
+echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&#160;Связь</h3><ul>';
 echo '<li><span class="gray">Тел. номер:</span><br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /></li>';
 echo '<li><span class="gray">E-mail:</span><br /><small>Внимание! Правильно указывайте свой адрес электронной почты!<br />Именно на него будет высылаться Ваш пароль.</small><br />';
 echo '<input type="text" value="' . $user['mail'] . '" name="mail" /><br />';
-echo '<input name="mailvis" type="checkbox" value="1" ' . ($user['mailvis'] ? 'checked="checked"' : '') . ' />&nbsp;Показывать в Анкете</li>';
+echo '<input name="mailvis" type="checkbox" value="1" ' . ($user['mailvis'] ? 'checked="checked"' : '') . ' />&#160;Показывать в Анкете</li>';
 echo '<li><span class="gray">ICQ:</span><br /><input type="text" value="' . $user['icq'] . '" name="icq" size="10" maxlength="10" /></li>';
 echo '<li><span class="gray">Skype:</span><br /><input type="text" value="' . $user['skype'] . '" name="skype" /></li>';
 echo '<li><span class="gray">Jabber:</span><br /><input type="text" value="' . $user['jabber'] . '" name="jabber" /></li>';
@@ -181,28 +181,28 @@ echo '<li><span class="gray">Сайт:</span><br /><input type="text" value="' .
 echo '</ul></p></div>';
 // Административные функции
 if ($rights >= 7) {
-    echo '<div class="rmenu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&nbsp;Настройки</h3><ul>';
+    echo '<div class="rmenu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;Настройки</h3><ul>';
     if ($rights == 9) {
-        echo '<li><input name="immunity" type="checkbox" value="1" ' . ($user['immunity'] ? 'checked="checked"' : '') . ' />&nbsp;<span class="green"><b>Иммунитет</b></span></li>';
-        echo '<li><input name="karma_off" type="checkbox" value="1" ' . ($user['karma_off'] ? 'checked="checked"' : '') . ' />&nbsp;<span class="red"><b>Запретить карму</b></span></li>';
+        echo '<li><input name="immunity" type="checkbox" value="1" ' . ($user['immunity'] ? 'checked="checked"' : '') . ' />&#160;<span class="green"><b>Иммунитет</b></span></li>';
+        echo '<li><input name="karma_off" type="checkbox" value="1" ' . ($user['karma_off'] ? 'checked="checked"' : '') . ' />&#160;<span class="red"><b>Запретить карму</b></span></li>';
     }
     echo '<li><a href="my_pass.php?id=' . $user['id'] . '">Сменить пароль</a></li>';
     echo '<li><a href="my_data.php?act=reset&amp;id=' . $user['id'] . '">Сбросить настройки</a></li>';
     echo '<li>Укажите пол:<br />';
-    echo '<input type="radio" value="m" name="sex" ' . ($user['sex'] == 'm' ? 'checked="checked"' : '') . '/>&nbsp;Мужской<br />';
-    echo '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&nbsp;Женский</li>';
+    echo '<input type="radio" value="m" name="sex" ' . ($user['sex'] == 'm' ? 'checked="checked"' : '') . '/>&#160;Мужской<br />';
+    echo '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&#160;Женский</li>';
     echo '</ul></p>';
     if ($user['id'] != $user_id) {
-        echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&nbsp;Должность на сайте</h3><ul>';
-        echo '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&nbsp;<b>Обычный юзер</b><br />';
-        echo '<input type="radio" value="2" name="rights" ' . ($user['rights'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;Модер чата<br />';
-        echo '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&nbsp;Модер форума<br />';
-        echo '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&nbsp;Модер по загрузкам<br />';
-        echo '<input type="radio" value="5" name="rights" ' . ($user['rights'] == 5 ? 'checked="checked"' : '') . '/>&nbsp;Модер библиотеки<br />';
-        echo '<input type="radio" value="6" name="rights" ' . ($user['rights'] == 6 ? 'checked="checked"' : '') . '/>&nbsp;Супермодератор<br />';
+        echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&#160;Должность на сайте</h3><ul>';
+        echo '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&#160;<b>Обычный юзер</b><br />';
+        echo '<input type="radio" value="2" name="rights" ' . ($user['rights'] == 2 ? 'checked="checked"' : '') . '/>&#160;Модер чата<br />';
+        echo '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&#160;Модер форума<br />';
+        echo '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&#160;Модер по загрузкам<br />';
+        echo '<input type="radio" value="5" name="rights" ' . ($user['rights'] == 5 ? 'checked="checked"' : '') . '/>&#160;Модер библиотеки<br />';
+        echo '<input type="radio" value="6" name="rights" ' . ($user['rights'] == 6 ? 'checked="checked"' : '') . '/>&#160;Супермодератор<br />';
         if ($rights == 9) {
-            echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&nbsp;Администратор<br />';
-            echo '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&nbsp;<span class="red"><b>Супервизор</b></span><br />';
+            echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&#160;Администратор<br />';
+            echo '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&#160;<span class="red"><b>Супервизор</b></span><br />';
         }
         echo '</ul></p>';
     }

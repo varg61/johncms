@@ -79,7 +79,7 @@ if ($total) {
 
                 case 'forum':
                 case 'forums':
-                    $place = '<a href="../forum/index.php">Форум</a>&nbsp;/&nbsp;<a href="../forum/index.php?act=who">&gt;&gt;</a>';
+                    $place = '<a href="../forum/index.php">Форум</a>&#160;/&#160;<a href="../forum/index.php?act=who">&gt;&gt;</a>';
                     break;
 
                 case 'chat':
@@ -102,7 +102,7 @@ if ($total) {
         }
         $arg = array(
             'stshide' => 1,
-            'header' => (' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place)
+            'header' => (' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
         );
         echo show_user($res, $arg);
         echo '</div>';

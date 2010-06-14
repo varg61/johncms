@@ -92,7 +92,7 @@ function forum_new($mod = 0) {
         OR `forum`.`time` > `cms_forum_rdm`.`time`)");
         $total = mysql_result($req, 0);
         if ($mod)
-            echo '<p><a href="index.php?act=new">Непрочитанное</a>&nbsp;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '') . '</p>';
+            echo '<p><a href="index.php?act=new">Непрочитанное</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '') . '</p>';
         else
             return $total;
     } else {
@@ -129,7 +129,7 @@ function kuser() {
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
     $res = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "'"), 0);
     if ($res > 0)
-        $total .= '&nbsp;<span class="red">+' . $res . '</span>';
+        $total .= '&#160;<span class="red">+' . $res . '</span>';
     return $total;
 }
 
@@ -142,11 +142,11 @@ function wfrm() {
     global $user_id, $rights, $home;
     $total_thm = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
     $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
-    $out = $total_thm . '&nbsp;/&nbsp;' . $total_msg . '';
+    $out = $total_thm . '&#160;/&#160;' . $total_msg . '';
     if ($user_id) {
         $new = forum_new();
         if ($new)
-            $out .= '&nbsp;/&nbsp;<span class="red"><a href="' . $home . '/forum/index.php?act=new">+' . $new . '</a></span>';
+            $out .= '&#160;/&#160;<span class="red"><a href="' . $home . '/forum/index.php?act=new">+' . $new . '</a></span>';
     }
     return $out;
 }
@@ -162,7 +162,7 @@ function dload() {
     $old = $realtime - (3 * 24 * 3600);
     $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0);
     if ($new > 0)
-        $total .= '&nbsp;/&nbsp;<span class="red"><a href="/download/?act=new">+' . $new . '</a></span>';
+        $total .= '&#160;/&#160;<span class="red"><a href="/download/?act=new">+' . $new . '</a></span>';
     return $total;
 }
 
@@ -181,7 +181,7 @@ function fgal($mod = 0) {
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft'"), 0);
         $out = $total;
         if ($new > 0)
-            $out .= '&nbsp;/&nbsp;<span class="red"><a href="/gallery/index.php?act=new">+' . $new . '</a></span>';
+            $out .= '&#160;/&#160;<span class="red"><a href="/gallery/index.php?act=new">+' . $new . '</a></span>';
     } else {
         $out = $new;
     }
@@ -200,7 +200,7 @@ function stlib() {
     $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
     $out = $countf;
     if ($countf1 > 0)
-        $out = $out . '&nbsp;/&nbsp;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
+        $out = $out . '&#160;/&#160;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
     $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
 
     if (($rights == 5 || $rights >= 6) && $countm > 0)
@@ -242,7 +242,7 @@ function gbook($mod = 0) {
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . ($realtime - 86400) . "'"), 0);
             if ($rights >= 1) {
                 $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "'");
-                $count = $count . '&nbsp;/&nbsp;<span class="red"><a href="str/guest.php?act=ga&amp;do=set">' . mysql_result($req, 0) . '</a></span>';
+                $count = $count . '&#160;/&#160;<span class="red"><a href="str/guest.php?act=ga&amp;do=set">' . mysql_result($req, 0) . '</a></span>';
             }
     }
     return $count;
@@ -312,7 +312,7 @@ function highlight($php) {
         'slash_JOHNCMS' => '&#92;',
         ':' => '&#58;',
         '[' => '&#91;',
-        '&nbsp;' => ' '
+        '&#160;' => ' '
     ));
     return '<div class="phpcode">' . $php . '</div>';
 }
@@ -847,15 +847,15 @@ function show_user($user = array (), $arg = array()) {
         if ($set_user['avatar']) {
             $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
             if (file_exists(('../files/users/avatar/' . $user['id'] . '.png')))
-                $out .= '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&nbsp;';
+                $out .= '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
             else
-                $out .= '<img src="../images/empty.png" width="32" height="32" alt="" />&nbsp;';
+                $out .= '<img src="../images/empty.png" width="32" height="32" alt="" />&#160;';
             $out .= '</td><td>';
         }
         if ($user['sex'])
-            $out .= '<img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&nbsp;';
+            $out .= '<img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
         else
-            $out .= '<img src="../images/del.png" width="12" height="12" align="middle" />&nbsp;';
+            $out .= '<img src="../images/del.png" width="12" height="12" align="middle" />&#160;';
         $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="../str/anketa.php?id=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
         $rank = array (
             0 => '',
@@ -873,7 +873,7 @@ function show_user($user = array (), $arg = array()) {
         if (!empty($arg['header']))
             $out .= ' ' . $arg['header'];
         if (!$arg['stshide'] && !empty($user['status']))
-            $out .= '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&nbsp;' . $user['status'] . '</div>';
+            $out .= '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
         if ($set_user['avatar'])
             $out .= '</td></tr></table>';
     }

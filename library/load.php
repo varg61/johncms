@@ -184,7 +184,7 @@ if ($rights == 5 || $rights >= 6) {
             }
         } else {
             echo "Выгрузка статьи<br/>(Поддерживаются кодировки Win-1251, KOI8-R, UTF-8)<br/><form action='index.php?act=load&amp;id=" . $id .
-                "' method='post' enctype='multipart/form-data'>Название статьи (max 50)<br/><input type='text' name='name'/><br/>Анонс (max 100)<br/><input type='text' name='anons'/><br/>Выберите текстовый файл( .txt):<br/><input type='file' name='fail'/><hr/>Для Opera Mini:<br/><input name='fail1' value =''/>&nbsp;<br/>
+                "' method='post' enctype='multipart/form-data'>Название статьи (max 50)<br/><input type='text' name='name'/><br/>Анонс (max 100)<br/><input type='text' name='anons'/><br/>Выберите текстовый файл( .txt):<br/><input type='file' name='fail'/><hr/>Для Opera Mini:<br/><input name='fail1' value =''/>&#160;<br/>
 <a href='op:fileselect'>Выбрать файл</a>
 <hr/><input type='submit' name='submit' value='Ok!'/><br/></form><a href ='index.php?id="
                 . $id . "'>Назад</a><br/>";

@@ -75,7 +75,7 @@ if (mysql_num_rows($req)) {
         else
             echo '<div class="list1">';
         // Время поста
-        echo '<span class="gray">' . date("H:i", ($res['time'] + $sdvig * 3600)) . '</span>&nbsp;';
+        echo '<span class="gray">' . date("H:i", ($res['time'] + $sdvig * 3600)) . '</span>&#160;';
         if ($res['user_id'] && $res['user_id'] != $user_id) {
             echo '<b><a href="index.php?act=say&amp;id=' . $res['id'] . '">' . $res['from'] . '</a></b> &gt;&gt; ';
         } elseif ($res['user_id']) {

@@ -165,7 +165,7 @@ else {
     echo '<div class="phdr">';
     if ($totalcat > 0)
         echo 'Папок: ' . $totalcat;
-    echo '&nbsp;&nbsp;&nbsp;';
+    echo '&#160;&#160;&#160;';
     if ($totalfile > 0)
         echo 'Файлов: ' . $totalfile;
     echo '</div>';

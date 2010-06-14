@@ -41,8 +41,8 @@ switch ($mod) {
                 }
             } else {
                 echo '<form action="index.php?act=usr_ban&amp;mod=amnesty" method="post"><div class="menu"><p>';
-                echo '<input type="radio" name="term" value="0" checked="checked" />&nbsp;Разбанить всех<br />';
-                echo '<input type="radio" name="term" value="1" />&nbsp;Очистить базу';
+                echo '<input type="radio" name="term" value="0" checked="checked" />&#160;Разбанить всех<br />';
+                echo '<input type="radio" name="term" value="1" />&#160;Очистить базу';
                 echo '</p><p><input type="submit" name="submit" value="Амнистия" />';
                 echo '</p></div></form>';
                 echo '<div class="phdr"><small>&quot;Разбанить всех&quot; - прекращает действие всех активных Банов<br />';
@@ -75,7 +75,7 @@ switch ($mod) {
                 echo '<div class="' . ($res['bantime'] > $realtime ? 'r' : '') . 'menu">';
                 echo show_user($res);
                 //TODO: Переделать на более удобный показ бана
-                //echo show_user($res, 0, 2, ' [' . $res['bancount'] . ']&nbsp;<a href="../str/users_ban.php?id=' . $res['id'] . '">&gt;&gt;</a>');
+                //echo show_user($res, 0, 2, ' [' . $res['bancount'] . ']&#160;<a href="../str/users_ban.php?id=' . $res['id'] . '">&gt;&gt;</a>');
                 echo '</div>';
             }
         } else {

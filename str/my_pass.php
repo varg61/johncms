@@ -90,7 +90,7 @@ switch ($act) {
         if (!$id || $rights < 7)
             echo '<div class="menu"><p>Введите старый пароль:<br /><input type="password" name="oldpass" /></p></div>';
         echo '<div class="gmenu"><p>Введите новый пароль:<br /><input type="password" name="newpass" /><br />Повторите пароль:<br /><input type="password" name="newconf" />';
-        echo '</p><p><input type="checkbox" value="1" name="autologin" />&nbsp;Показать ссылку на Автологин';
+        echo '</p><p><input type="checkbox" value="1" name="autologin" />&#160;Показать ссылку на Автологин';
         echo '</p><p><input type="submit" value="Сохранить" name="submit" />';
         echo '</p></div></form>';
         echo '<div class="phdr"><small>Длина пароля мин. 3, макс. 10 символов, разрешены буквы Латинского алфавита и цифры.</small></div>';

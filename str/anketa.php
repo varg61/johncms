@@ -117,13 +117,13 @@ if (mysql_num_rows($req)) {
 if (!empty($user['imname']))
     $out .= '<li><span class="gray">Имя:</span> ' . $user['imname'] . '</li>';
 if (!empty($user['dayb']))
-    $out .= '<li><span class="gray">Дата рождения:</span> ' . $user['dayb'] . '&nbsp;' . $mesyac[$user['monthb']] . '&nbsp;' . $user['yearofbirth'] . '</li>';
+    $out .= '<li><span class="gray">Дата рождения:</span> ' . $user['dayb'] . '&#160;' . $mesyac[$user['monthb']] . '&#160;' . $user['yearofbirth'] . '</li>';
 if (!empty($user['live']))
     $out .= '<li><span class="gray">Город:</span> ' . $user['live'] . '</li>';
 if (!empty($user['about']))
     $out .= '<li><span class="gray">О себе:<br /></span> ' . smileys(tags($user['about'])) . '</li>';
 if (!empty($out))
-    echo '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;Личные данные</h3><ul>' . $out . '</ul></p>';
+    echo '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&#160;Личные данные</h3><ul>' . $out . '</ul></p>';
 
 // Связь
 $out = '';
@@ -134,20 +134,20 @@ if (!empty($user['mail']) && (($id && $user['mailvis']) || !$id || $rights >= 7)
     $out .= ($user['mailvis'] ? '' : '<span class="gray"> [скрыт]</span>') . '</li>';
 }
 if (!empty($user['icq']))
-    $out .= '<li><span class="gray">ICQ:</span>&nbsp;<img src="http://web.icq.com/whitepages/online?icq=' . $user['icq'] . '&amp;img=5" width="18" height="18" alt="icq" align="middle"/>&nbsp;' . $user['icq'] . '</li>';
+    $out .= '<li><span class="gray">ICQ:</span>&#160;<img src="http://web.icq.com/whitepages/online?icq=' . $user['icq'] . '&amp;img=5" width="18" height="18" alt="icq" align="middle"/>&#160;' . $user['icq'] . '</li>';
 if (!empty($user['skype']))
-    $out .= '<li><span class="gray">Skype:</span>&nbsp;' . $user['skype'] . '</li>';
+    $out .= '<li><span class="gray">Skype:</span>&#160;' . $user['skype'] . '</li>';
 if (!empty($user['jabber']))
-    $out .= '<li><span class="gray">Jabber:</span>&nbsp;' . $user['jabber'] . '</li>';
+    $out .= '<li><span class="gray">Jabber:</span>&#160;' . $user['jabber'] . '</li>';
 if (!empty($user['www']))
     $out .= '<li><span class="gray">Сайт:</span> ' . tags($user['www']) . '</li>';
 if (!empty($out)) {
-    echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&nbsp;Связь</h3><ul>';
+    echo '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&#160;Связь</h3><ul>';
     echo $out;
     echo '</ul></p>';
 }
 // Статистика
-echo '<p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;Статистика</h3><ul>';
+echo '<p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;Статистика</h3><ul>';
 if ($rights >= 7) {
     if (!$user['preg'] && empty($user['regadm']))
         echo '<li>Ожидает подтверждения регистрации</li>';
@@ -165,7 +165,7 @@ echo '<li><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">�
 // Если были нарушения, показываем ссылку на их историю
 $ban = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 if ($ban)
-    echo '<li><a href="users_ban.php' . ($id && $id != $user_id ? '?id=' . $user['id'] : '') . '">Нарушения</a>&nbsp;<span class="red">(' . $ban . ')</span></li>';
+    echo '<li><a href="users_ban.php' . ($id && $id != $user_id ? '?id=' . $user['id'] : '') . '">Нарушения</a>&#160;<span class="red">(' . $ban . ')</span></li>';
 echo '</ul></p></div>';
 $menu = array ();
 if ($id && $id != $user_id) {

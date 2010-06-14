@@ -15,7 +15,8 @@
 define('_IN_JOHNCMS', 1);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
 echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
-echo '<title>JohnCMS 4.0.0 - обновление</title>
+echo
+    '<title>JohnCMS 4.0.0 - обновление</title>
 <style type="text/css">
 body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}
 h2{ margin: 0; padding: 0; padding-bottom: 4px; }
@@ -117,23 +118,14 @@ switch ($do) {
         `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
         `user_id` int(10) unsigned NOT NULL,
         `user_ip` bigint(11) NOT NULL,
+        `operator` int(10) unsigned NOT NULL DEFAULT '0',
         `time` int(10) unsigned NOT NULL,
         PRIMARY KEY (`id`),
         KEY `user_id` (`user_id`),
-        KEY `user_ip` (`user_ip`)
+        KEY `user_ip` (`user_ip`),
+        KEY `operator` (`operator`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица истории IP создана.<br />';
-        // Перенос IP адресов в таблицу истории
-        mysql_query("LOCK TABLES `users` READ, `cms_users_iphistory` WRITE");
-        $req = mysql_query("SELECT `id`, `ip`, `lastdate` FROM `users`");
-        while ($res = mysql_fetch_assoc($req)) {
-            mysql_query("INSERT INTO `cms_users_iphistory` SET
-            `user_id` = '" . $res['id'] . "',
-            `user_ip` = '" . $res['ip'] . "',
-            `time` = '" . $res['lastdate'] . "'");
-        }
-        mysql_query("UNLOCK TABLES");
-        echo '<span class="green">OK</span> IP адреса сконвертированы.<br />';
         // Изменяем таблицу `guest`
         mysql_query("ALTER TABLE `guest` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
         echo '<span class="green">OK</span> таблица `guest` обновлена.<br />';
@@ -154,6 +146,24 @@ switch ($do) {
         PRIMARY KEY (`id`)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица `cms_operators` создана.<br />';
+        //TODO: Добавить в базу операторов данные
+        echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
+        break;
+
+    case 'step3':
+        //TODO: Дописать конвертер, чтоб он учитывал диапазон адресов операторов
+        echo '<h2>Конвертация IP адресов</h2>';
+        // Перенос IP адресов в таблицу истории
+        mysql_query("LOCK TABLES `users` READ, `cms_users_iphistory` WRITE");
+        $req = mysql_query("SELECT `id`, `ip`, `lastdate` FROM `users`");
+        while ($res = mysql_fetch_assoc($req)) {
+            mysql_query("INSERT INTO `cms_users_iphistory` SET
+            `user_id` = '" . $res['id'] . "',
+            `user_ip` = '" . $res['ip'] . "',
+            `time` = '" . $res['lastdate'] . "'");
+        }
+        mysql_query("UNLOCK TABLES");
+        echo '<span class="green">OK</span> IP адреса сконвертированы.<br />';
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
@@ -173,7 +183,5 @@ switch ($do) {
         echo '<li>Если Вы нажмете ссылку "Продолжить", то отмена изменений будет невозможна без восстановления из резервной копии.</li>';
         echo '</ul><hr />Вы уверены? У Вас есть резервная копия базы данных?<br /><a href="update.php?do=step1">Начать обновление</a>';
 }
-
 echo '</body></html>';
-
 ?>

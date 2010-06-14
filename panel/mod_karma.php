@@ -45,10 +45,10 @@ if (isset($_POST['submit'])) {
 $settings['karma_time'] = $settings['time'] ? $settings['karma_time'] / 3600 : $settings['karma_time'] / 86400;
 echo '<form action="index.php?act=mod_karma" method="post"><div class="menu">';
 echo '<p><h3>Голосов в сутки</h3><input type="text" name="karma_points" value="' . $settings['karma_points'] . '"/></p>';
-echo '<p><h3>Ограничения для голосования</h3><input type="text" name="forum" value="' . $settings['forum'] . '" size="4"/>&nbsp;Постов на форуме<br />
-        <input type="text" name="karma_time" value="' . $settings['karma_time'] . '" size="4"/>&nbsp;Провел на сайте<br />';
-echo '&nbsp;<input name="time" type="radio" value="1"' . ($settings['time'] ? ' checked="checked"' : '') . '/>&nbsp;Часов<br />';
-echo '&nbsp;<input name="time" type="radio" value="0"' . (!$settings['time'] ? ' checked="checked"' : '') . '/>&nbsp;Дней</p>';
+echo '<p><h3>Ограничения для голосования</h3><input type="text" name="forum" value="' . $settings['forum'] . '" size="4"/>&#160;Постов на форуме<br />
+        <input type="text" name="karma_time" value="' . $settings['karma_time'] . '" size="4"/>&#160;Провел на сайте<br />';
+echo '&#160;<input name="time" type="radio" value="1"' . ($settings['time'] ? ' checked="checked"' : '') . '/>&#160;Часов<br />';
+echo '&#160;<input name="time" type="radio" value="0"' . (!$settings['time'] ? ' checked="checked"' : '') . '/>&#160;Дней</p>';
 echo '<p><h3>Основные настройки</h3><input type="checkbox" name="on"' . ($settings['on'] ? ' checked="checked"' : '') . '/> Включить модуль<br />';
 echo '<input type="checkbox" name="adm"' . ($settings['adm'] ? ' checked="checked"' : '') . '/> Запретить голосовать за администрацию</p>';
 echo '<p><input type="submit" value="Запомнить" name="submit" /></p></div>';

@@ -400,7 +400,7 @@ switch ($mod) {
         echo 'Позволяет выявить неизвестные файлы, и несанкционированные изменения.</small></li>';
         echo '<li><a href="index.php?act=sys_antispy&amp;mod=snap">Создание образа</a><br />';
         echo '<small>Делается "снимок" всех скриптовых файлов сайта, вычисляется их контрольные суммы и запоминается в базе</small></li>';
-        echo '</ul></p></div><div class="phdr">&nbsp;</div>';
+        echo '</ul></p></div><div class="phdr">&#160;</div>';
 }
 echo '<p>' . ($mod ? '<a href="index.php?act=sys_antispy">Меню сканера</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
 

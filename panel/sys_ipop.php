@@ -54,7 +54,7 @@ switch ($mod) {
                         $ip_max = long2ip($res['ip_max']);
                         $link = 'index.php?act=usr_search_ip&amp;search=' . rawurlencode($ip_min . '-' . $ip_max);
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                        echo '<b>' . checkout($res['name']) . '</b> [&nbsp;<a href="' . $link . '">' . $ip_total . '</a>&nbsp;]' .
+                        echo '<b>' . checkout($res['name']) . '</b> [&#160;<a href="' . $link . '">' . $ip_total . '</a>&#160;]' .
                             '<div class="sub">' .
                             '<b>' . $ip_min . '</b> - <b>' . $ip_max . '</b><br />' .
                             '<a href="index.php?act=sys_ipop&amp;mod=edit&amp;id=' . $res['id'] . '">Изменить</a> | <a href="index.php?act=sys_ipop&amp;mod=del&amp;id=' . $res['id'] . '">Удалить</a>' .
@@ -78,10 +78,10 @@ switch ($mod) {
             }
         } else {
             echo '<div class="gmenu"><form action="index.php?act=sys_ipop&amp;mod=add" method="post"><p>';
-            echo '<h3>Название</h3>&nbsp;<input type="text" name="name" /><br />&nbsp;<small>Макс. 50 символов</small>';
-            echo '</p><p><h3>Диапазон IP</h3>&nbsp;<small>Начальный адрес</small><br />&nbsp;<input type="text" name="startip" />';
-            echo '<br />&nbsp;<small>Конечный адрес</small><br />&nbsp;<input type="text" name="endip" />';
-            echo '</p><p>&nbsp;<input type="submit" name="submit" value="Добавить" />';
+            echo '<h3>Название</h3>&#160;<input type="text" name="name" /><br />&#160;<small>Макс. 50 символов</small>';
+            echo '</p><p><h3>Диапазон IP</h3>&#160;<small>Начальный адрес</small><br />&#160;<input type="text" name="startip" />';
+            echo '<br />&#160;<small>Конечный адрес</small><br />&#160;<input type="text" name="endip" />';
+            echo '</p><p>&#160;<input type="submit" name="submit" value="Добавить" />';
             echo '</p></form></div>';
         }
         echo '<div class="phdr"><a href="index.php?act=sys_ipop">Отмена</a></div>';
@@ -116,7 +116,7 @@ switch ($mod) {
                     // Подтверждение удаления оператора
                     $link = 'index.php?act=usr_search_ip&amp;search=' . rawurlencode($ip_min . '-' . $ip_max);
                     echo '<div class="list2">';
-                    echo '<b>' . checkout($res['name']) . '</b> [&nbsp;<a href="' . $link . '">' . $ip_total . '</a>&nbsp;]' .
+                    echo '<b>' . checkout($res['name']) . '</b> [&#160;<a href="' . $link . '">' . $ip_total . '</a>&#160;]' .
                         '<div class="sub">' .
                         '<b>' . $ip_min . '</b> - <b>' . $ip_max . '</b><br />' .
                         '</div></div>';
@@ -172,7 +172,7 @@ switch ($mod) {
                 $ip_max = long2ip($res['ip_max']);
                 $link = 'index.php?act=usr_search_ip&amp;search=' . rawurlencode($ip_min . '-' . $ip_max);
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<b>' . checkout($res['name']) . '</b> [&nbsp;<a href="' . $link . '">' . $ip_total . '</a>&nbsp;]' .
+                echo '<b>' . checkout($res['name']) . '</b> [&#160;<a href="' . $link . '">' . $ip_total . '</a>&#160;]' .
                     '<div class="sub">' .
                     '<b>' . $ip_min . '</b> - <b>' . $ip_max . '</b><br />' .
                     '<a href="index.php?act=sys_ipop&amp;mod=edit&amp;id=' . $res['id'] . '">Изменить</a> | <a href="index.php?act=sys_ipop&amp;mod=del&amp;id=' . $res['id'] . '">Удалить</a>' .

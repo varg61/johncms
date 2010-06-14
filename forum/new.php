@@ -106,15 +106,15 @@ if ($user_id) {
                     else
                         echo '<img src="../images/np.gif" alt=""/>';
                     if ($res['realid'] == 1)
-                        echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
-                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
-                        '</a>&nbsp;[' . $colmes1 . ']';
+                        echo '&#160;<img src="../images/rate.gif" alt=""/>';
+                    echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
+                        '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
-                        echo '<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
-                    echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
+                        echo '<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&#160;&gt;&gt;</a>';
+                    echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
                     echo $res['from'];
                     if ($colmes1 > 1) {
-                        echo '&nbsp;/&nbsp;' . $nick['from'];
+                        echo '&#160;/&#160;' . $nick['from'];
                     }
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $nick['time']) . '</font>';
                     echo '</div></div>';
@@ -169,15 +169,15 @@ if ($user_id) {
                     else
                         echo '<img src="../images/np.gif" alt=""/>';
                     if ($res['realid'] == 1)
-                        echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
-                    echo '&nbsp;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
-                        '</a>&nbsp;[' . $colmes1 . ']';
+                        echo '&#160;<img src="../images/rate.gif" alt=""/>';
+                    echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
+                        '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
-                        echo '<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&nbsp;&gt;&gt;</a>';
-                    echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
+                        echo '<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&#160;&gt;&gt;</a>';
+                    echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
                     echo $res['from'];
                     if ($colmes1 > 1) {
-                        echo '&nbsp;/&nbsp;' . $nick['from'];
+                        echo '&#160;/&#160;' . $nick['from'];
                     }
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $nick['time']) . '</font>';
                     echo '</div></div>';
@@ -213,14 +213,14 @@ if ($user_id) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<img src="../images/' . ($arr['edit'] == 1 ? 'tz' : 'np') . '.gif" alt=""/>';
         if ($arr['realid'] == 1)
-            echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
-        echo '&nbsp;<a href="index.php?id=' . $arr['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $arr['text'] . '</a>&nbsp;[' . $colmes1 . ']';
+            echo '&#160;<img src="../images/rate.gif" alt=""/>';
+        echo '&#160;<a href="index.php?id=' . $arr['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $arr['text'] . '</a>&#160;[' . $colmes1 . ']';
         if ($cpg > 1)
-            echo '&nbsp;<a href="index.php?id=' . $arr['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
-        echo '<br/><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&nbsp;/&nbsp;' . $razd['text'] . '</a><br />';
+            echo '&#160;<a href="index.php?id=' . $arr['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
+        echo '<br/><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
         echo $arr['from'];
         if (!empty($nam['from'])) {
-            echo '&nbsp;/&nbsp;' . $nam['from'];
+            echo '&#160;/&#160;' . $nam['from'];
         }
         echo ' <font color="#777777">' . date("d.m.y / H:i", $nam['time']) . '</font>';
         echo '</div></div>';

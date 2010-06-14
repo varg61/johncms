@@ -141,21 +141,21 @@ switch ($act) {
                 }
                 echo '</select><br />';
                 echo '</p><p><h3>Срок бана</h3>';
-                echo '&nbsp;<input type="text" name="timeval" size="2" maxlength="2" value="12"/>&nbsp;Время<br/>';
-                echo '&nbsp;<input name="time" type="radio" value="1" />&nbsp;Минут (60 макс.)<br />';
-                echo '&nbsp;<input name="time" type="radio" value="2" checked="checked" />&nbsp;Часов (24 макс.)<br />';
+                echo '&#160;<input type="text" name="timeval" size="2" maxlength="2" value="12"/>&#160;Время<br/>';
+                echo '&#160;<input name="time" type="radio" value="1" />&#160;Минут (60 макс.)<br />';
+                echo '&#160;<input name="time" type="radio" value="2" checked="checked" />&#160;Часов (24 макс.)<br />';
                 if ($rights >= 6)
-                    echo '&nbsp;<input name="time" type="radio" value="3" />&nbsp;Дней (30 макс.)<br />';
+                    echo '&#160;<input name="time" type="radio" value="3" />&#160;Дней (30 макс.)<br />';
                 if ($rights >= 7)
-                    echo '&nbsp;<input name="time" type="radio" value="4" />&nbsp;<b>До отмены</b>';
+                    echo '&#160;<input name="time" type="radio" value="4" />&#160;<b>До отмены</b>';
                 echo '</p><p><h3>Причина бана</h3>';
                 if (isset($_GET['fid'])) {
                     // Если бан из форума, фиксируем ID поста
                     $fid = intval($_GET['fid']);
-                    echo '&nbsp;Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $fid . '">на форуме</a><br />';
+                    echo '&#160;Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $fid . '">на форуме</a><br />';
                     echo '<input type="hidden" value="' . $fid . '" name="banref" />';
                 }
-                echo '&nbsp;<textarea cols="20" rows="4" name="reason"></textarea>';
+                echo '&#160;<textarea cols="20" rows="4" name="reason"></textarea>';
                 echo '</p><p><input type="submit" value="Банить" name="submit" />';
                 echo '</p></div></form>';
             }
@@ -280,7 +280,7 @@ switch ($act) {
                 $remain = $res['ban_time'] - $realtime;
                 $period = $res['ban_time'] - $res['ban_while'];
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/' . ($remain > 0 ? 'red' : 'green') . '.gif" width="16" height="16" align="left" />&nbsp;';
+                echo '<img src="../images/' . ($remain > 0 ? 'red' : 'green') . '.gif" width="16" height="16" align="left" />&#160;';
                 echo '<b>' . $ban_term[$res['ban_type']] . '</b>';
                 echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>';
                 echo '<br />' . checkout($res['ban_reason']);

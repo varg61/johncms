@@ -30,7 +30,7 @@ $search_t = isset($_REQUEST['t']) ? 1 : 0;
 echo '<div class="gmenu"><form action="search.php" method="post"><p>';
 echo '<input type="text" value="' . ($search ? checkout($search) : '') . '" name="search" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
-echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;Искать в названиях тем';
+echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&#160;Искать в названиях тем';
 echo '</p></form></div>';
 
 ////////////////////////////////////////////////////////////

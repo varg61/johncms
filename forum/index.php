@@ -236,15 +236,15 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($np ? 'op' : 'np') . '.gif" alt=""/>';
                     }
                     if ($mass['realid'] == 1)
-                        echo '&nbsp;<img src="../images/rate.gif" alt=""/>';
-                    echo '&nbsp;<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colmes1 . ']';
+                        echo '&#160;<img src="../images/rate.gif" alt=""/>';
+                    echo '&#160;<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> [' . $colmes1 . ']';
                     if ($cpg > 1) {
-                        echo "<a href='index.php?id=$mass[id]&amp;page=$cpg'>&nbsp;&gt;&gt;</a>";
+                        echo "<a href='index.php?id=$mass[id]&amp;page=$cpg'>&#160;&gt;&gt;</a>";
                     }
                     echo '<div class="sub">';
                     echo $mass['from'];
                     if (!empty($nam['from'])) {
-                        echo '&nbsp;/&nbsp;' . $nam['from'];
+                        echo '&#160;/&#160;' . $nam['from'];
                     }
                     $vrp = $mass['time'] + $set_user['sdvig'] * 3600;
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $vrp) . "</font></div></div>";
@@ -305,7 +305,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $frm = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
                 echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
-                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&nbsp;&nbsp;<b>' . $type1['text'] .
+                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
                     '</b></div>';
                 // Метки удаления темы
                 if ($type1['close'])
@@ -362,9 +362,9 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $postres = mysql_fetch_assoc($postreq);
                     echo '<div class="clip">';
                     if ($postres['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'f') . ($postres['datereg'] > $realtime - 86400 ? '_new.gif" width="14"' : '.gif" width="10"') . ' height="10"/>&nbsp;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'f') . ($postres['datereg'] > $realtime - 86400 ? '_new.gif" width="14"' : '.gif" width="10"') . ' height="10"/>&#160;';
                     else
-                        echo '<img src="../images/del.png" width="10" height="10" />&nbsp;';
+                        echo '<img src="../images/del.png" width="10" height="10" />&#160;';
                     if ($user_id && $user_id != $postres['user_id']) {
                         echo '<a href="../str/anketa.php?id=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ';
                         echo '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '&amp;cyt"> [ц]</a> ';
@@ -424,15 +424,15 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     if ($set_user['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
                         if (file_exists(('../files/users/avatar/' . $res['user_id'] . '.png')))
-                            echo '<img src="../files/users/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
+                            echo '<img src="../files/users/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
                         else
-                            echo '<img src="../images/empty.png" width="32" height="32" alt="' . $res['from'] . '" />&nbsp;';
+                            echo '<img src="../images/empty.png" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
                         echo '</td><td>';
                     }
                     if ($res['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&nbsp;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&#160;';
                     else
-                        echo '<img src="../images/del.png" width="12" height="12" align="middle" />&nbsp;';
+                        echo '<img src="../images/del.png" width="12" height="12" align="middle" />&#160;';
                     // Ник юзера и ссылка на его анкету
                     if ($user_id && $user_id != $res['user_id']) {
                         echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
@@ -451,13 +451,13 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
                     // Ссылки на ответ и цитирование
                     if ($user_id && $user_id != $res['user_id']) {
-                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '">[о]</a>&nbsp;<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt">[ц]</a> ';
+                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '">[о]</a>&#160;<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt">[ц]</a> ';
                     }
                     // Время поста
                     echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br />';
                     // Статус юзера
                     if (!empty($res['status']))
-                        echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle"/>&nbsp;' . $res['status'] . '</div>';
+                        echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle"/>&#160;' . $res['status'] . '</div>';
                     if ($set_user['avatar'])
                         echo '</td></tr></table>';
                     ////////////////////////////////////////////////////////////
@@ -523,7 +523,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         // Ссылки на редактирование / удаление постов
                         echo '<div class="sub">';
                         if ($rights == 3 || $rights >= 6)
-                            echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>&nbsp;';
+                            echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>&#160;';
                         echo '<a href="index.php?act=editpost&amp;id=' . $res['id'] . '">Изменить</a> | ';
                         if ($rights >= 7 && $res['close'] == 1)
                             echo '<a href="index.php?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">Восстановить</a> | ';
@@ -557,7 +557,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     echo '</form></div>';
                 }
                 echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $set_user['skin'] .
-                    '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&nbsp;&nbsp;Всего сообщений: ' . $colmes . '</div>';
+                    '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&#160;&#160;Всего сообщений: ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
@@ -588,7 +588,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $onltime = $realtime - 300;
                     $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
                     $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
-                    echo '<a href="index.php?act=who&amp;id=' . $id . '">Кто здесь?&nbsp;(' . $online_u . '&nbsp;/&nbsp;' . $online_g . ')</a><br/>';
+                    echo '<a href="index.php?act=who&amp;id=' . $id . '">Кто здесь?&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</a><br/>';
                 }
                 if ($filter)
                     echo '<div><a href="index.php?act=filter&amp;id=' . $id . '&amp;do=unset">Отменить фильтрацию</a></div>';
@@ -621,7 +621,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         $onltime = $realtime - 300;
         $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
         $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
-        echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&nbsp;(' . $online_u . '&nbsp;/&nbsp;' . $online_g . ')</div>';
+        echo '<div class="phdr">' . ($user_id ? '<a href="index.php?act=who">Кто в форуме</a>' : 'Кто в форуме') . '&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</div>';
         unset($_SESSION['fsort_id']);
         unset($_SESSION['fsort_users']);
     }
@@ -633,26 +633,26 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     if ($id && $tip == 'f') {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = '$id'" . $sql), 0);
         if ($count > 0)
-            echo '<p><a href="index.php?act=files&amp;c=' . $id . '">Файлы раздела</a>&nbsp;(' . $count . ')</p>';
+            echo '<p><a href="index.php?act=files&amp;c=' . $id . '">Файлы раздела</a>&#160;(' . $count . ')</p>';
         else
             echo '<p>Прикрепленных файлов нет</p>';
     } elseif ($id && $tip == 'r') {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = '$id'" . $sql), 0);
         if ($count > 0)
-            echo '<p><a href="index.php?act=files&amp;s=' . $id . '">Файлы подраздела</a>&nbsp;(' . $count . ')</p>';
+            echo '<p><a href="index.php?act=files&amp;s=' . $id . '">Файлы подраздела</a>&#160;(' . $count . ')</p>';
         else
             echo '<p>Прикрепленных файлов нет</p>';
     } elseif ($id && $tip == 't') {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = '$id'" . $sql), 0);
         if ($count > 0)
-            echo '<p><a href="index.php?act=files&amp;t=' . $id . '">Файлы топика</a>&nbsp;(' . $count . ')</p>';
+            echo '<p><a href="index.php?act=files&amp;t=' . $id . '">Файлы топика</a>&#160;(' . $count . ')</p>';
         else
             echo '<p>Прикрепленных файлов нет</p>';
     } else {
         $sql = ($rights == 9) ? '' : " WHERE `del` != '1'";
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . $sql), 0);
         if ($count > 0)
-            echo '<p><a href="index.php?act=files">Файлы форума</a>&nbsp;(' . $count . ')</p>';
+            echo '<p><a href="index.php?act=files">Файлы форума</a>&#160;(' . $count . ')</p>';
         else
             echo '<p>Прикрепленных файлов нет</p>';
     }
