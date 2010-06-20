@@ -19,10 +19,10 @@ $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 if (isset($_GET['ip']))
     $search = long2ip(intval($_GET['ip']));
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Поиск по истории IP</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['ip_search'] . '</div>';
 echo '<form action="index.php?act=usr_search_ip" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
-echo '<input type="submit" value="Поиск" name="submit" /><br />';
+echo '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />';
 echo '</p></div></form>';
 
 if ($search) {
@@ -33,12 +33,12 @@ if ($search) {
         $array = explode('-', $search);
         $ip = trim($array[0]);
         if (!ip_valid($ip))
-            $error[] = 'Первый адрес введен неверно';
+            $error[] = $lng['error_firstip'];
         else
             $ip1 = ip2long($ip);
         $ip = trim($array[1]);
         if (!ip_valid($ip))
-            $error[] = 'Второй адрес введен неверно';
+            $error[] = $lng['error_secondip'];
         else
             $ip2 = ip2long($ip);
     } elseif (strstr($search, '*')) {
@@ -54,7 +54,7 @@ if ($search) {
                 $ipt1[$i] = $array[$i];
                 $ipt2[$i] = $array[$i];
             } else {
-                $error = 'Адрес введен неверно';
+                $error = $lng['error_address'];
             }
             $ip1 = ip2long($ipt1[0] . '.' . $ipt1[1] . '.' . $ipt1[2] . '.' . $ipt1[3]);
             $ip2 = ip2long($ipt2[0] . '.' . $ipt2[1] . '.' . $ipt2[2] . '.' . $ipt2[3]);
@@ -64,7 +64,7 @@ if ($search) {
         // Обрабатываем одиночный адрес                           //
         ////////////////////////////////////////////////////////////
         if (!ip_valid($search)) {
-            $error = 'Адрес введен неверно';
+            $error = $lng['error_address'];
         } else {
             $ip1 = ip2long($search);
             $ip2 = $ip1;
@@ -75,7 +75,7 @@ if ($search && !$error) {
     ////////////////////////////////////////////////////////////
     // Выводим результаты поиска                              //
     ////////////////////////////////////////////////////////////
-    echo '<div class="phdr">Результаты запроса</div>';
+    echo '<div class="phdr">' . $lng['search_results'] . '</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_ip` BETWEEN $ip1 AND $ip2"), 0);
     if ($total) {
         $req = mysql_query("SELECT `cms_users_iphistory`.`user_ip` AS `ip`, `users`.`name`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`, `users`.`browser`
@@ -89,25 +89,23 @@ if ($search && !$error) {
             ++$i;
         }
     } else {
-        echo '<div class="menu"><p>По Вашему запросу ничего не найдено</p></div>';
+        echo '<div class="menu"><p>' . $lng['not_found'] . '</p></div>';
     }
-    echo '<div class="phdr">Всего найдено: ' . $total . '</div>';
+    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
         echo '<p>' . pagenav('index.php?act=usr_search_ip&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php?act=usr_search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) .
             '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="index.php?act=usr_search_ip">Новый поиск</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+    echo '<p><a href="index.php?act=usr_search_ip">' . $lng['search_new'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 } else {
     // Выводим сообщение об ошибке
     if ($error)
         echo display_error($error);
     // Инструкции для поиска
-    echo '<div class="phdr"><small><b>Примеры запросов:</b><br /><font color="#FF0000">10.5.7.1</font> - Поиск одного адреса<br />';
-    echo '<font color="#FF0000">10.5.7.1-10.5.7.100</font> - Поиск по диапазону адресов (знак маски * использовать нельзя)<br />';
-    echo '<font color="#FF0000">10.5.*.*</font> - Поиск по маске. Будет найдена вся подсеть, начиная с адреса 0 и заканчивая 255';
-    echo '</small></div><p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+    echo '<div class="phdr">' . $lng['search_ip_help'] . '</div>';
+    echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 
 ?>

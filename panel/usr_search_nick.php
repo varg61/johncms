@@ -43,7 +43,7 @@ if ($search && !$error) {
     Выводим результаты поиска
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr">' . $lng['inquiry_results'] . '</div>';
+    echo '<div class="phdr">' . $lng['search_results'] . '</div>';
     $search_db = rus_lat(mb_strtolower($search));
     $search_db = strtr($search_db, array (
         '_' => '\\_',
