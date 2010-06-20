@@ -129,7 +129,7 @@ if ($user_id) {
                     <input type="hidden" name="vr" value="' . $vr .
                         '"/>
                     <input type="text" name="page" size="2"/>
-                    <input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                    <input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
                 }
             } else {
                 echo '<p>За выбранный период нового  на форуме нет.</p>';
@@ -186,7 +186,7 @@ if ($user_id) {
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
                 if ($total > $kmess) {
                     echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
-                    echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                    echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
                 }
                 echo '<p><a href="index.php?act=new&amp;do=reset">Сброс!</a><br/>';
             } else {

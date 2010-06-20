@@ -96,7 +96,7 @@ if ($search && !$error) {
         // Навигация по страницам
         echo '<p>' . pagenav('index.php?act=usr_search_ip&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php?act=usr_search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) .
-            '" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+            '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
     echo '<p><a href="index.php?act=usr_search_ip">Новый поиск</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 } else {

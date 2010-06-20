@@ -67,7 +67,7 @@ if ($search && !$error) {
         // Навигация по страницам
         echo '<p>' . pagenav('users_search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="users_search.php" method="post"><input type="hidden" name="search" value="' . checkout($search) .
-            '" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+            '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
     echo '<p><a href="users_search.php">Новый поиск</a></p>';
 } else {

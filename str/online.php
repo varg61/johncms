@@ -115,7 +115,7 @@ echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > 10) {
     echo '<p>' . pagenav('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
     echo '<p><form action="online.php" method="get"><input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') .
-        '<input type="submit" value="К странице &gt;&gt;"/></form></p>';
+        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
 
 require_once('../incfiles/end.php');

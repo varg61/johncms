@@ -14,30 +14,36 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
-////////////////////////////////////////////////////////////
-// Принимаем данные, выводим форму поиска                 //
-////////////////////////////////////////////////////////////
+/*
+-----------------------------------------------------------------
+Принимаем данные, выводим форму поиска
+-----------------------------------------------------------------
+*/
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Поиск по Нику</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['search_nick'] . '</div>';
 echo '<form action="index.php?act=usr_search_nick" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
-echo '<input type="submit" value="Поиск" name="submit" /><br />';
+echo '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />';
 echo '</p></div></form>';
 
-////////////////////////////////////////////////////////////
-// Проверям на ошибки                                     //
-////////////////////////////////////////////////////////////
+/*
+-----------------------------------------------------------------
+Проверям на ошибки
+-----------------------------------------------------------------
+*/
 $error = false;
 if (!empty($search) && (mb_strlen($search) < 2 || mb_strlen($search) > 20))
-    $error = '<div>Недопустимая длина Ника. Разрешено минимум 2 и максимум 20 символов.</div>';
+    $error = '<div>' . $lng['error_nicklenght'] . '</div>';
 if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", rus_lat(mb_strtolower($search))))
-    $error .= '<div>Недопустимые символы</div>';
+    $error .= '<div>' . $lng['error_wrongsymbols'] . '</div>';
 if ($search && !$error) {
-    ////////////////////////////////////////////////////////////
-    // Выводим результаты поиска                              //
-    ////////////////////////////////////////////////////////////
-    echo '<div class="phdr">Результаты запроса</div>';
+    /*
+    -----------------------------------------------------------------
+    Выводим результаты поиска
+    -----------------------------------------------------------------
+    */
+    echo '<div class="phdr">' . $lng['inquiry_results'] . '</div>';
     $search_db = rus_lat(mb_strtolower($search));
     $search_db = strtr($search_db, array (
         '_' => '\\_',
@@ -56,25 +62,22 @@ if ($search && !$error) {
             ++$i;
         }
     } else {
-        echo '<div class="menu"><p>По Вашему запросу ничего не найдено</p></div>';
+        echo '<div class="menu"><p>' . $lng['not_found'] . '</p></div>';
     }
-    echo '<div class="phdr">Всего найдено: ' . $total . '</div>';
+    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
         echo '<p>' . pagenav('index.php?act=usr_search_nick&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php?act=usr_search_nick" method="post"><input type="hidden" name="search" value="' . checkout($search)
-            . '" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+            . '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="index.php?act=usr_search_nick">Новый поиск</a></p>';
+    echo '<p><a href="index.php?act=usr_search_nick">' . $lng['search_new'] . '</a></p>';
 } else {
     // Выводим сообщение об ошибке
     if ($error)
-        echo '<div class="rmenu"><p>ОШИБКА!<br />' . $error . '</p></div>';
+        echo display_error($error);
     // Инструкции для поиска
-    echo '<div class="phdr"><small>';
-    echo 'Поиск идет по Нику пользователя (NickName) и нечувствителен к регистру букв. То есть, <b>UsEr</b> и <b>user</b> для поиска равноценны.';
-    echo '<br />Запрос на поиск транслитерируется, то есть, чтоб найти, к примеру, ник ДИМА, Вы можете в запросе написать dima, результат будет один и тот же.';
-    echo '</small></div>';
+    echo '<div class="phdr"><small>' . $lng['search_nick_help'] . '</small></div>';
 }
 
 ?>

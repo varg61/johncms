@@ -375,7 +375,7 @@ if ($user_id) {
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
                 echo '<p>' . pagenav('pradd.php?act=in&amp;', $start, $total, $kmess) . '</p>';
-                echo '<p><form action="pradd.php?act=in" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                echo '<p><form action="pradd.php?act=in" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
                 echo "<a href='pradd.php?act=delread'>Удалить прочитанные</a><br/>";
@@ -518,7 +518,7 @@ if ($user_id) {
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
                 echo '<p>' . pagenav('pradd.php?act=out&amp;', $start, $total, $kmess) . '</p>';
-                echo '<p><form action="pradd.php?act=out" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                echo '<p><form action="pradd.php?act=out" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
                 echo "<a href='pradd.php?act=delout'>Удалить все исходящие</a><br/>";

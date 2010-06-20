@@ -116,7 +116,7 @@ if ($do || isset($_GET['new'])) {
             // Постраничная навигация
             echo '<p>' . pagenav('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="files"/><input type="hidden" name="do" value="' . $do . '"/>' . $input
-                . '<input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                . '<input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
     } else {
         echo '<div class="list1">Прикрепленных файлов нет</div>';

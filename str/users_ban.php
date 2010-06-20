@@ -307,7 +307,7 @@ switch ($act) {
         echo '<div class="phdr">Всего нарушений: ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('users_ban.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="users_ban.php?id=' . $user['id'] . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+            echo '<p><form action="users_ban.php?id=' . $user['id'] . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
 }
 

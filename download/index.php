@@ -172,7 +172,7 @@ else {
     // Постраничная навигация
     if ($total > $kmess) {
         echo '<p>' . pagenav('index.php?cat=' . $cat . '&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+        echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
     if ($rights == 4 || $rights >= 6) {
         ////////////////////////////////////////////////////////////

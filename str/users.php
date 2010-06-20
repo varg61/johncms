@@ -30,7 +30,7 @@ while ($res = mysql_fetch_assoc($req)) {
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
 if ($total > $kmess) {
     echo '<p>' . pagenav('users.php?', $start, $total, $kmess) . '</p>';
-    echo '<p><form action="users.php" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+    echo '<p><form action="users.php" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
 echo '<a href="users_search.php">Поиск пользователя</a><br /><a href="' . $_SESSION['refsm'] . '">Назад</a></p>';
 

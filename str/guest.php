@@ -335,7 +335,7 @@ switch ($act) {
             echo '<div class="phdr">Всего сообщений: ' . $colmes . '</div>';
             if ($colmes > $kmess) {
                 echo '<p>' . pagenav('guest.php?', $start, $colmes, $kmess) . '</p>';
-                echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             echo '<p><div class="func">';
             // Для Админов даем ссылку на чистку Гостевой

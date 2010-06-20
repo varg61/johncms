@@ -62,7 +62,7 @@ switch ($act) {
         if ($total > $kmess) {
             echo '<p>' . pagenav('avatar.php?act=cat&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="avatar.php" method="get"><input type="hidden" value="cat" name="act" /><input type="hidden" value="' . $id .
-                '" name="id" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
+                '" name="id" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="avatar.php">В категории</a></p>';
         break;
