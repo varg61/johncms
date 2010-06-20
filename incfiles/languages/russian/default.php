@@ -15,12 +15,17 @@ Russian Language Pack
 
 $lng = array (
     'admin_panel' => 'Админ панель',
+    'ban_do' => 'Банить',
     'chat' => 'Чат',
     'clock_settings' => 'Настройка часов',
     'common_settings' => 'Общие настройки',
+    'delete' => 'Удалить',
     'design_template' => 'Тема оформления',
     'empty_list' => 'Список пуст',
+    'edit' => 'Изменить',
     'error' => 'ОШИБКА',
+    'error_user_not_exist' => 'Такого пользователя не существует',
+    'error_user_not_specified' => 'Не указан пользователь',
     'error_nicklenght' => 'Недопустимая длина Ника. Разрешено минимум 2 и максимум 20 символов.',
     'error_wrongsymbols' => 'Недопустимые символы',
     'file_maxsize' => 'Макс. размер файла',
@@ -35,6 +40,7 @@ $lng = array (
     'last_ip' => 'Последний IP',
     'last_visit' => 'Последний визит',
     'news' => 'Новости',
+    'nick' => 'Ник',
     'not_found' => 'По Вашему запросу ничего не найдено',
     'online' => 'Онлайн',
     'save' => 'Сохранить',
@@ -52,6 +58,7 @@ $lng = array (
     'to_page' => 'К странице',
     'total' => 'Всего',
     'unread' => 'Непрочитанное',
-    'users' => 'Пользователи'
+    'users' => 'Пользователи',
+    'users_list' => 'Список пользователей'
 )
 ?>

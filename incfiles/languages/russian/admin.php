@@ -21,6 +21,7 @@ $lng_admin = array (
     'ban_panel' => 'Бан-панель',
     'counters' => 'Счетчики',
     'error_address' => 'Адрес введен неверно',
+    'error_usrdel_rights' => 'Вы не можете удалять старшего Вас по должности',
     'error_firstip' => 'Первый адрес введен неверно',
     'error_secondip' => 'Второй адрес введен неверно',
     'ip_ban' => 'Бан по IP',
@@ -38,7 +39,10 @@ $lng_admin = array (
     'site_email' => 'E-mail сайта',
     'site_settings' => 'Настройки сайта',
     'system' => 'Система',
-    'users_reg' => 'На регистрации',
-    'users_administration' => 'Администрация'
+    'users_administration' => 'Администрация',
+    'user_del' => 'Удаление пользователя',
+    'user_del_activity' => 'Чистка активности',
+    'user_deleted' => 'Пользователь удален',
+    'users_reg' => 'На регистрации'
 )
 ?>
