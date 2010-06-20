@@ -39,10 +39,10 @@ function usersonline() {
     Счетчик посетителей онлайн
     -----------------------------------------------------------------
     */
-    global $realtime, $user_id, $home;
+    global $realtime, $user_id, $home, $lng;
     $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
     $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
-    return ($user_id ? '<a href="' . $home . '/str/online.php">Онлайн: ' . $users . ' / ' . $guests . '</a>' : 'Онлайн: ' . $users . ' / ' . $guests);
+    return ($user_id ? '<a href="' . $home . '/str/online.php">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
 }
 
 function zipcount() {
@@ -51,15 +51,15 @@ function zipcount() {
     Вывод коэффициента сжатия Zlib
     -----------------------------------------------------------------
     */
-    global $set;
+    global $set, $lng;
     if ($set['gzip']) {
         $Contents = ob_get_contents();
         $gzib_file = strlen($Contents);
         $gzib_file_out = strlen(gzcompress($Contents, 9));
         $gzib_pro = round(100 - (100 / ($gzib_file / $gzib_file_out)), 1);
-        echo '<div>Cжатие вкл. (' . $gzib_pro . '%)</div>';
+        echo '<div>' . $lng['gzip_on'] . ' (' . $gzib_pro . '%)</div>';
     } else {
-        echo '<div>Cжатие выкл.</div>';
+        echo '<div>' . $lng['gzip_off'] . '</div>';
     }
 }
 
@@ -69,9 +69,9 @@ function timeonline() {
     Счетсик времени, проведенного на сайте
     -----------------------------------------------------------------
     */
-    global $realtime, $datauser, $user_id;
+    global $realtime, $datauser, $user_id, $lng;
     if ($user_id)
-        echo '<div>В онлайне: ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
+        echo '<div>' . $lng['online'] . ': ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
 }
 
 function forum_new($mod = 0) {
@@ -83,7 +83,7 @@ function forum_new($mod = 0) {
     $mod = 1   Выводит ссылки на непрочитанное
     -----------------------------------------------------------------
     */
-    global $user_id, $rights;
+    global $user_id, $rights, $lng;
     if ($user_id) {
         $req = mysql_query("SELECT COUNT(*) FROM `forum`
         LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
@@ -92,12 +92,12 @@ function forum_new($mod = 0) {
         OR `forum`.`time` > `cms_forum_rdm`.`time`)");
         $total = mysql_result($req, 0);
         if ($mod)
-            echo '<p><a href="index.php?act=new">Непрочитанное</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '') . '</p>';
+            echo '<p><a href="index.php?act=new">' . $lng['unread'] . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '') . '</p>';
         else
             return $total;
     } else {
         if ($mod)
-            echo '<p><a href="index.php?act=new">Последние 10 тем</a></p>';
+            echo '<p><a href="index.php?act=new">' . $lng['last_activity'] . '</a></p>';
         else
             return false;
     }
@@ -204,7 +204,7 @@ function stlib() {
     $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
 
     if (($rights == 5 || $rights >= 6) && $countm > 0)
-        $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> Мод:$countm</font></a>";
+        $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> M:$countm</font></a>";
     return $out;
 }
 
@@ -743,8 +743,9 @@ function display_error($error = false, $link = '') {
     Сообщения об ошибках
     -----------------------------------------------------------------
     */
+    global $lng;
     if ($error) {
-        $out = '<div class="rmenu"><p><b>ОШИБКА!</b>';
+        $out = '<div class="rmenu"><p><b>' . $lng['error'] . '!</b>';
         if (is_array($error)) {
             foreach ($error as $val)$out .= '<div>' . $val . '</div>';
         } else {
@@ -835,7 +836,7 @@ function show_user($user = array (), $arg = array()) {
     [footer]    (string)    Строка выводится внизу области "sub"
     -----------------------------------------------------------------
     */
-    global $set_user, $realtime, $user_id, $admp, $home, $rights;
+    global $set_user, $realtime, $user_id, $admp, $home, $rights, $lng;
     $out = false;
     if (!$user['id']) {
         $out = '<b>Гость</b>';
@@ -886,14 +887,14 @@ function show_user($user = array (), $arg = array()) {
         if ($arg['sub'])
             $out .= '<div>' . $arg['sub'] . '</div>';
         if($lastvisit)
-            $out .= '<div><span class="gray">Последний визит:</span> ' . $lastvisit . '</div>';
+            $out .= '<div><span class="gray">' . $lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
         if ($ipinf) {
             $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
-            $out .= '<div><span class="gray">Последний IP:</span> <a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></div>';
+            $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></div>';
         }
         if($ipinf && $arg['iphist']){
             $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-            $out .= '<div><span class="gray">История IP:</span> <a href="' . $home . '/str/users_iphist.php?id=' . $user['id'] . '">' . $iptotal . ' адр.</a></div>';
+            $out .= '<div><span class="gray">' . $lng['ip_history'] . ':</span> <a href="' . $home . '/str/users_iphist.php?id=' . $user['id'] . '">(' . $iptotal . ')</a></div>';
         }
         if ($arg['footer'])
             $out .= $arg['footer'];

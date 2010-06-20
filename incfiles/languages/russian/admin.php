@@ -28,6 +28,7 @@ $lng_admin = array (
     'meta_description' => 'Описание',
     'modules' => 'Модули',
     'refresh_smileys' => 'Обновить смайлы',
+    'search_nick' => 'Поиск по Нику',
     'site_url' => 'Адрес сайта без слэша в конце',
     'site_copyright' => 'Копирайт сайта',
     'site_email' => 'E-mail сайта',
