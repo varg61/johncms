@@ -333,7 +333,7 @@ class scaner {
 ////////////////////////////////////////////////////////////
 // Антишпион, сканирование на подозрительные файлы        //
 ////////////////////////////////////////////////////////////
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Антишпион</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Антишпион</div>';
 $scaner = new scaner();
 switch ($mod) {
     case 'scan':
@@ -402,6 +402,6 @@ switch ($mod) {
         echo '<small>Делается "снимок" всех скриптовых файлов сайта, вычисляется их контрольные суммы и запоминается в базе</small></li>';
         echo '</ul></p></div><div class="phdr">&#160;</div>';
 }
-echo '<p>' . ($mod ? '<a href="index.php?act=sys_antispy">Меню сканера</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
+echo '<p>' . ($mod ? '<a href="index.php?act=sys_antispy">Меню сканера</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

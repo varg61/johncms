@@ -103,8 +103,8 @@ switch ($mod) {
                         echo '</div>';
                         ++$i;
                     }
-                    echo '<div class="phdr">Всего: ' . $total . '</div>';
-                    echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">Админ панель</a></p>';
+                    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+                    echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
                     require_once('../incfiles/end.php');
                     exit;
                 }
@@ -149,7 +149,7 @@ switch ($mod) {
                 echo '<input type="hidden" value="' . $reason . '" name="reason" />';
                 echo '</div><div class="bmenu"><input type="submit" name="submit" value="Банить"/></div>';
                 echo '</form>';
-                echo '<p><a href="index.php?act=sys_ipban">Отмена</a><br /><a href="index.php">Админ панель</a></p>';
+                echo '<p><a href="index.php?act=sys_ipban">Отмена</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
             } else {
                 echo display_error($error, '<a href="index.php?act=sys_ipban&amp;mod=new">Назад</a></');
             }
@@ -175,7 +175,7 @@ switch ($mod) {
             echo '<textarea cols="20" rows="4" name="reason"></textarea></p></div>';
             echo '<div class="bmenu"><input type="submit" name="submit" value="Банить"/></div>';
             echo '</form>';
-            echo '<p><a href="index.php?act=sys_ipban">Отмена</a><br /><a href="index.php">Админ панель</a></p>';
+            echo '<p><a href="index.php?act=sys_ipban">Отмена</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -191,7 +191,7 @@ switch ($mod) {
         $ban_url = isset($_POST['url']) ? trim($_POST['url']) : '';
         $reason = isset($_POST['reason']) ? trim($_POST['reason']) : '';
         if (!$ip1 || !$ip2) {
-            echo '<p>ОШИБКА!<br />Адрес IP не указан<br /><a href="index.php">Админ панель</a></p>';
+            echo '<p>ОШИБКА!<br />Адрес IP не указан<br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
             require_once('../incfiles/end.php');
             exit;
         }
@@ -204,7 +204,7 @@ switch ($mod) {
         `reason` = '" . check($reason) . "',
         `date` = '$realtime'");
         echo '<p>Бан добавлен в базу.</p>';
-        echo '<p><a href="index.php?act=sys_ipban">Продолжить</a><br /><a href="index.php">Админ панель</a></p>';
+        echo '<p><a href="index.php?act=sys_ipban">Продолжить</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
 
     case 'clear':
@@ -216,10 +216,10 @@ switch ($mod) {
         if (isset($_GET['yes'])) {
             mysql_query("TRUNCATE TABLE `cms_ban_ip`;");
             echo '<p>Таблица IP банов успешно очищена.<br />Разбанены все адреса.</p>';
-            echo '<p><a href="index.php?act=sys_ipban">Продолжить</a><br /><a href="index.php">Админ панель</a></p>';
+            echo '<p><a href="index.php?act=sys_ipban">Продолжить</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         } else {
             echo '<p><b>ВНИМАНИЕ!</b><br />Таблица IP банов будет очищена.<br />Вы действительно хотите разбанить ВСЕ адреса IP?</p>';
-            echo '<p><a href="index.php?act=sys_ipban">Отмена</a><br /><a href="index.php?act=sys_ipban&amp;mod=clear&amp;yes=yes">Да, разбанить</a></p><p><a href="index.php">Админ панель</a></p>';
+            echo '<p><a href="index.php?act=sys_ipban">Отмена</a><br /><a href="index.php?act=sys_ipban&amp;mod=clear&amp;yes=yes">Да, разбанить</a></p><p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -277,7 +277,7 @@ switch ($mod) {
             echo 'Дата: <b>' . date('d.m.Y', $res['date']) . '</b><br />';
             echo 'Время: <b>' . date('H:i:s', $res['date']) . '</b></div>';
             echo '<div class="phdr"><a href="index.php?act=sys_ipban&amp;mod=del&amp;id=' . $res['id'] . '">Разбанить</a></div>';
-            echo '<p><a href="index.php?act=sys_ipban">В список</a><br /><a href="index.php">Админ панель</a></p>';
+            echo '<p><a href="index.php?act=sys_ipban">В список</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -292,12 +292,12 @@ switch ($mod) {
                 mysql_query("DELETE FROM `cms_ban_ip` WHERE `id`='$id' LIMIT 1");
                 mysql_query("OPTIMIZE TABLE `cms_ban_ip`");
                 echo '<p>Бан успешно удален из базы</p>';
-                echo '<p><a href="index.php?act=sys_ipban">Продолжить</a><br /><a href="index.php">Админ панель</a></p>';
+                echo '<p><a href="index.php?act=sys_ipban">Продолжить</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
             } else {
                 $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `id`='" . $id . "' LIMIT 1");
                 if (mysql_num_rows($req) != 1) {
                     echo '<p>Такого адреса нет в базе.</p>';
-                    echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">Админ панель</a></p>';
+                    echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
                     require_once('../incfiles/end.php');
                     exit;
                 } else {
@@ -320,7 +320,7 @@ switch ($mod) {
         echo '<p><input type="text" name="ip"/></p></div>';
         echo '<div class="bmenu"><input type="submit" name="submit" value="Поиск"/></div>';
         echo '</form>';
-        echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">Админ панель</a></p>';
+        echo '<p><a href="index.php?act=sys_ipban">Назад</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
 
     default:
@@ -329,7 +329,7 @@ switch ($mod) {
         Вывод общего списка забаненных IP
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Бан по IP</div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Бан по IP</div>';
         $req = mysql_query("SELECT COUNT(*) FROM `cms_ban_ip`");
         $total = mysql_result($req, 0);
         if ($total > 0) {
@@ -358,7 +358,7 @@ switch ($mod) {
             echo '<div class="menu">Список пуст</div>';
         }
         echo '<div class="rmenu"><form action="index.php?act=sys_ipban&amp;mod=new" method="post"><input type="submit" name="" value="Банить IP" /></form></div>';
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('index.php?act=sys_ipban&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=sys_ipban" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
@@ -366,7 +366,7 @@ switch ($mod) {
         echo '<p>';
         if ($total > 0)
             echo '<a href="index.php?act=sys_ipban&amp;mod=search">Поиск в базе</a><br /><a href="index.php?act=sys_ipban&amp;mod=clear">Разбанить все IP</a><br />';
-        echo '<a href="index.php">Админ панель</a></p>';
+        echo '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 
 ?>

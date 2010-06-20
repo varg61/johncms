@@ -111,7 +111,7 @@ if ($do || isset($_GET['new'])) {
             //$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
             //echo '<br /><b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text . '</div></div>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             // Постраничная навигация
             echo '<p>' . pagenav('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>';
@@ -143,7 +143,7 @@ if ($do || isset($_GET['new'])) {
     }
     echo '<div class="phdr">Всего файлов: ' . $total . '</div>';
 }
-echo '<p>' . (($do || isset($_GET['new'])) ? '<a href="index.php?act=files' . $lnk . '">К списку разделов</a><br />' : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">Форум</a></p>';
+echo '<p>' . (($do || isset($_GET['new'])) ? '<a href="index.php?act=files' . $lnk . '">К списку разделов</a><br />' : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">' . $lng['forum'] . '</a></p>';
 
 require_once('../incfiles/end.php');
 

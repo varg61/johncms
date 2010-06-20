@@ -253,7 +253,7 @@ switch ($mod) {
         ////////////////////////////////////////////////////////////
         // Вывод списка счетчиков                                 //
         ////////////////////////////////////////////////////////////
-        echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Управление счетчиками</div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Управление счетчиками</div>';
         $req = mysql_query("SELECT * FROM `cms_counters` ORDER BY `sort` ASC");
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_assoc($req)) {
@@ -269,6 +269,6 @@ switch ($mod) {
         }
         echo '<div class="phdr"><a href="index.php?act=mod_counters&amp;mod=edit">Добавить</a></div>';
 }
-echo '<p>' . ($mod ? '<a href="index.php?act=mod_counters">К счетчикам</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
+echo '<p>' . ($mod ? '<a href="index.php?act=mod_counters">К счетчикам</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

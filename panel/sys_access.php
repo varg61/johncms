@@ -22,7 +22,7 @@ if ($rights < 7) {
 ////////////////////////////////////////////////////////////
 // Установка прав доступа к подсистемам                   //
 ////////////////////////////////////////////////////////////
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Права доступа</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Права доступа</div>';
 if (isset($_POST['submit'])) {
     // Записываем настройки в базу
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['reg']) ? intval($_POST['reg']) : 0) . "' WHERE `key`='mod_reg'");
@@ -53,7 +53,7 @@ elseif ($set['mod_forum'] == 1)
     $img = 'yelow';
 else
     $img = 'red';
-echo '<div class="menu"><p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&#160;Форум</h3><div style="font-size: x-small;">
+echo '<div class="menu"><p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&#160;' . $lng['forum'] . '</h3><div style="font-size: x-small;">
 <input type="radio" value="2" name="forum" ' . ($set['mod_forum'] == 2 ? 'checked="checked"' : '') . '/>&#160;открыт<br />
 <input type="radio" value="1" name="forum" ' . ($set['mod_forum'] == 1 ? 'checked="checked"' : '') . '/>&#160;авторизованным<br />
 <input type="radio" value="0" name="forum" ' . (!$set['mod_forum'] ? 'checked="checked"' : '') . '/>&#160;закрыт</div></p>';
@@ -69,7 +69,7 @@ echo '<p><h3><img src="../images/' . $img . '.gif" width="16" height="16" class=
 <input type="radio" value="1" name="guest" ' . ($set['mod_guest'] == 1 ? 'checked="checked"' : '') . '/>&#160;открыта<br />
 <input type="radio" value="0" name="guest" ' . (!$set['mod_guest'] ? 'checked="checked"' : '') . '/>&#160;закрыта</div></p>';
 // Доступ к Чату
-echo '<p><h3><img src="../images/' . ($set['mod_chat'] ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&#160;Чат</h3><div style="font-size: x-small;">
+echo '<p><h3><img src="../images/' . ($set['mod_chat'] ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&#160;' . $lng['chat'] . '</h3><div style="font-size: x-small;">
 <input type="radio" value="2" name="chat" ' . ($set['mod_chat'] ? 'checked="checked"' : '') . '/>&#160;открыт<br />
 <input type="radio" value="0" name="chat" ' . (!$set['mod_chat'] ? 'checked="checked"' : '') . '/>&#160;закрыт</div></p>';
 // Доступ к Библиотеке
@@ -121,7 +121,7 @@ echo '<div class="gmenu"><h3><img src="../images/' . $img . '.gif" width="16" he
 <input type="radio" value="0" name="reg" ' . (!$set['mod_reg'] ? 'checked="checked"' : '') . '/>&#160;закрыта</div></div>';
 echo '<div class="phdr"><small>У Администратора всегда остается доступ ко всем закрытым модулям и комментариям.</small></div>';
 echo '<p><input type="submit" name="submit" id="button" value="Запомнить" /></p>';
-echo '<p><a href="index.php">Админ панель</a></p>';
+echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 echo '</form>';
 
 ?>

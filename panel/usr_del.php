@@ -51,7 +51,7 @@ if (!$error) {
     $guest_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     $forumt_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 't' AND `close` != '1'"), 0);
     $forump_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'  AND `close` != '1'"), 0);
-    echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Удаление пользователя</div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Удаление пользователя</div>';
     // Выводим краткие данные
     echo '<div class="rmenu"><p>' . show_user($user, array('lastvisit' => 1, 'iphist' => 1)) . '</p></div>';
     switch ($mod) {
@@ -144,6 +144,6 @@ if (!$error) {
 } else {
     echo display_error($error);
 }
-echo '<p><a href="index.php?act=usr_list">Список пользователей</a><br /><a href="index.php">Админ панель</a></p>';
+echo '<p><a href="index.php?act=usr_list">Список пользователей</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

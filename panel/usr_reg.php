@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Подтверждение регистраций</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Подтверждение регистраций</div>';
 switch ($mod) {
     case 'approve':
         if (mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `id` = '$id'"), 0)) {
@@ -39,12 +39,12 @@ switch ($mod) {
         } else {
             echo '<div class="menu"><p>На регистрации никого нет</p></div>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('index.php?act=usr_reg&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=usr_reg" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
-        echo '<p><a href="">Подтвердить всех</a><br /><a href="">Удалить всех</a><br /><a href="index.php">Админ панель</a></p>';
+        echo '<p><a href="">Подтвердить всех</a><br /><a href="">Удалить всех</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 
 ?>

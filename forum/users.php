@@ -35,7 +35,7 @@ if ($topic_vote == 0) {
     }
     if ($total == 0)
         echo '<div class="menu">В этом опросе пока никто не участвовал!</div>';
-    echo '<div class="phdr">Всего: ' . $total . '</div>';
+    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         echo '<p>' . pagenav('index.php?act=users&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="users"/><input type="hidden" name="id" value="' . $id .

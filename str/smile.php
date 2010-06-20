@@ -48,7 +48,7 @@ switch ($act) {
         } else {
             echo 'Смайлов в категории нет!<br/>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('smile.php?act=cat&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="smile.php" method="get"><input type="hidden" value="cat" name="act" /><input type="hidden" value="' . $id .
@@ -85,7 +85,7 @@ switch ($act) {
         } else {
             echo 'Смайлов в категории нет!<br/>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('smile.php?act=adm&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="smile.php" method="get"><input type="hidden" value="adm" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';

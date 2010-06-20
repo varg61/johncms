@@ -79,11 +79,11 @@ if ($total) {
 
                 case 'forum':
                 case 'forums':
-                    $place = '<a href="../forum/index.php">Форум</a>&#160;/&#160;<a href="../forum/index.php?act=who">&gt;&gt;</a>';
+                    $place = '<a href="../forum/index.php">' . $lng['forum'] . '</a>&#160;/&#160;<a href="../forum/index.php?act=who">&gt;&gt;</a>';
                     break;
 
                 case 'chat':
-                    $place = '<a href="../chat/index.php">Чат</a>';
+                    $place = '<a href="../chat/index.php">' . $lng['chat'] . '</a>';
                     break;
 
                 case 'guest':
@@ -111,7 +111,7 @@ if ($total) {
 } else {
     echo '<div class="menu"><p>Никого нет</p></div>';
 }
-echo '<div class="phdr">Всего: ' . $total . '</div>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > 10) {
     echo '<p>' . pagenav('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
     echo '<p><form action="online.php" method="get"><input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') .

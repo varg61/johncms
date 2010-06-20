@@ -53,7 +53,7 @@ if ($id) {
     } else {
         header('Location: index.php');
     }
-    echo '<div class="phdr">Всего: ' . $total . '</div>';
+    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     echo '<p><a href="index.php?id=' . $id . '&amp;act=who' . ($do == 'guest' ? '">Показать авторизованных' : '&amp;do=guest">Показать гостей') . '</a><br /><a href="index.php?id=' . $id . '">В тему</a></p>';
 } else {
     ////////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ if ($id) {
     } else {
         echo '<div class="menu"><p>Никого нет</p></div>';
     }
-    echo '<div class="phdr">Всего: ' . $total . '</div>';
+    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > 10) {
         echo '<p>' . pagenav('index.php?act=who&amp;' . ($do == 'guest' ? 'do=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php?act=who' . ($do == 'guest' ? '&amp;do=guest' : '') . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';

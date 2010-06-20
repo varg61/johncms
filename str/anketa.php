@@ -86,7 +86,7 @@ if ($set_karma['on']) {
         echo '<div class="menu">';
     }
     echo '<table  width="100%"><tr><td width="22" valign="top"><img src="../images/k_' . $images . '.gif"/></td><td>';
-    echo '<b>Карма (' . $user['karma'] . ')</b><div class="sub">
+    echo '<b>' . $lng['karma'] . ' (' . $user['karma'] . ')</b><div class="sub">
    <span class="green"><a href="karma.php?id=' . $id . '&amp;type=1">За (' . $exp[0] . ')</a></span> | <span class="red"><a href="karma.php?id=' . $id . '&amp;type=2">Против (' . $exp[1] . ')</a></span>';
     if ($id) {
         if (!$datauser['karma_off'] && (!$user['rights'] || ($user['rights'] && !$set_karma['adm'])) && $user['ip'] != $datauser['ip']) {

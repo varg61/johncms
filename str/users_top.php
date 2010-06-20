@@ -38,11 +38,11 @@ function get_top($order = 'postforum') {
 ////////////////////////////////////////////////////////////
 // Показываем топ                                         //
 ////////////////////////////////////////////////////////////
-$top_karma = $set_karma['on'] ? ' | <a href="users_top.php?act=karma">Карма</a>' : '';
+$top_karma = $set_karma['on'] ? ' | <a href="users_top.php?act=karma">' . $lng['karma'] . '</a>' : '';
 switch ($act) {
     case 'guest':
         echo
-            '<p><a href="users_top.php?act=forum">Форум</a> | Гостевая | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
+            '<p><a href="users_top.php?act=forum">' . $lng['forum'] . '</a> | Гостевая | <a href="users_top.php?act=chat">' . $lng['chat'] . '</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
             . $top_karma . '</p>';
         echo '<div class="phdr"><b>Самые активные в Гостевой</b></div>';
         echo get_top('postguest');
@@ -51,7 +51,7 @@ switch ($act) {
 
     case 'chat':
         echo
-            '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | Чат | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
+            '<p><a href="users_top.php?act=forum">' . $lng['forum'] . '</a> | <a href="users_top.php?act=guest">Гостевая</a> | ' . $lng['chat'] . ' | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
             . $top_karma . '</p>';
         echo '<div class="phdr"><b>Самые активные в Чате</b></div>';
         echo get_top('postchat');
@@ -60,7 +60,7 @@ switch ($act) {
 
     case 'vic':
         echo
-            '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | Викторина | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
+            '<p><a href="users_top.php?act=forum">' . $lng['forum'] . '</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">' . $lng['chat'] . '</a> | Викторина | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
             . $top_karma . '</p>';
         echo '<div class="phdr"><b>Лучшие &quot;умники&quot; Викторины</b></div>';
         echo get_top('otvetov');
@@ -69,7 +69,7 @@ switch ($act) {
 
     case 'bal':
         echo
-            '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | Баланс | <a href="users_top.php?act=kom">Комментарии</a>'
+            '<p><a href="users_top.php?act=forum">' . $lng['forum'] . '</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">' . $lng['chat'] . '</a> | <a href="users_top.php?act=vic">Викторина</a> | Баланс | <a href="users_top.php?act=kom">Комментарии</a>'
             . $top_karma . '</p>';
         echo '<div class="phdr"><b>Самые большие игровые Балансы</b></div>';
         echo get_top('balans');
@@ -78,7 +78,7 @@ switch ($act) {
 
     case 'kom':
         echo
-            '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | Комментарии'
+            '<p><a href="users_top.php?act=forum">' . $lng['forum'] . '</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">' . $lng['chat'] . '</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | Комментарии'
             . $top_karma . '</p>';
         echo '<div class="phdr"><b>Больше всего комментировали</b></div>';
         echo get_top('komm');
@@ -88,7 +88,7 @@ switch ($act) {
     case 'karma':
         if ($set_karma['on']) {
             echo
-                '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a> | Карма</p>';
+                '<p><a href="users_top.php?act=forum">' . $lng['forum'] . '</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">' . $lng['chat'] . '</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a> | ' . $lng['karma'] . '</p>';
             echo '<div class="phdr"><b>Больше всего карма у ...</b></div>';
             echo get_top('karma');
             echo '<div class="phdr"><a href="../index.php">На Главную</a></div>';
@@ -97,7 +97,7 @@ switch ($act) {
 
     default:
         echo
-            '<p>Форум | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
+            '<p>' . $lng['forum'] . ' | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">' . $lng['chat'] . '</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>'
             . $top_karma . '</p>';
         echo '<div class="phdr"><b>Самые активные на Форуме</b></div>';
         echo get_top('postforum');

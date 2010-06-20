@@ -29,7 +29,7 @@ if ($rights == 9 && $do == 'clean') {
         echo '<a href="index.php?act=mod_karma&amp;do=clean&amp;yes">Удалить</a> | <a href="index.php?act=mod_karma">Отмена</a></p></div>';
     }
 }
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Карма</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['karma'] . '</div>';
 $settings = unserialize($set['karma']);
 if (isset($_POST['submit'])) {
     $settings['karma_points'] = isset($_POST['karma_points']) ? abs(intval($_POST['karma_points'])) : 0;
@@ -53,6 +53,6 @@ echo '<p><h3>Основные настройки</h3><input type="checkbox" name
 echo '<input type="checkbox" name="adm"' . ($settings['adm'] ? ' checked="checked"' : '') . '/> Запретить голосовать за администрацию</p>';
 echo '<p><input type="submit" value="Запомнить" name="submit" /></p></div>';
 echo '</form><div class="phdr">' . ($rights == 9 ? '<a href="index.php?act=mod_karma&amp;do=clean">Сбросить карму</a>' : '<br />') . '</div>';
-echo '<p><a href="index.php">Админ панель</a></p>';
+echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

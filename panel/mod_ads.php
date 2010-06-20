@@ -442,7 +442,7 @@ switch ($from) {
         } else {
             echo '<div class="c">Сылок нет.</div>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             //TODO: Исправить навигацию
             echo '<p>' . pagenav('index.php?from=active&amp;', $start, $total, $kmess) . '</p>';
@@ -514,7 +514,7 @@ switch ($from) {
         } else {
             echo '<div class="c">Сылок нет.</div>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             //TODO: Исправить навигацию
             echo '<p>' . pagenav('index.php?from=noactive&amp;', $start, $total, $kmess) . '</p>';
@@ -557,7 +557,7 @@ switch ($from) {
         break;
 
     default:
-        echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Реклама</div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Реклама</div>';
         echo '<div class="gmenu"><a href="index.php?act=mod_ads&amp;from=addlink">Добавить ссылку</a></div>';
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `to` = '0'"), 0);
         echo '<div class="menu"><a href="index.php?act=mod_ads&amp;from=active">Активные ссылки</a> (' . $count . ')</div>';

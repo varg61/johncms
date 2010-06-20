@@ -126,9 +126,9 @@ switch ($act) {
                 echo '<form action="users_ban.php?act=ban&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p><h3>Тип бана</h3>';
                 echo '<select name="term" size="1">';
                 if ($rights == 2 || $rights >= 6)
-                    echo '<option value="12">Чат</option>';
+                    echo '<option value="12">' . $lng['chat'] . '</option>';
                 if ($rights == 3 || $rights >= 6)
-                    echo '<option value="11">Форум</option>';
+                    echo '<option value="11">' . $lng['forum'] . '</option>';
                 if ($rights == 1 || $rights >= 6)
                     echo '<option value="14">Галерея</option>';
                 if ($rights == 5 || $rights >= 6)

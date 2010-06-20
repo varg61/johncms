@@ -83,7 +83,7 @@ if ($total > 0) {
         echo "[$pat1]</div>";
         ++$i;
     }
-    echo '<div class="phdr">Всего: ' . $total . '</div>';
+    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > 10) {
         echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';

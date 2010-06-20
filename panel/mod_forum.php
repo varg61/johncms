@@ -478,7 +478,7 @@ switch ($mod) {
             } else {
                 echo '<div class="menu"><p>Скрытых тем нет</p></div>';
             }
-            echo '<div class="phdr">Всего: ' . $total . '</div>';
+            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
                 echo '<p>' . pagenav('index.php?act=mod_forum&amp;mod=htopics&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="index.php?act=mod_forum&amp;mod=htopics" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
@@ -549,7 +549,7 @@ switch ($mod) {
             } else {
                 echo '<div class="menu"><p>Скрытых постов нет</p></div>';
             }
-            echo '<div class="phdr">Всего: ' . $total . '</div>';
+            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
                 echo '<p>' . pagenav('index.php?act=mod_forum&amp;mod=hposts&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="index.php?act=mod_forum&amp;mod=hposts" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
@@ -640,7 +640,7 @@ switch ($mod) {
         $total_msg_del = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'"), 0);
         $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
         $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'"), 0);
-        echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Управление форумом</div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Управление форумом</div>';
         echo '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;Статистика</h3><ul>';
         echo '<li>Категории:&#160;' . $total_cat . '</li>';
         echo '<li>Разделы:&#160;' . $total_sub . '</li>';
@@ -658,6 +658,6 @@ switch ($mod) {
         echo '</ul></p></div>';
         echo '<div class="phdr"><a href="../forum/index.php">В форум</a></div>';
 }
-echo '<p><a href="index.php">Админ панель</a></p>';
+echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

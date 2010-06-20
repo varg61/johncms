@@ -52,7 +52,7 @@ if ($rights == 5 || $rights >= 6) {
             echo "[$pat1]<br/><a href='index.php?act=moder&amp;id=" . $res['id'] . "&amp;yes'> Принять</a></div>";
             ++$i;
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('index.php?act=moder&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" value="moder" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';

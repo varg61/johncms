@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Список пользователей</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Список пользователей</div>';
 $sort = isset($_GET['sort']) ? trim($_GET['sort']) : '';
 echo '<div class="topmenu"><span class="gray">Сортировка:</span> ';
 switch ($sort) {
@@ -47,11 +47,11 @@ while ($res = mysql_fetch_array($req)) {
     echo '</div>';
     ++$i;
 }
-echo '<div class="phdr">Всего: ' . $total . '</div>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
     echo '<p>' . pagenav('index.php?act=usr_list&amp;sort=' . $sort . '&amp;', $start, $total, $kmess) . '</p>';
     echo '<p><form action="index.php?act=usr_list&amp;sort=' . $sort . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
 }
-echo '<p><a href="index.php?act=usr_search">Поиск пользователя</a><br /><a href="index.php">Админ панель</a></p>';
+echo '<p><a href="index.php?act=usr_search">Поиск пользователя</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

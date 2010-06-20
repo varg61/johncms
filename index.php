@@ -108,8 +108,8 @@ switch ($act) {
         echo '<li><a href="str/anketa.php">Моя анкета</a></li>';
         echo '<li><a href="str/my_pass.php">Сменить пароль</a></li>';
         echo '<li><a href="str/my_set.php">Общие настройки</a></li>';
-        echo '<li><a href="str/my_set.php?act=forum">Форум</a></li>';
-        echo '<li><a href="str/my_set.php?act=chat">Чат</a></li>';
+        echo '<li><a href="str/my_set.php?act=forum">' . $lng['forum'] . '</a></li>';
+        echo '<li><a href="str/my_set.php?act=chat">' . $lng['chat'] . '</a></li>';
         echo '</ul></p></div>';
         break;
 
@@ -158,7 +158,7 @@ switch ($act) {
             echo '<li><a href="str/news.php">Новости</a> (' . $total_news . ')</li>';
         $total_forum = forum_new();
         if ($total_forum > 0)
-            echo '<li><a href="forum/index.php?act=new">Форум</a> (' . $total_forum . ')</li>';
+            echo '<li><a href="forum/index.php?act=new">' . $lng['forum'] . '</a> (' . $total_forum . ')</li>';
         $total_guest = gbook(1);
         if ($total_guest > 0)
             echo '<li><a href="str/guest.php?act=ga">Гостевая</a> (' . $total_guest . ')</li>';

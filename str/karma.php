@@ -188,7 +188,7 @@ if ($set_karma['on'] && $user_id) {
                     echo 'Все | <a href="karma.php?id=' . $id . '&amp;type=1">Положительные</a> | <a href="karma.php?id=' . $id . '&amp;type=2">Отрицательные</a>';
                     $type = 0;
             }
-            echo '</p><div class="phdr"><b>Карма ' . $user['name'] . '</b> ' . $user['karma'] . ' (<span class="green">'
+            echo '</p><div class="phdr"><b>' . $lng['karma'] . ' ' . $user['name'] . '</b> ' . $user['karma'] . ' (<span class="green">'
                 . $exp[0] . '</span>/<span class="red">' . $exp[1] . '</span>)</div>';
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user`='$id' $sql"), 0);
             if ($total) {

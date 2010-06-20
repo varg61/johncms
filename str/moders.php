@@ -107,7 +107,7 @@ if (mysql_num_rows($req)) {
         ++$kil;
     }
 }
-echo '<div class="phdr">Всего: ' . ($sw + $adm + $smd + $lmod + $dmod + $fmod + $cmod + $kil) . '</div>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . ($sw + $adm + $smd + $lmod + $dmod + $fmod + $cmod + $kil) . '</div>';
 echo '<p><a href="../index.php?act=users">Актив сайта</a></p>';
 
 require_once('../incfiles/end.php');

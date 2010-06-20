@@ -54,7 +54,7 @@ if (mysql_num_rows($req_u)) {
             break;
 
         case 'forum':
-            echo '<p>Форум | <a href="my_stat.php?act=guest' . ($id ? '&amp;id=' . $id : '') . '">Гостевая</a></p>';
+            echo '<p>' . $lng['forum'] . ' | <a href="my_stat.php?act=guest' . ($id ? '&amp;id=' . $id : '') . '">Гостевая</a></p>';
             echo '<div class="phdr"><b>Последняя активность на Форуме</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';
@@ -87,7 +87,7 @@ if (mysql_num_rows($req_u)) {
             break;
 
         case 'guest':
-            echo '<p><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">Форум</a> | Гостевая</p>';
+            echo '<p><a href="my_stat.php?act=forum' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['forum'] . '</a> | Гостевая</p>';
             echo '<div class="phdr"><b>Последняя активность в Гостевой</b></div>';
             if ($id)
                 echo '<div class="gmenu">Пользователь: <a href="anketa.php?id=' . $id . '">' . $res_u['name'] . '</a></div>';

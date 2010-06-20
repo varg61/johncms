@@ -45,7 +45,7 @@ if (mysql_num_rows($req)) {
     if (!$set_chat['carea'])
         echo '[1] <a href="index.php?act=say&amp;id=' . $id . '" accesskey="1">Сказать</a> ';
     echo '[2] <a href="index.php?id=' . $id . '&amp;refr=' . $refr . '" accesskey="2">Обновить</a></p>';
-    echo '<div class="phdr"><a href="index.php"><b>Чат</b></a> | ' . $type['text'] . '</div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . $lng['chat'] . '</b></a> | ' . $type['text'] . '</div>';
     if ($set_chat['carea']) {
         // Поле "написать сообщение"
         echo '<form action="index.php?act=say&amp;id=' . $id . '" method="post"><div class="gmenu">';

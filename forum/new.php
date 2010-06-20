@@ -120,7 +120,7 @@ if ($user_id) {
                     echo '</div></div>';
                     ++$i;
                 }
-                echo '<div class="phdr">Всего: ' . $count . '</div>';
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $count . '</div>';
                 if ($count > $kmess) {
                     echo '<p>' . pagenav('index.php?act=new&amp;do=all&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get">
@@ -183,7 +183,7 @@ if ($user_id) {
                     echo '</div></div>';
                     ++$i;
                 }
-                echo '<div class="phdr">Всего: ' . $total . '</div>';
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
                 if ($total > $kmess) {
                     echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';

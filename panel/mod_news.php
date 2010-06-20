@@ -17,7 +17,7 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 if ($rights < 7)
     die('Error: restricted access');
 
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Новости на Главной</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Новости на Главной</div>';
 if (!empty($set['news'])) {
     if (isset($_POST['submit'])) {
         $view = isset($_POST['view']) ? intval($_POST['view']) : 0;
@@ -82,6 +82,6 @@ if (!empty($set['news'])) {
     mysql_query("INSERT INTO `cms_settings` SET `key` = 'news', `val` = '" . $settings . "'");
     echo '<div class="menu"><p>Настройки модуля не заданы, будут использованы значения по умолчанию.<br /></p></div><div class="bmenu"><a href="index.php?act=mod_news">Продолжить</a></div>';
 }
-echo '<p><a href="index.php">Админ панель</a></p>';
+echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

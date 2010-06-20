@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Список должностных лиц</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Список должностных лиц</div>';
 $req = mysql_query("SELECT * FROM `users` WHERE `rights` = '9' ORDER BY `name` ASC");
 if (mysql_num_rows) {
     echo '<div class="bmenu">Супервайзоры</div>';
@@ -55,7 +55,7 @@ if (mysql_num_rows) {
         ++$mod;
     }
 }
-echo '<div class="phdr">Всего: ' . ($sw + $adm + $smd + $mod) . '</div>';
-echo '<p><a href="index.php?act=usr_list">Список пользователей</a><br /><a href="index.php">Админ панель</a></p>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . ($sw + $adm + $smd + $mod) . '</div>';
+echo '<p><a href="index.php?act=usr_list">Список пользователей</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

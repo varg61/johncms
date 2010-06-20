@@ -59,7 +59,7 @@ if ($rights == 3 || $rights >= 6) {
     }
 
     require_once('../incfiles/head.php');
-    echo '<div class="phdr"><b>Форум:</b> удалить тему</div>';
+    echo '<div class="phdr"><b>' . $lng['forum'] . ':</b> удалить тему</div>';
     echo '<div class="rmenu"><p>Вы действительно хотите удалить?';
     echo '</p><p><a href="index.php?id=' . $id . '">Не удалять</a> | <a href="index.php?act=deltema&amp;id=' . $id . '&amp;yes">Удалить</a>';
     if ($rights == 9 && $res['close'] != 1)

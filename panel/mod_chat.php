@@ -16,7 +16,7 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 
 if ($rights < 7)
     die('Error: restricted access');
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Управление Чатом</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Управление Чатом</div>';
 switch ($mod) {
     case 'del':
         if (empty($_GET['id'])) {
@@ -222,6 +222,6 @@ switch ($mod) {
         echo '<div class="gmenu"><form action="index.php?act=mod_chat&amp;mod=add" method="post"><input type="submit" value="Добавить комнату" /></form></div>';
         echo '<div class="phdr"><a href="../chat/index.php">В чат</a></div>';
 }
-echo '<p>' . ($mod ? '<a href="index.php?act=mod_chat">Управление Чатом</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
+echo '<p>' . ($mod ? '<a href="index.php?act=mod_chat">Управление Чатом</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

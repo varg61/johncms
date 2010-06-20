@@ -15,7 +15,6 @@
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
 require_once('../incfiles/ban.php');
-//TODO: Написать Амнистию
 switch ($mod) {
     case 'amnesty':
         if ($rights < 9) {
@@ -48,20 +47,22 @@ switch ($mod) {
                 echo '<div class="phdr"><small>&quot;Разбанить всех&quot; - прекращает действие всех активных Банов<br />';
                 echo '&quot;Очистить базу&quot; - прекращает действие всех банов и очищает всю историю нарушений</small></div>';
             }
-            echo '<p><a href="index.php?act=usr_ban">Бан панель</a><br /><a href="index.php">Админ панель</a></p>';
+            echo '<p><a href="index.php?act=usr_ban">Бан панель</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
     default:
-        ////////////////////////////////////////////////////////////
-        // Список нарушителей                                     //
-        ////////////////////////////////////////////////////////////
-        echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | список нарушителей</div>';
-        echo '<div class="gmenu"><p><span class="gray">Сортировка:</span> ';
+        /*
+        -----------------------------------------------------------------
+        БАН-панель, список нарушителей
+        -----------------------------------------------------------------
+        */
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['ban_panel'] . '</div>';
+        echo '<div class="topmenu"><span class="gray">' . $lng['sorting'] . ':</span> ';
         if (isset($_GET['count']))
-            echo '<a href="index.php?act=usr_ban">Срок</a> | Нарушения</p></div>';
+            echo '<a href="index.php?act=usr_ban">' . $lng['term'] . '</a> | ' . $lng['infringements'] . '</div>';
         else
-            echo 'Срок | <a href="index.php?act=usr_ban&amp;count">Нарушения</a></p></div>';
+            echo $lng['term'] . ' | <a href="index.php?act=usr_ban&amp;count">' . $lng['infringements'] . '</a></div>';
         $sort = isset($_GET['count']) ? 'bancount' : 'bantime';
         $req = mysql_query("SELECT `user_id` FROM `cms_ban_users` GROUP BY `user_id`");
         $total = mysql_num_rows($req);
@@ -79,14 +80,14 @@ switch ($mod) {
                 echo '</div>';
             }
         } else {
-            echo '<div class="menu"><p>Список пуст</p></div>';
+            echo '<div class="menu"><p>' . $lng['empty_list'] . '</p></div>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('index.php?act=usr_ban&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=usr_ban" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
         }
-        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">Амнистия</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
+        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">Амнистия</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 
 require_once('../incfiles/end.php');

@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$textl = 'Чат';
+$textl = '' . $lng['chat'] . '';
 require_once('../incfiles/core.php');
 $headmod = $id ? 'chat,' . $id : 'chat';
 

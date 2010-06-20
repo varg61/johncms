@@ -42,7 +42,7 @@ if ($total > 0) {
         echo '[<a href="index.php?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
         ++$i;
     }
-    echo '<div class="phdr">Всего: ' . $total . '</div>';
+    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     // Навигация по страницам
     if ($total > $kmess) {
         echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';

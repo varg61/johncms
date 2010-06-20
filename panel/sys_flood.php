@@ -18,7 +18,7 @@ if ($rights != 9)
     die('Error: restricted access');
 
 $set_af = isset($set['antiflood']) ? unserialize($set['antiflood']) : array ();
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Настройка антифлуда</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Настройка антифлуда</div>';
 if (isset($_POST['submit']) || isset($_POST['save'])) {
     // Принимаем данные из формы
     $set_af['mode'] = isset($_POST['mode']) && $_POST['mode'] > 0 && $_POST['mode'] < 5 ? intval($_POST['mode']) : 1;
@@ -72,6 +72,6 @@ echo '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlengt
 echo '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&#160;Конец дня <span class="gray">(17-23)</span>';
 echo '</p><p><input type="submit" name="submit" value="Запомнить"/></p></div></form>';
 echo '<div class="phdr"><a href="index.php?act=sys_flood&amp;reset">Сброс настроек</a></div>';
-echo '<p><a href="index.php">Админ панель</a></p>';
+echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

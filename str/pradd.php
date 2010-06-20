@@ -372,7 +372,7 @@ if ($user_id) {
                 echo '<div class="rmenu"><input type="submit" value="Удалить отмеченные"/></div>';
             }
             echo '</form>';
-            echo '<div class="phdr">Всего: ' . $total . '</div>';
+            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
                 echo '<p>' . pagenav('pradd.php?act=in&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="pradd.php?act=in" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
@@ -515,7 +515,7 @@ if ($user_id) {
                 echo '<div class="rmenu"><input type="submit" value="Удалить отмеченные"/></div>';
             }
             echo '</form>';
-            echo '<div class="phdr">Всего: ' . $total . '</div>';
+            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
                 echo '<p>' . pagenav('pradd.php?act=out&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="pradd.php?act=out" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';

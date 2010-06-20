@@ -229,7 +229,7 @@ switch ($do) {
             echo '</div></div>';
             ++$i;
         }
-        echo '<div class="phdr">Всего:&#160;' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ':&#160;' . $total . '</div>';
         echo '<p>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('news.php?', $start, $total, $kmess) . '</p>';

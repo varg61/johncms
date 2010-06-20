@@ -110,7 +110,7 @@ $headmod = $id ? 'forum,' . $id : 'forum';
 
 // Заголовки форума
 if (empty($id)) {
-    $textl = 'Форум';
+    $textl = '' . $lng['forum'] . '';
 } else {
     $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1;");
     $res = mysql_fetch_assoc($req);
@@ -180,7 +180,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 ////////////////////////////////////////////////////////////
                 forum_new(1);
                 echo '<div class="phdr">';
-                echo '<a href="index.php">Форум</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
+                echo '<a href="index.php">' . $lng['forum'] . '</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
@@ -195,7 +195,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     echo '</div>';
                     ++$i;
                 }
-                echo '<div class="phdr">Всего: ' . $total . '</div>';
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
                 unset($_SESSION['fsort_id']);
                 unset($_SESSION['fsort_users']);
                 break;
@@ -211,7 +211,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $forum = mysql_query("SELECT * FROM `forum` WHERE `type`='f' AND `id`='" . $type1['refid'] . "'");
                 $forum1 = mysql_fetch_assoc($forum);
                 echo '<div class="phdr">';
-                echo '<a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $type1['refid'] . '">' . $forum1['text'] . '</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
+                echo '<a href="index.php">' . $lng['forum'] . '</a> &gt;&gt; <a href="index.php?id=' . $type1['refid'] . '">' . $forum1['text'] . '</a> &gt;&gt; <b>' . $type1['text'] . '</b>';
                 echo '</div>';
                 if ($user_id && !$ban['1'] && !$ban['11']) {
                     echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . $id . '" method="post"><input type="submit" value="Новая тема" /></form></div>';
@@ -250,7 +250,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     echo ' <font color="#777777">' . date("d.m.y / H:i", $vrp) . "</font></div></div>";
                     ++$i;
                 }
-                echo '<div class="phdr">Всего: ' . $coltem . '</div>';
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $coltem . '</div>';
                 if ($coltem > $kmess) {
                     echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $coltem, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
@@ -303,7 +303,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 // Панель навигации
                 $razd = mysql_fetch_assoc(mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
                 $frm = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
-                echo '<div class="phdr"><a href="index.php">Форум</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
+                echo '<div class="phdr"><a href="index.php">' . $lng['forum'] . '</a> &gt;&gt; <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> &gt;&gt; <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
                 // Выводим название топика
                 echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
                     '</b></div>';
@@ -607,7 +607,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         ////////////////////////////////////////////////////////////
         forum_new(1);
         echo '<div class="phdr">';
-        echo '<b>Форум</b></div>';
+        echo '<b>' . $lng['forum'] . '</b></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';

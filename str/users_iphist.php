@@ -55,7 +55,7 @@ if($total){
         ++$i;
     }
 }
-echo '<div class="phdr">Всего: ' . $total . '</div>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
     echo '<p>' . pagenav('users_iphist.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
     echo '<p><form action="users_iphist.php?id=' . $user['id'] . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';

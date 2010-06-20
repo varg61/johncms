@@ -37,12 +37,12 @@ if ($set_user['quick_go']) {
         '<div><select name="adres" style="font-size:x-small">
     <option selected="selected">Быстрый переход</option>
     <option value="guest">Гостевая</option>
-    <option value="forum">Форум</option>
+    <option value="forum">' . $lng['forum'] . '</option>
     <option value="news">Новости</option>
     <option value="gallery">Галерея</option>
     <option value="down">Загрузки</option>
     <option value="lib">Библиотека</option>
-    <option value="chat">Чат</option>
+    <option value="chat">' . $lng['chat'] . '</option>
     <option value="gazen">Газенвагенъ</option>
     </select><input type="submit" value="Go!" style="font-size:x-small"/>';
     echo '</div></form>';

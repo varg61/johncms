@@ -19,7 +19,7 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 ////////////////////////////////////////////////////////////
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
-echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Поиск по Нику</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Поиск по Нику</div>';
 echo '<form action="index.php?act=usr_search_nick" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';

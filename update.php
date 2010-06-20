@@ -136,17 +136,6 @@ switch ($do) {
         mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip1` `ip1` BIGINT( 11 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip2` `ip2` BIGINT( 11 ) NOT NULL DEFAULT '0'");
         echo '<span class="green">OK</span> таблица `cms_ban_ip` обновлена.<br />';
-        // Создаем базу операторов
-        mysql_query("DROP TABLE IF EXISTS `cms_operators`");
-        mysql_query("CREATE TABLE `cms_operators` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `name` varchar(50) NOT NULL,
-        `ip_min` bigint(11) NOT NULL DEFAULT '0',
-        `ip_max` bigint(11) NOT NULL DEFAULT '0',
-        PRIMARY KEY (`id`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
-        echo '<span class="green">OK</span> таблица `cms_operators` создана.<br />';
-        //TODO: Добавить в базу операторов данные
         echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
         break;
 

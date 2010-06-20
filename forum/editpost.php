@@ -54,7 +54,7 @@ if (mysql_num_rows($req)) {
         }
     }
 } else {
-    $error = 'Пост не существует, или был удален<br /><a href="index.php">Форум</a>';
+    $error = 'Пост не существует, или был удален<br /><a href="index.php">' . $lng['forum'] . '</a>';
 }
 if (!$error) {
     switch ($do) {
@@ -126,7 +126,7 @@ if (!$error) {
         case 'del': ////////////////////////////////////////////////////////////
             // Удаление поста, предварительное напоминание            //
             ////////////////////////////////////////////////////////////
-            echo '<div class="phdr"><b>Форум:</b> удалить сообщение</div>';
+            echo '<div class="phdr"><b>' . $lng['forum'] . ':</b> удалить сообщение</div>';
             echo '<div class="rmenu"><p>';
             if ($posts == 1)
                 echo 'ВНИМАНИЕ!<br />Это последний пост темы. В случае его удаления, будет ' . ($rights >= 7 ? 'скрыта' : 'удалена') . ' сама тема<br />';
@@ -160,7 +160,7 @@ if (!$error) {
                 WHERE `id` = '$id'");
                 header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
             } else {
-                echo '<div class="phdr"><b>Форум:</b> изменить сообщение</div>';
+                echo '<div class="phdr"><b>' . $lng['forum'] . ':</b> изменить сообщение</div>';
                 echo '<div class="rmenu"><form action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post">';
                 echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
                 if ($set_user['translit'])

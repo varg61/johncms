@@ -58,7 +58,7 @@ switch ($act) {
         } else {
             echo 'Аватар в категории нет!<br/>';
         }
-        echo '<div class="phdr">Всего: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . pagenav('avatar.php?act=cat&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="avatar.php" method="get"><input type="hidden" value="cat" name="act" /><input type="hidden" value="' . $id .

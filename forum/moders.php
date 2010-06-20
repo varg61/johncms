@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'forummod';
 require_once('../incfiles/head.php');
 if (empty($_GET['id'])) {
-    echo '<div class="phdr"><a href="index.php"><b>Форум</b></a> | Модераторы</div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | Модераторы</div>';
     $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid`");
     while ($f1 = mysql_fetch_array($req)) {
         $mod = mysql_query("select * from `forum` where type='a' and refid='" . $f1['id'] . "'");

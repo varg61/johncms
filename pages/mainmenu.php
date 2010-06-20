@@ -27,8 +27,8 @@ echo '<div class="menu"><a href="index.php?act=info">Доп. информаци�
 echo '<div class="menu"><a href="index.php?act=users">Актив Сайта</a></div>';
 echo '<div class="phdr"><b>Общение</b></div>';
 echo '<div class="menu"><a href="str/guest.php">Гостевая</a> (' . gbook() . ')</div>';
-echo '<div class="menu"><a href="forum/">Форум</a> (' . wfrm() . ')</div>';
-echo '<div class="menu"><a href="chat/">Чат</a> (' . wch() . ')</div>';
+echo '<div class="menu"><a href="forum/">' . $lng['forum'] . '</a> (' . wfrm() . ')</div>';
+echo '<div class="menu"><a href="chat/">' . $lng['chat'] . '</a> (' . wch() . ')</div>';
 echo '<div class="phdr"><b>Полезное</b></div>';
 echo '<div class="menu"><a href="download/">Загрузки</a> (' . dload() . ')</div>';
 echo '<div class="menu"><a href="library/">Библиотека</a> (' . stlib() . ')</div>';
