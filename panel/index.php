@@ -105,6 +105,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     }
 }
 
-require_once('../incfiles/end.php');
+require('../incfiles/end.php');
 
 ?>

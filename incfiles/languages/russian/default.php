@@ -15,13 +15,15 @@ Russian Language Pack
 
 $lng = array (
     'admin_panel' => 'Админ панель',
+    'approve' => 'Подтвердить',
+    'back' => 'Назад',
     'ban_do' => 'Банить',
     'chat' => 'Чат',
+    'continue' => 'Продолжить',
     'clock_settings' => 'Настройка часов',
     'common_settings' => 'Общие настройки',
     'delete' => 'Удалить',
     'design_template' => 'Тема оформления',
-    'empty_list' => 'Список пуст',
     'edit' => 'Изменить',
     'error' => 'ОШИБКА',
     'error_user_not_exist' => 'Такого пользователя не существует',
@@ -39,6 +41,7 @@ $lng = array (
     'last_activity' => 'Последняя активность',
     'last_ip' => 'Последний IP',
     'last_visit' => 'Последний визит',
+    'list_empty' => 'Список пуст',
     'news' => 'Новости',
     'nick' => 'Ник',
     'not_found' => 'По Вашему запросу ничего не найдено',
@@ -59,6 +62,7 @@ $lng = array (
     'total' => 'Всего',
     'unread' => 'Непрочитанное',
     'users' => 'Пользователи',
-    'users_list' => 'Список пользователей'
+    'users_list' => 'Список пользователей',
+    'wrong_data' => 'Неверные данные'
 )
 ?>
