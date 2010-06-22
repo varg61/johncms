@@ -44,6 +44,7 @@ $lng_admin = array (
     'site_copyright' => 'Копирайт сайта',
     'site_email' => 'E-mail сайта',
     'site_settings' => 'Настройки сайта',
+    'supermoders' => 'Старшие модераторы',
     'system' => 'Система',
     'users_administration' => 'Администрация',
     'user_del' => 'Удаление пользователя',
