@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-function counters() {
+function display_counters() {
     /*
     -----------------------------------------------------------------
     Показ различных счетчиков внизу страницы
@@ -33,45 +33,168 @@ function counters() {
     }
 }
 
-function usersonline() {
+function display_error($error = false, $link = '') {
     /*
     -----------------------------------------------------------------
-    Счетчик посетителей онлайн
+    Сообщения об ошибках
     -----------------------------------------------------------------
     */
-    global $realtime, $user_id, $home, $lng;
-    $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
-    $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
-    return ($user_id ? '<a href="' . $home . '/str/online.php">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
-}
-
-function zipcount() {
-    /*
-    -----------------------------------------------------------------
-    Вывод коэффициента сжатия Zlib
-    -----------------------------------------------------------------
-    */
-    global $set, $lng;
-    if ($set['gzip']) {
-        $Contents = ob_get_contents();
-        $gzib_file = strlen($Contents);
-        $gzib_file_out = strlen(gzcompress($Contents, 9));
-        $gzib_pro = round(100 - (100 / ($gzib_file / $gzib_file_out)), 1);
-        echo '<div>' . $lng['gzip_on'] . ' (' . $gzib_pro . '%)</div>';
+    global $lng;
+    if ($error) {
+        $out = '<div class="rmenu"><p><b>' . $lng['error'] . '!</b>';
+        if (is_array($error)) {
+            foreach ($error as $val)$out .= '<div>' . $val . '</div>';
+        } else {
+            $out .= '<br />' . $error;
+        }
+        $out .= '</p><p>' . $link . '</p></div>';
+        return $out;
     } else {
-        echo '<div>' . $lng['gzip_off'] . '</div>';
+        return false;
     }
 }
 
-function timeonline() {
+function display_menu($val = array()){
     /*
     -----------------------------------------------------------------
-    Счетсик времени, проведенного на сайте
+    Отображение различных меню
     -----------------------------------------------------------------
     */
-    global $realtime, $datauser, $user_id, $lng;
-    if ($user_id)
-        echo '<div>' . $lng['online'] . ': ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
+    $out = '';
+    ksort($val);
+    $last = array_pop($val);
+    foreach ($val as $menu) {
+        $out .= $menu . ' | ';
+    }
+    return $out . $last;
+}
+
+function display_pagination($base_url, $start, $max_value, $num_per_page) {
+    /*
+    -----------------------------------------------------------------
+    Постраничная навигация
+    За основу взята аналогичная функция от форума SMF2.0
+    -----------------------------------------------------------------
+    */
+    $pgcont = 4;
+    $pgcont = (int)($pgcont - ($pgcont % 2)) / 2;
+    if ($start >= $max_value)
+        $start = max(0, (int)$max_value - (((int)$max_value % (int)$num_per_page) == 0 ? $num_per_page : ((int)$max_value % (int)$num_per_page)));
+    else
+        $start = max(0, (int)$start - ((int)$start % (int)$num_per_page));
+    $base_link = '<a class="navpg" href="' . strtr($base_url, array ('%' => '%%')) . 'start=%d' . '">%s</a> ';
+    $pageindex = $start == 0 ? '' : sprintf($base_link, $start - $num_per_page, '&lt;&lt;');
+    if ($start > $num_per_page * $pgcont)
+        $pageindex .= sprintf($base_link, 0, '1');
+    if ($start > $num_per_page * ($pgcont + 1))
+        $pageindex .= '<span style="font-weight: bold;"> ... </span>';
+    for ($nCont = $pgcont; $nCont >= 1; $nCont--)
+        if ($start >= $num_per_page * $nCont) {
+            $tmpStart = $start - $num_per_page * $nCont;
+            $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
+        }
+    $pageindex .= '[<b>' . ($start / $num_per_page + 1) . '</b>] ';
+    $tmpMaxPages = (int)(($max_value - 1) / $num_per_page) * $num_per_page;
+    for ($nCont = 1; $nCont <= $pgcont; $nCont++)
+        if ($start + $num_per_page * $nCont <= $tmpMaxPages) {
+            $tmpStart = $start + $num_per_page * $nCont;
+            $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
+        }
+    if ($start + $num_per_page * ($pgcont + 1) < $tmpMaxPages)
+        $pageindex .= '<span style="font-weight: bold;"> ... </span>';
+    if ($start + $num_per_page * $pgcont < $tmpMaxPages)
+        $pageindex .= sprintf($base_link, $tmpMaxPages, $tmpMaxPages / $num_per_page + 1);
+    if ($start + $num_per_page < $max_value) {
+        $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start + $num_per_page);
+        $pageindex .= sprintf($base_link, $display_page, '&gt;&gt;');
+    }
+    return $pageindex;
+}
+
+function display_user($user = array (), $arg = array()) {
+    /*
+    -----------------------------------------------------------------
+    Отображения личных данных пользователя
+    -----------------------------------------------------------------
+    $user       (array)     массив запроса в таблицу `users`
+    $arg        (array)     Массив параметров отображения
+    -----------------------------------------------------------------
+    [lastvisit] (boolean)   Дата и время последнего визита
+    [stshide]   (boolean)   Скрыть статус (если есть)
+    [iphide]    (boolean)   Скрыть (не показывать) IP и UserAgent
+    [iphist]    (boolean)   Показывать ссылку на историю IP
+    -----------------------------------------------------------------
+    [header]    (string)    Текст в строке после Ника пользователя
+    [body]      (string)    Основной текст, под ником пользователя
+    [sub]       (string)    Строка выводится вверху области "sub"
+    [footer]    (string)    Строка выводится внизу области "sub"
+    -----------------------------------------------------------------
+    */
+    global $set_user, $realtime, $user_id, $admp, $home, $rights, $lng;
+    $out = false;
+    if (!$user['id']) {
+        $out = '<b>Гость</b>';
+        if (!empty($user['name']))
+            $out .= ': ' . $user['name'];
+        if (!empty($arg['header']))
+            $out .= ' ' . $arg['header'];
+    } else {
+        if ($set_user['avatar']) {
+            $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
+            if (file_exists(('../files/users/avatar/' . $user['id'] . '.png')))
+                $out .= '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
+            else
+                $out .= '<img src="../images/empty.png" width="32" height="32" alt="" />&#160;';
+            $out .= '</td><td>';
+        }
+        if ($user['sex'])
+            $out .= '<img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
+        else
+            $out .= '<img src="../images/del.png" width="12" height="12" align="middle" />&#160;';
+        $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="../str/anketa.php?id=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
+        $rank = array (
+            0 => '',
+            1 => '(GMod)',
+            2 => '(CMod)',
+            3 => '(FMod)',
+            4 => '(DMod)',
+            5 => '(LMod)',
+            6 => '(Smd)',
+            7 => '(Adm)',
+            9 => '(SV!)'
+        );
+        $out .= ' ' . $rank[$user['rights']];
+        $out .= ($realtime > $user['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+        if (!empty($arg['header']))
+            $out .= ' ' . $arg['header'];
+        if (!$arg['stshide'] && !empty($user['status']))
+            $out .= '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
+        if ($set_user['avatar'])
+            $out .= '</td></tr></table>';
+    }
+    if ($arg['body'])
+        $out .= '<div>' . $arg['body'] . '</div>';
+    $ipinf = $rights > 0 && !$arg['iphide'] ? 1 : 0;
+    $lastvisit = $realtime > $user['lastdate'] + 300 && $arg['lastvisit'] ? date("d.m.Y (H:i)", $user['lastdate']) : false;
+    if ($ipinf || $lastvisit || $arg['sub'] || $arg['footer']) {
+        $out .= '<div class="sub">';
+        if ($arg['sub'])
+            $out .= '<div>' . $arg['sub'] . '</div>';
+        if($lastvisit)
+            $out .= '<div><span class="gray">' . $lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
+        if ($ipinf) {
+            $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
+            $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></div>';
+        }
+        if($ipinf && $arg['iphist']){
+            $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+            $out .= '<div><span class="gray">' . $lng['ip_history'] . ':</span> <a href="' . $home . '/str/users_iphist.php?id=' . $user['id'] . '">(' . $iptotal . ')</a></div>';
+        }
+        if ($arg['footer'])
+            $out .= $arg['footer'];
+        $out .= '</div>';
+    }
+    return $out;
 }
 
 function forum_new($mod = 0) {
@@ -103,23 +226,17 @@ function forum_new($mod = 0) {
     }
 }
 
-function dnews() {
+function stat_chat() {
     /*
     -----------------------------------------------------------------
-    Дата последней новости
+    Статистика Чата
     -----------------------------------------------------------------
     */
-    global $set_user;
-    $req = mysql_query("SELECT `time` FROM `news` ORDER BY `time` DESC LIMIT 1");
-    if (mysql_num_rows($req)) {
-        $res = mysql_fetch_array($req);
-        return date("H:i/d.m.y", $res['time'] + $set_user['sdvig'] * 3600);
-    } else {
-        return false;
-    }
+    //TODO: Написать функцию статистики Чата
+    return 0;
 }
 
-function kuser() {
+function stat_countusers() {
     /*
     -----------------------------------------------------------------
     Колличество зарегистрированных пользователей
@@ -133,7 +250,22 @@ function kuser() {
     return $total;
 }
 
-function wfrm() {
+function stat_download() {
+    /*
+    -----------------------------------------------------------------
+    Статистика загрузок
+    -----------------------------------------------------------------
+    */
+    global $realtime;
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file'"), 0);
+    $old = $realtime - (3 * 24 * 3600);
+    $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0);
+    if ($new > 0)
+        $total .= '&#160;/&#160;<span class="red"><a href="/download/?act=new">+' . $new . '</a></span>';
+    return $total;
+}
+
+function stat_forum() {
     /*
     -----------------------------------------------------------------
     Статистика Форума
@@ -151,22 +283,7 @@ function wfrm() {
     return $out;
 }
 
-function dload() {
-    /*
-    -----------------------------------------------------------------
-    Статистика загрузок
-    -----------------------------------------------------------------
-    */
-    global $realtime;
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file'"), 0);
-    $old = $realtime - (3 * 24 * 3600);
-    $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0);
-    if ($new > 0)
-        $total .= '&#160;/&#160;<span class="red"><a href="/download/?act=new">+' . $new . '</a></span>';
-    return $total;
-}
-
-function fgal($mod = 0) {
+function stat_gallery($mod = 0) {
     /*
     -----------------------------------------------------------------
     Статистика галлереи
@@ -188,37 +305,7 @@ function fgal($mod = 0) {
     return $out;
 }
 
-function stlib() {
-    /*
-    -----------------------------------------------------------------
-    Статистика библиотеки
-    -----------------------------------------------------------------
-    */
-    global $realtime, $rights;
-    $countf = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
-    $old = $realtime - (3 * 24 * 3600);
-    $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
-    $out = $countf;
-    if ($countf1 > 0)
-        $out = $out . '&#160;/&#160;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
-    $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
-
-    if (($rights == 5 || $rights >= 6) && $countm > 0)
-        $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> M:$countm</font></a>";
-    return $out;
-}
-
-function wch($id = false, $mod = false) {
-    /*
-    -----------------------------------------------------------------
-    Статистика Чата
-    -----------------------------------------------------------------
-    */
-    //TODO: Написать функцию статистики Чата
-    return 0;
-}
-
-function gbook($mod = 0) {
+function stat_guestbook($mod = 0) {
     /*
     -----------------------------------------------------------------
     Статистика гостевой
@@ -246,6 +333,83 @@ function gbook($mod = 0) {
             }
     }
     return $count;
+}
+
+function stat_gzip() {
+    /*
+    -----------------------------------------------------------------
+    Вывод коэффициента сжатия Zlib
+    -----------------------------------------------------------------
+    */
+    global $set, $lng;
+    if ($set['gzip']) {
+        $Contents = ob_get_contents();
+        $gzib_file = strlen($Contents);
+        $gzib_file_out = strlen(gzcompress($Contents, 9));
+        $gzib_pro = round(100 - (100 / ($gzib_file / $gzib_file_out)), 1);
+        echo '<div>' . $lng['gzip_on'] . ' (' . $gzib_pro . '%)</div>';
+    } else {
+        echo '<div>' . $lng['gzip_off'] . '</div>';
+    }
+}
+
+function stat_library() {
+    /*
+    -----------------------------------------------------------------
+    Статистика библиотеки
+    -----------------------------------------------------------------
+    */
+    global $realtime, $rights;
+    $countf = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
+    $old = $realtime - (3 * 24 * 3600);
+    $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
+    $out = $countf;
+    if ($countf1 > 0)
+        $out = $out . '&#160;/&#160;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
+    $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
+
+    if (($rights == 5 || $rights >= 6) && $countm > 0)
+        $out = $out . "/<a href='" . $home . "/library/index.php?act=moder'><font color='#FF0000'> M:$countm</font></a>";
+    return $out;
+}
+
+function stat_news() {
+    /*
+    -----------------------------------------------------------------
+    Дата последней новости
+    -----------------------------------------------------------------
+    */
+    global $set_user;
+    $req = mysql_query("SELECT `time` FROM `news` ORDER BY `time` DESC LIMIT 1");
+    if (mysql_num_rows($req)) {
+        $res = mysql_fetch_array($req);
+        return date("H:i/d.m.y", $res['time'] + $set_user['sdvig'] * 3600);
+    } else {
+        return false;
+    }
+}
+
+function stat_online() {
+    /*
+    -----------------------------------------------------------------
+    Счетчик посетителей онлайн
+    -----------------------------------------------------------------
+    */
+    global $realtime, $user_id, $home, $lng;
+    $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
+    $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
+    return ($user_id ? '<a href="' . $home . '/str/online.php">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
+}
+
+function stat_timeonline() {
+    /*
+    -----------------------------------------------------------------
+    Счетсик времени, проведенного на сайте
+    -----------------------------------------------------------------
+    */
+    global $realtime, $datauser, $user_id, $lng;
+    if ($user_id)
+        echo '<div>' . $lng['online'] . ': ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
 }
 
 function tags($var = '') {
@@ -467,48 +631,6 @@ function unhtmlentities($string) {
     $trans_tbl = get_html_translation_table(HTML_ENTITIES);
     $trans_tbl = array_flip($trans_tbl);
     return strtr($string, $trans_tbl);
-}
-
-function pagenav($base_url, $start, $max_value, $num_per_page) {
-    /*
-    -----------------------------------------------------------------
-    Функция постраничной навигации
-    За основу взята аналогичная функция от форума SMF2.0
-    -----------------------------------------------------------------
-    */
-    $pgcont = 4;
-    $pgcont = (int)($pgcont - ($pgcont % 2)) / 2;
-    if ($start >= $max_value)
-        $start = max(0, (int)$max_value - (((int)$max_value % (int)$num_per_page) == 0 ? $num_per_page : ((int)$max_value % (int)$num_per_page)));
-    else
-        $start = max(0, (int)$start - ((int)$start % (int)$num_per_page));
-    $base_link = '<a class="navpg" href="' . strtr($base_url, array ('%' => '%%')) . 'start=%d' . '">%s</a> ';
-    $pageindex = $start == 0 ? '' : sprintf($base_link, $start - $num_per_page, '&lt;&lt;');
-    if ($start > $num_per_page * $pgcont)
-        $pageindex .= sprintf($base_link, 0, '1');
-    if ($start > $num_per_page * ($pgcont + 1))
-        $pageindex .= '<span style="font-weight: bold;"> ... </span>';
-    for ($nCont = $pgcont; $nCont >= 1; $nCont--)
-        if ($start >= $num_per_page * $nCont) {
-            $tmpStart = $start - $num_per_page * $nCont;
-            $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
-        }
-    $pageindex .= '[<b>' . ($start / $num_per_page + 1) . '</b>] ';
-    $tmpMaxPages = (int)(($max_value - 1) / $num_per_page) * $num_per_page;
-    for ($nCont = 1; $nCont <= $pgcont; $nCont++)
-        if ($start + $num_per_page * $nCont <= $tmpMaxPages) {
-            $tmpStart = $start + $num_per_page * $nCont;
-            $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
-        }
-    if ($start + $num_per_page * ($pgcont + 1) < $tmpMaxPages)
-        $pageindex .= '<span style="font-weight: bold;"> ... </span>';
-    if ($start + $num_per_page * $pgcont < $tmpMaxPages)
-        $pageindex .= sprintf($base_link, $tmpMaxPages, $tmpMaxPages / $num_per_page + 1);
-    if ($start + $num_per_page < $max_value) {
-        $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start + $num_per_page);
-        $pageindex .= sprintf($base_link, $display_page, '&gt;&gt;');
-    }
-    return $pageindex;
 }
 
 function timecount($var) {
@@ -737,27 +859,6 @@ function smileys($str, $adm = 0) {
     }
 }
 
-function display_error($error = false, $link = '') {
-    /*
-    -----------------------------------------------------------------
-    Сообщения об ошибках
-    -----------------------------------------------------------------
-    */
-    global $lng;
-    if ($error) {
-        $out = '<div class="rmenu"><p><b>' . $lng['error'] . '!</b>';
-        if (is_array($error)) {
-            foreach ($error as $val)$out .= '<div>' . $val . '</div>';
-        } else {
-            $out .= '<br />' . $error;
-        }
-        $out .= '</p><p>' . $link . '</p></div>';
-        return $out;
-    } else {
-        return false;
-    }
-}
-
 function rus_lat($str) {
     /*
     -----------------------------------------------------------------
@@ -800,107 +901,6 @@ function rus_lat($str) {
         'я' => 'ya'
     ));
     return $str;
-}
-
-function show_menu($val = array()){
-    /*
-    -----------------------------------------------------------------
-    Отображение различных меню
-    -----------------------------------------------------------------
-    */
-    $out = '';
-    ksort($val);
-    $last = array_pop($val);
-    foreach ($val as $menu) {
-        $out .= $menu . ' | ';
-    }
-    return $out . $last;
-}
-
-function show_user($user = array (), $arg = array()) {
-    /*
-    -----------------------------------------------------------------
-    Отображения личных данных пользователя
-    -----------------------------------------------------------------
-    $user       (array)     массив запроса в таблицу `users`
-    $arg        (array)     Массив параметров отображения
-    -----------------------------------------------------------------
-    [lastvisit] (boolean)   Дата и время последнего визита
-    [stshide]   (boolean)   Скрыть статус (если есть)
-    [iphide]    (boolean)   Скрыть (не показывать) IP и UserAgent
-    [iphist]    (boolean)   Показывать ссылку на историю IP
-    -----------------------------------------------------------------
-    [header]    (string)    Текст в строке после Ника пользователя
-    [body]      (string)    Основной текст, под ником пользователя
-    [sub]       (string)    Строка выводится вверху области "sub"
-    [footer]    (string)    Строка выводится внизу области "sub"
-    -----------------------------------------------------------------
-    */
-    global $set_user, $realtime, $user_id, $admp, $home, $rights, $lng;
-    $out = false;
-    if (!$user['id']) {
-        $out = '<b>Гость</b>';
-        if (!empty($user['name']))
-            $out .= ': ' . $user['name'];
-        if (!empty($arg['header']))
-            $out .= ' ' . $arg['header'];
-    } else {
-        if ($set_user['avatar']) {
-            $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-            if (file_exists(('../files/users/avatar/' . $user['id'] . '.png')))
-                $out .= '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
-            else
-                $out .= '<img src="../images/empty.png" width="32" height="32" alt="" />&#160;';
-            $out .= '</td><td>';
-        }
-        if ($user['sex'])
-            $out .= '<img src="../theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
-        else
-            $out .= '<img src="../images/del.png" width="12" height="12" align="middle" />&#160;';
-        $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="../str/anketa.php?id=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
-        $rank = array (
-            0 => '',
-            1 => '(GMod)',
-            2 => '(CMod)',
-            3 => '(FMod)',
-            4 => '(DMod)',
-            5 => '(LMod)',
-            6 => '(Smd)',
-            7 => '(Adm)',
-            9 => '(SV!)'
-        );
-        $out .= ' ' . $rank[$user['rights']];
-        $out .= ($realtime > $user['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
-        if (!empty($arg['header']))
-            $out .= ' ' . $arg['header'];
-        if (!$arg['stshide'] && !empty($user['status']))
-            $out .= '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
-        if ($set_user['avatar'])
-            $out .= '</td></tr></table>';
-    }
-    if ($arg['body'])
-        $out .= '<div>' . $arg['body'] . '</div>';
-    $ipinf = $rights > 0 && !$arg['iphide'] ? 1 : 0;
-    $lastvisit = $realtime > $user['lastdate'] + 300 && $arg['lastvisit'] ? date("d.m.Y (H:i)", $user['lastdate']) : false;
-    if ($ipinf || $lastvisit || $arg['sub'] || $arg['footer']) {
-        $out .= '<div class="sub">';
-        if ($arg['sub'])
-            $out .= '<div>' . $arg['sub'] . '</div>';
-        if($lastvisit)
-            $out .= '<div><span class="gray">' . $lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
-        if ($ipinf) {
-            $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
-            $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></div>';
-        }
-        if($ipinf && $arg['iphist']){
-            $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-            $out .= '<div><span class="gray">' . $lng['ip_history'] . ':</span> <a href="' . $home . '/str/users_iphist.php?id=' . $user['id'] . '">(' . $iptotal . ')</a></div>';
-        }
-        if ($arg['footer'])
-            $out .= $arg['footer'];
-        $out .= '</div>';
-    }
-    return $out;
 }
 
 function ip_valid($ip = '') {

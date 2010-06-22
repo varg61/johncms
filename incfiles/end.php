@@ -48,7 +48,7 @@ if ($set_user['quick_go']) {
     echo '</div></form>';
 }
 // Счетчик посетителей онлайн
-echo '</div><div class="footer">' . usersonline() . '</div>';
+echo '</div><div class="footer">' . stat_online() . '</div>';
 
 ////////////////////////////////////////////////////////////
 // Выводим информацию внизу страницы                      //
@@ -56,12 +56,12 @@ echo '</div><div class="footer">' . usersonline() . '</div>';
 echo '<div style="text-align:center">';
 echo '<p><b>' . $copyright . '</b></p>';
 if (!$user_id || ($user_id && $set_user['gzip']))
-    zipcount();                    // Индикатор сжатия
+    stat_gzip();                    // Индикатор сжатия
 if (!$user_id || ($user_id && $set_user['online']))
-    timeonline();                  // Время, проведенное в онлайне
+    stat_timeonline();                  // Время, проведенное в онлайне
 if (!$user_id || ($user_id && $set_user['movings']))
     echo 'Переходов: ' . $movings; // Счетчик перемещений по сайту
-counters();                        // Счетчики каталогов
+display_counters();                        // Счетчики каталогов
 
 // Рекламный блок сайта
 if (!empty($cms_ads[3]))

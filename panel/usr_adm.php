@@ -20,7 +20,7 @@ if (mysql_num_rows) {
     echo '<div class="bmenu">Супервайзоры</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo $sw % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
+        echo display_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$sw;
     }
@@ -30,7 +30,7 @@ if (mysql_num_rows) {
     echo '<div class="bmenu">Администраторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo $adm % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
+        echo display_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$adm;
     }
@@ -40,7 +40,7 @@ if (mysql_num_rows) {
     echo '<div class="bmenu">Старшие модераторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo $smd % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
+        echo display_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$smd;
     }
@@ -50,7 +50,7 @@ if (mysql_num_rows) {
     echo '<div class="bmenu">Модераторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo $mod % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
+        echo display_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>')));
         echo '</div>';
         ++$mod;
     }

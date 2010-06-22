@@ -252,7 +252,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $coltem . '</div>';
                 if ($coltem > $kmess) {
-                    echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $coltem, $kmess) . '</p>';
+                    echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $coltem, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
                 }
                 unset($_SESSION['fsort_id']);
@@ -559,7 +559,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 echo '<div class="phdr"><a name="down" id="down"></a><a href="#up"><img src="../theme/' . $set_user['skin'] .
                     '/images/up.png" alt="Наверх" width="20" height="10" border="0"/></a>&#160;&#160;Всего сообщений: ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
-                    echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
+                    echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
                 } else {
                     echo '<br />';

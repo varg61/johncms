@@ -443,7 +443,7 @@ else {
     }
     else {
         // Главная страница Галлереи
-        echo '<p><a href="index.php?act=new">Новые фото</a> (' . fgal(1) . ')</p><hr/>';
+        echo '<p><a href="index.php?act=new">Новые фото</a> (' . stat_gallery(1) . ')</p><hr/>';
         $rz = mysql_query("select * from `gallery` where type='rz';");
         $count = mysql_num_rows($rz);
         while ($rz1 = mysql_fetch_array($rz)) {

@@ -92,7 +92,7 @@ if ($do || isset($_GET['new'])) {
             $arg = array(
             
             );
-            echo show_user($res_u, $arg);
+            echo display_user($res_u, $arg);
             echo '</div>';
             ++$i;
             
@@ -103,7 +103,7 @@ if ($do || isset($_GET['new'])) {
             //echo ' [' . $res['dlcount'] . ']';
             //echo ' <span class="gray">' . $fls . ' кб.</span>';
             //echo '</p><div class="sub">';
-            //echo show_user($mass1, 0, 0, '<span class="gray">' . date("d.m.Y / H:i", ($res['time'] + $set_user['sdvig'] * 3600)) . '</span>');
+            //echo display_user($mass1, 0, 0, '<span class="gray">' . date("d.m.Y / H:i", ($res['time'] + $set_user['sdvig'] * 3600)) . '</span>');
             // Выводим текст поста
             //$text = mb_substr($res['text'], 0, 200);
             //$text = htmlentities($text, ENT_QUOTES, 'UTF-8');
@@ -114,7 +114,7 @@ if ($do || isset($_GET['new'])) {
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             // Постраничная навигация
-            echo '<p>' . pagenav('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="files"/><input type="hidden" name="do" value="' . $do . '"/>' . $input
                 . '<input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }

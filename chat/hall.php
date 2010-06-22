@@ -24,10 +24,10 @@ $q = mysql_query("select * from `chat` where type='r' order by realid ;");
 while ($mass = mysql_fetch_array($q))
 {
     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-    echo '<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> (' . wch($mass['id']) . ')</div>';
+    echo '<a href="index.php?id=' . $mass['id'] . '">' . $mass['text'] . '</a> (' . stat_chat($mass['id']) . ')</div>';
     ++$i;
 }
-echo '<div class="phdr"><a href="who.php">Кто в чате</a> (' . wch() . ')</div>';
+echo '<div class="phdr"><a href="who.php">Кто в чате</a> (' . stat_chat() . ')</div>';
 echo '<p><a href="index.php?act=moders&amp;id=' . $id . '">Модераторы</a><br/>';
 echo '<a href="../str/usset.php?act=chat">Настройки чата</a></p>';
 require_once ('../incfiles/end.php');

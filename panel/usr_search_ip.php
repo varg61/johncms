@@ -84,7 +84,7 @@ if ($search && !$error) {
         ORDER BY `ip` ASC, `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo show_user($res, array('iphist' => 1));
+            echo display_user($res, array('iphist' => 1));
             echo '</div>';
             ++$i;
         }
@@ -94,7 +94,7 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . pagenav('index.php?act=usr_search_ip&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . display_pagination('index.php?act=usr_search_ip&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php?act=usr_search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) .
             '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }

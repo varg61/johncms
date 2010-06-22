@@ -26,7 +26,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Супервайзоры</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($sw % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$sw;
     }
 }
@@ -37,7 +37,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Администраторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($adm % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$adm;
     }
 }
@@ -48,7 +48,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Старшие Модераторы</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($smd % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$smd;
     }
 }
@@ -59,7 +59,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Модераторы Библиотеки</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($lmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$lmod;
     }
 }
@@ -70,7 +70,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Модераторы Загрузок</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($dmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$dmod;
     }
 }
@@ -81,7 +81,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Модераторы Форума</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($fmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$fmod;
     }
 }
@@ -92,7 +92,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Модераторы Чата</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($cmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$cmod;
     }
 }
@@ -103,7 +103,7 @@ if (mysql_num_rows($req)) {
     echo '<div class="bmenu">Киллеры</div>';
     while ($res = mysql_fetch_assoc($req)) {
         echo ($kil % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res) . '</div>';
+        echo display_user($res) . '</div>';
         ++$kil;
     }
 }

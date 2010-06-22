@@ -469,7 +469,7 @@ switch ($mod) {
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=htopics&amp;usort=' . $res['user_id'] . '">по автору</a>';
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     //TODO: Добавить показ первого поста скрытого топика
-                    echo show_user($res, array('header' => $ttime, 'body' => $text, 'sub' => $subtext));
+                    echo display_user($res, array('header' => $ttime, 'body' => $text, 'sub' => $subtext));
                     echo '</div>';
                     ++$i;
                 }
@@ -480,7 +480,7 @@ switch ($mod) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . pagenav('index.php?act=mod_forum&amp;mod=htopics&amp;', $start, $total, $kmess) . '</p>';
+                echo '<p>' . display_pagination('index.php?act=mod_forum&amp;mod=htopics&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="index.php?act=mod_forum&amp;mod=htopics" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
         }
@@ -540,7 +540,7 @@ switch ($mod) {
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=hposts&amp;tsort=' . $theme['id'] . '">по теме</a> | ';
                     $subtext .= '<a href="index.php?act=mod_forum&amp;mod=hposts&amp;usort=' . $res['user_id'] . '">по автору</a>';
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    echo show_user($res, array('header' => $posttime, 'body' => $text, 'sub' => $subtext));
+                    echo display_user($res, array('header' => $posttime, 'body' => $text, 'sub' => $subtext));
                     echo '</div>';
                     ++$i;
                 }
@@ -551,7 +551,7 @@ switch ($mod) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . pagenav('index.php?act=mod_forum&amp;mod=hposts&amp;', $start, $total, $kmess) . '</p>';
+                echo '<p>' . display_pagination('index.php?act=mod_forum&amp;mod=hposts&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="index.php?act=mod_forum&amp;mod=hposts" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
         }

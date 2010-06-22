@@ -18,8 +18,8 @@ $headmod = 'mainpage';
 // Внимание! Если файл находится в корневой папке, нужно указать $rootpath = '';
 $rootpath = '';
 
-require_once('incfiles/core.php');
-require_once('incfiles/head.php');
+require('incfiles/core.php');
+require('incfiles/head.php');
 
 if (isset($_GET['err']))
     $act = 404;
@@ -35,7 +35,7 @@ switch ($act) {
         //TODO: Сделать переключатель доступа из Админки, показвать, или нет Актив гостям
         echo '<div class="phdr"><b>Актив Сайта</b></div>';
         echo '<div class="menu"><a href="str/users_search.php">Поиск юзера</a></div>';
-        echo '<div class="menu"><a href="str/users.php">Список юзеров</a> (' . kuser() . ')</div>';
+        echo '<div class="menu"><a href="str/users.php">Список юзеров</a> (' . stat_countusers() . ')</div>';
         $mon = date("m", $realtime);
         if (substr($mon, 0, 1) == 0) {
             $mon = str_replace("0", "", $mon);
@@ -79,7 +79,7 @@ switch ($act) {
         echo '<li><a href="str/my_stat.php?act=forum">Последние записи</a></li>';
         echo '<li><a href="str/my_stat.php">Моя Статистика</a></li>';
         if ($rights >= 1) {
-            $guest = gbook(2);
+            $guest = stat_guestbook(2);
             echo '<li><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a> (<span class="red">' . $guest . '</span>)</li>';
             echo '<li><span class="red"><a href="' . $admp . '/index.php"><b>Админ панель</b></a></span></li>';
         }
@@ -144,7 +144,7 @@ switch ($act) {
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
             if ($total_libmod > 0)
                 echo '<li><a href="library/index.php?act=moder">Мод. Библиотеки</a> (' . $total_libmod . ')</li>';
-            $total_admin = gbook(2);
+            $total_admin = stat_guestbook(2);
             if ($total_admin > 0)
                 echo '<li><a href="str/guest.php?act=ga&amp;do=set">Админ-Клуб</a> (' . $total_admin . ')</li>';
             if (!$newusers_total && !$reg_total && !$ban_total && !$total_libmod && !$total_admin)
@@ -159,10 +159,10 @@ switch ($act) {
         $total_forum = forum_new();
         if ($total_forum > 0)
             echo '<li><a href="forum/index.php?act=new">' . $lng['forum'] . '</a> (' . $total_forum . ')</li>';
-        $total_guest = gbook(1);
+        $total_guest = stat_guestbook(1);
         if ($total_guest > 0)
             echo '<li><a href="str/guest.php?act=ga">Гостевая</a> (' . $total_guest . ')</li>';
-        $total_gal = fgal(1);
+        $total_gal = stat_gallery(1);
         if ($total_gal > 0)
             echo '<li><a href="gallery/index.php?act=new">Галерея</a> (' . $total_gal . ')</li>';
         if ($set_karma['on']) {
@@ -186,9 +186,9 @@ switch ($act) {
     ////////////////////////////////////////////////////////////
     // Главное меню сайта                                     //
     ////////////////////////////////////////////////////////////
-    include_once 'pages/mainmenu.php';
+    include 'pages/mainmenu.php';
 }
 
-require_once('incfiles/end.php');
+require('incfiles/end.php');
 
 ?>

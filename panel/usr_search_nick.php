@@ -57,7 +57,7 @@ if ($search && !$error) {
         $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo show_user($res);
+            echo display_user($res);
             echo '</div>';
             ++$i;
         }
@@ -67,7 +67,7 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . pagenav('index.php?act=usr_search_nick&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . display_pagination('index.php?act=usr_search_nick&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php?act=usr_search_nick" method="post"><input type="hidden" name="search" value="' . checkout($search)
             . '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }

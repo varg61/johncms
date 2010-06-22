@@ -88,7 +88,7 @@ if (mysql_num_rows($req)) {
         echo $text . '</div>';
         ++$i;
     }
-    echo '<div class="phdr"><a href="who.php?id=' . $id . '">В чате</a> (' . wch($id) . ')</div>';
+    echo '<div class="phdr"><a href="who.php?id=' . $id . '">В чате</a> (' . stat_chat($id) . ')</div>';
     echo '<p>[0] <a href="index.php?" accesskey="0">Прихожая</a><br/>';
     if ($type['dpar'] == "in")
         echo '[3] <a href="index.php?act=chpas&amp;id=' . $id . '" accesskey="3">Сменить пароль</a><br/>';

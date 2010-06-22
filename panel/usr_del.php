@@ -51,7 +51,7 @@ if (!$error) {
     $forump_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'  AND `close` != '1'"), 0);
     echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['user_del'] . '</div>';
     // Выводим краткие данные
-    echo '<div class="user"><p>' . show_user($user, array('lastvisit' => 1, 'iphist' => 1)) . '</p></div>';
+    echo '<div class="user"><p>' . display_user($user, array('lastvisit' => 1, 'iphist' => 1)) . '</p></div>';
     switch ($mod) {
         case 'del':
             // Удаляем личный альбом

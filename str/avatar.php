@@ -60,7 +60,7 @@ switch ($act) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . pagenav('avatar.php?act=cat&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('avatar.php?act=cat&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="avatar.php" method="get"><input type="hidden" value="cat" name="act" /><input type="hidden" value="' . $id .
                 '" name="id" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }

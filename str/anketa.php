@@ -54,7 +54,7 @@ if($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
 if ($user['id'] != $user_id && $rights > $user['rights'])
     $menu[] = '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">Банить</a>';
 if (!empty($menu))
-    echo '<div class="topmenu">' . show_menu($menu) . '</div>';
+    echo '<div class="topmenu">' . display_menu($menu) . '</div>';
 // Уведомление о дне рожденья
 if ($user['dayb'] == $day && $user['monthb'] == $mon) {
     echo '<div class="gmenu">ИМЕНИНЫ!!!</div>';
@@ -66,7 +66,7 @@ $arg = array (
     'iphist' => 1,
     'header' => '<b>ID:' . $user['id'] . '</b>'
 );
-echo show_user($user, $arg);
+echo display_user($user, $arg);
 echo '</p></div>';
 
 // Блок Кармы
@@ -184,7 +184,7 @@ if ($id && $id != $user_id) {
         }
     }
 }
-echo '<div class="phdr">' . show_menu($menu) . '</div>';
+echo '<div class="phdr">' . display_menu($menu) . '</div>';
 require_once('../incfiles/end.php');
 
 ?>

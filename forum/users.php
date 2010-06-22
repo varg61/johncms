@@ -29,7 +29,7 @@ if ($topic_vote == 0) {
     WHERE `cms_forum_vote_users`.`topic`='$id' ORDER BY `time` DESC LIMIT $start,$kmess");
     while ($res = mysql_fetch_array($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo show_user($res, array('iphide' => 1));
+        echo display_user($res, array('iphide' => 1));
         echo '</div>';
         ++$i;
     }
@@ -37,7 +37,7 @@ if ($topic_vote == 0) {
         echo '<div class="menu">В этом опросе пока никто не участвовал!</div>';
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
-        echo '<p>' . pagenav('index.php?act=users&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . display_pagination('index.php?act=users&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="users"/><input type="hidden" name="id" value="' . $id .
             '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }

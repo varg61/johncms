@@ -26,7 +26,7 @@ function get_top($order = 'postforum') {
         $out = '';
         while ($res = mysql_fetch_assoc($req)) {
             $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $out .= show_user($res, array('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
+            $out .= display_user($res, array('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
             ++$i;
         }
         return $out;

@@ -42,7 +42,7 @@ $arg = array (
     'lastvisit' => 1,
     'header' => '<b>ID:' . $user['id'] . '</b>'
 );
-echo show_user($user, $arg);
+echo display_user($user, $arg);
 echo '</p></div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 if($total){
@@ -57,7 +57,7 @@ if($total){
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . pagenav('users_iphist.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
+    echo '<p>' . display_pagination('users_iphist.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
     echo '<p><form action="users_iphist.php?id=' . $user['id'] . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
 

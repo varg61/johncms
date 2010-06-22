@@ -89,7 +89,7 @@ switch ($mod) {
                 $link .= '<a href="index.php?act=usr_reg&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a> | ';
                 $link .= '<a href="">' . $lng['reg_del_ip'] . '</a>';
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo show_user($res, array('header' => '<b>ID:' . $res['id'] . '</b>', 'sub' => $link));
+                echo display_user($res, array('header' => '<b>ID:' . $res['id'] . '</b>', 'sub' => $link));
                 echo '</div>';
                 ++$i;
             }
@@ -98,7 +98,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . pagenav('index.php?act=usr_reg&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('index.php?act=usr_reg&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=usr_reg" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p>';

@@ -74,9 +74,9 @@ switch ($mod) {
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_array($req)) {
                 echo '<div class="' . ($res['bantime'] > $realtime ? 'r' : '') . 'menu">';
-                echo show_user($res);
+                echo display_user($res);
                 //TODO: Переделать на более удобный показ бана
-                //echo show_user($res, 0, 2, ' [' . $res['bancount'] . ']&#160;<a href="../str/users_ban.php?id=' . $res['id'] . '">&gt;&gt;</a>');
+                //echo display_user($res, 0, 2, ' [' . $res['bancount'] . ']&#160;<a href="../str/users_ban.php?id=' . $res['id'] . '">&gt;&gt;</a>');
                 echo '</div>';
             }
         } else {
@@ -84,7 +84,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . pagenav('index.php?act=usr_ban&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('index.php?act=usr_ban&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=usr_ban" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">Амнистия</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';

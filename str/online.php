@@ -104,7 +104,7 @@ if ($total) {
             'stshide' => 1,
             'header' => (' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
         );
-        echo show_user($res, $arg);
+        echo display_user($res, $arg);
         echo '</div>';
         ++$i;
     }
@@ -113,7 +113,7 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > 10) {
-    echo '<p>' . pagenav('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
+    echo '<p>' . display_pagination('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
     echo '<p><form action="online.php" method="get"><input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }

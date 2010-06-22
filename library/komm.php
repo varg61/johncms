@@ -93,7 +93,7 @@ while ($mass = mysql_fetch_array($mess)) {
 echo '<div class="phdr">Всего каментов: ' . $countm . '</div>';
 // Навигация по страницам
 if ($countm > $kmess) {
-    echo '<p>' . pagenav('index.php?act=komm&amp;id=' . $id . '&amp;', $start, $countm, $kmess) . '</p>';
+    echo '<p>' . display_pagination('index.php?act=komm&amp;id=' . $id . '&amp;', $start, $countm, $kmess) . '</p>';
     echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="komm"/><input type="hidden" name="id" value="' . $id .
         '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }

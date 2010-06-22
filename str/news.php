@@ -232,7 +232,7 @@ switch ($do) {
         echo '<div class="phdr">' . $lng['total'] . ':&#160;' . $total . '</div>';
         echo '<p>';
         if ($total > $kmess) {
-            echo '<p>' . pagenav('news.php?', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('news.php?', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '</p>';

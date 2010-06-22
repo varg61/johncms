@@ -122,7 +122,7 @@ if ($user_id) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $count . '</div>';
                 if ($count > $kmess) {
-                    echo '<p>' . pagenav('index.php?act=new&amp;do=all&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</p>';
+                    echo '<p>' . display_pagination('index.php?act=new&amp;do=all&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get">
                     <input type="hidden" name="act" value="new"/>
                     <input type="hidden" name="do" value="all"/>
@@ -185,7 +185,7 @@ if ($user_id) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
                 if ($total > $kmess) {
-                    echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
+                    echo '<p>' . display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
                 }
                 echo '<p><a href="index.php?act=new&amp;do=reset">Сброс!</a><br/>';

@@ -80,7 +80,7 @@ if ($search && !$error) {
     echo '<div class="phdr">Всего совпадений: ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . pagenav('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . display_pagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
 } else {

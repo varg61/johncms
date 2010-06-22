@@ -85,7 +85,7 @@ if ($total > 0) {
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > 10) {
-        echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
 }

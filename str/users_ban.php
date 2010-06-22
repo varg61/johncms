@@ -52,7 +52,7 @@ switch ($act) {
             echo display_error('Данный пользователь имеет Иннунитет, его банить нельзя');
         } else {
             echo '<div class="phdr"><b>Баним пользователя</b></div>';
-            echo '<div class="rmenu"><p>' . show_user($user) . '</p></div>';
+            echo '<div class="rmenu"><p>' . display_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 $error = false;
                 $term = isset($_POST['term']) ? intval($_POST['term']) : '';
@@ -178,7 +178,7 @@ switch ($act) {
                     $error = 'Бан уже не активен';
                 if (!$error) {
                     echo '<div class="phdr"><b>Прекращение действия Бана</b></div>';
-                    echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
+                    echo '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
                     if (isset($_POST['submit'])) {
                         mysql_query("UPDATE `cms_ban_users` SET `ban_time` = '$realtime' WHERE `id` = '$ban' LIMIT 1");
                         echo '<div class="gmenu"><p><h3>Пользователь разбанен</h3></p></div>';
@@ -209,7 +209,7 @@ switch ($act) {
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="phdr"><b>Удаление Бана</b></div>';
-                echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
+                echo '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
                 if (isset($_POST['submit'])) {
                     mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '$id' AND `user_id` = '0' AND `time` = '" . $res['ban_while'] . "' LIMIT 1");
                     $points = $set_karma['karma_points'] * 2;
@@ -238,7 +238,7 @@ switch ($act) {
         ////////////////////////////////////////////////////////////
         if ($rights == 9) {
             echo '<div class="phdr"><b>История нарушений</b></div>';
-            echo '<div class="gmenu"><p>' . show_user($user) . '</p></div>';
+            echo '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
                 echo '<div class="gmenu"><h3>История нарушений очищена</h3></div>';
@@ -268,9 +268,9 @@ switch ($act) {
         if ($rights == 9)
             $menu[] = '<a href="users_ban.php?act=delhist&amp;id=' . $user['id'] . '">Очистить историю</a>';
         if (!empty($menu))
-            echo '<div class="topmenu">' . show_menu($menu) . '</div>';
+            echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         if ($user['id'] != $user_id)
-            echo '<div class="user"><p>' . show_user($user) . '</p></div>';
+            echo '<div class="user"><p>' . display_user($user) . '</p></div>';
         else
             echo '<div class="list2"><p>Мои нарушения</p></div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
@@ -297,7 +297,7 @@ switch ($act) {
                 if ($rights == 9)
                     $menu[] = '<a href="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $res['id'] . '">Удалить бан</a>';
                 if (!empty($menu))
-                    echo '<div>' . show_menu($menu) . '</div>';
+                    echo '<div>' . display_menu($menu) . '</div>';
                 echo '</div></div>';
                 ++$i;
             }
@@ -306,7 +306,7 @@ switch ($act) {
         }
         echo '<div class="phdr">Всего нарушений: ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . pagenav('users_ban.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('users_ban.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="users_ban.php?id=' . $user['id'] . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
 }

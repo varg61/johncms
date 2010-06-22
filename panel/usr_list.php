@@ -43,13 +43,13 @@ while ($res = mysql_fetch_array($req)) {
         $link .= '<a href="../str/my_data.php?id=' . $res['id'] . '">' . $lng['edit'] . '</a> | <a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a> | ';
     $link .= '<a href="../str/users_ban.php?act=ban&amp;id=' . $res['id'] . '">' . $lng['ban_do'] . '</a>';
     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-    echo show_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>'), 'sub' => $link));
+    echo display_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>'), 'sub' => $link));
     echo '</div>';
     ++$i;
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . pagenav('index.php?act=usr_list&amp;sort=' . $sort . '&amp;', $start, $total, $kmess) . '</p>';
+    echo '<p>' . display_pagination('index.php?act=usr_list&amp;sort=' . $sort . '&amp;', $start, $total, $kmess) . '</p>';
     echo '<p><form action="index.php?act=usr_list&amp;sort=' . $sort . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
 echo '<p><a href="index.php?act=usr_search">Поиск пользователя</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';

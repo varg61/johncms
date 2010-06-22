@@ -136,7 +136,7 @@ if (in_array($act, $do)) {
             echo '<p>';
             // Навигация по страницам
             if ($total > $kmess) {
-                echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
+                echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if (($rights == 5 || $rights >= 6) && $id != 0) {
@@ -251,7 +251,7 @@ if (in_array($act, $do)) {
             echo '<p>' . nl2br($page_text) . '</p>';
             echo '<hr /><p>';
             if ($pages > 1) {
-                echo '<p>' . pagenav('index.php?id=' . $id . '&amp;', $start, $pages, 1) . '</p>';
+                echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $pages, 1) . '</p>';
                 echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($rights == 5 || $rights >= 6) {

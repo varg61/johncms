@@ -445,7 +445,7 @@ switch ($from) {
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             //TODO: Исправить навигацию
-            echo '<p>' . pagenav('index.php?from=active&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('index.php?from=active&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="from" value="active"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="index.php?act=mod_ads&amp;">Назад</a></p>';
@@ -517,7 +517,7 @@ switch ($from) {
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             //TODO: Исправить навигацию
-            echo '<p>' . pagenav('index.php?from=noactive&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . display_pagination('index.php?from=noactive&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" name="from" value="noactive"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="index.php?act=mod_ads&amp;">Назад</a></p>';

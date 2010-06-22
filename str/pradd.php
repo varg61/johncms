@@ -374,7 +374,7 @@ if ($user_id) {
             echo '</form>';
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . pagenav('pradd.php?act=in&amp;', $start, $total, $kmess) . '</p>';
+                echo '<p>' . display_pagination('pradd.php?act=in&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="pradd.php?act=in" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
@@ -517,7 +517,7 @@ if ($user_id) {
             echo '</form>';
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . pagenav('pradd.php?act=out&amp;', $start, $total, $kmess) . '</p>';
+                echo '<p>' . display_pagination('pradd.php?act=out&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="pradd.php?act=out" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
