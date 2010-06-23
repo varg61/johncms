@@ -15,39 +15,40 @@
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
 require_once('../incfiles/ban.php');
+
 switch ($mod) {
     case 'amnesty':
         if ($rights < 9) {
-            echo display_error('Амнистия доступна только для Супервизоров');
+            echo display_error($lng['amnesty_access_error']);
         } else {
-            echo '<div class="phdr"><b>Амнистия</b></div>';
+            echo '<div class="phdr"><a href="index.php?act=usr_ban"><b>' . $lng['ban_panel'] . '</b></a> | ' . $lng['amnesty'] . '</div>';
             if (isset($_POST['submit'])) {
                 $term = isset($_POST['term']) && $_POST['term'] == 1 ? 1 : 0;
                 if ($term) {
                     // Очищаем таблицу Банов
                     mysql_query("TRUNCATE TABLE `cms_ban_users`");
-                    echo '<div class="gmenu"><p>Таблица Банов очищена.<br />Удалена вся история нарушений</p></div>';
+                    echo '<div class="gmenu"><p>' . $lng['amnesty_clean_confirm'] . '</p></div>';
                 } else {
                     // Разбаниваем активные Баны
                     $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `ban_time` > '" . $realtime . "'");
                     while ($res = mysql_fetch_array($req)) {
                         $ban_left = $res['ban_time'] - $realtime;
                         if ($ban_left < 2592000) {
-                            mysql_query("UPDATE `cms_ban_users` SET `ban_time`='$realtime', `ban_raz`='--Амнистия--' WHERE `id` = '" . $res['id'] . "'");
+                            $amnesty_msg = isset($lng['amnesty']) ? mysql_real_escape_string($lng['amnesty']) : 'Amnesty';
+                            mysql_query("UPDATE `cms_ban_users` SET `ban_time`='$realtime', `ban_raz`='--$amnesty_msg--' WHERE `id` = '" . $res['id'] . "'");
                         }
                     }
-                    echo '<div class="gmenu"><p>Разбанены все пользователи, которые имели активные Баны (кроме банов &quot;До отмены&quot;)</p></div>';
+                    echo '<div class="gmenu"><p>' . $lng['amnesty_delban_confirm'] . '</p></div>';
                 }
             } else {
                 echo '<form action="index.php?act=usr_ban&amp;mod=amnesty" method="post"><div class="menu"><p>';
-                echo '<input type="radio" name="term" value="0" checked="checked" />&#160;Разбанить всех<br />';
-                echo '<input type="radio" name="term" value="1" />&#160;Очистить базу';
-                echo '</p><p><input type="submit" name="submit" value="Амнистия" />';
+                echo '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng['amnesty_delban'] . '<br />';
+                echo '<input type="radio" name="term" value="1" />&#160;' . $lng['amnesty_clean'];
+                echo '</p><p><input type="submit" name="submit" value="' . $lng['amnesty'] . '" />';
                 echo '</p></div></form>';
-                echo '<div class="phdr"><small>&quot;Разбанить всех&quot; - прекращает действие всех активных Банов<br />';
-                echo '&quot;Очистить базу&quot; - прекращает действие всех банов и очищает всю историю нарушений</small></div>';
+                echo '<div class="phdr"><small>' . $lng['amnesty_help'] . '</small></div>';
             }
-            echo '<p><a href="index.php?act=usr_ban">Бан панель</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+            echo '<p><a href="index.php?act=usr_ban">' . $lng['ban_panel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -87,9 +88,7 @@ switch ($mod) {
             echo '<p>' . display_pagination('index.php?act=usr_ban&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=usr_ban" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
-        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">Амнистия</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">' . $lng['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
-
-require_once('../incfiles/end.php');
 
 ?>
