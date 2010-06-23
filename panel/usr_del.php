@@ -13,7 +13,6 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-
 if ($rights != 9)
     die('Error: restricted access');
 
@@ -51,7 +50,10 @@ if (!$error) {
     $forump_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'  AND `close` != '1'"), 0);
     echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['user_del'] . '</div>';
     // Выводим краткие данные
-    echo '<div class="user"><p>' . display_user($user, array('lastvisit' => 1, 'iphist' => 1)) . '</p></div>';
+    echo '<div class="user"><p>' . display_user($user, array (
+        'lastvisit' => 1,
+        'iphist' => 1
+    )) . '</p></div>';
     switch ($mod) {
         case 'del':
             // Удаляем личный альбом
@@ -123,25 +125,22 @@ if (!$error) {
             ////////////////////////////////////////////////////////////
             echo '<form action="index.php?act=usr_del&amp;mod=del&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p><h3>' . $lng['user_del_activity'] . '</h3>';
             if ($album)
-                echo '<div><input type="checkbox" value="1" name="gallery" checked="checked" />&#160;Галерея, удалить альбом <span class="red">(' . $images_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="gallery" checked="checked" />&#160;' . $lng['gallery'] . ' <span class="red">(' . $images_count . ')</span></div>';
             if ($comm_count)
-                echo '<div><input type="checkbox" value="1" name="comments" checked="checked" />&#160;Комментарии <span class="red">(' . $comm_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="comments" checked="checked" />&#160;' . $lng['comments'] . ' <span class="red">(' . $comm_count . ')</span></div>';
             if ($guest_count)
-                echo '<div><input type="checkbox" value="1" name="guest" checked="checked" />&#160;Гостевая <span class="red">(' . $guest_count . ')</span></div>';
-            if ($forumt_count)
-                echo '<div><input type="checkbox" value="1" name="forumt" checked="checked" />&#160;Форум, темы <span class="red">(' . $forumt_count . ')</span></div>';
-            if ($forump_count)
-                echo '<div><input type="checkbox" value="1" name="forump" checked="checked" />&#160;Форум, посты <span class="red">(' . $forump_count . ')</span></div>';
-            if ($forumt_count || $forump_count)
-                echo '<small><span class="gray">При чистке форума, темы и посты переходят в режим "скрытые"</span></small>';
-            echo '</p></div><div class="rmenu"><p>Вы действительно хотите удалить данного пользователя?';
-            echo '</p><p><input type="submit" value="Удалить" name="submit" />';
+                echo '<div><input type="checkbox" value="1" name="guest" checked="checked" />&#160;' . $lng['guestbook'] . ' <span class="red">(' . $guest_count . ')</span></div>';
+            if ($forumt_count || $forump_count) {
+                echo '<div><input type="checkbox" value="1" name="forum" checked="checked" />&#160;' . $lng['forum'] . ' <span class="red">(' . $forumt_count . '&nbsp;/&nbsp;' . $forump_count . ')</span></div>';
+                echo '<small><span class="gray">' . $lng['user_del_forumnote'] . '</span></small>';
+            }
+            echo '</p></div><div class="rmenu"><p>' . $lng['user_del_confirm'];
+            echo '</p><p><input type="submit" value="' . $lng['delete'] . '" name="submit" />';
             echo '</p></div></form>';
-            echo '<div class="phdr"><a href="../str/anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
+            echo '<div class="phdr"><a href="../str/anketa.php?id=' . $user['id'] . '">' . $lng['to_form'] . '</a></div>';
     }
 } else {
     echo display_error($error);
 }
-echo '<p><a href="index.php?act=usr_list">Список пользователей</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-
+echo '<p><a href="index.php?act=usr_list">' . $lng['users_list'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>
