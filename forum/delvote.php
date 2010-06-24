@@ -31,7 +31,7 @@ if ($rights == 3 || $rights >= 6) {
     else {
         echo '<p>Вы действительно хотите удалить опрос?</p>';
         echo '<p><a href="?act=delvote&amp;id=' . $id . '&amp;yes">Удалить</a><br />';
-        echo '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Отмена</a></p>';
+        echo '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . $lng['cancel'] . '</a></p>';
         $_SESSION['prd'] = htmlspecialchars(getenv("HTTP_REFERER"));
     }
 }

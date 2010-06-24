@@ -174,7 +174,7 @@ switch ($do) {
                 echo '<input type="radio" name="cl" value="2" />Очищаем все<br />';
                 echo '<input type="submit" name="submit" value="Очистить" />';
                 echo '</form></p>';
-                echo '<p><a href="news.php">Отмена</a></p>';
+                echo '<p><a href="news.php">' . $lng['cancel'] . '</a></p>';
             }
         } else {
             header("location: news.php");

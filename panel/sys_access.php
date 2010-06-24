@@ -115,7 +115,7 @@ elseif ($set['mod_reg'] == 1)
     $img = 'yelow';
 else
     $img = 'red';
-echo '<div class="gmenu"><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&#160;Регистрация</h3><div style="font-size: x-small;">
+echo '<div class="gmenu"><h3><img src="../images/' . $img . '.gif" width="16" height="16" class="left"/>&#160;' . $lng['registration'] . '</h3><div style="font-size: x-small;">
 <input type="radio" value="2" name="reg" ' . ($set['mod_reg'] == 2 ? 'checked="checked"' : '') . '/>&#160;открыта<br />
 <input type="radio" value="1" name="reg" ' . ($set['mod_reg'] == 1 ? 'checked="checked"' : '') . '/>&#160;с модерацией<br />
 <input type="radio" value="0" name="reg" ' . (!$set['mod_reg'] ? 'checked="checked"' : '') . '/>&#160;закрыта</div></div>';

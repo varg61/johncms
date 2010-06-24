@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$textl = 'Регистрация';
+$textl = $lng['registration'];
 $rootpath = '';
 require_once('incfiles/core.php');
 require_once('incfiles/head.php');
@@ -39,7 +39,7 @@ function regform() {
     echo '<div class="gmenu"><p>Если Вы не видите рисунок с кодом, включите поддержку графики в настройках браузера и обновите страницу.<br />';
     echo '<img src="captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />';
     echo 'Код с картинки:<br/><input type="text" size="5" maxlength="5"  name="kod"/></p></div>';
-    echo '<div class="bmenu"><input type="submit" name="submit" value="Регистрация"/></div></form>';
+    echo '<div class="bmenu"><input type="submit" name="submit" value="' . $lng['registration'] . '"/></div></form>';
 }
 
 if (isset($_POST['submit'])) {

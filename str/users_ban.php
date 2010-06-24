@@ -137,7 +137,7 @@ switch ($act) {
                     echo '<option value="13">Гостевая</option>';
                     echo '<option value="10">Коментарии</option>';
                     echo '<option value="3">Приват (антиспам)</option>';
-                    echo '<option value="1" selected="selected">Блокировка</option>';
+                    echo '<option value="1" selected="selected">' . $lng['blocking'] . '</option>';
                 }
                 echo '</select><br />';
                 echo '</p><p><h3>Срок бана</h3>';

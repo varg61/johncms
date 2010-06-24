@@ -387,7 +387,7 @@ switch ($mod) {
                 '<div class="rmenu"><b>ВНИМАНИЕ!!!</b><br />Перед продолжением, убедитесь, что все файлы, которые были выявлены в режиме сканирования "<a href="main.php?do=antispy&amp;act=scan">Дистрибутив</a>" и "<a href="main.php?do=antispy&amp;act=check">По образу</a>" надежны и не содержат несанкционированных модификаций.</div>';
             echo '<div class="menu"><p>Данная процедура создает список всех скриптовых файлов Вашего сайта, вычисляет их контрольные суммы и заносит в базу, для последующего сравнения.</p>';
             echo '<p><form action="index.php?act=sys_antispy&amp;mod=snap" method="post"><input type="submit" name="submit" value="Создать образ" /></form></p></div>';
-            echo '<div class="phdr"><a href="index.php?act=sys_antispy">Назад</a> (отмена)</div>';
+            echo '<div class="phdr"><a href="index.php?act=sys_antispy">' . $lng['cancel'] . '</div>';
         }
         break;
 

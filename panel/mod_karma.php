@@ -26,7 +26,7 @@ if ($rights == 9 && $do == 'clean') {
     }
     else {
         echo '<div class="rmenu"><p>Вы действительно хотите cбросить карму?<br/>';
-        echo '<a href="index.php?act=mod_karma&amp;do=clean&amp;yes">Удалить</a> | <a href="index.php?act=mod_karma">Отмена</a></p></div>';
+        echo '<a href="index.php?act=mod_karma&amp;do=clean&amp;yes">Удалить</a> | <a href="index.php?act=mod_karma">' . $lng['cancel'] . '</a></p></div>';
     }
 }
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['karma'] . '</div>';

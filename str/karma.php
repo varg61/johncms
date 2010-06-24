@@ -108,7 +108,7 @@ if ($set_karma['on'] && $user_id) {
                         header('Location: karma.php?id=' . $id . '&amp;type=' . $type);
                     } else {
                         echo '<p>Вы действительно хотите удалить отзыв?<br/>';
-                        echo '<a href="karma.php?act=delete&amp;id=' . $id . '&amp;del='.$del.'&amp;type=' . $type . '&amp;yes">Удалить</a> | <a href="karma.php?id=' . $id . '&amp;type=' . $type . '">Отмена</a></p>';
+                        echo '<a href="karma.php?act=delete&amp;id=' . $id . '&amp;del='.$del.'&amp;type=' . $type . '&amp;yes">Удалить</a> | <a href="karma.php?id=' . $id . '&amp;type=' . $type . '">' . $lng['cancel'] . '</a></p>';
                     }
                 }
             }
@@ -123,7 +123,7 @@ if ($set_karma['on'] && $user_id) {
                 } else {
                     echo '<p>Вы действительно хотите удалить все отзывы о пользователи?<br/>';
                     echo '<a href="karma.php?act=clean&amp;id=' . $id . '&amp;yes">Удалить</a> | <a href="karma.php?id='
-                        . $id . '">Отмена</a></p>';
+                        . $id . '">' . $lng['cancel'] . '</a></p>';
                 }
             }
             break;

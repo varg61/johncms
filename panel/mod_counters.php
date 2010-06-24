@@ -125,7 +125,7 @@ switch ($mod) {
                 $res = mysql_fetch_array($req);
                 echo '<div class="menu">Счетчик:<br /><b>' . $res['name'] . '</b></div>';
                 echo '<div class="rmenu"><p>Вы действительно хотите его удалить?</p><p><input type="submit" value="Удалить" name="submit" /></p></div>';
-                echo '<div class="phdr"><a href="index.php?act=mod_counters">Не удалять (отмена)</a></div></form>';
+                echo '<div class="phdr"><a href="index.php?act=mod_counters">' . $lng['cancel'] . '</a></div></form>';
             }
         } else {
             echo '<p><b>Ошибка!</b><br/>Счетчика не существует<br /><a href="index.php?act=mod_counters">Назад</a></p>';

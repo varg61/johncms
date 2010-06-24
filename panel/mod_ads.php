@@ -552,7 +552,7 @@ switch ($from) {
             echo '<input type="radio" name="cl" value="2" />Очищаем все<br />';
             echo '<input type="submit" name="submit" value="Очистить" />';
             echo '</form>';
-            echo '<p><a href="index.php?act=mod_ads">Отмена</a></p>';
+            echo '<p><a href="index.php?act=mod_ads">' . $lng['cancel'] . '</a></p>';
         }
         break;
 

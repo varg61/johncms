@@ -80,7 +80,7 @@ if (isset($_POST['submit'])) {
             // Сохраняем тему в формате HTML                          //
             ////////////////////////////////////////////////////////////
             $text = "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-<title>' . $lng['forum'] . '</title>
+<title>" . $lng['forum'] . "</title>
 <style type='text/css'>
 body { color: #000000; background-color: #FFFFFF }
 div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}

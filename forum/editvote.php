@@ -40,7 +40,7 @@ if ($rights == 3 || $rights >= 6) {
             } else {
                 echo '<p>Вы действительно хотите удалить вариант ответа?</p>';
                 echo '<p><a href="index.php?act=editvote&amp;id=' . $id . '&amp;vote=' . $vote . '&amp;delvote&amp;yes">Удалить</a><br />';
-                echo '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Отмена</a></p>';
+                echo '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . $lng['cancel'] . '</a></p>';
             }
         } else {
             header('location: ?act=editvote&id=' . $id . '');

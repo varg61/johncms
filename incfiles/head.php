@@ -82,7 +82,7 @@ echo '<div class="header">Привет ' . ($user_id ? '<b>' . $login . '</b>!' 
 echo '<div class="tmn">';
 echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $home . '\'>На главную</a> | ' : '';
 echo ($user_id && $mod != 'cab') ? '<a href="' . $home . '/index.php?act=cab">Личное</a> | ' : '';
-echo $user_id ? '<a href="' . $home . '/exit.php">Выход</a>' : '<a href="' . $home . '/login.php">Вход</a> | <a href="' . $home . '/registration.php">Регистрация</a>';
+echo $user_id ? '<a href="' . $home . '/exit.php">Выход</a>' : '<a href="' . $home . '/login.php">Вход</a> | <a href="' . $home . '/registration.php">' . $lng['registration'] . '</a>';
 echo '</div>';
 echo '<div class="maintxt">';
 

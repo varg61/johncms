@@ -15,7 +15,7 @@ defined('_IN_JOHNCMS') or die('Error:restricted access');
 
 // Краткие названия типов бана
 $ban_term = array (
-    1 => 'Блокировка',
+    1 => $lng['blocking'],
     3 => 'Приват',
     10 => 'Камменты',
     11 => $lng['forum'],

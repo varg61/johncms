@@ -42,7 +42,7 @@ switch ($act) {
                 header("Location: guest.php");
             } else {
                 echo '<p>Вы действительно хотите удалить пост?<br/>';
-                echo '<a href="guest.php?act=delpost&amp;id=' . $id . '&amp;yes">Удалить</a> | <a href="guest.php">Отмена</a></p>';
+                echo '<a href="guest.php?act=delpost&amp;id=' . $id . '&amp;yes">Удалить</a> | <a href="guest.php">' . $lng['cancel'] . '</a></p>';
             }
         }
         break;
@@ -219,7 +219,7 @@ switch ($act) {
                 echo '<input type="radio" name="cl" value="2" />Очищаем все<br />';
                 echo '<input type="submit" name="submit" value="Очистить" />';
                 echo '</form>';
-                echo '<p><a href="guest.php">Отмена</a></p>';
+                echo '<p><a href="guest.php">' . $lng['cancel'] . '</a></p>';
             }
         }
         break;
