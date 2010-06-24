@@ -166,7 +166,7 @@ if (!$error) {
                 if ($set_user['translit'])
                     echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
                 echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
-                echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+                echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">' . $lng['smileys'] . '</a></div>';
                 echo '<p><a href="' . $link . '">Назад</a></p>';
             }
     }

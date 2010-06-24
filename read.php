@@ -43,7 +43,7 @@ switch ($do) {
         echo '<div class="menu"><a href="read.php?do=forum">Правила форума</a></div>';
         echo '<div class="menu"><a href="read.php?do=forumfaq">FAQ по тэгам</a></div>';
         echo '<div class="menu"><a href="read.php?do=trans">Справка по транслиту</a></div>';
-        echo '<div class="menu"><a href="str/smile.php?">Смайлы</a></div>';
+        echo '<div class="menu"><a href="str/smile.php?">' . $lng['smileys'] . '</a></div>';
 }
 
 if ($do)

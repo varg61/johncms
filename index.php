@@ -57,7 +57,7 @@ switch ($act) {
         // Информационный блок                                    //
         ////////////////////////////////////////////////////////////
         echo '<div class="phdr"><b>Информация</b></div>';
-        echo '<div class="menu"><a href="str/smile.php">Смайлы</a></div>';
+        echo '<div class="menu"><a href="str/smile.php">' . $lng['smileys'] . '</a></div>';
         echo '<div class="menu"><a href="str/avatar.php">Аватары</a></div>';
         echo '<div class="menu"><a href="read.php?">FAQ (ЧаВо)</a></div>';
         //TODO: Разобраться с сессией, по возможности удалить

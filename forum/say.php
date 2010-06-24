@@ -111,7 +111,7 @@ switch ($tip) {
             echo '<input type="submit" name="submit" value="Отправить"/>';
             echo '</div></form>';
         }
-        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">' . $lng['smileys'] . '</a></div>';
         echo '<p><a href="?id=' . $id . '&amp;start=' . $start . '">Назад</a></p>';
         break;
 
@@ -250,7 +250,7 @@ switch ($tip) {
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             echo '<input type="submit" name="submit" value="Отправить"/></div></form>';
         }
-        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+        echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">' . $lng['smileys'] . '</a></div>';
         echo '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . $start . '">Назад</a></p>';
         break;
 

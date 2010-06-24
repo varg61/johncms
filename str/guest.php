@@ -178,7 +178,7 @@ switch ($act) {
                 <textarea rows="3" name="msg">' . $text .
                     '</textarea><br/>
                 <input type="submit" name="submit" value="Отправить"/></form></div>';
-                echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+                echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">' . $lng['smileys'] . '</a></div>';
                 echo '<p><a href="guest.php">Назад</a></p>';
             }
         }

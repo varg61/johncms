@@ -119,7 +119,7 @@ if (isset($_POST['submit'])) {
     if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения';
     echo '</p><p><input type="submit" name="submit" value="Отправить"/></p></div></form>';
-    echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+    echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">' . $lng['smileys'] . '</a></div>';
     echo '<p><a href="?id=' . $id . '">Назад</a></p>';
 }
 

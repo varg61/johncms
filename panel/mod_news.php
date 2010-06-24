@@ -58,7 +58,7 @@ if (!empty($set['news'])) {
         echo '&#160;<input type="radio" value="3" name="view" ' . ($settings['view'] == 3 ? 'checked="checked"' : '') . '/>&#160;Текст<br />';
         echo '&#160;<input type="radio" value="0" name="view" ' . ($settings['view'] == 0 ? 'checked="checked"' : '') . '/>&#160;<b>Не показывать</b></p>';
         echo '<p>&#160;<input name="breaks" type="checkbox" value="1" ' . ($settings['breaks'] ? 'checked="checked"' : '') . ' />&#160;Переносы строк<br />';
-        echo '&#160;<input name="smileys" type="checkbox" value="1" ' . ($settings['smileys'] ? 'checked="checked"' : '') . ' />&#160;Смайлы<br />';
+        echo '&#160;<input name="smileys" type="checkbox" value="1" ' . ($settings['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br />';
         echo '&#160;<input name="tags" type="checkbox" value="1" ' . ($settings['tags'] ? 'checked="checked"' : '') . ' />&#160;Тэги (BBcode)<br />';
         echo '&#160;<input name="kom" type="checkbox" value="1" ' . ($settings['kom'] ? 'checked="checked"' : '') . ' />&#160;Комментарии</p>';
         echo '<p><h3>Размер текста</h3>&#160;<input type="text" size="3" maxlength="3" name="size" value="' . $settings['size'] . '" />&#160;(50 - 500)</p>';

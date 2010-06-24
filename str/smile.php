@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$textl = 'Смайлы';
+$textl = $lng['smileys'];
 
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
@@ -26,7 +26,7 @@ switch ($act) {
             require_once('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr"><a href="smile.php"><b>Смайлы</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
+        echo '<div class="phdr"><a href="smile.php"><b>' . $lng['smileys'] . '</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/smileys/user/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
         $array = array ();
         $dir = opendir('../images/smileys/user/' . $id);
         while ($file = readdir($dir)) {
@@ -63,7 +63,7 @@ switch ($act) {
             require_once('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr"><a href="smile.php"><b>Смайлы</b></a> | Для администрации</div>';
+        echo '<div class="phdr"><a href="smile.php"><b>' . $lng['smileys'] . '</b></a> | Для администрации</div>';
         $array = array ();
         $dir = opendir('../images/smileys/admin');
         while ($file = readdir($dir)) {

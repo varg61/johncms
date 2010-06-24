@@ -303,7 +303,7 @@ if ($user_id) {
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             echo "<input type='hidden' name='idm' value='" . $id . "'/><input type='submit' value='Отправить' /></form>";
-            echo "<a href='pradd.php?act=trans'>Транслит</a><br/><a href='smile.php'>Смайлы</a><br/>";
+            echo '<a href="pradd.php?act=trans">Транслит</a><br/><a href="smile.php">' . $lng['smileys'] . '</a><br/>';
             break;
 
         case 'delch':

@@ -130,7 +130,7 @@ switch ($tip) {
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             }
             echo '</p><p><input type="submit" name="submit" value="Написать"/></p></div></form>';
-            echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">Смайлы</a></div>';
+            echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">' . $lng['smileys'] . '</a></div>';
             echo '<p>[0] <a href="index.php?id=' . $id . '" accesskey="0">Назад</a></p>';
         }
         break;
@@ -225,7 +225,7 @@ switch ($tip) {
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
             }
             echo '<input type="submit" title="Нажмите для отправки" name="submit" value="Отправить"/></div></form>';
-            echo "<a href='index.php?act=trans'>Транслит</a><br/><a href='../str/smile.php'>Смайлы</a><br/>";
+            echo '<a href="index.php?act=trans">Транслит</a><br/><a href="../str/smile.php">' . $lng['smileys'] . '</a><br/>';
             if ($ruz != 0) {
                 echo "<br/><a href='../str/pradd.php?act=write&amp;adr=" . $udat['id'] . "'>Написать в приват</a><br/>";
                 if ($rights == 1) {

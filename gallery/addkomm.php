@@ -57,7 +57,7 @@ if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_gal_comm'] || $rights >=
         <input type='checkbox' name='msgtrans' value='1' /> Транслит<br/>
         <input type='submit' name='submit' value='добавить' />
         </form><br/>";
-        echo "<a href='index.php?act=trans'>Транслит</a><br /><a href='../str/smile.php'>Смайлы</a><br/>";
+        echo '<a href="index.php?act=trans">Транслит</a><br /><a href="../str/smile.php">' . $lng['smileys'] . '</a><br/>';
     }
 } else {
     echo 'Нет доступа<br />';

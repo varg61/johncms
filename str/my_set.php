@@ -254,7 +254,7 @@ switch ($act) {
         echo '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> Системное время';
         echo '</p><p><h3>Функции системы</h3>';
         echo '<input name="avatar" type="checkbox" value="1" ' . ($set_user['avatar'] ? 'checked="checked"' : '') . ' />&#160;Аватары<br/>';
-        echo '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&#160;Смайлы<br/>';
+        echo '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>';
         echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&#160;Транслит<br/>';
         echo '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&#160;Дайджест';
         echo '</p><p><h3>Ввод текста</h3>';

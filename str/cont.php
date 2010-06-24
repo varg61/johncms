@@ -135,7 +135,7 @@ if (!empty($_SESSION['uid'])) {
       <br/>
       <input type='submit' value='Отправить' />
   </form>";
-                echo "<p><a href='cont.php?act=trans'>Транслит</a><br /><a href='smile.php'>Смайлы</a><br /><a href='?'>В список</a><br />";
+                echo '<p><a href="cont.php?act=trans">Транслит</a><br /><a href="smile.php">' . $lng['smileys'] . '</a><br /><a href="?">В список</a><br />';
             } else {
                 echo '<p>Ошибка-не указан адресат<br/>';
             }
