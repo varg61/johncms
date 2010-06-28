@@ -46,7 +46,7 @@ if ($id && $id != $user_id && $rights >= 7) {
 if ($id && $rights >= 7 && $act == 'reset') {
     // Сброс настроек
     mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['id'] . "'");
-    echo '<div class="gmenu"><p>Для пользователя <b>' . $user['name'] . '</b> установлены настройки по умолчанию<br /><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></p></div>';
+    echo '<div class="gmenu"><p>' . $lng['settings_default'] . '<br /><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></p></div>';
     require_once('../incfiles/end.php');
     exit;
 }

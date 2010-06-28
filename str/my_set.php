@@ -66,7 +66,7 @@ switch ($act) {
         echo '<input type="radio" value="3" name="postcut" ' . ($set_forum['postcut'] == 3 ? 'checked="checked"' : '') . '/>&#160;3000 символов<br />';
         echo '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&#160;не обрезать<br />';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-        echo '<div class="phdr"><a href="my_set.php?act=forum&amp;reset">Сброс настроек</a></div>';
+        echo '<div class="phdr"><a href="my_set.php?act=forum&amp;reset">' . $lng['reset_settings'] . '</a></div>';
         echo '<p><a href="../forum">В форум</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
         break;
 
@@ -177,7 +177,7 @@ switch ($act) {
         if ($rights >= 7)
             echo 'Или укажите свое:<br/><input type="text" name="mood_adm" value="' . (in_array($set_chat['mood'], $mood) ? '' : $set_chat['mood']) . '"/><br/>';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-        echo '<div class="phdr"><a href="my_set.php?act=chat&amp;reset">Сброс настроек</a></div>';
+        echo '<div class="phdr"><a href="my_set.php?act=chat&amp;reset">' . $lng['reset_settings'] . '</a></div>';
         echo '<p><a href="../chat">В чат</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
         break;
 
@@ -277,7 +277,7 @@ switch ($act) {
         closedir($dir);
         echo '</select>';
         echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-        echo '<div class="phdr"><a href="my_set.php?reset">Сброс настроек</a></div>';
+        echo '<div class="phdr"><a href="my_set.php?reset">' . $lng['reset_settings'] . '</a></div>';
         echo '<p><a href="../index.php?act=cab">В кабинет</a></p>';
 }
 
