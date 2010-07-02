@@ -18,6 +18,30 @@ $textl = 'Форум-поиск';
 $headmod = 'forumsearch';
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
+
+function ReplaceKeywords($keywords, $value) {
+    $a = stripos(mb_strtolower($value), mb_strtolower($keywords));
+    if ($a === false)
+        return $value;
+    else {
+        //Строка замены html тэгов
+        $zamen = 'qwertyzxcytrewq';
+        $b = substr($value, $a, strlen($keywords));
+        //ишем тэги и загоняем их в массив
+        preg_match_all("/<.*>/Usi", $value, $out);
+        //Заменяем тэги
+        $value = preg_replace('/<.*>/Usi', $zamen, $value);
+        //Подсвечиваем результат
+        $value = str_replace($b, '<span style="background-color: #FFFF33">' . $b . '</span>', $value);
+        //Вставляем тэги обратно
+        $heck = 0;
+        for ($i = 0; $i < count($out[0]); $i++) {
+            $heck = strpos($value, $zamen, $heck);
+            $value = substr($value, 0, $heck) . $out[0][$i] . substr($value, $heck + strlen($zamen));
+        }
+        return $value;
+    }
+}
 echo '<div class="phdr"><b>Поиск по форуму</b></div>';
 
 ////////////////////////////////////////////////////////////
@@ -27,12 +51,13 @@ $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 $search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
 $search_t = isset($_REQUEST['t']) ? 1 : 0;
+$search = preg_replace('/ {2,}/', ' ', $search);
+$search = str_replace('qwertyzxcytrewq', '', $search);
 echo '<div class="gmenu"><form action="search.php" method="post"><p>';
 echo '<input type="text" value="' . ($search ? checkout($search) : '') . '" name="search" />';
 echo '<input type="submit" value="Поиск" name="submit" /><br />';
-echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&#160;Искать в названиях тем';
+echo '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;Искать в названиях тем';
 echo '</p></form></div>';
-
 ////////////////////////////////////////////////////////////
 // Проверям на ошибки                                     //
 ////////////////////////////////////////////////////////////
@@ -45,11 +70,14 @@ if ($search && !$error) {
     ////////////////////////////////////////////////////////////
     // Выводим результаты поиска                              //
     ////////////////////////////////////////////////////////////
+    $array = explode(' ', $search);
+    $count = count($array);
     echo '<div class="bmenu">Результаты поиска</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum`
     WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "')
     AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
     if ($total) {
+        $searchs = str_replace(' ', '|', $search);
         $req = mysql_query("SELECT * FROM `forum` WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "') AND `type` = '" . ($search_t ? 't' : 'm') . "' LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
@@ -60,13 +88,35 @@ if ($search && !$error) {
             } else {
                 $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = '" . $res['id'] . "' ORDER BY `id` ASC LIMIT 1");
                 $res_p = mysql_fetch_assoc($req_p);
-                echo '<b>' . $res['text'] . '</b><br />';
+                if ($count > 1) {
+					for ($s = 0; $s <= count($array); $s++) {
+						if (mb_strlen($array[$s]) >= 3) {
+							$res['text'] = ReplaceKeywords($array[$s], $res['text']);
+						}
+					}
+				} else {
+					$res['text'] = ReplaceKeywords($search, $res['text']);
+				}
+				echo '<b>' . $res['text'] . '</b><br />';
             }
             echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
             echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
             $text = $search_t ? $res_p['text'] : $res['text'];
             $text = checkout(mb_substr($text, 0, 400), 2, 1);
+            $text = str_replace('qwertyzxcytrewq', '', $text);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
+            if(!$search_t)
+			{
+				if ($count > 1) {
+					for ($s = 0; $s <= count($array); $s++) {
+						if (mb_strlen($array[$s]) >= 3) {
+							$text = ReplaceKeywords($array[$s], $text);
+						}
+					}
+				} else {
+					$text = ReplaceKeywords($search, $text);
+				}
+			}
             echo $text;
             if (mb_strlen($res['text']) > 400)
                 echo '...<a href="index.php?act=post&amp;id=' . $res['id'] . '">Читать все &gt;&gt;</a>';
@@ -91,7 +141,5 @@ if ($search && !$error) {
     echo '<div class="phdr"><small>Длина запроса: 4мин., 64макс.<br />Поиск нечувствителен к регистру букв<br />Результаты выводятся с сортировкой по релевантности</small></div>';
 }
 echo '<p>' . ($search ? '<a href="search.php">Новый поиск</a><br />' : '') . '<a href="index.php">Вернуться в Форум</a></p>';
-
 require_once('../incfiles/end.php');
-
 ?>
