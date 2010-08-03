@@ -155,7 +155,8 @@ switch ($do) {
         `default` text NOT NULL,
         `custom` text NOT NULL,
         PRIMARY KEY (`id`),
-        KEY `iso` (`iso`)
+        KEY `iso` (`iso`),
+        KEY `module` (`module`)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         break;
 
