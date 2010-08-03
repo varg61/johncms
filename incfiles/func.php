@@ -116,18 +116,17 @@ function display_user($user = array (), $arg = array()) {
     -----------------------------------------------------------------
     Отображения личных данных пользователя
     -----------------------------------------------------------------
-    $user       (array)     массив запроса в таблицу `users`
-    $arg        (array)     Массив параметров отображения
-    -----------------------------------------------------------------
-    [lastvisit] (boolean)   Дата и время последнего визита
-    [stshide]   (boolean)   Скрыть статус (если есть)
-    [iphide]    (boolean)   Скрыть (не показывать) IP и UserAgent
-    [iphist]    (boolean)   Показывать ссылку на историю IP
-    -----------------------------------------------------------------
-    [header]    (string)    Текст в строке после Ника пользователя
-    [body]      (string)    Основной текст, под ником пользователя
-    [sub]       (string)    Строка выводится вверху области "sub"
-    [footer]    (string)    Строка выводится внизу области "sub"
+    $user          (array)     массив запроса в таблицу `users`
+    $arg           (array)     Массив параметров отображения
+       [lastvisit] (boolean)   Дата и время последнего визита
+       [stshide]   (boolean)   Скрыть статус (если есть)
+       [iphide]    (boolean)   Скрыть (не показывать) IP и UserAgent
+       [iphist]    (boolean)   Показывать ссылку на историю IP
+
+       [header]    (string)    Текст в строке после Ника пользователя
+       [body]      (string)    Основной текст, под ником пользователя
+       [sub]       (string)    Строка выводится вверху области "sub"
+       [footer]    (string)    Строка выводится внизу области "sub"
     -----------------------------------------------------------------
     */
     global $set_user, $realtime, $user_id, $admp, $home, $rights, $lng;
@@ -215,12 +214,12 @@ function forum_new($mod = 0) {
         OR `forum`.`time` > `cms_forum_rdm`.`time`)");
         $total = mysql_result($req, 0);
         if ($mod)
-            echo '<p><a href="index.php?act=new">' . $lng['unread'] . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '') . '</p>';
+            return '<a href="index.php?act=new">' . $lng['unread'] . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
         else
             return $total;
     } else {
         if ($mod)
-            echo '<p><a href="index.php?act=new">' . $lng['last_activity'] . '</a></p>';
+            return '<a href="index.php?act=new">' . $lng['last_activity'] . '</a>';
         else
             return false;
     }
@@ -639,18 +638,19 @@ function timecount($var) {
     Функция пересчета на дни, или часы
     -----------------------------------------------------------------
     */
+    global $lng;
     $str = '';
     if ($var < 0)
         $var = 0;
     $day = ceil($var / 86400);
     if ($var > 345600) {
-        $str = $day . ' дней';
+        $str = $day . ' ' . $lng['timecount_days'];
     }  elseif ($var >= 172800) {
-        $str = $day . ' дня';
+        $str = $day . ' ' . $lng['timecount_days_r'];
     }  elseif ($var >= 86400) {
-        $str = '1 день';
+        $str = '1 ' . $lng['timecount_day'];
     } else {
-        $str = gmdate('G:i', $var);
+        $str = date('G:i', $var);
     }
     return $str;
 }

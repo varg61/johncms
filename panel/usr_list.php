@@ -36,7 +36,7 @@ switch ($sort) {
 }
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0);
-$req = mysql_query("SELECT * FROM `users` WHERE `preg` = 1 ORDER BY $order LIMIT " . $start . "," . $kmess);
+$req = mysql_query("SELECT * FROM `users` WHERE `preg` = 1 ORDER BY $order LIMIT $start,$kmess");
 while ($res = mysql_fetch_array($req)) {
     $link = '';
     if ($rights >= 7)

@@ -13,11 +13,10 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $rootpath = '';
-require_once('incfiles/core.php');
-require_once('incfiles/head.php');
-echo '<div class="phdr"><b>Вход в систему</b></div>';
+require('incfiles/core.php');
+require('incfiles/head.php');
+echo '<div class="phdr"><b>' . $lng['login'] . '</b></div>';
 
 $error = array ();
 $captcha = false;
@@ -27,13 +26,13 @@ $user_pass = isset($_REQUEST['p']) ? check($_REQUEST['p']) : NULL;
 $user_mem = isset($_POST['mem']) ? 1 : 0;
 $user_code = isset($_POST['code']) ? trim($_POST['code']) : NULL;
 if ($user_pass && !$user_login && !$id)
-    $error[] = 'Вы не ввели имя';
+    $error[] = $lng['error_login_empty'];
 if (($user_login || $id) && !$user_pass)
-    $error[] = 'Вы не ввели пароль';
+    $error[] = $lng['error_password_empty'];
 if ($user_login && (mb_strlen($user_login) < 2 || mb_strlen($user_login) > 20))
-    $error[] = 'Допустимая длина имени не менее 2 и не более 20 символов';
+    $error[] = $lng['error_nicklenght'];
 if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 15))
-    $error[] = 'Допустимая длина пароля не менее 3 и не более 15 символов';
+    $error[] = $lng['error_password_lenght'];
 if (!$error && $user_pass && ($user_login || $id)) {
     // Запрос в базу на юзера
     $sql = $id ? "`id` = '$id'" : "`name_lat`='" . rus_lat(mb_strtolower($user_login)) . "'";
@@ -49,18 +48,18 @@ if (!$error && $user_pass && ($user_login || $id)) {
                 } else {
                     // Если проверочный код указан неверно
                     unset($_SESSION['code']);
-                    $error[] = 'Проверочный код указан неверно';
+                    $error[] = $lng['error_verifying_code'];
                 }
             } else {
                 // Показываем CAPTCHA
                 $display_form = 0;
                 echo '<form action="login.php" method="post">' .
-                    '<div class="menu"><p><img src="captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />' .
-                    'Введите код с картинки:<br/><input type="text" size="5" maxlength="5"  name="code"/>' .
+                    '<div class="menu"><p><img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng['verifying_code'] . '"/><br />' .
+                    $lng['enter_code'] . ':<br/><input type="text" size="5" maxlength="5"  name="code"/>' .
                     '<input type="hidden" name="n" value="' . $user_login . '"/>' .
                     '<input type="hidden" name="p" value="' . $user_pass . '"/>' .
                     '<input type="hidden" name="mem" value="' . $user_mem . '"/>' .
-                    '<input type="submit" name="submit" value="Продолжить"/></p></div></form>';
+                    '<input type="submit" name="submit" value="' . $lng['continue'] . '"/></p></div></form>';
             }
         }
         if ($user['failed_login'] < 3 || $captcha) {
@@ -70,12 +69,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
                 mysql_query("UPDATE `users` SET `failed_login` = '0' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
                 if (!$user['preg']) {
                     // Если регистрация не подтверждена
-                    echo '<div class="rmenu"><p>';
-                    if (!empty($user['regadm']))
-                        echo 'Ваша заявка на регистроацию отклонена.<br />Причина:<br />' . $res['regadm'];
-                    else
-                        echo 'Приносим извинения, но Ваша заявка на регистрацию ещё не рассмотрена.<br />Пожалуйста ожидайте.';
-                    echo '</p></div>';
+                    echo '<div class="rmenu"><p>' . $lng['registration_not_approved'] . '</p></div>';
                 } else {
                     // Если все проверки прошли удачно, подготавливаем вход на сайт
                     if ($_POST['mem'] == 1) {
@@ -94,7 +88,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
                         header('Location: ' . $home . '/index.php?act=digest&last=' . $user['lastdate']);
                     else
                         header('Location: ' . $home . '/index.php');
-                    echo '<div class="gmenu"><p><b><a href="index.php?act=digest">Войти на сайт</a></b></p></div>';
+                    echo '<div class="gmenu"><p><b><a href="index.php?act=digest">' . $lng['enter_on_site'] . '</a></b></p></div>';
                 }
             } else {
                 // Если логин неудачный
@@ -103,25 +97,25 @@ if (!$error && $user_pass && ($user_login || $id)) {
                     $failed_login = $user['failed_login'] + 1;
                     mysql_query("UPDATE `users` SET `failed_login` = '$failed_login' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
                 }
-                $error[] = 'Авторизация не прошла';
+                $error[] = $lng['authorisation_not_passed'];
             }
         }
     } else {
-        $error[] = 'Авторизация не прошла';
+        $error[] = $lng['authorisation_not_passed'];
     }
 }
-
 if ($display_form) {
     if ($error)
         echo display_error($error);
-    echo '<div class="gmenu"><form action="login.php" method="post">' .
-        'Имя:<br/><input type="text" name="n" value="' . htmlentities($user_login, ENT_QUOTES, 'UTF-8') . '" maxlength="20"/><br/>' .
-        'Пароль:<br/><input type="password" name="p" maxlength="20"/><br/>' .
-        '<input type="checkbox" name="mem" value="1" checked="checked"/>Запомнить меня<br/>' .
-        '<input type="submit" value="Вход"/></form></div>' .
-        '<div class="phdr"><a href="str/skl.php?continue">Забыли пароль?</a></div>';
+    echo '<div class="gmenu"><form action="login.php" method="post"><p>' . $lng['login_name'] . ':<br/>' .
+        '<input type="text" name="n" value="' . htmlentities($user_login, ENT_QUOTES, 'UTF-8') . '" maxlength="20"/>' .
+        '<br/>' . $lng['password'] . ':<br/>' .
+        '<input type="password" name="p" maxlength="20"/></p>' .
+        '<p><input type="checkbox" name="mem" value="1" checked="checked"/>' . $lng['remember'] . '</p>' .
+        '<p><input type="submit" value="' . $lng['login'] . '"/></p>' .
+        '</form></div>' .
+        '<div class="phdr"><a href="str/skl.php?continue">' . $lng['forgotten_password'] . '?</a></div>';
 }
 
-require_once('incfiles/end.php');
-
+require('incfiles/end.php');
 ?>

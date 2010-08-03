@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 
 $rootpath = '';
-require_once('incfiles/core.php');
+require('incfiles/core.php');
 
 $adres = trim($_POST['adres']);
 switch ($adres) {
@@ -32,7 +32,7 @@ switch ($adres) {
         break;
 
     case 'privat':
-        header("location: $home/index.php?act=cab");
+        header("location: $home/str/my_cabinet.php");
         break;
 
     case 'prof':

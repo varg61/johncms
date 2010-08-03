@@ -1,0 +1,4 @@
+forum_rules                   :::   Правила Форума
+smileys_adm                   :::   Для администрации
+tags_faq                      :::   FAQ по тэгам
+translit_help                 :::   Справка по транслиту

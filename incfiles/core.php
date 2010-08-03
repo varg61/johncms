@@ -130,13 +130,15 @@ $req = mysql_query("SELECT * FROM `cms_settings`");
 $set = array ();
 while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
 mysql_free_result($req);
-$emailadmina = $set['emailadmina']; // E-mail администратора
-$sdvigclock = $set['sdvigclock'];   // Временной сдвиг по умолчанию для системы
-$copyright = $set['copyright'];     // Коприайт сайта
-$home = $set['homeurl'];            // Домашняя страница
-$ras_pages = 'txt';                 // Расширение текстовых страниц
-$admp = $set['admp'];               // Папка с Админкой
-$flsz = $set['flsz'];               // Максимальный размер файлов
+$language = isset($set['language']) ? $set['language'] : 'ru'; // Язык системы по умолчанию
+$sys_language = $language;
+$emailadmina = $set['emailadmina'];                            // E-mail администратора
+$sdvigclock = $set['sdvigclock'];                              // Временной сдвиг по умолчанию для системы
+$copyright = $set['copyright'];                                // Коприайт сайта
+$home = $set['homeurl'];                                       // Домашняя страница
+$ras_pages = 'txt';                                            // Расширение текстовых страниц
+$admp = $set['admp'];                                          // Папка с Админкой
+$flsz = $set['flsz'];                                          // Максимальный размер файлов
 
 /*
 -----------------------------------------------------------------
@@ -144,15 +146,15 @@ $flsz = $set['flsz'];               // Максимальный размер ф�
 -----------------------------------------------------------------
 */
 $set_user = array ();
-$set_user['sdvig'] = 0;              // Временной сдвиг
-$set_user['smileys'] = 1;            // Включить(1) выключить(0) смайлы
-$set_user['quick_go'] = 1;           // Быстрый переход
-$set_user['avatar'] = 1;             // Аватары
-$set_user['field_w'] = 20;           // Ширина текстового поля ввода
-$set_user['field_h'] = 3;            // Высота текстового поля ввода
-$set_user['skin'] = $set['skindef']; // Тема оформления
-$set_user['kmess'] = 10;             // Число сообщений на страницу
-$kmess = $set_user['kmess'];         // Число сообщений на страницу для SQL запросов
+$set_user['sdvig'] = 0;                                        // Временной сдвиг
+$set_user['smileys'] = 1;                                      // Включить(1) выключить(0) смайлы
+$set_user['quick_go'] = 1;                                     // Быстрый переход
+$set_user['avatar'] = 1;                                       // Аватары
+$set_user['field_w'] = 20;                                     // Ширина текстового поля ввода
+$set_user['field_h'] = 3;                                      // Высота текстового поля ввода
+$set_user['skin'] = $set['skindef'];                           // Тема оформления
+$set_user['kmess'] = 10;                                       // Число сообщений на страницу
+$kmess = $set_user['kmess'];                                   // Число сообщений на страницу для SQL запросов
 $user_id = false;
 $user_ps = false;
 $rights = 0;
@@ -196,7 +198,7 @@ if ($set['clean_time'] <= ($realtime - 43200)) {
     // Очищаем таблицу `cms_guests`
     mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($realtime - 600) . "'");
     mysql_query("OPTIMIZE TABLE `cms_guests`");
-    mysql_query("UPDATE `cms_settings` SET  `val`='" . $realtime . "' WHERE `key`='clean_time'");
+    mysql_query("UPDATE `cms_settings` SET  `val`='$realtime' WHERE `key`='clean_time'");
 }
 
 /*
@@ -252,9 +254,10 @@ if ($user_id && $user_ps) {
                 $set_user['skin'] = 'default';
             }
             $kmess = (int)$set_user['kmess']; // Число сообщений на страницу
-            // Получаем данные пользователя
             $login = $datauser['name']; // Логин (Ник) пользователя
-            $rights = $datauser['rights'];
+            $rights = $datauser['rights']; // Права доступа
+            if(!empty($datauser['set_language']))
+                $language = $datauser['set_language']; // Язык пользователя
             // Проверка IP адреса, если менялся, то фиксируем новый
             if ($datauser['ip'] != $ipl){
                 // Обновляем время на предыдущем адресе
@@ -310,12 +313,35 @@ if ($user_id && $user_ps) {
 
 /*
 -----------------------------------------------------------------
+Загружаем язык системы
+-----------------------------------------------------------------
+*/
+function load_lng($module = 'main'){
+    global $language;
+    $req = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '$language' AND `module` = '$module'");
+    if(mysql_num_rows($req)){
+        $out = array();
+        while($res = mysql_fetch_assoc($req)) {
+            if(!empty($res['custom'])) {
+                $out[$res['var']] = $res['custom'];
+            } else {
+                $out[$res['var']] = $res['default'];
+            }
+        }
+        return $out;
+    } else {
+        return false;
+    }
+}
+$lng = load_lng();
+
+/*
+-----------------------------------------------------------------
 Подключаем служебные файлы
 -----------------------------------------------------------------
 */
-if(!include($rootpath . 'incfiles/languages/' . $set['language'] . '/default.php'))
-    echo '<p>Error: cannot include the main language file</p>';
 require($rootpath . 'incfiles/func.php');
+
 /*
 -----------------------------------------------------------------
 Актуализация переменных

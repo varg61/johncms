@@ -13,11 +13,11 @@
 */
 
 define('_IN_JOHNCMS', 1);
-require_once('../incfiles/core.php');
-require_once('../incfiles/head.php');
+require('../incfiles/core.php');
 if (!$user_id) {
-    display_error('Только для авторизованных посетителей');
-    require_once('../incfiles/end.php');
+    require('../incfiles/head.php');
+    display_error($lng['access_guest_forbidden']);
+    require('../incfiles/end.php');
     exit;
 }
 if ($id && $id != $user_id && $rights > 0) {
@@ -25,18 +25,19 @@ if ($id && $id != $user_id && $rights > 0) {
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
     if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
-        $textl = 'История IP: ' . $user['name'];
+        $textl = $lng['ip_history'] . ': ' . $user['name'];
     } else {
-        echo display_error('Такого пользователя не существует');
-        require_once('../incfiles/end.php');
+        require('../incfiles/head.php');
+        echo display_error($lng['user_does_not_exist']);
+        require('../incfiles/end.php');
         exit;
     }
 } else {
-    $textl = 'История IP';
+    $textl = $lng['ip_history'];
     $user = $datauser;
 }
-
-echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>Анкета</b></a> | История IP</div>';
+require('../incfiles/head.php');
+echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['ip_history'] . '</div>';
 echo '<div class="user"><p>';
 $arg = array (
     'lastvisit' => 1,
@@ -45,9 +46,9 @@ $arg = array (
 echo display_user($user, $arg);
 echo '</p></div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-if($total){
+if ($total) {
     $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "' ORDER BY `time` DESC LIMIT $start,$kmess");
-    while($res = mysql_fetch_assoc($req)){
+    while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $iptime = $user['ip'] == $res['user_ip'] ? $user['lastdate'] : $res['time'];
         $link = $rights > 0 ? '<a href="../' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $res['user_ip'] . '">' . long2ip($res['user_ip']) . '</a>' : long2ip($res['user_ip']);
@@ -58,9 +59,11 @@ if($total){
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
     echo '<p>' . display_pagination('users_iphist.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
-    echo '<p><form action="users_iphist.php?id=' . $user['id'] . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+    echo '<p><form action="users_iphist.php?id=' . $user['id'] . '" method="post">' .
+        '<input type="text" name="page" size="2"/>' .
+        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+        '</form></p>';
 }
 
-require_once('../incfiles/end.php');
-
+require('../incfiles/end.php');
 ?>

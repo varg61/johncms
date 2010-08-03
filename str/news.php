@@ -13,86 +13,100 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
-$textl = 'Новости ресурса';
 $headmod = 'news';
-require_once('../incfiles/core.php');
-require_once('../incfiles/head.php');
-
+require('../incfiles/core.php');
+$lng_news = load_lng('news'); // Загружаем язык модуля
+$textl = $lng_news['site_news'];
+require('../incfiles/head.php');
 switch ($do) {
     case 'add':
-        ////////////////////////////////////////////////////////////
-        // Добавление новости                                     //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Добавление новости
+        -----------------------------------------------------------------
+        */
         if ($rights >= 6) {
-            echo '<div class="phdr">Добавить новость</div>';
+            echo '<div class="phdr"><a href="news.php"><b>' . $lng['news'] . '</b></a> | ' . $lng_news['add'] . '</div>';
             $old = 20;
-            if ($datauser['lastpost'] > ($realtime - $old)) {
-                echo '<p><b>Антифлуд!</b><br />Вы не можете так часто писать<br/>Порог ' . $old . ' секунд<br/><br/><a href="news.php">Назад</a></p>';
-                require_once('../incfiles/end.php');
-                exit;
-            }
             if (isset($_POST['submit'])) {
-                if (empty($_POST['name'])) {
-                    echo "Вы не ввели заголовок<br/><a href='news.php?act=new'>Повторить</a><br/>";
-                    require_once('../incfiles/end.php');
-                    exit;
-                }
-                if (empty($_POST['text'])) {
-                    echo "Вы не ввели текст<br/><a href='news.php?act=new'>Повторить</a><br/>";
-                    require_once('../incfiles/end.php');
-                    exit;
-                }
-                $name = check($_POST['name']);
-                $text = trim($_POST['text']);
-                if (!empty($_POST['pf']) && ($_POST['pf'] != '0')) {
-                    $pf = intval($_POST['pf']);
-                    $rz = $_POST['rz'];
-                    $pr = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$pf' AND `type` = 'r'");
-                    while ($pr1 = mysql_fetch_array($pr)) {
-                        $arr[] = $pr1['id'];
-                    }
-                    foreach ($rz as $v) {
-                        if (in_array($v, $arr)) {
-                            mysql_query("INSERT INTO `forum` SET
-                            `refid` = '$v',
-                            `type` = 't',
-                            `time` = '$realtime',
-                            `user_id` = '$user_id',
-                            `from` = '$login',
-                            `text` = '$name'");
-                            $rid = mysql_insert_id();
-                            mysql_query("INSERT INTO `forum` SET
-                            `refid` = '$rid',
-                            `type` = 'm',
-                            `time` = '$realtime',
-                            `user_id` = '$user_id',
-                            `from` = '$login',
-                            `ip` = '$ipp',
-                            `soft` = '" . mysql_real_escape_string($agn) . "',
-                            `text` = '" . mysql_real_escape_string($text) . "'");
+                $error = array ();
+                $name = isset($_POST['name']) ? check($_POST['name']) : false;
+                $text = isset($_POST['text']) ? trim($_POST['text']) : false;
+                if (!$name)
+                    $error[] = $lng_news['error_title'];
+                if (!$text)
+                    $error[] = $lng_news['error_text'];
+                $flood = antiflood();
+                if ($flood)
+                    $error[] = $lng_news['error_flood'] . ' ' . $flood . '&#160;' . $lng_news['seconds'];
+                if (!$error) {
+                    if (!empty($_POST['pf']) && ($_POST['pf'] != '0')) {
+                        $pf = intval($_POST['pf']);
+                        $rz = $_POST['rz'];
+                        $pr = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$pf' AND `type` = 'r'");
+                        while ($pr1 = mysql_fetch_array($pr)) {
+                            $arr[] = $pr1['id'];
+                        }
+                        foreach ($rz as $v) {
+                            if (in_array($v, $arr)) {
+                                mysql_query("INSERT INTO `forum` SET
+                                    `refid` = '$v',
+                                    `type` = 't',
+                                    `time` = '$realtime',
+                                    `user_id` = '$user_id',
+                                    `from` = '$login',
+                                    `text` = '$name'
+                                ");
+                                $rid = mysql_insert_id();
+                                mysql_query("INSERT INTO `forum` SET
+                                    `refid` = '$rid',
+                                    `type` = 'm',
+                                    `time` = '$realtime',
+                                    `user_id` = '$user_id',
+                                    `from` = '$login',
+                                    `ip` = '$ipp',
+                                    `soft` = '" . mysql_real_escape_string($agn) . "',
+                                    `text` = '" . mysql_real_escape_string($text) . "'
+                                ");
+                            }
                         }
                     }
+                    mysql_query("INSERT INTO `news` SET
+                        `time` = '$realtime',
+                        `avt` = '$login',
+                        `name` = '$name',
+                        `text` = '" . mysql_real_escape_string($text) . "',
+                        `kom` = '$rid'
+                    ");
+                    mysql_query("UPDATE `users` SET
+                        `lastpost` = '$realtime'
+                        WHERE `id` = '$user_id'
+                    ");
+                    echo '<p>' . $lng_news['article_added'] . '<br /><a href="news.php">' . $lng_news['to_news'] . '</a></p>';
+                } else {
+                    echo display_error($error, '<a href="news.php">' . $lng_news['to_news'] . '</a>');
                 }
-                mysql_query("insert into `news` values(0,'$realtime','$login','$name','" . mysql_real_escape_string($text) . "','$rid')");
-                mysql_query("UPDATE `users` SET `lastpost` = '$realtime' WHERE `id` = '$user_id'");
-                echo "Новость добавлена.<p><a href='news.php'>Продолжить</a></p>";
             } else {
-                echo '<form action="news.php?do=add" method="post">';
-                echo '<div class="menu"><p><h3>Заголовок</h3><input type="text" name="name"/></p>';
-                echo '<p><h3>Текст</h3><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="text"></textarea></p>';
-                echo '<p><h3>Обсуждение</h3>';
+                echo '<form action="news.php?do=add" method="post"><div class="menu">' .
+                    '<p><h3>' . $lng_news['article_title'] . '</h3>' .
+                    '<input type="text" name="name"/></p>' .
+                    '<p><h3>' . $lng_news['article_text'] . '</h3>' .
+                    '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="text"></textarea></p>' .
+                    '<p><h3>' . $lng_news['discuss'] . '</h3>';
                 $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
-                echo '<input type="radio" name="pf" value="0" checked="checked" />Не обсуждать<br />';
+                echo '<input type="radio" name="pf" value="0" checked="checked" />' . $lng_news['discuss_off'] . '<br />';
                 while ($fr1 = mysql_fetch_array($fr)) {
-                    echo "<input type='radio' name='pf' value='" . $fr1['id'] . "'/>$fr1[text]<select name='rz[]'>";
-                    $pr = mysql_query("select * from `forum` where type='r' and refid= '" . $fr1['id'] . "'");
+                    echo '<input type="radio" name="pf" value="' . $fr1['id'] . '"/>' . $fr1['text'] . '<select name="rz[]">';
+                    $pr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $fr1['id'] . "'");
                     while ($pr1 = mysql_fetch_array($pr)) {
                         echo '<option value="' . $pr1['id'] . '">' . $pr1['text'] . '</option>';
                     }
                     echo '</select><br/>';
                 }
-                echo '</p></div><div class="bmenu"><input type="submit" name="submit" value="Ok!"/></div></form><p><a href="news.php">К новостям</a></p>';
+                echo '</p></div><div class="bmenu">' .
+                    '<input type="submit" name="submit" value="' . $lng['save'] . '"/>' .
+                    '</div></form>' .
+                    '<p><a href="news.php">' . $lng_news['to_news'] . '</a></p>';
             }
         } else {
             header("location: news.php");
@@ -100,81 +114,91 @@ switch ($do) {
         break;
 
     case 'edit':
-        ////////////////////////////////////////////////////////////
-        // Редактирование новости                                 //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Редактирование новости
+        -----------------------------------------------------------------
+        */
         if ($rights >= 6) {
-            echo '<div class="phdr">Редактирование новости</div>';
-            if (empty($_GET['id'])) {
-                echo "Ошибка!<br/><a href='news.php'>К новостям</a><br>";
-                require_once('../incfiles/end.php');
+            echo '<div class="phdr"><a href="news.php"><b>' . $lng['news'] . '</b></a> | ' . $lng_news['edit_article'] . '</div>';
+            if (!$id) {
+                echo display_error($lng['error_wrong_data'], '<a href="news.php">' . $lng_news['to_news'] . '</a>');
+                require('../incfiles/end.php');
                 exit;
             }
             if (isset($_POST['submit'])) {
-                if (empty($_POST['name'])) {
-                    echo "Вы не ввели заголовок<br/><a href='news.php?act=edit&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once('../incfiles/end.php');
-                    exit;
-                }
-                if (empty($_POST['text'])) {
-                    echo "Вы не ввели текст<br/><a href='news.php?act=edit&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once('../incfiles/end.php');
-                    exit;
-                }
+                $error = array ();
+                if (empty($_POST['name']))
+                    $error[] = $lng_news['error_title'];
+                if (empty($_POST['text']))
+                    $error[] = $lng_news['error_text'];
                 $name = check($_POST['name']);
                 $text = mysql_real_escape_string(trim($_POST['text']));
-                mysql_query("UPDATE `news` SET
-            `name` = '" . $name . "',
-            `text` = '" . $text . "'
-            WHERE `id` = '" . $id . "';");
-                echo '<p>Новость изменена.<br /><a href="news.php">Продолжить</a></p>';
+                if (!$error) {
+                    mysql_query("UPDATE `news` SET
+                        `name` = '$name',
+                        `text` = '$text'
+                        WHERE `id` = '$id'
+                    ");
+                } else {
+                    echo display_error($error, '<a href="news.php?act=edit&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                }
+                echo '<p>' . $lng_news['article_changed'] . '<br /><a href="news.php">' . $lng['continue'] . '</a></p>';
             } else {
-                $req = mysql_query("SELECT * FROM `news` WHERE `id` = '" . $id . "'");
-                $res = mysql_fetch_array($req);
-                echo '<form action="news.php?do=edit&amp;id=' . $id . '" method="post">Заголовок:<br/><input type="text" name="name" value="' . $res['name'] . '"/><br/>Текст:<br/><textarea cols="30" rows="5" name="text">'
-                    . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/><input type="submit" name="submit" value="Ok!"/></form><p><a href="news.php">К новостям</a></p>';
+                $req = mysql_query("SELECT * FROM `news` WHERE `id` = '$id' LIMIT 1");
+                $res = mysql_fetch_assoc($req);
+                echo '<div class="menu"><form action="news.php?do=edit&amp;id=' . $id . '" method="post">' .
+                    '<p><h3>' . $lng_news['article_title'] . '</h3>' .
+                    '<input type="text" name="name" value="' . $res['name'] . '"/></p>' .
+                    '<p><h3>' . $lng_news['article_text'] . '</h3>' .
+                    '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="text">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p>' .
+                    '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
+                    '</form></div>' .
+                    '<div class="phdr"><a href="news.php">' . $lng_news['to_news'] . '</a></div>';
             }
         } else {
-            header("location: news.php");
+            header('location: news.php');
         }
         break;
 
     case 'clean':
-        ////////////////////////////////////////////////////////////
-        // Чистка новостей                                        //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Чистка новостей
+        -----------------------------------------------------------------
+        */
         if ($rights >= 7) {
-            echo '<div class="phdr">Чистка новостей</div>';
+            echo '<div class="phdr"><a href="news.php"><b>' . $lng_news['site_news'] . '</b></a> | ' . $lng['clear'] . '</div>';
             if (isset($_POST['submit'])) {
                 $cl = isset($_POST['cl']) ? intval($_POST['cl']) : '';
                 switch ($cl) {
                     case '1':
                         // Чистим новости, старше 1 недели
                         mysql_query("DELETE FROM `news` WHERE `time`<='" . ($realtime - 604800) . "'");
-                        mysql_query("OPTIMIZE TABLE `news`;");
-                        echo '<p>Удалены все новости, старше 1 дня.</p><p><a href="news.php">К новостям</a></p>';
+                        mysql_query("OPTIMIZE TABLE `news`");
+                        echo '<p>' . $lng_news['clear_week_confirmation'] . '</p><p><a href="news.php">' . $lng_news['to_news'] . '</a></p>';
                         break;
 
                     case '2':
                         // Проводим полную очистку
                         mysql_query("TRUNCATE TABLE `news`");
-                        echo '<p>Удалены все новости.</p><p><a href="news.php">К новостям</a></p>';
+                        echo '<p>' . $lng_news['clear_all_confirmation'] . '</p><p><a href="news.php">' . $lng_news['to_news'] . '</a></p>';
                         break;
                         default :
-                    // Чистим сообщения, старше 1 месяца
-                    mysql_query("DELETE FROM `news` WHERE `time`<='" . ($realtime - 2592000) . "'");
+                        // Чистим сообщения, старше 1 месяца
+                        mysql_query("DELETE FROM `news` WHERE `time`<='" . ($realtime - 2592000) . "'");
                         mysql_query("OPTIMIZE TABLE `news`;");
-                        echo '<p>Удалены все новости, старше 1 недели.</p><p><a href="news.php">К новостям</a></p>';
+                        echo '<p>' . $lng_news['clear_month_confirmation'] . '</p><p><a href="news.php">' . $lng_news['to_news'] . '</a></p>';
                 }
             } else {
-                echo '<p><u>Что чистим?</u>';
-                echo '<form id="clean" method="post" action="news.php?do=clean">';
-                echo '<input type="radio" name="cl" value="0" checked="checked" />Старше 1 месяца<br />';
-                echo '<input type="radio" name="cl" value="1" />Старше 1 недели<br />';
-                echo '<input type="radio" name="cl" value="2" />Очищаем все<br />';
-                echo '<input type="submit" name="submit" value="Очистить" />';
-                echo '</form></p>';
-                echo '<p><a href="news.php">' . $lng['cancel'] . '</a></p>';
+                echo '<div class="menu"><form id="clean" method="post" action="news.php?do=clean">' .
+                    '<p><h3>' . $lng_news['clear_parametres'] . '</h3>' .
+                    '<input type="radio" name="cl" value="0" checked="checked" />' . $lng_news['clear_month'] . '<br />' .
+                    '<input type="radio" name="cl" value="1" />' . $lng_news['clear_week'] . '<br />' .
+                    '<input type="radio" name="cl" value="2" />' . $lng['clear_all'] . '</p>' .
+                    '<p><input type="submit" name="submit" value="' . $lng['clear'] . '" /></p>' .
+                    '</form></div>' .
+                    '<div class="phdr"><a href="news.php">' . $lng['cancel'] . '</a></div>';
             }
         } else {
             header("location: news.php");
@@ -182,16 +206,19 @@ switch ($do) {
         break;
 
     case 'del':
-        ////////////////////////////////////////////////////////////
-        // Удаление новости                                       //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Удаление новости
+        -----------------------------------------------------------------
+        */
         if ($rights >= 6) {
-            echo '<div class="phdr">Удалить новость</div>';
+            echo '<div class="phdr"><a href="news.php"><b>' . $lng_news['site_news'] . '</b></a> | ' . $lng_news['delete_article'] . '</div>';
             if (isset($_GET['yes'])) {
                 mysql_query("DELETE FROM `news` WHERE `id` = '" . $id . "' LIMIT 1");
-                echo '<p>Новость удалена!<br/><a href="news.php">К новостям</a></p>';
+                echo '<p>' . $lng_news['article_deleted'] . '<br/><a href="news.php">' . $lng_news['to_news'] . '</a></p>';
             } else {
-                echo '<p>Вы уверены,что хотите удалить новость?<br/><a href="news.php?do=del&amp;id=' . $id . '&amp;yes">Да</a> | <a href="news.php">Нет</a></p>';
+                echo '<p>' . $lng['delete_confirmation'] . '<br/>' .
+                    '<a href="news.php?do=del&amp;id=' . $id . '&amp;yes">' . $lng['yes'] . '</a> | <a href="news.php">' . $lng['no'] . '</a></p>';
             }
         } else {
             header("location: news.php");
@@ -199,51 +226,51 @@ switch ($do) {
         break;
 
     default:
-        ////////////////////////////////////////////////////////////
-        // Вывод списка новостей                                  //
-        ////////////////////////////////////////////////////////////
-        echo '<div class="phdr">Новости ресурса</div>';
+        /*
+        -----------------------------------------------------------------
+        Вывод списка новостей
+        -----------------------------------------------------------------
+        */
+        echo '<div class="phdr"><b>' . $lng_news['site_news'] . '</b></div>';
+        if ($rights >= 6)
+            echo '<div class="topmenu"><a href="news.php?do=add">' . $lng_news['add'] . '</a> | <a href="news.php?do=clean">' . $lng['clear'] . '</a></div>';
         $req = mysql_query("SELECT COUNT(*) FROM `news`");
         $total = mysql_result($req, 0);
-        $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT " . $start . "," . $kmess . ";");
-        while ($nw1 = mysql_fetch_array($req)) {
+        $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT $start, $kmess");
+        while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $text = $nw1['text'];
+            $text = $res['text'];
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
             $text = str_replace("\r\n", "<br/>", $text);
             $text = tags($text);
             if ($set_user['smileys'])
                 $text = smileys($text, 1);
-            $vr = $nw1['time'] + $set_user['sdvig'] * 3600;
+            $vr = $res['time'] + $set_user['sdvig'] * 3600;
             $vr1 = date("d.m.y / H:i", $vr);
-            echo '<b>' . $nw1['name'] . '</b><br/>' . $text . '<div class="func"><font color="#999999">Добавил: ' . $nw1['avt'] . ' (' . $vr1 . ')</font><br/>';
-            if ($nw1['kom'] != 0 && $nw1['kom'] != "") {
-                $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $nw1['kom'] . "'");
+            echo '<h3>' . $res['name'] . '</h3>' .
+                '<span class="gray"><small>' . $lng_news['author'] . ': ' . $res['avt'] . ' (' . $vr1 . ')</small></span>' .
+                '<br />' . $text . '<div class="sub">';
+            if ($res['kom'] != 0 && $res['kom'] != "") {
+                $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");
                 $komm = mysql_result($mes, 0) - 1;
                 if ($komm >= 0)
-                    echo '<a href="../forum/?id=' . $nw1['kom'] . '">Обсудить на форуме (' . $komm . ')</a><br/>';
+                    echo '<a href="../forum/?id=' . $res['kom'] . '">' . $lng_news['discuss_on_forum'] . ' (' . $komm . ')</a><br/>';
             }
             if ($rights >= 6) {
-                echo '<a href="news.php?do=edit&amp;id=' . $nw1['id'] . '">Изменить</a> | <a href="news.php?do=del&amp;id=' . $nw1['id'] . '">Удалить</a>';
+                echo '<a href="news.php?do=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a> | ' .
+                    '<a href="news.php?do=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>';
             }
             echo '</div></div>';
             ++$i;
         }
         echo '<div class="phdr">' . $lng['total'] . ':&#160;' . $total . '</div>';
-        echo '<p>';
         if ($total > $kmess) {
             echo '<p>' . display_pagination('news.php?', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
-        }
-        echo '</p>';
-        if ($rights >= 6) {
-            echo '<p><a href="news.php?do=add">Добавить новость</a>';
-            if ($rights >= 7)
-                echo '<br /><a href="news.php?do=clean">Чистка новостей</a>';
-            echo '</p>';
+            echo '<p><form action="news.php" method="post">' .
+                '<input type="text" name="page" size="2"/>' .
+                '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
 }
 
-require_once('../incfiles/end.php');
-
+require('../incfiles/end.php');
 ?>

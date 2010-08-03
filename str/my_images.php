@@ -14,15 +14,15 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'anketa';
-$textl = 'Редактирование Анкеты';
-require_once('../incfiles/core.php');
-require_once('../incfiles/head.php');
-require_once('../incfiles/lib/class.upload.php');
+require('../incfiles/core.php');
+$lng_profile = load_lng('profile');
+$textl = $lng_profile['profile_edit'];
+require('../incfiles/head.php');
+require('../incfiles/lib/class.upload.php');
 if (!$user_id) {
-    display_error('Только для зарегистрированных посетителей');
-    require_once('../incfiles/end.php');
+    display_error($lng['access_guest_forbidden']);
+    require('../incfiles/end.php');
     exit;
 }
 if ($id && $id != $user_id && $rights >= 7) {
@@ -32,13 +32,13 @@ if ($id && $id != $user_id && $rights >= 7) {
         $user = mysql_fetch_assoc($req);
         if ($user['rights'] > $datauser['rights']) {
             // Если не хватает прав, выводим ошибку
-            echo display_error('Вы не можете редактировать анкету старшего Вас по должности');
-            require_once('../incfiles/end.php');
+            echo display_error($lng_profile['error_rights']);
+            require('../incfiles/end.php');
             exit;
         }
     } else {
-        echo display_error('Такого пользователя не существует');
-        require_once('../incfiles/end.php');
+        echo display_error($lng['error_user_not_exist']);
+        require('../incfiles/end.php');
         exit;
     }
 } else {
@@ -46,8 +46,13 @@ if ($id && $id != $user_id && $rights >= 7) {
     $user = $datauser;
 }
 switch ($act) {
-    case 'up_avatar':
-        echo '<div class="phdr"><b>Выгружаем аватар</b></div>';
+    case 'avatar':
+        /*
+        -----------------------------------------------------------------
+        Выгружаем аватар
+        -----------------------------------------------------------------
+        */
+        echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['upload_avatar'] . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
@@ -67,28 +72,27 @@ switch ($act) {
                 $handle->image_convert = 'png';
                 $handle->process('../files/users/avatar/');
                 if ($handle->processed) {
-                    echo '<div class="gmenu"><p>Аватар загружен<br /><a href="my_data.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
-                    echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
+                    echo '<div class="gmenu"><p>' . $lng_profile['avatar_uploaded'] . '<br />' .
+                        '<a href="my_data.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
+                        '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                 } else {
                     echo display_error($handle->error);
                 }
                 $handle->clean();
             }
         } else {
-            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_avatar&amp;id=' . $user['id'] . '"><div class="menu"><p>';
-            echo 'Выберите изображение:<br /><input type="file" name="imagefile" value="" />';
-            echo '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" />';
-            echo '</p><p><input type="submit" name="submit" value="Выгрузить" />';
-            echo '</p></div></form>';
-            echo '<div class="phdr"><small>Для выгрузки разрешены файлы JPG, JPEG, PNG, GIF<br />Размер файла не должен превышать ' . $flsz . ' кб.<br />';
-            echo 'Вне зависимости от разрешения исходного файла, он будет преобразован в размер 32х32<br />';
-            echo 'Новое изображение заменит старое (если оно было)';
-            echo 'Для лучшего результата, исходное изображение должно иметь равное соотношение сторон</small></div>';
+            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' .
+                '<div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
+                '<input type="file" name="imagefile" value="" />' .
+                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" /></p>' .
+                '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" />' .
+                '</p></div></form>' .
+                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $flsz . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4'] . '</small></div>';
         }
         break;
 
     case 'up_photo':
-        echo '<div class="phdr"><b>Выгружаем фото</b></div>';
+        echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['upload_photo'] . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
@@ -117,8 +121,8 @@ switch ($act) {
                     $handle->image_convert = 'jpg';
                     $handle->process('../files/users/photo/');
                     if ($handle->processed) {
-                        echo '<div class="gmenu"><p>Фотография загружена<br /><a href="my_data.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
-                        echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">В анкету</a></div>';
+                        echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="my_data.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                        echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                     } else {
                         echo display_error($handle->error);
                     }
@@ -128,18 +132,15 @@ switch ($act) {
                 $handle->clean();
             }
         } else {
-            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_photo&amp;id=' . $user['id'] . '"><div class="menu"><p>';
-            echo 'Выберите изображение:<br /><input type="file" name="imagefile" value="" />';
-            echo '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" />';
-            echo '</p><p><input type="submit" name="submit" value="Выгрузить" />';
-            echo '</p></div></form>';
-            echo '<div class="phdr"><small>Для выгрузки разрешены файлы JPG, JPEG, PNG, GIF<br />Размер файла не должен превышать ' . $flsz . 'кб.<br />';
-            echo 'Вне зависимости от разрешения исходного файла, он будет преобразован в размеры не превышающие 640х480<br />';
-            echo 'Новое изображение заменит старое (если оно было)</small></div>';
+            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_photo&amp;id=' . $user['id'] . '"><div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
+                '<input type="file" name="imagefile" value="" />' .
+                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" /></p>' .
+                '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
+                '</div></form>' .
+                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $flsz . 'kb.<br />' . $lng_profile['select_image_help_5'] . '<br />' . $lng_profile['select_image_help_3'] . '</small></div>';
         }
         break;
 }
 
-require_once('../incfiles/end.php');
-
+require('../incfiles/end.php');
 ?>

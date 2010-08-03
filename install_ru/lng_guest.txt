@@ -1,0 +1,23 @@
+captcha                       :::   Код с картинки
+clear_day_ok                  :::   Удалены все сообщения, старше 1 дня
+clear_full_ok                 :::   Гостевая полностью очищена
+clear_param_all               :::   Очищаем все
+clear_param_day               :::   Старше 1 дня
+clear_param_week              :::   Старше 1 недели
+clear_parametres              :::   Параметры очистки
+clear_week_ok                 :::   Все сообщения, старше 1 недели удалены из Гостевой
+edit_post                     :::   Редактируем пост
+error_ban                     :::   Вы не можете писать в Гостевой
+error_captcha_wrong           :::   Проверочный код введен неверно
+error_flood                   :::   Вы не можете так часто добавлять сообщения<br />Пожалуйста, подождите
+error_message_empty           :::   Вы не ввели сообщение
+error_name_empty              :::   Вы не ввели имя
+guestbook_closed              :::   Гостевая закрыта
+guestbook_empty               :::   В Гостевой сообщений нет<br /><b>Будь первым! :)</b>
+message                       :::   Сообщение(max. 5000)
+name                          :::   Имя(max. 25)
+only_authorized               :::   Писать могут только <a href="../login.php">авторизованные</a> посетители
+reply                         :::   Ответить
+reply_already                 :::   <b>Внимание!</b><br />На этот пост уже ответили
+seconds                       :::   секунд
+sent                          :::   Отправить

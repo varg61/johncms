@@ -60,16 +60,6 @@ echo '&#160;<input name="gz" type="checkbox" value="1" ' . ($set['gzip'] ? 'chec
 echo '</p><p><h3>' . $lng['meta_tags'] . '</h3>';
 echo '&#160;' . $lng['meta_keywords'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_key">' . $set['meta_key'] . '</textarea><br />';
 echo '&#160;' . $lng['meta_description'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_desc">' . $set['meta_desc'] . '</textarea>';
-// Выбор языка
-echo '</p><p><h3>' . $lng['system_language'] . '</h3>&#160;<select name="language">';
-$dir = glob($rootpath . 'incfiles/languages/*', GLOB_ONLYDIR);
-foreach ($dir as $val) {
-    if (file_exists($val . '/name.dat')) {
-        $lngdir = substr(strrchr($val, "/"), 1);
-        echo '<option value="' . $lngdir . '"' . ($set['language'] == $lngdir ? ' selected="selected"' : '') . '>' . file_get_contents($val . '/name.dat') . '</option>';
-    }
-}
-echo '</select>';
 // Выбор темы оформления
 echo '</p><p><h3>' . $lng['design_template'] . '</h3>&#160;<select name="skindef">';
 $dir = opendir('../theme');

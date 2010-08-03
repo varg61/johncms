@@ -13,159 +13,128 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-
 if ($rights < 7)
     die('Error: restricted access');
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Управление Чатом</div>';
 switch ($mod) {
     case 'del':
-        if (empty($_GET['id'])) {
-            echo "Ошибка!<br/><a href='chat.php?'>В управление чатом</a><br/>";
-            require_once('../incfiles/end.php');
+        /*
+        -----------------------------------------------------------------
+        Удаляем комнату
+        -----------------------------------------------------------------
+        */
+        echo '<div class="phdr"><a href="index.php?act=mod_chat"><b>' . $lng['chat_management'] . '</b></a> | ' . $lng['chat_room_delete'] . '</div>';
+        if (!$id) {
+            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=mod_chat">' . $lng['back'] . '</a>');
+            require('../incfiles/end.php');
             exit;
         }
-        $typ = mysql_query("select * from `chat` where id='" . $id . "';");
-        $ms = mysql_fetch_array($typ);
-        if ($ms['type'] != "r") {
-            echo "Ошибка!<br/><a href='chat.php?'>В управление чатом</a><br/>";
-            require_once('../incfiles/end.php');
-            exit;
-        }
-        switch ($ms['type']) {
-            case 'r':
-                if (isset($_GET['yes'])) {
-                    $mes = mysql_query("select * from `chat` where refid='" . $id . "';");
-                    while ($mes1 = mysql_fetch_array($mes)) {
-                        mysql_query("delete from `chat` where `id`='" . $mes1['id'] . "';");
-                    }
-                    mysql_query("delete from `chat` where `id`='" . $id . "';");
-                    header("Location: index.php?act=mod_chat");
-                } else {
-                    echo "Вы уверены,что хотите удалить комнату $ms[text]?<br/><a href='index.php?act=mod_chat&amp;mod=del&amp;id=" . $id . "&amp;yes'>Да</a> | <a href='index.php?act=mod_chat'>Нет</a><br/>";
-                }
-                break;
-
-            default:
-                echo "Ошибка!<br/><a href='index.php?act=mod_chat'>В управление чатом</a><br/>";
-                require_once('../incfiles/end.php');
-                exit;
-                break;
-        }
-        break;
-
-    case 'add':
         if (isset($_POST['submit'])) {
-            if ((empty($_POST['tr'])) && (empty($_POST['nr']))) {
-                echo "Вы не ввели имя комнаты!<br/><a href='chat.php?act=crroom'>Повторить</a><br/>";
-                require_once('../incfiles/end.php');
-                exit;
-            }
-            $nr = check($_POST['nr']);
-            $tr = check($_POST['tr']);
-            if ($tr == "vik") {
-                $nr = "Викторина";
-            }
-            if ($tr == "in") {
-                $nr = "Интим";
-            }
-            $q = mysql_query("select * from `chat` where type='r' order by realid desc;");
-            $q1 = mysql_num_rows($q);
-            if ($q1 == 0) {
-                $rid = 1;
-            } else {
-                while ($arr = mysql_fetch_array($q)) {
-                    $arr1[] = $arr['realid'];
-                }
-                $rid = $arr1[0] + 1;
-            }
-            mysql_query("INSERT INTO `chat` SET
-            `realid` = '$rid',
-            `type` = 'r',
-            `dpar` = '$tr',
-            `text` = '$nr'");
+            // Удаляем сообщения комнаты
+            mysql_query("DELETE FROM `chat` WHERE `refid` = '$id'");
+            // Удаляем комнату
+            mysql_query("DELETE FROM `chat` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
             header("Location: index.php?act=mod_chat");
         } else {
-            echo "Добавление комнаты:<br/><form action='index.php?act=mod_chat&amp;mod=add' method='post'>Тип комнаты<br/><select name='tr'><option value=''>простая</option>";
-            $v = mysql_query("select * from `chat` where type='r' and dpar='vik';");
-            $v1 = mysql_num_rows($v);
-            $a = mysql_query("select * from `chat` where type='r' and dpar='in';");
-            $a1 = mysql_num_rows($a);
-            if ($v1 == 0) {
-                echo "<option value='vik'>викторина</option>";
+            // Подтверждение удаления
+            $req = mysql_query("SELECT * FROM `chat` WHERE `type` = 'r' AND `id` = '$id'");
+            if (mysql_num_rows($req)) {
+                $res = mysql_fetch_assoc($req);
+                echo '<div class="rmenu"><form action="index.php?act=mod_chat&amp;mod=del&amp;id=' . $id . '" method="post">' .
+                    '<p>' . $lng['chat_room_delete_warning'] . '<b>' . $res['text'] . '</b>?</p>' .
+                    '<p><input type="submit" name="submit" value="' . $lng['delete'] . '" /></p>' .
+                    '</form></div>' .
+                    '<div class="phdr"><a href="index.php?act=mod_chat">' . $lng['cancel'] . '</a></div>';
+            } else {
+                // Если комната не существует, выводим ошибку
+                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=mod_chat">' . $lng['back'] . '</a>');
+                require('../incfiles/end.php');
+                exit;
             }
-            if ($a1 == 0) {
-                echo "<option value='in'>интим</option>";
-            }
-            echo "</select><br/>Название(если простая):<br/><input type='text' name='nr'/><br/><input type='submit' name='submit' value='Ok!'/><br/></form>";
-            echo "<a href='index.php?act=mod_chat'>В управление чатом</a><br/>";
         }
         break;
 
     case 'edit':
-        if (!$id) {
-            echo "Ошибка!<br/><a href='index.php?act=mod_chat'>В управление чатом</a><br/>";
-            require_once('../incfiles/end.php');
-            exit;
-        }
-        $typ = mysql_query("select * from `chat` where id='" . $id . "';");
-        $ms = mysql_fetch_array($typ);
-        if ($ms['type'] != "r") {
-            echo "Ошибка!<br/><a href='chat.php?'>В управление чатом</a><br/>";
-            require_once('../incfiles/end.php');
-            exit;
-        }
-        if (isset($_POST['submit'])) {
-            if ((empty($_POST['tr'])) && ((empty($_POST['nr'])) || $_POST['nr'] == "Викторина" || $_POST['nr'] == "Интим")) {
-                echo "Вы не ввели новое название!<br/><a href='chat.php?act=edit&amp;id=" . $id . "'>Повторить</a><br/>";
-                require_once('../incfiles/end.php');
+        /*
+        -----------------------------------------------------------------
+        Добавляем / Редактируем комнату
+        -----------------------------------------------------------------
+        */
+        echo '<div class="phdr"><a href="index.php?act=mod_chat"><b>' . $lng['chat_management'] . '</b></a> | ' . ($id ? $lng['chat_room_edit'] : $lng['chat_room_add']) . '</div>';
+        if ($id) {
+            // Если комната редактироется, запрашиваем ее данные в базе
+            $req = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
+            if (mysql_num_rows($req)) {
+                $res = mysql_fetch_assoc($req);
+            } else {
+                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=mod_chat">' . $lng['chat_management'] . '</a>');
+                require('../incfiles/end.php');
                 exit;
             }
-            $nr = check(trim($_POST['nr']));
-            $tr = check(trim($_POST['tr']));
-            if ($tr == "vik") {
-                $nr = "Викторина";
+        } else {
+            $res = array ();
+        }
+        if (isset($_POST['submit'])) {
+            $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+            if (empty($name)) {
+                echo display_error($lng['error_nameto_empty'], '<a href="chat.php?act=edit&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                require('../incfiles/end.php');
+                exit;
             }
-            if ($tr == "in") {
-                $nr = "Интим";
+            switch ($_POST['tr']) {
+                case 'vik':
+                    $room_type = 'vik';
+                    break;
+
+                case 'in':
+                    $room_type = 'in';
+                    break;
+
+                case 'adm':
+                    $room_type = 'adm';
+                    break;
+                    default:
+                    $room_type = '';
             }
-            mysql_query("update `chat` set  dpar='" . $tr . "',text='" . $nr . "' where id='" . $id . "';");
+            if ($id) {
+                // Обновляем данные комнаты в базе
+                mysql_query("UPDATE `chat` SET
+                    `dpar` = '$room_type',
+                    `text` = '" . mysql_real_escape_string($name) . "'
+                    WHERE `id` = '$id'");
+            } else {
+                // Добавляем комнату в базу
+                mysql_query("INSERT INTO `chat` SET
+                    `type` = 'r',
+                    `dpar` = '$room_type',
+                    `text` = '" . mysql_real_escape_string($name) . "'");
+            }
             header("Location: index.php?act=mod_chat");
         } else {
-            echo "Изменить комнату<br/><form action='index.php?act=mod_chat&amp;mod=edit&amp;id=" . $id . "' method='post'>Тип комнаты<br/><select name='tr'>";
-            $v = mysql_query("select * from `chat` where type='r' and dpar='vik';");
-            $v1 = mysql_num_rows($v);
-            $a = mysql_query("select * from `chat` where type='r' and dpar='in';");
-            $a1 = mysql_num_rows($a);
-            if (empty($ms['dpar'])) {
-                echo "<option value=''>простая</option>";
-                if ($v1 == 0) {
-                    echo "<option value='vik'>викторина</option>";
-                }
-                if ($a1 == 0) {
-                    echo "<option value='in'>интим</option>";
-                }
-            }
-            if ($ms['dpar'] == "vik") {
-                echo "<option value='vik'>викторина</option><option value=''>простая</option>";
-                if ($a1 == 0) {
-                    echo "<option value='in'>интим</option>";
-                }
-            }
-            if ($ms['dpar'] == "in") {
-                echo "<option value='in'>интим</option><option value=''>простая</option>";
-                if ($v1 == 0) {
-                    echo "<option value='vik'>викторина</option>";
-                }
-            }
-            echo "</select><br/>Изменить название(если простая):<br/><input type='text' name='nr' value='" . $ms[text] . "'/><br/><input type='submit' name='submit' value='Ok!'/><br/></form>";
+            $quiz_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `chat` WHERE `type` = 'r' AND `dpar` = 'vik'"), 0);
+            $intim_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `chat` WHERE `type` = 'r' AND `dpar` = 'in'"), 0);
+            $adm_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `chat` WHERE `type` = 'r' AND `dpar` = 'adm'"), 0);
+            echo '<form action="index.php?act=mod_chat&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '" method="post">' .
+                '<div class="menu"><p><h3>' . $lng['name_the'] . '</h3>' .
+                '<input type="text" name="name" value="' . $res['text'] . '"/></p>' .
+                '<p><h3>' . $lng['chat_room_type'] . '</h3>' .
+                '<input type="radio" value="0" name="tr" ' . (empty($res['dpar']) == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['chat_room_simply'] . '<br />';
+            if (!$quiz_count || $res['dpar'] == 'vik')
+                echo '<input type="radio" value="vik" name="tr" ' . ($res['dpar'] == 'vik' ? 'checked="checked"' : '') . '/>&#160;' . $lng['chat_quiz'] . '<br />';
+            if (!$intim_count || $res['dpar'] == 'in')
+                echo '<input type="radio" value="in" name="tr" ' . ($res['dpar'] == 'in' ? 'checked="checked"' : '') . '/>&#160;' . $lng['chat_intim'] . '<br />';
+            if (!$adm_count || $res['dpar'] == 'adm')
+                echo '<input type="radio" value="adm" name="tr" ' . ($res['dpar'] == 'adm' ? 'checked="checked"' : '') . '/>&#160;' . $lng['admin_club'];
+            echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
+                '<div class="phdr"><a href="index.php?act=mod_chat">' . $lng['cancel'] . '</a></div>';
         }
-        echo "<a href='index.php?act=mod_chat'>В управление чатом</a><br/>";
         break;
 
     case 'up':
-        ////////////////////////////////////////////////////////////
-        // Перемещение комнаты на одну позицию вверх              //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Перемещение комнаты на одну позицию вверх
+        -----------------------------------------------------------------
+        */
         if ($id) {
             $req = mysql_query("SELECT `realid` FROM `chat` WHERE `type` = 'r' AND `id` = '$id' LIMIT 1");
             if (mysql_num_rows($req)) {
@@ -185,9 +154,11 @@ switch ($mod) {
         break;
 
     case 'down':
-        ////////////////////////////////////////////////////////////
-        // Перемещение комнаты на одну позицию вниз               //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Перемещение комнаты на одну позицию вниз
+        -----------------------------------------------------------------
+        */
         if ($id) {
             $req = mysql_query("SELECT `realid` FROM `chat` WHERE `type` = 'r' AND `id` = '$id' LIMIT 1");
             if (mysql_num_rows($req)) {
@@ -205,23 +176,29 @@ switch ($mod) {
         }
         header('Location: index.php?act=mod_chat');
         break;
-        default :
-    ////////////////////////////////////////////////////////////
-    // Список комнат Чата                                     //
-    ////////////////////////////////////////////////////////////
-    $req = mysql_query("SELECT * FROM `chat` WHERE `type` = 'r' ORDER BY `realid`");
+
+    default:
+        /*
+        -----------------------------------------------------------------
+        Список комнат Чата
+        -----------------------------------------------------------------
+        */
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['chat_management'] . '</div>';
+        $req = mysql_query("SELECT * FROM `chat` WHERE `type` = 'r' ORDER BY `realid`");
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<b>' . $res['text'] . '</b><br />';
-            echo '<div class="sub"><a href="index.php?act=mod_chat&amp;mod=up&amp;id=' . $res['id'] . '">Вверх</a> | ';
-            echo '<a href="index.php?act=mod_chat&amp;mod=down&amp;id=' . $res['id'] . '">Вниз</a> | ';
-            echo '<a href="index.php?act=mod_chat&amp;mod=edit&amp;id=' . $res['id'] . '">Изм.</a> | ';
-            echo '<a href="index.php?act=mod_chat&amp;mod=del&amp;id=' . $res['id'] . '">Удалить</a></div></div>';
+            echo '<b>' . $res['text'] . '</b><br />' .
+                '<div class="sub"><a href="index.php?act=mod_chat&amp;mod=up&amp;id=' . $res['id'] . '">' . $lng['up'] . '</a> | ' .
+                '<a href="index.php?act=mod_chat&amp;mod=down&amp;id=' . $res['id'] . '">' . $lng['down'] . '</a> | ' .
+                '<a href="index.php?act=mod_chat&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a> | ' .
+                '<a href="index.php?act=mod_chat&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>' .
+                '</div></div>';
             ++$i;
         }
-        echo '<div class="gmenu"><form action="index.php?act=mod_chat&amp;mod=add" method="post"><input type="submit" value="Добавить комнату" /></form></div>';
-        echo '<div class="phdr"><a href="../chat/index.php">В чат</a></div>';
+        echo '<div class="gmenu"><form action="index.php?act=mod_chat&amp;mod=edit" method="post">' .
+            '<input type="submit" value="' . $lng['chat_room_add'] . '" /></form></div>' .
+            '<div class="phdr"><a href="../chat/index.php">' . $lng['to_chat'] . '</a></div>';
 }
-echo '<p>' . ($mod ? '<a href="index.php?act=mod_chat">Управление Чатом</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-
+echo '<p>' . ($mod ? '<a href="index.php?act=mod_chat">' . $lng['chat_management'] . '</a><br />' : '') .
+    '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>

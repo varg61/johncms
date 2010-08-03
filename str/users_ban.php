@@ -14,11 +14,12 @@
 
 define('_IN_JOHNCMS', 1);
 $headmod = 'userban';
-require_once('../incfiles/core.php');
+require('../incfiles/core.php');
+$lng_ban = load_lng('ban');
 if (!$user_id) {
-    require_once('../incfiles/head.php');
-    display_error('Только для авторизованных посетителей');
-    require_once('../incfiles/end.php');
+    require('../incfiles/head.php');
+    display_error($lng['access_guest_forbidden']);
+    require('../incfiles/end.php');
     exit;
 }
 if ($id && $id != $user_id) {
@@ -26,48 +27,47 @@ if ($id && $id != $user_id) {
     $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
     if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
-        $textl = 'Список нарушений: ' . $user['name'];
+        $textl = $lng_ban['infringements_list'] . ': ' . $user['name'];
     } else {
-        require_once('../incfiles/head.php');
-        echo display_error('Такого пользователя не существует');
-        require_once('../incfiles/end.php');
+        require('../incfiles/head.php');
+        echo display_error($lng['error_user_not_exist']);
+        require('../incfiles/end.php');
         exit;
     }
 } else {
-    $textl = 'Мои нарушения';
+    $textl = $lng_ban['my_infringements'];
     $user = $datauser;
 }
 
-require_once('../incfiles/head.php');
-require_once('../incfiles/ban.php');
+require('../incfiles/head.php');
 $ban = isset($_GET['ban']) ? intval($_GET['ban']) : 0;
 switch ($act) {
     case 'ban':
-        ////////////////////////////////////////////////////////////
-        // Баним пользователя (добавляем Бан в базу)              //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Баним пользователя (добавляем Бан в базу)
+        -----------------------------------------------------------------
+        */
         if ($rights < 1 || ($rights < 6 && $user['rights']) || ($rights <= $user['rights'])) {
-            echo display_error('У Вас не хватает прав, чтоб банить данного пользователя');
-        } elseif ($user['immunity']) {
-            echo display_error('Данный пользователь имеет Иннунитет, его банить нельзя');
+            echo display_error($lng_ban['ban_rights']);
         } else {
-            echo '<div class="phdr"><b>Баним пользователя</b></div>';
+            echo '<div class="phdr"><b>' . $lng_ban['ban_do'] . '</b></div>';
             echo '<div class="rmenu"><p>' . display_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 $error = false;
-                $term = isset($_POST['term']) ? intval($_POST['term']) : '';
-                $timeval = isset($_POST['timeval']) ? intval($_POST['timeval']) : '';
-                $time = isset($_POST['time']) ? intval($_POST['time']) : '';
+                $term = isset($_POST['term']) ? intval($_POST['term']) : false;
+                $timeval = isset($_POST['timeval']) ? intval($_POST['timeval']) : false;
+                $time = isset($_POST['time']) ? intval($_POST['time']) : false;
                 $reason = !empty($_POST['reason']) ? trim($_POST['reason']) : '';
-                $banref = isset($_POST['banref']) ? intval($_POST['banref']) : '';
+                $banref = isset($_POST['banref']) ? intval($_POST['banref']) : false;
                 if (empty($reason) && empty($banref))
-                    $reason = 'Причина не указана';
+                    $reason = $lng_ban['reason_not_specified'];
                 if (empty($term) || empty($timeval) || empty($time) || $timeval < 1)
-                    $error = 'Отсутствуют необходимые данные';
+                    $error = $lng_ban['error_data'];
                 if ($rights == 1 && $term != 14 || $rights == 2 && $term != 12 || $rights == 3 && $term != 11 || $rights == 4 && $term != 16 || $rights == 5 && $term != 15)
-                    $error = 'Вы не имеете права банить не в своем разделе';
+                    $error = $lng_ban['error_rights_section'];
                 if (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '$id' AND `ban_time` > '$realtime' AND `ban_type` = '$term'"), 0))
-                    $error = 'Такой бан уже есть';
+                    $error = $lng_ban['error_ban_exist'];
                 switch ($time) {
                     case 2:
                         // Часы
@@ -101,115 +101,142 @@ switch ($act) {
                 if (!$error) {
                     // Заносим в базу
                     mysql_query("INSERT INTO `cms_ban_users` SET
-                    `user_id` = '$id',
-                    `ban_time` = '" . ($realtime + $timeval) .
-                        "',
-                    `ban_while` = '$realtime',
-                    `ban_type` = '$term',
-                    `ban_who` = '$login',
-                    `ban_reason` = '" . mysql_real_escape_string($reason) . "'") or die('error');
+                        `user_id` = '$id',
+                        `ban_time` = '" . ($realtime + $timeval) . "',
+                        `ban_while` = '$realtime',
+                        `ban_type` = '$term',
+                        `ban_who` = '$login',
+                        `ban_reason` = '" . mysql_real_escape_string($reason) . "'
+                    ");
                     if ($set_karma['on']) {
                         $points = $set_karma['karma_points'] * 2;
-                        mysql_query("INSERT INTO `karma_users` SET `user_id` = '0', `name` = 'Система', `karma_user` = '$id', `points` = '$points', `type` = '0', `time` = '$realtime', `text` = 'Бан ($ban_term[$term])'");
+                        mysql_query("INSERT INTO `karma_users` SET
+                            `user_id` = '0',
+                            `name` = '" . $lng_ban['system'] . "',
+                            `karma_user` = '$id',
+                            `points` = '$points',
+                            `type` = '0',
+                            `time` = '$realtime',
+                            `text` = '" . $lng['ban'] . " (" . $lng_ban['ban_' . $term] . ")'
+                        ");
                         $plm = explode('|', $user['plus_minus']);
                         $karma = $user['karma'] - $points;
                         $plus_minus = $plm[0] . '|' . ($plm[1] + $points);
-                        mysql_query("UPDATE `users` SET `karma`='$karma', `plus_minus`='$plus_minus' WHERE `id` = '$id' LIMIT 1");
-                        $text = ' и получил <span class="red">-' . $points . ' очков</span> к карме';
+                        mysql_query("UPDATE `users` SET
+                            `karma`='$karma',
+                            `plus_minus`='$plus_minus'
+                            WHERE `id` = '$id' LIMIT 1
+                        ");
+                        $text = ' ' . $lng_ban['also_received'] . ' <span class="red">-' . $points . ' ' . $lng['points'] . '</span> ' . $lng_ban['to_karma'];
                     }
-                    echo '<div class="rmenu"><p><h3>Пользователь забанен ' . $text . '</h3></p></div>';
+                    echo '<div class="rmenu"><p><h3>' . $lng_ban['user_banned'] . ' ' . $text . '</h3></p></div>';
                 } else {
                     echo display_error($error);
                 }
             } else {
                 // Форма параметров бана
-                echo '<form action="users_ban.php?act=ban&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p><h3>Тип бана</h3>';
-                echo '<select name="term" size="1">';
-                if ($rights == 2 || $rights >= 6)
-                    echo '<option value="12">' . $lng['chat'] . '</option>';
-                if ($rights == 3 || $rights >= 6)
-                    echo '<option value="11">' . $lng['forum'] . '</option>';
-                if ($rights == 1 || $rights >= 6)
-                    echo '<option value="14">Галерея</option>';
-                if ($rights == 5 || $rights >= 6)
-                    echo '<option value="15">Библиотека</option>';
+                echo '<form action="users_ban.php?act=ban&amp;id=' . $user['id'] . '" method="post">' .
+                '<div class="menu"><p><h3>' . $lng_ban['ban_type'] . '</h3>';
                 if ($rights >= 6) {
-                    echo '<option value="13">Гостевая</option>';
-                    echo '<option value="10">Коментарии</option>';
-                    echo '<option value="3">Приват (антиспам)</option>';
-                    echo '<option value="1" selected="selected">' . $lng['blocking'] . '</option>';
+                    // Блокировка
+                    echo '<div><input name="term" type="radio" value="1" checked="checked" />&#160;' . $lng_ban['ban_1'] . '</div>';
+                    // Приват
+                    echo '<div><input name="term" type="radio" value="3" />&#160;' . $lng_ban['ban_3'] . '</div>';
+                    // Комментарии
+                    echo '<div><input name="term" type="radio" value="10" />&#160;' . $lng_ban['ban_10'] . '</div>';
+                    // Гостевая
+                    echo '<div><input name="term" type="radio" value="13" />&#160;' . $lng_ban['ban_13'] . '</div>';
                 }
-                echo '</select><br />';
-                echo '</p><p><h3>Срок бана</h3>';
-                echo '&#160;<input type="text" name="timeval" size="2" maxlength="2" value="12"/>&#160;Время<br/>';
-                echo '&#160;<input name="time" type="radio" value="1" />&#160;Минут (60 макс.)<br />';
-                echo '&#160;<input name="time" type="radio" value="2" checked="checked" />&#160;Часов (24 макс.)<br />';
+                if ($rights == 3 || $rights >= 6){
+                    // Форум
+                    echo '<div><input name="term" type="radio" value="11" ' . ($rights == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng_ban['ban_11'] . '</div>';
+                }
+                if ($rights == 1 || $rights >= 6){
+                    // Галерея
+                    echo '<div><input name="term" type="radio" value="14" />&#160;' . $lng_ban['ban_14'] . '</div>';
+                }
+                if ($rights == 5 || $rights >= 6){
+                    // Библиотека
+                    echo '<div><input name="term" type="radio" value="15" />&#160;' . $lng_ban['ban_15'] . '</div>';
+                }
+                if ($rights == 2 || $rights >= 6){
+                    // Чат
+                    echo '<div><input name="term" type="radio" value="12" />&#160;' . $lng_ban['ban_12'] . '</div>';
+                }
+                echo '</p><p><h3>' . $lng_ban['ban_time'] . '</h3>' .
+                    '&#160;<input type="text" name="timeval" size="2" maxlength="2" value="12"/>&#160;' . $lng['time'] . '<br/>' .
+                    '<input name="time" type="radio" value="1" />&#160;' . $lng_ban['ban_time_minutes'] . '<br />' .
+                    '<input name="time" type="radio" value="2" checked="checked" />&#160;' . $lng_ban['ban_time_hours'] . '<br />';
                 if ($rights >= 6)
-                    echo '&#160;<input name="time" type="radio" value="3" />&#160;Дней (30 макс.)<br />';
+                    echo '<input name="time" type="radio" value="3" />&#160;' . $lng_ban['ban_time_days'] . '<br />';
                 if ($rights >= 7)
-                    echo '&#160;<input name="time" type="radio" value="4" />&#160;<b>До отмены</b>';
-                echo '</p><p><h3>Причина бана</h3>';
+                    echo '<input name="time" type="radio" value="4" />&#160;<span class="red">' . $lng_ban['ban_time_before_cancel'] . '</span>';
+                echo '</p><p><h3>' . $lng['reason'] . '</h3>';
                 if (isset($_GET['fid'])) {
                     // Если бан из форума, фиксируем ID поста
                     $fid = intval($_GET['fid']);
-                    echo '&#160;Нарушение <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $fid . '">на форуме</a><br />';
-                    echo '<input type="hidden" value="' . $fid . '" name="banref" />';
+                    echo '&#160;' . $lng_ban['infringement'] . ' <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $fid . '">' . $lng_ban['in_forum'] . '</a><br />' .
+                        '<input type="hidden" value="' . $fid . '" name="banref" />';
                 }
-                echo '&#160;<textarea cols="20" rows="4" name="reason"></textarea>';
-                echo '</p><p><input type="submit" value="Банить" name="submit" />';
-                echo '</p></div></form>';
+                echo '&#160;<textarea cols="20" rows="4" name="reason"></textarea>' .
+                    '</p><p><input type="submit" value="' . $lng['ban_do'] . '" name="submit" />' .
+                    '</p></div></form>';
             }
-            echo '<div class="phdr"><a href="anketa.php' . ($id ? '?id=' . $id : '') . '">В анкету</a></div>';
+            echo '<div class="phdr"><a href="anketa.php' . ($id ? '?id=' . $id : '') . '">' . $lng['profile'] . '</a></div>';
         }
         break;
 
     case 'razban':
-        ////////////////////////////////////////////////////////////
-        // Разбаниваем пользователя (с сохранением истории)       //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Разбаниваем пользователя (с сохранением истории)
+        -----------------------------------------------------------------
+        */
         if (!$ban || $user['id'] == $user_id || $rights < 7)
-            echo display_error('Неверные данные');
+            echo display_error($lng['error_wrong_data']);
         else {
             $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $error = false;
                 if ($res['ban_time'] < $realtime)
-                    $error = 'Бан уже не активен';
+                    $error = $lng_ban['error_ban_not_active'];
                 if (!$error) {
-                    echo '<div class="phdr"><b>Прекращение действия Бана</b></div>';
+                    echo '<div class="phdr"><b>' . $lng_ban['ban_cancel'] . '</b></div>';
                     echo '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
                     if (isset($_POST['submit'])) {
                         mysql_query("UPDATE `cms_ban_users` SET `ban_time` = '$realtime' WHERE `id` = '$ban' LIMIT 1");
-                        echo '<div class="gmenu"><p><h3>Пользователь разбанен</h3></p></div>';
+                        echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_cancel_confirmation'] . '</h3></p></div>';
                     } else {
-                        echo '<form action="users_ban.php?act=razban&amp;id=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">';
-                        echo '<div class="menu"><p>Прекращается действие активного бана с сохранением записи в истории нарушений';
-                        echo '</p><p><input type="submit" name="submit" value="Разбанить" />';
-                        echo '</p></div></form>';
-                        echo '<div class="phdr"><a href="users_ban.php?id=' . $user['id'] . '">Назад</a></div>';
+                        echo '<form action="users_ban.php?act=razban&amp;id=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .
+                            '<div class="menu"><p>' . $lng_ban['ban_cancel_help'] . '</p>' .
+                            '<p><input type="submit" name="submit" value="' . $lng_ban['ban_cancel_do'] . '" /></p>' .
+                            '</div></form>' .
+                            '<div class="phdr"><a href="users_ban.php?id=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
                     }
                 } else {
                     echo display_error($error);
                 }
             } else {
-                echo display_error('Неверные данные');
+                echo display_error($lng['error_wrong_data']);
             }
         }
         break;
 
     case 'delban':
-        ////////////////////////////////////////////////////////////
-        // Удаляем бан (с удалением записи из истории)            //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Удаляем бан (с удалением записи из истории)
+        -----------------------------------------------------------------
+        */
         if (!$ban || $rights < 9)
-            echo display_error('Неверные данные');
+            echo display_error($lng['error_wrong_data']);
         else {
             $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
-                echo '<div class="phdr"><b>Удаление Бана</b></div>';
-                echo '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
+                echo '<div class="phdr"><b>' . $lng_ban['ban_delete'] . '</b></div>' .
+                    '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
                 if (isset($_POST['submit'])) {
                     mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '$id' AND `user_id` = '0' AND `time` = '" . $res['ban_while'] . "' LIMIT 1");
                     $points = $set_karma['karma_points'] * 2;
@@ -218,98 +245,105 @@ switch ($act) {
                     $plus_minus = $plm[0] . '|' . ($plm[1] - $points);
                     mysql_query("UPDATE `users` SET `karma` = '$karma', `plus_minus` = '$plus_minus' WHERE `id` = '$id' LIMIT 1");
                     mysql_query("DELETE FROM `cms_ban_users` WHERE `id` = '$ban' LIMIT 1");
-                    echo '<div class="gmenu"><p><h3>Бан удален</h3><a href="users_ban.php?id=' . $user['id'] . '">Продолжить</a></p></div>';
+                    echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_deleted'] . '</h3><a href="users_ban.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
                 } else {
-                    echo '<form action="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">';
-                    echo '<div class="menu"><p>Удаляется бан вместе с записью в истории нарушений';
-                    echo '</p><p><input type="submit" name="submit" value="Удалить" />';
-                    echo '</p></div></form>';
-                    echo '<div class="phdr"><a href="users_ban.php?id=' . $user['id'] . '">Назад</a></div>';
+                    echo '<form action="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .
+                        '<div class="menu"><p>' . $lng_ban['ban_delete_help'] . '</p>' .
+                        '<p><input type="submit" name="submit" value="' . $lng['delete'] . '" /></p>' .
+                        '</div></form>' .
+                        '<div class="phdr"><a href="users_ban.php?id=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
                 }
             } else {
-                echo display_error('Неверные данные');
+                echo display_error($lng['error_wrong_data']);
             }
         }
         break;
 
     case 'delhist':
-        ////////////////////////////////////////////////////////////
-        // Очищаем историю нарушений юзера                        //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Очищаем историю нарушений юзера
+        -----------------------------------------------------------------
+        */
         if ($rights == 9) {
-            echo '<div class="phdr"><b>История нарушений</b></div>';
-            echo '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
+            echo '<div class="phdr"><b>' . $lng_ban['infringements_history'] . '</b></div>' .
+                '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
-                echo '<div class="gmenu"><h3>История нарушений очищена</h3></div>';
+                echo '<div class="gmenu"><h3>' . $lng_ban['history_cleared'] . '</h3></div>';
             } else {
-                echo '<form action="users_ban.php?act=delhist&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p>';
-                echo 'Вы действительно хотите очистить всю историю нарушений данного пользователя?';
-                echo '</p><p><input type="submit" value="Очистить" name="submit" />';
-                echo '</p></div></form>';
+                echo '<form action="users_ban.php?act=delhist&amp;id=' . $user['id'] . '" method="post">' .
+                    '<div class="menu"><p>' . $lng_ban['clear_confirmation'] . '</p>' .
+                    '<p><input type="submit" value="' . $lng['clear'] . '" name="submit" />' .
+                    '</p></div></form>';
             }
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-            echo '<div class="phdr">Всего нарушений: ' . $total . '</div>';
-            echo '<p>' . ($total ? '<a href="users_ban.php?id=' . $user['id'] . '">История нарушений</a><br />' : '') . '<a href="../' . $admp . '/index.php?act=usr_ban">Бан панель</a></p>';
+            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>' .
+                '<p>' . ($total ? '<a href="users_ban.php?id=' . $user['id'] . '">' . $lng_ban['infringements_history'] . '</a><br />' : '') .
+                '<a href="../' . $admp . '/index.php?act=usr_ban">' . $lng_ban['ban_panel'] . '</a></p>';
         } else {
-            echo display_error('Очищать историю нарушений могут только Супервайзоры');
+            echo display_error($lng_ban['error_rights_clear']);
         }
         break;
 
     default:
-        ////////////////////////////////////////////////////////////
-        // История нарушений                                      //
-        ////////////////////////////////////////////////////////////
-        echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>Анкета</b></a> | История нарушений</div>';
+        /*
+        -----------------------------------------------------------------
+        История нарушений
+        -----------------------------------------------------------------
+        */
+        echo '<div class="phdr"><a href="anketa.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_ban['infringements_history'] . '</div>';
         // Меню
         $menu = array ();
         if ($rights >= 6)
-            $menu[] = '<a href="../' . $admp . '/index.php?act=usr_ban">Бан панель</a>';
+            $menu[] = '<a href="../' . $admp . '/index.php?act=usr_ban">' . $lng_ban['ban_panel'] . '</a>';
         if ($rights == 9)
-            $menu[] = '<a href="users_ban.php?act=delhist&amp;id=' . $user['id'] . '">Очистить историю</a>';
+            $menu[] = '<a href="users_ban.php?act=delhist&amp;id=' . $user['id'] . '">' . $lng_ban['clear_history'] . '</a>';
         if (!empty($menu))
             echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         if ($user['id'] != $user_id)
             echo '<div class="user"><p>' . display_user($user) . '</p></div>';
         else
-            echo '<div class="list2"><p>Мои нарушения</p></div>';
+            echo '<div class="list2"><p>' . $lng_ban['my_infringements'] . '</p></div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
         if ($total) {
-            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "' ORDER BY `ban_time` DESC LIMIT $start,$kmess");
+            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "' ORDER BY `ban_time` DESC LIMIT $start, $kmess");
             while ($res = mysql_fetch_assoc($req)) {
                 $remain = $res['ban_time'] - $realtime;
                 $period = $res['ban_time'] - $res['ban_while'];
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/' . ($remain > 0 ? 'red' : 'green') . '.gif" width="16" height="16" align="left" />&#160;';
-                echo '<b>' . $ban_term[$res['ban_type']] . '</b>';
-                echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>';
-                echo '<br />' . checkout($res['ban_reason']);
-                echo '<div class="sub">';
-                if($rights > 0)
-                    echo '<span class="gray">Забанил:</span> ' . $res['ban_who'] . '<br />';
-                echo '<span class="gray">Срок:</span> ' . ($period < 86400000 ? timecount($period) : 'до отмены');
+                echo '<img src="../images/' . ($remain > 0 ? 'red' : 'green') . '.gif" width="16" height="16" align="left" />&#160;' .
+                    '<b>' . $lng_ban['ban_' . $res['ban_type']] . '</b>' .
+                    ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>' .
+                    '<br />' . checkout($res['ban_reason']) .
+                    '<div class="sub">';
+                if ($rights > 0)
+                    echo '<span class="gray">' . $lng_ban['ban_who'] . ':</span> ' . $res['ban_who'] . '<br />';
+                echo '<span class="gray">' . $lng['term'] . ':</span> ' . ($period < 86400000 ? timecount($period) : $lng_ban['ban_time_before_cancel']);
                 if ($remain > 0)
-                    echo '<br /><span class="gray">Осталось:</span> ' . timecount($remain);
+                    echo '<br /><span class="gray">' . $lng['remains'] . ':</span> ' . timecount($remain);
                 // Меню отдельного бана
                 $menu = array ();
                 if ($rights >= 7 && $remain > 0)
-                    $menu[] = '<a href="users_ban.php?act=razban&amp;id=' . $user['id'] . '&amp;ban=' . $res['id'] . '">Разбанить</a>';
+                    $menu[] = '<a href="users_ban.php?act=razban&amp;id=' . $user['id'] . '&amp;ban=' . $res['id'] . '">' . $lng_ban['ban_cancel_do'] . '</a>';
                 if ($rights == 9)
-                    $menu[] = '<a href="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $res['id'] . '">Удалить бан</a>';
+                    $menu[] = '<a href="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $res['id'] . '">' . $lng_ban['ban_delete_do'] . '</a>';
                 if (!empty($menu))
                     echo '<div>' . display_menu($menu) . '</div>';
                 echo '</div></div>';
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>Список пуст</p></div>';
+            echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
         }
-        echo '<div class="phdr">Всего нарушений: ' . $total . '</div>';
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             echo '<p>' . display_pagination('users_ban.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="users_ban.php?id=' . $user['id'] . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+            echo '<p><form action="users_ban.php?id=' . $user['id'] . '" method="post">' .
+                '<input type="text" name="page" size="2"/>' .
+                '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
 }
 
-require_once('../incfiles/end.php');
+require('../incfiles/end.php');
 ?>

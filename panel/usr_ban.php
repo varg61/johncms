@@ -14,39 +14,40 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
+$lng_ban = load_lng('ban');
 require_once('../incfiles/ban.php');
 
 switch ($mod) {
     case 'amnesty':
         if ($rights < 9) {
-            echo display_error($lng['amnesty_access_error']);
+            echo display_error($lng_ban['amnesty_access_error']);
         } else {
-            echo '<div class="phdr"><a href="index.php?act=usr_ban"><b>' . $lng['ban_panel'] . '</b></a> | ' . $lng['amnesty'] . '</div>';
+            echo '<div class="phdr"><a href="index.php?act=usr_ban"><b>' . $lng['ban_panel'] . '</b></a> | ' . $lng_ban['amnesty'] . '</div>';
             if (isset($_POST['submit'])) {
                 $term = isset($_POST['term']) && $_POST['term'] == 1 ? 1 : 0;
                 if ($term) {
                     // Очищаем таблицу Банов
                     mysql_query("TRUNCATE TABLE `cms_ban_users`");
-                    echo '<div class="gmenu"><p>' . $lng['amnesty_clean_confirm'] . '</p></div>';
+                    echo '<div class="gmenu"><p>' . $lng_ban['amnesty_clean_confirm'] . '</p></div>';
                 } else {
                     // Разбаниваем активные Баны
                     $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `ban_time` > '" . $realtime . "'");
                     while ($res = mysql_fetch_array($req)) {
                         $ban_left = $res['ban_time'] - $realtime;
                         if ($ban_left < 2592000) {
-                            $amnesty_msg = isset($lng['amnesty']) ? mysql_real_escape_string($lng['amnesty']) : 'Amnesty';
+                            $amnesty_msg = isset($lng_ban['amnesty']) ? mysql_real_escape_string($lng_ban['amnesty']) : 'Amnesty';
                             mysql_query("UPDATE `cms_ban_users` SET `ban_time`='$realtime', `ban_raz`='--$amnesty_msg--' WHERE `id` = '" . $res['id'] . "'");
                         }
                     }
-                    echo '<div class="gmenu"><p>' . $lng['amnesty_delban_confirm'] . '</p></div>';
+                    echo '<div class="gmenu"><p>' . $lng_ban['amnesty_delban_confirm'] . '</p></div>';
                 }
             } else {
                 echo '<form action="index.php?act=usr_ban&amp;mod=amnesty" method="post"><div class="menu"><p>';
-                echo '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng['amnesty_delban'] . '<br />';
-                echo '<input type="radio" name="term" value="1" />&#160;' . $lng['amnesty_clean'];
-                echo '</p><p><input type="submit" name="submit" value="' . $lng['amnesty'] . '" />';
+                echo '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng_ban['amnesty_delban'] . '<br />';
+                echo '<input type="radio" name="term" value="1" />&#160;' . $lng_ban['amnesty_clean'];
+                echo '</p><p><input type="submit" name="submit" value="' . $lng_ban['amnesty'] . '" />';
                 echo '</p></div></form>';
-                echo '<div class="phdr"><small>' . $lng['amnesty_help'] . '</small></div>';
+                echo '<div class="phdr"><small>' . $lng_ban['amnesty_help'] . '</small></div>';
             }
             echo '<p><a href="index.php?act=usr_ban">' . $lng['ban_panel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
@@ -88,7 +89,7 @@ switch ($mod) {
             echo '<p>' . display_pagination('index.php?act=usr_ban&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=usr_ban" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
-        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">' . $lng['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">' . $lng_ban['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 
 ?>

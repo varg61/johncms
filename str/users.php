@@ -13,12 +13,17 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'users';
-$textl = 'Юзеры';
-require_once("../incfiles/core.php");
-require_once('../incfiles/head.php');
-echo '<div class="phdr"><b>Список пользователей</b></div>';
+require('../incfiles/core.php');
+$textl = $lng['users'];
+require('../incfiles/head.php');
+
+/*
+-----------------------------------------------------------------
+Выводим список пользователей
+-----------------------------------------------------------------
+*/
+echo '<div class="phdr"><a href="../index.php?act=users"><b>' . $lng['site_active'] . '</b></a> | ' . $lng['users_list'] . '</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0);
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT $start, $kmess");
@@ -27,13 +32,16 @@ while ($res = mysql_fetch_assoc($req)) {
     echo display_user($res) . '</div>';
     ++$i;
 }
-echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
     echo '<p>' . display_pagination('users.php?', $start, $total, $kmess) . '</p>';
-    echo '<p><form action="users.php" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+    echo '<p><form action="users.php" method="post">' .
+        '<input type="text" name="page" size="2"/>' .
+        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+        '</form></p>';
 }
-echo '<a href="users_search.php">Поиск пользователя</a><br /><a href="' . $_SESSION['refsm'] . '">Назад</a></p>';
+echo '<p><a href="users_search.php">' . $lng['search_user'] . '</a><br />' .
+    '<a href="../index.php?act=users">' . $lng['back'] . '</a></p>';
 
-require_once('../incfiles/end.php');
-
+require('../incfiles/end.php');
 ?>

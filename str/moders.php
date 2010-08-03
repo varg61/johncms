@@ -13,103 +13,35 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $textl = 'Администрация';
 $headmod = "moders";
 require_once('../incfiles/core.php');
 require_once('../incfiles/head.php');
-echo '<div class="phdr"><b>Администрация ресурса</b></div>';
 
-// Супервайзоры
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '9'");
-if (mysql_num_rows($req)) {
-    echo '<div class="bmenu">Супервайзоры</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($sw % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$sw;
-    }
+/*
+-----------------------------------------------------------------
+Выводим список администрации
+-----------------------------------------------------------------
+*/
+echo '<div class="phdr"><a href="../index.php?act=users"><b>' . $lng['site_active'] . '</b></a> | Администрация</div>';
+$req = mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= 1");
+$total = mysql_result($req, 0);
+$req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `rights` >= 1 ORDER BY `rights` DESC LIMIT $start, $kmess");
+while ($res = mysql_fetch_assoc($req)) {
+    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+    echo display_user($res) . '</div>';
+    ++$i;
 }
-// Администраторы
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '7'");
-if (mysql_num_rows($req)) {
-    $i = 0;
-    echo '<div class="bmenu">Администраторы</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($adm % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$adm;
-    }
+echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+if ($total > $kmess) {
+    echo '<p>' . display_pagination('users.php?', $start, $total, $kmess) . '</p>';
+    echo '<p><form action="users.php" method="post">' .
+        '<input type="text" name="page" size="2"/>' .
+        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+        '</form></p>';
 }
-// Старшие Модераторы
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '6'");
-if (mysql_num_rows($req)) {
-    $i = 0;
-    echo '<div class="bmenu">Старшие Модераторы</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($smd % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$smd;
-    }
-}
-// Модераторы Библиотеки
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '5'");
-if (mysql_num_rows($req)) {
-    $i = 0;
-    echo '<div class="bmenu">Модераторы Библиотеки</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($lmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$lmod;
-    }
-}
-// Модераторы Загрузок
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '4'");
-if (mysql_num_rows($req)) {
-    $i = 0;
-    echo '<div class="bmenu">Модераторы Загрузок</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($dmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$dmod;
-    }
-}
-// Модераторы Форума
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '3'");
-if (mysql_num_rows($req)) {
-    $i = 0;
-    echo '<div class="bmenu">Модераторы Форума</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($fmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$fmod;
-    }
-}
-// Модераторы Чата
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '2'");
-if (mysql_num_rows($req)) {
-    $i = 0;
-    echo '<div class="bmenu">Модераторы Чата</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($cmod % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$cmod;
-    }
-}
-// Киллеры
-$req = mysql_query("SELECT * FROM `users` WHERE `rights` = '1'");
-if (mysql_num_rows($req)) {
-    $i = 0;
-    echo '<div class="bmenu">Киллеры</div>';
-    while ($res = mysql_fetch_assoc($req)) {
-        echo ($kil % 2) ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
-        ++$kil;
-    }
-}
-echo '<div class="phdr">' . $lng['total'] . ': ' . ($sw + $adm + $smd + $lmod + $dmod + $fmod + $cmod + $kil) . '</div>';
-echo '<p><a href="../index.php?act=users">Актив сайта</a></p>';
+echo '<p><a href="users_search.php">' . $lng['search_user'] . '</a><br />' .
+    '<a href="../index.php?act=users">' . $lng['back'] . '</a></p>';
 
 require_once('../incfiles/end.php');
-
 ?>

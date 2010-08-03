@@ -1,0 +1,249 @@
+language_name                 :::   Русский
+access_forbidden              :::   Доступ запрещен
+access_guest_forbidden        :::   Только для зарегистрированных посетителей
+add                           :::   Добавить
+administration                :::   Администрация
+administrators                :::   Администраторы
+admin_club                    :::   Админ-клуб
+admin_panel                   :::   Админ панель
+administrative_events         :::   События Администратора
+apperance                     :::   Внешний вид
+approve                       :::   Подтвердить
+arrangement                   :::   Расположение
+author                        :::   Автор
+authorized                    :::   Авторизованные
+authorisation_not_passed      :::   Авторизация не прошла
+avatar_applied                :::   Аватар успешно установлен
+avatar_loaded                 :::   Аватар успешно загружен
+avatar                        :::   Аватар
+avatars                       :::   Аватары
+back                          :::   Назад
+balance                       :::   Баланс
+ban                           :::   БАН
+ban_do                        :::   Банить
+ban_type                      :::   Тип бана
+ban_who                       :::   Банил
+bbcode                        :::   Тэги (BBcode)
+birthday                      :::   День рожденья
+birthday_men                  :::   Именинники
+blocking                      :::   Блокировка
+cancel                        :::   Отмена
+catalogue                     :::   Каталог
+category                      :::   Категория
+categories                    :::   Категории
+change_password               :::   Сменить пароль
+chat                          :::   Чат
+check_confirmation            :::   Пожалуйста проверьте правильность ввода данных
+clear                         :::   Очистить
+clear_all                     :::   Очистить все
+color                         :::   Цвет
+comments                      :::   Комментарии
+common_list                   :::   Общий список
+contacts                      :::   Контакты
+contacts_in                   :::   В контакты
+continue                      :::   Продолжить
+clock_settings                :::   Настройка часов
+common_settings               :::   Общие настройки
+date                          :::   Дата
+day                           :::   День
+days                          :::   Дней
+default                       :::   По умолчанию
+delete                        :::   Удалить
+delete_message                :::   Удалить сообщение
+delete_all                    :::   Удалить все
+delete_confirmation           :::   Действительно хотите удалить?
+description                   :::   Описание
+design_template               :::   Тема оформления
+dialogue                      :::   Общение
+digest                        :::   Дайджест
+discuss                       :::   Обсудить
+display_mode                  :::   Режим отображения
+do                            :::   Выполнить
+dont_display                  :::   Не показывать
+down                          :::   Вниз
+download                      :::   Скачать
+downloads                     :::   Загрузки
+edit                          :::   Изменить
+enter_code                    :::   Введите проверочный код
+enter_on_site                 :::   Войти на сайт
+error                         :::   ОШИБКА
+error_404                     :::   Запрошенная Вами страница отсутствует
+error_address                 :::   Адрес введен неверно
+error_description_lenght      :::   Длина описания должна быть не менее 2-х символов
+error_login_empty             :::   Вы не ввели Логин
+error_mandatory_fields        :::   Не заполнены обязательные поля
+error_nameto_empty            :::   Вы не ввели название
+error_nameto_lenght_2_30      :::   Длина названия должна быть не менее 2-х и не более 30 символов
+error_nicklenght              :::   Недопустимая длина Ника. Разрешено минимум 2 и максимум 20 символов
+error_password_empty          :::   Вы не ввели Пароль
+error_password_lenght         :::   Недопустимая длина Пароля. Разрешено минимум 3 и максимум 15 символов
+error_user_not_exist          :::   Такого пользователя не существует
+error_user_not_specified      :::   Не указан пользователь
+error_verifying_code          :::   Проверочный код введен неверно
+error_wrong_data              :::   Неверные данные
+error_wrong_limits            :::   Значения полей выходят за допустимые пределы
+error_wrongsymbols            :::   Недопустимые символы
+events_no_new                 :::   Новых событий нет
+exit                          :::   Выход
+field_height                  :::   Высота поля
+field_width                   :::   Ширина поля
+file_maxsize                  :::   Макс. размер файла
+files                         :::   Файлы
+font_bold                     :::   Жирный
+font_italic                   :::   Курсив
+font_underline                :::   Подчеркнутый
+forgotten_password            :::   Забыли пароль
+forum                         :::   Форум
+forum_posts                   :::   Постов на форуме
+gallery                       :::   Галерея
+guest                         :::   Гость
+guests                        :::   Гости
+gzip_compress                 :::   Gzip сжатие
+gzip_show                     :::   Коэффициент сжатия
+gzip_on                       :::   Сжатие вкл.
+gzip_off                      :::   Сжатие выкл.
+guestbook                     :::   Гостевая
+happy_birthday                :::   С днем рожденья!!!
+heading                       :::   Заголовок
+help                          :::   Справка
+hi                            :::   Привет
+hide                          :::   Скрыть
+homepage                      :::   На главную
+hours                         :::   Часов
+ignore                        :::   Игнорировать
+in_detail                     :::   Подробно
+information                   :::   Информация
+information_faq               :::   Информация, FAQ
+infringements                 :::   Нарушения
+ip_address                    :::   Адрес IP
+ip_history                    :::   История IP
+karma                         :::   Карма
+language                      :::   Язык
+language_select               :::   Выберите язык
+language_set                  :::   Для системы установлен язык
+last_activity                 :::   Последняя активность
+last_ip                       :::   Последний IP
+last_visit                    :::   Последний визит
+library                       :::   Библиотека
+library_on_moderation         :::   Мод. Библиотеки
+lines_on_page                 :::   Строк на страницу
+link                          :::   Ссылка
+list_empty                    :::   Список пуст
+login                         :::   Вход
+login_name                    :::   Логин
+general_settings              :::   Общие настройки
+mail_new                      :::   Вам письмо
+minmax_2_30                   :::   Мин. 2, макс. 30 символов
+minmax_2_500                  :::   Мин. 2, макс. 500 символов
+moders                        :::   Модераторы
+move                          :::   Переместить
+name_the                      :::   Название
+new_responses                 :::   Новые отзывы
+news                          :::   Новости
+news_archive                  :::   Архив новостей
+next                          :::   Дальше
+nick                          :::   Ник
+night                         :::   Ночь
+no                            :::   Нет
+not_found                     :::   По Вашему запросу ничего не найдено
+not_specified                 :::   Не указана
+not_mandatory_field           :::   Необязательное поле
+on                            :::   Включить
+or                            :::   или
+off                           :::   Выключить
+online                        :::   Онлайн
+personal                      :::   Личное
+password                      :::   Пароль
+points                        :::   очков
+posts                         :::   постов
+preview                       :::   Предварительный просмотр
+privat                        :::   Приват
+profile                       :::   Анкета
+quiz                          :::   Викторина
+quick_jump                    :::   Быстрый переход
+reason                        :::   Причина
+registration                  :::   Регистрация
+registration_not_approved     :::   Приносим извинения, но Ваша заявка на регистрацию ещё не рассмотрена<br />Пожалуйста ожидайте
+remains                       :::   Осталось
+remember                      :::   Запомнить
+repeat                        :::   Повторить
+reset_settings                :::   Сброс настроек
+responses_new                 :::   Новые отзывы
+save                          :::   Сохранить
+search                        :::   Поиск
+search_user                   :::   Поиск пользователя
+search_results                :::   Результаты запроса
+search_results_empty          :::   По Вашему запросу ничего не найдено
+search_new                    :::   Новый поиск
+search_nick_help              :::   Поиск идет по Нику пользователя (NickName) и нечувствителен к регистру букв. То есть, <b>UsEr</b> и <b>user</b> для поиска равноценны.<br />Запрос на поиск транслитерируется, то есть, чтоб найти, к примеру, ник ДИМА, Вы можете в запросе написать dima, результат будет один и тот же.
+sec                           :::   сек.
+section                       :::   Раздел
+sections                      :::   Разделы
+security                      :::   Безопасность
+select                        :::   Выбрать
+settings                      :::   Настройки
+settings_clock                :::   Настройка часов
+settings_clock_shift          :::   Сдвиг времени
+settings_default              :::   Установлены настройки по умолчанию
+settings_saved                :::   Настройки сохранены
+show                          :::   Показать
+site_active                   :::   Актив сайта
+site_new                      :::   Новое на сайте
+site_news                     :::   Новости ресурса
+site_spent                    :::   Провел на сайте
+smileys                       :::   Смайлы
+sorting                       :::   Сортировка
+statistics                    :::   Статистика
+statistics_my                 :::   Моя статистика
+statistics_user               :::   Статистика пользователя
+status                        :::   Статус
+supervisors                   :::   Супервайзоры
+system_functions              :::   Функции системы
+system_language               :::   Язык системы
+system_time                   :::   Системное время
+system_settings               :::   Настройки системы
+term                          :::   Срок
+text                          :::   Текст
+text_input                    :::   Ввод текста
+text_size                     :::   Размер текста
+themes                        :::   Темы
+time                          :::   Время
+time_online                   :::   Время Online
+timecount_day                 :::   день
+timecount_days                :::   дней
+timecount_days_r              :::   дня
+time_limit                    :::   Лимит времени
+time_shift                    :::   Сдвиг времени
+to_chat                       :::   В Чат
+to_form                       :::   В анкету
+to_forum                      :::   В Форум
+to_news                       :::   К новостям
+to_page                       :::   К странице
+to_show                       :::   Показывать
+total                         :::   Всего
+transitions                   :::   Переходы
+transitions_counter           :::   Счетчик переходов
+transitions_n                 :::   переходов
+translit                      :::   Транслит
+unread                        :::   Непрочитанное
+url_help                      :::   Адрес вводите в формате http://url.com
+up                            :::   Вверх
+user_does_not_exist           :::   Такого пользователя не существует
+useful                        :::   Полезное
+users                         :::   Пользователи
+users_list                    :::   Список пользователей
+users_new                     :::   Новые пользователи
+users_on_ban                  :::   Имеют Бан
+users_on_reg                  :::   На регистрации
+users_top                     :::   Топ активности
+verifying_code                :::   Проверочный код
+viewing                       :::   Просмотр
+view_mode                     :::   Режим отображения
+vote                          :::   Голосовать
+vote_against                  :::   Против
+vote_for                      :::   За
+votes                         :::   Голосования
+welcome_to                    :::   Добро пожаловать на
+without_limit                 :::   Без ограничений
+write                         :::   Написать
+yes                           :::   Да

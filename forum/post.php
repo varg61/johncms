@@ -14,10 +14,10 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../incfiles/head.php');
+require('../incfiles/head.php');
 if (empty($_GET['id'])) {
-    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once('../incfiles/end.php');
+    echo display_error($lng['error_wrong_data']);
+    require('../incfiles/end.php');
     exit;
 }
 $s = intval($_GET['s']);
@@ -29,7 +29,7 @@ $res = mysql_fetch_array($req);
 
 // Запрос темы
 $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
-echo '<div class="phdr"><b>Тема:</b> ' . $them['text'] . '</div><div class="menu">';
+echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
     echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png" alt=""  width="16" height="16"/>&#160;';
@@ -75,7 +75,7 @@ if ($set_user['smileys'])
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'"), 0) / $kmess);
-echo '<div class="phdr"><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">Вернуться в тему</a></div>';
-echo '<p><a href="index.php">В форум</a></p>';
+echo '<div class="phdr"><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . $lng_forum['back_to_topic'] . '</a></div>';
+echo '<p><a href="index.php">' . $lng['to_forum'] . '</a></p>';
 
 ?>

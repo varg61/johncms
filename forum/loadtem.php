@@ -15,12 +15,12 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (empty($_GET['n'])) {
-    require_once('../incfiles/head.php');
-    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once('../incfiles/end.php');
+    require('../incfiles/head.php');
+    echo display_error($lng['error_wrong_data']);
+    require('../incfiles/end.php');
     exit;
 }
-$n = $_GET['n'];
+$n = trim($_GET['n']);
 $o = opendir("../files/forum/topics");
 while ($f = readdir($o)) {
     if ($f != "." && $f != ".." && $f != "index.php" && $f != ".htaccess") {
@@ -33,7 +33,7 @@ while ($f = readdir($o)) {
 $tt = count($a);
 if (!in_array($n, $b)) {
     require_once('../incfiles/head.php');
-    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
+    echo display_error($lng['error_wrong_data']);
     require_once('../incfiles/end.php');
     exit;
 }

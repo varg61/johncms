@@ -68,8 +68,8 @@ echo '<input name="day" size="3" value="' . $set_af['day'] . '" maxlength="3" />
 echo '<input name="night" size="3" value="' . $set_af['night'] . '" maxlength="3" />&#160;' . $lng['night'];
 echo '<br /><small>' . $lng['antiflood_tl_help'] . '</small></p>';
 echo '<p><h3>' . $lng['day_mode'] . '</h3>';
-echo '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['amnesty_day_begin'] . ' <span class="gray">(6-12)</span><br />';
-echo '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['amnesty_day_end'] . ' <span class="gray">(17-23)</span>';
+echo '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['day_begin'] . ' <span class="gray">(6-12)</span><br />';
+echo '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['day_end'] . ' <span class="gray">(17-23)</span>';
 echo '</p><p><br /><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>';
 echo '<div class="phdr"><a href="index.php?act=sys_flood&amp;reset">' . $lng['reset_settings'] . '</a></div>';
 echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';

@@ -13,25 +13,48 @@
 */
 
 define('_IN_JOHNCMS', 1);
-
 $headmod = 'userset';
-$textl = 'Мои настройки';
-require_once('../incfiles/core.php');
-require_once('../incfiles/head.php');
+require('../incfiles/core.php');
+$lng_set = load_lng('set');
+$textl = $lng_set['my_set'];
+require('../incfiles/head.php');
 if (!$user_id) {
-    echo display_error('Только для авторизованных');
-    require_once('../incfiles/end.php');
+    echo display_error($lng['access_guest_forbidden']);
+    require('../incfiles/end.php');
     exit;
 }
+
+// Заголовок модуля
+echo '<div class="phdr"><b>' . $lng['settings'] . '</b> | ';
 switch ($act) {
     case 'forum':
-        ////////////////////////////////////////////////////////////
-        // Настройки форума                                       //
-        ////////////////////////////////////////////////////////////
+        echo $lng['forum'];
+        break;
+
+    case 'chat':
+        echo $lng['chat'];
+        break;
+        
+    default:
+        echo $lng['common_settings'];
+}
+echo '</div>';
+// Главное меню
+$menu = array();
+$menu[] = !$act ? $lng['common_settings'] : '<a href="my_set.php">' . $lng['common_settings'] . '</a>';
+$menu[] = $act == 'forum' ? $lng['forum'] : '<a href="my_set.php?act=forum">' . $lng['forum'] . '</a>';
+$menu[] = $act == 'chat' ? $lng['chat'] : '<a href="my_set.php?act=chat">' . $lng['chat'] . '</a>';
+echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+
+switch ($act) {
+    case 'forum':
+        /*
+        -----------------------------------------------------------------
+        Настройки Форума
+        -----------------------------------------------------------------
+        */
         $set_forum = array ();
         $set_forum = unserialize($datauser['set_forum']);
-        echo '<div class="phdr"><a href="../index.php?act=cab"><b>Кабинет</b></a> | Настройки Форума</div>';
-        echo '<div class="bmenu"><small>Данные настройки влияют на отображение информации Форума</small></div>';
         if (isset($_POST['submit'])) {
             $set_forum['farea'] = isset($_POST['farea']) ? 1 : 0;
             $set_forum['upfp'] = isset($_POST['upfp']) ? 1 : 0;
@@ -42,7 +65,7 @@ switch ($act) {
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
                 $set_forum['postcut'] = 1;
             mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Настройки сохранены</div>';
+            echo '<div class="gmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_forum)) {
             $set_forum = array ();
@@ -51,75 +74,34 @@ switch ($act) {
             $set_forum['postclip'] = 1;
             $set_forum['postcut'] = 2;
             mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Установлены настройки по умолчанию</div>';
+            echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
-        echo '<form action="my_set.php?act=forum" method="post"><div class="menu"><p><h3>Основные настройки</h3>';
-        echo '<input name="upfp" type="checkbox" value="1" ' . ($set_forum['upfp'] ? 'checked="checked"' : '') . ' />&#160;Обратная сортировка<br/>';
-        echo '<input name="farea" type="checkbox" value="1" ' . ($set_forum['farea'] ? 'checked="checked"' : '') . ' />&#160;Включить поле ввода<br/>';
-        echo '</p><p><h3>Закреплять 1-й пост</h3>';
-        echo '<input type="radio" value="2" name="postclip" ' . ($set_forum['postclip'] == 2 ? 'checked="checked"' : '') . '/>&#160;всегда<br />';
-        echo '<input type="radio" value="1" name="postclip" ' . ($set_forum['postclip'] == 1 ? 'checked="checked"' : '') . '/>&#160;в непрочитанных<br />';
-        echo '<input type="radio" value="0" name="postclip" ' . (!$set_forum['postclip'] ? 'checked="checked"' : '') . '/>&#160;никогда';
-        echo '</p><p><h3>Обрезка постов</h3>';
-        echo '<input type="radio" value="1" name="postcut" ' . ($set_forum['postcut'] == 1 ? 'checked="checked"' : '') . '/>&#160;500 символов<br />';
-        echo '<input type="radio" value="2" name="postcut" ' . ($set_forum['postcut'] == 2 ? 'checked="checked"' : '') . '/>&#160;1000 символов<br />';
-        echo '<input type="radio" value="3" name="postcut" ' . ($set_forum['postcut'] == 3 ? 'checked="checked"' : '') . '/>&#160;3000 символов<br />';
-        echo '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&#160;не обрезать<br />';
-        echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-        echo '<div class="phdr"><a href="my_set.php?act=forum&amp;reset">' . $lng['reset_settings'] . '</a></div>';
-        echo '<p><a href="../forum">В форум</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
+        echo '<form action="my_set.php?act=forum" method="post">' .
+            '<div class="menu"><p><h3>' . $lng_set['main_settings'] . '</h3>' .
+            '<input name="upfp" type="checkbox" value="1" ' . ($set_forum['upfp'] ? 'checked="checked"' : '') . ' />&#160;' . $lng_set['sorting_return'] . '<br/>' .
+            '<input name="farea" type="checkbox" value="1" ' . ($set_forum['farea'] ? 'checked="checked"' : '') . ' />&#160;' . $lng_set['field_on'] . '<br/>' .
+            '</p><p><h3>' . $lng_set['clip_first_post'] . '</h3>' .
+            '<input type="radio" value="2" name="postclip" ' . ($set_forum['postclip'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['always'] . '<br />' .
+            '<input type="radio" value="1" name="postclip" ' . ($set_forum['postclip'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['in_not_read'] . '<br />' .
+            '<input type="radio" value="0" name="postclip" ' . (!$set_forum['postclip'] ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['never'] .
+            '</p><p><h3>' . $lng_set['scrap_of_posts'] . '</h3>' .
+            '<input type="radio" value="1" name="postcut" ' . ($set_forum['postcut'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['500_symbols'] . '<br />' .
+            '<input type="radio" value="2" name="postcut" ' . ($set_forum['postcut'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['1000_symbols'] . '<br />' .
+            '<input type="radio" value="3" name="postcut" ' . ($set_forum['postcut'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['3000_symbols'] . '<br />' .
+            '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['not_to_cut_off'] . '<br />' .
+            '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
+            '<div class="phdr"><a href="my_set.php?act=forum&amp;reset">' . $lng['reset_settings'] . '</a></div>' .
+            '<p><a href="../forum">' . $lng['to_forum'] . '</a><br /><a href="my_cabinet.php">' . $lng['personal'] . '</a></p>';
         break;
 
     case 'chat':
-        ////////////////////////////////////////////////////////////
-        // Настройки Чата                                         //
-        ////////////////////////////////////////////////////////////
-        $mood = array (
-            "нейтральное",
-            "бодрое",
-            "прекрасное",
-            "весёлое",
-            "унылое",
-            "ангельское",
-            "агрессивное",
-            "удивленное",
-            "злое",
-            "сердитое",
-            "сонное",
-            "озлобленное",
-            "скучающее",
-            "оживлённое",
-            "угрюмое",
-            "размышляющее",
-            "занятое",
-            "нахальное",
-            "холодное",
-            "смущённое",
-            "крутое",
-            "дьявольское",
-            "сварливое",
-            "счастливое",
-            "горячее",
-            "влюблённое",
-            "невинное",
-            "вдохновлённое",
-            "одинокое",
-            "скрытое",
-            "задумчивое",
-            "психоделическое",
-            "расслабленое",
-            "грустное",
-            "испуганное",
-            "шокированное",
-            "потрясенное",
-            "хитрое",
-            "усталое",
-            "утомленное"
-        );
+        /*
+        -----------------------------------------------------------------
+        Настройки Чата
+        -----------------------------------------------------------------
+        */
         $set_chat = array ();
         $set_chat = unserialize($datauser['set_chat']);
-        echo '<div class="phdr"><b>Настройки Чата</b></div>';
-        echo '<div class="bmenu"><small>Индивидуальная настройка Чата</small></div>';
         if (isset($_POST['submit'])) {
             $set_chat['refresh'] = isset($_POST['refresh']) ? intval($_POST['refresh']) : 20;
             $set_chat['chmes'] = isset($_POST['chmes']) ? intval($_POST['chmes']) : 10;
@@ -147,7 +129,7 @@ switch ($act) {
             if ($rights >= 7 && !empty($mood_adm))
                 $set_chat['mood'] = $mood_adm;
             mysql_query("UPDATE `users` SET `set_chat` = '" . mysql_real_escape_string(serialize($set_chat)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Настройки сохранены</div>';
+            echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_chat)) {
             $set_chat = array ();
@@ -156,39 +138,68 @@ switch ($act) {
             $set_chat['carea'] = 0;
             $set_chat['carea_w'] = 20;
             $set_chat['carea_h'] = 2;
-            $set_chat['mood'] = 'нейтральное';
+            $set_chat['mood'] = $lng_set['mood_1'];
             mysql_query("UPDATE `users` SET `set_chat` = '" . mysql_real_escape_string(serialize($set_chat)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Установлены настройки по умолчанию</div>';
+            echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
-        echo '<form action="my_set.php?act=chat" method="post"><div class="menu"><p><h3>Основные настройки</h3>';
-        echo '<input type="text" name="refresh" size="2" maxlength="2" value="' . $set_chat['refresh'] . '"/> Обновление (10-99 сек.)<br />';
-        echo '<input type="text" name="chmess" size="2" maxlength="2" value="' . $set_chat['chmes'] . '"/> Постов на странице (5-40)<br />';
-        echo '</p><p><h3>Ввод сообщения</h3>';
-        echo '<input type="text" name="carea_w" size="2" maxlength="2" value="' . $set_chat['carea_w'] . '"/> Ширина формы (10-80)<br />';
-        echo '<input type="text" name="carea_h" size="2" maxlength="1" value="' . $set_chat['carea_h'] . '"/> Высота формы (1-9)<br />';
-        echo '<input name="carea" type="checkbox" value="1" ' . ($set_chat['carea'] ? 'checked="checked"' : '') . ' />&#160;Включить поле ввода<br />';
-        echo '</p><p><h3>Ваше настроение</h3>';
-        echo '';
-        echo 'Выберите настроение:<br/><select name="mood">';
+        echo '<form action="my_set.php?act=chat" method="post">' .
+            '<div class="menu"><p><h3>' . $lng_set['main_settings'] . '</h3>' .
+            '<input type="text" name="refresh" size="2" maxlength="2" value="' . $set_chat['refresh'] . '"/> ' . $lng_set['chat_refresh'] . '<br />' .
+            '<input type="text" name="chmess" size="2" maxlength="2" value="' . $set_chat['chmes'] . '"/> ' . $lng_set['chat_msg_per_page'] . '<br />' .
+            '</p><p><h3>' . $lng_set['message_input'] . '</h3>' .
+            '<input type="text" name="carea_w" size="2" maxlength="2" value="' . $set_chat['carea_w'] . '"/> ' . $lng_set['chat_field_width'] . '<br />' .
+            '<input type="text" name="carea_h" size="2" maxlength="1" value="' . $set_chat['carea_h'] . '"/> ' . $lng_set['chat_field_height'] . '<br />' .
+            '<input name="carea" type="checkbox" value="1" ' . ($set_chat['carea'] ? 'checked="checked"' : '') . ' />&#160;' . $lng_set['field_on'] . '<br />' .
+            '</p><p><h3>' . $lng_set['your_mood'] . '</h3>' .
+            '<select name="mood">';
+        $mood = array (
+            $lng_set['mood_1'],
+            $lng_set['mood_2'],
+            $lng_set['mood_3'],
+            $lng_set['mood_4'],
+            $lng_set['mood_5'],
+            $lng_set['mood_6'],
+            $lng_set['mood_7'],
+            $lng_set['mood_8'],
+            $lng_set['mood_9'],
+            $lng_set['mood_10'],
+            $lng_set['mood_11'],
+            $lng_set['mood_12'],
+            $lng_set['mood_13'],
+            $lng_set['mood_14'],
+            $lng_set['mood_15'],
+            $lng_set['mood_16'],
+            $lng_set['mood_17'],
+            $lng_set['mood_18'],
+            $lng_set['mood_19'],
+            $lng_set['mood_20'],
+            $lng_set['mood_21'],
+            $lng_set['mood_22'],
+            $lng_set['mood_23'],
+            $lng_set['mood_24'],
+            $lng_set['mood_25'],
+            $lng_set['mood_26'],
+            $lng_set['mood_27']
+        );
         foreach ($mood as $val) {
             echo '<option' . ($set_chat['mood'] == $val ? ' selected="selected">' : '>') . $val . '</option>';
         }
         echo '</select><br/>';
         if ($rights >= 7)
-            echo 'Или укажите свое:<br/><input type="text" name="mood_adm" value="' . (in_array($set_chat['mood'], $mood) ? '' : $set_chat['mood']) . '"/><br/>';
-        echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-        echo '<div class="phdr"><a href="my_set.php?act=chat&amp;reset">' . $lng['reset_settings'] . '</a></div>';
-        echo '<p><a href="../chat">В чат</a><br /><a href="../index.php?act=cab">В кабинет</a></p>';
+            echo $lng_set['or_specify_the'] . ':<br/><input type="text" name="mood_adm" value="' . (in_array($set_chat['mood'], $mood) ? '' : $set_chat['mood']) . '"/><br/>';
+        echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
+            '<div class="phdr"><a href="my_set.php?act=chat&amp;reset">' . $lng['reset_settings'] . '</a></div>' .
+            '<p><a href="../chat">' . $lng['to_chat'] . '</a><br /><a href="my_cabinet.php">' . $lng['personal'] . '</a></p>';
         break;
 
     default:
-        ////////////////////////////////////////////////////////////
-        // Общие настройки                                        //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Общие настройки
+        -----------------------------------------------------------------
+        */
         $set_user = array ();
         $set_user = unserialize($datauser['set_user']);
-        echo '<div class="phdr"><a href="../index.php?act=cab"><b>Кабинет</b></a> | Общие настройки</div>';
-        echo '<div class="bmenu"><small>Данные настройки влияют на весь сайт и все его модули</small></div>';
         if (isset($_POST['submit'])) {
             $set_user['sdvig'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
             $set_user['avatar'] = isset($_POST['avatar']) ? 1 : 0;
@@ -228,8 +239,23 @@ switch ($act) {
             closedir($dir);
             if (!in_array($set_user['skin'], $arr))
                 $set_user['skin'] = 'default';
-            mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Настройки сохранены</div>';
+            // Устанавливаем язык
+            $lng_select = isset($_POST['lng']) ? check(trim($_POST['lng'])) : false;
+            if ($lng_select && $lng_select != $language) {
+                $req = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '$lng_select' AND `var` = 'language_name' LIMIT 1");
+                if (mysql_num_rows($req)) {
+                    $language = $lng_select;
+                    $lng = load_lng();
+                    $res = mysql_fetch_assoc($req);
+                    echo '<div class="gmenu">' . $lng['language_set'] . ': <b>' . $res['default'] . '</b></div>';
+                }
+            }
+            // Записываем настройки в базу
+            mysql_query("UPDATE `users` SET
+                `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "',
+                `set_language` = '$language'
+                WHERE `id` = '$user_id' LIMIT 1");
+            echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_user)) {
             $set_user = array ();
@@ -246,27 +272,35 @@ switch ($act) {
             $set_user['sdvig'] = 0;
             $set_user['kmess'] = 10;
             $set_user['skin'] = 'default';
-            mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id' LIMIT 1");
-            echo '<div class="rmenu">Установлены настройки по умолчанию</div>';
+            mysql_query("UPDATE `users` SET
+                `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "',
+                `set_language` = ''
+                WHERE `id` = '$user_id' LIMIT 1");
+            $language = $sys_language;
+            $lng = load_lng();
+            echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
-        echo '<form action="my_set.php" method="post" ><div class="menu"><p><h3>Настройка часов</h3>';
-        echo '<input type="text" name="sdvig" size="2" maxlength="2" value="' . $set_user['sdvig'] . '"/> Сдвиг времени (+-12)<br />';
-        echo '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> Системное время';
-        echo '</p><p><h3>Функции системы</h3>';
-        echo '<input name="avatar" type="checkbox" value="1" ' . ($set_user['avatar'] ? 'checked="checked"' : '') . ' />&#160;Аватары<br/>';
-        echo '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>';
-        echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&#160;Транслит<br/>';
-        echo '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&#160;Дайджест';
-        echo '</p><p><h3>Ввод текста</h3>';
-        echo '<input type="text" name="field_w" size="2" maxlength="2" value="' . $set_user['field_w'] . '"/> Ширина поля (10-80)<br />';
-        echo '<input type="text" name="field_h" size="2" maxlength="1" value="' . $set_user['field_h'] . '"/> Высота поля (1-9)<br />';
-        echo '</p><p><h3>Внешний вид</h3>';
-        echo '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> Строк на страницу (5-99)<br />';
-        echo '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&#160;Меню быстрого перехода<br />';
-        echo '<input name="gzip" type="checkbox" value="1" ' . ($set_user['gzip'] ? 'checked="checked"' : '') . ' />&#160;Коэффициент сжатия<br />';
-        echo '<input name="online" type="checkbox" value="1" ' . ($set_user['online'] ? 'checked="checked"' : '') . ' />&#160;Время в Online<br />';
-        echo '<input name="movings" type="checkbox" value="1" ' . ($set_user['movings'] ? 'checked="checked"' : '') . ' />&#160;Счетчик переходов';
-        echo '</p><p><h3>Тема оформления</h3><select name="skin">';
+        // Пользовательские настройки (общие)
+        echo '<form action="my_set.php" method="post" >' .
+            '<div class="menu"><p><h3>' . $lng['settings_clock'] . '</h3>' .
+            '<input type="text" name="sdvig" size="2" maxlength="2" value="' . $set_user['sdvig'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
+            '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> ' . $lng['system_time'] .
+            '</p><p><h3>' . $lng['system_functions'] . '</h3>' .
+            '<input name="avatar" type="checkbox" value="1" ' . ($set_user['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .
+            '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>' .
+            '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'] . '<br/>' .
+            '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
+            '</p><p><h3>' . $lng['text_input'] . '</h3>' .
+            '<input type="text" name="field_w" size="2" maxlength="2" value="' . $set_user['field_w'] . '"/> ' . $lng['field_width'] . ' (10-80)<br />' .
+            '<input type="text" name="field_h" size="2" maxlength="1" value="' . $set_user['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />' .
+            '</p><p><h3>' . $lng['apperance'] . '</h3>' .
+            '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
+            '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] . '<br />' .
+            '<input name="gzip" type="checkbox" value="1" ' . ($set_user['gzip'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['gzip_show'] . '<br />' .
+            '<input name="online" type="checkbox" value="1" ' . ($set_user['online'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['time_online'] . '<br />' .
+            '<input name="movings" type="checkbox" value="1" ' . ($set_user['movings'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['transitions_counter'] .
+            '</p><p><h3>' . $lng['design_template'] . '</h3><select name="skin">';
+        // Выбор темы оформления
         $dir = opendir('../theme');
         while ($skindef = readdir($dir)) {
             if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn')) {
@@ -275,12 +309,24 @@ switch ($act) {
             }
         }
         closedir($dir);
-        echo '</select>';
-        echo '</p><p><input type="submit" name="submit" value="Сохранить"/></p></div></form>';
-        echo '<div class="phdr"><a href="my_set.php?reset">' . $lng['reset_settings'] . '</a></div>';
-        echo '<p><a href="../index.php?act=cab">В кабинет</a></p>';
+        echo '</select></p>';
+        // Выбор языка
+        $req = mysql_query("SELECT DISTINCT `iso` FROM `cms_languages`");
+        if (mysql_num_rows($req) > 1) {
+            echo '<p><h3>' . $lng['language_select'] . '</h3>';
+            while ($res = mysql_fetch_assoc($req)) {
+                $req_l = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '" . $res['iso'] . "' AND `var` = 'language_name' LIMIT 1");
+                $res_l = mysql_fetch_assoc($req_l);
+                echo '<div><input type="radio" value="' . $res['iso'] . '" name="lng" ' . ($res['iso'] == $language ? 'checked="checked"' : '') . '/>&#160;' .
+                    '<a href="">' . $res_l['default'] . '</a>' .
+                    '</div>';
+            }
+            echo '</p>';
+        }
+        echo '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
+            '<div class="phdr"><a href="my_set.php?reset">' . $lng['reset_settings'] . '</a></div>' .
+            '<p><a href="my_cabinet.php">' . $lng['personal'] . '</a></p>';
 }
 
-require_once('../incfiles/end.php');
-
+require('../incfiles/end.php');
 ?>

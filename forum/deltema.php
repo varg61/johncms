@@ -13,23 +13,22 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
 if ($rights == 3 || $rights >= 6) {
-    if (empty($_GET['id'])) {
-        require_once('../incfiles/head.php');
-        echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-        require_once('../incfiles/end.php');
+    if (!$id) {
+        require('../incfiles/head.php');
+        echo display_error($lng['error_wrong_data']);
+        require('../incfiles/end.php');
         exit;
     }
     // Проверяем, существует ли тема
-    $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $id . "'");
-    $res = mysql_fetch_array($req);
-    if ($res['type'] != 't') {
-        require_once('../incfiles/head.php');
-        echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-        require_once('../incfiles/end.php');
+    $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
+    if (!mysql_num_rows($req)) {
+        require('../incfiles/head.php');
+        echo display_error($lng_forum['error_topic_deleted']);
+        require('../incfiles/end.php');
         exit;
     }
+    $res = mysql_fetch_assoc($req);
     if (isset($_GET['yes']) && $rights == 9) {
         // Удаляем прикрепленные файлы
         $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '$id'");
@@ -47,27 +46,21 @@ if ($rights == 3 || $rights >= 6) {
         header('Location: ?id=' . $res['refid']);
     } elseif (isset($_GET['hid']) || isset($_GET['yes']) && $rights < 9) {
         // Скрываем топик
-        mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '" . $id . "' LIMIT 1");
+        mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
         // Скрываем прикрепленные файлы
-        $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '$id'");
-        if (mysql_num_rows($req1) > 0) {
-            while ($res1 = mysql_fetch_array($req1)) {
-                mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `id` = '" . $res1['id'] . "'");
-            }
-        }
+        mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `topic` = '$id'");
         header('Location: ?id=' . $res['refid']);
     }
-
-    require_once('../incfiles/head.php');
-    echo '<div class="phdr"><b>' . $lng['forum'] . ':</b> удалить тему</div>';
-    echo '<div class="rmenu"><p>Вы действительно хотите удалить?';
-    echo '</p><p><a href="index.php?id=' . $id . '">Не удалять</a> | <a href="index.php?act=deltema&amp;id=' . $id . '&amp;yes">Удалить</a>';
+    require('../incfiles/head.php');
+    echo '<div class="phdr"><a href="index.php?id=' . $id . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['topic_delete'] . '</div>' .
+        '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '</p>' .
+        '<p><a href="index.php?id=' . $id . '">' . $lng['cancel'] . '</a> | ' .
+        '<a href="index.php?act=deltema&amp;id=' . $id . '&amp;yes">' . $lng['delete'] . '</a>';
     if ($rights == 9 && $res['close'] != 1)
-        echo ' | <a href="index.php?act=deltema&amp;id=' . $id . '&amp;hid">Скрыть</a>';
+        echo ' | <a href="index.php?act=deltema&amp;id=' . $id . '&amp;hid">' . $lng['hide'] . '</a>';
     echo '</p></div>';
     echo '<div class="phdr">&#160;</div>';
 } else {
-    echo '<p>Доступ закрыт!!!</p>';
+    echo display_error($lng['access_forbidden']);
 }
-
 ?>

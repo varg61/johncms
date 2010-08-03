@@ -23,7 +23,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if(!$id){
-            echo display_error($lng['wrong_data']);
+            echo display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }
@@ -48,7 +48,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if(!$id){
-            echo display_error($lng['wrong_data']);
+            echo display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }

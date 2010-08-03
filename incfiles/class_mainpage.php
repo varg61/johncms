@@ -29,20 +29,19 @@ class mainpage {
 
     // Запрос свежих новостей на Главную
     private function news() {
-        global $realtime;
-
+        global $realtime, $lng;
         if ($this->settings['view'] > 0) {
             $reqtime = $this->settings['days'] ? $realtime - ($this->settings['days'] * 86400) : 0;
             $req = mysql_query("SELECT * FROM `news` WHERE `time` > '$reqtime' ORDER BY `time` DESC LIMIT " . $this->settings['quantity']);
             if (mysql_num_rows($req) > 0) {
-                $news = '<div class="phdr"><b>Новости</b></div>';
+                $news = '<div class="phdr"><b>' . $lng['site_news'] . '</b></div>';
                 while ($res = mysql_fetch_array($req)) {
                     $text = $res['text'];
                     // Если текст больше заданного предела, обрезаем
                     if (mb_strlen($text) > $this->settings['size']) {
                         $text = mb_substr($text, 0, $this->settings['size']);
                         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-                        $text .= ' <a href="str/news.php">Дальше...</a>';
+                        $text .= ' <a href="str/news.php">' . $lng['next'] . '...</a>';
                     } else {
                         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
                     }
@@ -77,7 +76,7 @@ class mainpage {
                         $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");
                         $komm = mysql_result($mes, 0) - 1;
                         if ($komm >= 0)
-                            $news .= '<br /><a href="../forum/?id=' . $res['kom'] . '">Обсудить</a> (' . $komm . ')';
+                            $news .= '<br /><a href="../forum/?id=' . $res['kom'] . '">' . $lng['discuss'] . '</a> (' . $komm . ')';
                     }
                     $news .= '</div>';
                     ++$i;

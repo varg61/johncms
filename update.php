@@ -106,12 +106,14 @@ switch ($do) {
         echo '<span class="green">OK</span> таблица `cms_forum_vote` обновлена.<br />';
         mysql_query("RENAME TABLE `forum_vote_us` TO `cms_forum_vote_users`");
         echo '<span class="green">OK</span> таблица `cms_forum_vote_users` обновлена.<br />';
+        // Таблица `users`
         mysql_query("ALTER TABLE `users` DROP `set_user`");
         mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `place`");
         mysql_query("ALTER TABLE `users` DROP `set_forum`");
         mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`");
         mysql_query("ALTER TABLE `users` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
-        echo '<span class="green">OK</span> таблица `users` обновлена.<br />';
+        mysql_query("ALTER TABLE `users` ADD `set_language` CHAR( 2 ) NOT NULL AFTER `place`");
+        echo '<span class="green">OK</span> таблица `users` обновлена<br />';
         // Таблица истории IP адресов
         mysql_query("DROP TABLE IF EXISTS `cms_users_iphistory`");
         mysql_query("CREATE TABLE `cms_users_iphistory` (
@@ -125,18 +127,36 @@ switch ($do) {
         KEY `user_ip` (`user_ip`),
         KEY `operator` (`operator`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
-        echo '<span class="green">OK</span> таблица истории IP создана.<br />';
+        echo '<span class="green">OK</span> таблица истории IP создана<br />';
         // Изменяем таблицу `guest`
         mysql_query("ALTER TABLE `guest` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
-        echo '<span class="green">OK</span> таблица `guest` обновлена.<br />';
+        echo '<span class="green">OK</span> таблица `guest` обновлена<br />';
         // Изменяем таблицу `cms_guests`
         mysql_query("ALTER TABLE `cms_guests` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
-        echo '<span class="green">OK</span> таблица `cms_guests` обновлена.<br />';
+        echo '<span class="green">OK</span> таблица `cms_guests` обновлена<br />';
         // Изменяем таблицу `cms_ban_ip`
         mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip1` `ip1` BIGINT( 11 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip2` `ip2` BIGINT( 11 ) NOT NULL DEFAULT '0'");
-        echo '<span class="green">OK</span> таблица `cms_ban_ip` обновлена.<br />';
+        echo '<span class="green">OK</span> таблица `cms_ban_ip` обновлена<br />';
         echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
+        // Изменяем таблицу рекламы
+        mysql_query("ALTER TABLE `cms_ads` DROP `font`");
+        mysql_query("ALTER TABLE `cms_ads` ADD `bold` BOOLEAN NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `cms_ads` ADD `italic` BOOLEAN NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `cms_ads` ADD `underline` BOOLEAN NOT NULL DEFAULT '0'");
+        echo '<span class="green">OK</span> таблица `cms_ads` обновлена<br />';
+        // Создаем таблицу языковых фраз
+        mysql_query("DROP TABLE IF EXISTS `cms_languages`");
+        mysql_query("CREATE TABLE `cms_languages` (
+        `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+        `iso` char(2) NOT NULL,
+        `module` varchar(10) NOT NULL,
+        `var` varchar(30) NOT NULL,
+        `default` text NOT NULL,
+        `custom` text NOT NULL,
+        PRIMARY KEY (`id`),
+        KEY `iso` (`iso`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         break;
 
     case 'step3':

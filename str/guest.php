@@ -14,51 +14,51 @@
 
 define('_IN_JOHNCMS', 1);
 $headmod = 'guest';
-$textl = 'Гостевая';
-require_once('../incfiles/core.php');
-require_once('../incfiles/head.php');
+require('../incfiles/core.php');
+$lng_guest = load_lng('guest');
+if (isset($_SESSION['ref']))
+    unset($_SESSION['ref']);
 
 // Проверяем права доступа в Админ-Клуб
 if (isset($_SESSION['ga']) && $rights < 1)
     unset($_SESSION['ga']);
 
 // Задаем заголовки страницы
-$textl = isset($_SESSION['ga']) ? 'Админ-Клуб' : 'Гостевая';
+$textl = isset($_SESSION['ga']) ? $lng['admin_club'] : $lng['guestbook'];
+require('../incfiles/head.php');
 
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
 if (!$set['mod_guest'] && $rights < 7) {
-    echo '<div class="rmenu"><p>Гостевая закрыта</p></div>';
-    require_once('../incfiles/end.php');
+    echo '<div class="rmenu"><p>' . $lng_guest['guestbook_closed'] . '</p></div>';
+    require('../incfiles/end.php');
     exit;
 }
 switch ($act) {
     case 'delpost':
-        ////////////////////////////////////////////////////////////
-        // Удаление отдельного поста                              //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Удаление отдельного поста
+        -----------------------------------------------------------------
+        */
         if ($rights >= 6 && $id) {
             if (isset($_GET['yes'])) {
                 mysql_query("DELETE FROM `guest` WHERE `id`='" . $id . "' LIMIT 1");
                 header("Location: guest.php");
             } else {
-                echo '<p>Вы действительно хотите удалить пост?<br/>';
-                echo '<a href="guest.php?act=delpost&amp;id=' . $id . '&amp;yes">Удалить</a> | <a href="guest.php">' . $lng['cancel'] . '</a></p>';
+                echo '<div class="phdr"><a href="guest.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['delete_message'] . '</div>' .
+                    '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '?<br/>' .
+                    '<a href="guest.php?act=delpost&amp;id=' . $id . '&amp;yes">' . $lng['delete'] . '</a> | ' .
+                    '<a href="guest.php">' . $lng['cancel'] . '</a></p></div>';
             }
         }
         break;
 
-    case 'trans':
-        ////////////////////////////////////////////////////////////
-        // Справка по транслиту                                   //
-        ////////////////////////////////////////////////////////////
-        include("../pages/trans.$ras_pages");
-        echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
-        break;
-
     case 'say':
-        ////////////////////////////////////////////////////////////
-        // Добавление нового поста                                //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Добавление нового поста
+        -----------------------------------------------------------------
+        */
         $admset = isset($_SESSION['ga']) ? 1 : 0; // Задаем куда вставляем, в Админ клуб (1), или в Гастивуху (0)
         // Принимаем и обрабатываем данные
         $name = isset($_POST['name']) ? mb_substr(trim($_POST['name']), 0, 20) : '';
@@ -73,14 +73,14 @@ switch ($act) {
         $error = array ();
         $flood = false;
         if (!$user_id && empty($_POST['name']))
-            $error[] = 'Вы не ввели имя';
+            $error[] = $lng_guest['error_name_empty'];
         if (empty($_POST['msg']))
-            $error[] = 'Вы не ввели сообщение';
+            $error[] = $lng_guest['error_message_empty'];
         if ($ban['1'] || $ban['13'])
-            $error[] = 'Вы не можете писать в Гостевой';
+            $error[] = $lng_guest['error_ban'];
         // CAPTCHA для гостей
         if (!$user_id && (empty($code) || mb_strlen($code) < 4 || $code != $_SESSION['code']))
-            $error[] = 'Проверочный код введен неверно';
+            $error[] = $lng_guest['error_captcha_wrong'];
         unset($_SESSION['code']);
         if ($user_id) {
             // Антифлуд для зарегистрированных пользователей
@@ -94,7 +94,7 @@ switch ($act) {
             }
         }
         if ($flood)
-            $error = 'Вы не можете так часто добавлять сообщения<br />Пожалуйста, подождите ' . $flood . ' сек.';
+            $error = $lng_guest['error_flood'] . ' ' . $flood . '&#160;' . $lng_guest['seconds'];
         if (!$error) {
             // Проверка на одинаковые сообщения
             $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '$user_id' ORDER BY `time` DESC");
@@ -107,180 +107,210 @@ switch ($act) {
         if (!$error) {
             // Вставляем сообщение в базу
             mysql_query("INSERT INTO `guest` SET
-            `adm` = '$admset',
-            `time` = '$realtime',
-            `user_id` = '$user_id',
-            `name` = '$from',
-            `text` = '" . mysql_real_escape_string($msg) . "',
-            `ip` = '$ipl',
-            `browser` = '" . mysql_real_escape_string($agn) . "'");
+                `adm` = '$admset',
+                `time` = '$realtime',
+                `user_id` = '$user_id',
+                `name` = '$from',
+                `text` = '" . mysql_real_escape_string($msg) . "',
+                `ip` = '$ipl',
+                `browser` = '" . mysql_real_escape_string($agn) . "'
+            ");
             // Фиксируем время последнего поста (антиспам)
             if ($user_id) {
                 $postguest = $datauser['postguest'] + 1;
                 mysql_query("UPDATE `users` SET `postguest` = '$postguest', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             }
-            header("location: guest.php");
+            header('location: guest.php');
         } else {
-            echo display_error($error, '<a href="guest.php">Назад</a>');
+            echo display_error($error, '<a href="guest.php">' . $lng['back'] . '</a>');
         }
         break;
 
     case 'otvet':
-        ////////////////////////////////////////////////////////////
-        // Добавление "ответа Админа"                             //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Добавление "ответа Админа"
+        -----------------------------------------------------------------
+        */
         if ($rights >= 6 && $id) {
             if (isset($_POST['submit'])) {
-                $otv = mb_substr($_POST['otv'], 0, 5000);
                 mysql_query("UPDATE `guest` SET
-                `admin` = '" . $login . "',
-                `otvet` = '" . mysql_real_escape_string($otv) . "',
-                `otime` = '" . $realtime . "'
-                WHERE `id` = '" . $id . "'");
+                    `admin` = '$login',
+                    `otvet` = '" . mysql_real_escape_string(mb_substr($_POST['otv'], 0, 5000)) . "',
+                    `otime` = '$realtime'
+                    WHERE `id` = '$id'
+                ");
                 header("location: guest.php");
             } else {
-                $ps = mysql_query("select * from `guest` where id='" . $id . "'");
-                $ps1 = mysql_fetch_array($ps);
-                if (!empty($ps1['otvet'])) {
-                    echo "<br /><b>Внимание!<br />На этот пост уже ответили.</b><br/><br/>";
+                echo '<div class="phdr"><a href="guest.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng_guest['reply'] . '</div>';
+                $req = mysql_query("SELECT * FROM `guest` WHERE `id` = '$id' LIMIT 1");
+                $res = mysql_fetch_assoc($req);
+                if (!empty($res['otvet'])) {
+                    echo '<div class="rmenu">' . $lng_guest['reply_already'] . '</div>';
                 }
-                $text = htmlentities($ps1['text'], ENT_QUOTES, 'UTF-8');
-                $otv = htmlentities($ps1['otvet'], ENT_QUOTES, 'UTF-8');
-                echo "Пост в гостевой:<br /><b>$ps1[name]:</b> $text&quot;<br/><br/><form action='guest.php?act=otvet&amp;id=" . $id .
-                    "' method='post'>Ответ:<br/><textarea rows='3' name='otv'>$otv</textarea><br/><input type='submit' name='submit' value='Ok!'/><br/></form><a href='guest.php?'>В гостевую</a><br/>";
+                echo '<div class="menu">' .
+                    '<div class="quote"><b>' . $res['name'] . '</b>' .
+                    '<br />' . checkout($res['text']) . '</div>' .
+                    '<form action="guest.php?act=otvet&amp;id=' . $id . '" method="post">' .
+                    '<p><h3>' . $lng_guest['reply'] . '</h3>' .
+                    '<textarea rows="3" name="otv">' . checkout($res['otvet']) . '</textarea></p>' .
+                    '<p><input type="submit" name="submit" value="' . $lng_guest['reply'] . '"/></p>' .
+                    '</form></div>' .
+                    '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+                    '<p><a href="guest.php">' . $lng['back'] . '</a></p>';
             }
         }
         break;
 
     case 'edit':
-        ////////////////////////////////////////////////////////////
-        // Редактирование поста                                   //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Редактирование поста
+        -----------------------------------------------------------------
+        */
         if ($rights >= 6 && $id) {
             if (isset($_POST['submit'])) {
                 $req = mysql_query("SELECT `edit_count` FROM `guest` WHERE `id`='" . $id . "' LIMIT 1");
                 $res = mysql_fetch_array($req);
                 $edit_count = $res['edit_count'] + 1;
-                $msg = mb_substr($_POST['msg'], 0, 500);
+                $msg = mb_substr($_POST['msg'], 0, 5000);
                 mysql_query("UPDATE `guest` SET
-                `text`='" . mysql_real_escape_string($msg) . "',
-                `edit_who`='" . $login . "',
-                `edit_time`='" . $realtime . "',
-                `edit_count`='" . $edit_count . "'
-                WHERE `id`='" . $id . "'");
+                    `text` = '" . mysql_real_escape_string($msg) . "',
+                    `edit_who` = '$login',
+                    `edit_time` = '$realtime',
+                    `edit_count` = '$edit_count'
+                    WHERE `id` = '$id'
+                ");
                 header("location: guest.php");
             } else {
                 $req = mysql_query("SELECT * FROM `guest` WHERE `id` = '" . $id . "' LIMIT 1");
-                $res = mysql_fetch_array($req);
+                $res = mysql_fetch_assoc($req);
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
-                echo '<div class="phdr"><b>Гостевая</b>: редактируем пост</div>';
-                echo '<div class="rmenu"><form action="guest.php?act=edit&amp;id=' . $id . '" method="post">
-                <textarea rows="3" name="msg">' . $text .
-                    '</textarea><br/>
-                <input type="submit" name="submit" value="Отправить"/></form></div>';
-                echo '<div class="phdr"><a href="index.php?act=trans">Транслит</a> | <a href="../str/smile.php">' . $lng['smileys'] . '</a></div>';
-                echo '<p><a href="guest.php">Назад</a></p>';
+                echo '<div class="phdr"><a href="guest.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng_guest['edit_post'] . '</div>' .
+                    '<div class="rmenu">' .
+                    '<form action="guest.php?act=edit&amp;id=' . $id . '" method="post">' .
+                    '<p><b>' . $lng['author'] . ':</b> ' . $res['name'] . '</p>' .
+                    '<p><textarea rows="3" name="msg">' . $text . '</textarea></p>' .
+                    '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
+                    '</form></div>' .
+                    '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+                    '<p><a href="guest.php">' . $lng['back'] . '</a></p>';
             }
         }
         break;
 
     case 'clean':
-        ////////////////////////////////////////////////////////////
-        // Очистка Гостевой                                       //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Очистка Гостевой
+        -----------------------------------------------------------------
+        */
         if ($rights >= 7) {
             if (isset($_POST['submit'])) {
+                // Проводим очистку Гостевой, согласно заданным параметрам
                 $adm = isset($_SESSION['ga']) ? 1 : 0;
                 $cl = isset($_POST['cl']) ? intval($_POST['cl']) : '';
                 switch ($cl) {
                     case '1':
                         // Чистим сообщения, старше 1 дня
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time` < '" . ($realtime - 86400) . "'");
-                        echo '<p>Удалены все сообщения, старше 1 дня.</p><p><a href="guest.php">Вернуться</a></p>';
+                        echo '<p>' . $lng_guest['clear_day_ok'] . '</p>';
                         break;
 
                     case '2':
                         // Проводим полную очистку
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm'");
-                        echo '<p>Удалены все сообщения.</p><p><a href="guest.php">Вернуться</a></p>';
+                        echo '<p>' . $lng_guest['clear_full_ok'] . '</p>';
                         break;
                         default :
                         // Чистим сообщения, старше 1 недели
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time`<='" . ($realtime - 604800) . "';");
-                        echo '<p>Все сообщения, старше 1 недели удалены из Гостевой.</p><p><a href="guest.php">В Гостевую</a></p>';
+                        echo '<p>' . $lng_guest['clear_week_ok'] . '</p>';
                 }
                 mysql_query("OPTIMIZE TABLE `guest`");
+                echo '<p><a href="guest.php">' . $lng['guestbook'] . '</a></p>';
             } else {
-                echo '<p><b>Очистка сообщений</b></p>';
-                echo '<u>Что чистим?</u>';
-                echo '<form id="clean" method="post" action="guest.php?act=clean">';
-                echo '<input type="radio" name="cl" value="0" checked="checked" />Старше 1 недели<br />';
-                echo '<input type="radio" name="cl" value="1" />Старше 1 дня<br />';
-                echo '<input type="radio" name="cl" value="2" />Очищаем все<br />';
-                echo '<input type="submit" name="submit" value="Очистить" />';
-                echo '</form>';
-                echo '<p><a href="guest.php">' . $lng['cancel'] . '</a></p>';
+                // Запрос параметров очистки
+                echo '<div class="phdr"><a href="guest.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['clear'] . '</div>' .
+                    '<div class="menu">' .
+                    '<form id="clean" method="post" action="guest.php?act=clean">' .
+                    '<p><h3>' . $lng_guest['clear_parametres'] . '</h3>' .
+                    '<input type="radio" name="cl" value="0" checked="checked" />' . $lng_guest['clear_param_week'] . '<br />' .
+                    '<input type="radio" name="cl" value="1" />' . $lng_guest['clear_param_day'] . '<br />' .
+                    '<input type="radio" name="cl" value="2" />' . $lng_guest['clear_param_all'] . '</p>' .
+                    '<p><input type="submit" name="submit" value="' . $lng['clear'] . '" /></p>' .
+                    '</form></div>' .
+                    '<div class="phdr"><a href="guest.php">' . $lng['cancel'] . '</a></div>';
             }
         }
         break;
 
     case 'ga':
-        ////////////////////////////////////////////////////////////
-        // Переключение режима работы Гостевая / Админ-клуб       //
-        ////////////////////////////////////////////////////////////
-        //TODO: Убрать переключение по сессии, сделать по ссылке
+        /*
+        -----------------------------------------------------------------
+        Переключение режима работы Гостевая / Админ-клуб
+        -----------------------------------------------------------------
+        */
         if ($rights >= 1) {
             if ($_GET['do'] == 'set') {
                 $_SESSION['ga'] = 1;
-                $textl = 'Админ-Клуб';
             } else {
                 unset($_SESSION['ga']);
-                $textl = 'Гостевая';
             }
         }
 
     default:
-        ////////////////////////////////////////////////////////////
-        // Отображаем Гостевую, или Админ клуб                    //
-        ////////////////////////////////////////////////////////////
+        /*
+        -----------------------------------------------------------------
+        Отображаем Гостевую, или Админ клуб
+        -----------------------------------------------------------------
+        */
         if (!$set['mod_guest'])
-            echo '<p><span class="red"><b>Гостевая закрыта!</b></span></p>';
-        echo '<div class="phdr"><b>Гостевая</b></div>';
+            echo '<div class="alarm">' . $lng_guest['guestbook_closed'] . '</div>';
+        echo '<div class="phdr"><b>' . $lng['guestbook'] . '</b></div>';
+        if ($rights > 0) {
+            $menu = array ();
+            $menu[] = isset($_SESSION['ga']) ? '<a href="guest.php?act=ga">' . $lng['guestbook'] . '</a>' : '<b>' . $lng['guestbook'] . '</b>';
+            $menu[] = isset($_SESSION['ga']) ? '<b>' . $lng['admin_club'] . '</b>' : '<a href="guest.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a>';
+            if ($rights >= 7)
+                $menu[] = '<a href="guest.php?act=clean">' . $lng['clear'] . '</a>';
+            echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        }
         // Форма ввода нового сообщения
         if (($user_id || $set['mod_guest'] == 2) && !$ban['1'] && !$ban['13']) {
             echo '<div class="gmenu"><form action="guest.php?act=say" method="post">';
             if (!$user_id)
-                echo "Имя(max. 25):<br/><input type='text' name='name' maxlength='25'/><br/>";
-            echo 'Сообщение(max. 500):<br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
+                echo $lng_guest['name'] . ':<br/><input type="text" name="name" maxlength="25"/><br/>';
+            echo $lng_guest['message'] . ':<br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             if ($set_user['translit'])
-                echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
+                echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . $lng['translit'] . '<br/>';
             if (!$user_id) {
                 // CAPTCHA для гостей
-                echo '<img src="../captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />';
-                echo '<input type="text" size="5" maxlength="5"  name="code"/>&#160;введите код<br />';
+                echo '<img src="../captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng_guest['captcha'] . '"/><br />';
+                echo '<input type="text" size="5" maxlength="5"  name="code"/>&#160;' . $lng_guest['captcha'] . '<br />';
             }
-            echo "<input type='submit' title='Нажмите для отправки' name='submit' value='Отправить'/></form></div>";
+            echo '<input type="submit" name="submit" value="' . $lng_guest['sent'] . '"/></form></div>';
         } else {
-            echo '<div class="rmenu">Писать могут только <a href="../login.php">авторизованные</a> посетители</div>';
+            echo '<div class="rmenu">' . $lng_guest['only_authorized'] . '</div>';
         }
         if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1")) {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1'");
         } else {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0'");
         }
-        $colmes = mysql_result($req, 0); // Число сообщений в гастивухе
-        if ($colmes > 0) {
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='" . (isset($_SESSION['ga']) ? 1 : 0) . "'"), 0);
+        if ($total) {
             if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1")) {
                 // Запрос для Админ клуба
                 echo '<div class="rmenu"><b>АДМИН-КЛУБ</b></div>';
                 $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
-                FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='1' ORDER BY `time` DESC LIMIT "
-                    . $start . "," . $kmess);
+                FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id`
+                WHERE `guest`.`adm`='1' ORDER BY `time` DESC LIMIT $start, $kmess");
             } else {
                 // Запрос для обычной Гастивухи
                 $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
-                FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id` WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT "
-                    . $start . "," . $kmess);
+                FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id`
+                WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT $start, $kmess");
             }
             while ($res = mysql_fetch_assoc($req)) {
                 $text = '';
@@ -318,8 +348,8 @@ switch ($act) {
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
                 }
                 if ($rights >= 6) {
-                    $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">Ответить</a>' . ($rights >= $res['rights'] ? ' | <a href="guest.php?act=edit&amp;id=' . $res['gid'] .
-                        '">Изменить</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">Удалить</a>' : '');
+                    $subtext = '<a href="guest.php?act=otvet&amp;id=' . $res['gid'] . '">' . $lng_guest['reply'] . '</a>' . 
+                    ($rights >= $res['rights'] ? ' | <a href="guest.php?act=edit&amp;id=' . $res['gid'] . '">' . $lng['edit'] . '</a> | <a href="guest.php?act=delpost&amp;id=' . $res['gid'] . '">' . $lng['delete'] . '</a>' : '');
                 } else {
                     $subtext = '';
                 }
@@ -332,25 +362,17 @@ switch ($act) {
                 echo '</div>';
                 ++$i;
             }
-            echo '<div class="phdr">Всего сообщений: ' . $colmes . '</div>';
-            if ($colmes > $kmess) {
-                echo '<p>' . display_pagination('guest.php?', $start, $colmes, $kmess) . '</p>';
-                echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
-            }
-            echo '<p><div class="func">';
-            // Для Админов даем ссылку на чистку Гостевой
-            if ($rights >= 7)
-                echo '<a href="guest.php?act=clean">Чистка истории</a><br />';
-            echo '</div></p>';
         } else {
-            echo '<p>В Гостевой сообщений нет.</p>';
+            echo '<div class="menu"><p>' . $lng_guest['guestbook_empty'] . '</p></div>';
         }
-        // Ссылка на Админ-клуб
-        if ($rights >= 1)
-            echo (isset($_SESSION['ga']) ? '<p><a href="guest.php?act=ga"><b>Гостевая &gt;&gt;</b></a></p>' : '<p><a href="guest.php?act=ga&amp;do=set"><b>Админ-Клуб &gt;&gt;</b></a></p>');
+        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+        // Навигация по страницам
+        if ($total > $kmess) {
+            echo '<p>' . display_pagination('guest.php?', $start, $total, $kmess) . '</p>';
+            echo '<p><form action="guest.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+        }
         break;
 }
 
-require_once('../incfiles/end.php');
-
+require('../incfiles/end.php');
 ?>

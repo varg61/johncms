@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once("../incfiles/core.php");
+require('../incfiles/core.php');
 
 $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id' LIMIT 1");
 if (mysql_num_rows($req)) {

@@ -17,9 +17,8 @@ define('_IN_JOHNCMS', 1);
 define('_IN_JOHNADM', 1);
 
 require('../incfiles/core.php');
-if(!include('../incfiles/languages/' . $set['language'] . '/admin.php'))
-    echo '<p>Error: cannot include the Admin language file</p>';
-$lng = array_merge($lng, $lng_admin);
+// Подключаем язык Админ-панели
+$lng = array_merge($lng, load_lng('admin'));
 $textl = $lng['admin_panel'];
 if ($rights < 1) {
     header('Location: http://gazenwagen.com/?err');
@@ -39,6 +38,7 @@ $array = array (
     'sys_flood',
     'sys_ipban',
     'sys_ipop',
+    'sys_lng',
     'sys_set',
     'sys_smileys',
     'usr_adm',
@@ -92,8 +92,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
             echo '</ul></p>';
         }
         echo '<p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;' . $lng['system'] . '</h3><ul>';
-        if ($rights == 9)
+        if ($rights == 9){
             echo '<li><a href="index.php?act=sys_set">' . $lng['site_settings'] . '</a></li>';
+            echo '<li><a href="index.php?act=sys_lng">' . $lng['language_default'] . '</a></li>';
+        }
         echo '<li><a href="index.php?act=sys_smileys">' . $lng['refresh_smileys'] . '</a></li>';
         echo '</ul></p>';
         echo '</div><div class="bmenu">';

@@ -13,11 +13,10 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
-require_once('../incfiles/head.php');
-$delf = opendir("temtemp");
+require('../incfiles/head.php');
+$delf = opendir('../files/forum/topics');
 while ($tt = readdir($delf)) {
-    if ($tt != "." && $tt != ".." && $tt != 'index.php') {
+    if ($tt != "." && $tt != ".." && $tt != 'index.php' && $tt != '.svn') {
         $tm[] = $tt;
     }
 }
@@ -31,20 +30,19 @@ for ($it = 0; $it < $totalt; $it++) {
         unlink("../files/forum/topics/$tm[$it]");
     }
 }
-if (empty($_GET['id'])) {
-    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once('../incfiles/end.php');
+if (!$id) {
+    echo display_error($lng['error_wrong_data']);
+    require('../incfiles/end.php');
     exit;
 }
-$type = mysql_query("select * from `forum` where id= '" . $id . "';");
-$type1 = mysql_fetch_array($type);
-$tip = $type1['type'];
-if ($tip != "t") {
-    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
-    require_once('../incfiles/end.php');
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
+if (!mysql_num_rows($req)) {
+    echo display_error($lng['error_wrong_data']);
+    require('../incfiles/end.php');
     exit;
 }
 if (isset($_POST['submit'])) {
+    $type1 = mysql_fetch_assoc($req);
     $tema = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `id` ASC");
     $mod = intval($_POST['mod']);
     switch ($mod) {
@@ -54,8 +52,8 @@ if (isset($_POST['submit'])) {
             ////////////////////////////////////////////////////////////
             $text = $type1['text'] . "\r\n\r\n";
             while ($arr = mysql_fetch_assoc($tema)) {
-                $txt_tmp = str_replace("[c]", "Цитата:{", $arr['text']);
-                $txt_tmp = str_replace("[/c]", "}-Ответ:", $txt_tmp);
+                $txt_tmp = str_replace('[c]', $lng_forum['cytate'] . ':{', $arr['text']);
+                $txt_tmp = str_replace('[/c]', '}-' . $lng_forum['answer'] . ':', $txt_tmp);
                 $txt_tmp = str_replace("&quot;", "\"", $txt_tmp);
                 $txt_tmp = str_replace("[l]", "", $txt_tmp);
                 $txt_tmp = str_replace("[l/]", "-", $txt_tmp);
@@ -63,7 +61,7 @@ if (isset($_POST['submit'])) {
                 $stroka = $arr['from'] . '(' . date("d.m.Y/H:i", $arr['time']) . ")\r\n" . $txt_tmp . "\r\n\r\n";
                 $text .= $stroka;
             }
-            $num = "$realtime$id";
+            $num = $realtime . $id;
             $fp = fopen("../files/forum/topics/$num.txt", "a+");
             flock($fp, LOCK_EX);
             fputs($fp, "$text\r\n");
@@ -72,15 +70,17 @@ if (isset($_POST['submit'])) {
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.txt", 0777);
-            echo "<a href='?act=loadtem&amp;n=" . $num . "'>Скачать</a><br/>Ссылка активна 5 минут!<br/><a href='?'>В форум</a><br/>";
+            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . $lng['download'] . '</a><br/>' . $lng_forum['download_topic_help'] . '<br/><a href="index.php">' . $lng['to_forum'] . '</a><br/>';
             break;
 
         case 2:
             ////////////////////////////////////////////////////////////
             // Сохраняем тему в формате HTML                          //
             ////////////////////////////////////////////////////////////
-            $text = "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-<title>" . $lng['forum'] . "</title>
+            $text =
+                "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<title>" . $lng['forum']
+                . "</title>
 <style type='text/css'>
 body { color: #000000; background-color: #FFFFFF }
 div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
@@ -109,7 +109,7 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
                 $text = "$text $stroka";
                 ++$i;
             }
-            $text = $text . '<p>Данная тема была скачана с форума сайта: <b>' . $copyright . '</b></p></body></html>';
+            $text = $text . '<p>' . $lng_forum['download_topic_note'] . ': <b>' . $copyright . '</b></p></body></html>';
             $num = "$realtime$id";
             $fp = fopen("../files/forum/topics/$num.htm", "a+");
             flock($fp, LOCK_EX);
@@ -119,15 +119,15 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.htm", 0777);
-            echo "<a href='?act=loadtem&amp;n=" . $num . "'>Скачать</a><br/>Ссылка активна 5 минут!<br/><a href='?'>В форум</a><br/>";
+            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . $lng['download'] . '</a><br/>' . $lng_forum['download_topic_help'] . '<br/><a href="index.php">' . $lng['to_forum'] . '</a><br/>';
             break;
     }
 } else {
-    echo "<p>Выберите формат<br/><form action='?act=tema&amp;id=" . $id .
-        "' method='post'><br/><select name='mod'>
-    <option value='1'>.txt</option>
-    <option value='2'>.htm</option>
-    </select><input type='submit' name='submit' value='Ok!'/><br/></form></p>";
+    echo '<p>' . $lng_forum['download_topic_format'] . '<br/>' .
+        '<form action="index.php?act=tema&amp;id=' . $id . '" method="post">' .
+        '<select name="mod"><option value="1">.txt</option>' .
+        '<option value="2">.htm</option></select>' .
+        '<input type="submit" name="submit" value="' . $lng['download'] . '"/>' .
+        '</form></p>';
 }
-
 ?>
