@@ -119,7 +119,7 @@ if ($do || isset($_GET['new'])) {
                 $file .= '<img src="thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . $lng_forum['click_to_view'] . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
-                $file .= ($res['del'] ? '<img src="../images/del.png" width="16" height="16" />' : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" />&#160;';
+                $file = ($res['del'] ? '<img src="../images/del.png" width="16" height="16" />' : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" />&#160;';
             }
             $file .= '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
             $file .= '<small><span class="gray">' . $lng_forum['size'] . ': ' . $fls . ' kb.<br />' . $lng_forum['downloaded'] . ': ' . $res['dlcount'] . ' ' . $lng_forum['time'] . '</span></small>';
