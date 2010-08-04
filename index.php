@@ -114,10 +114,10 @@ switch ($act) {
                 echo '<li><a href="str/guest.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (' . $total_admin . ')</li>';
             if (!$newusers_total && !$reg_total && !$ban_total && !$total_libmod && !$total_admin)
                 echo '<li>' . $lng['events_no_new'] . '</li>';
-            echo '</ul></p>';
+            echo '</ul></p></div>';
         }
         // Дайджест юзеров
-        echo '<p><h3>' . $lng['site_new'] . '</h3><ul>';
+        echo '<div class="menu"><p><h3>' . $lng['site_new'] . '</h3><ul>';
         $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
         if ($total_news > 0)
             echo '<li><a href="str/news.php">' . $lng['news'] . '</a> (' . $total_news . ')</li>';
