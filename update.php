@@ -50,7 +50,6 @@ switch ($do) {
         // Проверка прав доступа к папкам
         $arr = array (
             'files/forum/attach/',
-            'files/forum/thumbinals/',
             'files/forum/topics/',
             'files/users/avatar/',
             'files/users/photo/',

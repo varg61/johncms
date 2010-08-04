@@ -33,7 +33,6 @@ if (isset($_POST['submit'])) {
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['fm']) . "' WHERE `key` = 'fmod'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['meta_key']) . "' WHERE `key` = 'meta_key'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['meta_desc']) . "' WHERE `key` = 'meta_desc'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['language']) . "' WHERE `key` = 'language'");
     $req = mysql_query("SELECT * FROM `cms_settings`");
     $set = array ();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
