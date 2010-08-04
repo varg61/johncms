@@ -2,26 +2,28 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if (empty($_GET['n'])) {
-    require('../incfiles/head.php');
-    echo display_error($lng['error_wrong_data']);
-    require('../incfiles/end.php');
+if (empty ($_GET['n'])) {
+    require_once ("../incfiles/head.php");
+    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
+    require_once ("../incfiles/end.php");
     exit;
 }
-$n = trim($_GET['n']);
-$o = opendir("../files/forum/topics");
+$n = $_GET['n'];
+$o = opendir("temtemp");
 while ($f = readdir($o)) {
     if ($f != "." && $f != ".." && $f != "index.php" && $f != ".htaccess") {
         $ff = format($f);
@@ -32,16 +34,16 @@ while ($f = readdir($o)) {
 }
 $tt = count($a);
 if (!in_array($n, $b)) {
-    require_once('../incfiles/head.php');
-    echo display_error($lng['error_wrong_data']);
-    require_once('../incfiles/end.php');
+    require_once ("../incfiles/head.php");
+    echo "Ошибка!<br/><a href='?'>В форум</a><br/>";
+    require_once ("../incfiles/end.php");
     exit;
 }
 for ($i = 0; $i < $tt; $i++) {
     $tf = format($a[$i]);
     $tf1 = str_replace(".$tf", "", $a[$i]);
     if ($n == $tf1) {
-        header("Location: ../files/forum/topics/$n.$tf");
+        header("Location: temtemp/$n.$tf");
     }
 }
 

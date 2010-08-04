@@ -1,21 +1,23 @@
 <?
-
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
-// Спасибо Esi0n за помощь в написании модуля RSS
+// Спасибо Esi0n за помощь в написании функции RSS                            //
+////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
 
-require_once ('../incfiles/core.php');
+require_once ("../incfiles/core.php");
 header('content-type: application/rss+xml');
 echo '<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel>

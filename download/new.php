@@ -26,9 +26,9 @@ if ($total > 0) {
     ////////////////////////////////////////////////////////////
     // Выводим список новых файлов                            //
     ////////////////////////////////////////////////////////////
-    $req = mysql_query("SELECT * FROM `download` WHERE `time` > '$old' AND `type` = 'file' ORDER BY `time` DESC LIMIT $start,$kmess");
+    $req = mysql_query("SELECT * FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
     while ($newf = mysql_fetch_array($req)) {
-        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
         $fsz = filesize("$newf[adres]/$newf[name]");
         $fsz = round($fsz / 1024, 2);
         $ft = format("$newf[adres]/$newf[name]");
@@ -83,10 +83,10 @@ if ($total > 0) {
         echo "[$pat1]</div>";
         ++$i;
     }
-    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+    echo '<div class="phdr">Всего: ' . $total . '</div>';
     if ($total > 10) {
-        echo '<p>' . display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+        echo '<p>' . pagenav('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="К странице &gt;&gt;"/></form></p>';
     }
 }
 else {

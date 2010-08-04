@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -17,22 +19,22 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 ////////////////////////////////////////////////////////////
 // Главное меню сайта                                     //
 ////////////////////////////////////////////////////////////
-require ('incfiles/class_mainpage.php');
+require_once ('incfiles/class_mainpage.php');
 $mp = new mainpage();
 // Блок новостей
 echo $mp->news;
-echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
-echo '<div class="menu"><a href="str/news.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>';
-echo '<div class="menu"><a href="index.php?act=info">' . $lng['information'] . '</a> <a href="str/faq.php">FAQ</a></div>';
-echo '<div class="menu"><a href="index.php?act=users">' . $lng['site_active'] . '</a></div>';
-echo '<div class="phdr"><b>' . $lng['dialogue'] . '</b></div>';
-echo '<div class="menu"><a href="str/guest.php">' . $lng['guestbook'] . '</a> (' . stat_guestbook() . ')</div>';
-echo '<div class="menu"><a href="forum/">' . $lng['forum'] . '</a> (' . stat_forum() . ')</div>';
-echo '<div class="menu"><a href="chat/">' . $lng['chat'] . '</a> (' . stat_chat() . ')</div>';
-echo '<div class="phdr"><b>' . $lng['useful'] . '</b></div>';
-echo '<div class="menu"><a href="download/">' . $lng['downloads'] . '</a> (' . stat_download() . ')</div>';
-echo '<div class="menu"><a href="library/">' . $lng['library'] . '</a> (' . stat_library() . ')</div>';
-echo '<div class="menu"><a href="gallery/">' . $lng['gallery'] . '</a> (' . stat_gallery() . ')</div>';
-echo '<div class="phdr"><a href="http://gazenwagen.com">Gazenwagen</a></div>';
+echo '<div class="phdr"><b>Информация</b></div>';
+echo '<div class="menu"><a href="str/news.php">Архив новостей</a> (' . $mp->newscount . ')</div>';
+echo '<div class="menu"><a href="index.php?act=info">Доп. информация</a></div>';
+echo '<div class="menu"><a href="index.php?act=users">Актив Сайта</a></div>';
+echo '<div class="phdr"><b>Общение</b></div>';
+echo '<div class="menu"><a href="str/guest.php">Гостевая</a> (' . gbook() . ')</div>';
+echo '<div class="menu"><a href="forum/">Форум</a> (' . wfrm() . ')</div>';
+echo '<div class="menu"><a href="chat/">Чат</a> (' . wch() . ')</div>';
+echo '<div class="phdr"><b>Полезное</b></div>';
+echo '<div class="menu"><a href="download/">Загрузки</a> (' . dload() . ')</div>';
+echo '<div class="menu"><a href="library/">Библиотека</a> (' . stlib() . ')</div>';
+echo '<div class="menu"><a href="gallery/">Галерея</a> (' . fgal() . ')</div>';
+echo '<div class="phdr"><a href="http://gazenwagen.com">Ф Газенвагенъ</a></div>';
 
 ?>

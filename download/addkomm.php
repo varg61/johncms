@@ -61,7 +61,7 @@ Cообщение(max. 500)<br/>
 <input type='checkbox' name='msgtrans' value='1' title='Поставьте флажок для транслитерации сообщения' /> Транслит<br/>
 <input type='submit' title='Нажмите для отправки' name='submit' value='добавить' />
   </form><br/>";
-        echo '<a href="index.php?act=trans">Транслит</a><br /><a href="../str/smile.php">' . $lng['smileys'] . '</a><br/>';
+        echo "<a href='index.php?act=trans'>Транслит</a><br /><a href='../str/smile.php'>Смайлы</a><br/>";
     }
 }
 else {

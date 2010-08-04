@@ -2,128 +2,118 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
 $headmod = 'online';
-require('../incfiles/core.php');
-$textl = $lng['online'];
-$lng_online = load_lng('online');
-require('../incfiles/head.php');
-
-/*
------------------------------------------------------------------
-Показываем список Online
------------------------------------------------------------------
-*/
-echo '<div class="phdr"><b>' . $lng_online['who_on_site'] . '</b></div>';
-if ($rights > 0)
-    echo '<div class="topmenu">' . ($act == 'guest' ? '<a href="online.php">' . $lng['authorized'] . '</a> | ' . $lng['guests'] : $lng['authorized'] . ' | <a href="online.php?act=guest">' . $lng['guests'] . '</a>') . '</div>';
+$textl = 'Онлайн';
+require_once('../incfiles/core.php');
+require_once('../incfiles/head.php');
+echo '<div class="phdr"><b>Кто на сайте</b></div>';
+echo '<div class="bmenu">Список ' . ($act == 'guest' ? 'гостей' : 'авторизованных') . '</div>';
 $onltime = $realtime - 300;
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime'"), 0);
 if ($total) {
     $req = mysql_query("SELECT * FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY " . ($act == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
     while ($res = mysql_fetch_assoc($req)) {
-        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo ($i % 2) ? '<div class="list2">' : '<div class="list1">';
         if ($user_id) {
             // Вычисляем местоположение
             $where = explode(",", $res['place']);
             switch ($where[0]) {
                 case 'forumfiles':
-                    $place = '<a href="../forum/index.php?act=files">' . $lng_online['where_forum_files'] . '</a>';
+                    $place = '<a href="../forum/index.php?act=files">Файлы форума</a>';
                     break;
 
                 case 'forumwho':
-                    $place = '<a href="../forum/index.php?act=who">' . $lng_online['where_forum_who'] . '</a>';
+                    $place = '<a href="../forum/index.php?act=who">Смотрит кто в форуме?</a>';
                     break;
 
                 case 'anketa':
-                    $place = '<a href="anketa.php">' . $lng_online['where_profile'] . '</a>';
+                    $place = '<a href="anketa.php">Анкета</a>';
                     break;
 
                 case 'settings':
-                    $place = '<a href="usset.php">' . $lng_online['where_settings'] . '</a>';
+                    $place = '<a href="usset.php">Настройки</a>';
                     break;
 
                 case 'users':
-                    $place = '<a href="users.php">' . $lng_online['where_users_list'] . '</a>';
+                    $place = '<a href="users.php">Список юзеров</a>';
                     break;
 
                 case 'online':
-                    $place = $lng_online['where_here'];
+                    $place = 'Тут, в списке';
                     break;
 
                 case 'privat':
                 case 'pradd':
-                    $place = '<a href="my_cabinet.php">' . $lng_online['where_pm'] . '</a>';
+                    $place = '<a href="../index.php?act=cab">Приват</a>';
                     break;
 
                 case 'birth':
-                    $place = '<a href="brd.php">' . $lng_online['where_birth'] . '</a>';
+                    $place = '<a href="brd.php">Список именинников</a>';
                     break;
 
                 case 'read':
-                    $place = '<a href="faq.php">' . $lng_online['where_faq'] . '</a>';
+                    $place = '<a href="../read.php">Читает FAQ</a>';
                     break;
 
                 case 'load':
-                    $place = '<a href="../download/index.php">' . $lng_online['where_downloads'] . '</a>';
+                    $place = '<a href="../download/index.php">Загрузки</a>';
                     break;
 
                 case 'gallery':
-                    $place = '<a href="../gallery/index.php">' . $lng_online['where_gallery'] . '</a>';
+                    $place = '<a href="../gallery/index.php">Галерея</a>';
                     break;
 
                 case 'forum':
                 case 'forums':
-                    $place = '<a href="../forum/index.php">' . $lng_online['where_forum'] . '</a>&#160;/&#160;<a href="../forum/index.php?act=who">&gt;&gt;</a>';
+                    $place = '<a href="../forum/index.php">Форум</a>&nbsp;/&nbsp;<a href="../forum/index.php?act=who">&gt;&gt;</a>';
                     break;
 
                 case 'chat':
-                    $place = '<a href="../chat/index.php">' . $lng_online['where_chat'] . '</a>';
+                    $place = '<a href="../chat/index.php">Чат</a>';
                     break;
 
                 case 'guest':
-                    $place = '<a href="guest.php">' . $lng_online['where_guestbook'] . '</a>';
+                    $place = '<a href="guest.php">Гостевая</a>';
                     break;
 
                 case 'lib':
-                    $place = '<a href="../library/index.php">' . $lng_online['where_library'] . '</a>';
+                    $place = '<a href="../library/index.php">Библиотека</a>';
                     break;
 
                 case 'mainpage':
                 default:
-                    $place = '<a href="../index.php">' . $lng_online['where_homepage'] . '</a>';
+                    $place = '<a href="../index.php">Главная</a>';
                     break;
             }
         }
-        $arg = array (
-            'stshide' => 1,
-            'header' => (' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
-        );
-        echo display_user($res, $arg);
+        echo show_user($res, 0, ($act == 'guest' || ($rights >= 1) ? ($rights >= 1 ? 2 : 1) : 0), ' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&nbsp;' . $place);
         echo '</div>';
         ++$i;
     }
 } else {
-    echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>Никого нет</p></div>';
 }
-echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+echo '<div class="phdr">Всего: ' . $total . '</div>';
 if ($total > 10) {
-    echo '<p>' . display_pagination('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
-    echo '<p><form action="online.php" method="get">' .
-        '<input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') .
-        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
-        '</form></p>';
+    echo '<p>' . pagenav('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
+    echo '<p><form action="online.php" method="get"><input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') .
+        '<input type="submit" value="К странице &gt;&gt;"/></form></p>';
 }
+if ($user_id)
+    echo '<p><a href="online.php' . ($act == 'guest' ? '">Показать авторизованных' : '?act=guest">Показать гостей') . '</a></p>';
+require_once('../incfiles/end.php');
 
-require('../incfiles/end.php');
 ?>

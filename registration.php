@@ -2,59 +2,48 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
-$textl = $lng['registration'];
+
+$textl = 'Регистрация';
 $rootpath = '';
 require_once('incfiles/core.php');
 require_once('incfiles/head.php');
-// Загружаем язык Регистрации
-$lng_reg = load_lng('reg');
-// Если регистрация закрыта, выводим предупреждение
+
 if ($regban || !$set['mod_reg']) {
-    echo '<p>' . $lng_reg['registration_closed'] . '</p>';
+    echo '<p>Регистрация закрыта.</p>';
     require_once("incfiles/end.php");
     exit;
 }
-echo '<div class="phdr"><b>' . $lng['registration'] . '</b></div>';
+echo '<div class="phdr">Регистрация на сайте</div>';
+
 function regform() {
-    // Форма регистрации
-    global $lng_reg;
-    echo '<form action="registration.php" method="post"><div class="gmenu">' .
-        '<p><h3>' . $lng_reg['login'] . '</h3>' .
-        '<input type="text" name="nick" maxlength="15" value="' . htmlspecialchars($_POST['nick']) . '" /><br />' .
-        '<small>' . $lng_reg['login_help'] . '</small></p>' .
-        '<p><h3>' . $lng_reg['password'] . '</h3>' .
-        '<input type="text" name="password" maxlength="20" value="' . htmlspecialchars($_POST['password']) . '"/><br/>' .
-        '<small>' . $lng_reg['password_help'] . '</small></p>' .
-        '<p><h3>' . $lng_reg['sex'] . '</h3>' .
-        '<select name="sex">' .
-        '<option value="?">-?-</option>' .
-        '<option value="m">' . $lng_reg['sex_m'] . '</option>' .
-        '<option value="zh">' . $lng_reg['sex_w'] . '</option>' .
-        '</select></p></div>' .
-        '<div class="menu">' .
-        '<p><h3>' . $lng_reg['name'] . '</h3>' .
-        '<input type="text" name="imname" maxlength="30" value="' . htmlspecialchars($_POST['imname']) . '" /><br />' .
-        '<small>' . $lng_reg['name_help'] . '</small></p>' .
-        '<p><h3>' . $lng_reg['about'] . '</h3>' .
-        '<textarea rows="3" name="about">' . htmlspecialchars($_POST['about']) . '</textarea><br />' .
-        '<small>' . $lng_reg['about_help'] . '</small></p></div>' .
-        '<div class="gmenu"><p>' .
-        '<img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng_reg['captcha'] . '" border="1"/><br />' . $lng_reg['captcha'] . ':<br/><input type="text" size="5" maxlength="5"  name="kod"/><br />' .
-        '<small>' . $lng_reg['captcha_help'] . '</small></p>' .
-        '<p><input type="submit" name="submit" value="' . $lng_reg['registration'] . '"/></p></div></form>' .
-        '<div class="phdr"><small>' . $lng_reg['registration_terms'] . '</small></div>';
+    echo '<form action="registration.php" method="post"><div class="gmenu"><p>';
+    echo '<b>Логин:</b><br/><input type="text" name="nick" maxlength="15" value="' . check($_POST['nick']) . '" /><br />';
+    echo '<small>Мин. 2, макс. 15 символов.<br />Разрешены буквы Русского и Латинского алфавита,<br />цифры и знаки - = @ ! ? ~ _ ( ) [ ] . * (кроме нуля)</small></p>';
+    echo '<p><b>Пароль:</b><br/><input type="text" name="password" maxlength="20" /><br/>';
+    echo '<small>Мин. 3, макс. 10 символов.<br />Разрешены буквы Латинского алфавита и цифры.</small></p>';
+    echo '<p><b>Пол:</b><br/><select name="sex"><option value="?">-?-</option><option value="m">Муж.</option><option value="zh">Жен.</option></select></p></div>';
+    echo '<div class="menu"><p>Имя:<br/><input type="text" name="imname" maxlength="30" value="' . check($_POST['imname']) . '" /><br />';
+    echo '<small>Макс. 30 символов.</small></p>';
+    echo '<p>О себе: <small>(макс. 500 символов)</small><br/><textarea rows="3" name="about">' . check($_POST['about']) . '</textarea></p></div>';
+    echo '<div class="gmenu"><p>Если Вы не видите рисунок с кодом, включите поддержку графики в настройках браузера и обновите страницу.<br />';
+    echo '<img src="captcha.php?r=' . rand(1000, 9999) . '" alt="Проверочный код"/><br />';
+    echo 'Код с картинки:<br/><input type="text" size="5" maxlength="5"  name="kod"/></p></div>';
+    echo '<div class="bmenu"><input type="submit" name="submit" value="Регистрация"/></div></form>';
 }
+
 if (isset($_POST['submit'])) {
     // Принимаем переменные
     $reg_kod = isset($_POST['kod']) ? trim($_POST['kod']) : '';
@@ -64,30 +53,30 @@ if (isset($_POST['submit'])) {
     $reg_name = isset($_POST['imname']) ? trim($_POST['imname']) : '';
     $reg_about = isset($_POST['about']) ? trim($_POST['about']) : '';
     $reg_sex = isset($_POST['sex']) ? trim($_POST['sex']) : '';
-    $error = array();
+    $error = false;
     // Проверка Логина
     if (empty($reg_nick))
-        $error[] = $lng_reg['error_nick_empty'];
+        $error = $error . 'Не введён логин!<br/>';
     elseif (mb_strlen($reg_nick) < 2 || mb_strlen($reg_nick) > 15)
-        $error[] = $lng_reg['error_nick_lenght'];
+        $error = $error . 'Недопустимая длина Логина<br />';
     if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
-        $error[] = $lng_reg['error_nick_symbols'];
+        $error = $error . 'Недопустимые символы в Логине!<br/>';
     // Проверка пароля
     if (empty($reg_pass))
-        $error[] = $lng_reg['error_password_empty'];
+        $error = $error . 'Не введён пароль!<br/>';
     elseif (mb_strlen($reg_pass) < 3 || mb_strlen($reg_pass) > 10)
-        $error[] = $lng_reg['error_password_lenght'];
+        $error = $error . 'Недопустимая длина пароля<br />';
     if (preg_match("/[^\da-zA-Z_]+/", $reg_pass))
-        $error[] = $lng_reg['error_password_symbols'];
+        $error = $error . 'Недопустимые символы в пароле!<br/>';
     // Проверка имени
     if ($reg_sex == 'm' || $reg_sex == 'zh') { }
     else
-        $error[] = $lng_reg['error_sex'];
+        $error = $error . 'Не указан пол!<br/>';
     // Проверка кода CAPTCHA
     if (empty($reg_kod) || mb_strlen($reg_kod) < 4)
-        $error[] = $lng_reg['error_captcha_empty'];
+        $error = $error . 'Не введён проверочный код!<br/>';
     elseif ($reg_kod != $_SESSION['code'])
-        $error[] = $lng_reg['error_captcha_wrong'];
+        $error = $error . 'Проверочный код неверен!<br/>';
     unset($_SESSION['code']);
     // Проверка переменных
     if (empty($error)) {
@@ -96,56 +85,51 @@ if (isset($_POST['submit'])) {
         $reg_about = check(mb_substr($reg_about, 0, 500));
         $reg_sex = check(mb_substr($reg_sex, 0, 2));
         // Проверка, занят ли ник
-        $req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . mysql_real_escape_string($lat_nick) . "'");
+        $req = mysql_query("select * from `users` where `name_lat`='" . mysql_real_escape_string($lat_nick) . "';");
         if (mysql_num_rows($req) != 0) {
-            $error[] = $lng_reg['error_nick_occupied'];
+            $error = 'Этот ник уже зарегистрирован!<br/>Выберите другой.<br/>';
         }
     }
     if (empty($error)) {
         $preg = $set['mod_reg'] > 1 ? 1 : 0;
         mysql_query("INSERT INTO `users` SET
-            `name` = '" . mysql_real_escape_string($reg_nick) . "',
-            `name_lat` = '" . mysql_real_escape_string($lat_nick) . "',
-            `password` = '" . mysql_real_escape_string($pass) . "',
-            `imname` = '$reg_name',
-            `about` = '$reg_about',
-            `sex` = '$reg_sex',
-            `rights` = '0',
-            `ip` = '$ipl',
-            `browser` = '" . mysql_real_escape_string($agn) . "',
-            `datereg` = '$realtime',
-            `lastdate` = '$realtime',
-            `preg` = '$preg'
-        ");
+        `name` = '" . mysql_real_escape_string($reg_nick) . "',
+        `name_lat` = '" . mysql_real_escape_string($lat_nick) . "',
+        `password` = '" . mysql_real_escape_string($pass) . "',
+        `imname` = '$reg_name',
+        `about` = '$reg_about',
+        `sex` = '$reg_sex',
+        `rights` = '0',
+        `ip` = '$ipl',
+        `browser` = '" . mysql_real_escape_string($agn) . "',
+        `datereg` = '$realtime',
+        `lastdate` = '$realtime',
+        `preg` = '$preg'");
         $usid = mysql_insert_id();
-        mysql_query("INSERT INTO `cms_users_iphistory` SET
-            `user_id` = '$usid',
-            `user_ip` = '$ipl',
-            `time` = '$realtime'
-        ");
-        echo '<div class="menu"><p><h3>' . $lng_reg['you_registered'] . '</h3>' .
-            $lng_reg['your_id'] . ': <b>' . $usid . '</b><br/>' .
-            $lng_reg['your_login'] . ': <b>' . $reg_nick . '</b><br/>' .
-            $lng_reg['your_password'] . ': <b>' . $reg_pass . '</b></p>' .
-            '<p><h3>' . $lng_reg['your_link'] . '</h3><input type="text" value="' . $home . '/login.php?id=' . $usid . '&amp;p=' . $reg_pass . '" /><br/>';
+        echo "Вы зарегистрированы!<br/>";
+        echo "Ваш id: " . $usid . "<br/>";
+        echo "Ваш логин: " . $reg_nick . "<br/>";
+        echo "Ваш Пароль: " . $reg_pass . "<br/>";
+        echo "Ссылка для автовхода:<br/><input type='text' value='" . $home . "/login.php?id=" . $usid . "&amp;p=" . $reg_pass . "' /><br/>";
         if ($set['mod_reg'] == 1) {
-            echo '<p><span class="red"><b>' . $lng_reg['moderation_note'] . '</b></span></p>';
+            echo 'Пожалуйста,ожидайте подтверждения Вашей регистрации администратором<br/>';
         } else {
-            echo '<br /><a href="login.php?id=' . $usid . '&amp;p=' . $reg_pass . '">' . $lng_reg['enter'] . '</a><br/><br/>';
+            echo "<br /><a href='login.php?id=" . $usid . "&amp;p=" . $reg_pass . "'>ВХОД</a><br/><br/>";
         }
-        echo '</p></div>';
     } else {
-        echo display_error($error);
+        echo '<div class="rmenu"><p><b>ОШИБКА!</b><br />' . $error . '</p></div>';
         regform();
     }
 }
 // Форма регистрации
 else {
     if ($set['mod_reg'] == 1) {
-        echo '<div class="rmenu"><p>' . $lng_reg['moderation_warning'] . '</p></div>';
+        echo '<div class="rmenu"><p>Вы сможете получить авторизованный доступ к разделам сайта после подтверждения Вашей регистрации.<br />Подтверждение проводится 1-2 раза в сутки.</p>';
+        echo '<p>Просьба не регистрировать ники типа 111, ггг, uuuu и им подобные, они будут сразу же удалены.<br />Также будут удалены ВСЕ профили, которые регистрировались через Прокси серверы.</p></div>';
     }
     regform();
 }
 
 require_once('incfiles/end.php');
+
 ?>

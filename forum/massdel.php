@@ -2,39 +2,37 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
+////////////////////////////////////////////////////////////
+// Удаление выбранных постов с форума                     //
+////////////////////////////////////////////////////////////
 if ($rights == 3 || $rights >= 6) {
-    /*
-    -----------------------------------------------------------------
-    Массовое удаление выбранных постов форума
-    -----------------------------------------------------------------
-    */
-    require('../incfiles/head.php');
-    if (isset($_GET['yes'])) {
+    require_once ("../incfiles/head.php");
+    if (isset ($_GET['yes'])) {
         $dc = $_SESSION['dc'];
         $prd = $_SESSION['prd'];
         foreach ($dc as $delid) {
-            mysql_query("UPDATE `forum` SET
-                `close` = '1',
-                `close_who` = '$login'
-                WHERE `id` = '" . intval($delid) . "'
-            ");
+            mysql_query("UPDATE `forum` SET  `close` = '1', `close_who` = '$login' WHERE `id`='" . intval($delid) . "';");
         }
-        echo $lng_forum['mass_delete_confirm'] . '<br/><a href="' . $prd . '">' . $lng['back'] . '</a><br/>';
-    } else {
-        if (empty($_POST['delch'])) {
-            echo '<p>' . $lng_forum['error_mass_delete'] . '<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . $lng['back'] . '</a></p>';
-            require('../incfiles/end.php');
+        echo "Отмеченные посты удалены<br/><a href='" . $prd . "'>Назад</a><br/>";
+    }
+    else {
+        if (empty ($_POST['delch'])) {
+            echo '<p>Вы ничего не выбрали для удаления<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a></p>';
+            require_once ("../incfiles/end.php");
             exit;
         }
         foreach ($_POST['delch'] as $v) {
@@ -42,8 +40,8 @@ if ($rights == 3 || $rights >= 6) {
         }
         $_SESSION['dc'] = $dc;
         $_SESSION['prd'] = htmlspecialchars(getenv("HTTP_REFERER"));
-        echo '<p>' . $lng['delete_confirmation'] . '<br/><a href="index.php?act=massdel&amp;yes">' . $lng['delete'] . '</a> | ' .
-            '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . $lng['cancel'] . '</a></p>';
+        echo '<p>Вы уверены в удалении постов?<br/><a href="index.php?act=massdel&amp;yes">Да</a> | <a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Нет</a></p>';
     }
 }
+
 ?>

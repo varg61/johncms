@@ -2,67 +2,66 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 if ($rights == 3 || $rights >= 6) {
-    if (!$id) {
-        require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
-        require('../incfiles/end.php');
+    if (empty ($_GET['id'])) {
+        require_once ("../incfiles/head.php");
+        echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
+        require_once ("../incfiles/end.php");
         exit;
     }
-    $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
-    $ms = mysql_fetch_assoc($typ);
+    $id = intval(check($_GET['id']));
+
+    $typ = mysql_query("select * from `forum` where id='" . $id . "';");
+    $ms = mysql_fetch_array($typ);
     if ($ms[type] != "t") {
-        require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
-        require('../incfiles/end.php');
+        require_once ("../incfiles/head.php");
+        echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
+        require_once ("../incfiles/end.php");
         exit;
     }
-    if (isset($_POST['submit'])) {
-        $nn = isset($_POST['nn']) ? check(trim($_POST['nn'])) : false;
-        if (!$nn) {
-            require('../incfiles/head.php');
-            echo display_error($lng_forum['error_topic_name'], '<a href="index.php?act=ren&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
-            require('../incfiles/end.php');
+    if (isset ($_POST['submit'])) {
+        if (empty ($_POST['nn'])) {
+            require_once ("../incfiles/head.php");
+            echo "Ошибка!<br/><a href='index.php?'>В форум</a><br/>";
+            require_once ("../incfiles/end.php");
             exit;
         }
-        // Проверяем, есть ли тема с таким же названием?
-        $pt = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `refid` = '" . $ms['refid'] . "' and text='$nn' LIMIT 1");
+        $nn = check(trim($_POST['nn']));
+        ##
+
+        $pt = mysql_query("select * from `forum` where type='t' and refid='" . $ms[refid] . "' and text='" . $nn . "';");
         if (mysql_num_rows($pt) != 0) {
-            require('../incfiles/head.php');
-            echo display_error($lng_forum['error_topic_exists'], '<a href="index.php?act=ren&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
-            require('../incfiles/end.php');
+            require_once ("../incfiles/head.php");
+            echo "Ошибка!Тема с таким названием уже есть в этом разделе<br/><a href='index.php?act=ren&amp;id=" . $id . "'>Повторить</a><br/>";
+            require_once ("../incfiles/end.php");
             exit;
         }
         mysql_query("update `forum` set  text='" . $nn . "' where id='" . $id . "';");
         header("Location: index.php?id=$id");
-    } else {
-        /*
-        -----------------------------------------------------------------
-        Переименовываем тему
-        -----------------------------------------------------------------
-        */
-        require('../incfiles/head.php');
-        echo '<div class="phdr"><a href="index.php?id=' . $id . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['topic_rename'] . '</div>' .
-            '<div class="menu"><form action="index.php?act=ren&amp;id=' . $id . '" method="post">' .
-            '<p><h3>' . $lng_forum['topic_name'] . '</h3>' .
-            '<input type="text" name="nn" value="' . $ms['text'] . '"/></p>' .
-            '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
-            '</form></div>' .
-            '<div class="phdr"><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></div>';
     }
-} else {
-    require('../incfiles/head.php');
-    echo display_error($lng['access_forbidden']);
+    else {
+        require_once ("../incfiles/head.php");
+        echo "<form action='index.php?act=ren&amp;id=" . $id . "' method='post'>Переименование темы:<br/><input type='text' name='nn' value='" . $ms[text] . "'/><br/><input type='submit' name='submit' value='Ok!'/></form>";
+    }
 }
+else {
+    require_once ("../incfiles/head.php");
+    echo "Доступ закрыт!!!<br>";
+}
+echo "<a href='index.php?'>В форум</a><br/>";
+
 ?>

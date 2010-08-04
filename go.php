@@ -2,20 +2,21 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
-
 $rootpath = '';
-require('incfiles/core.php');
+require_once('incfiles/core.php');
 
 $adres = trim($_POST['adres']);
 switch ($adres) {
@@ -32,7 +33,7 @@ switch ($adres) {
         break;
 
     case 'privat':
-        header("location: $home/str/my_cabinet.php");
+        header("location: $home/index.php?act=cab");
         break;
 
     case 'prof':
@@ -58,8 +59,9 @@ switch ($adres) {
     case 'guest':
         header("location: $home/str/guest.php");
         break;
-        default :
-    header("location: http://gazenwagen.com");
+
+    default :
+        header("location: http://gazenwagen.com");
         break;
 }
 

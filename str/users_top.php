@@ -2,148 +2,92 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
 define('_IN_JOHNCMS', 1);
 
 $headmod = 'sitetop';
-require('../incfiles/core.php');
-$textl = $lng['users_top'];
-$lng_stat = load_lng('stat');
-require('../incfiles/head.php');
+$textl = 'Топ активности сайта';
+require_once ('../incfiles/core.php');
+require_once ('../incfiles/head.php');
 
-/*
------------------------------------------------------------------
-Функция отображения списков
------------------------------------------------------------------
-*/
 function get_top($order = 'postforum') {
     $req = mysql_query("SELECT * FROM `users` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
     if (mysql_num_rows($req)) {
         $out = '';
         while ($res = mysql_fetch_assoc($req)) {
-            $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $out .= display_user($res, array('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
+            $out .= ($i % 2) ? '<div class="list2">' : '<div class="list1">';
+            $out .= show_user($res, 1, 0, ' (' . $res[$order] . ')') . '</div>';
             ++$i;
         }
         return $out;
-    } else {
-        return '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+    }
+    else {
+        return '<div class="menu"><p>Список пуст</p></div>';
     }
 }
 
-/*
------------------------------------------------------------------
-Меню выбора
------------------------------------------------------------------
-*/
-$menu = array(
-    (!$act ? '<b>' . $lng['forum'] . '</b>' : '<a href="users_top.php">' . $lng['forum'] . '</a>'),
-    ($act == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="users_top.php?act=guest">' . $lng['guestbook'] . '</a>'),
-    ($act == 'chat' ? '<b>' . $lng['chat'] . '</b>' : '<a href="users_top.php?act=chat">' . $lng['chat'] . '</a>'),
-    ($act == 'vic' ? '<b>' . $lng['quiz'] . '</b>' : '<a href="users_top.php?act=vic">' . $lng['quiz'] . '</a>'),
-    ($act == 'bal' ? '<b>' . $lng['balance'] . '</b>' : '<a href="users_top.php?act=bal">' . $lng['balance'] . '</a>'),
-    ($act == 'comm' ? '<b>' . $lng['comments'] . '</b>' : '<a href="users_top.php?act=comm">' . $lng['comments'] . '</a>')
-);
-if($set_karma['on'])
-    $menu[] =  $act == 'karma' ? '<b>' . $lng['karma'] . '</b>' : '<a href="users_top.php?act=karma">' . $lng['karma'] . '</a>';
-
-
+////////////////////////////////////////////////////////////
+// Показываем топ                                         //
+////////////////////////////////////////////////////////////
+$top_karma = $set_karma['on'] ? ' | <a href="users_top.php?act=karma">Карма</a>' : '';
 switch ($act) {
     case 'guest':
-        /*
-        -----------------------------------------------------------------
-        Топ Гостевой
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng_stat['top_guest'] . '</b></div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<p><a href="users_top.php?act=forum">Форум</a> | Гостевая | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>' . $top_karma . '</p>';
+        echo '<div class="phdr"><b>Самые активные в Гостевой</b></div>';
         echo get_top('postguest');
-        echo '<div class="phdr"><a href="../str/guest.php">' . $lng['guestbook'] . '</a></div>';
+        echo '<div class="phdr"><a href="../str/guest.php">В Гостевую</a></div>';
         break;
-
     case 'chat':
-        /*
-        -----------------------------------------------------------------
-        Топ Чата
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng_stat['top_chat'] . '</b></div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | Чат | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>' . $top_karma . '</p>';
+        echo '<div class="phdr"><b>Самые активные в Чате</b></div>';
         echo get_top('postchat');
-        echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
+        echo '<div class="phdr"><a href="../chat/index.php">В Чат</a></div>';
         break;
-
     case 'vic':
-        /*
-        -----------------------------------------------------------------
-        Топ Викторины
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng_stat['top_quiz'] . '</b></div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | Викторина | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>' . $top_karma . '</p>';
+        echo '<div class="phdr"><b>Лучшие &quot;умники&quot; Викторины</b></div>';
         echo get_top('otvetov');
-        echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
+        echo '<div class="phdr"><a href="../chat/index.php">В Чат</a></div>';
         break;
-
     case 'bal':
-        /*
-        -----------------------------------------------------------------
-        Топ игрового баланса
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng_stat['top_bal'] . '</b></div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | Баланс | <a href="users_top.php?act=kom">Комментарии</a>' . $top_karma . '</p>';
+        echo '<div class="phdr"><b>Самые большие игровые Балансы</b></div>';
         echo get_top('balans');
-        echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
+        echo '<div class="phdr"><a href="../index.php">На Главную</a></div>';
         break;
-
-    case 'comm':
-        /*
-        -----------------------------------------------------------------
-        Топ комментариев
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng_stat['top_comm'] . '</b></div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+    case 'kom':
+        echo '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | Комментарии' . $top_karma . '</p>';
+        echo '<div class="phdr"><b>Больше всего комментировали</b></div>';
         echo get_top('komm');
-        echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
+        echo '<div class="phdr"><a href="../index.php">На Главную</a></div>';
         break;
-
     case 'karma':
-        /*
-        -----------------------------------------------------------------
-        Топ Кармы
-        -----------------------------------------------------------------
-        */
         if ($set_karma['on']) {
-            echo '<div class="phdr"><b>' . $lng_stat['top_karma'] . '</b></div>';
-            echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+            echo '<p><a href="users_top.php?act=forum">Форум</a> | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a> | Карма</p>';
+            echo '<div class="phdr"><b>Больше всего карма у ...</b></div>';
             echo get_top('karma');
-            echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
+            echo '<div class="phdr"><a href="../index.php">На Главную</a></div>';
         }
         break;
-
     default:
-        /*
-        -----------------------------------------------------------------
-        Топ Форума
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng_stat['top_forum'] . '</b></div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<p>Форум | <a href="users_top.php?act=guest">Гостевая</a> | <a href="users_top.php?act=chat">Чат</a> | <a href="users_top.php?act=vic">Викторина</a> | <a href="users_top.php?act=bal">Баланс</a> | <a href="users_top.php?act=kom">Комментарии</a>' . $top_karma . '</p>';
+        echo '<div class="phdr"><b>Самые активные на Форуме</b></div>';
         echo get_top('postforum');
-        echo '<div class="phdr"><a href="../forum/index.php">' . $lng['forum'] . '</a></div>';
+        echo '<div class="phdr"><a href="../forum/index.php">В Форум</a></div>';
 }
-echo '<p><a href="../index.php?act=users">' . $lng['site_active'] . '</a></p>';
-require('../incfiles/end.php');
+
+echo '<p><a href="../index.php?act=users">Актив Сайта</a></p>';
+require_once ('../incfiles/end.php');
 
 ?>

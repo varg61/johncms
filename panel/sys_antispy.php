@@ -1,27 +1,28 @@
 <?php
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-//TODO: Разобраться с подкаталогом /incfiles/lib
 defined('_IN_JOHNADM') or die('Error: restricted access');
 define('ROOT_DIR', '..');
+
 if ($rights < 7)
     die('Error: restricted access');
+
 class scaner {
-    /*
-    -----------------------------------------------------------------
-    Сканер - антишпион
-    -----------------------------------------------------------------
-    */
+    ////////////////////////////////////////////////////////////
+    // Класс сканера                                          //
+    ////////////////////////////////////////////////////////////
     public $scan_folders = array (
         '',
         '/cache',
@@ -73,6 +74,7 @@ class scaner {
         '../download/index.php',
         '../download/komm.php',
         '../download/makdir.php',
+        '../download/mp3.php',
         '../download/mp3temp/index.php',
         '../download/new.php',
         '../download/opis.php',
@@ -146,18 +148,19 @@ class scaner {
         '../gallery/upl.php',
         '../incfiles/.htaccess',
         '../incfiles/ban.php',
+        '../incfiles/char.php',
         '../incfiles/class_ipinit.php',
         '../incfiles/class_mainpage.php',
-        '../incfiles/pclzip.lib.php',
-        '../incfiles/lib/class.upload.php',
+        '../incfiles/class_pclzip.php',
+        '../incfiles/class_upload.php',
         '../incfiles/core.php',
         '../incfiles/db.php',
         '../incfiles/end.php',
         '../incfiles/func.php',
         '../incfiles/head.php',
         '../incfiles/index.php',
-        '../incfiles/lib/mp3.php',
-        '../incfiles/lib/pear.php',
+        '../incfiles/mp3.php',
+        '../incfiles/pear.php',
         '../library/addkomm.php',
         '../library/del.php',
         '../library/edit.php',
@@ -236,48 +239,50 @@ class scaner {
     public $track_files = array ();
     private $checked_folders = array ();
     private $cache_files = array ();
+
     function scan() {
         // Сканирование на соответствие дистрибутиву
         foreach ($this->scan_folders as $data) {
             $this->scan_files(ROOT_DIR . $data);
         }
     }
+
     function snapscan() {
         // Сканирование по образу
-        if (file_exists('../files/cache/' . $this->snap_base)) {
-            $filecontents = file('../files/cache/' . $this->snap_base);
+        if (file_exists('../cache/' . $this->snap_base)) {
+            $filecontents = file('../cache/' . $this->snap_base);
             foreach ($filecontents as $name => $value) {
                 $filecontents[$name] = explode("|", trim($value));
                 $this->track_files[$filecontents[$name][0]] = $filecontents[$name][1];
             }
             $this->snap = true;
         }
-
         foreach ($this->scan_folders as $data) {
             $this->scan_files(ROOT_DIR . $data);
         }
     }
+
     function snap() {
         // Добавляем снимок надежных файлов в базу
         foreach ($this->scan_folders as $data) {
             $this->scan_files(ROOT_DIR . $data, true);
+        //$this->scan_files(ROOT_DIR . $data);
         }
         $filecontents = "";
-
         foreach ($this->snap_files as $idx => $data) {
             $filecontents .= $data['file_path'] . "|" . $data['file_crc'] . "\r\n";
         }
-        $filehandle = fopen('../files/cache/' . $this->snap_base, "w+");
+        $filehandle = fopen('../cache/' . $this->snap_base, "w+");
         fwrite($filehandle, $filecontents);
         fclose($filehandle);
-        @chmod('../files/cache/' . $this->snap_base, 0666);
+        @chmod('../cache/' . $this->snap_base, 0666);
     }
+
     function scan_files($dir, $snap = false) {
         // Служебная функция сканирования
         if (!isset($file))
             $file = false;
         $this->checked_folders[] = $dir . '/' . $file;
-
         if ($dh = @opendir($dir)) {
             while (false !== ($file = readdir($dh))) {
                 if ($file == '.' or $file == '..' or $file == '.svn' or $file == '.DS_store') {
@@ -328,89 +333,81 @@ class scaner {
         }
     }
 }
+
+////////////////////////////////////////////////////////////
+// Антишпион, сканирование на подозрительные файлы        //
+////////////////////////////////////////////////////////////
+echo '<div class="phdr"><a href="index.php"><b>Админ панель</b></a> | Антишпион</div>';
 $scaner = new scaner();
+
 switch ($mod) {
     case 'scan':
-        /*
-        -----------------------------------------------------------------
-        Сканируем на соответствие дистрибутиву
-        -----------------------------------------------------------------
-        */
+        // Сканируем на соответствие дистрибутиву
         $scaner->scan();
-        echo '<div class="phdr"><a href="index.php?act=sys_antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_dist_scan'] . '</div>';
+        echo '<div class="bmenu">Сканирование по дистрибутиву</div>';
         if (count($scaner->bad_files)) {
-            echo '<div class="rmenu">' . $lng['antispy_dist_scan_bad'] . '</small></div>';
+            echo '<div class="rmenu">Несоответствие дистрибутиву<br /><small>Внимание! Все файлы, перечисленные в списке необходимо удалить, так, как они представляют угрозу для безопасности Вашего сайта.</small></div>';
             echo '<div class="menu">';
             foreach ($scaner->bad_files as $idx => $data) {
                 echo $data['file_path'] . '<br />';
             }
-            echo '</div><div class="phdr">' . $lng['total'] . ': ' . count($scaner->bad_files) . '</div>';
+            echo '</div><div class="rmenu">Всего файлов: ' . count($scaner->bad_files) .
+                '<br /><small>Если обнаруженные файлы относятся к дополнительным модулям, которые были устанавлены и Вы уверены в их надежности, можете игнорировать предупреждение.</small></div>';
         } else {
-            echo '<div class="gmenu">' . $lng['antispy_dist_scan_good'] . '</div>';
+            echo '<div class="gmenu"><h3>Отлично!</h3>Список файлов соот ветствует дистрибутиву</div>';
         }
-        echo '<p><a href="index.php?act=sys_antispy&amp;mod=scan">' . $lng['antispy_rescan'] . '</a></p>';
+        echo '<div class="phdr"><a href="index.php?act=sys_antispy&amp;mod=scan">Пересканировать</a></div>';
         break;
 
     case 'snapscan':
-        /*
-        -----------------------------------------------------------------
-        Сканируем на соответствие ранее созданному снимку
-        -----------------------------------------------------------------
-        */
+        // Сканируем на соответствие образу
         $scaner->snapscan();
-        echo '<div class="phdr"><a href="index.php?act=sys_antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_snapshot_scan'] . '</div>';
+        echo '<div class="bmenu">Сканирование по образу</div>';
         if (count($scaner->track_files) == 0) {
-            echo display_error($lng['antispy_no_snapshot'], '<a href="index.php?act=sys_antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a>');
+            echo '<p>Образ файлов еще не был создан.</p><p><a href="index.php?act=sys_antispy&amp;mod=snap">Создание образа</a></p>';
         } else {
             if (count($scaner->bad_files)) {
-                echo '<div class="rmenu">' . $lng['antispy_snapshot_scan_bad'] . '</div>';
+                echo '<div class="rmenu">Несоответствие образу<br /><small>Внимание!!! Вам необходимо обратить внимание на все файлы из данного списка. Они были добавлены, или модифицированы с момента создания образа.</small></div>';
                 echo '<div class="menu">';
                 foreach ($scaner->bad_files as $idx => $data) {
                     echo $data['file_path'] . '<br />';
                 }
-                echo '</div>';
+                echo '</div><div class="rmenu">Всего файлов: ' . count($scaner->bad_files) . '</div>';
             } else {
-                echo '<div class="gmenu">' . $lng['antispy_snapshot_scan_ok'] . '</div>';
+                echo '<div class="gmenu">Отлично!<br />Все файлы соответствуют ранее сделанному образу.</div>';
             }
-            echo '<div class="phdr">' . $lng['total'] . ': ' . count($scaner->bad_files) . '</div>';
+            echo '<div class="phdr"><a href="index.php?act=sys_antispy&amp;mod=snapscan">Пересканировать</a></div>';
         }
         break;
 
     case 'snap':
-        /*
-        -----------------------------------------------------------------
-        Создаем снимок файлов
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><a href="index.php?act=sys_antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_snapshot_create'] . '</div>';
+        // Добавляем в базу образы файлов
         if (isset($_POST['submit'])) {
             $scaner->snap();
-            echo '<div class="gmenu"><p>' . $lng['antispy_snapshot_create_ok'] . '</p></div>' .
-                '<div class="phdr"><a href="index.php?act=sys_antispy">' . $lng['continue'] . '</a></div>';
+            echo '<div class="gmenu"><p>Образ файлов успешно создан</p></div>';
+            echo '<div class="phdr"><a href="index.php?act=sys_antispy">Продолжить</a></div>';
         } else {
-            echo '<form action="index.php?act=sys_antispy&amp;mod=snap" method="post">' .
-                '<div class="menu"><p>' . $lng['antispy_snapshot_warning'] . '</p>' .
-                '<p><input type="submit" name="submit" value="' . $lng['antispy_snapshot_create'] . '" /></p>' .
-                '</div></form>' .
-                '<div class="phdr"><small>' . $lng['antispy_snapshot_help'] . '</small></div>';
+            echo '<div class="bmenu">Создание образа</div>';
+            echo
+                '<div class="rmenu"><b>ВНИМАНИЕ!!!</b><br />Перед продолжением, убедитесь, что все файлы, которые были выявлены в режиме сканирования "<a href="main.php?do=antispy&amp;act=scan">Дистрибутив</a>" и "<a href="main.php?do=antispy&amp;act=check">По образу</a>" надежны и не содержат несанкционированных модификаций.</div>';
+            echo '<div class="menu"><p>Данная процедура создает список всех скриптовых файлов Вашего сайта, вычисляет их контрольные суммы и заносит в базу, для последующего сравнения.</p>';
+            echo '<p><form action="index.php?act=sys_antispy&amp;mod=snap" method="post"><input type="submit" name="submit" value="Создать образ" /></form></p></div>';
+            echo '<div class="phdr"><a href="index.php?act=sys_antispy">Назад</a> (отмена)</div>';
         }
         break;
 
     default:
-        /*
-        -----------------------------------------------------------------
-        Главное меню Сканера
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['antispy'] . '</div>' .
-            '<div class="menu"><p><h3>' . $lng['antispy_scan_mode'] . '</h3><ul>' .
-            '<li><a href="index.php?act=sys_antispy&amp;mod=scan">' . $lng['antispy_dist_scan'] . '</a><br />' .
-            '<small>' . $lng['antispy_dist_scan_help'] . '</small></li>' .
-            '<li><a href="index.php?act=sys_antispy&amp;mod=snapscan">' . $lng['antispy_snapshot_scan'] . '</a><br />' .
-            '<small>' . $lng['antispy_snapshot_scan_help'] . '</small></li>' .
-            '<li><a href="index.php?act=sys_antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a><br />' .
-            '<small>' . $lng['antispy_snapshot_create_help'] . '</small></li>' .
-            '</ul></p></div><div class="phdr">&#160;</div>';
+        echo '<div class="menu"><p><h3>Режим сканирования</h3><ul>';
+        echo '<li><a href="index.php?act=sys_antispy&amp;mod=scan">Дистрибутив</a><br />';
+        echo '<small>Выявление "лишних" файлов, тех, что не входят в оригинальный дистрибутив</small></li>';
+        echo '<li><a href="index.php?act=sys_antispy&amp;mod=snapscan">По образу</a><br />';
+        echo '<small>Сравнение списка и контрольных сумм файлов с заранее сделанным образом.<br />';
+        echo 'Позволяет выявить неизвестные файлы, и несанкционированные изменения.</small></li>';
+        echo '<li><a href="index.php?act=sys_antispy&amp;mod=snap">Создание образа</a><br />';
+        echo '<small>Делается "снимок" всех скриптовых файлов сайта, вычисляется их контрольные суммы и запоминается в базе</small></li>';
+        echo '</ul></p></div><div class="phdr">&nbsp;</div>';
 }
-echo '<p>' . ($mod ? '<a href="index.php?act=sys_antispy">' . $lng['antispy_menu'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+
+echo '<p>' . ($mod ? '<a href="index.php?act=sys_antispy">Меню сканера</a><br />' : '') . '<a href="index.php">Админ панель</a></p>';
+
 ?>

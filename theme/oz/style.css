@@ -116,19 +116,6 @@ body {
 	color: #264564;
 	padding: 3px 4px 3px 4px;
 }
-.user{
-  background-color: #E2EBF1;
-  border: 1px solid white;
-  margin: 0px;
-  padding: 3px 4px 3px 4px;
-}
-.topmenu{
-  background-color: #D0D7DD;
-  border: 1px solid white;
-  font-size: x-small;
-  margin: 0px;
-  padding: 2px 4px 4px 4px;
-}
 .gmenu a { color: #4780B8; }
 .fmenu {
 	color: #989898;

@@ -2,13 +2,15 @@
 
 /*
 ////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
 ////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
 ////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -16,7 +18,7 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'gallery';
 $textl = 'Галерея сайта';
-require_once ('../incfiles/core.php');
+require_once ("../incfiles/core.php");
 require_once ("../incfiles/head.php");
 
 // Ограничиваем доступ к Галерее
@@ -24,7 +26,7 @@ $error = '';
 if (!$set['mod_gal'] && $rights < 7)
     $error = 'Галерея закрыта';
 elseif ($set['mod_gal'] == 1 && !$user_id)
-    $error = 'Доступ в Галерею открыт только <a href="../in.php">авторизованным</a> посетителям';
+    $error = 'Доступ в Галерею открыт только <a href="../login.php">авторизованным</a> посетителям';
 if ($error) {
     require_once ("../incfiles/head.php");
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
@@ -192,7 +194,7 @@ else {
                         else {
                             $div = "<div class='b'>";
                         }
-                        echo "$div&#160;<a href='index.php?id=" . $fot1['id'] . "'>";
+                        echo "$div&nbsp;<a href='index.php?id=" . $fot1['id'] . "'>";
                         $infile = "foto/$fot1[name]";
                         if (!empty ($_SESSION['frazm'])) {
                             $razm = $_SESSION['frazm'];
@@ -358,7 +360,7 @@ else {
                 break;
 
             case "ft" :
-                echo "<br/>&#160;";
+                echo "<br/>&nbsp;";
                 $infile = "foto/$ms[name]";
 
                 if (!empty ($_SESSION['frazm'])) {
@@ -443,7 +445,7 @@ else {
     }
     else {
         // Главная страница Галлереи
-        echo '<p><a href="index.php?act=new">Новые фото</a> (' . stat_gallery(1) . ')</p><hr/>';
+        echo '<p><a href="index.php?act=new">Новые фото</a> (' . fgal(1) . ')</p><hr/>';
         $rz = mysql_query("select * from `gallery` where type='rz';");
         $count = mysql_num_rows($rz);
         while ($rz1 = mysql_fetch_array($rz)) {
