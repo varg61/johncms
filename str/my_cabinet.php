@@ -47,7 +47,7 @@ switch ($act) {
         $count_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `attach` != ''"), 0);
         echo '<div class="menu"><p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&#160;' . $lng_cab['my_mail'] . '</h3><ul>' .
             '<li><a href="pradd.php?act=in">' . $lng_cab['received'] . '</a>&#160;(' . $count_mail . ($count_newmail ? '&#160;/&#160;<span class="red"><a href="str/pradd.php?act=in&amp;new">+' . $count_newmail . '</a></span>' : '') . ')</li>' .
-            '<li><a href="str/pradd.php?act=out">' . $lng_cab['sent'] . '</a>&#160;(' . $count_sentmail . ($count_sentunread ? '&#160;/&#160;<span class="red">' . $count_sentunread . '</span>' : '') . ')</li>';
+            '<li><a href="pradd.php?act=out">' . $lng_cab['sent'] . '</a>&#160;(' . $count_sentmail . ($count_sentunread ? '&#160;/&#160;<span class="red">' . $count_sentunread . '</span>' : '') . ')</li>';
         if (!$ban['1'] && !$ban['3'])
             echo '<p><form action="pradd.php?act=write" method="post"><input type="submit" value=" ' . $lng['write'] . ' " /></form></p>';
         // Блок контактов
