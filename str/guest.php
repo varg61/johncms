@@ -153,7 +153,7 @@ switch ($act) {
                     '<br />' . checkout($res['text']) . '</div>' .
                     '<form action="guest.php?act=otvet&amp;id=' . $id . '" method="post">' .
                     '<p><h3>' . $lng_guest['reply'] . '</h3>' .
-                    '<textarea rows="3" name="otv">' . checkout($res['otvet']) . '</textarea></p>' .
+                    '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="otv">' . checkout($res['otvet']) . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng_guest['reply'] . '"/></p>' .
                     '</form></div>' .
                     '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
@@ -190,7 +190,7 @@ switch ($act) {
                     '<div class="rmenu">' .
                     '<form action="guest.php?act=edit&amp;id=' . $id . '" method="post">' .
                     '<p><b>' . $lng['author'] . ':</b> ' . $res['name'] . '</p>' .
-                    '<p><textarea rows="3" name="msg">' . $text . '</textarea></p>' .
+                    '<p><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
                     '</form></div>' .
                     '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
