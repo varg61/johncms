@@ -1,0 +1,46 @@
+<table cellpadding="2" cellspacing="0">
+  <tr>
+    <td align="right"><h3>BBcode</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td align="right">[php]...[/php]</td>
+    <td>початковий код PHP</td>
+  </tr>
+  <tr>
+    <td align="right">Посилання</td>
+    <td>[url=http://адреса_посилання]назва посилання[/url]</td>
+  </tr>
+  <tr>
+    <td align="right">[b]...[/b]</td>
+    <td><b>жирний</b></td>
+  </tr>
+  <tr>
+    <td align="right">[i]...[/i]</td>
+    <td><i>похилий</i></td>
+  </tr>
+  <tr>
+    <td align="right">[u]...[/u]</td>
+    <td><u>підкреслений</u></td>
+  </tr>
+  <tr>
+    <td align="right">[s]...[/s]</td>
+    <td><strike>перекреслений</strike></td>
+  </tr>
+  <tr>
+    <td align="right">[red]...[/red]</td>
+    <td><span style="color:red">Червоний</span></td>
+  </tr>
+  <tr>
+    <td align="right">[green]...[/green]</td>
+    <td><span style="color:green">Зелений</span></td>
+  </tr>
+  <tr>
+    <td align="right">[blue]...[/blue]</td>
+    <td><span style="color:blue">Синій</span></td>
+  </tr>
+  <tr>
+    <td align="right">[c]...[/c]</td>
+    <td><span class="quote">текст в блоці</span></td>
+  </tr>
+</table>
