@@ -41,7 +41,7 @@
 Ж - ZH<br/>
 З - Z<br/>
 И - I<br/>
-й - J<br/>
+Й - J<br/>
 К - K<br/>
 Л - L<br/>
 М - M<br/>

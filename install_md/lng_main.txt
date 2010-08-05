@@ -1,4 +1,4 @@
-language_name                 :::   Moldovenesc/Română
+language_name                 :::   Moldovenească/Română
 access_forbidden              :::   Acces refuzat
 access_guest_forbidden        :::   Numai pentru utilizatorii înregistraţi
 add                           :::   Adăuga
@@ -106,7 +106,7 @@ guestbook                     :::   Camera de oaspeti
 happy_birthday                :::   La mulţi ani!!!
 heading                       :::   Titlu
 help                          :::   Referinţă
-hi                            :::   Salut
+hi                            :::   Salut,
 hide                          :::   Ascunde
 homepage                      :::   Acasă
 hours                         :::   oră
@@ -140,7 +140,7 @@ move                          :::   Muta
 name_the                      :::   Titlu
 new_responses                 :::   Noi comentarii
 news                          :::   Ştiri
-news_archive                  :::   Arhivă
+news_archive                  :::   Noutăţi
 next                          :::   Mai departe
 nick                          :::   Nick
 night                         :::   Noapte
@@ -241,7 +241,7 @@ viewing                       :::   Revizuire
 view_mode                     :::   Mod de afişare
 vote                          :::   Vota
 vote_against                  :::   Împotriva
-vote_for                      :::   pentru
+vote_for                      :::   Pentru
 votes                         :::   Sondaje
 welcome_to                    :::   Bine aţi venit la
 without_limit                 :::   Nelimitat

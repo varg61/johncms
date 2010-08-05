@@ -92,7 +92,7 @@ filter_to                     :::   Filtru
 forum_closed                  :::   Forumul este inchis
 forum_management              :::   Management Forum
 forum_rules                   :::   Regulile Forumului
-forum_search                  :::   Căutare în forumuri
+forum_search                  :::   Căutare în forum
 forum_structure               :::   Structura forumului
 hidden_posts                  :::   Ascuns mesajele
 hidden_topics                 :::   Ascuns teme
@@ -119,21 +119,21 @@ place_new                     :::   Se vede necitite
 place_search                  :::   Cautare În Forum
 place_section                 :::   În Secţiune
 place_topic                   :::   În tema
-place_write                   :::   Scrie la acesta tema
+place_write                   :::   Scrie în tema
 post                          :::   Mesaj
 post_deleted                  :::   Mesajul eliminat
 read_all                      :::   Citeste mai mult
 reference                     :::   Tratament
 reply_btn                     :::   [r]
 rating                        :::   Evaluare
-reply_1                       :::   Sînt bucuros să răspund la dvs.
+reply_1                       :::   Cu plăcere răspund la dvs.
 reply_2                       :::   la mesajul dvs.
-reply_3                       :::   răspuns
-reply_4                       :::   Dute mai de la aici prostule!
+reply_3                       :::   răspund
+reply_4                       :::   Măi! Dute de la aici, prostule!
 restore                       :::   Restabili
 results                       :::   Rezultate
 return_to_topic               :::   Inapoi la tema
-search_forum                  :::   Căutare în forumuri
+search_forum                  :::   Căutare în forum
 search_help                   :::   Lungimea interogare: 4min., 64 max.<br />Caută insensibil la majuscule<br />Rezultatele sunt sortate după relevanţă
 search_topic_name             :::   Cauta in titlu
 section_deleted               :::   Secţiunea elimintaă
@@ -158,7 +158,7 @@ to_topic                      :::   În tema
 to_section                    :::   În Secţiune
 topic                         :::   Tema
 topic_close                   :::   Inchide tema
-topic_closed                  :::   Închide tema
+topic_closed                  :::   Tema închisă
 topic_delete                  :::   Ştergeţi tema
 topic_deleted                 :::   Tema eliminat
 topic_delete_who              :::   Tema eliminat către
@@ -182,7 +182,7 @@ unread_show_for_period        :::   Arată după perioada
 upload                        :::   Trimite
 who_delete_post               :::   Mesajul eliminat
 who_restore_post              :::   Mesajul restabilit
-who_in_forum                  :::   Cineva pe forum
+who_in_forum                  :::   Cine în forum
 who_in_topic                  :::   Cine în tema
 vote_accepted                 :::   Votul vostru admis
 voting                        :::   Sondaj (max. 150)
