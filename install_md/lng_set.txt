@@ -1,0 +1,48 @@
+500_symbols                   :::   500 de simboluri
+1000_symbols                  :::   1000 de simboluri
+3000_symbols                  :::   3000 de simboluri
+always                        :::   mereu
+chat_field_height             :::   Înălţime domeniul (1-9)
+chat_field_width              :::   Lăţimea domeniul (10-80)
+chat_msg_per_page             :::   Posturi pe pagina (5-40)
+chat_refresh                  :::   Update (10-99 сек.)
+chat_settings                 :::   Chat Setări
+clip_first_post               :::   Fixa primul mesaj
+field_on                      :::   Include domeniu de intrare
+in_not_read                   :::   la necitit
+main_settings                 :::   Setările de bază
+message_input                 :::   Intrare mesaj
+mood_1                        :::   Neutru
+mood_2                        :::   vesel
+mood_3                        :::   frumos
+mood_4                        :::   amuzant
+mood_5                        :::   trist
+mood_6                        :::   angelic
+mood_7                        :::   agresiv
+mood_8                        :::   surpriză
+mood_9                        :::   rău
+mood_10                       :::   supărat
+mood_11                       :::   somnoros
+mood_12                       :::   plictisit
+mood_13                       :::   angajat
+mood_14                       :::   lipsit de pudoare
+mood_15                       :::   confuz
+mood_16                       :::   fericit
+mood_17                       :::   amant
+mood_18                       :::   inspirat
+mood_19                       :::   singuratic
+mood_20                       :::   meditativ
+mood_21                       :::   psihedelică
+mood_22                       :::   relaxare
+mood_23                       :::   trist
+mood_24                       :::   speriat
+mood_25                       :::   şocat
+mood_26                       :::   viclean
+mood_27                       :::   obosit
+my_set                        :::   Preferinţe
+never                         :::   niciodată
+not_to_cut_off                :::   Nu tăia
+or_specify_the                :::   Sau să vă introduceţi
+scrap_of_posts                :::   Decupaţi mesaje
+sorting_return                :::   Sortare inversă
+your_mood                     :::   Dispoziţie dvs.

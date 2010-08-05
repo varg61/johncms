@@ -1,0 +1,23 @@
+captcha                       :::   Codul din imagine
+clear_day_ok                  :::   Eliminate toate mesajele cu vârsta de peste o zi
+clear_full_ok                 :::   Camera de oaspeti complet eliminate
+clear_param_all               :::   Ştergeţi toate
+clear_param_day               :::   Mai mult de o zi
+clear_param_week              :::   Mai mult de o săptămâna
+clear_parametres              :::   Opţiuni Ştergerei
+clear_week_ok                 :::   Toate mesajele mai mari de 1 săptămână scos din camera de oaspeti
+edit_post                     :::   Editare mesajului
+error_ban                     :::   Nu puteţi scrie în camera de oaspeti
+error_captcha_wrong           :::   Verificarea incorecte ale codului
+error_flood                   :::   Nu puteţi adăuga mesaje ca de multe ori <br /> Vă rugăm să aşteptaţi
+error_message_empty           :::   Nu aţi introdus mesajul
+error_name_empty              :::   Nu aţi introdus nume
+guestbook_closed              :::   Camera de oaspeti este închisă
+guestbook_empty               :::   Nici un mesaj în camera de oaspeti<br /><b>Fii primul! :)</b>
+message                       :::   Mesajul(max. 5000)
+name                          :::   Prenume(max. 25)
+only_authorized               :::   Scrie poate numai Vizitatori <a href="../login.php">autorizate</a>
+reply                         :::   Răspuns
+reply_already                 :::   <b>Atenţie!</b><br />Acest mesaj a fost deja răspuns
+seconds                       :::   secunde
+sent                          :::   Trimite

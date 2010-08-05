@@ -1,0 +1,12 @@
+forum_last_activity           :::   Ultima activitate la Forumul
+game_balance                  :::   Joc Sold
+guest_empty                   :::   Lista este vidă.<br />Comunicările utilizatorului este eliminate automat după o curatare programată clienţi
+site_activity                 :::   Activitatea pe site-ul
+top_10                        :::   Top 10 active
+top_bal                       :::   Cel mai bun joc Sold
+top_chat                      :::   Cel mai activ in Chat
+top_comm                      :::   Cele mai comentate
+top_forum                     :::   Cel mai activ în cadrul Forumului
+top_guest                     :::   Cel mai activ în clienţi
+top_karma                     :::   Mai bine Karma
+top_quiz                      :::   Cel mai bun "expert" Ghicitul

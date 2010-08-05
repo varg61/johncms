@@ -1,0 +1,24 @@
+add                           :::   Adauga stiri
+article_added                 :::   Ştiri a fost adaugata
+article_changed               :::   Ştiri a fost schimbat
+article_deleted               :::   Ştiri afost eliminat
+article_text                  :::   Text
+article_title                 :::   Titlu
+author                        :::   Autor
+clear_all_confirmation        :::   Eliminate toate stirile
+clear_month                   :::   Mai vechi de o luna
+clear_month_confirmation      :::   Eliminate toate stirile mai vechi de o luna
+clear_parametres              :::   Opţiunii Ştergerii
+clear_week                    :::   Peste o săptămâna
+clear_week_confirmation       :::   Eliminat toate ştiri mai vechi de o săptămână
+delete_article                :::   Ştergeţi ştiri
+discuss                       :::   Discuţie
+discuss_on_forum              :::   Discuta pe forum
+discuss_off                   :::   Nu va discuta
+edit_article                  :::   Editarea
+error_flood                   :::   Nu puteţi adăuga ştiri atât de des, aşteptaţi
+error_title                   :::   Nu ati intrat în titlul articolulu
+error_text                    :::   Nu aţi introdus textul
+seconds                       :::   Secunde
+site_news                     :::   Ştiri Resursei
+to_news                       :::   Inapoi la Noutati
