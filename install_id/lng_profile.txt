@@ -1,0 +1,59 @@
+about                         :::   Tentang saya
+activity_stat                 :::   Statistik Kegiatan
+awaiting_registration         :::   Menunggu konfirmasi pendaftaran
+avatar_deleted                :::   Hapus avatar
+avatar_uploaded               :::   Upload avatar
+birt                          :::   Tanggal lahir
+birth_date                    :::   Tanggal Lahir (d.m.g)
+city                          :::   Kota
+communication                 :::   Kontak
+data_saved                    :::   Data di simpan
+deny_karma                    :::   menyangkal karma
+email_warning                 :::   Peringatan!! Harap mengisi alamat email Anda <br /> karena hal itu berguna jika anda lupa kata sandi.
+error_birth                   :::   Format Tanggal lahir salah
+error_icq                     :::   nomor ICQ harus minimal 5 digit dan maksimal 10
+error_nick_lenght             :::   Panjang julukan minimum - 2, maks 20 karakter
+error_nick_symbols            :::   Karakter tidak valid dalam julukan
+error_rights                  :::   Anda tidak dapat mengedit profil pada posting Anda yang sudah lama
+hidden                        :::   tersembunyi
+my_profile                    :::   Profil saya
+name                          :::   Nama
+nick_lenght                   :::   Min.2, Max. 20
+personal_album                :::   Album Pribadi
+personal_data                 :::   Data pribadi
+phone_number                  :::   nomber telepon
+photo                         :::   Photo
+photo_deleted                 :::   Hapus photo
+photo_uploaded                :::   Upload photo
+profile_edit                  :::   Ubah profil
+rank                          :::   Jabatan di situs
+rank_0                        :::   User
+rank_2                        :::   Moder chat
+rank_3                        :::   Moder forum
+rank_4                        :::   Moder download
+rank_5                        :::   Moder Perpustakaan
+rank_6                        :::   Super Moder
+rank_7                        :::   Administrator
+rank_9                        :::   Supervisor
+registration_approved         :::   Pendaftaran dikonfirmasi
+registration_free             :::   Pendaftaran tanpa konfirmasi
+registered_m                  :::   Terdaftar
+registered_w                  :::   Terdaftar
+select_image                  :::   Pilih gambar
+select_image_help             :::   Untuk meng-upload gambar diperbolehkan file JPG, JPEG, PNG, GIF<br />Ukuran File tidak boleh melebihi
+select_image_help_2           :::   Terlepas dari resolusi file asli Anda, itu akan dikonversi ke ukuran 32x32
+select_image_help_3           :::   Gambar baru akan menggantikan yang lama (apakah itu)
+select_image_help_4           :::   Untuk hasil terbaik, gambar asli harus sama dengan rasio aspek
+select_image_help_5           :::   Terlepas dari resolusi file sumber, itu akan dikonversi ke dalam ukuran tidak melebihi 640x480
+sex_m                         :::   Laki-laki
+sex_w                         :::   Wanita
+show_in_profile               :::   Kembali ke profil
+site                          :::   Situs
+specify_sex                   :::   Tentukan jenis kelamin
+status_lenght                 :::   Max. 50
+stayed_m                      :::   Tinggal di situs
+stayed_w                      :::   Tinggal di situs
+upload                        :::   Upload
+upload_avatar                 :::   Upload avatar
+upload_photo                  :::   Upload photo
+user_profile                  :::   Profil Pengguna

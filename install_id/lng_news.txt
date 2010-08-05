@@ -1,0 +1,24 @@
+add                           :::   Tambahkan berita
+article_added                 :::   Berita ditambahkan
+article_changed               :::   Berita berubah
+article_deleted               :::   Berita dihapus
+article_text                  :::   Teks
+article_title                 :::   Judul
+author                        :::   Oleh
+clear_all_confirmation        :::   Semua berita dihapus
+clear_month                   :::   Lebih lama dari 1 bulan
+clear_month_confirmation      :::   Semua berita lebih lama dari 1 bulan dihapus
+clear_parametres              :::   Metode pembersihan
+clear_week                    :::   Lebih dari 1 minggu
+clear_week_confirmation       :::   Semua berita lebih lama dari 1 minggu dihapus
+delete_article                :::   Hapus berita
+discuss                       :::   Diskusikan
+discuss_on_forum              :::   Diskusikan di forum
+discuss_off                   :::   Tidak didiskusikan
+edit_article                  :::   Ubah berita
+error_flood                   :::   Anda tidak dapat menambahkan berita begitu sering, tunggu
+error_title                   :::   Anda tidak memasukkan judul berita
+error_text                    :::   Anda belum memasukkan teks
+seconds                       :::   Detik
+site_news                     :::   Berita situs
+to_news                       :::   Kembali ke berita

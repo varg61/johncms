@@ -1,0 +1,48 @@
+500_symbols                   :::   500 Karakter
+1000_symbols                  :::   1000 Karakter
+3000_symbols                  :::   3000 Karakter
+always                        :::   selalu
+chat_field_height             :::   Tinggi area (1-9)
+chat_field_width              :::   Lebar area (10-80)
+chat_msg_per_page             :::   Posting per halaman (5-40)
+chat_refresh                  :::   Memperbarui (10-99 detik.)
+chat_settings                 :::   Pengaturan Chat
+clip_first_post               :::   Mengunci 1-st post
+field_on                      :::   gunakan Tekarea
+in_not_read                   :::   yang belum dibaca
+main_settings                 :::   Pengaturan Dasar
+message_input                 :::   Input pesan
+mood_1                        :::   Netral
+mood_2                        :::   riang
+mood_3                        :::   indah
+mood_4                        :::   homo
+mood_5                        :::   sedih
+mood_6                        :::   seperti malaikat
+mood_7                        :::   agresif
+mood_8                        :::   mengherankan
+mood_9                        :::   jahat
+mood_10                       :::   marah
+mood_11                       :::   sepi
+mood_12                       :::   bosan
+mood_13                       :::   dipekerjakan
+mood_14                       :::   kurang ajar
+mood_15                       :::   bingung
+mood_16                       :::   bahagia
+mood_17                       :::   kekasih
+mood_18                       :::   terinspirasi
+mood_19                       :::   kesepian
+mood_20                       :::   termenung
+mood_21                       :::   psychedelic
+mood_22                       :::   relaksasi
+mood_23                       :::   sedih
+mood_24                       :::   takut
+mood_25                       :::   terkejut
+mood_26                       :::   licik
+mood_27                       :::   lelah
+my_set                        :::   Pengaturan saya
+never                         :::   tak pernah
+not_to_cut_off                :::   tidak dipotong
+or_specify_the                :::   Atau masukkan Anda
+scrap_of_posts                :::   Trim posting
+sorting_return                :::   Kontak penyortiran
+your_mood                     :::   Mood Anda

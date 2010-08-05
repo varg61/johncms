@@ -1,0 +1,249 @@
+language_name                 :::   Indonesia
+access_forbidden              :::   Akses ditolak
+access_guest_forbidden        :::   Hanya untuk pengguna terdaftar
+add                           :::   Menambahkan
+administration                :::   Administrasi
+administrators                :::   Administrator
+admin_club                    :::   Admin-Club
+admin_panel                   :::   Admin Panel
+administrative_events         :::   Acara Administrator
+apperance                     :::   Tampilkan
+approve                       :::   Menegaskan
+arrangement                   :::   Tempat
+author                        :::   Oleh
+authorized                    :::   Otorisasi
+authorisation_not_passed      :::   Otorisasi gagal
+avatar_applied                :::   Avatar telah berhasil diinstal
+avatar_loaded                 :::   Avatar berhasil diupload
+avatar                        :::   Avatar
+avatars                       :::   Avatars
+back                          :::   Kembali
+balance                       :::   Balance
+ban                           :::   Ban
+ban_do                        :::   Larangan
+ban_type                      :::   Type ban
+ban_who                       :::   Diban
+bbcode                        :::   Tag (BBcode)
+birthday                      :::   Ulang tahun
+birthday_men                  :::   Ulang tahun
+blocking                      :::   Pemblokiran
+cancel                        :::   Batal
+catalogue                     :::   Direktori
+category                      :::   Kategori
+categories                    :::   Kategori
+change_password               :::   Ubah kata sandi
+chat                          :::   Chat
+check_confirmation            :::   Silakan periksa ulang yang anda masukan 
+clear                         :::   Bersih
+clear_all                     :::   Bersihkan semua
+color                         :::   Warna
+comments                      :::   Komentar
+common_list                   :::   Daftar umum
+contacts                      :::   Kontak
+contacts_in                   :::   Dalam kontak
+continue                      :::   Lanjutkan
+clock_settings                :::   Pengaturan jam
+common_settings               :::   Pengaturan umum
+date                          :::   Tanggal
+day                           :::   Hari
+days                          :::   Hari
+default                       :::   Default
+delete                        :::   Hapus
+delete_message                :::   Hapus pesan
+delete_all                    :::   Hapus semua
+delete_confirmation           :::   Apakah Anda benar-benar ingin menghapus?
+description                   :::   Deskripsi
+design_template               :::   Tema desain
+dialogue                      :::   Komunikasi
+digest                        :::   Mencernakan
+discuss                       :::   Membahas
+display_mode                  :::   View mode
+do                            :::   Menampilkan
+dont_display                  :::   Menyembunyikan
+down                          :::   Bawah
+download                      :::   Downlnad
+downloads                     :::   Downloads
+edit                          :::   Ubah
+enter_code                    :::   Masukan kode verifikasi
+enter_on_site                 :::   Masuk situs
+error                         :::   KESALAHAN
+error_404                     :::   Halaman yang Anda minta tidak ada
+error_address                 :::   Alamat salah
+error_description_lenght      :::   Panjang deskripsi harus setidaknya 2 karakter
+error_login_empty             :::   Anda belum memasukkan Login
+error_mandatory_fields        :::   Tabel yang diperlukan tidak diisi
+error_nameto_empty            :::   Anda belum memasukkan nama
+error_nameto_lenght_2_30      :::   Nama harus setidaknya 2 dan 30 karakter
+error_nicklenght              :::   Panjang tidak valid untuk Julukan. Diperbolehkan minimal 2 dan maksimal 20 karakter
+error_password_empty          :::   Anda tidak mengisi kata sandi
+error_password_lenght         :::   Panjang Kata sandi tidak valid. Diperbolehkan 3 minimum dan maksimum 15 karakter
+error_user_not_exist          :::   Pengguna ini tidak ada
+error_user_not_specified      :::   Tidak ditentukan pengguna
+error_verifying_code          :::   Kode Verifikasi yang dimasukan salah
+error_wrong_data              :::   Data Buruk
+error_wrong_limits            :::   Kolom-kolom berada di luar batas diperbolehkan
+error_wrongsymbols            :::   Karakter tidak valid
+events_no_new                 :::   Tidak ada perkembangan baru
+exit                          :::   Keluar
+field_height                  :::   Tinggi bidang
+field_width                   :::   Lebar bidang
+file_maxsize                  :::   Max. Ukuran file
+files                         :::   File
+font_bold                     :::   Tebal
+font_italic                   :::   Miring
+font_underline                :::   Garis bawah
+forgotten_password            :::   Lupa kata sandi
+forum                         :::   Forum
+forum_posts                   :::   Posting di forum
+gallery                       :::   Gallery
+guest                         :::   Tamu
+guests                        :::   Tamu
+gzip_compress                 :::   Gzip kompresi
+gzip_show                     :::   Rasio kompresi
+gzip_on                       :::   Kompresi ON.
+gzip_off                      :::   Kompresi OFF.
+guestbook                     :::   Buku tamu
+happy_birthday                :::   Selamat ulang tahun!!!
+heading                       :::   Judul
+help                          :::   Referensi
+hi                            :::   Hai
+hide                          :::   Menyembunyikan
+homepage                      :::   Halaman utama
+hours                         :::   Jam
+ignore                        :::   Mengabaikan
+in_detail                     :::   Terperinci
+information                   :::   Informasi
+information_faq               :::   Informasi, FAQ
+infringements                 :::   Pelanggaran
+ip_address                    :::   Alamat IP
+ip_history                    :::   Sejarah IP
+karma                         :::   Karma
+language                      :::   Bahasa
+language_select               :::   Pilih bahasa
+language_set                  :::   Sistem bahasa
+last_activity                 :::   Kegiatan Terakhir
+last_ip                       :::  IP Terakhir
+last_visit                    :::   Kunjungan Terakhir
+library                       :::   Perpustakaan
+library_on_moderation         :::   Mod. Perpustakaan
+lines_on_page                 :::   Baris per halaman
+link                          :::   Link
+list_empty                    :::   Daftar kosong
+login                         :::   Masuk
+login_name                    :::   Login
+general_settings              :::   Pengaturan umum
+mail_new                      :::   Pesan baru
+minmax_2_30                   :::   Min. 2, Max. 30 Karakter
+minmax_2_500                  :::   Min. 2, Max. 500 Karakter
+moders                        :::   Moderator
+move                          :::   Pindah
+name_the                      :::   Nama
+new_responses                 :::   Tinjauan baru
+news                          :::   Berita
+news_archive                  :::   Arsip berita
+next                          :::   Lebih lanjut
+nick                          :::   Julukan
+night                         :::   Malam
+no                            :::   Tidak
+not_found                     :::   Pencarian Anda tidak ada
+not_specified                 :::   Tidak ditentukan
+not_mandatory_field           :::   Opsional lapangan
+on                            :::   ON
+or                            :::   atau
+off                           :::   Off
+online                        :::   Online
+personal                      :::   Pribadi
+password                      :::   Kata sandi
+points                        :::   poin
+posts                         :::   posting
+preview                       :::   Tinjauan
+privat                        :::   Privat
+profile                       :::   Profil
+quiz                          :::   Kuis
+quick_jump                    :::   Tombol cepat
+reason                        :::   Menyebabkan
+registration                  :::   Pendaftaran
+registration_not_approved     :::   Kami minta maaf, tapi aplikasi Anda untuk pendaftaran masih tertunda <br /> Silakan tunggu
+remains                       :::   Tetap
+remember                      :::   Ingat
+repeat                        :::   Ulangi
+reset_settings                :::   Reset pengaturan
+responses_new                 :::   Tinjauan baru
+save                          :::   Simpan
+search                        :::   Mencari
+search_user                   :::   Cari user
+search_results                :::   Hasil Query
+search_results_empty          :::   Pencarian Anda tidak ditemukan
+search_new                    :::   Pencarian Baru
+search_nick_help              :::   Pencari julukan Pengguna (NickName)  tidak sensitif huruf. Yaitu <b>UsEr</b> dan <b>user</b> untuk menemukan setara. <br /> Pencarian permintaan adalah transliterasi, yaitu, untuk menemukan, misalnya, julukan DIMA, Anda dapat menulis dima query, hasilnya akan sama.
+sec                           :::   detik.
+section                       :::   Bagian
+sections                      :::   Bagian
+security                      :::   Keamanan
+select                        :::   Memilih
+settings                      :::   Pengaturan
+settings_clock                :::   Pengaturan jam
+settings_clock_shift          :::   Pergeseran waktu
+settings_default              :::   Pilihan diatur ke default
+settings_saved                :::   Pengaturan disimpan
+show                          :::   Tampilkan
+site_active                   :::   Buka situs
+site_new                      :::   Baru di situs
+site_news                     :::   Berita situs
+site_spent                    :::   Conducted site
+smileys                       :::   Smile
+sorting                       :::   Penyortiran
+statistics                    :::   Statistik
+statistics_my                 :::   Statistik saya
+statistics_user               :::   Statistik user
+status                        :::   Status
+supervisors                   :::   Supervisor
+system_functions              :::   Fungsi Sistem
+system_language               :::   Sistem bahasa
+system_time                   :::   Sistem waktu
+system_settings               :::   Sistem pengaturan
+term                          :::   Istilah
+text                          :::   Teks
+text_input                    :::   Memasukkan teks
+text_size                     :::   Ukuran Teks
+themes                        :::   tema
+time                          :::   Waktu
+time_online                   :::   Waktu Online
+timecount_day                 :::   hari
+timecount_days                :::   hari
+timecount_days_r              :::   Hari
+time_limit                    :::   Batas waktu
+time_shift                    :::   Pergeseran waktu
+to_chat                       :::   Dalam Chat
+to_form                       :::   Kuesioner
+to_forum                      :::   Dalam forum
+to_news                       :::   Kembali ke Berita
+to_page                       :::   Ke halaman
+to_show                       :::   Menunjukkan
+total                         :::   Total
+transitions                   :::   Transisi
+transitions_counter           :::   Hit counter
+transitions_n                 :::   Navigasi
+translit                      :::   Translit
+unread                        :::   Belum dibaca
+url_help                      :::   Format alamat http://url.com
+up                            :::   Atas
+user_does_not_exist           :::   Pengguna ini tidak ada
+useful                        :::   Gadget
+users                         :::   Member
+users_list                    :::   Daftar member
+users_new                     :::   Member baru
+users_on_ban                  :::   User ban
+users_on_reg                  :::   Menunggu konfirmasi
+users_top                     :::   Top Aktivitas
+verifying_code                :::   Kode Verifikash
+viewing                       :::   Tinjauan
+view_mode                     :::   Mode Tampilan
+vote                          :::   Polling
+vote_against                  :::   Polling
+vote_for                      :::   Untuk
+votes                         :::   Polling
+welcome_to                    :::   Selamat datang
+without_limit                 :::   Tak terbatas
+write                         :::   Menulis
+yes                           :::   Ya

@@ -1,0 +1,23 @@
+captcha                       :::   Kode dari gambar
+clear_day_ok                  :::   Dihapus semua pesan yang lebih dari 1 hari
+clear_full_ok                 :::   Buku Tamu sepenuhnya dibersihkan
+clear_param_all               :::   Hapus semua
+clear_param_day               :::   Lebih dari 1 hari
+clear_param_week              :::   Lebih dari 1 minggu
+clear_parametres              :::   Pilih metode pembersihan
+clear_week_ok                 :::   Semua pesan yang lebih dari 1 minggu dihapus dari buku tamu
+edit_post                     :::   Ubah Posting
+error_ban                     :::   Anda tidak dapat menulis di buku tamu
+error_captcha_wrong           :::   Kode dari gambar salah
+error_flood                   :::   Anda tidak dapat menambahkan pesan sesering mungkin<br />Silakan tunggu
+error_message_empty           :::   Anda belum mengisi teks pesan
+error_name_empty              :::   Anda belum memasukan nama
+guestbook_closed              :::   Buku tamu di tutup
+guestbook_empty               :::   Tidak ada pesan di buku tamu<br /><b>Jadilah anda yang pertama :)</b>
+message                       :::   Pesan(max. 5000)
+name                          :::   Nama(max. 25)
+only_authorized               :::   Akses hanya untuk member, silahkan <a href="../login.php">Masuk</a> Terlebih dahulu
+reply                         :::   Balas
+reply_already                 :::   <b>Perhatian!</b><br />Posting ini telah dibalas
+seconds                       :::   detik
+sent                          :::   Mengirim

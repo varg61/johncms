@@ -1,0 +1,46 @@
+<table cellpadding="2" cellspacing="0">
+  <tr>
+    <td align="right"><h3>BBcode</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td align="right">[php]...[/php]</td>
+    <td>kode sumber untuk PHP</td>
+  </tr>
+  <tr>
+    <td align="right">Link</td>
+    <td>[url=http://alamat_link]nama link[/url]</td>
+  </tr>
+  <tr>
+    <td align="right">[b]...[/b]</td>
+    <td><b>Tebal</b></td>
+  </tr>
+  <tr>
+    <td align="right">[i]...[/i]</td>
+    <td><i>Miring</i></td>
+  </tr>
+  <tr>
+    <td align="right">[u]...[/u]</td>
+    <td><u>Garis bawah</u></td>
+  </tr>
+  <tr>
+    <td align="right">[s]...[/s]</td>
+    <td><strike>coret teks</strike></td>
+  </tr>
+  <tr>
+    <td align="right">[red]...[/red]</td>
+    <td><span style="color:red">Merah</span></td>
+  </tr>
+  <tr>
+    <td align="right">[green]...[/green]</td>
+    <td><span style="color:green">Hijau</span></td>
+  </tr>
+  <tr>
+    <td align="right">[blue]...[/blue]</td>
+    <td><span style="color:blue">Biru</span></td>
+  </tr>
+  <tr>
+    <td align="right">[c]...[/c]</td>
+    <td><span class="quote">Terpisah dalam kotak teks</span></td>
+  </tr>
+</table>
