@@ -318,8 +318,7 @@ switch ($act) {
                 $req_l = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '" . $res['iso'] . "' AND `var` = 'language_name' LIMIT 1");
                 $res_l = mysql_fetch_assoc($req_l);
                 echo '<div><input type="radio" value="' . $res['iso'] . '" name="lng" ' . ($res['iso'] == $language ? 'checked="checked"' : '') . '/>&#160;' .
-                    '<a href="">' . $res_l['default'] . '</a>' .
-                    '</div>';
+                    $res_l['default'] . '</div>';
             }
             echo '</p>';
         }
