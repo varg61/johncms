@@ -633,13 +633,13 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $onltime = $realtime - 300;
                     $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
                     $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
-                    echo '<a href="index.php?act=who&amp;id=' . $id . '">Кто здесь?&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</a><br/>';
+                    echo '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng_forum['who_here'] . '?&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</a><br/>';
                 }
                 if ($filter)
                     echo '<div><a href="index.php?act=filter&amp;id=' . $id . '&amp;do=unset">' . $lng_forum['filter_cancel'] . '</a></div>';
                 else
                     echo '<div><a href="index.php?act=filter&amp;id=' . $id . '&amp;start=' . $start . '">' . $lng_forum['filter_on_author'] . '</a></div>';
-                echo '<a href="index.php?act=tema&amp;id=' . $id . '">Скачать тему</a>';
+                echo '<a href="index.php?act=tema&amp;id=' . $id . '">' . $lng_forum['download_topic'] . '</a>';
                 break;
 
             default:

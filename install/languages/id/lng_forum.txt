@@ -33,6 +33,7 @@ delete_post                   :::   Hapus pesan
 delete_post_help              :::   Dalam hal penghapusan counter posting forum akan dikurangi satu titik
 delete_section                :::   Hapus bagian
 delete_vote                   :::   Hapus polling
+download_topic                :::   Download topik
 download_topic_format         :::   Memilih format
 download_topic_help           :::   Link aktif 5 menit
 download_topic_note           :::   Tema ini adalah download dari forum website
@@ -181,9 +182,10 @@ unread_reset_done             :::   Semua topik ditandai sebagai telah dibaca
 unread_show_for_period        :::   Tampilkan periode
 upload                        :::   Mengirim
 who_delete_post               :::   Posting dihapus
-who_restore_post              :::   Posting dipulihkan
+who_here                      :::   Siapa disini?
 who_in_forum                  :::   Siapa di forum
 who_in_topic                  :::   Siapa di topik
+who_restore_post              :::   Posting dipulihkan
 vote_accepted                 :::   Anda memilih
 voting                        :::   polling (max. 150)
 voting_added                  :::   Polling ditambahkan

@@ -33,6 +33,7 @@ delete_post                   :::   Удалить сообщение
 delete_post_help              :::   В случае удаления, из счетчика постов форума будет вычтен один балл
 delete_section                :::   Удаляем раздел
 delete_vote                   :::   Удалить опрос
+download_topic                :::   Скачать тему
 download_topic_format         :::   Выберите формат
 download_topic_help           :::   Ссылка активна 5 минут
 download_topic_note           :::   Данная тема была скачана с форума сайта
@@ -181,9 +182,10 @@ unread_reset_done             :::   Все темы отмечены как пр
 unread_show_for_period        :::   Показать за период
 upload                        :::   Отправить
 who_delete_post               :::   Пост удалил
-who_restore_post              :::   Пост восстановил
+who_here                      :::   Кто здесь
 who_in_forum                  :::   Кто в форуме
 who_in_topic                  :::   Кто в теме
+who_restore_post              :::   Пост восстановил
 vote_accepted                 :::   Ваш голос принят
 voting                        :::   Опрос (max. 150)
 voting_added                  :::   Опрос добавлен
