@@ -1,0 +1,48 @@
+500_symbols                   :::   500 Symbole
+1000_symbols                  :::   1000 Symbole
+3000_symbols                  :::   3000 Symbole
+always                        :::   allemal
+chat_field_height             :::   Hohe des Ackers (1-9)
+chat_field_width              :::   Breite des Ackers (10-80)
+chat_msg_per_page             :::   Posten an Seite (5-40)
+chat_refresh                  :::   Erneuerung (10-99 сек.)
+chat_settings                 :::   Abstimmungen Chat
+clip_first_post               :::   1 Posten zu verankern
+field_on                      :::   Acker der Einfuhrung zu anschalten
+in_not_read                   :::   in undurchgelesener
+main_settings                 :::   Hauptsachliche Abstimmungen
+message_input                 :::   Einfuhrung der Ansage
+mood_1                        :::   neutraler
+mood_2                        :::   muntrer
+mood_3                        :::   ausgezeichneter
+mood_4                        :::   aufgeraumter
+mood_5                        :::   verzagter
+mood_6                        :::   engelgleicher
+mood_7                        :::   aggressiver
+mood_8                        :::   befremdeter
+mood_9                        :::   boseer
+mood_10                       :::   argerlicher
+mood_11                       :::   schlaftrunkener
+mood_12                       :::   langweiliger sich
+mood_13                       :::   beschäftigt
+mood_14                       :::   frecher
+mood_15                       :::   befangener
+mood_16                       :::   glucklicher
+mood_17                       :::   verliebter
+mood_18                       :::   begeisterter
+mood_19                       :::   einsamer
+mood_20                       :::   nachdenklicher
+mood_21                       :::   psychedelisch
+mood_22                       :::   entspannt
+mood_23                       :::   betrubter
+mood_24                       :::   erschrockener
+mood_25                       :::   schockierter
+mood_26                       :::   aberkluger
+mood_27                       :::   abgespannter
+my_set                        :::   Meine Abstimmungen
+never                         :::   niemals
+not_to_cut_off                :::   nicht zu beschneiden
+or_specify_the                :::   Oder angib ihriger
+scrap_of_posts                :::   Beschneidung der Posten
+sorting_return                :::   Entgegengesetzte Sonderung
+your_mood                     :::   Euere Gemutsstimmung

@@ -1,0 +1,12 @@
+forum_last_activity           :::   Allerletzter Aktivismus an Forum
+game_balance                  :::   Spielsbilanz
+guest_empty                   :::   Liste ist hohl.<br />Ansagen des gegebenen Benutzers quasi automatischer entfernten sich nach eingeplante Reinigung des Gastes
+site_activity                 :::   Aktivismus an Standort
+top_10                        :::   Top 10 Aktivismus
+top_bal                       :::   Bessere Spielsbilanz
+top_chat                      :::   Samye aktiver in Chat
+top_comm                      :::   Meist kommentierten
+top_forum                     :::   Selbsten aktiver an Forum
+top_guest                     :::   Selbsten aktiver in Gast
+top_karma                     :::   Besserer Karma
+top_quiz                      :::   Besserer &quot;umniki&quot; des Quiz

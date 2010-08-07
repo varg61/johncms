@@ -33,6 +33,7 @@ delete_post                   :::   Ştergeţi mesajul
 delete_post_help              :::   În caz de îndepărtare de forum metru de posturi vor fi deduse un punct
 delete_section                :::   Scoateţi secţiunea
 delete_vote                   :::   Scoateţi sondaj
+download_topic                :::   Download tema
 download_topic_format         :::   Selectaţi formatul
 download_topic_help           :::   Link activ 5 minute
 download_topic_note           :::   Această temă a fost descărcat de pe forumul site-ului
@@ -181,9 +182,10 @@ unread_reset_done             :::   Toate subiectele marcate ca fiind citite
 unread_show_for_period        :::   Arată după perioada
 upload                        :::   Trimite
 who_delete_post               :::   Mesajul eliminat
-who_restore_post              :::   Mesajul restabilit
+who_here                      :::   Cine e aici
 who_in_forum                  :::   Cine în forum
 who_in_topic                  :::   Cine în tema
+who_restore_post              :::   Mesajul restabilit
 vote_accepted                 :::   Votul vostru admis
 voting                        :::   Sondaj (max. 150)
 voting_added                  :::   Sondaj adăugată

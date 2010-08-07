@@ -1,0 +1,159 @@
+access_authorised             :::   autorisierter
+access_disabled               :::   Zutritt ist geschlossen
+access_enabled                :::   Zutritt offensteht
+access_enabled_for_guests     :::   konnen fabulieren Gaste
+access_help                   :::   bei Administrator allemal bleibt Zutritt zu all geschlossenen Moduln und Kommentare
+access_rights                 :::   Anrechte des Zutritts
+access_with_moderation        :::   mit moderacie
+adaptive                      :::   Adaptivnyy
+advertisement                 :::   Anpreisung
+agreement                     :::   Vertrag
+antiflood                     :::   Antiflud
+antiflood_dn_help             :::   Automatischer Ubergang aus Tag auf Nachtregime, zufolge der in Abstimmungen aufgegebenen Zeit
+antiflood_ad_help             :::   falls an Standorte ist jemand aus Administration, Gebaude arbeitet in &quot;Tagsregime&quot; ansonst heruberkommt in &quot;Nacht&quot;
+antiflood_settings            :::   Abstimmung antiflud
+antiflood_tl_help             :::   Min. 4, max. 300 Sekunden
+antispy                       :::   Antispion
+antispy_dist_scan             :::   Durchmusterungsoperation nach distributive
+antispy_dist_scan_help        :::   Ausstellen das uberflussige files, derjenige, dass nicht betreten in origineller distributive
+antispy_dist_scan_bad         :::   Missverhaltnis distributivu <br /><small> Aufmerksamkeit! Falls Datei, das in Liste nicht beziehen sich auf euere Erganzungs Moduln und ihr ist nicht zuversichtlich in ihrem Verlass durchgezahlt ist, entfernen sie, dermassen, als sie reprasentieren Androhung fur Sicherheit Euer sayt
+antispy_dist_scan_good        :::   <h3> Ausgezeichnet !</h3> Liste Dateien soot vetstvuet distributive
+antispy_menu                  :::   Menu des Blattabtasters
+antispy_no_snapshot           :::   Gestalt Datei noch nicht war geschaffen
+antispy_rescan                :::   Durchmusterungsoperation
+antispy_scan_mode             :::   Regime Durchmusterungsoperation
+antispy_snapshot_create       :::   Schopfung Aufnahme
+antispy_snapshot_create_ok    :::   Aufnahme Datei erfolgreich ist geschaffen
+antispy_snapshot_create_help  :::   Macht "Aufnahme" all Skrypt Datei Standort, berechnet ihre Kontroll Betrage und einpragt sich in Basis
+antispy_snapshot_help         :::   Gegebener procedura schafft Liste das all Scripting Datei Euer Standort, berechnet ihre Kontroll Betrage und eintragt in Basis, fur anschliessende Komparation
+antispy_snapshot_warning      :::   <b> AUFMERKSAMKEIT !!!</b><br /> vor der Fortfuhrung, uberzeugen sich, dass all Datei, das in Regime skanirovaniya Distributiv sicherer und nicht enthalten nesankcionirovannykh Modifikationen bewiesen waren
+antispy_snapshot_scan         :::   Skanirovanie nach Aufnahme
+antispy_snapshot_scan_bad     :::   Missverhaltnis Aufnahme <br /><small> Aufmerksamkeit !!! Euch es ist notwendig, all Datei aus gegebener Liste zu achten auf. Sie waren subsumiert, oder modifizierter aus Moment der Schopfung der Gestalt </small>
+antispy_snapshot_scan_help    :::   Komparation der Liste und Komtroll Betrage Datei mit dem voraus erledigter Art<br />erlaubt, unbekannter Datei, und Anderungen zu beweisen
+antispy_snapshot_scan_ok      :::   Ausgezeichnet!<br />All Datei zutreffen fruf erledigter Gestalt
+ban_del_confirmation          :::   Sperrung erfolgreich ist entfernt
+ban_del_question              :::   Sperrung zu entfernen?
+ban_details                   :::   Details Sperrung
+ban_panel                     :::   Sperrung-panel
+chat_intim                    :::   Intimitat
+chat_management               :::   Leitung Chat
+chat_quiz                     :::   Quiz
+chat_room_add                 :::   Zimmer zu subsumieren
+chat_room_delete              :::   Zimmer zu entfernen
+chat_room_delete_warning      :::   ihr gultig belieben, Zimmer zu entfernen
+chat_room_edit                :::   Zimmer zu verraten
+chat_room_simply              :::   einfach
+chat_room_type                :::   Baumuster des Zimmers
+counter_add_conf              :::   Zahler erfolgreich ist subsumiert
+counter_add_help              :::   AcHTUNG!<br />Achten auf Richtigkeit des eingefuhrten Codes. Er muss zutreffen Standards XML. <br /> Falls nach Druck der Zwecke " Einsehen " anfallen Fehler XHTML, in ihriger brauzere auf Knopf zu druckt " Ruckwarts ", zuruckkehre in gegebene Ausgestaltung und otkorrektiruyte Fehler
+counter_deleted               :::   Zahler ist entfernt
+counter_edit_conf             :::   Zahler erfolgreich ist verraten
+counter_help1                 :::   an all Seiten zeigt sich Variante-1
+counter_help2                 :::   an all Seiten zeigt sich Variante-2
+counter_help12                :::   an kardinaler zeigt sich Variante-1, an ubrigen Seiten Variante-2
+counter_mod_default_help      :::   an kardinaler zeigt sich Variante-1, an ubrigen Seiten Variante-2<br />falls Acker Variante-2 ist nicht ausgefullt, Zahler istallein an kardinaler Seite
+counter_mod1                  :::   Variante-1
+counter_mod1_description      :::   Code fur kardinale Seite
+counter_mod2                  :::   Variante-2
+counter_mod2_description      :::   Code fur ubrige Seiten
+counter_preview_help          :::   Falls Zahler widergeben recht und ohne Fehler, auf Knopf zu druckt " Zu behalten ".<br /> In entgegengesetzt Gelegenheit, in brauzere presse Zwecke " ruckwarts " und ausbessre Fehler
+counters                      :::   Zahler
+day_begin                     :::   Anfang des Tags
+day_end                       :::   Ende des Tags
+day_mode                      :::   Tagsregime
+error_color                   :::   Nicht recht ist ausgefullt Acker " Farbe "
+error_firstip                 :::   erste Adresse ist eingefuhrt falsch
+error_secondip                :::   zweiter Adresse ist eingefuhrt falsch
+error_usrdel_rights           :::   ihr nicht konnen entfernen Alteste ihr von Amts wegen
+heading_and_text              :::   Ubershrift + text
+installation_date             :::   Datum der Aufstellung
+ip_ban                        :::   Sperrung nach IP
+ip_ban_clean                  :::   verdünnt all IP
+ip_ban_clean_confirmation     :::   Tabelle IP Sperrung erfolgreich ist abgeburstet. <br /> verdünnt all Adressen
+ip_ban_clean_warning          :::   <b>ACHTUNG!</b> Tabelle IP banov ist abgeburstet.<br />An gultig belieben verdünnt IP?
+ip_ban_conflict_admin         :::   Sperrung ist impossibel. Euere eigene Adresse IP gelangt in Diapason
+ip_ban_conflict_address       :::   Die Sie eingefuhrte Adresse konfliktuet mit anderer, befindlicher in Basis
+ip_ban_del                    :::   Entfern Sperrung
+ip_ban_help                   :::   Beispiel:<br /><span class="red">10.5.7.1</span> - Ban eins Adresse<br /><span class="red">10.5.7.1-10.5.7.100</span> - Sperrung Diapason der Adressen.<br /><span class="red">10.5.*.*</span> - Sperrung nach Maske. Ist Sperung all podset', seit Adresse 0 und beendet 255
+ip_ban_new                    :::   Sperrung IP
+ip_ban_search_help            :::   Einfuhren Einzel Adresse, Maske und Diapasons ist unakzeptabel
+ip_ban_type1                  :::   Sperrung Diapason der Adressen
+ip_ban_type2                  :::   Sperrung nach Maske podseti
+ip_ban_type3                  :::   Sperrung Adresse IP
+ip_search                     :::   Suche nach IP
+ip_search_notfound            :::   Derart Adresse in Basis ist
+ip_settings                   :::   Abstimmungen IP
+karma_admin_disable           :::   Vor Administration zu verbieten zu abstimmen
+karma_clear_confirmation      :::   Ihr gultig belieben, karma zu abwerfen?
+karma_cleared                 :::   Karma ist abgeworfen
+karma_reset                   :::   Karmu zu abwerfen
+karma_restrictions            :::   Einschrankungen fur Abstimmung
+karma_votes_per_day           :::   Stimmen in Tag
+language_default              :::   Standardssprache
+language_delete_error         :::   Es man darf nicht zu entfernen Sprache, die fur Gebaude Standard angesetzt ist
+language_delete_warning       :::   Ihr gultig belieben, Sprache zu entfernen
+language_select_error         :::   Fehler der Auswahl der Sprache
+line_foldings                 :::   Trennunszeichen der Zeilen
+link_add                      :::   Exil zu subsumieren
+link_add_color_help           :::   In Format FFFFFF, falls nicht belieben, Exil Farbe zu abscheiden, einfach nicht ausfulle diesen Acker
+link_add_days_help            :::   Tage aus Moment der Aufstellung des Exils, nach ursprung das Exil quasi automatischer abschiebt<br />0 - unbegrenzt
+link_add_name_help            :::   Fur Ablosung der Benennung bei Erneuerung der Seite durchzahlen all Benennungen durch Zeichen |
+link_add_placing_all          :::   an all Seiten
+link_add_placing_child        :::   an all, abgerechnet kardinaler
+link_add_placing_front        :::   allein an kardinaler
+link_add_trans_help           :::   Quantitat der Ubergange, nach die Exil quasi automatischer abschiebt<br />0 - unbegrenzt
+link_add_ok                   :::   Exil erfolgreich ist subsumiert
+link_clear_warning            :::   ihr gultig belieben, all inaktive Exile zu entfernen?
+link_deletion_warning         :::   ihr gultig belieben, Exil zu entfernen?
+link_edit                     :::   Exil zu cutten
+link_edit_ok                  :::   Exil erfolgreivh ist verraten
+link_hide_warning             :::   ihr gultig belieben, Exil zu unterschlagen?
+link_show_warning             :::   ihr gultig belieben, Exil zu wiederherstellen?
+links_active                  :::   aktive Exile
+links_allocation              :::   Absonderung
+links_armt_over_counters      :::   uber Zahlern
+links_armt_over_logo          :::   uber logotipom
+links_armt_under_counters     :::   unter Zahlern
+links_armt_under_usermenu     :::   unter Menu
+links_delete_hidden           :::   inaktiver zu entfernen
+links_place_occupied          :::   gegebener Ort ist besetzt
+meta_tags                     :::   META teg
+meta_keywords                 :::   Schlusselworter
+meta_description              :::   Beshreibung
+module_default_settings       :::   Abstimmungen des Moduls ist nicht aufgegeben, sind ausgenutzt Standardsbedeutungen
+module_on                     :::   Modul zu anschalten
+modules                       :::   Moduln
+news_count                    :::   Quantitat der Neuigkeiten
+news_howmanydays_display      :::   wieviel Tage zu aufweisen
+news_on_frontpage             :::   Neuigkeiten an kardinaler
+operation_mode                :::   Regime der Arbeit
+placing                       :::   Anbringung
+redirect                      :::   redirekt
+redirect_url                  :::   URL redirekt
+refresh_smileys               :::   Smiley zu erneuern
+reg_approve                   :::   Bestarkung registriert
+reg_approved                  :::   registriert ist bejaht
+reg_approve_all               :::   all zu bejahen
+reg_del_all                   :::   all zu entfernen
+reg_deleted_all               :::   all unbejahter registrieren ist entfernt
+reg_del_ip                    :::   Entfern IP
+search_nick                   :::   Suche uber nik
+search_ip_help                :::   <small><b>Beispiele der Bedurfnisse:</b><br /><span class="red">10.5.7.1</span> - Suche der eins Adresse<br /><span class="red">10.5.7.1-10.5.7.100</span> - Suche nach Diapason der Adressen ( Zeichen der Maske * es man darf nicht zu ausnutzen )<br /><span class="red">10.5.*.*</span> - Suche nach Maske. Ist gefunden all podset', seit Adresse 0 und beendet 255</small>
+site_url                      :::   Adresse Standorte ohne slesch an dem Ende
+site_copyright                :::   Urheberrecht Standort
+site_email                    :::   E-mail Standort
+site_settings                 :::   Abstimmungen Standort
+smileys_error                 :::   Fehler des Zutritts zu Cache Smiley
+smileys_updated               :::   Cache Smiley erfolgreich ist erneut
+supermoders                   :::   Alteste moderator
+system                        :::   Gebaude
+to_all                        :::   all
+to_guest                      :::   Gaste
+to_users                      :::   Benutzer
+users_administration          :::   Administration
+user_del                      :::   Abkehr des Benutzer
+user_del_confirm              :::   ihr gultig belieben, gegebenen Benutzer zu entfernen?
+user_del_activity             :::   Reinigung des Aktivismus
+user_del_forumnote            :::   bei Reinigung  forum, Themen und Posten heruberkommen in Regime &quot;latenter&quot;
+user_deleted                  :::   Benutzer ist entfernt
+users_reg                     :::   an registriert

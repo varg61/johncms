@@ -1,0 +1,249 @@
+language_name                 :::   Russischer
+access_forbidden              :::   Zutritt ist verboten
+access_guest_forbidden        :::   Allein fur registrierte Besucher
+add                           :::   Subsumiert
+administration                :::   Administration
+administrators                :::   Administrationen
+admin_club                    :::   Admin-Klub
+admin_panel                   :::   Admin-panel
+administrative_events         :::   Begebenheiten des Administrators
+apperance                     :::   Aussenseite
+approve                       :::   Zu bejahen
+arrangement                   :::   Anordnung
+author                        :::   Autor
+authorized                    :::   Autorisierter
+authorisation_not_passed      :::   Autorisiert nicht durchmachte
+avatar_applied                :::   Avatar erfolgreich angesetzter
+avatar_loaded                 :::   Avatar erfolgreich belasteter
+avatar                        :::   Avatar
+avatars                       :::   Avataren
+back                          :::   Ruckwarts
+balance                       :::   Bilanz
+ban                           :::   Sperrung
+ban_do                        :::   sperrunger
+ban_type                      :::   Baumuster Sperrung
+ban_who                       :::   sperrunges
+bbcode                        :::   Tegi (BBcode)
+birthday                      :::   Geburtstag
+birthday_men                  :::   Geburtstager
+blocking                      :::   Blockung
+cancel                        :::   Aufhebung
+catalogue                     :::   Katalog
+category                      :::   Kategorie
+categories                    :::   Kategorien
+change_password               :::   Wechseln Kennwort
+chat                          :::   Chat
+check_confirmation            :::   Bitte durchsuche Richtigkeit der Einfuhrung der Angaben
+clear                         :::   abbursten
+clear_all                     :::   All zu abbursten
+color                         :::   Farbe
+comments                      :::   Kommentare
+common_list                   :::   Gemeinsame Liste
+contacts                      :::   Beruhrungen
+contacts_in                   :::   In Beruhrungen
+continue                      :::   Zu fortfuhren
+clock_settings                :::   Abstimmung der Uhren
+common_settings               :::   Gemeinsame Abstimmungen
+date                          :::   Datum
+day                           :::   Tag
+days                          :::   Tags
+default                       :::   Standards
+delete                        :::   Entfern
+delete_message                :::   Ansang ist entfernt
+delete_all                    :::   Entfernen zu all
+delete_confirmation           :::   Gultig belieben, zu entfernen?
+description                   :::   Beschreibung
+design_template               :::   Thema der Aufmachung
+dialogue                      :::   Verkehr
+digest                        :::   verdauen
+discuss                       :::   Zu besprechen
+display_mode                  :::   Regime der Abspiegelung
+do                            :::   Zu aufarbeiten
+dont_display                  :::   Nicht zu aufweisen
+down                          :::   Ab
+download                      :::   zu belasten
+downloads                     :::   Ladungen
+edit                          :::   verraten
+enter_code                    :::   Einfuhre Versuchscode
+enter_on_site                 :::   Auf Standort zu hineingehen
+error                         :::   FEHLER
+error_404                     :::   Die Sie gefragte Seite otsutstvuet
+error_address                 :::   Adresse ist eingefuhrt falsch
+error_description_lenght      :::   Lange der Beschreibung muss sein nicht weniger 2 Symbole
+error_login_empty             :::   Ihr nicht einfuhrten Login
+error_mandatory_fields        :::   Ist nicht ausgefullt obligatorische Acker
+error_nameto_empty            :::   Ihr nicht einfuhrten Benennung
+error_nameto_lenght_2_30      :::   Lange der Benennung muss sein nicht weniger 2 und nicht bolee 30 Symbole
+error_nicklenght              :::   Unzulassige Lange Nik. Es ist gelost min. 2 und maks.20 Symbole
+error_password_empty          :::   Ihr nicht einfuhrten Kennwort
+error_password_lenght         :::   Unzulassige Lange des Kennwortes. Es ist gelost min.3 und maks. 15 Symbole
+error_user_not_exist          :::   Derart Benutzer nicht daist
+error_user_not_specified      :::   Ist nicht namlich Benutzer
+error_verifying_code          :::   Versuchscode ist eingefuhrt falsch
+error_wrong_data              :::   Unrichtige Angaben
+error_wrong_limits            :::   Bedeutungen der Acker vykhodyat vor akzeptable Rahmen
+error_wrongsymbols            :::   Unzulassige Symbole
+events_no_new                 :::   Neue Begebenheiten ist
+exit                          :::   Austritt
+field_height                  :::   Hohe des Ackers
+field_width                   :::   Breite des Ackers
+file_maxsize                  :::   Maks. Dateigrosse
+files                         :::   Dateien
+font_bold                     :::   Fetter
+font_italic                   :::   Kursivschrift
+font_underline                :::   Angestrichener
+forgotten_password            :::   Vergassen Kennwort
+forum                         :::   Forum
+forum_posts                   :::   Posten an forum
+gallery                       :::   Galerie
+guest                         :::   Gast
+guests                        :::   Gasten
+gzip_compress                 :::   Gzip ballt
+gzip_show                     :::   Koeffizient ballt
+gzip_on                       :::   Ballt ist angeschaltet
+gzip_off                      :::   Ballt ist ausgeschaltet
+guestbook                     :::   Gaste
+happy_birthday                :::   Mit Geburtstag!!!
+heading                       :::   Zagolovok
+help                          :::   Auskunft
+hi                            :::   Grus
+hide                          :::   Zu unterschlagen
+homepage                      :::   Auf kardinaler
+hours                         :::   Uhren
+ignore                        :::   Zu ignorieren
+in_detail                     :::   Genau
+information                   :::   Information
+information_faq               :::   Information, FAQ
+infringements                 :::   Verletzungen
+ip_address                    :::   Adresse IP
+ip_history                    :::   Geschichte IP
+karma                         :::   Karma
+language                      :::   Sprache
+language_select               :::   Wahle Sprache
+language_set                  :::   Fur Gebaude ist angesetzt Sprache
+last_activity                 :::   Allerletzter Aktivismus
+last_ip                       :::   Allerletzter IP
+last_visit                    :::   Allerletzter Besuch
+library                       :::   Bibliotheke
+library_on_moderation         :::   Mod. Bibliotheken
+lines_on_page                 :::   Zeilen auf Seite
+link                          :::   Exil
+list_empty                    :::   Liste ist hohl
+login                         :::   Eingang
+login_name                    :::   Login
+general_settings              :::   Gemeinsame Abstimmungen
+mail_new                      :::   Ihr Brief
+minmax_2_30                   :::   Min. 2, maks. 30 Symbole
+minmax_2_500                  :::   Min. 2, maks. 500 Symbole
+moders                        :::   Moderatoren
+move                          :::   Zu deportieren
+name_the                      :::   Benennung
+new_responses                 :::   Neue Ausserungen
+news                          :::   Neuigkeiten
+news_archive                  :::   Archiv der Neuigkeiten
+next                          :::   Weiter
+nick                          :::   Nik
+night                         :::   Nein
+no                            :::   nicht
+not_found                     :::   Po Euere Anfrage nichts ist nicht gefunden
+not_specified                 :::   Nicht namlicher
+not_mandatory_field           :::   Unverbindlicher Acker
+on                            :::   Zu anschalten
+or                            :::   oder
+off                           :::   Zu auschalten
+online                        :::   Am Standort
+personal                      :::   Personlicher
+password                      :::   Kennwort
+points                        :::   Augenglaser
+posts                         :::   Posten
+preview                       :::   Predvaritel'nyy Einsehen
+privat                        :::   Privat
+profile                       :::   Enquette
+quiz                          :::   Quiz
+quick_jump                    :::   Schneller Ubergang
+reason                        :::   Anlass
+registration                  :::   Registration
+registration_not_approved     :::   Bringen Entschuldigungen, aber Euere Buchung auf registriert ist noch nicht begutachtet <br /> Bitte erwarte
+remains                       :::   Blieb
+remember                      :::   Zu behalten
+repeat                        :::   Zu rekapitulieren
+reset_settings                :::   Sbros der Abstimmungen
+responses_new                 :::   Neue Ausserungen
+save                          :::   zu behalten
+search                        :::   Suchen
+search_user                   :::   Suche des Benutzers
+search_results                :::   Ergebnisse der Anfrage
+search_results_empty          :::   nach Euere Anfrage nichts ist nicht gefunden
+search_new                    :::   Neue Suchen
+search_nick_help              :::   Suche geht nach Niku Benutzer (Nickname) und unempfindlicher zu registru der Buchstaben, <b> User </b> und <b> use r</b> fur Suche gleichwertiger. <br /> Anfrage auf Suche transliter, zu finden, beispielsweise, nik DIMA, Sie konnen in Anfrage aufschreiben dima, Ergebnis ist eins und selber.
+sec                           :::   Sekunde
+section                       :::   Abteilung
+sections                      :::   Abteilungen
+security                      :::   Sicherheit
+select                        :::   Zu wahlen
+settings                      :::   Abstimmungen
+settings_clock                :::   Abstimmung der Uhren
+settings_clock_shift          :::   Bergrutsch der Zeit
+settings_default              :::   Ist angesetzt Standardsabstimmungen
+settings_saved                :::   Abstimmungen ist behalten
+show                          :::   Zu aufweisen
+site_active                   :::   Aktive Standort
+site_new                      :::   Neuer an Standorte
+site_news                     :::   Neuigkeiten der Ressource
+site_spent                    :::   Durchfuhrte an Standorte
+smileys                       :::   Smeley
+sorting                       :::   Sonderung
+statistics                    :::   Statistik
+statistics_my                 :::   Meine Statistik
+statistics_user               :::   Statistik des Benutzers
+status                        :::   Status
+supervisors                   :::   SV
+system_functions              :::   Funktionen des Gebaudes
+system_language               :::   Sprache des Gebaudes
+system_time                   :::   Systemische Zeit
+system_settings               :::   Abstimmungen des Gebaudes
+term                          :::   Fachausdruck
+text                          :::   Text
+text_input                    :::   Einfuhrung des Textes
+text_size                     :::   Abmass des Textes
+themes                        :::   Themen
+time                          :::   Zeit
+time_online                   :::   Zeit Online
+timecount_day                 :::   Tag
+timecount_days                :::   Tags
+timecount_days_r              :::   Tag
+time_limit                    :::   Limit der Zeit
+time_shift                    :::   Bergrutsch der Zeit
+to_chat                       :::   In Chat
+to_form                       :::   In Enquette
+to_forum                      :::   In Forum
+to_news                       :::   Zu Neuigkeiten
+to_page                       :::   Zu Seite
+to_show                       :::   Zu aufweisen
+total                         :::   Im ganzen
+transitions                   :::   Ubergange
+transitions_counter           :::   Zahler der Ubergange
+transitions_n                 :::   Ubergange
+translit                      :::   Translit
+unread                        :::   Undurchgelesener
+url_help                      :::   Adresse einfuhren in Format http://url.com
+up                            :::   Nach oben
+user_does_not_exist           :::   Derart Benutzer nicht daist
+useful                        :::   Behilflicher
+users                         :::   Benutzer
+users_list                    :::   Liste der Benutzer
+users_new                     :::   Neue Benutzer
+users_on_ban                  :::   Haben Ban
+users_on_reg                  :::   An registration
+users_top                     :::   Top des Aktivismus
+verifying_code                :::   Versuchscode
+viewing                       :::   Einsehen
+view_mode                     :::   Regime der Abspiegelung
+vote                          :::   Zu abstimmen
+vote_against                  :::   Wider
+vote_for                      :::   Hinter
+votes                         :::   Abstimmungen
+welcome_to                    :::   Willkommener an
+without_limit                 :::   Ohne Einschrankungen
+write                         :::   Zu aufschreiben
+yes                           :::   ya

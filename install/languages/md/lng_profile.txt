@@ -56,4 +56,4 @@ stayed_w                      :::   Ea a stat pe site-ul
 upload                        :::   Încărcaţi
 upload_avatar                 :::   Încărcare avatar
 upload_photo                  :::   Încărcare o imagine
-user_profile                  :::   Анкета пользователя
+user_profile                  :::   Profilul utilizatorului
