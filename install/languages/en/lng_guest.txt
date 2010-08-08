@@ -1,0 +1,23 @@
+captcha                       :::   Verifying code
+clear_day_ok                  :::   Removed all messages older than 1 day
+clear_full_ok                 :::   Guestbook completely cleared
+clear_param_all               :::   Delete all
+clear_param_day               :::   Older than 1 day
+clear_param_week              :::   Older than 1 week
+clear_parametres              :::   Cleanup option
+clear_week_ok                 :::   All message older than 1 week removed
+edit_post                     :::   Editing post
+error_ban                     :::   You can not write in the guestbook
+error_captcha_wrong           :::   Invalid verifying code
+error_flood                   :::    Can not rapeat your message<br />Please wait
+error_message_empty           :::   You have not entered message
+error_name_empty              :::   You have not entered name
+guestbook_closed              :::   Guestbook closed
+guestbook_empty               :::   Empty message in the guestbook<br /><b>Write first :)</b>
+message                       :::   Message(max. 5000)
+name                          :::   Name(max. 25)
+only_authorized               :::   Access only registered users <a href="../login.php">Login</a> first
+reply                         :::   Reply
+reply_already                 :::   <b>WARNING!</b><br />this post already answered
+seconds                       :::   seconds
+sent                          :::   Send

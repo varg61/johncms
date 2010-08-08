@@ -143,7 +143,7 @@ switch ($act) {
         echo get_top('postforum');
         echo '<div class="phdr"><a href="../forum/index.php">' . $lng['forum'] . '</a></div>';
 }
-echo '<p><a href="../index.php?act=users">' . $lng['site_active'] . '</a></p>';
+echo '<p><a href="../index.php?act=users">' . $lng['community'] . '</a></p>';
 require('../incfiles/end.php');
 
 ?>

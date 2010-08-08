@@ -39,6 +39,7 @@ clear_all                     :::   Очистити все
 color                         :::   Колір
 comments                      :::   Коментарі
 common_list                   :::   Загальний список
+community                     :::   Актив сайту
 contacts                      :::   Контакти
 contacts_in                   :::   У контакти
 continue                      :::   Продовжити
@@ -187,7 +188,6 @@ settings_clock_shift          :::   Зміщення часу
 settings_default              :::   Встановлені налаштування за умовчанням
 settings_saved                :::   Налаштування збережені
 show                          :::   Показати
-site_active                   :::   Актив сайту
 site_new                      :::   Нове на сайті
 site_news                     :::   Новини ресурсу
 site_spent                    :::   Провів на сайті

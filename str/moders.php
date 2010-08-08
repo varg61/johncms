@@ -23,7 +23,7 @@ require_once('../incfiles/head.php');
 Выводим список администрации
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="../index.php?act=users"><b>' . $lng['site_active'] . '</b></a> | Администрация</div>';
+echo '<div class="phdr"><a href="../index.php?act=users"><b>' . $lng['community'] . '</b></a> | Администрация</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= 1");
 $total = mysql_result($req, 0);
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `rights` >= 1 ORDER BY `rights` DESC LIMIT $start, $kmess");

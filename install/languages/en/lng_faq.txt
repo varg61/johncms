@@ -1,0 +1,4 @@
+forum_rules                   :::   Forum rules
+smileys_adm                   :::   For administration
+tags_faq                      :::   FAQ on tags
+translit_help                 :::   Help translate

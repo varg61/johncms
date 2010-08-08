@@ -1,0 +1,12 @@
+forum_last_activity           :::   Last activity on forum
+game_balance                  :::   Game balance
+guest_empty                   :::   List is empty.<br />Communications of user automatic removed after scedule cleaning
+site_activity                 :::   Activity on the site
+top_10                        :::   Top 10 activity
+top_bal                       :::  Best game balance
+top_chat                      :::   Most active in chat
+top_comm                      :::   Most commented
+top_forum                     :::   Most active at forum
+top_guest                     :::   Most active in guestbook
+top_karma                     :::   Best karma
+top_quiz                      :::   Best &quot;answered&quot; Quiz

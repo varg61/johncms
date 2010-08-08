@@ -1,0 +1,21 @@
+all                           :::   All
+comment                       :::   Comment
+clear_warning                 :::   Do you really want to delete all reviews user 
+deletion_warning              :::   Do you really want to remove
+error_limit                   :::   Limit votes for today. New voice will be assessed
+error_not_for_admins          :::   Allowed only administration
+error_forbidden               :::   You are not allowed to vote in return for user
+error_rogue                   :::   Cheat voice prohibited
+error_terms_1                 :::   In the voting can take part, only user who have been detained at the site at least
+error_terms_2                 :::   Score on the forum
+error_terms_3                 :::   For single user can take the poll once every 24 hours
+done                          :::   Completed
+minus                         :::   Negative
+negative                      :::   Negative
+new_responses                 :::   New responses
+plus                          :::   Positive
+positive                      :::   Positive
+reset                         :::   Reset voice
+vote_qty                      :::   Number of vote
+vote_to                       :::   Vote for
+vote_type                     :::   Type voice

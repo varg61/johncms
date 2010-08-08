@@ -1,0 +1,48 @@
+500_symbols                   :::   500 characters
+1000_symbols                  :::   1000 characters
+3000_symbols                  :::   3000 characters
+always                        :::   Always
+chat_field_height             :::   Height fields (1-9)
+chat_field_width              :::   Width fields (10-80)
+chat_msg_per_page             :::   Posts per page (5-40)
+chat_refresh                  :::   Auto updating (10-99 detik.)
+chat_settings                 :::   Chat settings
+clip_first_post               :::   Lock 1-st post
+field_on                      :::   Use textarea
+in_not_read                   :::   Unread
+main_settings                 :::   Basic settings
+message_input                 :::   Enter message
+mood_1                        :::   Neutral
+mood_2                        :::   Excited
+mood_3                        :::   Happy
+mood_4                        :::   Angry
+mood_5                        :::   Sad
+mood_6                        :::   Angelic
+mood_7                        :::   aggresive
+mood_8                        :::   Surprise
+mood_9                        :::   Evil
+mood_10                       :::   Angry
+mood_11                       :::   Sleepy
+mood_12                       :::   Bored
+mood_13                       :::   Busy
+mood_14                       :::   Impudent
+mood_15                       :::   Embarrased
+mood_16                       :::   Happies
+mood_17                       :::   Lover
+mood_18                       :::   Inspired
+mood_19                       :::   Lonely
+mood_20                       :::   Pensive
+mood_21                       :::   Psychedelic
+mood_22                       :::   Relaxation
+mood_23                       :::   Sad
+mood_24                       :::   Scared
+mood_25                       :::   Shocked
+mood_26                       :::   Sly
+mood_27                       :::   Tired
+my_set                        :::   My settings
+never                         :::   Never
+not_to_cut_off                :::   Not cut
+or_specify_the                :::   Or enter your
+scrap_of_posts                :::   Cropping posts
+sorting_return                :::   Contacts
+your_mood                     :::   Your mood

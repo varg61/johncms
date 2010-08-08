@@ -39,7 +39,7 @@ switch ($act) {
         Актив сайта
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng['site_active'] . '</b></div>' .
+        echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
             '<div class="menu"><form action="str/users_search.php" method="post">' .
             '<p><h3><img src="images/search.png" width="16" height="16" class="left" />&#160;' . $lng['search'] . '</h3>' .
             '<input type="text" name="search" value="' . checkout($search) . '" />' .

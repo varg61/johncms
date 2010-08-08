@@ -1,0 +1,24 @@
+add                           :::   Add news
+article_added                 :::   News added
+article_changed               :::   News changed
+article_deleted               :::   News deleted
+article_text                  :::   Texs
+article_title                 :::   Title
+author                        :::   Author
+clear_all_confirmation        :::   Remove all news
+clear_month                   :::   Older than 1 month
+clear_month_confirmation      :::   Remove all news older than 1 month
+clear_parametres              :::   Cleanup option
+clear_week                    :::   Older than 1 week
+clear_week_confirmation       :::   Remove all news older than 1 week
+delete_article                :::   Delete news
+discuss                       :::   Discussion
+discuss_on_forum              :::   Discuss in forum
+discuss_off                   :::   Do not discuss
+edit_article                  :::   Editing news
+error_flood                   :::   You can not add news so often, wait
+error_title                   :::   You have not entered title news
+error_text                    :::   You have not entered title text
+seconds                       :::   Seconds
+site_news                     :::   Site news
+to_news                       :::   Back to news

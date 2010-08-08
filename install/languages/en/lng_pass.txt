@@ -1,0 +1,37 @@
+autologin_link                :::   Link autologin
+autologin_warning             :::   <b>ATTENTION !!</b><br />For your safety, Never use the autologin in unsafe locations (internet cafe, other computer, etc.)
+captcha                       :::   Verification code
+change_password               :::   Change password
+change_password_conf          :::   Password successfully changed.<br />New password sent to your E-mail address
+enter_code                    :::   Enter code
+error_code                    :::   Incorrect verification code
+error_email                   :::   Invalid E-mail address
+error_email_sent              :::   Error sending E-mail
+error_fatal                   :::   Password recovery is impossible
+error_fields                  :::   It is necessary to fill in all fields
+error_lenght                  :::   Password shoul be minimum 3 and maximum 10 characters
+error_new_password            :::   Incorrect entered confirm new password
+error_old_password            :::   Incorrect entered old password
+error_rights                  :::   You can not change password on your older posts
+error_timelimit               :::   Time alloted for the password passed
+input_new_password            :::   Enter new password
+input_old_password            :::   Enter old password
+password_change_help          :::   Password length min. 3, max. 10 characters are allowed letters and numbers.
+password_changed              :::   Password successfully changed
+password_restore              :::   Password recovery
+repeat_password               :::   Re-enter password
+restore_help                  :::   Password will send to E-mail address specified in your aplication.<br />WARNING !! If the questionnaire was not specified E-mail address, you will not be able to recover your password.
+restore_help1                 :::   Hello
+restore_help2                 :::   You start procedure password recovery on the site
+restore_help3                 :::   In order to recover password, you must click on the link
+restore_help4                 :::   Link valid for 1 hour
+restore_help5                 :::   If this letter error or you have not already recover, you can ignore this letter
+restore_help6                 :::   Link procedure password recovery sent to e-mail address
+restore_help7                 :::   After logging in, you can change your password with other what you want.
+restore_help8                 :::   You have change password on the site
+restore_timelimit             :::   Password can recover not more than 1 time per day
+sent                          :::   Send
+show_autologin                :::   Show link autologin
+your_email                    :::    Your E-mail
+your_login                    :::   Username
+your_new_password             :::   Your new password

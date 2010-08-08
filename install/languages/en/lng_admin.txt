@@ -1,0 +1,159 @@
+access_authorised             :::   Access authorised
+access_disabled               :::   Access denied
+access_enabled                :::   Access opened
+access_enabled_for_guests     :::   Guest can write in guestbook
+access_help                   :::   Administration can access to all closed and comments
+access_rights                 :::   Permissions
+access_with_moderation        :::   With moderation
+adaptive                      :::   Adaptive
+advertisement                 :::   Advertisement
+agreement                     :::   Agreement
+antiflood                     :::   Antiflood
+antiflood_dn_help             :::   Automatic change from day to night mode, according to specified time set
+antiflood_ad_help             :::   If your site is one of administration, system worked in &quot;day&quot; mode, or goes into &quot;night&quot;
+antiflood_settings            :::   Setting antiflood
+antiflood_tl_help             :::   Minimum 4, maximum 300 seconds
+antispy                       :::   Anti-Spyware
+antispy_dist_scan             :::   Scanning distribution file
+antispy_dist_scan_help        :::   Identify "extra" files, wich are not included in the original distribution
+antispy_dist_scan_bad         :::   Inconsistention distribution <br /> <small> Warning! If the file ar listed in the list, does not include your additional modules and you are not sure of their reability, you need to remove them, becouse they become a thread to the security of your site</small>
+antispy_dist_scan_good        :::   <h3>EXELENT !!</h3>List of files corresponds with distribution
+antispy_menu                  :::   Scanner menu
+antispy_no_snapshot           :::   Image file is not created
+antispy_rescan                :::   Rescan
+antispy_scan_mode             :::   Scan mode
+antispy_snapshot_create       :::  Creating a snapshot
+antispy_snapshot_create_ok    :::   Snapshot successfully created
+antispy_snapshot_create_help  :::   Takes a snapshot of all script files from the site calculates their checksums and stored in the database
+antispy_snapshot_help         :::   This procedure creates a list of all script files to your site, calculate the checksums and writes to the database, for later comparison
+antispy_snapshot_warning      :::   <b>WARNING!!!</b><br />Before continuing make sure that all files have been identified in the scanning mode distribution reliable and contain no unauthorized modifications
+antispy_snapshot_scan         :::   Scanning snapshot
+antispy_snapshot_scan_bad     :::   Inconsistency snapshot<br /><small>Attention! You need to pay attention to all files from the list. They have been added or modified since the image created</small>
+antispy_snapshot_scan_help    :::   Compare the list of files and checksums with pre-made way <br /> Allows you to indentify unknow files, and unauthorized changes
+antispy_snapshot_scan_ok      :::   Excellent! <br /> All files are consistent with previously made image
+ban_del_confirmation          :::   Ban has been successfully removed
+ban_del_question              :::   Are you sure to remove ban?
+ban_details                   :::   Ban details
+ban_panel                     :::   Ban panel
+chat_intim                    :::   Privacy
+chat_management               :::   panel chat room
+chat_quiz                     :::   Quiz
+chat_room_add                 :::   Make a room
+chat_room_delete              :::   Remove chat room
+chat_room_delete_warning      :::   Are you sure to delete this room?
+chat_room_edit                :::   Change chat room
+chat_room_simply              :::   Normal
+chat_room_type                :::   Chat room type
+counter_add_conf              :::   Counter successfully added
+counter_add_help              :::   WARNING!<br />Make sure you have correctly entered the code. It must meet the standard of XML <br /> If you click "View" error occured XHTML, then click your browser back button, return to this form and correct the error.
+counter_deleted               :::   Delete counter
+counter_edit_conf             :::   Counter successfully changed!
+counter_help1                 :::   On main page showing option 1
+counter_help2                 :::  On all pages showing option 2
+counter_help12                :::   At the main page showing option 1, on the other pages option 2
+counter_mod_default_help      :::   At the main showing option 1, on the other pages option 2 <br/> If "option 2" not filled, counter would only appear on the main page
+counter_mod1                  :::   Option 1
+counter_mod1_description      :::   Code for main page
+counter_mod2                  :::   Option 2
+counter_mod2_description      :::   Code for other pages
+counter_preview_help          :::   If the counter are displayed correctly and without errors, Click "Save".<br />Otherwise, click back button and correct errors
+counters                      :::   Counter
+day_begin                     :::   Begining day
+day_end                       :::   End of day
+day_mode                      :::   Night mode
+error_color                   :::   Not filled correctly "color"
+error_firstip                 :::   First address is entered incorrectly
+error_secondip                :::   Second address is entered incorrectly
+error_usrdel_rights           :::   You can not delete your old post 
+heading_and_text              :::   Title + Text
+installation_date             :::   Date set
+ip_ban                        :::   Ban by IP
+ip_ban_clean                  :::   Unban all IP
+ip_ban_clean_confirmation     :::   IP ban table successfully cleared.<br />Unban all address
+ip_ban_clean_warning          :::   <b>WARNING!</b> Tabel ban IP will be cleared.<br />Are you sure you wan to unban an IP?
+ip_ban_conflict_admin         :::   Ban impossible. Your own IP address in the range
+ip_ban_conflict_address       :::   Address your entered conflicts with other who in the database
+ip_ban_del                    :::   Ban deleted
+ip_ban_help                   :::   Example:<br /><span class="red">10.5.7.1</span> - Ban one address<br /><span class="red">10.5.7.1-10.5.7.100</span> - Ban range of address.<br /><span class="red">10.5.*.*</span> - Ban on a mask. There will banned from the entrie subnet, begining with address 0 and ending with 255
+ip_ban_new                    :::   IP Ban
+ip_ban_search_help            :::   Enter a single address, mask and range are not allowed
+ip_ban_type1                  :::   Ban range address
+ip_ban_type2                  :::   Ban on the subnet mask
+ip_ban_type3                  :::   Ban IP address
+ip_search                     :::   Search IP
+ip_search_notfound            :::   This address not in the database
+ip_settings                   :::   Setting IP
+karma_admin_disable           :::   Prohibited voice for the administration
+karma_clear_confirmation      :::   Are you sure you wan to clear voice?
+karma_cleared                 :::   Voice cleared
+karma_reset                   :::   Reset voice
+karma_restrictions            :::   Restriction voice
+karma_votes_per_day           :::   Voice per day
+language_default              :::   Default language
+language_delete_error         :::   You can not delete language set for default system
+language_delete_warning       :::   Are you sure you want to delete language?
+language_select_error         :::   Failed select language
+line_foldings                 :::   Lines
+link_add                      :::   Add link
+link_add_color_help           :::   In the format FFFFFF, if you do not want to provide a reference color, simply do not fill this field
+link_add_days_help            :::   Number of day since installation of link which reference automatically get out<br />0 - Unlimited
+link_add_name_help            :::   To change the name when updating pages to list all the name trought the symbol |
+link_add_placing_all          :::   All pages
+link_add_placing_child        :::   On all but the main
+link_add_placing_front        :::   Only main page
+link_add_trans_help           :::   Number of hits how many link automatically get out<br />0 - Unlimited
+link_add_ok                   :::   Link successfully added
+link_clear_warning            :::   Are you sure you want to delete all inactive link?
+link_deletion_warning         :::   Are you sure want to delete link?
+link_edit                     :::   Modify link
+link_edit_ok                  :::   Link successfully changed!
+link_hide_warning             :::   Are you sure you want to hidden this link?
+link_show_warning             :::   Are you sure you wan to restore this link?
+links_active                  :::   Active links
+links_allocation              :::   Isolation
+links_armt_over_counters      :::   Over the counter
+links_armt_over_logo          :::   Above logo
+links_armt_under_counters     :::   Under counter
+links_armt_under_usermenu     :::   Under menu
+links_delete_hidden           :::   Delete inaktif
+links_place_occupied          :::   This place is full
+meta_tags                     :::   META tags
+meta_keywords                 :::   Keywords
+meta_description              :::   Description
+module_default_settings       :::   Option module not specified, will use default module
+module_on                     :::   Include module
+modules                       :::   Modules
+news_count                    :::   News count
+news_howmanydays_display      :::   How many days to show?
+news_on_frontpage             :::   News on the mainpage
+operation_mode                :::   Fashion jobs
+placing                       :::   Place
+redirect                      :::   Redirect
+redirect_url                  :::   URL redicect
+refresh_smileys               :::   Update smiles
+reg_approve                   :::   Registration confirmation
+reg_approved                  :::   Registration is confirmed
+reg_approve_all               :::   Confirmed all
+reg_del_all                   :::   Delete all
+reg_deleted_all               :::   All unconfirmed registration removed
+reg_del_ip                    :::   Remove IP
+search_nick                   :::   Search by nick
+search_ip_help                :::   <small><b>Sample queries:</b><br /><span class="red">10.5.7.1</span> - Search for a single address<br /><span class="red">10.5.7.1-10.5.7.100</span> - Search a range address (Sign can not use mask *)<br /><span class="red">10.5.*.*</span> - Search mask. It is found all subnet addresses starting with 0 and ending with 255</small>
+site_url                      :::   Web site address without the slash at the end
+site_copyright                :::   Site copyright
+site_email                    :::   E-mail site
+site_settings                 :::   System setting
+smileys_error                 :::   Error updating cache
+smileys_updated               :::   Cache successfully updated !
+supermoders                   :::   Senior Moderators
+system                        :::   System
+to_all                        :::  Everyone
+to_guest                      :::   Guests
+to_users                      :::   members
+users_administration          :::   Administration
+user_del                      :::   Delete user
+user_del_confirm              :::   Are you sure that you want to delete this user?
+user_del_activity             :::   Cleaning activities
+user_del_forumnote            :::   When cleaning topic and post in the forum will be &quot;hidden&quot;
+user_deleted                  :::   User deleted
+users_reg                     :::   At registration

@@ -39,6 +39,7 @@ clear_all                     :::   şterge totul
 color                         :::   Culoare
 comments                      :::   Comentarii
 common_list                   :::   Listă
+community                     :::   Activ site-lui
 contacts                      :::   Contacte
 contacts_in                   :::   În contacte
 continue                      :::   Continue
@@ -187,7 +188,6 @@ settings_clock_shift          :::   Timp de schimbare
 settings_default              :::   Opţiuni setat pe implicit
 settings_saved                :::   Setări rezervat
 show                          :::   Arată
-site_active                   :::   Activ site-lui
 site_new                      :::   Noi pe site-ul
 site_news                     :::   Ştiri Resurse
 site_spent                    :::   Conductie site-ul

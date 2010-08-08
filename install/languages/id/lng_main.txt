@@ -39,6 +39,7 @@ clear_all                     :::   Bersihkan semua
 color                         :::   Warna
 comments                      :::   Komentar
 common_list                   :::   Daftar umum
+community                     :::   Komunitas
 contacts                      :::   Kontak
 contacts_in                   :::   Add kontak
 continue                      :::   Lanjutkan
@@ -187,7 +188,6 @@ settings_clock_shift          :::   Pergeseran waktu
 settings_default              :::   Pilihan diatur ke default
 settings_saved                :::   Pengaturan disimpan
 show                          :::   Tampilkan
-site_active                   :::   Komunitas
 site_new                      :::   Baru di situs
 site_news                     :::   Berita situs
 site_spent                    :::   Conducted site

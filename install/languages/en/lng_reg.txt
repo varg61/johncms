@@ -1,0 +1,34 @@
+about                         :::   About me
+about_help                    :::   Max. 500 characters
+captcha                       :::   Verification code
+captcha_help                  :::   Can not see image code, Enable allow image on your browser then refresh this page
+enter                         :::   LOGIN
+error_captcha_empty           :::   You have not entered verification code
+error_captcha_wrong           :::   Incorrect verification code 
+error_nick_empty              :::   You have not entered nick
+error_nick_lenght             :::   Is too long nick
+error_nick_occupied           :::   Nick already in use
+error_nick_symbols            :::   Invalid characters nick
+error_password_empty          :::  You have not entered password 
+error_password_lenght         :::   Too long password
+error_password_symbols        :::   Invalid characters password
+error_sex                     :::   You have not select sex
+login                         :::   Login
+login_help                    :::   Min. 2, Max. 15 Characters.<br />Allwed letters of the russian and latin alphabets, numbers and more symbols - = @ ! ? ~ _ ( ) [ ] . * (Except zero)
+moderation_note               :::   Waiting for confirmation of your registration by moderators
+moderation_warning            :::   You can get authorized on the site after confirmation of your registration.<br /> Confirmation is held 1-2 times.
+name                          :::   Name
+name_help                     :::   Max. 30 characters
+password                      :::   Password
+password_help                 :::   Min. 3, Max. 10 character.<br />Only allowed letters and numbers
+registration                  :::   Registration
+registration_closed           :::   Registration currency closed
+registration_terms            :::   Please register with name such as 111, shhhh, uuuu, and other like them. They will be immediatelly removed. <br /> Also remove all profiles  wich were register using proxy servers
+sex                           :::   Sex
+sex_m                         :::   Male
+sex_w                         :::   Female
+you_registered                :::   Your registratiton data
+your_id                       :::   Your ID
+your_login                    :::   Your username
+your_password                 :::   Your password
+your_link                     :::   Link autologin

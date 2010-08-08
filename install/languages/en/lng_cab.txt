@@ -1,0 +1,8 @@
+received                      :::   Incoming
+my_actives                    :::   Total assets
+my_mail                       :::   My mailbox
+my_office                     :::   My account
+my_profile                    :::   My profile
+my_settings                   :::   My setting
+my_statistics                 :::   My stats
+sent                          :::   Sent

@@ -1,0 +1,60 @@
+also_received                 :::   and received
+amnesty                       :::   Amnesty
+amnesty_access_error          :::   Amnesty available only for supervisor
+amnesty_clean_confirm         :::   Table ban cleared.<br />Removed whole history of violations
+amnesty_clean                 :::   Clear base
+amnesty_delban                :::   Unban all
+amnesty_delban_confirm        :::   Unban all users who have had active bans (Except for bans on &quot;before lifting&quot;)
+amnesty_help                  :::   &quot;Unban all&quot; - terminating all active bans<br />&quot;clean database&quot; - terminate all bans and cleans the history of violations
+ban_1                         :::   Blocked
+ban_3                         :::   Private
+ban_10                        :::   Comment
+ban_11                        :::   Forum
+ban_12                        :::   Chat
+ban_13                        :::   Guestbook
+ban_14                        :::   Gallery
+ban_15                        :::   Library
+ban_1_description             :::   Completely prohibited activity on the site. Letters can recive but not send
+ban_3_description             :::   Ban sending message in private (antispam)
+ban_10_description            :::   Forbidden to comment on all moduls subsystem
+ban_11_description            :::   Forbidden write in Forum
+ban_12_description            :::   Deny access to Chat
+ban_13_description            :::   Forbidden write message in guestbook
+ban_14_description            :::   Not allowed to post and comment on the photos in the gallery
+ban_15_description            :::   Not allowed post and comment on article in the library
+ban_cancel                    :::   Termination ban
+ban_cancel_do                 :::   Unban
+ban_cancel_confirmation       :::   User unban
+ban_cancel_help               :::   Terminates active ban maintaining record in the history of violations
+ban_delete                    :::   Delete ban
+ban_delete_do                 :::   Delete
+ban_delete_help               :::   Removing ban along with a record in the history of violations
+ban_deleted                   :::   Ban deleted
+ban_do                        :::   Ban user
+ban_panel                     :::   Ban Panel
+ban_rights                    :::   You do not have enought rights to ban this user
+ban_time                      :::   Ban times
+ban_time_before_cancel        :::   Before lifting
+ban_time_days                 :::   Day (30 max.)
+ban_time_hours                :::   Hours (24 max.)
+ban_time_minutes              :::   Minutes (60 max.)
+ban_type                      :::   Ban type
+ban_who                       :::   In the ban
+clear_confirmation            :::   Are you sure want to clean entire history of user violation?
+clear_history                 :::   Clear history
+error_ban_exist               :::   Ban already active
+error_ban_not_active          :::   Ban not active
+error_data                    :::   There is no required data
+error_rights_clear            :::   History of violation can only cleared by supervisor
+error_rights_section          :::   You do not have the right to ban is not in his section
+history_cleared               :::   History of violations cleared
+in_forum                      :::   Forum
+infringement                  :::   Violations
+infringements_history         :::   History of violations
+infringements_list            :::   List of violations
+my_infringements              :::   My violation
+pm                            :::   Private (antispam)
+reason_not_specified          :::   Reason not specified
+system                        :::   System
+to_karma                      :::   To voice
+user_banned                   :::   User banned

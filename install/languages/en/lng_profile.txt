@@ -1,0 +1,59 @@
+about                         :::   About me
+activity_stat                 :::   Stats activity
+awaiting_registration         :::   Pending confirmation registration
+avatar_deleted                :::   Delete avatar
+avatar_uploaded               :::   Upload avatar
+birt                          :::   Birthday
+birth_date                    :::   Date of birth (d.m.y)
+city                          :::   City
+communication                 :::   Contacts
+data_saved                    :::   Data saved
+deny_karma                    :::   Deny karma
+email_warning                 :::   Warning!! Correct fill your e-mail <br /> That it will send your password.
+error_birth                   :::   Invalid format date of birth
+error_icq                     :::   ICQ number must be at least 5 digits and maximum 10
+error_nick_lenght             :::   Minimum length nick 2, maximum 20 characters
+error_nick_symbols            :::   Invalid character nick
+error_rights                  :::   You can not edit profile on your older
+hidden                        :::   hidden
+my_profile                    :::   My profile
+name                          :::   Name
+nick_lenght                   :::   Min.2, Max. 20
+personal_album                :::   My album
+personal_data                 :::   Personal details
+phone_number                  :::   Tel. Number
+photo                         :::   Photo
+photo_deleted                 :::   Photo deleted
+photo_uploaded                :::   Photo uploaded
+profile_edit                  :::   Editing profile
+rank                          :::   Job in site
+rank_0                        :::   User
+rank_2                        :::   Moder chat
+rank_3                        :::   Moder forum
+rank_4                        :::   Moder download
+rank_5                        :::   Moder library
+rank_6                        :::   Super Moder
+rank_7                        :::   Administrator
+rank_9                        :::   Supervisor
+registration_approved         :::   Registration confirmed
+registration_free             :::   Free registration
+registered_m                  :::   Registered
+registered_w                  :::   Registered
+select_image                  :::   Select image
+select_image_help             :::   Allowed format image JPG, JPEG, PNG, GIF<br />File size should not exceed
+select_image_help_2           :::   Regardless resolution original file will be converted to size 32x32
+select_image_help_3           :::   New image will be replace old (if it was)
+select_image_help_4           :::   For best results, original image must have an equal ratio
+select_image_help_5           :::   Regardless resolution original file, it will be converted into a size not exceeding 640x480
+sex_m                         :::   Male
+sex_w                         :::   Female
+show_in_profile               :::   Back to profile
+site                          :::   Website
+specify_sex                   :::   Select sex
+status_lenght                 :::   Max. 50
+stayed_m                      :::   He stay on the site
+stayed_w                      :::   She stay on the site
+upload                        :::   Upload
+upload_avatar                 :::   Upload avatar
+upload_photo                  :::   Upload a picture
+user_profile                  :::   User profile

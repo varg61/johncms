@@ -417,7 +417,7 @@ function tags($var = '') {
     Обработка ссылок и тэгов BBCODE в тексте
     -----------------------------------------------------------------
     */
-    $var = preg_replace(array ('#\[php\](.*?)\[\/php\]#se'), array ("''.highlight('$1').''"), str_replace("]\n", "]", $var));
+    $var = preg_replace('#\[php\](.*?)\[\/php\]#se', "highlight('$1')", $var);
     $var = preg_replace('#\[b\](.*?)\[/b\]#si', '<span style="font-weight: bold;">\1</span>', $var);
     $var = preg_replace('#\[i\](.*?)\[/i\]#si', '<span style="font-style:italic;">\1</span>', $var);
     $var = preg_replace('#\[u\](.*?)\[/u\]#si', '<span style="text-decoration:underline;">\1</span>', $var);

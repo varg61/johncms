@@ -1,0 +1,17 @@
+where_birth                   :::   List of birthdays
+where_chat                    :::   Chat
+where_downloads               :::   Downloads
+where_faq                     :::   Read the FAQ
+where_forum                   :::   Forum
+where_forum_files             :::   Forum files
+where_forum_who               :::   Who in forum?
+where_gallery                 :::   Gallery
+where_guestbook               :::   Guestbook
+where_here                    :::   Here, in the list
+where_homepage                :::   Home
+where_library                 :::   Library
+where_pm                      :::   Private
+where_profile                 :::   Profile
+where_settings                :::   Perferences
+where_users_list              :::   Users list
+who_on_site                   :::   Who is online
