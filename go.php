@@ -59,7 +59,7 @@ switch ($adres) {
         header("location: $home/str/guest.php");
         break;
         default :
-    header("location: http://gazenwagen.com");
+    header("location: http://johncms.com");
         break;
 }
 

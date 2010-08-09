@@ -63,7 +63,7 @@ if (mysql_num_rows($req) > 0) {
         $font .= $res['underline'] ? ' text-decoration:underline;' : false;
         if ($font)
             $name = '<span style="' . $font . '">' . $name . '</span>';
-        $cms_ads[$res['type']] .= '<a href="' . $home . '/str/redirect.php?id=' . $res['id'] . '">' . $name . '</a><br/>';
+        $cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? checkout($res['link']) : $home . '/str/redirect.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
         if (($res['day'] != 0 && $realtime >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
             mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $res['id'] . "'");
     }

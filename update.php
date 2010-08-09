@@ -143,6 +143,7 @@ switch ($do) {
         mysql_query("ALTER TABLE `cms_ads` ADD `bold` BOOLEAN NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `cms_ads` ADD `italic` BOOLEAN NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `cms_ads` ADD `underline` BOOLEAN NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `cms_ads` ADD `show` tinyint(1) NOT NULL default 0");
         echo '<span class="green">OK</span> таблица `cms_ads` обновлена<br />';
         // Создаем таблицу языковых фраз
         mysql_query("DROP TABLE IF EXISTS `cms_languages`");

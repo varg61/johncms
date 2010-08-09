@@ -105,7 +105,7 @@ if (mysql_num_rows($req) > 0) {
                 header("Location: " . $res['link']);
                 exit;
             } else {
-                header("Location: http://gazenwagen.com");
+                header("Location: http://johncms.com");
                 exit;
             }
             break;

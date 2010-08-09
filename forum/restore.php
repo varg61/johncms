@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (($rights != 3 && $rights < 6) || !$id) {
-    header('Location: http://gazenwagen.com?act=404');
+    header('Location: http://johncms.com?act=404');
     exit;
 }
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND (`type` = 't' OR `type` = 'm') LIMIT 1");

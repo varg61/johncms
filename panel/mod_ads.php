@@ -45,6 +45,7 @@ switch ($mod) {
             $bold = isset($_POST['bold']);
             $italic = isset($_POST['italic']);
             $underline = isset($_POST['underline']);
+            $show = isset($_POST['show']);
             $font = $font_1 + $font_2 + $font_3;
             $view = isset($_POST['view']) ? abs(intval($_POST['view'])) : 0;
             $day = isset($_POST['day']) ? abs(intval($_POST['day'])) : 0;
@@ -87,6 +88,7 @@ switch ($mod) {
                     `day` = '$day',
                     `layout` = '$layout',
                     `bold` = '$bold',
+                    `show` = '$show',
                     `italic` = '$italic',
                     `underline` = '$underline'
                     WHERE `id` = '$id' LIMIT 1
@@ -111,6 +113,7 @@ switch ($mod) {
                     `day` = '$day',
                     `layout` = '$layout',
                     `to` = '0',
+                    `show` = '$show',
                     `time` = '$realtime',
                     `bold` = '$bold',
                     `italic` = '$italic',
@@ -124,7 +127,9 @@ switch ($mod) {
             // Форма добавления / изменения ссылки
             echo '<form action="index.php?act=mod_ads&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '" method="post">' .
                 '<div class="menu"><p><h3>' . $lng['link'] . '</h3>' .
-                '<input type="text" name="link" value="' . htmlentities($res['link'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
+                '<input type="text" name="link" value="' . htmlentities($res['link'], ENT_QUOTES, 'UTF-8') . '"/><br />' .
+                '<input type="checkbox" name="show" ' . ($res['show'] ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['link_direct'] . '<br />' .
+                '<small>' . $lng['link_direct_help'] . '</small></p>' .
                 '<p><h3>' . $lng['name_the'] . '</h3>' .
                 '<input type="text" name="name" value="' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '"/><br />' .
                 '<small>' . $lng['link_add_name_help'] . '</small></p>' .
@@ -326,11 +331,11 @@ switch ($mod) {
                     '<a href="index.php?act=mod_ads&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>',
                     '<a href="index.php?act=mod_ads&amp;mod=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? $lng['to_show'] : $lng['hide']) . '</a>'
                 );
-                echo '<div class="sub">';
-                echo '<div>' . display_menu($menu) . '</div>';
-                echo '<p><span class="gray">' . $lng['installation_date'] . ':</span> ' . date('d.m.y в H:i', $res['time'] + $sdvig) . '<br />' .
+                echo '<div class="sub">' .
+                    '<div>' . display_menu($menu) . '</div>' .
+                    '<p><span class="gray">' . $lng['installation_date'] . ':</span> ' . date('d.m.y в H:i', $res['time'] + $sdvig) . '<br />' .
                     '<span class="gray">' . $lng['placing'] . ':</span>&nbsp;' . $array_placing[$res['layout']] . '<br />' .
-                    '<span class="gray">' . $lng['to_show'] . ':</span>&nbsp;' . $array_show[$res['view']] . '<br />';
+                    '<span class="gray">' . $lng['to_show'] . ':</span>&nbsp;' . $array_show[$res['view']];
                 // Вычисляем условия договора на рекламу
                 $agreement = array ();
                 $remains = array ();
@@ -348,11 +353,11 @@ switch ($mod) {
                 }
                 // Если был договор, то выводим описание
                 if ($agreement) {
-                    echo '<span class="gray">' . $lng['agreement'] . ':</span>&nbsp;' . implode($agreement, ', ');
+                    echo '<br /><span class="gray">' . $lng['agreement'] . ':</span>&nbsp;' . implode($agreement, ', ');
                     if ($remains)
                         echo '<br /><span class="gray">' . $lng['remains'] . ':</span> ' . implode($remains, ', ');
                 }
-                echo '</p></div></div>';
+                echo ($res['show'] ? '<br /><span class="red"><b>' . $lng['link_direct'] . '</b></span>' : '') . '</p></div></div>';
                 ++$i;
             }
         } else {
@@ -360,8 +365,8 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?from=active&amp;', $start, $total, $kmess) . '</p>' .
-                '<p><form action="index.php?from=active&amp;" method="post">' .
+            echo '<p>' . display_pagination('index.php?act=mod_ads&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
+                '<p><form action="index.php?act=mod_ads&amp;type=' . $type . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }

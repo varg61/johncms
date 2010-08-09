@@ -23,7 +23,7 @@ if (mysql_num_rows($req)) {
     mysql_query("UPDATE `cms_ads` SET `count` = '$count_link'  WHERE `id` = '$id'");
     header('Location: ' . $res['link']);
 } else {
-    header("Location: http://gazenwagen.com/index.php?act=404");
+    header("Location: http://johncms.com/index.php?act=404");
 }
 
 ?>

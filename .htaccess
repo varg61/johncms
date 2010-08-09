@@ -59,7 +59,7 @@ RewriteEngine On
 RewriteCond %{REQUEST_METHOD} ^TRACE
 RewriteRule .* - [F]
 
-ErrorDocument 402 http://gazenwagen.com/?err	
-ErrorDocument 403 http://gazenwagen.com/?err
-ErrorDocument 404 http://gazenwagen.com/?err
-ErrorDocument 500 http://gazenwagen.com/?err
+ErrorDocument 402 http://johncms.com/?err	
+ErrorDocument 403 http://johncms.com/?err
+ErrorDocument 404 http://johncms.com/?err
+ErrorDocument 500 http://johncms.com/?err

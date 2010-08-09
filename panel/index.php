@@ -21,7 +21,7 @@ require('../incfiles/core.php');
 $lng = array_merge($lng, load_lng('admin'));
 $textl = $lng['admin_panel'];
 if ($rights < 1) {
-    header('Location: http://gazenwagen.com/?err');
+    header('Location: http://johncms.com/?err');
     exit;
 }
 

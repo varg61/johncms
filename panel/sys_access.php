@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 if ($rights < 7) {
-    header('Location: http://gazenwagen.com/?err');
+    header('Location: http://johncms.com/?err');
     exit;
 }
 
