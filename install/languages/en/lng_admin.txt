@@ -106,6 +106,7 @@ link_add_ok                   :::   Link successfully added
 link_clear_warning            :::   Are you sure you want to delete all inactive link?
 link_deletion_warning         :::   Are you sure want to delete link?
 link_direct                   :::   Direct Link
+link_direct_help              :::   Click statistics won't be counted, If the direct link is turned on
 link_edit                     :::   Modify link
 link_edit_ok                  :::   Link successfully changed!
 link_hide_warning             :::   Are you sure you want to hidden this link?
