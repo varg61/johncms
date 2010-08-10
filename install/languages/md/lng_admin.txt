@@ -105,6 +105,8 @@ link_add_trans_help           :::   Numărul de hit-uri, după care linkul în m
 link_add_ok                   :::   Link adăugat cu succes
 link_clear_warning            :::   Sunteţi sigur că doriţi să ştergeţi toate link-urile inactive?
 link_deletion_warning         :::   Sunteţi sigur că doriţi să ştergeţi linkul?
+link_direct                   :::   Linkul direct
+link_direct_help              :::   Dacă "Linkul direct" e activat, statisticile de conversie nu este
 link_edit                     :::   Editare link-ul
 link_edit_ok                  :::   Link schimbat cu succes
 link_hide_warning             :::   Sunteţi sigur că doriţi să ascundeţi linkul?
