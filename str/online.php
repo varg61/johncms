@@ -117,7 +117,7 @@ if ($total) {
     echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-if ($total > 10) {
+if ($total > $kmess) {
     echo '<p>' . display_pagination('online.php?' . ($act == 'guest' ? 'act=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
     echo '<p><form action="online.php" method="get">' .
         '<input type="text" name="page" size="2"/>' . ($act == 'guest' ? '<input type="hidden" value="guest" name="act" />' : '') .
