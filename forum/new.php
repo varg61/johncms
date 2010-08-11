@@ -223,7 +223,7 @@ if ($user_id) {
             $razd = mysql_fetch_assoc($q3);
             $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "' LIMIT 1");
             $frm = mysql_fetch_assoc($q4);
-            $nikuser = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "'ORDER BY `time` DESC LIMIT 1");
+            $nikuser = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "'ORDER BY `time` DESC");
             $colmes1 = mysql_num_rows($nikuser);
             $cpg = ceil($colmes1 / $kmess);
             $nam = mysql_fetch_assoc($nikuser);
