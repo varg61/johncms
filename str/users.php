@@ -34,8 +34,8 @@ while ($res = mysql_fetch_assoc($req)) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('users.php?', $start, $total, $kmess) . '</p>';
-    echo '<p><form action="users.php" method="post">' .
+    echo '<p>' . display_pagination('users.php?', $start, $total, $kmess) . '</p>' .
+        '<p><form action="users.php" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';

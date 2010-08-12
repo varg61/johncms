@@ -1,3 +1,4 @@
+achievements                  :::   Realizări
 forum_last_activity           :::   Ultima activitate la Forumul
 game_balance                  :::   Joc Sold
 guest_empty                   :::   Lista este vidă.<br />Comunicările utilizatorului este eliminate automat după o curatare programată clienţi

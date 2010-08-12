@@ -189,9 +189,9 @@ if (mysql_num_rows($req_u)) {
                 'postchat' => $lng['chat'],
                 'otvetov' => $lng['quiz']
             );
-            echo '<table><tr>';
+            echo '<table border="0" cellspacing="0" cellpadding="0"><tr>';
             foreach ($num as $val) {
-                echo '<td width="26"><small>' . $val . '</small></td>';
+                echo '<td width="28" align="center"><small>' . $val . '</small></td>';
             }
             echo '<td></td></tr>';
             foreach ($query as $key => $val) {
