@@ -29,7 +29,7 @@ $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '$user' LIMIT 1");
 if (mysql_num_rows($req_u)) {
     $res_u = mysql_fetch_assoc($req_u);
     // Заголовок модуля
-    echo '<div class="phdr">' . ($id ? '<b>' . $lng['statistics_user'] . ':</b> <a href="anketa.php?id=' . $res_u['id'] . '">' . $res_u['name'] . '</a>' : '<b>' . $lng['statistics_my'] . '</b>');
+    echo '<div class="phdr"><b>' . ($id ? $lng['statistics_user'] : $lng['statistics_my']) . '</b>';
     switch ($act) {
         case 'forum':
             echo ' | ' . $lng['forum'];
@@ -46,12 +46,25 @@ if (mysql_num_rows($req_u)) {
     -----------------------------------------------------------------
     */
     $menu = array ();
-    $menu[] = !$act ? $lng['statistics'] : '<a href="my_stat.php">' . $lng['statistics'] . '</a>';
+    $menu[] = !$act ? $lng['statistics'] : '<a href="my_stat.php?id=' . $id . '">' . $lng['statistics'] . '</a>';
     if ($res_u['postforum'])
-        $menu[] = $act == 'forum' ? $lng['forum'] : '<a href="my_stat.php?act=forum">' . $lng['forum'] . '</a>';
+        $menu[] = $act == 'forum' ? $lng['forum'] : '<a href="my_stat.php?act=forum&amp;id=' . $id . '">' . $lng['forum'] . '</a>';
     if ($res_u['postguest'])
-        $menu[] = $act == 'guest' ? $lng['guestbook'] : '<a href="my_stat.php?act=guest">' . $lng['guestbook'] . '</a>';
+        $menu[] = $act == 'guest' ? $lng['guestbook'] : '<a href="my_stat.php?act=guest&amp;id=' . $id . '">' . $lng['guestbook'] . '</a>';
     echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+    /*
+    -----------------------------------------------------------------
+    Данные пользователя
+    -----------------------------------------------------------------
+    */
+    echo '<div class="user"><p>';
+    $arg = array (
+        'lastvisit' => 1,
+        'iphist' => 1,
+        'header' => '<b>ID:' . $res_u['id'] . '</b>'
+    );
+    echo display_user($res_u, $arg);
+    echo '</p></div>';
     switch ($act) {
         case 'go':
             /*
