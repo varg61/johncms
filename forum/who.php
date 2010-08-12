@@ -134,7 +134,7 @@ if ($id) {
         echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-    if ($total > 10) {
+    if ($total > $kmess) {
         echo '<p>' . display_pagination('index.php?act=who&amp;' . ($do == 'guest' ? 'do=guest&amp;' : ''), $start, $total, $kmess) . '</p>' .
             '<p><form action="index.php?act=who' . ($do == 'guest' ? '&amp;do=guest' : '') . '" method="post">' .
             '<input type="text" name="page" size="2"/>' .

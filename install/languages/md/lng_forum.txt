@@ -18,8 +18,8 @@ category_list                 :::   Lista Categorie
 child_section                 :::   secţiuni subordonate
 click_to_view                 :::   Click pentru a vizualiza imaginea
 contents_moved_to             :::   Secţiunile subordonată şi fişiere mutat la
-contents_move_description     :::   Toate secţiunele, subiecte, şi fişierele vor fi mutate în categoria selectată. <br /> Categoria veche vor fi eliminate
-contents_move_warning         :::   <h3>ATENŢIE!</h3>Există secţiuni subordonate <br /> Ei trebuie să se mute la o altă categorie.
+contents_move_description     :::   Toate secţiunele, subiecte, şi fişierele vor fi mutate în categoria selectată.<br />Categoria veche vor fi eliminate
+contents_move_warning         :::   <h3>ATENŢIE!</h3>Există secţiuni subordonate<br />Ei trebuie să se mute la o altă categorie.
 cytate                        :::   Citata
 cytate_btn                    :::   [c]
 cytate_help                   :::   Admisă max. 200 de caractere, toate text suplimentar este tăiat.
@@ -28,7 +28,7 @@ delete_full                   :::   Eliminarea completă
 delete_full_note              :::   Dacă doriţi să distrugă toate informaţiile, în primul rând a elimina
 delete_full_warning           :::   ATENŢIE! Acest lucru va elimina toate informaţiile
 delete_last                   :::   Şterge ultima
-delete_last_post_warning      :::   ATENŢIE! <br /> Acesta este ultimul mesaj de acest subiect. Împreună cu nhi vor fi şterse (sau ascunse) şi tema în sine
+delete_last_post_warning      :::   ATENŢIE!<br />Acesta este ultimul mesaj de acest subiect. Împreună cu nhi vor fi şterse (sau ascunse) şi tema în sine
 delete_post                   :::   Ştergeţi mesajul
 delete_post_help              :::   În caz de îndepărtare de forum metru de posturi vor fi deduse un punct
 delete_section                :::   Scoateţi secţiunea
@@ -48,14 +48,14 @@ error_edit_another            :::   Sunteţi încercarea de a schimba altcuiva p
 error_edit_last               :::   Postarea dvs. nu va dura şi nu se poate schimba
 error_edit_rights             :::   Nu puteţi schimba poziţia de funcţii de conducere pentru tine
 error_edit_timeout            :::   Încă de la înfiinţarea postului a avut loc mai mult de 5 minute şi nu îl puteţi edita
-error_file_ext                :::   Interzise tipuri de fişiere! <br /> Permise pentru a trimite doar fişierele cu următoarele extensii
-error_file_name               :::   Prin trimiterea fişierelor permisa numai cu numele şi o prelungire (<b> name.ext </ b>). fişiere dezaprobate nu au un nume, extensie, sau cu extensie dublă.
+error_file_ext                :::   Interzise tipuri de fişiere!<br />Permise pentru a trimite doar fişierele cu următoarele extensii
+error_file_name               :::   Prin trimiterea fişierelor permisa numai cu numele şi o prelungire (<b>name.ext</ b>). fişiere dezaprobate nu au un nume, extensie, sau cu extensie dublă.
 error_file_name_size          :::   Numele de fişier nu trebuie să depăşească 30 de caractere
 error_file_not_exist          :::   Fisierul nu exista
 error_file_size               :::   Greutate fişier depăşeşte
 error_file_symbols            :::   În numele fişierului conţine caractere invalide
 error_file_uploaded           :::   Fişierul este deja încărcate
-error_flood                   :::   Nu puteţi adăuga mesaje ca de multe ori <br /> Vă rugăm să aşteptaţi
+error_flood                   :::   Nu puteţi adăuga mesaje ca de multe ori<br />Vă rugăm să aşteptaţi
 error_mass_delete             :::   Nu vă alegeţi pentru a elimina
 error_message_empty           :::   Nu aţi introdus mesajul
 error_post_deleted            :::   Mesaj nu exista sau a fost eliminat
@@ -143,7 +143,7 @@ section_edit                  :::   Editare secţiunei
 section_list                  :::   Listă Secţiunei
 section_list_empty            :::   In aceasta categorie există nici o partiţie
 section_move_description      :::   Toate temele şi fişierele vor fi mutate în secţiunea selectată <br /> secţiune vechi vor fi eliminate
-section_move_warning          :::   <h3> ATENŢIE! </ h3> În secţiunea există probleme <br /> Ei trebuie să se mute în altă secţiune.
+section_move_warning          :::   <h3>ATENŢIE!</ h3> În secţiunea există probleme<br />Ei trebuie să se mute în altă secţiune.
 select_category               :::   Alege categoria
 select_file                   :::   Selectaţi Fişier
 select_section                :::   Selectaţi Secţiune

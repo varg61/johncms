@@ -176,7 +176,7 @@ search_user                   :::   Cauta utilizator
 search_results                :::   Solicitare rezultate
 search_results_empty          :::   Căutarea dvs. nu a precise
 search_new                    :::   Cautare noua
-search_nick_help              :::   Caută merge pe Niku utilizator (nickname) şi litere majuscule. Asta este, <b> utilizator </ b> şi a utilizatorului <<b> / b> pentru a găsi echivalente. <br /> Caută cererea este tradus, care este, pentru a găsi, de exemplu, Nick Dima, puteţi scrie o interogare Dima, rezultatul va fi acelaşi.
+search_nick_help              :::   Caută merge pe Niku utilizator (nickname) şi litere majuscule. Asta este, <b>utilizator</b> şi a <b>utilizatorului</b> pentru a găsi echivalente. <br /> Caută cererea este tradus, care este, pentru a găsi, de exemplu, Nick Dima, puteţi scrie o interogare Dima, rezultatul va fi acelaşi.
 sec                           :::   sec.
 section                       :::   Secţiune
 sections                      :::   Secţiune

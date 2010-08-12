@@ -2,7 +2,7 @@ autologin_link                :::   Link la Autologin
 autologin_warning             :::   <b>Atenţie!</b><br />Pentru siguranta, nu folositi niciodata Autologin în locuri nesigure (cafenele internet, calculatoare străine, etc)
 captcha                       :::   Cod de verificare
 change_password               :::   Schimbarea parolei
-change_password_conf          :::   Parola a fost schimbata cu succes <br /> Noua parola trimis la adresa ta de e-mail.
+change_password_conf          :::   Parola a fost schimbata cu succes<br />Noua parola trimis la adresa ta de e-mail.
 enter_code                    :::   Introduceti codul
 error_code                    :::   Verificarea incorecte ale codului
 error_email                   :::   Adresa de e-mail este incorect

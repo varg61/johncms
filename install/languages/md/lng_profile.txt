@@ -40,7 +40,7 @@ registration_free             :::   Inregistrarea gratuita
 registered_m                  :::   Inregistrati
 registered_w                  :::   Inregistrati
 select_image                  :::   Selectaţi o imagine
-select_image_help             :::   Pentru a încărca permis fişiere JPG, JPEG, PNG, GIF <br /> dimensiunea fisierului nu trebuie să depăşească
+select_image_help             :::   Pentru a încărca permis fişiere JPG, JPEG, PNG, GIF<br />dimensiunea fisierului nu trebuie să depăşească
 select_image_help_2           :::   Indiferent de rezoluţia de fişier original, acesta va fi convertit la dimensiunea 32x32
 select_image_help_3           :::   Noua imagine înlocuieşte vechi (dacă a fost)
 select_image_help_4           :::   Pentru cele mai bune rezultate, imaginea originală trebuie să aibă un raport egal

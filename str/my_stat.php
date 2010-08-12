@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 $headmod = 'mystat';
-require_once('../incfiles/core.php');
+require('../incfiles/core.php');
 $lng_stat = load_lng('stat');
 $textl = $lng['my_stat'];
 require('../incfiles/head.php');
@@ -40,7 +40,11 @@ if (mysql_num_rows($req_u)) {
             break;
     }
     echo '</div>';
-    // Главное Меню модуля
+    /*
+    -----------------------------------------------------------------
+    Главное Меню модуля
+    -----------------------------------------------------------------
+    */
     $menu = array ();
     $menu[] = !$act ? $lng['statistics'] : '<a href="my_stat.php">' . $lng['statistics'] . '</a>';
     if ($res_u['postforum'])
@@ -72,8 +76,7 @@ if (mysql_num_rows($req_u)) {
                         header('Location: ../forum/index.php');
                     }
                     break;
-
-                default :
+                    default :
                     header('Location: ../index.php');
             }
             break;
@@ -140,17 +143,58 @@ if (mysql_num_rows($req_u)) {
             Общая статистика активности
             -----------------------------------------------------------------
             */
-            //TODO: Дописать статистику по Чату и комментариям
             echo '<div class="menu"><p>' .
                 '<h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;' . $lng_stat['site_activity'] . '</h3><ul>' .
                 '<li><a href="my_stat.php?act=forum">' . $lng['forum'] . '</a>: <b>' . $res_u['postforum'] . '</b></li>' .
                 '<li><a href="my_stat.php?act=guest">' . $lng['guestbook'] . '</a>: <b>' . $res_u['postguest'] . '</b></li>' .
-                '<li><a href="">' . $lng['comments'] . '</a>: <b>' . $res_u['komm'] . '</b></li>' .
-                '<li><a href="">' . $lng['chat'] . '</a>: <b>' . $res_u['postchat'] . '</b></li>' .
+                '<li>' . $lng['comments'] . ': <b>' . $res_u['komm'] . '</b></li>' .
+                '<li>' . $lng['chat'] . ': <b>' . $res_u['postchat'] . '</b></li>' .
                 '<li>' . $lng['quiz'] . ': <b>' . $res_u['otvetov'] . '</b></li>' .
                 '<li>' . $lng_stat['game_balance'] . ': <b>' . $res_u['balans'] . '</b></li>' .
-                '</ul></p></div>';
-            // Если были нарушения, то показываем их
+                '</ul></p>' .
+                '<p><h3><img src="../images/star.gif" width="16" height="16" class="left" />&#160;' . $lng_stat['achievements'] . '</h3>';
+            /*
+            -----------------------------------------------------------------
+            Вывод таблицы со списком достижений
+            Код таблицы Vert1go + AlkatraZ
+            -----------------------------------------------------------------
+            Параметры $num и $query можно редактировать под себя.
+            $num - определяет пороги достижений по статистике
+            $query - определяет, какую именно статистику будем показывать
+            -----------------------------------------------------------------
+            */
+            $num = array (
+                100,
+                500,
+                1000,
+                5000
+            );
+            $query = array (
+                'postforum' => $lng['forum'],
+                'postguest' => $lng['guestbook'],
+                'komm' => $lng['comments'],
+                'postchat' => $lng['chat'],
+                'otvetov' => $lng['quiz']
+            );
+            echo '<table><tr>';
+            foreach ($num as $val) {
+                echo '<td width="26"><small>' . $val . '</small></td>';
+            }
+            echo '<td></td></tr>';
+            foreach ($query as $key => $val) {
+                echo '<tr>';
+                foreach ($num as $achieve) {
+                    echo '<td align="center"><img src="../images/' . ($res_u[$key] >= $achieve ? 'green' : 'red') . '.gif" alt=""/></td>';
+                }
+                echo '<td><small><b>' . $val . '</b></small></td></tr>';
+            }
+            echo '</table>';
+            echo '</p></div>';
+            /*
+            -----------------------------------------------------------------
+            Если были нарушения, то показываем их
+            -----------------------------------------------------------------
+            */
             if ($total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '$user'"), 0))
                 echo '<div class="rmenu">' . $lng['infringements'] . ': <a href="anketa.php?act=ban&amp;id=' . $user . '">' . $total . '</a></div>';
             echo '<div class="phdr"><a href="users_top.php">' . $lng_stat['top_10'] . '</a></div>';
@@ -159,6 +203,5 @@ if (mysql_num_rows($req_u)) {
     echo display_error($lng['error_user_not_exist']);
 }
 echo '<p><a href="my_cabinet.php">' . $lng['personal'] . '</a></p>';
-
 require('../incfiles/end.php');
 ?>

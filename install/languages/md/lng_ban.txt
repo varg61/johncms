@@ -1,7 +1,7 @@
 also_received                 :::   şi a primit
 amnesty                       :::   Amnistia
 amnesty_access_error          :::   Amnistia este disponibil numai pentru autorităţile de SupraVizor
-amnesty_clean_confirm         :::   Tabelul bani închise. <br /> Eliminat întreaga istorie a încălcărilor
+amnesty_clean_confirm         :::   Tabelul bani închise.<br />Eliminat întreaga istorie a încălcărilor
 amnesty_clean                 :::   Clare de bază
 amnesty_delban                :::   Deblocaţi toate
 amnesty_delban_confirm        :::   UNBAN tuturor utilizatorilor care au avut bani activă (cu excepţia &quot;Pîna la anula&quot;)
