@@ -239,11 +239,11 @@ users_top                     :::   Top Aktivitas
 verifying_code                :::   Kode Verifikash
 viewing                       :::   Tinjauan
 view_mode                     :::   Mode Tampilan
-vote                          :::   Polling
-vote_against                  :::   Polling
+vote                          :::   Menilai
+vote_against                  :::   Buruk
 vote_for                      :::   Baik
-votes                         :::   Buruk
-welcome_to                    :::   Selamat datang
+votes                         :::   Menilai
+welcome_to                    :::   Selamat datang di
 without_limit                 :::   Tak terbatas
 write                         :::   Menulis
 yes                           :::   Ya
