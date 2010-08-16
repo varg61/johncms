@@ -18,22 +18,22 @@ require('../incfiles/core.php');
 $lng_forum = load_lng('forum');
 $textl = $lng_forum['search_forum'];
 require('../incfiles/head.php');
+
+/*
+-----------------------------------------------------------------
+Функция подсветки результатов запроса
+-----------------------------------------------------------------
+*/
 function ReplaceKeywords($keywords, $value) {
     $a = stripos(mb_strtolower($value), mb_strtolower($keywords));
-
     if ($a === false)
         return $value;
     else {
-        //Строка замены html тэгов
         $zamen = 'qwertyzxcytrewq';
         $b = substr($value, $a, strlen($keywords));
-        //ишем тэги и загоняем их в массив
         preg_match_all("/<.*>/Usi", $value, $out);
-        //Заменяем тэги
         $value = preg_replace('/<.*>/Usi', $zamen, $value);
-        //Подсвечиваем результат
         $value = str_replace($b, '<span style="background-color: #FFFF33">' . $b . '</span>', $value);
-        //Вставляем тэги обратно
         $heck = 0;
         for ($i = 0; $i < count($out[0]); $i++) {
             $heck = strpos($value, $zamen, $heck);
@@ -42,13 +42,14 @@ function ReplaceKeywords($keywords, $value) {
         return $value;
     }
 }
-
 echo '<p>' . forum_new(1) . '</p>';
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['search'] . '</div>';
 
-////////////////////////////////////////////////////////////
-// Принимаем данные, выводим форму поиска                 //
-////////////////////////////////////////////////////////////
+/*
+-----------------------------------------------------------------
+Принимаем данные, выводим форму поиска
+-----------------------------------------------------------------
+*/
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 $search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
@@ -60,16 +61,22 @@ echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
     '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
     '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . $lng_forum['search_topic_name'] .
     '</p></form></div>';
-////////////////////////////////////////////////////////////
-// Проверям на ошибки                                     //
-////////////////////////////////////////////////////////////
+
+/*
+-----------------------------------------------------------------
+Проверям на ошибки
+-----------------------------------------------------------------
+*/
 $error = false;
 if ($search && (mb_strlen($search) < 4 || mb_strlen($search) > 64))
     $error = $lng_forum['error_search_lenght'];
+
 if ($search && !$error) {
-    ////////////////////////////////////////////////////////////
-    // Выводим результаты поиска                              //
-    ////////////////////////////////////////////////////////////
+    /*
+    -----------------------------------------------------------------
+    Выводим результаты запроса
+    -----------------------------------------------------------------
+    */
     $array = explode(' ', $search);
     $count = count($array);
     echo '<div class="bmenu">' . $lng['search_results'] . '</div>';
@@ -137,10 +144,19 @@ if ($search && !$error) {
             '</form></p>';
     }
 } else {
-    // Выводим сообщение об ошибке
+    /*
+    -----------------------------------------------------------------
+    Выводим сообщение об ошибке
+    -----------------------------------------------------------------
+    */
     if ($error)
         echo display_error($error);
-    // Инструкции для поиска
+
+    /*
+    -----------------------------------------------------------------
+    Инструкции для поиска
+    -----------------------------------------------------------------
+    */
     echo '<div class="phdr"><small>' . $lng_forum['search_help'] . '</small></div>';
 }
 echo '<p>' . ($search ? '<a href="search.php">' . $lng['search_new'] . '</a><br />' : '') . '<a href="index.php">' . $lng['to_forum'] . '</a></p>';

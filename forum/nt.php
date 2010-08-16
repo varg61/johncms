@@ -119,7 +119,6 @@ if (isset($_POST['submit'])) {
         }
     }
     echo '<div class="phdr"><a href="index.php?id=' . $id . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['new_topic'] . '</div>' .
-        '<div class="menu"><b>' . $lng['section'] . ':</b> ' . $type1['text'] . '</div>' .
         '<form action="index.php?act=nt&amp;id=' . $id . '" method="post">' .
         '<div class="gmenu"><p>' . $lng_forum['new_topic_name'] . ':<br/>' .
         '<input type="text" size="20" maxlength="100" name="th"/><br/>' .

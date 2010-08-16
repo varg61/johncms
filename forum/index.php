@@ -276,7 +276,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         */
         echo '<p>' . forum_new(1) . '</p>' .
             '<div class="phdr">' . display_menu($tree) . '</div>' .
-            '<div class="topmenu"><a href="search.php">' . $lng['search'] . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
+            '<div class="topmenu"><a href="search.php?id=' . $id . '">' . $lng['search'] . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
         /*
         -----------------------------------------------------------------

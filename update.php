@@ -12,6 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
+@ini_set("max_execution_time", "600");
 define('_IN_JOHNCMS', 1);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
 echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
@@ -100,6 +101,7 @@ switch ($do) {
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
+        /*
         // Таблицы голосований форума
         mysql_query("RENAME TABLE `forum_vote` TO `cms_forum_vote`");
         echo '<span class="green">OK</span> таблица `cms_forum_vote` обновлена.<br />';
@@ -137,7 +139,6 @@ switch ($do) {
         mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip1` `ip1` BIGINT( 11 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `cms_ban_ip` CHANGE `ip2` `ip2` BIGINT( 11 ) NOT NULL DEFAULT '0'");
         echo '<span class="green">OK</span> таблица `cms_ban_ip` обновлена<br />';
-        echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
         // Изменяем таблицу рекламы
         mysql_query("ALTER TABLE `cms_ads` DROP `font`");
         mysql_query("ALTER TABLE `cms_ads` ADD `bold` BOOLEAN NOT NULL DEFAULT '0'");
@@ -158,10 +159,40 @@ switch ($do) {
         KEY `iso` (`iso`),
         KEY `module` (`module`)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
+        */
+
+        // Конвертируем структуру разделов
+        $req = mysql_query("SELECT `id`, `refid` FROM `forum` WHERE `type` = 'r'");
+        while($res = mysql_fetch_assoc($req)){
+            mysql_query("UPDATE `forum` SET `category` = '" . $res['refid'] . "' WHERE `id` = '" . $res['id'] . "' LIMIT 1");
+        }
+        // Конвертируем структуру тем
+        $req = mysql_query("SELECT `id`, `refid` FROM `forum` WHERE `type` = 't'");
+        while($res = mysql_fetch_assoc($req)){
+            $category = mysql_fetch_assoc(mysql_query("SELECT `id`, `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
+            mysql_query("UPDATE `forum` SET
+                `category` = '" . $category['refid'] . "',
+                `section` = '" . $res['refid'] . "'
+                WHERE `id` = '" . $res['id'] . "' LIMIT 1
+            ");
+        }
+        echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
         break;
 
     case 'step3':
-        //TODO: Дописать конвертер, чтоб он учитывал диапазон адресов операторов
+        // Конвертируем структуру постов
+        $req = mysql_query("SELECT `id`, `refid` FROM `forum` WHERE `type` = 'm'");
+        while($res = mysql_fetch_assoc($req)){
+            $section = mysql_fetch_assoc(mysql_query("SELECT `id`, `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
+            $category = mysql_fetch_assoc(mysql_query("SELECT `id`, `refid` FROM `forum` WHERE `id` = '" . $section['refid'] . "' LIMIT 1"));
+            mysql_query("UPDATE `forum` SET
+                `category` = '" . $category['refid'] . "',
+                `section` = '" . $section['refid'] . "',
+                `topic` = '" . $res['refid'] . "'
+                WHERE `id` = '" . $res['id'] . "' LIMIT 1
+            ");
+        }
+        /*
         echo '<h2>Конвертация IP адресов</h2>';
         // Перенос IP адресов в таблицу истории
         mysql_query("LOCK TABLES `users` READ, `cms_users_iphistory` WRITE");
@@ -174,6 +205,7 @@ switch ($do) {
         }
         mysql_query("UNLOCK TABLES");
         echo '<span class="green">OK</span> IP адреса сконвертированы.<br />';
+        */
         echo '<hr /><a href="update.php?do=final">Продолжить</a>';
         break;
 
