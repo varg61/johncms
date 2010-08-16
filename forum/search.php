@@ -42,7 +42,9 @@ function ReplaceKeywords($keywords, $value) {
         return $value;
     }
 }
-echo '<div class="phdr"><b>' . $lng_forum['search_forum'] . '</b></div>';
+
+echo '<p>' . forum_new(1) . '</p>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['search'] . '</div>';
 
 ////////////////////////////////////////////////////////////
 // Принимаем данные, выводим форму поиска                 //

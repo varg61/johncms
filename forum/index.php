@@ -172,7 +172,12 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once($act . '.php');
 } else {
     require('../incfiles/head.php');
-    // Если форум закрыт, то для Админов выводим напоминание
+
+    /*
+    -----------------------------------------------------------------
+    Если форум закрыт, то для Админов выводим напоминание
+    -----------------------------------------------------------------
+    */
     if (!$set['mod_forum'])
         echo '<div class="alarm">' . $lng_forum['forum_closed'] . '</div>';
     if (!$user_id) {
@@ -182,6 +187,11 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
             $_SESSION['uppost'] = 0;
     }
     if ($id) {
+        /*
+        -----------------------------------------------------------------
+        Определяем тип запроса (каталог, или тема)
+        -----------------------------------------------------------------
+        */
         $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '$id' LIMIT 1");
         if (!mysql_num_rows($type)) {
             // Если темы не существует, показываем ошибку
@@ -190,6 +200,89 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
             exit;
         }
         $type1 = mysql_fetch_assoc($type);
+
+        /*
+        -----------------------------------------------------------------
+        Фиксация факта прочтения Топика
+        -----------------------------------------------------------------
+        */
+        if ($user_id && $type1['type'] == 't') {
+            $req = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
+            if (mysql_num_rows($req)) {
+                $res = mysql_fetch_assoc($req);
+                if ($type1['time'] > $res['time'])
+                    mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
+            } else {
+                mysql_query("INSERT INTO `cms_forum_rdm` SET `topic_id` = '$id', `user_id` = '$user_id', `time` = '$realtime'");
+            }
+        }
+
+        /*
+        -----------------------------------------------------------------
+        Получаем структуру форума
+        -----------------------------------------------------------------
+        */
+        $parent = $type1['refid'];
+        $tree = array ('<a href="index.php">' . $lng['forum'] . '</a>');
+        while ($parent != '0' && $res != false) {
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
+            $res = mysql_fetch_assoc($req);
+            if ($res['type'] == 'f' || $res['type'] == 'r')
+                $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
+            $parent = $res['refid'];
+        }
+        sort($tree);
+        if ($type1['type'] != 't')
+            $tree[] = '<b>' . $type1['text'] . '</b>';
+
+        /*
+        -----------------------------------------------------------------
+        Счетчик файлов и ссылка на них
+        -----------------------------------------------------------------
+        */
+        $sql = ($rights == 9) ? "" : " AND `del` != '1'";
+        if ($type1['type'] == 'f') {
+            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = '$id'" . $sql), 0);
+            if ($count > 0)
+                $filelink = '<a href="index.php?act=files&amp;c=' . $id . '">' . $lng_forum['files_category'] . '</a>';
+        } elseif ($type1['type'] == 'r') {
+            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = '$id'" . $sql), 0);
+            if ($count > 0)
+                $filelink = '<a href="index.php?act=files&amp;s=' . $id . '">' . $lng_forum['files_section'] . '</a>';
+        } elseif ($type1['type'] == 't') {
+            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = '$id'" . $sql), 0);
+            if ($count > 0)
+                $filelink = '<a href="index.php?act=files&amp;t=' . $id . '">' . $lng_forum['files_topic'] . '</a>';
+        }
+        $filelink = isset($filelink) ? $filelink . '&#160;<span class="red">(' . $count . ')</span>' : false;
+
+        /*
+        -----------------------------------------------------------------
+        Счетчик "Кто в теме?"
+        -----------------------------------------------------------------
+        */
+        $wholink = false;
+        if ($user_id && $type1['type'] == 't') {
+            $onltime = $realtime - 300;
+            $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
+            $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
+            $wholink = '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng_forum['who_here'] . '?</a>&#160;<span class="red">(' . $online_u . '&#160;/&#160;' . $online_g . ')</span><br/>';
+        }
+
+        /*
+        -----------------------------------------------------------------
+        Выводим верхнюю панель навигации
+        -----------------------------------------------------------------
+        */
+        echo '<p>' . forum_new(1) . '</p>' .
+            '<div class="phdr">' . display_menu($tree) . '</div>' .
+            '<div class="topmenu"><a href="search.php">' . $lng['search'] . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
+
+        /*
+        -----------------------------------------------------------------
+        Отрбражаем содержимое форума
+        -----------------------------------------------------------------
+        */
         switch ($type1['type']) {
             case 'f':
                 /*
@@ -197,8 +290,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 Список разделов форума
                 -----------------------------------------------------------------
                 */
-                echo '<div class="phdr"><b><a href="index.php">' . $lng['forum'] . '</a></b> | ' . $type1['text'] . '</div>';
-                echo '<div class="topmenu">' . forum_new(1) . '</div>';
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 if ($total) {
@@ -228,9 +319,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 -----------------------------------------------------------------
                 */
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close`!='1'")), 0);
-                $category = mysql_fetch_assoc(mysql_query("SELECT `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
-                echo '<div class="phdr"><b><a href="index.php">' . $lng['forum'] . '</a></b> | <a href="index.php?id=' . $type1['refid'] . '">' . $category['text'] . '</a> | <b>' . $type1['text'] . '</b></div>';
-                echo '<div class="topmenu">' . forum_new(1) . '</div>';
                 if ($user_id && !$ban['1'] && !$ban['11']) {
                     // Кнопка создания новой темы
                     echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . $id . '" method="post"><input type="submit" value="' . $lng_forum['new_topic'] . '" /></form></div>';
@@ -308,16 +396,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $sql .= ')';
                 }
                 if ($user_id && !$filter) {
-                    // Фиксация факта прочтения топика
-                    $req = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
-                    if (mysql_num_rows($req) > 0) {
-                        $res = mysql_fetch_assoc($req);
-                        if ($type1['time'] > $res['time'])
-                            mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id`='$id' AND `user_id` = '$user_id'");
-                    } else {
-                        // Ставим метку о прочтении
-                        mysql_query("INSERT INTO `cms_forum_rdm` SET  `topic_id` = '$id', `user_id` = '$user_id', `time` = '$realtime'");
-                    }
+                // Фиксация факта прочтения топика
                 }
                 if ($rights < 7 && $type1['close'] == 1) {
                     echo '<div class="rmenu"><p>' . $lng_forum['topic_deleted'] . '<br/><a href="?id=' . $type1['refid'] . '">' . $lng_forum['to_section'] . '</a></p></div>';
@@ -326,12 +405,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 }
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0);
-                // Панель навигации
-                $razd = mysql_fetch_assoc(mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `id` = '" . $type1['refid'] . "' LIMIT 1"));
-                $frm = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $razd['refid'] . "' LIMIT 1"));
-                echo '<div class="phdr"><b><a href="index.php">' . $lng['forum'] . '</a></b> | <a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a> | <a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a></div>';
-                // Ссылка на непрочитанное
-                echo '<div class="topmenu">' . forum_new(1) . '</div>';
                 // Выводим название топика
                 echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
                     '</b></div>';
@@ -629,12 +702,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         echo '<a href="index.php?act=vip&amp;id=' . $id . '&amp;vip">' . $lng_forum['topic_fix'] . '</a>';
                     echo '<br/><a href="index.php?act=per&amp;id=' . $id . '">' . $lng_forum['topic_move'] . '</a></div></p>';
                 }
-                if ($user_id) {
-                    $onltime = $realtime - 300;
-                    $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
-                    $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
-                    echo '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng_forum['who_here'] . '?&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</a><br/>';
-                }
                 if ($filter)
                     echo '<div><a href="index.php?act=filter&amp;id=' . $id . '&amp;do=unset">' . $lng_forum['filter_cancel'] . '</a></div>';
                 else
@@ -657,8 +724,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Список Категорий форума
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng['forum'] . '</b></div>';
-        echo '<div class="topmenu">' . forum_new(1) . '</div>';
+        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . ($rights >= 7 ? '' : " WHERE `del` != '1'")), 0);
+        echo '<p>' . forum_new(1) . '</p>' .
+            '<div class="phdr"><b>' . $lng['forum'] . '</b></div>' .
+            '<div class="topmenu"><a href="search.php">' . $lng['search'] . '</a> | <a href="index.php?act=files">' . $lng_forum['files_forum'] . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
@@ -677,34 +746,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         unset($_SESSION['fsort_users']);
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик файлов и ссылка на них
-    -----------------------------------------------------------------
-    */
-    $sql = ($rights == 9) ? "" : " AND `del` != '1'";
-    if ($id && $type1['type'] == 'f') {
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = '$id'" . $sql), 0);
-        if ($count > 0)
-            echo '<p><a href="index.php?act=files&amp;c=' . $id . '">' . $lng_forum['files_category'] . '</a>&#160;(' . $count . ')</p>';
-    } elseif ($id && $type1['type'] == 'r') {
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = '$id'" . $sql), 0);
-        if ($count > 0)
-            echo '<p><a href="index.php?act=files&amp;s=' . $id . '">' . $lng_forum['files_section'] . '</a>&#160;(' . $count . ')</p>';
-    } elseif ($id && $type1['type'] == 't') {
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = '$id'" . $sql), 0);
-        if ($count > 0)
-            echo '<p><a href="index.php?act=files&amp;t=' . $id . '">' . $lng_forum['files_topic'] . '</a>&#160;(' . $count . ')</p>';
-    } else {
-        $sql = ($rights == 9) ? '' : " WHERE `del` != '1'";
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . $sql), 0);
-        if ($count > 0)
-            echo '<p><a href="index.php?act=files">' . $lng_forum['files_forum'] . '</a>&#160;(' . $count . ')</p>';
-    }
     // Навигация внизу страницы
-    echo '<p>' . ($id ? '<a href="index.php">' . $lng['to_forum'] . '</a><br />' : '') . '<a href="search.php">' . $lng_forum['forum_search'] . '</a>';
+    echo '<p>' . ($id ? '<a href="index.php">' . $lng['to_forum'] . '</a><br />' : '');
     if (!$id) {
-        echo '<br /><a href="../str/faq.php?act=forum">' . $lng_forum['forum_rules'] . '</a><br/>';
+        echo '<a href="../str/faq.php?act=forum">' . $lng_forum['forum_rules'] . '</a><br/>';
         echo '<a href="index.php?act=moders">' . $lng['moders'] . '</a><br />';
         echo '<a href="index.php?act=faq">FAQ</a>';
     }

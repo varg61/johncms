@@ -23,7 +23,7 @@ if (!$user_id) {
 }
 
 // Ссылка на Новые темы
-forum_new(1);
+echo '<p>' . forum_new(1) . '</p>';
 if ($id) {
     /*
     -----------------------------------------------------------------
@@ -33,7 +33,7 @@ if ($id) {
     $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
-        echo '<div class="phdr"><b>' . $lng_forum['who_in_topic'] . ':</b> ' . $res['text'] . '</div>';
+        echo '<div class="phdr"><b>' . $lng_forum['who_in_topic'] . ':</b> <a href="index.php?id=' . $id . '">' . $res['text'] . '</a></div>';
         if ($rights > 0)
             echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng['authorized'] . '</a> | ' . $lng['guests'] : $lng['authorized'] . ' | <a href="index.php?act=who&amp;do=guest&amp;id=' . $id . '">' . $lng['guests'] . '</a>') . '</div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
