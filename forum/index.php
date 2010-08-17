@@ -223,15 +223,18 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         -----------------------------------------------------------------
         */
         $parent = $type1['refid'];
-        $tree = array ('<a href="index.php">' . $lng['forum'] . '</a>');
+        $tree = array ();
+        $i = 10;
         while ($parent != '0' && $res != false) {
             $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
             $res = mysql_fetch_assoc($req);
             if ($res['type'] == 'f' || $res['type'] == 'r')
-                $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
+                $tree[$i] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
             $parent = $res['refid'];
+            --$i;
         }
-        sort($tree);
+        $tree[0] = '<a href="index.php">' . $lng['forum'] . '</a>';
+        krsort($tree);
         if ($type1['type'] != 't')
             $tree[] = '<b>' . $type1['text'] . '</b>';
 
@@ -266,7 +269,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
             $onltime = $realtime - 300;
             $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
             $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
-            $wholink = '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng_forum['who_here'] . '?</a>&#160;<span class="red">(' . $online_u . '&#160;/&#160;' . $online_g . ')</span><br/>';
+            $wholink = '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng_forum['who_here'] . '?</a>&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')<br/>';
         }
 
         /*
@@ -274,7 +277,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Выводим верхнюю панель навигации
         -----------------------------------------------------------------
         */
-        echo '<p>' . forum_new(1) . '</p>' .
+        echo '<p><a name="up" id="up"></a>' . forum_new(1) . '</p>' .
             '<div class="phdr">' . display_menu($tree) . '</div>' .
             '<div class="topmenu"><a href="search.php?id=' . $id . '">' . $lng['search'] . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
@@ -406,8 +409,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0);
                 // Выводим название топика
-                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
+                echo '<div class="phdr"><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
                     '</b></div>';
+                if ($colmes > $kmess)
+                    echo '<div class="topmenu">' . display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>';
                 // Метки удаления темы
                 if ($type1['close'])
                     echo '<div class="rmenu">' . $lng_forum['topic_delete_who'] . ': <b>' . $type1['close_who'] . '</b></div>';
@@ -669,7 +674,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     '<img src="../theme/' . $set_user['skin'] . '/images/up.png" alt="' . $lng['up'] . '" width="20" height="10" border="0"/></a>' .
                     '&#160;&#160;' . $lng['total'] . ': ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
-                    echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>' .
+                    echo '<div class="topmenu">' . display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>' .
                         '<p><form action="index.php?id=' . $id . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
