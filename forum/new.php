@@ -156,7 +156,7 @@ if ($user_id) {
             $total = forum_new();
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['unread'] . '</div>';
             if ($total > 0) {
-                $req = mysql_query("SELECT `id`, `text`, `from`, `refid`, `realid` FROM `forum`
+                $req = mysql_query("SELECT * FROM `forum`
                 LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '$user_id'
                 WHERE `forum`.`type`='t'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                 AND (`cms_forum_rdm`.`topic_id` Is Null
@@ -174,13 +174,13 @@ if ($user_id) {
                     $cpg = ceil($colmes1 / $kmess);
                     $nick = mysql_fetch_assoc($colmes);
                     if ($res['edit'])
-                        echo '<img src="../images/tz.gif" alt=""/>';
+                        echo '<img src="../images/tz.gif" alt="" class="left"/>';
                     elseif ($res['close'])
-                        echo '<img src="../images/dl.gif" alt=""/>';
+                        echo '<img src="../images/dl.gif" alt="" class="left"/>';
                     else
-                        echo '<img src="../images/np.gif" alt=""/>';
+                        echo '<img src="../images/np.gif" alt="" class="left"/>';
                     if ($res['realid'] == 1)
-                        echo '&#160;<img src="../images/rate.gif" alt=""/>';
+                        echo '&#160;<img src="../images/rate.gif" alt="" class="left"/>';
                     echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
