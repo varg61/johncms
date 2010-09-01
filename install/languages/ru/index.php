@@ -31,7 +31,8 @@ http://www.sil.org/iso639-3/codes.asp?order=639_1
 $install_language = 'ru';
 
 define('_IN_JOHNCMS', 1);
-require('../incfiles/core.php');
+$rootpath = '../../../';
+require('../../../incfiles/core.php');
 
 /*
 -----------------------------------------------------------------

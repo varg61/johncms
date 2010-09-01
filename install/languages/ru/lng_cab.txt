@@ -1,8 +1,0 @@
-received                      :::   Входящие
-my_actives                    :::   Мои активы
-my_mail                       :::   Моя почта
-my_office                     :::   Личный кабинет
-my_profile                    :::   Моя анкета
-my_settings                   :::   Мои настройки
-my_statistics                 :::   Моя Статистика
-sent                          :::   Отправленные
