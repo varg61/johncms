@@ -41,7 +41,6 @@ switch ($mod) {
             $error[] = $lng['language_select_error'];
         if (!$error) {
             if (isset($_POST['submit'])) {
-                //TODO: Добавить замену на язык по умолчанию для юзеров, использующих удаляемый язык
                 mysql_query("UPDATE `users` SET `set_language` = '$sys_language' WHERE `set_language` = '$lng_del'");
                 mysql_query("DELETE FROM `cms_languages` WHERE `iso` = '$lng_del'");
                 mysql_query("OPTIMIZE TABLE `cms_languages`");
@@ -103,7 +102,7 @@ switch ($mod) {
             }
         }
         echo '<div class="menu"><form action="index.php?act=sys_lng" method="post"><p>' .
-            '<h3>' . $lng['language_select'] . '</h3>';
+            '<h3>' . $lng['language_system'] . '</h3>';
         $req = mysql_query("SELECT DISTINCT `iso` FROM `cms_languages`");
         while ($res = mysql_fetch_assoc($req)) {
             $req_l = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '" . $res['iso'] . "' AND `var` = 'language_name' LIMIT 1");

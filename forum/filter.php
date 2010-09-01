@@ -67,7 +67,7 @@ switch ($do) {
             while ($res = mysql_fetch_array($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<input type="checkbox" name="users[]" value="' . $res['user_id'] . '"/>&#160;' .
-                    '<a href="../str/anketa.php?id=' . $res['user_id'] . '">' . $res['from'] . '</a> [' . $res['count'] . ']</div>';
+                    '<a href="../users/profile/index.php?id=' . $res['user_id'] . '">' . $res['from'] . '</a> [' . $res['count'] . ']</div>';
                 ++$i;
             }
             echo '<div class="gmenu"><input type="submit" value="' . $lng_forum['filter_to'] . '" name="submit" /></div>' .

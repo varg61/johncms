@@ -28,7 +28,7 @@ while ($f1 = mysql_fetch_array($req)) {
             $uz1 = mysql_fetch_array($uz);
             if ($uz1['rights'] == 3) {
                 if ((!empty($_SESSION['uid'])) && ($login != $mod1['from'])) {
-                    echo '<a href="../str/anketa.php?id=' . $uz1['id'] . '">' . $mod1['from'] . '</a>';
+                    echo '<a href="../users/profile/index.php?id=' . $uz1['id'] . '">' . $mod1['from'] . '</a>';
                 } else {
                     echo $mod1['from'];
                 }

@@ -119,8 +119,8 @@ switch ($type1['type']) {
             echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
                 '</div></form>';
         }
-        echo '<div class="phdr"><a href="../str/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
-            '<a href="../str/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+        echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
+            '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
             '<p><a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a></p>';
         break;
 
@@ -269,8 +269,8 @@ switch ($type1['type']) {
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
             echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>';
         }
-        echo '<div class="phdr"><a href="../str/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
-            '<a href="../str/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+        echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
+            '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
             '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . $start . '">' . $lng['back'] . '</a></p>';
         break;
 

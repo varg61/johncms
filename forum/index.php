@@ -223,18 +223,15 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         -----------------------------------------------------------------
         */
         $parent = $type1['refid'];
-        $tree = array ();
-        $i = 10;
+        $tree = array ('<a href="index.php">' . $lng['forum'] . '</a>');
         while ($parent != '0' && $res != false) {
             $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
             $res = mysql_fetch_assoc($req);
             if ($res['type'] == 'f' || $res['type'] == 'r')
-                $tree[$i] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
+                $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
             $parent = $res['refid'];
-            --$i;
         }
-        $tree[0] = '<a href="index.php">' . $lng['forum'] . '</a>';
-        krsort($tree);
+        sort($tree);
         if ($type1['type'] != 't')
             $tree[] = '<b>' . $type1['text'] . '</b>';
 
@@ -269,7 +266,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
             $onltime = $realtime - 300;
             $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
             $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
-            $wholink = '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng_forum['who_here'] . '?</a>&#160;<span class="red">(' . $online_u . '&#160;/&#160;' . $online_g . ')</span>';
+            $wholink = '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng_forum['who_here'] . '?</a>&#160;<span class="red">(' . $online_u . '&#160;/&#160;' . $online_g . ')</span><br/>';
         }
 
         /*
@@ -277,7 +274,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Выводим верхнюю панель навигации
         -----------------------------------------------------------------
         */
-        echo '<p><a name="up" id="up"></a>' . forum_new(1) . '</p>' .
+        echo '<p>' . forum_new(1) . '</p>' .
             '<div class="phdr">' . display_menu($tree) . '</div>' .
             '<div class="topmenu"><a href="search.php?id=' . $id . '">' . $lng['search'] . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
@@ -337,17 +334,17 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         $cpg = ceil($colmes1 / $kmess);
                         // Выводим список тем
                         if ($res['vip'] == 1) {
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt="" class="left"/>';
+                            echo '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>';
                         } elseif ($res['edit'] == 1) {
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt="" class="left"/>';
+                            echo '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>';
                         } elseif ($res['close'] == 1) {
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/dl.gif" alt="" class="left"/>';
+                            echo '<img src="../theme/' . $set_user['skin'] . '/images/dl.gif" alt=""/>';
                         } else {
                             $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id`='$user_id'"), 0);
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($np ? 'op' : 'np') . '.gif" alt="" class="left"/>';
+                            echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($np ? 'op' : 'np') . '.gif" alt=""/>';
                         }
                         if ($res['realid'] == 1)
-                            echo '&#160;<img src="../images/rate.gif" alt="" class="left"/>';
+                            echo '&#160;<img src="../images/rate.gif" alt=""/>';
                         echo '&#160;<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
                         if ($cpg > 1) {
                             echo '<a href="index.php?id=' . $res['id'] . '&amp;page=' . $cpg . '">&#160;&gt;&gt;</a>';
@@ -398,6 +395,9 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     }
                     $sql .= ')';
                 }
+                if ($user_id && !$filter) {
+                // Фиксация факта прочтения топика
+                }
                 if ($rights < 7 && $type1['close'] == 1) {
                     echo '<div class="rmenu"><p>' . $lng_forum['topic_deleted'] . '<br/><a href="?id=' . $type1['refid'] . '">' . $lng_forum['to_section'] . '</a></p></div>';
                     require('../incfiles/end.php');
@@ -406,11 +406,8 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0);
                 // Выводим название топика
-                echo '<div class="phdr"><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
+                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
                     '</b></div>';
-                // Верхняя постраничная навигация
-                if ($colmes > $kmess)
-                    echo '<div class="topmenu">' . display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>';
                 // Метки удаления темы
                 if ($type1['close'])
                     echo '<div class="rmenu">' . $lng_forum['topic_delete_who'] . ': <b>' . $type1['close_who'] . '</b></div>';
@@ -474,7 +471,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     else
                         echo '<img src="../images/del.png" width="10" height="10" />&#160;';
                     if ($user_id && $user_id != $postres['user_id']) {
-                        echo '<a href="../str/anketa.php?id=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
+                        echo '<a href="../users/profile/index.php?id=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
                             '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '"> ' . $lng_forum['reply_btn'] . '</a> ' .
                             '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '&amp;cyt"> ' . $lng_forum['cytate_btn'] . '</a> ';
                     } else {
@@ -544,7 +541,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         echo '<img src="../images/del.png" width="12" height="12" align="middle" />&#160;';
                     // Ник юзера и ссылка на его анкету
                     if ($user_id && $user_id != $res['user_id']) {
-                        echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
+                        echo '<a href="../users/profile/index.php?id=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
                     } else {
                         echo '<b>' . $res['from'] . '</b> ';
                     }
@@ -672,11 +669,13 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     '<img src="../theme/' . $set_user['skin'] . '/images/up.png" alt="' . $lng['up'] . '" width="20" height="10" border="0"/></a>' .
                     '&#160;&#160;' . $lng['total'] . ': ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
-                    echo '<div class="topmenu">' . display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>' .
+                    echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>' .
                         '<p><form action="index.php?id=' . $id . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
                         '</form></p>';
+                } else {
+                    echo '<br />';
                 }
                 /*
                 -----------------------------------------------------------------
@@ -752,7 +751,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     // Навигация внизу страницы
     echo '<p>' . ($id ? '<a href="index.php">' . $lng['to_forum'] . '</a><br />' : '');
     if (!$id) {
-        echo '<a href="../str/faq.php?act=forum">' . $lng_forum['forum_rules'] . '</a><br/>';
+        echo '<a href="../pages/faq.php?act=forum">' . $lng_forum['forum_rules'] . '</a><br/>';
         echo '<a href="index.php?act=moders">' . $lng['moders'] . '</a><br />';
         echo '<a href="index.php?act=faq">FAQ</a>';
     }

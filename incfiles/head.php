@@ -63,7 +63,7 @@ if (mysql_num_rows($req) > 0) {
         $font .= $res['underline'] ? ' text-decoration:underline;' : false;
         if ($font)
             $name = '<span style="' . $font . '">' . $name . '</span>';
-        $cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? checkout($res['link']) : $home . '/str/redirect.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
+        $cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? checkout($res['link']) : $home . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
         if (($res['day'] != 0 && $realtime >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
             mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $res['id'] . "'");
     }
@@ -89,7 +89,7 @@ echo '<div><img src="' . $home . '/theme/' . $set_user['skin'] . '/images/logo.g
 Выводим верхний блок с приветствием
 -----------------------------------------------------------------
 */
-echo '<div class="header"> ' . $lng['hi'] . ' ' . ($user_id ? '<b>' . $login . '</b>!' : $lng['guest'] . '!') . '</div>';
+echo '<div class="header"> ' . $lng['hi'] . ', ' . ($user_id ? '<b>' . $login . '</b>!' : $lng['guest'] . '!') . '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -98,7 +98,7 @@ echo '<div class="header"> ' . $lng['hi'] . ' ' . ($user_id ? '<b>' . $login . '
 */
 echo '<div class="tmn">';
 echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $home . '\'>' . $lng['homepage'] . '</a> | ' : '';
-echo ($user_id && $mod != 'cab') ? '<a href="' . $home . '/str/my_cabinet.php">' . $lng['personal'] . '</a> | ' : '';
+echo ($user_id && $mod != 'cab') ? '<a href="' . $home . '/users/profile/index.php?act=office">' . $lng['personal'] . '</a> | ' : '';
 echo $user_id ? '<a href="' . $home . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $home . '/login.php">' . $lng['login'] . '</a> | <a href="' . $home . '/registration.php">' . $lng['registration'] . '</a>';
 echo '</div><div class="maintxt">';
 
@@ -184,7 +184,7 @@ if ($user_id) {
 -----------------------------------------------------------------
 */
 if (isset($ban))
-    echo '<div class="alarm">' . $lng['ban'] . '&#160;<a href="' . $home . '/str/users_ban.php">' . $lng['in_detail'] . '</a></div>';
+    echo '<div class="alarm">' . $lng['ban'] . '&#160;<a href="' . $home . '/users/users_ban.php">' . $lng['in_detail'] . '</a></div>';
 
 /*
 -----------------------------------------------------------------
@@ -194,7 +194,7 @@ if (isset($ban))
 if ($headmod != "pradd" && $user_id) {
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
     if ($countnew > 0) {
-        echo '<div class="rmenu" style="text-align: center"><a href="' . $home . '/str/pradd.php?act=in&amp;new"><b><span class="red">' . $lng['mail_new'] . ': ' . $countnew . '</span></b></a></div>';
+        echo '<div class="rmenu" style="text-align: center"><a href="' . $home . '/users/pradd.php?act=in&amp;new"><b><span class="red">' . $lng['mail_new'] . ': ' . $countnew . '</span></b></a></div>';
     }
 }
 ?>

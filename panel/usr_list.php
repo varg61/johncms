@@ -40,8 +40,8 @@ $req = mysql_query("SELECT * FROM `users` WHERE `preg` = 1 ORDER BY $order LIMIT
 while ($res = mysql_fetch_array($req)) {
     $link = '';
     if ($rights >= 7)
-        $link .= '<a href="../str/my_data.php?id=' . $res['id'] . '">' . $lng['edit'] . '</a> | <a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a> | ';
-    $link .= '<a href="../str/users_ban.php?act=ban&amp;id=' . $res['id'] . '">' . $lng['ban_do'] . '</a>';
+        $link .= '<a href="../users/my_data.php?id=' . $res['id'] . '">' . $lng['edit'] . '</a> | <a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a> | ';
+    $link .= '<a href="../users/users_ban.php?act=ban&amp;id=' . $res['id'] . '">' . $lng['ban_do'] . '</a>';
     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
     echo display_user($res, array('header' => ('<b>ID:' . $res['id'] . '</b>'), 'sub' => $link));
     echo '</div>';

@@ -106,7 +106,7 @@ if ($search && !$error) {
                 }
                 echo '<b>' . $res['text'] . '</b><br />';
             }
-            echo '<a href="../str/anketa.php?id=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
+            echo '<a href="../users/profile/index.php?id=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
             echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
             $text = $search_t ? $res_p['text'] : $res['text'];
             $text = checkout(mb_substr($text, 0, 400), 2, 1);

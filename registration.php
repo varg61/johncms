@@ -74,11 +74,11 @@ if (isset($_POST['submit'])) {
         $error[] = $lng_reg['error_nick_symbols'];
     // Проверка пароля
     if (empty($reg_pass))
-        $error[] = $lng_reg['error_password_empty'];
+        $error[] = $lng['error_password_empty'];
     elseif (mb_strlen($reg_pass) < 3 || mb_strlen($reg_pass) > 10)
-        $error[] = $lng_reg['error_password_lenght'];
+        $error[] = $lng['error_password_lenght'];
     if (preg_match("/[^\da-zA-Z_]+/", $reg_pass))
-        $error[] = $lng_reg['error_password_symbols'];
+        $error[] = $lng['error_password_wrongsymbols'];
     // Проверка имени
     if ($reg_sex == 'm' || $reg_sex == 'zh') { }
     else

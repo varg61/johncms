@@ -128,8 +128,8 @@ if (isset($_POST['submit'])) {
     if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
     echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
-        '<div class="phdr"><a href="../str/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
-        '<a href="../str/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+        '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
+        '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
         '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
 }
 ?>

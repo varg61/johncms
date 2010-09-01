@@ -196,7 +196,7 @@ switch ($tip) {
         } else {
             require_once('../incfiles/head.php');
             echo '<div class="phdr">Написать</div>';
-            echo 'Кому: <a href="../str/anketa.php?user=' . $type1['user_id'] . '"><b>' . $type1['from'] . '</b></a>';
+            echo 'Кому: <a href="../users/profile/index.php?id=' . $type1['user_id'] . '"><b>' . $type1['from'] . '</b></a>';
             $user = mysql_fetch_array(mysql_query("SELECT * FROM `users` WHERE `id` = '" . $type1['user_id'] . "'"));
             if (!empty($user['nastroy']))
                 echo '<br />Настроение: ' . $user['nastroy'];

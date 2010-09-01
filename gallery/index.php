@@ -132,6 +132,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'ft' AND `refid` = '$id' ORDER BY `time` DESC LIMIT $start, $kmess");
                 while ($fot1 = mysql_fetch_array($req)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    if(file_exists('foto/' . $fot1['name'])){
                     echo '<a href="index.php?id=' . $fot1['id'] . '">';
                     $infile = "foto/$fot1[name]";
                     if (!empty($_SESSION['frazm'])) {
@@ -218,6 +219,9 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     }
                     if ($rights >= 6) {
                         echo "<a href='index.php?act=edf&amp;id=" . $fot1['id'] . "'>Изменить</a> | <a href='index.php?act=delf&amp;id=" . $fot1['id'] . "'>Удалить</a><br/>";
+                    }
+                    } else {
+                        echo 'Картинка отсутствует<br /><a href="index.php?act=delf&amp;id=' . $fot1['id'] . '">Удалить запись</a>';
                     }
                     echo "</div>";
                     ++$i;

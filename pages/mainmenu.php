@@ -22,11 +22,11 @@ $mp = new mainpage();
 // Блок новостей
 echo $mp->news;
 echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
-echo '<div class="menu"><a href="str/news.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>';
-echo '<div class="menu"><a href="index.php?act=info">' . $lng['information'] . '</a> <a href="str/faq.php">FAQ</a></div>';
+echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>';
+echo '<div class="menu"><a href="index.php?act=info">' . $lng['information'] . '</a> <a href="pages/faq.php">FAQ</a></div>';
 echo '<div class="menu"><a href="index.php?act=users">' . $lng['community'] . '</a></div>';
 echo '<div class="phdr"><b>' . $lng['dialogue'] . '</b></div>';
-echo '<div class="menu"><a href="str/guest.php">' . $lng['guestbook'] . '</a> (' . stat_guestbook() . ')</div>';
+echo '<div class="menu"><a href="guestbook/index.php">' . $lng['guestbook'] . '</a> (' . stat_guestbook() . ')</div>';
 echo '<div class="menu"><a href="forum/">' . $lng['forum'] . '</a> (' . stat_forum() . ')</div>';
 echo '<div class="menu"><a href="chat/">' . $lng['chat'] . '</a> (' . stat_chat() . ')</div>';
 echo '<div class="phdr"><b>' . $lng['useful'] . '</b></div>';

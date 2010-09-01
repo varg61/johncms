@@ -114,7 +114,7 @@ if ($display_form) {
         '<p><input type="checkbox" name="mem" value="1" checked="checked"/>' . $lng['remember'] . '</p>' .
         '<p><input type="submit" value="' . $lng['login'] . '"/></p>' .
         '</form></div>' .
-        '<div class="phdr"><a href="str/skl.php?continue">' . $lng['forgotten_password'] . '?</a></div>';
+        '<div class="phdr"><a href="users/skl.php?continue">' . $lng['forgotten_password'] . '?</a></div>';
 }
 
 require('incfiles/end.php');

@@ -33,7 +33,7 @@ if (mysql_num_rows($req) > 0) {
         echo '
 	<item>
 <title>Новости: ' . $res['name'] . '</title>
-<link>' . $home . '/str/news.php</link>
+<link>' . $home . '/news/index.php</link>
 <author>' . $res['avt'] . '</author>
 <description>' . $res['text'] . '</description>
 <pubDate>' . date('r', $res['time']) .

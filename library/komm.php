@@ -47,7 +47,7 @@ while ($mass = mysql_fetch_array($mess)) {
     $uz = mysql_query("select * from `users` where name='" . check($mass['avtor']) . "';");
     $mass1 = mysql_fetch_array($uz);
     if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id'])) {
-        echo "<a href='../str/anketa.php?id=" . $mass1['id'] . "'>$mass[avtor]</a>";
+        echo "<a href='../users/profile/index.php?id=" . $mass1['id'] . "'>$mass[avtor]</a>";
     } else {
         echo $mass['avtor'];
     }

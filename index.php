@@ -40,13 +40,13 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-            '<div class="menu"><form action="str/users_search.php" method="post">' .
+            '<div class="gmenu"><form action="users/users_search.php" method="post">' .
             '<p><h3><img src="images/search.png" width="16" height="16" class="left" />&#160;' . $lng['search'] . '</h3>' .
             '<input type="text" name="search" value="' . checkout($search) . '" />' .
             '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
-            '<small>' . $lng['search_nick_help'] . '</small></p></form>' .
-            '<p><h3><img src="images/users.png" width="16" height="16" class="left" />&#160;' . $lng['users'] . '</h3><ul>' .
-            '<li><a href="str/users.php">' . $lng['common_list'] . '</a> (' . stat_countusers() . ')</li>';
+            '<small>' . $lng['search_nick_help'] . '</small></p></form></div>' .
+            '<div class="menu"><p><h3><img src="images/users.png" width="16" height="16" class="left" />&#160;' . $lng['users'] . '</h3><ul>' .
+            '<li><a href="users/users.php">' . $lng['common_list'] . '</a> (' . stat_countusers() . ')</li>';
         $mon = date("m", $realtime);
         if (substr($mon, 0, 1) == 0) {
             $mon = str_replace("0", "", $mon);
@@ -57,9 +57,9 @@ switch ($act) {
         }
         $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1'"), 0);
         if ($brth)
-            echo '<li><a href="str/brd.php">' . $lng['birthday_men'] . '</a> (' . $brth . ')</li>';
-        echo '<li><a href="str/moders.php">' . $lng['administration'] . '</a></li>' .
-            '<li><a href="str/users_top.php">' . $lng['users_top'] . '</a></li>' .
+            echo '<li><a href="users/brd.php">' . $lng['birthday_men'] . '</a> (' . $brth . ')</li>';
+        echo '<li><a href="users/moders.php">' . $lng['administration'] . '</a></li>' .
+            '<li><a href="users/users_top.php">' . $lng['users_top'] . '</a></li>' .
             '</ul></p></div>' .
             '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
         break;
@@ -71,9 +71,9 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
-        echo '<div class="menu"><a href="str/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>';
-        echo '<div class="menu"><a href="str/avatar.php">' . $lng['avatars'] . '</a></div>';
-        echo '<div class="menu"><a href="str/faq.php">' . $lng['help'] . ' (FAQ)</a></div>';
+        echo '<div class="menu"><a href="pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>';
+        echo '<div class="menu"><a href="users/avatar.php">' . $lng['avatars'] . '</a></div>';
+        echo '<div class="menu"><a href="pages/faq.php">' . $lng['help'] . ' (FAQ)</a></div>';
         echo '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
         break;
 
@@ -101,7 +101,7 @@ switch ($act) {
             $ban_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time`>'" . $realtime . "'"), 0);
             echo '<div class="menu"><p><h3>' . $lng['administrative_events'] . '</h3><ul>';
             if ($newusers_total > 0)
-                echo '<li><a href="str/users.php">' . $lng['users_new'] . '</a> (' . $newusers_total . ')</li>';
+                echo '<li><a href="users/users.php">' . $lng['users_new'] . '</a> (' . $newusers_total . ')</li>';
             if ($reg_total > 0)
                 echo '<li><a href="' . $admp . '/index.php?act=usr_reg">' . $lng['users_on_reg'] . '</a> (' . $reg_total . ')</li>';
             if ($ban_total > 0)
@@ -111,7 +111,7 @@ switch ($act) {
                 echo '<li><a href="library/index.php?act=moder">' . $lng['library_on_moderation'] . '</a> (' . $total_libmod . ')</li>';
             $total_admin = stat_guestbook(2);
             if ($total_admin > 0)
-                echo '<li><a href="str/guest.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (' . $total_admin . ')</li>';
+                echo '<li><a href="guestbook/index.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (' . $total_admin . ')</li>';
             if (!$newusers_total && !$reg_total && !$ban_total && !$total_libmod && !$total_admin)
                 echo '<li>' . $lng['events_no_new'] . '</li>';
             echo '</ul></p></div>';
@@ -120,20 +120,20 @@ switch ($act) {
         echo '<div class="menu"><p><h3>' . $lng['site_new'] . '</h3><ul>';
         $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
         if ($total_news > 0)
-            echo '<li><a href="str/news.php">' . $lng['news'] . '</a> (' . $total_news . ')</li>';
+            echo '<li><a href="news/index.php">' . $lng['news'] . '</a> (' . $total_news . ')</li>';
         $total_forum = forum_new();
         if ($total_forum > 0)
             echo '<li><a href="forum/index.php?act=new">' . $lng['forum'] . '</a> (' . $total_forum . ')</li>';
         $total_guest = stat_guestbook(1);
         if ($total_guest > 0)
-            echo '<li><a href="str/guest.php?act=ga">' . $lng['guestbook'] . '</a> (' . $total_guest . ')</li>';
+            echo '<li><a href="guestbook/index.php?act=ga">' . $lng['guestbook'] . '</a> (' . $total_guest . ')</li>';
         $total_gal = stat_gallery(1);
         if ($total_gal > 0)
             echo '<li><a href="gallery/index.php?act=new">' . $lng['gallery'] . '</a> (' . $total_gal . ')</li>';
         if ($set_karma['on']) {
             $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
             if ($total_karma > 0)
-                echo '<li><a href="str/karma.php?act=new">' . $lng['new_responses'] . '</a> (' . $total_karma . ')</li>';
+                echo '<li><a href="users/karma.php?act=new">' . $lng['new_responses'] . '</a> (' . $total_karma . ')</li>';
         }
         $old = $realtime - (3 * 24 * 3600);
         $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . $old), 0);

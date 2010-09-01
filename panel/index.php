@@ -94,7 +94,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         echo '<p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;' . $lng['system'] . '</h3><ul>';
         if ($rights == 9){
             echo '<li><a href="index.php?act=sys_set">' . $lng['site_settings'] . '</a></li>';
-            echo '<li><a href="index.php?act=sys_lng">' . $lng['language_default'] . '</a></li>';
+            echo '<li><a href="index.php?act=sys_lng">' . $lng['language_settings'] . '</a></li>';
         }
         echo '<li><a href="index.php?act=sys_smileys">' . $lng['refresh_smileys'] . '</a></li>';
         echo '</ul></p>';

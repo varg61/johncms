@@ -27,7 +27,7 @@ if (!empty($set['news'])) {
         $tags = isset($_POST['tags']) ? intval($_POST['tags']) : 0;
         $kom = isset($_POST['kom']) ? intval($_POST['kom']) : 0;
         if ($view < 0 || $view > 3 || $size < 50 || $size > 500 || $quantity < 1 || $quantity > 15 || $days < 0 || $days > 15 || $breaks < 0 || $breaks > 1) {
-            echo display_error($lng['error_wrong_limits'], '<a href="news.php">' . $lng['back'] . '</a>');
+            echo display_error($lng['error_wrong_limits'], '<a href="index.php?act=mod_news">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -66,7 +66,7 @@ if (!empty($set['news'])) {
             '<p><h3>' . $lng['news_howmanydays_display'] . '</h3><input type="text" size="3" maxlength="2" name="days" value="' . $settings['days'] . '" />&#160;(0 - 15)<br />' .
             '<small>0 - ' . $lng['without_limit'] . '</small></p>' .
             '<p><input type="submit" value="' . $lng['save'] . '" name="submit" /></p></div>' .
-            '<div class="phdr"><a href="../str/news.php">' . $lng['to_news'] . '</a></div>' .
+            '<div class="phdr"><a href="../news/index.php">' . $lng['to_news'] . '</a></div>' .
             '</form>';
     }
 } else {

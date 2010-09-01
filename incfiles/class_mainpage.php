@@ -41,7 +41,7 @@ class mainpage {
                     if (mb_strlen($text) > $this->settings['size']) {
                         $text = mb_substr($text, 0, $this->settings['size']);
                         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-                        $text .= ' <a href="str/news.php">' . $lng['next'] . '...</a>';
+                        $text .= ' <a href="news/index.php">' . $lng['next'] . '...</a>';
                     } else {
                         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
                     }
@@ -62,7 +62,7 @@ class mainpage {
                     $news .= '<div class="news">';
                     switch ($this->settings['view']) {
                         case 2:
-                            $news .= '<a href="str/news.php">' . $res['name'] . '</a>';
+                            $news .= '<a href="news/index.php">' . $res['name'] . '</a>';
                             break;
 
                         case 3:

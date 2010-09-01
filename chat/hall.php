@@ -29,7 +29,7 @@ while ($mass = mysql_fetch_array($q))
 }
 echo '<div class="phdr"><a href="who.php">Кто в чате</a> (' . stat_chat() . ')</div>';
 echo '<p><a href="index.php?act=moders&amp;id=' . $id . '">Модераторы</a><br/>';
-echo '<a href="../str/usset.php?act=chat">Настройки чата</a></p>';
+echo '<a href="../users/my_set.php?act=chat">Настройки чата</a></p>';
 require_once ('../incfiles/end.php');
 
 ?>
