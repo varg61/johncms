@@ -46,7 +46,7 @@ echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</
 */
 if ($album['access'] != 2)
     unset($_SESSION['ap']);
-if ($album['access'] == 1 && $user['id'] != $user_id) {
+if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 7) {
     // Если доступ закрыт
     echo display_error($lng['access_forbidden']) .
         '<div class="phdr"><a href="index.php?id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
