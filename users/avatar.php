@@ -29,7 +29,7 @@ switch ($act) {
             $av = '../images/avatars/' . $cat . '/' . $ava . '.png';
             copy($av, '../files/users/avatar/' . $user_id . '.png');
         }
-        echo '<p>' . $lng['avatar_applied'] . '<br /><a href="my_data.php?id=' . $user_id . '">' . $lng['continue'] . '</a><br/><a href="avatar.php">' . $lng['catalogue'] . '</a></p>';
+        echo '<p>' . $lng['avatar_applied'] . '<br /><a href="profile/index.php?act=edit&amp;id=' . $user_id . '">' . $lng['continue'] . '</a><br/><a href="avatar.php">' . $lng['catalogue'] . '</a></p>';
         break;
 
     case 'cat':

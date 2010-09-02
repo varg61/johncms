@@ -154,14 +154,14 @@ if (file_exists(('../../files/users/avatar/' . $user['id'] . '.png'))) {
     $link = ' | <a href="index.php?act=edit&amp;id=' . $user['id'] . '&amp;delavatar">' . $lng['delete'] . '</a>';
 }
 echo '<small><a href="../my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a> | ' .
-    '<a href="avatar.php?id=' . $user['id'] . '">' . $lng['select'] . '</a>' . $link . '</small><br />' .
+    '<a href="../avatar.php?id=' . $user['id'] . '">' . $lng['select'] . '</a>' . $link . '</small><br />' .
     $lng_profile['photo'] . ':<br />';
 $link = '';
 if (file_exists(('../../files/users/photo/' . $user['id'] . '_small.jpg'))) {
-    echo '<a href="../../files/users/photo/' . $user['id'] . '.jpg"><img src="../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
-    $link = ' | <a href="my_data.php?delphoto">' . $lng['delete'] . '</a>';
+    echo '<a href="../../files/users/photo/' . $user['id'] . '.jpg"><img src="../../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
+    $link = ' | <a href="index.php?act=edit&amp;delphoto">' . $lng['delete'] . '</a>';
 }
-echo '<small><a href="my_images.php?act=up_photo&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
+echo '<small><a href="../my_images.php?act=up_photo&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
     '</p></div>' .
     '<div class="menu">' .
     '<p><h3><img src="' . $home . '/images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .

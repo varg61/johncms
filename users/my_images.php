@@ -121,7 +121,7 @@ switch ($act) {
                     $handle->image_convert = 'jpg';
                     $handle->process('../files/users/photo/');
                     if ($handle->processed) {
-                        echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="my_data.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                        echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="profile/index.php?act=edit&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
                         echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                     } else {
                         echo display_error($handle->error);
