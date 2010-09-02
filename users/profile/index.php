@@ -134,14 +134,18 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     echo '<div class="list2"><p>' .
         '<div><img src="' . $home . '/images/contacts.png" width="16" height="16"/>&#160;<a href="index.php?act=info&amp;id=' . $user['id'] . '">' . $lng['information'] . '</a></div>' .
         '<div><img src="' . $home . '/images/activity.gif" width="16" height="16"/>&#160;<a href="index.php?act=activity&amp;id=' . $user['id'] . '">' . $lng_profile['activity'] . '</a></div>' .
-        '<div><img src="' . $home . '/images/rate.gif" width="16" height="16"/>&#160;<a href="index.php?act=stat&amp;id=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>' .
-        '</p><p>' .
+        '<div><img src="' . $home . '/images/rate.gif" width="16" height="16"/>&#160;<a href="index.php?act=stat&amp;id=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
+    $bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+    if ($bancount)
+        echo '<div><img src="' . $home . '/images/admin.png" width="16" height="16"/>&#160;<a href="../users_ban.php?id=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
+    echo '</p><p>' .
         '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php?id=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
         '<div><img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="../guestbook/index.php?id=' . $user['id'] . '">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
         '<div><img src="' . $home . '/images/pt.gif" width="16" height="16"/>&#160;<a href="../blog/index.php?id=' . $user['id'] . '">' . $lng['blog'] . '</a>&#160;(0)</div>' .
         '</p><p>' .
         '<div><img src="' . $home . '/images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>'
-        . ($user['id'] != $user_id && !$ban['1'] && !$ban['3'] ? '<div><img src="' . $home . '/images/write.gif" width="16" height="16"/>&#160;<a href="../pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>' : '') .
+        . ($user['id'] != $user_id && !$ban['1']
+            && !$ban['3'] ? '<div><img src="' . $home . '/images/write.gif" width="16" height="16"/>&#160;<a href="../pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>' : '') .
         '</p></div>';
     echo '<div class="phdr">&nbsp;</div>';
 }

@@ -13,9 +13,7 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-
 $lng_ban = load_lng('ban');
-require_once('../incfiles/ban.php');
 
 switch ($mod) {
     case 'amnesty':
