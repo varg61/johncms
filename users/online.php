@@ -29,6 +29,8 @@ if ($rights > 0)
     echo '<div class="topmenu">' . ($act == 'guest' ? '<a href="online.php">' . $lng['authorized'] . '</a> | ' . $lng['guests'] : $lng['authorized'] . ' | <a href="online.php?act=guest">' . $lng['guests'] . '</a>') . '</div>';
 $onltime = $realtime - 300;
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime'"), 0);
+if(!$user_id)
+    $total = 0;
 if ($total) {
     $req = mysql_query("SELECT * FROM `" . ($act == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY " . ($act == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
     while ($res = mysql_fetch_assoc($req)) {
