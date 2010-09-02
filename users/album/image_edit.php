@@ -28,6 +28,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
         if (isset($_POST['submit'])) {
             if (!isset($_SESSION['post'])) {
                 $_SESSION['post'] = true;
+                $sql = '';
                 $rotate = isset($_POST['rotate']) ? intval($_POST['rotate']) : 0;
                 $brightness = isset($_POST['brightness']) ? intval($_POST['brightness']) : 0;
                 $contrast = isset($_POST['contrast']) ? intval($_POST['contrast']) : 0;
@@ -134,10 +135,9 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                     $handle->clean();
                     @unlink('../../files/users/album/' . $user['id'] . '/' . $res['img_name']);
                     @unlink('../../files/users/album/' . $user['id'] . '/' . $res['tmb_name']);
+                    $sql = "`img_name` = '" . mysql_real_escape_string($img_name) . "', `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',";
                 }
-                mysql_query("UPDATE `cms_album_files` SET
-                    `img_name` = '" . mysql_real_escape_string($img_name) . "',
-                    `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',
+                mysql_query("UPDATE `cms_album_files` SET $sql
                     `description` = '" . mysql_real_escape_string($description) . "'
                     WHERE `id` = '$img' LIMIT 1
                 ");
