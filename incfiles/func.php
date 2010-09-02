@@ -140,7 +140,7 @@ $arg           (array)     Массив параметров отображен�
 -----------------------------------------------------------------
 */
 function display_user($user = array (), $arg = array ()) {
-    global $set_user, $realtime, $user_id, $admp, $home, $rights, $lng;
+    global $set_user, $realtime, $user_id, $admp, $home, $rights, $lng, $rootpath;
     $out = false;
 
     if (!$user['id']) {
@@ -152,7 +152,7 @@ function display_user($user = array (), $arg = array ()) {
     } else {
         if ($set_user['avatar']) {
             $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-            if (file_exists(($home . '/files/users/avatar/' . $user['id'] . '.png')))
+            if (file_exists(($rootpath . 'files/users/avatar/' . $user['id'] . '.png')))
                 $out .= '<img src="' . $home . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
             else
                 $out .= '<img src="' . $home . '/images/empty.png" width="32" height="32" alt="" />&#160;';
