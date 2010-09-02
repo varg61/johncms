@@ -35,16 +35,16 @@ if ($user['id'] != $user_id) {
 $total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '$user_id'"), 0);
 echo '<div class="phdr"><b>' . $lng_profile['my_office'] . '</b></div>' .
     '<div class="list2"><p>' .
-    '<div><img src="' . $home . '/images/contacts.png" width="16" height="16" class="left" />&#160;<a href="index.php">' . $lng_profile['my_profile'] . '</a></div>' .
-    '<div><img src="' . $home . '/images/rate.gif" width="16" height="16" class="left" />&#160;<a href="index.php?act=stat">' . $lng['statistics'] . '</a></div>' .
+    '<div><img src="' . $home . '/images/contacts.png" width="16" height="16"/>&#160;<a href="index.php">' . $lng_profile['my_profile'] . '</a></div>' .
+    '<div><img src="' . $home . '/images/rate.gif" width="16" height="16"/>&#160;<a href="index.php?act=stat">' . $lng['statistics'] . '</a></div>' .
     '</p><p>' .
-    '<div><img src="' . $home . '/images/photo.gif" width="16" height="16" class="left" />&#160;<a href="../album/index.php">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
-    '<div><img src="' . $home . '/images/guestbook.gif" width="16" height="16" class="left" />&#160;<a href="../guestbook/index.php">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
-    '<div><img src="' . $home . '/images/pt.gif" width="16" height="16" class="left" />&#160;<a href="../blog/index.php">' . $lng['blog'] . '</a>&#160;(0)</div>';
+    '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
+    '<div><img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="../guestbook/index.php">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
+    '<div><img src="' . $home . '/images/pt.gif" width="16" height="16"/>&#160;<a href="../blog/index.php">' . $lng['blog'] . '</a>&#160;(0)</div>';
 if ($rights >= 1) {
     $guest = stat_guestbook(2);
     echo '</p><p>' .
-        '<div><img src="' . $home . '/images/admin.png" width="16" height="16" class="left" />&#160;<a href="../../guestbook/index.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (<span class="red">' . $guest . '</span>)</div>';
+        '<div><img src="' . $home . '/images/admin.png" width="16" height="16"/>&#160;<a href="../../guestbook/index.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (<span class="red">' . $guest . '</span>)</div>';
 }
 echo '</p></div><div class="menu"><p>';
 // Блок почты
