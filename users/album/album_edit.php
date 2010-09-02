@@ -67,12 +67,11 @@ if ($user['id'] == $user_id || $rights >= 6) {
             if ($al) {
                 // Изменяем данные в базе
                 mysql_query("UPDATE `cms_album_cat` SET
-                    `user_id` = '$user_id',
                     `name` = '" . mysql_real_escape_string($name) . "',
                     `description` = '" . mysql_real_escape_string($description) . "',
                     `password` = '" . mysql_real_escape_string($password) . "',
                     `access` = '$access'
-                    WHERE `id` = '$al' LIMIT 1
+                    WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1
                 ");
             } else {
                 // Вычисляем сортировку
@@ -102,7 +101,7 @@ if ($user['id'] == $user_id || $rights >= 6) {
     if ($error)
         echo display_error($error);
     echo '<div class="menu">' .
-        '<form action="index.php?act=album_edit&amp;id=' . $user['id'] . ($al ? '&amp;al=' . $al : '') . '" method="post">' .
+        '<form action="index.php?act=album_edit&amp;id=' . $user['id'] . '&amp;al=' . $al . '" method="post">' .
         '<p><h3>' . $lng['name_the'] . '</h3>' .
         '<input type="text" name="name" value="' . checkout($name) . '" maxlength="30" /><br />' .
         '<small>Min. 2, Max. 30</small></p>' .

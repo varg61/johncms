@@ -88,7 +88,7 @@ if ($img) {
             '<li><a href="">' . $lng['comments'] . '</a></li>' .
             '<li><a href="../../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></li>' .
             '</ul></div></div>' .
-            '<div class="phdr"><a href="index.php?act=album&amp;al=' . $al . '">' . $lng['back'] . '&amp;id=' . $user['id'] . '</a></div>';
+            '<div class="phdr"><a href="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
     } else {
         echo display_error($lng['error_wrong_data']);
     }
