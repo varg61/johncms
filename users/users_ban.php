@@ -182,7 +182,7 @@ switch ($act) {
                     '</p><p><input type="submit" value="' . $lng['ban_do'] . '" name="submit" />' .
                     '</p></div></form>';
             }
-            echo '<div class="phdr"><a href="profile.php' . ($id ? '?id=' . $id : '') . '">' . $lng['profile'] . '</a></div>';
+            echo '<div class="phdr"><a href="profile/index.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
         }
         break;
 
