@@ -16,6 +16,19 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 /*
 -----------------------------------------------------------------
+Счетчик Фотоальбомов / фотографий юзеров
+-----------------------------------------------------------------
+*/
+function count_photo(){
+    global $realtime;
+    $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `album_id`) FROM `cms_album_files`"), 0);
+    $photocount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files`"), 0);
+    $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "'"), 0);
+    return $albumcount . '&#160;/&#160;' . $photocount . ($newcount ? '&#160;/&#160;<span class="red">+' . $newcount . '</span>' : '');
+}
+
+/*
+-----------------------------------------------------------------
 Показ различных счетчиков внизу страницы
 -----------------------------------------------------------------
 */
@@ -281,7 +294,7 @@ function stat_countusers() {
     $res = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "'"), 0);
 
     if ($res > 0)
-        $total .= '&#160;<span class="red">+' . $res . '</span>';
+        $total .= '&#160;/&#160;<span class="red">+' . $res . '</span>';
     return $total;
 }
 

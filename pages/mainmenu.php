@@ -24,7 +24,6 @@ echo $mp->news;
 echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
 echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>';
 echo '<div class="menu"><a href="index.php?act=info">' . $lng['information'] . '</a> <a href="pages/faq.php">FAQ</a></div>';
-echo '<div class="menu"><a href="index.php?act=users">' . $lng['community'] . '</a></div>';
 echo '<div class="phdr"><b>' . $lng['dialogue'] . '</b></div>';
 echo '<div class="menu"><a href="guestbook/index.php">' . $lng['guestbook'] . '</a> (' . stat_guestbook() . ')</div>';
 echo '<div class="menu"><a href="forum/">' . $lng['forum'] . '</a> (' . stat_forum() . ')</div>';
@@ -33,6 +32,10 @@ echo '<div class="phdr"><b>' . $lng['useful'] . '</b></div>';
 echo '<div class="menu"><a href="download/">' . $lng['downloads'] . '</a> (' . stat_download() . ')</div>';
 echo '<div class="menu"><a href="library/">' . $lng['library'] . '</a> (' . stat_library() . ')</div>';
 echo '<div class="menu"><a href="gallery/">' . $lng['gallery'] . '</a> (' . stat_gallery() . ')</div>';
+echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>';
+echo '<div class="menu"><a href="index.php?act=users">' . $lng['users'] . '</a> (' . stat_countusers() . ')</div>';
+echo '<div class="menu">Фотоальбомы (' . count_photo() . ')</div>';
+echo '<div class="menu">Дневники</div>';
 echo '<div class="phdr"><a href="http://gazenwagen.com">Gazenwagen</a></div>';
 
 ?>
