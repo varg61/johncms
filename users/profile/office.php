@@ -38,7 +38,7 @@ echo '<div class="phdr"><b>' . $lng_profile['my_office'] . '</b></div>' .
     '<div><img src="' . $home . '/images/contacts.png" width="16" height="16"/>&#160;<a href="index.php">' . $lng_profile['my_profile'] . '</a></div>' .
     '<div><img src="' . $home . '/images/rate.gif" width="16" height="16"/>&#160;<a href="index.php?act=stat">' . $lng['statistics'] . '</a></div>' .
     '</p><p>' .
-    '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
+    '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php?act=catalogue">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
     '<div><img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="../guestbook/index.php">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
     '<div><img src="' . $home . '/images/pt.gif" width="16" height="16"/>&#160;<a href="../blog/index.php">' . $lng['blog'] . '</a>&#160;(0)</div>';
 if ($rights >= 1) {

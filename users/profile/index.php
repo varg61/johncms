@@ -139,7 +139,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     if ($bancount)
         echo '<div><img src="' . $home . '/images/block.gif" width="16" height="16"/>&#160;<a href="../users_ban.php?id=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
     echo '<br />' .
-        '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php?id=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
+        '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
         '<div><img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="../guestbook/index.php?id=' . $user['id'] . '">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
         '<div><img src="' . $home . '/images/pt.gif" width="16" height="16"/>&#160;<a href="../blog/index.php?id=' . $user['id'] . '">' . $lng['blog'] . '</a>&#160;(0)</div>' .
         '<br />' .

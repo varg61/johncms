@@ -33,7 +33,7 @@ if (!mysql_num_rows($req)) {
 $album = mysql_fetch_assoc($req);
 echo '<div class="phdr">' .
     '<a href="../profile/index.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></a> | ' .
-    '<a href="index.php?id=' . $user['id'] . '">' . $lng['photo_album'] . '</a></div>';
+    '<a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a></div>';
 if ($user['id'] == $user_id || $rights >= 7)
     echo '<div class="topmenu"><a href="index.php?act=image_upload&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng_profile['image_add'] . '</a></div>';
 echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
@@ -130,6 +130,6 @@ if ($img) {
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
             '</form></p>';
     }
-    echo '<p><a href="index.php?id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></p>';
+    echo '<p><a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></p>';
 }
 ?>

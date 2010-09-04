@@ -34,5 +34,5 @@ if ($al && $user['id'] == $user_id || $rights >= 6) {
         }
     }
 }
-header('Location: index.php?id=' . $user['id']);
+header('Location: index.php?act=catalogue&id=' . $user['id']);
 ?>

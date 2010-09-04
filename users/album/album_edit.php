@@ -93,7 +93,7 @@ if ($user['id'] == $user_id || $rights >= 6) {
                 ");
             }
             echo '<div class="gmenu"><p>' . ($al ? $lng_profile['album_changed'] : $lng_profile['album_created']) . '<br />' .
-                '<a href="index.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                '<a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
             require('../../incfiles/end.php');
             exit;
         }
@@ -118,6 +118,6 @@ if ($user['id'] == $user_id || $rights >= 6) {
         '<input type="radio" name="access" value="1" ' . ($access == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['access_closed'] . '</p>' .
         '<p><input type="submit" name="submit" value="' . $lng['save'] . '" /></p>' .
         '</form></div>' .
-        '<div class="phdr"><a href="index.php?id=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
+        '<div class="phdr"><a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
 }
 ?>

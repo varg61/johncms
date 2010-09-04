@@ -7,6 +7,7 @@ administrators                :::   Администраторы
 admin_club                    :::   Админ-клуб
 admin_panel                   :::   Админ панель
 administrative_events         :::   События Администратора
+albums                        :::   Альбомы
 apperance                     :::   Внешний вид
 approve                       :::   Подтвердить
 arrangement                   :::   Расположение
@@ -162,6 +163,7 @@ online                        :::   Онлайн
 personal                      :::   Личное
 password                      :::   Пароль
 photo_album                   :::   Фотоальбом
+photo_albums                  :::   Фотоальбомы
 points                        :::   очков
 posts                         :::   постов
 preview                       :::   Предварительный просмотр

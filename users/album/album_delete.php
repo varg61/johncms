@@ -32,13 +32,13 @@ if ($user['id'] == $user_id || $rights >= 6) {
         mysql_query("DELETE FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al'");
         // Удаляем альбом
         mysql_query("DELETE FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
-        echo '<div class="menu"><p>' . $lng_profile['album_deleted'] . '<br /><a href="index.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+        echo '<div class="menu"><p>' . $lng_profile['album_deleted'] . '<br /><a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
     } else {
         echo '<div class="rmenu"><form action="index.php?act=album_delete&amp;al=' . $al . '&amp;id=' . $user['id'] . '" method="post">' .
             '<p>' . $lng_profile['album_delete_warning'] . '</p>' .
             '<p><input type="submit" name="submit" value="' . $lng['delete'] . '"/></p>' .
             '</form></div>' .
-            '<div class="phdr"><a href="index.php?id=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
+            '<div class="phdr"><a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
     }
 }
 ?>
