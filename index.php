@@ -40,7 +40,7 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-            '<div class="list2"><form action="users/users_search.php" method="post">' .
+            '<div class="gmenu"><form action="users/users_search.php" method="post">' .
             '<p><h3><img src="images/search.png" width="16" height="16" class="left" />&#160;' . $lng['search'] . '</h3>' .
             '<input type="text" name="search"/>' .
             '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .

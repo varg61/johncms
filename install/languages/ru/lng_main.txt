@@ -135,6 +135,7 @@ library                       :::   Библиотека
 library_on_moderation         :::   Мод. Библиотеки
 lines_on_page                 :::   Строк на страницу
 link                          :::   Ссылка
+list                          :::   Список
 list_empty                    :::   Список пуст
 login                         :::   Вход
 login_name                    :::   Логин

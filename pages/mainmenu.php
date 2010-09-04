@@ -35,7 +35,7 @@ echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>' .
 if ($user_id) {
     echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
         '<div class="menu"><a href="index.php?act=users">' . $lng['users'] . '</a> (' . stat_countusers() . ')</div>' .
-        '<div class="menu"><a href="users/album/index.php">' . $lng['albums'] . '</a> (' . count_photo() . ')</div>' .
+        '<div class="menu"><a href="users/album/index.php">' . $lng['photo_albums'] . '</a> (' . count_photo() . ')</div>' .
         '<div class="menu">' . $lng['blogs'] . '</div>';
 }
 echo '<div class="phdr"><a href="http://gazenwagen.com">Gazenwagen</a></div>';
