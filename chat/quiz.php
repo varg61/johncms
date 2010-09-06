@@ -21,7 +21,7 @@ $quiz_res = mysql_fetch_array($quiz_req);
 if (!$quiz_num || ($quiz_res['realid'] == 1 && $quiz_res['time'] < ($realtime - 15))) {
     // "Умник" задает вопрос Викторины
     $num = rand(1, mysql_result(mysql_query("SELECT COUNT(*) FROM `vik`"), 0));
-    $vik = mysql_fetch_array(mysql_query("SELECT * FROM `vik` WHERE `id` = '$num'"));
+    $vik = mysql_fetch_array(mysql_query("SELECT * FROM `vik` LIMIT $num, 1"));
     $vopros = checkout($vik['vopros']);
     $len = mb_strlen($vik['otvet']);
     mysql_query("INSERT INTO `chat` SET
