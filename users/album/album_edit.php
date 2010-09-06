@@ -61,7 +61,7 @@ if ($user['id'] == $user_id || $rights >= 6) {
         if ($access < 1 || $access > 4)
             $error[] = $lng['error_wrong_data'];
         // Проверяем, есть ли уже альбом с таким же именем?
-        if (!$al && mysql_num_rows(mysql_query("SELECT * FROM `cms_album_cat` WHERE `name` = '" . mysql_real_escape_string($name) . "' LIMIT 1")))
+        if (!$al && mysql_num_rows(mysql_query("SELECT * FROM `cms_album_cat` WHERE `name` = '" . mysql_real_escape_string($name) . "' AND `user_id` = '" . $user['id'] . "' LIMIT 1")))
             $error[] = $lng_profile['error_album_exists'];
         if (!$error) {
             if ($al) {

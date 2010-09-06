@@ -112,8 +112,8 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         }
         echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $home . '/images/k_' . $images . '.gif"/></td><td>' .
             '<b>' . $lng['karma'] . ' (' . $user['karma'] . ')</b>' .
-            '<div class="sub"><span class="green"><a href="karma.php?id=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . ($exp[0] ? $exp[0] : '0') . ')</a></span> | ' .
-            '<span class="red"><a href="karma.php?id=' . $user['id'] . '&amp;type=2">' . $lng['vote_against'] . ' (' . ($exp[1] ? $exp[1] : '0') . ')</a></span>';
+            '<div class="sub"><span class="green"><a href="../karma.php?id=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . ($exp[0] ? $exp[0] : '0') . ')</a></span> | ' .
+            '<span class="red"><a href="../karma.php?id=' . $user['id'] . '&amp;type=2">' . $lng['vote_against'] . ' (' . ($exp[1] ? $exp[1] : '0') . ')</a></span>';
         if ($id) {
             if (!$datauser['karma_off'] && (!$user['rights'] || ($user['rights'] && !$set_karma['adm'])) && $user['ip'] != $datauser['ip']) {
                 $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '" . $datauser['karma_time'] . "'"), 0);

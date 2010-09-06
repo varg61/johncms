@@ -70,12 +70,12 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         '</ul></p>' .
         '<p><h3><img src="' . $home . '/images/album-4.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['photos'] . '</h3><ul>' .
         '<li><a href="">' . $lng_profile['top_votes'] . '</a></li>' .
-        '<li><a href="">' . $lng_profile['top_comments'] . '</a></li>' .
         '<li><a href="">' . $lng_profile['top_views'] . '</a></li>' .
+        '<li><a href="">' . $lng_profile['top_comments'] . '</a></li>' .
         '<li><a href="">' . $lng_profile['top_trash'] . '</a></li>' .
         '</ul></p>' .
         '</div>' .
-        '<div class="phdr"><a href="../index.php?act=users">' . $lng['users'] . '</a></div>';
+        '<div class="phdr"><a href="../../index.php?act=users">' . $lng['users'] . '</a></div>';
 }
 require('../../incfiles/end.php');
 ?>
