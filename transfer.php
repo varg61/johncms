@@ -3,13 +3,28 @@
 define('_IN_JOHNCMS', 1);
 $rootpath = '';
 require('incfiles/core.php');
-require('incfiles/lib/class.upload.php');
+
+/*
+-----------------------------------------------------------------
+Конвертируем права доступа для фотографий
+-----------------------------------------------------------------
+*/
+$req = mysql_query("SELECT * FROM `cms_album_files`");
+while($res = mysql_fetch_assoc($req)){
+    $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res['album_id'] . "' LIMIT 1");
+    $res_a = mysql_fetch_assoc($req_a);
+    mysql_query("UPDATE `cms_album_files` SET
+    `access` = '" . $res_a['access'] . "'
+    WHERE `id` = '" . $res['id'] . "' LIMIT 1");
+}
 
 /*
 -----------------------------------------------------------------
 Конвертируем личные альбомы
 -----------------------------------------------------------------
 */
+/*
+require('incfiles/lib/class.upload.php');
 $req_a = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `user` = '1'");
 // Получаем список альбомов юзера
 while ($res_a = mysql_fetch_assoc($req_a)) {
@@ -74,7 +89,8 @@ while ($res_a = mysql_fetch_assoc($req_a)) {
                             `user_id` = '" . $res_u['id'] . "',
                             `img_name` = '" . mysql_real_escape_string($img_name) . "',
                             `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',
-                            `time` = '$realtime'
+                            `time` = '$realtime',
+                            `access` = '4'
                         ");
                     }
                 }
@@ -85,4 +101,5 @@ while ($res_a = mysql_fetch_assoc($req_a)) {
         }
     }
 }
+*/
 ?>

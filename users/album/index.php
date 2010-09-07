@@ -52,16 +52,17 @@ $array = array (
     'image_edit',
     'image_move',
     'image_upload',
+    'new',
     'users'
 );
 if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once($act . '.php');
 } else {
     $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `album_id`) FROM `cms_album_files`"), 0);
-    $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "'"), 0);
+    $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . $lng['photo_albums'] . '</b></div>' .
         '<div class="gmenu"><p>' .
-        '<img src="' . $home . '/images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
+        '<img src="' . $home . '/images/users.png" width="16" height="16"/>&#160;<a href="index.php?act=new">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
         '<img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="">' . $lng_profile['new_comments'] . '</a>' .
         '</p></div>' .
         '<div class="menu">' .

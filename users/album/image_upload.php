@@ -5,14 +5,15 @@
 Выгрузка фотографии
 -----------------------------------------------------------------
 */
-if ($user['id'] == $user_id || $rights >= 7) {
-    $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
-    if(!mysql_num_rows($req)){
+if ($al && $user['id'] == $user_id || $rights >= 7) {
+    $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
+    if(!mysql_num_rows($req_a)){
         // Если альбома не существует, завершаем скрипт
         echo display_error($lng['error_wrong_data']);
         require('../../incfiles/end.php');
         exit;
     }
+    $res_a = mysql_fetch_assoc($req_a);
     require('../../incfiles/lib/class.upload.php');
     echo '<div class="phdr"><a href="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '"><b>' . $lng['photo_album'] . '</b></a> | ' . $lng_profile['upload_photo'] . '</div>';
     if (isset($_POST['submit'])) {
@@ -60,7 +61,8 @@ if ($user['id'] == $user_id || $rights >= 7) {
                             `img_name` = '" . mysql_real_escape_string($img_name) . "',
                             `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',
                             `description` = '" . mysql_real_escape_string($description) . "',
-                            `time` = '$realtime'
+                            `time` = '$realtime',
+                            `access` = '" . $res_a['access'] . "'
                         ");
                     echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br />' .
                         '<a href="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .

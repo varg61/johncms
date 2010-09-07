@@ -66,6 +66,7 @@ if ($user['id'] == $user_id || $rights >= 6) {
         if (!$error) {
             if ($al) {
                 // Изменяем данные в базе
+                mysql_query("UPDATE `cms_album_files` SET `access` = '$access' WHERE `album_id` = '$al' AND `user_id` = '" . $user['id'] . "'");
                 mysql_query("UPDATE `cms_album_cat` SET
                     `name` = '" . mysql_real_escape_string($name) . "',
                     `description` = '" . mysql_real_escape_string($description) . "',

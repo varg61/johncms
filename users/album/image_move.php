@@ -25,9 +25,14 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
         $image = mysql_fetch_assoc($req);
         echo '<div class="phdr"><a href="index.php?act=album&amp;al=' . $image['album_id'] . '&amp;id=' . $user['id'] . '"><b>' . $lng['photo_album'] . '</b></a> | ' . $lng_profile['image_move'] . '</div>';
         if (isset($_POST['submit'])) {
-            $album = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
-            if (mysql_num_rows($req)) {
-                mysql_query("UPDATE `cms_album_files` SET `album_id` = '$al' WHERE `id` = '$img' LIMIT 1");
+            $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+            if (mysql_num_rows($req_a)) {
+                $res_a = mysql_fetch_assoc($req_a);
+                mysql_query("UPDATE `cms_album_files` SET
+                    `album_id` = '$al',
+                    `access` = '" . $res_a['access'] . "'
+                    WHERE `id` = '$img' LIMIT 1
+                ");
                 echo '<div class="gmenu"><p>' . $lng_profile['image_moved'] . '<br />' .
                     '<a href="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
             } else {

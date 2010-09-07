@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 18 2010 г., 14:39
+-- Время создания: Сен 07 2010 г., 13:59
 -- Версия сервера: 5.1.40
 -- Версия PHP: 5.3.1
 
@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- База данных: `johncms_gal`
+-- База данных: `johncms_4`
 --
 
 -- --------------------------------------------------------
@@ -35,5 +35,9 @@ CREATE TABLE `cms_album_files` (
   `tmb_name` varchar(100) NOT NULL,
   `time` int(11) NOT NULL DEFAULT '0',
   `comments` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `access` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `album_id` (`album_id`),
+  KEY `access` (`access`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

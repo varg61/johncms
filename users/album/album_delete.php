@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Удалить альбом
 -----------------------------------------------------------------
 */
-if ($user['id'] == $user_id || $rights >= 6) {
+if ($al && $user['id'] == $user_id || $rights >= 6) {
     echo '<div class="phdr"><a href="index.php?id=' . $user['id'] . '"><b>' . $lng['photo_album'] . '</b></a> | ' . $lng['delete'] . '</div>';
     if (isset($_POST['submit'])) {
         // Удаляем файлы фотографий
