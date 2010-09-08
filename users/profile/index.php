@@ -36,6 +36,7 @@ if (!$user_id) {
 */
 $user = get_user($id);
 if (!$user) {
+    require('../../incfiles/head.php');
     echo display_error($lng['user_does_not_exist']);
     require('../../incfiles/end.php');
     exit;
