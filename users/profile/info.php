@@ -21,8 +21,10 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 $textl = htmlspecialchars($user['name']) . ': ' . $lng['information'];
 require('../../incfiles/head.php');
-echo '<div class="phdr"><a href="index.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['information'] . '</div>' .
-    '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
+echo '<div class="phdr"><a href="index.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['information'] . '</div>';
+if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
+    echo '<div class="topmenu"><a href="index.php?act=edit&amp;id=' . $user['id'] . '">' . $lng['edit'] . '</a></div>';
+echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
     '<div class="list2"><p>' .
     '<h3><img src="' . $home . '/images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .
     '<ul>';

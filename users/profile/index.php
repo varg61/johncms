@@ -71,8 +71,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     echo '<div class="phdr"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты
     $menu = array ();
-    if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
-        $menu[] = '<a href="index.php?act=edit&amp;id=' . $user['id'] . '">' . $lng['edit'] . '</a>';
     if ($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
         $menu[] = '<a href="' . $home . '/' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a>';
     if ($user['id'] != $user_id && $rights > $user['rights'])
@@ -141,13 +139,14 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     echo '<br />' .
         '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
         '<div><img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="../guestbook/index.php?id=' . $user['id'] . '">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
-        '<div><img src="' . $home . '/images/pt.gif" width="16" height="16"/>&#160;<a href="../blog/index.php?id=' . $user['id'] . '">' . $lng['blog'] . '</a>&#160;(0)</div>' .
-        '<br />' .
-        '<div><img src="' . $home . '/images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>'
-        . ($user['id'] != $user_id && !$ban['1']
-            && !$ban['3'] ? '<div><img src="' . $home . '/images/write.gif" width="16" height="16"/>&#160;<a href="../pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>' : '') .
-        '</p></div>';
-    echo '<div class="phdr">&nbsp;</div>';
+        '<div><img src="' . $home . '/images/pt.gif" width="16" height="16"/>&#160;<a href="../blog/index.php?id=' . $user['id'] . '">' . $lng['blog'] . '</a>&#160;(0)</div>';
+    if ($user['id'] != $user_id) {
+        echo '<br /><div><img src="' . $home . '/images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>';
+        if (!$ban['1'] && !$ban['3'])
+            echo '<div><img src="' . $home . '/images/write.gif" width="16" height="16"/>&#160;<a href="../pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
+    }
+    echo '</p></div>';
+    echo '<div class="phdr"><a href="' . $home . '/index.php?act=users">' . $lng['users'] . '</a></div>';
 }
 
 require('../../incfiles/end.php');

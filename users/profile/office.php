@@ -68,6 +68,7 @@ echo '</ul><h3><img src="' . $home . '/images/users.png" width="16" height="16" 
 // Блок настроек
 echo '<div class="bmenu"><p><h3><img src="' . $home . '/images/settings.png" width="16" height="16" class="left" />&#160;' . $lng_profile['my_settings'] . '</h3><ul>' .
     '<li><a href="index.php?act=set_main">' . $lng['system_settings'] . '</a></li>' .
+    '<li><a href="index.php?act=edit">' . $lng_profile['profile_edit'] . '</a></li>' .
     '<li><a href="index.php?act=password">' . $lng['change_password'] . '</a></li>';
 if ($rights >= 1)
     echo '<li><span class="red"><a href="' . $home . '/' . $admp . '/index.php"><b>' . $lng['admin_panel'] . '</b></a></span></li>';
