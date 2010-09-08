@@ -207,10 +207,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         -----------------------------------------------------------------
         */
         if ($user_id && $type1['type'] == 't') {
-            $req = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
-                if ($type1['time'] > $res['time'])
+            $req_r = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
+            if (mysql_num_rows($req_r)) {
+                $res_r = mysql_fetch_assoc($req_r);
+                if ($type1['time'] > $res_r['time'])
                     mysql_query("UPDATE `cms_forum_rdm` SET `time` = '$realtime' WHERE `topic_id` = '$id' AND `user_id` = '$user_id' LIMIT 1");
             } else {
                 mysql_query("INSERT INTO `cms_forum_rdm` SET `topic_id` = '$id', `user_id` = '$user_id', `time` = '$realtime'");
@@ -222,6 +222,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Получаем структуру форума
         -----------------------------------------------------------------
         */
+        $res = true;
         $parent = $type1['refid'];
         $tree = array ('<a href="index.php">' . $lng['forum'] . '</a>');
         while ($parent != '0' && $res != false) {
