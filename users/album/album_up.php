@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Передвигаем альбом на позицию вверх
 -----------------------------------------------------------------
 */
-if ($al && $user['id'] == $user_id || $rights >= 6) {
+if ($al && $user['id'] == $user_id || $rights >= 7) {
     $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);

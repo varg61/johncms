@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Создать / изменить альбом
 -----------------------------------------------------------------
 */
-if ($user['id'] == $user_id || $rights >= 6) {
+if ($user['id'] == $user_id || $rights >= 7) {
     if ($al) {
         $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
         if (mysql_num_rows($req)) {
@@ -85,7 +85,7 @@ if ($user['id'] == $user_id || $rights >= 6) {
                 }
                 // Заносим данные в базу
                 mysql_query("INSERT INTO `cms_album_cat` SET
-                    `user_id` = '$user_id',
+                    `user_id` = '" . $user['id'] . "',
                     `name` = '" . mysql_real_escape_string($name) . "',
                     `description` = '" . mysql_real_escape_string($description) . "',
                     `password` = '" . mysql_real_escape_string($password) . "',

@@ -83,11 +83,17 @@ if ($img) {
         echo '<div class="menu">' .
             '<a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '"><img src="image.php?u=' . $user['id'] . '&amp;f=' . $res['img_name'] . '" /></a>';
         if (!empty($res['description']))
-            echo '<br />' . smileys(checkout($res['description'], 1, 1)) . '';
-        echo '<div class="sub"><ul>' .
-            '<li><a href="">' . $lng['comments'] . '</a></li>' .
-            '<li><a href="../../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></li>' .
-            '</ul></div></div>' .
+            echo '<div class="gray">' . smileys(checkout($res['description'], 1, 1)) . '</div>';
+        echo '<div class="sub">';
+        if ($user['id'] == $user_id || $rights >= 6) {
+            echo '<p><a href="index.php?act=image_edit&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['edit'] . '</a> | ' .
+                '<a href="index.php?act=image_move&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['move'] . '</a> | ' .
+                '<a href="index.php?act=image_delete&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a></p>';
+        }
+        vote_photo($res);
+        echo '<p><a href="">' . $lng['comments'] . '</a> (0)<br />' .
+            '<a href="../../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
+            '</div></div>' .
             '<div class="phdr"><a href="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng_profile['album'] . '</a></div>';
     } else {
         echo display_error($lng['error_wrong_data']);
@@ -105,17 +111,13 @@ if ($img) {
         $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `time` DESC LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                '<a href="index.php?act=album&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '"><img src="../../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>' .
-                '<div class="sub">' . checkout($res['description'], 1);
-            if ($user['id'] == $user_id || $rights >= 6) {
-                echo '<p><a href="index.php?act=image_edit&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['edit'] . '</a> | ' .
-                    '<a href="index.php?act=image_move&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['move'] . '</a> | ' .
-                    '<a href="index.php?act=image_delete&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a></p>';
-            }
-            echo '<ul>' .
-                '<li><a href="">' . $lng['comments'] . '</a></li>' .
-                '<li><a href="../../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></li>' .
-                '</ul>' .
+                '<a href="index.php?act=album&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '"><img src="../../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
+            if (!empty($res['description']))
+                echo '<div class="gray">' . smileys(checkout($res['description'], 1)) . '</div>';
+            echo '<div class="sub">';
+            vote_photo($res);
+            echo '<p><a href="">' . $lng['comments'] . '</a> (0)<br />' .
+                '<a href="../../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
                 '</div></div>';
             ++$i;
         }
