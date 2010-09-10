@@ -20,11 +20,20 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng['list'] . '</div>';
-$total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
+echo '<div class="topmenu">' . ($mod == 'girls' ? '<a href="index.php?act=users">' . $lng['mans'] . '</a> | <b>' . $lng['womans'] . '</b>' : '<b>' . $lng['mans'] . '</b> | <a href="index.php?act=users&amp;mod=girls">' . $lng['womans'] . '</a>') . '</div>';
+$sex = $mod == 'girls' ? 'zh' : 'm';
+$total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
+    FROM `cms_album_files`
+    LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
+    WHERE `users`.`sex` = '$sex'
+"), 0);
 if ($total) {
     $req = mysql_query("SELECT `cms_album_files`.*, COUNT(`cms_album_files`.`id`) AS `count`, `users`.`id` AS `uid`, `users`.`name` AS `nick`
-    FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
-    GROUP BY `cms_album_files`.`user_id` ORDER BY `users`.`name` ASC LIMIT $start, $kmess");
+        FROM `cms_album_files`
+        LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
+        WHERE `users`.`sex` = '$sex'
+        GROUP BY `cms_album_files`.`user_id` ORDER BY `users`.`name` ASC LIMIT $start, $kmess
+    ");
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<a href="index.php?act=catalogue&amp;id=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
@@ -35,8 +44,8 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('index.php?act=users&amp;', $start, $total, $kmess) . '</p>' .
-        '<p><form action="index.php?act=users" method="post">' .
+    echo '<p>' . display_pagination('index.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '&amp;', $start, $total, $kmess) . '</p>' .
+        '<p><form action="index.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';

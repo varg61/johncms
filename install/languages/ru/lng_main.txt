@@ -141,6 +141,7 @@ login                         :::   Вход
 login_name                    :::   Логин
 general_settings              :::   Общие настройки
 mail_new                      :::   Вам письмо
+mans                          :::   Парни
 messages                      :::   Сообщения
 minmax_2_30                   :::   Мин. 2, макс. 30 символов
 minmax_2_500                  :::   Мин. 2, макс. 500 символов
@@ -256,5 +257,6 @@ vote_for                      :::   За
 votes                         :::   Голосования
 welcome_to                    :::   Добро пожаловать на
 without_limit                 :::   Без ограничений
+womans                        :::   Девушки
 write                         :::   Написать
 yes                           :::   Да
