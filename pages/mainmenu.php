@@ -19,10 +19,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 ////////////////////////////////////////////////////////////
 require('incfiles/class_mainpage.php');
 $mp = new mainpage();
-// Блок новостей
+echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
 echo $mp->news;
-echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>' .
-    '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>' .
+echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>' .
     '<div class="menu"><a href="index.php?act=info">' . $lng['information'] . '</a> <a href="pages/faq.php">FAQ</a></div>' .
     '<div class="phdr"><b>' . $lng['dialogue'] . '</b></div>' .
     '<div class="menu"><a href="guestbook/index.php">' . $lng['guestbook'] . '</a> (' . stat_guestbook() . ')</div>' .

@@ -23,32 +23,6 @@ $max_album = 10;
 $max_photo = 200;
 $al = isset($_REQUEST['al']) ? abs(intval($_REQUEST['al'])) : NULL;
 $img = isset($_REQUEST['img']) ? abs(intval($_REQUEST['img'])) : NULL;
-function vote_photo($arg = null) {
-    // Голосование за фотографию
-    global $lng, $datauser, $user, $user_id, $ban;
-
-    if ($arg) {
-        $rating = $arg['vote_plus'] - $arg['vote_minus'];
-        if ($rating > 0)
-            $color = 'C0FFC0';
-        elseif ($rating < 0)
-            $color = 'F196A8';
-        else
-            $color = 'CCC';
-        echo '<div class="gray">' . $lng['rating'] . ': <span style="color:#000;background-color:#' . $color . '">&#160;&#160;<big><b>' . $rating . '</b></big>&#160;&#160;</span> ' .
-            '(' . $lng['vote_against'] . ': ' . $arg['vote_minus'] . ', ' . $lng['vote_for'] . ': ' . $arg['vote_plus'] . ')';
-        //TODO: Добавить нужные проверки
-        if ($user_id != $arg['user_id'] && !$ban) {
-            // Проверяем, имеет ли юзер право голоса
-            $req = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = '$user_id' AND `file_id` = '" . $arg['id'] . "' LIMIT 1");
-            if(!mysql_num_rows($req))
-                echo '<br />' . $lng['vote'] . ': <a href="index.php?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | <a href="index.php?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
-        }
-        echo '</div>';
-    } else {
-        return false;
-    }
-}
 
 /*
 -----------------------------------------------------------------
@@ -71,6 +45,35 @@ if (!$user) {
     echo display_error($lng['user_does_not_exist']);
     require('../../incfiles/end.php');
     exit;
+}
+
+/*
+-----------------------------------------------------------------
+Функция голосований за фотографии
+-----------------------------------------------------------------
+*/
+function vote_photo($arg = null) {
+    global $lng, $datauser, $user, $user_id, $ban;
+    if ($arg) {
+        $rating = $arg['vote_plus'] - $arg['vote_minus'];
+        if ($rating > 0)
+            $color = 'C0FFC0';
+        elseif ($rating < 0)
+            $color = 'F196A8';
+        else
+            $color = 'CCC';
+        echo '<div class="gray">' . $lng['rating'] . ': <span style="color:#000;background-color:#' . $color . '">&#160;&#160;<big><b>' . $rating . '</b></big>&#160;&#160;</span> ' .
+            '(' . $lng['vote_against'] . ': ' . $arg['vote_minus'] . ', ' . $lng['vote_for'] . ': ' . $arg['vote_plus'] . ')';
+        if ($user_id != $arg['user_id'] && !$ban && $datauser['postforum'] > 10 && $datauser['total_on_site'] > 1200) {
+            // Проверяем, имеет ли юзер право голоса
+            $req = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = '$user_id' AND `file_id` = '" . $arg['id'] . "' LIMIT 1");
+            if(!mysql_num_rows($req))
+                echo '<br />' . $lng['vote'] . ': <a href="index.php?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | <a href="index.php?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
+        }
+        echo '</div>';
+    } else {
+        return false;
+    }
 }
 
 /*
