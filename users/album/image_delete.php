@@ -25,11 +25,15 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $album = $res['album_id'];
-        // Сделать проверку, чтоб администрация не могла удалять фотки старших по должности
+        //TODO: Сделать проверку, чтоб администрация не могла удалять фотки старших по должности
         if (isset($_POST['submit'])) {
+            // Удаляем файлы картинок
             @unlink('../../files/users/album/' . $user['id'] . '/' . $res['img_name']);
             @unlink('../../files/users/album/' . $user['id'] . '/' . $res['tmb_name']);
+            // Удаляем записи из таблиц
             mysql_query("DELETE FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+            mysql_query("DELETE FROM `cms_album_votes` WHERE `file_id` = '$img'");
+            mysql_query("OPTIMIZE TABLE `cms_album_votes`");
             header('Location: index.php?act=album&al=' . $album . '&id=' . $user['id']);
         } else {
             echo '<div class="rmenu"><form action="index.php?act=image_delete&amp;img=' . $img . '&amp;id=' . $user['id'] . '" method="post">' .
