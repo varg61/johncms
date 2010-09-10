@@ -19,9 +19,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Топ фотографий с худшим рейтингом
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng_profile['top_votes'] . '</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng_profile['top_trash'] . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE (`vote_plus` - `vote_minus`) < 0" . ($rights >=7 ? "" : " AND `cms_album_files`.`access` > '1'")), 0);
 if ($total) {
+    if ($total > $kmess)
+        echo '<div class="topmenu">' . display_pagination('index.php?act=top_trash&amp;', $start, $total, $kmess) . '</div>';
     $req = mysql_query("SELECT `cms_album_files`.*, `users`.`name` AS `user_name`, `cms_album_cat`.`name` AS `album_name`, (`vote_plus` - `vote_minus`) AS `rating`
     FROM `cms_album_files`
     INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
@@ -34,6 +36,8 @@ if ($total) {
         if ($res['access'] == 4 || $rights >= 7) {
             // Если доступ открыт всем, или смотрит Администратор
             echo '<a href="index.php?act=album&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;id=' . $res['user_id'] . '"><img src="../../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
+            if (!empty($res['description']))
+                echo '<div class="gray">' . smileys(checkout($res['description'], 1)) . '</div>';
         } elseif ($res['access'] == 3) {
             // Если доступ открыт друзьям
             echo 'Только для друзей';
@@ -43,12 +47,8 @@ if ($total) {
         }
         echo '<div class="sub">';
         vote_photo($res);
-        if ($res['access'] == 4) {
-            if (!empty($res['description']))
-                echo checkout($res['description'], 1) . '<br />';
-            echo '<a href="">' . $lng['comments'] . '</a><br />';
-        }
-        echo '<a href="../profile/index.php?id=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="index.php?act=album&amp;al=' . $res['album_id'] . '&amp;id=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a>';
+        echo '<p><a href="../profile/index.php?id=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="index.php?act=album&amp;al=' . $res['album_id'] . '&amp;id=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a><br />' .
+            '<a href="../../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>';
         echo '</div></div>';
         ++$i;
     }
@@ -57,8 +57,8 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<div class="topmenu">' . display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>' .
-        '<p><form action="index.php?act=new" method="post">' .
+    echo '<div class="topmenu">' . display_pagination('index.php?act=top_trash&amp;', $start, $total, $kmess) . '</div>' .
+        '<p><form action="index.php?act=top_trash" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
