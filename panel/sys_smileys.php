@@ -14,8 +14,6 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
-if ($rights < 7)
-    die('Error: restricted access');
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['smileys'] . '</div>';
 if ($total = smileys(0, 2)) {
     echo '<div class="gmenu"><p>' . $lng['smileys_updated'] . '</p></div>';

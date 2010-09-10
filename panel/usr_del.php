@@ -13,8 +13,12 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-if ($rights != 9)
-    die('Error: restricted access');
+
+// Проверяем права доступа
+if ($rights < 9) {
+    header('Location: http://johncms.com/?err');
+    exit;
+}
 
 $error = false;
 if ($id && $id != $user_id) {

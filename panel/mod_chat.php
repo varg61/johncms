@@ -13,8 +13,13 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-if ($rights < 7)
-    die('Error: restricted access');
+
+// Проверяем права доступа
+if ($rights < 7) {
+    header('Location: http://johncms.com/?err');
+    exit;
+}
+
 switch ($mod) {
     case 'del':
         /*

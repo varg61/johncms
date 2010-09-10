@@ -13,7 +13,13 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-//TODO: Разобраться с правами доступа и проверкой переменных
+
+// Проверяем права доступа
+if ($rights < 6) {
+    header('Location: http://johncms.com/?err');
+    exit;
+}
+
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['reg_approve'] . '</div>';
 switch ($mod) {
     case 'approve':

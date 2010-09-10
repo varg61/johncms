@@ -14,8 +14,13 @@
 //TODO: Разобраться с подкаталогом /incfiles/lib
 defined('_IN_JOHNADM') or die('Error: restricted access');
 define('ROOT_DIR', '..');
-if ($rights < 7)
-    die('Error: restricted access');
+
+// Проверяем права доступа
+if ($rights < 7) {
+    header('Location: http://johncms.com/?err');
+    exit;
+}
+
 class scaner {
     /*
     -----------------------------------------------------------------

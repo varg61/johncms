@@ -13,11 +13,13 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
+
+// Проверяем права доступа
 if ($rights < 7) {
-    echo display_error($lng['access_forbidden']);
-    require('../incfiles/end.php');
+    header('Location: http://johncms.com/?err');
     exit;
 }
+
 switch ($mod) {
     case 'edit':
         /*

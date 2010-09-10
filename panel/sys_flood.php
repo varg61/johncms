@@ -14,8 +14,11 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
-if ($rights != 9)
-    die('Error: restricted access');
+// Проверяем права доступа
+if ($rights < 7) {
+    header('Location: http://johncms.com/?err');
+    exit;
+}
 
 $set_af = isset($set['antiflood']) ? unserialize($set['antiflood']) : array ();
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['antiflood_settings'] . '</div>';
