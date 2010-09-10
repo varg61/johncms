@@ -27,7 +27,7 @@ if ($total) {
     INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
     INNER JOIN `cms_album_cat` ON `cms_album_files`.`album_id` = `cms_album_cat`.`id`
     WHERE (`vote_plus` - `vote_minus`) < 0" . ($rights >=7 ? "" : " AND `cms_album_files`.`access` > '1'") . "
-    ORDER BY `rating` DESC
+    ORDER BY `rating` ASC
     LIMIT $start, $kmess");
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
