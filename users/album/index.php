@@ -16,6 +16,7 @@ define('_IN_JOHNCMS', 1);
 $rootpath = '../../';
 require('../../incfiles/core.php');
 $lng_profile = load_lng('profile');
+$headmod = 'album';
 require('../../incfiles/head.php');
 
 //TODO: Разобраться с правами доступа к функциям!!!

@@ -100,6 +100,10 @@ if ($total) {
                 case 'lib':
                     $place = '<a href="../library/index.php">' . $lng_online['where_library'] . '</a>';
                     break;
+                    
+                case 'album':
+                    $place = '<a href="album/index.php">' . $lng_online['where_album'] . '</a>';
+                    break;
 
                 case 'mainpage':
                 default:

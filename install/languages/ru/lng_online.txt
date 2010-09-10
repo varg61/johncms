@@ -1,3 +1,4 @@
+where_album                   :::   Смотрит Фотоальбомы
 where_birth                   :::   Список именинников
 where_chat                    :::   Чат
 where_downloads               :::   Загрузки

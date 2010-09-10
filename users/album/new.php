@@ -22,6 +22,8 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng_profile['new_photo'] . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "'" . ($rights >=7 ? "" : " AND `access` > '1'")), 0);
 if ($total) {
+    if ($total > $kmess)
+        echo '<div class="topmenu">' . display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>';
     $req = mysql_query("SELECT `cms_album_files`.*, `users`.`name` AS `user_name`, `cms_album_cat`.`name` AS `album_name`
     FROM `cms_album_files`
     INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
