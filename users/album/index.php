@@ -111,7 +111,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         '</p></div>' .
         '<div class="menu">' .
         '<p><h3><img src="' . $home . '/images/users.png" width="16" height="16" class="left" />&#160;' . $lng['albums'] . '</h3><ul>' .
-        '<li><a href="index.php?act=users">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
+        '<li><a href="index.php?act=users' . ($datauser['sex'] == 'm' ? '&amp;mod=girls' : '') . '">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
         '</ul></p>' .
         '<p><h3><img src="' . $home . '/images/album-4.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['photos'] . '</h3><ul>' .
         '<li><a href="index.php?act=top_votes">' . $lng_profile['top_votes'] . '</a></li>' .
