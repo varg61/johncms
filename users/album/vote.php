@@ -24,6 +24,11 @@ if (!$img) {
     require('../../incfiles/end.php');
     exit;
 }
+$check = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = '$user_id' AND `file_id` = '$img' LIMIT 1");
+if (mysql_num_rows($check)) {
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit;
+}
 $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` != '$user_id' LIMIT 1");
 if (mysql_num_rows($req)) {
     $res = mysql_fetch_assoc($req);
