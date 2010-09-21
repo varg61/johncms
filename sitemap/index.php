@@ -20,7 +20,7 @@
 function sitemap() {
     global $rootpath, $realtime, $home;
     $links_count = 140;
-    $file = $rootpath . 'files/cache/sitemap_cache.dat';
+    $file = $rootpath . 'files/cache/sitemap.dat';
     if (file_exists($file) && filemtime($file) > ($realtime - 2592000)) {
         // Считываем ссылки из Кэша
         return file_get_contents($file);
@@ -60,7 +60,7 @@ function sitemap() {
         if (!empty($out)) {
             // записываем Кэш ссылок
             if (!file_put_contents($file, $out)) {
-                return 'Ошибка записи кэша Карты Сайта';
+                return 'Cache file write error!';
             }
             return $out;
         } else {
