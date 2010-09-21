@@ -135,7 +135,7 @@ switch ($act) {
         echo '<p>' . $lng_pass['your_login'] . ':<br/><input type="text" name="nick" /><br/>';
         echo $lng_pass['your_email'] . ':<br/><input type="text" name="email" /></p>';
         echo '<p><img src="../captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng_pass['captcha'] . '"/><br />';
-        echo '<input type="text" size="4" maxlength="4"  name="code"/>&#160;' . $lng_pass['enter_code'] . '</p>';
+        echo '<input type="text" size="5" maxlength="5"  name="code"/>&#160;' . $lng_pass['enter_code'] . '</p>';
         echo '<p><input type="submit" value="' . $lng_pass['sent'] . '"/></p></form></div>';
         echo '<div class="phdr"><small>' . $lng_pass['restore_help'] . '</small></div>';
         break;
