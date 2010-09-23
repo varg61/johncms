@@ -19,7 +19,6 @@ define('_IN_JOHNADM', 1);
 require('../incfiles/core.php');
 // Подключаем язык Админ-панели
 $lng = array_merge($lng, load_lng('admin'));
-$textl = $lng['admin_panel'];
 
 // Проверяем права доступа
 if ($rights < 1) {
@@ -27,6 +26,8 @@ if ($rights < 1) {
     exit;
 }
 
+$headmod = 'admin';
+$textl = $lng['admin_panel'];
 require_once('../incfiles/head.php');
 $array = array (
     'ads' => 'modules',
