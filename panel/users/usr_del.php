@@ -146,5 +146,5 @@ if (!$error) {
 } else {
     echo display_error($error);
 }
-echo '<p><a href="index.php?act=usr_list">' . $lng['users_list'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+echo '<p><a href="index.php?act=users">' . $lng['users_list'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>

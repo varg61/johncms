@@ -49,18 +49,18 @@ switch ($mod) {
                 mysql_query("UPDATE `users` SET `set_language` = '$sys_language' WHERE `set_language` = '$lng_del'");
                 mysql_query("DELETE FROM `cms_languages` WHERE `iso` = '$lng_del'");
                 mysql_query("OPTIMIZE TABLE `cms_languages`");
-                header('Location: index.php?act=sys_lng');
+                header('Location: index.php?act=languages');
             } else {
                 $res = mysql_fetch_assoc($req);
-                echo '<div class="phdr"><a href="index.php?act=sys_lng"><b>' . $lng['language'] . '</b></a> | ' . $lng['delete'] . '</div>' .
-                    '<div class="rmenu"><form action="index.php?act=sys_lng&amp;mod=delete&amp;del=' . $lng_del . '" method="post">' .
+                echo '<div class="phdr"><a href="index.php?act=languages"><b>' . $lng['language'] . '</b></a> | ' . $lng['delete'] . '</div>' .
+                    '<div class="rmenu"><form action="index.php?act=languages&amp;mod=delete&amp;del=' . $lng_del . '" method="post">' .
                     '<p>' . $lng['language_delete_warning'] . ': <b>' . $res['default'] . '</b>?</p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['delete'] . '" /></p>' .
                     '</form></div>' .
-                    '<div class="phdr"><a href="index.php?act=sys_lng">' . $lng['cancel'] . '</a></div>';
+                    '<div class="phdr"><a href="index.php?act=languages">' . $lng['cancel'] . '</a></div>';
             }
         } else {
-            echo display_error($error, '<a href="index.php?act=sys_lng">' . $lng['back'] . '</a>');
+            echo display_error($error, '<a href="index.php?act=languages">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -106,14 +106,14 @@ switch ($mod) {
                 }
             }
         }
-        echo '<div class="menu"><form action="index.php?act=sys_lng" method="post"><p>' .
+        echo '<div class="menu"><form action="index.php?act=languages" method="post"><p>' .
             '<h3>' . $lng['language_system'] . '</h3>';
         $req = mysql_query("SELECT DISTINCT `iso` FROM `cms_languages`");
         while ($res = mysql_fetch_assoc($req)) {
             $req_l = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '" . $res['iso'] . "' AND `var` = 'language_name' LIMIT 1");
             $res_l = mysql_fetch_assoc($req_l);
             echo '<div><input type="radio" value="' . $res['iso'] . '" name="lng" ' . ($res['iso'] == $sys_language ? 'checked="checked"' : '') . '/>&#160;' .
-                '<a href="">' . $res_l['default'] . '</a>' . ($res['iso'] == $sys_language ? '' : '&nbsp;<a href="index.php?act=sys_lng&amp;mod=delete&amp;del=' . $res['iso'] . '">[x]</a>') .
+                '<a href="">' . $res_l['default'] . '</a>' . ($res['iso'] == $sys_language ? '' : '&nbsp;<a href="index.php?act=languages&amp;mod=delete&amp;del=' . $res['iso'] . '">[x]</a>') .
                 '</div>';
         }
         echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '" /></p>' .

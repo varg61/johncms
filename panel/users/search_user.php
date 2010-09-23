@@ -22,7 +22,7 @@ defined('_IN_JOHNADM') or die('Error: restricted access');
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['search_nick'] . '</div>';
-echo '<form action="index.php?act=usr_search_nick" method="post"><div class="gmenu"><p>';
+echo '<form action="index.php?act=search_user" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />';
 echo '</p></div></form>';
@@ -67,11 +67,11 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . display_pagination('index.php?act=usr_search_nick&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="index.php?act=usr_search_nick" method="post"><input type="hidden" name="search" value="' . checkout($search)
+        echo '<p>' . display_pagination('index.php?act=search_user&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p><form action="index.php?act=search_user" method="post"><input type="hidden" name="search" value="' . checkout($search)
             . '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="index.php?act=usr_search_nick">' . $lng['search_new'] . '</a></p>';
+    echo '<p><a href="index.php?act=search_user">' . $lng['search_new'] . '</a></p>';
 } else {
     // Выводим сообщение об ошибке
     if ($error)

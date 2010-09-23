@@ -20,7 +20,7 @@ switch ($mod) {
         if ($rights < 9) {
             echo display_error($lng_ban['amnesty_access_error']);
         } else {
-            echo '<div class="phdr"><a href="index.php?act=usr_ban"><b>' . $lng['ban_panel'] . '</b></a> | ' . $lng_ban['amnesty'] . '</div>';
+            echo '<div class="phdr"><a href="index.php?act=ban_panel"><b>' . $lng['ban_panel'] . '</b></a> | ' . $lng_ban['amnesty'] . '</div>';
             if (isset($_POST['submit'])) {
                 $term = isset($_POST['term']) && $_POST['term'] == 1 ? 1 : 0;
                 if ($term) {
@@ -40,14 +40,14 @@ switch ($mod) {
                     echo '<div class="gmenu"><p>' . $lng_ban['amnesty_delban_confirm'] . '</p></div>';
                 }
             } else {
-                echo '<form action="index.php?act=usr_ban&amp;mod=amnesty" method="post"><div class="menu"><p>';
+                echo '<form action="index.php?act=ban_panel&amp;mod=amnesty" method="post"><div class="menu"><p>';
                 echo '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng_ban['amnesty_delban'] . '<br />';
                 echo '<input type="radio" name="term" value="1" />&#160;' . $lng_ban['amnesty_clean'];
                 echo '</p><p><input type="submit" name="submit" value="' . $lng_ban['amnesty'] . '" />';
                 echo '</p></div></form>';
                 echo '<div class="phdr"><small>' . $lng_ban['amnesty_help'] . '</small></div>';
             }
-            echo '<p><a href="index.php?act=usr_ban">' . $lng['ban_panel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+            echo '<p><a href="index.php?act=ban_panel">' . $lng['ban_panel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -60,9 +60,9 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['ban_panel'] . '</div>';
         echo '<div class="topmenu"><span class="gray">' . $lng['sorting'] . ':</span> ';
         if (isset($_GET['count']))
-            echo '<a href="index.php?act=usr_ban">' . $lng['term'] . '</a> | ' . $lng['infringements'] . '</div>';
+            echo '<a href="index.php?act=ban_panel">' . $lng['term'] . '</a> | ' . $lng['infringements'] . '</div>';
         else
-            echo $lng['term'] . ' | <a href="index.php?act=usr_ban&amp;count">' . $lng['infringements'] . '</a></div>';
+            echo $lng['term'] . ' | <a href="index.php?act=ban_panel&amp;count">' . $lng['infringements'] . '</a></div>';
         $sort = isset($_GET['count']) ? 'bancount' : 'bantime';
         $req = mysql_query("SELECT `user_id` FROM `cms_ban_users` GROUP BY `user_id`");
         $total = mysql_num_rows($req);
@@ -84,10 +84,10 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?act=usr_ban&amp;', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="index.php?act=usr_ban" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+            echo '<p>' . display_pagination('index.php?act=ban_panel&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p><form action="index.php?act=ban_panel" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
-        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=usr_ban&amp;mod=amnesty">' . $lng_ban['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+        echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=ban_panel&amp;mod=amnesty">' . $lng_ban['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 
 ?>

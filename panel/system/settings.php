@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
 Форма ввода параметров системы
 -----------------------------------------------------------------
 */
-echo '<form action="index.php?act=sys_set" method="post"><div class="menu"><p>';
+echo '<form action="index.php?act=settings" method="post"><div class="menu"><p>';
 // Настройка времени
 echo '<h3>' . $lng['clock_settings'] . '</h3>';
 echo '&#160;<input type="text" name="sdvigclock" size="2" maxlength="2" value="' . $set['sdvigclock'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />';

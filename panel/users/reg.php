@@ -34,7 +34,7 @@ switch ($mod) {
             exit;
         }
         @mysql_query("UPDATE `users` SET `preg` = '1', `regadm` = '$login' WHERE `id` = '$id' LIMIT 1");
-        echo '<div class="menu"><p>' . $lng['reg_approved'] . '<br /><a href="index.php?act=usr_reg">' . $lng['continue'] . '</a></p></div>';
+        echo '<div class="menu"><p>' . $lng['reg_approved'] . '<br /><a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         break;
 
     case 'massapprove':
@@ -44,7 +44,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         mysql_query("UPDATE `users` SET `preg` = '1', `regadm` = '$login' WHERE `preg` = '0'");
-        echo '<div class="menu"><p>' . $lng['reg_approved'] . '<br /><a href="index.php?act=usr_reg">' . $lng['continue'] . '</a></p></div>';
+        echo '<div class="menu"><p>' . $lng['reg_approved'] . '<br /><a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         break;
 
     case 'del':
@@ -63,7 +63,7 @@ switch ($mod) {
             mysql_query("DELETE FROM `users` WHERE `id` = '$id' LIMIT 1");
             mysql_query("DELETE FROM `cms_users_iphistory` WHERE `user_id` = '$id' LIMIT 1");
         }
-        echo '<div class="menu"><p>' . $lng['user_deleted'] . '<br /><a href="index.php?act=usr_reg">' . $lng['continue'] . '</a></p></div>';
+        echo '<div class="menu"><p>' . $lng['user_deleted'] . '<br /><a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         break;
 
     case 'massdel':
@@ -78,7 +78,7 @@ switch ($mod) {
         }
         mysql_query("DELETE FROM `users` WHERE `preg` = '0'");
         mysql_query("OPTIMIZE TABLE `cms_users_iphistory` , `users`");
-        echo '<div class="menu"><p>' . $lng['reg_deleted_all'] . '<br /><a href="index.php?act=usr_reg">' . $lng['continue'] . '</a></p></div>';
+        echo '<div class="menu"><p>' . $lng['reg_deleted_all'] . '<br /><a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         break;
 
     case 'delip':
@@ -96,7 +96,7 @@ switch ($mod) {
             mysql_query("DELETE FROM `users` WHERE `preg` = '0' AND `ip` = '$ip'");
             mysql_query("OPTIMIZE TABLE `cms_users_iphistory` , `users`");
             echo '<div class="menu"><p>' . $lng['reg_del_ip_done'] . '<br />' .
-                '<a href="index.php?act=usr_reg">' . $lng['continue'] . '</a></p></div>';
+                '<a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         } else {
             echo display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
@@ -115,9 +115,9 @@ switch ($mod) {
             $req = mysql_query("SELECT * FROM `users` WHERE `preg` = '0' ORDER BY `id` DESC LIMIT $start,$kmess");
             while ($res = mysql_fetch_assoc($req)) {
                 $link = array (
-                    '<a href="index.php?act=usr_reg&amp;mod=approve&amp;id=' . $res['id'] . '">' . $lng['approve'] . '</a>',
-                    '<a href="index.php?act=usr_reg&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>',
-                    '<a href="index.php?act=usr_reg&amp;mod=delip&amp;ip=' . $res['ip'] . '">' . $lng['reg_del_ip'] . '</a>'
+                    '<a href="index.php?act=reg&amp;mod=approve&amp;id=' . $res['id'] . '">' . $lng['approve'] . '</a>',
+                    '<a href="index.php?act=reg&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>',
+                    '<a href="index.php?act=reg&amp;mod=delip&amp;ip=' . $res['ip'] . '">' . $lng['reg_del_ip'] . '</a>'
                 );
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo display_user($res, array (
@@ -132,12 +132,12 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?act=usr_reg&amp;', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="index.php?act=usr_reg" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+            echo '<p>' . display_pagination('index.php?act=reg&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p><form action="index.php?act=reg" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p>';
         if ($total)
-            echo '<a href="index.php?act=usr_reg&amp;mod=massapprove">' . $lng['reg_approve_all'] . '</a><br /><a href="index.php?act=usr_reg&amp;mod=massdel">' . $lng['reg_del_all'] . '</a><br />';
+            echo '<a href="index.php?act=reg&amp;mod=massapprove">' . $lng['reg_approve_all'] . '</a><br /><a href="index.php?act=reg&amp;mod=massdel">' . $lng['reg_del_all'] . '</a><br />';
         echo '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 ?>

@@ -59,22 +59,28 @@ if (isset($_POST['submit']) || isset($_POST['save'])) {
     @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'antiflood' LIMIT 1");
     mysql_query("INSERT INTO `cms_settings` SET `key` = 'antiflood', `val` = '" . serialize($set_af) . "'");
 }
-echo '<form action="index.php?act=sys_flood" method="post">';
-echo '<div class="gmenu"><p><h3>' . $lng['operation_mode'] . '</h3><table cellspacing="2">
-<tr><td valign="top"><input type="radio" name="mode" value="3" ' . ($set_af['mode'] == 3 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['day'] . '</b></td></tr>
-<tr><td valign="top"><input type="radio" name="mode" value="4" ' . ($set_af['mode'] == 4 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['night'] . '</b></td></tr>
-<tr><td valign="top"><input type="radio" name="mode" value="2" ' . ($set_af['mode'] == 2 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['day'] . ' / ' . $lng['night'] . '</b><br /><small>' . $lng['antiflood_dn_help'] . '</small></td></tr>
-<tr><td valign="top"><input type="radio" name="mode" value="1" ' . ($set_af['mode'] == 1 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['adaptive'] . '</b><br /><small>' . $lng['antiflood_ad_help'] . '</small></td></tr>
-</table></p></div>';
-echo '<div class="menu"><p><h3>' . $lng['time_limit'] . '</h3>';
-echo '<input name="day" size="3" value="' . $set_af['day'] . '" maxlength="3" />&#160;' . $lng['day'] . '<br />';
-echo '<input name="night" size="3" value="' . $set_af['night'] . '" maxlength="3" />&#160;' . $lng['night'];
-echo '<br /><small>' . $lng['antiflood_tl_help'] . '</small></p>';
-echo '<p><h3>' . $lng['day_mode'] . '</h3>';
-echo '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['day_begin'] . ' <span class="gray">(6-12)</span><br />';
-echo '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['day_end'] . ' <span class="gray">(17-23)</span>';
-echo '</p><p><br /><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>';
-echo '<div class="phdr"><a href="index.php?act=sys_flood&amp;reset">' . $lng['reset_settings'] . '</a></div>';
-echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
+/*
+-----------------------------------------------------------------
+Форма ввода параметров Антифлуда
+-----------------------------------------------------------------
+*/
+echo '<form action="index.php?act=antiflood" method="post">' .
+    '<div class="gmenu"><p><h3>' . $lng['operation_mode'] . '</h3><table cellspacing="2">' .
+    '<tr><td valign="top"><input type="radio" name="mode" value="3" ' . ($set_af['mode'] == 3 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['day'] . '</b></td></tr>' .
+    '<tr><td valign="top"><input type="radio" name="mode" value="4" ' . ($set_af['mode'] == 4 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['night'] . '</b></td></tr>' .
+    '<tr><td valign="top"><input type="radio" name="mode" value="2" ' . ($set_af['mode'] == 2 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['day'] . ' / ' . $lng['night'] . '</b><br /><small>' . $lng['antiflood_dn_help']
+    . '</small></td></tr>' .
+    '<tr><td valign="top"><input type="radio" name="mode" value="1" ' . ($set_af['mode'] == 1 ? 'checked="checked"' : '') . '/></td><td><b>' . $lng['adaptive'] . '</b><br /><small>' . $lng['antiflood_ad_help'] . '</small></td></tr>' .
+    '</table></p></div>' .
+    '<div class="menu"><p><h3>' . $lng['time_limit'] . '</h3>' .
+    '<input name="day" size="3" value="' . $set_af['day'] . '" maxlength="3" />&#160;' . $lng['day'] . '<br />' .
+    '<input name="night" size="3" value="' . $set_af['night'] . '" maxlength="3" />&#160;' . $lng['night'] .
+    '<br /><small>' . $lng['antiflood_tl_help'] . '</small></p>' .
+    '<p><h3>' . $lng['day_mode'] . '</h3>' .
+    '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['day_begin'] . ' <span class="gray">(6-12)</span><br />' .
+    '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng['day_end'] . ' <span class="gray">(17-23)</span>' .
+    '</p><p><br /><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
+    '<div class="phdr"><a href="index.php?act=antiflood&amp;reset">' . $lng['reset_settings'] . '</a></div>' .
+    '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>

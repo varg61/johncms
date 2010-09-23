@@ -55,7 +55,8 @@ if (mysql_num_rows) {
         ++$mod;
     }
 }
-echo '<div class="phdr">' . $lng['total'] . ': ' . ($sw + $adm + $smd + $mod) . '</div>';
-echo '<p><a href="index.php?act=usr_list">' . $lng['users_list'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . ($sw + $adm + $smd + $mod) . '</div>' .
+    '<p><a href="index.php?act=users">' . $lng['users_list'] . '</a><br />' .
+    '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

@@ -32,7 +32,7 @@ if (!empty($set['news'])) {
         $tags = isset($_POST['tags']) ? intval($_POST['tags']) : 0;
         $kom = isset($_POST['kom']) ? intval($_POST['kom']) : 0;
         if ($view < 0 || $view > 3 || $size < 50 || $size > 500 || $quantity < 1 || $quantity > 15 || $days < 0 || $days > 15 || $breaks < 0 || $breaks > 1) {
-            echo display_error($lng['error_wrong_limits'], '<a href="index.php?act=mod_news">' . $lng['back'] . '</a>');
+            echo display_error($lng['error_wrong_limits'], '<a href="index.php?act=news">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -47,14 +47,14 @@ if (!empty($set['news'])) {
             'kom' => $kom
         );
         mysql_query("UPDATE `cms_settings` SET `val` = '" . serialize($settings) . "' WHERE `key` = 'news'");
-        header("location: index.php?act=mod_news&set");
+        header("location: index.php?act=news&set");
     } else {
         if (isset($_GET['set'])) {
             echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
         }
         // Форма с настройками
         $settings = unserialize($set['news']);
-        echo '<form action="index.php?act=mod_news" method="post">' .
+        echo '<form action="index.php?act=news" method="post">' .
             '<div class="menu"><p><h3>' . $lng['apperance'] . '</h3>' .
             '&#160;<input type="radio" value="1" name="view" ' . ($settings['view'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['heading_and_text'] . '<br />' .
             '&#160;<input type="radio" value="2" name="view" ' . ($settings['view'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['heading'] . '<br />' .
@@ -87,7 +87,7 @@ if (!empty($set['news'])) {
     ));
     mysql_query("INSERT INTO `cms_settings` SET `key` = 'news', `val` = '" . $settings . "'");
     echo '<div class="menu"><p>' . $lng['module_default_settings'] . '<br /></p></div>' .
-        '<div class="bmenu"><a href="index.php?act=mod_news">' . $lng['continue'] . '</a></div>';
+        '<div class="bmenu"><a href="index.php?act=news">' . $lng['continue'] . '</a></div>';
 }
 echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>

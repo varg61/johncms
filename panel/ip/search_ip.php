@@ -20,7 +20,7 @@ $search = $search ? $search : rawurldecode(trim($_GET['search']));
 if (isset($_GET['ip']))
     $search = long2ip(intval($_GET['ip']));
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['ip_search'] . '</div>';
-echo '<form action="index.php?act=usr_search_ip" method="post"><div class="gmenu"><p>';
+echo '<form action="index.php?act=search_ip" method="post"><div class="gmenu"><p>';
 echo '<input type="text" name="search" value="' . checkout($search) . '" />';
 echo '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />';
 echo '</p></div></form>';
@@ -102,11 +102,11 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . display_pagination('index.php?act=usr_search_ip&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="index.php?act=usr_search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) .
+        echo '<p>' . display_pagination('index.php?act=search_ip&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p><form action="index.php?act=search_ip" method="post"><input type="hidden" name="search" value="' . checkout($search) .
             '" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="index.php?act=usr_search_ip">' . $lng['search_new'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+    echo '<p><a href="index.php?act=search_ip">' . $lng['search_new'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 } else {
     // Выводим сообщение об ошибке
     if ($error)

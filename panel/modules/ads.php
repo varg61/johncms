@@ -27,14 +27,14 @@ switch ($mod) {
         Добавляем / редактируем ссылку
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?act=mod_ads"><b>' . $lng['advertisement'] . '</b></a> | ' . ($id ? $lng['link_edit'] : $lng['link_add']) . '</div>';
+        echo '<div class="phdr"><a href="index.php?act=ads"><b>' . $lng['advertisement'] . '</b></a> | ' . ($id ? $lng['link_edit'] : $lng['link_add']) . '</div>';
         if ($id) {
             // Если ссылка редактироется, запрашиваем ее данные в базе
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id' LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
             } else {
-                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=mod_ads">' . $lng['back'] . '</a>');
+                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=ads">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -74,7 +74,7 @@ switch ($mod) {
                     $error[] = $lng['error_color'];
             }
             if ($error) {
-                echo display_error($error, '<a href="index.php?act=mod_ads&amp;from=addlink">' . $lng['back'] . '</a>');
+                echo display_error($error, '<a href="index.php?act=ads&amp;from=addlink">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -120,14 +120,14 @@ switch ($mod) {
                     `bold` = '$bold',
                     `italic` = '$italic',
                     `underline` = '$underline'
-                ");
+                ") or die (mysql_error());
             }
             mysql_query("UPDATE `users` SET `lastpost` = '$realtime' WHERE `id` = '$user_id'");
             echo '<div class="menu"><p>' . ($id ? $lng['link_edit_ok'] : $lng['link_add_ok']) . '<br />' .
-            '<a href="index.php?act=mod_ads&amp;sort=' . $type . '">' . $lng['continue'] . '</a></p></div>';
+                '<a href="index.php?act=ads&amp;sort=' . $type . '">' . $lng['continue'] . '</a></p></div>';
         } else {
             // Форма добавления / изменения ссылки
-            echo '<form action="index.php?act=mod_ads&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '" method="post">' .
+            echo '<form action="index.php?act=ads&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '" method="post">' .
                 '<div class="menu"><p><h3>' . $lng['link'] . '</h3>' .
                 '<input type="text" name="link" value="' . htmlentities($res['link'], ENT_QUOTES, 'UTF-8') . '"/><br />' .
                 '<input type="checkbox" name="show" ' . ($res['show'] ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['link_direct'] . '<br />' .
@@ -163,8 +163,8 @@ switch ($mod) {
                 '<input type="checkbox" name="italic" ' . ($res['italic'] ? 'checked="checked"' : '') . '/>&nbsp;<i>' . $lng['font_italic'] . '</i><br />' .
                 '<input type="checkbox" name="underline" ' . ($res['underline'] ? 'checked="checked"' : '') . '/>&nbsp;<u>' . $lng['font_underline'] . '</u></p></div>' .
                 '<div class="phdr"><input type="submit" name="submit" value="' . ($id ? $lng['edit'] : $lng['add']) . '" /></div></form>' .
-                '<p><a href="index.php?act=mod_ads">' . $lng['advertisement'] . '</a><br />' .
-                '<a href="index.php?act=mod_ads">' . $lng['admin_panel'] . '</a></p>';
+                '<p><a href="index.php?act=ads">' . $lng['advertisement'] . '</a><br />' .
+                '<a href="index.php?act=ads">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -227,8 +227,8 @@ switch ($mod) {
                 mysql_query("DELETE FROM `cms_ads` WHERE `id` = '$id'");
                 header('Location: ' . $_POST['ref']);
             } else {
-                echo '<div class="phdr"><a href="index.php?act=mod_ads"><b>' . $lng['advertisement'] . '</b></a> | ' . $lng['delete'] . '</div>' .
-                    '<div class="rmenu"><form action="index.php?act=mod_ads&amp;mod=del&amp;id=' . $id . '" method="post">' .
+                echo '<div class="phdr"><a href="index.php?act=ads"><b>' . $lng['advertisement'] . '</b></a> | ' . $lng['delete'] . '</div>' .
+                    '<div class="rmenu"><form action="index.php?act=ads&amp;mod=del&amp;id=' . $id . '" method="post">' .
                     '<p>' . $lng['link_deletion_warning'] . '</p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['delete'] . '" /></p>' .
                     '<input type="hidden" name="ref" value="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '" />' .
@@ -247,14 +247,14 @@ switch ($mod) {
         if (isset($_POST['submit'])) {
             mysql_query("DELETE FROM `cms_ads` WHERE `to` = '1'");
             mysql_query("OPTIMIZE TABLE `cms_ads`");
-            header('location: index.php?act=mod_ads');
+            header('location: index.php?act=ads');
         } else {
-            echo '<div class="phdr"><a href="index.php?act=mod_ads"><b>' . $lng['advertisement'] . '</b></a> | ' . $lng['links_delete_hidden'] . '</div>' .
-                '<div class="menu"><form method="post" action="index.php?act=mod_ads&amp;mod=clear">' .
+            echo '<div class="phdr"><a href="index.php?act=ads"><b>' . $lng['advertisement'] . '</b></a> | ' . $lng['links_delete_hidden'] . '</div>' .
+                '<div class="menu"><form method="post" action="index.php?act=ads&amp;mod=clear">' .
                 '<p>' . $lng['link_clear_warning'] . '</p>' .
                 '<p><input type="submit" name="submit" value="' . $lng['delete'] . '" />' .
                 '</p></form></div>' .
-                '<div class="phdr"><a href="index.php?act=mod_ads">' . $lng['cancel'] . '</a></div>';
+                '<div class="phdr"><a href="index.php?act=ads">' . $lng['cancel'] . '</a></div>';
         }
         break;
 
@@ -299,10 +299,10 @@ switch ($mod) {
         );
         $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
         $array_menu = array (
-            (!$type ? $lng['links_armt_over_logo'] : '<a href="index.php?act=mod_ads">' . $lng['links_armt_over_logo'] . '</a>'),
-            ($type == 1 ? $lng['links_armt_under_usermenu'] : '<a href="index.php?act=mod_ads&amp;type=1">' . $lng['links_armt_under_usermenu'] . '</a>'),
-            ($type == 2 ? $lng['links_armt_over_counters'] : '<a href="index.php?act=mod_ads&amp;type=2">' . $lng['links_armt_over_counters'] . '</a>'),
-            ($type == 3 ? $lng['links_armt_under_counters'] : '<a href="index.php?act=mod_ads&amp;type=3">' . $lng['links_armt_under_counters'] . '</a>')
+            (!$type ? $lng['links_armt_over_logo'] : '<a href="index.php?act=ads">' . $lng['links_armt_over_logo'] . '</a>'),
+            ($type == 1 ? $lng['links_armt_under_usermenu'] : '<a href="index.php?act=ads&amp;type=1">' . $lng['links_armt_under_usermenu'] . '</a>'),
+            ($type == 2 ? $lng['links_armt_over_counters'] : '<a href="index.php?act=ads&amp;type=2">' . $lng['links_armt_over_counters'] . '</a>'),
+            ($type == 3 ? $lng['links_armt_under_counters'] : '<a href="index.php?act=ads&amp;type=3">' . $lng['links_armt_under_counters'] . '</a>')
         );
         echo '<div class="topmenu">' . display_menu($array_menu) . '</div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'"), 0);
@@ -327,11 +327,11 @@ switch ($mod) {
                 echo '<p><img src="../images/' . ($res['to'] ? 'red' : 'green') . '.gif" width="16" height="16" class="left"/>&#160;' .
                     '<a href="' . htmlspecialchars($res['link']) . '">' . htmlspecialchars($res['link']) . '</a>&nbsp;[' . $res['count'] . ']<br />' . $name . '</p>';
                 $menu = array (
-                    '<a href="index.php?act=mod_ads&amp;mod=up&amp;id=' . $res['id'] . '">' . $lng['up'] . '</a>',
-                    '<a href="index.php?act=mod_ads&amp;mod=down&amp;id=' . $res['id'] . '">' . $lng['down'] . '</a>',
-                    '<a href="index.php?act=mod_ads&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a>',
-                    '<a href="index.php?act=mod_ads&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>',
-                    '<a href="index.php?act=mod_ads&amp;mod=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? $lng['to_show'] : $lng['hide']) . '</a>'
+                    '<a href="index.php?act=ads&amp;mod=up&amp;id=' . $res['id'] . '">' . $lng['up'] . '</a>',
+                    '<a href="index.php?act=ads&amp;mod=down&amp;id=' . $res['id'] . '">' . $lng['down'] . '</a>',
+                    '<a href="index.php?act=ads&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a>',
+                    '<a href="index.php?act=ads&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>',
+                    '<a href="index.php?act=ads&amp;mod=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? $lng['to_show'] : $lng['hide']) . '</a>'
                 );
                 echo '<div class="sub">' .
                     '<div>' . display_menu($menu) . '</div>' .
@@ -367,13 +367,13 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?act=mod_ads&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
-                '<p><form action="index.php?act=mod_ads&amp;type=' . $type . '" method="post">' .
+            echo '<p>' . display_pagination('index.php?act=ads&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
+                '<p><form action="index.php?act=ads&amp;type=' . $type . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
-        echo '<p><a href="index.php?act=mod_ads&amp;mod=edit">' . $lng['link_add'] . '</a><br />' .
-            '<a href="index.php?act=mod_ads&amp;mod=clear">' . $lng['links_delete_hidden'] . '</a><br />' .
+        echo '<p><a href="index.php?act=ads&amp;mod=edit">' . $lng['link_add'] . '</a><br />' .
+            '<a href="index.php?act=ads&amp;mod=clear">' . $lng['links_delete_hidden'] . '</a><br />' .
             '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 ?>

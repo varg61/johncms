@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 }
 
 $color = array('red', 'yelow', 'green');
-echo '<form method="post" action="index.php?act=sys_access">';
+echo '<form method="post" action="index.php?act=access">';
 /*
 -----------------------------------------------------------------
 Управление доступом к Форуму

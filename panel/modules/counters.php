@@ -38,7 +38,7 @@ switch ($mod) {
                     $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
                 }
                 $res = mysql_fetch_array($req);
-                echo '<div class="phdr"><a href="index.php?act=mod_counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['viewing'] . '</div>';
+                echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['viewing'] . '</div>';
                 echo '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . $res['name'] . '</b></div>';
                 echo ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . $lng['counter_mod1'] . '</h3>' . $res['link1'] . '</p>';
                 echo '<p><h3>' . $lng['counter_mod2'] . '</h3>' . $res['link2'] . '</p>';
@@ -57,9 +57,9 @@ switch ($mod) {
                 }
                 echo '</p></div>';
                 echo '<div class="phdr">'
-                    . ($res['switch'] == 1 ? '<a href="index.php?act=mod_counters&amp;mod=view&amp;go=off&amp;id=' . $id . '">' . $lng['off'] . '</a>'
-                        : '<a href="index.php?act=mod_counters&amp;mod=view&amp;go=on&amp;id=' . $id . '">' . $lng['on'] . '</a>')
-                        . ' | <a href="index.php?act=mod_counters&amp;mod=edit&amp;id=' . $id . '">' . $lng['edit'] . '</a> | <a href="index.php?act=mod_counters&amp;mod=del&amp;id=' . $id . '">' . $lng['delete'] . '</a></div>';
+                    . ($res['switch'] == 1 ? '<a href="index.php?act=counters&amp;mod=view&amp;go=off&amp;id=' . $id . '">' . $lng['off'] . '</a>'
+                        : '<a href="index.php?act=counters&amp;mod=view&amp;go=on&amp;id=' . $id . '">' . $lng['on'] . '</a>')
+                        . ' | <a href="index.php?act=counters&amp;mod=edit&amp;id=' . $id . '">' . $lng['edit'] . '</a> | <a href="index.php?act=counters&amp;mod=del&amp;id=' . $id . '">' . $lng['delete'] . '</a></div>';
             } else {
                 echo display_error($lng['error_wrong_data']);
             }
@@ -87,7 +87,7 @@ switch ($mod) {
                 }
             }
         }
-        header('Location: index.php?act=mod_counters');
+        header('Location: index.php?act=counters');
         break;
 
     case 'down':
@@ -111,7 +111,7 @@ switch ($mod) {
                 }
             }
         }
-        header('Location: index.php?act=mod_counters');
+        header('Location: index.php?act=counters');
         break;
 
     case 'del':
@@ -121,7 +121,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$id) {
-            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=mod_counters">' . $lng['back'] . '</a>');
+            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -129,18 +129,18 @@ switch ($mod) {
         if (mysql_num_rows($req)) {
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
-                echo '<p>' . $lng['counter_deleted'] . '<br/><a href="index.php?act=mod_counters">' . $lng['continue'] . '</a></p>';
+                echo '<p>' . $lng['counter_deleted'] . '<br/><a href="index.php?act=counters">' . $lng['continue'] . '</a></p>';
                 require('../incfiles/end.php');
                 exit;
             } else {
-                echo '<form action="index.php?act=mod_counters&amp;mod=del&amp;id=' . $id . '" method="post">';
-                echo '<div class="phdr"><a href="index.php?act=mod_counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['delete'] . '</div>';
+                echo '<form action="index.php?act=counters&amp;mod=del&amp;id=' . $id . '" method="post">';
+                echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['delete'] . '</div>';
                 $res = mysql_fetch_array($req);
                 echo '<div class="rmenu"><p><h3>' . $res['name'] . '</h3>' . $lng['delete_confirmation'] . '</p><p><input type="submit" value="' . $lng['delete'] . '" name="submit" /></p></div>';
-                echo '<div class="phdr"><a href="index.php?act=mod_counters">' . $lng['cancel'] . '</a></div></form>';
+                echo '<div class="phdr"><a href="index.php?act=counters">' . $lng['cancel'] . '</a></div></form>';
             }
         } else {
-            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=mod_counters">' . $lng['back'] . '</a>');
+            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -159,16 +159,16 @@ switch ($mod) {
             $link2 = isset($_POST['link2']) ? trim($_POST['link2']) : '';
             $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
             if (empty($name) || empty($link1)) {
-                echo display_error($lng['error_mandatory_fields'], '<a href="index.php?act=mod_counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
+                echo display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
-            echo '<div class="phdr"><a href="index.php?act=mod_counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['preview'] . '</div>' .
+            echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['preview'] . '</div>' .
                 '<div class="menu"><p><h3>' . $lng['name_the'] . '</h3><b>' . check($name) . '</b></p>' .
                 '<p><h3>' . $lng['counter_mod1'] . '</h3>' . $link1 . '</p>' .
                 '<p><h3>' . $lng['counter_mod2'] . '</h3>' . $link2 . '</p></div>' .
                 '<div class="rmenu">' . $lng['counter_preview_help'] . '</div>' .
-                '<form action="index.php?act=mod_counters&amp;mod=add" method="post">' .
+                '<form action="index.php?act=counters&amp;mod=add" method="post">' .
                 '<input type="hidden" value="' . $name . '" name="name" />' .
                 '<input type="hidden" value="' . htmlspecialchars($link1) . '" name="link1" />' .
                 '<input type="hidden" value="' . htmlspecialchars($link2) . '" name="link2" />' .
@@ -193,13 +193,13 @@ switch ($mod) {
                     $mode = $res['mode'];
                     $switch = 1;
                 } else {
-                    echo display_error($lng['error_wrong_data'], '<a href="index.php?act=mod_counters">' . $lng['back'] . '</a>');
+                    echo display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
             }
-            echo '<form action="index.php?act=mod_counters&amp;mod=edit" method="post">' .
-                '<div class="phdr"><a href="index.php?act=mod_counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['add'] . '</div>' .
+            echo '<form action="index.php?act=counters&amp;mod=edit" method="post">' .
+                '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['add'] . '</div>' .
                 '<div class="menu"><p><h3>' . $lng['name_the'] . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
                 '<p><h3>' . $lng['counter_mod1'] . '</h3><textarea rows="3" name="link1">' . $link1 . '</textarea><br /><small>' . $lng['counter_mod1_description'] . '</small></p>' .
                 '<p><h3>' . $lng['counter_mod2'] . '</h3><textarea rows="3" name="link2">' . $link2 . '</textarea><br /><small>' . $lng['counter_mod2_description'] . '</small></p>' .
@@ -226,7 +226,7 @@ switch ($mod) {
         $link2 = isset($_POST['link2']) ? $_POST['link2'] : '';
         $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
         if (empty($name) || empty($link1)) {
-            echo display_error($lng['error_mandatory_fields'], '<a href="index.php?act=mod_counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
+            echo display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
             require_once('../incfiles/end.php');
             exit;
         }
@@ -276,15 +276,15 @@ switch ($mod) {
             while ($res = mysql_fetch_assoc($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<img src="../images/' . ($res['switch'] == 1 ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&#160;';
-                echo '<a href="index.php?act=mod_counters&amp;mod=view&amp;id=' . $res['id'] . '"><b>' . $res['name'] . '</b></a><br />';
-                echo '<div class="sub"><a href="index.php?act=mod_counters&amp;mod=up&amp;id=' . $res['id'] . '">' . $lng['up'] . '</a> | ';
-                echo '<a href="index.php?act=mod_counters&amp;mod=down&amp;id=' . $res['id'] . '">' . $lng['down'] . '</a> | ';
-                echo '<a href="index.php?act=mod_counters&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a> | ';
-                echo '<a href="index.php?act=mod_counters&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a></div></div>';
+                echo '<a href="index.php?act=counters&amp;mod=view&amp;id=' . $res['id'] . '"><b>' . $res['name'] . '</b></a><br />';
+                echo '<div class="sub"><a href="index.php?act=counters&amp;mod=up&amp;id=' . $res['id'] . '">' . $lng['up'] . '</a> | ';
+                echo '<a href="index.php?act=counters&amp;mod=down&amp;id=' . $res['id'] . '">' . $lng['down'] . '</a> | ';
+                echo '<a href="index.php?act=counters&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a> | ';
+                echo '<a href="index.php?act=counters&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a></div></div>';
                 ++$i;
             }
         }
-        echo '<div class="phdr"><a href="index.php?act=mod_counters&amp;mod=edit">' . $lng['add'] . '</a></div>';
+        echo '<div class="phdr"><a href="index.php?act=counters&amp;mod=edit">' . $lng['add'] . '</a></div>';
 }
-echo '<p>' . ($mod ? '<a href="index.php?act=mod_counters">' . $lng['counters'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+echo '<p>' . ($mod ? '<a href="index.php?act=counters">' . $lng['counters'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>
