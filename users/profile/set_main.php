@@ -103,7 +103,7 @@ if (isset($_GET['reset']) || empty($set_user)) {
     $set_user['gzip'] = 1;
     $set_user['online'] = 1;
     $set_user['movings'] = 1;
-    $set_user['digest'] = 1;
+    $set_user['digest'] = 0;
     $set_user['field_w'] = 20;
     $set_user['field_h'] = 3;
     $set_user['sdvig'] = 0;
