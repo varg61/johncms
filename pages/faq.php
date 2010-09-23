@@ -13,10 +13,10 @@
 */
 
 define('_IN_JOHNCMS', 1);
-$headmod = 'info';
 require('../incfiles/core.php');
 $lng_faq = load_lng('faq');
 $textl = 'FAQ';
+$headmod = 'faq';
 require('../incfiles/head.php');
 
 // Обрабатываем ссылку для возврата

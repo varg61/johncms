@@ -33,7 +33,7 @@ echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a
     '<div class="menu"><a href="gallery/">' . $lng['gallery'] . '</a> (' . stat_gallery() . ')</div>';
 if ($user_id) {
     echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-        '<div class="menu"><a href="index.php?act=users">' . $lng['users'] . '</a> (' . stat_countusers() . ')</div>' .
+        '<div class="menu"><a href="users/index.php">' . $lng['users'] . '</a> (' . stat_countusers() . ')</div>' .
         '<div class="menu"><a href="users/album/index.php">' . $lng['photo_albums'] . '</a> (' . count_photo() . ')</div>' .
         '<div class="menu">' . $lng['blogs'] . '</div>';
 }

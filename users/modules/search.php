@@ -12,9 +12,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
-require('../incfiles/core.php');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = $lng['search_user'];
+$headmod = 'usersearch';
 require('../incfiles/head.php');
 
 /*
@@ -25,7 +25,7 @@ require('../incfiles/head.php');
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
 echo '<div class="phdr"><b>' . $lng['search_user'] . '</b></div>' .
-    '<form action="users_search.php" method="post">' .
+    '<form action="index.php?act=search" method="post">' .
     '<div class="gmenu"><p>' .
     '<input type="text" name="search" value="' . checkout($search) . '" />' .
     '<input type="submit" value="' . $lng['search'] . '" name="submit" />' .
@@ -71,8 +71,8 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . display_pagination('users_search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="users_search.php" method="post">' .
+        echo '<p>' . display_pagination('index.php?act=search&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>' .
+            '<p><form action="index.php?act=search" method="post">' .
             '<input type="hidden" name="search" value="' . checkout($search) . '" />' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
@@ -94,6 +94,5 @@ if ($search && !$error) {
     */
     echo '<div class="phdr"><small>' . $lng['search_nick_help'] . '</small></div>';
 }
-echo '<p>' . ($search && !$error ? '<a href="users_search.php">' . $lng['search_new'] . '</a><br />' : '') . '<a href="../index.php?act=users">' . $lng['users'] . '</a></p>';
-require('../incfiles/end.php');
+echo '<p>' . ($search && !$error ? '<a href="index.php?act=search">' . $lng['search_new'] . '</a><br />' : '') . '<a href="index.php">' . $lng['back'] . '</a></p>';
 ?>

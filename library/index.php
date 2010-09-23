@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'lib';
+$headmod = 'library';
 $textl = 'Библиотека';
 require_once("../incfiles/core.php");
 

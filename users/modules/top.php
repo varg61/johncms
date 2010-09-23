@@ -12,12 +12,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$headmod = 'sitetop';
-require('../incfiles/core.php');
+$headmod = 'userstop';
 $textl = $lng['users_top'];
-$lng_stat = load_lng('stat');
 require('../incfiles/head.php');
 
 /*
@@ -46,25 +44,25 @@ function get_top($order = 'postforum') {
 -----------------------------------------------------------------
 */
 $menu = array(
-    (!$act ? '<b>' . $lng['forum'] . '</b>' : '<a href="users_top.php">' . $lng['forum'] . '</a>'),
-    ($act == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="users_top.php?act=guest">' . $lng['guestbook'] . '</a>'),
-    ($act == 'chat' ? '<b>' . $lng['chat'] . '</b>' : '<a href="users_top.php?act=chat">' . $lng['chat'] . '</a>'),
-    ($act == 'vic' ? '<b>' . $lng['quiz'] . '</b>' : '<a href="users_top.php?act=vic">' . $lng['quiz'] . '</a>'),
-    ($act == 'bal' ? '<b>' . $lng['balance'] . '</b>' : '<a href="users_top.php?act=bal">' . $lng['balance'] . '</a>'),
-    ($act == 'comm' ? '<b>' . $lng['comments'] . '</b>' : '<a href="users_top.php?act=comm">' . $lng['comments'] . '</a>')
+    (!$mod ? '<b>' . $lng['forum'] . '</b>' : '<a href="index.php?act=top">' . $lng['forum'] . '</a>'),
+    ($mod == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="index.php?act=top&amp;mod=guest">' . $lng['guestbook'] . '</a>'),
+    ($mod == 'chat' ? '<b>' . $lng['chat'] . '</b>' : '<a href="index.php?act=top&amp;mod=chat">' . $lng['chat'] . '</a>'),
+    ($mod == 'vic' ? '<b>' . $lng['quiz'] . '</b>' : '<a href="index.php?act=top&amp;mod=vic">' . $lng['quiz'] . '</a>'),
+    ($mod == 'bal' ? '<b>' . $lng['balance'] . '</b>' : '<a href="index.php?act=top&amp;mod=bal">' . $lng['balance'] . '</a>'),
+    ($mod == 'comm' ? '<b>' . $lng['comments'] . '</b>' : '<a href="index.php?act=top&amp;mod=comm">' . $lng['comments'] . '</a>')
 );
 if($set_karma['on'])
-    $menu[] =  $act == 'karma' ? '<b>' . $lng['karma'] . '</b>' : '<a href="users_top.php?act=karma">' . $lng['karma'] . '</a>';
+    $menu[] =  $act == 'karma' ? '<b>' . $lng['karma'] . '</b>' : '<a href="index.php?act=top&amp;mod=karma">' . $lng['karma'] . '</a>';
 
 
-switch ($act) {
+switch ($mod) {
     case 'guest':
         /*
         -----------------------------------------------------------------
         Топ Гостевой
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng_stat['top_guest'] . '</b></div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_guest'] . '</div>';
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         echo get_top('postguest');
         echo '<div class="phdr"><a href="../guestbook/index.php">' . $lng['guestbook'] . '</a></div>';
@@ -76,7 +74,7 @@ switch ($act) {
         Топ Чата
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng_stat['top_chat'] . '</b></div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_chat'] . '</div>';
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         echo get_top('postchat');
         echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
@@ -88,7 +86,7 @@ switch ($act) {
         Топ Викторины
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng_stat['top_quiz'] . '</b></div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_quiz'] . '</div>';
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         echo get_top('otvetov');
         echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
@@ -100,7 +98,7 @@ switch ($act) {
         Топ игрового баланса
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng_stat['top_bal'] . '</b></div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_bal'] . '</div>';
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         echo get_top('balans');
         echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
@@ -112,7 +110,7 @@ switch ($act) {
         Топ комментариев
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng_stat['top_comm'] . '</b></div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_comm'] . '</div>';
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         echo get_top('komm');
         echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
@@ -125,7 +123,7 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         if ($set_karma['on']) {
-            echo '<div class="phdr"><b>' . $lng_stat['top_karma'] . '</b></div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_karma'] . '</div>';
             echo '<div class="topmenu">' . display_menu($menu) . '</div>';
             echo get_top('karma');
             echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
@@ -138,12 +136,11 @@ switch ($act) {
         Топ Форума
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng_stat['top_forum'] . '</b></div>';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_forum'] . '</div>';
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         echo get_top('postforum');
         echo '<div class="phdr"><a href="../forum/index.php">' . $lng['forum'] . '</a></div>';
 }
-echo '<p><a href="../index.php?act=users">' . $lng['community'] . '</a></p>';
-require('../incfiles/end.php');
+echo '<p><a href="index.php">' . $lng['back'] . '</a></p>';
 
 ?>

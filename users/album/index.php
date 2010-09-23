@@ -120,7 +120,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         '<li><a href="index.php?act=top_trash">' . $lng_profile['top_trash'] . '</a></li>' .
         '</ul></p>' .
         '</div>' .
-        '<div class="phdr"><a href="../../index.php?act=users">' . $lng['users'] . '</a></div>';
+        '<div class="phdr"><a href="../index.php">' . $lng['users'] . '</a></div>';
 }
 require('../../incfiles/end.php');
 ?>

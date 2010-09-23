@@ -33,38 +33,6 @@ switch ($act) {
         echo display_error($lng['error_404']);
         break;
 
-    case 'users':
-        /*
-        -----------------------------------------------------------------
-        Актив сайта
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-            '<div class="gmenu"><form action="users/users_search.php" method="post">' .
-            '<p><h3><img src="images/search.png" width="16" height="16" class="left" />&#160;' . $lng['search'] . '</h3>' .
-            '<input type="text" name="search"/>' .
-            '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
-            '<small>' . $lng['search_nick_help'] . '</small></p></form></div>' .
-            '<div class="menu"><p><h3><img src="images/users.png" width="16" height="16" class="left" />&#160;' . $lng['users'] . '</h3><ul>' .
-            '<li><a href="users/users.php">' . $lng['common_list'] . '</a> (' . stat_countusers() . ')</li>';
-        $mon = date("m", $realtime);
-        if (substr($mon, 0, 1) == 0) {
-            $mon = str_replace("0", "", $mon);
-        }
-        $day = date("d", $realtime);
-        if (substr($day, 0, 1) == 0) {
-            $day = str_replace("0", "", $day);
-        }
-        $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1'"), 0);
-        if ($brth)
-            echo '<li><a href="users/brd.php">' . $lng['birthday_men'] . '</a> (' . $brth . ')</li>';
-        echo '<li><a href="users/moders.php">' . $lng['administration'] . '</a></li>' .
-            '<li><a href="users/users_top.php">' . $lng['users_top'] . '</a></li>' .
-            '<li><a href="users/album_list.php">' . $lng['photo_albums'] . '</a></li>' .
-            '</ul></p></div>' .
-            '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
-        break;
-
     case 'info':
         /*
         -----------------------------------------------------------------

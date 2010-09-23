@@ -215,7 +215,7 @@ function display_user($user = array (), $arg = array ()) {
         }
         if ($ipinf) {
             $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
-            $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $home . '/' . $admp . '/index.php?act=usr_search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist . '</div>';
+            $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $home . '/' . $admp . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist . '</div>';
         }
         if ($arg['footer'])
             $out .= $arg['footer'];
@@ -454,7 +454,7 @@ function stat_online() {
     global $realtime, $user_id, $home, $lng;
     $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
     $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
-    return ($user_id ? '<a href="' . $home . '/users/online.php">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
+    return ($user_id ? '<a href="' . $home . '/users/index.php?act=online">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
 }
 
 /*

@@ -68,6 +68,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
     -----------------------------------------------------------------
     */
     $textl = $lng['profile'] . ': ' . htmlspecialchars($user['name']);
+    $headmod = 'profile';
     require('../../incfiles/head.php');
     echo '<div class="phdr"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты

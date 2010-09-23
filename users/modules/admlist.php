@@ -12,18 +12,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
-$textl = 'Администрация';
-$headmod = "moders";
-require_once('../incfiles/core.php');
-require_once('../incfiles/head.php');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
+$textl = $lng['administration'];
+$headmod = "admlist";
+require('../incfiles/head.php');
 
 /*
 -----------------------------------------------------------------
 Выводим список администрации
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="../index.php?act=users"><b>' . $lng['community'] . '</b></a> | Администрация</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['administration'] . '</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= 1");
 $total = mysql_result($req, 0);
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `rights` >= 1 ORDER BY `rights` DESC LIMIT $start, $kmess");
@@ -34,14 +33,12 @@ while ($res = mysql_fetch_assoc($req)) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('users.php?', $start, $total, $kmess) . '</p>';
-    echo '<p><form action="users.php" method="post">' .
+    echo '<p>' . display_pagination('index.php?act=admlist&amp;', $start, $total, $kmess) . '</p>' .
+        '<p><form action="index.php?act=admlist" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="users_search.php">' . $lng['search_user'] . '</a><br />' .
-    '<a href="../index.php?act=users">' . $lng['back'] . '</a></p>';
-
-require_once('../incfiles/end.php');
+echo '<p><a href="index.php?act=search">' . $lng['search_user'] . '</a><br />' .
+    '<a href="index.php">' . $lng['back'] . '</a></p>';
 ?>

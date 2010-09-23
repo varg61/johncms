@@ -12,10 +12,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
-$headmod = 'users';
-require('../incfiles/core.php');
-$textl = $lng['users'];
+defined('_IN_JOHNCMS') or die('Error: restricted access');
+$textl = $lng['users_list'];
+$headmod = 'userlist';
 require('../incfiles/head.php');
 
 /*
@@ -23,7 +22,7 @@ require('../incfiles/head.php');
 Выводим список пользователей
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="../index.php?act=users"><b>' . $lng['community'] . '</b></a> | ' . $lng['users_list'] . '</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['users_list'] . '</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0);
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT $start, $kmess");
@@ -34,14 +33,12 @@ while ($res = mysql_fetch_assoc($req)) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('users.php?', $start, $total, $kmess) . '</p>' .
-        '<p><form action="users.php" method="post">' .
+    echo '<p>' . display_pagination('index.php?act=userlist&amp;', $start, $total, $kmess) . '</p>' .
+        '<p><form action="index.php?act=userlist" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="users_search.php">' . $lng['search_user'] . '</a><br />' .
-    '<a href="../index.php?act=users">' . $lng['back'] . '</a></p>';
-
-require('../incfiles/end.php');
+echo '<p><a href="index.php?act=search">' . $lng['search_user'] . '</a><br />' .
+    '<a href="index.php">' . $lng['back'] . '</a></p>';
 ?>
