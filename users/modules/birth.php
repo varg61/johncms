@@ -13,9 +13,8 @@
 */
 
 define('_IN_JOHNCMS', 1);
-$headmod = 'birth';
-require('../incfiles/core.php');
 $textl = $lng['birthday_men'];
+$headmod = 'birth';
 require('../incfiles/head.php');
 
 /*
@@ -23,7 +22,7 @@ require('../incfiles/head.php');
 Выводим список именинников
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><b>' . $lng['birthday_men'] . '</b></div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['birthday_men'] . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1'"), 0);
 if ($total) {
     $req = mysql_query("SELECT * FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1' LIMIT $start, $kmess");
@@ -34,8 +33,8 @@ if ($total) {
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
-        echo '<p>' . display_pagination('brd.php?', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="brd.php" method="post">' .
+        echo '<p>' . display_pagination('index.php?act=birth&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p><form action="index.php?act=birth" method="post">' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
             '</form></p>';
@@ -43,6 +42,5 @@ if ($total) {
 } else {
     echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
 }
-
-require('../incfiles/end.php');
+echo '<p><a href="index.php">' . $lng['back'] . '</a></p>';
 ?>

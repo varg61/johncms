@@ -18,6 +18,7 @@ require('../incfiles/core.php');
 
 $array = array (
     'admlist' => 'modules',
+    'birth' => 'modules',
     'online' => 'modules',
     'search' => 'modules',
     'top' => 'modules',
@@ -53,7 +54,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         '<div class="menu"><p>' .
         '<img src="../images/contacts.png" width="16" height="16" />&#160;<a href="index.php?act=userlist">' . $lng['users'] . '</a> (' . stat_countusers() . ')<br />' .
         '<img src="../images/users.png" width="16" height="16" />&#160;<a href="index.php?act=admlist">' . $lng['administration'] . '</a> (' . $count_adm . ')' .
-        ($brth ? '<br /><img src="../images/award.png" width="16" height="16" />&#160;<a href="users/brd.php">' . $lng['birthday_men'] . '</a> (' . $brth . ')' : '') .
+        ($brth ? '<br /><img src="../images/award.png" width="16" height="16" />&#160;<a href="index.php?act=birth">' . $lng['birthday_men'] . '</a> (' . $brth . ')' : '') .
         '</p><p><img src="../images/photo.gif" width="16" height="16" />&#160;<a href="album/index.php">' . $lng['photo_albums'] . '</a> (' . count_photo() . ')</p>' .
         '<p><img src="../images/rate.gif" width="16" height="16" />&#160;<a href="index.php?act=top">' . $lng['users_top'] . '</a></p>' .
         '</div>' .
