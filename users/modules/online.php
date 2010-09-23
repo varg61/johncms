@@ -38,8 +38,9 @@ if ($total) {
         $where = explode(",", $res['place']);
         // Список возможных местоположений
         $places = array (
+            'admlist'       => '<a href="index.php?act=admlist">' . $lng_online['where_adm_list'] . '</a>',
             'album'         => '<a href="album/index.php">' . $lng_online['where_album'] . '</a>',
-            'birth'         => '<a href="brd.php">' . $lng_online['where_birth'] . '</a>',
+            'birth'         => '<a href="index.php?act=birth">' . $lng_online['where_birth'] . '</a>',
             'chat'          => '<a href="../chat/index.php">' . $lng_online['where_chat'] . '</a>',
             'downloads'     => '<a href="../download/index.php">' . $lng_online['where_downloads'] . '</a>',
             'faq'           => '<a href="../pages/faq.php">' . $lng_online['where_faq'] . '</a>',
@@ -49,10 +50,13 @@ if ($total) {
             'gallery'       => '<a href="../gallery/index.php">' . $lng_online['where_gallery'] . '</a>',
             'guest'         => '<a href="../guestbook/index.php">' . $lng_online['where_guestbook'] . '</a>',
             'library'       => '<a href="../library/index.php">' . $lng_online['where_library'] . '</a>',
+            'news'          => '<a href="../news/index.php">' . $lng_online['where_news'] . '</a>',
             'online'        => $lng_online['where_here'],
             'pm'            => $lng_online['where_pm'],
             'profile'       => '<a href="profile/index.php">' . $lng_online['where_profile'] . '</a>',
-            'userlist'      => '<a href="index.php?act=userlist">' . $lng_online['where_users_list'] . '</a>'
+            'userlist'      => '<a href="index.php?act=userlist">' . $lng_online['where_users_list'] . '</a>',
+            'users'         => '<a href="index.php">' . $lng['community'] . '</a>',
+            'userstop'      => '<a href="index.php?act=top">' . $lng_online['where_users_top'] . '</a>'
         );
         // Вычисляем местоположение
         $place = array_key_exists($where[0], $places) ? $places[$where[0]] : '<a href="../index.php">' . $lng_online['where_homepage'] . '</a>';
