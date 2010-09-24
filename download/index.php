@@ -35,7 +35,7 @@ if ($error) {
     exit;
 }
 
-$do = array (
+$array = array (
     'scan_dir',
     'rat',
     'delmes',
@@ -63,7 +63,7 @@ $do = array (
     'mp3',
     'trans'
 );
-if (in_array($act, $do)) {
+if (in_array($act, $array)) {
     require_once($act . '.php');
 } else {
     require_once("../incfiles/head.php");

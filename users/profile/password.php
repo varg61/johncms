@@ -70,7 +70,7 @@ switch ($mod) {
             }
             echo '</div>';
         } else {
-            echo display_error($error, '<a href="profile.php?act=password&amp;id=' . $user['id'] . '">' . $lng['repeat'] . '</a>');
+            echo display_error($error, '<a href="profile.php?act=password&amp;user=' . $user['id'] . '">' . $lng['repeat'] . '</a>');
         }
         break;
 
@@ -81,7 +81,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>' . $lng_pass['change_password'] . ':</b> ' . $user['name'] . '</div>';
-        echo '<form action="profile.php?act=password&amp;mod=change&amp;id=' . $user['id'] . '" method="post">';
+        echo '<form action="profile.php?act=password&amp;mod=change&amp;user=' . $user['id'] . '" method="post">';
         if ($user['id'] == $user_id)
             echo '<div class="menu"><p>' . $lng_pass['input_old_password'] . ':<br /><input type="password" name="oldpass" /></p></div>';
         echo '<div class="gmenu"><p>' . $lng_pass['input_new_password'] . ':<br />' .
@@ -91,6 +91,6 @@ switch ($mod) {
             '</p><p><input type="submit" value="' . $lng['save'] . '" name="submit" />' .
             '</p></div></form>' .
             '<div class="phdr"><small>' . $lng_pass['password_change_help'] . '</small></div>' .
-            '<p><a href="profile.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></p>';
+            '<p><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></p>';
 }
 ?>

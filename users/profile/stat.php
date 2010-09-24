@@ -21,7 +21,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 $textl = htmlspecialchars($user['name']) . ': ' . $lng['statistics'];
 require('../incfiles/head.php');
-echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['statistics'] . '</div>' .
+echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['statistics'] . '</div>' .
     '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
     '<div class="list2">' .
     '<p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;' . $lng['statistics'] . '</h3><ul>';
@@ -40,8 +40,8 @@ if ($lastvisit)
     echo '<li><span class="gray">' . $lng['last_visit'] . ':</span> ' . $lastvisit . '</li>';
 echo '</ul></p><p>' .
     '<h3><img src="../images/activity.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['activity'] . '</h3><ul>' .
-    '<li><span class="gray">' . $lng['forum'] . ':</span> <a href="profile.php?act=activity&amp;id=' . $user['id'] . '">' . $user['postforum'] . '</a></li>' .
-    '<li><span class="gray">' . $lng['guestbook'] . ':</span> <a href="profile.php?act=activity&amp;mod=guest&amp;id=' . $user['id'] . '">' . $user['postguest'] . '</a></li>' .
+    '<li><span class="gray">' . $lng['forum'] . ':</span> <a href="profile.php?act=activity&amp;user=' . $user['id'] . '">' . $user['postforum'] . '</a></li>' .
+    '<li><span class="gray">' . $lng['guestbook'] . ':</span> <a href="profile.php?act=activity&amp;mod=guest&amp;user=' . $user['id'] . '">' . $user['postguest'] . '</a></li>' .
     '<li><span class="gray">' . $lng['comments'] . ':</span> ' . $user['komm'] . '</li>' .
     '<li><span class="gray">' . $lng['chat'] . ':</span> ' . $user['postchat'] . '</li>' .
     '<li><span class="gray">' . $lng['quiz'] . ':</span> ' . $user['otvetov'] . '</li>' .
@@ -74,5 +74,5 @@ foreach ($query as $key => $val) {
     echo '<td><small><b>' . $val . '</b></small></td></tr>';
 }
 echo '</table></p></div>' .
-    '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
+    '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
 ?>

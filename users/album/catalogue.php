@@ -21,7 +21,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 if (isset($_SESSION['ap']))
     unset($_SESSION['ap']);
-echo '<div class="phdr"><a href="../profile.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></a> | ' . $lng['photo_album'] . '</div>';
+echo '<div class="phdr"><a href="../profile.php?user=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></a> | ' . $lng['photo_album'] . '</div>';
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' " . ($user['id'] == $user_id || $rights >= 6 ? "" : "AND `access` > 1") . " ORDER BY `sort` ASC");
 $total = mysql_num_rows($req);
 if ($user['id'] == $user_id && $total < $max_album || $rights >= 7) {
@@ -51,5 +51,5 @@ if ($total) {
     echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>' .
-    '<p><a href="../profile.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></p>';
+    '<p><a href="../profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></p>';
 ?>

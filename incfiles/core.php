@@ -51,6 +51,7 @@ if (get_magic_quotes_gpc()) {
 -----------------------------------------------------------------
 */
 $id = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false;
+$user = isset($_REQUEST['user']) ? abs(intval($_REQUEST['user'])) : false;
 $page = isset($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1;
 $start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
 $act = isset($_GET['act']) ? trim($_GET['act']) : '';

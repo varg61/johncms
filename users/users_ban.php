@@ -292,7 +292,7 @@ switch ($act) {
         История нарушений
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_ban['infringements_history'] . '</div>';
+        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_ban['infringements_history'] . '</div>';
         // Меню
         $menu = array ();
         if ($rights >= 6)

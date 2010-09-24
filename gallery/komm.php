@@ -63,7 +63,7 @@ while ($mass = mysql_fetch_array($mess)) {
         $mass1 = @mysql_fetch_array($uz);
         echo "$div";
         if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id'])) {
-            echo "<a href='../users/profile/index.php?id=" . $mass1['id'] . "'>$mass[avtor]</a>";
+            echo "<a href='../users/profile.php?user=" . $mass1['id'] . "'>$mass[avtor]</a>";
         } else {
             echo "$mass[avtor]";
         }

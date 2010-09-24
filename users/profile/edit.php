@@ -35,11 +35,11 @@ if ($user['id'] != $user_id && ($rights < 7 || $user['rights'] > $rights)) {
 */
 if ($id && $rights >= 7 && $act == 'reset') {
     mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['id'] . "'");
-    echo '<div class="gmenu"><p>' . $lng['settings_default'] . '<br /><a href="profile.php?id=' . $user['id'] . '">' . $lng['to_form'] . '</a></p></div>';
+    echo '<div class="gmenu"><p>' . $lng['settings_default'] . '<br /><a href="profile.php?user=' . $user['id'] . '">' . $lng['to_form'] . '</a></p></div>';
     require('../incfiles/end.php');
     exit;
 }
-echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng['profile'] : $lng_profile['my_profile']) . '</b></a> | ' . $lng['edit'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . ($user['id'] != $user_id ? $lng['profile'] : $lng_profile['my_profile']) . '</b></a> | ' . $lng['edit'] . '</div>';
 if (isset($_GET['delavatar'])) {
     /*
     -----------------------------------------------------------------
@@ -137,7 +137,7 @@ if (isset($_GET['delavatar'])) {
 Форма редактирования анкеты пользователя
 -----------------------------------------------------------------
 */
-echo '<form action="profile.php?act=edit&amp;id=' . $user['id'] . '" method="post">' .
+echo '<form action="profile.php?act=edit&amp;user=' . $user['id'] . '" method="post">' .
     '<div class="gmenu"><p>' .
     'Логин: <b>' . $user['name_lat'] . '</b><br />';
 if ($rights >= 7) {
@@ -151,7 +151,7 @@ echo $lng['avatar'] . ':<br />';
 $link = '';
 if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
     echo '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
-    $link = ' | <a href="profile.php?act=edit&amp;id=' . $user['id'] . '&amp;delavatar">' . $lng['delete'] . '</a>';
+    $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['id'] . '&amp;delavatar">' . $lng['delete'] . '</a>';
 }
 echo '<small><a href="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a> | ' .
     '<a href="avatar.php?id=' . $user['id'] . '">' . $lng['select'] . '</a>' . $link . '</small><br />' .
@@ -159,7 +159,7 @@ echo '<small><a href="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $
 $link = '';
 if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg'))) {
     echo '<a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
-    $link = ' | <a href="profile.php?act=edit&amp;delphoto">' . $lng['delete'] . '</a>';
+    $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['id'] . '&amp;delphoto">' . $lng['delete'] . '</a>';
 }
 echo '<small><a href="my_images.php?act=up_photo&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
     '</p></div>' .
@@ -212,5 +212,5 @@ if ($rights >= 7) {
 }
 echo '<div class="gmenu"><input type="submit" value="' . $lng['save'] . '" name="submit" /></div>' .
     '</form>' .
-    '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '">' . $lng['to_form'] . '</a></div>';
+    '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['to_form'] . '</a></div>';
 ?>

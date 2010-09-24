@@ -34,12 +34,12 @@ if(!$set['active']){
 -----------------------------------------------------------------
 */
 $array = array (
-    'admlist' => 'modules/misc',
-    'birth' => 'modules/misc',
-    'online' => 'modules/misc',
-    'search' => 'modules/misc',
-    'top' => 'modules/misc',
-    'userlist' => 'modules/misc'
+    'admlist' => 'misc',
+    'birth' => 'misc',
+    'online' => 'misc',
+    'search' => 'misc',
+    'top' => 'misc',
+    'userlist' => 'misc'
 );
 $path = !empty($array[$act]) ? $array[$act] . '/' : '';
 if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {

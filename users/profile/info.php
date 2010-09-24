@@ -21,9 +21,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 $textl = htmlspecialchars($user['name']) . ': ' . $lng['information'];
 require('../incfiles/head.php');
-echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['information'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['information'] . '</div>';
 if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
-    echo '<div class="topmenu"><a href="profile.php?act=edit&amp;id=' . $user['id'] . '">' . $lng['edit'] . '</a></div>';
+    echo '<div class="topmenu"><a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['edit'] . '</a></div>';
 echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
     '<div class="list2"><p>' .
     '<h3><img src="../images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .
@@ -47,5 +47,5 @@ echo '</li>' .
     '<li><span class="gray">Jabber:</span> ' . (empty($user['jabber']) ? '' : $user['jabber']) . '</li>' .
     '<li><span class="gray">' . $lng_profile['site'] . ':</span> ' . (empty($user['www']) ? '' : tags($user['www'])) . '</li>' .
     '</ul></p></div>' .
-    '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
+    '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
 ?>

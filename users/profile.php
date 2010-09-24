@@ -34,7 +34,7 @@ if (!$user_id) {
 Получаем данные пользователя
 -----------------------------------------------------------------
 */
-$user = get_user($id);
+$user = get_user($user);
 if (!$user) {
     require('../incfiles/head.php');
     echo display_error($lng['user_does_not_exist']);
@@ -48,14 +48,14 @@ if (!$user) {
 -----------------------------------------------------------------
 */
 $array = array (
-    'activity' => 'modules/profile',
-    'edit' => 'modules/profile',
-    'info' => 'modules/profile',
-    'ip' => 'modules/profile',
-    'office' => 'modules/profile',
-    'password' => 'modules/profile',
-    'settings' => 'modules/profile',
-    'stat' => 'modules/profile'
+    'activity' => 'profile',
+    'edit' => 'profile',
+    'info' => 'profile',
+    'ip' => 'profile',
+    'office' => 'profile',
+    'password' => 'profile',
+    'settings' => 'profile',
+    'stat' => 'profile'
 );
 $path = !empty($array[$act]) ? $array[$act] . '/' : '';
 if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
@@ -68,7 +68,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     */
     $textl = $lng['profile'] . ': ' . htmlspecialchars($user['name']);
     require('../incfiles/head.php');
-    echo '<div class="phdr"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
+    echo '<div class="phdr"><b>' . ($user['id'] != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты
     $menu = array ();
     if ($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
@@ -130,9 +130,9 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     // Меню выбора
     $total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     echo '<div class="list2"><p>' .
-        '<div><img src="../images/contacts.png" width="16" height="16"/>&#160;<a href="profile.php?act=info&amp;id=' . $user['id'] . '">' . $lng['information'] . '</a></div>' .
-        '<div><img src="../images/activity.gif" width="16" height="16"/>&#160;<a href="profile.php?act=activity&amp;id=' . $user['id'] . '">' . $lng_profile['activity'] . '</a></div>' .
-        '<div><img src="../images/rate.gif" width="16" height="16"/>&#160;<a href="profile.php?act=stat&amp;id=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
+        '<div><img src="../images/contacts.png" width="16" height="16"/>&#160;<a href="profile.php?act=info&amp;user=' . $user['id'] . '">' . $lng['information'] . '</a></div>' .
+        '<div><img src="../images/activity.gif" width="16" height="16"/>&#160;<a href="profile.php?act=activity&amp;user=' . $user['id'] . '">' . $lng_profile['activity'] . '</a></div>' .
+        '<div><img src="../images/rate.gif" width="16" height="16"/>&#160;<a href="profile.php?act=stat&amp;user=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
     $bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     if ($bancount)
         echo '<div><img src="../images/block.gif" width="16" height="16"/>&#160;<a href="../users_ban.php?id=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
@@ -143,7 +143,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     if ($user['id'] != $user_id) {
         echo '<br /><div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>';
         if (!$ban['1'] && !$ban['3'])
-            echo '<div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="../pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
+            echo '<div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
     }
     echo '</p></div>';
     echo '<div class="phdr"><a href="index.php">' . $lng['users'] . '</a></div>';

@@ -175,7 +175,7 @@ function display_user($user = array (), $arg = array ()) {
             $out .= '<img src="' . $home . '/theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
         else
             $out .= '<img src="' . $home . '/images/del.png" width="12" height="12" align="middle" />&#160;';
-        $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="' . $home . '/users/profile.php?id=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
+        $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="' . $home . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
         $rank = array (
             0 => '',
             1 => '(GMod)',
@@ -211,7 +211,7 @@ function display_user($user = array (), $arg = array ()) {
         $iphist = '';
         if ($ipinf && $arg['iphist']) {
             $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-            $iphist = '&#160;<a href="' . $home . '/users/profile.php?act=ip&amp;id=' . $user['id'] . '">[' . $iptotal . ']</a>';
+            $iphist = '&#160;<a href="' . $home . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a>';
         }
         if ($ipinf) {
             $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';

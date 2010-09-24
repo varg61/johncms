@@ -472,7 +472,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     else
                         echo '<img src="../images/del.png" width="10" height="10" />&#160;';
                     if ($user_id && $user_id != $postres['user_id']) {
-                        echo '<a href="../users/profile/index.php?id=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
+                        echo '<a href="../users/profile.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
                             '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '"> ' . $lng_forum['reply_btn'] . '</a> ' .
                             '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '&amp;cyt"> ' . $lng_forum['cytate_btn'] . '</a> ';
                     } else {
@@ -542,7 +542,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         echo '<img src="../images/del.png" width="12" height="12" align="middle" />&#160;';
                     // Ник юзера и ссылка на его анкету
                     if ($user_id && $user_id != $res['user_id']) {
-                        echo '<a href="../users/profile/index.php?id=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
+                        echo '<a href="../users/profile.php?user=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
                     } else {
                         echo '<b>' . $res['from'] . '</b> ';
                     }

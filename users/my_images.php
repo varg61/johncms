@@ -52,7 +52,7 @@ switch ($act) {
         Выгружаем аватар
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['upload_avatar'] . '</div>';
+        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['upload_avatar'] . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
@@ -74,7 +74,7 @@ switch ($act) {
                 if ($handle->processed) {
                     echo '<div class="gmenu"><p>' . $lng_profile['avatar_uploaded'] . '<br />' .
                         '<a href="my_data.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
-                        '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
+                        '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                 } else {
                     echo display_error($handle->error);
                 }
@@ -92,7 +92,7 @@ switch ($act) {
         break;
 
     case 'up_photo':
-        echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['upload_photo'] . '</div>';
+        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['upload_photo'] . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
@@ -122,7 +122,7 @@ switch ($act) {
                     $handle->process('../files/users/photo/');
                     if ($handle->processed) {
                         echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="profile/index.php?act=edit&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
-                        echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
+                        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                     } else {
                         echo display_error($handle->error);
                     }

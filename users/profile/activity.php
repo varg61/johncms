@@ -21,11 +21,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 $textl = htmlspecialchars($user['name']) . ': ' . $lng_profile['activity'];
 require('../incfiles/head.php');
-echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['activity'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng_profile['activity'] . '</div>';
 $menu = array (
-    (!$mod ? '<b>' . $lng['messages'] . '</b>' : '<a href="profile.php?act=activity&amp;id=' . $user['id'] . '">' . $lng['messages'] . '</a>'),
-    ($mod == 'topic' ? '<b>' . $lng['themes'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=topic&amp;id=' . $user['id'] . '">' . $lng['themes'] . '</a>'),
-    ($mod == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=guest&amp;id=' . $user['id'] . '">' . $lng['guestbook'] . '</a>'),
+    (!$mod ? '<b>' . $lng['messages'] . '</b>' : '<a href="profile.php?act=activity&amp;user=' . $user['id'] . '">' . $lng['messages'] . '</a>'),
+    ($mod == 'topic' ? '<b>' . $lng['themes'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=topic&amp;user=' . $user['id'] . '">' . $lng['themes'] . '</a>'),
+    ($mod == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=guest&amp;user=' . $user['id'] . '">' . $lng['guestbook'] . '</a>'),
 );
 echo '<div class="topmenu">' . display_menu($menu) . '</div>';
 echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>';
@@ -100,8 +100,8 @@ switch ($mod) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('profile.php?act=activity&amp;id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>' .
-        '<p><form action="profile.php?act=activity&amp;id=' . $user['id'] . '" method="post">' .
+    echo '<p>' . display_pagination('profile.php?act=activity&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>' .
+        '<p><form action="profile.php?act=activity&amp;user=' . $user['id'] . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
