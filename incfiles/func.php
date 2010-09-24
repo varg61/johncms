@@ -451,10 +451,10 @@ function stat_news() {
 -----------------------------------------------------------------
 */
 function stat_online() {
-    global $realtime, $user_id, $home, $lng;
+    global $realtime, $user_id, $home, $lng, $set;
     $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
     $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
-    return ($user_id ? '<a href="' . $home . '/users/index.php?act=online">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
+    return ($user_id || $set['active'] ? '<a href="' . $home . '/users/index.php?act=online">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
 }
 
 /*

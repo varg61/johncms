@@ -24,7 +24,7 @@ require('../incfiles/head.php');
 */
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $search = $search ? $search : rawurldecode(trim($_GET['search']));
-echo '<div class="phdr"><b>' . $lng['search_user'] . '</b></div>' .
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['search_user'] . '</div>' .
     '<form action="index.php?act=search" method="post">' .
     '<div class="gmenu"><p>' .
     '<input type="text" name="search" value="' . checkout($search) . '" />' .

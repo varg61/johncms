@@ -16,6 +16,18 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'users';
 require('../incfiles/core.php');
 
+/*
+-----------------------------------------------------------------
+Закрываем от неавторизованных юзеров
+-----------------------------------------------------------------
+*/
+if(!$set['active']){
+    require('../incfiles/head.php');
+    echo display_error($lng['access_guest_forbidden']);
+    require('../incfiles/end.php');
+    exit;
+}
+
 $array = array (
     'admlist' => 'modules',
     'birth' => 'modules',

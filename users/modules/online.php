@@ -29,8 +29,6 @@ if ($rights > 0)
         . '</div>';
 $onltime = $realtime - 300;
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($mod == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime'"), 0);
-if (!$user_id)
-    $total = 0;
 if ($total) {
     $req = mysql_query("SELECT * FROM `" . ($mod == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY " . ($mod == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
     while ($res = mysql_fetch_assoc($req)) {

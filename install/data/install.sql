@@ -370,6 +370,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('mod_down', '2'),
 ('mod_lib_comm', '1'),
 ('mod_gal_comm', '1'),
+('active', '0'),
 ('skindef', 'default'),
 ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:500;s:8:"quantity";i:2;s:4:"days";i:5;s:6:"breaks";i:1;s:7:"smileys";i:0;s:4:"tags";i:1;s:3:"kom";i:1;}');
 

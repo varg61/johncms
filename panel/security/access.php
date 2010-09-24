@@ -33,6 +33,7 @@ if (isset($_POST['submit'])) {
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['libcomm']) . "' WHERE `key`='mod_lib_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['galcomm']) . "' WHERE `key`='mod_gal_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['downcomm']) . "' WHERE `key`='mod_down_comm'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['active']) ? intval($_POST['active']) : 0) . "' WHERE `key`='active'");
     $req = mysql_query("SELECT * FROM `cms_settings`");
     $set = array ();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
@@ -42,6 +43,7 @@ if (isset($_POST['submit'])) {
 
 $color = array('red', 'yelow', 'green');
 echo '<form method="post" action="index.php?act=access">';
+
 /*
 -----------------------------------------------------------------
 Управление доступом к Форуму
@@ -54,6 +56,7 @@ echo '<div class="menu"><p>' .
     '<input type="radio" value="1" name="forum" ' . ($set['mod_forum'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_authorised'] . '<br />' .
     '<input type="radio" value="0" name="forum" ' . (!$set['mod_forum'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] .
     '</div></p>';
+
 /*
 -----------------------------------------------------------------
 Управление доступом к Гостевой
@@ -65,6 +68,7 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_guest']] . '.gif" width="1
     '<input type="radio" value="1" name="guest" ' . ($set['mod_guest'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
     '<input type="radio" value="0" name="guest" ' . (!$set['mod_guest'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] .
     '</div></p>';
+
 /*
 -----------------------------------------------------------------
 Управление доступом к Чату
@@ -75,6 +79,7 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_chat']] . '.gif" width="16
     '<input type="radio" value="2" name="chat" ' . ($set['mod_chat'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
     '<input type="radio" value="0" name="chat" ' . (!$set['mod_chat'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] .
     '</div></p>';
+
 /*
 -----------------------------------------------------------------
 Управление доступом к Библиотеке
@@ -87,6 +92,7 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_lib']] . '.gif" width="16"
     '<input type="radio" value="0" name="lib" ' . (!$set['mod_lib'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] . '<br />' .
     '<input name="libcomm" type="checkbox" value="1" ' . ($set['mod_lib_comm'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['comments'] .
     '</div></p>';
+    
 /*
 -----------------------------------------------------------------
 Управление доступом к Галерее
@@ -99,6 +105,7 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_gal']] . '.gif" width="16"
     '<input type="radio" value="0" name="gal" ' . (!$set['mod_gal'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] . '<br />' .
     '<input name="galcomm" type="checkbox" value="1" ' . ($set['mod_gal_comm'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['comments'] .
     '</div></p>';
+
 /*
 -----------------------------------------------------------------
 Управление доступом к Загрузкам
@@ -110,7 +117,19 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_down']] . '.gif" width="16
     '<input type="radio" value="1" name="down" ' . ($set['mod_down'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_authorised'] . '<br />' .
     '<input type="radio" value="0" name="down" ' . (!$set['mod_down'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] . '<br />' .
     '<input name="downcomm" type="checkbox" value="1" ' . ($set['mod_down_comm'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['comments'] .
+    '</div></p>';
+
+/*
+-----------------------------------------------------------------
+Управление доступом к Активу сайта (списки юзеров и т.д.)
+-----------------------------------------------------------------
+*/
+echo '<p><h3><img src="../images/' . $color[$set['active'] + 1] . '.gif" width="16" height="16" class="left"/>&#160;' . $lng['community'] . '</h3>' .
+    '<div style="font-size: x-small">' .
+    '<input type="radio" value="1" name="active" ' . ($set['active'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
+    '<input type="radio" value="0" name="active" ' . (!$set['active'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_authorised'] . '<br />' .
     '</div></p></div>';
+    
 /*
 -----------------------------------------------------------------
 Управление доступом к Регистрации
