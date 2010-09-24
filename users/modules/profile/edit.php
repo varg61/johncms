@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = htmlspecialchars($user['name']) . ': ' . $lng_profile['profile_edit'];
-require('../../incfiles/head.php');
+require('../incfiles/head.php');
 
 /*
 -----------------------------------------------------------------
@@ -39,14 +39,14 @@ if ($id && $rights >= 7 && $act == 'reset') {
     require('../incfiles/end.php');
     exit;
 }
-echo '<div class="phdr"><a href="index.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng['profile'] : $lng_profile['my_profile']) . '</b></a> | ' . $lng['edit'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng['profile'] : $lng_profile['my_profile']) . '</b></a> | ' . $lng['edit'] . '</div>';
 if (isset($_GET['delavatar'])) {
     /*
     -----------------------------------------------------------------
     Удаляем аватар
     -----------------------------------------------------------------
     */
-    @unlink('../../files/users/avatar/' . $user['id'] . '.png');
+    @unlink('../files/users/avatar/' . $user['id'] . '.png');
     echo '<div class="rmenu">' . $lng_profile['avatar_deleted'] . '</div>';
 } elseif (isset($_GET['delphoto'])) {
     /*
@@ -54,8 +54,8 @@ if (isset($_GET['delavatar'])) {
     Удаляем фото
     -----------------------------------------------------------------
     */
-    @unlink('../../files/users/photo/' . $user['id'] . '.jpg');
-    @unlink('../../files/users/photo/' . $user['id'] . '_small.jpg');
+    @unlink('../files/users/photo/' . $user['id'] . '.jpg');
+    @unlink('../files/users/photo/' . $user['id'] . '_small.jpg');
     echo '<div class="rmenu">' . $lng_profile['photo_deleted'] . '</div>';
 } elseif (isset($_POST['submit'])) {
     /*
@@ -137,7 +137,7 @@ if (isset($_GET['delavatar'])) {
 Форма редактирования анкеты пользователя
 -----------------------------------------------------------------
 */
-echo '<form action="index.php?act=edit&amp;id=' . $user['id'] . '" method="post">' .
+echo '<form action="profile.php?act=edit&amp;id=' . $user['id'] . '" method="post">' .
     '<div class="gmenu"><p>' .
     'Логин: <b>' . $user['name_lat'] . '</b><br />';
 if ($rights >= 7) {
@@ -149,22 +149,22 @@ if ($rights >= 7) {
 }
 echo $lng['avatar'] . ':<br />';
 $link = '';
-if (file_exists(('../../files/users/avatar/' . $user['id'] . '.png'))) {
-    echo '<img src="../../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
-    $link = ' | <a href="index.php?act=edit&amp;id=' . $user['id'] . '&amp;delavatar">' . $lng['delete'] . '</a>';
+if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
+    echo '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
+    $link = ' | <a href="profile.php?act=edit&amp;id=' . $user['id'] . '&amp;delavatar">' . $lng['delete'] . '</a>';
 }
-echo '<small><a href="../my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a> | ' .
-    '<a href="../avatar.php?id=' . $user['id'] . '">' . $lng['select'] . '</a>' . $link . '</small><br />' .
+echo '<small><a href="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a> | ' .
+    '<a href="avatar.php?id=' . $user['id'] . '">' . $lng['select'] . '</a>' . $link . '</small><br />' .
     $lng_profile['photo'] . ':<br />';
 $link = '';
-if (file_exists(('../../files/users/photo/' . $user['id'] . '_small.jpg'))) {
-    echo '<a href="../../files/users/photo/' . $user['id'] . '.jpg"><img src="../../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
-    $link = ' | <a href="index.php?act=edit&amp;delphoto">' . $lng['delete'] . '</a>';
+if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg'))) {
+    echo '<a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
+    $link = ' | <a href="profile.php?act=edit&amp;delphoto">' . $lng['delete'] . '</a>';
 }
-echo '<small><a href="../my_images.php?act=up_photo&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
+echo '<small><a href="my_images.php?act=up_photo&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
     '</p></div>' .
     '<div class="menu">' .
-    '<p><h3><img src="' . $home . '/images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .
+    '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .
     $lng_profile['name'] . ':<br /><input type="text" value="' . $user['imname'] . '" name="imname" /></p>' .
     '<p>' . $lng_profile['birth_date'] . '<br />' .
     '<input type="text" value="' . $user['dayb'] . '" size="2" maxlength="2" name="dayb" />.' .
@@ -172,7 +172,7 @@ echo '<small><a href="../my_images.php?act=up_photo&amp;id=' . $user['id'] . '">
     '<input type="text" value="' . $user['yearofbirth'] . '" size="4" maxlength="4" name="yearofbirth" /></p>' .
     '<p>' . $lng_profile['city'] . ':<br /><input type="text" value="' . $user['live'] . '" name="live" /></p>' .
     '<p>' . $lng_profile['about'] . ':<br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></p>' .
-    '<p><h3><img src="' . $home . '/images/mail.png" width="16" height="16" class="left" />&#160;' . $lng_profile['communication'] . '</h3>' .
+    '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&#160;' . $lng_profile['communication'] . '</h3>' .
     $lng_profile['phone_number'] . ':<br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /><br />' .
     '</p><p>E-mail:<br /><small>' . $lng_profile['email_warning'] . '</small><br />' .
     '<input type="text" value="' . $user['mail'] . '" name="mail" /><br />' .
@@ -184,7 +184,7 @@ echo '<small><a href="../my_images.php?act=up_photo&amp;id=' . $user['id'] . '">
     '</div>';
 // Административные функции
 if ($rights >= 7) {
-    echo '<div class="rmenu"><p><h3><img src="' . $home . '/images/settings.png" width="16" height="16" class="left" />&#160;' . $lng['settings'] . '</h3><ul>';
+    echo '<div class="rmenu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;' . $lng['settings'] . '</h3><ul>';
     if ($rights == 9) {
         echo '<li><input name="karma_off" type="checkbox" value="1" ' . ($user['karma_off'] ? 'checked="checked"' : '') . ' />&#160;<span class="red"><b>' . $lng_profile['deny_karma'] . '</b></span></li>';
     }
@@ -212,5 +212,5 @@ if ($rights >= 7) {
 }
 echo '<div class="gmenu"><input type="submit" value="' . $lng['save'] . '" name="submit" /></div>' .
     '</form>' .
-    '<div class="phdr"><a href="index.php?id=' . $user['id'] . '">' . $lng['to_form'] . '</a></div>';
+    '<div class="phdr"><a href="profile.php?id=' . $user['id'] . '">' . $lng['to_form'] . '</a></div>';
 ?>

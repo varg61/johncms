@@ -28,13 +28,18 @@ if(!$set['active']){
     exit;
 }
 
+/*
+-----------------------------------------------------------------
+Переключаем режимы работы
+-----------------------------------------------------------------
+*/
 $array = array (
-    'admlist' => 'modules',
-    'birth' => 'modules',
-    'online' => 'modules',
-    'search' => 'modules',
-    'top' => 'modules',
-    'userlist' => 'modules'
+    'admlist' => 'modules/misc',
+    'birth' => 'modules/misc',
+    'online' => 'modules/misc',
+    'search' => 'modules/misc',
+    'top' => 'modules/misc',
+    'userlist' => 'modules/misc'
 );
 $path = !empty($array[$act]) ? $array[$act] . '/' : '';
 if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {

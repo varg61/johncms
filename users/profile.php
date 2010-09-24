@@ -13,19 +13,19 @@
 */
 
 define('_IN_JOHNCMS', 1);
-$headmod = 'anketa';
-$rootpath = '../../';
-require('../../incfiles/core.php');
+$headmod = 'profile';
+require('../incfiles/core.php');
 $lng_profile = load_lng('profile');
 
 /*
 -----------------------------------------------------------------
-Закрываем доступ для неавторизованных
+Закрываем от неавторизованных юзеров
 -----------------------------------------------------------------
 */
 if (!$user_id) {
-    display_error($lng['access_guest_forbidden']);
-    require('../../incfiles/end.php');
+    require('../incfiles/head.php');
+    echo display_error($lng['access_guest_forbidden']);
+    require('../incfiles/end.php');
     exit;
 }
 
@@ -36,9 +36,9 @@ if (!$user_id) {
 */
 $user = get_user($id);
 if (!$user) {
-    require('../../incfiles/head.php');
+    require('../incfiles/head.php');
     echo display_error($lng['user_does_not_exist']);
-    require('../../incfiles/end.php');
+    require('../incfiles/end.php');
     exit;
 }
 
@@ -48,35 +48,33 @@ if (!$user) {
 -----------------------------------------------------------------
 */
 $array = array (
-    'activity',
-    'edit',
-    'history_ip',
-    'info',
-    'office',
-    'password',
-    'set_chat',
-    'set_forum',
-    'set_main',
-    'stat'
+    'activity' => 'modules/profile',
+    'edit' => 'modules/profile',
+    'info' => 'modules/profile',
+    'ip' => 'modules/profile',
+    'office' => 'modules/profile',
+    'password' => 'modules/profile',
+    'settings' => 'modules/profile',
+    'stat' => 'modules/profile'
 );
-if (in_array($act, $array) && file_exists($act . '.php')) {
-    require_once($act . '.php');
+$path = !empty($array[$act]) ? $array[$act] . '/' : '';
+if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
+    require_once($path . $act . '.php');
 } else {
     /*
     -----------------------------------------------------------------
-    Главная страница Анкеты пользователя
+    Анкета пользователя
     -----------------------------------------------------------------
     */
     $textl = $lng['profile'] . ': ' . htmlspecialchars($user['name']);
-    $headmod = 'profile';
-    require('../../incfiles/head.php');
+    require('../incfiles/head.php');
     echo '<div class="phdr"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты
     $menu = array ();
     if ($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
         $menu[] = '<a href="' . $home . '/' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a>';
     if ($user['id'] != $user_id && $rights > $user['rights'])
-        $menu[] = '<a href="../users_ban.php?act=ban&amp;id=' . $user['id'] . '">' . $lng['ban_do'] . '</a>';
+        $menu[] = '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">' . $lng['ban_do'] . '</a>';
     if (!empty($menu))
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
     //Уведомление о дне рожденья
@@ -112,44 +110,44 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         }
         echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $home . '/images/k_' . $images . '.gif"/></td><td>' .
             '<b>' . $lng['karma'] . ' (' . $user['karma'] . ')</b>' .
-            '<div class="sub"><span class="green"><a href="../karma.php?id=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . ($exp[0] ? $exp[0] : '0') . ')</a></span> | ' .
-            '<span class="red"><a href="../karma.php?id=' . $user['id'] . '&amp;type=2">' . $lng['vote_against'] . ' (' . ($exp[1] ? $exp[1] : '0') . ')</a></span>';
+            '<div class="sub"><span class="green"><a href="karma.php?id=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . ($exp[0] ? $exp[0] : '0') . ')</a></span> | ' .
+            '<span class="red"><a href="karma.php?id=' . $user['id'] . '&amp;type=2">' . $lng['vote_against'] . ' (' . ($exp[1] ? $exp[1] : '0') . ')</a></span>';
         if ($id) {
             if (!$datauser['karma_off'] && (!$user['rights'] || ($user['rights'] && !$set_karma['adm'])) && $user['ip'] != $datauser['ip']) {
                 $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '" . $datauser['karma_time'] . "'"), 0);
                 $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '$id' AND `time` > '" . ($realtime - 86400) . "'"), 0);
                 if ($datauser['postforum'] >= $set_karma['forum'] && $datauser['total_on_site'] >= $set_karma['karma_time'] && ($set_karma['karma_points'] - $sum) > 0 && !$count) {
-                    echo '<br /><a href="../karma.php?act=user&amp;id=' . $user['id'] . '">' . $lng['vote'] . '</a>';
+                    echo '<br /><a href="karma.php?act=user&amp;id=' . $user['id'] . '">' . $lng['vote'] . '</a>';
                 }
             }
         } else {
             $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
             if ($total_karma > 0)
-                echo '<br /><a href="../karma.php?act=new">' . $lng['responses_new'] . '</a> (' . $total_karma . ')';
+                echo '<br /><a href="karma.php?act=new">' . $lng['responses_new'] . '</a> (' . $total_karma . ')';
         }
         echo '</div></td></tr></table></div>';
     }
     // Меню выбора
     $total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     echo '<div class="list2"><p>' .
-        '<div><img src="' . $home . '/images/contacts.png" width="16" height="16"/>&#160;<a href="index.php?act=info&amp;id=' . $user['id'] . '">' . $lng['information'] . '</a></div>' .
-        '<div><img src="' . $home . '/images/activity.gif" width="16" height="16"/>&#160;<a href="index.php?act=activity&amp;id=' . $user['id'] . '">' . $lng_profile['activity'] . '</a></div>' .
-        '<div><img src="' . $home . '/images/rate.gif" width="16" height="16"/>&#160;<a href="index.php?act=stat&amp;id=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
+        '<div><img src="../images/contacts.png" width="16" height="16"/>&#160;<a href="profile.php?act=info&amp;id=' . $user['id'] . '">' . $lng['information'] . '</a></div>' .
+        '<div><img src="../images/activity.gif" width="16" height="16"/>&#160;<a href="profile.php?act=activity&amp;id=' . $user['id'] . '">' . $lng_profile['activity'] . '</a></div>' .
+        '<div><img src="../images/rate.gif" width="16" height="16"/>&#160;<a href="profile.php?act=stat&amp;id=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
     $bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     if ($bancount)
-        echo '<div><img src="' . $home . '/images/block.gif" width="16" height="16"/>&#160;<a href="../users_ban.php?id=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
+        echo '<div><img src="../images/block.gif" width="16" height="16"/>&#160;<a href="../users_ban.php?id=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
     echo '<br />' .
-        '<div><img src="' . $home . '/images/photo.gif" width="16" height="16"/>&#160;<a href="../album/index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
-        '<div><img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="../guestbook/index.php?id=' . $user['id'] . '">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
-        '<div><img src="' . $home . '/images/pt.gif" width="16" height="16"/>&#160;<a href="../blog/index.php?id=' . $user['id'] . '">' . $lng['blog'] . '</a>&#160;(0)</div>';
+        '<div><img src="../images/photo.gif" width="16" height="16"/>&#160;<a href="album/index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
+        '<div><img src="../images/guestbook.gif" width="16" height="16"/>&#160;<a href="">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
+        '<div><img src="../images/pt.gif" width="16" height="16"/>&#160;<a href="">' . $lng['blog'] . '</a>&#160;(0)</div>';
     if ($user['id'] != $user_id) {
-        echo '<br /><div><img src="' . $home . '/images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>';
+        echo '<br /><div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>';
         if (!$ban['1'] && !$ban['3'])
-            echo '<div><img src="' . $home . '/images/write.gif" width="16" height="16"/>&#160;<a href="../pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
+            echo '<div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="../pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
     }
     echo '</p></div>';
-    echo '<div class="phdr"><a href="' . $home . '/index.php?act=users">' . $lng['users'] . '</a></div>';
+    echo '<div class="phdr"><a href="index.php">' . $lng['users'] . '</a></div>';
 }
 
-require('../../incfiles/end.php');
+require_once('../incfiles/end.php');
 ?>

@@ -162,7 +162,7 @@ if (!empty($_SESSION['uid'])) {
             break;
     }
 }
-echo "<a href='my_cabinet.php'>В кабинет</a></p>";
+echo "<a href='profile.php?act=office'>В кабинет</a></p>";
 
 require_once('../incfiles/end.php');
 

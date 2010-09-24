@@ -98,7 +98,7 @@ echo '<div class="header"> ' . $lng['hi'] . ', ' . ($user_id ? '<b>' . $login . 
 */
 echo '<div class="tmn">';
 echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $home . '\'>' . $lng['homepage'] . '</a> | ' : '';
-echo ($user_id && $mod != 'cab') ? '<a href="' . $home . '/users/profile/index.php?act=office">' . $lng['personal'] . '</a> | ' : '';
+echo ($user_id) ? '<a href="' . $home . '/users/profile.php?act=office">' . $lng['personal'] . '</a> | ' : '';
 echo $user_id ? '<a href="' . $home . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $home . '/login.php">' . $lng['login'] . '</a> | <a href="' . $home . '/registration.php">' . $lng['registration'] . '</a>';
 echo '</div><div class="maintxt">';
 

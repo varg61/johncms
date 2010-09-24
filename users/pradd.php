@@ -552,7 +552,7 @@ if ($user_id) {
             echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
             break;
     }
-    echo "<p><a href='my_cabinet.php'>В кабинет</a><br/>";
+    echo "<p><a href='profile.php?act=office'>В кабинет</a><br/>";
     echo "<a href='pradd.php?act=write'>Написать</a></p>";
 }
 
