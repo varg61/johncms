@@ -52,6 +52,7 @@ $array = array (
     'edit' => 'profile',
     'info' => 'profile',
     'ip' => 'profile',
+    'karma' => 'profile',
     'office' => 'profile',
     'password' => 'profile',
     'settings' => 'profile',
@@ -110,14 +111,14 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         }
         echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $home . '/images/k_' . $images . '.gif"/></td><td>' .
             '<b>' . $lng['karma'] . ' (' . $user['karma'] . ')</b>' .
-            '<div class="sub"><span class="green"><a href="karma.php?id=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . ($exp[0] ? $exp[0] : '0') . ')</a></span> | ' .
-            '<span class="red"><a href="karma.php?id=' . $user['id'] . '&amp;type=2">' . $lng['vote_against'] . ' (' . ($exp[1] ? $exp[1] : '0') . ')</a></span>';
-        if ($id) {
+            '<div class="sub"><span class="green"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . ($exp[0] ? $exp[0] : '0') . ')</a></span> | ' .
+            '<span class="red"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=2">' . $lng['vote_against'] . ' (' . ($exp[1] ? $exp[1] : '0') . ')</a></span>';
+        if ($user['id'] != $user_id) {
             if (!$datauser['karma_off'] && (!$user['rights'] || ($user['rights'] && !$set_karma['adm'])) && $user['ip'] != $datauser['ip']) {
                 $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '" . $datauser['karma_time'] . "'"), 0);
                 $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '$id' AND `time` > '" . ($realtime - 86400) . "'"), 0);
                 if ($datauser['postforum'] >= $set_karma['forum'] && $datauser['total_on_site'] >= $set_karma['karma_time'] && ($set_karma['karma_points'] - $sum) > 0 && !$count) {
-                    echo '<br /><a href="karma.php?act=user&amp;id=' . $user['id'] . '">' . $lng['vote'] . '</a>';
+                    echo '<br /><a href="profile.php?act=karma&amp;mod=vote&amp;user=' . $user['id'] . '">' . $lng['vote'] . '</a>';
                 }
             }
         } else {

@@ -24,7 +24,6 @@ if ($user_id) {
     $foruser = check(trim($_POST['foruser']));
     $tem = check(trim($_POST['tem']));
     $idm = intval($_POST['idm']);
-    $act = isset($_GET['act']) ? $_GET['act'] : '';
     switch ($act) {
         case 'send':
             ////////////////////////////////////////////////////////////
@@ -425,7 +424,6 @@ if ($user_id) {
             // Читаем входящие письма                                 //
             ////////////////////////////////////////////////////////////
             require_once('../incfiles/head.php');
-            $id = intval($_GET['id']);
             $messages1 = mysql_query("select * from `privat` where user='" . $login . "' and type='in' and id='" . $id . "';");
             $massiv1 = mysql_fetch_array($messages1);
             if ($massiv1['chit'] == "no") {
@@ -436,12 +434,12 @@ if ($user_id) {
             if ($countnew > 0) {
                 echo "<div style='text-align: center'><a href='$home/users/pradd.php?act=in&amp;new'><b><font color='red'>Вам письмо: $countnew</font></b></a></div>";
             }
-            $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='" . $massiv1['author'] . "';"));
+            $mass = mysql_fetch_array(mysql_query("select * from `users` where `name`='" . $massiv1['author'] . "';"));
             $text = $massiv1['text'];
             $text = tags($text);
             if ($set_user['smileys'])
                 $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
-            echo "<p>От <a href='profile/index.php?id=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
+            echo "<p>От <a href='profile.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
             $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
             echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
             if (!empty($massiv1['attach'])) {

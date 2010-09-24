@@ -12,15 +12,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
-$headmod = 'karma';
-require('../incfiles/core.php');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 $lng_karma = load_lng('karma');
 $textl = $lng['karma'];
 require('../incfiles/head.php');
-if ($set_karma['on'] && $user_id) {
-    switch ($act) {
-        case 'user':
+if ($set_karma['on']) {
+    switch ($mod) {
+        case 'vote':
             /*
             -----------------------------------------------------------------
             Отдаем голос за пользователя
@@ -28,29 +26,22 @@ if ($set_karma['on'] && $user_id) {
             */
             if (!$datauser['karma_off']) {
                 $error = array ();
-                $req = mysql_query("SELECT `ip`, `name`, `karma`, `plus_minus`, `rights` FROM `users` WHERE `id` = '$id' LIMIT 1");
-                if (!mysql_num_rows($req) || $id == $user_id)
-                    $error[] = $lng['error_user_not_exist'];
-                if (!$error) {
-                    $res = mysql_fetch_assoc($req);
-                    if ($res['rights'] && $set_karma['adm'])
-                        $error[] = $lng_karma['error_not_for_admins'];
-                    if ($res['ip'] == $datauser['ip'])
-                        $error[] = $lng_karma['error_rogue'];
-                    if ($datauser['total_on_site'] < $set_karma['karma_time'] || $datauser['postforum'] < $set_karma['forum'])
-                        $error[] = $lng_karma['error_terms_1'] . ' '
-                            . ($set_karma['time'] ? ($set_karma['karma_time'] / 3600) . $lng['hours'] : ($set_karma['karma_time'] / 86400) . $lng['days']) . ' ' . $lng_karma['error_terms_2'] . ' ' . $set_karma['forum'] . ' ' . $lng_karma['posts'];
-                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '$id' AND `time` > '"
-                        . ($realtime - 86400) . "'"), 0);
-                    if ($count)
-                        $error[] = $lng_karma['error_terms_3'];
-                    $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '"
-                        . $datauser['karma_time'] . "'"), 0);
-                    if (($set_karma['karma_points'] - $sum) <= 0)
-                        $error[] = $lng_karma['error_limit'] . ' ' . date('d.m.y в H:i:s', ($datauser['karma_time'] + 86400));
-                }
+                if ($user['rights'] && $set_karma['adm'])
+                    $error[] = $lng_karma['error_not_for_admins'];
+                if ($user['ip'] == $ipl)
+                    $error[] = $lng_karma['error_rogue'];
+                if ($datauser['total_on_site'] < $set_karma['karma_time'] || $datauser['postforum'] < $set_karma['forum'])
+                    $error[] = $lng_karma['error_terms_1'] . ' '
+                        . ($set_karma['time'] ? ($set_karma['karma_time'] / 3600) . $lng['hours'] : ($set_karma['karma_time'] / 86400) . $lng['days']) . ' ' . $lng_karma['error_terms_2'] . ' ' . $set_karma['forum'] . ' '
+                        . $lng_karma['posts'];
+                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '" . $user['id'] . "' AND `time` > '" . ($realtime - 86400) . "'"), 0);
+                if ($count)
+                    $error[] = $lng_karma['error_terms_3'];
+                $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '" . $datauser['karma_time'] . "'"), 0);
+                if (($set_karma['karma_points'] - $sum) <= 0)
+                    $error[] = $lng_karma['error_limit'] . ' ' . date('d.m.y в H:i:s', ($datauser['karma_time'] + 86400));
                 if ($error) {
-                    echo display_error($error, '<a href="profile/index.php?id=' . $id . '">' . $lng['back'] . '</a>');
+                    echo display_error($error, '<a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a>');
                 } else {
                     if (isset($_POST['submit'])) {
                         $text = trim($_POST['text']);
@@ -59,11 +50,10 @@ if ($set_karma['on'] && $user_id) {
                         if (!$points || $points > ($set_karma['karma_points'] - $sum))
                             $points = 1;
                         $text = mysql_real_escape_string(mb_substr($text, 0, 500));
-                        mysql_query(
-                            "INSERT INTO `karma_users` SET
+                        mysql_query("INSERT INTO `karma_users` SET
                             `user_id` = '$user_id',
                             `name` = '$login',
-                            `karma_user` = '$id',
+                            `karma_user` = '" . $user['id'] . "',
                             `points` = '$points',
                             `type` = '$type',
                             `time` = '$realtime',
@@ -78,11 +68,15 @@ if ($set_karma['on'] && $user_id) {
                             $plm[1] = $plm[1] + $points;
                         }
                         $plus_minus = $plm[0] . '|' . $plm[1];
-                        mysql_query("UPDATE `users` SET `karma`='$karma', `plus_minus`='$plus_minus' WHERE `id` = '$id' LIMIT 1");
-                        echo '<div class="gmenu">' . $lng_karma['done'] . '!<br /><a href="profile/index.php?id=' . $id . '">' . $lng['continue'] . '</a></div>';
+                        mysql_query("UPDATE `users` SET
+                            `karma` = '$karma',
+                            `plus_minus` = '$plus_minus'
+                            WHERE `id` = '" . $user['id'] . "' LIMIT 1
+                        ");
+                        echo '<div class="gmenu">' . $lng_karma['done'] . '!<br /><a href="profile.php?user=' . $user['id'] . '">' . $lng['continue'] . '</a></div>';
                     } else {
                         echo '<div class="phdr"><b>' . $lng_karma['vote_to'] . ' ' . $res['name'] . '</b></div>' .
-                            '<form action="karma.php?act=user&amp;id=' . $id . '" method="post">' .
+                            '<form action="profile.php?act=karma&amp;mod=vote&amp;user=' . $user['id'] . '" method="post">' .
                             '<div class="gmenu"><b>' . $lng_karma['vote_type'] . ':</b><br />' .
                             '<input name="type" type="radio" value="1" checked="checked"/> ' . $lng_karma['plus'] . '<br />' .
                             '<input name="type" type="radio" value="0"/> ' . $lng_karma['minus'] . '<br />' .
@@ -96,11 +90,11 @@ if ($set_karma['on'] && $user_id) {
                             '<small>' . $lng['minmax_2_500'] . '</small>' .
                             '<p><input type="submit" name="submit" value="' . $lng['vote'] . '"/></p>' .
                             '</div></form>' .
-                            '<div class="list2"><a href="profile/index.php?id=' . $id . '">' . $lng['profile'] . '</a></div>';
+                            '<div class="list2"><a href="profile/index.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                     }
                 }
             } else {
-                echo display_error($lng_karma['error_forbidden'], '<a href="profile/index.php?id=' . $id . '">' . $lng['back'] . '</a>');
+                echo display_error($lng_karma['error_forbidden'], '<a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a>');
             }
             break;
 
@@ -112,12 +106,10 @@ if ($set_karma['on'] && $user_id) {
             */
             if ($rights == 9) {
                 $type = isset($_GET['type']) ? abs(intval($_GET['type'])) : NULL;
-                $del = isset($_GET['del']) ? intval($_GET['del']) : NULL;
-                $req = mysql_query("SELECT * FROM `karma_users` WHERE `id`='$del' AND `karma_user` = '$id' LIMIT 1");
+                $req = mysql_query("SELECT * FROM `karma_users` WHERE `id` = '$id' AND `karma_user` = '" . $user['id'] . "' LIMIT 1");
                 if (mysql_num_rows($req)) {
                     if (isset($_GET['yes'])) {
                         $res = mysql_fetch_assoc($req);
-                        $user = mysql_fetch_assoc(mysql_query("SELECT `karma`, `plus_minus` FROM `users` WHERE `id` = '$id' LIMIT 1"));
                         $plm = explode('|', $user['plus_minus']);
                         if ($res['type']) {
                             $karma = $user['karma'] - $res['points'];
@@ -126,17 +118,17 @@ if ($set_karma['on'] && $user_id) {
                             $karma = $user['karma'] + $res['points'];
                             $plus_minus = $plm[0] . '|' . ($plm[1] - $res['points']);
                         }
-                        mysql_query("DELETE FROM `karma_users` WHERE `id` = '$del' LIMIT 1");
+                        mysql_query("DELETE FROM `karma_users` WHERE `id` = '$id' LIMIT 1");
                         mysql_query("UPDATE `users` SET
                             `karma`='$karma',
                             `plus_minus`='$plus_minus'
-                            WHERE `id` = '$id' LIMIT 1
+                            WHERE `id` = '" . $user['id'] . "' LIMIT 1
                         ");
-                        header('Location: karma.php?id=' . $id . '&amp;type=' . $type);
+                        header('Location: profile.php?act=karma&user=' . $user['id'] . '&type=' . $type);
                     } else {
                         echo '<p>' . $lng_karma['deletion_warning'] . '?<br/>' .
-                            '<a href="karma.php?act=delete&amp;id=' . $id . '&amp;del=' . $del . '&amp;type=' . $type . '&amp;yes">' . $lng['delete'] . '</a> | ' .
-                            '<a href="karma.php?id=' . $id . '&amp;type=' . $type . '">' . $lng['cancel'] . '</a></p>';
+                            '<a href="profile.php?act=karma&amp;mod=delete&amp;user=' . $user['id'] . '&amp;id=' . $id . '&amp;type=' . $type . '&amp;yes">' . $lng['delete'] . '</a> | ' .
+                            '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=' . $type . '">' . $lng['cancel'] . '</a></p>';
                     }
                 }
             }
@@ -148,15 +140,15 @@ if ($set_karma['on'] && $user_id) {
             Очищаем все голоса за пользователя
             -----------------------------------------------------------------
             */
-            if ($id && $rights == 9) {
+            if ($rights == 9) {
                 if (isset($_GET['yes'])) {
-                    mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '$id'");
-                    mysql_query("UPDATE `users` SET `karma` = '0', `plus_minus` = '0|0' WHERE `id` = '$id' LIMIT 1");
-                    header('Location: karma.php?id=' . $id);
+                    mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "'");
+                    mysql_query("UPDATE `users` SET `karma` = '0', `plus_minus` = '0|0' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+                    header('Location: profile.php?act=karma&user=' . $user['id']);
                 } else {
                     echo '<p>' . $lng_karma['clear_warning'] . '?<br/>' .
-                        '<a href="karma.php?act=clean&amp;id=' . $id . '&amp;yes">' . $lng['delete'] . '</a> | ' .
-                        '<a href="karma.php?id=' . $id . '">' . $lng['cancel'] . '</a></p>';
+                        '<a href="profile.php?act=karma&amp;mod=clean&amp;user=' . $user['id'] . '&amp;yes">' . $lng['delete'] . '</a> | ' .
+                        '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '">' . $lng['cancel'] . '</a></p>';
                 }
             }
             break;
@@ -201,49 +193,27 @@ if ($set_karma['on'] && $user_id) {
             Главная страница Кармы, список отзывов
             -----------------------------------------------------------------
             */
-            if ($id && $id != $user_id) {
-                $req = mysql_query("SELECT `name`, `karma`, `plus_minus` FROM `users` WHERE `id` = '$id' LIMIT 1");
-                if (!mysql_num_rows($req)) {
-                    echo display_error($lng['error_user_not_exist']);
-                    require('../incfiles/end.php');
-                    exit;
-                }
-                $user = mysql_fetch_assoc($req);
-            } else {
-                $user = $datauser;
-                $id = $user_id;
-            }
             $exp = explode('|', $user['plus_minus']);
-            echo '<p>';
-            $type = abs(intval($_GET['type']));
-            $sql = '';
-            switch ($type) {
-                case 2:
-                    echo '<a href="karma.php?id=' . $id . '&amp;type=0">' . $lng_karma['all'] . '</a> | <a href="karma.php?id=' . $id . '&amp;type=1">' . $lng_karma['positive'] . '</a> | ' . $lng_karma['negative'];
-                    $sql = ' AND `type` = 0';
-                    break;
-
-                case 1:
-                    echo '<a href="karma.php?id=' . $id . '&amp;type=0">' . $lng_karma['all'] . '</a> | ' . $lng_karma['positive'] . ' | <a href="karma.php?id=' . $id . '&amp;type=2">' . $lng_karma['negative'] . '</a>';
-                    $sql = ' AND `type` = 1';
-                    break;
-
-                default:
-                    echo $lng_karma['all'] . ' | <a href="karma.php?id=' . $id . '&amp;type=1">' . $lng_karma['positive'] . '</a> | <a href="karma.php?id=' . $id . '&amp;type=2">' . $lng_karma['negative'] . '</a>';
-                    $type = 0;
-            }
-            echo '</p><div class="phdr"><b>' . $lng['karma'] . ' ' . $user['name'] . '</b> ' . $user['karma'] . ' (<span class="green">'
+            $type = isset($_GET['type']) ? abs(intval($_GET['type'])) : 0;
+            $menu = array(
+                (!$type ? '<b>' . $lng_karma['all'] . '</b>' : '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '">' . $lng_karma['all'] . '</a>'),
+                ($type == 1 ? '<b>' . $lng_karma['positive'] . '</b>' : '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=1">' . $lng_karma['positive'] . '</a>'),
+                ($type == 2 ? '<b>' . $lng_karma['negative'] . '</b>' : '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=2">' . $lng_karma['negative'] . '</a>')
+            );
+            echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['karma'] . ' ' . $user['karma'] . ' (<span class="green">'
                 . $exp[0] . '</span>/<span class="red">' . $exp[1] . '</span>)</div>';
-            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user`='$id' $sql"), 0);
+            echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+            echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>';
+            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "'" . ($type ? " AND `type` = '$type'" : '')), 0);
             if ($total) {
-                $req = mysql_query("SELECT * FROM `karma_users` WHERE `karma_user`='$id' $sql ORDER BY `time` DESC LIMIT $start, $kmess");
+                $req = mysql_query("SELECT * FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "'" . ($type ? " AND `type` = '$type'" : '') . " ORDER BY `time` DESC LIMIT $start, $kmess");
                 while ($res = mysql_fetch_assoc($req)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo $res['type'] ? '<span class="green">+' . $res['points'] . '</span> ' : '<span class="red">-' . $res['points'] . '</span> ';
-                    echo $user_id == $res['user_id'] || !$res['user_id'] ? '<b>' . $res['name'] . '</b>' : '<a href="profile/index.php?id=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a>';
+                    echo $user_id == $res['user_id'] || !$res['user_id'] ? '<b>' . $res['name'] . '</b>' : '<a href="profile.php?user=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a>';
                     echo ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                     if ($rights == 9)
-                        echo ' <span class="red"><a href="karma.php?act=delete&amp;id=' . $id . '&amp;del=' . $res['id'] . '&amp;type=' . $type . '">[X]</a></span>';
+                        echo ' <span class="red"><a href="profile.php?act=karma&amp;mod=delete&amp;user=' . $user['id'] . '&amp;id=' . $res['id'] . '&amp;type=' . $type . '">[X]</a></span>';
                     if (!empty($res['text']))
                         echo '<div class="sub">' . checkout($res['text']) . '</div>';
                     echo '</div>';
@@ -254,18 +224,14 @@ if ($set_karma['on'] && $user_id) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('karma.php?id=' . $id . '&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
-                    '<p><form action="karma.php" method="get">' .
-                    '<input type="hidden" name="id" value="' . $id . '"/>' .
-                    '<input type="hidden" name="type" value="' . $type . '"/>' .
+                echo '<p>' . display_pagination('profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
+                    '<p><form action="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=' . $type . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($rights == 9)
-                echo '<div class="func"><a href="karma.php?id=' . $id . '&amp;act=clean">' . $lng_karma['reset'] . '</a></div>';
-            echo '<p><a href="profile/index.php?id=' . $id . '">' . $lng['profile'] . '</a></p>';
+                echo '<div class="func"><a href="profile.php?user=' . $user['id'] . '&amp;mod=clean">' . $lng_karma['reset'] . '</a></div>';
+            echo '<p><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></p>';
     }
 }
-
-require('../incfiles/end.php');
 ?>
