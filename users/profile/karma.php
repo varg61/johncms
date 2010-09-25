@@ -176,9 +176,9 @@ if ($set_karma['on']) {
                 ($type == 1 ? '<b>' . $lng_karma['positive'] . '</b>' : '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=1">' . $lng_karma['positive'] . '</a>'),
                 (!$type ? '<b>' . $lng_karma['negative'] . '</b>' : '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '">' . $lng_karma['negative'] . '</a>')
             );
-            echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['karma'] . '</div>';
-            echo '<div class="topmenu">' . display_menu($menu) . '</div>';
-            echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>';
+            echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['karma'] . '</div>' .
+                '<div class="topmenu">' . display_menu($menu) . '</div>' .
+                '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>';
             $karma = $user['karma_plus'] - $user['karma_minus'];
             if ($karma > 0) {
                 $images = ($user['karma_minus'] ? ceil($user['karma_plus'] / $user['karma_minus']) : $user['karma_plus']) > 10 ? '2' : '1';
@@ -207,7 +207,7 @@ if ($set_karma['on']) {
                     if ($rights == 9)
                         echo ' <span class="red"><a href="profile.php?act=karma&amp;mod=delete&amp;user=' . $user['id'] . '&amp;id=' . $res['id'] . '&amp;type=' . $type . '">[X]</a></span>';
                     if (!empty($res['text']))
-                        echo '<div class="sub">' . checkout($res['text']) . '</div>';
+                        echo '<br />' . smileys(checkout($res['text']));
                     echo '</div>';
                     ++$i;
                 }
