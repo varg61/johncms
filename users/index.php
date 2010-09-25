@@ -21,7 +21,7 @@ require('../incfiles/core.php');
 Закрываем от неавторизованных юзеров
 -----------------------------------------------------------------
 */
-if(!$set['active']){
+if(!$user_id && !$set['active']){
     require('../incfiles/head.php');
     echo display_error($lng['access_guest_forbidden']);
     require('../incfiles/end.php');
