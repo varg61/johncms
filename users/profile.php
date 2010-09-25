@@ -55,6 +55,7 @@ $array = array (
     'karma' => 'profile',
     'office' => 'profile',
     'password' => 'profile',
+    'reset' => 'profile',
     'settings' => 'profile',
     'stat' => 'profile'
 );
@@ -72,6 +73,8 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     echo '<div class="phdr"><b>' . ($user['id'] != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты
     $menu = array ();
+    if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
+        $menu[] = '<a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['edit'] . '</a>';
     if ($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
         $menu[] = '<a href="' . $home . '/' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a>';
     if ($user['id'] != $user_id && $rights > $user['rights'])
@@ -95,28 +98,26 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     }
     // Карма
     if ($set_karma['on']) {
-        if ($user['karma'])
-            $exp = explode('|', $user['plus_minus']);
-        if ($exp[0] > $exp[1]) {
-            $karma = $exp[1] ? ceil($exp[0] / $exp[1]) : $exp[0];
-            $images = $karma > 10 ? '2' : '1';
+        $karma = $user['karma_plus'] - $user['karma_minus'];
+        if ($karma > 0) {
+            $images = ($user['karma_minus'] ? ceil($user['karma_plus'] / $user['karma_minus']) : $user['karma_plus']) > 10 ? '2' : '1';
             echo '<div class="gmenu">';
-        } else if ($exp[1] > $exp[0]) {
-            $karma = $exp[0] ? ceil($exp[1] / $exp[0]) : $exp[1];
-            $images = $karma > 10 ? '-2' : '-1';
+        } else if ($karma < 0) {
+            $images = ($user['karma_plus'] ? ceil($user['karma_minus'] / $user['karma_plus']) : $user['karma_minus']) > 10 ? '-2' : '-1';
             echo '<div class="rmenu">';
         } else {
             $images = 0;
             echo '<div class="menu">';
         }
         echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $home . '/images/k_' . $images . '.gif"/></td><td>' .
-            '<b>' . $lng['karma'] . ' (' . $user['karma'] . ')</b>' .
-            '<div class="sub"><span class="green"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . ($exp[0] ? $exp[0] : '0') . ')</a></span> | ' .
-            '<span class="red"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=2">' . $lng['vote_against'] . ' (' . ($exp[1] ? $exp[1] : '0') . ')</a></span>';
+            '<b>' . $lng['karma'] . ' (' . $karma . ')</b>' .
+            '<div class="sub">' .
+            '<span class="green"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . $user['karma_plus'] . ')</a></span> | ' .
+            '<span class="red"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '">' . $lng['vote_against'] . ' (' . $user['karma_minus'] . ')</a></span>';
         if ($user['id'] != $user_id) {
             if (!$datauser['karma_off'] && (!$user['rights'] || ($user['rights'] && !$set_karma['adm'])) && $user['ip'] != $datauser['ip']) {
                 $sum = mysql_result(mysql_query("SELECT SUM(`points`) FROM `karma_users` WHERE `user_id` = '$user_id' AND `time` >= '" . $datauser['karma_time'] . "'"), 0);
-                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '$id' AND `time` > '" . ($realtime - 86400) . "'"), 0);
+                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `user_id` = '$user_id' AND `karma_user` = '" . $user['id'] . "' AND `time` > '" . ($realtime - 86400) . "'"), 0);
                 if ($datauser['postforum'] >= $set_karma['forum'] && $datauser['total_on_site'] >= $set_karma['karma_time'] && ($set_karma['karma_points'] - $sum) > 0 && !$count) {
                     echo '<br /><a href="profile.php?act=karma&amp;mod=vote&amp;user=' . $user['id'] . '">' . $lng['vote'] . '</a>';
                 }
@@ -124,7 +125,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         } else {
             $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
             if ($total_karma > 0)
-                echo '<br /><a href="karma.php?act=new">' . $lng['responses_new'] . '</a> (' . $total_karma . ')';
+                echo '<br /><a href="profile.php?act=karma&amp;mod=new">' . $lng['responses_new'] . '</a> (' . $total_karma . ')';
         }
         echo '</div></td></tr></table></div>';
     }

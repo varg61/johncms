@@ -188,9 +188,10 @@ if ($rights >= 7) {
     if ($rights == 9) {
         echo '<li><input name="karma_off" type="checkbox" value="1" ' . ($user['karma_off'] ? 'checked="checked"' : '') . ' />&#160;<span class="red"><b>' . $lng_profile['deny_karma'] . '</b></span></li>';
     }
-    echo '<li><a href="index.php?act=password&amp;id=' . $user['id'] . '">' . $lng['change_password'] . '</a></li>' .
-        '<li><a href="my_data.php?act=reset&amp;id=' . $user['id'] . '">' . $lng['reset_settings'] . '</a></li>' .
-        '<li>' . $lng_profile['specify_sex'] . ':<br />' .
+    echo '<li><a href="profile.php?act=password&amp;user=' . $user['id'] . '">' . $lng['change_password'] . '</a></li>';
+    if($rights > $user['rights'])
+        echo '<li><a href="profile.php?act=reset&amp;user=' . $user['id'] . '">' . $lng['reset_settings'] . '</a></li>';
+    echo '<li>' . $lng_profile['specify_sex'] . ':<br />' .
         '<input type="radio" value="m" name="sex" ' . ($user['sex'] == 'm' ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['sex_m'] . '<br />' .
         '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['sex_w'] . '</li>' .
         '</ul></p>';

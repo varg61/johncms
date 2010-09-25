@@ -13,7 +13,6 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
 $headmod = 'userstop';
 $textl = $lng['users_top'];
 require('../incfiles/head.php');
@@ -25,11 +24,12 @@ require('../incfiles/head.php');
 */
 function get_top($order = 'postforum') {
     $req = mysql_query("SELECT * FROM `users` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
+
     if (mysql_num_rows($req)) {
         $out = '';
         while ($res = mysql_fetch_assoc($req)) {
             $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $out .= display_user($res, array('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
+            $out .= display_user($res, array ('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
             ++$i;
         }
         return $out;
@@ -43,7 +43,7 @@ function get_top($order = 'postforum') {
 Меню выбора
 -----------------------------------------------------------------
 */
-$menu = array(
+$menu = array (
     (!$mod ? '<b>' . $lng['forum'] . '</b>' : '<a href="index.php?act=top">' . $lng['forum'] . '</a>'),
     ($mod == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="index.php?act=top&amp;mod=guest">' . $lng['guestbook'] . '</a>'),
     ($mod == 'chat' ? '<b>' . $lng['chat'] . '</b>' : '<a href="index.php?act=top&amp;mod=chat">' . $lng['chat'] . '</a>'),
@@ -51,10 +51,8 @@ $menu = array(
     ($mod == 'bal' ? '<b>' . $lng['balance'] . '</b>' : '<a href="index.php?act=top&amp;mod=bal">' . $lng['balance'] . '</a>'),
     ($mod == 'comm' ? '<b>' . $lng['comments'] . '</b>' : '<a href="index.php?act=top&amp;mod=comm">' . $lng['comments'] . '</a>')
 );
-if($set_karma['on'])
-    $menu[] =  $act == 'karma' ? '<b>' . $lng['karma'] . '</b>' : '<a href="index.php?act=top&amp;mod=karma">' . $lng['karma'] . '</a>';
-
-
+if ($set_karma['on'])
+    $menu[] = $mod == 'karma' ? '<b>' . $lng['karma'] . '</b>' : '<a href="index.php?act=top&amp;mod=karma">' . $lng['karma'] . '</a>';
 switch ($mod) {
     case 'guest':
         /*
@@ -125,7 +123,16 @@ switch ($mod) {
         if ($set_karma['on']) {
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_karma'] . '</div>';
             echo '<div class="topmenu">' . display_menu($menu) . '</div>';
-            echo get_top('karma');
+            $req = mysql_query("SELECT *, (`karma_plus` - `karma_minus`) AS `karma` FROM `users` WHERE (`karma_plus` - `karma_minus`) > 0 ORDER BY `karma` DESC LIMIT 9");
+            if (mysql_num_rows($req)) {
+                while ($res = mysql_fetch_assoc($req)) {
+                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    echo display_user($res, array ('header' => ('<b>' . $res['karma']) . '</b>')) . '</div>';
+                    ++$i;
+                }
+            } else {
+                echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+            }
             echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
         }
         break;
@@ -142,5 +149,4 @@ switch ($mod) {
         echo '<div class="phdr"><a href="../forum/index.php">' . $lng['forum'] . '</a></div>';
 }
 echo '<p><a href="index.php">' . $lng['back'] . '</a></p>';
-
 ?>

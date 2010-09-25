@@ -61,7 +61,8 @@ switch ($mod) {
             // Проверяем и записываем COOKIES
             if (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
                 setcookie('cups', md5($newpass), time() + 3600 * 24 * 365);
-            echo '<div class="gmenu"><p><b>' . $lng_pass['password_changed'] . '</b></p>';
+            echo '<div class="gmenu"><p><b>' . $lng_pass['password_changed'] . '</b><br />' .
+                '<a href="' . ($user_id == $user['id'] ? '../login.php' : 'profile.php?user=' . $user['id']) . '">' . $lng['continue'] . '</a></p>';
             if ($autologin) {
                 // Показываем ссылку на Автологин
                 echo '<p>' . $lng_pass['autologin_link'] . ':<br />' .
