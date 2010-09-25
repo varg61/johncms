@@ -47,7 +47,7 @@ if ($total) {
         }
         echo '<div class="sub">';
         vote_photo($res);
-        echo '<p><a href="../profile/index.php?id=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="index.php?act=album&amp;al=' . $res['album_id'] . '&amp;id=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a><br />';
+        echo '<p><a href="../profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="index.php?act=album&amp;al=' . $res['album_id'] . '&amp;id=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a><br />';
         echo '<a href="../../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>';
         echo '</div></div>';
         ++$i;
