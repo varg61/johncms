@@ -73,6 +73,7 @@ enter_on_site                 :::   Войти на сайт
 error                         :::   ОШИБКА
 error_404                     :::   Запрошенная Вами страница отсутствует
 error_address                 :::   Адрес введен неверно
+error_avatar_select           :::   Ошибка выбора Аватара
 error_description_lenght      :::   Длина описания должна быть не менее 2-х символов
 error_login_empty             :::   Вы не ввели Логин
 error_mandatory_fields        :::   Не заполнены обязательные поля

@@ -139,7 +139,7 @@ if (isset($_GET['delavatar'])) {
 */
 echo '<form action="profile.php?act=edit&amp;user=' . $user['id'] . '" method="post">' .
     '<div class="gmenu"><p>' .
-    'Логин: <b>' . $user['name_lat'] . '</b><br />';
+    $lng['login_name'] . ': <b>' . $user['name_lat'] . '</b><br />';
 if ($rights >= 7) {
     echo $lng['nick'] . ': (' . $lng_profile['nick_lenght'] . ')<br /><input type="text" value="' . $user['name'] . '" name="name" /><br />' .
         $lng['status'] . ': (' . $lng_profile['status_lenght'] . ')<br /><input type="text" value="' . $user['status'] . '" name="status" /><br />';
@@ -147,15 +147,17 @@ if ($rights >= 7) {
     echo '<span class="gray">' . $lng['nick'] . ':</span> <b>' . $user['name'] . '</b><br />' .
         '<span class="gray">' . $lng['status'] . ':</span> ' . $user['status'] . '<br />';
 }
-echo $lng['avatar'] . ':<br />';
+echo '</p><p>' . $lng['avatar'] . ':<br />';
 $link = '';
 if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
     echo '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
     $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['id'] . '&amp;delavatar">' . $lng['delete'] . '</a>';
 }
-echo '<small><a href="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a> | ' .
-    '<a href="avatar.php?id=' . $user['id'] . '">' . $lng['select'] . '</a>' . $link . '</small><br />' .
-    $lng_profile['photo'] . ':<br />';
+echo '<small><a href="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>';
+if($user['id'] == $user_id)
+    echo ' | <a href="../pages/faq.php?act=avatars">' . $lng['select'] . '</a>';
+echo $link . '</small></p>';
+echo '<p>' . $lng_profile['photo'] . ':<br />';
 $link = '';
 if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg'))) {
     echo '<a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';

@@ -163,6 +163,70 @@ switch ($act) {
         echo '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></div>';
         break;
 
+    case 'avatars':
+        /*
+        -----------------------------------------------------------------
+        Каталог пользовательских Аватаров
+        -----------------------------------------------------------------
+        */
+        if ($id && is_dir($rootpath . 'images/avatars/' . $id)) {
+            $avatar = isset($_GET['avatar']) ? intval($_GET['avatar']) : false;
+            if ($user_id && $avatar && is_file('../images/avatars/' . $id . '/' . $avatar . '.png')) {
+                // Устанавливаем пользовательский Аватар
+                if(@copy('../images/avatars/' . $id . '/' . $avatar . '.png', '../files/users/avatar/' . $user_id . '.png'))
+                    echo '<div class="gmenu"><p>' . $lng['avatar_applied'] . '<br />' .
+                        '<a href="../users/profile.php?act=edit">' . $lng['continue'] . '</a></p></div>';
+                else
+                    echo display_error($lng['error_avatar_select'], '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a>');
+            } else {
+                // Показываем список Аватаров
+                echo '<div class="phdr"><a href="faq.php?act=avatars"><b>' . $lng['avatars'] . '</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/avatars/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
+                $array = glob($rootpath . 'images/avatars/' . $id . '/*.png');
+                $total = count($array);
+                $end = $start + $kmess;
+                if ($end > $total)
+                    $end = $total;
+                if ($total > 0) {
+                    for ($i = $start; $i < $end; $i++) {
+                        $ava = preg_replace('#^' . $rootpath . 'images/avatars/' . $id . '/(.*?).png$#isU', '$1', $array[$i], 1);
+                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                        echo '<img src="' . $array[$i] . '" alt="" />';
+                        if ($user_id)
+                            echo ' - <a href="faq.php?act=avatars&amp;id=' . $id . '&amp;avatar=' . $ava . '">' . $lng['select'] . '</a>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<div class="menu">' . $lng['list_empty'] . '</div>';
+                }
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+                if ($total > $kmess) {
+                    echo '<p>' . display_pagination('faq.php?act=avatars&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
+                        '<p><form action="faq.php?act=avatars&amp;id=' . $id . '" method="post">' .
+                        '<input type="text" name="page" size="2"/>' .
+                        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+                        '</form></p>';
+                }
+                echo '<p><a href="avatar.php">' . $lng['catalogue'] . '</a><br />' .
+                    '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></p>';
+            }
+        } else {
+            // Показываем каталоги с Аватарами
+            echo '<div class="phdr"><b>' . $lng['avatars'] . '</b></div>';
+            $dir = glob($rootpath . 'images/avatars/*', GLOB_ONLYDIR);
+            $total = 0;
+            $total_dir = count($dir);
+            for ($i = 0; $i < $total_dir; $i++) {
+                $count = (int)count(glob($dir[$i] . '/*.png'));
+                $total = $total + $count;
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                echo '<a href="faq.php?act=avatars&amp;id=' . preg_replace('#^' . $rootpath . 'images/avatars/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') .
+                    '</a> (' . $count . ')</div>';
+            }
+            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>' .
+                '<p><a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></p>';
+        }
+        break;
+
     default:
         /*
         -----------------------------------------------------------------
@@ -173,6 +237,7 @@ switch ($act) {
             '<div class="menu"><a href="faq.php?act=forum">' . $lng_faq['forum_rules'] . '</a></div>' .
             '<div class="menu"><a href="faq.php?act=tags">' . $lng_faq['tags_faq'] . '</a></div>' .
             '<div class="menu"><a href="faq.php?act=trans">' . $lng_faq['translit_help'] . '</a></div>' .
+            '<div class="menu"><a href="faq.php?act=avatars">' . $lng['avatars'] . '</a></div>' .
             '<div class="menu"><a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
             '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></div>';
 }
