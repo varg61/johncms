@@ -72,9 +72,9 @@ switch ($act) {
             if ($newusers_total > 0)
                 echo '<li><a href="users/users.php">' . $lng['users_new'] . '</a> (' . $newusers_total . ')</li>';
             if ($reg_total > 0)
-                echo '<li><a href="' . $admp . '/index.php?act=usr_reg">' . $lng['users_on_reg'] . '</a> (' . $reg_total . ')</li>';
+                echo '<li><a href="' . $admp . '/index.php?act=reg">' . $lng['users_on_reg'] . '</a> (' . $reg_total . ')</li>';
             if ($ban_total > 0)
-                echo '<li><a href="' . $admp . '/index.php?act=usr_ban">' . $lng['users_on_ban'] . '</a> (' . $ban_total . ')</li>';
+                echo '<li><a href="' . $admp . '/index.php?act=ban_panel">' . $lng['users_on_ban'] . '</a> (' . $ban_total . ')</li>';
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
             if ($total_libmod > 0)
                 echo '<li><a href="library/index.php?act=moder">' . $lng['library_on_moderation'] . '</a> (' . $total_libmod . ')</li>';
