@@ -19,8 +19,8 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Список посетителей. у которых есть фотографии
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng['list'] . '</div>';
-echo '<div class="topmenu">' . ($mod == 'girls' ? '<a href="index.php?act=users">' . $lng['mans'] . '</a> | <b>' . $lng['womans'] . '</b>' : '<b>' . $lng['mans'] . '</b> | <a href="index.php?act=users&amp;mod=girls">' . $lng['womans'] . '</a>') . '</div>';
+echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng['list'] . '</div>';
+echo '<div class="topmenu">' . ($mod == 'girls' ? '<a href="album.php?act=users">' . $lng['mans'] . '</a> | <b>' . $lng['womans'] . '</b>' : '<b>' . $lng['mans'] . '</b> | <a href="album.php?act=users&amp;mod=girls">' . $lng['womans'] . '</a>') . '</div>';
 $sex = $mod == 'girls' ? 'zh' : 'm';
 $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     FROM `cms_album_files`
@@ -36,7 +36,7 @@ if ($total) {
     ");
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo '<a href="index.php?act=catalogue&amp;id=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
+        echo '<a href="album.php?act=list&amp;id=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
         ++$i;
     }
 } else {
@@ -44,8 +44,8 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('index.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '&amp;', $start, $total, $kmess) . '</p>' .
-        '<p><form action="index.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '" method="post">' .
+    echo '<p>' . display_pagination('album.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '&amp;', $start, $total, $kmess) . '</p>' .
+        '<p><form action="album.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';

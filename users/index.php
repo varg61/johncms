@@ -72,7 +72,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         '<img src="../images/contacts.png" width="16" height="16" />&#160;<a href="index.php?act=userlist">' . $lng['users'] . '</a> (' . stat_countusers() . ')<br />' .
         '<img src="../images/users.png" width="16" height="16" />&#160;<a href="index.php?act=admlist">' . $lng['administration'] . '</a> (' . $count_adm . ')' .
         ($brth ? '<br /><img src="../images/award.png" width="16" height="16" />&#160;<a href="index.php?act=birth">' . $lng['birthday_men'] . '</a> (' . $brth . ')' : '') .
-        '</p><p><img src="../images/photo.gif" width="16" height="16" />&#160;<a href="album/index.php">' . $lng['photo_albums'] . '</a> (' . count_photo() . ')</p>' .
+        '</p><p><img src="../images/photo.gif" width="16" height="16" />&#160;<a href="album.php">' . $lng['photo_albums'] . '</a> (' . count_photo() . ')</p>' .
         '<p><img src="../images/rate.gif" width="16" height="16" />&#160;<a href="index.php?act=top">' . $lng['users_top'] . '</a></p>' .
         '</div>' .
         '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';

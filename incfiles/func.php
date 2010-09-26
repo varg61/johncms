@@ -24,7 +24,7 @@ function count_photo(){
     $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
     $photocount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files`"), 0);
     $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "' AND `access` > '1'"), 0);
-    return $albumcount . '&#160;/&#160;' . $photocount . ($newcount ? '&#160;/&#160;<span class="red"><a href="' . $home . '/users/album/index.php?act=new">+' . $newcount . '</a></span>' : '');
+    return $albumcount . '&#160;/&#160;' . $photocount . ($newcount ? '&#160;/&#160;<span class="red"><a href="' . $home . '/users/album.php?act=new">+' . $newcount . '</a></span>' : '');
 }
 
 /*

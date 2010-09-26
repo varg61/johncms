@@ -21,21 +21,21 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 if (!$al) {
     echo display_error($lng['error_wrong_data']);
-    require('../../incfiles/end.php');
+    require('../incfiles/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' LIMIT 1");
 if (!mysql_num_rows($req)) {
     echo display_error($lng['error_wrong_data']);
-    require('../../incfiles/end.php');
+    require('../incfiles/end.php');
     exit;
 }
 $album = mysql_fetch_assoc($req);
 echo '<div class="phdr">' .
-    '<a href="../profile/index.php?id=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></a> | ' .
-    '<a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a></div>';
+    '<a href="profile.php?user=' . $user['id'] . '"><b>' . ($id && $id != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></a> | ' .
+    '<a href="album.php?act=list&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a></div>';
 if ($user['id'] == $user_id || $rights >= 7)
-    echo '<div class="topmenu"><a href="index.php?act=image_upload&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng_profile['image_add'] . '</a></div>';
+    echo '<div class="topmenu"><a href="album.php?act=image_upload&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng_profile['image_add'] . '</a></div>';
 echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
     '<div class="phdr">' . $lng_profile['album'] . ': <b>' . checkout($album['name']) . '</b><br />' . checkout($album['description'], 1) . '</div>';
 
@@ -49,8 +49,8 @@ if ($album['access'] != 2)
 if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 7) {
     // Если доступ закрыт
     echo display_error($lng['access_forbidden']) .
-        '<div class="phdr"><a href="index.php?id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
-    require('../../incfiles/end.php');
+        '<div class="phdr"><a href="album.php?act=list&amp;id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
+    require('../incfiles/end.php');
     exit;
 } elseif ($album['access'] == 2 && $user['id'] != $user_id && $rights < 6) {
     // Если доступ через пароль
@@ -61,13 +61,13 @@ if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 7) {
             echo display_error($lng['error_wrong_password']);
     }
     if (!isset($_SESSION['ap']) || $_SESSION['ap'] != $album['password']) {
-        echo '<form action="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p>';
+        echo '<form action="album.php?act=show&amp;al=' . $al . '&amp;id=' . $user['id'] . '" method="post"><div class="menu"><p>';
         echo $lng_profile['album_password'] . '<br />';
         echo '<input type="text" name="password"/></p>';
         echo '<p><input type="submit" name="submit" value="' . $lng['login'] . '"/></p>';
         echo '</div></form>';
-        echo '<div class="phdr"><a href="index.php?id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
-        require('../../incfiles/end.php');
+        echo '<div class="phdr"><a href="album.php?act=show&amp;id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
+        require('../incfiles/end.php');
         exit;
     }
 }
@@ -86,15 +86,15 @@ if ($img) {
             echo '<div class="gray">' . smileys(checkout($res['description'], 1, 1)) . '</div>';
         echo '<div class="sub">';
         if ($user['id'] == $user_id || $rights >= 6) {
-            echo '<p><a href="index.php?act=image_edit&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['edit'] . '</a> | ' .
-                '<a href="index.php?act=image_move&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['move'] . '</a> | ' .
-                '<a href="index.php?act=image_delete&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a></p>';
+            echo '<p><a href="album.php?act=image_edit&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['edit'] . '</a> | ' .
+                '<a href="album.php?act=image_move&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['move'] . '</a> | ' .
+                '<a href="album.php?act=image_delete&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a></p>';
         }
         vote_photo($res);
         echo '<p><a href="">' . $lng['comments'] . '</a> (0)<br />' .
-            '<a href="../../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
+            '<a href="../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
             '</div></div>' .
-            '<div class="phdr"><a href="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng_profile['album'] . '</a></div>';
+            '<div class="phdr"><a href="album.php?act=show&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng_profile['album'] . '</a></div>';
     } else {
         echo display_error($lng['error_wrong_data']);
     }
@@ -106,18 +106,18 @@ if ($img) {
     */
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al'"), 0);
     if ($total > $kmess)
-        echo '<div class="topmenu">' . display_pagination('index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>';
+        echo '<div class="topmenu">' . display_pagination('album.php?act=show&amp;al=' . $al . '&amp;id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>';
     if ($total) {
         $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `time` DESC LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                '<a href="index.php?act=album&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '"><img src="../../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
+                '<a href="album.php?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;id=' . $user['id'] . '"><img src="../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
                 echo '<div class="gray">' . smileys(checkout($res['description'], 1)) . '</div>';
             echo '<div class="sub">';
             vote_photo($res);
             echo '<p><a href="">' . $lng['comments'] . '</a> (0)<br />' .
-                '<a href="../../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
+                '<a href="../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
                 '</div></div>';
             ++$i;
         }
@@ -126,12 +126,12 @@ if ($img) {
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
-        echo '<div class="topmenu">' . display_pagination('index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>' .
-            '<p><form action="index.php?act=album&amp;al=' . $al . '&amp;id=' . $user['id'] . '" method="post">' .
+        echo '<div class="topmenu">' . display_pagination('album.php?act=show&amp;al=' . $al . '&amp;id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>' .
+            '<p><form action="album.php?act=show&amp;al=' . $al . '&amp;id=' . $user['id'] . '" method="post">' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
             '</form></p>';
     }
-    echo '<p><a href="index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></p>';
+    echo '<p><a href="album.php?act=list&amp;id=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></p>';
 }
 ?>
