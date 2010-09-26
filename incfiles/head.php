@@ -184,7 +184,7 @@ if ($user_id) {
 -----------------------------------------------------------------
 */
 if (isset($ban))
-    echo '<div class="alarm">' . $lng['ban'] . '&#160;<a href="' . $home . '/users/users_ban.php">' . $lng['in_detail'] . '</a></div>';
+    echo '<div class="alarm">' . $lng['ban'] . '&#160;<a href="' . $home . '/users/profile.php?act=ban">' . $lng['in_detail'] . '</a></div>';
 
 /*
 -----------------------------------------------------------------

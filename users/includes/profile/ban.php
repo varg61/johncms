@@ -12,37 +12,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'userban';
-require('../incfiles/core.php');
 $lng_ban = load_lng('ban');
-if (!$user_id) {
-    require('../incfiles/head.php');
-    display_error($lng['access_guest_forbidden']);
-    require('../incfiles/end.php');
-    exit;
-}
-if ($id && $id != $user_id) {
-    // Если был запрос на юзера, то получаем его данные
-    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
-    if (mysql_num_rows($req)) {
-        $user = mysql_fetch_assoc($req);
-        $textl = $lng_ban['infringements_list'] . ': ' . $user['name'];
-    } else {
-        require('../incfiles/head.php');
-        echo display_error($lng['error_user_not_exist']);
-        require('../incfiles/end.php');
-        exit;
-    }
-} else {
-    $textl = $lng_ban['my_infringements'];
-    $user = $datauser;
-}
-
 require('../incfiles/head.php');
 $ban = isset($_GET['ban']) ? intval($_GET['ban']) : 0;
-switch ($act) {
-    case 'ban':
+switch ($mod) {
+    case 'do':
         /*
         -----------------------------------------------------------------
         Баним пользователя (добавляем Бан в базу)
@@ -66,7 +42,7 @@ switch ($act) {
                     $error = $lng_ban['error_data'];
                 if ($rights == 1 && $term != 14 || $rights == 2 && $term != 12 || $rights == 3 && $term != 11 || $rights == 4 && $term != 16 || $rights == 5 && $term != 15)
                     $error = $lng_ban['error_rights_section'];
-                if (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '$id' AND `ban_time` > '$realtime' AND `ban_type` = '$term'"), 0))
+                if (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "' AND `ban_time` > '$realtime' AND `ban_type` = '$term'"), 0))
                     $error = $lng_ban['error_ban_exist'];
                 switch ($time) {
                     case 2:
@@ -101,7 +77,7 @@ switch ($act) {
                 if (!$error) {
                     // Заносим в базу
                     mysql_query("INSERT INTO `cms_ban_users` SET
-                        `user_id` = '$id',
+                        `user_id` = '" . $user['id'] . "',
                         `ban_time` = '" . ($realtime + $timeval) . "',
                         `ban_while` = '$realtime',
                         `ban_type` = '$term',
@@ -113,19 +89,15 @@ switch ($act) {
                         mysql_query("INSERT INTO `karma_users` SET
                             `user_id` = '0',
                             `name` = '" . $lng_ban['system'] . "',
-                            `karma_user` = '$id',
+                            `karma_user` = '" . $user['id'] . "',
                             `points` = '$points',
                             `type` = '0',
                             `time` = '$realtime',
                             `text` = '" . $lng['ban'] . " (" . $lng_ban['ban_' . $term] . ")'
                         ");
-                        $plm = explode('|', $user['plus_minus']);
-                        $karma = $user['karma'] - $points;
-                        $plus_minus = $plm[0] . '|' . ($plm[1] + $points);
                         mysql_query("UPDATE `users` SET
-                            `karma`='$karma',
-                            `plus_minus`='$plus_minus'
-                            WHERE `id` = '$id' LIMIT 1
+                            `karma_minus` = '" . ($user['karma_minus'] + $points) . "'
+                            WHERE `id` = '" . $user['id'] . "' LIMIT 1
                         ");
                         $text = ' ' . $lng_ban['also_received'] . ' <span class="red">-' . $points . ' ' . $lng['points'] . '</span> ' . $lng_ban['to_karma'];
                     }
@@ -135,7 +107,7 @@ switch ($act) {
                 }
             } else {
                 // Форма параметров бана
-                echo '<form action="users_ban.php?act=ban&amp;id=' . $user['id'] . '" method="post">' .
+                echo '<form action="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '" method="post">' .
                 '<div class="menu"><p><h3>' . $lng_ban['ban_type'] . '</h3>';
                 if ($rights >= 6) {
                     // Блокировка
@@ -182,11 +154,11 @@ switch ($act) {
                     '</p><p><input type="submit" value="' . $lng['ban_do'] . '" name="submit" />' .
                     '</p></div></form>';
             }
-            echo '<div class="phdr"><a href="profile/index.php?id=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
+            echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
         }
         break;
 
-    case 'razban':
+    case 'cancel':
         /*
         -----------------------------------------------------------------
         Разбаниваем пользователя (с сохранением истории)
@@ -208,11 +180,11 @@ switch ($act) {
                         mysql_query("UPDATE `cms_ban_users` SET `ban_time` = '$realtime' WHERE `id` = '$ban' LIMIT 1");
                         echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_cancel_confirmation'] . '</h3></p></div>';
                     } else {
-                        echo '<form action="users_ban.php?act=razban&amp;id=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .
+                        echo '<form action="profile.php?act=ban&amp;mod=cancel&amp;user=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .
                             '<div class="menu"><p>' . $lng_ban['ban_cancel_help'] . '</p>' .
                             '<p><input type="submit" name="submit" value="' . $lng_ban['ban_cancel_do'] . '" /></p>' .
                             '</div></form>' .
-                            '<div class="phdr"><a href="users_ban.php?id=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
+                            '<div class="phdr"><a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
                     }
                 } else {
                     echo display_error($error);
@@ -223,7 +195,7 @@ switch ($act) {
         }
         break;
 
-    case 'delban':
+    case 'delete':
         /*
         -----------------------------------------------------------------
         Удаляем бан (с удалением записи из истории)
@@ -238,20 +210,20 @@ switch ($act) {
                 echo '<div class="phdr"><b>' . $lng_ban['ban_delete'] . '</b></div>' .
                     '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
                 if (isset($_POST['submit'])) {
-                    mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '$id' AND `user_id` = '0' AND `time` = '" . $res['ban_while'] . "' LIMIT 1");
+                    mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "' AND `user_id` = '0' AND `time` = '" . $res['ban_while'] . "' LIMIT 1");
                     $points = $set_karma['karma_points'] * 2;
-                    $plm = explode('|', $user['plus_minus']);
-                    $karma = $user['karma'] + $points;
-                    $plus_minus = $plm[0] . '|' . ($plm[1] - $points);
-                    mysql_query("UPDATE `users` SET `karma` = '$karma', `plus_minus` = '$plus_minus' WHERE `id` = '$id' LIMIT 1");
+                    mysql_query("UPDATE `users` SET
+                        `karma_minus` = '" . ($user['karma_minus'] > $points ? $user['karma_minus'] - $points : 0) . "'
+                        WHERE `id` = '" . $user['id'] . "' LIMIT 1
+                    ");
                     mysql_query("DELETE FROM `cms_ban_users` WHERE `id` = '$ban' LIMIT 1");
-                    echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_deleted'] . '</h3><a href="users_ban.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                    echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_deleted'] . '</h3><a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
                 } else {
-                    echo '<form action="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .
+                    echo '<form action="profile.php?act=ban&amp;mod=delete&amp;user=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .
                         '<div class="menu"><p>' . $lng_ban['ban_delete_help'] . '</p>' .
                         '<p><input type="submit" name="submit" value="' . $lng['delete'] . '" /></p>' .
                         '</div></form>' .
-                        '<div class="phdr"><a href="users_ban.php?id=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
+                        '<div class="phdr"><a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
                 }
             } else {
                 echo display_error($lng['error_wrong_data']);
@@ -272,15 +244,15 @@ switch ($act) {
                 mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
                 echo '<div class="gmenu"><h3>' . $lng_ban['history_cleared'] . '</h3></div>';
             } else {
-                echo '<form action="users_ban.php?act=delhist&amp;id=' . $user['id'] . '" method="post">' .
+                echo '<form action="profile.php?act=ban&amp;mod=delhist&amp;user=' . $user['id'] . '" method="post">' .
                     '<div class="menu"><p>' . $lng_ban['clear_confirmation'] . '</p>' .
                     '<p><input type="submit" value="' . $lng['clear'] . '" name="submit" />' .
                     '</p></div></form>';
             }
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>' .
-                '<p>' . ($total ? '<a href="users_ban.php?id=' . $user['id'] . '">' . $lng_ban['infringements_history'] . '</a><br />' : '') .
-                '<a href="../' . $admp . '/index.php?act=usr_ban">' . $lng_ban['ban_panel'] . '</a></p>';
+                '<p>' . ($total ? '<a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng_ban['infringements_history'] . '</a><br />' : '') .
+                '<a href="../' . $admp . '/index.php?act=ban_panel">' . $lng_ban['ban_panel'] . '</a></p>';
         } else {
             echo display_error($lng_ban['error_rights_clear']);
         }
@@ -298,7 +270,7 @@ switch ($act) {
         if ($rights >= 6)
             $menu[] = '<a href="../' . $admp . '/index.php?act=usr_ban">' . $lng_ban['ban_panel'] . '</a>';
         if ($rights == 9)
-            $menu[] = '<a href="users_ban.php?act=delhist&amp;id=' . $user['id'] . '">' . $lng_ban['clear_history'] . '</a>';
+            $menu[] = '<a href="profile.php?act=ban&amp;mod=delhist&amp;user=' . $user['id'] . '">' . $lng_ban['clear_history'] . '</a>';
         if (!empty($menu))
             echo '<div class="topmenu">' . display_menu($menu) . '</div>';
         if ($user['id'] != $user_id)
@@ -325,9 +297,9 @@ switch ($act) {
                 // Меню отдельного бана
                 $menu = array ();
                 if ($rights >= 7 && $remain > 0)
-                    $menu[] = '<a href="users_ban.php?act=razban&amp;id=' . $user['id'] . '&amp;ban=' . $res['id'] . '">' . $lng_ban['ban_cancel_do'] . '</a>';
+                    $menu[] = '<a href="profile.php?act=ban&amp;mod=cancel&amp;user=' . $user['id'] . '&amp;ban=' . $res['id'] . '">' . $lng_ban['ban_cancel_do'] . '</a>';
                 if ($rights == 9)
-                    $menu[] = '<a href="users_ban.php?act=delban&amp;id=' . $user['id'] . '&amp;ban=' . $res['id'] . '">' . $lng_ban['ban_delete_do'] . '</a>';
+                    $menu[] = '<a href="profile.php?act=ban&amp;mod=delete&amp;user=' . $user['id'] . '&amp;ban=' . $res['id'] . '">' . $lng_ban['ban_delete_do'] . '</a>';
                 if (!empty($menu))
                     echo '<div>' . display_menu($menu) . '</div>';
                 echo '</div></div>';
@@ -338,12 +310,11 @@ switch ($act) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('users_ban.php?id=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="users_ban.php?id=' . $user['id'] . '" method="post">' .
+            echo '<p>' . display_pagination('profile.php?act=ban&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>' .
+                '<p><form action="profile.php?act=ban&amp;user=' . $user['id'] . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
 }
 
-require('../incfiles/end.php');
 ?>

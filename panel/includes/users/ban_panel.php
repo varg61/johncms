@@ -76,7 +76,7 @@ switch ($mod) {
                 echo '<div class="' . ($res['bantime'] > $realtime ? 'r' : '') . 'menu">';
                 echo display_user($res);
                 //TODO: Переделать на более удобный показ бана
-                //echo display_user($res, 0, 2, ' [' . $res['bancount'] . ']&#160;<a href="../str/users_ban.php?id=' . $res['id'] . '">&gt;&gt;</a>');
+                //echo display_user($res, 0, 2, ' [' . $res['bancount'] . ']&#160;<a href="../users/profile.php?act=ban&amp;user=' . $res['id'] . '">&gt;&gt;</a>');
                 echo '</div>';
             }
         } else {

@@ -98,7 +98,12 @@ if ($set_karma['on']) {
                     $res = mysql_fetch_assoc($req);
                     if (isset($_GET['yes'])) {
                         mysql_query("DELETE FROM `karma_users` WHERE `id` = '$id' LIMIT 1");
-                        $sql = $res['type'] ? "`karma_plus` = '" . ($user['karma_plus'] - $res['points']) . "'" : "`karma_minus` = '" . ($user['karma_minus'] - $res['points']) . "'";
+                        //TODO: Доработать калькуляцию
+                        if($res['type']){
+                            $sql = "`karma_plus` = '" . ($user['karma_plus'] > $res['points'] ? $user['karma_plus'] - $res['points'] : 0) . "'";
+                        } else {
+                            $sql = "`karma_minus` = '" . ($user['karma_minus'] > $res['points'] ? $user['karma_minus'] - $res['points'] : 0) . "'";
+                        }
                         mysql_query("UPDATE `users` SET $sql WHERE `id` = '" . $user['id'] . "' LIMIT 1");
                         header('Location: profile.php?act=karma&user=' . $user['id'] . '&type=' . $type);
                     } else {

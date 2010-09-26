@@ -48,16 +48,17 @@ if (!$user) {
 -----------------------------------------------------------------
 */
 $array = array (
-    'activity' => 'profile',
-    'edit' => 'profile',
-    'info' => 'profile',
-    'ip' => 'profile',
-    'karma' => 'profile',
-    'office' => 'profile',
-    'password' => 'profile',
-    'reset' => 'profile',
-    'settings' => 'profile',
-    'stat' => 'profile'
+    'activity' => 'includes/profile',
+    'ban' => 'includes/profile',
+    'edit' => 'includes/profile',
+    'info' => 'includes/profile',
+    'ip' => 'includes/profile',
+    'karma' => 'includes/profile',
+    'office' => 'includes/profile',
+    'password' => 'includes/profile',
+    'reset' => 'includes/profile',
+    'settings' => 'includes/profile',
+    'stat' => 'includes/profile'
 );
 $path = !empty($array[$act]) ? $array[$act] . '/' : '';
 if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
@@ -78,7 +79,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     if ($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
         $menu[] = '<a href="' . $home . '/' . $admp . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a>';
     if ($user['id'] != $user_id && $rights > $user['rights'])
-        $menu[] = '<a href="users_ban.php?act=ban&amp;id=' . $user['id'] . '">' . $lng['ban_do'] . '</a>';
+        $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '">' . $lng['ban_do'] . '</a>';
     if (!empty($menu))
         echo '<div class="topmenu">' . display_menu($menu) . '</div>';
     //Уведомление о дне рожденья
@@ -137,7 +138,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         '<div><img src="../images/rate.gif" width="16" height="16"/>&#160;<a href="profile.php?act=stat&amp;user=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
     $bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     if ($bancount)
-        echo '<div><img src="../images/block.gif" width="16" height="16"/>&#160;<a href="users_ban.php?id=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
+        echo '<div><img src="../images/block.gif" width="16" height="16"/>&#160;<a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
     echo '<br />' .
         '<div><img src="../images/photo.gif" width="16" height="16"/>&#160;<a href="album/index.php?act=catalogue&amp;id=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
         '<div><img src="../images/guestbook.gif" width="16" height="16"/>&#160;<a href="">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
