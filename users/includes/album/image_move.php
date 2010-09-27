@@ -23,7 +23,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
     $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
     if (mysql_num_rows($req)) {
         $image = mysql_fetch_assoc($req);
-        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;id=' . $user['id'] . '"><b>' . $lng['photo_album'] . '</b></a> | ' . $lng_profile['image_move'] . '</div>';
+        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '"><b>' . $lng['photo_album'] . '</b></a> | ' . $lng_profile['image_move'] . '</div>';
         if (isset($_POST['submit'])) {
             $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
             if (mysql_num_rows($req_a)) {
@@ -34,14 +34,14 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                     WHERE `id` = '$img' LIMIT 1
                 ");
                 echo '<div class="gmenu"><p>' . $lng_profile['image_moved'] . '<br />' .
-                    '<a href="album.php?act=show&amp;al=' . $al . '&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                    '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
             } else {
                 echo display_error($lng['error_wrong_data']);
             }
         } else {
             $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `id` != '" . $image['album_id'] . "' ORDER BY `sort` ASC");
             if (mysql_num_rows($req)) {
-                echo '<form action="album.php?act=image_move&amp;img=' . $img . '&amp;id=' . $user['id'] . '" method="post">' .
+                echo '<form action="album.php?act=image_move&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
                     '<div class="menu"><p><h3>' . $lng_profile['album_select'] . '</h3>' .
                     '<select name="al">';
                 while ($res = mysql_fetch_assoc($req)) {
@@ -50,9 +50,9 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 echo '</select></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['move'] . '"/></p>' .
                     '</div></form>' .
-                    '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;id=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
+                    '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
             } else {
-                echo display_error($lng_profile['image_move_error'], '<a href="album.php?act=list&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a>');
+                echo display_error($lng_profile['image_move_error'], '<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a>');
             }
         }
     } else {

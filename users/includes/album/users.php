@@ -36,7 +36,7 @@ if ($total) {
     ");
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo '<a href="album.php?act=list&amp;id=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
+        echo '<a href="album.php?act=list&amp;user=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
         ++$i;
     }
 } else {

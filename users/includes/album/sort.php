@@ -61,5 +61,5 @@ switch ($mod) {
         break;
 }
 
-header('Location: album.php?act=list&id=' . $user['id']);
+header('Location: album.php?act=list&user=' . $user['id']);
 ?>

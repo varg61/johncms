@@ -40,7 +40,7 @@ if(!$user_id){
 Получаем данные пользователя
 -----------------------------------------------------------------
 */
-$user = get_user($id);
+$user = get_user($user);
 if (!$user) {
     echo display_error($lng['user_does_not_exist']);
     require('../incfiles/end.php');

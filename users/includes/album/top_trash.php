@@ -35,7 +35,7 @@ if ($total) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         if ($res['access'] == 4 || $rights >= 7) {
             // Если доступ открыт всем, или смотрит Администратор
-            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;id=' . $res['user_id'] . '"><img src="../../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
+            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '"><img src="../../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
                 echo '<div class="gray">' . smileys(checkout($res['description'], 1)) . '</div>';
         } elseif ($res['access'] == 3) {
@@ -47,7 +47,7 @@ if ($total) {
         }
         echo '<div class="sub">';
         vote_photo($res);
-        echo '<p><a href="../profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;id=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a><br />' .
+        echo '<p><a href="../profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a><br />' .
             '<a href="../../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>';
         echo '</div></div>';
         ++$i;
