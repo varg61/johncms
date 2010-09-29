@@ -33,7 +33,7 @@ if ($user['id'] != $user_id && ($rights < 7 || $user['rights'] > $rights)) {
 Сброс настроек
 -----------------------------------------------------------------
 */
-if ($id && $rights >= 7 && $act == 'reset') {
+if ($rights >= 7 && $rights > $user['rights'] && $act == 'reset') {
     mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['id'] . "'");
     echo '<div class="gmenu"><p>' . $lng['settings_default'] . '<br /><a href="profile.php?user=' . $user['id'] . '">' . $lng['to_form'] . '</a></p></div>';
     require('../incfiles/end.php');
@@ -72,7 +72,7 @@ if (isset($_GET['delavatar'])) {
     $user['about'] = isset($_POST['about']) ? check(mb_substr($_POST['about'], 0, 500)) : '';
     $user['mibile'] = isset($_POST['mibile']) ? check(mb_substr($_POST['mibile'], 0, 40)) : '';
     $user['mail'] = isset($_POST['mail']) ? check(mb_substr($_POST['mail'], 0, 40)) : '';
-    $user['mailvis'] = isset($_POST['mailvis']);
+    $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
     $user['icq'] = isset($_POST['icq']) ? intval($_POST['icq']) : 0;
     $user['skype'] = isset($_POST['skype']) ? check(mb_substr($_POST['skype'], 0, 40)) : '';
     $user['jabber'] = isset($_POST['jabber']) ? check(mb_substr($_POST['jabber'], 0, 40)) : '';

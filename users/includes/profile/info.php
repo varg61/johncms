@@ -38,7 +38,7 @@ echo '<li><span class="gray">' . $lng_profile['name'] . ':</span> ' . (empty($us
     '<h3><img src="../images/mail.png" width="16" height="16" class="left" />&#160;' . $lng_profile['communication'] . '</h3><ul>' .
     '<li><span class="gray">' . $lng_profile['phone_number'] . ':</span> ' . (empty($user['mibile']) ? '' : $user['mibile']) . '</li>' .
     '<li><span class="gray">E-mail:</span> ';
-if (!empty($user['mail']) && (($id && $user['mailvis']) || !$id || $rights >= 7)) {
+if (!empty($user['mail']) && $user['mailvis'] || $rights >= 7 || $user['id'] == $user_id) {
     echo $user['mail'] . ($user['mailvis'] ? '' : '<span class="gray"> [' . $lng_profile['hidden'] . ']</span>');
 }
 echo '</li>' .
