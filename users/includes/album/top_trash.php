@@ -43,13 +43,15 @@ if ($total) {
             echo 'Только для друзей';
         } elseif ($res['access'] == 2) {
             // Если доступ по паролю
-            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '"><img src="' . $home . '/images/stop.gif" width="50" height="50"/></a>';
+            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '"><img src="' . $home . '/images/stop.gif" width="50" height="50"/></a>';
         }
         echo '<div class="sub">';
-        vote_photo($res);
-        echo '<p><a href="../profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a><br />' .
-            '<a href="../../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>';
-        echo '</div></div>';
+        if ($res['access'] == 4 || $rights >= 7)
+            vote_photo($res);
+        echo '<p><a href="../profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a>';
+        if ($res['access'] == 4 || $rights >= 7)
+            echo '<br /><a href="../../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
+        echo '</p></div></div>';
         ++$i;
     }
 } else {
