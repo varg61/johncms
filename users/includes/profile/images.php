@@ -13,39 +13,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'anketa';
-require('../incfiles/core.php');
-$lng_profile = load_lng('profile');
 $textl = $lng_profile['profile_edit'];
 require('../incfiles/head.php');
 require('../incfiles/lib/class.upload.php');
-if (!$user_id) {
-    display_error($lng['access_guest_forbidden']);
+if ($user['rights'] > $datauser['rights']) {
+    // Если не хватает прав, выводим ошибку
+    echo display_error($lng_profile['error_rights']);
     require('../incfiles/end.php');
     exit;
 }
-if ($id && $id != $user_id && $rights >= 7) {
-    // Если был запрос на юзера, то получаем его данные
-    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
-    if (mysql_num_rows($req)) {
-        $user = mysql_fetch_assoc($req);
-        if ($user['rights'] > $datauser['rights']) {
-            // Если не хватает прав, выводим ошибку
-            echo display_error($lng_profile['error_rights']);
-            require('../incfiles/end.php');
-            exit;
-        }
-    } else {
-        echo display_error($lng['error_user_not_exist']);
-        require('../incfiles/end.php');
-        exit;
-    }
-} else {
-    $id = false;
-    $user = $datauser;
-}
-switch ($act) {
+switch ($mod) {
     case 'avatar':
         /*
         -----------------------------------------------------------------
@@ -73,7 +52,7 @@ switch ($act) {
                 $handle->process('../files/users/avatar/');
                 if ($handle->processed) {
                     echo '<div class="gmenu"><p>' . $lng_profile['avatar_uploaded'] . '<br />' .
-                        '<a href="my_data.php?id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
+                        '<a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
                         '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                 } else {
                     echo display_error($handle->error);
@@ -81,13 +60,14 @@ switch ($act) {
                 $handle->clean();
             }
         } else {
-            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' .
+            echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['id'] . '">' .
                 '<div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
                 '<input type="file" name="imagefile" value="" />' .
                 '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" /></p>' .
                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" />' .
                 '</p></div></form>' .
-                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $flsz . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4'] . '</small></div>';
+                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $flsz . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4']
+                . '</small></div>';
         }
         break;
 
@@ -121,7 +101,7 @@ switch ($act) {
                     $handle->image_convert = 'jpg';
                     $handle->process('../files/users/photo/');
                     if ($handle->processed) {
-                        echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="profile/index.php?act=edit&amp;id=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                        echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
                         echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                     } else {
                         echo display_error($handle->error);
@@ -132,7 +112,7 @@ switch ($act) {
                 $handle->clean();
             }
         } else {
-            echo '<form enctype="multipart/form-data" method="post" action="my_images.php?act=up_photo&amp;id=' . $user['id'] . '"><div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
+            echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '"><div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
                 '<input type="file" name="imagefile" value="" />' .
                 '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" /></p>' .
                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
@@ -141,6 +121,4 @@ switch ($act) {
         }
         break;
 }
-
-require('../incfiles/end.php');
 ?>

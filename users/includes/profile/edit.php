@@ -153,7 +153,7 @@ if (file_exists(('../files/users/avatar/' . $user['id'] . '.png'))) {
     echo '<img src="../files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
     $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['id'] . '&amp;delavatar">' . $lng['delete'] . '</a>';
 }
-echo '<small><a href="my_images.php?act=avatar&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>';
+echo '<small><a href="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>';
 if($user['id'] == $user_id)
     echo ' | <a href="../pages/faq.php?act=avatars">' . $lng['select'] . '</a>';
 echo $link . '</small></p>';
@@ -163,7 +163,7 @@ if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg'))) {
     echo '<a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
     $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['id'] . '&amp;delphoto">' . $lng['delete'] . '</a>';
 }
-echo '<small><a href="my_images.php?act=up_photo&amp;id=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
+echo '<small><a href="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
     '</p></div>' .
     '<div class="menu">' .
     '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .

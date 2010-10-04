@@ -51,6 +51,7 @@ $array = array (
     'activity' => 'includes/profile',
     'ban' => 'includes/profile',
     'edit' => 'includes/profile',
+    'images' => 'includes/profile',
     'info' => 'includes/profile',
     'ip' => 'includes/profile',
     'karma' => 'includes/profile',
