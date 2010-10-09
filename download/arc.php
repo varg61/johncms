@@ -67,7 +67,7 @@ $f = $_GET['f'];
 $path = $selectfile[$f];
 $fname = ereg_replace(".*[\\/]", "", $path);
 $zdir = ereg_replace("[\\/]?[^\\/]*$", "", $path);
-$tfl = strtolower(format($fname));
+$tfl = strtolower(functions::format($fname));
 $df = array("asp", "aspx", "shtml", "htd", "php", "php3", "php4", "php5", "phtml", "htt", "cfm", "tpl", "dtd", "hta", "pl", "js", "jsp");
 if (!in_array($tfl, $df)) {
     $content = $zip->extract(PCLZIP_OPT_BY_NAME, $path, PCLZIP_OPT_EXTRACT_AS_STRING);

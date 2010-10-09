@@ -46,15 +46,15 @@ switch ($tip) {
                 exit;
             }
             // Принимаем и проверяем сообщение
-            $msg = check(mb_substr($_POST['msg'], 0, 500));
+            $msg = functions::check(mb_substr($_POST['msg'], 0, 500));
             if ($_POST['msgtrans'])
-                $msg = trans($msg);
+                $msg = functions::trans($msg);
             // Проверяем на повтор сообщений
             $req = mysql_query("SELECT * FROM `chat` WHERE `refid` = '$id' AND `user_id` = '$user_id' ORDER BY `time` DESC LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_array($req);
                 if (stripslashes($msg) == $res['text']) {
-                    header("location: $home/chat/index.php?id=$id");
+                    header('location: ' . $set['homeurl'] . '/chat/index.php?id=' . $id);
                     exit;
                 }
             }
@@ -110,17 +110,18 @@ switch ($tip) {
                         $tx .= 'Игровой баланс: <b>' . $balans . '</b> баллов.';
                         $tx .= '</small>';
                         mysql_query("INSERT INTO `chat` SET
-                        `refid` = '$id',
-                        `type` = 'm',
-                        `time` = '$realtime',
-                        `from` = 'Умник',
-                        `text` = '$tx'");
+                            `refid` = '$id',
+                            `type` = 'm',
+                            `time` = '$realtime',
+                            `from` = 'Умник',
+                            `text` = '$tx'
+                        ");
                         mysql_query("UPDATE `chat` SET `realid` = '1', `time` = '$realtime' WHERE `id` = '" . $quiz_res['id'] . "'");
                         mysql_query("UPDATE `users` SET `otvetov` = '$itg', `balans` = '$balans' WHERE `id` = '$user_id'");
                     }
                 }
             }
-            header("location: $home/chat/index.php?id=$id");
+            header('location: ' . $set['homeurl'] . '/chat/index.php?id=' . $id);
         } else {
             require_once('../incfiles/head.php');
             echo '<div class="phdr">Добавляем сообщение</div>';
@@ -160,11 +161,11 @@ switch ($tip) {
             }
             $to = $type1['from'];
             $priv = intval($_POST['priv']);
-            $nas = check($_POST['nas']);
+            $nas = functions::check($_POST['nas']);
             // Принимаем и проверяем сообщение
-            $msg = check(mb_substr($_POST['msg'], 0, 500));
+            $msg = functions::check(mb_substr($_POST['msg'], 0, 500));
             if ($_POST['msgtrans'])
-                $msg = trans($msg);
+                $msg = functions::trans($msg);
             if (!empty($nas))
                 $msg = '<span class="gray">*' . $nas . '*</span> ' . $msg;
             // Проверяем на повтор сообщений
@@ -172,7 +173,7 @@ switch ($tip) {
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_array($req);
                 if (stripslashes($msg) == $res['text']) {
-                    header("location: $home/chat/index.php?id=$id");
+                    header('location: ' . $set['homeurl'] . '/chat/index.php?id=' . $id);
                     exit;
                 }
             }
@@ -185,14 +186,13 @@ switch ($tip) {
             `from` = '$login',
             `text` = '$msg',
             `ip` = '$ipl',
-            `soft` = '"
-                . mysql_real_escape_string(strtok($agn, ' ')) . "'");
+            `soft` = '" . mysql_real_escape_string(strtok($agn, ' ')) . "'");
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET
             `postchat` = '" . ($datauser['postchat'] + 1) . "',
             `lastpost` = '$realtime'
             WHERE `id` = '$user_id'");
-            header("location: $home/chat/index.php?id=$th");
+            header('location: ' . $set['homeurl'] . '/chat/index.php?id=' . $th);
         } else {
             require_once('../incfiles/head.php');
             echo '<div class="phdr">Написать</div>';
@@ -229,7 +229,7 @@ switch ($tip) {
             if ($ruz != 0) {
                 echo "<br/><a href='../str/pradd.php?act=write&amp;adr=" . $udat['id'] . "'>Написать в приват</a><br/>";
                 if ($rights == 1) {
-                    echo "<a href='../" . $admp . "/zaban.php?do=ban&amp;id=" . $udat['id'] . "&amp;chat'>Пнуть</a><br/>";
+                    echo "<a href='../" . $set['admp'] . "/zaban.php?do=ban&amp;id=" . $udat['id'] . "&amp;chat'>Пнуть</a><br/>";
                 }
             }
             echo "<a href='index.php?id=" . $type1['refid'] . "'>Назад</a><br/>";

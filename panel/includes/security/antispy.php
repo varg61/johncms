@@ -341,7 +341,7 @@ switch ($mod) {
         $scaner->snapscan();
         echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_snapshot_scan'] . '</div>';
         if (count($scaner->track_files) == 0) {
-            echo display_error($lng['antispy_no_snapshot'], '<a href="index.php?act=antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a>');
+            echo functions::display_error($lng['antispy_no_snapshot'], '<a href="index.php?act=antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a>');
         } else {
             if (count($scaner->bad_files)) {
                 echo '<div class="rmenu">' . $lng['antispy_snapshot_scan_bad'] . '</div>';

@@ -34,7 +34,7 @@ switch ($mod) {
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
             } else {
-                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=ads">' . $lng['back'] . '</a>');
+                echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=ads">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -74,7 +74,7 @@ switch ($mod) {
                     $error[] = $lng['error_color'];
             }
             if ($error) {
-                echo display_error($error, '<a href="index.php?act=ads&amp;from=addlink">' . $lng['back'] . '</a>');
+                echo functions::display_error($error, '<a href="index.php?act=ads&amp;from=addlink">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -304,7 +304,7 @@ switch ($mod) {
             ($type == 2 ? $lng['links_armt_over_counters'] : '<a href="index.php?act=ads&amp;type=2">' . $lng['links_armt_over_counters'] . '</a>'),
             ($type == 3 ? $lng['links_armt_under_counters'] : '<a href="index.php?act=ads&amp;type=3">' . $lng['links_armt_under_counters'] . '</a>')
         );
-        echo '<div class="topmenu">' . display_menu($array_menu) . '</div>';
+        echo '<div class="topmenu">' . functions::display_menu($array_menu) . '</div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'"), 0);
         if ($total) {
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `type` = '$type' ORDER BY `mesto` ASC LIMIT $start,$kmess");
@@ -334,7 +334,7 @@ switch ($mod) {
                     '<a href="index.php?act=ads&amp;mod=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? $lng['to_show'] : $lng['hide']) . '</a>'
                 );
                 echo '<div class="sub">' .
-                    '<div>' . display_menu($menu) . '</div>' .
+                    '<div>' . functions::display_menu($menu) . '</div>' .
                     '<p><span class="gray">' . $lng['installation_date'] . ':</span> ' . date('d.m.y в H:i', $res['time'] + $sdvig) . '<br />' .
                     '<span class="gray">' . $lng['placing'] . ':</span>&nbsp;' . $array_placing[$res['layout']] . '<br />' .
                     '<span class="gray">' . $lng['to_show'] . ':</span>&nbsp;' . $array_show[$res['view']];
@@ -348,10 +348,10 @@ switch ($mod) {
                         $remains[] = $remains_count . ' ' . $lng['transitions_n'];
                 }
                 if (!empty($res['day'])) {
-                    $agreement[] = timecount($res['day'] * 86400);
+                    $agreement[] = functions::timecount($res['day'] * 86400);
                     $remains_count = $res['day'] * 86400 - ($realtime - $res['time']);
                     if ($remains_count > 0)
-                        $remains[] = timecount($remains_count);
+                        $remains[] = functions::timecount($remains_count);
                 }
                 // Если был договор, то выводим описание
                 if ($agreement) {
@@ -367,7 +367,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?act=ads&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
+            echo '<p>' . functions::display_pagination('index.php?act=ads&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
                 '<p><form action="index.php?act=ads&amp;type=' . $type . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';

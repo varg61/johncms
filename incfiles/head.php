@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = isset($headmod) ? mysql_real_escape_string($headmod) : '';
 if ($headmod == 'mainpage')
-    $textl = $copyright;
+    $textl = $set['copyright'];
 
 /*
 -----------------------------------------------------------------
@@ -31,15 +31,15 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n" .
     "\n" . '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">' .
     "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">' .
     "\n" . '<head><meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>' .
-    "\n" . '<link rel="shortcut icon" href="' . $home . '/favicon.ico" />' .
+    "\n" . '<link rel="shortcut icon" href="' . $set['homeurl'] . '/favicon.ico" />' .
     "\n" . '<meta name="copyright" content="Powered by JohnCMS" />'; // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
 if (!empty($set['meta_key']))
     echo "\n" . '<meta name="keywords" content="' . $set['meta_key'] . '" />';
 if (!empty($set['meta_desc']))
     echo "\n" . '<meta name="description" content="' . $set['meta_desc'] . '" />';
-echo "\n" . '<link rel="alternate" type="application/rss+xml" title="RSS | ' . $lng['site_news'] . '" href="' . $home . '/rss/rss.php" />' .
+echo "\n" . '<link rel="alternate" type="application/rss+xml" title="RSS | ' . $lng['site_news'] . '" href="' . $set['homeurl'] . '/rss/rss.php" />' .
     "\n" . '<title>' . $textl . '</title>' .
-    "\n" . '<link rel="stylesheet" href="' . $home . '/theme/' . $set_user['skin'] . '/style.css" type="text/css" />' .
+    "\n" . '<link rel="stylesheet" href="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/style.css" type="text/css" />' .
     "\n" . '</head><body>';
 
 /*
@@ -63,7 +63,7 @@ if (mysql_num_rows($req) > 0 && $headmod != 'admin') {
         $font .= $res['underline'] ? ' text-decoration:underline;' : false;
         if ($font)
             $name = '<span style="' . $font . '">' . $name . '</span>';
-        $cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? checkout($res['link']) : $home . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
+        $cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? functions::checkout($res['link']) : $set['homeurl'] . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
         if (($res['day'] != 0 && $realtime >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
             mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $res['id'] . "'");
     }
@@ -82,7 +82,7 @@ if ($cms_ads[0])
 Выводим логотип
 -----------------------------------------------------------------
 */
-echo '<div><img src="' . $home . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></div>';
+echo '<div><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></div>';
 
 /*
 -----------------------------------------------------------------
@@ -97,9 +97,9 @@ echo '<div class="header"> ' . $lng['hi'] . ', ' . ($user_id ? '<b>' . $login . 
 -----------------------------------------------------------------
 */
 echo '<div class="tmn">';
-echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $home . '\'>' . $lng['homepage'] . '</a> | ' : '';
-echo ($user_id) ? '<a href="' . $home . '/users/profile.php?act=office">' . $lng['personal'] . '</a> | ' : '';
-echo $user_id ? '<a href="' . $home . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $home . '/login.php">' . $lng['login'] . '</a> | <a href="' . $home . '/registration.php">' . $lng['registration'] . '</a>';
+echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $set['homeurl'] . '\'>' . $lng['homepage'] . '</a> | ' : '';
+echo ($user_id) ? '<a href="' . $set['homeurl'] . '/users/profile.php?act=office">' . $lng['personal'] . '</a> | ' : '';
+echo $user_id ? '<a href="' . $set['homeurl'] . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $set['homeurl'] . '/login.php">' . $lng['login'] . '</a> | <a href="' . $set['homeurl'] . '/registration.php">' . $lng['registration'] . '</a>';
 echo '</div><div class="maintxt">';
 
 /*
@@ -183,8 +183,8 @@ if ($user_id) {
 Выводим сообщение о Бане
 -----------------------------------------------------------------
 */
-if (isset($ban))
-    echo '<div class="alarm">' . $lng['ban'] . '&#160;<a href="' . $home . '/users/profile.php?act=ban">' . $lng['in_detail'] . '</a></div>';
+if (!empty($ban))
+    echo '<div class="alarm">' . $lng['ban'] . '&#160;<a href="' . $set['homeurl'] . '/users/profile.php?act=ban">' . $lng['in_detail'] . '</a></div>';
 
 /*
 -----------------------------------------------------------------
@@ -194,7 +194,7 @@ if (isset($ban))
 if ($headmod != "pradd" && $user_id) {
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
     if ($countnew > 0) {
-        echo '<div class="rmenu" style="text-align: center"><a href="' . $home . '/users/pradd.php?act=in&amp;new"><b><span class="red">' . $lng['mail_new'] . ': ' . $countnew . '</span></b></a></div>';
+        echo '<div class="rmenu" style="text-align: center"><a href="' . $set['homeurl'] . '/users/pradd.php?act=in&amp;new"><b><span class="red">' . $lng['mail_new'] . ': ' . $countnew . '</span></b></a></div>';
     }
 }
 ?>

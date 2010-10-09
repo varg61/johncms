@@ -58,7 +58,7 @@ switch ($_GET['act']) {
 
             // Принимаем данные из формы
             $log = trim($_POST['wnickadmina']);
-            $latlog = rus_lat(mb_strtolower($log));
+            $latlog = functions::rus_lat(mb_strtolower($log));
             $par = trim($_POST['wpassadmina']);
             $par1 = md5(md5($par));
             $meil = trim($_POST['wemailadmina']);

@@ -64,7 +64,7 @@ if ($totalnew != 0) {
                 $tn_width = ceil($y_ratio * $width);
                 $tn_height = $razm;
             }
-            $format = format($infile);
+            $format = functions::format($infile);
             switch ($format) {
                 case "gif":
                     $im = ImageCreateFromGIF($infile);

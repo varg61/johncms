@@ -21,7 +21,7 @@ if ($rights < 7) {
 }
 
 // Подключаем языковый файл форума
-$lng_forum = load_lng('forum');
+$lng_forum = $core->load_lng('forum');
 
 // Задаем пользовательские настройки форума
 $set_forum = unserialize($datauser['set_forum']);
@@ -42,7 +42,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$id) {
-            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+            echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -60,13 +60,13 @@ switch ($mod) {
                     if (isset($_POST['submit'])) {
                         $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
                         if (!$category || $category == $id) {
-                            echo display_error($lng['error_wrong_data']);
+                            echo functions::display_error($lng['error_wrong_data']);
                             require('../incfiles/end.php');
                             exit;
                         }
                         $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f' LIMIT 1"), 0);
                         if (!$check) {
-                            echo display_error($lng['error_wrong_data']);
+                            echo functions::display_error($lng['error_wrong_data']);
                             require('../incfiles/end.php');
                             exit;
                         }
@@ -105,13 +105,13 @@ switch ($mod) {
                         // Предварительные проверки
                         $subcat = isset($_POST['subcat']) ? intval($_POST['subcat']) : 0;
                         if (!$subcat || $subcat == $id) {
-                            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+                            echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
                             require('../incfiles/end.php');
                             exit;
                         }
                         $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$subcat' AND `type` = 'r' LIMIT 1"), 0);
                         if (!$check) {
-                            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+                            echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
                             require('../incfiles/end.php');
                             exit;
                         }
@@ -122,7 +122,7 @@ switch ($mod) {
                             '</p></div>';
                     } elseif (isset($_POST['delete'])) {
                         if ($rights != 9) {
-                            echo display_error($lng['access_forbidden']);
+                            echo functions::display_error($lng['access_forbidden']);
                             require_once('../incfiles/end.php');
                             exit;
                         }
@@ -205,15 +205,15 @@ switch ($mod) {
                 $res = mysql_fetch_array($req);
                 $cat_name = $res['text'];
             } else {
-                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+                echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
         }
         if (isset($_POST['submit'])) {
             // Принимаем данные
-            $name = isset($_POST['name']) ? check($_POST['name']) : '';
-            $desc = isset($_POST['desc']) ? check($_POST['desc']) : '';
+            $name = isset($_POST['name']) ? functions::check($_POST['name']) : '';
+            $desc = isset($_POST['desc']) ? functions::check($_POST['desc']) : '';
             // Проверяем на ошибки
             $error = array ();
             if (!$name)
@@ -240,7 +240,7 @@ switch ($mod) {
                 header('Location: index.php?act=forum&mod=cat' . ($id ? '&id=' . $id : ''));
             } else {
                 // Выводим сообщение об ошибках
-                echo display_error($error);
+                echo functions::display_error($error);
             }
         } else {
             // Форма ввода
@@ -268,7 +268,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$id) {
-            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+            echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -278,8 +278,8 @@ switch ($mod) {
             if ($res['type'] == 'f' || $res['type'] == 'r') {
                 if (isset($_POST['submit'])) {
                     // Принимаем данные
-                    $name = isset($_POST['name']) ? check($_POST['name']) : '';
-                    $desc = isset($_POST['desc']) ? check($_POST['desc']) : '';
+                    $name = isset($_POST['name']) ? functions::check($_POST['name']) : '';
+                    $desc = isset($_POST['desc']) ? functions::check($_POST['desc']) : '';
                     $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
                     // проверяем на ошибки
                     $error = array ();
@@ -312,7 +312,7 @@ switch ($mod) {
                         header('Location: index.php?act=forum&mod=cat' . ($res['type'] == 'r' ? '&id=' . $res['refid'] : ''));
                     } else {
                         // Выводим сообщение об ошибках
-                        echo display_error($error);
+                        echo functions::display_error($error);
                     }
                 } else {
                     // Форма ввода
@@ -472,7 +472,7 @@ switch ($mod) {
         }
         if (isset($_POST['deltopic'])) {
             if ($rights != 9) {
-                echo display_error($lng['access_forbidden']);
+                echo functions::display_error($lng['access_forbidden']);
                 require('../incfiles/end.php');
                 exit;
             }
@@ -508,7 +508,7 @@ switch ($mod) {
                     $subtext .= '<a href="index.php?act=forum&amp;mod=htopics&amp;rsort=' . $res['refid'] . '">' . $lng_forum['by_section'] . '</a> | ';
                     $subtext .= '<a href="index.php?act=forum&amp;mod=htopics&amp;usort=' . $res['user_id'] . '">' . $lng_forum['by_author'] . '</a>';
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    echo display_user($res, array (
+                    echo functions::display_user($res, array (
                         'header' => $ttime,
                         'body' => $text,
                         'sub' => $subtext
@@ -526,7 +526,7 @@ switch ($mod) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('index.php?act=forum&amp;mod=htopics&amp;', $start, $total, $kmess) . '</p>' .
+                echo '<p>' . functions::display_pagination('index.php?act=forum&amp;mod=htopics&amp;', $start, $total, $kmess) . '</p>' .
                     '<p><form action="index.php?act=forum&amp;mod=htopics" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
@@ -555,7 +555,7 @@ switch ($mod) {
         }
         if (isset($_POST['delpost'])) {
             if ($rights != 9) {
-                echo display_error($lng['access_forbidden']);
+                echo functions::display_error($lng['access_forbidden']);
                 require('../incfiles/end.php');
                 exit;
             }
@@ -583,7 +583,7 @@ switch ($mod) {
                     $posttime = ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                     $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['fid'] . "'"), 0) / $kmess);
                     $text = mb_substr($res['text'], 0, 500);
-                    $text = checkout($text, 1, 0);
+                    $text = functions::checkout($text, 1, 0);
                     $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                     $theme = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
                     $text = '<b>' . $theme['text'] . '</b> <a href="../forum/index.php?id=' . $theme['id'] . '&amp;page=' . $page . '">&gt;&gt;</a><br />' . $text;
@@ -591,7 +591,7 @@ switch ($mod) {
                     $subtext .= '<a href="index.php?act=forum&amp;mod=hposts&amp;tsort=' . $theme['id'] . '">' . $lng_forum['by_theme'] . '</a> | ';
                     $subtext .= '<a href="index.php?act=forum&amp;mod=hposts&amp;usort=' . $res['user_id'] . '">' . $lng_forum['by_author'] . '</a>';
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    echo display_user($res, array (
+                    echo functions::display_user($res, array (
                         'header' => $posttime,
                         'body' => $text,
                         'sub' => $subtext
@@ -606,7 +606,7 @@ switch ($mod) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('index.php?act=forum&amp;mod=hposts&amp;', $start, $total, $kmess) . '</p>' .
+                echo '<p>' . functions::display_pagination('index.php?act=forum&amp;mod=hposts&amp;', $start, $total, $kmess) . '</p>' .
                     '<p><form action="index.php?act=forum&amp;mod=hposts" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>; .
@@ -623,7 +623,7 @@ switch ($mod) {
         */
         if (isset($_POST['submit'])) {
             if (!$id) {
-                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+                echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -635,7 +635,7 @@ switch ($mod) {
                     }
                 }
                 foreach ($_POST['moder'] as $v) {
-                    $v = check($v);
+                    $v = functions::check($v);
                     $q2 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'a' AND `from` = '$v' AND `refid` = '$id'");
                     $q3 = mysql_num_rows($q2);
                     if ($q3 == 0) {
@@ -655,7 +655,7 @@ switch ($mod) {
                 $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
                 $ms = mysql_fetch_array($typ);
                 if ($ms['type'] != "f") {
-                    echo display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+                    echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }

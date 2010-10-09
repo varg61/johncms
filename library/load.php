@@ -36,7 +36,7 @@ if ($rights == 5 || $rights >= 6) {
             }
             $name = mb_substr($_POST['name'], 0, 50);
             $fname = $_FILES['fail']['name'];
-            $ftip = format($fname);
+            $ftip = functions::format($fname);
             $ftip = strtolower($ftip);
             if ($fname != "") {
                 if (eregi("[^a-z0-9.()+_-]", $fname)) {
@@ -102,7 +102,7 @@ if ($rights == 5 || $rights >= 6) {
                     $tmp_name = $array[0];
                     $filebase64 = $array[1];
                 }
-                $ftip = strtolower(format($tmp_name));
+                $ftip = strtolower(functions::format($tmp_name));
                 if (eregi("[^a-z0-9.()+_-]", $tmp_name)) {
                     echo "В названии файла <b>$fname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='index.php?act=load&amp;id="
                         . $id . "'>Повторить</a><br/>";

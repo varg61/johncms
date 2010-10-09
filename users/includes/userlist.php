@@ -28,12 +28,12 @@ $total = mysql_result($req, 0);
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT $start, $kmess");
 while ($res = mysql_fetch_assoc($req)) {
     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-    echo display_user($res) . '</div>';
+    echo functions::display_user($res) . '</div>';
     ++$i;
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('index.php?act=userlist&amp;', $start, $total, $kmess) . '</p>' .
+    echo '<p>' . functions::display_pagination('index.php?act=userlist&amp;', $start, $total, $kmess) . '</p>' .
         '<p><form action="index.php?act=userlist" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

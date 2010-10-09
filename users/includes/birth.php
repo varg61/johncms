@@ -28,12 +28,12 @@ if ($total) {
     $req = mysql_query("SELECT * FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1' LIMIT $start, $kmess");
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo display_user($res) . '</div>';
+        echo functions::display_user($res) . '</div>';
         ++$i;
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
-        echo '<p>' . display_pagination('index.php?act=birth&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . functions::display_pagination('index.php?act=birth&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php?act=birth" method="post">' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

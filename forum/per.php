@@ -16,14 +16,14 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights == 3 || $rights >= 6) {
     if (!$id) {
         require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
     $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
     if (!mysql_num_rows($typ)) {
         require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
@@ -31,14 +31,14 @@ if ($rights == 3 || $rights >= 6) {
         $razd = isset($_POST['razd']) ? abs(intval($_POST['razd'])) : false;
         if (!$razd) {
             require('../incfiles/head.php');
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }
         $typ1 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$razd' AND `type` = 'r' LIMIT 1");
         if (!mysql_num_rows($typ1)) {
             require('../incfiles/head.php');
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }
@@ -60,7 +60,7 @@ if ($rights == 3 || $rights >= 6) {
             $rz1 = mysql_fetch_assoc($rz);
             $other = $rz1['refid'];
         } else {
-            $other = intval(check($_GET['other']));
+            $other = intval(functions::check($_GET['other']));
         }
         $fr = mysql_query("select * from `forum` where id='" . $other . "';");
         $fr1 = mysql_fetch_assoc($fr);

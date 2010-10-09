@@ -27,7 +27,7 @@ if ($rights == 4 || $rights >= 6) {
         $adrdir = mysql_fetch_array($cat1);
         $loaddir = "$adrdir[adres]/$adrdir[name]";
     }
-    $opis = check(trim($_POST['opis']));
+    $opis = functions::check($_POST['opis']);
     $fname = $_FILES['fail']['name'];
     $fsize = $_FILES['fail']['size'];
     $scrname = $_FILES['screens']['name'];
@@ -35,7 +35,7 @@ if ($rights == 4 || $rights >= 6) {
     $scsize = GetImageSize($_FILES['screens']['tmp_name']);
     $scwidth = $scsize[0];
     $scheight = $scsize[1];
-    $ftip = format($fname);
+    $ftip = functions::format($fname);
     $ffot = strtolower($scrname);
     $dopras = array("gif", "jpg", "png");
     if ($fname != "") {
@@ -43,10 +43,10 @@ if ($rights == 4 || $rights >= 6) {
             $newname = str_replace(".$ftip", "", $fname);
         }
         else {
-            $newname = check(trim($_POST['newname']));
+            $newname = functions::check($_POST['newname']);
         }
         if ($scrname != "") {
-            $formfot = format($ffot);
+            $formfot = functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
                 require_once ('../incfiles/end.php');
@@ -63,8 +63,8 @@ if ($rights == 4 || $rights >= 6) {
             require_once ('../incfiles/end.php');
             exit;
         }
-        if ($fsize >= 1024 * $flsz) {
-            echo "Вес файла превышает $flsz кб<br/>
+        if ($fsize >= 1024 * $set['flsz']) {
+            echo "Вес файла превышает " . $set['flsz'] . " кб<br/>
 <a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
             require_once ('../incfiles/end.php');
             exit;
@@ -113,12 +113,12 @@ if ($rights == 4 || $rights >= 6) {
             $tmp_name = $array [0];
             $filebase64 = $array [1];
         }
-        $ftip = format($tmp_name);
+        $ftip = functions::format($tmp_name);
         if (empty ($_POST['newname'])) {
             $newname = str_replace(".$ftip", "", $tmp_name);
         }
         else {
-            $newname = check(trim($_POST['newname']));
+            $newname = functions::check($_POST['newname']);
         }
         if (!empty ($_POST['screens1'])) {
             $uploaddir1 = "$screenroot";
@@ -138,7 +138,7 @@ if ($rights == 4 || $rights >= 6) {
             $ffot = strtolower($tmp_name1);
             $dopras = array("gif", "jpg", "png");
 
-            $formfot = format($ffot);
+            $formfot = functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
                 require_once ('../incfiles/end.php');
@@ -209,8 +209,8 @@ if ($rights == 4 || $rights >= 6) {
             if (file_exists($FileName) && filesize($FileName) == strlen($filedata)) {
                 $siz = filesize("$FileName");
                 $siz = round($siz / 1024, 2);
-                if ($siz >= 1024 * $flsz) {
-                    echo "Вес файла превышает $flsz кб<br/>
+                if ($siz >= 1024 * $set['flsz']) {
+                    echo "Вес файла превышает " . $set['flsz'] . " кб<br/>
 <a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
                     unlink("$FileName");
                     require_once ('../incfiles/end.php');

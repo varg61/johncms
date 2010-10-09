@@ -22,7 +22,7 @@ require('../incfiles/head.php');
 -----------------------------------------------------------------
 */
 if ($rights < 6) {
-    echo display_error($lng['access_forbidden']);
+    echo functions::display_error($lng['access_forbidden']);
     require('../incfiles/end.php');
     exit;
 }
@@ -38,22 +38,23 @@ $arg = array (
     'lastvisit' => 1,
     'header' => '<b>ID:' . $user['id'] . '</b>'
 );
-echo display_user($user, $arg);
+echo functions::display_user($user, $arg);
 echo '</p></div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 if ($total) {
-    $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "' ORDER BY `time` DESC LIMIT $start,$kmess");
+    $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "' ORDER BY `time` DESC LIMIT $start, $kmess");
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        $iptime = $user['ip'] == $res['user_ip'] ? $user['lastdate'] : $res['time'];
-        $link = $rights > 0 ? '<a href="' . $home . '/' . $admp . '/index.php?act=search_ip&amp;ip=' . $res['user_ip'] . '">' . long2ip($res['user_ip']) . '</a>' : long2ip($res['user_ip']);
-        echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $iptime) . ')</span></div>';
+        $link = $rights > 0 ? '<a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;mod=history&amp;ip=' . $res['user_ip'] . '">' . long2ip($res['user_ip']) . '</a>' : long2ip($res['user_ip']);
+        echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $res['time']) . ')</span></div>';
         ++$i;
     }
+} else {
+    echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('profile.php?act=ip&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
+    echo '<p>' . functions::display_pagination('profile.php?act=ip&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
     echo '<p><form action="profile.php?act=ip&amp;user=' . $user['id'] . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

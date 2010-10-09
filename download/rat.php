@@ -35,7 +35,7 @@ if ($_SESSION['rat'] == $id) {
     require_once ('../incfiles/end.php');
     exit;
 }
-$rat = intval(check($_POST['rat']));
+$rat = intval(functions::check($_POST['rat']));
 if (!empty ($ms[soft])) {
     $rt = explode(",", $ms[soft]);
     $rt1 = $rt[0] + $rat;

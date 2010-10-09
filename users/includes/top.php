@@ -29,7 +29,7 @@ function get_top($order = 'postforum') {
         $out = '';
         while ($res = mysql_fetch_assoc($req)) {
             $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $out .= display_user($res, array ('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
+            $out .= functions::display_user($res, array ('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
             ++$i;
         }
         return $out;
@@ -61,7 +61,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_guest'] . '</div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         echo get_top('postguest');
         echo '<div class="phdr"><a href="../guestbook/index.php">' . $lng['guestbook'] . '</a></div>';
         break;
@@ -73,7 +73,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_chat'] . '</div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         echo get_top('postchat');
         echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
         break;
@@ -85,7 +85,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_quiz'] . '</div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         echo get_top('otvetov');
         echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
         break;
@@ -97,7 +97,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_bal'] . '</div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         echo get_top('balans');
         echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
         break;
@@ -109,7 +109,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_comm'] . '</div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         echo get_top('komm');
         echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
         break;
@@ -122,12 +122,12 @@ switch ($mod) {
         */
         if ($set_karma['on']) {
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_karma'] . '</div>';
-            echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+            echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
             $req = mysql_query("SELECT *, (`karma_plus` - `karma_minus`) AS `karma` FROM `users` WHERE (`karma_plus` - `karma_minus`) > 0 ORDER BY `karma` DESC LIMIT 9");
             if (mysql_num_rows($req)) {
                 while ($res = mysql_fetch_assoc($req)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    echo display_user($res, array ('header' => ('<b>' . $res['karma']) . '</b>')) . '</div>';
+                    echo functions::display_user($res, array ('header' => ('<b>' . $res['karma']) . '</b>')) . '</div>';
                     ++$i;
                 }
             } else {
@@ -144,7 +144,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_forum'] . '</div>';
-        echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         echo get_top('postforum');
         echo '<div class="phdr"><a href="../forum/index.php">' . $lng['forum'] . '</a></div>';
 }

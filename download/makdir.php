@@ -32,8 +32,8 @@ if ($rights == 4 || $rights >= 6) {
             $adrdir = mysql_fetch_array($cat1);
             $droot = "$adrdir[adres]/$adrdir[name]";
         }
-        $drn = check(trim($_POST['drn']));
-        $rusn = check(trim($_POST['rusn']));
+        $drn = functions::check($_POST['drn']);
+        $rusn = functions::check($_POST['rusn']);
         $mk = mkdir("$droot/$drn", 0777);
         if ($mk == true) {
             chmod("$droot/$drn", 0777);

@@ -17,7 +17,7 @@ if ($rights == 3 || $rights >= 6) {
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = '$id'"), 0);
     require('../incfiles/head.php');
     if ($topic_vote == 0) {
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }

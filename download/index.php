@@ -35,6 +35,18 @@ if ($error) {
     exit;
 }
 
+function provcat($catalog) {
+    $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
+    $cat2 = mysql_num_rows($cat1);
+    $adrdir = mysql_fetch_array($cat1);
+
+    if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]"))) {
+        echo 'Ошибка при выборе категории<br/><a href="?">К категориям</a><br/>';
+        require_once('../incfiles/end.php');
+        exit;
+    }
+}
+
 $array = array (
     'scan_dir',
     'rat',
@@ -60,8 +72,7 @@ $array = array (
     'select',
     'preview',
     'delcat',
-    'mp3',
-    'trans'
+    'mp3'
 );
 if (in_array($act, $array)) {
     require_once($act . '.php');
@@ -141,7 +152,7 @@ if (in_array($act, $array)) {
             ////////////////////////////////////////////////////////////
             if ($totalfile > 0 && $zap2['type'] == 'file') {
                 echo '<div class="list2">';
-                $ft = format($zap2['name']);
+                $ft = functions::format($zap2['name']);
                 switch ($ft) {
                     case "mp3":
                         $imt = "mp3.png";
@@ -196,7 +207,7 @@ if (in_array($act, $array)) {
     echo '</div>';
     // Постраничная навигация
     if ($total > $kmess) {
-        echo '<p>' . display_pagination('index.php?cat=' . $cat . '&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . functions::display_pagination('index.php?cat=' . $cat . '&amp;', $start, $total, $kmess) . '</p>';
     }
     if ($rights == 4 || $rights >= 6) {
         ////////////////////////////////////////////////////////////

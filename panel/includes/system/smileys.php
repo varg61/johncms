@@ -15,7 +15,7 @@
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['smileys'] . '</div>';
-if ($total = smileys(0, 2)) {
+if ($total = functions::smileys(0, 2)) {
     echo '<div class="gmenu"><p>' . $lng['smileys_updated'] . '</p></div>';
 } else {
     echo '<div class="rmenu"><p>' . $lng['smileys_error'] . '</p></div>';

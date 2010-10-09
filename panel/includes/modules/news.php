@@ -32,7 +32,7 @@ if (!empty($set['news'])) {
         $tags = isset($_POST['tags']) ? intval($_POST['tags']) : 0;
         $kom = isset($_POST['kom']) ? intval($_POST['kom']) : 0;
         if ($view < 0 || $view > 3 || $size < 50 || $size > 500 || $quantity < 1 || $quantity > 15 || $days < 0 || $days > 15 || $breaks < 0 || $breaks > 1) {
-            echo display_error($lng['error_wrong_limits'], '<a href="index.php?act=news">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_wrong_limits'], '<a href="index.php?act=news">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }

@@ -36,9 +36,9 @@ if (!empty($_SESSION['uid'])) {
 
         case "edit":
             if (!empty($_POST['nik'])) {
-                $nik = check($_POST['nik']);
+                $nik = functions::check($_POST['nik']);
             }  elseif (!empty($_GET['nik'])) {
-                $nik = check($_GET['nik']);
+                $nik = functions::check($_GET['nik']);
             } else {
                 if (empty($_GET['id'])) {
                     echo "Ошибка!<br/><a href='ignor.php'>В список</a><br/>";

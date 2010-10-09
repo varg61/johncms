@@ -20,11 +20,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if ($user['id'] != $user_id && ($rights < 7 || $user['rights'] > $rights)) {
-    echo display_error($lng['access_forbidden']);
+    echo functions::display_error($lng['access_forbidden']);
     require('../incfiles/end.php');
     exit;
 }
-$lng_pass = load_lng('pass');
+$lng_pass = $core->load_lng('pass');
 $textl = htmlspecialchars($user['name']) . ': ' . $lng_pass['change_password'];
 require('../incfiles/head.php');
 
@@ -66,12 +66,12 @@ switch ($mod) {
             if ($autologin) {
                 // Показываем ссылку на Автологин
                 echo '<p>' . $lng_pass['autologin_link'] . ':<br />' .
-                    '<input type="text" value="' . $home . '/login.php?id=' . $user['id'] . '&amp;p=' . $newpass . '" /></p>' .
+                    '<input type="text" value="' . $set['homeurl'] . '/login.php?id=' . $user['id'] . '&amp;p=' . $newpass . '" /></p>' .
                     '<p>' . $lng_pass['autologin_warning'] . '</p>';
             }
             echo '</div>';
         } else {
-            echo display_error($error, '<a href="profile.php?act=password&amp;user=' . $user['id'] . '">' . $lng['repeat'] . '</a>');
+            echo functions::display_error($error, '<a href="profile.php?act=password&amp;user=' . $user['id'] . '">' . $lng['repeat'] . '</a>');
         }
         break;
 

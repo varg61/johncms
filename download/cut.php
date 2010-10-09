@@ -42,7 +42,7 @@ if (!empty ($_GET['id'])) {
     $muz1 = mysql_fetch_array($muz);
     $mp3 = "$muz1[adres]/$muz1[name]";
     $mp3 = str_replace("../", "", $mp3);
-    $mp3 = "$home/$mp3";
+    $mp3 = $set['homeurl'] . '/' . $mp3;
 }
 if (!isset ($_POST['a']) || empty ($_POST['a'])) {
     $_SESSION['rand'] = $rand;
@@ -82,10 +82,10 @@ if (!isset ($_POST['a']) || empty ($_POST['a'])) {
 }
 else {
     $url = $_POST['url'];
-    $a = check(trim($_POST['a']));
+    $a = functions::check($_POST['a']);
     $s = intval(trim($_POST['s']));
     $p = intval(trim($_POST['p']));
-    $way = check(trim($_POST['way']));
+    $way = functions::check($_POST['way']);
     $error = 0;
     if (!eregi("^(http://)([a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z;]{2,3}))|(([0-9]{1,3}\.){3}([0-9]{1,3}))((/|\?)[a-z0-9~#%&'_\+=:;\?\.-])(.mp3)\$", $url)) {
         print "Это не MP3!<br/>";

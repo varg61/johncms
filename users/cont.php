@@ -24,11 +24,6 @@ if (!empty($_SESSION['uid'])) {
         $act = $_GET['act'];
     }
     switch ($act) {
-        case "trans":
-            include("../pages/trans.$ras_pages");
-            echo '<p><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
-            break;
-
         case "add":
             echo "<form action='cont.php?act=edit&amp;add=1' method='post'>Введите ник<br/>";
             echo "<input type='text' name='nik' value='' /><br/>
@@ -39,9 +34,9 @@ if (!empty($_SESSION['uid'])) {
 
         case "edit":
             if (!empty($_POST['nik'])) {
-                $nik = check($_POST['nik']);
+                $nik = functions::check($_POST['nik']);
             }  elseif (!empty($_GET['nik'])) {
-                $nik = check($_GET['nik']);
+                $nik = functions::check($_GET['nik']);
             } else {
                 if (empty($_GET['id'])) {
                     echo "Ошибка!<br/><a href='cont.php'>В контакты</a><br/>";

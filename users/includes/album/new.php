@@ -23,7 +23,7 @@ echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b><
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "'" . ($rights >=7 ? "" : " AND `access` > '1'")), 0);
 if ($total) {
     if ($total > $kmess)
-        echo '<div class="topmenu">' . display_pagination('album.php?act=new&amp;', $start, $total, $kmess) . '</div>';
+        echo '<div class="topmenu">' . functions::display_pagination('album.php?act=new&amp;', $start, $total, $kmess) . '</div>';
     $req = mysql_query("SELECT `cms_album_files`.*, `users`.`name` AS `user_name`, `cms_album_cat`.`name` AS `album_name`
     FROM `cms_album_files`
     INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
@@ -37,18 +37,18 @@ if ($total) {
             // Если доступ открыт всем, или смотрит Администратор
             echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '"><img src="../../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
-                echo '<div class="gray">' . smileys(checkout($res['description'], 1)) . '</div>';
+                echo '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
         } elseif ($res['access'] == 3) {
             // Если доступ открыт друзьям
             echo 'Только для друзей';
         } elseif ($res['access'] == 2) {
             // Если доступ по паролю
-            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '"><img src="' . $home . '/images/stop.gif" width="50" height="50"/></a>';
+            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '"><img src="' . $set['homeurl'] . '/images/stop.gif" width="50" height="50"/></a>';
         }
         echo '<div class="sub">';
         if ($res['access'] == 4 || $rights >= 7)
             vote_photo($res);
-        echo '<p><a href="profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . checkout($res['album_name']) . '</a>';
+        echo '<p><a href="profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';
         if ($res['access'] == 4 || $rights >= 7)
             echo '<br /><a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
         echo '</p></div></div>';
@@ -59,7 +59,7 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<div class="topmenu">' . display_pagination('album.php?act=new&amp;', $start, $total, $kmess) . '</div>' .
+    echo '<div class="topmenu">' . functions::display_pagination('album.php?act=new&amp;', $start, $total, $kmess) . '</div>' .
         '<p><form action="album.php?act=new" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

@@ -17,12 +17,12 @@ define('_IN_JOHNCMS', 1);
 $textl = 'Почта(письма)';
 require_once("../incfiles/core.php");
 if ($user_id) {
-    $msg = check(trim($_POST['msg']));
+    $msg = functions::check($_POST['msg']);
     if ($_POST['msgtrans'] == 1) {
         $msg = trans($msg);
     }
-    $foruser = check(trim($_POST['foruser']));
-    $tem = check(trim($_POST['tem']));
+    $foruser = functions::check($_POST['foruser']);
+    $tem = functions::check($_POST['tem']);
     $idm = intval($_POST['idm']);
     switch ($act) {
         case 'send':
@@ -102,8 +102,8 @@ if ($user_id) {
                         );
                         $ext = explode(".", $fname);
                         // Проверка на допустимый размер файла
-                        if ($fsize >= 1024 * $flsz) {
-                            echo '<p><b>ОШИБКА!</b></p><p>Вес файла превышает ' . $flsz . ' кб.';
+                        if ($fsize >= 1024 * $set['flsz']) {
+                            echo '<p><b>ОШИБКА!</b></p><p>Вес файла превышает ' . $set['flsz'] . ' кб.';
                             echo '</p><p><a href="pradd.php?act=write&amp;adr=' . $adres . '">Повторить</a></p>';
                             require_once('../incfiles/end.php');
                             exit;
@@ -204,7 +204,7 @@ if ($user_id) {
             $mas = mysql_fetch_array($fil);
             $att = $mas['attach'];
             if (!empty($att)) {
-                $tfl = strtolower(format(trim($att)));
+                $tfl = strtolower(functions::format(trim($att)));
                 $df = array (
                     "asp",
                     "aspx",
@@ -297,7 +297,7 @@ if ($user_id) {
                 echo "<br/><input type='text' name='foruser'/>";
             }
             echo " <br/>Тема:<br/><input type='text' name='tem' value='" . $tema .
-                "'/><br/> Cообщение:<br/><textarea rows='5' name='msg'></textarea><br/>Прикрепить файл(max. $flsz kb):<br/><input type='file' name='fail'/><hr/>Прикрепить файл(Opera Mini):<br/><input name='fail1' value =''/>&#160;<br/>
+                "'/><br/> Cообщение:<br/><textarea rows='5' name='msg'></textarea><br/>Прикрепить файл(max. " . $set['flsz'] . " kb):<br/><input type='file' name='fail'/><hr/>Прикрепить файл(Opera Mini):<br/><input name='fail1' value =''/>&#160;<br/>
 <a href='op:fileselect'>Выбрать файл</a><hr/>";
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" /> Транслит сообщения<br/>';
@@ -373,7 +373,7 @@ if ($user_id) {
             echo '</form>';
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('pradd.php?act=in&amp;', $start, $total, $kmess) . '</p>';
+                echo '<p>' . functions::display_pagination('pradd.php?act=in&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="pradd.php?act=in" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
@@ -432,13 +432,13 @@ if ($user_id) {
             $newl = mysql_query("select * from `privat` where user = '" . $login . "' and type = 'in' and chit = 'no';");
             $countnew = mysql_num_rows($newl);
             if ($countnew > 0) {
-                echo "<div style='text-align: center'><a href='$home/users/pradd.php?act=in&amp;new'><b><font color='red'>Вам письмо: $countnew</font></b></a></div>";
+                echo "<div style='text-align: center'><a href='" . $set['homeurl'] . "/users/pradd.php?act=in&amp;new'><b><font color='red'>Вам письмо: $countnew</font></b></a></div>";
             }
             $mass = mysql_fetch_array(mysql_query("select * from `users` where `name`='" . $massiv1['author'] . "';"));
             $text = $massiv1['text'];
-            $text = tags($text);
+            $text = functions::tags($text);
             if ($set_user['smileys'])
-                $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
+                $text = functions::smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             echo "<p>От <a href='profile.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
             $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
             echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
@@ -515,7 +515,7 @@ if ($user_id) {
             echo '</form>';
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('pradd.php?act=out&amp;', $start, $total, $kmess) . '</p>';
+                echo '<p>' . functions::display_pagination('pradd.php?act=out&amp;', $start, $total, $kmess) . '</p>';
                 echo '<p><form action="pradd.php?act=out" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
@@ -532,9 +532,9 @@ if ($user_id) {
             $massiv1 = mysql_fetch_array($messages1);
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='$massiv1[user]';"));
             $text = $massiv1['text'];
-            $text = tags($text);
+            $text = functions::tags($text);
             if ($set_user['smileys'])
-                $text = smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
+                $text = functions::smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             echo "<p>Для <a href='profile/index.php?id=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
             $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
             echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>Тема: $massiv1[temka]<br/></div>Текст: $text</p>";
@@ -542,12 +542,6 @@ if ($user_id) {
                 echo "<p>Прикреплённый файл: $massiv1[attach]</p>";
             }
             echo "<hr /><p><a href='pradd.php?act=delmess&amp;del=" . $massiv1['id'] . "'>Удалить</a></p>";
-            break;
-
-        case 'trans':
-            require_once('../incfiles/head.php');
-            include("../pages/trans.$ras_pages");
-            echo '<br/><br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">Назад</a><br/>';
             break;
     }
     echo "<p><a href='profile.php?act=office'>В кабинет</a><br/>";

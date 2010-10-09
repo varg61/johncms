@@ -44,7 +44,7 @@ if ($user_id && !$ban['1'] && !$ban['10']) {
 $mess = mysql_query("SELECT * FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
 while ($mass = mysql_fetch_array($mess)) {
     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-    $uz = mysql_query("select * from `users` where name='" . check($mass['avtor']) . "';");
+    $uz = mysql_query("select * from `users` where name='" . functions::check($mass['avtor']) . "';");
     $mass1 = mysql_fetch_array($uz);
     if ((!empty($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1['id'])) {
         echo "<a href='../users/profile.php?user=" . $mass1['id'] . "'>$mass[avtor]</a>";
@@ -79,7 +79,7 @@ while ($mass = mysql_fetch_array($mess)) {
     }
     echo "($vr1)<br/>";
     if ($set_user['smileys']) {
-        $tekst = smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
+        $tekst = functions::smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
     } else {
         $tekst = $mass['text'];
     }
@@ -93,7 +93,7 @@ while ($mass = mysql_fetch_array($mess)) {
 echo '<div class="phdr">Всего каментов: ' . $countm . '</div>';
 // Навигация по страницам
 if ($countm > $kmess) {
-    echo '<p>' . display_pagination('index.php?act=komm&amp;id=' . $id . '&amp;', $start, $countm, $kmess) . '</p>';
+    echo '<p>' . functions::display_pagination('index.php?act=komm&amp;id=' . $id . '&amp;', $start, $countm, $kmess) . '</p>';
     echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="komm"/><input type="hidden" name="id" value="' . $id .
         '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }

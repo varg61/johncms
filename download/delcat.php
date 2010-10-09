@@ -16,6 +16,20 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+function deletcat($catalog) {
+    $dir = opendir($catalog);
+
+    while (($file = readdir($dir))) {
+        if (is_file($catalog . "/" . $file)) {
+            unlink($catalog . "/" . $file);
+        } else if (is_dir($catalog . "/" . $file) && ($file != ".") && ($file != "..")) {
+            deletcat($catalog . "/" . $file);
+        }
+    }
+    closedir($dir);
+    rmdir($catalog);
+}
+
 if (($rights == 4 || $rights >= 6) && (!empty ($_GET['cat']))) {
     $cat = $_GET['cat'];
     $delcat = mysql_query("select * from `download` where type = 'cat' and refid = '" . $cat . "';");

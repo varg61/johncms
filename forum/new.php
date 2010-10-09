@@ -132,7 +132,7 @@ if ($user_id) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $count . '</div>';
                 if ($count > $kmess) {
-                    echo '<p>' . display_pagination('index.php?act=new&amp;do=all&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</p>';
+                    echo '<p>' . functions::display_pagination('index.php?act=new&amp;do=all&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</p>';
                     echo '<p><form action="index.php" method="get">
                     <input type="hidden" name="act" value="new"/>
                     <input type="hidden" name="do" value="all"/>
@@ -153,7 +153,7 @@ if ($user_id) {
             Вывод непрочитанных тем (для зарегистрированных)
             -----------------------------------------------------------------
             */
-            $total = forum_new();
+            $total = functions::forum_new();
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['unread'] . '</div>';
             if ($total > 0) {
                 $req = mysql_query("SELECT `id`, `text`, `from`, `refid`, `realid` FROM `forum`
@@ -197,7 +197,7 @@ if ($user_id) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>' .
+                echo '<p>' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>' .
                     '<p><form action="index.php" method="get">' .
                     '<input type="hidden" name="act" value="new"/>' .
                     '<input type="text" name="page" size="2"/>' .

@@ -31,13 +31,13 @@ for ($it = 0; $it < $totalt; $it++) {
     }
 }
 if (!$id) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
 if (!mysql_num_rows($req)) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
@@ -102,14 +102,14 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
                     $div = "<div class='c'>";
                 }
                 $txt_tmp = htmlentities($arr['text'], ENT_QUOTES, 'UTF-8');
-                $txt_tmp = tags($txt_tmp);
+                $txt_tmp = functions::tags($txt_tmp);
                 $txt_tmp = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $txt_tmp);
                 $txt_tmp = str_replace("\r\n", "<br/>", $txt_tmp);
                 $stroka = "$div <b>$arr[from]</b>(" . date("d.m.Y/H:i", $arr['time']) . ")<br/>$txt_tmp</div>";
                 $text = "$text $stroka";
                 ++$i;
             }
-            $text = $text . '<p>' . $lng_forum['download_topic_note'] . ': <b>' . $copyright . '</b></p></body></html>';
+            $text = $text . '<p>' . $lng_forum['download_topic_note'] . ': <b>' . $set['copyright'] . '</b></p></body></html>';
             $num = "$realtime$id";
             $fp = fopen("../files/forum/topics/$num.htm", "a+");
             flock($fp, LOCK_EX);

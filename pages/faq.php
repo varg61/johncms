@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 require('../incfiles/core.php');
-$lng_faq = load_lng('faq');
+$lng_faq = $core->load_lng('faq');
 $textl = 'FAQ';
 $headmod = 'faq';
 require('../incfiles/head.php');
@@ -64,7 +64,7 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         if (!is_dir($rootpath . 'images/smileys/user/' . $id)) {
-            echo display_error($lng['error_wrong_data'], '<a href="faq.php?act=smileys">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_wrong_data'], '<a href="faq.php?act=smileys">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -85,14 +85,14 @@ switch ($act) {
             for ($i = $start; $i < $end; $i++) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['or'] . ' :' . trans($smile) . ':</div>';
+                echo '<img src="../images/smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['or'] . ' :' . functions::trans($smile) . ':</div>';
             }
         } else {
             echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('faq.php?act=smusr&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . functions::display_pagination('faq.php?act=smusr&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="faq.php?act=smusr&amp;id=' . $id . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
@@ -107,7 +107,7 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         if ($rights < 1) {
-            echo display_error($lng['error_wrong_data'], '<a href="faq.php?act=smileys">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_wrong_data'], '<a href="faq.php?act=smileys">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -135,7 +135,7 @@ switch ($act) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('faq.php?act=smadm&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . functions::display_pagination('faq.php?act=smadm&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="faq.php?act=smadm" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
@@ -177,7 +177,7 @@ switch ($act) {
                     echo '<div class="gmenu"><p>' . $lng['avatar_applied'] . '<br />' .
                         '<a href="../users/profile.php?act=edit">' . $lng['continue'] . '</a></p></div>';
                 else
-                    echo display_error($lng['error_avatar_select'], '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a>');
+                    echo functions::display_error($lng['error_avatar_select'], '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a>');
             } else {
                 // Показываем список Аватаров
                 echo '<div class="phdr"><a href="faq.php?act=avatars"><b>' . $lng['avatars'] . '</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/avatars/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
@@ -200,7 +200,7 @@ switch ($act) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
                 if ($total > $kmess) {
-                    echo '<p>' . display_pagination('faq.php?act=avatars&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
+                    echo '<p>' . functions::display_pagination('faq.php?act=avatars&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
                         '<p><form action="faq.php?act=avatars&amp;id=' . $id . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

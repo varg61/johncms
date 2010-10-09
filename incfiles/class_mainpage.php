@@ -50,13 +50,13 @@ class mainpage {
                         $text = str_replace("\r\n", "<br/>", $text);
                     // Парсинг смайлов
                     if ($this->settings['smileys']) {
-                        $text = call_user_func('smileys', $text, 1);
+                        $text = call_user_func('functions::smileys', $text, 1);
                     }
                     // Обрабатываем тэги
                     if ($this->settings['tags']) {
                         $text = call_user_func('tags', $text);
                     } else {
-                        $text = call_user_func('notags', $text);
+                        $text = functions::notags($text);
                     }
                     // Определяем режим просмотра заголовка - текста
                     $news .= '<div class="news">';

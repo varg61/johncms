@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require('../incfiles/head.php');
 if (!$user_id || !$id) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
@@ -153,13 +153,13 @@ if (!$error) {
             */
             if (isset($_POST['submit'])) {
                 if (empty($_POST['msg'])) {
-                    echo display_error($lng_forum['error_message_empty'], '<a href="index.php?act=editpost&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                    echo functions::display_error($lng_forum['error_message_empty'], '<a href="index.php?act=editpost&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
                 $msg = mysql_real_escape_string(trim($_POST['msg']));
                 if ($_POST['msgtrans'] == 1) {
-                    $msg = trans($msg);
+                    $msg = functions::trans($msg);
                 }
                 mysql_query("UPDATE `forum` SET
                     `tedit` = '$realtime',
@@ -186,6 +186,6 @@ if (!$error) {
     Выводим сообщения об ошибках
     -----------------------------------------------------------------
     */
-    echo display_error($error);
+    echo functions::display_error($error);
 }
 ?>

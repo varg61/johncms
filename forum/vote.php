@@ -21,7 +21,7 @@ if ($user_id) {
     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user` = '$user_id' AND `topic` = '$id'"), 0);
     require('../incfiles/head.php');
     if ($topic_vote == 0 || $vote_user > 0 || $topic == 0) {
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
@@ -30,7 +30,7 @@ if ($user_id) {
     mysql_query("UPDATE `cms_forum_vote` SET `count` = count + 1 WHERE topic = '$id' AND `type` = '1'");
     echo $lng_forum['vote_accepted'] . '<br /><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . $lng['back'] . '</a>';
 } else {
-    echo display_error($lng['access_guest_forbidden']);
+    echo functions::display_error($lng['access_guest_forbidden']);
 }
 
 ?>

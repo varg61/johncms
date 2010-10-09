@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require('../incfiles/head.php');
 if (!$id) {
-    echo display_error($lng['error_wrong_data'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
+    echo functions::display_error($lng['error_wrong_data'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
     require('../incfiles/end.php');
     exit;
 }
@@ -74,7 +74,7 @@ switch ($do) {
                 '<div class="phdr"><small>' . $lng_forum['filter_on_author_help'] . '</small></div>' .
                 '</form>';
         } else {
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
         }
 }
 echo '<p><a href="index.php?id=' . $id . '&amp;start=' . $start . '">' . $lng_forum['return_to_topic'] . '</a></p>';

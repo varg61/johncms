@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require('../incfiles/head.php');
 if (!$id || !$user_id) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
@@ -23,13 +23,13 @@ if (!$id || !$user_id) {
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
 $res = mysql_fetch_assoc($req);
 if ($res['user_id'] != $user_id) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
 $req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = '$id'");
 if (mysql_result($req1, 0) > 0) {
-    echo display_error($lng_forum['error_file_uploaded']);
+    echo functions::display_error($lng_forum['error_file_uploaded']);
     require('../incfiles/end.php');
     exit;
 }
@@ -67,8 +67,8 @@ switch ($res['type']) {
                 $ext = explode(".", $fname);
                 $error = array ();
                 // Проверка на допустимый размер файла
-                if ($fsize > 1024 * $flsz)
-                    $error[] = $lng_forum['error_file_size'] . ' ' . $flsz . 'kb.';
+                if ($fsize > 1024 * $set['flsz'])
+                    $error[] = $lng_forum['error_file_size'] . ' ' . $set['flsz'] . 'kb.';
                 // Проверка файла на наличие только одного расширения
                 if (count($ext) != 2)
                     $error[] = $lng_forum['error_file_name'];
@@ -152,7 +152,7 @@ switch ($res['type']) {
                         `filetype` = '$type'
                     ");
                 } else {
-                    echo display_error($error, '<a href="index.php?act=addfile&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                    echo functions::display_error($error, '<a href="index.php?act=addfile&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
                 }
             } else {
                 echo $lng_forum['error_upload_error'] . '<br />';
@@ -175,11 +175,11 @@ switch ($res['type']) {
                 echo '<input type="file" name="fail"/>';
             }
             echo '</p><p><input type="submit" name="submit" value="' . $lng_forum['upload'] . '"/></p></form></div>' .
-                '<div class="phdr">' . $lng_forum['max_size'] . ': ' . $flsz . 'kb.</div>';
+                '<div class="phdr">' . $lng_forum['max_size'] . ': ' . $set['flsz'] . 'kb.</div>';
         }
         break;
 
     default:
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
 }
 ?>

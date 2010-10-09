@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights >= 6) {
     if (isset($_POST['submit'])) {
         $user = intval($_POST['user']);
-        $text = check($_POST['text']);
+        $text = functions::check($_POST['text']);
         //TODO: Переделать запрос, убрать быдлокод
         mysql_query("insert into `gallery` values(0,'0','" . $realtime . "','rz','','" . $text . "','','" . $user . "','','');");
         header("location: index.php");

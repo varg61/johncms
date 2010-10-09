@@ -14,7 +14,7 @@
 
 define('_IN_JOHNCMS', 1);
 require('../incfiles/core.php');
-$lng_profile = load_lng('profile');
+$lng_profile = $core->load_lng('profile');
 $headmod = 'album';
 require('../incfiles/head.php');
 
@@ -30,7 +30,7 @@ $img = isset($_REQUEST['img']) ? abs(intval($_REQUEST['img'])) : NULL;
 -----------------------------------------------------------------
 */
 if(!$user_id){
-    echo display_error($lng['access_guest_forbidden']);
+    echo functions::display_error($lng['access_guest_forbidden']);
     require('../incfiles/end.php');
     exit;
 }
@@ -40,9 +40,9 @@ if(!$user_id){
 Получаем данные пользователя
 -----------------------------------------------------------------
 */
-$user = get_user($user);
+$user = functions::get_user($user);
 if (!$user) {
-    echo display_error($lng['user_does_not_exist']);
+    echo functions::display_error($lng['user_does_not_exist']);
     require('../incfiles/end.php');
     exit;
 }
@@ -83,6 +83,7 @@ function vote_photo($arg = null) {
 -----------------------------------------------------------------
 */
 $array = array (
+    'comments' => 'includes/album',
     'delete' => 'includes/album',
     'edit' => 'includes/album',
     'image_delete' => 'includes/album',
@@ -106,14 +107,14 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . $lng['photo_albums'] . '</b></div>' .
         '<div class="gmenu"><p>' .
-        '<img src="' . $home . '/images/users.png" width="16" height="16"/>&#160;<a href="album.php?act=new">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
-        '<img src="' . $home . '/images/guestbook.gif" width="16" height="16"/>&#160;' . $lng_profile['new_comments'] . '' .
+        '<img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16"/>&#160;<a href="album.php?act=new">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
+        '<img src="' . $set['homeurl'] . '/images/guestbook.gif" width="16" height="16"/>&#160;' . $lng_profile['new_comments'] . '' .
         '</p></div>' .
         '<div class="menu">' .
-        '<p><h3><img src="' . $home . '/images/users.png" width="16" height="16" class="left" />&#160;' . $lng['albums'] . '</h3><ul>' .
+        '<p><h3><img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16" class="left" />&#160;' . $lng['albums'] . '</h3><ul>' .
         '<li><a href="album.php?act=users' . ($datauser['sex'] == 'm' ? '&amp;mod=girls' : '') . '">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
         '</ul></p>' .
-        '<p><h3><img src="' . $home . '/images/album-4.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['photos'] . '</h3><ul>' .
+        '<p><h3><img src="' . $set['homeurl'] . '/images/album-4.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['photos'] . '</h3><ul>' .
         '<li><a href="album.php?act=top_votes">' . $lng_profile['top_votes'] . '</a></li>' .
         '<li>' . $lng_profile['top_views'] . '</li>' .
         '<li>' . $lng_profile['top_comments'] . '</li>' .

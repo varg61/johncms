@@ -28,7 +28,7 @@ if ($rights >= 6) {
         exit;
     }
     if (isset($_POST['submit'])) {
-        $text = check($_POST['text']);
+        $text = functions::check($_POST['text']);
         mysql_query("insert into `gallery` values(0,'" . $id . "','" . $realtime . "','al','','" . $text . "','','','','');");
         header("location: index.php?id=$id");
     } else {

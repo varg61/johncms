@@ -61,7 +61,7 @@ while ($mass = mysql_fetch_array($mess)) {
         else {
             $div = "<div class='b'>";
         }
-        $uz = @ mysql_query("select * from `users` where name='" . check($mass[avtor]) . "';");
+        $uz = @ mysql_query("select * from `users` where name='" . functions::check($mass[avtor]) . "';");
         $mass1 = @ mysql_fetch_array($uz);
         echo "$div";
         if ((!empty ($_SESSION['uid'])) && ($_SESSION['uid'] != $mass1[id])) {
@@ -108,7 +108,7 @@ while ($mass = mysql_fetch_array($mess)) {
             $mass[text] = eregi_replace("((https?|ftp)://)([[:alnum:]_=/-]+(\\.[[:alnum:]_=/-]+)*(/[[:alnum:]+&._=/~%]*(\\?[[:alnum:]?+&_=/%]*)?)?)", "<a href='\\1\\3'>\\3</a>", $mass[text]);
         }
         if ($set_user['smileys']) {
-            $tekst = smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
+            $tekst = functions::smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
         }
         else {
             $tekst = $mass['text'];

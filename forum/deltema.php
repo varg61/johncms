@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights == 3 || $rights >= 6) {
     if (!$id) {
         require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
@@ -24,7 +24,7 @@ if ($rights == 3 || $rights >= 6) {
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
     if (!mysql_num_rows($req)) {
         require('../incfiles/head.php');
-        echo display_error($lng_forum['error_topic_deleted']);
+        echo functions::display_error($lng_forum['error_topic_deleted']);
         require('../incfiles/end.php');
         exit;
     }
@@ -61,6 +61,6 @@ if ($rights == 3 || $rights >= 6) {
     echo '</p></div>';
     echo '<div class="phdr">&#160;</div>';
 } else {
-    echo display_error($lng['access_forbidden']);
+    echo functions::display_error($lng['access_forbidden']);
 }
 ?>

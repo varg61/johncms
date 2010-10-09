@@ -27,13 +27,13 @@ $total = mysql_num_rows($req);
 if ($user['id'] == $user_id && $total < $max_album || $rights >= 7) {
     echo '<div class="topmenu"><a href="album.php?act=edit&amp;user=' . $user['id'] . '">' . $lng_profile['album_create'] . '</a></div>';
 }
-echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>';
+echo '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>';
 if ($total) {
     while ($res = mysql_fetch_assoc($req)) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $res['id'] . "'"), 0);
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
             '<img src="../images/album-' . $res['access'] . '.gif" width="16" height="16" class="left" />&#160;' .
-            '<a href="album.php?act=show&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '"><b>' . checkout($res['name']) . '</b></a>&#160;(' . $count . ')' .
+            '<a href="album.php?act=show&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '"><b>' . functions::checkout($res['name']) . '</b></a>&#160;(' . $count . ')' .
             '<div class="sub">';
         if ($user['id'] == $user_id || $rights >= 6) {
             $menu = array (
@@ -42,9 +42,9 @@ if ($total) {
                 '<a href="album.php?act=edit&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . $lng['edit'] . '</a>',
                 '<a href="album.php?act=delete&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . $lng['delete'] . '</a>'
             );
-            echo display_menu($menu) . '<br />';
+            echo functions::display_menu($menu) . '<br />';
         }
-        echo checkout($res['description'], 1, 1, 1) . '</div></div>';
+        echo functions::checkout($res['description'], 1, 1, 1) . '</div></div>';
         ++$i;
     }
 } else {

@@ -20,13 +20,13 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!$al) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' LIMIT 1");
 if (!mysql_num_rows($req)) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
@@ -36,8 +36,8 @@ echo '<div class="phdr">' .
     '<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng['photo_album'] . '</a></div>';
 if ($user['id'] == $user_id || $rights >= 7)
     echo '<div class="topmenu"><a href="album.php?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng_profile['image_add'] . '</a></div>';
-echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
-    '<div class="phdr">' . $lng_profile['album'] . ': <b>' . checkout($album['name']) . '</b><br />' . checkout($album['description'], 1) . '</div>';
+echo '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>' .
+    '<div class="phdr">' . $lng_profile['album'] . ': <b>' . functions::checkout($album['name']) . '</b><br />' . functions::checkout($album['description'], 1) . '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -48,7 +48,7 @@ if ($album['access'] != 2)
     unset($_SESSION['ap']);
 if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 7) {
     // Если доступ закрыт
-    echo display_error($lng['access_forbidden']) .
+    echo functions::display_error($lng['access_forbidden']) .
         '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
     require('../incfiles/end.php');
     exit;
@@ -58,7 +58,7 @@ if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 7) {
         if ($album['password'] == trim($_POST['password']))
             $_SESSION['ap'] = $album['password'];
         else
-            echo display_error($lng['error_wrong_password']);
+            echo functions::display_error($lng['error_wrong_password']);
     }
     if (!isset($_SESSION['ap']) || $_SESSION['ap'] != $album['password']) {
         echo '<form action="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post"><div class="menu"><p>';
@@ -83,7 +83,7 @@ if ($img) {
         echo '<div class="menu">' .
             '<a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '"><img src="image.php?u=' . $user['id'] . '&amp;f=' . $res['img_name'] . '" /></a>';
         if (!empty($res['description']))
-            echo '<div class="gray">' . smileys(checkout($res['description'], 1, 1)) . '</div>';
+            echo '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1, 1)) . '</div>';
         echo '<div class="sub">';
         if ($user['id'] == $user_id || $rights >= 6) {
             echo '<p><a href="album.php?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . $lng['edit'] . '</a> | ' .
@@ -96,7 +96,7 @@ if ($img) {
             '</div></div>' .
             '<div class="phdr"><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng_profile['album'] . '</a></div>';
     } else {
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
     }
 } else {
     /*
@@ -106,17 +106,17 @@ if ($img) {
     */
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al'"), 0);
     if ($total > $kmess)
-        echo '<div class="topmenu">' . display_pagination('album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>';
+        echo '<div class="topmenu">' . functions::display_pagination('album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>';
     if ($total) {
         $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `time` DESC LIMIT $start, $kmess");
         while ($res = mysql_fetch_assoc($req)) {
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                 '<a href="album.php?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '"><img src="../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
-                echo '<div class="gray">' . smileys(checkout($res['description'], 1)) . '</div>';
+                echo '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
             echo '<div class="sub">';
             vote_photo($res);
-            echo '<p><a href="">' . $lng['comments'] . '</a> (0)<br />' .
+            echo '<p><a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (0)<br />' .
                 '<a href="../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
                 '</div></div>';
             ++$i;
@@ -126,7 +126,7 @@ if ($img) {
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
-        echo '<div class="topmenu">' . display_pagination('album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>' .
+        echo '<div class="topmenu">' . functions::display_pagination('album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</div>' .
             '<p><form action="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

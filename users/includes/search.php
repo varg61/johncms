@@ -27,7 +27,7 @@ $search = $search ? $search : rawurldecode(trim($_GET['search']));
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['search_user'] . '</div>' .
     '<form action="index.php?act=search" method="post">' .
     '<div class="gmenu"><p>' .
-    '<input type="text" name="search" value="' . checkout($search) . '" />' .
+    '<input type="text" name="search" value="' . functions::checkout($search) . '" />' .
     '<input type="submit" value="' . $lng['search'] . '" name="submit" />' .
     '</p></div></form>';
 
@@ -39,7 +39,7 @@ echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a>
 $error = false;
 if (!empty($search) && (mb_strlen($search) < 2 || mb_strlen($search) > 20))
     $error = '<div>' . $lng['error_nicklenght'] . '</div>';
-if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", rus_lat(mb_strtolower($search))))
+if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", functions::rus_lat(mb_strtolower($search))))
     $error .= '<div>' . $lng['error_wrongsymbols'] . '</div>';
 if ($search && !$error) {
     /*
@@ -48,7 +48,7 @@ if ($search && !$error) {
     -----------------------------------------------------------------
     */
     echo '<div class="phdr">' . $lng['search_results'] . '</div>';
-    $search_db = rus_lat(mb_strtolower($search));
+    $search_db = functions::rus_lat(mb_strtolower($search));
     $search_db = strtr($search_db, array (
         '_' => '\\_',
         '%' => '\\%',
@@ -61,7 +61,7 @@ if ($search && !$error) {
         $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `name` ASC LIMIT $start, $kmess");
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo display_user($res);
+            echo functions::display_user($res);
             echo '</div>';
             ++$i;
         }
@@ -71,9 +71,9 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . display_pagination('index.php?act=search&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>' .
+        echo '<p>' . functions::display_pagination('index.php?act=search&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>' .
             '<p><form action="index.php?act=search" method="post">' .
-            '<input type="hidden" name="search" value="' . checkout($search) . '" />' .
+            '<input type="hidden" name="search" value="' . functions::checkout($search) . '" />' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
             '</form></p>';
@@ -85,7 +85,7 @@ if ($search && !$error) {
     -----------------------------------------------------------------
     */
     if ($error)
-        echo display_error($error);
+        echo functions::display_error($error);
 
     /*
     -----------------------------------------------------------------

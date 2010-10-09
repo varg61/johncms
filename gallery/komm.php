@@ -90,9 +90,9 @@ while ($mass = mysql_fetch_array($mess)) {
             echo " [ON]";
         }
         echo "($vr1)<br/>";
-        $text = tags($mass['text']);
+        $text = functions::tags($mass['text']);
         if ($set_user['smileys'])
-            $text = smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
+            $text = functions::smileys($text, ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
         echo $text . '<br/>';
         if ($rights >= 6) {
             echo '<div class="func"><a href="index.php?act=delmes&amp;id=' . $mass['id'] . '">Удалить</a><br />' . $mass['ip'] . ' - ' . $mass['soft'] . '</div>';

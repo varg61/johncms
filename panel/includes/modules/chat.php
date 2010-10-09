@@ -29,7 +29,7 @@ switch ($mod) {
         */
         echo '<div class="phdr"><a href="index.php?act=chat"><b>' . $lng['chat_management'] . '</b></a> | ' . $lng['chat_room_delete'] . '</div>';
         if (!$id) {
-            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=chat">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=chat">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -51,7 +51,7 @@ switch ($mod) {
                     '<div class="phdr"><a href="index.php?act=chat">' . $lng['cancel'] . '</a></div>';
             } else {
                 // Если комната не существует, выводим ошибку
-                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=chat">' . $lng['back'] . '</a>');
+                echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=chat">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -71,7 +71,7 @@ switch ($mod) {
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
             } else {
-                echo display_error($lng['error_wrong_data'], '<a href="index.php?act=chat">' . $lng['chat_management'] . '</a>');
+                echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=chat">' . $lng['chat_management'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -81,7 +81,7 @@ switch ($mod) {
         if (isset($_POST['submit'])) {
             $name = isset($_POST['name']) ? trim($_POST['name']) : '';
             if (empty($name)) {
-                echo display_error($lng['error_nameto_empty'], '<a href="chat.php?act=edit&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                echo functions::display_error($lng['error_nameto_empty'], '<a href="chat.php?act=edit&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }

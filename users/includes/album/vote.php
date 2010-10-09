@@ -20,7 +20,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!$img) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
@@ -63,6 +63,6 @@ if (mysql_num_rows($req)) {
     }
     header('Location: ' . $_SERVER['HTTP_REFERER']);
 } else {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
 }
 ?>

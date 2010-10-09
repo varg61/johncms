@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 require('../incfiles/head.php');
 if (empty($_GET['id'])) {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
@@ -69,9 +69,9 @@ if (!empty($res['status']))
     echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&#160;' . $res['status'] . '</div>';
 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
 $text = nl2br($text);
-$text = tags($text);
+$text = functions::tags($text);
 if ($set_user['smileys'])
-    $text = smileys($text, ($res['rights'] >= 1) ? 1 : 0);
+    $text = functions::smileys($text, ($res['rights'] >= 1) ? 1 : 0);
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'"), 0) / $kmess);

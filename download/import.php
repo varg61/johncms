@@ -30,9 +30,9 @@ if ($rights == 4 || $rights >= 6) {
     }
     if (isset ($_POST['submit'])) {
         $url = trim($_POST['url']);
-        $opis = check(trim($_POST['opis']));
-        $newn = check(trim($_POST['newn']));
-        $tipf = format($url);
+        $opis = functions::check($_POST['opis']);
+        $newn = functions::check($_POST['newn']);
+        $tipf = functions::format($url);
         if (eregi("[^a-z0-9.()+_-]", $newn)) {
             echo
             "В новом названии файла <b>$newn</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=import&amp;cat="

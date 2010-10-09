@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 require('../incfiles/core.php');
 $headmod = 'gallery';
-$lng_gal = load_lng('gallery');
+$lng_gal = $core->load_lng('gallery');
 $textl = 'Галерея сайта';
 require('../incfiles/head.php');
 
@@ -40,7 +40,6 @@ $array = array (
     'del',
     'delmes',
     'addkomm',
-    'trans',
     'komm',
     'preview',
     'load',
@@ -79,7 +78,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
                 if ($total > $kmess) {
-                    echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
+                    echo '<p>' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
                         '<p><form action="index.php?id=' . $id . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
@@ -156,7 +155,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         $tn_width = ceil($y_ratio * $width);
                         $tn_height = $razm;
                     }
-                    $format = format($infile);
+                    $format = functions::format($infile);
                     switch ($format) {
                         case "gif":
                             $im = ImageCreateFromGIF($infile);
@@ -228,7 +227,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
                 if ($total > $kmess) {
-                    echo '<p>' . display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
+                    echo '<p>' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
                         '<p><form action="index.php?id=' . $id . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
@@ -261,7 +260,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $width = $sizs[0];
                 $height = $sizs[1];
                 $quality = 85;
-                $format = format($infile);
+                $format = functions::format($infile);
                 switch ($format) {
                     case "gif":
                         $im = ImageCreateFromGIF($infile);
@@ -341,7 +340,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Главная страница Галлереи
         -----------------------------------------------------------------
         */
-        echo '<p><a href="index.php?act=new">Новые фото</a> (' . stat_gallery(1) . ')</p>';
+        echo '<p><a href="index.php?act=new">Новые фото</a> (' . functions::stat_gallery(1) . ')</p>';
         echo '<div class="phdr"><b>' . $lng['gallery'] . '</b></div>';
         $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'rz'");
         $total = mysql_num_rows($req);

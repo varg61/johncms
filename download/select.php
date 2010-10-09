@@ -23,7 +23,7 @@ if (!empty ($_GET['cat'])) {
     if ($rights == 4 || $rights >= 6) {
         echo
         "<form action='?act=upl' method='post' enctype='multipart/form-data'>
-         Выберите файл(max $flsz кб.):<br/>
+         Выберите файл(max " . $set['flsz'] . " кб.):<br/>
          <input type='file' name='fail'/><br/>
          Скриншот:<br/>
          <input type='file' name='screens'/><hr/>

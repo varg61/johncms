@@ -54,7 +54,7 @@ if ($rights == 5 || $rights >= 6) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?act=moder&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . functions::display_pagination('index.php?act=moder&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="get"><input type="hidden" value="moder" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="index.php?act=moder&amp;all">Принять все!</a><br />';

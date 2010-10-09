@@ -31,7 +31,7 @@ if ($total > 0) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $fsz = filesize("$newf[adres]/$newf[name]");
         $fsz = round($fsz / 1024, 2);
-        $ft = format("$newf[adres]/$newf[name]");
+        $ft = functions::format("$newf[adres]/$newf[name]");
         switch ($ft) {
             case "mp3" :
                 $imt = "mp3.png";
@@ -85,7 +85,7 @@ if ($total > 0) {
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > 10) {
-        echo '<p>' . display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
+        echo '<p>' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
         echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
     }
 }

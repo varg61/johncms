@@ -28,7 +28,7 @@ if ($id && ($rights > 5 || $rights == 2)) {
         // Очищаем комнату                                        //
         ////////////////////////////////////////////////////////////
         mysql_query("DELETE FROM `chat` WHERE `refid` = '$id'");
-        header("Location: $home/chat/index.php?id=$id");
+        header('Location: ' . $set['homeurl'] . '/chat/index.php?id=$id');
     } else {
         require_once('../incfiles/head.php');
         echo '<div class="rmenu"><p>Вы действительно хотите очистить комнату?<br/><a href="index.php?act=clean&amp;id=' . $id . '&amp;yes">Да</a> | <a href="index.php?id=' . $id . '">Нет</a></p></div>';

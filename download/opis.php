@@ -34,7 +34,7 @@ if ($rights == 4 || $rights >= 6) {
     }
     $stt = "$adrfile[text]";
     if (isset ($_POST['submit'])) {
-        $newt = check(trim($_POST['newt']));
+        $newt = functions::check($_POST['newt']);
         mysql_query("update `download` set `text`='" . $newt . "' where `id`='" . $file . "';");
         echo "Описание изменено <br/>";
     }

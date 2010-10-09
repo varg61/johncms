@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights == 3 || $rights >= 6) {
     if (!$id) {
         require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
@@ -24,15 +24,15 @@ if ($rights == 3 || $rights >= 6) {
     $ms = mysql_fetch_assoc($typ);
     if ($ms[type] != "t") {
         require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
     if (isset($_POST['submit'])) {
-        $nn = isset($_POST['nn']) ? check(trim($_POST['nn'])) : false;
+        $nn = isset($_POST['nn']) ? functions::check($_POST['nn']) : false;
         if (!$nn) {
             require('../incfiles/head.php');
-            echo display_error($lng_forum['error_topic_name'], '<a href="index.php?act=ren&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+            echo functions::display_error($lng_forum['error_topic_name'], '<a href="index.php?act=ren&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -40,7 +40,7 @@ if ($rights == 3 || $rights >= 6) {
         $pt = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `refid` = '" . $ms['refid'] . "' and text='$nn' LIMIT 1");
         if (mysql_num_rows($pt) != 0) {
             require('../incfiles/head.php');
-            echo display_error($lng_forum['error_topic_exists'], '<a href="index.php?act=ren&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+            echo functions::display_error($lng_forum['error_topic_exists'], '<a href="index.php?act=ren&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -63,6 +63,6 @@ if ($rights == 3 || $rights >= 6) {
     }
 } else {
     require('../incfiles/head.php');
-    echo display_error($lng['access_forbidden']);
+    echo functions::display_error($lng['access_forbidden']);
 }
 ?>

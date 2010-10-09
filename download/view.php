@@ -55,7 +55,7 @@ $filtime = filemtime("$adrfile[adres]/$adrfile[name]");
 $filtime = date("d.m.Y", $filtime);
 echo "Файл: $adrfile[name]<br/>Вес:$siz кб<br/>Загружен:$filtime<br/>";
 $graf = array("gif", "jpg", "png");
-$prg = strtolower(format($adrfile['name']));
+$prg = strtolower(functions::format($adrfile['name']));
 if (in_array($prg, $graf)) {
     $sizsf = GetImageSize("$adrfile[adres]/$adrfile[name]");
     $widthf = $sizsf[0];
@@ -199,7 +199,7 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
         $quality = 100;
         $angle = 0;
         $fontsiz = 20;
-        $tekst = $copyright;
+        $tekst = $set['copyright'];
         $x_ratio = $razm / $width;
         $y_ratio = $razm / $height;
         if (($width <= $razm) && ($height <= $razm)) {
@@ -215,7 +215,7 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
                 $tn_width = ceil($y_ratio * $width);
                 $tn_height = $razm;
         }
-        $format = format($infile);
+        $format = functions::format($infile);
         switch ($format) {
             case "gif" :
                 $im = ImageCreateFromGIF($infile);

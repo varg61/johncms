@@ -17,7 +17,7 @@
 define('_IN_JOHNCMS', 1);
 
 require('../incfiles/core.php');
-$lng_pass = load_lng('pass');
+$lng_pass = $core->load_lng('pass');
 $textl = $lng_pass['password_restore'];
 require('../incfiles/head.php');
 
@@ -36,7 +36,7 @@ switch ($act) {
         Отправляем E-mail с инструкциями по восстановлению пароля
         -----------------------------------------------------------------
         */
-        $nick = isset($_POST['nick']) ? rus_lat(mb_strtolower(check($_POST['nick']))) : '';
+        $nick = isset($_POST['nick']) ? functions::rus_lat(mb_strtolower(functions::check($_POST['nick']))) : '';
         $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
         $code = isset($_POST['code']) ? trim($_POST['code']) : '';
         $error = false;
@@ -61,11 +61,11 @@ switch ($act) {
         if (!$error) {
             // Высылаем инструкции на E-mail
             $subject = $lng_pass['password_restore'];
-            $mail = $lng_pass['restore_help1'] . ', ' . $res['name'] . "\r\n" . $lng_pass['restore_help2'] . ' ' . $home . "\r\n";
-            $mail .= $lng_pass['restore_help3'] . ": \r\n$home/users/skl.php?act=set&id=" . $res['id'] . "&code=" . session_id() . "\n\n";
+            $mail = $lng_pass['restore_help1'] . ', ' . $res['name'] . "\r\n" . $lng_pass['restore_help2'] . ' ' . $set['homeurl'] . "\r\n";
+            $mail .= $lng_pass['restore_help3'] . ": \r\n" . $set['homeurl'] . "/users/skl.php?act=set&id=" . $res['id'] . "&code=" . session_id() . "\n\n";
             $mail .= $lng_pass['restore_help4'] . "\r\n";
             $mail .= $lng_pass['restore_help5'];
-            $adds = "From: <" . $emailadmina . ">\r\n";
+            $adds = "From: <" . $set['email'] . ">\r\n";
             $adds .= "Content-Type: text/plain; charset=\"utf-8\"\r\n";
             if (mail($res['mail'], $subject, $mail, $adds)) {
                 mysql_query("UPDATE `users` SET `rest_code` = '" . session_id() . "', `rest_time` = '$realtime' WHERE `id` = '" . $res['id'] . "'");
@@ -75,7 +75,7 @@ switch ($act) {
             }
         } else {
             // Выводим сообщение об ошибке
-            echo display_error($error, '<a href="skl.php">' . $lng['back'] . '</a>');
+            echo functions::display_error($error, '<a href="skl.php">' . $lng['back'] . '</a>');
         }
         break;
 
@@ -106,10 +106,10 @@ switch ($act) {
             // Высылаем пароль на E-mail
             $pass = passgen(4);
             $subject = $lng_pass['your_new_password'];
-            $mail = $lng_pass['restore_help1'] . ', ' . $res['name'] . "\r\n" . $lng_pass['restore_help8'] . ' ' . $home . "\r\n";
+            $mail = $lng_pass['restore_help1'] . ', ' . $res['name'] . "\r\n" . $lng_pass['restore_help8'] . ' ' . $set['homeurl'] . "\r\n";
             $mail .= $lng_pass['your_new_password'] . ": $pass\r\n";
             $mail .= $lng_pass['restore_help7'];
-            $adds = "From: <" . $emailadmina . ">\n";
+            $adds = "From: <" . $set['email'] . ">\n";
             $adds .= "Content-Type: text/plain; charset=\"utf-8\"\r\n";
             if (mail($res['mail'], $subject, $mail, $adds)) {
                 mysql_query("UPDATE `users` SET `rest_code` = '', `password` = '" . md5(md5($pass)) . "' WHERE `id` = '$id'");
@@ -120,7 +120,7 @@ switch ($act) {
             }
         } else {
             // Выводим сообщение об ошибке
-            echo display_error($error);
+            echo functions::display_error($error);
         }
         break;
 

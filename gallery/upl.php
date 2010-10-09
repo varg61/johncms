@@ -50,7 +50,7 @@ if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || 
         "png"
     );
     $tff = implode(" ,", $dopras);
-    $fotsize = $flsz / 5;
+    $fotsize = $set['flsz'] / 5;
     echo "Добавление фотографии:<br/>Разрешённые типы: $tff<br/>Максимальный вес: $fotsize кб.<br/><form action='index.php?act=load&amp;id=" . $id .
         "' method='post' enctype='multipart/form-data'>Выберите фото:<br/><input type='file' name='fail'/><hr/>Для Opera Mini:<br/><input name='fail1' value =''/>&#160;<br/><a href='op:fileselect'>Выбрать фото</a><hr/>Подпись:<br/><textarea name='text'></textarea><br/><input type='submit' value='Загрузить'/><br/></form><a href='index.php?id="
         . $id . "'>Назад</a><br/>";

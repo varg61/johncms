@@ -13,12 +13,12 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-$lng_ban = load_lng('ban');
+$lng_ban = $core->load_lng('ban');
 
 switch ($mod) {
     case 'amnesty':
         if ($rights < 9) {
-            echo display_error($lng_ban['amnesty_access_error']);
+            echo functions::display_error($lng_ban['amnesty_access_error']);
         } else {
             echo '<div class="phdr"><a href="index.php?act=ban_panel"><b>' . $lng['ban_panel'] . '</b></a> | ' . $lng_ban['amnesty'] . '</div>';
             if (isset($_POST['submit'])) {
@@ -74,7 +74,7 @@ switch ($mod) {
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_array($req)) {
                 echo '<div class="' . ($res['bantime'] > $realtime ? 'r' : '') . 'menu">';
-                echo display_user($res);
+                echo functions::display_user($res);
                 //TODO: Переделать на более удобный показ бана
                 //echo display_user($res, 0, 2, ' [' . $res['bancount'] . ']&#160;<a href="../users/profile.php?act=ban&amp;user=' . $res['id'] . '">&gt;&gt;</a>');
                 echo '</div>';
@@ -84,7 +84,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?act=ban_panel&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . functions::display_pagination('index.php?act=ban_panel&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=ban_panel" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=ban_panel&amp;mod=amnesty">' . $lng_ban['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';

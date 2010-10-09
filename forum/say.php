@@ -19,10 +19,10 @@ if (!$id || !$user_id || $ban['1'] || $ban['11']) {
 }
 
 // Проверка на флуд
-$flood = antiflood();
+$flood = functions::antiflood();
 if ($flood) {
     require('../incfiles/head.php');
-    echo display_error($lng_forum['error_flood'] . ' ' . $flood . $lng['sec'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+    echo functions::display_error($lng_forum['error_flood'] . ' ' . $flood . $lng['sec'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
     require('../incfiles/end.php');
     exit;
 }
@@ -41,14 +41,14 @@ switch ($type1['type']) {
         if (($type1['edit'] == 1 || $type1['close'] == 1) && $rights < 7) {
             // Проверка, закрыта ли тема
             require('../incfiles/head.php');
-            echo display_error($lng_forum['error_topic_closed'], '<a href="index.php?id=' . $id . '">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng_forum['error_topic_closed'], '<a href="index.php?id=' . $id . '">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
             $msg = trim($_POST['msg']);
             if ($_POST['msgtrans'] == 1) {
-                $msg = trans($msg);
+                $msg = functions::trans($msg);
             }
             // Проверяем, не повторяется ли сообщение?
             $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC");
@@ -56,7 +56,7 @@ switch ($type1['type']) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
                     require('../incfiles/head.php');
-                    echo display_error($lng_forum['error_post_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+                    echo functions::display_error($lng_forum['error_post_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
@@ -67,7 +67,7 @@ switch ($type1['type']) {
                 unset($_SESSION['fsort_users']);
             }
             //Обрабатываем ссылки
-            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
+            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'functions::forum_link', $msg);
             // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
                 `refid` = '$id',
@@ -75,7 +75,7 @@ switch ($type1['type']) {
                 `time` = '$realtime',
                 `user_id` = '$user_id',
                 `from` = '$login',
-                `ip` = '$ipp',
+                `ip` = '" . long2ip($ip) . "',
                 `soft` = '" . mysql_real_escape_string($agn1) . "',
                 `text` = '" . mysql_real_escape_string($msg) . "'
             ");
@@ -101,7 +101,7 @@ switch ($type1['type']) {
             require('../incfiles/head.php');
             if ($datauser['postforum'] == 0) {
                 if (!isset($_GET['yes'])) {
-                    $lng_faq = load_lng('faq');
+                    $lng_faq = $core->load_lng('faq');
                     echo '<p>' . $lng_faq['forum_rules_text'] . '</p>' .
                         '<p><a href="index.php?act=say&amp;id=' . $id . '&amp;yes">' . $lng_forum['agree'] . '</a> | ' .
                         '<a href="index.php?id=' . $id . '">' . $lng_forum['not_agree'] . '</a></p>';
@@ -135,7 +135,7 @@ switch ($type1['type']) {
         $th1 = mysql_fetch_array($th2);
         if (($th1['edit'] == 1 || $th1['close'] == 1) && $rights < 7) {
             require('../incfiles/head.php');
-            echo display_error($lng_forum['error_topic_closed'], '<a href="index.php?id=' . $id . '">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng_forum['error_topic_closed'], '<a href="index.php?id=' . $id . '">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -144,13 +144,13 @@ switch ($type1['type']) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
                 require('../incfiles/head.php');
-                echo display_error($lng_forum['error_post_empty'], '<a href="index.php?act=say&amp;id=' . $id . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
+                echo functions::display_error($lng_forum['error_post_empty'], '<a href="index.php?act=say&amp;id=' . $id . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
             $msg = trim($_POST['msg']);
             if ($_POST['msgtrans'] == 1) {
-                $msg = trans($msg);
+                $msg = functions::trans($msg);
             }
             $to = $type1['from'];
             if (!empty($_POST['citata'])) {
@@ -169,7 +169,7 @@ switch ($type1['type']) {
                         break;
 
                     case 3:
-                        $repl = $type1['from'] . ', ' . $lng_forum['reply_2'] . ' ([url=' . $home . '/forum/index.php?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . $lng_forum['reply_3'] . ', ';
+                        $repl = $type1['from'] . ', ' . $lng_forum['reply_2'] . ' ([url=' . $set['homeurl'] . '/forum/index.php?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . $lng_forum['reply_3'] . ', ';
                         break;
 
                     case 4:
@@ -181,14 +181,14 @@ switch ($type1['type']) {
                 $msg = $repl . ' ' . $msg;
             }
             //Обрабатываем ссылки
-            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
+            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'functions::forum_link', $msg);
             // Проверяем, не повторяется ли сообщение?
             $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC LIMIT 1");
             if (mysql_num_rows($req) > 0) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
                     require('../incfiles/head.php');
-                    echo display_error($lng_forum['error_post_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+                    echo functions::display_error($lng_forum['error_post_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
@@ -205,7 +205,7 @@ switch ($type1['type']) {
                 `time` = '$realtime',
                 `user_id` = '$user_id',
                 `from` = '$login',
-                `ip` = '$ipp',
+                `ip` = '" . long2ip($ip) . "',
                 `soft` = '" . mysql_real_escape_string($agn1) . "',
                 `text` = '" . mysql_real_escape_string($msg) . "'
             ");
@@ -234,7 +234,7 @@ switch ($type1['type']) {
             $qt = " $type1[text]";
             if (($datauser['postforum'] == "" || $datauser['postforum'] == 0)) {
                 if (!isset($_GET['yes'])) {
-                    $lng_faq = load_lng('faq');
+                    $lng_faq = $core->load_lng('faq');
                     echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
                     echo '<p><a href="index.php?act=say&amp;id=' . $id . '&amp;yes&amp;cyt">' . $lng_forum['agree'] . '</a> | <a href="index.php?id=' . $type1['refid'] . '">' . $lng_forum['not_agree'] . '</a></p>';
                     require('../incfiles/end.php');
@@ -244,7 +244,7 @@ switch ($type1['type']) {
             echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $th1['text'] . '</div>';
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
-            $qt = checkout($qt, 0, 2);
+            $qt = functions::checkout($qt, 0, 2);
             echo '<form action="?act=say&amp;id=' . $id . '&amp;start=' . $start . '&amp;cyt" method="post">';
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
@@ -276,7 +276,7 @@ switch ($type1['type']) {
 
     default:
         require('../incfiles/head.php');
-        echo display_error($lng_forum['error_topic_deleted'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
+        echo functions::display_error($lng_forum['error_topic_deleted'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
         require('../incfiles/end.php');
         break;
 }

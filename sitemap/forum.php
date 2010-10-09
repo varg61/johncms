@@ -42,7 +42,7 @@ if ($id) {
                 $req_m = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res_t['id'] . "' AND `type` = 'm' AND `close` != '1' ORDER BY `id` ASC LIMIT 1");
                 $res_m = mysql_fetch_assoc($req_m);
                 if ($res_m['time'] < $realtime - 2592000)
-                    $out .= '<div><a href="' . $home . '/forum/index.php?id=' . $res_t['id'] . '">' . $res_t['text'] . '</a></div>';
+                    $out .= '<div><a href="' . $set['homeurl'] . '/forum/index.php?id=' . $res_t['id'] . '">' . $res_t['text'] . '</a></div>';
             }
             if (!empty($out)) {
                 $out = '<div class="phdr"><b>Карта Форума</b> | ' . $res_s['text'] . '</div><div class="menu">' . $out . '</div>';
@@ -55,11 +55,11 @@ if ($id) {
                 echo $lng['list_empty'];
             }
         } else {
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
         }
     }
 } else {
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
 }
 
 require('../incfiles/end.php');

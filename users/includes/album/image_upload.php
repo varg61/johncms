@@ -9,7 +9,7 @@ if ($al && $user['id'] == $user_id || $rights >= 7) {
     $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
     if(!mysql_num_rows($req_a)){
         // Если альбома не существует, завершаем скрипт
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
@@ -26,14 +26,14 @@ if ($al && $user['id'] == $user_id || $rights >= 7) {
                 'image/gif',
                 'image/png'
             );
-            $handle->file_max_size = 1024 * $flsz;
+            $handle->file_max_size = 1024 * $set['flsz'];
             $handle->image_resize = true;
             $handle->image_x = 640;
             $handle->image_y = 480;
             $handle->image_ratio_no_zoom_in = true;
             $handle->image_convert = 'jpg';
             // Поставить в зависимость от настроек в Админке
-            //$handle->image_text = $home;
+            //$handle->image_text = $set['homeurl'];
             //$handle->image_text_x = 0;
             //$handle->image_text_y = 0;
             //$handle->image_text_font = 3;
@@ -68,10 +68,10 @@ if ($al && $user['id'] == $user_id || $rights >= 7) {
                         '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
                         '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                 } else {
-                    echo display_error($handle->error);
+                    echo functions::display_error($handle->error);
                 }
             } else {
-                echo display_error($handle->error);
+                echo functions::display_error($handle->error);
             }
             $handle->clean();
         }
@@ -82,10 +82,10 @@ if ($al && $user['id'] == $user_id || $rights >= 7) {
             '<p><h3>' . $lng['description'] . '</h3>' .
             '<textarea name="description" cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '"></textarea><br />' .
             '<small>' . $lng['not_mandatory_field'] . ', max. 500</small></p>' .
-            '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" />' .
+            '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" />' .
             '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
             '</div></form>' .
-            '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $flsz . 'kb.<br />' . $lng_profile['select_image_help_5'] . '</small></div>' .
+            '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . 'kb.<br />' . $lng_profile['select_image_help_5'] . '</small></div>' .
             '<p><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng['back'] . '</a></p>';
     }
 }

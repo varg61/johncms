@@ -39,35 +39,35 @@ if ($id) {
     $adres = trim($_POST['adres']);
     switch ($adres) {
         case 'chat':
-            header("location: $home/chat/index.php");
+            header('location: ' . $set['homeurl'] . '/chat/index.php');
             break;
 
         case 'forum':
-            header("location: $home/forum/index.php");
+            header('location: ' . $set['homeurl'] . '/forum/index.php');
             break;
 
         case 'lib':
-            header("location: $home/library/index.php");
+            header('location: ' . $set['homeurl'] . '/library/index.php');
             break;
 
         case 'down':
-            header("location: $home/download/index.php");
+            header('location: ' . $set['homeurl'] . '/download/index.php');
             break;
 
         case 'gallery':
-            header("location: $home/gallery/index.php");
+            header('location: ' . $set['homeurl'] . '/gallery/index.php');
             break;
 
         case 'news':
-            header("location: $home/news/index.php");
+            header('location: ' . $set['homeurl'] . '/news/index.php');
             break;
 
         case 'guest':
-            header("location: $home/guestbook/index.php");
+            header('location: ' . $set['homeurl'] . '/guestbook/index.php');
             break;
 
         default :
-            header("location: http://johncms.com");
+            header('location: http://johncms.com');
             break;
     }
 }

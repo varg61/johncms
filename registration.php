@@ -18,7 +18,7 @@ $rootpath = '';
 require_once('incfiles/core.php');
 require_once('incfiles/head.php');
 // Загружаем язык Регистрации
-$lng_reg = load_lng('reg');
+$lng_reg = $core->load_lng('reg');
 // Если регистрация закрыта, выводим предупреждение
 if ($regban || !$set['mod_reg']) {
     echo '<p>' . $lng_reg['registration_closed'] . '</p>';
@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
     // Принимаем переменные
     $reg_kod = isset($_POST['kod']) ? trim($_POST['kod']) : '';
     $reg_nick = isset($_POST['nick']) ? trim($_POST['nick']) : '';
-    $lat_nick = rus_lat(mb_strtolower($reg_nick));
+    $lat_nick = functions::rus_lat(mb_strtolower($reg_nick));
     $reg_pass = isset($_POST['password']) ? trim($_POST['password']) : '';
     $reg_name = isset($_POST['imname']) ? trim($_POST['imname']) : '';
     $reg_about = isset($_POST['about']) ? trim($_POST['about']) : '';
@@ -92,9 +92,9 @@ if (isset($_POST['submit'])) {
     // Проверка переменных
     if (empty($error)) {
         $pass = md5(md5($reg_pass));
-        $reg_name = check(mb_substr($reg_name, 0, 20));
-        $reg_about = check(mb_substr($reg_about, 0, 500));
-        $reg_sex = check(mb_substr($reg_sex, 0, 2));
+        $reg_name = functions::check(mb_substr($reg_name, 0, 20));
+        $reg_about = functions::check(mb_substr($reg_about, 0, 500));
+        $reg_sex = functions::check(mb_substr($reg_sex, 0, 2));
         // Проверка, занят ли ник
         $req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . mysql_real_escape_string($lat_nick) . "'");
         if (mysql_num_rows($req) != 0) {
@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
             $lng_reg['your_id'] . ': <b>' . $usid . '</b><br/>' .
             $lng_reg['your_login'] . ': <b>' . $reg_nick . '</b><br/>' .
             $lng_reg['your_password'] . ': <b>' . $reg_pass . '</b></p>' .
-            '<p><h3>' . $lng_reg['your_link'] . '</h3><input type="text" value="' . $home . '/login.php?id=' . $usid . '&amp;p=' . $reg_pass . '" /><br/>';
+            '<p><h3>' . $lng_reg['your_link'] . '</h3><input type="text" value="' . $set['homeurl'] . '/login.php?id=' . $usid . '&amp;p=' . $reg_pass . '" /><br/>';
         if ($set['mod_reg'] == 1) {
             echo '<p><span class="red"><b>' . $lng_reg['moderation_note'] . '</b></span></p>';
         } else {
@@ -135,7 +135,7 @@ if (isset($_POST['submit'])) {
         }
         echo '</p></div>';
     } else {
-        echo display_error($error);
+        echo functions::display_error($error);
         regform();
     }
 }

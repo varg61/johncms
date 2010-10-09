@@ -81,14 +81,14 @@ if (mysql_num_rows($req)) {
         } elseif ($res['user_id']) {
             echo '<b>' . $res['from'] . '</b> &gt;&gt; ';
         }
-        $text = tags($res['text']);
+        $text = functions::tags($res['text']);
         if ($offsm != 1) {
-            $text = smileys($text, ($mass1['rights'] >= 1) ? 1 : 0);
+            $text = functions::smileys($text, ($mass1['rights'] >= 1) ? 1 : 0);
         }
         echo $text . '</div>';
         ++$i;
     }
-    echo '<div class="phdr"><a href="who.php?id=' . $id . '">В чате</a> (' . stat_chat($id) . ')</div>';
+    echo '<div class="phdr"><a href="who.php?id=' . $id . '">В чате</a> (' . functions::stat_chat($id) . ')</div>';
     echo '<p>[0] <a href="index.php?" accesskey="0">Прихожая</a><br/>';
     if ($type['dpar'] == "in")
         echo '[3] <a href="index.php?act=chpas&amp;id=' . $id . '" accesskey="3">Сменить пароль</a><br/>';

@@ -28,16 +28,16 @@ if (isset($_POST['submit'])) {
     Сохраняем настройки системы
     -----------------------------------------------------------------
     */
-    mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['skindef']) . "' WHERE `key` = 'skindef'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(htmlspecialchars($_POST['madm'])) . "' WHERE `key` = 'emailadmina'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['sdvigclock']) . "' WHERE `key` = 'sdvigclock'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['copyright']) . "' WHERE `key` = 'copyright'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['homeurl']) . "' WHERE `key` = 'homeurl'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check($_POST['skindef']) . "' WHERE `key` = 'skindef'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(htmlspecialchars($_POST['madm'])) . "' WHERE `key` = 'email'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['timeshift']) . "' WHERE `key` = 'timeshift'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check($_POST['copyright']) . "' WHERE `key` = 'copyright'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check($_POST['homeurl']) . "' WHERE `key` = 'homeurl'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['flsz']) . "' WHERE `key` = 'flsz'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['gz']) . "' WHERE `key` = 'gzip'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['fm']) . "' WHERE `key` = 'fmod'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['meta_key']) . "' WHERE `key` = 'meta_key'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . check($_POST['meta_desc']) . "' WHERE `key` = 'meta_desc'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check($_POST['meta_key']) . "' WHERE `key` = 'meta_key'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check($_POST['meta_desc']) . "' WHERE `key` = 'meta_desc'");
     $req = mysql_query("SELECT * FROM `cms_settings`");
     $set = array ();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
@@ -51,13 +51,13 @@ if (isset($_POST['submit'])) {
 echo '<form action="index.php?act=settings" method="post"><div class="menu"><p>';
 // Настройка времени
 echo '<h3>' . $lng['clock_settings'] . '</h3>';
-echo '&#160;<input type="text" name="sdvigclock" size="2" maxlength="2" value="' . $set['sdvigclock'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />';
+echo '&#160;<input type="text" name="timeshift" size="2" maxlength="2" value="' . $set['timeshift'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />';
 echo '&#160;<span style="font-weight:bold; background-color:#CCC">' . date("H:i") . '</span> ' . $lng['system_time'];
 // Общие настройки
 echo '</p><p><h3>' . $lng['common_settings'] . '</h3>';
 echo '&#160;'. $lng['site_url'] . ':<br/>&#160;<input type="text" name="homeurl" value="' . htmlentities($set['homeurl']) . '"/><br/>';
 echo '&#160;'. $lng['site_copyright'] . ':<br/>&#160;<input type="text" name="copyright" value="' . htmlentities($set['copyright'], ENT_QUOTES, 'UTF-8') . '"/><br/>';
-echo '&#160;'. $lng['site_email'] . ':<br/>&#160;<input name="madm" maxlength="50" value="' . htmlentities($set['emailadmina']) . '"/><br />';
+echo '&#160;'. $lng['site_email'] . ':<br/>&#160;<input name="madm" maxlength="50" value="' . htmlentities($set['email']) . '"/><br />';
 echo '&#160;'. $lng['file_maxsize'] . ' (kb):<br />&#160;<input type="text" name="flsz" value="' . intval($set['flsz']) . '"/><br />';
 echo '&#160;<input name="gz" type="checkbox" value="1" ' . ($set['gzip'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['gzip_compress'];
 // META тэги

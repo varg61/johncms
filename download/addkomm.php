@@ -25,10 +25,10 @@ if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_down_comm'] || $rights <
     }
     if (isset ($_POST['submit'])) {
         // Проверка на флуд
-        $flood = antiflood();
+        $flood = functions::antiflood();
         if ($flood){
             require_once ('../incfiles/head.php');
-            echo display_error('Вы не можете так часто добавлять сообщения<br />Пожалуйста, подождите ' . $flood . ' сек.', '<a href="index.php?act=komm&amp;id=' . $id . '">Назад</a>');
+            echo functions::display_error('Вы не можете так часто добавлять сообщения<br />Пожалуйста, подождите ' . $flood . ' сек.', '<a href="index.php?act=komm&amp;id=' . $id . '">Назад</a>');
             require_once ('../incfiles/end.php');
             exit;
         }
@@ -38,13 +38,13 @@ if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_down_comm'] || $rights <
             require_once ('../incfiles/end.php');
             exit;
         }
-        $msg = check(trim($_POST['msg']));
+        $msg = functions::check($_POST['msg']);
         if ($_POST[msgtrans] == 1) {
-            $msg = trans($msg);
+            $msg = functions::trans($msg);
         }
         $msg = mb_substr($msg, 0, 500);
         $agn = strtok($agn, ' ');
-        mysql_query("insert into `download` values(0,'" . $id . "','','" . $realtime . "','','komm','" . $login . "','" . $ipp . "','" . $agn . "','" . $msg . "','');");
+        mysql_query("insert into `download` values(0,'$id','','$realtime','','komm','$login','" . long2ip($ip) . "','" . $agn . "','" . $msg . "','');");
         $fpst = $datauser['komm'] + 1;
         mysql_query("UPDATE `users` SET
 		`komm`='" . $fpst . "',

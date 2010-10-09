@@ -13,7 +13,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$lng_karma = load_lng('karma');
+$lng_karma = $core->load_lng('karma');
 $textl = $lng['karma'];
 require('../incfiles/head.php');
 if ($set_karma['on']) {
@@ -41,7 +41,7 @@ if ($set_karma['on']) {
                 if (($set_karma['karma_points'] - $sum) <= 0)
                     $error[] = $lng_karma['error_limit'] . ' ' . date('d.m.y в H:i:s', ($datauser['karma_time'] + 86400));
                 if ($error) {
-                    echo display_error($error, '<a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a>');
+                    echo functions::display_error($error, '<a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a>');
                 } else {
                     if (isset($_POST['submit'])) {
                         $text = isset($_POST['text']) ? mysql_real_escape_string(mb_substr(trim($_POST['text']), 0, 500)) : '';
@@ -81,7 +81,7 @@ if ($set_karma['on']) {
                     }
                 }
             } else {
-                echo display_error($lng_karma['error_forbidden'], '<a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a>');
+                echo functions::display_error($lng_karma['error_forbidden'], '<a href="profile.php?user=' . $user['id'] . '">' . $lng['back'] . '</a>');
             }
             break;
 
@@ -151,7 +151,7 @@ if ($set_karma['on']) {
                     echo $user_id == $res['user_id'] || !$res['user_id'] ? '<b>' . $res['name'] . '</b>' : '<a href="profile.php?user=' . $res['user_id'] . '"><b>' . $res['name'] . '</b></a>';
                     echo ' <span class="gray">(' . date("d.m.y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                     if (!empty($res['text']))
-                        echo '<div class="sub">' . checkout($res['text']) . '</div>';
+                        echo '<div class="sub">' . functions::checkout($res['text']) . '</div>';
                     echo '</div>';
                     ++$i;
                 }
@@ -160,7 +160,7 @@ if ($set_karma['on']) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('profile.php?act=karma&amp;mod=new&amp;', $start, $total, $kmess) . '</p>' .
+                echo '<p>' . functions::display_pagination('profile.php?act=karma&amp;mod=new&amp;', $start, $total, $kmess) . '</p>' .
                     '<p><form action="profile.php?act=karma&amp;mod=new" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
@@ -182,8 +182,8 @@ if ($set_karma['on']) {
                 (!$type ? '<b>' . $lng_karma['negative'] . '</b>' : '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '">' . $lng_karma['negative'] . '</a>')
             );
             echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['karma'] . '</div>' .
-                '<div class="topmenu">' . display_menu($menu) . '</div>' .
-                '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>';
+                '<div class="topmenu">' . functions::display_menu($menu) . '</div>' .
+                '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>';
             $karma = $user['karma_plus'] - $user['karma_minus'];
             if ($karma > 0) {
                 $images = ($user['karma_minus'] ? ceil($user['karma_plus'] / $user['karma_minus']) : $user['karma_plus']) > 10 ? '2' : '1';
@@ -195,7 +195,7 @@ if ($set_karma['on']) {
                 $images = 0;
                 echo '<div class="menu">';
             }
-            echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $home . '/images/k_' . $images . '.gif"/></td><td>' .
+            echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $set['homeurl'] . '/images/k_' . $images . '.gif"/></td><td>' .
                 '<b>' . $lng['karma'] . ' (' . $karma . ')</b>' .
                 '<div class="sub">' .
                 '<span class="green">' . $lng['vote_for'] . ' (' . $user['karma_plus'] . ')</span> | ' .
@@ -212,7 +212,7 @@ if ($set_karma['on']) {
                     if ($rights == 9)
                         echo ' <span class="red"><a href="profile.php?act=karma&amp;mod=delete&amp;user=' . $user['id'] . '&amp;id=' . $res['id'] . '&amp;type=' . $type . '">[X]</a></span>';
                     if (!empty($res['text']))
-                        echo '<br />' . smileys(checkout($res['text']));
+                        echo '<br />' . functions::smileys(functions::checkout($res['text']));
                     echo '</div>';
                     ++$i;
                 }
@@ -221,7 +221,7 @@ if ($set_karma['on']) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . display_pagination('profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
+                echo '<p>' . functions::display_pagination('profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
                     '<p><form action="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=' . $type . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';

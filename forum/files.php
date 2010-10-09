@@ -70,7 +70,7 @@ if ($c || $s || $t) {
         $res = mysql_fetch_array($req);
         $caption .= $res['text'];
     } else {
-        echo display_error($lng['error_wrong_data'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
+        echo functions::display_error($lng['error_wrong_data'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
         require('../incfiles/end.php');
         exit;
     }
@@ -97,7 +97,7 @@ if ($do || isset($_GET['new'])) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Выводим текст поста
             $text = mb_substr($res['text'], 0, 500);
-            $text = checkout($text, 1, 0);
+            $text = functions::checkout($text, 1, 0);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
             $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
             $text = '<b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text;
@@ -106,7 +106,7 @@ if ($do || isset($_GET['new'])) {
             // Формируем ссылку на файл
             $fls = filesize('../files/forum/attach/' . $res['filename']);
             $fls = round($fls / 1024, 0);
-            $att_ext = strtolower(format('./files/forum/attach/' . $res['filename']));
+            $att_ext = strtolower(functions::format('./files/forum/attach/' . $res['filename']));
             $pic_ext = array (
                 'gif',
                 'jpg',
@@ -128,14 +128,14 @@ if ($do || isset($_GET['new'])) {
                 'sub' => $file,
                 'body' => $text
             );
-            echo display_user($res_u, $arg);
+            echo functions::display_user($res_u, $arg);
             echo '</div>';
             ++$i;
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
             // Постраничная навигация
-            echo '<p>' . display_pagination('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>' .
+            echo '<p>' . functions::display_pagination('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>' .
                 '<p><form action="index.php" method="get">' .
                 '<input type="hidden" name="act" value="files"/>' .
                 '<input type="hidden" name="do" value="' . $do . '"/>' . $input . '<input type="text" name="page" size="2"/>' .

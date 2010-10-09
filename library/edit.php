@@ -39,7 +39,7 @@ if ($rights == 5 || $rights >= 6) {
                     exit;
                 }
                 $text = trim($_POST['text']);
-                $autor = isset($_POST['autor']) ? check(trim($_POST['autor'])) : '';
+                $autor = isset($_POST['autor']) ? functions::check($_POST['autor']) : '';
                 $count = isset($_POST['count']) ? abs(intval($_POST['count'])) : '0';
                 if (!empty($_POST['anons'])) {
                     $anons = mb_substr(trim($_POST['anons']), 0, 100);
@@ -60,7 +60,7 @@ if ($rights == 5 || $rights >= 6) {
                 ////////////////////////////////////////////////////////////
                 // Сохраняем отредактированную категорию                  //
                 ////////////////////////////////////////////////////////////
-                $text = check($_POST['text']);
+                $text = functions::check($_POST['text']);
                 if (!empty($_POST['user'])) {
                     $user = intval($_POST['user']);
                 } else {
@@ -78,7 +78,7 @@ if ($rights == 5 || $rights >= 6) {
             ////////////////////////////////////////////////////////////
             // Сохраняем отредактированный комментарий                //
             ////////////////////////////////////////////////////////////
-            $text = check($_POST['text']);
+            $text = functions::check($_POST['text']);
                 mysql_query("update `lib` set text='" . $text . "' where id='" . $id . "';");
                 header("location: index.php?id=$ms[refid]");
                 break;

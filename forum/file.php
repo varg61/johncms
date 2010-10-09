@@ -35,7 +35,7 @@ if ($id) {
     }
     if ($error) {
         require('../incfiles/head.php');
-        echo display_error($lng_forum['error_file_not_exist'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
+        echo functions::display_error($lng_forum['error_file_not_exist'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
         require('../incfiles/end.php');
         exit;
     }

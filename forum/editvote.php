@@ -17,7 +17,7 @@ if ($rights == 3 || $rights >= 6) {
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic`='$id'"), 0);
     require('../incfiles/head.php');
     if ($topic_vote == 0) {
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
@@ -96,7 +96,7 @@ if ($rights == 3 || $rights >= 6) {
             elseif ($_POST['count_vote'] > 8)
                 $_POST['count_vote'] = 8;
             for ($vote = $i; $vote < $_POST['count_vote']; $vote++) {
-                echo 'Ответ ' . ($vote + 1) . '(max. 50): <br/><input type="text" name="' . $vote . '" value="' . checkout($_POST[$vote]) . '"/><br/>';
+                echo 'Ответ ' . ($vote + 1) . '(max. 50): <br/><input type="text" name="' . $vote . '" value="' . functions::checkout($_POST[$vote]) . '"/><br/>';
             }
             echo '<input type="hidden" name="count_vote" value="' . abs(intval($_POST['count_vote'])) . '"/>' . 
                 ($_POST['count_vote'] < 8 ? '<input type="submit" name="plus" value="' . $lng['add'] . '"/>' : '') .

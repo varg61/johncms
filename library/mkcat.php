@@ -33,7 +33,7 @@ if ($rights == 5 || $rights >= 6) {
             require_once('../incfiles/end.php');
             exit;
         }
-        $text = check($_POST['text']);
+        $text = functions::check($_POST['text']);
         $user = intval($_POST['user']);
         $typs = intval($_POST['typs']);
         mysql_query("INSERT INTO `lib` (

@@ -18,17 +18,17 @@ if (!$id || !$user_id || $ban['1'] || $ban['11']) {
     exit;
 }
 // Проверка на флуд
-$flood = antiflood();
+$flood = functions::antiflood();
 if ($flood) {
     require('../incfiles/head.php');
-    echo display_error($lng_forum['error_flood'] . ' ' . $flood . $lng['sec'] . ', <a href="index.php?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+    echo functions::display_error($lng_forum['error_flood'] . ' ' . $flood . $lng['sec'] . ', <a href="index.php?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
     require('../incfiles/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
 if (!mysql_num_rows($req)) {
     require('../incfiles/head.php');
-    echo display_error($lng['error_wrong_data']);
+    echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
     exit;
 }
@@ -43,12 +43,12 @@ if (isset($_POST['submit'])) {
     if (empty($msg))
         $error[] = $lng_forum['error_post_empty'];
     if (!$error) {
-        $th = check(mb_substr($th, 0, 100));
+        $th = functions::check(mb_substr($th, 0, 100));
         if ($_POST['msgtrans'] == 1) {
-            $th = trans($th);
-            $msg = trans($msg);
+            $th = functions::trans($th);
+            $msg = functions::trans($msg);
         }
-        $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
+        $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'functions::forum_link', $msg);
         // Прверяем, есть ли уже такая тема в текущем разделе?
         if (mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '$id' AND `text` = '$th'"), 0) > 0)
             $error[] = $lng_forum['error_topic_exists'];
@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
             `time` = '$realtime',
             `user_id` = '$user_id',
             `from` = '$login',
-            `ip` = '$ipp',
+            `ip` = '" . long2ip($ip) . "',
             `soft` = '" . mysql_real_escape_string($agn) . "',
             `text` = '" . mysql_real_escape_string($msg) . "'
         ");
@@ -103,7 +103,7 @@ if (isset($_POST['submit'])) {
     } else {
         // Выводим сообщение об ошибке
         require('../incfiles/head.php');
-        echo display_error($error, '<a href="index.php?act=nt&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+        echo functions::display_error($error, '<a href="index.php?act=nt&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
         require('../incfiles/end.php');
         exit;
     }
@@ -111,7 +111,7 @@ if (isset($_POST['submit'])) {
     require('../incfiles/head.php');
     if ($datauser['postforum'] == 0) {
         if (!isset($_GET['yes'])) {
-            $lng_faq = load_lng('faq');
+            $lng_faq = $core->load_lng('faq');
             echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
             echo '<p><a href="index.php?act=nt&amp;id=' . $id . '&amp;yes">' . $lng_forum['agree'] . '</a> | <a href="index.php?id=' . $id . '">' . $lng_forum['not_agree'] . '</a></p>';
             require('../incfiles/end.php');

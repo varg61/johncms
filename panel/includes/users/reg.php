@@ -29,7 +29,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$id) {
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }
@@ -54,7 +54,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$id) {
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }
@@ -98,7 +98,7 @@ switch ($mod) {
             echo '<div class="menu"><p>' . $lng['reg_del_ip_done'] . '<br />' .
                 '<a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         } else {
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }
@@ -120,9 +120,9 @@ switch ($mod) {
                     '<a href="index.php?act=reg&amp;mod=delip&amp;ip=' . $res['ip'] . '">' . $lng['reg_del_ip'] . '</a>'
                 );
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo display_user($res, array (
+                echo functions::display_user($res, array (
                     'header' => '<b>ID:' . $res['id'] . '</b>',
-                    'sub' => display_menu($link)
+                    'sub' => functions::display_menu($link)
                 ));
                 echo '</div>';
                 ++$i;
@@ -132,7 +132,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?act=reg&amp;', $start, $total, $kmess) . '</p>';
+            echo '<p>' . functions::display_pagination('index.php?act=reg&amp;', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php?act=reg" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p>';

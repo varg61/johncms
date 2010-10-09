@@ -41,7 +41,7 @@ if ($rights == 4 || $rights >= 6) {
         $ffot = strtolower($scrname);
         $dopras = array("gif", "jpg", "png");
         if ($scrname != "") {
-            $formfot = format($ffot);
+            $formfot = functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=screen&amp;file=" . $file . "'>Повторить</a><br/>";
                 require_once ('../incfiles/end.php');
@@ -85,7 +85,7 @@ if ($rights == 4 || $rights >= 6) {
             $ffot = strtolower($tmp_name);
             $dopras = array("gif", "jpg", "png");
 
-            $formfot = format($ffot);
+            $formfot = functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=screen&amp;file=" . $file . "'>Повторить</a><br/>";
                 require_once ('../incfiles/end.php');

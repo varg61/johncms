@@ -27,8 +27,8 @@ $menu = array (
     ($mod == 'topic' ? '<b>' . $lng['themes'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=topic&amp;user=' . $user['id'] . '">' . $lng['themes'] . '</a>'),
     ($mod == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=guest&amp;user=' . $user['id'] . '">' . $lng['guestbook'] . '</a>'),
 );
-echo '<div class="topmenu">' . display_menu($menu) . '</div>';
-echo '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>';
+echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
+echo '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>';
 switch ($mod) {
     case 'guest':
         // Список сообщений в Гостевой
@@ -36,7 +36,7 @@ switch ($mod) {
         $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '" . $user['id'] . "' LIMIT $start, $kmess");
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_assoc($req)) {
-                echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . checkout($res['text'], 2, 1) . '<div class="sub">' .
+                echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . functions::checkout($res['text'], 2, 1) . '<div class="sub">' .
                     '<span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>' .
                     '</div></div>';
                 ++$i;
@@ -56,13 +56,13 @@ switch ($mod) {
                 $section = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
                 $category = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $section['refid'] . "' LIMIT 1"));
                 $text = mb_substr($post['text'], 0, 300);
-                $text = checkout($text, 2, 1);
+                $text = functions::checkout($text, 2, 1);
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                    '<a href="' . $home . '/forum/index.php?id=' . $res['id'] . '">' . $res['text'] . '</a>' .
-                    '<br />' . $text . '...<a href="' . $home . '/forum/index.php?id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>' .
+                    '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $res['id'] . '">' . $res['text'] . '</a>' .
+                    '<br />' . $text . '...<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>' .
                     '<div class="sub">' .
-                    '<a href="' . $home . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
-                    '<a href="' . $home . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
+                    '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
+                    '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
                     '<br /><span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>' .
                     '</div></div>';
                 ++$i;
@@ -82,14 +82,14 @@ switch ($mod) {
                 $section = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $topic['refid'] . "' LIMIT 1"));
                 $category = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $section['refid'] . "' LIMIT 1"));
                 $text = mb_substr($res['text'], 0, 300);
-                $text = checkout($text, 2, 1);
+                $text = functions::checkout($text, 2, 1);
                 $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                    '<a href="' . $home . '/forum/index.php?id=' . $topic['id'] . '">' . $topic['text'] . '</a>' .
-                    '<br />' . $text . '...<a href="' . $home . '/forum/index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>' .
+                    '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $topic['id'] . '">' . $topic['text'] . '</a>' .
+                    '<br />' . $text . '...<a href="' . $set['homeurl'] . '/forum/index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>' .
                     '<div class="sub">' .
-                    '<a href="' . $home . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
-                    '<a href="' . $home . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
+                    '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
+                    '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
                     '<br /><span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>' .
                     '</div></div>';
                 ++$i;
@@ -100,7 +100,7 @@ switch ($mod) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('profile.php?act=activity&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>' .
+    echo '<p>' . functions::display_pagination('profile.php?act=activity&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>' .
         '<p><form action="profile.php?act=activity&amp;user=' . $user['id'] . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

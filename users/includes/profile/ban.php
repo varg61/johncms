@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'userban';
-$lng_ban = load_lng('ban');
+$lng_ban = $core->load_lng('ban');
 require('../incfiles/head.php');
 $ban = isset($_GET['ban']) ? intval($_GET['ban']) : 0;
 switch ($mod) {
@@ -25,10 +25,10 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if ($rights < 1 || ($rights < 6 && $user['rights']) || ($rights <= $user['rights'])) {
-            echo display_error($lng_ban['ban_rights']);
+            echo functions::display_error($lng_ban['ban_rights']);
         } else {
             echo '<div class="phdr"><b>' . $lng_ban['ban_do'] . '</b></div>';
-            echo '<div class="rmenu"><p>' . display_user($user) . '</p></div>';
+            echo '<div class="rmenu"><p>' . functions::display_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 $error = false;
                 $term = isset($_POST['term']) ? intval($_POST['term']) : false;
@@ -103,7 +103,7 @@ switch ($mod) {
                     }
                     echo '<div class="rmenu"><p><h3>' . $lng_ban['user_banned'] . ' ' . $text . '</h3></p></div>';
                 } else {
-                    echo display_error($error);
+                    echo functions::display_error($error);
                 }
             } else {
                 // Форма параметров бана
@@ -147,7 +147,7 @@ switch ($mod) {
                 if (isset($_GET['fid'])) {
                     // Если бан из форума, фиксируем ID поста
                     $fid = intval($_GET['fid']);
-                    echo '&#160;' . $lng_ban['infringement'] . ' <a href="' . $home . '/forum/index.php?act=post&amp;id=' . $fid . '">' . $lng_ban['in_forum'] . '</a><br />' .
+                    echo '&#160;' . $lng_ban['infringement'] . ' <a href="' . $set['homeurl'] . '/forum/index.php?act=post&amp;id=' . $fid . '">' . $lng_ban['in_forum'] . '</a><br />' .
                         '<input type="hidden" value="' . $fid . '" name="banref" />';
                 }
                 echo '&#160;<textarea cols="20" rows="4" name="reason"></textarea>' .
@@ -165,7 +165,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$ban || $user['id'] == $user_id || $rights < 7)
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
         else {
             $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
             if (mysql_num_rows($req)) {
@@ -175,7 +175,7 @@ switch ($mod) {
                     $error = $lng_ban['error_ban_not_active'];
                 if (!$error) {
                     echo '<div class="phdr"><b>' . $lng_ban['ban_cancel'] . '</b></div>';
-                    echo '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
+                    echo '<div class="gmenu"><p>' . functions::display_user($user) . '</p></div>';
                     if (isset($_POST['submit'])) {
                         mysql_query("UPDATE `cms_ban_users` SET `ban_time` = '$realtime' WHERE `id` = '$ban' LIMIT 1");
                         echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_cancel_confirmation'] . '</h3></p></div>';
@@ -187,10 +187,10 @@ switch ($mod) {
                             '<div class="phdr"><a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
                     }
                 } else {
-                    echo display_error($error);
+                    echo functions::display_error($error);
                 }
             } else {
-                echo display_error($lng['error_wrong_data']);
+                echo functions::display_error($lng['error_wrong_data']);
             }
         }
         break;
@@ -202,13 +202,13 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$ban || $rights < 9)
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
         else {
             $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="phdr"><b>' . $lng_ban['ban_delete'] . '</b></div>' .
-                    '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
+                    '<div class="gmenu"><p>' . functions::display_user($user) . '</p></div>';
                 if (isset($_POST['submit'])) {
                     mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "' AND `user_id` = '0' AND `time` = '" . $res['ban_while'] . "' LIMIT 1");
                     $points = $set_karma['karma_points'] * 2;
@@ -226,7 +226,7 @@ switch ($mod) {
                         '<div class="phdr"><a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['back'] . '</a></div>';
                 }
             } else {
-                echo display_error($lng['error_wrong_data']);
+                echo functions::display_error($lng['error_wrong_data']);
             }
         }
         break;
@@ -239,7 +239,7 @@ switch ($mod) {
         */
         if ($rights == 9) {
             echo '<div class="phdr"><b>' . $lng_ban['infringements_history'] . '</b></div>' .
-                '<div class="gmenu"><p>' . display_user($user) . '</p></div>';
+                '<div class="gmenu"><p>' . functions::display_user($user) . '</p></div>';
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
                 echo '<div class="gmenu"><h3>' . $lng_ban['history_cleared'] . '</h3></div>';
@@ -252,9 +252,9 @@ switch ($mod) {
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>' .
                 '<p>' . ($total ? '<a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng_ban['infringements_history'] . '</a><br />' : '') .
-                '<a href="../' . $admp . '/index.php?act=ban_panel">' . $lng_ban['ban_panel'] . '</a></p>';
+                '<a href="../' . $set['admp'] . '/index.php?act=ban_panel">' . $lng_ban['ban_panel'] . '</a></p>';
         } else {
-            echo display_error($lng_ban['error_rights_clear']);
+            echo functions::display_error($lng_ban['error_rights_clear']);
         }
         break;
 
@@ -268,13 +268,13 @@ switch ($mod) {
         // Меню
         $menu = array ();
         if ($rights >= 6)
-            $menu[] = '<a href="../' . $admp . '/index.php?act=usr_ban">' . $lng_ban['ban_panel'] . '</a>';
+            $menu[] = '<a href="../' . $set['admp'] . '/index.php?act=usr_ban">' . $lng_ban['ban_panel'] . '</a>';
         if ($rights == 9)
             $menu[] = '<a href="profile.php?act=ban&amp;mod=delhist&amp;user=' . $user['id'] . '">' . $lng_ban['clear_history'] . '</a>';
         if (!empty($menu))
-            echo '<div class="topmenu">' . display_menu($menu) . '</div>';
+            echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         if ($user['id'] != $user_id)
-            echo '<div class="user"><p>' . display_user($user) . '</p></div>';
+            echo '<div class="user"><p>' . functions::display_user($user) . '</p></div>';
         else
             echo '<div class="list2"><p>' . $lng_ban['my_infringements'] . '</p></div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
@@ -287,13 +287,13 @@ switch ($mod) {
                 echo '<img src="../images/' . ($remain > 0 ? 'red' : 'green') . '.gif" width="16" height="16" align="left" />&#160;' .
                     '<b>' . $lng_ban['ban_' . $res['ban_type']] . '</b>' .
                     ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>' .
-                    '<br />' . checkout($res['ban_reason']) .
+                    '<br />' . functions::checkout($res['ban_reason']) .
                     '<div class="sub">';
                 if ($rights > 0)
                     echo '<span class="gray">' . $lng_ban['ban_who'] . ':</span> ' . $res['ban_who'] . '<br />';
-                echo '<span class="gray">' . $lng['term'] . ':</span> ' . ($period < 86400000 ? timecount($period) : $lng_ban['ban_time_before_cancel']);
+                echo '<span class="gray">' . $lng['term'] . ':</span> ' . ($period < 86400000 ? functions::timecount($period) : $lng_ban['ban_time_before_cancel']);
                 if ($remain > 0)
-                    echo '<br /><span class="gray">' . $lng['remains'] . ':</span> ' . timecount($remain);
+                    echo '<br /><span class="gray">' . $lng['remains'] . ':</span> ' . functions::timecount($remain);
                 // Меню отдельного бана
                 $menu = array ();
                 if ($rights >= 7 && $remain > 0)
@@ -301,7 +301,7 @@ switch ($mod) {
                 if ($rights == 9)
                     $menu[] = '<a href="profile.php?act=ban&amp;mod=delete&amp;user=' . $user['id'] . '&amp;ban=' . $res['id'] . '">' . $lng_ban['ban_delete_do'] . '</a>';
                 if (!empty($menu))
-                    echo '<div>' . display_menu($menu) . '</div>';
+                    echo '<div>' . functions::display_menu($menu) . '</div>';
                 echo '</div></div>';
                 ++$i;
             }
@@ -310,7 +310,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('profile.php?act=ban&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>' .
+            echo '<p>' . functions::display_pagination('profile.php?act=ban&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>' .
                 '<p><form action="profile.php?act=ban&amp;user=' . $user['id'] . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';

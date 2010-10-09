@@ -18,7 +18,7 @@ if ($rights == 3 || $rights >= 6) {
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic`='$id'"), 0);
     require_once('../incfiles/head.php');
     if ($topic_vote != 0 || $topic == 0) {
-        echo display_error($lng['error_wrong_data'], '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . $lng['back'] . '</a>');
+        echo functions::display_error($lng['error_wrong_data'], '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . $lng['back'] . '</a>');
         require('../incfiles/end.php');
         exit;
     }

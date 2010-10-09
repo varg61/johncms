@@ -22,7 +22,7 @@ require('../incfiles/head.php');
 -----------------------------------------------------------------
 */
 if ($user['id'] != $user_id) {
-    echo display_error($lng['access_forbidden']);
+    echo functions::display_error($lng['access_forbidden']);
     require('../incfiles/end.php');
     exit;
 }
@@ -42,7 +42,7 @@ echo '<div class="phdr"><b>' . $lng_profile['my_office'] . '</b></div>' .
     '<div><img src="../images/guestbook.gif" width="16" height="16"/>&#160;<a href="">' . $lng['guestbook'] . '</a>&#160;(0)</div>' .
     '<div><img src="../images/pt.gif" width="16" height="16"/>&#160;<a href="">' . $lng['blog'] . '</a>&#160;(0)</div>';
 if ($rights >= 1) {
-    $guest = stat_guestbook(2);
+    $guest = functions::stat_guestbook(2);
     echo '</p><p>' .
         '<div><img src="../images/admin.png" width="16" height="16"/>&#160;<a href="../guestbook/index.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (<span class="red">' . $guest . '</span>)</div>';
 }
@@ -71,6 +71,6 @@ echo '<div class="bmenu"><p><h3><img src="../images/settings.png" width="16" hei
     '<li><a href="profile.php?act=edit">' . $lng_profile['profile_edit'] . '</a></li>' .
     '<li><a href="profile.php?act=password">' . $lng['change_password'] . '</a></li>';
 if ($rights >= 1)
-    echo '<li><span class="red"><a href="../' . $admp . '/index.php"><b>' . $lng['admin_panel'] . '</b></a></span></li>';
+    echo '<li><span class="red"><a href="../' . $set['admp'] . '/index.php"><b>' . $lng['admin_panel'] . '</b></a></span></li>';
 echo '</ul></p></div>';
 ?>

@@ -25,7 +25,7 @@ if ($rights >= 6) {
     switch ($ms['type']) {
         case "al":
             if (isset($_POST['submit'])) {
-                $text = check($_POST['text']);
+                $text = functions::check($_POST['text']);
                 mysql_query("update `gallery` set text='" . $text . "' where id='" . $id . "';");
                 header("location: index.php?id=$id");
             } else {
@@ -36,7 +36,7 @@ if ($rights >= 6) {
 
         case "rz":
             if (isset($_POST['submit'])) {
-                $text = check($_POST['text']);
+                $text = functions::check($_POST['text']);
                 if (!empty($_POST['user'])) {
                     $user = intval($_POST['user']);
                 } else {

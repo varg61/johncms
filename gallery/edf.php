@@ -28,7 +28,7 @@ if ($rights >= 6) {
         exit;
     }
     if (isset($_POST['submit'])) {
-        $text = check($_POST['text']);
+        $text = functions::check($_POST['text']);
         mysql_query("update `gallery` set text='" . $text . "' where id='" . $id . "';");
         header("location: index.php?id=$ms[refid]");
     } else {

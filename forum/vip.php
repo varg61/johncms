@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights == 3 || $rights >= 6) {
     if (empty($_GET['id'])) {
         require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }
@@ -27,7 +27,7 @@ if ($rights == 3 || $rights >= 6) {
         header('Location: index.php?id=' . $id);
     } else {
         require('../incfiles/head.php');
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
         require('../incfiles/end.php');
         exit;
     }

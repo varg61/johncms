@@ -30,7 +30,7 @@ if ($rights == 4 || $rights >= 6) {
     $namedir = "$adrdir[adres]/$adrdir[name]";
     if (isset ($_POST['submit'])) {
         if (!empty ($_POST['newrus'])) {
-            $newrus = check(trim($_POST['newrus']));
+            $newrus = functions::check($_POST['newrus']);
         }
         else {
             $newrus = "$adrdir[text]";

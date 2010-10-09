@@ -43,7 +43,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . 'user=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
         }
     } else {
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
     }
 }
 ?>

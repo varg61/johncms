@@ -13,7 +13,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$lng_set = load_lng('set');
+$lng_set = $core->load_lng('set');
 $textl = $lng['settings'];
 require('../incfiles/head.php');
 
@@ -23,7 +23,7 @@ require('../incfiles/head.php');
 -----------------------------------------------------------------
 */
 if ($user['id'] != $user_id) {
-    echo display_error($lng['access_forbidden']);
+    echo functions::display_error($lng['access_forbidden']);
     require('../incfiles/end.php');
     exit;
 }
@@ -47,7 +47,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>' . $lng['settings'] . '</b> | ' . $lng['forum'] . '</div>' .
-            '<div class="topmenu">' . display_menu($menu) . '</div>';
+            '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         $set_forum = array ();
         $set_forum = unserialize($datauser['set_forum']);
         if (isset($_POST['submit'])) {
@@ -96,7 +96,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>' . $lng['settings'] . '</b> | ' . $lng['forum'] . '</div>' .
-            '<div class="topmenu">' . display_menu($menu) . '</div>';
+            '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         $set_chat = array ();
         $set_chat = unserialize($datauser['set_chat']);
         $mood = array (
@@ -135,7 +135,7 @@ switch ($mod) {
             $set_chat['carea_w'] = isset($_POST['carea_w']) ? intval($_POST['carea_w']) : 20;
             $set_chat['carea_h'] = isset($_POST['carea_h']) ? intval($_POST['carea_h']) : 2;
             $set_chat['mood'] = (isset($_POST['mood']) && in_array(trim($_POST['mood']), $mood)) ? trim($_POST['mood']) : 'нейтральное';
-            $mood_adm = isset($_POST['mood_adm']) ? check(mb_substr(trim($_POST['mood_adm']), 0, 30)) : '';
+            $mood_adm = isset($_POST['mood_adm']) ? functions::check(mb_substr(trim($_POST['mood_adm']), 0, 30)) : '';
             if ($set_chat['refresh'] < 10)
                 $set_chat['refresh'] = 10;
             elseif ($set_chat['refresh'] > 99)
@@ -196,7 +196,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>' . $lng['settings'] . '</b> | ' . $lng['common_settings'] . '</div>' .
-            '<div class="topmenu">' . display_menu($menu) . '</div>';
+            '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         $set_user = array ();
         $set_user = unserialize($datauser['set_user']);
         if (isset($_POST['submit'])) {
@@ -228,7 +228,7 @@ switch ($mod) {
                 $set_user['field_h'] = 1;
             elseif ($set_user['field_h'] > 9)
                 $set_user['field_h'] = 9;
-            $set_user['skin'] = isset($_POST['skin']) ? check(trim($_POST['skin'])) : 'default';
+            $set_user['skin'] = isset($_POST['skin']) ? functions::check($_POST['skin']) : 'default';
             $arr = array ();
             $dir = opendir('../theme');
             while ($skindef = readdir($dir)) {
@@ -239,12 +239,12 @@ switch ($mod) {
             if (!in_array($set_user['skin'], $arr))
                 $set_user['skin'] = 'default';
             // Устанавливаем язык
-            $lng_select = isset($_POST['lng']) ? check(trim($_POST['lng'])) : false;
+            $lng_select = isset($_POST['lng']) ? functions::check($_POST['lng']) : false;
             if ($lng_select && $lng_select != $language) {
                 $req = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '$lng_select' AND `var` = 'language_name' LIMIT 1");
                 if (mysql_num_rows($req)) {
                     $language = $lng_select;
-                    $lng = load_lng();
+                    $lng = $core->load_lng();
                     $res = mysql_fetch_assoc($req);
                     echo '<div class="gmenu">' . $lng['language_set'] . ': <b>' . $res['default'] . '</b></div>';
                 }
@@ -276,8 +276,8 @@ switch ($mod) {
                 `set_language` = ''
                 WHERE `id` = '$user_id' LIMIT 1
             ");
-            $language = $sys_language;
-            $lng = load_lng();
+            $language = $set['language'];
+            $lng = $core->load_lng();
             echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
         // Форма ввода настроек

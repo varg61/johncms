@@ -22,7 +22,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = htmlspecialchars($user['name']) . ': ' . $lng['statistics'];
 require('../incfiles/head.php');
 echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['statistics'] . '</div>' .
-    '<div class="user"><p>' . display_user($user, array ('iphide' => 1,)) . '</p></div>' .
+    '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>' .
     '<div class="list2">' .
     '<p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;' . $lng['statistics'] . '</h3><ul>';
 if ($rights >= 7) {
@@ -34,7 +34,7 @@ if ($rights >= 7) {
         echo '<li>' . $lng_profile['registration_free'] . '</li>';
 }
 echo '<li><span class="gray">' . ($user['sex'] == 'm' ? $lng_profile['registered_m'] : $lng_profile['registered_w']) . ':</span> ' . date("d.m.Y", $user['datereg']) . '</li>' .
-    '<li><span class="gray">' . ($user['sex'] == 'm' ? $lng_profile['stayed_m'] : $lng_profile['stayed_w']) . ':</span> ' . timecount($user['total_on_site']) . '</li>';
+    '<li><span class="gray">' . ($user['sex'] == 'm' ? $lng_profile['stayed_m'] : $lng_profile['stayed_w']) . ':</span> ' . functions::timecount($user['total_on_site']) . '</li>';
 $lastvisit = $realtime > $user['lastdate'] + 300 ? date("d.m.Y (H:i)", $user['lastdate']) : false;
 if ($lastvisit)
     echo '<li><span class="gray">' . $lng['last_visit'] . ':</span> ' . $lastvisit . '</li>';

@@ -151,7 +151,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 '<p><h3>' . $lng_profile['image'] . '</h3>' .
                 '<img src="../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></p>' .
                 '<p><h3>' . $lng['description'] . '</h3>' .
-                '<textarea name="description" cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '">' . checkout($res['description']) . '</textarea><br />' .
+                '<textarea name="description" cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '">' . functions::checkout($res['description']) . '</textarea><br />' .
                 '<small>' . $lng['not_mandatory_field'] . ', max. 500</small></p>' .
                 '</div><div class="rmenu">' .
                 '<p><h3>Яркость</h3>' .
@@ -192,7 +192,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
         }
     } else {
-        echo display_error($lng['error_wrong_data']);
+        echo functions::display_error($lng['error_wrong_data']);
     }
 }
 ?>

@@ -28,11 +28,11 @@ if (!empty($cms_ads[2]))
     echo '<div class="gmenu">' . $cms_ads[2] . '</div>';
 echo '</div><div class="fmenu">';
 if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act))
-    echo '<a href=\'' . $home . '\'>' . $lng['homepage'] . '</a><br/>';
+    echo '<a href=\'' . $set['homeurl'] . '\'>' . $lng['homepage'] . '</a><br/>';
 
 // Меню быстрого перехода
 if ($set_user['quick_go']) {
-    echo '<form action="' . $home . '/go.php" method="post">';
+    echo '<form action="' . $set['homeurl'] . '/go.php" method="post">';
     echo
         '<div><select name="adres" style="font-size:x-small">
     <option selected="selected">' . $lng['quick_jump'] . '</option>
@@ -48,20 +48,20 @@ if ($set_user['quick_go']) {
     echo '</div></form>';
 }
 // Счетчик посетителей онлайн
-echo '</div><div class="footer">' . stat_online() . '</div>';
+echo '</div><div class="footer">' . functions::stat_online() . '</div>';
 
 ////////////////////////////////////////////////////////////
 // Выводим информацию внизу страницы                      //
 ////////////////////////////////////////////////////////////
 echo '<div style="text-align:center">';
-echo '<p><b>' . $copyright . '</b></p>';
+echo '<p><b>' . $set['copyright'] . '</b></p>';
 if (!$user_id || ($user_id && $set_user['gzip']))
-    stat_gzip();                    // Индикатор сжатия
+    functions::stat_gzip();                    // Индикатор сжатия
 if (!$user_id || ($user_id && $set_user['online']))
-    stat_timeonline();                  // Время, проведенное в онлайне
+    functions::stat_timeonline();                  // Время, проведенное в онлайне
 if (!$user_id || ($user_id && $set_user['movings']))
     echo $lng['transitions'] . ': ' . $movings; // Счетчик перемещений по сайту
-display_counters();                        // Счетчики каталогов
+functions::display_counters();                        // Счетчики каталогов
 
 // Рекламный блок сайта
 if (!empty($cms_ads[3]))

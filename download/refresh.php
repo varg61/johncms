@@ -42,7 +42,7 @@ if ($rights == 4 || $rights >= 6) {
             while (($file = readdir($diropen))) {
                 if ($file != "." && $file != ".." && $file != "index.php") {
                     $pap = "$obn1[adres]/$obn1[name]";
-                    $obn2 = mysql_query("select * from `download` where name = '" . check(trim($file)) . "' and adres = '" . $pap . "' ;");
+                    $obn2 = mysql_query("select * from `download` where name = '" . functions::check($file) . "' and adres = '" . $pap . "' ;");
 
                     while ($obndir = mysql_fetch_array($obn2)) {
                         $fod[] = $obndir[name];

@@ -23,7 +23,7 @@ require('../incfiles/head.php');
 -----------------------------------------------------------------
 */
 if ($user['id'] != $user_id && ($rights < 7 || $user['rights'] > $rights)) {
-    echo display_error($lng_profile['error_rights']);
+    echo functions::display_error($lng_profile['error_rights']);
     require('../incfiles/end.php');
     exit;
 }
@@ -64,22 +64,22 @@ if (isset($_GET['delavatar'])) {
     -----------------------------------------------------------------
     */
     $error = array ();
-    $user['imname'] = isset($_POST['imname']) ? check(mb_substr($_POST['imname'], 0, 25)) : '';
-    $user['live'] = isset($_POST['live']) ? check(mb_substr($_POST['live'], 0, 50)) : '';
+    $user['imname'] = isset($_POST['imname']) ? functions::check(mb_substr($_POST['imname'], 0, 25)) : '';
+    $user['live'] = isset($_POST['live']) ? functions::check(mb_substr($_POST['live'], 0, 50)) : '';
     $user['dayb'] = isset($_POST['dayb']) ? intval($_POST['dayb']) : 0;
     $user['monthb'] = isset($_POST['monthb']) ? intval($_POST['monthb']) : 0;
     $user['yearofbirth'] = isset($_POST['yearofbirth']) ? intval($_POST['yearofbirth']) : 0;
-    $user['about'] = isset($_POST['about']) ? check(mb_substr($_POST['about'], 0, 500)) : '';
-    $user['mibile'] = isset($_POST['mibile']) ? check(mb_substr($_POST['mibile'], 0, 40)) : '';
-    $user['mail'] = isset($_POST['mail']) ? check(mb_substr($_POST['mail'], 0, 40)) : '';
+    $user['about'] = isset($_POST['about']) ? functions::check(mb_substr($_POST['about'], 0, 500)) : '';
+    $user['mibile'] = isset($_POST['mibile']) ? functions::check(mb_substr($_POST['mibile'], 0, 40)) : '';
+    $user['mail'] = isset($_POST['mail']) ? functions::check(mb_substr($_POST['mail'], 0, 40)) : '';
     $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
     $user['icq'] = isset($_POST['icq']) ? intval($_POST['icq']) : 0;
-    $user['skype'] = isset($_POST['skype']) ? check(mb_substr($_POST['skype'], 0, 40)) : '';
-    $user['jabber'] = isset($_POST['jabber']) ? check(mb_substr($_POST['jabber'], 0, 40)) : '';
-    $user['www'] = isset($_POST['www']) ? check(mb_substr($_POST['www'], 0, 40)) : '';
+    $user['skype'] = isset($_POST['skype']) ? functions::check(mb_substr($_POST['skype'], 0, 40)) : '';
+    $user['jabber'] = isset($_POST['jabber']) ? functions::check(mb_substr($_POST['jabber'], 0, 40)) : '';
+    $user['www'] = isset($_POST['www']) ? functions::check(mb_substr($_POST['www'], 0, 40)) : '';
     // Данные юзера (для Администраторов)
-    $user['name'] = isset($_POST['name']) ? check(mb_substr($_POST['name'], 0, 20)) : $user['name'];
-    $user['status'] = isset($_POST['status']) ? check(mb_substr($_POST['status'], 0, 50)) : '';
+    $user['name'] = isset($_POST['name']) ? functions::check(mb_substr($_POST['name'], 0, 20)) : $user['name'];
+    $user['status'] = isset($_POST['status']) ? functions::check(mb_substr($_POST['status'], 0, 50)) : '';
     $user['karma_off'] = isset($_POST['karma_off']);
     $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
     $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : 0;
@@ -89,7 +89,7 @@ if (isset($_GET['delavatar'])) {
     if ($rights >= 7) {
         if (mb_strlen($user['name']) < 2 || mb_strlen($user['name']) > 20)
             $error[] = $lng_profile['error_nick_lenght'];
-        $lat_nick = rus_lat(mb_strtolower($user['name']));
+        $lat_nick = functions::rus_lat(mb_strtolower($user['name']));
         if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
             $error[] = $lng_profile['error_nick_symbols'];
     }
@@ -128,7 +128,7 @@ if (isset($_GET['delavatar'])) {
         }
         echo '<div class="gmenu">' . $lng_profile['data_saved'] . '</div>';
     } else {
-        echo display_error($error);
+        echo functions::display_error($error);
     }
 }
 

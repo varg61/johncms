@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'online';
 $textl = $lng['online'];
-$lng_online = load_lng('online');
+$lng_online = $core->load_lng('online');
 require('../incfiles/head.php');
 
 /*
@@ -60,9 +60,9 @@ if ($total) {
         $place = array_key_exists($where[0], $places) ? $places[$where[0]] : '<a href="../index.php">' . $lng_online['where_homepage'] . '</a>';
         $arg = array (
             'stshide' => 1,
-            'header' => (' (' . $res['movings'] . ' - ' . timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
+            'header' => (' (' . $res['movings'] . ' - ' . functions::timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
         );
-        echo display_user($res, $arg);
+        echo functions::display_user($res, $arg);
         echo '</div>';
         ++$i;
     }
@@ -71,7 +71,7 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . display_pagination('index.php?act=online&amp;' . ($mod == 'guest' ? 'mod=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
+    echo '<p>' . functions::display_pagination('index.php?act=online&amp;' . ($mod == 'guest' ? 'mod=guest&amp;' : ''), $start, $total, $kmess) . '</p>';
     echo '<p><form action="index.php?act=online' . ($mod == 'guest' ? '&amp;mod=guest' : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

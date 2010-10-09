@@ -30,7 +30,7 @@ if ($user['id'] == $user_id || $rights >= 7) {
             $password = htmlspecialchars($res['password']);
             $access = $res['access'];
         } else {
-            echo display_error($lng['error_wrong_data']);
+            echo functions::display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
             exit;
         }
@@ -100,17 +100,17 @@ if ($user['id'] == $user_id || $rights >= 7) {
         }
     }
     if ($error)
-        echo display_error($error);
+        echo functions::display_error($error);
     echo '<div class="menu">' .
         '<form action="album.php?act=edit&amp;user=' . $user['id'] . '&amp;al=' . $al . '" method="post">' .
         '<p><h3>' . $lng['name_the'] . '</h3>' .
-        '<input type="text" name="name" value="' . checkout($name) . '" maxlength="30" /><br />' .
+        '<input type="text" name="name" value="' . functions::checkout($name) . '" maxlength="30" /><br />' .
         '<small>Min. 2, Max. 30</small></p>' .
         '<p><h3>' . $lng['description'] . '</h3>' .
-        '<textarea name="description" cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '">' . checkout($description) . '</textarea><br />' .
+        '<textarea name="description" cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '">' . functions::checkout($description) . '</textarea><br />' .
         '<small>' . $lng['not_mandatory_field'] . '<br />Max. 500</small></p>' .
         '<p><h3>' . $lng['password'] . '</h3>' .
-        '<input type="text" name="password" value="' . checkout($password) . '" maxlength="15" /><br />' .
+        '<input type="text" name="password" value="' . functions::checkout($password) . '" maxlength="15" /><br />' .
         '<small>' . $lng_profile['access_help'] . '<br />Min. 3, Max. 15</small></p>' .
         '<p><h3>Доступ</h3>' .
         '<input type="radio" name="access" value="4" ' . (!$access || $access == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['access_all'] . '<br />' .

@@ -35,7 +35,7 @@ switch ($mod) {
         Удаляем язык
         -----------------------------------------------------------------
         */
-        $lng_del = isset($_GET['del']) ? check(trim($_GET['del'])) : false;
+        $lng_del = isset($_GET['del']) ? functions::check($_GET['del']) : false;
         $error = array ();
         if (!$lng_del)
             $error[] = $lng['error_wrong_data'];
@@ -60,7 +60,7 @@ switch ($mod) {
                     '<div class="phdr"><a href="index.php?act=languages">' . $lng['cancel'] . '</a></div>';
             }
         } else {
-            echo display_error($error, '<a href="index.php?act=languages">' . $lng['back'] . '</a>');
+            echo functions::display_error($error, '<a href="index.php?act=languages">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -91,8 +91,8 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['language_default'] . '</div>';
         if (isset($_POST['submit'])) {
             // Устанавливаем системный язык
-            $lng_select = isset($_POST['lng']) ? check(trim($_POST['lng'])) : false;
-            if ($lng_select && $lng_select != $sys_language) {
+            $lng_select = isset($_POST['lng']) ? functions::check($_POST['lng']) : false;
+            if ($lng_select && $lng_select != $set['language']) {
                 $req = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '$lng_select' AND `var` = 'language_name' LIMIT 1");
                 if (mysql_num_rows($req)) {
                     if (!isset($set['language'])) {
@@ -100,7 +100,7 @@ switch ($mod) {
                     } else {
                         mysql_query("UPDATE `cms_settings` SET `val` = '$lng_select' WHERE `key` = 'language'");
                     }
-                    $sys_language = $lng_select;
+                    $set['language'] = $lng_select;
                     $res = mysql_fetch_assoc($req);
                     echo '<div class="gmenu">' . $lng['language_set'] . ': <b>' . $res['default'] . '</b></div>';
                 }
@@ -112,8 +112,8 @@ switch ($mod) {
         while ($res = mysql_fetch_assoc($req)) {
             $req_l = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '" . $res['iso'] . "' AND `var` = 'language_name' LIMIT 1");
             $res_l = mysql_fetch_assoc($req_l);
-            echo '<div><input type="radio" value="' . $res['iso'] . '" name="lng" ' . ($res['iso'] == $sys_language ? 'checked="checked"' : '') . '/>&#160;' .
-                '<a href="">' . $res_l['default'] . '</a>' . ($res['iso'] == $sys_language ? '' : '&nbsp;<a href="index.php?act=languages&amp;mod=delete&amp;del=' . $res['iso'] . '">[x]</a>') .
+            echo '<div><input type="radio" value="' . $res['iso'] . '" name="lng" ' . ($res['iso'] == $set['language'] ? 'checked="checked"' : '') . '/>&#160;' .
+                '<a href="">' . $res_l['default'] . '</a>' . ($res['iso'] == $set['language'] ? '' : '&nbsp;<a href="index.php?act=languages&amp;mod=delete&amp;del=' . $res['iso'] . '">[x]</a>') .
                 '</div>';
         }
         echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '" /></p>' .

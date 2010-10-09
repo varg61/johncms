@@ -24,10 +24,10 @@ if (empty($_GET['id'])) {
     exit;
 }
 // Проверка на флуд
-$flood = antiflood();
+$flood = functions::antiflood();
 if ($flood) {
     require_once('../incfiles/head.php');
-    echo display_error('Вы не можете так часто добавлять картинки<br />Пожалуйста, подождите ' . $flood . ' сек.', '<a href="index.php?id=' . $id . '">Назад</a>');
+    echo functions::display_error('Вы не можете так часто добавлять картинки<br />Пожалуйста, подождите ' . $flood . ' сек.', '<a href="index.php?id=' . $id . '">Назад</a>');
     require_once('../incfiles/end.php');
     exit;
 }
@@ -42,19 +42,19 @@ if ($ms['type'] != "al") {
 $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refid'] . "';");
 $rz1 = mysql_fetch_array($rz);
 if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || $rights >= 6) {
-    $text = check($_POST['text']);
+    $text = functions::check($_POST['text']);
     $dopras = array (
         "gif",
         "jpg",
         "png"
     );
     $tff = implode(" ,", $dopras);
-    $ftsz = $flsz / 5;
+    $ftsz = $set['flsz'] / 5;
     $fname = $_FILES['fail']['name'];
     $fsize = $_FILES['fail']['size'];
     if ($fname != "") {
         $ffail = strtolower($fname);
-        $formfail = format($ffail);
+        $formfail = functions::format($ffail);
         if ((preg_match("/php/i", $ffail)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess")) {
             echo "Попытка отправить файл запрещенного типа.<br/><a href='index.php?act=upl&amp;id=" . $id . "'>Повторить</a><br/>";
             require_once('../incfiles/end.php');
@@ -100,7 +100,7 @@ if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || 
             $filebase64 = $array[1];
         }
         $ffail = strtolower($tmp_name);
-        $fftip = format($ffail);
+        $fftip = functions::format($ffail);
         if ((preg_match("/php/i", $ffail)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess")) {
             echo "Попытка отправить файл запрещенного типа.<br/><a href='index.php?act=upl&amp;id=" . $id . "'>Повторить</a><br/>";
             require_once('../incfiles/end.php');

@@ -54,7 +54,7 @@ if (!$error) {
     $forump_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'  AND `close` != '1'"), 0);
     echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['user_del'] . '</div>';
     // Выводим краткие данные
-    echo '<div class="user"><p>' . display_user($user, array (
+    echo '<div class="user"><p>' . functions::display_user($user, array (
         'lastvisit' => 1,
         'iphist' => 1
     )) . '</p></div>';
@@ -144,7 +144,7 @@ if (!$error) {
             echo '<div class="phdr"><a href="../users/profile.php?user=' . $user['id'] . '">' . $lng['to_form'] . '</a></div>';
     }
 } else {
-    echo display_error($error);
+    echo functions::display_error($error);
 }
 echo '<p><a href="index.php?act=users">' . $lng['users_list'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>

@@ -28,7 +28,7 @@ elseif (!$user_id)
     $error = 'Доступ в Чат открыт только <a href="../in.php">авторизованным</a> посетителям';
 if ($error) {
     require_once('../incfiles/head.php');
-    echo display_error($error);
+    echo functions::display_error($error);
     require_once('../incfiles/end.php');
     exit;
 }

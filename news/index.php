@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 $headmod = 'news';
 require('../incfiles/core.php');
-$lng_news = load_lng('news'); // Загружаем язык модуля
+$lng_news = $core->load_lng('news'); // Загружаем язык модуля
 $textl = $lng_news['site_news'];
 require('../incfiles/head.php');
 switch ($do) {
@@ -30,13 +30,13 @@ switch ($do) {
             $old = 20;
             if (isset($_POST['submit'])) {
                 $error = array ();
-                $name = isset($_POST['name']) ? check($_POST['name']) : false;
+                $name = isset($_POST['name']) ? functions::check($_POST['name']) : false;
                 $text = isset($_POST['text']) ? trim($_POST['text']) : false;
                 if (!$name)
                     $error[] = $lng_news['error_title'];
                 if (!$text)
                     $error[] = $lng_news['error_text'];
-                $flood = antiflood();
+                $flood = functions::antiflood();
                 if ($flood)
                     $error[] = $lng_news['error_flood'] . ' ' . $flood . '&#160;' . $lng_news['seconds'];
                 if (!$error) {
@@ -64,7 +64,7 @@ switch ($do) {
                                     `time` = '$realtime',
                                     `user_id` = '$user_id',
                                     `from` = '$login',
-                                    `ip` = '$ipp',
+                                    `ip` = '" . long2ip($ip) . "',
                                     `soft` = '" . mysql_real_escape_string($agn) . "',
                                     `text` = '" . mysql_real_escape_string($text) . "'
                                 ");
@@ -84,7 +84,7 @@ switch ($do) {
                     ");
                     echo '<p>' . $lng_news['article_added'] . '<br /><a href="index.php">' . $lng_news['to_news'] . '</a></p>';
                 } else {
-                    echo display_error($error, '<a href="index.php">' . $lng_news['to_news'] . '</a>');
+                    echo functions::display_error($error, '<a href="index.php">' . $lng_news['to_news'] . '</a>');
                 }
             } else {
                 echo '<form action="index.php?do=add" method="post"><div class="menu">' .
@@ -122,7 +122,7 @@ switch ($do) {
         if ($rights >= 6) {
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['news'] . '</b></a> | ' . $lng_news['edit_article'] . '</div>';
             if (!$id) {
-                echo display_error($lng['error_wrong_data'], '<a href="index.php">' . $lng_news['to_news'] . '</a>');
+                echo functions::display_error($lng['error_wrong_data'], '<a href="index.php">' . $lng_news['to_news'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -132,7 +132,7 @@ switch ($do) {
                     $error[] = $lng_news['error_title'];
                 if (empty($_POST['text']))
                     $error[] = $lng_news['error_text'];
-                $name = check($_POST['name']);
+                $name = functions::check($_POST['name']);
                 $text = mysql_real_escape_string(trim($_POST['text']));
                 if (!$error) {
                     mysql_query("UPDATE `news` SET
@@ -141,7 +141,7 @@ switch ($do) {
                         WHERE `id` = '$id'
                     ");
                 } else {
-                    echo display_error($error, '<a href="index.php?act=edit&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                    echo functions::display_error($error, '<a href="index.php?act=edit&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
                 }
                 echo '<p>' . $lng_news['article_changed'] . '<br /><a href="index.php">' . $lng['continue'] . '</a></p>';
             } else {
@@ -242,9 +242,9 @@ switch ($do) {
             $text = $res['text'];
             $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
             $text = str_replace("\r\n", "<br/>", $text);
-            $text = tags($text);
+            $text = functions::tags($text);
             if ($set_user['smileys'])
-                $text = smileys($text, 1);
+                $text = functions::smileys($text, 1);
             $vr = $res['time'] + $set_user['sdvig'] * 3600;
             $vr1 = date("d.m.y / H:i", $vr);
             echo '<h3>' . $res['name'] . '</h3>' .
@@ -265,7 +265,7 @@ switch ($do) {
         }
         echo '<div class="phdr">' . $lng['total'] . ':&#160;' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . display_pagination('index.php?', $start, $total, $kmess) . '</p>';
+            echo '<p>' . functions::display_pagination('index.php?', $start, $total, $kmess) . '</p>';
             echo '<p><form action="index.php" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';

@@ -13,37 +13,34 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
 Error_Reporting(E_ALL & ~E_NOTICE);
-mb_internal_encoding('UTF-8');
 @ini_set('session.use_trans_sid', '0');
 @ini_set('arg_separator.output', '&amp;');
-
+date_default_timezone_set('Europe/Moscow');
+mb_internal_encoding('UTF-8');
 if (!isset($rootpath))
     $rootpath = '../';
-if (get_magic_quotes_gpc()) {
-    // Удаляем слэши, если открыт magic_quotes_gpc
-    $in = array (
-        &$_GET,
-        &$_POST,
-        &$_COOKIE
-    );
-    while (list($k, $v) = each($in)) {
-        foreach ($v as $key => $val) {
-            if (!is_array($val)) {
-                $in[$k][$key] = stripslashes($val);
-                continue;
-            }
-            $in[] = &$in[$k][$key];
-        }
-    }
-    unset($in);
-    if (!empty($_FILES)) {
-        foreach ($_FILES as $k => $v) {
-            $_FILES[$k]['name'] = stripslashes((string)$v['name']);
-        }
-    }
-}
+
+require('class_functions.php');
+require('class_core.php');
+$core = new core() or die('Error: Core System');
+// Системные переменные
+$ipl = $core->ip;                   // Адрес IP
+$set = $core->system_settings;      // Системные настройки
+$realtime = $core->system_time;     // Системное время с учетом сдвига
+$language = $core->system_language; // Язык системы
+$lng = $core->language_phrases;     // Фразы выбранного языка
+// Пользовательские переменные
+$user_id = $core->user_id;        // Идентификатор пользователя
+$rights = $core->user_rights;     // Права доступа
+$datauser = $core->user_data;     // Все данные пользователя
+$set_user = $core->user_settings; // Пользовательские настройки
+$ban = $core->user_ban;           // Бан
+
+// Число сообщений на страницу для SQL запросов
+$kmess = $set_user['kmess'] > 4 && $set_user['kmess'] < 99 ? $set_user['kmess'] : 10;
+// Логин (Ник) пользователя
+$login = $datauser['name'];
 
 /*
 -----------------------------------------------------------------
@@ -58,37 +55,6 @@ $act = isset($_GET['act']) ? trim($_GET['act']) : '';
 $mod = isset($_GET['mod']) ? trim($_GET['mod']) : '';
 $do = isset($_GET['do']) ? trim($_GET['do']) : '';
 $agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES);
-
-/*
------------------------------------------------------------------
-1) Получаем реальный IP
-2) Проверяем на попытку HTTP флуда
------------------------------------------------------------------
-*/
-require($rootpath . 'incfiles/class_ipinit.php');
-$ipinit = new ipinit();
-$ipl = $ipinit->ip;
-$ipp = long2ip($ipl);
-unset($ipinit);
-
-/*
------------------------------------------------------------------
-Стартуем сессию
------------------------------------------------------------------
-*/
-session_name('SESID');
-session_start();
-
-/*
------------------------------------------------------------------
-Подключаемся к базе данных,
-устанавливаем кодировку подключения UTF8
------------------------------------------------------------------
-*/
-require($rootpath . 'incfiles/db.php');
-$connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to DB server');
-@mysql_select_db($db_name) or die('Error: cannot select DB');
-@mysql_query("SET NAMES 'utf8'", $connect);
 
 /*
 -----------------------------------------------------------------
@@ -115,7 +81,7 @@ if (mysql_num_rows($req) > 0) {
             // Закрытие регистрации
             $regban = true;
             break;
-        default :
+            default :
             // Полный запрет доступа к сайту
             header("HTTP/1.0 404 Not Found");
             exit;
@@ -124,105 +90,18 @@ if (mysql_num_rows($req) > 0) {
 
 /*
 -----------------------------------------------------------------
-Получаем и задаем основные настройки системы
------------------------------------------------------------------
-*/
-$req = mysql_query("SELECT * FROM `cms_settings`");
-$set = array ();
-while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
-mysql_free_result($req);
-$language = isset($set['language']) ? $set['language'] : 'ru'; // Язык системы по умолчанию
-$sys_language = $language;
-$emailadmina = $set['emailadmina'];                            // E-mail администратора
-$sdvigclock = $set['sdvigclock'];                              // Временной сдвиг по умолчанию для системы
-$copyright = $set['copyright'];                                // Коприайт сайта
-$home = $set['homeurl'];                                       // Домашняя страница
-$ras_pages = 'txt';                                            // Расширение текстовых страниц
-$admp = $set['admp'];                                          // Папка с Админкой
-$flsz = $set['flsz'];                                          // Максимальный размер файлов
-
-/*
------------------------------------------------------------------
-Задаем настройки по-умолчанию для гостей
------------------------------------------------------------------
-*/
-$set_user = array ();
-$set_user['sdvig'] = 0;                                        // Временной сдвиг
-$set_user['smileys'] = 1;                                      // Включить(1) выключить(0) смайлы
-$set_user['quick_go'] = 1;                                     // Быстрый переход
-$set_user['avatar'] = 1;                                       // Аватары
-$set_user['field_w'] = 20;                                     // Ширина текстового поля ввода
-$set_user['field_h'] = 3;                                      // Высота текстового поля ввода
-$set_user['skin'] = $set['skindef'];                           // Тема оформления
-$set_user['kmess'] = 10;                                       // Число сообщений на страницу
-$kmess = $set_user['kmess'];                                   // Число сообщений на страницу для SQL запросов
-$user_id = false;
-$user_ps = false;
-$rights = 0;
-
-/*
------------------------------------------------------------------
 Обрабатываем дату и время
 -----------------------------------------------------------------
 */
-date_default_timezone_set('Europe/Moscow');
-$realtime = time() + $sdvigclock * 3600;
+//TODO: Убрать
 $mon = date("m", $realtime);
 if (substr($mon, 0, 1) == 0) {
     $mon = str_replace("0", "", $mon);
 }
+//TODO: Убрать
 $day = date("d", $realtime);
 if (substr($day, 0, 1) == 0) {
     $day = str_replace("0", "", $day);
-}
-$mesyac = array (
-    1 => "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря"
-);
-
-/*
------------------------------------------------------------------
-Автоочистка системы
------------------------------------------------------------------
-*/
-if ($set['clean_time'] <= ($realtime - 43200)) {
-    // Очищаем таблицу `cms_guests`
-    mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($realtime - 600) . "'");
-    mysql_query("OPTIMIZE TABLE `cms_guests`");
-    mysql_query("UPDATE `cms_settings` SET  `val`='$realtime' WHERE `key`='clean_time'");
-}
-
-/*
------------------------------------------------------------------
-Авторизация по сессии
------------------------------------------------------------------
-*/
-if (isset($_SESSION['uid']) && isset($_SESSION['ups'])) {
-    $user_id = intval($_SESSION['uid']);
-    $user_ps = $_SESSION['ups'];
-}
-
-/*
------------------------------------------------------------------
-Авторизация по COOKIE
------------------------------------------------------------------
-*/
-elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups'])) {
-    $user_id = intval(base64_decode($_COOKIE['cuid']));
-    $_SESSION['uid'] = $user_id;
-    $user_ps = md5($_COOKIE['cups']);
-    $_SESSION['ups'] = $user_ps;
-    $cookauth = true;
 }
 
 /*
@@ -231,110 +110,10 @@ elseif (isset($_COOKIE['cuid']) && isset($_COOKIE['cups'])) {
 -----------------------------------------------------------------
 */
 if ($user_id && $user_ps) {
-    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user_id' LIMIT 1");
-    if (mysql_num_rows($req)) {
-        $datauser = mysql_fetch_assoc($req);
-        if ($user_ps === $datauser['password']) {
-            // Получаем общие настройки пользователя
-            $set_user = array ();
-            $set_user = unserialize($datauser['set_user']);
-            if (empty($set_user)) {
-                // Задаем пользовательские настройки по-умолчанию
-                $set_user['avatar'] = 1;
-                $set_user['smileys'] = 1;
-                $set_user['translit'] = 1;
-                $set_user['quick_go'] = 1;
-                $set_user['gzip'] = 1;
-                $set_user['online'] = 1;
-                $set_user['movings'] = 1;
-                $set_user['digest'] = 0;
-                $set_user['field_w'] = 20;
-                $set_user['field_h'] = 3;
-                $set_user['sdvig'] = 0;
-                $set_user['kmess'] = 10;
-                $set_user['skin'] = 'default';
-            }
-            $kmess = (int)$set_user['kmess']; // Число сообщений на страницу
-            $login = $datauser['name']; // Логин (Ник) пользователя
-            $rights = $datauser['rights']; // Права доступа
-            if(!empty($datauser['set_language']))
-                $language = $datauser['set_language']; // Язык пользователя
-            // Проверка IP адреса, если менялся, то фиксируем новый
-            if ($datauser['ip'] != $ipl){
-                // Обновляем время на предыдущем адресе
-                $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '$user_id' ORDER BY `time` DESC LIMIT 1");
-                if(mysql_num_rows($req)){
-                    $res = mysql_fetch_row($req);
-                    mysql_query("UPDATE `cms_users_iphistory` SET `time` = '" . $datauser['lastdate'] . "' WHERE `id` = '" . $res[0] . "' LIMIT 1");
-                }
-                // Обрабатываем текущий адрес
-                $req = mysql_query("SELECT * FROM `cms_users_iphistory` WHERE `user_id` = '$user_id' AND `user_ip` = '$ipl' LIMIT 1");
-                if(mysql_num_rows($req)){
-                    // Если адрес в истории был, то обновляем время
-                    $res = mysql_fetch_row($req);
-                    mysql_query("UPDATE `cms_users_iphistory` SET `time` = '$realtime' WHERE `id` = '" . $res[0] . "' LIMIT 1");
-                } else {
-                    // Если адреса в истории небыло, то вставляем запись
-                    mysql_query("INSERT INTO `cms_users_iphistory` SET `user_id` = '$user_id', `user_ip` = '$ipl', `time` = '$realtime'");
-                }
-                // Обновляем текущий адрес в анкете
-                mysql_query("UPDATE `users` SET `ip` = '$ipl' WHERE `id` = '$user_id' LIMIT 1");
-            }
-            
-            // Проверка юзера на бан
-            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '$user_id' AND `ban_time` > '$realtime'") or die('Error: table "cms_ban_users"');
-            if (mysql_num_rows($req)) {
-                $rights = 0;
-                $ban = array ();
-                while ($res = mysql_fetch_row($req)) $ban[$res[4]] = 1;
-                mysql_free_result($req);
-            }
-            // Если юзера не было на сайте более 1-го часа , показываем дайджест
-            if ($datauser['lastdate'] < ($realtime - 3600) && $set_user['digest'] && $headmod == 'mainpage')
-                header('Location: ' . $home . '/index.php?act=digest&last=' . $datauser['lastdate']);
-        } else {
-            // Если пароль не совпадает, уничтожаем переменные сессии и чистим куки
-            unset($_SESSION['uid']);
-            unset($_SESSION['ups']);
-            setcookie('cuid', '');
-            setcookie('cups', '');
-            $user_id = false;
-            $user_ps = false;
-        }
-    } else {
-        // Если юзер не найден, уничтожаем переменные сессии и чистим куки
-        unset($_SESSION['uid']);
-        unset($_SESSION['ups']);
-        setcookie('cuid', '');
-        setcookie('cups', '');
-        $user_id = false;
-        $user_ps = false;
-    }
+    // Если юзера не было на сайте более 1-го часа , показываем дайджест
+    if ($datauser['lastdate'] < ($realtime - 3600) && $set_user['digest'] && $headmod == 'mainpage')
+        header('Location: ' . $set['homeurl'] . '/index.php?act=digest&last=' . $datauser['lastdate']);
 }
-
-/*
------------------------------------------------------------------
-Загружаем язык системы
------------------------------------------------------------------
-*/
-function load_lng($module = 'main'){
-    global $language;
-    $req = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '$language' AND `module` = '$module'");
-    if(mysql_num_rows($req)){
-        $out = array();
-        while($res = mysql_fetch_assoc($req)) {
-            if(!empty($res['custom'])) {
-                $out[$res['var']] = $res['custom'];
-            } else {
-                $out[$res['var']] = $res['default'];
-            }
-        }
-        return $out;
-    } else {
-        return false;
-    }
-}
-$lng = load_lng();
 
 /*
 -----------------------------------------------------------------
@@ -361,5 +140,4 @@ if ($set['gzip'] && @extension_loaded('zlib')) {
 } else {
     ob_start();
 }
-
 ?>

@@ -21,8 +21,8 @@ echo '<div class="phdr"><b>' . $lng['login'] . '</b></div>';
 $error = array ();
 $captcha = false;
 $display_form = 1;
-$user_login = isset($_POST['n']) ? check($_POST['n']) : NULL;
-$user_pass = isset($_REQUEST['p']) ? check($_REQUEST['p']) : NULL;
+$user_login = isset($_POST['n']) ? functions::check($_POST['n']) : NULL;
+$user_pass = isset($_REQUEST['p']) ? functions::check($_REQUEST['p']) : NULL;
 $user_mem = isset($_POST['mem']) ? 1 : 0;
 $user_code = isset($_POST['code']) ? trim($_POST['code']) : NULL;
 if ($user_pass && !$user_login && !$id)
@@ -35,7 +35,7 @@ if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 15))
     $error[] = $lng['error_password_lenght'];
 if (!$error && $user_pass && ($user_login || $id)) {
     // Запрос в базу на юзера
-    $sql = $id ? "`id` = '$id'" : "`name_lat`='" . rus_lat(mb_strtolower($user_login)) . "'";
+    $sql = $id ? "`id` = '$id'" : "`name_lat`='" . functions::rus_lat(mb_strtolower($user_login)) . "'";
     $req = mysql_query("SELECT * FROM `users` WHERE $sql LIMIT 1");
     if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
@@ -85,9 +85,9 @@ if (!$error && $user_pass && ($user_login || $id)) {
                     mysql_query("UPDATE `users` SET `sestime` = '$realtime' WHERE `id` = '" . $user['id'] . "'");
                     $set_user = unserialize($user['set_user']);
                     if ($user['lastdate'] < ($realtime - 3600) && $set_user['digest'])
-                        header('Location: ' . $home . '/index.php?act=digest&last=' . $user['lastdate']);
+                        header('Location: ' . $set['homeurl'] . '/index.php?act=digest&last=' . $user['lastdate']);
                     else
-                        header('Location: ' . $home . '/index.php');
+                        header('Location: ' . $set['homeurl'] . '/index.php');
                     echo '<div class="gmenu"><p><b><a href="index.php?act=digest">' . $lng['enter_on_site'] . '</a></b></p></div>';
                 }
             } else {
@@ -106,7 +106,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
 }
 if ($display_form) {
     if ($error)
-        echo display_error($error);
+        echo functions::display_error($error);
     echo '<div class="gmenu"><form action="login.php" method="post"><p>' . $lng['login_name'] . ':<br/>' .
         '<input type="text" name="n" value="' . htmlentities($user_login, ENT_QUOTES, 'UTF-8') . '" maxlength="20"/>' .
         '<br/>' . $lng['password'] . ':<br/>' .

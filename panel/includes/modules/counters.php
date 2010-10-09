@@ -61,7 +61,7 @@ switch ($mod) {
                         : '<a href="index.php?act=counters&amp;mod=view&amp;go=on&amp;id=' . $id . '">' . $lng['on'] . '</a>')
                         . ' | <a href="index.php?act=counters&amp;mod=edit&amp;id=' . $id . '">' . $lng['edit'] . '</a> | <a href="index.php?act=counters&amp;mod=del&amp;id=' . $id . '">' . $lng['delete'] . '</a></div>';
             } else {
-                echo display_error($lng['error_wrong_data']);
+                echo functions::display_error($lng['error_wrong_data']);
             }
         }
         break;
@@ -121,7 +121,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if (!$id) {
-            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -140,7 +140,7 @@ switch ($mod) {
                 echo '<div class="phdr"><a href="index.php?act=counters">' . $lng['cancel'] . '</a></div></form>';
             }
         } else {
-            echo display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
@@ -159,12 +159,12 @@ switch ($mod) {
             $link2 = isset($_POST['link2']) ? trim($_POST['link2']) : '';
             $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
             if (empty($name) || empty($link1)) {
-                echo display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
+                echo functions::display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
             echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['preview'] . '</div>' .
-                '<div class="menu"><p><h3>' . $lng['name_the'] . '</h3><b>' . check($name) . '</b></p>' .
+                '<div class="menu"><p><h3>' . $lng['name_the'] . '</h3><b>' . functions::check($name) . '</b></p>' .
                 '<p><h3>' . $lng['counter_mod1'] . '</h3>' . $link1 . '</p>' .
                 '<p><h3>' . $lng['counter_mod2'] . '</h3>' . $link2 . '</p></div>' .
                 '<div class="rmenu">' . $lng['counter_preview_help'] . '</div>' .
@@ -193,7 +193,7 @@ switch ($mod) {
                     $mode = $res['mode'];
                     $switch = 1;
                 } else {
-                    echo display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
+                    echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
@@ -226,7 +226,7 @@ switch ($mod) {
         $link2 = isset($_POST['link2']) ? $_POST['link2'] : '';
         $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
         if (empty($name) || empty($link1)) {
-            echo display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
             require_once('../incfiles/end.php');
             exit;
         }
@@ -234,12 +234,12 @@ switch ($mod) {
             // Режим редактирования
             $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
             if (mysql_num_rows($req) != 1) {
-                echo display_error($lng['error_wrong_data']);
+                echo functions::display_error($lng['error_wrong_data']);
                 require_once('../incfiles/end.php');
                 exit;
             }
             mysql_query("UPDATE `cms_counters` SET
-            `name` = '" . check($name) . "',
+            `name` = '" . functions::check($name) . "',
             `link1` = '" . mysql_real_escape_string($link1) . "',
             `link2` = '" . mysql_real_escape_string($link2) . "',
             `mode` = '$mode'
@@ -255,7 +255,7 @@ switch ($mod) {
             }
             // Режим добавления
             mysql_query("INSERT INTO `cms_counters` SET
-            `name` = '" . check($name) . "',
+            `name` = '" . functions::check($name) . "',
             `sort` = '$sort',
             `link1` = '" . mysql_real_escape_string($link1) . "',
             `link2` = '" . mysql_real_escape_string($link2) . "',

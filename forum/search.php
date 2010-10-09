@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 $headmod = 'forumsearch';
 require('../incfiles/core.php');
-$lng_forum = load_lng('forum');
+$lng_forum = $core->load_lng('forum');
 $textl = $lng_forum['search_forum'];
 require('../incfiles/head.php');
 
@@ -42,7 +42,7 @@ function ReplaceKeywords($keywords, $value) {
         return $value;
     }
 }
-echo '<p>' . forum_new(1) . '</p>';
+echo '<p>' . functions::forum_new(1) . '</p>';
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['search'] . '</div>';
 
 /*
@@ -57,7 +57,7 @@ $search_t = isset($_REQUEST['t']) ? 1 : 0;
 $search = preg_replace('/ {2,}/', ' ', $search);
 $search = str_replace('qwertyzxcytrewq', '', $search);
 echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
-    '<input type="text" value="' . ($search ? checkout($search) : '') . '" name="search" />' .
+    '<input type="text" value="' . ($search ? functions::checkout($search) : '') . '" name="search" />' .
     '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
     '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . $lng_forum['search_topic_name'] .
     '</p></form></div>';
@@ -109,7 +109,7 @@ if ($search && !$error) {
             echo '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
             echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
             $text = $search_t ? $res_p['text'] : $res['text'];
-            $text = checkout(mb_substr($text, 0, 400), 2, 1);
+            $text = functions::checkout(mb_substr($text, 0, 400), 2, 1);
             $text = str_replace('qwertyzxcytrewq', '', $text);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
             if (!$search_t) {
@@ -137,7 +137,7 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
         // Навигация по страницам
-        echo '<p>' . display_pagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>' .
+        echo '<p>' . functions::display_pagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>' .
             '<p><form action="search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '" method="post">' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
@@ -150,7 +150,7 @@ if ($search && !$error) {
     -----------------------------------------------------------------
     */
     if ($error)
-        echo display_error($error);
+        echo functions::display_error($error);
 
     /*
     -----------------------------------------------------------------

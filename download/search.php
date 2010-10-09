@@ -17,7 +17,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once ("../incfiles/head.php");
 if (!empty ($_GET['srh'])) {
-    $srh = check(trim($_GET['srh']));
+    $srh = functions::check($_GET['srh']);
 }
 else {
     if ($_POST['srh'] == "") {
@@ -25,10 +25,10 @@ else {
         require_once ('../incfiles/end.php');
         exit;
     }
-    $srh = check(trim($_POST['srh']));
+    $srh = functions::check($_POST['srh']);
 }
 if (!empty ($_GET['srh'])) {
-    $srh = check(trim($_GET['srh']));
+    $srh = functions::check($_GET['srh']);
 }
 $psk = mysql_query("select * from `download` where  type='file' ;");
 if (empty ($_GET['start']))

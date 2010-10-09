@@ -31,11 +31,11 @@ if ($rights == 4 || $rights >= 6) {
         require_once ('../incfiles/end.php');
         exit;
     }
-    $tf = format($adrfile[name]);
+    $tf = functions::format($adrfile[name]);
     $stn = str_replace("$tf", "", $adrfile[name]);
     if (isset ($_POST['submit'])) {
         if (!empty ($_POST['newf'])) {
-            $newf = check(trim($_POST['newf']));
+            $newf = functions::check($_POST['newf']);
         }
         else {
             $newf = $stn;

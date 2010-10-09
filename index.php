@@ -30,7 +30,7 @@ switch ($act) {
         Сообщение об ошибке 404
         -----------------------------------------------------------------
         */
-        echo display_error($lng['error_404']);
+        echo functions::display_error($lng['error_404']);
         break;
 
     case 'info':
@@ -53,12 +53,12 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         if (!$user_id) {
-            echo display_error($lng['access_guest_forbidden']);
+            echo functions::display_error($lng['access_guest_forbidden']);
             require_once('incfiles/end.php');
             exit;
         }
         echo '<div class="phdr"><b>' . $lng['digest'] . '</b></div>';
-        echo '<div class="gmenu"><p>' . $lng['hi'] . ', <b>' . $login . '</b><br/>' . $lng['welcome_to'] . ' ' . $copyright . '!<br /><a href="index.php">' . $lng['enter_on_site'] . '</a></p></div>';
+        echo '<div class="gmenu"><p>' . $lng['hi'] . ', <b>' . $login . '</b><br/>' . $lng['welcome_to'] . ' ' . $set['copyright'] . '!<br /><a href="index.php">' . $lng['enter_on_site'] . '</a></p></div>';
         // Поздравление с днем рождения
         if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon) {
             echo '<div class="rmenu"><p>' . $lng['happy_birthday'] . '</p></div>';
@@ -72,13 +72,13 @@ switch ($act) {
             if ($newusers_total > 0)
                 echo '<li><a href="users/users.php">' . $lng['users_new'] . '</a> (' . $newusers_total . ')</li>';
             if ($reg_total > 0)
-                echo '<li><a href="' . $admp . '/index.php?act=reg">' . $lng['users_on_reg'] . '</a> (' . $reg_total . ')</li>';
+                echo '<li><a href="' . $set['admp'] . '/index.php?act=reg">' . $lng['users_on_reg'] . '</a> (' . $reg_total . ')</li>';
             if ($ban_total > 0)
-                echo '<li><a href="' . $admp . '/index.php?act=ban_panel">' . $lng['users_on_ban'] . '</a> (' . $ban_total . ')</li>';
+                echo '<li><a href="' . $set['admp'] . '/index.php?act=ban_panel">' . $lng['users_on_ban'] . '</a> (' . $ban_total . ')</li>';
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
             if ($total_libmod > 0)
                 echo '<li><a href="library/index.php?act=moder">' . $lng['library_on_moderation'] . '</a> (' . $total_libmod . ')</li>';
-            $total_admin = stat_guestbook(2);
+            $total_admin = functions::stat_guestbook(2);
             if ($total_admin > 0)
                 echo '<li><a href="guestbook/index.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (' . $total_admin . ')</li>';
             if (!$newusers_total && !$reg_total && !$ban_total && !$total_libmod && !$total_admin)
@@ -90,13 +90,13 @@ switch ($act) {
         $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
         if ($total_news > 0)
             echo '<li><a href="news/index.php">' . $lng['news'] . '</a> (' . $total_news . ')</li>';
-        $total_forum = forum_new();
+        $total_forum = functions::forum_new();
         if ($total_forum > 0)
             echo '<li><a href="forum/index.php?act=new">' . $lng['forum'] . '</a> (' . $total_forum . ')</li>';
-        $total_guest = stat_guestbook(1);
+        $total_guest = functions::stat_guestbook(1);
         if ($total_guest > 0)
             echo '<li><a href="guestbook/index.php?act=ga">' . $lng['guestbook'] . '</a> (' . $total_guest . ')</li>';
-        $total_gal = stat_gallery(1);
+        $total_gal = functions::stat_gallery(1);
         if ($total_gal > 0)
             echo '<li><a href="gallery/index.php?act=new">' . $lng['gallery'] . '</a> (' . $total_gal . ')</li>';
         if ($set_karma['on']) {

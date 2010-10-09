@@ -18,7 +18,7 @@ define('_IN_JOHNADM', 1);
 
 require('../incfiles/core.php');
 // Подключаем язык Админ-панели
-$lng = array_merge($lng, load_lng('admin'));
+$lng = array_merge($lng, $core->load_lng('admin'));
 
 // Проверяем права доступа
 if ($rights < 1) {
@@ -68,7 +68,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     if ($regtotal && $rights >= 6)
         echo '<li><span class="red"><b><a href="index.php?act=reg">' . $lng['users_reg'] . '</a>&#160;(' . $regtotal . ')</b></span></li>';
     echo '<li><a href="index.php?act=administrators">' . $lng['users_administration'] . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>' .
-        '<li><a href="index.php?act=users">' . $lng['users'] . '</a>&#160;(' . stat_countusers() . ')</li>' .
+        '<li><a href="index.php?act=users">' . $lng['users'] . '</a>&#160;(' . functions::stat_countusers() . ')</li>' .
         '<li><a href="index.php?act=ban_panel">' . $lng['ban_panel'] . '</a>&#160;(' . $bantotal . ')</li>' .
         '<li><a href="index.php?act=search_user"><b>' . $lng['search'] . '</b></a></li>' .
         '</ul></p></div>' .

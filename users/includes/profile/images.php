@@ -55,7 +55,7 @@ switch ($mod) {
                         '<a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
                         '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                 } else {
-                    echo display_error($handle->error);
+                    echo functions::display_error($handle->error);
                 }
                 $handle->clean();
             }
@@ -104,10 +104,10 @@ switch ($mod) {
                         echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
                         echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                     } else {
-                        echo display_error($handle->error);
+                        echo functions::display_error($handle->error);
                     }
                 } else {
-                    echo display_error($handle->error);
+                    echo functions::display_error($handle->error);
                 }
                 $handle->clean();
             }
@@ -117,7 +117,7 @@ switch ($mod) {
                 '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" /></p>' .
                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
                 '</div></form>' .
-                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $flsz . 'kb.<br />' . $lng_profile['select_image_help_5'] . '<br />' . $lng_profile['select_image_help_3'] . '</small></div>';
+                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . 'kb.<br />' . $lng_profile['select_image_help_5'] . '<br />' . $lng_profile['select_image_help_3'] . '</small></div>';
         }
         break;
 }

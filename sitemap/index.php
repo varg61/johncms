@@ -18,7 +18,7 @@
 -----------------------------------------------------------------
 */
 function sitemap() {
-    global $rootpath, $realtime, $home;
+    global $rootpath, $realtime, $set;
     $links_count = 140;
     $file = $rootpath . 'files/cache/sitemap.dat';
     if (file_exists($file) && filemtime($file) > ($realtime - 2592000)) {
@@ -39,10 +39,10 @@ function sitemap() {
                     $pages = ceil($count / $links_count);
                     if($pages > 1){
                         for($i = 0; $i < $pages; $i++){
-                            $out .= '<br /><a href="' . $home . '/sitemap/forum.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . checkout($text) . ' (part ' . ($i + 1) . ')</a>' . "\r\n";
+                            $out .= '<br /><a href="' . $set['homeurl'] . '/sitemap/forum.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . functions::checkout($text) . ' (part ' . ($i + 1) . ')</a>' . "\r\n";
                         }
                     } else {
-                        $out .= '<br /><a href="' . $home . '/sitemap/forum.php?id=' . $res['id'] . '">' . checkout($text) . '</a>' . "\r\n";
+                        $out .= '<br /><a href="' . $set['homeurl'] . '/sitemap/forum.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a>' . "\r\n";
                     }
                 }
             }
@@ -54,7 +54,7 @@ function sitemap() {
             while ($res = mysql_fetch_assoc($req)) {
                 $text = html_entity_decode($res['text']);
                 $text = mb_substr($text, 0, 30);
-                $out .= '<br /><a href="../library/index.php?id=' . $res['id'] . '">' . checkout($text) . '</a>' . "\r\n";
+                $out .= '<br /><a href="../library/index.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a>' . "\r\n";
             }
         }
         if (!empty($out)) {
