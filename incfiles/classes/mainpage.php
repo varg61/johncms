@@ -48,15 +48,15 @@ class mainpage {
                     // Если включены переносы, то обрабатываем
                     if ($this->settings['breaks'])
                         $text = str_replace("\r\n", "<br/>", $text);
-                    // Парсинг смайлов
-                    if ($this->settings['smileys']) {
-                        $text = call_user_func('functions::smileys', $text, 1);
-                    }
                     // Обрабатываем тэги
                     if ($this->settings['tags']) {
-                        $text = call_user_func('tags', $text);
+                        $text = functions::tags($text);
                     } else {
                         $text = functions::notags($text);
+                    }
+                    // Обрабатываем смайлы
+                    if ($this->settings['smileys']) {
+                        $text = functions::smileys($text);
                     }
                     // Определяем режим просмотра заголовка - текста
                     $news .= '<div class="news">';
