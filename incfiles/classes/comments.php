@@ -139,7 +139,7 @@ class comments {
     -----------------------------------------------------------------
     */
     private function add() {
-        global $datauser, $user_id, $realtime, $ipl, $agn;
+        global $datauser, $user_id, $realtime, $ip, $agn;
         $message = isset($_POST['message']) ? mb_substr(trim($_POST['message']), 0, $this->max_lenght) : false;
         $translit = isset($_POST['translit']);
 
@@ -168,7 +168,7 @@ class comments {
             `user_id` = '$user_id',
             `text` = '" . mysql_real_escape_string($message) . "',
             `time` = '$realtime',
-            `ip` = '" . $ipl . "',
+            `ip` = '" . $ip . "',
             `ua` = '" . mysql_real_escape_string($agn) . "'
         ");
         // Обновляем статистику пользователя

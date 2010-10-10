@@ -143,7 +143,7 @@ if ($user_id) {
     ");
 } else {
     // Фиксируем местоположение гостей
-    $sid = md5($ipl . $agn);
+    $sid = md5($ip . $agn);
     $movings = 0;
     $req = mysql_query("SELECT * FROM `cms_guests` WHERE `session_id` = '$sid' LIMIT 1");
     if (mysql_num_rows($req)) {
@@ -154,8 +154,8 @@ if ($user_id) {
             $movings = 0;
             $sql .= "`sestime` = '$realtime',";
         }
-        if ($res['ip'] != $ipl)
-            $sql .= "`ip` = '$ipl',";
+        if ($res['ip'] != $ip)
+            $sql .= "`ip` = '$ip',";
         if ($res['browser'] != $agn)
             $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
         if ($res['place'] != $headmod) {
@@ -169,7 +169,7 @@ if ($user_id) {
         // Если еще небыло в базе, то добавляем запись
         mysql_query("INSERT INTO `cms_guests` SET
             `session_id` = '$sid',
-            `ip` = '$ipl',
+            `ip` = '$ip',
             `browser` = '" . mysql_real_escape_string($agn) . "',
             `lastdate` = '$realtime',
             `sestime` = '$realtime',

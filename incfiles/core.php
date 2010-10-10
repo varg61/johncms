@@ -36,7 +36,7 @@ function autoload($name) {
 
 $core = new core() or die('Error: Core System');
 // Системные переменные
-$ipl = $core->ip;                   // Адрес IP
+$ip = $core->ip;                    // Адрес IP
 $set = $core->system_settings;      // Системные настройки
 $realtime = $core->system_time;     // Системное время с учетом сдвига
 $language = $core->system_language; // Язык системы
@@ -73,7 +73,7 @@ $agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES);
 и обрабатываем действие в случае Бана
 -----------------------------------------------------------------
 */
-$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '$ipl' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
+$req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '$ip' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
 if (mysql_num_rows($req) > 0) {
     $res = mysql_fetch_array($req);
     switch ($res['ban_type']) {

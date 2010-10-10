@@ -86,7 +86,7 @@ switch ($act) {
             $flood = functions::antiflood();
         } else {
             // Антифлуд для гостей
-            $req = mysql_query("SELECT `time` FROM `guest` WHERE `ip` = '$ipl' AND `browser` = '" . mysql_real_escape_string($agn) . "' AND `time` > '" . ($realtime - 60) . "'");
+            $req = mysql_query("SELECT `time` FROM `guest` WHERE `ip` = '$ip' AND `browser` = '" . mysql_real_escape_string($agn) . "' AND `time` > '" . ($realtime - 60) . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $flood = $realtime - $res['time'];
@@ -111,7 +111,7 @@ switch ($act) {
                 `user_id` = '$user_id',
                 `name` = '$from',
                 `text` = '" . mysql_real_escape_string($msg) . "',
-                `ip` = '$ipl',
+                `ip` = '$ip',
                 `browser` = '" . mysql_real_escape_string($agn) . "'
             ");
             // Фиксируем время последнего поста (антиспам)

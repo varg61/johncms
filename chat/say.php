@@ -77,7 +77,7 @@ switch ($tip) {
             `user_id` = '$user_id',
             `from` = '" . mysql_real_escape_string($usr) . "',
             `text` = '$msg',
-            `ip` = '$ipl',
+            `ip` = '$ip',
             `soft` = '" . mysql_real_escape_string(strtok($agn, ' ')) . "'");
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET
@@ -185,7 +185,7 @@ switch ($tip) {
             `user_id` = '$user_id',
             `from` = '$login',
             `text` = '$msg',
-            `ip` = '$ipl',
+            `ip` = '$ip',
             `soft` = '" . mysql_real_escape_string(strtok($agn, ' ')) . "'");
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET

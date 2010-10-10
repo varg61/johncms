@@ -82,7 +82,7 @@ if ($rights == 5 || $rights >= 6) {
                             `announce`='" . mysql_real_escape_string($anons) . "',
                             `avtor`='" . $login . "',
                             `text`='" . mysql_real_escape_string($txt) . "',
-                            `ip`='" . $ipl . "',
+                            `ip`='" . $ip . "',
                             `soft`='" . mysql_real_escape_string($agn) .
                         "',
                             `moder`='1';");
@@ -170,7 +170,7 @@ if ($rights == 5 || $rights >= 6) {
                                 '" . mysql_real_escape_string($anons) . "',
                                 '" . mysql_real_escape_string($txt) . "',
                                 '" . $login . "',
-                                '" . $ipl . "',
+                                '" . $ip . "',
                                 '" . mysql_real_escape_string($agn) . "',
                                 '1'
                                 );");

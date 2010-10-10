@@ -30,33 +30,33 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php?act=ipban"><b>' . $lng['ip_ban'] . '</b></a> | ' . $lng['ban_do'] . '</div>';
         if (isset($_POST['submit'])) {
             $error = '';
-            $ip = isset($_POST['ip']) ? trim($_POST['ip']) : '';
+            $get_ip = isset($_POST['ip']) ? trim($_POST['ip']) : '';
             $ban_term = isset($_POST['term']) ? intval($_POST['term']) : 1;
             $ban_url = isset($_POST['url']) ? htmlentities(trim($_POST['url']), ENT_QUOTES, 'UTF-8') : '';
             $reason = isset($_POST['reason']) ? htmlentities(trim($_POST['reason']), ENT_QUOTES, 'UTF-8') : '';
-            if (empty($ip)) {
+            if (empty($get_ip)) {
                 echo functions::display_error($lng['error_address'], '<a href="index.php?act=ipban&amp;mod=new">' . $lng['back'] . '</a>');
                 require_once('../incfiles/end.php');
                 exit;
             }
-            if (strstr($ip, '-')) {
+            if (strstr($get_ip, '-')) {
                 // Обрабатываем диапазон адресов
                 $mode = 1;
-                $array = explode('-', $ip);
-                $ip = trim($array[0]);
-                if (!$core->ip_valid($ip))
+                $array = explode('-', $get_ip);
+                $get_ip = trim($array[0]);
+                if (!$core->ip_valid($get_ip))
                     $error[] = $lng['error_firstip'];
                 else
-                    $ip1 = ip2long($ip);
-                $ip = trim($array[1]);
-                if (!$core->ip_valid($ip))
+                    $ip1 = ip2long($get_ip);
+                $get_ip = trim($array[1]);
+                if (!$core->ip_valid($get_ip))
                     $error[] = $lng['error_secondip'];
                 else
-                    $ip2 = ip2long($ip);
-            } elseif (strstr($ip, '*')) {
+                    $ip2 = ip2long($get_ip);
+            } elseif (strstr($get_ip, '*')) {
                 // Обрабатываем адреса с маской
                 $mode = 2;
-                $array = explode('.', $ip);
+                $array = explode('.', $get_ip);
                 for ($i = 0; $i < 4; $i++) {
                     if (!isset($array[$i]) || $array[$i] == '*') {
                         $ipt1[$i] = '0';
@@ -73,10 +73,10 @@ switch ($mod) {
             } else {
                 // Обрабатываем одиночный адрес
                 $mode = 3;
-                if (!$core->ip_valid($ip)) {
+                if (!$core->ip_valid($get_ip)) {
                     $error = $lng['error_address'];
                 } else {
-                    $ip1 = ip2long($ip);
+                    $ip1 = ip2long($get_ip);
                     $ip2 = $ip1;
                 }
             }
@@ -88,8 +88,8 @@ switch ($mod) {
                     echo functions::display_error($lng['ip_ban_conflict_address']);
                     while ($res = mysql_fetch_array($req)) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                        $ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
-                        echo '<a href="index.php?act=ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $ip . '</a> ';
+                        $get_ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
+                        echo '<a href="index.php?act=ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $get_ip . '</a> ';
                         switch ($res['ban_type']) {
                             case 2:
                                 echo $lng['redirect'];
@@ -112,7 +112,7 @@ switch ($mod) {
                 }
             }
             // Проверяем, не попадает ли IP администратора в забаниваемый диапазон
-            if ($ipl >= $ip1 && $ipl <= $ip2)
+            if ($ip >= $ip1 && $ip <= $ip2)
                 $error = $lng['ip_ban_conflict_admin'];
             if (!$error) {
                 // Окно подтверждения
@@ -230,16 +230,16 @@ switch ($mod) {
         if ($id) {
             // Поиск адреса по ссылке (ID)
             $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `id` = '$id' LIMIT 1");
-            $ip = '';
+            $get_ip = '';
         } elseif (isset($_POST['ip'])) {
             // Поиск адреса по запросу из формы
-            $ip = ip2long($_POST['ip']);
-            if (!$ip) {
+            $get_ip = ip2long($_POST['ip']);
+            if (!$get_ip) {
                 echo functions::display_error($lng['error_address'], '<a href="index.php?act=ipban&amp;mod=new">' . $lng['back'] . '</a>');
                 require_once('../incfiles/end.php');
                 exit;
             }
-            $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE '$ip' BETWEEN `ip1` AND `ip2` LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE '$get_ip' BETWEEN `ip1` AND `ip2` LIMIT 1");
         } else {
             echo functions::display_error($lng['error_address'], '<a href="index.php?act=ipban&amp;mod=new">' . $lng['back'] . '</a>');
             require_once('../incfiles/end.php');
@@ -252,8 +252,8 @@ switch ($mod) {
             exit;
         } else {
             $res = mysql_fetch_array($req);
-            $ip = $res['ip1'] == $res['ip2'] ? '<b>' . long2ip($res['ip1']) . '</b>' : '[<b>' . long2ip($res['ip1']) . '</b>] - [<b>' . long2ip($res['ip2']) . '</b>]';
-            echo '<div class="rmenu"><p>' . $ip . '</p></div>';
+            $get_ip = $res['ip1'] == $res['ip2'] ? '<b>' . long2ip($res['ip1']) . '</b>' : '[<b>' . long2ip($res['ip1']) . '</b>] - [<b>' . long2ip($res['ip2']) . '</b>]';
+            echo '<div class="rmenu"><p>' . $get_ip . '</p></div>';
             echo '<div class="menu"><p><h3>' . $lng['ban_type'] . '</h3>&nbsp;';
             switch ($res['ban_type']) {
                 case 2:
@@ -328,8 +328,8 @@ switch ($mod) {
             $req = mysql_query("SELECT * FROM `cms_ban_ip` ORDER BY `id` ASC LIMIT $start,$kmess");
             while ($res = mysql_fetch_array($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                $ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
-                echo '<a href="index.php?act=ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $ip . '</a> ';
+                $get_ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
+                echo '<a href="index.php?act=ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $get_ip . '</a> ';
                 switch ($res['ban_type']) {
                     case 2:
                         echo $lng['redirect'];

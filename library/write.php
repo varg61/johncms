@@ -69,7 +69,7 @@ if ($ms['ip'] == 0) {
             `announce` = '" . mysql_real_escape_string($anons) . "',
             `text` = '" . mysql_real_escape_string($text) . "',
             `avtor` = '$login',
-            `ip` = '$ipl',
+            `ip` = '$ip',
             `soft` = '" . mysql_real_escape_string($agn) . "',
             `moder` = '$md'");
             $cid = mysql_insert_id();

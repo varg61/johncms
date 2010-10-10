@@ -54,7 +54,7 @@ if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_lib_comm'] || $rights >=
         `avtor` = '" . $login . "',
         `count` = '" . $user_id . "',
         `text` = '" . $msg . "',
-        `ip` = '" . $ipl . "',
+        `ip` = '" . $ip . "',
         `soft` = '" . mysql_real_escape_string($agn) . "'");
         $fpst = $datauser['komm'] + 1;
         mysql_query("UPDATE `users` SET

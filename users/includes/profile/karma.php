@@ -28,7 +28,7 @@ if ($set_karma['on']) {
                 $error = array ();
                 if ($user['rights'] && $set_karma['adm'])
                     $error[] = $lng_karma['error_not_for_admins'];
-                if ($user['ip'] == $ipl)
+                if ($user['ip'] == $ip)
                     $error[] = $lng_karma['error_rogue'];
                 if ($datauser['total_on_site'] < $set_karma['karma_time'] || $datauser['postforum'] < $set_karma['forum'])
                     $error[] = $lng_karma['error_terms_1'] . ' '

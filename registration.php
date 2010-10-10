@@ -111,18 +111,13 @@ if (isset($_POST['submit'])) {
             `about` = '$reg_about',
             `sex` = '$reg_sex',
             `rights` = '0',
-            `ip` = '$ipl',
+            `ip` = '$ip',
             `browser` = '" . mysql_real_escape_string($agn) . "',
             `datereg` = '$realtime',
             `lastdate` = '$realtime',
             `preg` = '$preg'
         ");
         $usid = mysql_insert_id();
-        mysql_query("INSERT INTO `cms_users_iphistory` SET
-            `user_id` = '$usid',
-            `user_ip` = '$ipl',
-            `time` = '$realtime'
-        ");
         echo '<div class="menu"><p><h3>' . $lng_reg['you_registered'] . '</h3>' .
             $lng_reg['your_id'] . ': <b>' . $usid . '</b><br/>' .
             $lng_reg['your_login'] . ': <b>' . $reg_nick . '</b><br/>' .
