@@ -60,7 +60,7 @@ if ($id) {
     Показываем общий список тех, кто в форуме
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr"><b>' . $lng_forum['who_in_forum'] . '</b></div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['who_in_forum'] . '</div>';
     if ($rights > 0)
         echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who">' . $lng['authorized'] . '</a> | ' . $lng['guests'] : $lng['authorized'] . ' | <a href="index.php?act=who&amp;do=guest">' . $lng['guests'] . '</a>') . '</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
