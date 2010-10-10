@@ -709,7 +709,7 @@ class functions {
     Колличество зарегистрированных пользователей
     -----------------------------------------------------------------
     */
-    function stat_countusers() {
+    function stat_users($refresh = false) {
         global $realtime;
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
         $res = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "'"), 0);

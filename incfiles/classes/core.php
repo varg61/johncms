@@ -74,7 +74,8 @@ class core {
     -----------------------------------------------------------------
     */
     private function db_connect() {
-        require('db.php');
+        global $rootpath;
+        require($rootpath. 'incfiles/db.php');
         $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to DB server');
         @mysql_select_db($db_name) or die('Error: cannot select DB');
         @mysql_query("SET NAMES 'utf8'", $connect);

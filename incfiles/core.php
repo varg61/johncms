@@ -21,8 +21,19 @@ mb_internal_encoding('UTF-8');
 if (!isset($rootpath))
     $rootpath = '../';
 
-require('class_functions.php');
-require('class_core.php');
+/*
+-----------------------------------------------------------------
+Автозагрузка Классов
+-----------------------------------------------------------------
+*/
+spl_autoload_register('autoload');
+function autoload($name) {
+    global $rootpath;
+    $file = $rootpath . 'incfiles/classes/' . $name . '.php';
+    if (file_exists($file))
+        require_once($file);
+}
+
 $core = new core() or die('Error: Core System');
 // Системные переменные
 $ipl = $core->ip;                   // Адрес IP

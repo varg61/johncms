@@ -17,7 +17,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 ////////////////////////////////////////////////////////////
 // Главное меню сайта                                     //
 ////////////////////////////////////////////////////////////
-require('incfiles/class_mainpage.php');
 $mp = new mainpage();
 echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
 echo $mp->news;
@@ -33,7 +32,7 @@ echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a
     '<div class="menu"><a href="gallery/">' . $lng['gallery'] . '</a> (' . functions::stat_gallery() . ')</div>';
 if ($user_id || $set['active']) {
     echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-        '<div class="menu"><a href="users/index.php">' . $lng['users'] . '</a> (' . functions::stat_countusers() . ')</div>' .
+        '<div class="menu"><a href="users/index.php">' . $lng['users'] . '</a> (' . functions::stat_users() . ')</div>' .
         '<div class="menu"><a href="users/album.php">' . $lng['photo_albums'] . '</a> (' . functions::count_photo() . ')</div>' .
         '<div class="menu">' . $lng['blogs'] . '</div>';
 }
