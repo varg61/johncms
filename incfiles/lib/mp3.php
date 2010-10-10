@@ -166,7 +166,7 @@ class MP3_Id
             print ($this->debugbeg . "_read_v1()<HR>\n");
 
         $mqr = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        //set_magic_quotes_runtime(0);
 
         if (!($f = @fopen($this->file, 'rb')))
         {
@@ -180,7 +180,7 @@ class MP3_Id
 
         $r = fread($f, 128);
         fclose($f);
-        set_magic_quotes_runtime($mqr);
+        //set_magic_quotes_runtime($mqr);
 
         if ($this->debug)
         {
@@ -381,7 +381,7 @@ class MP3_Id
         $file = $this->file;
 
         $mqr = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        //set_magic_quotes_runtime(0);
 
         if (!($f = fopen($file, 'rb')))
         {
@@ -535,7 +535,7 @@ class MP3_Id
         }
 
         fclose($f);
-        set_magic_quotes_runtime($mqr);
+        //set_magic_quotes_runtime($mqr);
 
         if ($bits[11] == 0)
         {
