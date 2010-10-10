@@ -48,9 +48,8 @@ class core {
                 die('Flood!!!');
         }
 
-        // Удаляем слэши, если открыт magic_quotes_gpc
-        if (get_magic_quotes_gpc())
-            $this->del_slashes();
+        // Удаляем слэши
+        $this->del_slashes();
         // Стартуем сессию
         session_name('SESID');
         session_start();
@@ -58,10 +57,8 @@ class core {
         $this->db_connect();
         // Получаем системные настройки
         $this->system_settings();
-
         // Автоочистка системы
-        if ($this->system_settings['clean_time'] < $this->system_time - 43200)
-            $this->autoclean();
+        $this->autoclean();
         // Авторизация пользователей
         $this->user_authorize();
         // Загружаем язык системы
@@ -75,7 +72,7 @@ class core {
     */
     private function db_connect() {
         global $rootpath;
-        require($rootpath. 'incfiles/db.php');
+        require($rootpath . 'incfiles/db.php');
         $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to DB server');
         @mysql_select_db($db_name) or die('Error: cannot select DB');
         @mysql_query("SET NAMES 'utf8'", $connect);
@@ -140,7 +137,7 @@ class core {
     -----------------------------------------------------------------
     */
     public function ip_valid($ip = '') {
-        if(empty($ip))
+        if (empty($ip))
             return false;
         $d = explode('.', $ip);
 
@@ -157,26 +154,26 @@ class core {
     -----------------------------------------------------------------
     */
     private function del_slashes() {
-        $in = array (
-            &$_GET,
-            &$_POST,
-            &$_COOKIE
-        );
-
-        while (list($k, $v) = each($in)) {
-            foreach ($v as $key => $val) {
-                if (!is_array($val)) {
-                    $in[$k][$key] = stripslashes($val);
-                    continue;
+        if (get_magic_quotes_gpc()) {
+            $in = array (
+                &$_GET,
+                &$_POST,
+                &$_COOKIE
+            );
+            while (list($k, $v) = each($in)) {
+                foreach ($v as $key => $val) {
+                    if (!is_array($val)) {
+                        $in[$k][$key] = stripslashes($val);
+                        continue;
+                    }
+                    $in[] = &$in[$k][$key];
                 }
-                $in[] = &$in[$k][$key];
             }
-        }
-        unset($in);
-
-        if (!empty($_FILES)) {
-            foreach ($_FILES as $k => $v) {
-                $_FILES[$k]['name'] = stripslashes((string)$v['name']);
+            unset($in);
+            if (!empty($_FILES)) {
+                foreach ($_FILES as $k => $v) {
+                    $_FILES[$k]['name'] = stripslashes((string)$v['name']);
+                }
             }
         }
     }
@@ -369,12 +366,17 @@ class core {
     -----------------------------------------------------------------
     */
     private function autoclean() {
-        // Очищаем таблицу статистики гостей
-        mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($this->system_time - 600) . "'");
-        mysql_query("OPTIMIZE TABLE `cms_guests`");
-        // Очищаем таблицу истории IP адресов
-        //TODO: Написать автоочистку истории адресов
-        mysql_query("UPDATE `cms_settings` SET  `val`='" . $this->system_time . "' WHERE `key`='clean_time'");
+        if (!isset($this->system_settings['clean_time']))
+            mysql_query("INSERT INTO `cms_settings` SET `key` = 'clean_time', `val` = '0'");
+
+        if ($this->system_settings['clean_time'] < $this->system_time - 43200) {
+            // Очищаем таблицу статистики гостей
+            mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($this->system_time - 600) . "'");
+            mysql_query("OPTIMIZE TABLE `cms_guests`");
+            // Очищаем таблицу истории IP адресов
+            //TODO: Написать автоочистку истории адресов
+            mysql_query("UPDATE `cms_settings` SET  `val` = '" . $this->system_time . "' WHERE `key` = 'clean_time' LIMIT 1");
+        }
     }
 }
 ?>
