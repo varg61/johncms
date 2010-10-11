@@ -239,10 +239,7 @@ switch ($do) {
         $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT $start, $kmess");
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $text = $res['text'];
-            $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
-            $text = str_replace("\r\n", "<br/>", $text);
-            $text = functions::tags($text);
+            $text = functions::checkout($res['text'], 1, 1);
             if ($set_user['smileys'])
                 $text = functions::smileys($text, 1);
             $vr = $res['time'] + $set_user['sdvig'] * 3600;

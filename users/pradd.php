@@ -436,7 +436,7 @@ if ($user_id) {
             }
             $mass = mysql_fetch_array(mysql_query("select * from `users` where `name`='" . $massiv1['author'] . "';"));
             $text = $massiv1['text'];
-            $text = functions::tags($text);
+            $text = tags($text);
             if ($set_user['smileys'])
                 $text = functions::smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             echo "<p>От <a href='profile.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
@@ -532,7 +532,7 @@ if ($user_id) {
             $massiv1 = mysql_fetch_array($messages1);
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='$massiv1[user]';"));
             $text = $massiv1['text'];
-            $text = functions::tags($text);
+            $text = tags($text);
             if ($set_user['smileys'])
                 $text = functions::smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             echo "<p>Для <a href='profile/index.php?id=" . $mass['id'] . "'>$massiv1[user]</a><br/>";

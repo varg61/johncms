@@ -165,9 +165,9 @@ class functions {
             $str = nl2br($str);
         elseif ($br == 2)
             $str = str_replace("\r\n", ' ', $str);
-
+        //TODO: Передеать на новую функцию подсветки Тэгов
         if ($tags == 1)
-            $str = self::tags($str);
+            $str = call_user_func('tags', $str);
         elseif ($tags == 2)
             $str = self::notags($str);
         $str = strtr($str, array (
@@ -906,6 +906,7 @@ class functions {
         $var = preg_replace('#\[green\](.*?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
         $var = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
         $var = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $var);
+        $var = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1&#058;", $var);
         $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'functions::tags_url', $var);
         return $var;
     }

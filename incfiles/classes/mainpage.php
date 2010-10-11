@@ -50,7 +50,7 @@ class mainpage {
                         $text = str_replace("\r\n", "<br/>", $text);
                     // Обрабатываем тэги
                     if ($this->settings['tags']) {
-                        $text = functions::tags($text);
+                        $text = call_user_func('tags', $text);
                     } else {
                         $text = functions::notags($text);
                     }

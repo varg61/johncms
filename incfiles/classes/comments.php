@@ -101,7 +101,7 @@ class comments {
             $out = '';
             while ($res = mysql_fetch_assoc($req)) {
                 $out .= $i % 2 ? '<div class="' . $this->style_list2 . '">' : '<div class="' . $this->style_list1 . '">';
-                $out .= functions::smileys(functions::tags(functions::checkout($res['text'])));
+                $out .= functions::smileys(functions::checkout($res['text'], 1, 1));
                 if ($rights >= 6) {
                     $out .= '<div class="' . $this->style_func . '">';
                     $out .= '<a href="">' . $this->lng['edit'] . '</a> | ';

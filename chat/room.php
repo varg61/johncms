@@ -81,7 +81,7 @@ if (mysql_num_rows($req)) {
         } elseif ($res['user_id']) {
             echo '<b>' . $res['from'] . '</b> &gt;&gt; ';
         }
-        $text = functions::tags($res['text']);
+        $text = tags($res['text']);
         if ($offsm != 1) {
             $text = functions::smileys($text, ($mass1['rights'] >= 1) ? 1 : 0);
         }
