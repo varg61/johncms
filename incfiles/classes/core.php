@@ -292,7 +292,7 @@ class core {
     private function user_ip() {
         if ($this->user_data['ip'] != $this->ip) {
             // Удаляем из истории текущий адрес (если есть)
-            mysql_query("DELETE FROM `cms_users_iphistory` WHERE `user_id` = '" . $this->user_id . "' AND `user_ip` = '" . $this->ip . "' LIMIT 1");
+            mysql_query("DELETE FROM `cms_users_iphistory` WHERE `user_id` = '" . $this->user_id . "' AND `ip` = '" . $this->ip . "' LIMIT 1");
             if (!empty($this->user_data['ip']) && $this->ip_valid(long2ip($this->user_data['ip']))) {
                 // Вставляем в историю предыдущий адрес IP
                 mysql_query("INSERT INTO `cms_users_iphistory` SET
