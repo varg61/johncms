@@ -297,7 +297,7 @@ class core {
                 // Вставляем в историю предыдущий адрес IP
                 mysql_query("INSERT INTO `cms_users_iphistory` SET
                     `user_id` = '" . $this->user_id . "',
-                    `user_ip` = '" . $this->user_data['ip'] . "',
+                    `ip` = '" . $this->user_data['ip'] . "',
                     `time` = '" . $this->user_data['lastdate'] . "'
                 ");
             }
