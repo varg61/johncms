@@ -35,18 +35,6 @@ if ($error) {
     exit;
 }
 
-function provcat($catalog) {
-    $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
-    $cat2 = mysql_num_rows($cat1);
-    $adrdir = mysql_fetch_array($cat1);
-
-    if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]"))) {
-        echo 'Ошибка при выборе категории<br/><a href="?">К категориям</a><br/>';
-        require_once('../incfiles/end.php');
-        exit;
-    }
-}
-
 $array = array (
     'scan_dir',
     'rat',
