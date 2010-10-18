@@ -23,9 +23,9 @@ require('../incfiles/head.php');
 -----------------------------------------------------------------
 */
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['birthday_men'] . '</div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1'"), 0);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . date('j', $realtime) . "' AND `monthb` = '" . date('n', $realtime) . "' AND `preg` = '1'"), 0);
 if ($total) {
-    $req = mysql_query("SELECT * FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1' LIMIT $start, $kmess");
+    $req = mysql_query("SELECT * FROM `users` WHERE `dayb` = '" . date('j', $realtime) . "' AND `monthb` = '" . date('n', $realtime) . "' AND `preg` = '1' LIMIT $start, $kmess");
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo functions::display_user($res) . '</div>';

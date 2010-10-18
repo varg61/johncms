@@ -20,6 +20,7 @@ class core {
     public $system_time;                 // Системное время
     public $system_language = 'ru';      // Язык системы
     public $language_phrases = array (); // Массив с фразами выбранного языка
+    public $regban = false;              // Запрет регистрации пользователей
 
     // Пользовательские переменные
     public $user_id = false;          // Идентификатор пользователя
@@ -174,6 +175,35 @@ class core {
                 foreach ($_FILES as $k => $v) {
                     $_FILES[$k]['name'] = stripslashes((string)$v['name']);
                 }
+            }
+        }
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Проверяем адрес IP на Бан
+    -----------------------------------------------------------------
+    */
+    function ip_ban() {
+        $req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . $this->ip . "' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
+        if (mysql_num_rows($req)) {
+            $res = mysql_fetch_array($req);
+            switch ($res['ban_type']) {
+                case 2:
+                    if (!empty($res['link']))
+                        header('Location: ' . $res['link']);
+                    else
+                        header('Location: http://johncms.com');
+                    exit;
+                    break;
+
+                case 3:
+                    $this->regban = true;
+                    break;
+
+                default :
+                    header("HTTP/1.0 404 Not Found");
+                    exit;
             }
         }
     }

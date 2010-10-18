@@ -52,15 +52,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     */
     $textl = $lng['community'];
     require('../incfiles/head.php');
-    $mon = date("m", $realtime);
-    if (substr($mon, 0, 1) == 0) {
-        $mon = str_replace("0", "", $mon);
-    }
-    $day = date("d", $realtime);
-    if (substr($day, 0, 1) == 0) {
-        $day = str_replace("0", "", $day);
-    }
-    $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '$day' AND `monthb` = '$mon' AND `preg` = '1'"), 0);
+    $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . date('j', $realtime) . "' AND `monthb` = '" . date('n', $realtime) . "' AND `preg` = '1'"), 0);
     $count_adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0"), 0);
     echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
         '<div class="gmenu"><form action="index.php?act=search" method="post">' .

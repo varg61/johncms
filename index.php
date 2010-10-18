@@ -60,7 +60,7 @@ switch ($act) {
         echo '<div class="phdr"><b>' . $lng['digest'] . '</b></div>';
         echo '<div class="gmenu"><p>' . $lng['hi'] . ', <b>' . $login . '</b><br/>' . $lng['welcome_to'] . ' ' . $set['copyright'] . '!<br /><a href="index.php">' . $lng['enter_on_site'] . '</a></p></div>';
         // Поздравление с днем рождения
-        if ($datauser['dayb'] == $day && $datauser['monthb'] == $mon) {
+        if ($datauser['dayb'] == date('j', $realtime) && $datauser['monthb'] == date('n', $realtime)) {
             echo '<div class="rmenu"><p>' . $lng['happy_birthday'] . '</p></div>';
         }
         // Дайджест Администратора

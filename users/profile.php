@@ -84,7 +84,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     if (!empty($menu))
         echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
     //Уведомление о дне рожденья
-    if ($user['dayb'] == $day && $user['monthb'] == $mon) {
+    if ($user['dayb'] == date('j', $realtime) && $user['monthb'] == date('n', $realtime)) {
         echo '<div class="gmenu">' . $lng['birthday'] . '!!!</div>';
     }
     // Информация о юзере
