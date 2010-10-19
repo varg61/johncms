@@ -77,7 +77,7 @@ if ($set_karma['on']) {
                             '<small>' . $lng['minmax_2_500'] . '</small>' .
                             '<p><input type="submit" name="submit" value="' . $lng['vote'] . '"/></p>' .
                             '</div></form>' .
-                            '<div class="list2"><a href="profile/index.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
+                            '<div class="list2"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                     }
                 }
             } else {

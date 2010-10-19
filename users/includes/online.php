@@ -51,7 +51,7 @@ if ($total) {
             'news'          => '<a href="../news/index.php">' . $lng_online['where_news'] . '</a>',
             'online'        => $lng_online['where_here'],
             'pm'            => $lng_online['where_pm'],
-            'profile'       => '<a href="profile/index.php">' . $lng_online['where_profile'] . '</a>',
+            'profile'       => '<a href="profile.php">' . $lng_online['where_profile'] . '</a>',
             'userlist'      => '<a href="index.php?act=userlist">' . $lng_online['where_users_list'] . '</a>',
             'users'         => '<a href="index.php">' . $lng['community'] . '</a>',
             'userstop'      => '<a href="index.php?act=top">' . $lng_online['where_users_top'] . '</a>'
