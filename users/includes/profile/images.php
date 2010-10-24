@@ -43,7 +43,7 @@ switch ($mod) {
                     'image/gif',
                     'image/png'
                 );
-                $handle->file_max_size = 1024 * $flsz;
+                $handle->file_max_size = 1024 * $set['flsz'];
                 $handle->file_overwrite = true;
                 $handle->image_resize = true;
                 $handle->image_x = 32;
@@ -63,10 +63,10 @@ switch ($mod) {
             echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['id'] . '">' .
                 '<div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
                 '<input type="file" name="imagefile" value="" />' .
-                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" /></p>' .
+                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" /></p>' .
                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" />' .
                 '</p></div></form>' .
-                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $flsz . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4']
+                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4']
                 . '</small></div>';
         }
         break;
@@ -84,7 +84,7 @@ switch ($mod) {
                     'image/gif',
                     'image/png'
                 );
-                $handle->file_max_size = 1024 * $flsz;
+                $handle->file_max_size = 1024 * $set['flsz'];
                 $handle->file_overwrite = true;
                 $handle->image_resize = true;
                 $handle->image_x = 320;
@@ -114,7 +114,7 @@ switch ($mod) {
         } else {
             echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '"><div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
                 '<input type="file" name="imagefile" value="" />' .
-                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $flsz) . '" /></p>' .
+                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" /></p>' .
                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
                 '</div></form>' .
                 '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . 'kb.<br />' . $lng_profile['select_image_help_5'] . '<br />' . $lng_profile['select_image_help_3'] . '</small></div>';
