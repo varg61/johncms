@@ -399,12 +399,14 @@ class core {
         if (!isset($this->system_settings['clean_time']))
             mysql_query("INSERT INTO `cms_settings` SET `key` = 'clean_time', `val` = '0'");
 
-        if ($this->system_settings['clean_time'] < $this->system_time - 43200) {
-            // Очищаем таблицу статистики гостей
-            mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($this->system_time - 600) . "'");
+        if ($this->system_settings['clean_time'] < $this->system_time - 86400) {
+            // Очищаем таблицу статистики гостей (удаляем записи старше 1 дня)
+            mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($this->system_time - 86400) . "'");
             mysql_query("OPTIMIZE TABLE `cms_guests`");
-            // Очищаем таблицу истории IP адресов
-            //TODO: Написать автоочистку истории адресов
+            // Очищаем таблицу истории IP адресов (удаляем записи старше 1 месяца)
+            mysql_query("DELETE FROM `cms_users_iphistory` WHERE `time` < '" . ($this->system_time - 2592000) . "'");
+            mysql_query("OPTIMIZE TABLE `cms_users_iphistory`");
+            // Обновляем метку времени
             mysql_query("UPDATE `cms_settings` SET  `val` = '" . $this->system_time . "' WHERE `key` = 'clean_time' LIMIT 1");
         }
     }

@@ -51,7 +51,6 @@ $set = $core->system_settings;      // Системные настройки
 $realtime = $core->system_time;     // Системное время с учетом сдвига
 $language = $core->system_language; // Язык системы
 $lng = $core->language_phrases;     // Фразы выбранного языка
-$regban = $core->regban;            // Запрет регистрации пользователей
 
 /*
 -----------------------------------------------------------------

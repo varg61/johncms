@@ -15,14 +15,14 @@
 define('_IN_JOHNCMS', 1);
 $textl = $lng['registration'];
 $rootpath = '';
-require_once('incfiles/core.php');
-require_once('incfiles/head.php');
+require('incfiles/core.php');
+require('incfiles/head.php');
 // Загружаем язык Регистрации
 $lng_reg = $core->load_lng('reg');
 // Если регистрация закрыта, выводим предупреждение
-if ($regban || !$set['mod_reg']) {
+if ($core->regban || !$set['mod_reg']) {
     echo '<p>' . $lng_reg['registration_closed'] . '</p>';
-    require_once("incfiles/end.php");
+    require('incfiles/end.php');
     exit;
 }
 echo '<div class="phdr"><b>' . $lng['registration'] . '</b></div>';
@@ -64,7 +64,7 @@ if (isset($_POST['submit'])) {
     $reg_name = isset($_POST['imname']) ? trim($_POST['imname']) : '';
     $reg_about = isset($_POST['about']) ? trim($_POST['about']) : '';
     $reg_sex = isset($_POST['sex']) ? trim($_POST['sex']) : '';
-    $error = array();
+    $error = array ();
     // Проверка Логина
     if (empty($reg_nick))
         $error[] = $lng_reg['error_nick_empty'];
@@ -118,10 +118,7 @@ if (isset($_POST['submit'])) {
             `preg` = '$preg'
         ");
         $usid = mysql_insert_id();
-        echo '<div class="menu"><p><h3>' . $lng_reg['you_registered'] . '</h3>' .
-            $lng_reg['your_id'] . ': <b>' . $usid . '</b><br/>' .
-            $lng_reg['your_login'] . ': <b>' . $reg_nick . '</b><br/>' .
-            $lng_reg['your_password'] . ': <b>' . $reg_pass . '</b></p>' .
+        echo '<div class="menu"><p><h3>' . $lng_reg['you_registered'] . '</h3>' . $lng_reg['your_id'] . ': <b>' . $usid . '</b><br/>' . $lng_reg['your_login'] . ': <b>' . $reg_nick . '</b><br/>' . $lng_reg['your_password'] . ': <b>' . $reg_pass . '</b></p>' .
             '<p><h3>' . $lng_reg['your_link'] . '</h3><input type="text" value="' . $set['homeurl'] . '/login.php?id=' . $usid . '&amp;p=' . $reg_pass . '" /><br/>';
         if ($set['mod_reg'] == 1) {
             echo '<p><span class="red"><b>' . $lng_reg['moderation_note'] . '</b></span></p>';
@@ -133,14 +130,13 @@ if (isset($_POST['submit'])) {
         echo functions::display_error($error);
         regform();
     }
-}
-// Форма регистрации
-else {
+} else {
+    // Форма регистрации
     if ($set['mod_reg'] == 1) {
         echo '<div class="rmenu"><p>' . $lng_reg['moderation_warning'] . '</p></div>';
     }
     regform();
 }
 
-require_once('incfiles/end.php');
+require('incfiles/end.php');
 ?>
