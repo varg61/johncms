@@ -19,9 +19,7 @@ if ($rights < 9) {
     header('Location: http://johncms.com/?err');
     exit;
 }
-
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['site_settings'] . '</div>';
-
 if (isset($_POST['submit'])) {
     /*
     -----------------------------------------------------------------
@@ -41,6 +39,7 @@ if (isset($_POST['submit'])) {
     $req = mysql_query("SELECT * FROM `cms_settings`");
     $set = array ();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
+    $realtime = time() + $set['timeshift'] * 3600;
     echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
 }
 /*
@@ -48,24 +47,31 @@ if (isset($_POST['submit'])) {
 Форма ввода параметров системы
 -----------------------------------------------------------------
 */
-echo '<form action="index.php?act=settings" method="post"><div class="menu"><p>';
-// Настройка времени
-echo '<h3>' . $lng['clock_settings'] . '</h3>';
-echo '&#160;<input type="text" name="timeshift" size="2" maxlength="2" value="' . $set['timeshift'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />';
-echo '&#160;<span style="font-weight:bold; background-color:#CCC">' . date("H:i") . '</span> ' . $lng['system_time'];
+echo '<form action="index.php?act=settings" method="post"><div class="menu">';
 // Общие настройки
-echo '</p><p><h3>' . $lng['common_settings'] . '</h3>';
-echo '&#160;'. $lng['site_url'] . ':<br/>&#160;<input type="text" name="homeurl" value="' . htmlentities($set['homeurl']) . '"/><br/>';
-echo '&#160;'. $lng['site_copyright'] . ':<br/>&#160;<input type="text" name="copyright" value="' . htmlentities($set['copyright'], ENT_QUOTES, 'UTF-8') . '"/><br/>';
-echo '&#160;'. $lng['site_email'] . ':<br/>&#160;<input name="madm" maxlength="50" value="' . htmlentities($set['email']) . '"/><br />';
-echo '&#160;'. $lng['file_maxsize'] . ' (kb):<br />&#160;<input type="text" name="flsz" value="' . intval($set['flsz']) . '"/><br />';
-echo '&#160;<input name="gz" type="checkbox" value="1" ' . ($set['gzip'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['gzip_compress'];
+echo '<p>' .
+    '<h3>' . $lng['common_settings'] . '</h3>' .
+    $lng['site_url'] . ':<br/>' . '<input type="text" name="homeurl" value="' . htmlentities($set['homeurl']) . '"/><br/>' .
+    $lng['site_copyright'] . ':<br/>' . '<input type="text" name="copyright" value="' . htmlentities($set['copyright'], ENT_QUOTES, 'UTF-8') . '"/><br/>' .
+    $lng['site_email'] . ':<br/>' . '<input name="madm" maxlength="50" value="' . htmlentities($set['email']) . '"/><br />' .
+    $lng['file_maxsize'] . ' (kb):<br />' . '<input type="text" name="flsz" value="' . intval($set['flsz']) . '"/><br />' .
+    '<input name="gz" type="checkbox" value="1" ' . ($set['gzip'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['gzip_compress'] .
+    '</p>';
+// Настройка времени
+echo '<p>' .
+    '<h3>' . $lng['clock_settings'] . '</h3>' .
+    '<input type="text" name="timeshift" size="2" maxlength="2" value="' . $set['timeshift'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />' .
+    '<span style="font-weight:bold; background-color:#C0FFC0">' . date("H:i", $realtime) . '</span> ' . $lng['system_time'] .
+    '<br /><span style="font-weight:bold; background-color:#FFC0C0">' . date("H:i") . '</span> ' . $lng['server_time'] .
+    '</p>';
 // META тэги
-echo '</p><p><h3>' . $lng['meta_tags'] . '</h3>';
-echo '&#160;' . $lng['meta_keywords'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_key">' . $set['meta_key'] . '</textarea><br />';
-echo '&#160;' . $lng['meta_description'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_desc">' . $set['meta_desc'] . '</textarea>';
+echo '<p>' .
+    '<h3>' . $lng['meta_tags'] . '</h3>' .
+    '&#160;' . $lng['meta_keywords'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_key">' . $set['meta_key'] . '</textarea><br />' .
+    '&#160;' . $lng['meta_description'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_desc">' . $set['meta_desc'] . '</textarea>' .
+    '</p>';
 // Выбор темы оформления
-echo '</p><p><h3>' . $lng['design_template'] . '</h3>&#160;<select name="skindef">';
+echo '<p><h3>' . $lng['design_template'] . '</h3>&#160;<select name="skindef">';
 $dir = opendir('../theme');
 while ($skindef = readdir($dir)) {
     if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn')) {
@@ -74,8 +80,8 @@ while ($skindef = readdir($dir)) {
     }
 }
 closedir($dir);
-echo '</select>';
-echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>';
-echo '<div class="phdr">&#160;</div>';
-echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+echo '</select>' .
+    '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
+    '<div class="phdr">&#160;</div>' .
+    '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 ?>
