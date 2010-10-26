@@ -31,9 +31,13 @@ echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
 echo '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>';
 switch ($mod) {
     case 'guest':
-        // Список сообщений в Гостевой
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-        $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '" . $user['id'] . "' LIMIT $start, $kmess");
+        /*
+        -----------------------------------------------------------------
+        Список сообщений в Гостевой
+        -----------------------------------------------------------------
+        */
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `user_id` = '" . $user['id'] . "'" . ($rights >= 1 ? '' : " AND `adm` = '0'")), 0);
+        $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '" . $user['id'] . "'" . ($rights >= 1 ? '' : " AND `adm` = '0'") . " ORDER BY `id` DESC LIMIT $start, $kmess");
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_assoc($req)) {
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . functions::checkout($res['text'], 2, 1) . '<div class="sub">' .
@@ -47,7 +51,11 @@ switch ($mod) {
         break;
 
     case 'topic':
-        // Список тем Форума
+        /*
+        -----------------------------------------------------------------
+        Список тем Форума
+        -----------------------------------------------------------------
+        */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 't'" . ($rights >= 7 ? '' : " AND `close`!='1'")), 0);
         $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 't'" . ($rights >= 7 ? '' : " AND `close`!='1'") . " ORDER BY `id` DESC LIMIT $start, $kmess");
         if (mysql_num_rows($req)) {
@@ -73,7 +81,11 @@ switch ($mod) {
         break;
 
     default:
-        // Список постов Форума
+        /*
+        -----------------------------------------------------------------
+        Список постов Форума
+        -----------------------------------------------------------------
+        */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close`!='1'")), 0);
         $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm' " . ($rights >= 7 ? '' : " AND `close`!='1'") . " ORDER BY `id` DESC LIMIT $start, $kmess");
         if (mysql_num_rows($req)) {
