@@ -102,7 +102,7 @@ switch ($act) {
         if ($set_karma['on']) {
             $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
             if ($total_karma > 0)
-                echo '<li><a href="users/karma.php?act=new">' . $lng['new_responses'] . '</a> (' . $total_karma . ')</li>';
+                echo '<li><a href="users/profile.php?act=karma&amp;mod=new">' . $lng['new_responses'] . '</a> (' . $total_karma . ')</li>';
         }
         $old = $realtime - (3 * 24 * 3600);
         $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . $old), 0);
