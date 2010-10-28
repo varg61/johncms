@@ -211,7 +211,7 @@ switch ($act) {
             }
         } else {
             // Показываем каталоги с Аватарами
-            echo '<div class="phdr"><b>' . $lng['avatars'] . '</b></div>';
+            echo '<div class="phdr"><a href="faq.php"><b>F.A.Q.</b></a> | ' . $lng['avatars'] . '</div>';
             $dir = glob($rootpath . 'images/avatars/*', GLOB_ONLYDIR);
             $total = 0;
             $total_dir = count($dir);
