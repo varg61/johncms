@@ -142,34 +142,35 @@ if (empty($id)) {
 -----------------------------------------------------------------
 */
 $array = array (
-    'addfile',
-    'addvote',
-    'close',
-    'deltema',
-    'delvote',
-    'editpost',
-    'editvote',
-    'file',
-    'files',
-    'filter',
-    'loadtem',
-    'massdel',
-    'moders',
-    'new',
-    'nt',
-    'per',
-    'post',
-    'ren',
-    'restore',
-    'say',
-    'tema',
-    'users',
-    'who',
-    'vip',
-    'vote'
+    'addfile' => 'includes',
+    'addvote' => 'includes',
+    'close' => 'includes',
+    'deltema' => 'includes',
+    'delvote' => 'includes',
+    'editpost' => 'includes',
+    'editvote' => 'includes',
+    'file' => 'includes',
+    'files' => 'includes',
+    'filter' => 'includes',
+    'loadtem' => 'includes',
+    'massdel' => 'includes',
+    'moders' => 'includes',
+    'new' => 'includes',
+    'nt' => 'includes',
+    'per' => 'includes',
+    'post' => 'includes',
+    'ren' => 'includes',
+    'restore' => 'includes',
+    'say' => 'includes',
+    'tema' => 'includes',
+    'users' => 'includes',
+    'vip' => 'includes',
+    'vote' => 'includes',
+    'who' => 'includes'
 );
-if (in_array($act, $array) && file_exists($act . '.php')) {
-    require_once($act . '.php');
+$path = !empty($array[$act]) ? $array[$act] . '/' : '';
+if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
+    require_once($path . $act . '.php');
 } else {
     require('../incfiles/head.php');
 
