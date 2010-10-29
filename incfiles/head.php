@@ -32,7 +32,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n" .
     "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">' .
     "\n" . '<head><meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>' .
     "\n" . '<link rel="shortcut icon" href="' . $set['homeurl'] . '/favicon.ico" />' .
-    "\n" . '<meta name="copyright" content="Powered by JohnCMS" />'; // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
+    "\n" . '<meta name="Generator" content="JohnCMS, http://johncms.com" />'; // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
 if (!empty($set['meta_key']))
     echo "\n" . '<meta name="keywords" content="' . $set['meta_key'] . '" />';
 if (!empty($set['meta_desc']))

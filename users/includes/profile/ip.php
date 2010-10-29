@@ -21,7 +21,7 @@ require('../incfiles/head.php');
 Проверяем права доступа
 -----------------------------------------------------------------
 */
-if ($rights < 6) {
+if (!$rights && $user_id != $user['id']) {
     echo functions::display_error($lng['access_forbidden']);
     require('../incfiles/end.php');
     exit;

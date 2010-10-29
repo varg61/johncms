@@ -393,7 +393,7 @@ class functions {
 
         if ($arg['body'])
             $out .= '<div>' . $arg['body'] . '</div>';
-        $ipinf = $rights > 0 && !$arg['iphide'] ? 1 : 0;
+        $ipinf = ($rights || $user_id == $user['id']) && !$arg['iphide'] ? 1 : 0;
         $lastvisit = $realtime > $user['lastdate'] + 300 && $arg['lastvisit'] ? date("d.m.Y (H:i)", $user['lastdate']) : false;
 
         if ($ipinf || $lastvisit || $arg['sub'] || $arg['footer']) {
@@ -409,8 +409,7 @@ class functions {
             }
             if ($ipinf) {
                 $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
-                $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist
-                    . '</div>';
+                $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist . '</div>';
             }
             if ($arg['footer'])
                 $out .= $arg['footer'];
