@@ -62,7 +62,7 @@ if ($set_karma['on']) {
                         mysql_query("UPDATE `users` SET $sql WHERE `id` = '" . $user['id'] . "' LIMIT 1");
                         echo '<div class="gmenu">' . $lng_karma['done'] . '!<br /><a href="profile.php?user=' . $user['id'] . '">' . $lng['continue'] . '</a></div>';
                     } else {
-                        echo '<div class="phdr"><b>' . $lng_karma['vote_to'] . ' ' . $res['name'] . '</b></div>' .
+                        echo '<div class="phdr"><b>' . $lng_karma['vote_to'] . ' ' . $res['name'] . '</b>: ' . functions::checkout($user['name']) . '</div>' .
                             '<form action="profile.php?act=karma&amp;mod=vote&amp;user=' . $user['id'] . '" method="post">' .
                             '<div class="gmenu"><b>' . $lng_karma['vote_type'] . ':</b><br />' .
                             '<input name="type" type="radio" value="1" checked="checked"/> ' . $lng_karma['plus'] . '<br />' .
