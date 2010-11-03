@@ -30,7 +30,7 @@ if ($id) {
     Показываем общий список тех, кто в выбранной теме
     -----------------------------------------------------------------
     */
-    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
+    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 't'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         echo '<div class="phdr"><b>' . $lng_forum['who_in_topic'] . ':</b> <a href="index.php?id=' . $id . '">' . $res['text'] . '</a></div>';
@@ -94,7 +94,7 @@ if ($id) {
                 default:
                     $where = explode(",", $res['place']);
                     if ($where[0] == 'forum' && intval($where[1])) {
-                        $req_t = mysql_query("SELECT `type`, `refid`, `text` FROM `forum` WHERE `id` = '$where[1]' LIMIT 1");
+                        $req_t = mysql_query("SELECT `type`, `refid`, `text` FROM `forum` WHERE `id` = '$where[1]'");
                         if (mysql_num_rows($req_t)) {
                             $res_t = mysql_fetch_assoc($req_t);
                             $link = '<a href="index.php?id=' . $where[1] . '">' . $res_t['text'] . '</a>';
@@ -112,7 +112,7 @@ if ($id) {
                                     break;
 
                                 case 'm':
-                                    $req_m = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '" . $res_t['refid'] . "' AND `type` = 't' LIMIT 1");
+                                    $req_m = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '" . $res_t['refid'] . "' AND `type` = 't'");
                                     if (mysql_num_rows($req_m)) {
                                         $res_m = mysql_fetch_assoc($req_m);
                                         $place = (isset($where[2]) ? $lng_forum['place_answer'] : $lng_forum['place_topic']) . ' &quot;<a href="index.php?id=' . $res_t['refid'] . '">' . $res_m['text'] . '</a>&quot;';

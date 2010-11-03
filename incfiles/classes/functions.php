@@ -506,7 +506,7 @@ class functions {
         global $datauser, $user_id;
 
         if ($id && $id != $user_id) {
-            $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 return mysql_fetch_assoc($req);
             } else {

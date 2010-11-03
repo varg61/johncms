@@ -59,7 +59,7 @@ switch ($mod) {
                 $set_forum['postclip'] = 1;
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
                 $set_forum['postcut'] = 1;
-            mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id' LIMIT 1");
+            mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id'");
             echo '<div class="gmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_forum)) {
@@ -68,7 +68,7 @@ switch ($mod) {
             $set_forum['upfp'] = 0;
             $set_forum['postclip'] = 1;
             $set_forum['postcut'] = 2;
-            mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id' LIMIT 1");
+            mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id'");
             echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
         echo '<form action="profile.php?act=settings&amp;mod=forum" method="post">' .
@@ -154,7 +154,7 @@ switch ($mod) {
                 $set_chat['carea_h'] = 9;
             if ($rights >= 7 && !empty($mood_adm))
                 $set_chat['mood'] = $mood_adm;
-            mysql_query("UPDATE `users` SET `set_chat` = '" . mysql_real_escape_string(serialize($set_chat)) . "' WHERE `id` = '$user_id' LIMIT 1");
+            mysql_query("UPDATE `users` SET `set_chat` = '" . mysql_real_escape_string(serialize($set_chat)) . "' WHERE `id` = '$user_id'");
             echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_chat)) {
@@ -253,7 +253,7 @@ switch ($mod) {
             mysql_query("UPDATE `users` SET
                 `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "',
                 `set_language` = '$language'
-                WHERE `id` = '$user_id' LIMIT 1");
+                WHERE `id` = '$user_id'");
             echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_user)) {
@@ -274,7 +274,7 @@ switch ($mod) {
             mysql_query("UPDATE `users` SET
                 `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "',
                 `set_language` = ''
-                WHERE `id` = '$user_id' LIMIT 1
+                WHERE `id` = '$user_id'
             ");
             $language = $set['language'];
             $lng = $core->load_lng();

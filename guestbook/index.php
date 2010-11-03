@@ -41,7 +41,7 @@ switch ($act) {
         */
         if ($rights >= 6 && $id) {
             if (isset($_GET['yes'])) {
-                mysql_query("DELETE FROM `guest` WHERE `id`='" . $id . "' LIMIT 1");
+                mysql_query("DELETE FROM `guest` WHERE `id`='" . $id . "'");
                 header("Location: index.php");
             } else {
                 echo '<div class="phdr"><a href="index.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['delete_message'] . '</div>' .
@@ -142,7 +142,7 @@ switch ($act) {
                 header("location: index.php");
             } else {
                 echo '<div class="phdr"><a href="index.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['reply'] . '</div>';
-                $req = mysql_query("SELECT * FROM `guest` WHERE `id` = '$id' LIMIT 1");
+                $req = mysql_query("SELECT * FROM `guest` WHERE `id` = '$id'");
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="menu">' .
                     '<div class="quote"><b>' . $res['name'] . '</b>' .
@@ -166,7 +166,7 @@ switch ($act) {
         */
         if ($rights >= 6 && $id) {
             if (isset($_POST['submit'])) {
-                $req = mysql_query("SELECT `edit_count` FROM `guest` WHERE `id`='" . $id . "' LIMIT 1");
+                $req = mysql_query("SELECT `edit_count` FROM `guest` WHERE `id`='$id'");
                 $res = mysql_fetch_array($req);
                 $edit_count = $res['edit_count'] + 1;
                 $msg = mb_substr($_POST['msg'], 0, 5000);
@@ -179,7 +179,7 @@ switch ($act) {
                 ");
                 header("location: index.php");
             } else {
-                $req = mysql_query("SELECT * FROM `guest` WHERE `id` = '" . $id . "' LIMIT 1");
+                $req = mysql_query("SELECT * FROM `guest` WHERE `id` = '$id'");
                 $res = mysql_fetch_assoc($req);
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
                 echo '<div class="phdr"><a href="index.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['edit'] . '</div>' .

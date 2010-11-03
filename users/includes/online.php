@@ -25,7 +25,7 @@ require('../incfiles/head.php');
 */
 echo '<div class="phdr"><b>' . $lng_online['who_on_site'] . '</b></div>';
 if ($rights > 0)
-    echo '<div class="topmenu">' . ($mod == 'guest' ? '<a href="index.php?act=online">' . $lng['authorized'] . '</a> | ' . $lng['guests'] : $lng['authorized'] . ' | <a href="index.php?act=online&amp;mod=guest">' . $lng['guests'] . '</a>')
+    echo '<div class="topmenu">' . ($mod == 'guest' ? '<a href="index.php?act=online">' . $lng['authorized'] . '</a> | <b>' . $lng['guests'] . '</b>' : '<b>' . $lng['authorized'] . '</b> | <a href="index.php?act=online&amp;mod=guest">' . $lng['guests'] . '</a>')
         . '</div>';
 $onltime = $realtime - 300;
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($mod == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime'"), 0);

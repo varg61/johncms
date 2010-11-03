@@ -229,7 +229,7 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php?act=ipban"><b>' . $lng['ip_ban'] . '</b></a> | ' . $lng['ban_details'] . '</div>';
         if ($id) {
             // Поиск адреса по ссылке (ID)
-            $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_ban_ip` WHERE `id` = '$id'");
             $get_ip = '';
         } elseif (isset($_POST['ip'])) {
             // Поиск адреса по запросу из формы
@@ -286,7 +286,7 @@ switch ($mod) {
         */
         if ($id) {
             if (isset($_GET['yes'])) {
-                mysql_query("DELETE FROM `cms_ban_ip` WHERE `id`='$id' LIMIT 1");
+                mysql_query("DELETE FROM `cms_ban_ip` WHERE `id`='$id'");
                 mysql_query("OPTIMIZE TABLE `cms_ban_ip`");
                 echo '<p>' . $lng['ban_del_confirmation'] . '</p>';
                 echo '<p><a href="index.php?act=ipban">' . $lng['continue'] . '</a></p>';

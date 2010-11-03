@@ -46,7 +46,7 @@ switch ($mod) {
             require('../incfiles/end.php');
             exit;
         }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND (`type` = 'f' OR `type` = 'r') LIMIT 1");
+        $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND (`type` = 'f' OR `type` = 'r')");
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
             echo '<div class="phdr"><b>' . ($res['type'] == 'r' ? $lng_forum['delete_section'] : $lng_forum['delete_catrgory']) . ':</b> ' . $res['text'] . '</div>';
@@ -64,7 +64,7 @@ switch ($mod) {
                             require('../incfiles/end.php');
                             exit;
                         }
-                        $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f' LIMIT 1"), 0);
+                        $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'"), 0);
                         if (!$check) {
                             echo functions::display_error($lng['error_wrong_data']);
                             require('../incfiles/end.php');
@@ -75,12 +75,12 @@ switch ($mod) {
                         $sortnum = !empty($sort['realid']) && $sort['realid'] > 0 ? $sort['realid'] + 1 : 1;
                         $req_c = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'r'");
                         while ($res_c = mysql_fetch_assoc($req_c)) {
-                            mysql_query("UPDATE `forum` SET `refid` = '" . $category . "', `realid` = '$sortnum' WHERE `id` = '" . $res_c['id'] . "' LIMIT 1");
+                            mysql_query("UPDATE `forum` SET `refid` = '" . $category . "', `realid` = '$sortnum' WHERE `id` = '" . $res_c['id'] . "'");
                             ++$sortnum;
                         }
                         // Перемещаем файлы в выбранную категорию
                         mysql_query("UPDATE `cms_forum_files` SET `cat` = '" . $category . "' WHERE `cat` = '" . $res['refid'] . "'");
-                        mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
+                        mysql_query("DELETE FROM `forum` WHERE `id` = '$id'");
                         echo '<div class="rmenu"><p><h3>' . $lng_forum['category_deleted'] . '</h3>' . $lng_forum['contents_moved_to'] . ' <a href="../forum/index.php?id=' . $category . '">' . $lng_forum['selected_category'] . '</a></p></div>';
                     } else {
                         echo '<form action="index.php?act=forum&amp;mod=del&amp;id=' . $id . '" method="POST">' .
@@ -109,7 +109,7 @@ switch ($mod) {
                             require('../incfiles/end.php');
                             exit;
                         }
-                        $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$subcat' AND `type` = 'r' LIMIT 1"), 0);
+                        $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$subcat' AND `type` = 'r'"), 0);
                         if (!$check) {
                             echo functions::display_error($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
                             require('../incfiles/end.php');
@@ -117,7 +117,7 @@ switch ($mod) {
                         }
                         mysql_query("UPDATE `forum` SET `refid` = '$subcat' WHERE `refid` = '$id'");
                         mysql_query("UPDATE `cms_forum_files` SET `subcat` = '$subcat' WHERE `subcat` = '$id'");
-                        mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
+                        mysql_query("DELETE FROM `forum` WHERE `id` = '$id'");
                         echo '<div class="rmenu"><p><h3>' . $lng_forum['section_deleted'] . '</h3>' . $lng_forum['themes_moved_to'] . ' <a href="../forum/index.php?id=' . $subcat . '">' . $lng_forum['selected_section'] . '</a>.' .
                             '</p></div>';
                     } elseif (isset($_POST['delete'])) {
@@ -143,7 +143,7 @@ switch ($mod) {
                         // Удаляем темы
                         mysql_query("DELETE FROM `forum` WHERE `refid` = '$id'");
                         // Удаляем раздел
-                        mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
+                        mysql_query("DELETE FROM `forum` WHERE `id` = '$id'");
                         // Оптимизируем таблицы
                         mysql_query("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `cms_forum_vote` , `cms_forum_vote_users`");
                         echo '<div class="rmenu"><p>' . $lng_forum['section_themes_deleted'] . '<br />' .
@@ -177,7 +177,7 @@ switch ($mod) {
                 // Удаление пустого раздела, или категории                //
                 ////////////////////////////////////////////////////////////
                 if (isset($_POST['submit'])) {
-                    mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
+                    mysql_query("DELETE FROM `forum` WHERE `id` = '$id'");
                     echo '<div class="rmenu"><p>' . ($res['type'] == 'r' ? $lng_forum['section_deleted'] : $lng_forum['category_deleted']) . '</p></div>';
                 } else {
                     echo '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '</p>' .
@@ -200,7 +200,7 @@ switch ($mod) {
         */
         if ($id) {
             // Проверяем наличие категории
-            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 'f' LIMIT 1");
+            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 'f'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_array($req);
                 $cat_name = $res['text'];
@@ -272,7 +272,7 @@ switch ($mod) {
             require('../incfiles/end.php');
             exit;
         }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
+        $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
             if ($res['type'] == 'f' || $res['type'] == 'r') {
@@ -285,7 +285,7 @@ switch ($mod) {
                     $error = array ();
                     if ($res['type'] == 'r' && !$category)
                         $error[] = $lng_forum['error_category_select'];
-                    elseif ($res['type'] == 'r' && !mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f' LIMIT 1"), 0))
+                    elseif ($res['type'] == 'r' && !mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'"), 0))
                         $error[] = $lng_forum['error_category_select'];
                     if (!$name)
                         $error[] = $lng['error_nameto_empty'];
@@ -298,14 +298,14 @@ switch ($mod) {
                         mysql_query("UPDATE `forum` SET
                             `text` = '$name',
                             `soft` = '$desc'
-                            WHERE `id` = '$id' LIMIT 1");
+                            WHERE `id` = '$id'");
                         if ($res['type'] == 'r' && $category != $res['refid']) {
                             // Вычисляем сортировку
                             $req_s = mysql_query("SELECT `realid` FROM `forum` WHERE `refid` = '$category' AND `type` = 'r' ORDER BY `realid` DESC LIMIT 1");
                             $res_s = mysql_fetch_assoc($req_s);
                             $sort = $res_s['realid'] + 1;
                             // Меняем категорию
-                            mysql_query("UPDATE `forum` SET `refid` = '$category', `realid` = '$sort' WHERE `id` = '$id' LIMIT 1");
+                            mysql_query("UPDATE `forum` SET `refid` = '$category', `realid` = '$sort' WHERE `id` = '$id'");
                             // Меняем категорию для прикрепленных файлов
                             mysql_query("UPDATE `cms_forum_files` SET `cat` = '$category' WHERE `cat` = '" . $res['refid'] . "'");
                         }
@@ -352,7 +352,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if ($id) {
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 $res1 = mysql_fetch_assoc($req);
                 $sort = $res1['realid'];
@@ -376,7 +376,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if ($id) {
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 $res1 = mysql_fetch_assoc($req);
                 $sort = $res1['realid'];
@@ -402,7 +402,7 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php?act=forum"><b>' . $lng_forum['forum_management'] . '</b></a> | ' . $lng_forum['forum_structure'] . '</div>';
         if ($id) {
             // Управление разделами
-            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 'f' LIMIT 1");
+            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 'f'");
             $res = mysql_fetch_assoc($req);
             echo '<div class="bmenu"><a href="index.php?act=forum&amp;mod=cat"><b>' . $res['text'] . '</b></a> | ' . $lng_forum['section_list'] . '</div>';
             $req = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 'r' ORDER BY `realid` ASC");
@@ -499,8 +499,8 @@ switch ($mod) {
             WHERE `forum`.`type` = 't' AND `forum`.`close` = '1' $sort ORDER BY `forum`.`id` DESC LIMIT $start, $kmess");
             if (mysql_num_rows($req)) {
                 while ($res = mysql_fetch_assoc($req)) {
-                    $subcat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
-                    $cat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $subcat['refid'] . "' LIMIT 1"));
+                    $subcat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
+                    $cat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $subcat['refid'] . "'"));
                     $ttime = '<span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
                     $text = '<a href="../forum/index.php?id=' . $res['fid'] . '"><b>' . $res['text'] . '</b></a>';
                     $text .= '<br /><small><a href="../forum/index.php?id=' . $cat['id'] . '">' . $cat['text'] . '</a> / <a href="../forum/index.php?id=' . $subcat['id'] . '">' . $subcat['text'] . '</a></small>';
@@ -585,7 +585,7 @@ switch ($mod) {
                     $text = mb_substr($res['text'], 0, 500);
                     $text = functions::checkout($text, 1, 0);
                     $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                    $theme = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
+                    $theme = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
                     $text = '<b>' . $theme['text'] . '</b> <a href="../forum/index.php?id=' . $theme['id'] . '&amp;page=' . $page . '">&gt;&gt;</a><br />' . $text;
                     $subtext = '<span class="gray">' . $lng_forum['filter_to'] . ':</span> ';
                     $subtext .= '<a href="index.php?act=forum&amp;mod=hposts&amp;tsort=' . $theme['id'] . '">' . $lng_forum['by_theme'] . '</a> | ';

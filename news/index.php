@@ -145,7 +145,7 @@ switch ($do) {
                 }
                 echo '<p>' . $lng_news['article_changed'] . '<br /><a href="index.php">' . $lng['continue'] . '</a></p>';
             } else {
-                $req = mysql_query("SELECT * FROM `news` WHERE `id` = '$id' LIMIT 1");
+                $req = mysql_query("SELECT * FROM `news` WHERE `id` = '$id'");
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="menu"><form action="index.php?do=edit&amp;id=' . $id . '" method="post">' .
                     '<p><h3>' . $lng_news['article_title'] . '</h3>' .
@@ -214,7 +214,7 @@ switch ($do) {
         if ($rights >= 6) {
             echo '<div class="phdr"><a href="index.php"><b>' . $lng_news['site_news'] . '</b></a> | ' . $lng_news['delete_article'] . '</div>';
             if (isset($_GET['yes'])) {
-                mysql_query("DELETE FROM `news` WHERE `id` = '" . $id . "' LIMIT 1");
+                mysql_query("DELETE FROM `news` WHERE `id` = '$id'");
                 echo '<p>' . $lng_news['article_deleted'] . '<br/><a href="index.php">' . $lng_news['to_news'] . '</a></p>';
             } else {
                 echo '<p>' . $lng['delete_confirmation'] . '<br/>' .

@@ -32,7 +32,7 @@ if ($rights == 4 || $rights >= 6) {
         require_once ('../incfiles/end.php');
         exit;
     }
-    mysql_query("delete from `download` where `id`='" . $id . "';");
+    mysql_query("delete from `download` where `id`='" . $id . "'");
     header("location: index.php?act=komm&id=$ms[refid]");
 }
 else {

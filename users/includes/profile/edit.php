@@ -114,7 +114,7 @@ if (isset($_GET['delavatar'])) {
             `skype` = '" . $user['skype'] . "',
             `jabber` = '" . $user['jabber'] . "',
             `www` = '" . $user['www'] . "'
-            WHERE `id` = '" . $user['id'] . "' LIMIT 1
+            WHERE `id` = '" . $user['id'] . "'
         ");
         if ($rights >= 7) {
             mysql_query("UPDATE `users` SET
@@ -123,7 +123,7 @@ if (isset($_GET['delavatar'])) {
                 `karma_off` = '" . $user['karma_off'] . "',
                 `sex` = '" . $user['sex'] . "',
                 `rights` = '" . $user['rights'] . "'
-                WHERE `id` = '" . $user['id'] . "' LIMIT 1
+                WHERE `id` = '" . $user['id'] . "'
             ");
         }
         echo '<div class="gmenu">' . $lng_profile['data_saved'] . '</div>';

@@ -21,7 +21,7 @@ if ($rights == 3 || $rights >= 6) {
         exit;
     }
     // Проверяем, существует ли тема
-    $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't'");
     if (!mysql_num_rows($req)) {
         require('../incfiles/head.php');
         echo functions::display_error($lng_forum['error_topic_deleted']);
@@ -46,7 +46,7 @@ if ($rights == 3 || $rights >= 6) {
         header('Location: ?id=' . $res['refid']);
     } elseif (isset($_GET['hid']) || isset($_GET['yes']) && $rights < 9) {
         // Скрываем топик
-        mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
+        mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '$id'");
         // Скрываем прикрепленные файлы
         mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `topic` = '$id'");
         header('Location: ?id=' . $res['refid']);

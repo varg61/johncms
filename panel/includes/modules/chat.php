@@ -37,7 +37,7 @@ switch ($mod) {
             // Удаляем сообщения комнаты
             mysql_query("DELETE FROM `chat` WHERE `refid` = '$id'");
             // Удаляем комнату
-            mysql_query("DELETE FROM `chat` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
+            mysql_query("DELETE FROM `chat` WHERE `id` = '$id' AND `type` = 'r'");
             header("Location: index.php?act=chat");
         } else {
             // Подтверждение удаления
@@ -67,7 +67,7 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php?act=chat"><b>' . $lng['chat_management'] . '</b></a> | ' . ($id ? $lng['chat_room_edit'] : $lng['chat_room_add']) . '</div>';
         if ($id) {
             // Если комната редактироется, запрашиваем ее данные в базе
-            $req = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id' AND `type` = 'r'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
             } else {
@@ -175,6 +175,7 @@ switch ($mod) {
                     $id2 = $res['id'];
                     $sort2 = $res['realid'];
                     mysql_query("UPDATE `chat` SET `realid` = '$sort2' WHERE `id` = '$id'");
+                    mysql_query("UPDATE `chat` SET `realid` = '$sort' WHERE `id` = '$id2'");
                     mysql_query("UPDATE `chat` SET `realid` = '$sort' WHERE `id` = '$id2'");
                 }
             }

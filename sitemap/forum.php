@@ -32,7 +32,7 @@ if ($id) {
     } else {
         $out = '';
         // Проверяем существование раздела
-        $req_s = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
+        $req_s = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r'");
         if (mysql_num_rows($req_s)) {
             $res_s = mysql_fetch_assoc($req_s);
             // Запрос на список тем выбранного раздела

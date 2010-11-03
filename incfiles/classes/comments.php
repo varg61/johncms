@@ -173,7 +173,7 @@ class comments {
         ");
         // Обновляем статистику пользователя
         $comm_count = $datauser['komm'] + 1;
-        mysql_query("UPDATE `users` SET `komm` = '$comm_count', `lastpost` = '$realtime' WHERE `id` = '$user_id' LIMIT 1");
+        mysql_query("UPDATE `users` SET `komm` = '$comm_count', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
     }
 
     /*

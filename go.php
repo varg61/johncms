@@ -21,7 +21,7 @@ if ($id) {
     Редирект по рекламной ссылке
     -----------------------------------------------------------------
     */
-    $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $count_link = $res['count'] + 1;
@@ -64,6 +64,10 @@ if ($id) {
 
         case 'guest':
             header('location: ' . $set['homeurl'] . '/guestbook/index.php');
+            break;
+            
+        case 'gazen':
+            header('location: http://gazenwagen.com');
             break;
 
         default :

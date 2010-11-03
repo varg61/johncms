@@ -28,14 +28,14 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if ($id) {
-            $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 if (isset($_GET['go']) && $_GET['go'] == 'on') {
                     mysql_query("UPDATE `cms_counters` SET `switch` = '1' WHERE `id` = '$id'");
-                    $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
+                    $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
                 } elseif (isset($_GET['go']) && $_GET['go'] == 'off') {
                     mysql_query("UPDATE `cms_counters` SET `switch` = '0' WHERE `id` = '$id'");
-                    $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
+                    $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
                 }
                 $res = mysql_fetch_array($req);
                 echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['viewing'] . '</div>';
@@ -73,7 +73,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if ($id) {
-            $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $sort = $res['sort'];
@@ -97,7 +97,7 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if ($id) {
-            $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $sort = $res['sort'];
@@ -128,7 +128,7 @@ switch ($mod) {
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
         if (mysql_num_rows($req)) {
             if (isset($_POST['submit'])) {
-                mysql_query("DELETE FROM `cms_counters` WHERE `id` = '$id' LIMIT 1");
+                mysql_query("DELETE FROM `cms_counters` WHERE `id` = '$id'");
                 echo '<p>' . $lng['counter_deleted'] . '<br/><a href="index.php?act=counters">' . $lng['continue'] . '</a></p>';
                 require('../incfiles/end.php');
                 exit;
@@ -184,7 +184,7 @@ switch ($mod) {
             $mode = 0;
             if ($id) {
                 // запрос к базе, если счетчик редактируется
-                $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '" . $id . "' LIMIT 1");
+                $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = '$id'");
                 if (mysql_num_rows($req) > 0) {
                     $res = mysql_fetch_array($req);
                     $name = $res['name'];

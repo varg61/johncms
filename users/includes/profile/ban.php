@@ -97,7 +97,7 @@ switch ($mod) {
                         ");
                         mysql_query("UPDATE `users` SET
                             `karma_minus` = '" . ($user['karma_minus'] + $points) . "'
-                            WHERE `id` = '" . $user['id'] . "' LIMIT 1
+                            WHERE `id` = '" . $user['id'] . "'
                         ");
                         $text = ' ' . $lng_ban['also_received'] . ' <span class="red">-' . $points . ' ' . $lng['points'] . '</span> ' . $lng_ban['to_karma'];
                     }
@@ -167,7 +167,7 @@ switch ($mod) {
         if (!$ban || $user['id'] == $user_id || $rights < 7)
             echo functions::display_error($lng['error_wrong_data']);
         else {
-            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $error = false;
@@ -177,7 +177,7 @@ switch ($mod) {
                     echo '<div class="phdr"><b>' . $lng_ban['ban_cancel'] . '</b></div>';
                     echo '<div class="gmenu"><p>' . functions::display_user($user) . '</p></div>';
                     if (isset($_POST['submit'])) {
-                        mysql_query("UPDATE `cms_ban_users` SET `ban_time` = '$realtime' WHERE `id` = '$ban' LIMIT 1");
+                        mysql_query("UPDATE `cms_ban_users` SET `ban_time` = '$realtime' WHERE `id` = '$ban'");
                         echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_cancel_confirmation'] . '</h3></p></div>';
                     } else {
                         echo '<form action="profile.php?act=ban&amp;mod=cancel&amp;user=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .
@@ -204,7 +204,7 @@ switch ($mod) {
         if (!$ban || $rights < 9)
             echo functions::display_error($lng['error_wrong_data']);
         else {
-            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `id` = '$ban' AND `user_id` = '" . $user['id'] . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="phdr"><b>' . $lng_ban['ban_delete'] . '</b></div>' .
@@ -214,9 +214,9 @@ switch ($mod) {
                     $points = $set_karma['karma_points'] * 2;
                     mysql_query("UPDATE `users` SET
                         `karma_minus` = '" . ($user['karma_minus'] > $points ? $user['karma_minus'] - $points : 0) . "'
-                        WHERE `id` = '" . $user['id'] . "' LIMIT 1
+                        WHERE `id` = '" . $user['id'] . "'
                     ");
-                    mysql_query("DELETE FROM `cms_ban_users` WHERE `id` = '$ban' LIMIT 1");
+                    mysql_query("DELETE FROM `cms_ban_users` WHERE `id` = '$ban'");
                     echo '<div class="gmenu"><p><h3>' . $lng_ban['ban_deleted'] . '</h3><a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
                 } else {
                     echo '<form action="profile.php?act=ban&amp;mod=delete&amp;user=' . $user['id'] . '&amp;ban=' . $ban . '" method="POST">' .

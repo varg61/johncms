@@ -29,7 +29,7 @@ if (mysql_num_rows($check)) {
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit;
 }
-$req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` != '$user_id' LIMIT 1");
+$req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` != '$user_id'");
 if (mysql_num_rows($req)) {
     $res = mysql_fetch_assoc($req);
     switch ($mod) {
@@ -44,7 +44,7 @@ if (mysql_num_rows($req)) {
                 `file_id` = '$img',
                 `vote` = '1'
             ");
-            mysql_query("UPDATE `cms_album_files` SET `vote_plus` = '" . ($res['vote_plus'] + 1) . "' WHERE `id` = '$img' LIMIT 1");
+            mysql_query("UPDATE `cms_album_files` SET `vote_plus` = '" . ($res['vote_plus'] + 1) . "' WHERE `id` = '$img'");
             break;
 
         case 'minus':
@@ -58,7 +58,7 @@ if (mysql_num_rows($req)) {
                 `file_id` = '$img',
                 `vote` = '-1'
             ");
-            mysql_query("UPDATE `cms_album_files` SET `vote_minus` = '" . ($res['vote_minus'] + 1) . "' WHERE `id` = '$img' LIMIT 1");
+            mysql_query("UPDATE `cms_album_files` SET `vote_minus` = '" . ($res['vote_minus'] + 1) . "' WHERE `id` = '$img'");
             break;
     }
     header('Location: ' . $_SERVER['HTTP_REFERER']);

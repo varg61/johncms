@@ -18,10 +18,10 @@ if (($rights != 3 && $rights < 6) || !$id) {
     header('Location: http://johncms.com?act=404');
     exit;
 }
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND (`type` = 't' OR `type` = 'm') LIMIT 1");
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND (`type` = 't' OR `type` = 'm')");
 if (mysql_num_rows($req)) {
     $res = mysql_fetch_assoc($req);
-    mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
+    mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '$login' WHERE `id` = '$id'");
     if ($res['type'] == 't') {
         header('Location: index.php?id=' . $id);
     } else {

@@ -33,7 +33,7 @@ switch ($mod) {
             require('../incfiles/end.php');
             exit;
         }
-        @mysql_query("UPDATE `users` SET `preg` = '1', `regadm` = '$login' WHERE `id` = '$id' LIMIT 1");
+        @mysql_query("UPDATE `users` SET `preg` = '1', `regadm` = '$login' WHERE `id` = '$id'");
         echo '<div class="menu"><p>' . $lng['reg_approved'] . '<br /><a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         break;
 
@@ -58,9 +58,9 @@ switch ($mod) {
             require('../incfiles/end.php');
             exit;
         }
-        $req = mysql_query("SELECT `id` FROM `users` WHERE `id` = '$id' AND `preg` = '0' LIMIT 1");
+        $req = mysql_query("SELECT `id` FROM `users` WHERE `id` = '$id' AND `preg` = '0'");
         if (mysql_num_rows($req)) {
-            mysql_query("DELETE FROM `users` WHERE `id` = '$id' LIMIT 1");
+            mysql_query("DELETE FROM `users` WHERE `id` = '$id'");
             mysql_query("DELETE FROM `cms_users_iphistory` WHERE `user_id` = '$id' LIMIT 1");
         }
         echo '<div class="menu"><p>' . $lng['user_deleted'] . '<br /><a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';

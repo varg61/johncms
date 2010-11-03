@@ -20,7 +20,7 @@ if ($rights == 3 || $rights >= 6) {
         require('../incfiles/end.php');
         exit;
     }
-    $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
+    $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
     $ms = mysql_fetch_assoc($typ);
     if ($ms[type] != "t") {
         require('../incfiles/head.php');

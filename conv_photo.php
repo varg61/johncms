@@ -11,11 +11,11 @@ require('incfiles/core.php');
 */
 $req = mysql_query("SELECT * FROM `cms_album_files`");
 while($res = mysql_fetch_assoc($req)){
-    $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res['album_id'] . "' LIMIT 1");
+    $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res['album_id'] . "'");
     $res_a = mysql_fetch_assoc($req_a);
     mysql_query("UPDATE `cms_album_files` SET
     `access` = '" . $res_a['access'] . "'
-    WHERE `id` = '" . $res['id'] . "' LIMIT 1");
+    WHERE `id` = '" . $res['id'] . "'");
 }
 
 /*

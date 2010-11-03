@@ -23,7 +23,7 @@ if ($rights < 9) {
 $error = false;
 if ($id && $id != $user_id) {
     // Получаем данные юзера
-    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
     if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
         if ($user['rights'] > $datauser['rights'])
@@ -115,7 +115,7 @@ if (!$error) {
             mysql_query("DELETE FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'");
             mysql_query("OPTIMIZE TABLE `cms_ban_users`");
             // Удаляем пользователя
-            mysql_query("DELETE FROM `users` WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+            mysql_query("DELETE FROM `users` WHERE `id` = '" . $user['id'] . "'");
             mysql_query("OPTIMIZE TABLE `users`");
             // Удаляем историю IP
             mysql_query("DELETE FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'");

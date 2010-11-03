@@ -59,7 +59,7 @@ if ($set_karma['on']) {
                             `text` = '$text'
                         ");
                         $sql = $type ? "`karma_plus` = '" . ($user['karma_plus'] + $points) . "'" : "`karma_minus` = '" . ($user['karma_minus'] + $points) . "'";
-                        mysql_query("UPDATE `users` SET $sql WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+                        mysql_query("UPDATE `users` SET $sql WHERE `id` = '" . $user['id'] . "'");
                         echo '<div class="gmenu">' . $lng_karma['done'] . '!<br /><a href="profile.php?user=' . $user['id'] . '">' . $lng['continue'] . '</a></div>';
                     } else {
                         echo '<div class="phdr"><b>' . $lng_karma['vote_to'] . ' ' . $res['name'] . '</b>: ' . functions::checkout($user['name']) . '</div>' .
@@ -93,18 +93,18 @@ if ($set_karma['on']) {
             */
             if ($rights == 9) {
                 $type = isset($_GET['type']) ? abs(intval($_GET['type'])) : NULL;
-                $req = mysql_query("SELECT * FROM `karma_users` WHERE `id` = '$id' AND `karma_user` = '" . $user['id'] . "' LIMIT 1");
+                $req = mysql_query("SELECT * FROM `karma_users` WHERE `id` = '$id' AND `karma_user` = '" . $user['id'] . "'");
                 if (mysql_num_rows($req)) {
                     $res = mysql_fetch_assoc($req);
                     if (isset($_GET['yes'])) {
-                        mysql_query("DELETE FROM `karma_users` WHERE `id` = '$id' LIMIT 1");
+                        mysql_query("DELETE FROM `karma_users` WHERE `id` = '$id'");
                         //TODO: Доработать калькуляцию
                         if($res['type']){
                             $sql = "`karma_plus` = '" . ($user['karma_plus'] > $res['points'] ? $user['karma_plus'] - $res['points'] : 0) . "'";
                         } else {
                             $sql = "`karma_minus` = '" . ($user['karma_minus'] > $res['points'] ? $user['karma_minus'] - $res['points'] : 0) . "'";
                         }
-                        mysql_query("UPDATE `users` SET $sql WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+                        mysql_query("UPDATE `users` SET $sql WHERE `id` = '" . $user['id'] . "'");
                         header('Location: profile.php?act=karma&user=' . $user['id'] . '&type=' . $type);
                     } else {
                         echo '<div class="rmenu"><p>' . $lng_karma['deletion_warning'] . '?<br/>' .
@@ -125,7 +125,7 @@ if ($set_karma['on']) {
                 if (isset($_GET['yes'])) {
                     mysql_query("DELETE FROM `karma_users` WHERE `karma_user` = '" . $user['id'] . "'");
                     mysql_query("OPTIMIZE TABLE `karma_users`");
-                    mysql_query("UPDATE `users` SET `karma_plus` = '0', `karma_minus` = '0' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+                    mysql_query("UPDATE `users` SET `karma_plus` = '0', `karma_minus` = '0' WHERE `id` = '" . $user['id'] . "'");
                     header('Location: profile.php?user=' . $user['id']);
                 } else {
                     echo '<div class="rmenu"><p>' . $lng_karma['clear_warning'] . '?<br/>' .

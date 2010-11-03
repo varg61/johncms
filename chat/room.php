@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNCMS') or die('Error:restricted access');
 
-$req = mysql_query("SELECT * FROM `chat` WHERE `id`= '$id' AND `type` = 'r' LIMIT 1");
+$req = mysql_query("SELECT * FROM `chat` WHERE `id`= '$id' AND `type` = 'r'");
 if (mysql_num_rows($req)) {
     $type = mysql_fetch_array($req);
     ////////////////////////////////////////////////////////////

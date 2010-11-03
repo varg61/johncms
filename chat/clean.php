@@ -15,7 +15,7 @@
 defined('_IN_JOHNCMS') or die('Error:restricted access');
 
 if ($id && ($rights > 5 || $rights == 2)) {
-    $typ = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id' LIMIT 1");
+    $typ = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id'");
     $ms = mysql_fetch_array($typ);
     if ($ms['type'] != "r") {
         require_once('../incfiles/head.php');

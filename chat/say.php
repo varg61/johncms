@@ -30,7 +30,7 @@ if ($lastpost > ($realtime - $old)) {
     exit;
 }
 
-$type = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id' LIMIT 1");
+$type = mysql_query("SELECT * FROM `chat` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
 $tip = $type1['type'];
 switch ($tip) {

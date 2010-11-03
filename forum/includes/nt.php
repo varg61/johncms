@@ -25,7 +25,7 @@ if ($flood) {
     require('../incfiles/end.php');
     exit;
 }
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r'");
 if (!mysql_num_rows($req)) {
     require('../incfiles/head.php');
     echo functions::display_error($lng['error_wrong_data']);

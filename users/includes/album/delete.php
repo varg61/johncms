@@ -32,7 +32,7 @@ if ($al && $user['id'] == $user_id || $rights >= 6) {
         }
         // Удаляем записи из таблиц
         mysql_query("DELETE FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al'");
-        mysql_query("DELETE FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+        mysql_query("DELETE FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
         mysql_query("OPTIMIZE TABLE `cms_album_votes`");
         mysql_query("OPTIMIZE TABLE `cms_album_files`");
         echo '<div class="menu"><p>' . $lng_profile['album_deleted'] . '<br />' .

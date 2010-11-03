@@ -89,7 +89,7 @@ if ($search && !$error) {
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             if (!$search_t) {
-                $req_t = mysql_query("SELECT `id`,`text` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
+                $req_t = mysql_query("SELECT `id`,`text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
                 $res_t = mysql_fetch_assoc($req_t);
                 echo '<b>' . $res_t['text'] . '</b><br />';
             } else {

@@ -20,7 +20,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if ($img && $user['id'] == $user_id || $rights >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $album = $res['album_id'];
@@ -139,7 +139,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 }
                 mysql_query("UPDATE `cms_album_files` SET $sql
                     `description` = '" . mysql_real_escape_string($description) . "'
-                    WHERE `id` = '$img' LIMIT 1
+                    WHERE `id` = '$img'
                 ");
             }
             echo '<div class="gmenu"><p>' . $lng_profile['image_edited'] . '<br />' .

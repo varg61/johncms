@@ -272,7 +272,7 @@ class core {
         }
 
         if ($user_id && $user_ps) {
-            $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user_id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user_id'");
             if (mysql_num_rows($req)) {
                 $this->user_data = mysql_fetch_assoc($req);
                 if ($user_ps === $this->user_data['password']) {
@@ -332,7 +332,7 @@ class core {
                 ");
             }
             // Обновляем текущий адрес в таблице `users`
-            mysql_query("UPDATE `users` SET `ip` = '" . $this->ip . "' WHERE `id` = '" . $this->user_id . "' LIMIT 1");
+            mysql_query("UPDATE `users` SET `ip` = '" . $this->ip . "' WHERE `id` = '" . $this->user_id . "'");
         }
     }
 

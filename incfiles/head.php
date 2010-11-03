@@ -139,7 +139,7 @@ if ($user_id) {
     mysql_query("UPDATE `users` SET $sql
         `total_on_site` = '$totalonsite',
         `lastdate` = '$realtime'
-        WHERE `id` = '$user_id' LIMIT 1
+        WHERE `id` = '$user_id'
     ");
 } else {
     // Фиксируем местоположение гостей

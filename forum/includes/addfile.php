@@ -20,7 +20,7 @@ if (!$id || !$user_id) {
     exit;
 }
 // Проверяем, тот ли юзер заливает файл
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $res = mysql_fetch_assoc($req);
 if ($res['user_id'] != $user_id) {
     echo functions::display_error($lng['error_wrong_data']);
@@ -137,9 +137,9 @@ switch ($res['type']) {
                     else
                         $type = 9;
                     // Определяем ID субкатегории и категории
-                    $req2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1");
+                    $req2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
                     $res2 = mysql_fetch_array($req2);
-                    $req3 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res2['refid'] . "' LIMIT 1");
+                    $req3 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res2['refid'] . "'");
                     $res3 = mysql_fetch_array($req3);
                     // Заносим данные в базу
                     mysql_query("INSERT INTO `cms_forum_files` SET

@@ -57,7 +57,7 @@ switch ($mod) {
             $error[] = $lng_pass['error_lenght'];
         if (!$error) {
             // Записываем в базу
-            mysql_query("UPDATE `users` SET `password` = '" . mysql_real_escape_string(md5(md5($newpass))) . "' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+            mysql_query("UPDATE `users` SET `password` = '" . mysql_real_escape_string(md5(md5($newpass))) . "' WHERE `id` = '" . $user['id'] . "'");
             // Проверяем и записываем COOKIES
             if (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
                 setcookie('cups', md5($newpass), time() + 3600 * 24 * 365);

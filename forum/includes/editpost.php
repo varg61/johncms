@@ -19,7 +19,7 @@ if (!$user_id || !$id) {
     require('../incfiles/end.php');
     exit;
 }
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'm' " . ($rights >= 7 ? "" : " AND `close` != '1'") . " LIMIT 1");
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'm' " . ($rights >= 7 ? "" : " AND `close` != '1'"));
 if (mysql_num_rows($req)) {
     /*
     -----------------------------------------------------------------
@@ -34,7 +34,7 @@ if (mysql_num_rows($req)) {
     if ($rights == 3 || $rights >= 6) {
         // Проверка для Администрации
         if ($res['user_id'] != $user_id) {
-            $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
             if (mysql_num_rows($req_u)) {
                 $res_u = mysql_fetch_assoc($req_u);
                 if ($res_u['rights'] > $datauser['rights'])
@@ -65,13 +65,13 @@ if (!$error) {
             Восстановление удаленного поста
             -----------------------------------------------------------------
             */
-            $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
             if (mysql_num_rows($req_u)) {
                 // Добавляем один балл к счетчику постов юзера
                 $res_u = mysql_fetch_assoc($req_u);
-                mysql_query("UPDATE `users` SET `postforum` = '" . ($res_u['postforum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                mysql_query("UPDATE `users` SET `postforum` = '" . ($res_u['postforum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "'");
             }
-            mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
+            mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '$login' WHERE `id` = '$id'");
             header('Location: ' . $link);
             break;
 
@@ -82,12 +82,12 @@ if (!$error) {
             -----------------------------------------------------------------
             */
             if ($res['close'] != 1) {
-                $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
                 if (mysql_num_rows($req_u)) {
                     // Вычитаем один балл из счетчика постов юзера
                     $res_u = mysql_fetch_assoc($req_u);
                     $postforum = $res_u['postforum'] > 0 ? $res_u['postforum'] - 1 : 0;
-                    mysql_query("UPDATE `users` SET `postforum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+                    mysql_query("UPDATE `users` SET `postforum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "'");
                 }
             }
             if ($rights == 9 && !isset($_GET['hide'])) {
@@ -101,7 +101,7 @@ if (!$error) {
                 }
                 // Формируем ссылку на нужную страницу темы
                 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">" : "<") . " '$id'"), 0) / $kmess);
-                mysql_query("DELETE FROM `forum` WHERE `id` = '$id' LIMIT 1");
+                mysql_query("DELETE FROM `forum` WHERE `id` = '$id'");
                 if ($posts < 2) {
                     // Пересылка на удаление всей темы
                     header('Location: index.php?act=deltema&id=' . $res['refid']);
@@ -117,11 +117,11 @@ if (!$error) {
                 }
                 if ($posts == 1) {
                     // Если это был последний пост темы, то скрываем саму тему
-                    $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "' LIMIT 1"));
-                    mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't' LIMIT 1");
+                    $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
+                    mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't'");
                     header('Location: index.php?id=' . $res_l['refid']);
                 } else {
-                    mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '$id' LIMIT 1");
+                    mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '$login' WHERE `id` = '$id'");
                     header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
                 }
             }

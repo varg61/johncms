@@ -29,7 +29,7 @@ if ($flood) {
 
 $headmod = 'forum,' . $id . ',1';
 $agn1 = strtok($agn, ' ');
-$type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' LIMIT 1");
+$type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
 $type1 = mysql_fetch_array($type);
 switch ($type1['type']) {
     case 't':
@@ -83,13 +83,13 @@ switch ($type1['type']) {
             // Обновляем время топика
             mysql_query("UPDATE `forum` SET
                 `time` = '$realtime'
-                WHERE `id` = '$id' LIMIT 1
+                WHERE `id` = '$id'
             ");
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET
                 `postforum`='" . ($datauser['postforum'] + 1) . "',
                 `lastpost` = '$realtime'
-                WHERE `id` = '$user_id' LIMIT 1
+                WHERE `id` = '$user_id'
             ");
             // Вычисляем, на какую страницу попадает добавляемый пост
             $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0) / $kmess);
@@ -131,7 +131,7 @@ switch ($type1['type']) {
         -----------------------------------------------------------------
         */
         $th = $type1['refid'];
-        $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th' LIMIT 1");
+        $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
         if (($th1['edit'] == 1 || $th1['close'] == 1) && $rights < 7) {
             require('../incfiles/head.php');
@@ -213,13 +213,13 @@ switch ($type1['type']) {
             // Обновляем время топика
             mysql_query("UPDATE `forum`
                 SET `time` = '$realtime'
-                WHERE `id` = '$th' LIMIT 1
+                WHERE `id` = '$th'
             ");
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET
                 `postforum`='" . ($datauser['postforum'] + 1) . "',
                 `lastpost` = '$realtime'
-                WHERE `id` = '$user_id' LIMIT 1
+                WHERE `id` = '$user_id'
             ");
             // Вычисляем, на какую страницу попадает добавляемый пост
             $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0) / $kmess);

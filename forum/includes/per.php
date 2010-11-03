@@ -20,7 +20,7 @@ if ($rights == 3 || $rights >= 6) {
         require('../incfiles/end.php');
         exit;
     }
-    $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' LIMIT 1");
+    $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't'");
     if (!mysql_num_rows($typ)) {
         require('../incfiles/head.php');
         echo functions::display_error($lng['error_wrong_data']);
@@ -35,7 +35,7 @@ if ($rights == 3 || $rights >= 6) {
             require('../incfiles/end.php');
             exit;
         }
-        $typ1 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$razd' AND `type` = 'r' LIMIT 1");
+        $typ1 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$razd' AND `type` = 'r'");
         if (!mysql_num_rows($typ1)) {
             require('../incfiles/head.php');
             echo functions::display_error($lng['error_wrong_data']);

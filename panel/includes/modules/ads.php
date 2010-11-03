@@ -30,7 +30,7 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php?act=ads"><b>' . $lng['advertisement'] . '</b></a> | ' . ($id ? $lng['link_edit'] : $lng['link_add']) . '</div>';
         if ($id) {
             // Если ссылка редактироется, запрашиваем ее данные в базе
-            $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
             } else {
@@ -93,7 +93,7 @@ switch ($mod) {
                     `show` = '$show',
                     `italic` = '$italic',
                     `underline` = '$underline'
-                    WHERE `id` = '$id' LIMIT 1
+                    WHERE `id` = '$id'
                 ");
             } else {
                 // Добавляем новую ссылку
@@ -265,10 +265,10 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         if ($id) {
-            $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
-                mysql_query("UPDATE `cms_ads` SET `to`='" . ($res['to'] ? 0 : 1) . "' WHERE `id`='$id' LIMIT 1");
+                mysql_query("UPDATE `cms_ads` SET `to`='" . ($res['to'] ? 0 : 1) . "' WHERE `id` = '$id'");
             }
         }
         header('Location: ' . $_SERVER['HTTP_REFERER']);

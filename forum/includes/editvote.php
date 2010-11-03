@@ -29,7 +29,7 @@ if ($rights == 3 || $rights >= 6) {
             header('location: ?act=editvote&id=' . $id . '');
         if ($totalvote != 0) {
             if (isset($_GET['yes'])) {
-                mysql_query("DELETE FROM `cms_forum_vote` WHERE `id` = '$vote' LIMIT 1");
+                mysql_query("DELETE FROM `cms_forum_vote` WHERE `id` = '$vote'");
                 $countus = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `vote` = '$vote' AND `topic` = '$id'"), 0);
                 $topic_vote = mysql_fetch_array(mysql_query("SELECT `count` FROM `cms_forum_vote` WHERE `type` = '1' AND `topic` = '$id' LIMIT 1"));
                 $totalcount = $topic_vote['count'] - $countus;

@@ -122,7 +122,7 @@ $headmod = $id ? 'forum,' . $id : 'forum';
 if (empty($id)) {
     $textl = '' . $lng['forum'] . '';
 } else {
-    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '" . $id . "' LIMIT 1;");
+    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '" . $id . "'");
     $res = mysql_fetch_assoc($req);
     $hdr = strtr($res['text'], array (
         '&quot;' => '',
@@ -193,7 +193,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         Определяем тип запроса (каталог, или тема)
         -----------------------------------------------------------------
         */
-        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '$id' LIMIT 1");
+        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= '$id'");
         if (!mysql_num_rows($type)) {
             // Если темы не существует, показываем ошибку
             echo functions::display_error($lng_forum['error_topic_deleted'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
@@ -227,7 +227,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         $parent = $type1['refid'];
         $tree = array ('<a href="index.php">' . $lng['forum'] . '</a>');
         while ($parent != '0' && $res != false) {
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent'");
             $res = mysql_fetch_assoc($req);
             if ($res['type'] == 'f' || $res['type'] == 'r')
                 $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';

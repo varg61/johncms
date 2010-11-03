@@ -24,7 +24,7 @@ if (!$al) {
     require('../incfiles/end.php');
     exit;
 }
-$req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' LIMIT 1");
+$req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al'");
 if (!mysql_num_rows($req)) {
     echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
@@ -77,7 +77,7 @@ if ($img) {
     Предпросмотр фотографии
     -----------------------------------------------------------------
     */
-    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '" . $img . "' AND `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "' AND `album_id` = '$al'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         echo '<div class="menu">' .

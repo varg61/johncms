@@ -66,7 +66,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
             if (md5(md5($user_pass)) == $user['password']) {
                 // Если логин удачный
                 $display_form = 0;
-                mysql_query("UPDATE `users` SET `failed_login` = '0' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+                mysql_query("UPDATE `users` SET `failed_login` = '0' WHERE `id` = '" . $user['id'] . "'");
                 if (!$user['preg']) {
                     // Если регистрация не подтверждена
                     echo '<div class="rmenu"><p>' . $lng['registration_not_approved'] . '</p></div>';
@@ -95,7 +95,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
                 if ($user['failed_login'] < 3) {
                     // Прибавляем к счетчику неудачных логинов
                     $failed_login = $user['failed_login'] + 1;
-                    mysql_query("UPDATE `users` SET `failed_login` = '$failed_login' WHERE `id` = '" . $user['id'] . "' LIMIT 1");
+                    mysql_query("UPDATE `users` SET `failed_login` = '$failed_login' WHERE `id` = '" . $user['id'] . "'");
                 }
                 $error[] = $lng['authorisation_not_passed'];
             }

@@ -65,7 +65,7 @@ if ($c) {
 }
 if ($c || $s || $t) {
     // Получаем имя нужной категории форума
-    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' LIMIT 1");
+    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id'");
     if (mysql_num_rows($req) > 0) {
         $res = mysql_fetch_array($req);
         $caption .= $res['text'];
@@ -92,7 +92,7 @@ if ($do || isset($_GET['new'])) {
         WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql .
         "ORDER BY `time` DESC LIMIT $start,$kmess");
         while ($res = mysql_fetch_assoc($req)) {
-            $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1");
+            $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
             $res_u = mysql_fetch_assoc($req_u);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Выводим текст поста

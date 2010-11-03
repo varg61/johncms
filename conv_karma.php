@@ -16,7 +16,7 @@ while($res = mysql_fetch_assoc($req)){
     mysql_query("UPDATE `users` SET
         `karma_plus` = '$karma_plus',
         `karma_minus` = '$karma_minus'
-        WHERE `id` = '" . $res['id'] . "' LIMIT 1
+        WHERE `id` = '" . $res['id'] . "'
     ");
 }
 // Удаляем старые поля

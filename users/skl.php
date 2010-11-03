@@ -89,7 +89,7 @@ switch ($act) {
         $error = false;
         if (!$id || !$code)
             $error = $lng['error_wrong_data'];
-        $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
+        $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
         if (mysql_num_rows($req) == 1) {
             $res = mysql_fetch_array($req);
             if (empty($res['rest_code']) || empty($res['rest_time']) || $code != $res['rest_code']) {
@@ -97,7 +97,7 @@ switch ($act) {
             }
             if (!$error && $res['rest_time'] < $realtime - 3600) {
                 $error = $lng_pass['error_timelimit'];
-                mysql_query("UPDATE `users` SET `rest_code` = '', `rest_time` = '' WHERE `id` = '$id' LIMIT 1");
+                mysql_query("UPDATE `users` SET `rest_code` = '', `rest_time` = '' WHERE `id` = '$id'");
             }
         } else {
             $error = $lng['error_user_not_exist'];

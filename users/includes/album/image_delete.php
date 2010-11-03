@@ -20,7 +20,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if ($img && $user['id'] == $user_id || $rights >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $album = $res['album_id'];
@@ -31,7 +31,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
             @unlink('../files/users/album/' . $user['id'] . '/' . $res['img_name']);
             @unlink('../files/users/album/' . $user['id'] . '/' . $res['tmb_name']);
             // Удаляем записи из таблиц
-            mysql_query("DELETE FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "' LIMIT 1");
+            mysql_query("DELETE FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "'");
             mysql_query("DELETE FROM `cms_album_votes` WHERE `file_id` = '$img'");
             mysql_query("OPTIMIZE TABLE `cms_album_votes`");
             header('Location: album.php?act=show&al=' . $album . '&user=' . $user['id']);
