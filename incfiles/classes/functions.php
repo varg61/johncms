@@ -409,7 +409,10 @@ class functions {
             }
             if ($ipinf) {
                 $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
-                $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist . '</div>';
+                if($rights)
+                    $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist . '</div>';
+                else
+                    $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist . '</div>';
             }
             if ($arg['footer'])
                 $out .= $arg['footer'];
