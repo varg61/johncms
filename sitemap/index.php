@@ -21,7 +21,7 @@ function sitemap() {
     global $rootpath, $realtime, $set;
     $links_count = 140;
     $file = $rootpath . 'files/cache/sitemap.dat';
-    if (file_exists($file) && filemtime($file) > ($realtime - 2592000)) {
+    if (file_exists($file) && filemtime($file) > ($realtime - 604800)) {
         // Считываем ссылки из Кэша
         return file_get_contents($file);
     } else {

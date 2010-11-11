@@ -26,7 +26,7 @@ $p = isset($_GET['p']) ? abs(intval($_GET['p'])) : 0;
 $page = $links_count * $p;
 if ($id) {
     $file = $rootpath . 'files/cache/sitemap_f_' . $id . ($p ? '_' . $p : '') . '.dat';
-    if (file_exists($file) && filemtime($file) > ($realtime - 2592000)) {
+    if (file_exists($file) && filemtime($file) > ($realtime - 604800)) {
         // Считываем ссылки из Кэша
         echo file_get_contents($file);
     } else {
