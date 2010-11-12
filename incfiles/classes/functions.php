@@ -269,6 +269,10 @@ class functions {
     */
     function display_menu($val = array ()) {
         $out = '';
+        foreach($val as $key => $menu){
+            if(empty($menu))
+                unset($val[$key]);
+        }
         ksort($val);
         $last = array_pop($val);
 
