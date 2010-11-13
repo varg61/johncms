@@ -47,6 +47,7 @@ $core = new core() or die('Error: Core System');
 -----------------------------------------------------------------
 */
 $ip = $core->ip;                    // Адрес IP
+$agn = $core->user_agent;           // User Agent
 $set = $core->system_settings;      // Системные настройки
 $realtime = $core->system_time;     // Системное время с учетом сдвига
 $language = $core->system_language; // Язык системы
@@ -75,7 +76,6 @@ $user = isset($_REQUEST['user']) ? abs(intval($_REQUEST['user'])) : false;
 $act = isset($_GET['act']) ? trim($_GET['act']) : '';
 $mod = isset($_GET['mod']) ? trim($_GET['mod']) : '';
 $do = isset($_GET['do']) ? trim($_GET['do']) : '';
-$agn = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES);
 $page = isset($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1;
 $start = isset($_REQUEST['page']) ? $page * $kmess - $kmess : (isset($_GET['start']) ? abs(intval($_GET['start'])) : 0);
 

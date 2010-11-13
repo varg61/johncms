@@ -15,12 +15,13 @@
 defined('_IN_JOHNCMS') or die('Restricted access');
 class core {
     // Системные переменные
-    public $ip;                          // IP адрес в LONG формате
-    public $system_settings = array ();  // Системные настройки
-    public $system_time;                 // Системное время
-    public $system_language = 'ru';      // Язык системы
-    public $language_phrases = array (); // Массив с фразами выбранного языка
-    public $regban = false;              // Запрет регистрации пользователей
+    public $ip;                            // IP адрес в LONG формате
+    public $user_agent = 'Not Recognised'; // User Agent (Browser)
+    public $system_settings = array ();    // Системные настройки
+    public $system_time;                   // Системное время
+    public $system_language = 'ru';        // Язык системы
+    public $language_phrases = array ();   // Массив с фразами выбранного языка
+    public $regban = false;                // Запрет регистрации пользователей
 
     // Пользовательские переменные
     public $user_id = false;          // Идентификатор пользователя
@@ -41,7 +42,7 @@ class core {
     */
     function __construct() {
         // Получаем реальный адрес IP
-        $this->ip = ip2long($this->ip_getip());
+        $this->ip = ip2long($this->ip_get());
 
         // Проверка адреса IP на флуд
         if ($this->flood_chk) {
@@ -50,18 +51,28 @@ class core {
         }
 
         // Удаляем слэши
-        $this->del_slashes();
+        if (get_magic_quotes_gpc())
+            $this->del_slashes();
+
+        // Получаем User Agent
+        $this->user_agent = $this->ua_get();
+        
         // Стартуем сессию
         session_name('SESID');
         session_start();
+
         // Соединяемся с базой данных
         $this->db_connect();
+
         // Получаем системные настройки
         $this->system_settings();
+
         // Автоочистка системы
         $this->autoclean();
+
         // Авторизация пользователей
         $this->user_authorize();
+
         // Загружаем язык системы
         $this->language_phrases = $this->load_lng();
     }
@@ -84,7 +95,7 @@ class core {
     Получаем реальный адрес IP
     -----------------------------------------------------------------
     */
-    private function ip_getip() {
+    private function ip_get() {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $this->ip_valid($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
         }  elseif ($_SERVER['REMOTE_ADDR']) {
@@ -92,6 +103,15 @@ class core {
         } else {
             die('Unknown IP');
         }
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Получаем User Agent
+    -----------------------------------------------------------------
+    */
+    private function ua_get(){
+        return htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES);
     }
 
     /*
@@ -155,26 +175,26 @@ class core {
     -----------------------------------------------------------------
     */
     private function del_slashes() {
-        if (get_magic_quotes_gpc()) {
-            $in = array (
-                &$_GET,
-                &$_POST,
-                &$_COOKIE
-            );
-            while (list($k, $v) = each($in)) {
-                foreach ($v as $key => $val) {
-                    if (!is_array($val)) {
-                        $in[$k][$key] = stripslashes($val);
-                        continue;
-                    }
-                    $in[] = &$in[$k][$key];
+        $in = array (
+            &$_GET,
+            &$_POST,
+            &$_COOKIE
+        );
+
+        while (list($k, $v) = each($in)) {
+            foreach ($v as $key => $val) {
+                if (!is_array($val)) {
+                    $in[$k][$key] = stripslashes($val);
+                    continue;
                 }
+                $in[] = &$in[$k][$key];
             }
-            unset($in);
-            if (!empty($_FILES)) {
-                foreach ($_FILES as $k => $v) {
-                    $_FILES[$k]['name'] = stripslashes((string)$v['name']);
-                }
+        }
+        unset($in);
+
+        if (!empty($_FILES)) {
+            foreach ($_FILES as $k => $v) {
+                $_FILES[$k]['name'] = stripslashes((string)$v['name']);
             }
         }
     }
@@ -186,6 +206,7 @@ class core {
     */
     function ip_ban() {
         $req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . $this->ip . "' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
+
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_array($req);
             switch ($res['ban_type']) {
@@ -200,8 +221,7 @@ class core {
                 case 3:
                     $this->regban = true;
                     break;
-
-                default :
+                    default :
                     header("HTTP/1.0 404 Not Found");
                     exit;
             }
