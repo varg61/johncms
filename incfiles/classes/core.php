@@ -111,7 +111,7 @@ class core {
     -----------------------------------------------------------------
     */
     private function ua_get(){
-        return htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 100), ENT_QUOTES);
+        return htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 150), ENT_QUOTES);
     }
 
     /*
