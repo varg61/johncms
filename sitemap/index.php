@@ -81,8 +81,7 @@ if (!defined('_IN_JOHNCMS')) {
     echo '<div class="menu">' . sitemap() . '</div>';
     require('../incfiles/end.php');
 } else {
-    require($rootpath . 'incfiles/lib/mobile_device_detect.php');
-    if (!mobile_device_detect()) {
+    if (!functions::mobile_detect()) {
         echo '<div class="menu"><div class="sitemap">' . sitemap() . '</div></div>';
     }
 }
