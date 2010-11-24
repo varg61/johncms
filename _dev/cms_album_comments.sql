@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Ноя 18 2010 г., 13:58
+-- Время создания: Ноя 24 2010 г., 16:32
 -- Версия сервера: 5.1.40
 -- Версия PHP: 5.3.1
 
@@ -22,11 +22,11 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `cms_comments`
+-- Структура таблицы `cms_album_comments`
 --
 
-DROP TABLE IF EXISTS `cms_comments`;
-CREATE TABLE `cms_comments` (
+DROP TABLE IF EXISTS `cms_album_comments`;
+CREATE TABLE `cms_album_comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(10) NOT NULL,
   `sub_id` int(10) unsigned NOT NULL,

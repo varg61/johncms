@@ -91,7 +91,7 @@ if ($img) {
                 '<a href="album.php?act=image_delete&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . $lng['delete'] . '</a></p>';
         }
         vote_photo($res);
-        echo '<p><a href="">' . $lng['comments'] . '</a> (0)<br />' .
+        echo '<p><a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')<br />' .
             '<a href="../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
             '</div></div>' .
             '<div class="phdr"><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng_profile['album'] . '</a></div>';
@@ -116,7 +116,7 @@ if ($img) {
                 echo '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
             echo '<div class="sub">';
             vote_photo($res);
-            echo '<p><a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (0)<br />' .
+            echo '<p><a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')<br />' .
                 '<a href="../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a></p>' .
                 '</div></div>';
             ++$i;

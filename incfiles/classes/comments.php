@@ -14,143 +14,152 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 class comments {
-    // Параметры отображения комментариев
-    public $sub_id;             // Идентификатор комментируемого объекта
-    public $sub_id_name = 'id'; // Имя идентификатора объекта
-    public $script;             // Имя скрипта, использующего класс
-    public $min_lenght = 4;     // Мин. к-во символов в комментарии
-    public $max_lenght = 5000;  // Макс. к-во символов в комментарии
-    public $captcha = false;    // Показывать CAPTCHA
+    // Служебные данные
+    private $object_table;    // Таблица комментируемых объектов
+    private $comments_table;  // Таблица с комментариями
+    private $sub_id = false;  // Идентификатор комментируемого объекта
+    private $item;            // Локальный идентификатор
+    private $user_id = false; // Идентификатор авторизованного пользователя
+    private $rights = 0;      // Права доступа
+    private $ban = false;     // Находится ли юзер в бане?
+    private $url;             // URL формируемых ссылок
 
     // Права доступа
-    public $msg_reply = false;  // Возможность отвечать на комментарий
-    public $msg_edit = false;   // Возможность редактировать комментарий
-    public $msg_delete = false; // Возможность удалять комментарий
-    public $access_level = 6;   // Уровень доступа для Администрации
+    private $access_reply = false;  // Возможность отвечать на комментарий
+    private $access_edit = false;   // Возможность редактировать комментарий
+    private $access_delete = false; // Возможность удалять комментарий
+    private $access_level = 6;      // Уровень доступа для Администрации
 
-    // Служебные данные
-    private $table = false; // Таблица базы данных
-    private $module;        // Модуль, использующий комментарии
-    private $lng;           // Язык (фразы)
-    private $rights = 0;    // Права доступа
-    private $ban = false;   // Находится ли юзер в бане?
-    private $url;           // URL формируемых ссылок
+    // Параметры отображения комментариев
+    public $min_lenght = 4;    // Мин. к-во символов в комментарии
+    public $max_lenght = 5000; // Макс. к-во символов в комментарии
+    public $captcha = false;   // Показывать CAPTCHA
 
     /*
-    -----------------------------------------------------------------
+    =================================================================
     Конструктор класса
-    -----------------------------------------------------------------
+    =================================================================
     */
-    function __construct($table, $module) {
-        global $lng, $ban, $rights;
-        $this->table = $table;
-        $this->module = $module;
-        $this->lng = $lng;
-        $this->rights = $rights;
-        $this->ban = $ban;
-    }
+    function __construct($arg = array ()) {
+        global $lng, $user_id, $rights, $ban, $mod;
+        $this->comments_table = $arg['comments_table'];
+        $this->object_table = !empty($arg['object_table']) ? $arg['object_table'] : false;
 
-    /*
-    -----------------------------------------------------------------
-    Переключаем режимы работы и показываем комментарии
-    -----------------------------------------------------------------
-    */
-    public function display_comments() {
-        global $mod;
+        if (!empty($arg['sub_id_name']) && !empty($arg['sub_id'])) {
+            $this->sub_id = $arg['sub_id'];
+            $this->url = $arg['script'] . '&amp;' . $arg['sub_id_name'] . '=' . $arg['sub_id'];
+        } else {
+            //TODO: Доработать на режим без sub_id
+            $this->url = $arg['script'];
+        }
+        $this->item = isset($_GET['item']) ? abs(intval($_GET['item'])) : false;
 
-        // Формируем служебные ссылки
-        $this->url = $this->script . '&amp;' . $this->sub_id_name . '=' . $this->sub_id;
-        $item = isset($_GET['item']) ? abs(intval($_GET['item'])) : false;
+        // Получаем данные пользователя
+        if ($user_id) {
+            $this->user_id = $user_id;
+            $this->rights = $rights;
+            $this->ban = $ban;
+        }
+
+        // Назначение пользовательских прав
+        if ($arg['owner'] == $user_id) {
+            $this->access_delete = isset($arg['owner_delete']);
+            $this->access_reply = isset($arg['owner_reply']);
+            $this->access_edit = isset($arg['owner_edit']);
+        }
 
         // Открываем доступ для Администрации
         if ($this->rights >= $this->access_level) {
-            $this->msg_reply = true;
-            $this->msg_edit = true;
-            $this->msg_delete = true;
+            $this->access_reply = true;
+            $this->access_edit = true;
+            $this->access_delete = true;
         }
 
         switch ($mod) {
             case 'reply':
                 /*
-                -----------------------------------------------------------------
+                =================================================================
                 Отвечаем на комментарий
-                -----------------------------------------------------------------
+                =================================================================
                 */
-                if ($this->msg_reply || !$this->ban) {
-                    $req = mysql_query("SELECT * FROM `" . $this->table . "` WHERE `id` = '$item'");
+                if ($this->access_reply || !$this->ban) {
+                    $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "'");
                     if (isset($_POST['submit'])) {
                         $msg = '';
                     } else {
-                        echo $this->submit_form($item);
+                        echo $this->msg_form($this->item);
                     }
                 }
                 break;
 
             case 'edit':
             /*
-            -----------------------------------------------------------------
+            =================================================================
             Редактируем комментарий
-            -----------------------------------------------------------------
+            =================================================================
             */
             break;
 
             case 'del':
                 /*
-                -----------------------------------------------------------------
+                =================================================================
                 Удаляем комментарий
-                -----------------------------------------------------------------
+                =================================================================
                 */
                 if (isset($_GET['yes'])) {
-                    $this->delete($item, isset($_GET['all']));
+                    $this->msg_del($this->item, isset($_GET['all']));
                     header('Location: ' . str_replace('&amp;', '&', $this->url));
                 } else {
-                    echo '<div class="rmenu"><p>' . $this->lng['delete_confirmation'] . '<br />' .
-                        '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $item . '&amp;yes">' . $this->lng['delete'] . '</a> | ' .
-                        '<a href="' . $this->url . '">' . $this->lng['cancel'] . '</a><br />' .
-                        '<div class="sub">' . $this->lng['clear_user_msg'] . '<br />' .
-                        '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $item . '&amp;yes&amp;all">' . $this->lng['clear'] . '</a></span></div></p></div>';
+                    echo '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '<br />' .
+                        '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes">' . $lng['delete'] . '</a> | ' .
+                        '<a href="' . $this->url . '">' . $lng['cancel'] . '</a><br />' .
+                        '<div class="sub">' . $lng['clear_user_msg'] . '<br />' .
+                        '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes&amp;all">' . $lng['clear'] . '</a></span></div></p></div>';
                 }
                 break;
 
             case 'add_comment':
                 /*
-                -----------------------------------------------------------------
+                =================================================================
                 Добавляем комментарий
-                -----------------------------------------------------------------
+                =================================================================
                 */
-                $error = $this->add();
-                if (!empty($error))
-                    echo functions::display_error($error, '<a href="' . $this->url . '">' . $this->lng['back'] . '</a>');
-                else
+                $message = $this->msg_check(1);
+                if (empty($message['error'])) {
+                    $this->msg_add($message['text']);
                     header('Location: ' . str_replace('&amp;', '&', $this->url));
+                } else {
+                    echo functions::display_error($message['error'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
+                }
                 break;
 
             default:
                 /*
-                -----------------------------------------------------------------
+                =================================================================
                 Показываем комментарии
-                -----------------------------------------------------------------
+                =================================================================
                 */
                 if (!$this->ban)
-                    echo $this->submit_form();
-                echo $this->comments_list();
+                    echo $this->msg_form();
+                echo $this->msg_list();
         }
     }
 
     /*
-    -----------------------------------------------------------------
+    =================================================================
     Листинг комментариев
-    -----------------------------------------------------------------
+    =================================================================
     */
-    private function comments_list() {
-        global $start, $kmess;
-        $req = mysql_query("SELECT `" . $this->table . "`.*, `" . $this->table . "`.`id` AS `subid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
-            FROM `" . $this->table . "` LEFT JOIN `users` ON `" . $this->table . "`.`user_id` = `users`.`id`
-            WHERE `module` = '" . $this->module . "' AND `sub_id` = '" . $this->sub_id . "' ORDER BY `subid` DESC LIMIT $start, $kmess
-        ");
+    private function msg_list() {
+        global $start, $kmess, $lng;
+        $total = $this->msg_total();
 
-        if (mysql_num_rows($req)) {
+        if ($total) {
             $out = '';
+            $req = mysql_query("SELECT `" . $this->comments_table . "`.*, `" . $this->comments_table . "`.`id` AS `subid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
+                FROM `" . $this->comments_table . "` LEFT JOIN `users` ON `" . $this->comments_table . "`.`user_id` = `users`.`id`
+                WHERE `sub_id` = '" . $this->sub_id . "' ORDER BY `subid` DESC LIMIT $start, $kmess
+            ");
             while ($res = mysql_fetch_assoc($req)) {
                 $attributes = unserialize($res['attributes']);
                 $res['name'] = $attributes['author_name'];
@@ -158,10 +167,11 @@ class comments {
                 $res['browser'] = $attributes['author_browser'];
                 $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $menu = array (
-                    $this->msg_reply ? '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $res['subid'] . '">' . $this->lng['reply'] . '</a>' : '',
-                    $this->msg_edit ? '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $res['subid'] . '">' . $this->lng['edit'] . '</a>' : '',
-                    $this->msg_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . $this->lng['delete'] . '</a>' : ''
+                    $this->access_reply ? '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $res['subid'] . '">' . $lng['reply'] . '</a>' : '',
+                    $this->access_edit ? '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $res['subid'] . '">' . $lng['edit'] . '</a>' : '',
+                    $this->access_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . $lng['delete'] . '</a>' : ''
                 );
+                //TODO: Добавить выключение смайлов
                 $arg = array (
                     'header' => ' <span class="gray">(' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>',
                     'body' => functions::smileys(functions::checkout($res['text'], 1, 1)),
@@ -171,105 +181,130 @@ class comments {
                 $out .= '</div>';
                 ++$i;
             }
+            $out .= '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+            if($total > $kmess){
+                $out .= functions::display_pagination($this->url . '&amp;', $start, $total, $kmess);
+                $out .= '<p><form action="' . $this->url . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+            }
             return $out;
         } else {
-            return '<div class="menu"><p>' . $this->lng['list_empty'] . '</p></div>';
+            return '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
         }
     }
 
     /*
-    -----------------------------------------------------------------
+    =================================================================
     Форма ввода комментария
     -----------------------------------------------------------------
+    $mode = 0               Добавление коммментария
+    $mode = 1               Редактирование комментария
+    $mode = 2               Ответ на комментарий
+    =================================================================
     */
-    private function submit_form($item = false) {
-        global $set_user;
-        $out = '<div class="gmenu"><form action="' . $this->script . '&amp;mod=' . ($item ? 'reply&amp;item=' . $item : 'add_comment') . '&amp;img=' . $this->sub_id . '" method="post">';
-        $out .= $this->lng['message'] . ':<br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="message"></textarea><br/>';
+    private function msg_form($mode = 0) {
+        global $set_user, $lng;
+        $out = '<div class="gmenu"><form action="' . $this->url . '&amp;mod=add_comment" method="post">';
+        $out .= $lng['message'] . ':<br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="message"></textarea><br/>';
 
         if ($set_user['translit'])
-            $out .= '<input type="checkbox" name="translit" value="1" />&nbsp;' . $this->lng['translit'] . '<br/>';
-        $out .= '<input type="submit" name="submit" value="' . $this->lng['sent'] . '"/></form></div>';
+            $out .= '<input type="checkbox" name="translit" value="1" />&nbsp;' . $lng['translit'] . '<br/>';
+        $out .= '<input type="submit" name="submit" value="' . $lng['sent'] . '"/></form></div>';
         return $out;
     }
 
     /*
+    =================================================================
+    Проверка текста сообщения
     -----------------------------------------------------------------
-    Добавление сообщения в базу
-    -----------------------------------------------------------------
+    $rpt_check (boolean)    проверка на повтор сообщений
+    =================================================================
     */
-    private function add($reply = false) {
-        global $datauser, $user_id, $realtime, $ip, $agn;
+    private function msg_check($rpt_check = false) {
+        global $lng;
+        $error = array ();
         $message = isset($_POST['message']) ? mb_substr(trim($_POST['message']), 0, $this->max_lenght) : false;
         $translit = isset($_POST['translit']);
-        $error = array ();
 
-        // Транслит сообщения
-        if ($translit)
-            $message = functions::trans($message);
+        // Проверяем на минимально допустимую длину
+        if (mb_strlen($message) < $this->min_lenght)
+            $error[] = $lng['error_message_short'];
+
         // Проверка на флуд
         $flood = functions::antiflood();
 
         if ($flood)
-            $error[] = $this->lng['error_flood'] . ' ' . $flood . '&#160;' . $this->lng['seconds'];
+            $error[] = $lng['error_flood'] . ' ' . $flood . '&#160;' . $lng['seconds'];
 
-        // Проверяем на минимально допустимую длину
-        if (mb_strlen($message) < $this->min_lenght)
-            $error[] = $this->lng['error_message_short'];
-
-        // Проверяем на повтор сообщений
-        $req = mysql_query("SELECT * FROM `" . $this->table . "` WHERE `user_id` = '$user_id' ORDER BY `id` DESC LIMIT 1");
-        $res = mysql_fetch_assoc($req);
-
-        if (mb_strtolower($message) == mb_strtolower($res['text']))
-            $error[] = $this->lng['error_message_exists'];
-
-        if (!$error) {
-            if ($reply) {
-                $req = mysql_query("");
-                if (mysql_num_rows($req)) { }
-                else {
-                    return $this->lng['error_wrong_data'];
-                }
-            } else {
-                $attributes = array (
-                    'author_name' => $datauser['name'],
-                    'author_ip' => $ip,
-                    'author_browser' => $agn
-                );
-                // Записываем комментарий в базу
-                mysql_query("INSERT INTO `" . $this->table . "` SET
-                    `module` = '" . $this->module . "',
-                    `sub_id` = '" . intval($this->sub_id) . "',
-                    `user_id` = '$user_id',
-                    `text` = '" . mysql_real_escape_string($message) . "',
-                    `time` = '$realtime',
-                    `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
-            ");
-                // Обновляем статистику пользователя
-                mysql_query("UPDATE `users` SET `komm` = '" . ($datauser['komm'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
-            }
+        // Проверка на повтор сообщений
+        if ($rpt_check) {
+            $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `user_id` = '" . $this->user_id . "' ORDER BY `id` DESC LIMIT 1");
+            $res = mysql_fetch_assoc($req);
+            if (mb_strtolower($message) == mb_strtolower($res['text']))
+                $error[] = $lng['error_message_exists'];
         }
-        return $error;
+
+        // Транслит сообщения
+        if (!$error && $translit)
+            $message = functions::trans($message);
+
+        // Возвращаем результат
+        return array (
+            'text' => $message,
+            'error' => $error
+        );
     }
 
     /*
+    =================================================================
+    Добавление сообщения в базу
     -----------------------------------------------------------------
+    $message (string)       текст сообщения
+    =================================================================
+    */
+    private function msg_add($message = '') {
+        global $datauser, $realtime, $ip, $agn;
+
+        // Формируем атрибуты сообщения
+        $attributes = array (
+            'author_name' => $datauser['name'],
+            'author_ip' => $ip,
+            'author_browser' => $agn
+        );
+
+        // Записываем комментарий в базу
+        mysql_query("INSERT INTO `" . $this->comments_table . "` SET
+            `sub_id` = '" . intval($this->sub_id) . "',
+            `user_id` = '" . $this->user_id . "',
+            `text` = '" . mysql_real_escape_string($message) . "',
+            `time` = '$realtime',
+            `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
+        ");
+        // Обновляем счетчик комментариев
+        $this->msg_total(1);
+        // Обновляем статистику пользователя
+        mysql_query("UPDATE `users` SET `komm` = '" . ($datauser['komm'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '" . $this->user_id . "'");
+    }
+
+    /*
+    =================================================================
     Удаляем комментарии
     -----------------------------------------------------------------
+    $item  (int)            идентификатор объекта
+    $clear (boolean)        массовое удаление
+    =================================================================
     */
-    private function delete($item = false, $clear = false) {
-        if ($item && $this->msg_delete) {
+    private function msg_del($item = false, $clear = false) {
+        if ($item && $this->access_delete) {
             //TODO: Написать удаление баллов из статистики юзера
-            $req = mysql_query("SELECT * FROM `" . $this->table . "` WHERE `id` = '$item' AND `sub_id` = '" . $this->sub_id . "' AND `module` = '" . $this->module . "' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '$item' AND `sub_id` = '" . $this->sub_id . "' AND `module` = '" . $this->module . "' LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 if ($clear) {
-                    $count = mysql_query("SELECT COUNT(*) FROM `" . $this->table . "`");
-                    mysql_query("DELETE FROM `" . $this->table . "` WHERE `module` = '" . $this->module . "' AND `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'");
+                    $count = mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "`");
+                    mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'");
                 } else {
                     $count = 1;
-                    mysql_query("DELETE FROM `" . $this->table . "` WHERE `id` = '$item'");
+                    mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `id` = '$item'");
                 }
             } else {
                 return false;
@@ -281,10 +316,29 @@ class comments {
     }
 
     /*
-    -----------------------------------------------------------------
+    =================================================================
     Редактируем комментарий
-    -----------------------------------------------------------------
+    =================================================================
     */
-    private function edit() { }
+    private function msg_edit() { }
+
+    /*
+    =================================================================
+    Счетчик комментариев
+    -----------------------------------------------------------------
+    $update (boolean)       Обновить статистику в таблице объекта
+    =================================================================
+    */
+    private function msg_total($update = false) {
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "'"), 0);
+
+        if ($update) {
+            mysql_query("UPDATE `" . $this->object_table . "` SET
+                `comm_count` = '$total'
+                WHERE `id` = '" . $this->sub_id . "'
+            ");
+        }
+        return $total;
+    }
 }
 ?>
