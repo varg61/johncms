@@ -62,7 +62,7 @@ class comments {
         }
 
         // Назначение пользовательских прав
-        if ($arg['owner'] == $user_id) {
+        if ($user_id && $arg['owner'] == $user_id) {
             $this->access_delete = isset($arg['owner_delete']);
             $this->access_reply = isset($arg['owner_reply']);
             $this->access_edit = isset($arg['owner_edit']);
@@ -110,7 +110,8 @@ class comments {
                     $this->msg_del($this->item, isset($_GET['all']));
                     header('Location: ' . str_replace('&amp;', '&', $this->url));
                 } else {
-                    echo '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '<br />' .
+                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['delete'] . '</div>' .
+                        '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '<br />' .
                         '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes">' . $lng['delete'] . '</a> | ' .
                         '<a href="' . $this->url . '">' . $lng['cancel'] . '</a><br />' .
                         '<div class="sub">' . $lng['clear_user_msg'] . '<br />' .
@@ -139,6 +140,7 @@ class comments {
                 Показываем комментарии
                 =================================================================
                 */
+                echo '<div class="phdr"><b>' . $lng['comments'] . '</b></div>';
                 if (!$this->ban)
                     echo $this->msg_form();
                 echo $this->msg_list();
@@ -181,15 +183,16 @@ class comments {
                 $out .= '</div>';
                 ++$i;
             }
-            $out .= '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-            if($total > $kmess){
-                $out .= functions::display_pagination($this->url . '&amp;', $start, $total, $kmess);
-                $out .= '<p><form action="' . $this->url . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
-            }
-            return $out;
         } else {
-            return '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+            $out = '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
         }
+        $out .= '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+
+        if ($total > $kmess) {
+            $out .= functions::display_pagination($this->url . '&amp;', $start, $total, $kmess);
+            $out .= '<p><form action="' . $this->url . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+        }
+        return $out;
     }
 
     /*
@@ -295,23 +298,30 @@ class comments {
     */
     private function msg_del($item = false, $clear = false) {
         if ($item && $this->access_delete) {
-            //TODO: Написать удаление баллов из статистики юзера
-            $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '$item' AND `sub_id` = '" . $this->sub_id . "' AND `module` = '" . $this->module . "' LIMIT 1");
+            // Проверяем наличие выбранного к удалению комментария
+            $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '$item' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 if ($clear) {
-                    $count = mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "`");
+                    // Удаляем все комментарии выбранного пользователя
+                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'"), 0);
                     mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'");
                 } else {
+                    // Удаляем отдельный комментарий
                     $count = 1;
                     mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `id` = '$item'");
                 }
-            } else {
-                return false;
+
+                // Вычитаем баллы из статистики пользователя
+                $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+                if(mysql_num_rows($req_u)){
+                    $res_u = mysql_fetch_assoc($req_u);
+                    $count = $res_u['komm'] > $count ? $res_u['komm'] - $count : 0;
+                    mysql_query("UPDATE `users` SET `komm` = '$count' WHERE `id` = '" . $res['user_id'] . "'");
+                }
+                // Обновляем счетчик комментариев
+                $this->msg_total(1);
             }
-            return true;
-        } else {
-            return false;
         }
     }
 
