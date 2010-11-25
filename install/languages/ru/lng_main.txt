@@ -77,6 +77,7 @@ down                          :::   Вниз
 download                      :::   Скачать
 downloads                     :::   Загрузки
 edit                          :::   Изменить
+edited                        :::   Изменен
 enter_code                    :::   Введите проверочный код
 enter_on_site                 :::   Войти на сайт
 error                         :::   ОШИБКА
@@ -85,6 +86,7 @@ error_address                 :::   Адрес введен неверно
 error_avatar_select           :::   Ошибка выбора Аватара
 error_captcha_wrong           :::   Проверочный код введен неверно
 error_description_lenght      :::   Длина описания должна быть не менее 2-х символов
+error_edit_rights             :::   Вы не можете редактировать сообщение старшего Вас по должности
 error_flood                   :::   Вы не можете так часто добавлять сообщения<br />Пожалуйста, подождите
 error_login_empty             :::   Вы не ввели Логин
 error_mandatory_fields        :::   Не заполнены обязательные поля

@@ -38,7 +38,7 @@ if (mysql_num_rows($req)) {
             if (mysql_num_rows($req_u)) {
                 $res_u = mysql_fetch_assoc($req_u);
                 if ($res_u['rights'] > $datauser['rights'])
-                    $error = $lng_forum['error_edit_rights'] . '<br /><a href="' . $link . '">' . $lng['back'] . '</a>';
+                    $error = $lng['error_edit_rights'] . '<br /><a href="' . $link . '">' . $lng['back'] . '</a>';
             }
         }
     } else {

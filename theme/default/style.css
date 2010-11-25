@@ -199,13 +199,13 @@ ul {
 }
 
 .reply {
-    border-left: 4px solid red;
-    color: #FF0000;
+    border-left: 4px solid #EE0000;
+    color: #EE0000;
     padding: 2px 0px 2px 4px;
 }
 
 .reply a:link, .reply a:visited{
-  color: #FF0000
+  color: #DD0000
 }
 
 .greply {

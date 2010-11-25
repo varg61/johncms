@@ -120,12 +120,51 @@ class comments {
                 break;
 
             case 'edit':
-            /*
-            -----------------------------------------------------------------
-            Редактируем комментарий
-            -----------------------------------------------------------------
-            */
-            break;
+                /*
+                -----------------------------------------------------------------
+                Редактируем комментарий
+                -----------------------------------------------------------------
+                */
+                if ($this->item && $this->access_edit && !$this->ban) {
+                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['edit'] . '</div>';
+                    $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
+                    if (mysql_num_rows($req)) {
+                        $res = mysql_fetch_assoc($req);
+                        $attributes = unserialize($res['attributes']);
+                        $user = functions::get_user($res['user_id']);
+                        if ($user['rights'] > $rights) {
+                            echo functions::display_error($lng['error_edit_rights'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
+                        } elseif (isset($_POST['submit'])) {
+                            $message = $this->msg_check();
+                            if (empty($message['error'])) {
+                                $attributes['edit_id'] = $this->user_id;
+                                $attributes['edit_name'] = $datauser['name'];
+                                $attributes['edit_time'] = $realtime;
+                                if (isset($attributes['edit_count']))
+                                    ++$attributes['edit_count'];
+                                else
+                                    $attributes['edit_count'] = 1;
+                                mysql_query("UPDATE `" . $this->comments_table . "` SET
+                                    `text` = '" . mysql_real_escape_string($message['text']) . "',
+                                    `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
+                                    WHERE `id` = '" . $this->item . "'
+                                ");
+                                header('Location: ' . str_replace('&amp;', '&', $this->url));
+                            } else {
+                                echo functions::display_error($message['error'], '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $this->item . '">' . $lng['back'] . '</a>');
+                            }
+                        } else {
+                            $author = '<a href="' . $set['homeurl'] . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
+                            $author .= ' (' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')<br />';
+                            $text = functions::checkout($res['text']);
+                            echo $this->msg_form('&amp;mod=edit&amp;item=' . $this->item, $author, $text);
+                        }
+                    } else {
+                        echo functions::display_error($lng['error_wrong_data'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
+                    }
+                    echo '<div class="phdr"><a href="' . $this->url . '">' . $lng['cancel'] . '</a></div>';
+                }
+                break;
 
             case 'del':
                 /*
@@ -208,7 +247,7 @@ class comments {
             default:
                 /*
                 -----------------------------------------------------------------
-                Показываем комментарии
+                Показываем список комментариев
                 -----------------------------------------------------------------
                 */
                 echo '<div class="phdr"><b>' . $lng['comments'] . '</b></div>';
@@ -235,6 +274,11 @@ class comments {
                         $text = functions::checkout($res['text'], 1, 1);
                         if ($set_user['smileys'])
                             $text = functions::smileys($text, $res['rights'] >= 1 ? 1 : 0);
+                        if (isset($attributes['edit_count'])) {
+                            $text .= '<br /><span class="gray"><small>' . $lng['edited'] . ': <b>' . $attributes['edit_name'] . '</b>' .
+                                ' (' . date("d.m.Y / H:i", $attributes['edit_time'] + $set_user['sdvig'] * 3600) . ') <b>' .
+                                '[' . $attributes['edit_count'] . ']</b></small></span>';
+                        }
                         if (!empty($res['reply'])) {
                             $reply = functions::checkout($res['reply'], 1, 1);
                             if ($set_user['smileys'])
@@ -272,16 +316,16 @@ class comments {
     */
     private function msg_form($submit_link = '', $text = '', $reply = '') {
         global $set_user, $lng;
-        $out = '<div class="gmenu"><form action="' . $this->url . $submit_link . '" method="post">';
+        $out = '<div class="gmenu"><form action="' . $this->url . $submit_link . '" method="post"><p>';
 
         if (!empty($text)) {
-            $out .= '<p><div class="quote">' . $text . '</div></p>';
+            $out .= '<div class="quote">' . $text . '</div></p><p>';
         }
         $out .= $lng['message'] . ':<br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="message">' . $reply . '</textarea><br/>';
 
         if ($set_user['translit'])
             $out .= '<input type="checkbox" name="translit" value="1" />&nbsp;' . $lng['translit'] . '<br/>';
-        $out .= '<input type="submit" name="submit" value="' . $lng['sent'] . '"/></form></div>';
+        $out .= '<input type="submit" name="submit" value="' . $lng['sent'] . '"/></p></form></div>';
         return $out;
     }
 
