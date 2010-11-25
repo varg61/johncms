@@ -99,6 +99,7 @@ error_nicklenght              :::   Недопустимая длина Ника
 error_password_empty          :::   Вы не ввели Пароль
 error_password_lenght         :::   Недопустимая длина Пароля. Разрешено минимум 3 и максимум 15 символов
 error_password_wrongsymbols   :::   Недопустимые символы в пароле
+error_reply_rights            :::   На это сообщение уже ответил Администратор
 error_user_not_exist          :::   Такого пользователя не существует
 error_user_not_specified      :::   Не указан пользователь
 error_verifying_code          :::   Проверочный код введен неверно

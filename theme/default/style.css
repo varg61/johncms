@@ -204,6 +204,20 @@ ul {
     padding: 2px 0px 2px 4px;
 }
 
+.reply a:link, .reply a:visited{
+  color: #FF0000
+}
+
+.greply {
+    border-left: 4px solid #009900;
+    color: #009900;
+    padding: 2px 0px 2px 4px;
+}
+
+.greply a:link, .greply a:visited{
+  color: #008800
+}
+
 .rmenu {
     background-color: #e9ccd2;
     border: 1px solid white;

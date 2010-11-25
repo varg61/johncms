@@ -41,7 +41,7 @@ class comments {
     -----------------------------------------------------------------
     */
     function __construct($arg = array ()) {
-        global $lng, $user_id, $rights, $ban, $mod;
+        global $lng, $user_id, $rights, $ban, $mod, $set_user, $set, $realtime, $ip, $agn, $datauser, $start, $kmess;
         $this->comments_table = $arg['comments_table'];
         $this->object_table = !empty($arg['object_table']) ? $arg['object_table'] : false;
 
@@ -62,7 +62,7 @@ class comments {
         }
 
         // Назначение пользовательских прав
-        if ($user_id && $arg['owner'] == $user_id) {
+        if ($user_id && $arg['owner'] == $user_id && !$this->ban) {
             $this->access_delete = isset($arg['owner_delete']);
             $this->access_reply = isset($arg['owner_reply']);
             $this->access_edit = isset($arg['owner_edit']);
@@ -82,12 +82,39 @@ class comments {
                 Отвечаем на комментарий
                 -----------------------------------------------------------------
                 */
-                if ($this->access_reply || !$this->ban) {
-                    $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "'");
-                    if (isset($_POST['submit'])) {
-                        $msg = '';
+                if ($this->item && $this->access_reply && !$this->ban) {
+                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['reply'] . '</div>';
+                    $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
+                    if (mysql_num_rows($req)) {
+                        $res = mysql_fetch_assoc($req);
+                        $attributes = unserialize($res['attributes']);
+                        if (!empty($res['reply']) && $attributes['reply_rights'] > $this->rights) {
+                            echo functions::display_error($lng['error_reply_rights'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
+                        } elseif (isset($_POST['submit'])) {
+                            $message = $this->msg_check();
+                            if (empty($message['error'])) {
+                                $attributes['reply_id'] = $this->user_id;
+                                $attributes['reply_rights'] = $this->rights;
+                                $attributes['reply_name'] = $datauser['name'];
+                                $attributes['reply_time'] = $realtime;
+                                mysql_query("UPDATE `" . $this->comments_table . "` SET
+                                    `reply` = '" . mysql_real_escape_string($message['text']) . "',
+                                    `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
+                                    WHERE `id` = '" . $this->item . "'
+                                ");
+                                header('Location: ' . str_replace('&amp;', '&', $this->url));
+                            } else {
+                                echo functions::display_error($message['error'], '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $this->item . '">' . $lng['back'] . '</a>');
+                            }
+                        } else {
+                            $text = '<a href="' . $set['homeurl'] . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
+                            $text .= ' (' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')<br />';
+                            $text .= functions::checkout($res['text']);
+                            $reply = functions::checkout($res['reply']);
+                            echo $this->msg_form('&amp;mod=reply&amp;item=' . $this->item, $text, $reply);
+                        }
                     } else {
-                        echo $this->msg_form($this->item);
+                        echo functions::display_error($lng['error_wrong_data'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
                     }
                 }
                 break;
@@ -106,16 +133,40 @@ class comments {
                 Удаляем комментарий
                 -----------------------------------------------------------------
                 */
-                if (isset($_GET['yes'])) {
-                    $this->msg_del($this->item, isset($_GET['all']));
-                    header('Location: ' . str_replace('&amp;', '&', $this->url));
-                } else {
-                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['delete'] . '</div>' .
-                        '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '<br />' .
-                        '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes">' . $lng['delete'] . '</a> | ' .
-                        '<a href="' . $this->url . '">' . $lng['cancel'] . '</a><br />' .
-                        '<div class="sub">' . $lng['clear_user_msg'] . '<br />' .
-                        '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes&amp;all">' . $lng['clear'] . '</a></span></div></p></div>';
+                if ($this->item && $this->access_delete && !$this->ban) {
+                    if (isset($_GET['yes'])) {
+                        //TODO: Продумать проверку на удаление постов администрации
+                        $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
+                        if (mysql_num_rows($req)) {
+                            $res = mysql_fetch_assoc($req);
+                            if (isset($_GET['all'])) {
+                                // Удаляем все комментарии выбранного пользователя
+                                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'"), 0);
+                                mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'");
+                            } else {
+                                // Удаляем отдельный комментарий
+                                $count = 1;
+                                mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "'");
+                            }
+                            // Вычитаем баллы из статистики пользователя
+                            $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+                            if (mysql_num_rows($req_u)) {
+                                $res_u = mysql_fetch_assoc($req_u);
+                                $count = $res_u['komm'] > $count ? $res_u['komm'] - $count : 0;
+                                mysql_query("UPDATE `users` SET `komm` = '$count' WHERE `id` = '" . $res['user_id'] . "'");
+                            }
+                            // Обновляем счетчик комментариев
+                            $this->msg_total(1);
+                        }
+                        header('Location: ' . str_replace('&amp;', '&', $this->url));
+                    } else {
+                        echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['delete'] . '</div>' .
+                            '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '<br />' .
+                            '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes">' . $lng['delete'] . '</a> | ' .
+                            '<a href="' . $this->url . '">' . $lng['cancel'] . '</a><br />' .
+                            '<div class="sub">' . $lng['clear_user_msg'] . '<br />' .
+                            '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes&amp;all">' . $lng['clear'] . '</a></span></div></p></div>';
+                    }
                 }
                 break;
 
@@ -125,12 +176,32 @@ class comments {
                 Добавляем комментарий
                 -----------------------------------------------------------------
                 */
-                $message = $this->msg_check(1);
-                if (empty($message['error'])) {
-                    $this->msg_add($message['text']);
-                    header('Location: ' . str_replace('&amp;', '&', $this->url));
-                } else {
-                    echo functions::display_error($message['error'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
+                if (!$this->ban) {
+                    $message = $this->msg_check(1);
+                    if (empty($message['error'])) {
+                        // Формируем атрибуты сообщения
+                        $attributes = array (
+                            'author_name' => $datauser['name'],
+                            'author_ip' => $ip,
+                            'author_browser' => $agn
+                        );
+
+                        // Записываем комментарий в базу
+                        mysql_query("INSERT INTO `" . $this->comments_table . "` SET
+                            `sub_id` = '" . intval($this->sub_id) . "',
+                            `user_id` = '" . $this->user_id . "',
+                            `text` = '" . mysql_real_escape_string($message['text']) . "',
+                            `time` = '$realtime',
+                            `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
+                        ");
+                        // Обновляем счетчик комментариев
+                        $this->msg_total(1);
+                        // Обновляем статистику пользователя
+                        mysql_query("UPDATE `users` SET `komm` = '" . ($datauser['komm'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '" . $this->user_id . "'");
+                        header('Location: ' . str_replace('&amp;', '&', $this->url));
+                    } else {
+                        echo functions::display_error($message['error'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
+                    }
                 }
                 break;
 
@@ -141,75 +212,72 @@ class comments {
                 -----------------------------------------------------------------
                 */
                 echo '<div class="phdr"><b>' . $lng['comments'] . '</b></div>';
-                if (!$this->ban)
-                    echo $this->msg_form();
-                echo $this->msg_list();
+                if (!$this->ban) {
+                    // Показываем форму ввода
+                    echo $this->msg_form('&amp;mod=add_comment');
+                }
+                $total = $this->msg_total();
+                if ($total) {
+                    $req = mysql_query("SELECT `" . $this->comments_table . "`.*, `" . $this->comments_table . "`.`id` AS `subid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
+                    FROM `" . $this->comments_table . "` LEFT JOIN `users` ON `" . $this->comments_table . "`.`user_id` = `users`.`id`
+                    WHERE `sub_id` = '" . $this->sub_id . "' ORDER BY `subid` DESC LIMIT $start, $kmess");
+                    while ($res = mysql_fetch_assoc($req)) {
+                        $attributes = unserialize($res['attributes']);
+                        $res['name'] = $attributes['author_name'];
+                        $res['ip'] = $attributes['author_ip'];
+                        $res['browser'] = $attributes['author_browser'];
+                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                        $menu = array (
+                            $this->access_reply ? '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $res['subid'] . '">' . $lng['reply'] . '</a>' : '',
+                            $this->access_edit ? '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $res['subid'] . '">' . $lng['edit'] . '</a>' : '',
+                            $this->access_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . $lng['delete'] . '</a>' : ''
+                        );
+                        $text = functions::checkout($res['text'], 1, 1);
+                        if ($set_user['smileys'])
+                            $text = functions::smileys($text, $res['rights'] >= 1 ? 1 : 0);
+                        if (!empty($res['reply'])) {
+                            $reply = functions::checkout($res['reply'], 1, 1);
+                            if ($set_user['smileys'])
+                                $reply = functions::smileys($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
+                            $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><a href=""><b>' . $attributes['reply_name'] . '</b></a>:' .
+                                ' (' . date("d.m.Y / H:i:s", $attributes['reply_time'] + $set_user['sdvig'] * 3600) . ')<br/>' . $reply . '</div>';
+                        }
+                        $arg = array (
+                            'header' => ' <span class="gray">(' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>',
+                            'body' => $text,
+                            'sub' => functions::display_menu($menu)
+                        );
+                        echo functions::display_user($res, $arg);
+                        echo '</div>';
+                        ++$i;
+                    }
+                } else {
+                    echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+                }
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+                if ($total > $kmess) {
+                    echo functions::display_pagination($this->url . '&amp;', $start, $total, $kmess);
+                    echo '<p><form action="' . $this->url . '" method="post">' .
+                        '<input type="text" name="page" size="2"/>' .
+                        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+                        '</form></p>';
+                }
         }
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Листинг комментариев
-    -----------------------------------------------------------------
-    */
-    private function msg_list() {
-        global $start, $kmess, $lng, $set_user;
-        $total = $this->msg_total();
-
-        if ($total) {
-            $out = '';
-            $req = mysql_query("SELECT `" . $this->comments_table . "`.*, `" . $this->comments_table . "`.`id` AS `subid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
-                FROM `" . $this->comments_table . "` LEFT JOIN `users` ON `" . $this->comments_table . "`.`user_id` = `users`.`id`
-                WHERE `sub_id` = '" . $this->sub_id . "' ORDER BY `subid` DESC LIMIT $start, $kmess
-            ");
-            while ($res = mysql_fetch_assoc($req)) {
-                $attributes = unserialize($res['attributes']);
-                $res['name'] = $attributes['author_name'];
-                $res['ip'] = $attributes['author_ip'];
-                $res['browser'] = $attributes['author_browser'];
-                $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                $menu = array (
-                    $this->access_reply ? '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $res['subid'] . '">' . $lng['reply'] . '</a>' : '',
-                    $this->access_edit ? '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $res['subid'] . '">' . $lng['edit'] . '</a>' : '',
-                    $this->access_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . $lng['delete'] . '</a>' : ''
-                );
-                $text = functions::checkout($res['text'], 1, 1);
-                if ($set_user['smileys'])
-                    $text = functions::smileys($text, $res['rights'] >= 1 ? 1 : 0);
-                $arg = array (
-                    'header' => ' <span class="gray">(' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>',
-                    'body' => $text,
-                    'sub' => functions::display_menu($menu)
-                );
-                $out .= functions::display_user($res, $arg);
-                $out .= '</div>';
-                ++$i;
-            }
-        } else {
-            $out = '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
-        }
-        $out .= '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-
-        if ($total > $kmess) {
-            $out .= functions::display_pagination($this->url . '&amp;', $start, $total, $kmess);
-            $out .= '<p><form action="' . $this->url . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
-        }
-        return $out;
     }
 
     /*
     -----------------------------------------------------------------
     Форма ввода комментария
     -----------------------------------------------------------------
-    $mode = 0               Добавление коммментария
-    $mode = 1               Редактирование комментария
-    $mode = 2               Ответ на комментарий
-    -----------------------------------------------------------------
     */
-    private function msg_form($mode = 0) {
+    private function msg_form($submit_link = '', $text = '', $reply = '') {
         global $set_user, $lng;
-        $out = '<div class="gmenu"><form action="' . $this->url . '&amp;mod=add_comment" method="post">';
-        $out .= $lng['message'] . ':<br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="message"></textarea><br/>';
+        $out = '<div class="gmenu"><form action="' . $this->url . $submit_link . '" method="post">';
+
+        if (!empty($text)) {
+            $out .= '<p><div class="quote">' . $text . '</div></p>';
+        }
+        $out .= $lng['message'] . ':<br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="message">' . $reply . '</textarea><br/>';
 
         if ($set_user['translit'])
             $out .= '<input type="checkbox" name="translit" value="1" />&nbsp;' . $lng['translit'] . '<br/>';
@@ -258,81 +326,6 @@ class comments {
             'error' => $error
         );
     }
-
-    /*
-    -----------------------------------------------------------------
-    Добавление сообщения в базу
-    -----------------------------------------------------------------
-    $message (string)       текст сообщения
-    -----------------------------------------------------------------
-    */
-    private function msg_add($message = '') {
-        global $datauser, $realtime, $ip, $agn;
-
-        // Формируем атрибуты сообщения
-        $attributes = array (
-            'author_name' => $datauser['name'],
-            'author_ip' => $ip,
-            'author_browser' => $agn
-        );
-
-        // Записываем комментарий в базу
-        mysql_query("INSERT INTO `" . $this->comments_table . "` SET
-            `sub_id` = '" . intval($this->sub_id) . "',
-            `user_id` = '" . $this->user_id . "',
-            `text` = '" . mysql_real_escape_string($message) . "',
-            `time` = '$realtime',
-            `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
-        ");
-        // Обновляем счетчик комментариев
-        $this->msg_total(1);
-        // Обновляем статистику пользователя
-        mysql_query("UPDATE `users` SET `komm` = '" . ($datauser['komm'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '" . $this->user_id . "'");
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Удаляем комментарии
-    -----------------------------------------------------------------
-    $item  (int)            идентификатор объекта
-    $clear (boolean)        массовое удаление
-    -----------------------------------------------------------------
-    */
-    private function msg_del($item = false, $clear = false) {
-        if ($item && $this->access_delete) {
-            // Проверяем наличие выбранного к удалению комментария
-            $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '$item' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
-                if ($clear) {
-                    // Удаляем все комментарии выбранного пользователя
-                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'"), 0);
-                    mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "' AND `user_id` = '" . $res['user_id'] . "'");
-                } else {
-                    // Удаляем отдельный комментарий
-                    $count = 1;
-                    mysql_query("DELETE FROM `" . $this->comments_table . "` WHERE `id` = '$item'");
-                }
-
-                // Вычитаем баллы из статистики пользователя
-                $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
-                if (mysql_num_rows($req_u)) {
-                    $res_u = mysql_fetch_assoc($req_u);
-                    $count = $res_u['komm'] > $count ? $res_u['komm'] - $count : 0;
-                    mysql_query("UPDATE `users` SET `komm` = '$count' WHERE `id` = '" . $res['user_id'] . "'");
-                }
-                // Обновляем счетчик комментариев
-                $this->msg_total(1);
-            }
-        }
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Редактируем комментарий
-    -----------------------------------------------------------------
-    */
-    private function msg_edit() { }
 
     /*
     -----------------------------------------------------------------
