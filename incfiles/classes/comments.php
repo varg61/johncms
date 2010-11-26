@@ -283,8 +283,8 @@ class comments {
                             $reply = functions::checkout($res['reply'], 1, 1);
                             if ($set_user['smileys'])
                                 $reply = functions::smileys($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
-                            $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><a href=""><b>' . $attributes['reply_name'] . '</b></a>:' .
-                                ' (' . date("d.m.Y / H:i:s", $attributes['reply_time'] + $set_user['sdvig'] * 3600) . ')<br/>' . $reply . '</div>';
+                            $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><small><a href="' . $set['homeurl'] . '/users/profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
+                                ' (' . date("d.m.Y / H:i:s", $attributes['reply_time'] + $set_user['sdvig'] * 3600) . ')</small><br/>' . $reply . '</div>';
                         }
                         $arg = array (
                             'header' => ' <span class="gray">(' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>',
