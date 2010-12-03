@@ -29,7 +29,7 @@ $img = isset($_REQUEST['img']) ? abs(intval($_REQUEST['img'])) : NULL;
 Закрываем от неавторизованных юзеров
 -----------------------------------------------------------------
 */
-if(!$user_id){
+if (!$user_id) {
     echo functions::display_error($lng['access_guest_forbidden']);
     require('../incfiles/end.php');
     exit;
@@ -53,7 +53,8 @@ if (!$user) {
 -----------------------------------------------------------------
 */
 function vote_photo($arg = null) {
-    global $lng, $datauser, $user, $user_id, $ban;
+    global $lng, $datauser, $user_id, $ban;
+
     if ($arg) {
         $rating = $arg['vote_plus'] - $arg['vote_minus'];
         if ($rating > 0)
@@ -67,7 +68,7 @@ function vote_photo($arg = null) {
         if ($user_id != $arg['user_id'] && !$ban && $datauser['postforum'] > 10 && $datauser['total_on_site'] > 1200) {
             // Проверяем, имеет ли юзер право голоса
             $req = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = '$user_id' AND `file_id` = '" . $arg['id'] . "' LIMIT 1");
-            if(!mysql_num_rows($req))
+            if (!mysql_num_rows($req))
                 echo '<br />' . $lng['vote'] . ': <a href="album.php?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | ' .
                     '<a href="album.php?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
         }
@@ -112,7 +113,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         '</p></div>' .
         '<div class="menu">' .
         '<p><h3><img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16" class="left" />&#160;' . $lng['albums'] . '</h3><ul>' .
-        '<li><a href="album.php?act=users' . ($datauser['sex'] == 'm' ? '&amp;mod=girls' : '') . '">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
+        '<li><a href="album.php?act=users">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
         '</ul></p>' .
         '<p><h3><img src="' . $set['homeurl'] . '/images/album-4.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['photos'] . '</h3><ul>' .
         '<li><a href="album.php?act=top_votes">' . $lng_profile['top_votes'] . '</a></li>' .

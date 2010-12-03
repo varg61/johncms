@@ -8,6 +8,7 @@ admin_club                    :::   Админ-клуб
 admin_panel                   :::   Админ панель
 administrative_events         :::   События Администратора
 albums                        :::   Альбомы
+all                           :::   Все
 apperance                     :::   Внешний вид
 approve                       :::   Подтвердить
 arrangement                   :::   Расположение
@@ -188,6 +189,7 @@ or                            :::   или
 off                           :::   Выключить
 online                        :::   Онлайн
 personal                      :::   Личное
+personal_2                    :::   Персональные
 password                      :::   Пароль
 photo_album                   :::   Фотоальбом
 photo_albums                  :::   Фотоальбомы

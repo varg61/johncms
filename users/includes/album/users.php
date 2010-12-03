@@ -19,19 +19,32 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Список посетителей. у которых есть фотографии
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng['list'] . '</div>';
-echo '<div class="topmenu">' . ($mod == 'girls' ? '<a href="album.php?act=users">' . $lng['mans'] . '</a> | <b>' . $lng['womans'] . '</b>' : '<b>' . $lng['mans'] . '</b> | <a href="album.php?act=users&amp;mod=girls">' . $lng['womans'] . '</a>') . '</div>';
-$sex = $mod == 'girls' ? 'zh' : 'm';
+switch ($mod) {
+    case 'boys':
+        $sql = "WHERE `users`.`sex` = 'm'";
+        break;
+
+    case 'girls':
+        $sql = "WHERE `users`.`sex` = 'zh'";
+        break;
+        default:
+        $sql = '';
+}
+$menu = array (
+    (!$mod ? '<b>' . $lng['all'] . '</b>' : '<a href="album.php?act=users">' . $lng['all'] . '</a>'),
+    ($mod == 'boys' ? '<b>' . $lng['mans'] . '</b>' : '<a href="album.php?act=users&amp;mod=boys">' . $lng['mans'] . '</a>'),
+    ($mod == 'girls' ? '<b>' . $lng['womans'] . '</b>' : '<a href="album.php?act=users&amp;mod=girls">' . $lng['womans'] . '</a>')
+);
+echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng['list'] . '</div>' .
+    '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     FROM `cms_album_files`
-    LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
-    WHERE `users`.`sex` = '$sex'
+    LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
 "), 0);
 if ($total) {
     $req = mysql_query("SELECT `cms_album_files`.*, COUNT(`cms_album_files`.`id`) AS `count`, `users`.`id` AS `uid`, `users`.`name` AS `nick`
         FROM `cms_album_files`
-        LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
-        WHERE `users`.`sex` = '$sex'
+        LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
         GROUP BY `cms_album_files`.`user_id` ORDER BY `users`.`name` ASC LIMIT $start, $kmess
     ");
     while ($res = mysql_fetch_assoc($req)) {

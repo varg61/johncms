@@ -60,7 +60,6 @@ name                          :::   Имя
 new_comments                  :::   Последние комментарии
 new_photo                     :::   Новые фотографии
 nick_lenght                   :::   мин.2, макс. 20
-personal_album                :::   Личный альбом
 personal_data                 :::   Личные данные
 phone_number                  :::   Тел. номер
 photo                         :::   Фотография
