@@ -63,9 +63,9 @@ class comments {
 
         // Назначение пользовательских прав
         if ($user_id && $arg['owner'] == $user_id && !$this->ban) {
-            $this->access_delete = isset($arg['owner_delete']);
-            $this->access_reply = isset($arg['owner_reply']);
-            $this->access_edit = isset($arg['owner_edit']);
+            $this->access_delete = isset($arg['owner_delete']) ? $arg['owner_delete'] : false;
+            $this->access_reply = isset($arg['owner_reply']) ? $arg['owner_reply'] : false;
+            $this->access_edit = isset($arg['owner_edit']) ? $arg['owner_edit'] : false;
         }
 
         // Открываем доступ для Администрации
@@ -83,7 +83,7 @@ class comments {
                 -----------------------------------------------------------------
                 */
                 if ($this->item && $this->access_reply && !$this->ban) {
-                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['reply'] . '</div>';
+                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . $lng['reply'] . '</div>';
                     $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
                     if (mysql_num_rows($req)) {
                         $res = mysql_fetch_assoc($req);
@@ -111,7 +111,8 @@ class comments {
                             $text .= ' (' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')<br />';
                             $text .= functions::checkout($res['text']);
                             $reply = functions::checkout($res['reply']);
-                            echo $this->msg_form('&amp;mod=reply&amp;item=' . $this->item, $text, $reply);
+                            echo $this->msg_form('&amp;mod=reply&amp;item=' . $this->item, $text, $reply) .
+                                '<div class="phdr"><a href="' . $this->url . '">' . $lng['back'] . '</a></div>';
                         }
                     } else {
                         echo functions::display_error($lng['error_wrong_data'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
@@ -126,7 +127,7 @@ class comments {
                 -----------------------------------------------------------------
                 */
                 if ($this->item && $this->access_edit && !$this->ban) {
-                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['edit'] . '</div>';
+                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . $lng['edit'] . '</div>';
                     $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
                     if (mysql_num_rows($req)) {
                         $res = mysql_fetch_assoc($req);
@@ -162,7 +163,7 @@ class comments {
                     } else {
                         echo functions::display_error($lng['error_wrong_data'], '<a href="' . $this->url . '">' . $lng['back'] . '</a>');
                     }
-                    echo '<div class="phdr"><a href="' . $this->url . '">' . $lng['cancel'] . '</a></div>';
+                    echo '<div class="phdr"><a href="' . $this->url . '">' . $lng['back'] . '</a></div>';
                 }
                 break;
 
@@ -199,12 +200,14 @@ class comments {
                         }
                         header('Location: ' . str_replace('&amp;', '&', $this->url));
                     } else {
-                        echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $lng['comments'] . '</b></a> | ' . $lng['delete'] . '</div>' .
+                        echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . $lng['delete'] . '</div>' .
                             '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '<br />' .
                             '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes">' . $lng['delete'] . '</a> | ' .
                             '<a href="' . $this->url . '">' . $lng['cancel'] . '</a><br />' .
                             '<div class="sub">' . $lng['clear_user_msg'] . '<br />' .
-                            '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes&amp;all">' . $lng['clear'] . '</a></span></div></p></div>';
+                            '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes&amp;all">' . $lng['clear'] . '</a></span>' .
+                            '</div></p></div>' .
+                            '<div class="phdr"><a href="' . $this->url . '">' . $lng['back'] . '</a></div>';
                     }
                 }
                 break;
@@ -250,7 +253,9 @@ class comments {
                 Показываем список комментариев
                 -----------------------------------------------------------------
                 */
-                echo '<div class="phdr"><b>' . $lng['comments'] . '</b></div>';
+                if (!empty($arg['context_top']))
+                    echo $arg['context_top'];
+                echo '<div class="phdr"><b>' . $arg['title'] . '</b></div>';
                 if (!$this->ban) {
                     // Показываем форму ввода
                     echo $this->msg_form('&amp;mod=add_comment');
@@ -286,12 +291,12 @@ class comments {
                             $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><small><a href="' . $set['homeurl'] . '/users/profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
                                 ' (' . date("d.m.Y / H:i:s", $attributes['reply_time'] + $set_user['sdvig'] * 3600) . ')</small><br/>' . $reply . '</div>';
                         }
-                        $arg = array (
+                        $user_arg = array (
                             'header' => ' <span class="gray">(' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>',
                             'body' => $text,
                             'sub' => functions::display_menu($menu)
                         );
-                        echo functions::display_user($res, $arg);
+                        echo functions::display_user($res, $user_arg);
                         echo '</div>';
                         ++$i;
                     }
@@ -306,6 +311,8 @@ class comments {
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
                         '</form></p>';
                 }
+                if (!empty($arg['context_bottom']))
+                    echo $arg['context_bottom'];
         }
     }
 
