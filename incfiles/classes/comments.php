@@ -294,7 +294,8 @@ class comments {
                         $user_arg = array (
                             'header' => ' <span class="gray">(' . date("d.m.Y / H:i:s", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>',
                             'body' => $text,
-                            'sub' => functions::display_menu($menu)
+                            'sub' => functions::display_menu($menu),
+                            'iphide' => ($rights ? false : true)
                         );
                         echo functions::display_user($res, $user_arg);
                         echo '</div>';
@@ -350,17 +351,17 @@ class comments {
         $translit = isset($_POST['translit']);
 
         // Проверяем на минимально допустимую длину
-        if (mb_strlen($message) < $this->min_lenght)
+        if (mb_strlen($message) < $this->min_lenght) {
             $error[] = $lng['error_message_short'];
-
-        // Проверка на флуд
-        $flood = functions::antiflood();
-
-        if ($flood)
-            $error[] = $lng['error_flood'] . ' ' . $flood . '&#160;' . $lng['seconds'];
+        } else {
+            // Проверка на флуд
+            $flood = functions::antiflood();
+            if ($flood)
+                $error[] = $lng['error_flood'] . ' ' . $flood . '&#160;' . $lng['seconds'];
+        }
 
         // Проверка на повтор сообщений
-        if ($rpt_check) {
+        if (!$error && $rpt_check) {
             $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `user_id` = '" . $this->user_id . "' ORDER BY `id` DESC LIMIT 1");
             $res = mysql_fetch_assoc($req);
             if (mb_strtolower($message) == mb_strtolower($res['text']))

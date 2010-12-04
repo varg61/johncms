@@ -35,7 +35,7 @@ if (mysql_num_rows($req)) {
     if ($res['access'] == 4 || $rights >= 7){
         $context_top .= vote_photo($res) .
             '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
-            '<a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
+            '<a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . $lng['download'] . '</a>';
     }
     $context_top .= '</div></div>';
 
