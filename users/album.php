@@ -96,6 +96,7 @@ $array = array (
     'new' => 'includes/album',
     'show' => 'includes/album',
     'sort' => 'includes/album',
+    'top_comments' => 'includes/album',
     'top_trash' => 'includes/album',
     'top_votes' => 'includes/album',
     'users' => 'includes/album',
@@ -119,7 +120,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         '<p><h3><img src="' . $set['homeurl'] . '/images/album-4.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['photos'] . '</h3><ul>' .
         '<li><a href="album.php?act=top_votes">' . $lng_profile['top_votes'] . '</a></li>' .
         '<li>' . $lng_profile['top_views'] . '</li>' .
-        '<li>' . $lng_profile['top_comments'] . '</li>' .
+        '<li><a href="album.php?act=top_comments">' . $lng_profile['top_comments'] . '</a></li>' .
         '<li><a href="album.php?act=top_trash">' . $lng_profile['top_trash'] . '</a></li>' .
         '</ul></p>' .
         '</div>' .

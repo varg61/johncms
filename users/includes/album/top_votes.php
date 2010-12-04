@@ -47,11 +47,11 @@ if ($total) {
         }
         echo '<div class="sub">';
         if ($res['access'] == 4 || $rights >= 7)
-            vote_photo($res);
-        echo '<p><a href="profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';
+            echo vote_photo($res);
+        echo '<a href="profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';
         if ($res['access'] == 4 || $rights >= 7)
             echo '<br /><a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
-        echo '</p></div></div>';
+        echo '</div></div>';
         ++$i;
     }
 } else {

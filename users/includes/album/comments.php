@@ -30,8 +30,8 @@ if (mysql_num_rows($req)) {
     if (!empty($res['description']))
         $context_top .= '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
     $context_top .= '<div class="sub">' .
-        '<a href="profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a> | ' .
-        '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $user['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
+        '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['name'] . '</b></a> | ' .
+        '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
     if ($res['access'] == 4 || $rights >= 7)
         $context_top .= vote_photo($res);
     if ($res['access'] == 4 || $rights >= 7)
