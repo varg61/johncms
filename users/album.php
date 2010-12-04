@@ -96,9 +96,7 @@ $array = array (
     'new' => 'includes/album',
     'show' => 'includes/album',
     'sort' => 'includes/album',
-    'top_comments' => 'includes/album',
-    'top_trash' => 'includes/album',
-    'top_votes' => 'includes/album',
+    'top' => 'includes/album',
     'users' => 'includes/album',
     'vote' => 'includes/album'
 );
@@ -110,18 +108,19 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . $lng['photo_albums'] . '</b></div>' .
         '<div class="gmenu"><p>' .
-        '<img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16"/>&#160;<a href="album.php?act=new">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
+        '<img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16"/>&#160;<a href="album.php?act=top">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
         '<img src="' . $set['homeurl'] . '/images/guestbook.gif" width="16" height="16"/>&#160;' . $lng_profile['new_comments'] . '' .
         '</p></div>' .
         '<div class="menu">' .
         '<p><h3><img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16" class="left" />&#160;' . $lng['albums'] . '</h3><ul>' .
         '<li><a href="album.php?act=users">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
         '</ul></p>' .
-        '<p><h3><img src="' . $set['homeurl'] . '/images/album-4.gif" width="16" height="16" class="left" />&#160;' . $lng_profile['photos'] . '</h3><ul>' .
-        '<li><a href="album.php?act=top_votes">' . $lng_profile['top_votes'] . '</a></li>' .
-        '<li>' . $lng_profile['top_views'] . '</li>' .
-        '<li><a href="album.php?act=top_comments">' . $lng_profile['top_comments'] . '</a></li>' .
-        '<li><a href="album.php?act=top_trash">' . $lng_profile['top_trash'] . '</a></li>' .
+        '<p><h3><img src="' . $set['homeurl'] . '/images/rate.gif" width="16" height="16" class="left" />&#160;' . $lng['rating'] . '</h3><ul>' .
+        '<li><a href="album.php?act=top&amp;mod=votes">' . $lng_profile['top_votes'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=downloads">' . $lng_profile['top_downloads'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=views">' . $lng_profile['top_views'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=comments">' . $lng_profile['top_comments'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=trash">' . $lng_profile['top_trash'] . '</a></li>' .
         '</ul></p>' .
         '</div>' .
         '<div class="phdr"><a href="index.php">' . $lng['users'] . '</a></div>';

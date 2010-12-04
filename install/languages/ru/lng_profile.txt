@@ -99,6 +99,7 @@ status_lenght                 :::   макс. 50
 stayed_m                      :::   Пробыл на сайте
 stayed_w                      :::   Пробыла на сайте
 top_comments                  :::   ТОП комментариев
+top_downloads                 :::   ТОП загрузок
 top_trash                     :::   КГ/АМ
 top_views                     :::   ТОП просмотров
 top_votes                     :::   ТОП голосов
