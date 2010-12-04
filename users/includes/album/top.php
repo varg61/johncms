@@ -22,7 +22,7 @@ switch ($mod) {
         */
         $title = $lng_profile['top_views'];
         $select = "";
-        $where = "`views` > '0'";
+        $where = "`views` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`views` DESC";
         $link = '&amp;mod=views';
         break;
@@ -35,8 +35,8 @@ switch ($mod) {
         */
         $title = $lng_profile['top_downloads'];
         $select = "";
-        $where = "";
-        $order = "";
+        $where = "`downloads` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
+        $order = "`downloads` DESC";
         $link = '&amp;mod=downloads';
         break;
 
@@ -48,7 +48,7 @@ switch ($mod) {
         */
         $title = $lng_profile['top_comments'];
         $select = "";
-        $where = "`comm_count` > '0'";
+        $where = "`comm_count` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`comm_count` DESC";
         $link = '&amp;mod=comments';
         break;
@@ -61,7 +61,7 @@ switch ($mod) {
         */
         $title = $lng_profile['top_votes'];
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
-        $where = "(`vote_plus` - `vote_minus`) > 0";
+        $where = "(`vote_plus` - `vote_minus`) > 0" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`rating` DESC";
         $link = '&amp;mod=votes';
         break;
@@ -74,7 +74,7 @@ switch ($mod) {
         */
         $title = $lng_profile['top_trash'];
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
-        $where = "(`vote_plus` - `vote_minus`) < 0";
+        $where = "(`vote_plus` - `vote_minus`) < 0" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`rating` ASC";
         $link = '&amp;mod=trash';
         break;
@@ -87,7 +87,7 @@ switch ($mod) {
         */
         $title = $lng_profile['new_photo'];
         $select = "";
-        $where = "`cms_album_files`.`time` > '" . ($realtime - 86400) . "'";
+        $where = "`cms_album_files`.`time` > '" . ($realtime - 259200) . "'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` > '1'");
         $order = "`cms_album_files`.`time` DESC";
         $link = '';
 }
@@ -98,7 +98,7 @@ switch ($mod) {
 -----------------------------------------------------------------
 */
 echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $title . '</div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where" . ($rights >= 7 ? "" : " AND `access` > '1'")), 0);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where"), 0);
 if ($total) {
     if ($total > $kmess)
         echo '<div class="topmenu">' . functions::display_pagination('album.php?act=top' . $link . '&amp;', $start, $total, $kmess) . '</div>';
@@ -106,7 +106,7 @@ if ($total) {
     FROM `cms_album_files`
     INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
     INNER JOIN `cms_album_cat` ON `cms_album_files`.`album_id` = `cms_album_cat`.`id`
-    WHERE $where" . ($rights >= 7 ? "" : " AND `cms_album_files`.`access` > '1'") . "
+    WHERE $where
     ORDER BY $order
     LIMIT $start, $kmess");
     while ($res = mysql_fetch_assoc($req)) {
@@ -121,15 +121,16 @@ if ($total) {
             echo 'Только для друзей';
         } elseif ($res['access'] == 2) {
             // Если доступ по паролю
-            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '"><img src="' . $set['homeurl'] . '/images/stop.gif" width="50" height="50"/></a>';
+            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '"><img src="' . $set['homeurl'] . '/images/stop.gif" width="50" height="50"/></a>';
         }
         echo '<div class="sub">';
-        echo '<a href="profile.php?user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';
-        if ($res['access'] == 4 || $rights >= 7)
-            echo vote_photo($res);
-        echo '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')';
-        if ($res['access'] == 4 || $rights >= 7)
-            echo '<br /><a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
+        echo '<a href="album.php?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';
+        if ($res['access'] == 4 || $rights >= 6) {
+            echo vote_photo($res) .
+                '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
+                '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')' .
+                '<br /><a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . $lng['download'] . '</a>';
+        }
         echo '</div></div>';
         ++$i;
     }

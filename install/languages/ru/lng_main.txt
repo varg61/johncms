@@ -56,6 +56,8 @@ community                     :::   Актив сайта
 contacts                      :::   Контакты
 contacts_in                   :::   В контакты
 continue                      :::   Продолжить
+count_downloads               :::   Загрузок
+count_views                   :::   Просмотров
 clock_settings                :::   Настройка часов
 common_settings               :::   Общие настройки
 date                          :::   Дата
@@ -88,6 +90,7 @@ error_avatar_select           :::   Ошибка выбора Аватара
 error_captcha_wrong           :::   Проверочный код введен неверно
 error_description_lenght      :::   Длина описания должна быть не менее 2-х символов
 error_edit_rights             :::   Вы не можете редактировать сообщение старшего Вас по должности
+error_file_not_exist          :::   Файла не существует
 error_flood                   :::   Вы не можете так часто добавлять сообщения<br />Пожалуйста, подождите
 error_login_empty             :::   Вы не ввели Логин
 error_mandatory_fields        :::   Не заполнены обязательные поля

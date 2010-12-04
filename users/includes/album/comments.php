@@ -32,13 +32,12 @@ if (mysql_num_rows($req)) {
     $context_top .= '<div class="sub">' .
         '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['name'] . '</b></a> | ' .
         '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
-    if ($res['access'] == 4 || $rights >= 7)
-        $context_top .= vote_photo($res);
-    if ($res['access'] == 4 || $rights >= 7)
-        $context_top .= '<a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
-    $context_top .= '</div>';
-
-    $context_top .= '</div>';
+    if ($res['access'] == 4 || $rights >= 7){
+        $context_top .= vote_photo($res) .
+            '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
+            '<a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
+    }
+    $context_top .= '</div></div>';
 
     /*
     -----------------------------------------------------------------

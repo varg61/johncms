@@ -97,8 +97,9 @@ if ($img) {
             ));
         }
         echo vote_photo($res) .
+            '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
             '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')<br />' .
-            '<a href="../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>' .
+            '<a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . $lng['download'] . '</a>' .
             '</div></div>' .
             '<div class="phdr"><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng_profile['album'] . '</a></div>';
     } else {
@@ -121,8 +122,9 @@ if ($img) {
             if (!empty($res['description']))
                 echo '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
             echo '<div class="sub">' . vote_photo($res) .
+                '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
                 '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')<br />' .
-                '<a href="../files/users/album/' . $user['id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>' .
+                '<a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . $lng['download'] . '</a>' .
                 '</div></div>';
             ++$i;
         }

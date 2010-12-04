@@ -21,7 +21,7 @@ if ($id) {
     -----------------------------------------------------------------
     */
     $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = '$id'");
-    if (mysql_num_rows($req) > 0) {
+    if (mysql_num_rows($req)) {
         $res = mysql_fetch_array($req);
         if (file_exists('../files/forum/attach/' . $res['filename'])) {
             $dlcount = $res['dlcount'] + 1;
@@ -35,7 +35,7 @@ if ($id) {
     }
     if ($error) {
         require('../incfiles/head.php');
-        echo functions::display_error($lng_forum['error_file_not_exist'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
+        echo functions::display_error($lng['error_file_not_exist'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
         require('../incfiles/end.php');
         exit;
     }
