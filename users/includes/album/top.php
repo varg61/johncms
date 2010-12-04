@@ -22,8 +22,8 @@ switch ($mod) {
         */
         $title = $lng_profile['top_views'];
         $select = "";
-        $where = "";
-        $order = "";
+        $where = "`views` > '0'";
+        $order = "`views` DESC";
         $link = '&amp;mod=views';
         break;
 

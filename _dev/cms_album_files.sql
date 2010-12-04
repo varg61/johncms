@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.1
+-- version 3.3.3
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Сен 09 2010 г., 15:08
+-- Время создания: Дек 04 2010 г., 14:58
 -- Версия сервера: 5.1.40
 -- Версия PHP: 5.3.1
 
@@ -35,9 +35,12 @@ CREATE TABLE `cms_album_files` (
   `tmb_name` varchar(100) NOT NULL,
   `time` int(11) NOT NULL DEFAULT '0',
   `comments` tinyint(1) NOT NULL DEFAULT '1',
+  `comm_count` int(11) NOT NULL DEFAULT '0',
   `access` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `vote_plus` int(11) NOT NULL,
   `vote_minus` int(11) NOT NULL,
+  `views` int(10) unsigned NOT NULL DEFAULT '0',
+  `downloads` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `album_id` (`album_id`),

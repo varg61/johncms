@@ -78,6 +78,12 @@ if ($img) {
     $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "' AND `album_id` = '$al'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
+        // Счетчик просмотров
+        if(!mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_views` WHERE `user_id` = '$user_id' AND `file_id` = '$img'"), 0)){
+            mysql_query("INSERT INTO `cms_album_views` SET `user_id` = '$user_id', `file_id` = '$img', `time` = '$realtime'");
+            $views = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_views` WHERE `file_id` = '$img'"), 0);
+            mysql_query("UPDATE `cms_album_files` SET `views` = '$views' WHERE `id` = '$img'");
+        }
         echo '<div class="menu">' .
             '<a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '"><img src="image.php?u=' . $user['id'] . '&amp;f=' . $res['img_name'] . '" /></a>';
         if (!empty($res['description']))
