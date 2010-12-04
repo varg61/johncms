@@ -46,12 +46,13 @@ if ($total) {
             echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '"><img src="' . $set['homeurl'] . '/images/stop.gif" width="50" height="50"/></a>';
         }
         echo '<div class="sub">';
+        echo '<a href="profile.php?user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';
         if ($res['access'] == 4 || $rights >= 7)
-            vote_photo($res);
-        echo '<p><a href="profile.php?user=' . $res['user_id'] . '">' . $res['user_name'] . '</a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';
+            echo vote_photo($res);
+        echo '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')';
         if ($res['access'] == 4 || $rights >= 7)
             echo '<br /><a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
-        echo '</p></div></div>';
+        echo '</div></div>';
         ++$i;
     }
 } else {

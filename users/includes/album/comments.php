@@ -19,18 +19,25 @@ if (mysql_num_rows($req)) {
 
     /*
     -----------------------------------------------------------------
-    Показываем информацию об Альбоме и выбранное изображение
+    Показываем выбранную картинку
     -----------------------------------------------------------------
     */
     $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res['album_id'] . "'");
     $res_a = mysql_fetch_assoc($req_a);
     $context_top = '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' .
         '<a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng['personal_2'] . '</a></div>' .
-        '<div class="user"><p>' . functions::display_user($owner, array ('iphide' => 1,)) . '</p></div>' .
-
         '<div class="menu"><a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '"><img src="../files/users/album/' . $owner['id'] . '/' . $res['tmb_name'] . '" /></a>';
     if (!empty($res['description']))
         $context_top .= '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
+    $context_top .= '<div class="sub">' .
+        '<a href="profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a> | ' .
+        '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $user['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
+    if ($res['access'] == 4 || $rights >= 7)
+        $context_top .= vote_photo($res);
+    if ($res['access'] == 4 || $rights >= 7)
+        $context_top .= '<a href="../files/users/album/' . $res['user_id'] . '/' . $res['img_name'] . '">' . $lng['download'] . '</a>';
+    $context_top .= '</div>';
+
     $context_top .= '</div>';
 
     /*
