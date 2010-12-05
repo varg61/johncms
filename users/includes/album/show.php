@@ -64,7 +64,7 @@ if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 7) {
         echo '<input type="text" name="password"/></p>';
         echo '<p><input type="submit" name="submit" value="' . $lng['login'] . '"/></p>';
         echo '</div></form>';
-        echo '<div class="phdr"><a href="album.php?act=show&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
+        echo '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
         require('../incfiles/end.php');
         exit;
     }

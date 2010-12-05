@@ -22,7 +22,7 @@ switch ($mod) {
         */
         $title = $lng_profile['top_views'];
         $select = "";
-        $where = "`views` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
+        $where = "`cms_album_files`.`views` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`views` DESC";
         $link = '&amp;mod=views';
         break;
@@ -35,7 +35,7 @@ switch ($mod) {
         */
         $title = $lng_profile['top_downloads'];
         $select = "";
-        $where = "`downloads` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
+        $where = "`cms_album_files`.`downloads` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`downloads` DESC";
         $link = '&amp;mod=downloads';
         break;
@@ -48,7 +48,7 @@ switch ($mod) {
         */
         $title = $lng_profile['top_comments'];
         $select = "";
-        $where = "`comm_count` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
+        $where = "`cms_album_files`.`comm_count` > '0'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`comm_count` DESC";
         $link = '&amp;mod=comments';
         break;
