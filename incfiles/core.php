@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Error_Reporting(E_ALL & ~E_NOTICE);
 @ini_set('session.use_trans_sid', '0');
 @ini_set('arg_separator.output', '&amp;');
-date_default_timezone_set('Europe/Moscow');
+date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 if (!isset($rootpath))
     $rootpath = '../';
