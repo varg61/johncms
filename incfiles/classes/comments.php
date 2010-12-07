@@ -62,7 +62,7 @@ class comments {
         }
 
         // Назначение пользовательских прав
-        if ($user_id && $arg['owner'] == $user_id && !$this->ban) {
+        if ($user_id && isset($arg['owner']) && $arg['owner'] == $user_id && !$this->ban) {
             $this->access_delete = isset($arg['owner_delete']) ? $arg['owner_delete'] : false;
             $this->access_reply = isset($arg['owner_reply']) ? $arg['owner_reply'] : false;
             $this->access_edit = isset($arg['owner_edit']) ? $arg['owner_edit'] : false;
