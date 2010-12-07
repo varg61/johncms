@@ -14,7 +14,6 @@
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 $lng_ban = $core->load_lng('ban');
-
 switch ($mod) {
     case 'amnesty':
         if ($rights < 9) {
@@ -40,12 +39,12 @@ switch ($mod) {
                     echo '<div class="gmenu"><p>' . $lng_ban['amnesty_delban_confirm'] . '</p></div>';
                 }
             } else {
-                echo '<form action="index.php?act=ban_panel&amp;mod=amnesty" method="post"><div class="menu"><p>';
-                echo '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng_ban['amnesty_delban'] . '<br />';
-                echo '<input type="radio" name="term" value="1" />&#160;' . $lng_ban['amnesty_clean'];
-                echo '</p><p><input type="submit" name="submit" value="' . $lng_ban['amnesty'] . '" />';
-                echo '</p></div></form>';
-                echo '<div class="phdr"><small>' . $lng_ban['amnesty_help'] . '</small></div>';
+                echo '<form action="index.php?act=ban_panel&amp;mod=amnesty" method="post"><div class="menu"><p>' .
+                    '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng_ban['amnesty_delban'] . '<br />' .
+                    '<input type="radio" name="term" value="1" />&#160;' . $lng_ban['amnesty_clean'] .
+                    '</p><p><input type="submit" name="submit" value="' . $lng_ban['amnesty'] . '" />' .
+                    '</p></div></form>' .
+                    '<div class="phdr"><small>' . $lng_ban['amnesty_help'] . '</small></div>';
             }
             echo '<p><a href="index.php?act=ban_panel">' . $lng['ban_panel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
@@ -66,7 +65,7 @@ switch ($mod) {
         $sort = isset($_GET['count']) ? 'bancount' : 'bantime';
         $req = mysql_query("SELECT `user_id` FROM `cms_ban_users` GROUP BY `user_id`");
         $total = mysql_num_rows($req);
-        $req = mysql_query("SELECT COUNT(`cms_ban_users`.`user_id`) AS `bancount`, MAX(`cms_ban_users`.`ban_time`) AS `bantime`, `users`.*
+        $req = mysql_query("SELECT COUNT(`cms_ban_users`.`user_id`) AS `bancount`, MAX(`cms_ban_users`.`ban_time`) AS `bantime`, `cms_ban_users`.`id` AS `ban_id`, `users`.*
         FROM `cms_ban_users` LEFT JOIN `users` ON `cms_ban_users`.`user_id` = `users`.`id`
         GROUP BY `user_id`
         ORDER BY `$sort` DESC
@@ -74,9 +73,10 @@ switch ($mod) {
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_array($req)) {
                 echo '<div class="' . ($res['bantime'] > $realtime ? 'r' : '') . 'menu">';
-                echo functions::display_user($res);
-                //TODO: Переделать на более удобный показ бана
-                //echo display_user($res, 0, 2, ' [' . $res['bancount'] . ']&#160;<a href="../users/profile.php?act=ban&amp;user=' . $res['id'] . '">&gt;&gt;</a>');
+                $arg = array (
+                    'header' => '<br /><img src="../images/block.gif" width="16" height="16" align="middle" />&#160;<small><a href="../users/profile.php?act=ban&amp;user=' . $res['id'] . '">' . $lng_ban['infringements_history'] . '</a> [' . $res['bancount'] . ']</small>'
+                );
+                echo functions::display_user($res, $arg);
                 echo '</div>';
             }
         } else {
@@ -89,5 +89,4 @@ switch ($mod) {
         }
         echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=ban_panel&amp;mod=amnesty">' . $lng_ban['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
-
 ?>
