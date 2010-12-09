@@ -101,31 +101,44 @@ switch ($do) {
 
     case 'step2':
         echo '<h2>Подготовка таблиц</h2>';
+        // Удаляем Чат
+        mysql_query("DROP TABLE `chat`");
+        echo '<span class="green">OK</span> таблица `chat` удалена.<br />';
         // Таблицы голосований форума
         mysql_query("RENAME TABLE `forum_vote` TO `cms_forum_vote`");
         echo '<span class="green">OK</span> таблица `cms_forum_vote` обновлена.<br />';
         mysql_query("RENAME TABLE `forum_vote_us` TO `cms_forum_vote_users`");
         echo '<span class="green">OK</span> таблица `cms_forum_vote_users` обновлена.<br />';
         // Таблица `users`
+        mysql_query("ALTER TABLE `users` DROP `immunity`");
+        mysql_query("ALTER TABLE `users` DROP `otvetov`");
+        mysql_query("ALTER TABLE `users` DROP `postchat`");
+        mysql_query("ALTER TABLE `users` DROP `balans`");
         mysql_query("ALTER TABLE `users` DROP `set_user`");
-        mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `place`");
         mysql_query("ALTER TABLE `users` DROP `set_forum`");
+        mysql_query("ALTER TABLE `users` DROP `set_chat`");
+        mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `place`");
         mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`");
-        mysql_query("ALTER TABLE `users` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `users` ADD `set_language` CHAR( 2 ) NOT NULL AFTER `place`");
+        mysql_query("ALTER TABLE `users` ADD `comm_count` INT UNSIGNED NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `users` CHANGE `id` `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT");
+        mysql_query("ALTER TABLE `users` CHANGE `failed_login` `failed_login` TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `users` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `users` CHANGE `mailvis` `mailvis` BOOLEAN NOT NULL DEFAULT '0'");
+        mysql_query("ALTER TABLE `users` CHANGE `preg` `preg` BOOLEAN NOT NULL DEFAULT '0'");
         echo '<span class="green">OK</span> таблица `users` обновлена<br />';
         // Таблица истории IP адресов
         mysql_query("DROP TABLE IF EXISTS `cms_users_iphistory`");
         mysql_query("CREATE TABLE `cms_users_iphistory` (
-        `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-        `user_id` int(10) unsigned NOT NULL,
-        `user_ip` bigint(11) NOT NULL,
-        `operator` int(10) unsigned NOT NULL DEFAULT '0',
-        `time` int(10) unsigned NOT NULL,
-        PRIMARY KEY (`id`),
-        KEY `user_id` (`user_id`),
-        KEY `user_ip` (`user_ip`),
-        KEY `operator` (`operator`)
+            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            `user_id` int(10) unsigned NOT NULL,
+            `user_ip` bigint(11) NOT NULL,
+            `operator` int(10) unsigned NOT NULL DEFAULT '0',
+            `time` int(10) unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY `user_id` (`user_id`),
+            KEY `user_ip` (`user_ip`),
+            KEY `operator` (`operator`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
         echo '<span class="green">OK</span> таблица истории IP создана<br />';
         // Изменяем таблицу `guest`
@@ -147,7 +160,8 @@ switch ($do) {
         echo '<span class="green">OK</span> таблица `cms_ads` обновлена<br />';
         // Создаем таблицу языковых фраз
         mysql_query("DROP TABLE IF EXISTS `cms_languages`");
-        mysql_query("CREATE TABLE `cms_languages` (
+        mysql_query(
+            "CREATE TABLE `cms_languages` (
         `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
         `iso` char(2) NOT NULL,
         `module` varchar(10) NOT NULL,

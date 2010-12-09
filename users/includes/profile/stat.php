@@ -43,12 +43,10 @@ echo '</ul></p><p>' .
     '<li><span class="gray">' . $lng['forum'] . ':</span> <a href="profile.php?act=activity&amp;user=' . $user['id'] . '">' . $user['postforum'] . '</a></li>' .
     '<li><span class="gray">' . $lng['guestbook'] . ':</span> <a href="profile.php?act=activity&amp;mod=guest&amp;user=' . $user['id'] . '">' . $user['postguest'] . '</a></li>' .
     '<li><span class="gray">' . $lng['comments'] . ':</span> ' . $user['komm'] . '</li>' .
-    '<li><span class="gray">' . $lng['chat'] . ':</span> ' . $user['postchat'] . '</li>' .
-    '<li><span class="gray">' . $lng['quiz'] . ':</span> ' . $user['otvetov'] . '</li>' .
-    '<li><span class="gray">' . $lng_profile['game_balance'] . ':</span> ' . $user['balans'] . '</li>' .
     '</ul></p>' .
     '<p><h3><img src="../images/award.png" width="16" height="16" class="left" />&#160;' . $lng_profile['achievements'] . '</h3>';
 $num = array (
+    50,
     100,
     500,
     1000,
@@ -57,9 +55,7 @@ $num = array (
 $query = array (
     'postforum' => $lng['forum'],
     'postguest' => $lng['guestbook'],
-    'komm' => $lng['comments'],
-    'postchat' => $lng['chat'],
-    'otvetov' => $lng['quiz']
+    'komm' => $lng['comments']
 );
 echo '<table border="0" cellspacing="0" cellpadding="0"><tr>';
 foreach ($num as $val) {

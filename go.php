@@ -38,10 +38,6 @@ if ($id) {
     */
     $adres = trim($_POST['adres']);
     switch ($adres) {
-        case 'chat':
-            header('location: ' . $set['homeurl'] . '/chat/index.php');
-            break;
-
         case 'forum':
             header('location: ' . $set['homeurl'] . '/forum/index.php');
             break;

@@ -25,7 +25,6 @@ echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a
     '<div class="phdr"><b>' . $lng['dialogue'] . '</b></div>' .
     '<div class="menu"><a href="guestbook/index.php">' . $lng['guestbook'] . '</a> (' . functions::stat_guestbook() . ')</div>' .
     '<div class="menu"><a href="forum/">' . $lng['forum'] . '</a> (' . functions::stat_forum() . ')</div>' .
-    '<div class="menu"><a href="chat/">' . $lng['chat'] . '</a> (' . functions::stat_chat() . ')</div>' .
     '<div class="phdr"><b>' . $lng['useful'] . '</b></div>' .
     '<div class="menu"><a href="download/">' . $lng['downloads'] . '</a> (' . functions::stat_download() . ')</div>' .
     '<div class="menu"><a href="library/">' . $lng['library'] . '</a> (' . functions::stat_library() . ')</div>' .

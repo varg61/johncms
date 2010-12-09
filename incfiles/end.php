@@ -33,8 +33,7 @@ if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act))
 // Меню быстрого перехода
 if ($set_user['quick_go']) {
     echo '<form action="' . $set['homeurl'] . '/go.php" method="post">';
-    echo
-        '<div><select name="adres" style="font-size:x-small">
+    echo '<div><select name="adres" style="font-size:x-small">
     <option selected="selected">' . $lng['quick_jump'] . '</option>
     <option value="guest">' . $lng['guestbook'] . '</option>
     <option value="forum">' . $lng['forum'] . '</option>
@@ -42,7 +41,6 @@ if ($set_user['quick_go']) {
     <option value="gallery">' . $lng['gallery'] . '</option>
     <option value="down">' . $lng['downloads'] . '</option>
     <option value="lib">' . $lng['library'] . '</option>
-    <option value="chat">' . $lng['chat'] . '</option>
     <option value="gazen">Gazenwagen :)</option>
     </select><input type="submit" value="Go!" style="font-size:x-small"/>';
     echo '</div></form>';

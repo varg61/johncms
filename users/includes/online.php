@@ -39,7 +39,6 @@ if ($total) {
             'admlist'       => '<a href="index.php?act=admlist">' . $lng_online['where_adm_list'] . '</a>',
             'album'         => '<a href="album.php">' . $lng_online['where_album'] . '</a>',
             'birth'         => '<a href="index.php?act=birth">' . $lng_online['where_birth'] . '</a>',
-            'chat'          => '<a href="../chat/index.php">' . $lng_online['where_chat'] . '</a>',
             'downloads'     => '<a href="../download/index.php">' . $lng_online['where_downloads'] . '</a>',
             'faq'           => '<a href="../pages/faq.php">' . $lng_online['where_faq'] . '</a>',
             'forum'         => '<a href="../forum/index.php">' . $lng_online['where_forum'] . '</a>&#160;/&#160;<a href="../forum/index.php?act=who">&gt;&gt;</a>',

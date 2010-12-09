@@ -31,7 +31,6 @@ $textl = $lng['admin_panel'];
 require_once('../incfiles/head.php');
 $array = array (
     'ads'               => 'includes/modules',
-    'chat'              => 'includes/modules',
     'counters'          => 'includes/modules',
     'forum'             => 'includes/modules',
     'karma'             => 'includes/modules',
@@ -81,7 +80,6 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             echo '<li><a href="index.php?act=counters">' . $lng['counters'] . '</a></li>';
         echo '<li><a href="index.php?act=news">' . $lng['news'] . '</a></li>' .
             '<li><a href="index.php?act=forum">' . $lng['forum'] . '</a></li>' .
-            '<li><a href="index.php?act=chat">' . $lng['chat'] . '</a></li>' .
             '<li><a href="index.php?act=karma">' . $lng['karma'] . '</a></li>' .
             '</ul></p>';
     }
