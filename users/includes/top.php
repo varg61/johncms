@@ -46,9 +46,6 @@ function get_top($order = 'postforum') {
 $menu = array (
     (!$mod ? '<b>' . $lng['forum'] . '</b>' : '<a href="index.php?act=top">' . $lng['forum'] . '</a>'),
     ($mod == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="index.php?act=top&amp;mod=guest">' . $lng['guestbook'] . '</a>'),
-    ($mod == 'chat' ? '<b>' . $lng['chat'] . '</b>' : '<a href="index.php?act=top&amp;mod=chat">' . $lng['chat'] . '</a>'),
-    ($mod == 'vic' ? '<b>' . $lng['quiz'] . '</b>' : '<a href="index.php?act=top&amp;mod=vic">' . $lng['quiz'] . '</a>'),
-    ($mod == 'bal' ? '<b>' . $lng['balance'] . '</b>' : '<a href="index.php?act=top&amp;mod=bal">' . $lng['balance'] . '</a>'),
     ($mod == 'comm' ? '<b>' . $lng['comments'] . '</b>' : '<a href="index.php?act=top&amp;mod=comm">' . $lng['comments'] . '</a>')
 );
 if ($set_karma['on'])
@@ -64,42 +61,6 @@ switch ($mod) {
         echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         echo get_top('postguest');
         echo '<div class="phdr"><a href="../guestbook/index.php">' . $lng['guestbook'] . '</a></div>';
-        break;
-
-    case 'chat':
-        /*
-        -----------------------------------------------------------------
-        Топ Чата
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_chat'] . '</div>';
-        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
-        echo get_top('postchat');
-        echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
-        break;
-
-    case 'vic':
-        /*
-        -----------------------------------------------------------------
-        Топ Викторины
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_quiz'] . '</div>';
-        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
-        echo get_top('otvetov');
-        echo '<div class="phdr"><a href="../chat/index.php">' . $lng['chat'] . '</a></div>';
-        break;
-
-    case 'bal':
-        /*
-        -----------------------------------------------------------------
-        Топ игрового баланса
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['top_bal'] . '</div>';
-        echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
-        echo get_top('balans');
-        echo '<div class="phdr"><a href="../index.php">' . $lng['homepage'] . '</a></div>';
         break;
 
     case 'comm':
