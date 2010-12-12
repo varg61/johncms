@@ -85,7 +85,7 @@ switch ($act) {
             for ($i = $start; $i < $end; $i++) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['or'] . ' :' . functions::trans($smile) . ':</div>';
+                echo '<img src="../images/smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['lng_or'] . ' :' . functions::trans($smile) . ':</div>';
             }
         } else {
             echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
@@ -128,7 +128,7 @@ switch ($act) {
             for ($i = $start; $i < $end; $i++) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['or'] . ' :' . trans($smile) . ':</div>';
+                echo '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['lng_or'] . ' :' . trans($smile) . ':</div>';
             }
         } else {
             echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';

@@ -1,4 +1,0 @@
-forum_rules                   :::   Regeln Forum
-smileys_adm                   :::   Fur Administration
-tags_faq                      :::   FAQ nach tegen
-translit_help                 :::   Auskunft nach translit

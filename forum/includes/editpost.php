@@ -153,7 +153,7 @@ if (!$error) {
             */
             if (isset($_POST['submit'])) {
                 if (empty($_POST['msg'])) {
-                    echo functions::display_error($lng_forum['error_message_empty'], '<a href="index.php?act=editpost&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                    echo functions::display_error($lng['error_message_empty'], '<a href="index.php?act=editpost&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }

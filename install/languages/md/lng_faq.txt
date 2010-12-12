@@ -1,4 +1,0 @@
-forum_rules                   :::   Regulile Forumului
-smileys_adm                   :::   Pentru administraţie
-tags_faq                      :::   FAQ pentru taguri
-translit_help                 :::   Ajutor pentru translit

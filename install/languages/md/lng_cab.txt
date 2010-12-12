@@ -1,8 +1,0 @@
-received                      :::   Primite
-my_actives                    :::   Activele mele
-my_mail                       :::   Căsuţa mea poştală
-my_office                     :::   Cabinet
-my_profile                    :::   Profilul meu
-my_settings                   :::   Preferinţe
-my_statistics                 :::   Statistică mea
-sent                          :::   Trimis

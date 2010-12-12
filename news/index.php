@@ -26,7 +26,7 @@ switch ($do) {
         -----------------------------------------------------------------
         */
         if ($rights >= 6) {
-            echo '<div class="phdr"><a href="index.php"><b>' . $lng['news'] . '</b></a> | ' . $lng_news['add'] . '</div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . $lng['news'] . '</b></a> | ' . $lng['add'] . '</div>';
             $old = 20;
             if (isset($_POST['submit'])) {
                 $error = array ();
@@ -38,7 +38,7 @@ switch ($do) {
                     $error[] = $lng_news['error_text'];
                 $flood = functions::antiflood();
                 if ($flood)
-                    $error[] = $lng_news['error_flood'] . ' ' . $flood . '&#160;' . $lng_news['seconds'];
+                    $error[] = $lng['error_flood'] . ' ' . $flood . '&#160;' . $lng['seconds'];
                 if (!$error) {
                     if (!empty($_POST['pf']) && ($_POST['pf'] != '0')) {
                         $pf = intval($_POST['pf']);
@@ -90,7 +90,7 @@ switch ($do) {
                 echo '<form action="index.php?do=add" method="post"><div class="menu">' .
                     '<p><h3>' . $lng_news['article_title'] . '</h3>' .
                     '<input type="text" name="name"/></p>' .
-                    '<p><h3>' . $lng_news['article_text'] . '</h3>' .
+                    '<p><h3>' . $lng['text'] . '</h3>' .
                     '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="text"></textarea></p>' .
                     '<p><h3>' . $lng_news['discuss'] . '</h3>';
                 $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
@@ -120,7 +120,7 @@ switch ($do) {
         -----------------------------------------------------------------
         */
         if ($rights >= 6) {
-            echo '<div class="phdr"><a href="index.php"><b>' . $lng['news'] . '</b></a> | ' . $lng_news['edit_article'] . '</div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . $lng['news'] . '</b></a> | ' . $lng['edit'] . '</div>';
             if (!$id) {
                 echo functions::display_error($lng['error_wrong_data'], '<a href="index.php">' . $lng_news['to_news'] . '</a>');
                 require('../incfiles/end.php');
@@ -150,7 +150,7 @@ switch ($do) {
                 echo '<div class="menu"><form action="index.php?do=edit&amp;id=' . $id . '" method="post">' .
                     '<p><h3>' . $lng_news['article_title'] . '</h3>' .
                     '<input type="text" name="name" value="' . $res['name'] . '"/></p>' .
-                    '<p><h3>' . $lng_news['article_text'] . '</h3>' .
+                    '<p><h3>' . $lng['text'] . '</h3>' .
                     '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="text">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
                     '</form></div>' .
@@ -192,7 +192,7 @@ switch ($do) {
                 }
             } else {
                 echo '<div class="menu"><form id="clean" method="post" action="index.php?do=clean">' .
-                    '<p><h3>' . $lng_news['clear_parametres'] . '</h3>' .
+                    '<p><h3>' . $lng['clear_param'] . '</h3>' .
                     '<input type="radio" name="cl" value="0" checked="checked" />' . $lng_news['clear_month'] . '<br />' .
                     '<input type="radio" name="cl" value="1" />' . $lng_news['clear_week'] . '<br />' .
                     '<input type="radio" name="cl" value="2" />' . $lng['clear_all'] . '</p>' .
@@ -212,13 +212,13 @@ switch ($do) {
         -----------------------------------------------------------------
         */
         if ($rights >= 6) {
-            echo '<div class="phdr"><a href="index.php"><b>' . $lng_news['site_news'] . '</b></a> | ' . $lng_news['delete_article'] . '</div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . $lng['site_news'] . '</b></a> | ' . $lng['delete'] . '</div>';
             if (isset($_GET['yes'])) {
                 mysql_query("DELETE FROM `news` WHERE `id` = '$id'");
                 echo '<p>' . $lng_news['article_deleted'] . '<br/><a href="index.php">' . $lng_news['to_news'] . '</a></p>';
             } else {
                 echo '<p>' . $lng['delete_confirmation'] . '<br/>' .
-                    '<a href="index.php?do=del&amp;id=' . $id . '&amp;yes">' . $lng['yes'] . '</a> | <a href="index.php">' . $lng['no'] . '</a></p>';
+                    '<a href="index.php?do=del&amp;id=' . $id . '&amp;yes">' . $lng['delete'] . '</a> | <a href="index.php">' . $lng['cancel'] . '</a></p>';
             }
         } else {
             header("location: index.php");
@@ -231,9 +231,9 @@ switch ($do) {
         Вывод списка новостей
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . $lng_news['site_news'] . '</b></div>';
+        echo '<div class="phdr"><b>' . $lng['site_news'] . '</b></div>';
         if ($rights >= 6)
-            echo '<div class="topmenu"><a href="index.php?do=add">' . $lng_news['add'] . '</a> | <a href="index.php?do=clean">' . $lng['clear'] . '</a></div>';
+            echo '<div class="topmenu"><a href="index.php?do=add">' . $lng['add'] . '</a> | <a href="index.php?do=clean">' . $lng['clear'] . '</a></div>';
         $req = mysql_query("SELECT COUNT(*) FROM `news`");
         $total = mysql_result($req, 0);
         $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT $start, $kmess");
@@ -245,7 +245,7 @@ switch ($do) {
             $vr = $res['time'] + $set_user['sdvig'] * 3600;
             $vr1 = date("d.m.y / H:i", $vr);
             echo '<h3>' . $res['name'] . '</h3>' .
-                '<span class="gray"><small>' . $lng_news['author'] . ': ' . $res['avt'] . ' (' . $vr1 . ')</small></span>' .
+                '<span class="gray"><small>' . $lng['author'] . ': ' . $res['avt'] . ' (' . $vr1 . ')</small></span>' .
                 '<br />' . $text . '<div class="sub">';
             if ($res['kom'] != 0 && $res['kom'] != "") {
                 $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");

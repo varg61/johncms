@@ -1,4 +1,0 @@
-forum_rules                   :::   Aturan Forum
-smileys_adm                   :::   Untuk administrasi
-tags_faq                      :::   FAQ dengan tag
-translit_help                 :::   Bantuan translit

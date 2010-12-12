@@ -1,8 +1,0 @@
-received                      :::   Kotak masuk
-my_actives                    :::   Total aktif
-my_mail                       :::   Kotak surat saya
-my_office                     :::   Personal area
-my_profile                    :::   Profil saya
-my_settings                   :::   Pengaturan
-my_statistics                 :::   Statistik saya
-sent                          :::   Terkirim

@@ -21,7 +21,7 @@ if (!$id || !$user_id || $ban['1'] || $ban['11']) {
 $flood = functions::antiflood();
 if ($flood) {
     require('../incfiles/head.php');
-    echo functions::display_error($lng_forum['error_flood'] . ' ' . $flood . $lng['sec'] . ', <a href="index.php?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+    echo functions::display_error($lng['error_flood'] . ' ' . $flood . $lng['sec'] . ', <a href="index.php?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
     require('../incfiles/end.php');
     exit;
 }
@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
     if (mb_strlen($th) < 2)
         $error[] = $lng_forum['error_topic_name_lenght'];
     if (empty($msg))
-        $error[] = $lng_forum['error_post_empty'];
+        $error[] = $lng['error_message_empty'];
     if (!$error) {
         $th = functions::check(mb_substr($th, 0, 100));
         if ($_POST['msgtrans'] == 1) {
@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
         if (mysql_num_rows($req) > 0) {
             $res = mysql_fetch_array($req);
             if ($msg == $res['text'])
-                $error[] = $lng_forum['error_post_exists'];
+                $error[] = $lng['error_message_exists'];
         }
     }
     if (!$error) {

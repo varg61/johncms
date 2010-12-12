@@ -57,8 +57,8 @@ switch ($mod) {
                 }
                 echo '</p></div>';
                 echo '<div class="phdr">'
-                    . ($res['switch'] == 1 ? '<a href="index.php?act=counters&amp;mod=view&amp;go=off&amp;id=' . $id . '">' . $lng['off'] . '</a>'
-                        : '<a href="index.php?act=counters&amp;mod=view&amp;go=on&amp;id=' . $id . '">' . $lng['on'] . '</a>')
+                    . ($res['switch'] == 1 ? '<a href="index.php?act=counters&amp;mod=view&amp;go=off&amp;id=' . $id . '">' . $lng['lng_off'] . '</a>'
+                        : '<a href="index.php?act=counters&amp;mod=view&amp;go=on&amp;id=' . $id . '">' . $lng['lng_on'] . '</a>')
                         . ' | <a href="index.php?act=counters&amp;mod=edit&amp;id=' . $id . '">' . $lng['edit'] . '</a> | <a href="index.php?act=counters&amp;mod=del&amp;id=' . $id . '">' . $lng['delete'] . '</a></div>';
             } else {
                 echo functions::display_error($lng['error_wrong_data']);

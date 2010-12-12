@@ -22,7 +22,7 @@ if (!$id || !$user_id || $ban['1'] || $ban['11']) {
 $flood = functions::antiflood();
 if ($flood) {
     require('../incfiles/head.php');
-    echo functions::display_error($lng_forum['error_flood'] . ' ' . $flood . $lng['sec'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+    echo functions::display_error($lng['error_flood'] . ' ' . $flood . $lng['sec'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
     require('../incfiles/end.php');
     exit;
 }
@@ -56,7 +56,7 @@ switch ($type1['type']) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
                     require('../incfiles/head.php');
-                    echo functions::display_error($lng_forum['error_post_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+                    echo functions::display_error($lng['error_message_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
@@ -144,7 +144,7 @@ switch ($type1['type']) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
                 require('../incfiles/head.php');
-                echo functions::display_error($lng_forum['error_post_empty'], '<a href="index.php?act=say&amp;id=' . $id . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
+                echo functions::display_error($lng['error_message_empty'], '<a href="index.php?act=say&amp;id=' . $id . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -188,7 +188,7 @@ switch ($type1['type']) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
                     require('../incfiles/head.php');
-                    echo functions::display_error($lng_forum['error_post_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+                    echo functions::display_error($lng['error_message_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
