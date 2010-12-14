@@ -225,15 +225,12 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         */
         $res = true;
         $parent = $type1['refid'];
-        if($type1['refid']){
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $type1['refid'] . "'");
+        while ($parent != '0' && $res != false) {
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
             $res = mysql_fetch_assoc($req);
-            $tree[] = '<a href="index.php?id=' . $type1['refid'] . '">' . $res['text'] . '</a>';
-        }
-        if($res['refid']){
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
-            $res = mysql_fetch_assoc($req);
-            $tree[] = '<a href="index.php?id=' . $res['refid'] . '">' . $res['text'] . '</a>';
+            if ($res['type'] == 'f' || $res['type'] == 'r')
+                $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
+            $parent = $res['refid'];
         }
         $tree[] = '<a href="index.php">' . $lng['forum'] . '</a>';
         krsort($tree);

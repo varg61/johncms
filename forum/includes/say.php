@@ -30,7 +30,7 @@ if ($flood) {
 $headmod = 'forum,' . $id . ',1';
 $agn1 = strtok($agn, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
-$type1 = mysql_fetch_array($type);
+$type1 = mysql_fetch_assoc($type);
 switch ($type1['type']) {
     case 't':
         /*
@@ -144,7 +144,7 @@ switch ($type1['type']) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
                 require('../incfiles/head.php');
-                echo functions::display_error($lng['error_message_empty'], '<a href="index.php?act=say&amp;id=' . $id . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
+                echo functions::display_error($lng['error_message_empty'], '<a href="index.php?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
@@ -188,7 +188,7 @@ switch ($type1['type']) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
                     require('../incfiles/head.php');
-                    echo functions::display_error($lng['error_message_exists'], '<a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
+                    echo functions::display_error($lng['error_message_exists'], '<a href="index.php?id=' . $th . '&amp;start=' . $start . '">' . $lng['back'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
