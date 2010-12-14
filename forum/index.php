@@ -328,26 +328,25 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 if ($total) {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($rights >= 7 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
                     while ($res = mysql_fetch_assoc($req)) {
-                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                        if($res['close'])
+                            echo '<div class="rmenu">';
+                        else
+                            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "' ORDER BY `time` DESC LIMIT 1");
                         $nam = mysql_fetch_assoc($nikuser);
                         $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $res['id'] . "'" . ($rights >= 7 ? '' : " AND `close` != '1'"));
                         $colmes1 = mysql_result($colmes, 0);
                         $cpg = ceil($colmes1 / $kmess);
-                        // Выводим список тем
-                        if ($res['vip'] == 1) {
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>';
-                        } elseif ($res['edit'] == 1) {
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>';
-                        } elseif ($res['close'] == 1) {
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/dl.gif" alt=""/>';
-                        } else {
-                            $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id`='$user_id'"), 0);
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($np ? 'op' : 'np') . '.gif" alt=""/>';
-                        }
-                        if ($res['realid'] == 1)
-                            echo '&#160;<img src="../images/rate.gif" alt=""/>';
-                        echo '&#160;<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
+                        $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id`='$user_id'"), 0);
+                        // Значки
+                        $icons = array(
+                            ($np ? '' : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
+                            ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
+                            ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
+                            ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
+                        );
+                        echo functions::display_menu($icons, '&#160;', '&#160;');
+                        echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
                         if ($cpg > 1) {
                             echo '<a href="index.php?id=' . $res['id'] . '&amp;page=' . $cpg . '">&#160;&gt;&gt;</a>';
                         }

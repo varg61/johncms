@@ -267,22 +267,24 @@ class functions {
     -----------------------------------------------------------------
     Отображение различных меню
     -----------------------------------------------------------------
+    $delimiter - разделитель между пунктами
+    $end_space - выводится в конце
+    -----------------------------------------------------------------
     */
-    function display_menu($val = array ()) {
+    function display_menu($val = array (), $delimiter = ' | ', $end_space = '') {
         $out = '';
-
         foreach ($val as $key => $menu) {
             if (empty($menu))
                 unset($val[$key]);
         }
-
+        if(empty($val))
+            return false;
         ksort($val);
         $last = array_pop($val);
-
         foreach ($val as $menu) {
-            $out .= $menu . ' | ';
+            $out .= $menu . $delimiter;
         }
-        return $out . $last;
+        return $out . $last . $end_space;
     }
 
     /*

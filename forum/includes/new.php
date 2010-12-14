@@ -156,7 +156,7 @@ if ($user_id) {
             $total = functions::forum_new();
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['unread'] . '</div>';
             if ($total > 0) {
-                $req = mysql_query("SELECT `id`, `text`, `from`, `refid`, `realid` FROM `forum`
+                $req = mysql_query("SELECT * FROM `forum`
                 LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '$user_id'
                 WHERE `forum`.`type`='t'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                 AND (`cms_forum_rdm`.`topic_id` Is Null
@@ -164,7 +164,10 @@ if ($user_id) {
                 ORDER BY `forum`.`time` DESC
                 LIMIT $start, $kmess");
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    if($res['close'])
+                        echo '<div class="rmenu">';
+                    else
+                        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type` = 'r' AND `id` = '" . $res['refid'] . "' LIMIT 1");
                     $razd = mysql_fetch_assoc($q3);
                     $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' AND `id` = '" . $razd['refid'] . "' LIMIT 1");
@@ -173,15 +176,14 @@ if ($user_id) {
                     $colmes1 = mysql_num_rows($colmes);
                     $cpg = ceil($colmes1 / $kmess);
                     $nick = mysql_fetch_assoc($colmes);
-                    if ($res['edit'])
-                        echo '<img src="../images/tz.gif" alt=""/>';
-                    elseif ($res['close'])
-                        echo '<img src="../images/dl.gif" alt=""/>';
-                    else
-                        echo '<img src="../images/np.gif" alt=""/>';
-                    if ($res['realid'] == 1)
-                        echo '&#160;<img src="../images/rate.gif" alt=""/>';
-                    echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
+                    // Значки
+                    $icons = array(
+                        ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
+                        ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
+                        ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
+                    );
+                        echo functions::display_menu($icons, '&#160;', '&#160;');
+                    echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
                         echo '&#160;<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&gt;&gt;</a>';
