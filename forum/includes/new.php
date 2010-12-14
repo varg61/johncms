@@ -164,7 +164,7 @@ if ($user_id) {
                 ORDER BY `forum`.`time` DESC
                 LIMIT $start, $kmess");
                 while ($res = mysql_fetch_assoc($req)) {
-                    if($res['close'])
+                    if ($res['close'])
                         echo '<div class="rmenu">';
                     else
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
@@ -177,19 +177,18 @@ if ($user_id) {
                     $cpg = ceil($colmes1 / $kmess);
                     $nick = mysql_fetch_assoc($colmes);
                     // Значки
-                        $icons = array(
-                            ($np ? (!$res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/op.gif" alt=""/>' : '') : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
-                            ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
-                            ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
-                            ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
-                        );
-                        echo functions::display_menu($icons, '&#160;', '&#160;');
+                    $icons = array (
+                        ($np ? (!$res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/op.gif" alt=""/>' : '') : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
+                        ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
+                        ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
+                        ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
+                    );
+                    echo functions::display_menu($icons, '&#160;', '&#160;');
                     echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
                         echo '&#160;<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&gt;&gt;</a>';
-                    echo '<div class="sub">' .
-                        $res['from'] . ($colmes1 > 1 ? '&#160;/&#160;' . $nick['from'] : '') .
+                    echo '<div class="sub">' . $res['from'] . ($colmes1 > 1 ? '&#160;/&#160;' . $nick['from'] : '') .
                         ' <span class="gray">(' . date("d.m.y / H:i", $nick['time']) . ')</span><br />' .
                         '<a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a>&#160;/&#160;<a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>' .
                         '</div></div>';
@@ -208,7 +207,7 @@ if ($user_id) {
                     '</form></p>';
             }
             echo '<p>';
-            if($total)
+            if ($total)
                 echo '<a href="index.php?act=new&amp;do=reset">' . $lng_forum['unread_reset'] . '</a><br/>';
             echo '<a href="index.php?act=new&amp;do=select">' . $lng_forum['unread_show_for_period'] . '</a></p>';
     }
@@ -231,10 +230,15 @@ if ($user_id) {
             $cpg = ceil($colmes1 / $kmess);
             $nam = mysql_fetch_assoc($nikuser);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<img src="../images/' . ($res['edit'] == 1 ? 'tz' : 'np') . '.gif" alt=""/>';
-            if ($res['realid'] == 1)
-                echo '&#160;<img src="../images/rate.gif" alt=""/>';
-            echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&#160;[' . $colmes1 . ']';
+                    // Значки
+                    $icons = array (
+                        ($np ? (!$res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/op.gif" alt=""/>' : '') : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
+                        ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
+                        ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
+                        ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
+                    );
+                    echo functions::display_menu($icons, '&#160;', '&#160;');
+            echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&#160;[' . $colmes1 . ']';
             if ($cpg > 1)
                 echo '&#160;<a href="index.php?id=' . $res['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
             echo '<br/><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
@@ -251,5 +255,4 @@ if ($user_id) {
     }
     echo '<div class="phdr"><a href="index.php">' . $lng['to_forum'] . '</a></div>';
 }
-
 ?>
