@@ -222,7 +222,6 @@ user_banned                   =   "Utilizator are ban"
 
 
 
-
 [faq]
 forum_rules                   =   "Regulile Forumului"
 smileys_adm                   =   "Pentru administraţie"
@@ -627,6 +626,7 @@ lng_or                        =   "sau"
 login                         =   "Login"
 login_name                    =   "Login"
 general_settings              =   "Setări generale"
+mail                          =   "Mail"
 mail_new                      =   "Mesaj nou"
 mans                          =   "Парни"
 message                       =   "Mesajul"

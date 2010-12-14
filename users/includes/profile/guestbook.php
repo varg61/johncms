@@ -13,7 +13,11 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 $textl = $lng['profile'] . ' | ' . $lng['guestbook'];
+$headmod = 'my_guest';
+if($user_id && $user['id'] == $user_id)
+    $datauser['comm_old'] = $datauser['comm_count'];
 require('../incfiles/head.php');
 
 $context_top = '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['guestbook'] . '</div>' .
@@ -33,10 +37,8 @@ $arg = array (
     'owner' => $user['id'],                    // Владелец объекта
     'owner_delete' => true,                    // Возможность владельцу удалять комментарий
     'owner_reply' => true,                     // Возможность владельцу отвечать на комментарий
-    'owner_edit' => false,                     // Возможность владельцу редактировать комментарий
     'title' => $lng['comments'],               // Название раздела
-    'context_top' => $context_top,             // Выводится вверху списка
-    'context_bottom' => ''                     // Выводится внизу списка
+    'context_top' => $context_top              // Выводится вверху списка
 );
 
 /*
@@ -45,4 +47,14 @@ $arg = array (
 -----------------------------------------------------------------
 */
 $comm = new comments($arg);
+
+/*
+-----------------------------------------------------------------
+Обновляем счетчик непрочитанного
+-----------------------------------------------------------------
+*/
+if(!$mod && $user['id'] == $user_id && $user['comm_count'] != $user['comm_old']){
+    mysql_query("UPDATE `users` SET `comm_old` = '" . $user['comm_count'] . "' WHERE `id` = '$user_id'");
+}
+
 ?>

@@ -34,6 +34,9 @@ class comments {
     public $min_lenght = 4;    // Мин. к-во символов в комментарии
     public $max_lenght = 5000; // Макс. к-во символов в комментарии
     public $captcha = false;   // Показывать CAPTCHA
+    
+    // Возвращаемые значения
+    public $total = 0; // Общее число комментариев объекта
 
     /*
     -----------------------------------------------------------------
@@ -260,8 +263,8 @@ class comments {
                     // Показываем форму ввода
                     echo $this->msg_form('&amp;mod=add_comment');
                 }
-                $total = $this->msg_total();
-                if ($total) {
+                $this->total = $this->msg_total();
+                if ($this->total) {
                     $req = mysql_query("SELECT `" . $this->comments_table . "`.*, `" . $this->comments_table . "`.`id` AS `subid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
                     FROM `" . $this->comments_table . "` LEFT JOIN `users` ON `" . $this->comments_table . "`.`user_id` = `users`.`id`
                     WHERE `sub_id` = '" . $this->sub_id . "' ORDER BY `subid` DESC LIMIT $start, $kmess");
@@ -304,9 +307,9 @@ class comments {
                 } else {
                     echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
                 }
-                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-                if ($total > $kmess) {
-                    echo functions::display_pagination($this->url . '&amp;', $start, $total, $kmess);
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $this->total . '</div>';
+                if ($this->total > $kmess) {
+                    echo functions::display_pagination($this->url . '&amp;', $start, $this->total, $kmess);
                     echo '<p><form action="' . $this->url . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
@@ -388,7 +391,7 @@ class comments {
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "'"), 0);
 
         if ($update) {
-            // Обновляем счетчик в таблице объекта
+            // Обновляем счетчики в таблице объекта
             mysql_query("UPDATE `" . $this->object_table . "` SET `comm_count` = '$total' WHERE `id` = '" . $this->sub_id . "'");
         }
 

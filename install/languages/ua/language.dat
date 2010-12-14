@@ -425,7 +425,6 @@ voting_variant_warning        =   "Ви дійсно хочете видалит
 
 
 
-
 [gallery]
 new_photo                     =   "Новые фото"
 
@@ -627,6 +626,7 @@ lng_or                        =   "або"
 login                         =   "Вхід"
 login_name                    =   "Логін"
 general_settings              =   "Загальні налаштування"
+mail                          =   "Mail"
 mail_new                      =   "Вам лист"
 mans                          =   "Хлопці"
 message                       =   "Сообщение"

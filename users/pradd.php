@@ -15,6 +15,7 @@
 define('_IN_JOHNCMS', 1);
 
 $textl = 'Почта(письма)';
+$headmod = 'pradd';
 require_once("../incfiles/core.php");
 if ($user_id) {
     $msg = functions::check($_POST['msg']);
@@ -336,7 +337,6 @@ if ($user_id) {
             ////////////////////////////////////////////////////////////
             // Список входящих писем                                  //
             ////////////////////////////////////////////////////////////
-            $headmod = 'pradd';
             require_once('../incfiles/head.php');
             if (isset($_GET['new'])) {
                 $_SESSION['refpr'] = htmlspecialchars(getenv("HTTP_REFERER"));

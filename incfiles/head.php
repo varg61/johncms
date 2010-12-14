@@ -99,7 +99,8 @@ echo '<div class="header"> ' . $lng['hi'] . ', ' . ($user_id ? '<b>' . $login . 
 echo '<div class="tmn">';
 echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $set['homeurl'] . '\'>' . $lng['homepage'] . '</a> | ' : '';
 echo ($user_id) ? '<a href="' . $set['homeurl'] . '/users/profile.php?act=office">' . $lng['personal'] . '</a> | ' : '';
-echo $user_id ? '<a href="' . $set['homeurl'] . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $set['homeurl'] . '/login.php">' . $lng['login'] . '</a> | <a href="' . $set['homeurl'] . '/registration.php">' . $lng['registration'] . '</a>';
+echo $user_id
+    ? '<a href="' . $set['homeurl'] . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $set['homeurl'] . '/login.php">' . $lng['login'] . '</a> | <a href="' . $set['homeurl'] . '/registration.php">' . $lng['registration'] . '</a>';
 echo '</div><div class="maintxt">';
 
 /*
@@ -188,13 +189,20 @@ if (!empty($ban))
 
 /*
 -----------------------------------------------------------------
-Проверяем, есть ли новые письма
+Ссылки на непрочитанное
 -----------------------------------------------------------------
 */
-if ($headmod != "pradd" && $user_id) {
-    $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
-    if ($countnew > 0) {
-        echo '<div class="rmenu" style="text-align: center"><a href="' . $set['homeurl'] . '/users/pradd.php?act=in&amp;new"><b><span class="red">' . $lng['mail_new'] . ': ' . $countnew . '</span></b></a></div>';
+if ($user_id) {
+    $list = array ();
+    if ($headmod != "pradd") {
+        $new_mail = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `user` = '$login' AND `type` = 'in' AND `chit` = 'no'"), 0);
+        if ($new_mail)
+            $list[] = '<a href="' . $set['homeurl'] . '/users/pradd.php?act=in&amp;new">' . $lng['mail'] . '</a>&#160;(' . $new_mail . ')';
     }
+    if ($datauser['comm_count'] > $datauser['comm_old']) {
+        $list[] = '<a href="' . $set['homeurl'] . '/users/profile.php?act=guestbook&amp;user=' . $user_id . '">' . $lng['guestbook'] . '</a> (' . ($datauser['comm_count'] - $datauser['comm_old']) . ')';
+    }
+    if(!empty($list))
+        echo '<div class="rmenu">' . $lng['unread'] . ': ' . functions::display_menu($list, ', ') . '</div>';
 }
 ?>
