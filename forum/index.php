@@ -340,7 +340,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                         $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $res['id'] . "'" . ($rights >= 7 ? '' : " AND `close` != '1'"));
                         $colmes1 = mysql_result($colmes, 0);
                         $cpg = ceil($colmes1 / $kmess);
-                        $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` > '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id`='$user_id'"), 0);
+                        $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` >= '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id`='$user_id'"), 0);
                         // Значки
                         $icons = array(
                             ($np ? '' : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
