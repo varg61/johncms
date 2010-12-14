@@ -25,8 +25,8 @@ if ($flood) {
     require('../incfiles/end.php');
     exit;
 }
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r'");
-if (!mysql_num_rows($req)) {
+$req_r = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r' LIMIT 1");
+if (!mysql_num_rows($req_r)) {
     require('../incfiles/head.php');
     echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
@@ -108,6 +108,9 @@ if (isset($_POST['submit'])) {
         exit;
     }
 } else {
+    $res_r = mysql_fetch_assoc($req_r);
+    $req_c = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res_r['refid'] . "'");
+    $res_c = mysql_fetch_assoc($req_c);
     require('../incfiles/head.php');
     if ($datauser['postforum'] == 0) {
         if (!isset($_GET['yes'])) {
@@ -120,11 +123,14 @@ if (isset($_POST['submit'])) {
     }
     echo '<div class="phdr"><a href="index.php?id=' . $id . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['new_topic'] . '</div>' .
         '<form action="index.php?act=nt&amp;id=' . $id . '" method="post">' .
-        '<div class="gmenu"><p>' . $lng_forum['new_topic_name'] . ':<br/>' .
-        '<input type="text" size="20" maxlength="100" name="th"/><br/>' .
-        $lng_forum['post'] . ':<br/>' .
-        '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br />' .
-        '<input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
+        '<div class="gmenu">' .
+        '<p><h3>' . $lng['section'] . '</h3>' .
+        '<a href="index.php?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="index.php?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
+        '<p><h3>' . $lng_forum['new_topic_name'] . '</h3>' .
+        '<input type="text" size="20" maxlength="100" name="th"/></p>' .
+        '<p><h3>' . $lng_forum['post'] . '</h3>' .
+        '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+        '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
     if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
     echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
