@@ -104,7 +104,7 @@ if ($do || isset($_GET['new'])) {
             if (mb_strlen($res['text']) > 500)
                 $text .= '<br /><a href="index.php?act=post&amp;id=' . $res['post'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>';
             // Формируем ссылку на файл
-            $fls = filesize('../files/forum/attach/' . $res['filename']);
+            $fls = @filesize('../files/forum/attach/' . $res['filename']);
             $fls = round($fls / 1024, 0);
             $att_ext = strtolower(functions::format('./files/forum/attach/' . $res['filename']));
             $pic_ext = array (

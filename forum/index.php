@@ -225,15 +225,18 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         */
         $res = true;
         $parent = $type1['refid'];
-        $tree = array ('<a href="index.php">' . $lng['forum'] . '</a>');
-        while ($parent != '0' && $res != false) {
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent'");
+        if($type1['refid']){
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $type1['refid'] . "'");
             $res = mysql_fetch_assoc($req);
-            if ($res['type'] == 'f' || $res['type'] == 'r')
-                $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
-            $parent = $res['refid'];
+            $tree[] = '<a href="index.php?id=' . $type1['refid'] . '">' . $res['text'] . '</a>';
         }
-        sort($tree);
+        if($res['refid']){
+            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
+            $res = mysql_fetch_assoc($req);
+            $tree[] = '<a href="index.php?id=' . $res['refid'] . '">' . $res['text'] . '</a>';
+        }
+        $tree[] = '<a href="index.php">' . $lng['forum'] . '</a>';
+        krsort($tree);
         if ($type1['type'] != 't')
             $tree[] = '<b>' . $type1['text'] . '</b>';
 
@@ -366,7 +369,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 }
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
                 if ($total > $kmess) {
-                    echo '<p>' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
+                    echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</div>' .
                         '<p><form action="index.php?id=' . $id . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
@@ -407,8 +410,9 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0);
                 // Выводим название топика
-                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] .
-                    '</b></div>';
+                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
+                if ($colmes > $kmess)
+                    echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>';
                 // Метки удаления темы
                 if ($type1['close'])
                     echo '<div class="rmenu">' . $lng_forum['topic_delete_who'] . ': <b>' . $type1['close_who'] . '</b></div>';
@@ -670,7 +674,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                     '<img src="../theme/' . $set_user['skin'] . '/images/up.png" alt="' . $lng['up'] . '" width="20" height="10" border="0"/></a>' .
                     '&#160;&#160;' . $lng['total'] . ': ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
-                    echo '<p>' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</p>' .
+                    echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>' .
                         '<p><form action="index.php?id=' . $id . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .

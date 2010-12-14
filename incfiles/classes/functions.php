@@ -279,7 +279,7 @@ class functions {
         }
         if(empty($val))
             return false;
-        ksort($val);
+        //ksort($val);
         $last = array_pop($val);
         foreach ($val as $menu) {
             $out .= $menu . $delimiter;
