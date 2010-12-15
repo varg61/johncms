@@ -239,7 +239,7 @@ element.value = str.substr(0, start) + text1 + str.substr(start, length) + text2
         global $realtime, $set;
         $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
         $photocount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files`"), 0);
-        $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 86400) . "' AND `access` > '1'"), 0);
+        $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 259200) . "' AND `access` > '1'"), 0);
         return $albumcount . '&#160;/&#160;' . $photocount . ($newcount ? '&#160;/&#160;<span class="red"><a href="' . $set['homeurl'] . '/users/album.php?act=top">+' . $newcount . '</a></span>' : '');
     }
 

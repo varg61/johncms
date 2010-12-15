@@ -1,8 +1,0 @@
-received                      :::   Betretender
-my_actives                    :::   Meine Aktiven
-my_mail                       :::   Meine Post
-my_office                     :::   Personliches Kabinett
-my_profile                    :::   Meine Enquete
-my_settings                   :::   Meine Abstimmungen
-my_statistics                 :::   Meine Statistik
-sent                          :::   Versendeter
