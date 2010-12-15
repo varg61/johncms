@@ -125,7 +125,8 @@ switch ($act) {
         if (isset($_SESSION['ref']))
             unset($_SESSION['ref']);
         include 'pages/mainmenu.php';
-        include 'sitemap/index.php';
+        if (!$is_mobile)
+            include 'sitemap/index.php';
 }
 
 require('incfiles/end.php');

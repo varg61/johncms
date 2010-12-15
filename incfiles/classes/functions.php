@@ -95,6 +95,28 @@ class functions {
 
         return $var;
     }
+    function auto_bb($form, $field) {
+        global $set;
+        return '<script language="JavaScript" type="text/javascript">
+function tag(text1, text2) {
+if ((document.selection)) {
+document.' . $form . '.' . $field . '.focus();
+document.' . $form . '.document.selection.createRange().text = text1+document.' . $form . '.document.selection.createRange().text+text2;
+} else if(document.forms[\'' . $form . '\'].elements[\'' . $field . '\'].selectionStart!=undefined) {
+var element = document.forms[\'' . $form . '\'].elements[\'' . $field . '\'];
+var str = element.value;
+var start = element.selectionStart;
+var length = element.selectionEnd - element.selectionStart;
+element.value = str.substr(0, start) + text1 + str.substr(start, length) + text2 + str.substr(start + length);
+} else document.' . $form . '.' . $field . '.value += text1+text2;}</script>
+<a href="javascript:tag(\'[b]\', \'[/b]\')"><img src="' . $set['homeurl'] . '/images/bb/b.png" alt="b" title="Жирный"/></a>
+<a href="javascript:tag(\'[i]\', \'[/i]\')"><img src="' . $set['homeurl'] . '/images/bb/i.png" alt="i" title="Наклонный"/></a><a href="javascript:tag(\'[u]\', \'[/u]\')"><img src="../images/bb/u.png" alt="u" title="Подчёркнутый"/></a>
+<a href="javascript:tag(\'[s]\', \'[/s]\')"><img src="' . $set['homeurl'] . '/images/bb/s.png" alt="s" title="Перечёркнутый"/></a><a href="javascript:tag(\'[c]\', \'[/c]\')"><img src="../images/bb/q.png" alt="quote" title="Цитата"/></a>
+<a href="javascript:tag(\'[php]\', \'[/php]\')"><img src="' . $set['homeurl'] . '/images/bb/cod.png" alt="cod" title="Код"/></a>
+<a href="javascript:tag(\'[url=]\', \'[/url]\')"><img src="' . $set['homeurl'] . '/images/bb/l.png" alt="url" title="Ссылка" /></a>
+<a href="javascript:tag(\'[red]\', \'[/red]\')"><img src="' . $set['homeurl'] . '/images/bb/re.png" alt="red" title="Красный"/></a>
+<a href="javascript:tag(\'[green]\', \'[/green]\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="Зелёный"/></a><a href="javascript:tag(\'[blue]\', \'[/blue]\')"><img src="../images/bb/bl.png" alt="blue" title="Синий"/></a><br />';
+    }
 
     /*
     -----------------------------------------------------------------
@@ -273,14 +295,18 @@ class functions {
     */
     function display_menu($val = array (), $delimiter = ' | ', $end_space = '') {
         $out = '';
+
         foreach ($val as $key => $menu) {
             if (empty($menu))
                 unset($val[$key]);
         }
-        if(empty($val))
+
+        if (empty($val))
             return false;
+
         //ksort($val);
         $last = array_pop($val);
+
         foreach ($val as $menu) {
             $out .= $menu . $delimiter;
         }
@@ -374,7 +400,8 @@ class functions {
                 $out .= '</td><td>';
             }
             if ($user['sex'])
-                $out .= '<img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
+                $out .= '<img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '')
+                    . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
             else
                 $out .= '<img src="' . $set['homeurl'] . '/images/del.png" width="12" height="12" align="middle" />&#160;';
             $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="' . $set['homeurl'] . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
@@ -418,7 +445,8 @@ class functions {
             if ($ipinf) {
                 $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
                 if ($rights)
-                    $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist . '</div>';
+                    $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist
+                        . '</div>';
                 else
                     $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist . '</div>';
             }
@@ -973,18 +1001,23 @@ class functions {
     -----------------------------------------------------------------
     Проверка, мобильный ли браузер?
     -----------------------------------------------------------------
-    Автор функции ManHunter http://www.manhunter.ru
+    За основу взята функция от ManHunter http://www.manhunter.ru
     -----------------------------------------------------------------
     */
     function mobile_detect() {
-        $user_agent = strtolower(getenv('HTTP_USER_AGENT'));
-        $accept = strtolower(getenv('HTTP_ACCEPT'));
+        if (isset($_SESSION['is_mobile'])) {
+            return $_SESSION['is_mobile'];
+        }
+        $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $accept = strtolower($_SERVER['HTTP_ACCEPT']);
 
         if ((strpos($accept, 'text/vnd.wap.wml') !== false) || (strpos($accept, 'application/vnd.wap.xhtml+xml') !== false)) {
+            $_SESSION['is_mobile'] = 1;
             return 1;
         }
 
         if (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
+            $_SESSION['is_mobile'] = 2;
             return 2;
         }
 
@@ -1004,6 +1037,7 @@ class functions {
             'sonyericsson|samsung|240x|x320vx10|nokia|sony cmd|motorola|' .
             'up.browser|up.link|mmp|symbian|smartphone|midp|wap|vodafone|o2|' .
             'pocket|kindle|mobile|psp|treo)/', $user_agent)) {
+            $_SESSION['is_mobile'] = 3;
             return 3;
         }
 
@@ -1407,8 +1441,10 @@ class functions {
             "zeto",
             "zte-"
         ))) {
+            $_SESSION['is_mobile'] = 4;
             return 4;
         }
+        $_SESSION['is_mobile'] = 0;
         return false;
     }
 }

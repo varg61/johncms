@@ -110,9 +110,11 @@ switch ($type1['type']) {
                 }
             }
             echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $type1['text'] . '</div>' .
-                '<form action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><div class="gmenu">' .
-                '<p><h3>' . $lng_forum['post'] . '</h3>' .
-                '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+                '<form name="form" action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><div class="gmenu">' .
+                '<p><h3>' . $lng_forum['post'] . '</h3>';
+            if(!$is_mobile)
+                echo '</p><p>' . functions::auto_bb('form', 'msg');
+            echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                 '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
@@ -245,7 +247,7 @@ switch ($type1['type']) {
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
             $qt = functions::checkout($qt, 0, 2);
-            echo '<form action="?act=say&amp;id=' . $id . '&amp;start=' . $start . '&amp;cyt" method="post">';
+            echo '<form name="form" action="?act=say&amp;id=' . $id . '&amp;start=' . $start . '&amp;cyt" method="post">';
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
                 echo '<div class="gmenu">' .
@@ -262,8 +264,10 @@ switch ($type1['type']) {
                     . ',<br />' .
                     '<input type="radio" value="4" name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_4'] . '</p>';
             }
-            echo '<p><h3>' . $lng_forum['post'] . '</h3>' .
-                '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+            echo '<p><h3>' . $lng_forum['post'] . '</h3>';
+            if(!$is_mobile)
+                echo '</p><p>' . functions::auto_bb('form', 'msg');
+            echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                 '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];

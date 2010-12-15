@@ -511,14 +511,18 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                     . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order LIMIT $start, $kmess");
                 // Верхнее поле "Написать"
                 if (($user_id && !$type1['edit'] && $set_forum['upfp']) || ($rights >= 7 && $set_forum['upfp'])) {
-                    echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
+                    echo '<div class="gmenu"><form name="form1" action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
-                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>' .
-                            '<input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'] . '<br/>';
+                        echo '<p>';
+                        if(!$is_mobile)
+                            echo functions::auto_bb('form1', 'msg');
+                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+                            '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
                         if ($set_user['translit'])
-                            echo '<input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'] . '<br/>';
+                            echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
+                        echo '</p>';
                     }
-                    echo '<input type="submit" name="submit" value="' . $lng['write'] . '"/>' .
+                    echo '<p><input type="submit" name="submit" value="' . $lng['write'] . '"/></p>' .
                         '</form></div>';
                 }
                 if ($rights == 3 || $rights >= 6)
@@ -657,14 +661,18 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 }
                 // Нижнее поле "Написать"
                 if (($user_id && !$type1['edit'] && !$set_forum['upfp']) || ($rights >= 7 && !$set_forum['upfp'])) {
-                    echo '<div class="gmenu"><form action="index.php?act=say&amp;id=' . $id . '" method="post">';
+                    echo '<div class="gmenu"><form name="form2" action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
-                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>' .
-                            '<input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'] . '<br/>';
+                        echo '<p>';
+                        if(!$is_mobile)
+                            echo functions::auto_bb('form2', 'msg');
+                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/></p>' .
+                            '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
                         if ($set_user['translit'])
-                            echo '<input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'] . '<br/>';
+                            echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
+                        echo '</p>';
                     }
-                    echo '<input type="submit" name="submit" value="' . $lng['write'] . '"/>' .
+                    echo '<p><input type="submit" name="submit" value="' . $lng['write'] . '"/></p>' .
                         '</form></div>';
                 }
                 echo '<div class="phdr"><a name="down" id="down"></a><a href="#up">' .

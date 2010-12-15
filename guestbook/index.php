@@ -274,10 +274,13 @@ switch ($act) {
         }
         // Форма ввода нового сообщения
         if (($user_id || $set['mod_guest'] == 2) && !$ban['1'] && !$ban['13']) {
-            echo '<div class="gmenu"><form action="index.php?act=say" method="post">';
+            echo '<div class="gmenu"><form name="form" action="index.php?act=say" method="post">';
             if (!$user_id)
                 echo $lng['name'] . ' (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>';
-            echo $lng['message'] . ' (max 5000):<br/><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
+            echo '<b>' . $lng['message'] . '</b> <small>(max 5000)</small>:<br/>';
+            if(!$is_mobile)
+                echo functions::auto_bb('form', 'msg');
+            echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . $lng['translit'] . '<br/>';
             if (!$user_id) {

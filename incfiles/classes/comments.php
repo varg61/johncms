@@ -326,13 +326,16 @@ class comments {
     -----------------------------------------------------------------
     */
     private function msg_form($submit_link = '', $text = '', $reply = '') {
-        global $set_user, $lng;
-        $out = '<div class="gmenu"><form action="' . $this->url . $submit_link . '" method="post"><p>';
+        global $set_user, $lng, $is_mobile;
+        $out = '<div class="gmenu"><form name="form" action="' . $this->url . $submit_link . '" method="post"><p>';
 
         if (!empty($text)) {
             $out .= '<div class="quote">' . $text . '</div></p><p>';
         }
-        $out .= $lng['message'] . ':<br /><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="message">' . $reply . '</textarea><br/>';
+        $out .= '<b>' . $lng['message'] . '</b>: <small>(Max. ' . $this->max_lenght . ')</small><br />';
+        if(!$is_mobile)
+            $out .= '</p><p>' . functions::auto_bb('form', 'message');
+        $out .= '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="message">' . $reply . '</textarea><br/>';
 
         if ($set_user['translit'])
             $out .= '<input type="checkbox" name="translit" value="1" />&nbsp;' . $lng['translit'] . '<br/>';

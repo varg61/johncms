@@ -30,6 +30,7 @@ spl_autoload_register('autoload');
 function autoload($name) {
     global $rootpath;
     $file = $rootpath . 'incfiles/classes/' . $name . '.php';
+
     if (file_exists($file))
         require_once($file);
 }
@@ -46,12 +47,14 @@ $core = new core() or die('Error: Core System');
 Получаем системные переменные
 -----------------------------------------------------------------
 */
-$ip = $core->ip;                    // Адрес IP
-$agn = $core->user_agent;           // User Agent
-$set = $core->system_settings;      // Системные настройки
-$realtime = $core->system_time;     // Системное время с учетом сдвига
-$language = $core->system_language; // Язык системы
-$lng = $core->language_phrases;     // Фразы выбранного языка
+$ip = $core->ip;                         // Адрес IP
+$agn = $core->user_agent;                // User Agent
+$set = $core->system_settings;           // Системные настройки
+$realtime = $core->system_time;          // Системное время с учетом сдвига
+$language = $core->system_language;      // Язык системы
+$lng = $core->language_phrases;          // Фразы выбранного языка
+$is_mobile = functions::mobile_detect(); // Определение мобильного браузера
+$home = $set['homeurl'];                 // Домашняя страница
 
 /*
 -----------------------------------------------------------------
