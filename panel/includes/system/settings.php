@@ -60,7 +60,7 @@ echo '<p>' .
 // Настройка времени
 echo '<p>' .
     '<h3>' . $lng['clock_settings'] . '</h3>' .
-    '<input type="text" name="timeshift" size="2" maxlength="2" value="' . $set['timeshift'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />' .
+    '<input type="text" name="timeshift" size="2" maxlength="3" value="' . $set['timeshift'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />' .
     '<span style="font-weight:bold; background-color:#C0FFC0">' . date("H:i", $realtime) . '</span> ' . $lng['system_time'] .
     '<br /><span style="font-weight:bold; background-color:#FFC0C0">' . date("H:i") . '</span> ' . $lng['server_time'] .
     '</p>';

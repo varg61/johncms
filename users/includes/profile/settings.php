@@ -182,7 +182,7 @@ switch ($mod) {
         // Форма ввода настроек
         echo '<form action="profile.php?act=settings" method="post" >' .
             '<div class="menu"><p><h3>' . $lng['settings_clock'] . '</h3>' .
-            '<input type="text" name="sdvig" size="2" maxlength="2" value="' . $set_user['sdvig'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
+            '<input type="text" name="sdvig" size="2" maxlength="3" value="' . $set_user['sdvig'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
             '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $set_user['sdvig'] * 3600) . '</span> ' . $lng['system_time'] .
             '</p><p><h3>' . $lng['system_functions'] . '</h3>' .
             '<input name="avatar" type="checkbox" value="1" ' . ($set_user['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .
