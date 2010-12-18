@@ -20,7 +20,8 @@ class core {
     public $user_agent = 'Not Recognised'; // User Agent (Browser)
     public $system_settings = array ();    // Системные настройки
     public $system_time;                   // Системное время
-    public $system_language = 'ru';        // Язык системы
+    public $language_id;                   // Идентификатор языка
+    public $language_iso;                  // Двухбуквенный ISO код языка
     public $language_phrases = array ();   // Массив с фразами выбранного языка
     public $regban = false;                // Запрет регистрации пользователей
 
@@ -236,15 +237,15 @@ class core {
     -----------------------------------------------------------------
     */
     public function load_lng($module = 'main') {
-        $req = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '" . $this->system_language . "' AND `module` = '$module'");
+        $req = mysql_query("SELECT * FROM `cms_lng_phrases` WHERE `language_id` = '" . $this->language_id . "' AND `module` = '$module'");
 
         if (mysql_num_rows($req)) {
             $out = array ();
             while ($res = mysql_fetch_assoc($req)) {
                 if (!empty($res['custom'])) {
-                    $out[$res['var']] = $res['custom'];
+                    $out[$res['keyword']] = $res['custom'];
                 } else {
-                    $out[$res['var']] = $res['default'];
+                    $out[$res['keyword']] = $res['default'];
                 }
             }
             return $out;
@@ -260,14 +261,11 @@ class core {
     */
     private function system_settings() {
         $req = mysql_query("SELECT * FROM `cms_settings`");
-        $out = array ();
-
         while ($res = mysql_fetch_row($req)) {
             $out[$res[0]] = $res[1];
         }
-
-        if (isset($out['language']))
-            $this->system_language = $out['language'];
+        $this->language_id = $out['lng_id'];
+        $this->language_iso = $out['lng_iso'];
         $this->system_time = time() + $out['timeshift'] * 3600;
         $this->system_settings = $out;
     }
@@ -305,7 +303,7 @@ class core {
                     $this->user_ip();                                // Обработка истории IP адресов
                     $this->user_ban_check();                         // Проверка на Бан
                     if (!empty($this->user_data['set_language']))    // Язык
-                        $this->system_language = $this->user_data['set_language'];
+                        $this->language_id = $this->user_data['set_language'];
                 } else {
                     // Если авторизация не прошла
                     $this->user_unset();

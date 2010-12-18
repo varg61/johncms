@@ -51,7 +51,6 @@ $ip = $core->ip;                         // Адрес IP
 $agn = $core->user_agent;                // User Agent
 $set = $core->system_settings;           // Системные настройки
 $realtime = $core->system_time;          // Системное время с учетом сдвига
-$language = $core->system_language;      // Язык системы
 $lng = $core->language_phrases;          // Фразы выбранного языка
 $is_mobile = functions::mobile_detect(); // Определение мобильного браузера
 $home = $set['homeurl'];                 // Домашняя страница
