@@ -32,8 +32,7 @@ echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a
 if ($user_id || $set['active']) {
     echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
         '<div class="menu"><a href="users/index.php">' . $lng['users'] . '</a> (' . functions::stat_users() . ')</div>' .
-        '<div class="menu"><a href="users/album.php">' . $lng['photo_albums'] . '</a> (' . functions::count_photo() . ')</div>' .
-        '<div class="menu">' . $lng['blogs'] . '</div>';
+        '<div class="menu"><a href="users/album.php">' . $lng['photo_albums'] . '</a> (' . functions::count_photo() . ')</div>';
 }
 echo '<div class="phdr"><a href="http://gazenwagen.com">Gazenwagen</a></div>';
 ?>

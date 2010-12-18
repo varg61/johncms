@@ -15,6 +15,7 @@
 defined('_IN_JOHNCMS') or die('Restricted access');
 class core {
     // Системные переменные
+    public $build;                         // Версия системы
     public $ip;                            // IP адрес в LONG формате
     public $user_agent = 'Not Recognised'; // User Agent (Browser)
     public $system_settings = array ();    // Системные настройки
@@ -88,6 +89,7 @@ class core {
         $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to DB server');
         @mysql_select_db($db_name) or die('Error: cannot select DB');
         @mysql_query("SET NAMES 'utf8'", $connect);
+        $this->build = isset($build) ? $build : false;
     }
 
     /*
