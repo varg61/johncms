@@ -19,7 +19,6 @@ define('_IN_JOHNCMS', 1);
 $install = false;
 $update = false;
 $lng_install = false;
-$language = false;
 $lng_id = 1;
 
 /*
@@ -29,7 +28,7 @@ $lng_id = 1;
 */
 if (file_exists('../incfiles/db.php') && file_exists('../incfiles/core.php')) {
     require('../incfiles/core.php');
-    if(!$core->build)
+    if (!$core->build)
         $update = true;
 } else {
     $install = true;
@@ -60,10 +59,10 @@ if (!count($lng_key))
 if (isset($_REQUEST['lng_id']) && in_array($_REQUEST['lng_id'], $lng_key)) {
     // Меняем язык по запросу из формы
     $lng_id = intval($_REQUEST['lng_id']);
-} elseif (isset($language) && !empty($language) && array_key_exists($language, $lng_key)) {
+}  elseif (isset($language) && !empty($language) && array_key_exists($language, $lng_key)) {
     // Если система проинсталлирована, то используем ее язык
     $lng_id = $lng_key[$language];
-} elseif (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+}  elseif (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     // Устанавливаем язык по браузеру
     $browser_lang = explode(',', strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
     foreach ($browser_lang as $var) {
@@ -104,58 +103,43 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 Переключаем режимы работы
 -----------------------------------------------------------------
 */
-
-switch ($_REQUEST['act']) {
-    case 'install':
-        /*
-        -----------------------------------------------------------------
-        Новая инсталляция
-        -----------------------------------------------------------------
-        */
-        require('includes/check.php');
-        break;
-
-    case 'update':
-        /*
-        -----------------------------------------------------------------
-        Обновление с предыдущей версии
-        -----------------------------------------------------------------
-        */
-        echo 'UPDATE';
-        break;
-
-    case 'languages':
-        /*
-        -----------------------------------------------------------------
-        Установка языковых пакетов
-        -----------------------------------------------------------------
-        */
-        require('includes/languages.php');
-        break;
-
-    default:
-        /*
-        -----------------------------------------------------------------
-        Главное меню инсталлятора
-        -----------------------------------------------------------------
-        */
-        echo '<form action="index.php" method="post">' .
-            '<table>' .
-            '<tr><td valign="top"><input type="radio" name="act" value="install" ' . ($install ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($install ? 'blue' : 'gray') . '">' . $lng['install'] . '</h3><small>' . ($install ? $lng['install_note'] : '<span class="gray">' . $lng['alredy_installed'] . '</span>') . '</small></td></tr>' .
-            '<tr><td valign="top"><input type="radio" name="act" value="update" ' . ($update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($update ? 'blue' : 'gray') . '">' . $lng['update'] . '</h3><small>' . ($update ? $lng['update_note'] : '<span class="gray">' . $lng['update_not_required'] . '</span>') . '</small></td></tr>' .
-            '<tr><td valign="top"><input type="radio" name="act" value="languages" ' . (!$install && !$update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . (!$install && !$update ? 'blue' : 'gray') . '">' . $lng['install_languages'] . '</h3><small>' . (!$install && !$update ? $lng['install_languages_note'] : '<span class="gray">' . $lng['install_languages_impossible'] . '</span>') . '</small></td></tr>' .
-            '<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . $lng['continue'] . '" /></td></tr>' .
-            '</table>' .
-            '<input type="hidden" name="lng_id" value="' . $lng_id . '" />' .
-            '</form><hr />' .
-            '<form action="index.php" method="post"><table>' .
-            '<tr><td>&nbsp;</td><td><h3>' . $lng['change_language'] . '</h3></td></tr>';
-        foreach ($lng_set as $key => $val) {
-            echo '<tr><td valign="top"><input type="radio" name="lng_id" value="' . $key . '" ' . ($key == $lng_id ? 'checked="checked"' : '') . ' /></td>' .
-                '<td>' . $val['name'] . (isset($language) && !empty($language) && $language == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '</td></tr>';
-        }
-        echo '<tr><td>&nbsp;</td><td style="padding-top:6px"><input type="submit" name="submit" value="' . $lng['change'] . '" /></td></tr>' .
-            '</table></form>';
+$act = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : '';
+$mod = isset($_REQUEST['mod']) ? trim($_REQUEST['mod']) : '';
+$actions = array (
+    'install',
+    'update',
+    'languages'
+);
+if (in_array($act, $actions)) {
+    require_once('includes/' . $act . '.php');
+} else {
+    /*
+    -----------------------------------------------------------------
+    Главное меню инсталлятора
+    -----------------------------------------------------------------
+    */
+    echo '<form action="index.php" method="post">' .
+        '<table>' .
+        '<tr><td valign="top"><input type="radio" name="act" value="install" ' . ($install ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($install ? 'blue' : 'gray') . '">' . $lng['install'] . '</h3><small>'
+        . ($install ? $lng['install_note'] : '<span class="gray">' . $lng['alredy_installed'] . '</span>') . '</small></td></tr>' .
+        '<tr><td valign="top"><input type="radio" name="act" value="update" ' . ($update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($update ? 'blue' : 'gray') . '">' . $lng['update'] . '</h3><small>'
+        . ($update ? $lng['update_note'] : '<span class="gray">' . $lng['update_not_required'] . '</span>') . '</small></td></tr>' .
+        '<tr><td valign="top"><input type="radio" name="act" value="languages" ' . (!$install && !$update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . (!$install && !$update ? 'blue' : 'gray') . '">' . $lng['install_languages'] . '</h3><small>'
+        . (!$install && !$update ? $lng['install_languages_note'] : '<span class="gray">' . $lng['install_languages_impossible'] . '</span>') . '</small></td></tr>' .
+        '<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . $lng['continue'] . '" /></td></tr>' .
+        '</table>' .
+        '<input type="hidden" name="lng_id" value="' . $lng_id . '" />' .
+        '</form><hr />' .
+        '<form action="index.php" method="post"><table>' .
+        '<tr><td>&nbsp;</td><td><h3>' . $lng['change_language'] . '</h3></td></tr>';
+    foreach ($lng_set as $key => $val) {
+        echo '<tr>' .
+            '<td valign="top"><input type="radio" name="lng_id" value="' . $key . '" ' . ($key == $lng_id ? 'checked="checked"' : '') . ' /></td>' .
+            '<td>' . $val['name'] . (isset($language) && !empty($language) && $language == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '</td>' .
+            '</tr>';
+    }
+    echo '<tr><td>&nbsp;</td><td style="padding-top:6px"><input type="submit" name="submit" value="' . $lng['change'] . '" /></td></tr>' .
+        '</table></form>';
 }
 echo '<hr />&copy;&#160;Powered by <a href="http://johncms.com">JohnCMS</a></body></html>';
 ?>
