@@ -44,24 +44,19 @@ if ($rights == 4 || $rights >= 6) {
             echo "&#187;<a href='?cat=" . $newcat[id] . "'>В папку</a><br/>";
         }
         else {
-            echo "Ошибка<br/>";
+            echo "ERROR<br/>";
         }
     }
     else {
-        echo "<form action='?act=makdir&amp;cat=" . $_GET['cat'] .
-        "' method='post'>
-         Название папки:<br/>
-         <input type='text' name='drn'/><br/>
-         Название для отображения:<br/>
-         <input type='text' name='rusn'/><br/>
-
-         <input type='submit' name='submit' value='Создать'/><br/>
+        echo "<form action='?act=makdir&amp;cat=" . $_GET['cat'] . "' method='post'>
+         <p>" . $lng_dl['folder_name'] . "<br />
+         <input type='text' name='drn'/></p>
+         <p>" . $lng_dl['folder_name_for_list'] . ":<br/>
+         <input type='text' name='rusn'/></p>
+         <p><input type='submit' name='submit' value='Создать'/></p>
          </form>";
     }
 }
-else {
-    echo "Нет доступа!<br/>";
-}
-echo "&#187;<a href='?'>К категориям</a><br/>";
+echo "<a href='?'>" . $lng['back'] . "</a><br/>";
 
 ?>

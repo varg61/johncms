@@ -29,7 +29,7 @@ for ($imp = 0; $imp < $totalmp; $imp++) {
     $tim = time();
     $ftime1 = $tim - 300;
     if ($filtime[$imp] < $ftime1) {
-        unlink("$filesroot/arctemp/$mp[$imp]");
+        @unlink("$filesroot/arctemp/$mp[$imp]");
     }
 }
 if ($_GET['file'] == "") {

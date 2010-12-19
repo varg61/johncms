@@ -32,7 +32,7 @@ if ($rights == 4 || $rights >= 6) {
     $fsize = $_FILES['fail']['size'];
     $scrname = $_FILES['screens']['name'];
     $scrsize = $_FILES['screens']['size'];
-    $scsize = GetImageSize($_FILES['screens']['tmp_name']);
+    $scsize = @GetImageSize($_FILES['screens']['tmp_name']);
     $scwidth = $scsize[0];
     $scheight = $scsize[1];
     $ftip = functions::format($fname);
@@ -58,7 +58,7 @@ if ($rights == 4 || $rights >= 6) {
             require_once ('../incfiles/end.php');
             exit;
         }
-        if (eregi("[^a-z0-9.()+_-]", $scrname)) {
+        if (preg_match("/[^\da-z_\-.]+/", $scrname)) {
             echo "В названии изображения $scrname присутствуют недопустимые символы<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
             require_once ('../incfiles/end.php');
             exit;
@@ -69,14 +69,14 @@ if ($rights == 4 || $rights >= 6) {
             require_once ('../incfiles/end.php');
             exit;
         }
-        if (eregi("[^a-z0-9.()+_-]", $fname)) {
+        if (preg_match("/[^\da-z_\-.]+/", $fname)) {
             echo
             "В названии файла <b>$fname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
             . $cat . "'>Повторить</a><br/>";
             require_once ('../incfiles/end.php');
             exit;
         }
-        if (eregi("[^a-z0-9.()+_-]", $newname)) {
+        if (preg_match("/[^\da-z_\-.]+/", $newname)) {
             echo
             "В новом названии файла <b>$newname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
             . $cat . "'>Повторить</a><br/>";

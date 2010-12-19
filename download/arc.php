@@ -17,13 +17,13 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($_GET['file'] == "") {
-    require_once ("../incfiles/head.php");
-    echo "Не выбран файл<br/><a href='?'>К категориям</a><br/>";
+    require_once ('../incfiles/head.php');
+    echo functions::display_error($lng_dl['file_not_selected'], '<a href="index.php">' . $lng['back'] . '</a>');
     require_once ('../incfiles/end.php');
     exit;
 }
 if ($_GET['f'] == "") {
-    require_once ("../incfiles/head.php");
+    require_once ('../incfiles/head.php');
     echo "Не выбран файл из архива<br/><a href='?act=zip&amp;file=" . $file . "'>В архив</a><br/>";
     require_once ('../incfiles/end.php');
     exit;

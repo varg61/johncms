@@ -17,7 +17,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 require_once ("../incfiles/head.php");
-echo '<div class="phdr">Новые файлы</div>';
+echo '<div class="phdr">' . $lng['new_files'] . '</div>';
 
 $old = $realtime - (3 * 24 * 3600);
 $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'");
@@ -90,8 +90,8 @@ if ($total > 0) {
     }
 }
 else {
-    echo "За три дня новых файлов не было<br/>";
+    echo '<p>' . $lng['list_empty'] . '</p>';
 }
-echo "<p><a href='index.php?'>К категориям</a></p>";
+echo "<p><a href='index.php?'>" . $lng['back'] . "</a></p>";
 
 ?>

@@ -14,10 +14,11 @@
 
 define('_IN_JOHNCMS', 1);
 $headmod = 'load';
-$textl = 'Загрузки';
 require_once('../incfiles/core.php');
+$lng_dl = $core->load_lng('downloads');
 require_once('../incfiles/lib/mp3.php');
 require_once('../incfiles/lib/pclzip.lib.php');
+$textl = $lng['downloads'];
 $filesroot = '../download';
 $screenroot = "$filesroot/screen";
 $loadroot = "$filesroot/files";
@@ -25,11 +26,11 @@ $loadroot = "$filesroot/files";
 // Ограничиваем доступ к Загрузкам
 $error = '';
 if (!$set['mod_down'] && $rights < 7)
-    $error = 'Загрузки закрыты';
+    $error = $lng_dl['downloads_closed'];
 elseif ($set['mod_down'] == 1 && !$user_id)
-    $error = 'Доступ к загрузкам открыт только <a href="../in.php">авторизованным</a> посетителям';
+    $error = $lng['access_guest_forbidden'];
 if ($error) {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
     require_once("../incfiles/end.php");
     exit;
@@ -48,11 +49,9 @@ $array = array (
     'down',
     'dfile',
     'opis',
-    'renf',
     'screen',
     'ren',
     'import',
-    'cut',
     'refresh',
     'upl',
     'view',
@@ -65,15 +64,15 @@ $array = array (
 if (in_array($act, $array)) {
     require_once($act . '.php');
 } else {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     if (!$set['mod_down'])
-        echo '<p><font color="#FF0000"><b>Загруз-зона закрыта!</b></font></p>';
+        echo '<p><font color="#FF0000"><b>' . $lng_dl['downloads_closed'] . '</b></font></p>';
     // Ссылка на новые файлы
     $old = $realtime - (3 * 24 * 3600);
-    echo '<p><a href="?act=new">Новые файлы</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0) . ')</p>';
+    echo '<p><a href="?act=new">' . $lng['new_files'] . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0) . ')</p>';
     if (empty($_GET['cat'])) {
         // Заголовок начальной страницы загрузок
-        echo '<div class="phdr">Загрузки</div>';
+        echo '<div class="phdr">' . $lng['downloads'] . '</div>';
     } else {
         // Заголовок страниц категорий
         $cat = intval($_GET['cat']);
@@ -81,7 +80,7 @@ if (in_array($act, $array)) {
         $res = mysql_fetch_array($req);
         if (mysql_num_rows($req) == 0 || !is_dir($res['adres'] . '/' . $res['name'])) {
             // Если неправильно выбран каталог, выводим ошибку
-            echo '<p>ОШИБКА!<br />Каталог не существует<br /><a href="index.php">Назад</a></p>';
+            echo functions::display_error($lng_dl['folder_does_not_exist'], '<a href="index.php">' . $lng['back'] . '</a>');
             require_once('../incfiles/end.php');
             exit;
         }
@@ -98,11 +97,11 @@ if (in_array($act, $array)) {
         }
         krsort($tree);
         $cdir = array_pop($tree);
-        echo '<div class="phdr"><a href="index.php">Загрузки</a> | ';
+        echo '<div class="phdr"><a href="index.php"><b>' . $lng['downloads'] . '</b></a> | ';
         foreach ($tree as $value) {
             echo $value . ' | ';
         }
-        echo '<b>' . strip_tags($cdir) . '</b></div>';
+        echo strip_tags($cdir) . '</div>';
     }
     // Подсчитываем число папок
     $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `refid` = '$cat' AND `type` = 'cat'");
@@ -184,14 +183,14 @@ if (in_array($act, $array)) {
             ++$i;
         }
     } else {
-        echo '<div class="menu"><p>В данной категории нет файлов</p></div>';
+        echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
     }
     echo '<div class="phdr">';
     if ($totalcat > 0)
-        echo 'Папок: ' . $totalcat;
-    echo '&#160;&#160;&#160;';
+        echo $lng_dl['folders'] . ': ' . $totalcat;
+    echo '&#160;&#160;';
     if ($totalfile > 0)
-        echo 'Файлов: ' . $totalfile;
+        echo $lng_dl['files'] . ': ' . $totalfile;
     echo '</div>';
     // Постраничная навигация
     if ($total > $kmess) {
@@ -202,27 +201,27 @@ if (in_array($act, $array)) {
         // Выводим ссылки на модерские функции                    //
         ////////////////////////////////////////////////////////////
         echo '<p><div class="func">';
-        echo '<a href="?act=makdir&amp;cat=' . $cat . '">Создать папку</a><br/>';
+        echo '<a href="?act=makdir&amp;cat=' . $cat . '">' . $lng_dl['make_folder'] . '</a><br/>';
         if (!empty($_GET['cat'])) {
             $delcat = mysql_query("select * from `download` where type = 'cat' and refid = '" . $cat . "';");
             $delcat1 = mysql_num_rows($delcat);
             if ($delcat1 == 0) {
-                echo "<a href='?act=delcat&amp;cat=" . $cat . "'>Удалить каталог</a><br/>";
+                echo '<a href="index.php?act=delcat&amp;cat=' . $cat . '">' . $lng_dl['delete_folder'] . '</a><br />';
             }
-            echo "<a href='?act=ren&amp;cat=" . $cat . "'>Переименовать каталог</a><br/>";
-            echo "<a href='?act=select&amp;cat=" . $cat . "'>Выгрузить файл</a><br/>";
-            echo "<a href='?act=import&amp;cat=" . $cat . "'>Импорт файла</a><br/>";
+            echo '<a href="index.php?act=ren&amp;cat=' . $cat . '">' . $lng_dl['rename_folder'] . '</a><br />';
+            echo '<a href="index.php?act=select&amp;cat=' . $cat . '">' . $lng_dl['upload_file'] . '</a><br />';
+            echo '<a href="index.php?act=import&amp;cat=' . $cat . '">' . $lng_dl['import_file'] . '</a><br />';
         }
-        echo '<a href="?act=refresh">Обновить</a>';
+        echo '<a href="index.php?act=refresh">' . $lng_dl['refresh_downloads'] . '</a>';
         echo '</div></p>';
     }
     if (!empty($cat))
-        echo '<p><a href="index.php">В загрузки</a></p>';
-    echo "<a href='?act=preview'>Размеры изображений</a><br/>";
+        echo '<p><a href="index.php">' . $lng['downloads'] . '</a></p>';
+    echo '<p><a href="index.php?act=preview">' . $lng_dl['images_size'] . '</a></p>';
     if (empty($cat)) {
-        echo "<form action='?act=search' method='post'>";
-        echo "Поиск файла: <br/><input type='text' name='srh' size='20' maxlength='20' title='Введите запрос' value=''/><br/>";
-        echo "<input type='submit' title='Нажмите для поиска' value='Найти!'/></form><br/>";
+        echo '<form action="index.php?act=search" method="post">';
+        echo $lng_dl['search_file'] . ': <br/><input type="text" name="srh" size="20" maxlength="20" value=""/><br/>';
+        echo '<input type="submit" value="' . $lng['search'] . '"/></form>';
     }
 }
 

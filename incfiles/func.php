@@ -418,4 +418,15 @@ function mobileads($mad_siteId = NULL) {
     $_SESSION['mad_time'] = $realtime;
     return $out;
 }
+
+function provcat($catalog) {
+    $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
+    $cat2 = mysql_num_rows($cat1);
+    $adrdir = mysql_fetch_array($cat1);
+    if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]"))) {
+        echo 'ERROR<br/><a href="?">Back</a><br/>';
+        require_once('../incfiles/end.php');
+        exit;
+    }
+}
 ?>

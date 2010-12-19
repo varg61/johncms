@@ -84,7 +84,7 @@ if ($do || isset($_GET['new'])) {
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE " . (isset($_GET['new']) ? " `time` > '$new'" : " `filetype` = '$do'") . $sql), 0);
     if ($total > 0) {
         // Заголовок раздела
-        echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />' . $lng_forum['new_files_24'] : '') . '</div>' . ($do ? '<div class="bmenu">' . $types[$do] . '</div>' : '');
+        echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />' . $lng['new_files'] : '') . '</div>' . ($do ? '<div class="bmenu">' . $types[$do] . '</div>' : '');
         $req = mysql_query("SELECT `cms_forum_files`.*, `forum`.`user_id`, `forum`.`text`, `topicname`.`text` AS `topicname`
         FROM `cms_forum_files`
         LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
@@ -151,7 +151,7 @@ if ($do || isset($_GET['new'])) {
     -----------------------------------------------------------------
     */
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
-    echo '<p>' . ($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">' . $lng_forum['new_files'] . ' (' . $countnew . ')</a>' : $lng_forum['new_files_empty']) . '</p>';
+    echo '<p>' . ($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">' . $lng['new_files'] . ' (' . $countnew . ')</a>' : $lng_forum['new_files_empty']) . '</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array ();
     $total = 0;
