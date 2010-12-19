@@ -98,7 +98,6 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 '<li><a href="index.php?act=languages">' . $lng['language_settings'] . '</a></li>';
         }
         echo '<li><a href="index.php?act=smileys">' . $lng['refresh_smileys'] . '</a></li>' .
-            '<li><a href="index.php?act=seo">SEO Tools</a></li>' .
             '</ul></p></div>';
         // Блок безопасности
         echo '<div class="bmenu">' .
