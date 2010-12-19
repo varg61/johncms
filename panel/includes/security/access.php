@@ -25,7 +25,6 @@ if (isset($_POST['submit'])) {
     // Записываем настройки в базу
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['reg']) ? intval($_POST['reg']) : 0) . "' WHERE `key`='mod_reg'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['forum']) ? intval($_POST['forum']) : 0) . "' WHERE `key`='mod_forum'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['chat']) ? intval($_POST['chat']) : 0) . "' WHERE `key`='mod_chat'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['guest']) ? intval($_POST['guest']) : 0) . "' WHERE `key`='mod_guest'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['lib']) ? intval($_POST['lib']) : 0) . "' WHERE `key`='mod_lib'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['gal']) ? intval($_POST['gal']) : 0) . "' WHERE `key`='mod_gal'");
@@ -67,17 +66,6 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_guest']] . '.gif" width="1
     '<input type="radio" value="2" name="guest" ' . ($set['mod_guest'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled_for_guests'] . '<br />' .
     '<input type="radio" value="1" name="guest" ' . ($set['mod_guest'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
     '<input type="radio" value="0" name="guest" ' . (!$set['mod_guest'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] .
-    '</div></p>';
-
-/*
------------------------------------------------------------------
-Управление доступом к Чату
------------------------------------------------------------------
-*/
-echo '<p><h3><img src="../images/' . $color[$set['mod_chat']] . '.gif" width="16" height="16" class="left"/>&#160;' . $lng['chat'] . '</h3>' .
-    '<div style="font-size: x-small">' .
-    '<input type="radio" value="2" name="chat" ' . ($set['mod_chat'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
-    '<input type="radio" value="0" name="chat" ' . (!$set['mod_chat'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] .
     '</div></p>';
 
 /*
