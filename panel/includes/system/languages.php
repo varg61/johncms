@@ -111,7 +111,7 @@ switch ($mod) {
             );
             echo '<tr>' .
                 '<td valign="top"><input type="radio" value="' . $res['id'] . '" name="id" ' . ($res['id'] == $set['lng_id'] ? 'checked="checked"' : '') . '/></td>' .
-                '<td style="padding-bottom:6px"><b>' . $attr['name'] . '</b>&#160;<span class="green">[' . $res['iso'] . ']</span>&#160;<span class="gray">v.' . $attr['version'] . '</span>' .
+                '<td style="padding-bottom:6px"><b>' . $attr['name'] . '</b>&#160;<span class="green">[' . $res['iso'] . ']</span> <span class="gray">v.' . $attr['version'] . '</span>' .
                 '<div class="sub"><a href="index.php?act=languages&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a> | ' .
                 '<a href="index.php?act=languages&amp;mod=delete&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a><br />' . functions::display_menu($lng_menu, '<br />') . '</div></td>' .
                 '</tr>';

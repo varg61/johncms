@@ -59,9 +59,9 @@ if (!count($lng_key))
 if (isset($_REQUEST['lng_id']) && in_array($_REQUEST['lng_id'], $lng_key)) {
     // Меняем язык по запросу из формы
     $lng_id = intval($_REQUEST['lng_id']);
-}  elseif (isset($language) && !empty($language) && array_key_exists($language, $lng_key)) {
+}  elseif (isset($core->language_iso) && array_key_exists($core->language_iso, $lng_key)) {
     // Если система проинсталлирована, то используем ее язык
-    $lng_id = $lng_key[$language];
+    $lng_id = $lng_key[$core->language_iso];
 }  elseif (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     // Устанавливаем язык по браузеру
     $browser_lang = explode(',', strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
@@ -92,7 +92,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
     '.red{color: #FF0000;}' .
     '.green{color: #009933;}' .
     '.blue{color: #0000EE;}' .
-    '.gray{color: #999999;}' .
+    '.gray{color: #888888;}' .
     '.small{font-size: x-small}' .
     '</style>' .
     '</head><body>' .
@@ -135,7 +135,7 @@ if (in_array($act, $actions)) {
     foreach ($lng_set as $key => $val) {
         echo '<tr>' .
             '<td valign="top"><input type="radio" name="lng_id" value="' . $key . '" ' . ($key == $lng_id ? 'checked="checked"' : '') . ' /></td>' .
-            '<td>' . $val['name'] . (isset($language) && !empty($language) && $language == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '</td>' .
+            '<td>' . $val['name'] . (isset($core->language_iso) && $core->language_iso == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '</td>' .
             '</tr>';
     }
     echo '<tr><td>&nbsp;</td><td style="padding-top:6px"><input type="submit" name="submit" value="' . $lng['change'] . '" /></td></tr>' .

@@ -85,12 +85,26 @@ switch ($_GET['mod']) {
         Выбор языков
         -----------------------------------------------------------------
         */
+        $req = mysql_query("SELECT * FROM `cms_lng_list`");
+        while($res = mysql_fetch_assoc($req)){
+            $lng_array[] = $res['iso'];
+        }
         echo '<form action="index.php?act=languages&amp;mod=install" method="post"><table>' .
             '<tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3 class="blue">' . $lng['select_languages_to_install'] . '</h3><small>' . $lng['language_install_note'] . '</small></td></tr>';
         foreach ($lng_set as $key => $val) {
+            $inst_status =  in_array($val['iso'], $lng_array) ? '<span class="red">[' . $lng['installed'] . ']</span>' : '';
+            $sys_status = $core->language_iso == $val['iso'] ? ' <span class="red">[' . $lng['system'] . ']</span>' : '';
+            $lng_menu = array (
+                (!empty($inst_status) || !empty($sys_status) ? '<span class="gray">' . $lng['status'] . ':</span> ' . $inst_status . ' ' . $sys_status : ''),
+                (!empty($val['author']) ? '<span class="gray">' . $lng['author'] . ':</span> ' . $val['author'] : ''),
+                (!empty($val['author_email']) ? '<span class="gray">E-mail:</span> ' . $val['author_email'] : ''),
+                (!empty($val['author_url']) ? '<span class="gray">URL:</span> ' . $val['author_url'] : ''),
+                (!empty($val['description']) ? '<span class="gray">' . $lng['description'] . ':</span> ' . $val['description'] : '')
+            );
             echo '<tr>' .
                 '<td valign="top"><input type="checkbox" name="select[]" value="' . $key . '"/></td>' .
-                '<td><b>' . $val['name'] . '</b>' . (isset($language) && !empty($language) && $language == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '<br /><small>' . $lng['language_alredy_installed'] . '</small></td>' .
+                '<td style="padding-bottom:6px"><b>' . $val['name'] . '</b>&#160;<span class="green">[' . $val['iso'] . ']</span> <span class="gray">v.' . $val['version'] . '</span>' .
+                (!empty($lng_menu) ? '<br /><small>' . functions::display_menu($lng_menu, '<br />') . '</small>' : '') . '</td>' .
                 '</tr>';
         }
         echo '<tr><td>&nbsp;</td><td style="padding-top:6px"><input type="submit" name="submit" value="' . $lng['install'] . '" /></td></tr>' .
