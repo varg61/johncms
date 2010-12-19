@@ -24,6 +24,13 @@ if (mysql_num_rows($req)) {
     */
     $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res['album_id'] . "'");
     $res_a = mysql_fetch_assoc($req_a);
+    if ($res_a['access'] == 1 && $owner['id'] != $user_id && $rights < 7) {
+        // Если доступ закрыт
+        echo functions::display_error($lng['access_forbidden']) .
+            '<div class="phdr"><a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
+        require('../incfiles/end.php');
+        exit;
+    }
     $context_top = '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' .
         '<a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng['personal_2'] . '</a></div>' .
         '<div class="menu"><a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '"><img src="../files/users/album/' . $owner['id'] . '/' . $res['tmb_name'] . '" /></a>';
@@ -32,7 +39,7 @@ if (mysql_num_rows($req)) {
     $context_top .= '<div class="sub">' .
         '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['name'] . '</b></a> | ' .
         '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
-    if ($res['access'] == 4 || $rights >= 7){
+    if ($res['access'] == 4 || $rights >= 7) {
         $context_top .= vote_photo($res) .
             '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
             '<a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . $lng['download'] . '</a>';
