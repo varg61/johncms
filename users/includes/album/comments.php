@@ -24,7 +24,7 @@ if (mysql_num_rows($req)) {
     */
     $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res['album_id'] . "'");
     $res_a = mysql_fetch_assoc($req_a);
-    if ($res_a['access'] == 1 && $owner['id'] != $user_id && $rights < 7) {
+    if ($res_a['access'] == 1 && $owner['id'] != $user_id && $rights < 6) {
         // Если доступ закрыт
         echo functions::display_error($lng['access_forbidden']) .
             '<div class="phdr"><a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng_profile['album_list'] . '</a></div>';

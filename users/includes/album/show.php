@@ -44,7 +44,7 @@ echo '<div class="user"><p>' . functions::display_user($user, array ('iphide' =>
 */
 if ($album['access'] != 2)
     unset($_SESSION['ap']);
-if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 7) {
+if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 6) {
     // Если доступ закрыт
     echo functions::display_error($lng['access_forbidden']) .
         '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
