@@ -33,19 +33,6 @@ switch ($act) {
         echo functions::display_error($lng['error_404']);
         break;
 
-    case 'info':
-        /*
-        -----------------------------------------------------------------
-        Информационный блок
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
-        echo '<div class="menu"><a href="pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>';
-        echo '<div class="menu"><a href="users/avatar.php">' . $lng['avatars'] . '</a></div>';
-        echo '<div class="menu"><a href="pages/faq.php">' . $lng['help'] . ' (FAQ)</a></div>';
-        echo '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
-        break;
-
     case 'digest':
         /*
         -----------------------------------------------------------------

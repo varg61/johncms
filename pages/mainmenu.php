@@ -24,7 +24,7 @@ $mp = new mainpage();
 echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
 echo $mp->news;
 echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>' .
-    '<div class="menu"><a href="index.php?act=info">' . $lng['information'] . '</a> <a href="pages/faq.php">FAQ</a></div>';
+    '<div class="menu"><a href="pages/faq.php">' . $lng['information'] . ', FAQ</a></div>';
 
 /*
 -----------------------------------------------------------------
