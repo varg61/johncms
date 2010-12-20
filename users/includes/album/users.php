@@ -57,7 +57,7 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . functions::display_pagination('album.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '&amp;', $start, $total, $kmess) . '</p>' .
+    echo '<p>' . functions::display_pagination('album.php?act=users' . ($mod ? '&amp;mod=' . $mod : '') . '&amp;', $start, $total, $kmess) . '</p>' .
         '<p><form action="album.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
