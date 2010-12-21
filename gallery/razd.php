@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($rights >= 6) {
     if (isset($_POST['submit'])) {
-        $user = intval($_POST['user']);
+        $user = 0;
         $text = functions::check($_POST['text']);
         //TODO: Переделать запрос, убрать быдлокод
         mysql_query("insert into `gallery` values(0,'0','" . $realtime . "','rz','','" . $text . "','','" . $user . "','','');");
@@ -25,7 +25,6 @@ if ($rights >= 6) {
         echo 'Добавление раздела.<br/>
         <form action="index.php?act=razd" method="post">
         Введите название:<br/><input type="text" name="text"/><br/>
-        <input type="checkbox" name="user" value="1"/>Для альбомов юзеров<br/>
         <input type="submit" name="submit" value="Ok!"/>
         </form>
         <br/><a href="index.php">В галерею</a><br/>';

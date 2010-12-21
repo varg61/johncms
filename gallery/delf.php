@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($rights >= 6) {
     if ($_GET['id'] == "") {
-        echo "Ошибка<br/><a href='index.php'>В галерею</a><br/>";
+        echo "ERROR<br/><a href='index.php'>Back</a><br/>";
         require_once('../incfiles/end.php');
         exit;
     }
@@ -24,7 +24,7 @@ if ($rights >= 6) {
     $typ = mysql_query("select * from `gallery` where id='" . $id . "';");
     $ms = mysql_fetch_array($typ);
     if ($ms['type'] != "ft") {
-        echo "Ошибка<br/><a href='index.php'>В галерею</a><br/>";
+        echo "ERROR<br/><a href='index.php'>Back</a><br/>";
         require_once('../incfiles/end.php');
         exit;
     }
@@ -37,11 +37,9 @@ if ($rights >= 6) {
         mysql_query("delete from `gallery` where `id`='" . $id . "';");
         header("location: index.php?id=$ms[refid]");
     } else {
-        echo "Вы уверены?<br/>";
-        echo "<a href='index.php?act=delf&amp;id=" . $id . "&amp;yes'>Да</a> | <a href='index.php?id=" . $ms['refid'] . "'>Нет</a><br/>";
+        echo $lng['delete_confirmation'] . "<br/>";
+        echo "<a href='index.php?act=delf&amp;id=" . $id . "&amp;yes'>" . $lng['delete'] . "</a> | <a href='index.php?id=" . $ms['refid'] . "'>" . $lng['cancel'] . "</a><br/>";
     }
-} else {
-    header("location: index.php");
 }
 
 ?>

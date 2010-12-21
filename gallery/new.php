@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-echo '<div class="phdr">Новые фотографии</div>';
+echo '<div class="phdr">' . $lng_gal['new_photo'] . '</div>';
 $old = $realtime - (3 * 24 * 3600);
 $newfile = mysql_query("select * from `gallery` where time > '" . $old . "' and type='ft' order by time desc;");
 $totalnew = mysql_num_rows($newfile);
@@ -118,7 +118,7 @@ if ($totalnew != 0) {
             $vrf1 = date("d.m.y / H:i", $vrf);
             $kom = mysql_query("select * from `gallery` where type='km' and refid='" . $newf['id'] . "';");
             $kom1 = mysql_num_rows($kom);
-            echo "</a><br/>Добавлено: $vrf1<br/>Подпись: $newf[text]<br/><a href='index.php?act=komm&amp;id=" . $newf['id'] . "'>Комментарии</a> ($kom1)<br/>";
+            echo "</a><br/>" . $lng['date'] . ": $vrf1<br/>" . $lng['description'] . ": $newf[text]<br/>";
             $al = mysql_query("select * from `gallery` where type = 'al' and id = '" . $newf['refid'] . "';");
             $al1 = mysql_fetch_array($al);
             $rz = mysql_query("select * from `gallery` where type = 'rz' and id = '" . $al1['refid'] . "';");
@@ -131,7 +131,6 @@ if ($totalnew != 0) {
     {
         echo "<hr/>";
         $ba = ceil($totalnew / 10);
-        echo "Страницы:<br/>";
         if ($start != 0) {
             echo '<a href="index.php?act=new&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
         }
@@ -176,12 +175,12 @@ if ($totalnew != 0) {
             echo ' <a href="index.php?act=new&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
         }
         echo
-            "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
+            "<form action='index.php'>" . $lng['to_page'] . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page'/><br/><input type='submit' value='Go!'/></form>";
     }
-    echo "<br/>Всего новых фотографий за 3 дня: $totalnew";
+    echo "<br/>" . $lng['total'] . ": $totalnew";
 } else {
-    echo "<br/>Нет новых фотографий за 3 дня";
+    echo '<p>' . $lng['list_empty'] . '</p>';
 }
-echo "<br/><a href='index.php?'>В галерею</a><br/>";
+echo "<br/><a href='index.php?'>" . $lng['to_gallery'] . "</a><br/>";
 
 ?>

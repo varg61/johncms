@@ -16,19 +16,19 @@ define('_IN_JOHNCMS', 1);
 require('../incfiles/core.php');
 $headmod = 'gallery';
 $lng_gal = $core->load_lng('gallery');
-$textl = 'Галерея сайта';
+$textl = $lng['gallery'];
 require('../incfiles/head.php');
 
 // Ограничиваем доступ к Галерее
 $error = '';
 if (!$set['mod_gal'] && $rights < 7)
-    $error = 'Галерея закрыта';
+    $error = $lng_gal['gallery_closed'];
 elseif ($set['mod_gal'] == 1 && !$user_id)
-    $error = 'Доступ в Галерею открыт только <a href="../in.php">авторизованным</a> посетителям';
+    $error = $lng['access_guest_forbidden'];
 if ($error) {
-    require_once("../incfiles/head.php");
+    require_once('../incfiles/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once("../incfiles/end.php");
+    require_once('../incfiles/end.php');
     exit;
 }
 
@@ -38,21 +38,16 @@ $array = array (
     'delf',
     'edit',
     'del',
-    'delmes',
-    'addkomm',
-    'komm',
-    'preview',
     'load',
     'upl',
     'cral',
-    'album',
     'razd'
 );
 if (in_array($act, $array) && file_exists($act . '.php')) {
     require_once($act . '.php');
 } else {
     if (!$set['mod_gal'])
-        echo '<p><font color="#FF0000"><b>Галерея закрыта!</b></font></p>';
+        echo '<p><font color="#FF0000"><b>' . $lng_gal['gallery_closed'] . '</b></font></p>';
     if ($id) {
         $type = mysql_query("SELECT * FROM `gallery` WHERE `id` = '$id' LIMIT 1");
         $ms = mysql_fetch_assoc($type);
@@ -84,20 +79,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
                         '</form></p>';
                 }
-                if (!empty($_SESSION['uid']) && $ms['user'] == 1) {
-                    $alb = mysql_query("select * from `gallery` where type='al' and  refid='" . $id . "' and avtor='" . $login . "';");
-                    $cnt = mysql_num_rows($alb);
-                    if ($cnt == 1) {
-                        $alb1 = mysql_fetch_array($alb);
-                        echo "<a href='index.php?id=" . $alb1['id'] . "'>В свой альбом</a><br/>";
-                    } else {
-                        echo "<a href='index.php?act=album&amp;id=" . $id . "'>Создать свой альбом</a><br/>";
-                    }
-                }
                 if ($rights >= 6) {
-                    echo "<a href='index.php?act=cral&amp;id=" . $id . "'>Создать новый альбом</a><br/>";
-                    echo "<a href='index.php?act=del&amp;id=" . $id . "'>Удалить раздел</a><br/>";
-                    echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить раздел</a><br/>";
+                    echo "<a href='index.php?act=cral&amp;id=" . $id . "'>" . $lng_gal['create_album'] . "</a><br/>";
+                    echo "<a href='index.php?act=del&amp;id=" . $id . "'>" . $lng_gal['delete_section'] . "</a><br/>";
+                    echo "<a href='index.php?act=edit&amp;id=" . $id . "'>" . $lng_gal['edit_section'] . "</a><br/>";
                 }
                 echo "<a href='index.php'>В галерею</a></p>";
                 break;
@@ -121,7 +106,6 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     $tim = time();
                     $ftime1 = $tim - 10;
                     if ($filtime[$imi] < $ftime1) {
-                    //unlink("temp/$im[$imi]");
                     }
                 }
                 $rz = mysql_query("select * from `gallery` where type='rz' and  id='" . $ms['refid'] . "';");
@@ -211,16 +195,11 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                     echo '</a>';
                     if (!empty($fot1['text']))
                         echo "$fot1[text]<br/>";
-                    if ($set['mod_gal_comm'] || $rights >= 7) {
-                        $comm = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'km' AND `refid` = '" . $fot1['id'] . "'"), 0);
-                        if ($comm > 0)
-                            echo '<a href="index.php?act=komm&amp;id=' . $fot1['id'] . '">Комментарии</a> (' . $comm . ')<br/>';
-                    }
                     if ($rights >= 6) {
-                        echo "<a href='index.php?act=edf&amp;id=" . $fot1['id'] . "'>Изменить</a> | <a href='index.php?act=delf&amp;id=" . $fot1['id'] . "'>Удалить</a><br/>";
+                        echo "<a href='index.php?act=edf&amp;id=" . $fot1['id'] . "'>" . $lng['edit'] . "</a> | <a href='index.php?act=delf&amp;id=" . $fot1['id'] . "'>" . $lng['delete'] . "</a><br/>";
                     }
                     } else {
-                        echo 'Картинка отсутствует<br /><a href="index.php?act=delf&amp;id=' . $fot1['id'] . '">Удалить запись</a>';
+                        echo $lng_gal['image_missing'] . '<br /><a href="index.php?act=delf&amp;id=' . $fot1['id'] . '">' . $lng['delete'] . '</a>';
                     }
                     echo "</div>";
                     ++$i;
@@ -234,13 +213,13 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         '</form></p>';
                 }
                 if (($user_id && $rz1['user'] == 1 && $ms['text'] == $login && !$ban['1'] && !$ban['14']) || $rights >= 6) {
-                    echo '<a href="index.php?act=upl&amp;id=' . $id . '">Выгрузить фото</a><br/>';
+                    echo '<a href="index.php?act=upl&amp;id=' . $id . '">' . $lng_gal['upload_photo'] . '</a><br/>';
                 }
                 if ($rights >= 6) {
-                    echo "<a href='index.php?act=del&amp;id=" . $id . "'>Удалить альбом</a><br/>";
-                    echo "<a href='index.php?act=edit&amp;id=" . $id . "'>Изменить альбом</a><br/>";
+                    echo "<a href='index.php?act=del&amp;id=" . $id . "'>" . $lng_gal['delete_album'] . "</a><br/>";
+                    echo "<a href='index.php?act=edit&amp;id=" . $id . "'>" . $lng_gal['edit_album'] . "</a><br/>";
                 }
-                echo "<a href='index.php'>В галерею</a></p>";
+                echo "<a href='index.php'>" . $lng_gal['to_gallery'] . "</a></p>";
                 break;
 
             case 'ft':
@@ -317,18 +296,14 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $fheight = $sizs[1];
                 $vrf = $ms[time] + $set_user['sdvig'] * 3600;
                 $vrf1 = date("d.m.y / H:i", $vrf);
-                echo "<p>Подпись: $ms[text]<br/>";
-                if ($set['mod_gal_comm'] || $rights >= 7) {
-                    $comm = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'km' AND `refid` = '" . $id . "'"), 0);
-                    echo '<a href="index.php?act=komm&amp;id=' . $id . '">Комментарии</a> (' . $comm . ')<br/>';
-                }
-                echo "Размеры: $fwidth*$fheight пкс.<br/>";
-                echo "Вес: $fotsz кб.<br/>";
-                echo "Добавлено: $vrf1<br/>";
-                echo "Разместил: $ms[avtor]<br/>";
-                echo "<a href='foto/$ms[name]'>Скачать</a><br /><br />";
-                echo "<a href='index.php?id=" . $ms['refid'] . "'>Назад</a><br/>";
-                echo "<a href='index.php'>В галерею</a></p>";
+                echo "<p>" . $lng['description'] . ": $ms[text]<br/>";
+                echo $lng_gal['dimensions'] . ": $fwidth*$fheight пкс.<br/>";
+                echo $lng_gal['weight'] . ": $fotsz кб.<br/>";
+                echo $lng['date'] . ": $vrf1<br/>";
+                echo $lng_gal['posted_by'] . ": $ms[avtor]<br/>";
+                echo "<a href='foto/$ms[name]'>" . $lng['download'] . "</a><br /><br />";
+                echo "<a href='index.php?id=" . $ms['refid'] . "'>" . $lng['back'] . "</a><br/>";
+                echo "<a href='index.php'>" . $lng_gal['to_gallery'] . "</a></p>";
                 break;
                 default :
                 header("location: index.php");
@@ -340,22 +315,22 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Главная страница Галлереи
         -----------------------------------------------------------------
         */
-        echo '<p><a href="index.php?act=new">Новые фото</a> (' . functions::stat_gallery(1) . ')</p>';
+        echo '<p><a href="index.php?act=new">' . $lng_gal['new_photo'] . '</a> (' . functions::stat_gallery(1) . ')</p>';
         echo '<div class="phdr"><b>' . $lng['gallery'] . '</b></div>';
         $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'rz'");
         $total = mysql_num_rows($req);
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $al = mysql_query("select * from `gallery` where type='al' and  refid='" . $res['id'] . "';");
+            $al = mysql_query("select * from `gallery` where type='al' and  refid='" . $res['id'] . "'");
             $countal = mysql_num_rows($al);
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> (' . $countal . ')</div>';
             ++$i;
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
         if ($rights >= 6) {
-            echo "<a href='index.php?act=razd'>Создать раздел</a><br/>";
+            echo "<a href='index.php?act=razd'>" . $lng_gal['create_section'] . "</a><br/>";
         }
-        echo "<a href='index.php?act=preview'>Размеры изображений</a></p>";
+        echo "</p>";
     }
 }
 
