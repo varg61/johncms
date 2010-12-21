@@ -44,8 +44,6 @@ require_once('../incfiles/head.php');
 
 $do = array (
     'java',
-    'symb',
-    'search',
     'new',
     'moder',
     'addkomm',
@@ -175,11 +173,6 @@ if (in_array($act, $do)) {
                     $catname = $dnamm3['text'];
                 }
                 echo "<a href='index.php?'>" . $lng_lib['to_library'] . "</a><br/>";
-            } else {
-                echo "<a href='index.php?act=symb'>" . $lng['settings'] . "</a><br/>";
-                echo "<form action='?act=search' method='post'>";
-                echo $lng_lib['search_article'] . ": <br/><input type='text' name='srh' value=''/><br/>" . $lng_lib['search_method'] . ":<br/><select name='mod'><option value='1'>" . $lng_lib['by_name'] . "</option><option value='2'>" . $lng_lib['by_text'] . "</option></select><br/>";
-                echo "<input type='submit' value='" . $lng['search'] . "'/></form><br/>";
             }
             echo '</p>';
             break;

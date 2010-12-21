@@ -15,21 +15,15 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Рейтинг самых читаемых статей
-echo "<p><b>50 самых читаемых статей</b></p><hr/>";
-$req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC LIMIT 50;");
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['library'] . '</b></a> | ' . $lng_lib['top_read'] . '</div>';
+$req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC LIMIT 50");
 $totalnew = mysql_num_rows($req);
-if (empty($_GET['page'])) {
-    $page = 1;
-} else {
-    $page = intval($_GET['page']);
-}
 $start = $page * 10 - 10;
 if ($totalnew < $start + 10) {
     $end = $totalnew;
 } else {
     $end = $start + 10;
 }
-//TODO: Переделать по новому, убрать быдлокод
 if ($totalnew != 0) {
     while ($res = mysql_fetch_array($req)) {
         if ($i >= $start && $i < $end) {
@@ -47,7 +41,7 @@ if ($totalnew != 0) {
             echo $div;
             echo '<b><a href="?id=' . $res['id'] . '">' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
             echo htmlentities($res['announce'], ENT_QUOTES, 'UTF-8') . '<br />';
-            echo 'Прочтений: ' . $res['count'] . '<br/>';
+            echo $lng_lib['reads'] . ': ' . $res['count'] . '<br/>';
             $nadir = $res['refid'];
             $dirlink = $nadir;
             $pat = "";
@@ -64,11 +58,9 @@ if ($totalnew != 0) {
         ++$i;
     }
     echo "<hr/><p>";
-    //TODO: Переделать на новый листинг по страницам
     if ($totalnew > 10)
     {
         $ba = ceil($totalnew / 10);
-        echo "Страницы:<br/>";
         if ($start != 0) {
             echo '<a href="index.php?act=topread&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
         }
@@ -113,11 +105,11 @@ if ($totalnew != 0) {
             echo ' <a href="index.php?act=topread&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
         }
         echo
-            "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
+            "<form action='index.php'>" . $lng['to_page'] . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
     }
 } else {
-    echo "<p>Еще никто не читал в библиотеке<br/>";
+    echo "<p>" . $lng['list_empty'] . "<br/>";
 }
-echo "<a href='index.php?'>В библиотеку</a></p>";
+echo "<a href='index.php?'>" . $lng_lib['to_library'] . "</a></p>";
 
 ?>

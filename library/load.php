@@ -13,7 +13,6 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
 if ($rights == 5 || $rights >= 6) {
     if ($_GET['id'] == "") {
         echo "ERROR<br/><a href='index.php?'>Back</a><br/>";
@@ -40,18 +39,18 @@ if ($rights == 5 || $rights >= 6) {
             $ftip = strtolower($ftip);
             if ($fname != "") {
                 if (eregi("[^a-z0-9.()+_-]", $fname)) {
-                    echo "В названии файла <b>$fname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='index.php?act=load&amp;id="
-                        . $id . "'>Повторить</a><br/>";
+                    echo "Invalid file name<br /><a href='index.php?act=load&amp;id="
+                        . $id . "'>" . $lng['repeat'] . "</a><br/>";
                     require_once('../incfiles/end.php');
                     exit;
                 }
                 if ((preg_match("/.php/i", $fname)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess")) {
-                    echo "Попытка отправить файл запрещенного типа.<br/><a href='index.php?act=load&amp;id=" . $id . "'>Повторить</a><br/>";
+                    echo "Invalid file format<br/><a href='index.php?act=load&amp;id=" . $id . "'>" . $lng['repeat'] . "</a><br/>";
                     require_once('../incfiles/end.php');
                     exit;
                 }
                 if ($ftip != "txt") {
-                    echo "Это не текст .txt .<br/><a href='index.php?act=load&amp;id=" . $id . "'>Повторить</a><br/>";
+                    echo "This is not a text file<br/><a href='index.php?act=load&amp;id=" . $id . "'>" . $lng['repeat'] . "</a><br/>";
                     require_once('../incfiles/end.php');
                     exit;
                 }
@@ -65,135 +64,44 @@ if ($rights == 5 || $rights >= 6) {
                     }  elseif (mb_check_encoding($txt, 'KOI8-R')) {
                         $txt = iconv("KOI8-R", "UTF-8", $txt);
                     } else {
-                        echo "Файл в неизвестной кодировке!<br /><a href='index.php?act=load&amp;id=" . $id . "'>Повторить</a><br/>";
+                        echo "File in an unknown encoding<br /><a href='index.php?act=load&amp;id=" . $id . "'>" . $lng['repeat'] . "</a><br/>";
                         require_once('../incfiles/end.php');
                         exit;
                     }
-                    if (!empty($_POST['anons'])) {
-                        $anons = mb_substr($_POST['anons'], 0, 100);
-                    } else {
-                        $anons = mb_substr($txt, 0, 100);
-                    }
+                    $anons = !empty($_POST['anons']) ? mb_substr($_POST['anons'], 0, 100) : mb_substr($txt, 0, 100);
                     mysql_query("insert into `lib` set
-                            `refid`='" . $id . "',
-                            `time`='" . $realtime . "',
-                            `type`='bk',
-                            `name`='" . mysql_real_escape_string($name) . "',
-                            `announce`='" . mysql_real_escape_string($anons) . "',
-                            `avtor`='" . $login . "',
-                            `text`='" . mysql_real_escape_string($txt) . "',
-                            `ip`='" . $ip . "',
-                            `soft`='" . mysql_real_escape_string($agn) .
-                        "',
-                            `moder`='1';");
+                        `refid`='" . $id . "',
+                        `time`='" . $realtime . "',
+                        `type`='bk',
+                        `name`='" . mysql_real_escape_string($name) . "',
+                        `announce`='" . mysql_real_escape_string($anons) . "',
+                        `avtor`='" . $login . "',
+                        `text`='" . mysql_real_escape_string($txt) . "',
+                        `ip`='" . $ip . "',
+                        `soft`='" . mysql_real_escape_string($agn) . "',
+                        `moder`='1'
+                    ");
                     unlink("temp/$ch");
                     $cid = mysql_insert_id();
-                    echo "Статья добавлена<br/><a href='index.php?id=" . $cid . "'>К статье</a><br/>";
+                    echo $lng_lib['article_added'] . "<br/><a href='index.php?id=" . $cid . "'>" . $lng_lib['to_article'] . "</a><br/>";
                 } else {
-                    echo "Ошибка при загрузке<br/><a href='index.php?act=load&amp;id=" . $id . "'>Повторить</a><br/>";
+                    echo $lng_lib['error_uploading'] . "<br/><a href='index.php?act=load&amp;id=" . $id . "'>" . $lng['repeat'] . "</a><br/>";
                     require_once('../incfiles/end.php');
                     exit;
-                }
-            }
-            if (!empty($_POST['fail1'])) {
-                $libedfile = $_POST['fail1'];
-                if (strlen($libedfile) > 0) {
-                    $array = explode('file=', $libedfile);
-                    $tmp_name = $array[0];
-                    $filebase64 = $array[1];
-                }
-                $ftip = strtolower(functions::format($tmp_name));
-                if (eregi("[^a-z0-9.()+_-]", $tmp_name)) {
-                    echo "В названии файла <b>$fname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='index.php?act=load&amp;id="
-                        . $id . "'>Повторить</a><br/>";
-                    require_once('../incfiles/end.php');
-                    exit;
-                }
-                if ((preg_match("/.php/i", $fname)) or (preg_match("/.pl/i", $tmp_name)) or ($fname == ".htaccess")) {
-                    echo "Попытка отправить файл запрещенного типа.<br/><a href='index.php?act=load&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once('../incfiles/end.php');
-                    exit;
-                }
-                if ($ftip != "txt") {
-                    echo "Это не текст .txt .<br/><a href='index.php?act=load&amp;id=" . $id . "'>Повторить</a><br/>";
-                    require_once('../incfiles/end.php');
-                    exit;
-                }
-                if (strlen($filebase64) > 0) {
-                    $FileName = "temp/$tmp_name";
-                    $filedata = base64_decode($filebase64);
-                    $fid = @fopen($FileName, "wb");
-                    if ($fid) {
-                        if (flock($fid, LOCK_EX)) {
-                            fwrite($fid, $filedata);
-                            flock($fid, LOCK_UN);
-                        }
-                        fclose($fid);
-                    }
-                    if (file_exists($FileName) && filesize($FileName) == strlen($filedata)) {
-                        echo 'Файл загружен!<br/>';
-                        $txt = file_get_contents("temp/$tmp_name");
-                        if (mb_check_encoding($txt, 'windows-1251')) {
-                            $txt = iconv("windows-1251", "UTF-8", $txt);
-                        }  elseif (mb_check_encoding($txt, 'KOI8-R')) {
-                            $txt = iconv("KOI8-R", "UTF-8", $txt);
-                        }  elseif (mb_check_encoding($txt, 'UTF-8')) {
-                            $txt = $txt;
-                        } else {
-                            echo "Файл в неизвестной кодировке!<br /><a href='index.php?act=load&amp;id=" . $id . "'>Повторить</a><br/>";
-                            require_once('../incfiles/end.php');
-                            exit;
-                        }
-                        if (!empty($_POST['anons'])) {
-                            $anons = mb_substr($_POST['anons'], 0, 100);
-                        } else {
-                            $anons = mb_substr($txt, 0, 100);
-                        }
-                        //TODO: Переделать на новый запрос
-                        mysql_query("INSERT INTO `lib` (
-                                refid,
-                                time,
-                                type,
-                                name,
-                                announce,
-                                text,
-                                avtor,
-                                ip,
-                                soft,
-                                moder
-                                ) VALUES(
-                                '" . $id .
-                            "',
-                                '" . $realtime . "',
-                                'bk',
-                                '" . $name . "',
-                                '" . mysql_real_escape_string($anons) . "',
-                                '" . mysql_real_escape_string($txt) . "',
-                                '" . $login . "',
-                                '" . $ip . "',
-                                '" . mysql_real_escape_string($agn) . "',
-                                '1'
-                                );");
-                        unlink("temp/$tmp_name");
-                        $cid = mysql_insert_id();
-                        echo "Статья добавлена<br/><a href='index.php?id=" . $cid . "'>К статье</a><br/>";
-                    } else {
-                        echo 'Ошибка при загрузке файла<br/>';
-                    }
                 }
             }
         } else {
-            echo '<h3>' . $lng_lib['upload_article'] . "</h3>(Поддерживаются кодировки Win-1251, KOI8-R, UTF-8)<br/><form action='index.php?act=load&amp;id=" . $id .
-                "' method='post' enctype='multipart/form-data'>Название статьи (max 50)<br/><input type='text' name='name'/><br/>Анонс (max 100)<br/><input type='text' name='anons'/><br/>Выберите текстовый файл( .txt):<br/><input type='file' name='fail'/><hr/>Для Opera Mini:<br/><input name='fail1' value =''/>&#160;<br/>
-<a href='op:fileselect'>Выбрать файл</a>
-<hr/><input type='submit' name='submit' value='Ok!'/><br/></form><a href ='index.php?id="
-                . $id . "'>Назад</a><br/>";
+            echo '<h3>' . $lng_lib['upload_article'] . '</h3>' . $lng_lib['supported_encoding'] . ' Win-1251, KOI8-R, UTF-8<br/><br/>' .
+                '<form action="index.php?act=load&amp;id=' . $id . '" method="post" enctype="multipart/form-data">' .
+                $lng['title'] . ' (max. 50)<br/>' . '<input type="text" name="name"/><br/>' .
+                $lng_lib['announce'] . ' (max. 100)<br/><input type="text" name="anons"/><br/>' .
+                $lng_lib['select_text_file'] . ' ( .txt):<br/><input type="file" name="fail"/>' .
+                '<p><input type="submit" name="submit" value="' . $lng['sent'] . '"/></p>' .
+                '</form>' .
+                '<p><a href ="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
         }
-    } else {
-        echo "Ваще то эта категория не для статей,а для других категорий<br/>";
     }
 } else {
     header("location: index.php");
 }
-
 ?>
