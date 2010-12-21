@@ -15,12 +15,12 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!$id) {
-    echo '<p>Не выбрана статья<br/><a href="index.php">В библиотеку</a></p>';
+    echo '<p>ERROR<br/><a href="index.php">Back</a></p>';
     require_once('../incfiles/end.php');
     exit;
 }
 if (!$set['mod_lib_comm'] && $rights < 7) {
-    echo '<p>Комментарии закрыты<br/><a href="index.php">В библиотеку</a></p>';
+    echo '<p>' . $lng['comments_closed'] . '<br/><a href="index.php">' . $lng['back'] . '</a></p>';
     require_once('../incfiles/end.php');
     exit;
 }
@@ -28,7 +28,7 @@ if (!$set['mod_lib_comm'] && $rights < 7) {
 $req = mysql_query("SELECT `name` FROM `lib` WHERE `type` = 'bk' AND `id` = '" . $id . "' LIMIT 1");
 if (mysql_num_rows($req) != 1) {
     // если статья не существует, останавливаем скрипт
-    echo '<p>Не выбрана статья<br/><a href="index.php">К категориям</a></p>';
+    echo '<p>ERROR<br/><a href="index.php">Back</a></p>';
     require_once('../incfiles/end.php');
     exit;
 }
@@ -36,9 +36,9 @@ $article = mysql_fetch_array($req);
 // Запрос числа каментов
 $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "'");
 $countm = mysql_result($req, 0);
-echo '<div class="phdr">Комментируем статью:<br /><b>' . htmlentities($article['name'], ENT_QUOTES, 'UTF-8') . '</b></div>';
+echo '<div class="phdr">' . $lng_lib['comment_article'] . ':<br /><b>' . htmlentities($article['name'], ENT_QUOTES, 'UTF-8') . '</b></div>';
 if ($user_id && !$ban['1'] && !$ban['10']) {
-    echo '<div class="gmenu"><a href="index.php?act=addkomm&amp;id=' . $id . '">Написать</a></div>';
+    echo '<div class="gmenu"><a href="index.php?act=addkomm&amp;id=' . $id . '">' . $lng['write'] . '</a></div>';
 }
 // Запрос списка комментариев
 $mess = mysql_query("SELECT * FROM `lib` WHERE `type` = 'komm' AND `refid` = '" . $id . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
@@ -85,18 +85,18 @@ while ($mass = mysql_fetch_array($mess)) {
     }
     echo "$tekst<br/>";
     if ($rights == 5 || $rights >= 6) {
-        echo long2ip($mass['ip']) . " - $mass[soft]<br/><a href='index.php?act=del&amp;id=" . $mass['id'] . "'>(Удалить)</a>";
+        echo long2ip($mass['ip']) . " - $mass[soft]<br/><a href='index.php?act=del&amp;id=" . $mass['id'] . "'>" . $lng['delete'] . "</a>";
     }
     echo '</div>';
     ++$i;
 }
-echo '<div class="phdr">Всего каментов: ' . $countm . '</div>';
+echo '<div class="phdr">' . $lng['total'] . ': ' . $countm . '</div>';
 // Навигация по страницам
 if ($countm > $kmess) {
     echo '<p>' . functions::display_pagination('index.php?act=komm&amp;id=' . $id . '&amp;', $start, $countm, $kmess) . '</p>';
     echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="komm"/><input type="hidden" name="id" value="' . $id .
         '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
-echo '<p><a href="?id=' . $id . '">К статье</a></p>';
+echo '<p><a href="?id=' . $id . '">' . $lng['to_article'] . '</a></p>';
 
 ?>

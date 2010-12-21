@@ -104,7 +104,7 @@ $error = '';
 if (!$set['mod_forum'] && $rights < 7)
     $error = $lng_forum['forum_closed'];
 elseif ($set['mod_forum'] == 1 && !$user_id)
-    $error = $lng_forum['only_authorized'];
+    $error = $lng['access_guest_forbidden'];
 if ($error) {
     require('../incfiles/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';

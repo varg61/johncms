@@ -32,7 +32,7 @@ if ($id && $id != $user_id) {
         $error = $lng['error_user_not_exist'];
     }
 } else {
-    $error = $lng['error_user_not_specified'];
+    $error = $lng['error_wrong_data'];
 }
 if (!$error) {
     // Считаем комментарии в галерее

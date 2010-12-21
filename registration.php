@@ -74,7 +74,7 @@ if (isset($_POST['submit'])) {
         $error[] = $lng_reg['error_nick_symbols'];
     // Проверка пароля
     if (empty($reg_pass))
-        $error[] = $lng['error_password_empty'];
+        $error[] = $lng['error_empty_password'];
     elseif (mb_strlen($reg_pass) < 3 || mb_strlen($reg_pass) > 10)
         $error[] = $lng['error_password_lenght'];
     if (preg_match("/[^\da-zA-Z_]+/", $reg_pass))
@@ -87,7 +87,7 @@ if (isset($_POST['submit'])) {
     if (empty($reg_kod) || mb_strlen($reg_kod) < 4)
         $error[] = $lng_reg['error_captcha_empty'];
     elseif ($reg_kod != $_SESSION['code'])
-        $error[] = $lng_reg['error_captcha_wrong'];
+        $error[] = $lng_reg['error_wrong_captcha'];
     unset($_SESSION['code']);
     // Проверка переменных
     if (empty($error)) {

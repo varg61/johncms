@@ -159,12 +159,12 @@ switch ($mod) {
             $link2 = isset($_POST['link2']) ? trim($_POST['link2']) : '';
             $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
             if (empty($name) || empty($link1)) {
-                echo functions::display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
+                echo functions::display_error($lng['error_empty_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }
             echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['preview'] . '</div>' .
-                '<div class="menu"><p><h3>' . $lng['name_the'] . '</h3><b>' . functions::check($name) . '</b></p>' .
+                '<div class="menu"><p><h3>' . $lng['title'] . '</h3><b>' . functions::check($name) . '</b></p>' .
                 '<p><h3>' . $lng['counter_mod1'] . '</h3>' . $link1 . '</p>' .
                 '<p><h3>' . $lng['counter_mod2'] . '</h3>' . $link2 . '</p></div>' .
                 '<div class="rmenu">' . $lng['counter_preview_help'] . '</div>' .
@@ -200,7 +200,7 @@ switch ($mod) {
             }
             echo '<form action="index.php?act=counters&amp;mod=edit" method="post">' .
                 '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['add'] . '</div>' .
-                '<div class="menu"><p><h3>' . $lng['name_the'] . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
+                '<div class="menu"><p><h3>' . $lng['title'] . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
                 '<p><h3>' . $lng['counter_mod1'] . '</h3><textarea rows="3" name="link1">' . $link1 . '</textarea><br /><small>' . $lng['counter_mod1_description'] . '</small></p>' .
                 '<p><h3>' . $lng['counter_mod2'] . '</h3><textarea rows="3" name="link2">' . $link2 . '</textarea><br /><small>' . $lng['counter_mod2_description'] . '</small></p>' .
                 '<p><h3>' . $lng['view_mode'] . '</h3>' . '<input type="radio" value="1" ' . ($mode == 0 || $mode == 1 ? 'checked="checked" ' : '') . 'name="mode" />&#160;' . $lng['default'] . '<br />' .
@@ -226,7 +226,7 @@ switch ($mod) {
         $link2 = isset($_POST['link2']) ? $_POST['link2'] : '';
         $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
         if (empty($name) || empty($link1)) {
-            echo functions::display_error($lng['error_mandatory_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng['error_empty_fields'], '<a href="index.php?act=counters&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a>');
             require_once('../incfiles/end.php');
             exit;
         }

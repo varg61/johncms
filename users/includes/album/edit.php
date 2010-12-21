@@ -50,12 +50,12 @@ if ($user['id'] == $user_id || $rights >= 7) {
         $access = isset($_POST['access']) ? abs(intval($_POST['access'])) : NULL;
         // Проверяем на ошибки
         if (empty($name))
-            $error[] = $lng['error_nameto_empty'];
+            $error[] = $lng['error_empty_title'];
         elseif (mb_strlen($name) < 2 || mb_strlen($name) > 50)
             $error[] = $lng['error_nameto_lenght_2_30'];
         $description = mb_substr($description, 0, 500);
         if ($access == 2 && empty($password))
-            $error[] = $lng['error_password_empty'];
+            $error[] = $lng['error_empty_password'];
         elseif ($access == 2 && mb_strlen($password) < 3 || mb_strlen($password) > 15)
             $error[] = $lng['error_password_lenght'];
         if ($access < 1 || $access > 4)
@@ -103,7 +103,7 @@ if ($user['id'] == $user_id || $rights >= 7) {
         echo functions::display_error($error);
     echo '<div class="menu">' .
         '<form action="album.php?act=edit&amp;user=' . $user['id'] . '&amp;al=' . $al . '" method="post">' .
-        '<p><h3>' . $lng['name_the'] . '</h3>' .
+        '<p><h3>' . $lng['title'] . '</h3>' .
         '<input type="text" name="name" value="' . functions::checkout($name) . '" maxlength="30" /><br />' .
         '<small>Min. 2, Max. 30</small></p>' .
         '<p><h3>' . $lng['description'] . '</h3>' .

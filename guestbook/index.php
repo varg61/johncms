@@ -72,14 +72,14 @@ switch ($act) {
         $error = array ();
         $flood = false;
         if (!$user_id && empty($_POST['name']))
-            $error[] = $lng['error_name_empty'];
+            $error[] = $lng['error_empty_name'];
         if (empty($_POST['msg']))
-            $error[] = $lng['error_message_empty'];
+            $error[] = $lng['error_empty_message'];
         if ($ban['1'] || $ban['13'])
             $error[] = $lng['access_forbidden'];
         // CAPTCHA для гостей
         if (!$user_id && (empty($code) || mb_strlen($code) < 4 || $code != $_SESSION['code']))
-            $error[] = $lng['error_captcha_wrong'];
+            $error[] = $lng['error_wrong_captcha'];
         unset($_SESSION['code']);
         if ($user_id) {
             // Антифлуд для зарегистрированных пользователей
@@ -290,7 +290,7 @@ switch ($act) {
             }
             echo '<input type="submit" name="submit" value="' . $lng['sent'] . '"/></form></div>';
         } else {
-            echo '<div class="rmenu">' . $lng['only_authorized'] . '</div>';
+            echo '<div class="rmenu">' . $lng['access_guest_forbidden'] . '</div>';
         }
         if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1")) {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1'");

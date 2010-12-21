@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($user_id && $user_ps) {
     $req = mysql_query("select `name`, `text` from `lib` where `id` = '" . $id . "' and `type` = 'bk' and `moder`='1' LIMIT 1;");
     if (mysql_num_rows($req) == 0) {
-        echo '<p>Статья не найдена</p>';
+        echo '<p>ERROR</p>';
         require_once('../incfiles/end.php');
         exit;
     }
@@ -37,8 +37,8 @@ if ($user_id && $user_ps) {
         fclose($files);
         // Записываем манифест
         $manifest_text = 'Manifest-Version: 1.0
-MIDlet-1: Книга ' . $id . ', , br.BookReader
-MIDlet-Name: Книга ' . $id .
+MIDlet-1: Book ' . $id . ', , br.BookReader
+MIDlet-Name: Book ' . $id .
             '
 MIDlet-Vendor: JohnCMS
 MIDlet-Version: 1.5.3
@@ -58,7 +58,7 @@ TCBR-Platform: Generic version (all phones)';
         $archive = new PclZip('files/' . $id . '.jar');
         $list = $archive->create('java', PCLZIP_OPT_REMOVE_PATH, 'java');
         if (!file_exists('files/' . $id . '.jar')) {
-            echo '<p>Ошибка создания JAR файла</p>';
+            echo '<p>Error creating JAR file</p>';
             require_once('../incfiles/end.php');
             exit;
         }
@@ -68,8 +68,8 @@ TCBR-Platform: Generic version (all phones)';
     if (!file_exists('files/' . $id . '.jad')) {
         $filesize = filesize('files/' . $id . '.jar');
         $jad_text = 'Manifest-Version: 1.0
-MIDlet-1: Книга ' . $id . ', , br.BookReader
-MIDlet-Name: Книга ' . $id .
+MIDlet-1: Book ' . $id . ', , br.BookReader
+MIDlet-Name: Book ' . $id .
             '
 MIDlet-Vendor: JohnCMS
 MIDlet-Version: 1.5.3
@@ -86,13 +86,13 @@ MIDlet-Jar-URL: ' . $set['homeurl'] . '/library/files/' . $id . '.jar';
         flock($files, LOCK_UN);
         fclose($files);
     }
-    echo 'На этой странице Вы можете скачать Java (MIDP-2) книгу с нужной вам статьей.<br /><br />';
-    echo 'Название: ' . $res['name'] . '<br />';
-    echo 'Скачать: <a href="files/' . $id . '.jar">JAR</a> | <a href="files/' . $id . '.jad">JAD</a>';
-    echo '<p><a href="index.php?id=' . $id . '">К статье</a></p>';
+    echo $lng_lib['download_java_help'] . '<br /><br />' .
+        $lng['title'] . ': ' . $res['name'] . '<br />' .
+        $lng['download'] . ': <a href="files/' . $id . '.jar">JAR</a> | <a href="files/' . $id . '.jad">JAD</a>' .
+        '<p><a href="index.php?id=' . $id . '">' . $lng['to_article'] . '</a></p>';
 } else {
-    echo '<p>Внимание!<br />Скачать книгу в Java формате могут только зарегистрированные пользователи.</p>';
-    echo '<p><a href="index.php?id=' . $id . '">К статье</a></p>';
+    echo '<p>' . $lng['access_guest_forbidden'] . '</p>' .
+        '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
 }
 
 ?>

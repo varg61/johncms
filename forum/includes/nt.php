@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
     if (mb_strlen($th) < 2)
         $error[] = $lng_forum['error_topic_name_lenght'];
     if (empty($msg))
-        $error[] = $lng['error_message_empty'];
+        $error[] = $lng['error_empty_message'];
     if (!$error) {
         $th = functions::check(mb_substr($th, 0, 100));
         if ($_POST['msgtrans'] == 1) {

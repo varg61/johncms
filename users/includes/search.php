@@ -40,7 +40,7 @@ $error = false;
 if (!empty($search) && (mb_strlen($search) < 2 || mb_strlen($search) > 20))
     $error = '<div>' . $lng['error_nicklenght'] . '</div>';
 if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", functions::rus_lat(mb_strtolower($search))))
-    $error .= '<div>' . $lng['error_wrongsymbols'] . '</div>';
+    $error .= '<div>' . $lng['error_wrong_symbols'] . '</div>';
 if ($search && !$error) {
     /*
     -----------------------------------------------------------------

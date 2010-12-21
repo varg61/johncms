@@ -52,7 +52,7 @@ switch ($mod) {
         if ($newpass != $newconf)
             $error[] = $lng_pass['error_new_password'];
         if (preg_match("/[^\da-zA-Z_]+/", $newpass) && !$error)
-            $error[] = $lng['error_wrongsymbols'];
+            $error[] = $lng['error_wrong_symbols'];
         if (!$error && (strlen($newpass) < 3 || strlen($newpass) > 10))
             $error[] = $lng_pass['error_lenght'];
         if (!$error) {

@@ -43,7 +43,7 @@ if ($rights == 5 || $rights >= 6) {
                 $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . $id . "';");
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
-                    echo "Сначала удалите вложенные категории<br/><a href='index.php?id=" . $id . "'>Назад</a><br/>";
+                    echo $lng_lib['first_delete_category'] . "<br/><a href='index.php?id=" . $id . "'>" . $lng['back'] . "</a><br/>";
                     require_once('../incfiles/end.php');
                     exit;
                 }
@@ -67,20 +67,20 @@ if ($rights == 5 || $rights >= 6) {
                 break;
 
             case "bk":
-                echo "Вы уверены в удалении статьи?<br/><a href='index.php?act=del&amp;id=" . $id . "&amp;yes'>Да</a> | <a href='index.php?id=" . $id .
-                    "'>Нет</a><br/><a href='index.php'>В галерею</a><br/>";
+                echo $lng['delete_confirmation'] . "<br/><a href='index.php?act=del&amp;id=" . $id . "&amp;yes'>" . $lng['delete'] . "</a> | <a href='index.php?id=" . $id .
+                    "'>" . $lng['cancel'] . "</a><br/><a href='index.php'>" . $lng_lib['to_library'] . "</a><br/>";
                 break;
 
             case "cat":
                 $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . $id . "';");
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
-                    echo "Сначала удалите вложенные категории<br/><a href='index.php?id=" . $id . "'>Назад</a><br/>";
+                    echo $lng_lib['first_delete_category'] . "<br/><a href='index.php?id=" . $id . "'>" . $lng['back'] . "</a><br/>";
                     require_once('../incfiles/end.php');
                     exit;
                 }
-                echo "Вы уверены в удалении категории?<br/><a href='index.php?act=del&amp;id=" . $id . "&amp;yes'>Да</a> | <a href='index.php?id=" . $id .
-                    "'>Нет</a><br/><a href='index.php'>В галерею</a><br/>";
+                echo $lng['delete_confirmation'] . "<br/><a href='index.php?act=del&amp;id=" . $id . "&amp;yes'>" . $lng['delete'] . "</a> | <a href='index.php?id=" . $id .
+                    "'>" . $lng['cancel'] . "</a><br/><a href='index.php'>" . $lng['back'] . "</a><br/>";
                 break;
         }
     }

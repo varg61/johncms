@@ -28,7 +28,7 @@ $user_code = isset($_POST['code']) ? trim($_POST['code']) : NULL;
 if ($user_pass && !$user_login && !$id)
     $error[] = $lng['error_login_empty'];
 if (($user_login || $id) && !$user_pass)
-    $error[] = $lng['error_password_empty'];
+    $error[] = $lng['error_empty_password'];
 if ($user_login && (mb_strlen($user_login) < 2 || mb_strlen($user_login) > 20))
     $error[] = $lng['error_nicklenght'];
 if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 15))
@@ -48,7 +48,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
                 } else {
                     // Если проверочный код указан неверно
                     unset($_SESSION['code']);
-                    $error[] = $lng['error_verifying_code'];
+                    $error[] = $lng['error_wrong_captcha'];
                 }
             } else {
                 // Показываем CAPTCHA

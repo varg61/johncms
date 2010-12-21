@@ -168,7 +168,7 @@ if ($prg == "mp3") {
     if(!empty($id3->year))
         echo '<div><b>' . $lng_dl['released'] . ':</b> ' . $id3->year . '</div>';
     if(!empty($id3->name))
-        echo '<div><b>' . $lng['name_the'] . ':</b> ' . $id3->name . '</div>';
+        echo '<div><b>' . $lng['title'] . ':</b> ' . $id3->name . '</div>';
     echo '</p>';
     if ($id3->getTag('bitrate')) {
         echo '<b>' . $lng_dl['bitrate'] . ':</b> ' . $id3->getTag('bitrate') . ' kBit/sec<br/>' .

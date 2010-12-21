@@ -217,7 +217,7 @@ switch ($mod) {
             // Проверяем на ошибки
             $error = array ();
             if (!$name)
-                $error[] = $lng['error_nameto_empty'];
+                $error[] = $lng['error_empty_title'];
             if ($name && (mb_strlen($name) < 2 || mb_strlen($name) > 30))
                 $error[] = $lng['error_nameto_lenght_2_30'];
             if ($desc && mb_strlen($desc) < 2)
@@ -249,7 +249,7 @@ switch ($mod) {
                 echo '<div class="bmenu"><b>' . $lng_forum['to_category'] . ':</b> ' . $cat_name . '</div>';
             echo '<form action="index.php?act=forum&amp;mod=add' . ($id ? '&amp;id=' . $id : '') . '" method="post">' .
                 '<div class="gmenu">' .
-                '<p><h3>' . $lng['name_the'] . '</h3>' .
+                '<p><h3>' . $lng['title'] . '</h3>' .
                 '<input type="text" name="name" />' .
                 '<br /><small>' . $lng['minmax_2_30'] . '</small></p>' .
                 '<p><h3>' . $lng['description'] . '</h3>' .
@@ -288,7 +288,7 @@ switch ($mod) {
                     elseif ($res['type'] == 'r' && !mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'"), 0))
                         $error[] = $lng_forum['error_category_select'];
                     if (!$name)
-                        $error[] = $lng['error_nameto_empty'];
+                        $error[] = $lng['error_empty_title'];
                     if ($name && (mb_strlen($name) < 2 || mb_strlen($name) > 30))
                         $error[] = $lng['error_nameto_lenght_2_30'];
                     if ($desc && mb_strlen($desc) < 2)
@@ -319,7 +319,7 @@ switch ($mod) {
                     echo '<div class="phdr"><b>' . ($res['type'] == 'r' ? $lng_forum['section_edit'] : $lng_forum['category_edit']) . '</b></div>' .
                         '<form action="index.php?act=forum&amp;mod=edit&amp;id=' . $id . '" method="post">' .
                         '<div class="gmenu">' .
-                        '<p><h3>' . $lng['name_the'] . '</h3>' .
+                        '<p><h3>' . $lng['title'] . '</h3>' .
                         '<input type="text" name="name" value="' . $res['text'] . '"/>' .
                         '<br /><small>' . $lng['minmax_2_30'] . '</small></p>' .
                         '<p><h3>' . $lng['description'] . '</h3>' .

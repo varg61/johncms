@@ -59,7 +59,7 @@ switch ($mod) {
             $color = isset($_POST['color']) ? mb_substr(trim($_POST['color']), 0, 6) : '';
             $error = array ();
             if (!$link || !$name)
-                $error[] = $lng['error_mandatory_fields'];
+                $error[] = $lng['error_empty_fields'];
             if ($type > 3 || $type < 0)
                 $type = 0;
             if (!$mesto) {
@@ -69,7 +69,7 @@ switch ($mod) {
             }
             if ($color) {
                 if (preg_match("/[^\da-fA-F_]+/", $color))
-                    $error[] = $lng['error_wrongsymbols'];
+                    $error[] = $lng['error_wrong_symbols'];
                 if (strlen($color) < 6)
                     $error[] = $lng['error_color'];
             }
@@ -132,7 +132,7 @@ switch ($mod) {
                 '<input type="text" name="link" value="' . htmlentities($res['link'], ENT_QUOTES, 'UTF-8') . '"/><br />' .
                 '<input type="checkbox" name="show" ' . ($res['show'] ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['link_direct'] . '<br />' .
                 '<small>' . $lng['link_direct_help'] . '</small></p>' .
-                '<p><h3>' . $lng['name_the'] . '</h3>' .
+                '<p><h3>' . $lng['title'] . '</h3>' .
                 '<input type="text" name="name" value="' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '"/><br />' .
                 '<small>' . $lng['link_add_name_help'] . '</small></p>' .
                 '<p><h3>' . $lng['color'] . '</h3>' .

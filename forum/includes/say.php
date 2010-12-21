@@ -146,7 +146,7 @@ switch ($type1['type']) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
                 require('../incfiles/head.php');
-                echo functions::display_error($lng['error_message_empty'], '<a href="index.php?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
+                echo functions::display_error($lng['error_empty_message'], '<a href="index.php?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
             }

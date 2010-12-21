@@ -50,7 +50,7 @@ if ($rights == 3 || $rights >= 6) {
             }
             echo $lng_forum['voting_added'] . '<br /><a href="?id=' . $id . '">' . $lng['continue'] . '</a>';
         } else
-            echo $lng['error_mandatory_fields'] . '<br /><a href="?act=addvote&amp;id=' . $id . '">' . $lng['repeat'] . '</a>';
+            echo $lng['error_empty_fields'] . '<br /><a href="?act=addvote&amp;id=' . $id . '">' . $lng['repeat'] . '</a>';
     } else {
         echo '<form action="index.php?act=addvote&amp;id=' . $id . '" method="post">' .
             '<br />' . $lng_forum['voting'] . ':<br/>' .

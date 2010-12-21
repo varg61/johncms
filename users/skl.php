@@ -41,7 +41,7 @@ switch ($act) {
         $code = isset($_POST['code']) ? trim($_POST['code']) : '';
         $error = false;
         if (!$nick || !$email || !$code)
-            $error = $lng['error_mandatory_fields'];
+            $error = $lng['error_empty_fields'];
         elseif (!isset($_SESSION['code']) || mb_strlen($code) < 4 || $code != $_SESSION['code'])
             $error = $lng_pass['error_code'];
         unset($_SESSION['code']);
