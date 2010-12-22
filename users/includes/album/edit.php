@@ -52,12 +52,12 @@ if ($user['id'] == $user_id || $rights >= 7) {
         if (empty($name))
             $error[] = $lng['error_empty_title'];
         elseif (mb_strlen($name) < 2 || mb_strlen($name) > 50)
-            $error[] = $lng['error_nameto_lenght_2_30'];
+            $error[] = $lng['title'] . ': ' . $lng['error_wrong_lenght'];
         $description = mb_substr($description, 0, 500);
         if ($access == 2 && empty($password))
             $error[] = $lng['error_empty_password'];
         elseif ($access == 2 && mb_strlen($password) < 3 || mb_strlen($password) > 15)
-            $error[] = $lng['error_password_lenght'];
+            $error[] = $lng['password'] . ': ' . $lng['error_wrong_lenght'];
         if ($access < 1 || $access > 4)
             $error[] = $lng['error_wrong_data'];
         // Проверяем, есть ли уже альбом с таким же именем?

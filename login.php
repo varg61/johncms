@@ -30,9 +30,9 @@ if ($user_pass && !$user_login && !$id)
 if (($user_login || $id) && !$user_pass)
     $error[] = $lng['error_empty_password'];
 if ($user_login && (mb_strlen($user_login) < 2 || mb_strlen($user_login) > 20))
-    $error[] = $lng['error_nicklenght'];
+    $error[] = $lng['nick'] .  ': ' . $lng['error_nicklenght'];
 if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 15))
-    $error[] = $lng['error_password_lenght'];
+    $error[] = $lng['password'] . ': ' . $lng['error_password_lenght'];
 if (!$error && $user_pass && ($user_login || $id)) {
     // Запрос в базу на юзера
     $sql = $id ? "`id` = '$id'" : "`name_lat`='" . functions::rus_lat(mb_strtolower($user_login)) . "'";

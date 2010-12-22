@@ -36,11 +36,11 @@ echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a>
 Проверям на ошибки
 -----------------------------------------------------------------
 */
-$error = false;
+$error = array();
 if (!empty($search) && (mb_strlen($search) < 2 || mb_strlen($search) > 20))
-    $error = '<div>' . $lng['error_nicklenght'] . '</div>';
+    $error[] = $lng['nick'] . ': ' . $lng['error_nicklenght'];
 if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", functions::rus_lat(mb_strtolower($search))))
-    $error .= '<div>' . $lng['error_wrong_symbols'] . '</div>';
+    $error[] = $lng['nick'] . ': ' . $lng['error_wrong_symbols'];
 if ($search && !$error) {
     /*
     -----------------------------------------------------------------

@@ -219,7 +219,7 @@ switch ($mod) {
             if (!$name)
                 $error[] = $lng['error_empty_title'];
             if ($name && (mb_strlen($name) < 2 || mb_strlen($name) > 30))
-                $error[] = $lng['error_nameto_lenght_2_30'];
+                $error[] = $lng['title'] . ': ' . $lng['error_wrong_lenght'];
             if ($desc && mb_strlen($desc) < 2)
                 $error[] = $lng['error_description_lenght'];
             if (!$error) {
@@ -290,7 +290,7 @@ switch ($mod) {
                     if (!$name)
                         $error[] = $lng['error_empty_title'];
                     if ($name && (mb_strlen($name) < 2 || mb_strlen($name) > 30))
-                        $error[] = $lng['error_nameto_lenght_2_30'];
+                        $error[] = $lng['title'] . ': ' . $lng['error_wrong_lenght'];
                     if ($desc && mb_strlen($desc) < 2)
                         $error[] = $lng['error_description_lenght'];
                     if (!$error) {
