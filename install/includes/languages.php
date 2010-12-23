@@ -54,6 +54,7 @@ switch ($_GET['mod']) {
                 mysql_query("INSERT INTO `cms_lng_list` SET
                     `iso` = '" . $lng_set[$var]['iso'] . "',
                     `name` = '" . $lng_set[$var]['name'] . "',
+                    `build` = '" . $lng_set[$var]['build'] . "',
                     `attr` = '" . mysql_real_escape_string($attr) . "'
                 ");
                 $language_id = mysql_insert_id();
@@ -72,7 +73,7 @@ switch ($_GET['mod']) {
                     }
                 }
                 // Инициализируем системные настройки
-                if($sys_init && $lng_set[$var]['iso'] == $core->language_iso){
+                if ($sys_init && $lng_set[$var]['iso'] == $core->language_iso) {
                     mysql_query("UPDATE `users` SET `set_language` = '0'");
                 }
                 // Обновляем системные настройки
@@ -95,20 +96,22 @@ switch ($_GET['mod']) {
         }
         break;
         default:
-    /*
-    -----------------------------------------------------------------
-    Выбор языков
-    -----------------------------------------------------------------
-    */
-    $req = mysql_query("SELECT * FROM `cms_lng_list`");
+        /*
+        -----------------------------------------------------------------
+        Выбор языков
+        -----------------------------------------------------------------
+        */
+        $req = mysql_query("SELECT * FROM `cms_lng_list`");
+        $lng_array = array ();
         while ($res = mysql_fetch_assoc($req)) {
-            $lng_array[] = $res['iso'];
+            $lng_array[$res['iso']] = $res['build'];
         }
         echo '<form action="index.php?act=languages&amp;mod=install" method="post"><table>' .
             '<tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3 class="blue">' . $lng['select_languages_to_install'] . '</h3><small>' . $lng['language_install_note'] . '</small></td></tr>';
         foreach ($lng_set as $key => $val) {
-            $inst_status = @in_array($val['iso'], $lng_array) ? '<span class="red">[' . $lng['installed'] . ']</span>' : false;
-            $sys_status = $core->language_iso == $val['iso'] ? ' <span class="red">[' . $lng['system'] . ']</span>' : false;
+            $inst_status = array_key_exists($val['iso'], $lng_array) ? '<span class="green">[' . $lng['installed'] . ']</span>' : false;
+            $update_status = array_key_exists($val['iso'], $lng_array) && $val['build'] > $lng_array[$val['iso']] ? ' <small class="red">[' . $lng['update_available'] . ']</small>' : false;
+            $sys_status = $core->language_iso == $val['iso'] ? ' <span class="blue">[' . $lng['system'] . ']</span>' : false;
             $lng_menu = array (
                 ($inst_status || $sys_status ? '<span class="gray">' . $lng['status'] . ':</span> ' . $inst_status . ' ' . $sys_status : ''),
                 (!empty($val['author']) ? '<span class="gray">' . $lng['author'] . ':</span> ' . $val['author'] : ''),
@@ -117,9 +120,8 @@ switch ($_GET['mod']) {
                 (!empty($val['description']) ? '<span class="gray">' . $lng['description'] . ':</span> ' . $val['description'] : '')
             );
             echo '<tr>' .
-                '<td valign="top"><input type="checkbox" name="select[]" value="' . $key . '"' . (!$inst_status && $sys_status ? ' disabled="disabled" checked="checked"' : '') . '/>' .
-                (!$inst_status && $sys_status ? '<input type="hidden" name="select[]" value="' . $key . '">' : '') . '</td>' .
-                '<td style="padding-bottom:6px"><b>' . $val['name'] . '</b>&#160;<span class="green">[' . $val['iso'] . ']</span> <span class="gray">v.' . $val['version'] . '</span>' . (!empty($lng_menu) ? '<br /><small>' . functions::display_menu($lng_menu, '<br />') . '</small>' : '') . '</td>' .
+                '<td valign="top"><input type="checkbox" name="select[]" value="' . $key . '"' . (!$inst_status && $sys_status ? ' disabled="disabled" checked="checked"' : ($update_status ? ' checked="checked"' : '')) . '/>' . (!$inst_status && $sys_status ? '<input type="hidden" name="select[]" value="' . $key . '">' : '') . '</td>' .
+                '<td style="padding-bottom:6px"><b>' . $val['name'] . '</b>&#160;<span class="blue">[' . $val['iso'] . ']</span>' . $update_status . (!empty($lng_menu) ? '<br /><small>' . functions::display_menu($lng_menu, '<br />') . '</small>' : '') . '</td>' .
                 '</tr>';
         }
         echo '<tr><td>&nbsp;</td><td style="padding-top:6px"><input type="submit" name="submit" value="' . $lng['install'] . '" /></td></tr>' .
