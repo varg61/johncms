@@ -20,6 +20,7 @@ $install = false;
 $update = false;
 $lng_install = false;
 $lng_id = 1;
+$system_build = 600; // Версия системы
 
 /*
 -----------------------------------------------------------------
@@ -28,7 +29,7 @@ $lng_id = 1;
 */
 if (file_exists('../incfiles/db.php') && file_exists('../incfiles/core.php')) {
     require('../incfiles/core.php');
-    if (!$core->build)
+    if (!$core->system_build)
         $update = true;
 } else {
     $install = true;

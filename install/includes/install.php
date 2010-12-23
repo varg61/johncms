@@ -168,9 +168,84 @@ switch ($_GET['mod']) {
         break;
 
     case 'set':
-        echo '<form action="dgs" method="post">' .
-            '<input type="submit" name="submit" value="Continue">' .
-            '</form>';
+        /*
+        -----------------------------------------------------------------
+        Создание базы данных и Администратора системы
+        -----------------------------------------------------------------
+        */
+        $check = false;
+        $db_error = array ();
+        $db_host = isset($_POST['dbhost']) ? trim($_POST['dbhost']) : 'localhost';
+        $db_name = isset($_POST['dbname']) ? trim($_POST['dbname']) : 'johncms';
+        $db_user = isset($_POST['dbuser']) ? trim($_POST['dbuser']) : 'root';
+        $db_pass = isset($_POST['dbpass']) ? trim($_POST['dbpass']) : '';
+        $admin_user = isset($_POST['admin']) ? trim($_POST['admin']) : 'admin';
+        $admin_pass = isset($_POST['password']) ? trim($_POST['password']) : '';
+        $site_url = isset($_POST['siteurl']) ? trim($_POST['siteurl']) : false;
+        $site_mail = isset($_POST['sitemail']) ? trim($_POST['sitemail']) : false;
+        if (isset($_POST['check']) || isset($_POST['install'])) {
+            // Проверяем заполнение реквизитов базы данных
+            if (empty($db_host))
+                $db_error['host'] = $lng['error_db_host_empty'];
+            if (empty($db_name))
+                $db_error['name'] = $lng['error_db_name_empty'];
+            if (empty($db_user))
+                $db_error['user'] = $lng['error_db_user_empty'];
+            if (empty($db_error)) {
+                // Проверяем подключение к серверу базы данных
+                $con_err = false;
+                @mysql_connect($db_host, $db_user, $db_pass) or $con_err = mysql_error();
+                if ($con_err && stristr($con_err, 'no such host'))
+                    $db_error['host'] = $lng['error_db_host'];
+                elseif ($con_err && stristr($con_err, 'access denied for user'))
+                    $db_error['access'] = $lng['error_db_user'];
+                elseif ($con_err)
+                    $db_error['unknown'] = $lng['error_db_unknown'];
+            }
+            // Проверяем наличие базы данных
+            if (empty($db_error) && @mysql_select_db($db_name) == false)
+                $db_error['name'] = $lng['error_db_name'];
+            if (empty($db_error))
+                $check = true;
+        }
+        if (empty($db_error) && isset($_POST['install'])) {
+            // Проверяем административные данные
+            // Создаем системный файл db.php
+            $dbfile = "<?php\r\n\r\n" .
+                "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" .
+                '$db_host = ' . "'$db_host';\r\n" .
+                '$db_name = ' . "'$db_name';\r\n" .
+                '$db_user = ' . "'$db_user';\r\n" .
+                '$db_pass = ' . "'$db_pass';\r\n\r\n" .
+                '$system_build = ' . "'$system_build';\r\n\r\n" .
+                '?>';
+            if (!file_put_contents('../incfiles/db.php', $dbfile)) {
+                echo 'ERROR: Can not write system file';
+            }
+        }
+        echo '<h2 class="blue">' . $lng['database'] . '</h2>';
+        if (!empty($db_error)) {
+            // Показываем ошибки
+            echo '<p><div class="red"><b>' . $lng['error'] . '</b>';
+            foreach ($db_error as $val)echo '<div>' . $val . '</div>';
+            echo '</div></p>';
+        }
+        echo '<form action="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '" method="post">' .
+            '<small class="blue"><b>MySQL Host:</b></small><br />' .
+            '<input type="text" name="dbhost" value="' . $db_host . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+            '<small class="blue"><b>MySQL Database:</b></small><br />' .
+            '<input type="text" name="dbname" value="' . $db_name . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['name']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+            '<small class="blue"><b>MySQL User:</b></small><br />' .
+            '<input type="text" name="dbuser" value="' . $db_user . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['access']) || isset($db_error['user']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+            '<small class="blue"><b>MySQL Password:</b></small><br />' .
+            '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
+        if ($check) {
+            echo '<p><input type="submit" name="install" value="' . $lng['setup'] . '"></p>';
+        } else {
+            echo '<p><input type="submit" name="check" value="' . $lng['check'] . '"></p>';
+        }
+        echo '</form>';
+        echo '<p><a href="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '">' . $lng['reset_form'] . '</a></p>';
         break;
 
     default:
