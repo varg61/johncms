@@ -32,7 +32,7 @@ switch ($_GET['mod']) {
                     mysql_query("DELETE FROM `cms_lng_list` WHERE `id` = '" . $res['id'] . "'");
                     mysql_query("OPTIMIZE TABLE `cms_lng_list` , `cms_lng_phrases`");
                     $lng_setup = $lng['updated'];
-                    $user_update = true;
+                    $usr_update = true;
                     if ($res['id'] == $core->language_id)
                         $sys_update = true;
                 } else {
@@ -44,7 +44,6 @@ switch ($_GET['mod']) {
                 -----------------------------------------------------------------
                 */
                 $attr = serialize(array (
-                    'name' => $lng_set[$var]['name'],
                     'author' => $lng_set[$var]['author'],
                     'author_email' => $lng_set[$var]['author_email'],
                     'author_url' => $lng_set[$var]['author_url'],
@@ -54,6 +53,7 @@ switch ($_GET['mod']) {
                 // Добавляем в список
                 mysql_query("INSERT INTO `cms_lng_list` SET
                     `iso` = '" . $lng_set[$var]['iso'] . "',
+                    `name` = '" . $lng_set[$var]['name'] . "',
                     `attr` = '" . mysql_real_escape_string($attr) . "'
                 ");
                 $language_id = mysql_insert_id();

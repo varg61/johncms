@@ -138,20 +138,20 @@ switch ($mod) {
             if (!in_array($set_user['skin'], $arr))
                 $set_user['skin'] = 'default';
             // Устанавливаем язык
-            $lng_select = isset($_POST['lng']) ? functions::check($_POST['lng']) : false;
-            if ($lng_select && $lng_select != $language) {
-                $req = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '$lng_select' AND `var` = 'language_name' LIMIT 1");
+            $lng_select = isset($_POST['lng']) ? intval($_POST['lng']) : false;
+            if ($lng_select && $lng_select != $core->language_id) {
+                $req = mysql_query("SELECT * FROM `cms_lng_list` WHERE `id` = '$lng_select'");
                 if (mysql_num_rows($req)) {
-                    $language = $lng_select;
+                    $core->language_id = $lng_select;
                     $lng = $core->load_lng();
-                    $res = mysql_fetch_assoc($req);
-                    echo '<div class="gmenu">' . $lng['language_set'] . ': <b>' . $res['default'] . '</b></div>';
+                    //$res = mysql_fetch_assoc($req);
+                    //echo '<div class="gmenu">' . $lng['language_set'] . ': <b>' . $res['default'] . '</b></div>';
                 }
             }
             // Записываем настройки в базу
             mysql_query("UPDATE `users` SET
                 `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "',
-                `set_language` = '$language'
+                `set_language` = '" . $core->language_id . "'
                 WHERE `id` = '$user_id'");
             echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
         }
@@ -172,7 +172,7 @@ switch ($mod) {
             $set_user['skin'] = 'default';
             mysql_query("UPDATE `users` SET
                 `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "',
-                `set_language` = ''
+                `set_language` = '0'
                 WHERE `id` = '$user_id'
             ");
             $language = $set['language'];
@@ -210,13 +210,11 @@ switch ($mod) {
         closedir($dir);
         echo '</select></p>';
         // Выбор языка
-        $req = mysql_query("SELECT DISTINCT `iso` FROM `cms_languages`");
+        $req = mysql_query("SELECT * FROM `cms_lng_list`");
         if (mysql_num_rows($req) > 1) {
             echo '<p><h3>' . $lng['language_select'] . '</h3>';
             while ($res = mysql_fetch_assoc($req)) {
-                $req_l = mysql_query("SELECT * FROM `cms_languages` WHERE `iso` = '" . $res['iso'] . "' AND `var` = 'language_name' LIMIT 1");
-                $res_l = mysql_fetch_assoc($req_l);
-                echo '<div><input type="radio" value="' . $res['iso'] . '" name="lng" ' . ($res['iso'] == $language ? 'checked="checked"' : '') . '/>&#160;' . $res_l['default'] . '</div>';
+                echo '<div><input type="radio" value="' . $res['id'] . '" name="lng" ' . ($res['id'] == $core->language_id ? 'checked="checked"' : '') . '/>&#160;' . $res['name'] . '</div>';
             }
             echo '</p>';
         }

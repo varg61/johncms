@@ -110,7 +110,7 @@ $actions = array (
     'update',
     'languages'
 );
-if (in_array($act, $actions)) {
+if (in_array($act, $actions) && file_exists('includes/' . $act . '.php')) {
     require_once('includes/' . $act . '.php');
 } else {
     /*
