@@ -12,10 +12,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 */
 
-define('_IN_JOHNCMS', 1);
-
+defined('INSTALL') or die('Error: restricted access');
 switch ($_GET['mod']) {
-    case 'set':
+    case 'setup':
         ////////////////////////////////////////////////////////////
         // Создание таблиц в базе данных MySQL                    //
         ////////////////////////////////////////////////////////////
@@ -168,47 +167,58 @@ switch ($_GET['mod']) {
         echo '<hr /><input type="submit" class="button" value="Продолжить"/></form>';
         break;
 
+    case 'set':
+        echo '<form action="dgs" method="post">' .
+            '<input type="submit" name="submit" value="Continue">' .
+            '</form>';
+        break;
+
     default:
-        ///////////////////////////////////////////////////////
-        //Приветствие                                         //
-        ///////////////////////////////////////////////////////
-        echo
-            '<h2>Добро пожаловать в JohnCMS</h2><ul>
-        <li>Перед началом инсталляции, настоятельно рекомендуем ознакомиться с инструкцией, в файле <a href="../install.txt">install.txt</a><br />
-        Список изменений, в сравнении с предыдущей версией, находится в файле <a href="../version.txt">version.txt</a></li>
-        <li>Дополнительную информацию Вы можете получить на официальном сайте проекта <a href="http://johncms.com">johncms.com</a>,<br />или на доп. сайте поддержки <a href="http://gazenwagen.com">gazenwagen.com</a>.</li>
-        <li>Установка и использование скриптов JohnCMS, означает полное согласие с условиями <a href="../license.txt">лицензии</a></li>';
-        echo '</ul><hr /><a class="button" href="index.php?act=check">Начать установку</a>';
+        /*
+        -----------------------------------------------------------------
+        Проверка прав доступа
+        -----------------------------------------------------------------
+        */
+        $folders = array (
+            '/download/arctemp/',
+            '/download/files/',
+            '/download/graftemp/',
+            '/download/screen/',
+            '/files/cache/',
+            '/files/forum/attach/',
+            '/files/library/',
+            '/files/users/album/',
+            '/files/users/album/',
+            '/files/users/avatar/',
+            '/files/users/photo/',
+            '/files/users/pm/',
+            '/gallery/foto/',
+            '/gallery/temp/',
+            '/incfiles/'
+        );
+        $files = array (
+            '/library/java/textfile.txt',
+            '/library/java/META-INF/MANIFEST.MF'
+        );
+        require('check.php');
+        echo '<hr />';
+        if (!empty($error_php) || !empty($error_rights_folders) || !empty($error_rights_files)) {
+            echo '<p>' . $lng['critical_errors'] . '</p>' .
+                '<p><a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                '<a href="index.php?act=install&amp;lng_id=' . $lng_id . '">' . $lng['check_again'] . '</a></p>';
+        } elseif (!empty($warning)) {
+            echo '<p>' . $lng['are_warnings'] . '</p>' .
+                '<p><a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                '<a href="index.php?act=install&amp;lng_id=' . $lng_id . '">' . $lng['check_again'] . '</a></p>' .
+                '<p>' . $lng['ignore_warnings'] . '</p>' .
+                '<p><a href="">' . $lng['start_installation'] . '</a> ' . $lng['not_recommended'] . '</p>';
+        } else {
+            echo '<p>' . $lng['configuration_successful'] . '</p>' .
+                '<a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                '<a href="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '">' . $lng['start_installation'] . ' &gt;&gt;</a>';
+            echo '</p>';
+        }
         break;
 }
 echo '</body></html>';
-
-function split_sql($sql) {
-    $sql = trim($sql);
-    $sql = ereg_replace("\n#[^\n]*\n", "\n", $sql);
-    $buffer = array ();
-    $ret = array ();
-    $in_string = false;
-    for ($i = 0; $i < strlen($sql) - 1; $i++) {
-        if ($sql[$i] == ";" && !$in_string) {
-            $ret[] = substr($sql, 0, $i);
-            $sql = substr($sql, $i + 1);
-            $i = 0;
-        }
-        if ($in_string && ($sql[$i] == $in_string) && $buffer[1] != "\\") {
-            $in_string = false;
-        }  elseif (!$in_string && ($sql[$i] == '"' || $sql[$i] == "'") && (!isset($buffer[0]) || $buffer[0] != "\\")) {
-            $in_string = $sql[$i];
-        }
-        if (isset($buffer[1])) {
-            $buffer[0] = $buffer[1];
-        }
-        $buffer[1] = $sql[$i];
-    }
-    if (!empty($sql)) {
-        $ret[] = $sql;
-    }
-    return ($ret);
-}
-
 ?>

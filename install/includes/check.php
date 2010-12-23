@@ -1,133 +1,103 @@
 <?php
+defined('INSTALL') or die('Error: restricted access');
+$error_php = array ();
+$error_rights_folders = array ();
+$error_rights_files = array ();
+$warning = array ();
+echo '<h2 class="blue">' . $lng['check_settings'] . '</h2>';
 
-////////////////////////////////////////////////////////////
-// Предварительная проверка системы                       //
-// 1) Проверка настроек PHP                               //
-// 2) Проверка необходимых расширений PHP                 //
-// 2) Проверка прав доступа к файлам и папкам             //
-////////////////////////////////////////////////////////////
-$err = false;
-// Проверка настроек PHP
-echo '<h2>Настройки PHP</h2><ul>';
-if (version_compare(phpversion(), '5.1.0', '>')) {
-    echo '<div><span class="green">OK</span> - Версия PHP ' . phpversion() . '</div>';
-} else {
-    $err = 1;
-    echo '<div><span class="red">ОШИБКА! - Версия PHP ' . phpversion() . ' устаревшая и не поддерживается системой.</span></div>';
-}
-if (!ini_get('register_globals')) {
-    echo '<div><span class="green">OK</span> - register_globals OFF</div>';
-} else {
-    $err = 2;
-    echo '<div><span class="red">Внимание! - register_globals OFF</span><br /><span class="gray">Вы можете продолжить установку, однако система в большей степени будет подвержена уязвимостям.</span></div>';
-}
-if (ini_get('arg_separator.output') == '&amp;') {
-    echo '<div><span class="green">OK</span> - arg_separator.output "&amp;amp;"</div>';
-} else {
-    $err = 2;
-    echo '<div><span class="red">Внимание! - arg_separator.output "' . htmlentities(ini_get('arg_separator.output')) . '"</span><br />';
-    echo '<span class="gray">Вы можете продолжить установку, однако настоятельно рекомендуется установить этот параметр на "&amp;amp;",<br /> иначе будут неправильно обрабатываться гиперссылки в xHTML.</span></div>';
-}
-
-// Проверка загрузки необходимых расширений PHP
-echo '</ul><br /><h2>Расширения PHP</h2><ul>';
-if (extension_loaded('mysql')) {
-    echo '<div><span class="green">OK</span> - mysql</div>';
-} else {
-    $err = 1;
-    echo '<div><span class="red">ОШИБКА! - расширение "mysql" не загружено</span></div>';
-}
-if (extension_loaded('gd')) {
-    echo '<div><span class="green">OK</span> - gd</div>';
-} else {
-    $err = 1;
-    echo '<div><span class="red">ОШИБКА! - расширение "gd" не загружено</span></div>';
-}
-if (extension_loaded('zlib')) {
-    echo '<div><span class="green">OK</span> - zlib</div>';
-} else {
-    $err = 1;
-    echo '<div><span class="red">ОШИБКА! - расширение "zlib" не загружено</span></div>';
-}
-if (extension_loaded('iconv')) {
-    echo '<div><span class="green">OK</span> - iconv</div>';
-} else {
-    $err = 1;
-    echo '<div><span class="red">ОШИБКА! - расширение "iconv" не загружено</span></div>';
-}
-if (extension_loaded('mbstring')) {
-    echo '<div><span class="green">OK</span> - mb_string</div>';
-} else {
-    $err = 1;
-    echo '<div><span class="red">Ошибка! - расширение "mbstring" не загружено</span><br />';
-    echo '<span class="gray">Если Вы тестируете сайт локально на "Денвере", то там, в настройках по умолчанию данное расширение не подключено.<br />';
-    echo 'Вам необходимо (для Денвера) открыть файл php.ini, который находится в папке /usr/local/php5 (или php4, в зависимости от версии) и отредактировать строку ;extension=php_mbstring.dll убрав точку с запятой в начале строки.</span></div>';
-}
-
-// Проверка прав доступа к файлам и папкам
-function permissions($filez) {
-    $filez = @decoct(@fileperms("../$filez")) % 1000;
-    return $filez;
-}
-$cherr = '';
+/*
+-----------------------------------------------------------------
+Проверка настроек PHP
+-----------------------------------------------------------------
+*/
+if (version_compare(phpversion(), '5.1.0', '<'))
+    $error_php[] = '<b>PHP ' . phpversion() . '</b> ' . $lng['error_php_version'];
+// Проверка register_globals
+if (ini_get('register_globals'))
+    $warning[] = '<b class="red">register_globals ON</b> ' . $lng['warning_rerister_globals'];
+// Проверка arg_separator.output
+if (ini_get('arg_separator.output') != '&amp;')
+    $warning[] = '<b class="red">arg_separator.output &quot;' . htmlentities(ini_get('arg_separator.output')) . '&quot;</b> ' . $lng['warning_arg_separator'];
+// Проверка загрузки расширения MySQL
+if (!extension_loaded('mysql'))
+    $error_php[] = '[<b>mysql</b>] ' . $lng['error_module'];
+// Проверка загрузки расширения gd
+if (!extension_loaded('gd'))
+    $error_php[] = '[<b>gd</b>] ' . $lng['error_module'];
+// Проверка загрузки расширения zlib
+if (!extension_loaded('zlib'))
+    $error_php[] = '[<b>zlib</b>] ' . $lng['error_module'];
+// Проверка загрузки расширения zlib
+if (!extension_loaded('iconv'))
+    $error_php[] = '[<b>iconv</b>] ' . $lng['error_module'];
+// Проверка загрузки расширения mbstring
+if (!extension_loaded('mbstring'))
+    $error_php[] = '[<b>mbstring</b>] ' . $lng['error_module'];
 
 // Проверка прав доступа к папкам
-$arr = array (
-    'files/forum/attach/',
-    'files/forum/topics/',
-    'files/users/avatar/',
-    'files/users/photo/',
-    'files/users/pm/',
-    'files/cache/',
-    'incfiles/',
-    'gallery/foto/',
-    'gallery/temp/',
-    'library/files/',
-    'library/temp/',
-    'download/arctemp/',
-    'download/files/',
-    'download/graftemp/',
-    'download/screen/',
-    'download/mp3temp/',
-    'download/upl/'
-);
-foreach ($arr as $v) {
-    if (permissions($v) < 777) {
-        $cherr = $cherr . '<div class="smenu"><span class="red">ОШИБКА! - ' . $v . '</span><br /><span class="gray">Необходимо установить права доступа 777.</span></div>';
-        $err = 1;
-    } else {
-        $cherr = $cherr . '<div class="smenu"><span class="green">OK</span> - ' . $v . '</div>';
+foreach ($folders as $val) {
+    if ((@decoct(@fileperms('..' . $val)) % 1000) < 777) {
+        $error_rights_folders[] = $val;
     }
 }
 
 // Проверка прав доступа к файлам
-$arr = array (
-    'library/java/textfile.txt',
-    'library/java/META-INF/MANIFEST.MF'
-);
-foreach ($arr as $v) {
-    if (permissions($v) < 666) {
-        $cherr = $cherr . '<div class="smenu"><span class="red">ОШИБКА! - ' . $v . '</span><br/><span class="gray">Необходимо установить права доступа 666.</span></div>';
-        $err = 1;
-    } else {
-        $cherr = $cherr . '<div class="smenu"><span class="green">OK</span> - ' . $v . '</div>';
+foreach ($files as $val) {
+    if ((@decoct(@fileperms('..' . $val)) % 1000) < 666)
+        $error_rights_files[] = $val;
+}
+
+/*
+-----------------------------------------------------------------
+Показываем критические ошибки PHP
+-----------------------------------------------------------------
+*/
+if (!empty($error_php)) {
+    echo '<h3>' . $lng['errors'] . '</h3><ul>';
+    foreach ($error_php as $val) {
+        echo '<li><span class="red">' . $val . '</span></li>';
     }
+    echo '</ul>';
 }
-echo '</ul><br /><h2>Права доступа</h2><ul>';
-echo $cherr;
-echo '</ul><hr />';
-switch ($err) {
-    case '1':
-        echo '<span class="red">Внимание!</span> Имеются критические ошибки!<br />Вы не сможете продолжить инсталляцию, пока не устраните их.';
-        echo '<p clss="step"><a class="button" href="index.php?act=check">Проверить заново</a></p>';
-        break;
 
-    case '2':
-        echo '<span class="red">Внимание!</span> Имеются ошибки в конфигурации!<br />Вы можете продолжить инсталляцию, однако нормальная работа системы не гарантируется.';
-        echo '<p class="step"><a class="button" href="index.php?act=check">Проверить заново</a> <a class="button" href="index.php?act=db">Продолжить установку</a></p>';
-        break;
-
-    default:
-        echo '<span class="green">Отлично!</span><br />Все настройки правильные.<p><a class="button" href="index.php?act=db">Продолжить установку</a></p>';
+/*
+-----------------------------------------------------------------
+Показываем ошибки прав доступа к папкам
+-----------------------------------------------------------------
+*/
+if (!empty($error_rights_folders)) {
+    echo '<h3>' . $lng['error_access_rights'] . ' 777</h3><ul>';
+    foreach ($error_rights_folders as $val) {
+        echo '<li><span class="red">' . $val . '</span></li>';
+    }
+    echo '</ul>';
 }
+
+/*
+-----------------------------------------------------------------
+Показываем ошибки прав доступа к файлам
+-----------------------------------------------------------------
+*/
+if (!empty($error_rights_files)) {
+    echo '<h3>' . $lng['error_access_rights'] . ' 666</h3><ul>';
+    foreach ($error_rights_files as $val) {
+        echo '<li><span class="red">' . $val . '</span></li>';
+    }
+    echo '</ul>';
+}
+
+/*
+-----------------------------------------------------------------
+Показываем предупреждения
+-----------------------------------------------------------------
+*/
+if (!empty($warning)) {
+    echo '<h3>' . $lng['warnings'] . '</h3><ul>';
+    foreach ($warning as $val) {
+        echo '<li>' . $val . '</li>';
+    }
+    echo '</ul>';
+}
+
 ?>

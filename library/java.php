@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($user_id && $user_ps) {
+if ($user_id) {
     $req = mysql_query("select `name`, `text` from `lib` where `id` = '" . $id . "' and `type` = 'bk' and `moder`='1' LIMIT 1;");
     if (mysql_num_rows($req) == 0) {
         echo '<p>ERROR</p>';
@@ -55,9 +55,9 @@ TCBR-Platform: Generic version (all phones)';
 
         // Создаем архив
         require_once('../incfiles/lib/pclzip.lib.php');
-        $archive = new PclZip('files/' . $id . '.jar');
+        $archive = new PclZip('../files/library/' . $id . '.jar');
         $list = $archive->create('java', PCLZIP_OPT_REMOVE_PATH, 'java');
-        if (!file_exists('files/' . $id . '.jar')) {
+        if (!file_exists('../files/library/' . $id . '.jar')) {
             echo '<p>Error creating JAR file</p>';
             require_once('../incfiles/end.php');
             exit;
@@ -65,8 +65,8 @@ TCBR-Platform: Generic version (all phones)';
     }
 
     // Создаем JAD файл
-    if (!file_exists('files/' . $id . '.jad')) {
-        $filesize = filesize('files/' . $id . '.jar');
+    if (!file_exists('../files/library/' . $id . '.jad')) {
+        $filesize = filesize('../files/library/' . $id . '.jar');
         $jad_text = 'Manifest-Version: 1.0
 MIDlet-1: Book ' . $id . ', , br.BookReader
 MIDlet-Name: Book ' . $id .
@@ -80,7 +80,7 @@ MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
 MIDlet-Jar-URL: ' . $set['homeurl'] . '/library/files/' . $id . '.jar';
-        $files = fopen('files/' . $id . '.jad', 'w+');
+        $files = fopen('../files/library/' . $id . '.jad', 'w+');
         flock($files, LOCK_EX);
         fputs($files, $jad_text);
         flock($files, LOCK_UN);
@@ -88,7 +88,7 @@ MIDlet-Jar-URL: ' . $set['homeurl'] . '/library/files/' . $id . '.jar';
     }
     echo $lng_lib['download_java_help'] . '<br /><br />' .
         $lng['title'] . ': ' . $res['name'] . '<br />' .
-        $lng['download'] . ': <a href="files/' . $id . '.jar">JAR</a> | <a href="files/' . $id . '.jad">JAD</a>' .
+        $lng['download'] . ': <a href="../files/library/' . $id . '.jar">JAR</a> | <a href="../files/library/' . $id . '.jad">JAD</a>' .
         '<p><a href="index.php?id=' . $id . '">' . $lng['to_article'] . '</a></p>';
 } else {
     echo '<p>' . $lng['access_guest_forbidden'] . '</p>' .

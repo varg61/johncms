@@ -120,11 +120,14 @@ if (in_array($act, $actions) && file_exists('includes/' . $act . '.php')) {
     */
     echo '<form action="index.php" method="post">' .
         '<table>' .
-        '<tr><td valign="top"><input type="radio" name="act" value="install" ' . ($install ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($install ? 'blue' : 'gray') . '">' . $lng['install'] . '</h3><small>'
+        '<tr><td valign="top"><input type="radio" name="act" value="install" ' . ($install ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($install ? 'blue' : 'gray') . '">'
+        . $lng['install'] . '</h3><small>'
         . ($install ? $lng['install_note'] : '<span class="gray">' . $lng['alredy_installed'] . '</span>') . '</small></td></tr>' .
-        '<tr><td valign="top"><input type="radio" name="act" value="update" ' . ($update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($update ? 'blue' : 'gray') . '">' . $lng['update'] . '</h3><small>'
+        '<tr><td valign="top"><input type="radio" name="act" value="update" ' . ($update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . ($update ? 'blue' : 'gray') . '">'
+        . $lng['update'] . '</h3><small>'
         . ($update ? $lng['update_note'] : '<span class="gray">' . $lng['update_not_required'] . '</span>') . '</small></td></tr>' .
-        '<tr><td valign="top"><input type="radio" name="act" value="languages" ' . (!$install && !$update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="' . (!$install && !$update ? 'blue' : 'gray') . '">' . $lng['install_languages'] . '</h3><small>'
+        '<tr><td valign="top"><input type="radio" name="act" value="languages" ' . (!$install && !$update ? 'checked="checked"' : 'disabled="disabled"') . '/></td><td style="padding-bottom:6px"><h3 class="'
+        . (!$install && !$update ? 'blue' : 'gray') . '">' . $lng['install_languages'] . '</h3><small>'
         . (!$install && !$update ? $lng['install_languages_note'] : '<span class="gray">' . $lng['install_languages_impossible'] . '</span>') . '</small></td></tr>' .
         '<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . $lng['continue'] . '" /></td></tr>' .
         '</table>' .

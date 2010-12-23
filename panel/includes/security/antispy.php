@@ -83,7 +83,6 @@ class scaner {
         '../download/search.php',
         '../download/select.php',
         '../download/trans.php',
-        '../download/upl/index.php',
         '../download/upl.php',
         '../download/view.php',
         '../download/zip.php',

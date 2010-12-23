@@ -255,7 +255,7 @@ if (in_array($act, $do)) {
                 $km1 = mysql_num_rows($km);
                 echo "<a href='index.php?act=komm&amp;id=" . $id . "'>" . $lng['comments'] . "</a> ($km1)<br />";
             }
-            echo '<a href="index.php?act=java&amp;id=' . $id . '">' . $lng['download_java'] . '</a><br /><br />';
+            echo '<a href="index.php?act=java&amp;id=' . $id . '">' . $lng_lib['download_java'] . '</a><br /><br />';
             $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $zag['refid'] . "'");
             $dnam1 = mysql_fetch_array($dnam);
             $catname = "$dnam1[text]";
