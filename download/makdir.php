@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once ("../incfiles/head.php");
 if ($rights == 4 || $rights >= 6) {
     if (!empty ($_GET['cat'])) {
-        $cat = $_GET['cat'];
+        $cat = intval($_GET['cat']);
     }
     if (isset ($_POST['submit'])) {
         if (empty ($cat)) {
@@ -48,7 +48,7 @@ if ($rights == 4 || $rights >= 6) {
         }
     }
     else {
-        echo "<form action='?act=makdir&amp;cat=" . $_GET['cat'] . "' method='post'>
+        echo "<form action='?act=makdir&amp;cat=" . intval($_GET['cat']) . "' method='post'>
          <p>" . $lng_dl['folder_name'] . "<br />
          <input type='text' name='drn'/></p>
          <p>" . $lng_dl['folder_name_for_list'] . ":<br/>
