@@ -210,7 +210,7 @@ switch ($mod) {
         closedir($dir);
         echo '</select></p>';
         // Выбор языка
-        $req = mysql_query("SELECT * FROM `cms_lng_list`");
+        $req = mysql_query("SELECT * FROM `cms_lng_list` ORDER BY `name` ASC");
         if (mysql_num_rows($req) > 1) {
             echo '<p><h3>' . $lng['language_select'] . '</h3>';
             while ($res = mysql_fetch_assoc($req)) {
