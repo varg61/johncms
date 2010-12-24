@@ -173,16 +173,18 @@ switch ($_GET['mod']) {
         Создание базы данных и Администратора системы
         -----------------------------------------------------------------
         */
-        $check = false;
+        $db_check = false;
         $db_error = array ();
+        $site_error = array();
+        $user_error = array();
         $db_host = isset($_POST['dbhost']) ? trim($_POST['dbhost']) : 'localhost';
         $db_name = isset($_POST['dbname']) ? trim($_POST['dbname']) : 'johncms';
         $db_user = isset($_POST['dbuser']) ? trim($_POST['dbuser']) : 'root';
         $db_pass = isset($_POST['dbpass']) ? trim($_POST['dbpass']) : '';
+        $site_url = isset($_POST['siteurl']) ? trim($_POST['siteurl']) : 'http://' . $_SERVER["SERVER_NAME"];
+        $site_mail = isset($_POST['sitemail']) ? trim($_POST['sitemail']) : '@';
         $admin_user = isset($_POST['admin']) ? trim($_POST['admin']) : 'admin';
         $admin_pass = isset($_POST['password']) ? trim($_POST['password']) : '';
-        $site_url = isset($_POST['siteurl']) ? trim($_POST['siteurl']) : false;
-        $site_mail = isset($_POST['sitemail']) ? trim($_POST['sitemail']) : false;
         if (isset($_POST['check']) || isset($_POST['install'])) {
             // Проверяем заполнение реквизитов базы данных
             if (empty($db_host))
@@ -206,10 +208,13 @@ switch ($_GET['mod']) {
             if (empty($db_error) && @mysql_select_db($db_name) == false)
                 $db_error['name'] = $lng['error_db_name'];
             if (empty($db_error))
-                $check = true;
+                $db_check = true;
+            mysql_close();
         }
-        if (empty($db_error) && isset($_POST['install'])) {
+        if ($db_check && isset($_POST['install'])) {
             // Проверяем административные данные
+            // Заливаем базу данных
+            /*
             // Создаем системный файл db.php
             $dbfile = "<?php\r\n\r\n" .
                 "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" .
@@ -222,7 +227,9 @@ switch ($_GET['mod']) {
             if (!file_put_contents('../incfiles/db.php', $dbfile)) {
                 echo 'ERROR: Can not write system file';
             }
+            */
         }
+        echo '<form action="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '" method="post">';
         echo '<h2 class="blue">' . $lng['database'] . '</h2>';
         if (!empty($db_error)) {
             // Показываем ошибки
@@ -230,16 +237,30 @@ switch ($_GET['mod']) {
             foreach ($db_error as $val)echo '<div>' . $val . '</div>';
             echo '</div></p>';
         }
-        echo '<form action="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '" method="post">' .
-            '<small class="blue"><b>MySQL Host:</b></small><br />' .
-            '<input type="text" name="dbhost" value="' . $db_host . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+        echo '<small class="blue"><b>MySQL Host:</b></small><br />' .
+            '<input type="text" name="dbhost" value="' . $db_host . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
             '<small class="blue"><b>MySQL Database:</b></small><br />' .
-            '<input type="text" name="dbname" value="' . $db_name . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['name']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+            '<input type="text" name="dbname" value="' . $db_name . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['name']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
             '<small class="blue"><b>MySQL User:</b></small><br />' .
-            '<input type="text" name="dbuser" value="' . $db_user . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['access']) || isset($db_error['user']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+            '<input type="text" name="dbuser" value="' . $db_user . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) || isset($db_error['user']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
             '<small class="blue"><b>MySQL Password:</b></small><br />' .
-            '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($check ? ' readonly="readonly"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
-        if ($check) {
+            '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
+        if ($db_check) {
+            // Настройки Сайта
+            echo '<p><h2 class="blue">' . $lng['site_settings'] . '</h2>';
+            echo '<small class="blue"><b>' . $lng['site_url'] . ':</b></small><br />';
+            echo '<input type="text" name="siteurl" value="' . $site_url . '"' . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />';
+            echo '<small class="gray">' . $lng['site_url_help'] . '</small><br />';
+            echo '<small class="blue"><b>' . $lng['site_email'] . ':</b></small><br />';
+            echo '<input type="text" name="sitemail" value="' . $site_mail . '"' . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />';
+            echo '<small class="gray">' . $lng['site_email_help'] . '</small></p>';
+            // Данные Администратора
+            echo '<p><h2 class="blue">' . $lng['admin'] . '</h2>';
+            echo '<small class="blue"><b>' . $lng['admin_login'] . ':</b></small><br />';
+            echo '<input type="text" name="dbhost" value="' . $admin_user . '"' . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />';
+            echo '<small class="blue"><b>' . $lng['admin_password'] . ':</b></small><br />';
+            echo '<input type="text" name="dbhost" value="' . $admin_pass . '"' . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '></p>';
+
             echo '<p><input type="submit" name="install" value="' . $lng['setup'] . '"></p>';
         } else {
             echo '<p><input type="submit" name="check" value="' . $lng['check'] . '"></p>';
