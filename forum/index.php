@@ -469,7 +469,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                     $postres = mysql_fetch_assoc($postreq);
                     echo '<div class="clip">';
                     if ($postres['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'f') . ($postres['datereg'] > $realtime - 86400 ? '_new.gif" width="14"' : '.gif" width="10"') . ' height="10"/>&#160;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'w') . ($postres['datereg'] > $realtime - 86400 ? '_new.png" width="14"' : '.png" width="10"') . ' height="10"/>&#160;';
                     else
                         echo '<img src="../images/del.png" width="10" height="10" />&#160;';
                     if ($user_id && $user_id != $postres['user_id']) {
