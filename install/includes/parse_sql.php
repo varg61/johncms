@@ -11,6 +11,7 @@ class parse_sql {
     -----------------------------------------------------------------
     */
     function __construct($file = false) {
+        echo $file;
         if ($file && file_exists($file)) {
             $query = fread(fopen($file, 'r'), filesize($file));
             $pieces = $this->split_sql($query);

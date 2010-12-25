@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
     mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(htmlspecialchars($_POST['madm'])) . "' WHERE `key` = 'email'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['timeshift']) . "' WHERE `key` = 'timeshift'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check($_POST['copyright']) . "' WHERE `key` = 'copyright'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check($_POST['homeurl']) . "' WHERE `key` = 'homeurl'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . functions::check(preg_replace("#/$#", '', trim($_POST['homeurl']))) . "' WHERE `key` = 'homeurl'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['flsz']) . "' WHERE `key` = 'flsz'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['gz']) . "' WHERE `key` = 'gzip'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['fm']) . "' WHERE `key` = 'fmod'");

@@ -70,14 +70,14 @@ if (isset($_POST['submit'])) {
         $error[] = $lng_reg['error_nick_empty'];
     elseif (mb_strlen($reg_nick) < 2 || mb_strlen($reg_nick) > 15)
         $error[] = $lng_reg['error_nick_lenght'];
-    if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
+    if (preg_match("/[^\da-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
         $error[] = $lng['nick'] . ': ' . $lng['error_wrong_symbols'];
     // Проверка пароля
     if (empty($reg_pass))
         $error[] = $lng['error_empty_password'];
     elseif (mb_strlen($reg_pass) < 3 || mb_strlen($reg_pass) > 10)
         $error[] = $lng['password'] . ': ' . $lng['error_wrong_lenght'];
-    if (preg_match("/[^\da-zA-Z_]+/", $reg_pass))
+    if (preg_match("/[^\dA-Za-z]+/", $reg_pass))
         $error[] = $lng['password'] . ': ' . $lng['error_wrong_symbols'];
     // Проверка имени
     if ($reg_sex == 'm' || $reg_sex == 'zh') { }
