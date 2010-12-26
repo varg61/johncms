@@ -22,7 +22,7 @@ if ($_GET['id'] == "") {
     require_once ('../incfiles/end.php');
     exit;
 }
-if (!$set['mod_down_comm'] || $rights < 7) {
+if (!$set['mod_down_comm'] && $rights < 7) {
     echo '<p>ERROR<br/><a href="index.php">Back</a></p>';
     require_once ('../incfiles/end.php');
     exit;

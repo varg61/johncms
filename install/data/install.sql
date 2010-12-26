@@ -132,8 +132,8 @@ CREATE TABLE `cms_ban_ip` (
   `reason` text NOT NULL,
   `date` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ip1` (`ip1`) USING BTREE,
-  UNIQUE KEY `ip2` (`ip2`) USING BTREE
+  UNIQUE KEY `ip1` (`ip1`),
+  UNIQUE KEY `ip2` (`ip2`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -151,8 +151,8 @@ CREATE TABLE `cms_ban_users` (
   `ban_reason` text NOT NULL,
   `ban_raz` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`) USING BTREE,
-  KEY `ban_time` (`ban_time`) USING BTREE
+  KEY `user_id` (`user_id`),
+  KEY `ban_time` (`ban_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -186,10 +186,10 @@ CREATE TABLE `cms_forum_files` (
   `dlcount` int(11) NOT NULL,
   `del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `cat` (`cat`) USING BTREE,
-  KEY `subcat` (`subcat`) USING BTREE,
-  KEY `topic` (`topic`) USING BTREE,
-  KEY `post` (`post`) USING BTREE
+  KEY `cat` (`cat`),
+  KEY `subcat` (`subcat`),
+  KEY `topic` (`topic`),
+  KEY `post` (`post`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -201,7 +201,7 @@ CREATE TABLE `cms_forum_rdm` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`topic_id`,`user_id`),
-  KEY `time` (`time`) USING BTREE
+  KEY `time` (`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -246,8 +246,8 @@ CREATE TABLE `cms_guests` (
   `movings` int(11) NOT NULL DEFAULT '0',
   `place` varchar(30) NOT NULL,
   PRIMARY KEY (`session_id`),
-  KEY `time` (`lastdate`) USING BTREE,
-  KEY `place` (`place`) USING BTREE
+  KEY `time` (`lastdate`),
+  KEY `place` (`place`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -313,6 +313,8 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('mod_down', '2'),
 ('mod_lib_comm', '1'),
 ('mod_gal_comm', '1'),
+('meta_key', ''),
+('meta_desc', ''),
 ('skindef', 'default'),
 ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smileys";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}'),
 ('karma', 'a:6:{s:12:"karma_points";i:5;s:10:"karma_time";i:86400;s:5:"forum";i:20;s:4:"time";i:0;s:2:"on";i:1;s:3:"adm";i:0;}'),
@@ -346,8 +348,8 @@ CREATE TABLE `cms_users_iphistory` (
   `ip` bigint(11) NOT NULL,
   `time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`) USING BTREE,
-  KEY `user_ip` (`ip`) USING BTREE
+  KEY `user_id` (`user_id`),
+  KEY `user_ip` (`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -367,9 +369,9 @@ CREATE TABLE `download` (
   `text` text NOT NULL,
   `screen` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `type` (`type`) USING BTREE,
-  KEY `refid` (`refid`) USING BTREE,
-  KEY `time` (`time`) USING BTREE
+  KEY `type` (`type`),
+  KEY `refid` (`refid`),
+  KEY `time` (`time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -394,11 +396,11 @@ CREATE TABLE `forum` (
   `tedit` int(11) NOT NULL DEFAULT '0',
   `kedit` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `refid` (`refid`) USING BTREE,
-  KEY `type` (`type`) USING BTREE,
-  KEY `time` (`time`) USING BTREE,
-  KEY `close` (`close`) USING BTREE,
-  KEY `user_id` (`user_id`) USING BTREE,
+  KEY `refid` (`refid`),
+  KEY `type` (`type`),
+  KEY `time` (`time`),
+  KEY `close` (`close`),
+  KEY `user_id` (`user_id`),
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
@@ -418,10 +420,10 @@ CREATE TABLE `gallery` (
   `ip` text NOT NULL,
   `soft` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `refid` (`refid`) USING BTREE,
-  KEY `type` (`type`) USING BTREE,
-  KEY `time` (`time`) USING BTREE,
-  KEY `avtor` (`avtor`) USING BTREE
+  KEY `refid` (`refid`),
+  KEY `type` (`type`),
+  KEY `time` (`time`),
+  KEY `avtor` (`avtor`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -444,9 +446,9 @@ CREATE TABLE `guest` (
   `edit_time` int(11) NOT NULL DEFAULT '0',
   `edit_count` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `time` (`time`) USING BTREE,
-  KEY `ip` (`ip`) USING BTREE,
-  KEY `adm` (`adm`) USING BTREE
+  KEY `time` (`time`),
+  KEY `ip` (`ip`),
+  KEY `adm` (`adm`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -463,9 +465,9 @@ CREATE TABLE `karma_users` (
   `time` int(11) NOT NULL,
   `text` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`) USING BTREE,
-  KEY `karma_user` (`karma_user`) USING BTREE,
-  KEY `type` (`type`) USING BTREE
+  KEY `user_id` (`user_id`),
+  KEY `karma_user` (`karma_user`),
+  KEY `type` (`type`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -486,10 +488,10 @@ CREATE TABLE `lib` (
   `moder` tinyint(1) NOT NULL DEFAULT '0',
   `count` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `type` (`type`) USING BTREE,
-  KEY `moder` (`moder`) USING BTREE,
-  KEY `time` (`time`) USING BTREE,
-  KEY `refid` (`refid`) USING BTREE
+  KEY `type` (`type`),
+  KEY `moder` (`moder`),
+  KEY `time` (`time`),
+  KEY `refid` (`refid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -525,8 +527,8 @@ CREATE TABLE `privat` (
   `ignor` varchar(25) NOT NULL DEFAULT '',
   `attach` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `me` (`me`) USING BTREE,
-  KEY `ignor` (`ignor`) USING BTREE
+  KEY `me` (`me`),
+  KEY `ignor` (`ignor`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -591,7 +593,7 @@ CREATE TABLE `users` (
   `comm_count` int(10) unsigned NOT NULL,
   `comm_old` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `name_lat` (`name_lat`) USING BTREE,
-  KEY `lastdate` (`lastdate`) USING BTREE,
-  KEY `place` (`place`) USING BTREE
+  KEY `name_lat` (`name_lat`),
+  KEY `lastdate` (`lastdate`),
+  KEY `place` (`place`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

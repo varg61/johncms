@@ -91,6 +91,8 @@ class scaner {
         '../files/forum/attach/index.php',
         '../files/forum/index.php',
         '../files/forum/topics/index.php',
+        '../files/library/index.php',
+        '../files/users/album/index.php',
         '../files/users/avatar/index.php',
         '../files/users/index.php',
         '../files/users/photo/index.php',
@@ -367,7 +369,7 @@ switch ($mod) {
         $scaner->scan();
         echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_dist_scan'] . '</div>';
         if (count($scaner->bad_files)) {
-            echo '<div class="rmenu">' . $lng['antispy_dist_scan_bad'] . '</small></div>';
+            echo '<div class="rmenu"><small>' . $lng['antispy_dist_scan_bad'] . '</small></div>';
             echo '<div class="menu">';
             foreach ($scaner->bad_files as $idx => $data) {
                 echo $data['file_path'] . '<br />';
