@@ -20,7 +20,7 @@ $install = false;
 $update = false;
 $lng_install = false;
 $lng_id = 1;
-$system_build = 600; // Версия системы
+$system_build = 686; // Версия системы
 
 /*
 -----------------------------------------------------------------
