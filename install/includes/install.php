@@ -27,89 +27,6 @@ function show_errors($error) {
     }
 }
 switch ($_GET['mod']) {
-    case 'setup':
-        ////////////////////////////////////////////////////////////
-        // Создание таблиц в базе данных MySQL                    //
-        ////////////////////////////////////////////////////////////
-        echo '<h2>Установка системы</h2><ul>';
-        require_once("../incfiles/db.php");
-        require_once("../incfiles/func.php");
-        $connect = mysql_connect($db_host, $db_user, $db_pass) or die('cannot connect to server</div></body></html>');
-        mysql_select_db($db_name) or die('cannot connect to db</div></body></html>');
-        mysql_query("SET NAMES 'utf8'", $connect);
-        $error = '';
-        @set_magic_quotes_runtime(0);
-        // Читаем SQL файл и заносим его в базу данных
-        $query = fread(fopen('data/install.sql', 'r'), filesize('data/install.sql'));
-        $pieces = split_sql($query);
-        for ($i = 0; $i < count($pieces); $i++) {
-            $pieces[$i] = trim($pieces[$i]);
-            if (!empty($pieces[$i]) && $pieces[$i] != "#") {
-                if (!mysql_query($pieces[$i])) {
-                    $error = $error . mysql_error() . '<br />';
-                }
-            }
-        }
-        if (empty($error)) {
-            echo '<span class="green">Oк</span> - Таблицы созданы<br />';
-
-            // Принимаем данные из формы
-            $log = trim($_POST['wnickadmina']);
-            $latlog = functions::rus_lat(mb_strtolower($log));
-            $par = trim($_POST['wpassadmina']);
-            $par1 = md5(md5($par));
-            $meil = trim($_POST['wemailadmina']);
-            $hom = trim($_POST[whome]);
-            $brow = $_SERVER["HTTP_USER_AGENT"];
-            $ip = $_SERVER["REMOTE_ADDR"];
-
-            // Настройка администратора
-            mysql_query("insert into `users` set
-            `name`='" . mysql_real_escape_string($log) . "',
-            `name_lat`='" . mysql_real_escape_string($latlog) . "',
-            `password`='" . mysql_real_escape_string($par1) . "',
-            `sex`='m',
-            `datereg`='" . time() . "',
-            `lastdate`='" . time() . "',
-            `mail`='" . mysql_real_escape_string($meil) . "',
-            `www`='" . mysql_real_escape_string($hom) . "',
-            `rights`='9',
-            `ip`='" . $ip . "',
-            `browser`='" . mysql_real_escape_string($brow) . "',
-            `preg`='1';") or die('Ошибка настройки администратора</div></body></html>');
-            $user_id = mysql_insert_id();
-            echo '<span class="green">Oк</span> - администратор настроен<br />';
-
-            // Импорт настроек
-            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($meil) . "' WHERE `key`='emailadmina';");
-            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(trim($_POST['wcopyright'])) . "' WHERE `key`='copyright';");
-            mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($hom) . "' WHERE `key`='homeurl';");
-            echo '<span class="green">Oк</span> - настройки импортированы<br />';
-
-            // Импорт вопросов Викторины
-            $file = file("data/vopros.txt");
-            $count = count($file);
-            for ($i = 0; $i < $count; $i++) {
-                $tx = explode("||", $file[$i]);
-                mysql_query("INSERT INTO `vik` SET
-                `vopros`='" . mysql_real_escape_string(trim($tx[0])) . "',
-                `otvet`='" . mysql_real_escape_string(trim($tx[1])) . "'
-                ");
-            }
-            echo '<span class="green">Oк</span> - викторина импортирована (' . $i . ' вопросов)</ul>';
-            echo '<br /><h2 class="green">Установка завершена</h2>';
-            // Установка ДЕМО данных
-            echo '<ul>При желании, Вы можете установить <a href="index.php?act=demo&amp;id=' . $user_id . '&amp;ps=' . $_POST['wpassadmina'] .
-                '">Демо данные</a><br />Это может быть полезно для начинающих сайтостроителей.<br />В базу будут внесены некоторые исходные настроики и материалы.</ul>';
-            echo '<br /><h2 class="red">Не забудьте:</h2><ul><li>Сменить права к папке incfiles на 755</li><li>Сменить права на файл incfiles/db.php 644</li><li>Удалить папку install с сайта</li></ul>';
-            echo '<hr /><a href="../login.php?id=' . $user_id . '&amp;p=' . $_POST['wpassadmina'] . '">Вход на сайт</a>';
-        } else {
-            // Если были ошибки, выводим их
-            echo $error;
-            echo '<br /><span class="red">Error!</span><br />При создании таблиц возникла ошибка.<br />Продолжение невозможно.';
-        }
-        break;
-
     case 'demo':
         ////////////////////////////////////////////////////////////
         // Установка ДЕМО данных                                  //
@@ -144,40 +61,20 @@ switch ($_GET['mod']) {
         echo "<p style='step'><a class='button' href='../login.php?id=" . $_GET['id'] . "&amp;p=" . $_GET['ps'] . "'>Вход на сайт</a></p>";
         break;
 
-    case "admin":
-        ////////////////////////////////////////////////////////////
-        // Настройки сайта и Администратора                       //
-        ////////////////////////////////////////////////////////////
-        $dhost = trim($_POST['host']);
-        $duser = trim($_POST['user']);
-        $dpass = trim($_POST['pass']);
-        $dname = trim($_POST['name']);
-        $text = "<?php\r\n\r\n" . "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" . "$" . "db_host=\"$dhost\";\r\n" . "$" . "db_user=\"$duser\";\r\n" . "$" . "db_pass=\"$dpass\";\r\n" . "$" . "db_name=\"$dname\";\r\n"
-            . "\r\n?>";
-        $fp = @fopen("../incfiles/db.php", "w");
-        fputs($fp, $text);
-        fclose($fp);
-        echo '<p>Создаем Администратора системы</p>';
-        echo '<form method="post" action="index.php?act=set">';
-        echo '<p><b>Ваш ник</b><br/><input name="wnickadmina" maxlength="50" value="Admin" /></p>';
-        echo '<p><b>Ваш пароль</b><br/><input name="wpassadmina" maxlength="50" value="password" /></p>';
-        echo '<p><b>Ваш e-mail</b><br/><input name="wemailadmina" maxlength="50" /></p>';
-        echo '<p><b>Копирайт</b><br/><input name="wcopyright" maxlength="100" /></p>';
-        echo '<p><b>Главная сайта</b> без слэша в конце<br/><input name="whome" maxlength="100" value="http://' . $_SERVER["SERVER_NAME"] . '" /></p>';
-        echo '<hr /><input value="Продолжить" type="submit" class="button" /></form>';
-        break;
-
-    case 'db':
-        ////////////////////////////////////////////////////////////
-        // Настройка соединения с MySQL                           //
-        ////////////////////////////////////////////////////////////
-        echo '<form action="index.php?act=admin" method="post">';
-        echo '<p>Ниже вы должны ввести настройки соединения с базой данных MySQL.<br />Если вы не уверенны в них, свяжитесь с вашим хостинг-провайдером.</p>';
-        echo '<p><b>Адрес сервера</b><br /><input type="text" name="host" value="localhost"/></p>';
-        echo '<p><b>Название базы</b><br /><input type="text" name="name" value="johncms"/></p>';
-        echo '<p><b>Имя пользователя</b><br /><input type="text" name="user" value="root"/></p>';
-        echo '<p><b>MySQL пароль</b><br /><input type="text" name="pass"/></p>';
-        echo '<hr /><input type="submit" class="button" value="Продолжить"/></form>';
+    case 'final':
+        /*
+        -----------------------------------------------------------------
+        Установка завершена
+        -----------------------------------------------------------------
+        */
+        functions::smileys(0, 2);
+        echo '<h2 class="blue">' . $lng['congratulations'] . '</h2>' .
+            $lng['installation_completed'] . '<p><ul>' .
+            '<li><a href="index.php?act=languages&amp;lng_id=' . $lng_id . '">' . $lng['install_more_languages'] . '</a></li>' .
+            '<li><a href="../panel">' . $lng['admin_panel'] . '</a></li>' .
+            '<li><a href="../index.php">' . $lng['to_site'] . '</a></li>' .
+            '</ul></p>' .
+            $lng['final_warning'];
         break;
 
     case 'set':
@@ -199,6 +96,7 @@ switch ($_GET['mod']) {
         $site_mail = isset($_POST['sitemail']) ? htmlentities(trim($_POST['sitemail']), ENT_QUOTES, 'UTF-8') : '@';
         $admin_user = isset($_POST['admin']) ? trim($_POST['admin']) : 'admin';
         $admin_pass = isset($_POST['password']) ? trim($_POST['password']) : '';
+        $demo = isset($_POST['demo']);
         if (isset($_POST['check']) || isset($_POST['install'])) {
             // Проверяем заполнение реквизитов базы данных
             if (empty($db_host))
@@ -244,6 +142,19 @@ switch ($_GET['mod']) {
             if (preg_match("/[^\dA-Za-z]+/", $admin_pass))
                 $admin_error['pass'] = $lng['error_pass_symbols'];
             if ($db_check && empty($site_error) && empty($admin_error)) {
+                // Создаем системный файл db.php
+                $dbfile = "<?php\r\n\r\n" .
+                    "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" .
+                    '$db_host = ' . "'$db_host';\r\n" .
+                    '$db_name = ' . "'$db_name';\r\n" .
+                    '$db_user = ' . "'$db_user';\r\n" .
+                    '$db_pass = ' . "'$db_pass';\r\n\r\n" .
+                    '$system_build = ' . "'$system_build';\r\n\r\n" .
+                    '?>';
+                if (!file_put_contents('../incfiles/db.php', $dbfile)) {
+                    echo 'ERROR: Can not write db.php</body></html>';
+                    exit;
+                }
                 // Соединяемся с базой данных
                 $connect = mysql_connect($db_host, $db_user, $db_pass) or die('ERROR: cannot connect to DB server</body></html>');
                 mysql_select_db($db_name) or die('ERROR: cannot select DB</body></html>');
@@ -251,26 +162,75 @@ switch ($_GET['mod']) {
                 // Заливаем базу данных
                 require('includes/parse_sql.php');
                 $sql = new parse_sql('data/install.sql');
+                if (!empty($sql->errors)) {
+                    foreach ($sql->errors as $val)echo $val . '<br />';
+                    echo '</body></html>';
+                    exit;
+                }
+                // Добавляем в базу системный язык
+                $attr = serialize(array (
+                    'author' => $lng_set[$lng_id]['author'],
+                    'author_email' => $lng_set[$lng_id]['author_email'],
+                    'author_url' => $lng_set[$lng_id]['author_url'],
+                    'description' => $lng_set[$lng_id]['description'],
+                    'version' => $lng_set[$lng_id]['version']
+                ));
+                mysql_query("INSERT INTO `cms_lng_list` SET
+                    `iso` = '" . $lng_set[$lng_id]['iso'] . "',
+                    `name` = '" . $lng_set[$lng_id]['name'] . "',
+                    `build` = '" . $lng_set[$lng_id]['build'] . "',
+                    `attr` = '" . mysql_real_escape_string($attr) . "'
+                ");
+                $lng_insert_id = mysql_insert_id();
+                $lng_array = parse_ini_file('languages/' . $lng_set[$lng_id]['filename'] . '.ini', true);
+                unset($lng_array['description']); // Удаляем описание языка
+                unset($lng_array['install']);     // Удаляем фразы инсталлятора
+                foreach ($lng_array as $module => $phr_array) {
+                    foreach ($phr_array as $keyword => $phrase) {
+                        mysql_query("INSERT INTO `cms_lng_phrases` SET
+                            `language_id` = '$lng_insert_id',
+                            `module` = '" . mysql_real_escape_string($module) . "',
+                            `keyword` = '" . mysql_real_escape_string($keyword) . "',
+                            `default` = '" . mysql_real_escape_string($phrase) . "'
+                        ");
+                    }
+                }
+                // Записываем системные настройки
+                mysql_query("UPDATE `cms_settings` SET `val`='$lng_insert_id' WHERE `key`='lng_id'");
+                mysql_query("UPDATE `cms_settings` SET `val`='" . $lng_set[$lng_id]['iso'] . "' WHERE `key`='lng_iso'");
+                mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($site_url) . "' WHERE `key`='homeurl'");
+                mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string($site_mail) . "' WHERE `key`='email'");
+                // Создаем Администратора
+                mysql_query("INSERT INTO `users` SET
+                    `name` = '" . mysql_real_escape_string($admin_user) . "',
+                    `name_lat` = '" . mysql_real_escape_string(mb_strtolower($admin_user)) . "',
+                    `password` = '" . mysql_real_escape_string(md5(md5($admin_pass))) . "',
+                    `sex` = 'm',
+                    `datereg` = '" . time() . "',
+                    `lastdate` = '" . time() . "',
+                    `mail` = '" . mysql_real_escape_string($site_mail) . "',
+                    `www` = '" . mysql_real_escape_string($site_url) . "',
+                    `rights` = '9',
+                    `ip` = '" . ip2long($_SERVER["REMOTE_ADDR"]) . "',
+                    `browser` = '" . mysql_real_escape_string(htmlentities($_SERVER["HTTP_USER_AGENT"])) . "',
+                    `preg` = '1'
+                ") or die('ERROR: Administrator setup</body></html>');
+                $user_id = mysql_insert_id();
+                // Устанавливаем сессию и COOKIE c данными администратора
+                $_SESSION['uid'] = $user_id;
+                $_SESSION['ups'] = md5(md5($admin_pass));
+                setcookie("cuid", base64_encode($user_id), time() + 3600 * 24 * 365);
+                setcookie("cups", md5($admin_pass), time() + 3600 * 24 * 365);
+                // Установка ДЕМО данных
+                if($demo){
+                    $demo_data = new parse_sql('data/demo.sql');
+                }
+                // Установка завершена
+                header('Location: index.php?act=install&mod=final&lng_id=' . $lng_id);
             }
-
-        /*
-        // Создаем системный файл db.php
-        $dbfile = "<?php\r\n\r\n" .
-            "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" .
-            '$db_host = ' . "'$db_host';\r\n" .
-            '$db_name = ' . "'$db_name';\r\n" .
-            '$db_user = ' . "'$db_user';\r\n" .
-            '$db_pass = ' . "'$db_pass';\r\n\r\n" .
-            '$system_build = ' . "'$system_build';\r\n\r\n" .
-            '?>';
-        if (!file_put_contents('../incfiles/db.php', $dbfile)) {
-            echo 'ERROR: Can not write system file';
-        }
-        */
         }
         echo '<form action="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '" method="post">' .
-            '<h2 class="blue">' . $lng['database'] . '</h2>' .
-            show_errors($db_error) .
+            '<h2 class="blue">' . $lng['database'] . '</h2>' . show_errors($db_error) .
             '<small class="blue"><b>MySQL Host:</b></small><br />' .
             '<input type="text" name="dbhost" value="' . $db_host . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
             '<small class="blue"><b>MySQL Database:</b></small><br />' .
@@ -281,16 +241,16 @@ switch ($_GET['mod']) {
             '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
         if ($db_check) {
             // Настройки Сайта
-            echo '<p><h2 class="blue">' . $lng['site_settings'] . '</h2>' .
-                show_errors($site_error) .
+            echo '<p><h2 class="blue">' . $lng['site_settings'] . '</h2>' . show_errors($site_error) .
                 '<small class="blue"><b>' . $lng['site_url'] . ':</b></small><br />' .
                 '<input type="text" name="siteurl" value="' . $site_url . '"' . (isset($site_error['url']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
                 '<small class="gray">' . $lng['site_url_help'] . '</small><br />' .
                 '<small class="blue"><b>' . $lng['site_email'] . ':</b></small><br />' .
                 '<input type="text" name="sitemail" value="' . $site_mail . '"><br />' .
-                '<small class="gray">' . $lng['site_email_help'] . '</small></p>' .
-                '<p><h2 class="blue">' . $lng['admin'] . '</h2>' .
-                show_errors($admin_error) .
+                '<small class="gray">' . $lng['site_email_help'] . '</small><br />' .
+                '<input type="checkbox" name="demo" value="1"><small class="blue">&#160;<b>' . $lng['install_demo'] . '</b></small><br />' .
+                '<small class="gray">' . $lng['install_demo_help'] . '</small></p>' .
+                '<p><h2 class="blue">' . $lng['admin'] . '</h2>' . show_errors($admin_error) .
                 '<small class="blue"><b>' . $lng['admin_login'] . ':</b></small><br />' .
                 '<input type="text" name="admin" value="' . $admin_user . '"' . (isset($admin_error['admin']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
                 '<small class="gray">' . $lng['admin_login_help'] . '</small><br />' .

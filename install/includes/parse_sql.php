@@ -1,5 +1,18 @@
 <?php
 
+/*
+////////////////////////////////////////////////////////////////////////////////
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
+////////////////////////////////////////////////////////////////////////////////
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+////////////////////////////////////////////////////////////////////////////////
+*  Парсер SQL разработан на основе функций CMS Joomla
+*/
+
 defined('INSTALL') or die('Error: restricted access');
 
 class parse_sql {
@@ -11,7 +24,6 @@ class parse_sql {
     -----------------------------------------------------------------
     */
     function __construct($file = false) {
-        echo $file;
         if ($file && file_exists($file)) {
             $query = fread(fopen($file, 'r'), filesize($file));
             $pieces = $this->split_sql($query);
