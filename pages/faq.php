@@ -206,7 +206,7 @@ switch ($act) {
                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
                         '</form></p>';
                 }
-                echo '<p><a href="avatar.php">' . $lng['catalogue'] . '</a><br />' .
+                echo '<p><a href="faq.php?act=avatars">' . $lng['catalogue'] . '</a><br />' .
                     '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></p>';
             }
         } else {

@@ -280,7 +280,6 @@ switch ($_GET['mod']) {
             '/files/forum/attach/',
             '/files/library/',
             '/files/users/album/',
-            '/files/users/album/',
             '/files/users/avatar/',
             '/files/users/photo/',
             '/files/users/pm/',
