@@ -119,7 +119,7 @@ switch ($do) {
         mysql_query("ALTER TABLE `users` DROP `set_chat`");
         mysql_query("ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `place`");
         mysql_query("ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`");
-        mysql_query("ALTER TABLE `users` ADD `set_language` CHAR( 2 ) NOT NULL AFTER `place`");
+        mysql_query("ALTER TABLE `users` ADD `set_language` tinyint(4) NOT NULL AFTER `place`");
         mysql_query("ALTER TABLE `users` ADD `comm_count` INT UNSIGNED NOT NULL DEFAULT '0'");
         mysql_query("ALTER TABLE `users` CHANGE `id` `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT");
         mysql_query("ALTER TABLE `users` CHANGE `failed_login` `failed_login` TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0'");
@@ -159,19 +159,6 @@ switch ($do) {
         mysql_query("ALTER TABLE `cms_ads` ADD `show` tinyint(1) NOT NULL default 0");
         echo '<span class="green">OK</span> таблица `cms_ads` обновлена<br />';
         // Создаем таблицу языковых фраз
-        mysql_query("DROP TABLE IF EXISTS `cms_languages`");
-        mysql_query(
-            "CREATE TABLE `cms_languages` (
-        `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-        `iso` char(2) NOT NULL,
-        `module` varchar(10) NOT NULL,
-        `var` varchar(30) NOT NULL,
-        `default` text NOT NULL,
-        `custom` text NOT NULL,
-        PRIMARY KEY (`id`),
-        KEY `iso` (`iso`),
-        KEY `module` (`module`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8");
         echo '<hr /><a href="update.php?do=step3">Продолжить</a>';
         break;
 

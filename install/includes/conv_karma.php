@@ -5,8 +5,8 @@ $rootpath = '';
 require('incfiles/core.php');
 
 // Добавляем новые поля
-mysql_query("ALTER TABLE `users` ADD `karma_plus` INT NOT NULL DEFAULT '0' AFTER `set_chat`");
-mysql_query("ALTER TABLE `users` ADD `karma_minus` INT NOT NULL DEFAULT '0' AFTER `karma_plus`");
+mysql_query("ALTER TABLE `users` ADD `karma_plus` INT NOT NULL DEFAULT '0' AFTER `set_forum`") or die('ERROR:1 ' . mysql_error());
+mysql_query("ALTER TABLE `users` ADD `karma_minus` INT NOT NULL DEFAULT '0' AFTER `karma_plus`") or die('ERROR:2 ' . mysql_error());
 // Конвертируем данные
 $req = mysql_query("SELECT `id`, `plus_minus` FROM `users`");
 while($res = mysql_fetch_assoc($req)){
