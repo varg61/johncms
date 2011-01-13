@@ -14,7 +14,6 @@
 
 define('INSTALL', 1);
 define('_IN_JOHNCMS', 1);
-@ini_set("max_execution_time", "600");
 
 // Служебные переменные
 $install = false;

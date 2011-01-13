@@ -23,6 +23,7 @@ while($res = mysql_fetch_assoc($req)){
 Конвертируем личные альбомы
 -----------------------------------------------------------------
 */
+/*
 require('incfiles/lib/class.upload.php');
 $req_a = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `user` = '1'");
 // Получаем список альбомов юзера
@@ -95,12 +96,10 @@ while ($res_a = mysql_fetch_assoc($req_a)) {
                 }
                 $handle->clean();
                 unset($handle);
+                mysql_query("DELETE FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "'");
             }
-            mysql_query("DELETE FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "'");
         }
     }
 }
-
-echo 'Личные альбомы сконвертированы';
-
+*/
 ?>
