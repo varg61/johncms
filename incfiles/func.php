@@ -31,7 +31,7 @@ function tags($var = '') {
     $var = preg_replace('#\[green\](.+?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.+?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
     $var = preg_replace('#\[c\](.+?)\[/c\]#si', '<div class="quote">\1</div>', $var);
-    $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'url_replace', $var);
+    $var = preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://[0-9a-z\.-]+\.[a-z0-9]{2,6}((&amp;)?[0-9a-zA-Z/\.\?\~=_%])*)~', 'url_replace', $var);
     return $var;
 }
 
