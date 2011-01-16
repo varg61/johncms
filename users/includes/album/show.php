@@ -80,7 +80,7 @@ if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 6) {
 */
 if ($view) {
     $kmess = 1;
-    $start = $img ? mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $al . "' AND `id` > '$img'"), 0) : $start;
+    $start = isset($_GET['start']) ? abs(intval($_GET['start'])) : mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $al . "' AND `id` > '$img'"), 0);
     // Обрабатываем ссылку для возврата
     if (empty($_SESSION['ref']))
         $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
@@ -91,7 +91,7 @@ $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE 
 if ($total > $kmess)
     echo '<div class="topmenu">' . functions::display_pagination('album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), $start, $total, $kmess) . '</div>';
 if ($total) {
-    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `time` DESC LIMIT $start, $kmess");
+    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `id` DESC LIMIT $start, $kmess");
     while ($res = mysql_fetch_assoc($req)) {
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">');
         if ($view) {
@@ -127,6 +127,7 @@ if ($total) {
         }
         echo vote_photo($res) .
             '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
+            '<div class="gray">' . $lng['date'] . ': ' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . '</div>' .
             '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')<br />' .
             '<a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . $lng['download'] . '</a>' .
             '</div></div>';
