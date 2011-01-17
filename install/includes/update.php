@@ -111,6 +111,8 @@ switch ($mod) {
                 ");
             }
         }
+        
+        // Обновляем настройки
         mysql_query("UPDATE `cms_settings` SET `val`='$lng_insert_id' WHERE `key`='lng_id'");
         mysql_query("UPDATE `cms_settings` SET `val`='" . $lng_set[$lng_id]['iso'] . "' WHERE `key`='lng_iso'");
 

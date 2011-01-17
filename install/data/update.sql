@@ -169,6 +169,9 @@ ALTER TABLE `users` DROP `set_chat`;
 --
 RENAME TABLE `forum_vote` TO `cms_forum_vote`;
 RENAME TABLE `forum_vote_us` TO `cms_forum_vote_users`;
+ALTER TABLE `cms_forum_vote` ADD INDEX ( `type` );
+ALTER TABLE `cms_forum_vote` ADD INDEX ( `topic` );
+ALTER TABLE `cms_forum_vote_users` ADD INDEX ( `topic` );
 
 --
 -- Модифицируем таблицу `guest`
@@ -202,6 +205,7 @@ ALTER TABLE `cms_ban_ip` CHANGE `ip2` `ip2` BIGINT( 11 ) NOT NULL DEFAULT '0';
 ALTER TABLE `users` DROP `immunity`;
 ALTER TABLE `users` DROP `set_user`;
 ALTER TABLE `users` DROP `set_forum`;
+ALTER TABLE `users` DROP `pfon`;
 ALTER TABLE `users` ADD `set_language` tinyint(4) NOT NULL AFTER `place`;
 ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `set_language`;
 ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`;
@@ -225,5 +229,6 @@ DELETE FROM `cms_settings` WHERE `key` = 'mod_chat';
 UPDATE `cms_settings` SET `key` = 'email' WHERE `key` = 'emailadmina';
 UPDATE `cms_settings` SET `key` = 'timeshift' WHERE `key` = 'sdvigclock';
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
+('activity', '1'),
 ('lng_id', ''),
 ('lng_iso', '');
