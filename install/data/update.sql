@@ -205,7 +205,6 @@ ALTER TABLE `cms_ban_ip` CHANGE `ip2` `ip2` BIGINT( 11 ) NOT NULL DEFAULT '0';
 ALTER TABLE `users` DROP `immunity`;
 ALTER TABLE `users` DROP `set_user`;
 ALTER TABLE `users` DROP `set_forum`;
-ALTER TABLE `users` DROP `pfon`;
 ALTER TABLE `users` ADD `set_language` tinyint(4) NOT NULL AFTER `place`;
 ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `set_language`;
 ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`;
