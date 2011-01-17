@@ -234,7 +234,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         }
         $tree[] = '<a href="index.php">' . $lng['forum'] . '</a>';
         krsort($tree);
-        if ($type1['type'] != 't')
+        if ($type1['type'] != 't' && $type1['type'] != 'm')
             $tree[] = '<b>' . $type1['text'] . '</b>';
 
         /*
