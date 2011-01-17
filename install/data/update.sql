@@ -187,6 +187,7 @@ ALTER TABLE `cms_ads` ADD `show` BOOLEAN NOT NULL DEFAULT '0';
 --
 -- Модифицируем таблицу `cms_guests`
 --
+TRUNCATE `cms_guests`;
 ALTER TABLE `cms_guests` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0';
 
 --
@@ -204,6 +205,8 @@ ALTER TABLE `users` DROP `set_forum`;
 ALTER TABLE `users` ADD `set_language` tinyint(4) NOT NULL AFTER `place`;
 ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `set_language`;
 ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`;
+ALTER TABLE `users` ADD `karma_plus` INT NOT NULL DEFAULT '0' AFTER `set_forum`;
+ALTER TABLE `users` ADD `karma_minus` INT NOT NULL DEFAULT '0' AFTER `karma_plus`;
 ALTER TABLE `users` CHANGE `id` `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `users` CHANGE `failed_login` `failed_login` TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `users` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0';

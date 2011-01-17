@@ -234,9 +234,10 @@ switch ($_GET['mod']) {
     default:
         /*
         -----------------------------------------------------------------
-        Проверка прав доступа
+        Проверка настроек PHP и прав доступа
         -----------------------------------------------------------------
         */
+        echo '<h2 class="blue">' . $lng['check_settings'] . '</h2>';
         $folders = array (
             '/download/arctemp/',
             '/download/files/',
@@ -268,7 +269,7 @@ switch ($_GET['mod']) {
                 '<p><a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
                 '<a href="index.php?act=install&amp;lng_id=' . $lng_id . '">' . $lng['check_again'] . '</a></p>' .
                 '<p>' . $lng['ignore_warnings'] . '</p>' .
-                '<p><a href="">' . $lng['start_installation'] . '</a> ' . $lng['not_recommended'] . '</p>';
+                '<p><a href="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '">' . $lng['start_installation'] . '</a> ' . $lng['not_recommended'] . '</p>';
         } else {
             echo '<p>' . $lng['configuration_successful'] . '</p>' .
                 '<a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
