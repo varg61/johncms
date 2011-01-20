@@ -58,7 +58,7 @@ class core {
 
         // Получаем User Agent
         $this->user_agent = $this->ua_get();
-        
+
         // Стартуем сессию
         session_name('SESID');
         session_start();
@@ -113,9 +113,7 @@ class core {
     Получаем User Agent
     -----------------------------------------------------------------
     */
-    private function ua_get(){
-        return htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 150), ENT_QUOTES);
-    }
+    private function ua_get() { return htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 150), ENT_QUOTES); }
 
     /*
     -----------------------------------------------------------------
@@ -207,7 +205,7 @@ class core {
     Проверяем адрес IP на Бан
     -----------------------------------------------------------------
     */
-    function ip_ban() {
+    public function ip_ban() {
         $req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . $this->ip . "' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
 
         if (mysql_num_rows($req)) {
@@ -227,6 +225,35 @@ class core {
                     default :
                     header("HTTP/1.0 404 Not Found");
                     exit;
+            }
+        }
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Определяем язык по браузеру
+    -----------------------------------------------------------------
+    */
+    private function lng_detect() {
+        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            if (isset($_SESSION['lng_id']) && isset($_SESSION['lng_iso'])) {
+                $this->language_id = $_SESSION['lng_id'];
+                $this->language_iso = $_SESSION['lng_iso'];
+            } else {
+                $req = mysql_query("SELECT `id`, `iso` FROM `cms_lng_list`");
+                while ($res = mysql_fetch_assoc($req)) {
+                    $sys_lng[$res['iso']] = $res['id'];
+                }
+                foreach (explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE']))) as $var) {
+                    $lng = substr($var, 0, 2);
+                    if (array_key_exists($lng, $sys_lng)) {
+                        $this->language_id = $sys_lng[$lng];
+                        $this->language_iso = $lng;
+                        $_SESSION['lng_id'] = $sys_lng[$lng];
+                        $_SESSION['lng_iso'] = $lng;
+                        break;
+                    }
+                }
             }
         }
     }
@@ -261,6 +288,7 @@ class core {
     */
     private function system_settings() {
         $req = mysql_query("SELECT * FROM `cms_settings`");
+
         while ($res = mysql_fetch_row($req)) {
             $out[$res[0]] = $res[1];
         }
@@ -302,8 +330,13 @@ class core {
                     $this->user_settings = $this->user_settings();   // Пользовательские настройки
                     $this->user_ip();                                // Обработка истории IP адресов
                     $this->user_ban_check();                         // Проверка на Бан
-                    if (!empty($this->user_data['set_language']))    // Язык
+                    if (!empty($this->user_data['set_language'])) {
+                        // Если юзер установил язык в настройках, используем его
                         $this->language_id = $this->user_data['set_language'];
+                    } else {
+                        // Если язык не установлен, то пробуем автоматически определить
+                        $this->lng_detect();
+                    }
                 } else {
                     // Если авторизация не прошла
                     $this->user_unset();
@@ -391,6 +424,7 @@ class core {
             'translit' => 0                              // Транслит
         );
 
+        $this->lng_detect();                             // Определяем язык по браузеру
         return $settings;
     }
 
