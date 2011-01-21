@@ -17,6 +17,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once("../incfiles/head.php");
 if ($rights == 4 || $rights >= 6) {
+    $drt = array ();
     $dropen = opendir("$loadroot");
     while (($file1 = readdir($dropen))) {
         if ($file1 != "." && $file1 != ".." && $file1 != "index.php") {
@@ -29,7 +30,6 @@ if ($rights == 4 || $rights >= 6) {
                     mysql_query("insert into `download` values(0,'','" . $loadroot . "','" . $realtime . "','" . $file1 . "','cat','','','','" . $file1 . "','');");
                 }
             }
-            $drt = array ();
         }
     }
     $obn = mysql_query("select * from `download` where type = 'cat' ;");
