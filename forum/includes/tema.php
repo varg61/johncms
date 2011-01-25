@@ -35,7 +35,7 @@ if (!$id) {
     require('../incfiles/end.php');
     exit;
 }
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't'");
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 't' AND `close` != '1'");
 if (!mysql_num_rows($req)) {
     echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
