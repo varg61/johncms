@@ -297,8 +297,7 @@ element.value = str.substr(0, start) + text1 + str.substr(start, length) + text2
     -----------------------------------------------------------------
     */
     function display_menu($val = array (), $delimiter = ' | ', $end_space = '') {
-        if (empty($val))
-            return false;
+        $val = array_diff($val, array(''));
         return implode($delimiter, $val) . $end_space;
     }
 
