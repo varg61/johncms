@@ -76,7 +76,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     echo '<div class="phdr"><b>' . ($user['id'] != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты
     $menu = array ();
-    if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
+    if ($user['id'] == $user_id || $rights == 9 || ($rights == 7 && $rights > $user['rights']))
         $menu[] = '<a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['edit'] . '</a>';
     if ($user['id'] != $user_id && $rights >= 7 && $rights > $user['rights'])
         $menu[] = '<a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . $lng['delete'] . '</a>';

@@ -84,8 +84,10 @@ if (isset($_GET['delavatar'])) {
     $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
     $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : 0;
     // Проводим необходимые проверки
-    if ($user['id'] == $user_id)
-        $user['rights'] = $datauser['rights'];
+    if($user['rights'] > $rights)
+        $user['rights'] = 0;
+    if($user['rights'] > 9 || $user['rights'] < 0)
+        $user['rights'] = 0;
     if ($rights >= 7) {
         if (mb_strlen($user['name']) < 2 || mb_strlen($user['name']) > 20)
             $error[] = $lng_profile['error_nick_lenght'];
