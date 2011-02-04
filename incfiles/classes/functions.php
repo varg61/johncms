@@ -297,23 +297,9 @@ element.value = str.substr(0, start) + text1 + str.substr(start, length) + text2
     -----------------------------------------------------------------
     */
     function display_menu($val = array (), $delimiter = ' | ', $end_space = '') {
-        $out = '';
-
-        foreach ($val as $key => $menu) {
-            if (empty($menu))
-                unset($val[$key]);
-        }
-
         if (empty($val))
             return false;
-
-        //ksort($val);
-        $last = array_pop($val);
-
-        foreach ($val as $menu) {
-            $out .= $menu . $delimiter;
-        }
-        return $out . $last . $end_space;
+        return implode($delimiter, $val) . $end_space;
     }
 
     /*
