@@ -82,11 +82,9 @@ if (isset($_GET['delavatar'])) {
     $user['status'] = isset($_POST['status']) ? functions::check(mb_substr($_POST['status'], 0, 50)) : '';
     $user['karma_off'] = isset($_POST['karma_off']);
     $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
-    $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : 0;
+    $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : $user['rights'];
     // Проводим необходимые проверки
-    if($user['rights'] > $rights)
-        $user['rights'] = 0;
-    if($user['rights'] > 9 || $user['rights'] < 0)
+    if($user['rights'] > $rights || $user['rights'] > 9 || $user['rights'] < 0)
         $user['rights'] = 0;
     if ($rights >= 7) {
         if (mb_strlen($user['name']) < 2 || mb_strlen($user['name']) > 20)
