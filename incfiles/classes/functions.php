@@ -95,30 +95,63 @@ class functions {
 
         return $var;
     }
+
+    /*
+    -----------------------------------------------------------------
+    ББ панель (для компьютеров)
+    -----------------------------------------------------------------
+    */
     function auto_bb($form, $field) {
-        global $set;
-        return '<script language="JavaScript" type="text/javascript">
-function tag(text1, text2) {
-if ((document.selection)) {
-document.' . $form . '.' . $field . '.focus();
-document.' . $form . '.document.selection.createRange().text = text1+document.' . $form . '.document.selection.createRange().text+text2;
-} else if(document.forms[\'' . $form . '\'].elements[\'' . $field . '\'].selectionStart!=undefined) {
-var element = document.forms[\'' . $form . '\'].elements[\'' . $field . '\'];
-var str = element.value;
-var start = element.selectionStart;
-var length = element.selectionEnd - element.selectionStart;
-element.value = str.substr(0, start) + text1 + str.substr(start, length) + text2 + str.substr(start + length);
-} else document.' . $form . '.' . $field . '.value += text1+text2;}</script>
-<a href="javascript:tag(\'[b]\', \'[/b]\')"><img src="' . $set['homeurl'] . '/images/bb/b.png" alt="b" title="Жирный"/></a>
-<a href="javascript:tag(\'[i]\', \'[/i]\')"><img src="' . $set['homeurl'] . '/images/bb/i.png" alt="i" title="Наклонный"/></a>
-<a href="javascript:tag(\'[u]\', \'[/u]\')"><img src="' . $set['homeurl'] . '/images/bb/u.png" alt="u" title="Подчёркнутый"/></a>
-<a href="javascript:tag(\'[s]\', \'[/s]\')"><img src="' . $set['homeurl'] . '/images/bb/s.png" alt="s" title="Перечёркнутый"/></a>
-<a href="javascript:tag(\'[c]\', \'[/c]\')"><img src="' . $set['homeurl'] . '/images/bb/q.png" alt="quote" title="Цитата"/></a>
-<a href="javascript:tag(\'[php]\', \'[/php]\')"><img src="' . $set['homeurl'] . '/images/bb/cod.png" alt="cod" title="Код"/></a>
-<a href="javascript:tag(\'[url=]\', \'[/url]\')"><img src="' . $set['homeurl'] . '/images/bb/l.png" alt="url" title="Ссылка" /></a>
-<a href="javascript:tag(\'[red]\', \'[/red]\')"><img src="' . $set['homeurl'] . '/images/bb/re.png" alt="red" title="Красный"/></a>
-<a href="javascript:tag(\'[green]\', \'[/green]\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="Зелёный"/></a>
-<a href="javascript:tag(\'[blue]\', \'[/blue]\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="Синий"/></a><br />';
+        global $set, $datauser, $lng;
+        $smileys = unserialize($datauser['smileys']);
+        if(!empty($smileys)){
+            $my_smileys = '<small><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys">' . $lng['edit_list'] . '</a></small><br />';
+            foreach ($smileys as $value)
+                $my_smileys .= '<a href="javascript:tag(\'' . $value . '\', \'\');">' . functions::smileys($value, $datauser['rights'] >= 1 ? 1 : 0) . '</a> ';
+        } else {
+            $my_smileys = '<small><a href="' . $set['homeurl'] . '/pages/faq.php?act=smileys">' . $lng['add_smileys'] . '</a></small>';
+        }
+        return '<style>
+            .smileys{
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid white;
+            visibility: hidden;
+            display: none;
+            overflow: auto;
+            max-width: 250px;
+            max-height: 100px;
+            position: absolute;
+            }
+            .smileys_from:hover .smileys{
+            visibility: visible;
+            display: block;
+            }
+            </style>
+            <script language="JavaScript" type="text/javascript">
+            function tag(text1, text2) {
+            if ((document.selection)) {
+                document.' . $form . '.' . $field . '.focus();
+                document.' . $form . '.document.selection.createRange().text = text1+document.' . $form . '.document.selection.createRange().text+text2;
+            } else if(document.forms[\'' . $form . '\'].elements[\'' . $field . '\'].selectionStart!=undefined) {
+                var element = document.forms[\'' . $form . '\'].elements[\'' . $field . '\'];
+                var str = element.value;
+                var start = element.selectionStart;
+                var length = element.selectionEnd - element.selectionStart;
+                element.value = str.substr(0, start) + text1 + str.substr(start, length) + text2 + str.substr(start + length);
+            } else document.' . $form . '.' . $field . '.value += text1+text2;}</script>
+            <a href="javascript:tag(\'[b]\', \'[/b]\')"><img src="' . $set['homeurl'] . '/images/bb/b.png" alt="b" title="' . $lng['tag_bold'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[i]\', \'[/i]\')"><img src="' . $set['homeurl'] . '/images/bb/i.png" alt="i" title="' . $lng['tag_italic'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[u]\', \'[/u]\')"><img src="' . $set['homeurl'] . '/images/bb/u.png" alt="u" title="' . $lng['tag_underline'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[s]\', \'[/s]\')"><img src="' . $set['homeurl'] . '/images/bb/s.png" alt="s" title="' . $lng['tag_strike'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[c]\', \'[/c]\')"><img src="' . $set['homeurl'] . '/images/bb/q.png" alt="quote" title="' . $lng['tag_quote'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[php]\', \'[/php]\')"><img src="' . $set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . $lng['tag_code'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[url=]\', \'[/url]\')"><img src="' . $set['homeurl'] . '/images/bb/l.png" alt="url" title="' . $lng['tag_link'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[red]\', \'[/red]\')"><img src="' . $set['homeurl'] . '/images/bb/re.png" alt="red" title="' . $lng['tag_red'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[green]\', \'[/green]\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . $lng['tag_green'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[blue]\', \'[/blue]\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . $lng['tag_blue'] . '" border="0"/></a>
+            <span class="smileys_from" style="display: inline-block;"><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys"><img src="' . $set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . $lng['smileys'] . '" border="0"/></a>
+            <div class="smileys">' . $my_smileys . '</div></span><br />';
     }
 
     /*
@@ -297,8 +330,7 @@ element.value = str.substr(0, start) + text1 + str.substr(start, length) + text2
     -----------------------------------------------------------------
     */
     function display_menu($val = array (), $delimiter = ' | ', $end_space = '') {
-        $val = array_diff($val, array(''));
-        return implode($delimiter, $val) . $end_space;
+        return implode($delimiter, array_diff($val, array(''))) . $end_space;
     }
 
     /*

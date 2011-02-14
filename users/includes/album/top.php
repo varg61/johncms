@@ -114,7 +114,7 @@ if ($total) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         if ($res['access'] == 4 || $rights >= 7) {
             // Если доступ открыт всем, или смотрит Администратор
-            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '&amp;view"><img src="../../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
+            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '&amp;view"><img src="../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
                 echo '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
         } elseif ($res['access'] == 3) {
