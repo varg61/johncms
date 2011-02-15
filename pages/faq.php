@@ -94,7 +94,7 @@ switch ($act) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (!$is_mobile)
-                    $smileys = (in_array(':' . $smile . ':', $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value=":' . $smile . ':" />&#160;');
+                    $smileys = (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
                 echo $smileys . '<img src="../images/smileys/user/' . $id . '/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['lng_or'] . ' :' . functions::trans($smile) . ':</div>';
             }
         } else {
@@ -148,7 +148,7 @@ switch ($act) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', $array[$i], 1);
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (!$is_mobile)
-                    $smileys = (in_array(':' . $smile . ':', $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value=":' . $smile . ':" />&#160;');
+                    $smileys = (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
                 echo $smileys . '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['lng_or'] . ' :' . trans($smile) . ':</div>';
             }
         } else {
@@ -197,10 +197,11 @@ switch ($act) {
             }
         }
         foreach ($smileys as $value) {
-            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;' . functions::smileys($value, $rights >= 1 ? 1 : 0) . '</div>';
+            $smileys_res .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
+            $smileys_res .= '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;:' . $value . ':</div>';
             $i++;
         }
+		echo functions::smileys($smileys_res, $rights >= 1 ? 1 : 0);
         if ($total) {
             echo '<div class="rmenu"><input type="submit" name="delete" value=" ' . $lng['delete'] . ' "/></div></form>';
         } else {
@@ -239,7 +240,7 @@ switch ($act) {
                 if ($rights)
                     $cache = array_merge($cache, unserialize($file[1]));
                 foreach ($add_sm as $value)
-                    if (!array_key_exists($value, $cache))
+                    if (!array_key_exists(':' . $value . ':', $cache))
                         $delete_sm[] = $value;
                 echo print_r($delete_sm);
                 if (is_array($delete_sm))
