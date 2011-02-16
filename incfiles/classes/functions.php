@@ -140,16 +140,16 @@ class functions {
                 var length = element.selectionEnd - element.selectionStart;
                 element.value = str.substr(0, start) + text3 + text1 + str.substr(start, length) + text2 + text3 + str.substr(start + length);
             } else document.' . $form . '.' . $field . '.value += text3+text1+text2+text3;}</script>
-            <a href="javascript:tag(\'[b]\', \'[/b]\')"><img src="' . $set['homeurl'] . '/images/bb/b.png" alt="b" title="' . $lng['tag_bold'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[i]\', \'[/i]\')"><img src="' . $set['homeurl'] . '/images/bb/i.png" alt="i" title="' . $lng['tag_italic'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[u]\', \'[/u]\')"><img src="' . $set['homeurl'] . '/images/bb/u.png" alt="u" title="' . $lng['tag_underline'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[s]\', \'[/s]\')"><img src="' . $set['homeurl'] . '/images/bb/s.png" alt="s" title="' . $lng['tag_strike'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[c]\', \'[/c]\')"><img src="' . $set['homeurl'] . '/images/bb/q.png" alt="quote" title="' . $lng['tag_quote'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[php]\', \'[/php]\')"><img src="' . $set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . $lng['tag_code'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[url=]\', \'[/url]\')"><img src="' . $set['homeurl'] . '/images/bb/l.png" alt="url" title="' . $lng['tag_link'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[red]\', \'[/red]\')"><img src="' . $set['homeurl'] . '/images/bb/re.png" alt="red" title="' . $lng['tag_red'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[green]\', \'[/green]\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . $lng['tag_green'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[blue]\', \'[/blue]\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . $lng['tag_blue'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[b]\', \'[/b]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/b.png" alt="b" title="' . $lng['tag_bold'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[i]\', \'[/i]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/i.png" alt="i" title="' . $lng['tag_italic'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[u]\', \'[/u]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/u.png" alt="u" title="' . $lng['tag_underline'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[s]\', \'[/s]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/s.png" alt="s" title="' . $lng['tag_strike'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[c]\', \'[/c]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/q.png" alt="quote" title="' . $lng['tag_quote'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . $lng['tag_code'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/l.png" alt="url" title="' . $lng['tag_link'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[red]\', \'[/red]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/re.png" alt="red" title="' . $lng['tag_red'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[green]\', \'[/green]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . $lng['tag_green'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[blue]\', \'[/blue]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . $lng['tag_blue'] . '" border="0"/></a>
             <span class="smileys_from" style="display: inline-block; cursor:pointer"><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys"><img src="' . $set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . $lng['smileys'] . '" border="0"/></a>
             <div class="smileys">' . $my_smileys . '</div></span><br />';
     }
