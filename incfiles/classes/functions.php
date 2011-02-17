@@ -102,7 +102,7 @@ class functions {
     -----------------------------------------------------------------
     */
     function auto_bb($form, $field) {
-        global $set, $datauser, $lng;
+        global $set, $datauser, $lng, $user_id;
         $smileys = unserialize($datauser['smileys']);
         if(!empty($smileys)){
             $my_smileys = '<small><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys">' . $lng['edit_list'] . '</a></small><br />';
@@ -112,7 +112,7 @@ class functions {
         } else {
             $my_smileys = '<small><a href="' . $set['homeurl'] . '/pages/faq.php?act=smileys">' . $lng['add_smileys'] . '</a></small>';
         }
-        return '<style>
+        $out = '<style>
             .smileys{
 			background-color: rgba(178,178,178,0.5);
             padding: 5px;
@@ -149,9 +149,12 @@ class functions {
             <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/l.png" alt="url" title="' . $lng['tag_link'] . '" border="0"/></a>
             <a href="javascript:tag(\'[red]\', \'[/red]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/re.png" alt="red" title="' . $lng['tag_red'] . '" border="0"/></a>
             <a href="javascript:tag(\'[green]\', \'[/green]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . $lng['tag_green'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[blue]\', \'[/blue]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . $lng['tag_blue'] . '" border="0"/></a>
-            <span class="smileys_from" style="display: inline-block; cursor:pointer"><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys"><img src="' . $set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . $lng['smileys'] . '" border="0"/></a>
-            <div class="smileys">' . $my_smileys . '</div></span><br />';
+            <a href="javascript:tag(\'[blue]\', \'[/blue]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . $lng['tag_blue'] . '" border="0"/></a>';
+            if($user_id){
+                $out .= ' <span class="smileys_from" style="display: inline-block; cursor:pointer"><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys"><img src="' . $set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . $lng['smileys'] . '" border="0"/></a>
+                <div class="smileys">' . $my_smileys . '</div></span>';
+            }
+            return $out . '<br />';
     }
 
     /*
