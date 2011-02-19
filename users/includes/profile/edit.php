@@ -90,7 +90,7 @@ if (isset($_GET['delavatar'])) {
         if (mb_strlen($user['name']) < 2 || mb_strlen($user['name']) > 20)
             $error[] = $lng_profile['error_nick_lenght'];
         $lat_nick = functions::rus_lat(mb_strtolower($user['name']));
-        if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
+        if (preg_match("/[^0-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
             $error[] = $lng_profile['error_nick_symbols'];
     }
     if ($user['dayb'] || $user['monthb'] || $user['yearofbirth']) {
