@@ -151,7 +151,7 @@ class functions {
             <a href="javascript:tag(\'[green]\', \'[/green]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . $lng['tag_green'] . '" border="0"/></a>
             <a href="javascript:tag(\'[blue]\', \'[/blue]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . $lng['tag_blue'] . '" border="0"/></a>';
             if($user_id){
-                $out .= ' <span class="smileys_from" style="display: inline-block; cursor:pointer"><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys"><img src="' . $set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . $lng['smileys'] . '" border="0"/></a>
+                $out .= ' <span class="smileys_from" style="display: inline-block; cursor:pointer"><img src="' . $set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . $lng['smileys'] . '" border="0"/>
                 <div class="smileys">' . $my_smileys . '</div></span>';
             }
             return $out . '<br />';
