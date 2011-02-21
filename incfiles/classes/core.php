@@ -65,6 +65,9 @@ class core {
 
         // Соединяемся с базой данных
         $this->db_connect();
+        
+        // Проверяем адрес IP на бан
+        $this->ip_ban();
 
         // Получаем системные настройки
         $this->system_settings();
@@ -222,7 +225,8 @@ class core {
                 case 3:
                     $this->regban = true;
                     break;
-                    default :
+
+                default :
                     header("HTTP/1.0 404 Not Found");
                     exit;
             }
