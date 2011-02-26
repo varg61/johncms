@@ -27,16 +27,16 @@ class core {
     public $regban = false;                // Запрет регистрации пользователей
 
     // Пользовательские переменные
-    public $user_id = false;               // Идентификатор пользователя
-    public $user_rights = 0;               // Права доступа
-    public $user_data = array ();          // Все данные пользователя
-    public $user_settings = array ();      // Пользовательские настройки
-    public $user_ban = array ();           // Бан
+    public $user_id = false;          // Идентификатор пользователя
+    public $user_rights = 0;          // Права доступа
+    public $user_data = array ();     // Все данные пользователя
+    public $user_settings = array (); // Пользовательские настройки
+    public $user_ban = array ();      // Бан
 
     // Параметры проверки на HTTP флуд
-    private $flood_chk = 1;                // Включение - выключение функции IP антифлуда
-    private $flood_interval = '120';       // Интервал времени в секундах
-    private $flood_limit = '40';           // Число разрешенных запросов за интервал
+    private $flood_chk = 0;          // Включение - выключение функции IP антифлуда
+    private $flood_interval = '120'; // Интервал времени в секундах
+    private $flood_limit = '40';     // Число разрешенных запросов за интервал
 
     /*
     -----------------------------------------------------------------
@@ -108,12 +108,14 @@ class core {
         $file = $rootpath . 'files/cache/ip_flood.dat';
         $tmp = array ();
         $requests = 1;
+
         if (!file_exists($file))
             $in = fopen($file, "w+");
         else
             $in = fopen($file, "r+");
         flock($in, LOCK_EX) or die("Cannot flock ANTIFLOOD file.");
         $now = time();
+
         while ($block = fread($in, 8)) {
             $arr = unpack("Lip/Ltime", $block);
             if (($now - $arr['time']) > $this->flood_interval) {
@@ -126,6 +128,7 @@ class core {
         }
         fseek($in, 0);
         ftruncate($in, 0);
+
         for ($i = 0; $i < count($tmp); $i++) {
             fwrite($in, pack('LL', $tmp[$i]['ip'], $tmp[$i]['time']));
         }
@@ -143,6 +146,7 @@ class core {
         if (empty($ip))
             return false;
         $d = explode('.', $ip);
+
         for ($x = 0; $x < 4; $x++)
             if (!is_numeric($d[$x]) || ($d[$x] < 0) || ($d[$x] > 255))
                 return false;
@@ -157,6 +161,7 @@ class core {
     private function ip_whitelist() {
         global $rootpath;
         $file = $rootpath . 'files/cache/ip_wlist.dat';
+
         if (file_exists($file)) {
             foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $val) {
                 $tmp = explode(':', $val);
@@ -180,6 +185,7 @@ class core {
             &$_POST,
             &$_COOKIE
         );
+
         while (list($k, $v) = each($in)) {
             foreach ($v as $key => $val) {
                 if (!is_array($val)) {
@@ -190,6 +196,7 @@ class core {
             }
         }
         unset($in);
+
         if (!empty($_FILES)) {
             foreach ($_FILES as $k => $v) {
                 $_FILES[$k]['name'] = stripslashes((string)$v['name']);
@@ -229,11 +236,13 @@ class core {
 
     /*
     -----------------------------------------------------------------
-    Определяем язык по браузеру
+    Определяем системный язык
     -----------------------------------------------------------------
     */
     private function lng_detect() {
-        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        if($this->user_id && !empty($this->user_data['set_language'])){
+            $this->language_id = $this->user_data['set_language'];
+        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             if (isset($_SESSION['lng_id']) && isset($_SESSION['lng_iso'])) {
                 $this->language_id = $_SESSION['lng_id'];
                 $this->language_iso = $_SESSION['lng_iso'];
@@ -263,6 +272,7 @@ class core {
     */
     public function load_lng($module = 'main') {
         $req = mysql_query("SELECT * FROM `cms_lng_phrases` WHERE `language_id` = '" . $this->language_id . "' AND `module` = '$module'");
+
         if (mysql_num_rows($req)) {
             $out = array ();
             while ($res = mysql_fetch_assoc($req)) {
@@ -285,6 +295,7 @@ class core {
     */
     private function system_settings() {
         $req = mysql_query("SELECT * FROM `cms_settings`");
+
         while ($res = mysql_fetch_row($req)) {
             $out[$res[0]] = $res[1];
         }
@@ -316,23 +327,20 @@ class core {
         if ($user_id && $user_ps) {
             $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user_id'");
             if (mysql_num_rows($req)) {
-                $this->user_data = mysql_fetch_assoc($req);
-                if ($user_ps === $this->user_data['password']) {
+                $user_data = mysql_fetch_assoc($req);
+                $permit = $user_data['failed_login'] < 3 || $user_data['failed_login'] > 2 && $user_data['ip'] == $this->ip && $user_data['browser'] == $this->user_agent ? true : false;
+                if ($permit && $user_ps === $user_data['password']) {
                     // Если авторизация прошла успешно
-                    $this->user_id = $this->user_data['id'];         // ID пользователя
-                    $this->user_rights = $this->user_data['rights']; // Права доступа
-                    $this->user_settings = $this->user_settings();   // Пользовательские настройки
-                    $this->user_ip();                                // Обработка истории IP адресов
-                    $this->user_ban_check();                         // Проверка на Бан
-                    if (!empty($this->user_data['set_language'])) {
-                        // Если юзер установил язык в настройках, используем его
-                        $this->language_id = $this->user_data['set_language'];
-                    } else {
-                        // Если язык не установлен, то пробуем автоматически определить
-                        $this->lng_detect();
-                    }
+                    $this->user_data = $user_data;
+                    $this->user_id = $user_data['id'];         // ID пользователя
+                    $this->user_rights = $user_data['rights']; // Права доступа
+                    $this->user_settings();                    // Пользовательские настройки
+                    $this->lng_detect();                       // Определяем системный язык
+                    $this->user_ip();                          // Обработка истории IP адресов
+                    $this->user_ban_check();                   // Проверка на Бан
                 } else {
                     // Если авторизация не прошла
+                    mysql_query("UPDATE `users` SET `failed_login` = '" . ($user_data['failed_login'] + 1) . "' WHERE `id` = '" . $user_data['id'] . "'");
                     $this->user_unset();
                 }
             } else {
@@ -352,6 +360,7 @@ class core {
     */
     private function user_ban_check() {
         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '" . $this->user_id . "' AND `ban_time` > '" . $this->system_time . "'");
+
         if (mysql_num_rows($req)) {
             $this->user_rights = 0;
             while ($res = mysql_fetch_row($req)) {
@@ -388,11 +397,7 @@ class core {
     -----------------------------------------------------------------
     */
     private function user_settings() {
-        if (!empty($this->user_data['set_user'])) {
-            return unserialize($this->user_data['set_user']);
-        } else {
-            return $this->user_setings_default();
-        }
+        $this->user_settings = !empty($this->user_data['set_user']) ? unserialize($this->user_data['set_user']) : $this->user_setings_default();
     }
 
     /*
@@ -416,6 +421,7 @@ class core {
             'smileys' => 1,                              // Включить(1) выключить(0) смайлы
             'translit' => 0                              // Транслит
         );
+
         $this->lng_detect();                             // Определяем язык по браузеру
         return $settings;
     }
@@ -444,6 +450,7 @@ class core {
     private function autoclean() {
         if (!isset($this->system_settings['clean_time']))
             mysql_query("INSERT INTO `cms_settings` SET `key` = 'clean_time', `val` = '0'");
+
         if ($this->system_settings['clean_time'] < $this->system_time - 86400) {
             // Очищаем таблицу статистики гостей (удаляем записи старше 1 дня)
             mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($this->system_time - 86400) . "'");

@@ -94,8 +94,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
                 // Если логин неудачный
                 if ($user['failed_login'] < 3) {
                     // Прибавляем к счетчику неудачных логинов
-                    $failed_login = $user['failed_login'] + 1;
-                    mysql_query("UPDATE `users` SET `failed_login` = '$failed_login' WHERE `id` = '" . $user['id'] . "'");
+                    mysql_query("UPDATE `users` SET `failed_login` = '" . ($user['failed_login'] + 1) . "' WHERE `id` = '" . $user['id'] . "'");
                 }
                 $error[] = $lng['authorisation_not_passed'];
             }
