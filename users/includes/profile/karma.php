@@ -24,7 +24,7 @@ if ($set_karma['on']) {
             Отдаем голос за пользователя
             -----------------------------------------------------------------
             */
-            if (!$datauser['karma_off']) {
+            if (!$datauser['karma_off'] && !$ban) {
                 $error = array ();
                 if ($user['rights'] && $set_karma['adm'])
                     $error[] = $lng_karma['error_not_for_admins'];
