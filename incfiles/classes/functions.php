@@ -451,7 +451,7 @@ class functions {
 
         if ($arg['body'])
             $out .= '<div>' . $arg['body'] . '</div>';
-        $ipinf = ($rights || $user_id == $user['id']) && !$arg['iphide'] ? 1 : 0;
+        $ipinf = ($rights || $user['id'] && $user['id'] == $user_id) && !$arg['iphide'] ? 1 : 0;
         $lastvisit = $realtime > $user['lastdate'] + 300 && $arg['lastvisit'] ? date("d.m.Y (H:i)", $user['lastdate']) : false;
 
         if ($ipinf || $lastvisit || $arg['sub'] || $arg['footer']) {
