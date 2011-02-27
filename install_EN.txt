@@ -1,0 +1,26 @@
+////////////////////////////////////////////////////////////////////////////////
+// JohnCMS                Mobile Content Management System                    //
+// Project site:          http://johncms.com                                  //
+// Support site:          http://gazenwagen.com                               //
+////////////////////////////////////////////////////////////////////////////////
+// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
+// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
+//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
+////////////////////////////////////////////////////////////////////////////////
+
+ATTENTION, PLEASE!!!
+The following conditions are necessary for good work of the system:
+ 1) The version PHP is not low than 5.1
+ 2) MySQL of the version is not slow than 4.1
+ 3) Support is .htaccess
+
+
+THE INSTALLATION OF THE SYSTEM
+ Before you begin the procedure of installation you should input this address in browser: http://your.site/install
+ Start the installer and folow the instructions.
+
+If the procedure was successful and the site works, 
+REMEMBER THE FOLLOWING:
+   - delete the catalog /install
+   - set up permissions (CHMOD) 755 for the folder /incfiles   
+   - set up permissions (CHMOD) 644 for the file /incfiles/db.php
