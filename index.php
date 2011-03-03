@@ -112,8 +112,16 @@ switch ($act) {
         if (isset($_SESSION['ref']))
             unset($_SESSION['ref']);
         include 'pages/mainmenu.php';
-        if (!$user_id && !$is_mobile)
-            include 'sitemap/index.php';
+
+        /*
+        -----------------------------------------------------------------
+        Карта сайта
+        -----------------------------------------------------------------
+        */
+        if (!$user_id && !$is_mobile) {
+            $map = new sitemap();
+            echo '<div class="sitemap">' . $map->site() . '</div>';
+        }
 }
 require('incfiles/end.php');
 ?>
