@@ -330,6 +330,9 @@ ul {
 }
 
 .sitemap {
+    background-color: #f0f0f0;
+    margin: 0px;
+    padding: 2px 4px 3px 4px;
     font-size: xx-small;
     position: relative;
     width: 100%;

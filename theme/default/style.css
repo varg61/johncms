@@ -293,6 +293,9 @@ a:link, a:visited {
 }
 
 .sitemap {
+    background-color: #eeecd9;
+    margin: 0px;
+    padding: 2px 4px 3px 4px;
     font-size: xx-small;
     position: relative;
     width: 100%;

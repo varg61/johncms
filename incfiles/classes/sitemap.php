@@ -14,9 +14,6 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 class sitemap {
-    // Общие настройки
-    private $links_count = 140; // Число ссылок в блоке
-
     // Настройки карты форума
     private $cache_forum_map = 72;               // Время кэширования карты форума (часов)
     private $cache_forum_contents = 48;          // Время кэширования оглавления форума (часов)
@@ -28,6 +25,7 @@ class sitemap {
     private $cache_lib_file = 'map_lib.dat'; // Файл кэша карты Библиотеки
 
     // Системные настройки
+    private $links_count = 140; // Число ссылок в блоке
     private $set = array (
         'forum' => 1,
         'lib' => 1
