@@ -30,13 +30,7 @@ switch ($act) {
         Сообщение об ошибке 404
         -----------------------------------------------------------------
         */
-        if ($is_mobile) {
-            //TODO: Убрать!!!
-            header('Location: http://mobileads.ru/plinks?id=2106');
-        } else {
-            echo functions::display_error($lng['error_404']);
-            echo '<div class="gmenu"><p><a href="' . $set['homeurl'] . '"><big><b>Перейти на сайт</b></big></a></p></div>';
-        }
+        echo functions::display_error($lng['error_404']);
         break;
 
     case 'digest':
@@ -124,8 +118,8 @@ switch ($act) {
         Карта сайта
         -----------------------------------------------------------------
         */
-        if (!$user_id && !$is_mobile) {
-            //TODO: Сделать переключатели в Админке, кому показывать
+        $set_map = isset($set['sitemap']) ? unserialize($set['sitemap']) : array();
+        if (($set_map['forum'] || $set_map['lib']) && ($set_map['users'] || !$user_id) && ($set_map['browsers'] || !$is_mobile)) {
             $map = new sitemap();
             echo '<div class="sitemap">' . $map->site() . '</div>';
         }

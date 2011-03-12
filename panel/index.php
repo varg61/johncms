@@ -30,14 +30,14 @@ $headmod = 'admin';
 $textl = $lng['admin_panel'];
 require_once('../incfiles/head.php');
 $array = array (
-    'ads' => 'includes/modules',
-    'counters' => 'includes/modules',
     'forum' => 'includes/modules',
-    'karma' => 'includes/modules',
     'news' => 'includes/modules',
+    'ads' => 'includes/system',
+    'counters' => 'includes/system',
     'languages' => 'includes/system',
     'seo' => 'includes/system',
     'settings' => 'includes/system',
+    'sitemap' => 'includes/system',
     'smileys' => 'includes/system',
     'access' => 'includes/security',
     'antispy' => 'includes/security',
@@ -47,6 +47,7 @@ $array = array (
     'administrators' => 'includes/users',
     'antiflood' => 'includes/users',
     'ban_panel' => 'includes/users',
+    'karma' => 'includes/users',
     'reg' => 'includes/users',
     'search_user' => 'includes/users',
     'users' => 'includes/users',
@@ -101,6 +102,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             '<li><a href="index.php?act=smileys">' . $lng['refresh_smileys'] . '</a></li>' .
             ($rights == 9 ? '<li><a href="index.php?act=languages">' . $lng['language_settings'] . '</a></li>' : '') .
             '<li><a href="index.php?act=access">' . $lng['access_rights'] . '</a></li><br />' .
+            ($rights == 9 ? '<li><a href="index.php?act=sitemap">' . $lng['site_map'] . '</a></li>' : '') .
             ($rights == 9 ? '<li><a href="index.php?act=counters">' . $lng['counters'] . '</a></li>' : '') .
             '<li><a href="index.php?act=ads">' . $lng['advertisement'] . '</a></li>' .
             '</ul>' .

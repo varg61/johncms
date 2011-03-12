@@ -36,11 +36,7 @@ class sitemap {
     */
     function __construct() {
         global $set;
-        //TODO: Убрать настройки в массиве
-        $this->set = isset($set['sitemap']) ? unserialize($set['sitemap']) : array (
-            'forum' => 1,
-            'lib' => 1
-        );
+        $this->set = isset($set['sitemap']) ? unserialize($set['sitemap']) : array();
         $this->page = isset($_GET['p']) ? abs(intval($_GET['p'])) : 0;
     }
 
