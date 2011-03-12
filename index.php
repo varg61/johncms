@@ -30,7 +30,13 @@ switch ($act) {
         Сообщение об ошибке 404
         -----------------------------------------------------------------
         */
-        echo functions::display_error($lng['error_404']);
+        if ($is_mobile) {
+            //TODO: Убрать!!!
+            header('Location: http://mobileads.ru/plinks?id=2106');
+        } else {
+            echo functions::display_error($lng['error_404']);
+            echo '<div class="gmenu"><p><a href="' . $set['homeurl'] . '"><big><b>Перейти на сайт</b></big></a></p></div>';
+        }
         break;
 
     case 'digest':

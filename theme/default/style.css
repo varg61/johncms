@@ -192,8 +192,8 @@ ul {
     padding: 2px 0px 2px 4px;
 }
 
-.reply a:link, .reply a:visited{
-  color: #DD0000
+.reply a:link, .reply a:visited {
+    color: #DD0000
 }
 
 .greply {
@@ -202,8 +202,8 @@ ul {
     padding: 2px 0px 2px 4px;
 }
 
-.greply a:link, .greply a:visited{
-  color: #008800
+.greply a:link, .greply a:visited {
+    color: #008800
 }
 
 .rmenu {
@@ -297,9 +297,6 @@ a:link, a:visited {
     margin: 0px;
     padding: 2px 4px 3px 4px;
     font-size: xx-small;
-    position: relative;
-    width: 100%;
     height: 38px;
-    z-index: 1;
     overflow: auto;
 }
