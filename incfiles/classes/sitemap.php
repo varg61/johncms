@@ -105,7 +105,7 @@ class sitemap {
                 $req_t = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT " . ($this->page * $this->links_count) . ", " . $this->links_count);
                 if (mysql_num_rows($req_t)) {
                     while ($res_t = mysql_fetch_assoc($req_t)) $out .= '<div><a href="' . $set['homeurl'] . '/forum/index.php?id=' . $res_t['id'] . '">' . $res_t['text'] . '</a></div>';
-                    $out = '<div class="phdr"><b>Forum</b> | ' . $res['text'] . '</div><div class="menu">' . $out . '</div>';
+                    $out = '<div class="phdr"><b>' . $lng['forum'] . '</b> | ' . $res['text'] . '</div><div class="menu">' . $out . '</div>';
                     return file_put_contents($file, $out) ? $out : 'Forum Contents cache error';
                 }
             }
@@ -167,7 +167,7 @@ class sitemap {
                 $res = mysql_fetch_assoc($req);
                 $req_a = mysql_query("SELECT * FROM `lib` WHERE `refid` = '$id' AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` ASC LIMIT " . ($this->page * $this->links_count) . ", " . $this->links_count);
                 if (mysql_num_rows($req_a)) {
-                    while ($res_a = mysql_fetch_assoc($req_a)) $out .= '<div><a href="' . $set['homeurl'] . '/library/index.php?id=' . $res_a['id'] . '">' . $res_a['name'] . '</a></div>';
+                    while ($res_a = mysql_fetch_assoc($req_a)) $out .= '<div><a href="' . $set['homeurl'] . '/library/index.php?id=' . $res_a['id'] . '">' . functions::checkout($res_a['name']) . '</a></div>';
                     $out = '<div class="phdr"><b>' . $lng['library'] . '</b> | ' . $res['text'] . '</div><div class="menu">' . $out . '</div>';
                     return file_put_contents($file, $out) ? $out : 'Library Contents cache error';
                 }
