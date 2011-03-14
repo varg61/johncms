@@ -52,41 +52,6 @@ class sitemap {
 
     /*
     -----------------------------------------------------------------
-    Кэш карты Форума
-    -----------------------------------------------------------------
-    */
-    private function forum_map() {
-        global $rootpath, $realtime, $set;
-        $file = $rootpath . 'files/cache/' . $this->cache_forum_file . '.dat';
-        if (file_exists($file) && filemtime($file) > ($realtime - $this->cache_forum_map * 3600)) {
-            return file_get_contents($file);
-        } else {
-            $out = '';
-            $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r'");
-            if (mysql_num_rows($req)) {
-                while ($res = mysql_fetch_assoc($req)) {
-                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 't' AND `close` != '1'"), 0);
-                    if ($count) {
-                        $text = html_entity_decode($res['text']);
-                        $text = mb_substr($text, 0, 40);
-                        $pages = ceil($count / $this->links_count);
-                        if ($pages > 1) {
-                            for ($i = 0; $i < $pages; $i++) {
-                                $out .= '<div><a href="' . $set['homeurl'] . '/forum/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . functions::checkout($text) . ' (' . ($i + 1) . ')</a></div>' . "\r\n";
-                            }
-                        } else {
-                            $out .= '<div><a href="' . $set['homeurl'] . '/forum/contents.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a></div>' . "\r\n";
-                        }
-                    }
-                }
-                return file_put_contents($file, $out) ? $out : 'Forum cache error';
-            }
-            return false;
-        }
-    }
-
-    /*
-    -----------------------------------------------------------------
     Содержание разделов форума
     -----------------------------------------------------------------
     */
@@ -109,43 +74,8 @@ class sitemap {
                     return file_put_contents($file, $out) ? $out : 'Forum Contents cache error';
                 }
             }
-            return functions::display_error($lng['error_wrong_data']);
         }
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Кэш карты Библиотеки
-    -----------------------------------------------------------------
-    */
-    private function library_map() {
-        global $rootpath, $realtime, $set;
-        $file = $rootpath . 'files/cache/' . $this->cache_lib_file . '.dat';
-        if (file_exists($file) && filemtime($file) > ($realtime - 604800)) {
-            return file_get_contents($file);
-        } else {
-            $out = '';
-            $req = mysql_query("SELECT * FROM `lib` WHERE `type` = 'cat' AND `ip` = '0'");
-            if (mysql_num_rows($req)) {
-                while ($res = mysql_fetch_assoc($req)) {
-                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
-                    if ($count) {
-                        $text = html_entity_decode($res['text']);
-                        $text = mb_substr($text, 0, 40);
-                        $pages = ceil($count / $this->links_count);
-                        if ($pages > 1) {
-                            for ($i = 0; $i < $pages; $i++) {
-                                $out .= '<div><a href="' . $set['homeurl'] . '/library/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . functions::checkout($text) . ' (' . ($i + 1) . ')</a></div>' . "\r\n";
-                            }
-                        } else {
-                            $out .= '<div><a href="../library/contents.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a></div>' . "\r\n";
-                        }
-                    }
-                }
-                return file_put_contents($file, $out) ? $out : 'Library cache error';
-            }
-            return false;
-        }
+        return false;
     }
 
     /*
@@ -172,8 +102,78 @@ class sitemap {
                     return file_put_contents($file, $out) ? $out : 'Library Contents cache error';
                 }
             }
-            return functions::display_error($lng['error_wrong_data']);
         }
+        return false;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Кэш карты Форума
+    -----------------------------------------------------------------
+    */
+    private function forum_map() {
+        global $rootpath, $realtime, $set;
+        $file = $rootpath . 'files/cache/' . $this->cache_forum_file . '.dat';
+        if (file_exists($file) && filemtime($file) > ($realtime - $this->cache_forum_map * 3600)) {
+            return file_get_contents($file);
+        } else {
+            $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r'");
+            if (mysql_num_rows($req)) {
+                while ($res = mysql_fetch_assoc($req)) {
+                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 't' AND `close` != '1'"), 0);
+                    if ($count) {
+                        $text = html_entity_decode($res['text']);
+                        $text = mb_substr($text, 0, 40);
+                        $pages = ceil($count / $this->links_count);
+                        if ($pages > 1) {
+                            for ($i = 0; $i < $pages; $i++) {
+                                $out[] = '<div><a href="' . $set['homeurl'] . '/forum/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . functions::checkout($text) . ' (' . ($i + 1) . ')</a></div>';
+                            }
+                        } else {
+                            $out[] = '<div><a href="' . $set['homeurl'] . '/forum/contents.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a></div>';
+                        }
+                    }
+                }
+                if(isset($out))
+                    return file_put_contents($file, implode("\r\n", $out)) ? implode($out) : 'Forum cache error';
+            }
+        }
+        return false;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Кэш карты Библиотеки
+    -----------------------------------------------------------------
+    */
+    private function library_map() {
+        global $rootpath, $realtime, $set;
+        $file = $rootpath . 'files/cache/' . $this->cache_lib_file . '.dat';
+        if (file_exists($file) && filemtime($file) > ($realtime - 604800)) {
+            return file_get_contents($file);
+        } else {
+            $req = mysql_query("SELECT * FROM `lib` WHERE `type` = 'cat' AND `ip` = '0'");
+            if (mysql_num_rows($req)) {
+                while ($res = mysql_fetch_assoc($req)) {
+                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
+                    if ($count) {
+                        $text = html_entity_decode($res['text']);
+                        $text = mb_substr($text, 0, 40);
+                        $pages = ceil($count / $this->links_count);
+                        if ($pages > 1) {
+                            for ($i = 0; $i < $pages; $i++) {
+                                $out[] = '<div><a href="' . $set['homeurl'] . '/library/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . functions::checkout($text) . ' (' . ($i + 1) . ')</a></div>';
+                            }
+                        } else {
+                            $out []= '<div><a href="../library/contents.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a></div>';
+                        }
+                    }
+                }
+                if(isset($out))
+                    return file_put_contents($file, implode("\r\n", $out)) ? implode($out) : 'Library cache error';
+            }
+        }
+        return false;
     }
 }
 ?>
