@@ -66,7 +66,7 @@ echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '
 echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
 // Статус юзера
 if (!empty($res['status']))
-    echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/star.gif" alt=""/>&#160;' . $res['status'] . '</div>';
+    echo '<div class="status"><img src="../images/star.gif" alt=""/>&#160;' . $res['status'] . '</div>';
 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
 $text = nl2br($text);
 $text = tags($text);

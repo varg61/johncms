@@ -764,8 +764,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     echo '<p>' . ($id ? '<a href="index.php">' . $lng['to_forum'] . '</a><br />' : '');
     if (!$id) {
         echo '<a href="../pages/faq.php?act=forum">' . $lng_forum['forum_rules'] . '</a><br/>';
-        echo '<a href="index.php?act=moders">' . $lng['moders'] . '</a><br />';
-        echo '<a href="../pages/faq.php?act=forum">FAQ</a>';
+        echo '<a href="index.php?act=moders">' . $lng['moders'] . '</a>';
     }
     echo '</p>';
     if (!$user_id) {
