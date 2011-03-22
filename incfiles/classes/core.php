@@ -14,11 +14,10 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 class core {
-    // Системные переменные
-    public $system_build;                  // Версия системы
+    public $system_build = 744;            // Версия системы
     public $ip;                            // IP адрес
     public $ip_viaproxy;                   // IP адрес за прокси-сервером
-    public $user_agent = 'Not Recognised'; // User Agent (Browser)
+    public $user_agent;                    // User Agent (Browser)
     public $system_settings = array ();    // Системные настройки
     public $system_time;                   // Системное время
     public $language_id;                   // Идентификатор языка
@@ -26,18 +25,16 @@ class core {
     public $language_phrases = array ();   // Массив с фразами выбранного языка
     public $regban = false;                // Запрет регистрации пользователей
 
-    // Пользовательские переменные
-    public $user_id = false;          // Идентификатор пользователя
-    public $user_rights = 0;          // Права доступа
-    public $user_data = array ();     // Все данные пользователя
-    public $user_settings = array (); // Пользовательские настройки
-    public $user_ban = array ();      // Бан
+    public $user_id = false;               // Идентификатор пользователя
+    public $user_rights = 0;               // Права доступа
+    public $user_data = array ();          // Все данные пользователя
+    public $user_settings = array ();      // Пользовательские настройки
+    public $user_ban = array ();           // Бан
 
-    // Параметры проверки на HTTP флуд
-    private $flood_chk = 0;          // Включение - выключение функции IP антифлуда
-    private $flood_interval = '120'; // Интервал времени в секундах
-    private $flood_limit = '40';     // Число разрешенных запросов за интервал
-
+    private $flood_chk = 0;                // Включение - выключение функции IP антифлуда
+    private $flood_interval = '120';       // Интервал времени в секундах
+    private $flood_limit = '20';           // Число разрешенных запросов за интервал
+    
     /*
     -----------------------------------------------------------------
     Конструктор класса, выполняем основную последовательность
@@ -49,9 +46,9 @@ class core {
         $this->ip_viaproxy = isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $this->ip_valid($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
 
         // Проверка адреса IP на флуд
-        if ($this->flood_chk && !$this->ip_whitelist()) {
+        if ($this->flood_chk && !$this->ip_whitelist($this->ip)) {
             if ($this->ip_reqcount() > $this->flood_limit)
-                die('Flood!!!');
+                die('Error: exceeded limit of allowed requests (FLOOD)');
         }
 
         // Удаляем слэши
@@ -59,7 +56,7 @@ class core {
             $this->del_slashes();
 
         // Получаем User Agent
-        $this->user_agent = htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 150), ENT_QUOTES);
+        $this->user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 150), ENT_QUOTES) : 'Not Recognised';
 
         // Стартуем сессию
         session_name('SESID');
@@ -92,10 +89,13 @@ class core {
     private function db_connect() {
         global $rootpath;
         require($rootpath . 'incfiles/db.php');
-        $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to DB server');
-        @mysql_select_db($db_name) or die('Error: cannot select DB');
+        $db_host = isset($db_host) ? $db_host : 'localhost';
+        $db_user = isset($db_user) ? $db_user : '';
+        $db_pass = isset($db_pass) ? $db_pass : '';
+        $db_name = isset($db_name) ? $db_name : '';
+        $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
+        @mysql_select_db($db_name) or die('Error: specified database does not exist');
         @mysql_query("SET NAMES 'utf8'", $connect);
-        $this->system_build = isset($system_build) ? $system_build : false;
     }
 
     /*
@@ -113,7 +113,7 @@ class core {
             $in = fopen($file, "w+");
         else
             $in = fopen($file, "r+");
-        flock($in, LOCK_EX) or die("Cannot flock ANTIFLOOD file.");
+        flock($in, LOCK_EX) or die("Error: can not access antiflood file");
         $now = time();
 
         while ($block = fread($in, 8)) {
@@ -158,7 +158,7 @@ class core {
     Обрабатываем "белый" список IP адресов
     -----------------------------------------------------------------
     */
-    private function ip_whitelist() {
+    private function ip_whitelist($ip) {
         global $rootpath;
         $file = $rootpath . 'files/cache/ip_wlist.dat';
 
@@ -167,7 +167,7 @@ class core {
                 $tmp = explode(':', $val);
                 if (!$tmp[1])
                     $tmp[1] = $tmp[0];
-                if ($this->ip >= $tmp[0] && $this->ip <= $tmp[1])
+                if ($ip >= $tmp[0] && $ip <= $tmp[1])
                     return true;
             }
         }
