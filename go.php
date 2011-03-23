@@ -15,15 +15,28 @@
 define('_IN_JOHNCMS', 1);
 $rootpath = '';
 require('incfiles/core.php');
-$url = isset($_GET['url']) ? strip_tags(html_entity_decode(base64_decode(trim($_GET['url'])))) : false;
+$url = isset($_REQUEST['url']) ? strip_tags(html_entity_decode(base64_decode(trim($_REQUEST['url'])))) : false;
 if($url){
     /*
     -----------------------------------------------------------------
     Редирект по ссылкам в текстах, обработанным функцией tags()
     -----------------------------------------------------------------
     */
-    header('Location: ' . $url);
-    exit;
+    if(isset($_POST['submit'])){
+        header('Location: ' . $url);
+    } else {
+        require('incfiles/head.php');
+        echo '<div class="phdr"><b>' . $lng['external_link'] . '</b></div>' .
+            '<div class="rmenu">' .
+            '<form action="go.php?url=' . base64_encode($url) . '" method="post">' .
+            '<p>' . $lng['redirect_1'] . ':<br /><span class="red">' . functions::checkout($url) . '</span></p>' .
+            '<p>' . $lng['redirect_2'] . '.<br />' .
+            $lng['redirect_3'] . ' <span class="green">' . $set['homeurl'] . '</span> ' . $lng['redirect_4'] . '.</p>' .
+            '<p><input type="submit" name="submit" value="' . $lng['redirect_5'] . '" /></p>' .
+            '</form></div>' .
+            '<div class="phdr"><a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '">' . $lng['back'] . '</a></div>';
+        require('incfiles/end.php');
+    }
 } elseif ($id) {
     /*
     -----------------------------------------------------------------
