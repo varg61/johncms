@@ -65,11 +65,12 @@ function highlight($php) {
 -----------------------------------------------------------------
 */
 function url_replace($m) {
+    global $set;
     if (!isset($m[3]))
-        return '<a href="' . str_replace(':', '&#58;', $m[1]) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
+        return '<a href="'  . $set['homeurl'] . '/go.php?url=' . base64_encode(str_replace(':', '&#58;', $m[1])) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
     else {
         $m[3] = str_replace(':', '&#58;', $m[3]);
-        return '<a href="' . $m[3] . '">' . $m[3] . '</a>';
+        return '<a href="' . $set['homeurl'] . '/go.php?url=' . base64_encode($m[3]) . '">' . $m[3] . '</a>';
     }
 }
 
