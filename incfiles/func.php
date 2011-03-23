@@ -66,11 +66,21 @@ function highlight($php) {
 */
 function url_replace($m) {
     global $set;
-    if (!isset($m[3]))
-        return '<a href="'  . $set['homeurl'] . '/go.php?url=' . base64_encode(str_replace(':', '&#58;', $m[1])) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
-    else {
+    if (!isset($m[3])) {
+        $tmp = parse_url($m[1]);
+        if('http://' . $tmp['host'] == $set['homeurl']){
+            return '<a href="' . str_replace(':', '&#58;', $m[1]) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
+        } else {
+            return '<a href="'  . $set['homeurl'] . '/go.php?url=' . base64_encode(str_replace(':', '&#58;', $m[1])) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
+        }
+    } else {
+        $tmp = parse_url($m[3]);
         $m[3] = str_replace(':', '&#58;', $m[3]);
-        return '<a href="' . $set['homeurl'] . '/go.php?url=' . base64_encode($m[3]) . '">' . $m[3] . '</a>';
+        if('http://' . $tmp['host'] == $set['homeurl']){
+            return '<a href="' . $m[3] . '">' . $m[3] . '</a>';
+        } else {
+            return '<a href="' . $set['homeurl'] . '/go.php?url=' . base64_encode($m[3]) . '">' . $m[3] . '</a>';
+        }
     }
 }
 
