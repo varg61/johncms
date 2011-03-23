@@ -201,7 +201,7 @@ switch ($act) {
             $smileys_res .= '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;:' . $value . ':</div>';
             $i++;
         }
-		echo functions::smileys($smileys_res, $rights >= 1 ? 1 : 0);
+        echo functions::smileys($smileys_res, $rights >= 1 ? 1 : 0);
         if ($total) {
             echo '<div class="rmenu"><input type="submit" name="delete" value=" ' . $lng['delete'] . ' "/></div></form>';
         } else {
@@ -292,12 +292,22 @@ switch ($act) {
         if ($id && is_dir($rootpath . 'images/avatars/' . $id)) {
             $avatar = isset($_GET['avatar']) ? intval($_GET['avatar']) : false;
             if ($user_id && $avatar && is_file('../images/avatars/' . $id . '/' . $avatar . '.png')) {
-                // Устанавливаем пользовательский Аватар
-                if (@copy('../images/avatars/' . $id . '/' . $avatar . '.png', '../files/users/avatar/' . $user_id . '.png'))
-                    echo '<div class="gmenu"><p>' . $lng['avatar_applied'] . '<br />' .
-                        '<a href="../users/profile.php?act=edit">' . $lng['continue'] . '</a></p></div>';
-                else
-                    echo functions::display_error($lng['error_avatar_select'], '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a>');
+                if (isset($_POST['submit'])) {
+                    // Устанавливаем пользовательский Аватар
+                    if (@copy('../images/avatars/' . $id . '/' . $avatar . '.png', '../files/users/avatar/' . $user_id . '.png')) {
+                        echo '<div class="gmenu"><p>' . $lng['avatar_applied'] . '<br />' .
+                            '<a href="../users/profile.php?act=edit">' . $lng['continue'] . '</a></p></div>';
+                    } else {
+                        echo functions::display_error($lng['error_avatar_select'], '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a>');
+                    }
+                } else {
+                    echo '<div class="phdr"><a href="faq.php?act=avatars"><b>' . $lng['avatars'] . '</b></a> | ' . $lng_faq['set_to_profile'] . '</div>' .
+                        '<div class="rmenu"><p>' . $lng_faq['avatar_change_warning'] . '</p>' .
+                        '<p><img src="../images/avatars/' . $id . '/' . $avatar . '.png" alt="" /></p>' .
+                        '<p><form action="faq.php?act=avatars&amp;id=' . $id . '&amp;avatar=' . $avatar . '" method="post"><input type="submit" name="submit" value="' . $lng['save'] . '"/></form></p>' .
+                        '</div>' .
+                        '<div class="phdr"><a href="faq.php?act=avatars&amp;id=' . $id . '">' . $lng['cancel'] . '</a></div>';
+                }
             } else {
                 // Показываем список Аватаров
                 echo '<div class="phdr"><a href="faq.php?act=avatars"><b>' . $lng['avatars'] . '</b></a> | ' . htmlentities(file_get_contents($rootpath . 'images/avatars/' . $id . '/name.dat'), ENT_QUOTES, 'utf-8') . '</div>';
