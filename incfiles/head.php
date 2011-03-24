@@ -82,7 +82,7 @@ if ($cms_ads[0])
 Выводим логотип
 -----------------------------------------------------------------
 */
-echo '<div><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt="" border="0"/></a></div>';
+echo '<div><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></a></div>';
 
 /*
 -----------------------------------------------------------------
