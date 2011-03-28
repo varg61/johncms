@@ -1,15 +1,12 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
+/**
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
 */
 
 define('_IN_JOHNCMS', 1);
@@ -634,24 +631,27 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                         }
                         echo ' (' . $fls . ' кб.)<br/>';
                         echo $lng_forum['downloads'] . ': ' . $fres['dlcount'] . ' ' . $lng_forum['time'] . '</span>';
+                        $file_id = $fres['id'];
                     }
                     if ((($rights == 3 || $rights >= 6) && $rights >= $res['rights']) || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > $realtime - 300)
                         || ($res['user_id'] == $user_id && $set_forum['upfp'] && $start == 0 && $i == 1 && $res['time'] > $realtime - 300)) {
                         // Ссылки на редактирование / удаление постов
+                        $menu = array(
+                            '<a href="index.php?act=editpost&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a>',
+                            ($rights >= 7 && $res['close'] == 1 ? '<a href="index.php?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">' . $lng_forum['restore'] . '</a>' : ''),
+                            ($res['close'] == 1 ? '' : '<a href="index.php?act=editpost&amp;do=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>')
+                        );
                         echo '<div class="sub">';
                         if ($rights == 3 || $rights >= 6)
                             echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>&#160;';
-                        echo '<a href="index.php?act=editpost&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a> | ';
-                        if ($rights >= 7 && $res['close'] == 1)
-                            echo '<a href="index.php?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">' . $lng_forum['restore'] . '</a> | ';
-                        echo '<a href="index.php?act=editpost&amp;do=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>';
-                        if ($res['close']) {
+                        echo functions::display_menu($menu);
+                              if ($res['close']) {
                             echo '<div class="red">' . $lng_forum['who_delete_post'] . ': <b>' . $res['close_who'] . '</b></div>';
                         } elseif (!empty($res['close_who'])) {
                             echo '<div class="green">' . $lng_forum['who_restore_post'] . ': <b>' . $res['close_who'] . '</b></div>';
                         }
                         if ($rights == 3 || $rights >= 6)
-                            echo '<div class="gray">' . $res['ip'] . ' - ' . $res['soft'] . '</div>';
+                            echo '<div class="gray"><a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . ip2long($res['ip']) . '">' . $res['ip'] . '</a> - ' . $res['soft'] . '</div>';
                         echo '</div>';
                     }
                     echo '</div>';

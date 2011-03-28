@@ -1,0 +1,43 @@
+/**
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
+*/
+
+*english version below*
+
+--------------------------------------------------------------------------------
+
+СИСТЕМНЫЕ ТРЕБОВАНИЯ
+Для нормальной работы системы, необходимы следующие условия:
+1) Версия PHP не ниже 5.1
+2) MySQL версии не ниже 4.1
+3) Поддержка .htaccess
+
+УСТАНОВКА
+Для начала процедуры установки, Вам нужно в браузере набрать адрес: http://ваш.сайт/install
+Запустится Инсталлятор, далее следуйте его инструкциям.
+
+ПОСЛЕ УСТАНОВКИ
+- удалите каталог /install
+- установите права доступа 755 к папке /incfiles
+- установите права доступа 644 на файл /incfiles/db.php
+
+--------------------------------------------------------------------------------
+
+The following conditions are necessary for good work of the system:
+ 1) The version PHP is not low than 5.1
+ 2) MySQL of the version is not slow than 4.1
+ 3) Support is .htaccess
+
+INSTALLATION
+ Before you begin the procedure of installation you should input this address in browser: http://your.site/install
+ Start the installer and folow the instructions.
+
+AFTER INSTALLATION
+- delete the catalog /install
+- set up permissions (CHMOD) 755 for the folder /incfiles   
+- set up permissions (CHMOD) 644 for the file /incfiles/db.php
