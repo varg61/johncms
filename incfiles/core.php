@@ -18,8 +18,7 @@ Error_Reporting(E_ALL & ~E_NOTICE);
 @ini_set('arg_separator.output', '&amp;');
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
-if (!isset($rootpath))
-    $rootpath = '../';
+$rootpath = isset($rootpath) ? $rootpath : '../';
 
 /*
 -----------------------------------------------------------------
@@ -80,6 +79,7 @@ $mod = isset($_REQUEST['mod']) ? trim($_REQUEST['mod']) : '';
 $do = isset($_REQUEST['do']) ? trim($_REQUEST['do']) : '';
 $page = isset($_REQUEST['page']) && $_REQUEST['page'] > 0 ? intval($_REQUEST['page']) : 1;
 $start = isset($_REQUEST['page']) ? $page * $kmess - $kmess : (isset($_GET['start']) ? abs(intval($_GET['start'])) : 0);
+$headmod = isset($headmod) ? $headmod : '';
 
 /*
 -----------------------------------------------------------------

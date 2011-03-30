@@ -62,10 +62,11 @@ class sitemap {
         } else {
             $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id' AND `type` = 'r'");
             if (mysql_num_rows($req)) {
+                $row = array();
                 $res = mysql_fetch_assoc($req);
                 $req_t = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$id' AND `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT " . ($this->page * $this->links_count) . ", " . $this->links_count);
                 if (mysql_num_rows($req_t)) {
-                    while ($res_t = mysql_fetch_assoc($req_t)) $row[] = '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $res_t['id'] . '">' . $res_t['text'] . '</a>';
+                    while (($res_t = mysql_fetch_assoc($req_t)) !== false) $row[] = '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $res_t['id'] . '">' . $res_t['text'] . '</a>';
                     $out = '<div class="phdr"><b>' . $lng['forum'] . '</b> | ' . $res['text'] . '</div><div class="menu">' . implode('<br />' . "\r\n", $row) . '</div>';
                     return file_put_contents($file, $out) ? $out : 'Forum Contents cache error';
                 }
@@ -89,10 +90,11 @@ class sitemap {
         } else {
             $req = mysql_query("SELECT * FROM `lib` WHERE `id` = '$id' AND `type` = 'cat' AND `ip` = '0'");
             if (mysql_num_rows($req)) {
+                $row = array();
                 $res = mysql_fetch_assoc($req);
                 $req_a = mysql_query("SELECT * FROM `lib` WHERE `refid` = '$id' AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` ASC LIMIT " . ($this->page * $this->links_count) . ", " . $this->links_count);
                 if (mysql_num_rows($req_a)) {
-                    while ($res_a = mysql_fetch_assoc($req_a)) $row[] = '<a href="' . $set['homeurl'] . '/library/index.php?id=' . $res_a['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
+                    while (($res_a = mysql_fetch_assoc($req_a)) !== false) $row[] = '<a href="' . $set['homeurl'] . '/library/index.php?id=' . $res_a['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
                     $out = '<div class="phdr"><b>' . $lng['library'] . '</b> | ' . $res['text'] . '</div><div class="menu">' . implode('<br />' . "\r\n", $row) . '</div>';
                     return file_put_contents($file, $out) ? $out : 'Library Contents cache error';
                 }
@@ -114,7 +116,7 @@ class sitemap {
         } else {
             $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r'");
             if (mysql_num_rows($req)) {
-                while ($res = mysql_fetch_assoc($req)) {
+                while (($res = mysql_fetch_assoc($req)) !== false) {
                     $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 't' AND `close` != '1'"), 0);
                     if ($count) {
                         $text = html_entity_decode($res['text']);
@@ -144,12 +146,12 @@ class sitemap {
     private function library_map() {
         global $rootpath, $realtime, $set;
         $file = $rootpath . 'files/cache/' . $this->cache_lib_file . '.dat';
-        if (file_exists($file) && filemtime($file) > ($realtime - 604800)) {
+        if (file_exists($file) && filemtime($file) > ($realtime - $this->cache_lib_map * 3600)) {
             return file_get_contents($file);
         } else {
             $req = mysql_query("SELECT * FROM `lib` WHERE `type` = 'cat' AND `ip` = '0'");
             if (mysql_num_rows($req)) {
-                while ($res = mysql_fetch_assoc($req)) {
+                while (($res = mysql_fetch_assoc($req)) !== false) {
                     $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
                     if ($count) {
                         $text = html_entity_decode($res['text']);

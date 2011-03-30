@@ -1,21 +1,19 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
+/**
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
 */
 
 define('_IN_JOHNCMS', 1);
-$textl = $lng['registration'];
+global $core, $lng, $set, $ip, $agn, $realtime;
 $rootpath = '';
 require('incfiles/core.php');
+$textl = $lng['registration'];
 require('incfiles/head.php');
 // Загружаем язык Регистрации
 $lng_reg = $core->load_lng('reg');
@@ -70,14 +68,14 @@ if (isset($_POST['submit'])) {
         $error[] = $lng_reg['error_nick_empty'];
     elseif (mb_strlen($reg_nick) < 2 || mb_strlen($reg_nick) > 15)
         $error[] = $lng_reg['error_nick_lenght'];
-    if (preg_match("/[^\da-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
+    if (preg_match('/[^\da-z\-\@\*\(\)\?\!\~\_\=\[\]]+/', $lat_nick))
         $error[] = $lng['nick'] . ': ' . $lng['error_wrong_symbols'];
     // Проверка пароля
     if (empty($reg_pass))
         $error[] = $lng['error_empty_password'];
     elseif (mb_strlen($reg_pass) < 3 || mb_strlen($reg_pass) > 10)
         $error[] = $lng['password'] . ': ' . $lng['error_wrong_lenght'];
-    if (preg_match("/[^\dA-Za-z]+/", $reg_pass))
+    if (preg_match('/[^\dA-Za-z]+/', $reg_pass))
         $error[] = $lng['password'] . ': ' . $lng['error_wrong_symbols'];
     // Проверка имени
     if ($reg_sex == 'm' || $reg_sex == 'zh') { }

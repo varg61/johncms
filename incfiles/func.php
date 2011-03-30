@@ -210,12 +210,9 @@ function pagenav($base_url, $start, $max_value, $num_per_page) {
 -----------------------------------------------------------------
 */
 function timecount($var) {
-    $str = '';
-
     if ($var < 0)
         $var = 0;
     $day = ceil($var / 86400);
-
     if ($var > 345600) {
         $str = $day . ' дней';
     }  elseif ($var >= 172800) {
@@ -289,7 +286,7 @@ function check($str) {
         chr(31)=> ''
     ));
 
-    $str = str_replace("\'", "&#39;", $str);
+    $str = str_replace("'", "&#39;", $str);
     $str = str_replace('\\', "&#92;", $str);
     $str = str_replace("|", "I", $str);
     $str = str_replace("||", "I", $str);
@@ -314,7 +311,7 @@ function checkout($str, $br = 0, $tags = 0) {
     if ($tags == 1)
         $str = tags($str);
     elseif ($tags == 2)
-        $str = notags($str);
+        $str = functions::notags($str);
     $str = strtr($str, array (
         chr(0)=> '',
         chr(1)=> '',
@@ -374,30 +371,11 @@ function smileys($str, $adm = 0) {
 
 /*
 -----------------------------------------------------------------
-Сообщения об ошибках
------------------------------------------------------------------
-*/
-function display_error($error = false, $link = '') {
-    if ($error) {
-        $out = '<div class="rmenu"><p><b>ОШИБКА!</b>';
-        if (is_array($error)) {
-            foreach ($error as $val)$out .= '<div>' . $val . '</div>';
-        } else {
-            $out .= '<br />' . $error;
-        }
-        $out .= '</p><p>' . $link . '</p></div>';
-        return $out;
-    } else {
-        return false;
-    }
-}
-
-/*
------------------------------------------------------------------
 Рекламная сеть mobileads.ru
 -----------------------------------------------------------------
 */
 function mobileads($mad_siteId = NULL) {
+    global $realtime;
     $out = '';
     $mad_socketTimeout = 2;      // таймаут соединения с сервером mobileads.ru
     ini_set("default_socket_timeout", $mad_socketTimeout);

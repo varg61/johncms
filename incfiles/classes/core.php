@@ -113,7 +113,7 @@ class core {
         flock($in, LOCK_EX) or die("Error: can not access antiflood file");
         $now = time();
 
-        while ($block = fread($in, 8)) {
+        while (($block = fread($in, 8)) !== false) {
             $arr = unpack("Lip/Ltime", $block);
             if (($now - $arr['time']) > $this->flood_interval) {
                 continue;
@@ -183,7 +183,7 @@ class core {
             &$_COOKIE
         );
 
-        while (list($k, $v) = each($in)) {
+        while ((list($k, $v) = each($in)) !== false) {
             foreach ($v as $key => $val) {
                 if (!is_array($val)) {
                     $in[$k][$key] = stripslashes($val);
@@ -244,8 +244,9 @@ class core {
                 $this->language_id = $_SESSION['lng_id'];
                 $this->language_iso = $_SESSION['lng_iso'];
             } else {
+                $sys_lng = array();
                 $req = mysql_query("SELECT `id`, `iso` FROM `cms_lng_list`");
-                while ($res = mysql_fetch_assoc($req)) {
+                while (($res = mysql_fetch_assoc($req)) !== false) {
                     $sys_lng[$res['iso']] = $res['id'];
                 }
                 foreach (explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE']))) as $var) {
@@ -272,7 +273,7 @@ class core {
 
         if (mysql_num_rows($req)) {
             $out = array ();
-            while ($res = mysql_fetch_assoc($req)) {
+            while (($res = mysql_fetch_assoc($req)) !== false) {
                 if (!empty($res['custom'])) {
                     $out[$res['keyword']] = $res['custom'];
                 } else {
@@ -291,9 +292,9 @@ class core {
     -----------------------------------------------------------------
     */
     private function system_settings() {
+        $out = array();
         $req = mysql_query("SELECT * FROM `cms_settings`");
-
-        while ($res = mysql_fetch_row($req)) {
+        while (($res = mysql_fetch_row($req)) !== false) {
             $out[$res[0]] = $res[1];
         }
         $this->language_id = $out['lng_id'];
@@ -360,7 +361,7 @@ class core {
 
         if (mysql_num_rows($req)) {
             $this->user_rights = 0;
-            while ($res = mysql_fetch_row($req)) {
+            while (($res = mysql_fetch_row($req)) !== false) {
                 $this->user_ban[$res[4]] = 1;
             }
         }
