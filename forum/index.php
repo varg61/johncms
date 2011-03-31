@@ -10,6 +10,7 @@
 */
 
 define('_IN_JOHNCMS', 1);
+
 require('../incfiles/core.php');
 $lng_forum = $core->load_lng('forum');
 if (isset($_SESSION['ref']))
@@ -292,7 +293,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 if ($total) {
-                    while ($res = mysql_fetch_assoc($req)) {
+                    while (($res = mysql_fetch_assoc($req)) !== false) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
                         echo '<a href="?id=' . $res['id'] . '">' . $res['text'] . '</a>';
@@ -324,7 +325,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 }
                 if ($total) {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($rights >= 7 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
-                    while ($res = mysql_fetch_assoc($req)) {
+                    while (($res = mysql_fetch_assoc($req)) !== false) {
                         if($res['close'])
                             echo '<div class="rmenu">';
                         else
@@ -430,7 +431,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                     if (!$type1['edit'] && !isset($_GET['vote_result']) && $user_id && $vote_user == 0) {
                         // Выводим форму с опросами
                         echo '<form action="index.php?act=vote&amp;id=' . $id . '" method="post">';
-                        while ($vote = mysql_fetch_assoc($vote_result)) {
+                        while (($vote = mysql_fetch_assoc($vote_result)) !== false) {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . functions::checkout($vote['name']) . '<br />';
                         }
                         echo '<p><input type="submit" name="submit" value="' . $lng['vote'] . '"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum .
@@ -438,7 +439,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                     } else {
                         // Выводим результаты голосования
                         echo '<small>';
-                        while ($vote = mysql_fetch_assoc($vote_result)) {
+                        while (($vote = mysql_fetch_assoc($vote_result)) !== false) {
                             $count_vote = $topic_vote['count'] ? round(100 / $topic_vote['count'] * $vote['count']) : 0;
                             echo functions::checkout($vote['name']) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="vote_img.php?img=' . $count_vote . '" alt="' . $lng_forum['rating'] . ': ' . $count_vote . '%" /><br />';
@@ -468,7 +469,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                     if ($postres['sex'])
                         echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'w') . ($postres['datereg'] > $realtime - 86400 ? '_new.png" width="14"' : '.png" width="10"') . ' height="10"/>&#160;';
                     else
-                        echo '<img src="../images/del.png" width="10" height="10" />&#160;';
+                        echo '<img src="../images/del.png" width="10" height="10" alt=""/>&#160;';
                     if ($user_id && $user_id != $postres['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
                             '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '"> ' . $lng_forum['reply_btn'] . '</a> ' .
@@ -525,7 +526,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 if ($rights == 3 || $rights >= 6)
                     echo '<form action="index.php?act=massdel" method="post">';
                 $i = 1;
-                while ($res = mysql_fetch_assoc($req)) {
+                while (($res = mysql_fetch_assoc($req)) !== false) {
                     if ($res['close'])
                         echo '<div class="rmenu">';
                     else
@@ -541,7 +542,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                     if ($res['sex'])
                         echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > $realtime - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&#160;';
                     else
-                        echo '<img src="../images/del.png" width="12" height="12" align="middle" />&#160;';
+                        echo '<img src="../images/del.png" width="12" height="12" align="middle" alt=""/>&#160;';
                     // Ник юзера и ссылка на его анкету
                     if ($user_id && $user_id != $res['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
@@ -743,7 +744,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             '<div class="phdr"><b>' . $lng['forum'] . '</b></div>' .
             '<div class="topmenu"><a href="search.php">' . $lng['search'] . '</a> | <a href="index.php?act=files">' . $lng_forum['files_forum'] . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
-        while ($res = mysql_fetch_array($req)) {
+        while (($res = mysql_fetch_array($req)) !== false) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';

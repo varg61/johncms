@@ -10,16 +10,17 @@
 */
 
 define('_IN_JOHNCMS', 1);
-$headmod = 'mainpage';
-// Внимание! Если файл находится в корневой папке, нужно указать $rootpath = '';
-$rootpath = '';
 
+$headmod = 'mainpage';
+$rootpath = ''; // Внимание! Если файл находится в корневой папке, нужно указать $rootpath = '';
 require('incfiles/core.php');
 require('incfiles/head.php');
+
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);
 if (isset($_GET['err']))
     $act = 404;
+
 switch ($act) {
     case '404':
         /*

@@ -10,13 +10,13 @@
 */
 
 define('_IN_JOHNCMS', 1);
-global $core, $lng, $set, $ip, $agn, $realtime;
+
 $rootpath = '';
 require('incfiles/core.php');
 $textl = $lng['registration'];
 require('incfiles/head.php');
-// Загружаем язык Регистрации
 $lng_reg = $core->load_lng('reg');
+
 // Если регистрация закрыта, выводим предупреждение
 if ($core->regban || !$set['mod_reg']) {
     echo '<p>' . $lng_reg['registration_closed'] . '</p>';
@@ -24,8 +24,9 @@ if ($core->regban || !$set['mod_reg']) {
     exit;
 }
 echo '<div class="phdr"><b>' . $lng['registration'] . '</b></div>';
+
+// Форма регистрации
 function regform() {
-    // Форма регистрации
     global $lng_reg;
     echo '<form action="registration.php" method="post"><div class="gmenu">' .
         '<p><h3>' . $lng_reg['login'] . '</h3>' .

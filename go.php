@@ -10,8 +10,10 @@
 */
 
 define('_IN_JOHNCMS', 1);
+
 $rootpath = '';
 require('incfiles/core.php');
+
 $url = isset($_REQUEST['url']) ? strip_tags(html_entity_decode(base64_decode(trim($_REQUEST['url'])))) : false;
 if($url){
     /*

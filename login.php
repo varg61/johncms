@@ -10,7 +10,7 @@
 */
 
 define('_IN_JOHNCMS', 1);
-global $lng, $id;
+
 $rootpath = '';
 require('incfiles/core.php');
 require('incfiles/head.php');
