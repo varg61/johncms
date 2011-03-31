@@ -397,7 +397,7 @@ class functions {
        [footer]    (string)    Строка выводится внизу области "sub"
     -----------------------------------------------------------------
     */
-    static function display_user($user = array (), $arg = array ()) {
+    static function display_user($user = false, $arg = false) {
         global $set, $set_user, $realtime, $user_id, $rights, $lng, $rootpath;
         $out = false;
 
@@ -437,25 +437,25 @@ class functions {
             $out .= ($realtime > $user['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
             if (!empty($arg['header']))
                 $out .= ' ' . $arg['header'];
-            if (!$arg['stshide'] && !empty($user['status']))
+            if (!isset($arg['stshide']) && !empty($user['status']))
                 $out .= '<div class="status"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
             if ($set_user['avatar'])
                 $out .= '</td></tr></table>';
         }
 
-        if ($arg['body'])
+        if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
-        $ipinf = ($rights || $user['id'] && $user['id'] == $user_id) && !$arg['iphide'] ? 1 : 0;
-        $lastvisit = $realtime > $user['lastdate'] + 300 && $arg['lastvisit'] ? date("d.m.Y (H:i)", $user['lastdate']) : false;
+        $ipinf = ($rights || $user['id'] && $user['id'] == $user_id) && !isset($arg['iphide']) ? 1 : 0;
+        $lastvisit = $realtime > $user['lastdate'] + 300 && isset($arg['lastvisit']) ? date("d.m.Y (H:i)", $user['lastdate']) : false;
 
-        if ($ipinf || $lastvisit || $arg['sub'] || $arg['footer']) {
+        if ($ipinf || $lastvisit || isset($arg['sub']) || isset($arg['footer'])) {
             $out .= '<div class="sub">';
-            if ($arg['sub'])
+            if (isset($arg['sub']))
                 $out .= '<div>' . $arg['sub'] . '</div>';
             if ($lastvisit)
                 $out .= '<div><span class="gray">' . $lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
             $iphist = '';
-            if ($ipinf && $arg['iphist']) {
+            if ($ipinf && isset($arg['iphist'])) {
                 $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
                 $iphist = '&#160;<a href="' . $set['homeurl'] . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a>';
             }
@@ -467,7 +467,7 @@ class functions {
                 else
                     $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist . '</div>';
             }
-            if ($arg['footer'])
+            if (isset($arg['footer']))
                 $out .= $arg['footer'];
             $out .= '</div>';
         }

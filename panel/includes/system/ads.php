@@ -305,6 +305,7 @@ switch ($mod) {
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'"), 0);
         if ($total) {
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `type` = '$type' ORDER BY `mesto` ASC LIMIT $start,$kmess");
+            $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $name = str_replace('|', '; ', $res['name']);

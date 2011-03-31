@@ -39,13 +39,13 @@ $array = array (
     'access' => 'includes/security',
     'antispy' => 'includes/security',
     'httpaf' => 'includes/security',
-    'ipban' => 'includes/ip',
-    'search_ip' => 'includes/ip',
+    'ipban' => 'includes/security',
     'administrators' => 'includes/users',
     'antiflood' => 'includes/users',
     'ban_panel' => 'includes/users',
     'karma' => 'includes/users',
     'reg' => 'includes/users',
+    'search_ip' => 'includes/users',
     'search_user' => 'includes/users',
     'users' => 'includes/users',
     'usr_del' => 'includes/users'
@@ -113,7 +113,6 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         echo '<div class="rmenu"><p>' .
             '<h3><img src="../images/admin.png" width="16" height="16" class="left" />&#160;' . $lng['security'] . '</h3>' .
             '<ul>' .
-            '<li><a href="index.php?act=httpaf">HTTP Antiflood</a></li>' .
             '<li><a href="index.php?act=antispy">' . $lng['antispy'] . '</a></li>' .
             ($rights == 9 ? '<li><a href="index.php?act=ipban">' . $lng['ip_ban'] . '</a></li>' : '') .
             '</ul>' .

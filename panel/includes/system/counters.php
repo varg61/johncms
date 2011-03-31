@@ -270,6 +270,7 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['counters'] . '</div>';
         $req = mysql_query("SELECT * FROM `cms_counters` ORDER BY `sort` ASC");
         if (mysql_num_rows($req)) {
+            $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<img src="../images/' . ($res['switch'] == 1 ? 'green' : 'red') . '.gif" width="16" height="16" class="left"/>&#160;';

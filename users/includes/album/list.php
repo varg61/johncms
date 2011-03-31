@@ -26,6 +26,7 @@ if ($user['id'] == $user_id && $total < $max_album || $rights >= 7) {
 }
 echo '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>';
 if ($total) {
+    $i = 0;
     while ($res = mysql_fetch_assoc($req)) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $res['id'] . "'"), 0);
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
