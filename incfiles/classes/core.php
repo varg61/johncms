@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 class core {
-    public $system_build = 744;            // Версия системы
+    public $system_build = 760;            // Версия системы
     public $ip;                            // IP адрес
     public $ip_viaproxy;                   // IP адрес за прокси-сервером
     public $user_agent;                    // User Agent (Browser)

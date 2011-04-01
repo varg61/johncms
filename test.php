@@ -1,4 +1,8 @@
 <?php
+
+// Для обновлений, проверка существования поля
+// mysql_query("SELECT `FIELD` FROM `TABLE` WHERE 0");
+
 $ip = sprintf("%u", ip2long('192.168.1.60'));
 echo long2ip($ip) . '<hr />';
 $file = 'files/cache/ip_wlist.dat'; // Файл кэша "белого" списка IP адресов

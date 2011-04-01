@@ -144,7 +144,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     //echo '<div><img src="../images/pt.gif" width="16" height="16"/>&#160;<a href="">' . $lng['blog'] . '</a>&#160;(0)</div>';
     if ($user['id'] != $user_id) {
         echo '<br /><div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>';
-        if (!$ban['1'] && !$ban['3'])
+        if (!isset($ban['1']) && !isset($ban['3']))
             echo '<div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
     }
     echo '</p></div>';

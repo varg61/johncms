@@ -293,6 +293,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 if ($total) {
+                    $i = 0;
                     while (($res = mysql_fetch_assoc($req)) !== false) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
@@ -319,12 +320,13 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 -----------------------------------------------------------------
                 */
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close`!='1'")), 0);
-                if ($user_id && !$ban['1'] && !$ban['11']) {
+                if ($user_id && !isset($ban['1']) && !isset($ban['11'])) {
                     // Кнопка создания новой темы
                     echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . $id . '" method="post"><input type="submit" value="' . $lng_forum['new_topic'] . '" /></form></div>';
                 }
                 if ($total) {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . ($rights >= 7 ? '' : " AND `close`!='1'") . " AND `refid`='$id' ORDER BY `vip` DESC, `time` DESC LIMIT $start, $kmess");
+                    $i = 0;
                     while (($res = mysql_fetch_assoc($req)) !== false) {
                         if($res['close'])
                             echo '<div class="rmenu">';
@@ -697,7 +699,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                 */
                 if ($rights == 3 || $rights >= 6) {
                     echo '<p><div class="func">';
-                    echo $topic_vote > 0 ? '<a href="index.php?act=editvote&amp;id=' . $id . '">' . $lng_forum['edit_vote'] . '</a><br/><a href="index.php?act=delvote&amp;id=' . $id . '">' . $lng_forum['delete_vote'] . '</a><br/>'
+                    echo isset($topic_vote) && $topic_vote > 0 ? '<a href="index.php?act=editvote&amp;id=' . $id . '">' . $lng_forum['edit_vote'] . '</a><br/><a href="index.php?act=delvote&amp;id=' . $id . '">' . $lng_forum['delete_vote'] . '</a><br/>'
                         : '<a href="index.php?act=addvote&amp;id=' . $id . '">' . $lng_forum['add_vote'] . '</a><br/>';
                     echo '<a href="index.php?act=ren&amp;id=' . $id . '">' . $lng_forum['topic_rename'] . '</a><br/>';
                     // Закрыть - открыть тему
@@ -744,6 +746,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             '<div class="phdr"><b>' . $lng['forum'] . '</b></div>' .
             '<div class="topmenu"><a href="search.php">' . $lng['search'] . '</a> | <a href="index.php?act=files">' . $lng_forum['files_forum'] . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
+        $i = 0;
         while (($res = mysql_fetch_array($req)) !== false) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);

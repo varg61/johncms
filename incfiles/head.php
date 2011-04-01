@@ -11,8 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = isset($headmod) ? mysql_real_escape_string($headmod) : '';
-if ($headmod == 'mainpage')
-    $textl = $set['copyright'];
+$textl = isset($textl) ? $textl : $set['copyright'];
 
 /*
 -----------------------------------------------------------------
@@ -49,7 +48,7 @@ $view = $user_id ? 2 : 1;
 $layout = ($headmod == 'mainpage' && !$act) ? 1 : 2;
 $req = mysql_query("SELECT * FROM `cms_ads` WHERE `to` = '0' AND (`layout` = '$layout' or `layout` = '0') AND (`view` = '$view' or `view` = '0') ORDER BY  `mesto` ASC");
 if (mysql_num_rows($req) > 0 && $headmod != 'admin') {
-    while ($res = mysql_fetch_array($req)) {
+    while (($res = mysql_fetch_assoc($req)) !== false) {
         $name = explode("|", $res['name']);
         $name = htmlentities($name[mt_rand(0, (count($name) - 1))], ENT_QUOTES, 'UTF-8');
         if (!empty($res['color']))

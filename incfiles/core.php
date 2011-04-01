@@ -62,9 +62,9 @@ $home = $set['homeurl'];                 // Домашняя страница
 $user_id = $core->user_id;        // Идентификатор пользователя
 $rights = $core->user_rights;     // Права доступа
 $datauser = $core->user_data;     // Все данные пользователя
-$login = $datauser['name'];       // Ник пользователя
 $set_user = $core->user_settings; // Пользовательские настройки
 $ban = $core->user_ban;           // Бан
+$login = isset($datauser['name']) ? $datauser['name'] : false;
 $kmess = $set_user['kmess'] > 4 && $set_user['kmess'] < 99 ? $set_user['kmess'] : 10;
 
 /*
