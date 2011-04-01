@@ -28,9 +28,9 @@ class core {
     public $user_settings = array ();      // Пользовательские настройки
     public $user_ban = array ();           // Бан
 
-    private $flood_chk = 0;                // Включение - выключение функции IP антифлуда
+    private $flood_chk = 1;                // Включение - выключение функции IP антифлуда
     private $flood_interval = '120';       // Интервал времени в секундах
-    private $flood_limit = '20';           // Число разрешенных запросов за интервал
+    private $flood_limit = '30';           // Число разрешенных запросов за интервал
     
     /*
     -----------------------------------------------------------------
@@ -110,10 +110,10 @@ class core {
             $in = fopen($file, "w+");
         else
             $in = fopen($file, "r+");
-        flock($in, LOCK_EX) or die("Error: can not access antiflood file");
+        flock($in, LOCK_EX) or die("Cannot flock ANTIFLOOD file.");
         $now = time();
 
-        while (($block = fread($in, 8)) !== false) {
+        while ($block = fread($in, 8)) {
             $arr = unpack("Lip/Ltime", $block);
             if (($now - $arr['time']) > $this->flood_interval) {
                 continue;
