@@ -10,7 +10,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$lng_set = $core->load_lng('set');
+$lng_set = $core->load_lng('settings');
 $textl = $lng['settings'];
 require('../incfiles/head.php');
 
