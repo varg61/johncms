@@ -13,7 +13,7 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 class core {
     public $system_build = 760;            // Версия системы
     public $ip;                            // IP адрес
-    public $ip_viaproxy;                   // IP адрес за прокси-сервером
+    public $ip_via_proxy;                  // IP адрес за прокси-сервером
     public $user_agent;                    // User Agent (Browser)
     public $system_settings = array ();    // Системные настройки
     public $system_time;                   // Системное время
@@ -40,7 +40,7 @@ class core {
     function __construct() {
         // Получаем реальный адрес IP
         $this->ip = ip2long($_SERVER['REMOTE_ADDR']) or die('Invalid IP');
-        $this->ip_viaproxy = isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $this->ip_valid($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
+        $this->ip_via_proxy = isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $this->ip_valid($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
 
         // Проверка адреса IP на флуд
         if ($this->flood_chk && !$this->ip_whitelist($this->ip)) {
@@ -268,21 +268,19 @@ class core {
     Загружаем язык системы
     -----------------------------------------------------------------
     */
-    public function load_lng($module = 'main') {
-        $req = mysql_query("SELECT * FROM `cms_lng_phrases` WHERE `language_id` = '" . $this->language_id . "' AND `module` = '$module'");
-
-        if (mysql_num_rows($req)) {
-            $out = array ();
-            while (($res = mysql_fetch_assoc($req)) !== false) {
-                if (!empty($res['custom'])) {
-                    $out[$res['keyword']] = $res['custom'];
-                } else {
-                    $out[$res['keyword']] = $res['default'];
-                }
-            }
-            return $out;
+    public function load_lng($module = 'main', $file_path = '') {
+        global $rootpath;
+        $cache_file = $rootpath . 'files/cache/lng_' . $this->language_iso . '_' . $module . '.dat';
+        if(file_exists($cache_file)){
+            // Выдаем кэшированные фразы языка
+            return file($cache_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         } else {
-            return false;
+            // Читаем фразы выбранного языка из файла
+            $lng_file = !empty($file_path) ? $file_path . '/' . $this->language_iso . '.ini' : $rootpath . 'incfiles/languages/' . $this->language_iso . '.ini';
+            $phrases = parse_ini_file($lng_file, true);
+            // записываем кэш
+            file_put_contents($cache_file, implode("\r\n", $phrases[$module]));
+            return $phrases[$module];
         }
     }
 

@@ -10,6 +10,7 @@
 */
 
 defined('INSTALL') or die('Error: restricted access');
+$lng_id = 0; // Delete!!!
 function show_errors($error) {
     global $lng;
 
@@ -33,7 +34,6 @@ switch ($_GET['mod']) {
         functions::smileys(0, 2);
         echo '<h2 class="blue">' . $lng['congratulations'] . '</h2>' .
             $lng['installation_completed'] . '<p><ul>' .
-            '<li><a href="index.php?act=languages&amp;lng_id=' . $lng_id . '">' . $lng['install_more_languages'] . '</a></li>' .
             '<li><a href="../panel">' . $lng['admin_panel'] . '</a></li>' .
             '<li><a href="../index.php">' . $lng['to_site'] . '</a></li>' .
             '</ul></p>' .
@@ -188,10 +188,10 @@ switch ($_GET['mod']) {
                     $demo_data = new parse_sql('data/demo.sql');
                 }
                 // Установка завершена
-                header('Location: index.php?act=install&mod=final&lng_id=' . $lng_id);
+                header('Location: index.php?act=install&mod=final&lng=' . $lng_iso);
             }
         }
-        echo '<form action="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '" method="post">' .
+        echo '<form action="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '" method="post">' .
             '<h2 class="blue">' . $lng['database'] . '</h2>' . show_errors($db_error) .
             '<small class="blue"><b>MySQL Host:</b></small><br />' .
             '<input type="text" name="dbhost" value="' . $db_host . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
@@ -224,7 +224,7 @@ switch ($_GET['mod']) {
             echo '<p><input type="submit" name="check" value="' . $lng['check'] . '"></p>';
         }
         echo '</form>';
-        echo '<p><a href="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '">' . $lng['reset_form'] . '</a></p>';
+        echo '<p><a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['reset_form'] . '</a></p>';
         break;
 
     default:
@@ -258,18 +258,18 @@ switch ($_GET['mod']) {
         echo '<hr />';
         if (!empty($error_php) || !empty($error_rights_folders) || !empty($error_rights_files)) {
             echo '<p>' . $lng['critical_errors'] . '</p>' .
-                '<p><a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
-                '<a href="index.php?act=install&amp;lng_id=' . $lng_id . '">' . $lng['check_again'] . '</a></p>';
+                '<p><a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                '<a href="index.php?act=install&amp;lng=' . $lng_iso . '">' . $lng['check_again'] . '</a></p>';
         } elseif (!empty($warning)) {
             echo '<p>' . $lng['are_warnings'] . '</p>' .
-                '<p><a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
-                '<a href="index.php?act=install&amp;lng_id=' . $lng_id . '">' . $lng['check_again'] . '</a></p>' .
+                '<p><a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                '<a href="index.php?act=install&amp;lng=' . $lng_iso . '">' . $lng['check_again'] . '</a></p>' .
                 '<p>' . $lng['ignore_warnings'] . '</p>' .
-                '<p><a href="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '">' . $lng['start_installation'] . '</a> ' . $lng['not_recommended'] . '</p>';
+                '<p><a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['start_installation'] . '</a> ' . $lng['not_recommended'] . '</p>';
         } else {
             echo '<p>' . $lng['configuration_successful'] . '</p>' .
-                '<a href="index.php?lng_id=' . $lng_id . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
-                '<a href="index.php?act=install&amp;mod=set&amp;lng_id=' . $lng_id . '">' . $lng['start_installation'] . ' &gt;&gt;</a>';
+                '<a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                '<a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['start_installation'] . ' &gt;&gt;</a>';
             echo '</p>';
         }
         break;

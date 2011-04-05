@@ -251,36 +251,6 @@ CREATE TABLE `cms_guests` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Структура таблицы `cms_lng_list`
---
-DROP TABLE IF EXISTS `cms_lng_list`;
-CREATE TABLE `cms_lng_list` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `iso` char(2) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `build` int(11) NOT NULL DEFAULT '0',
-  `attr` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `iso` (`iso`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
---
--- Структура таблицы `cms_lng_phrases`
---
-DROP TABLE IF EXISTS `cms_lng_phrases`;
-CREATE TABLE `cms_lng_phrases` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `language_id` int(10) unsigned NOT NULL,
-  `module` varchar(10) NOT NULL,
-  `keyword` varchar(30) NOT NULL,
-  `default` text NOT NULL,
-  `custom` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `language_id` (`language_id`),
-  KEY `module` (`module`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
---
 -- Структура таблицы `cms_settings`
 --
 DROP TABLE IF EXISTS `cms_settings`;
