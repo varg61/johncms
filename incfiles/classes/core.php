@@ -272,8 +272,11 @@ class core {
     public function load_lng($module = 'main') {
         global $rootpath;
         $lng_file = $rootpath . 'incfiles/languages/' . $this->language_iso . '/' . $module . '.lng';
-        $out = parse_ini_file($lng_file) or die('ERROR: language file');
-        return $out;
+        if(file_exists($lng_file)){
+            $out = parse_ini_file($lng_file) or die('ERROR: language file');
+            return $out;
+        }
+        die('ERROR: Language file is missing');
     }
 
     /*
