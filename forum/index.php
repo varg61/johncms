@@ -434,7 +434,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                         // Выводим форму с опросами
                         echo '<form action="index.php?act=vote&amp;id=' . $id . '" method="post">';
                         while (($vote = mysql_fetch_assoc($vote_result)) !== false) {
-                            echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . functions::checkout($vote['name']) . '<br />';
+                            echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . functions::checkout($vote['name'], 0, 1) . '<br />';
                         }
                         echo '<p><input type="submit" name="submit" value="' . $lng['vote'] . '"/><br /><a href="index.php?id=' . $id . '&amp;start=' . $start . '&amp;vote_result' . $clip_forum .
                             '">' . $lng_forum['results'] . '</a></p></form></div>';
@@ -443,7 +443,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
                         echo '<small>';
                         while (($vote = mysql_fetch_assoc($vote_result)) !== false) {
                             $count_vote = $topic_vote['count'] ? round(100 / $topic_vote['count'] * $vote['count']) : 0;
-                            echo functions::checkout($vote['name']) . ' [' . $vote['count'] . ']<br />';
+                            echo functions::checkout($vote['name'], 0, 1) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="vote_img.php?img=' . $count_vote . '" alt="' . $lng_forum['rating'] . ': ' . $count_vote . '%" /><br />';
                         }
                         echo '</small></div><div class="bmenu">' . $lng_forum['total_votes'] . ': ';
