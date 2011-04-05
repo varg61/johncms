@@ -19,6 +19,7 @@ class core {
     public $system_time;                   // Системное время
     public $language_id;                   // Идентификатор языка
     public $language_iso;                  // Двухбуквенный ISO код языка
+    public $language_list;                 // Список имеющихся языков
     public $language_phrases = array ();   // Массив с фразами выбранного языка
     public $regban = false;                // Запрет регистрации пользователей
 
@@ -268,20 +269,11 @@ class core {
     Загружаем язык системы
     -----------------------------------------------------------------
     */
-    public function load_lng($module = 'main', $file_path = '') {
+    public function load_lng($module = 'main') {
         global $rootpath;
-        $cache_file = $rootpath . 'files/cache/lng_' . $this->language_iso . '_' . $module . '.dat';
-        if(file_exists($cache_file)){
-            // Выдаем кэшированные фразы языка
-            return file($cache_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        } else {
-            // Читаем фразы выбранного языка из файла
-            $lng_file = !empty($file_path) ? $file_path . '/' . $this->language_iso . '.ini' : $rootpath . 'incfiles/languages/' . $this->language_iso . '.ini';
-            $phrases = parse_ini_file($lng_file, true);
-            // записываем кэш
-            file_put_contents($cache_file, implode("\r\n", $phrases[$module]));
-            return $phrases[$module];
-        }
+        $lng_file = $rootpath . 'incfiles/languages/' . $this->language_iso . '/' . $module . '.lng';
+        $out = parse_ini_file($lng_file) or die('ERROR: language file');
+        return $out;
     }
 
     /*
@@ -295,8 +287,9 @@ class core {
         while (($res = mysql_fetch_row($req)) !== false) {
             $out[$res[0]] = $res[1];
         }
-        $this->language_id = $out['lng_id'];
-        $this->language_iso = $out['lng_iso'];
+        //$this->language_id = $out['lng_id'];
+        $this->language_iso = isset($out['lng_iso']) ? $out['lng_iso'] : 'en';
+        $this->language_list = isset($out['lng_list']) ? unserialize($out['lng_list']) : array();
         $this->system_time = time() + $out['timeshift'] * 3600;
         $this->system_settings = $out;
     }

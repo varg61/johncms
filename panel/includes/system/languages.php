@@ -16,74 +16,52 @@ if ($rights < 9) {
     header('Location: http://johncms.com/?err');
     exit;
 }
+
+/*
+-----------------------------------------------------------------
+Читаем каталог с файлами языков
+-----------------------------------------------------------------
+*/
+$lng_iso = array ();
+$lng_desc = array ();
+$languages = glob('../incfiles/languages/*/_lng.ini');
+foreach ($languages as $val) {
+    $array = explode('/', dirname($val));
+    $iso = array_pop($array);
+    $lng_iso[] = $iso;
+    $lng_desc[$iso] = parse_ini_file($val);
+}
+
+/*
+-----------------------------------------------------------------
+Автоустановка языков
+-----------------------------------------------------------------
+*/
+$lng_add = array_diff($lng_iso, $core->language_list);
+$lng_del = array_diff($core->language_list, $lng_iso);
+if (!empty($lng_add) || !empty($lng_del)) {
+    if (!empty($lng_del) && in_array($set['lng_iso'], $lng_del)) {
+        // Если удаленный язык был системный, то меняем на первый доступный
+        mysql_query("UPDATE `cms_settings` SET `val` = '" . $lng_iso[0] . "' WHERE `key` = 'lng_iso' LIMIT 1");
+    }
+    $req = mysql_query("SELECT * FROM `cms_settings` WHERE `key` = 'lng_list'");
+    if (mysql_num_rows($req)) {
+        mysql_query("UPDATE `cms_settings` SET `val` = '" . serialize($lng_iso) . "' WHERE `key` = 'lng_list' LIMIT 1");
+    } else {
+        mysql_query("INSERT INTO `cms_settings` SET `key` = 'lng_list', `val` = '" . serialize($lng_iso) . "'");
+    }
+}
+
 switch ($mod) {
-    case 'edit':
-        /*
-        -----------------------------------------------------------------
-        Редактируем пользовательские фразы
-        -----------------------------------------------------------------
-        */
-        echo '<div class="rmenu">' .
-            '<p>Функция редактирования фраз пока недоступна.<br />Будет в одной из следующих версий</p>' .
-            '<p>Editing the phrase is not yet available.<br />Will be in one of the following versions.</p>' .
-            '</div>';
-        break;
-
-    case 'delete':
-        /*
-        -----------------------------------------------------------------
-        Удаляем язык
-        -----------------------------------------------------------------
-        */
-        $error = array ();
-        if (!$id)
-            $error[] = $lng['error_wrong_data'];
-        if ($id == $set['lng_id'])
-            $error[] = $lng['language_delete_error'];
-        if (!$error) {
-            $req = mysql_query("SELECT * FROM `cms_lng_list` WHERE `id` = '$id'");
-            if (!mysql_num_rows($req))
-                $error[] = $lng['language_select_error'];
-        }
-        if (!$error) {
-            if (isset($_POST['submit'])) {
-                mysql_query("UPDATE `users` SET `set_language` = '" . $set['lng_id'] . "' WHERE `set_language` = '$id'");
-                mysql_query("DELETE FROM `cms_lng_phrases` WHERE `language_id` = '$id'");
-                mysql_query("DELETE FROM `cms_lng_list` WHERE `id` = '$id'");
-                mysql_query("OPTIMIZE TABLE `cms_lng_list` , `cms_lng_phrases`");
-                header('Location: index.php?act=languages');
-            } else {
-                $res = mysql_fetch_assoc($req);
-                $attr = unserialize($res['attr']);
-                echo '<div class="phdr"><a href="index.php?act=languages"><b>' . $lng['language'] . '</b></a> | ' . $lng['delete'] . '</div>' .
-                    '<div class="rmenu"><form action="index.php?act=languages&amp;mod=delete&amp;id=' . $id . '" method="post">' .
-                    '<p>' . $lng['language_delete_warning'] . ': <b>' . $attr['name'] . '</b>?</p>' .
-                    '<p><input type="submit" name="submit" value="' . $lng['delete'] . '" /></p>' .
-                    '</form></div>' .
-                    '<div class="phdr"><a href="index.php?act=languages">' . $lng['cancel'] . '</a></div>';
-            }
-        } else {
-            echo functions::display_error($error, '<a href="index.php?act=languages">' . $lng['back'] . '</a>');
-            require('../incfiles/end.php');
-            exit;
-        }
-        break;
-
     case 'set':
         /*
         -----------------------------------------------------------------
         Устанавливаем системный язык
         -----------------------------------------------------------------
         */
-        if ($id && $id != $set['lng_id']) {
-            $req = mysql_query("SELECT * FROM `cms_lng_list` WHERE `id` = '$id'");
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
-                mysql_query("UPDATE `cms_settings` SET `val` = '$id' WHERE `key` = 'lng_id'");
-                mysql_query("UPDATE `cms_settings` SET `val` = '" . $res['iso'] . "' WHERE `key` = 'lng_iso'");
-                $set['lng_id'] = $id;
-                echo '<div class="gmenu">' . $lng['language_set'] . ': <b>' . $res['default'] . '</b></div>';
-            }
+        $iso = isset($_POST['iso']) ? trim($_POST['iso']) : false;
+        if($iso && in_array($iso, $lng_iso) && $iso != $core->language_iso){
+            mysql_query("UPDATE `cms_settings` SET `val` = '" . mysql_real_escape_string($iso) . "' WHERE `key` = 'lng_iso'");
         }
         header('Location: index.php?act=languages');
         break;
@@ -97,20 +75,17 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['language_default'] . '</div>';
         echo '<div class="menu"><form action="index.php?act=languages&amp;mod=set" method="post"><p>';
         echo '<table><tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3>' . $lng['language_system'] . '</h3></td></tr>';
-        $req = mysql_query("SELECT * FROM `cms_lng_list`");
-        while ($res = mysql_fetch_assoc($req)) {
-            $attr = unserialize($res['attr']);
+        foreach ($lng_desc as $key => $val) {
             $lng_menu = array (
-                (!empty($attr['author']) ? '<span class="gray">' . $lng['author'] . ':</span> ' . $attr['author'] : ''),
-                (!empty($attr['author_email']) ? '<span class="gray">E-mail:</span> ' . $attr['author_email'] : ''),
-                (!empty($attr['author_url']) ? '<span class="gray">URL:</span> ' . $attr['author_url'] : ''),
-                (!empty($attr['description']) ? '<span class="gray">' . $lng['description'] . ':</span> ' . $attr['description'] : '')
+                (!empty($val['author']) ? '<span class="gray">' . $lng['author'] . ':</span> ' . $val['author'] : ''),
+                (!empty($val['author_email']) ? '<span class="gray">E-mail:</span> ' . $val['author_email'] : ''),
+                (!empty($val['author_url']) ? '<span class="gray">URL:</span> ' . $val['author_url'] : ''),
+                (!empty($val['description']) ? '<span class="gray">' . $lng['description'] . ':</span> ' . $val['description'] : '')
             );
             echo '<tr>' .
-                '<td valign="top"><input type="radio" value="' . $res['id'] . '" name="id" ' . ($res['id'] == $set['lng_id'] ? 'checked="checked"' : '') . '/></td>' .
-                '<td style="padding-bottom:6px"><b>' . $res['name'] . '</b>&#160;<span class="green">[' . $res['iso'] . ']</span> <small class="gray">build:' . $res['build'] . '</small>' .
-                '<div class="sub"><a href="index.php?act=languages&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a> | ' .
-                '<a href="index.php?act=languages&amp;mod=delete&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a><br />' . functions::display_menu($lng_menu, '<br />') . '</div></td>' .
+                '<td valign="top"><input type="radio" value="' . $key . '" name="iso" ' . ($key == $set['lng_iso'] ? 'checked="checked"' : '') . '/></td>' .
+                '<td style="padding-bottom:6px"><b>' . $val['name'] . '</b>&#160;<span class="green">[' . $key . ']</span>' .
+                '<div class="sub">' . functions::display_menu($lng_menu, '<br />') . '</div></td>' .
                 '</tr>';
         }
         echo '<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . $lng['save'] . '" /></td></tr>' .
