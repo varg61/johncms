@@ -264,12 +264,11 @@ CREATE TABLE `cms_settings` (
 -- Дамп данных таблицы `cms_settings`
 --
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
-('lng_id', ''),
 ('lng_iso', ''),
 ('homeurl', ''),
 ('email', ''),
 ('timeshift', '0'),
-('copyright', 'JohnCMS 4.0'),
+('copyright', 'Powered by JohnCMS'),
 ('admp', 'panel'),
 ('flsz', '4000'),
 ('gzip', '1'),
@@ -284,7 +283,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('mod_lib_comm', '1'),
 ('mod_gal_comm', '1'),
 ('meta_key', ''),
-('meta_desc', ''),
+('meta_desc', 'Powered by JohnCMS http://johncms.com'),
 ('skindef', 'default'),
 ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smileys";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}'),
 ('karma', 'a:6:{s:12:"karma_points";i:5;s:10:"karma_time";i:86400;s:5:"forum";i:20;s:4:"time";i:0;s:2:"on";i:1;s:3:"adm";i:0;}'),
@@ -552,7 +551,6 @@ CREATE TABLE `users` (
   `rest_time` int(11) NOT NULL,
   `movings` int(11) NOT NULL DEFAULT '0',
   `place` varchar(30) NOT NULL,
-  `set_language` int(11) NOT NULL,
   `set_user` text NOT NULL,
   `set_forum` text NOT NULL,
   `set_chat` text NOT NULL,

@@ -62,10 +62,10 @@ if (isset($_REQUEST['lng_id']) && in_array($_REQUEST['lng_id'], $lng_key)) {
     // Меняем язык по запросу из формы
     echo 'Из формы';
     $lng_id = intval($_REQUEST['lng_id']);
-}  elseif (isset($core->language_iso) && in_array($core->language_iso, $lng_list)) {
+}  elseif (isset($core->lng) && in_array($core->lng, $lng_list)) {
     // Если система проинсталлирована, то используем ее язык
     echo 'В системе';
-    $lng_iso = $core->language_iso;
+    $lng_iso = $core->lng;
 }  elseif (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     // Устанавливаем язык по браузеру
     echo 'По браузеру';
@@ -162,7 +162,7 @@ if (in_array($act, $actions) && file_exists('includes/' . $act . '.php')) {
     foreach ($lng_set as $key => $val) {
         echo '<tr>' .
             '<td valign="top"><input type="radio" name="lng_id" value="' . $key . '" ' . ($key == $lng_id ? 'checked="checked"' : '') . ' /></td>' .
-            '<td>' . $val['name'] . (isset($core->language_iso) && $core->language_iso == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '</td>' .
+            '<td>' . $val['name'] . (isset($core->lng) && $core->lng == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '</td>' .
             '</tr>';
     }
     echo '<tr><td>&nbsp;</td><td style="padding-top:6px"><input type="submit" name="submit" value="' . $lng['change'] . '" /></td></tr>' .
