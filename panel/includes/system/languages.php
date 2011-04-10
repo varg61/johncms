@@ -83,7 +83,9 @@ switch ($mod) {
             );
             echo '<tr>' .
                  '<td valign="top"><input type="radio" value="' . $key . '" name="iso" ' . ($key == $set['lng'] ? 'checked="checked"' : '') . '/></td>' .
-                 '<td style="padding-bottom:6px"><b>' . $val['name'] . '</b>&#160;<span class="green">[' . $key . ']</span>' .
+                 '<td style="padding-bottom:6px">' .
+                 (file_exists('../images/flags/' . $key . '.gif') ? '<img src="../images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
+                 '<b>' . $val['name'] . '</b>&#160;<span class="green">[' . $key . ']</span>' .
                  '<div class="sub">' . functions::display_menu($lng_menu, '<br />') . '</div></td>' .
                  '</tr>';
         }
