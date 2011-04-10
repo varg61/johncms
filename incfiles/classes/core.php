@@ -155,7 +155,6 @@ class core {
     private function ip_whitelist($ip) {
         global $rootpath;
         $file = $rootpath . 'files/cache/ip_wlist.dat';
-
         if (file_exists($file)) {
             foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $val) {
                 $tmp = explode(':', $val);
@@ -229,19 +228,19 @@ class core {
     -----------------------------------------------------------------
     */
     private function lng_detect() {
-        if ($this->user_id && isset($this->user_set['lng']) && !empty($this->user_set['lng']) && in_array($this->user_set['lng'], $this->lng_list)) {
-            //$this->lng = $this->user_settings['lng'];
+        if(isset($_SESSION['lng']) && array_key_exists($_SESSION['lng'], $this->lng_list)){
+            // По сессии
+            $this->lng = $_SESSION['lng'];
+        } elseif ($this->user_id && isset($this->user_set['lng']) && !empty($this->user_set['lng']) && in_array($this->user_set['lng'], $this->lng_list)) {
+            // По настройкам пользователя
+            $this->lng = $this->user_set['lng'];
         } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            if (isset($_SESSION['lng'])) {
-                //$this->lng = $_SESSION['lng'];
-            } else {
-                foreach (explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE']))) as $var) {
-                    $lng = substr($var, 0, 2);
-                    if (in_array($lng, $this->lng_list)) {
-                        //$this->lng = $lng;
-                        //$_SESSION['lng'] = $lng;
-                        break;
-                    }
+            // По браузеру
+            foreach (explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE']))) as $var) {
+                $lng = substr($var, 0, 2);
+                if (array_key_exists($lng, $this->lng_list)) {
+                    $this->lng = $lng;
+                    break;
                 }
             }
         }
@@ -252,7 +251,7 @@ class core {
     Загружаем фразы языка из файла
     -----------------------------------------------------------------
     */
-    public function load_lng($module = 'main') {
+    public function load_lng($module = '_core') {
         global $rootpath;
         $lng_file = $rootpath . 'incfiles/languages/' . $this->lng . '/' . $module . '.lng';
         if (file_exists($lng_file)) {
@@ -299,7 +298,6 @@ class core {
             $user_ps = md5(trim($_COOKIE['cups']));
             $_SESSION['ups'] = $user_ps;
         }
-
         if ($user_id && $user_ps) {
             $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$user_id'");
             if (mysql_num_rows($req)) {
@@ -335,7 +333,6 @@ class core {
     */
     private function user_ban_check() {
         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '" . $this->user_id . "' AND `ban_time` > '" . $this->system_time . "'");
-
         if (mysql_num_rows($req)) {
             $this->user_rights = 0;
             while (($res = mysql_fetch_row($req)) !== false) {

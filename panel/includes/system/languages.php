@@ -24,10 +24,8 @@ if ($rights < 9) {
 */
 $lng_list = array();
 $lng_desc = array();
-$languages = glob('../incfiles/languages/*/_lng.ini');
-foreach ($languages as $val) {
-    $array = explode('/', dirname($val));
-    $iso = array_pop($array);
+foreach (glob('../incfiles/languages/*/_core.ini') as $val) {
+    $iso = array_pop(explode('/', dirname($val)));
     $desc = parse_ini_file($val);
     $lng_list[$iso] = isset($desc['name']) && !empty($desc['name']) ? $desc['name'] : $iso;
     $lng_desc[$iso] = $desc;
@@ -91,7 +89,7 @@ switch ($mod) {
         }
         echo '<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . $lng['save'] . '" /></td></tr>' .
              '</table></p>' .
-             '</form></div><div class="phdr">' . $lng['total'] . ': ' . mysql_num_rows($req) . '</div>' .
+             '</form></div><div class="phdr">' . $lng['total'] . ': ' . count($lng_desc) . '</div>' .
              '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 ?>
