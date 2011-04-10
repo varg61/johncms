@@ -78,14 +78,11 @@ if ($cms_ads[0])
 Выводим логотип и переключатель языков
 -----------------------------------------------------------------
 */
-foreach ($core->lng_list as $key => $val)
-    $sel[] = '<a href="?setlng=' . $key . '" title="' . $val . '"><img src="' . $set['homeurl'] . '/images/flags/' . $key . '.gif" alt="" width="16" height="11"/></a>';
-echo '<table width="100%" border="0" cellspacing="0" cellpadding="1">' .
-     '<tr>' .
-     '<td valign="bottom"><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></a></td>' .
-     '<td align="right">' . implode(' ', $sel) . '</td>' .
-     '</tr>' .
-     '</table>';
+echo '<table width="100%" border="0" cellspacing="0" cellpadding="1"><tr>' .
+     '<td valign="bottom"><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></a></td>';
+if($headmod == 'mainpage')
+    echo '<td align="right"><a href="go.php?lng"><b>' . strtoupper($core->lng) . '</b></a>&#160;<img src="' . $set['homeurl'] . '/images/flags/' . $core->lng . '.gif" alt=""/>&#160;</td>';
+echo '</tr></table>';
 
 /*
 -----------------------------------------------------------------
@@ -101,9 +98,8 @@ echo '<div class="header"> ' . $lng['hi'] . ', ' . ($user_id ? '<b>' . $login . 
 */
 echo '<div class="tmn">';
 echo ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) ? '<a href=\'' . $set['homeurl'] . '\'>' . $lng['homepage'] . '</a> | ' : '';
-echo ($user_id) ? '<a href="' . $set['homeurl'] . '/users/profile.php?act=office">' . $lng['personal'] . '</a> | ' : '';
-echo $user_id
-    ? '<a href="' . $set['homeurl'] . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $set['homeurl'] . '/login.php">' . $lng['login'] . '</a> | <a href="' . $set['homeurl'] . '/registration.php">' . $lng['registration'] . '</a>';
+echo $user_id ? '<a href="' . $set['homeurl'] . '/users/profile.php?act=office">' . $lng['personal'] . '</a> | ' : '';
+echo $user_id ? '<a href="' . $set['homeurl'] . '/exit.php">' . $lng['exit'] . '</a>' : '<a href="' . $set['homeurl'] . '/login.php">' . $lng['login'] . '</a> | <a href="' . $set['homeurl'] . '/registration.php">' . $lng['registration'] . '</a>';
 echo '</div><div class="maintxt">';
 
 /*

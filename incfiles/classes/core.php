@@ -245,7 +245,7 @@ class core {
     -----------------------------------------------------------------
     */
     private function lng_detect() {
-        $setlng = isset($_GET['setlng']) ? substr(trim($_GET['setlng']), 0, 2) : '';
+        $setlng = isset($_POST['setlng']) ? substr(trim($_POST['setlng']), 0, 2) : '';
         if(!empty($setlng) && array_key_exists($setlng, $this->lng_list)){
             // Переключатель языка
             $_SESSION['lng'] = $setlng;
