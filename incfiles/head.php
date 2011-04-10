@@ -75,10 +75,17 @@ if ($cms_ads[0])
 
 /*
 -----------------------------------------------------------------
-Выводим логотип
+Выводим логотип и переключатель языков
 -----------------------------------------------------------------
 */
-echo '<div><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></a></div>';
+foreach ($core->lng_list as $key => $val)
+    $sel[] = '<a href="?setlng=' . $key . '" title="' . $val . '"><img src="' . $set['homeurl'] . '/images/flags/' . $key . '.gif" alt="" width="16" height="11"/></a>';
+echo '<table width="100%" border="0" cellspacing="0" cellpadding="1">' .
+     '<tr>' .
+     '<td valign="bottom"><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></a></td>' .
+     '<td align="right">' . implode(' ', $sel) . '</td>' .
+     '</tr>' .
+     '</table>';
 
 /*
 -----------------------------------------------------------------
