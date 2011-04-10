@@ -224,6 +224,23 @@ class core {
 
     /*
     -----------------------------------------------------------------
+    Получаем системные настройки
+    -----------------------------------------------------------------
+    */
+    private function system_settings() {
+        $set = array();
+        $req = mysql_query("SELECT * FROM `cms_settings`");
+        while (($res = mysql_fetch_row($req)) !== false) {
+            $set[$res[0]] = $res[1];
+        }
+        $this->lng = isset($set['lng']) && !empty($set['lng']) ? $set['lng'] : 'en';
+        $this->lng_list = isset($set['lng_list']) ? unserialize($set['lng_list']) : array();
+        $this->system_time = time() + $set['timeshift'] * 3600;
+        $this->system_settings = $set;
+    }
+
+    /*
+    -----------------------------------------------------------------
     Определяем язык
     -----------------------------------------------------------------
     */
@@ -231,7 +248,7 @@ class core {
         if(isset($_SESSION['lng']) && array_key_exists($_SESSION['lng'], $this->lng_list)){
             // По сессии
             $this->lng = $_SESSION['lng'];
-        } elseif ($this->user_id && isset($this->user_set['lng']) && !empty($this->user_set['lng']) && in_array($this->user_set['lng'], $this->lng_list)) {
+        } elseif ($this->user_id && isset($this->user_set['lng']) && array_key_exists($this->user_set['lng'], $this->lng_list)) {
             // По настройкам пользователя
             $this->lng = $this->user_set['lng'];
         } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
@@ -259,23 +276,6 @@ class core {
             return $out;
         }
         die('ERROR: Language file is missing');
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Получаем системные настройки
-    -----------------------------------------------------------------
-    */
-    private function system_settings() {
-        $set = array();
-        $req = mysql_query("SELECT * FROM `cms_settings`");
-        while (($res = mysql_fetch_row($req)) !== false) {
-            $set[$res[0]] = $res[1];
-        }
-        $this->lng = isset($set['lng']) && !empty($set['lng']) ? $set['lng'] : 'en';
-        $this->lng_list = isset($set['lng_list']) ? unserialize($set['lng_list']) : array();
-        $this->system_time = time() + $set['timeshift'] * 3600;
-        $this->system_settings = $set;
     }
 
     /*

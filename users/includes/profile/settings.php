@@ -122,25 +122,20 @@ switch ($mod) {
                 $set_user['field_h'] = 1;
             elseif ($set_user['field_h'] > 9)
                 $set_user['field_h'] = 9;
-            $set_user['skin'] = isset($_POST['skin']) ? functions::check($_POST['skin']) : 'default';
-            $arr = array();
-            $dir = opendir('../theme');
-            while ($skindef = readdir($dir)) {
-                if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn'))
-                    $arr[] = str_replace('.css', '', $skindef);
-            }
-            closedir($dir);
-            if (!in_array($set_user['skin'], $arr))
-                $set_user['skin'] = 'default';
+
+            // Устанавливаем скин
+            foreach (glob('../theme/*/*.css') as $val)
+                $theme_list[] = array_pop(explode('/', dirname($val)));
+            $set_user['skin'] = isset($_POST['skin']) && in_array($_POST['skin'], $theme_list) ? functions::check($_POST['skin']) : $set['skindef'];
+
             // Устанавливаем язык
             $lng_select = isset($_POST['iso']) ? trim($_POST['iso']) : false;
-            if ($lng_select && $lng_select != $core->language_id) {
-                $req = mysql_query("SELECT * FROM `cms_lng_list` WHERE `id` = '$lng_select'");
-                if (mysql_num_rows($req)) {
-                    $core->language_id = $lng_select;
-                    $lng = $core->load_lng();
-                }
+            if ($lng_select && array_key_exists($lng_select, $core->lng_list)) {
+                $set_user['lng'] = $lng_select;
+                unset($_SESSION['lng']);
             }
+
+            // Записываем настройки
             mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id'");
             $_SESSION['set_ok'] = 1;
             header('Location: profile.php?act=settings');
@@ -188,25 +183,29 @@ switch ($mod) {
              '<input name="gzip" type="checkbox" value="1" ' . ($core->user_set['gzip'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['gzip_show'] . '<br />' .
              '<input name="online" type="checkbox" value="1" ' . ($core->user_set['online'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['time_online'] . '<br />' .
              '<input name="movings" type="checkbox" value="1" ' . ($core->user_set['movings'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['transitions_counter'] .
-             '</p><p><h3>' . $lng['design_template'] . '</h3><select name="skin">';
+             '</p>';
+
         // Выбор темы оформления
-        $dir = opendir('../theme');
-        while ($skindef = readdir($dir)) {
-            if (($skindef != '.') && ($skindef != '..') && ($skindef != '.svn')) {
-                $skindef = str_replace('.css', '', $skindef);
-                echo '<option' . ($core->user_set['skin'] == $skindef ? ' selected="selected">' : '>') . $skindef . '</option>';
-            }
+        echo '<p><h3>' . $lng['design_template'] . '</h3><select name="skin">';
+        foreach (glob('../theme/*/*.css') as $val) {
+            $theme = array_pop(explode('/', dirname($val)));
+            echo '<option' . ($core->user_set['skin'] == $theme ? ' selected="selected">' : '>') . $theme . '</option>';
         }
-        closedir($dir);
         echo '</select></p>';
+
         // Выбор языка
         if (count($core->lng_list) > 1) {
             echo '<p><h3>' . $lng['language_select'] . '</h3>';
             foreach ($core->lng_list as $key => $val) {
-                echo '<div><input type="radio" value="' . $key . '" name="iso" ' . ($key == $core->lng ? 'checked="checked"' : '') . '/>&#160;' . $val . '</div>';
+                echo '<div><input type="radio" value="' . $key . '" name="iso" ' . ($key == $core->user_set['lng'] ? 'checked="checked"' : '') . '/>&#160;' .
+                     (file_exists('../images/flags/' . $key . '.gif') ? '<img src="../images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
+                     $val .
+                     ($key == $core->system_settings['lng'] ? ' <small class="red">[' . $lng['default'] . ']</small>' : '') .
+                     '</div>';
             }
             echo '</p>';
         }
+
         echo '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
              '<div class="phdr"><a href="profile.php?act=settings&amp;reset">' . $lng['reset_settings'] . '</a></div>';
 }
