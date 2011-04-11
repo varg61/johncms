@@ -188,7 +188,8 @@ switch ($mod) {
         // Выбор темы оформления
         echo '<p><h3>' . $lng['design_template'] . '</h3><select name="skin">';
         foreach (glob('../theme/*/*.css') as $val) {
-            $theme = array_pop(explode('/', dirname($val)));
+            $dir = explode('/', dirname($val));
+            $theme = array_pop($dir);
             echo '<option' . ($core->user_set['skin'] == $theme ? ' selected="selected">' : '>') . $theme . '</option>';
         }
         echo '</select></p>';
@@ -196,8 +197,9 @@ switch ($mod) {
         // Выбор языка
         if (count($core->lng_list) > 1) {
             echo '<p><h3>' . $lng['language_select'] . '</h3>';
+            $user_lng = isset($core->user_set['lng']) ? $core->user_set['lng'] : $core->lng;
             foreach ($core->lng_list as $key => $val) {
-                echo '<div><input type="radio" value="' . $key . '" name="iso" ' . ($key == $core->user_set['lng'] ? 'checked="checked"' : '') . '/>&#160;' .
+                echo '<div><input type="radio" value="' . $key . '" name="iso" ' . ($key == $user_lng ? 'checked="checked"' : '') . '/>&#160;' .
                      (file_exists('../images/flags/' . $key . '.gif') ? '<img src="../images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
                      $val .
                      ($key == $core->system_settings['lng'] ? ' <small class="red">[' . $lng['default'] . ']</small>' : '') .

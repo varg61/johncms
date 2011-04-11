@@ -3,6 +3,7 @@
 --
 DROP TABLE IF EXISTS `cms_lng_list`;
 DROP TABLE IF EXISTS `cms_lng_phrases`;
+ALTER TABLE `users` DROP `set_language`;
 
 
 

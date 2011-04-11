@@ -25,7 +25,8 @@ if ($rights < 9) {
 $lng_list = array();
 $lng_desc = array();
 foreach (glob('../incfiles/languages/*/_core.ini') as $val) {
-    $iso = array_pop(explode('/', dirname($val)));
+    $dir = explode('/', dirname($val));
+    $iso = array_pop($dir);
     $desc = parse_ini_file($val);
     $lng_list[$iso] = isset($desc['name']) && !empty($desc['name']) ? $desc['name'] : $iso;
     $lng_desc[$iso] = $desc;
