@@ -264,7 +264,7 @@ CREATE TABLE `cms_settings` (
 -- Дамп данных таблицы `cms_settings`
 --
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
-('lng_iso', ''),
+('lng', 'en'),
 ('homeurl', ''),
 ('email', ''),
 ('timeshift', '0'),
