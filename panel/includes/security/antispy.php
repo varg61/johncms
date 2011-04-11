@@ -9,7 +9,6 @@
 * @author      http://johncms.com/about
 */
 
-//TODO: Разобраться с подкаталогом /incfiles/lib
 defined('_IN_JOHNADM') or die('Error: restricted access');
 define('ROOT_DIR', '..');
 
@@ -41,6 +40,7 @@ class scaner {
         '/rss',
         '/sitemap',
         '/theme',
+        '/update',
         '/users'
     );
     public $good_files = array (
