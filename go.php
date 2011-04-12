@@ -23,7 +23,7 @@ if(isset($_GET['lng'])){
     -----------------------------------------------------------------
     */
     require('incfiles/head.php');
-    echo '<div class="menu"><form action="index.php" method="post"><p>';
+    echo '<div class="menu"><form action="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '" method="post"><p>';
     if (count($core->lng_list) > 1) {
         echo '<p><h3>' . $lng['language_select'] . '</h3>';
         foreach ($core->lng_list as $key => $val) {
