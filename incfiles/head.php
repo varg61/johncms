@@ -80,7 +80,8 @@ if ($cms_ads[0])
 */
 echo '<table width="100%" border="0" cellspacing="0" cellpadding="1"><tr>' .
      '<td valign="bottom"><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></a></td>';
-echo '<td align="right"><a href="' . $set['homeurl'] . '/go.php?lng"><b>' . strtoupper($core->lng) . '</b></a>&#160;<img src="' . $set['homeurl'] . '/images/flags/' . $core->lng . '.gif" alt=""/>&#160;</td>';
+if(count($core->lng_list) > 1)
+    echo '<td align="right"><a href="' . $set['homeurl'] . '/go.php?lng"><b>' . strtoupper($core->lng) . '</b></a>&#160;<img src="' . $set['homeurl'] . '/images/flags/' . $core->lng . '.gif" alt=""/>&#160;</td>';
 echo '</tr></table>';
 
 /*

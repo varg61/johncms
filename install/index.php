@@ -13,7 +13,7 @@ define('INSTALL', 1);
 @ini_set("max_execution_time", "600");
 
 // Служебные переменные
-$lng_iso = 'ru';
+$lng_iso = 'en';
 $act = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : '';
 $mod = isset($_REQUEST['mod']) ? trim($_REQUEST['mod']) : '';
 session_name('SESID');
@@ -77,7 +77,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
      '.small{font-size: x-small}' .
      '</style>' .
      '</head><body>' .
-     '<h2 class="green">JohnCMS 5.0.0</h2>' . $pagedesc . '<hr />';
+     '<h2 class="green">JohnCMS 5.0.0</h2>' . $lng['install'] . '<hr />';
 
 /*
 -----------------------------------------------------------------
@@ -95,10 +95,10 @@ if (in_array($act, $actions) && file_exists('includes/' . $act . '.php')) {
     Главное меню инсталлятора
     -----------------------------------------------------------------
     */
-    echo '<h3 class="blue">' . $lng['install_note'] . '</h3>' .
+    echo '<h3>' . $lng['install_note'] . '</h3>' .
          '<a href="index.php?act=install&amp;lng=' . $lng_iso . '"><b>' . $lng['start_installation'] . '</b></a>' .
          '<hr />' .
-         '<h3 class="blue">' . $lng['change_language'] . '</h3>' .
+         '<h3>' . $lng['change_language'] . '</h3>' .
          '<form action="index.php" method="post">';
     foreach ($lng_list as $val) {
         echo '<div><input type="radio" name="lng" value="' . $val . '" ' . ($val == $lng_iso ? 'checked="checked"' : '') . ' />' .

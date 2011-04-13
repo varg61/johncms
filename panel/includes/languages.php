@@ -16,6 +16,7 @@ if ($rights < 9) {
     header('Location: http://johncms.com/?err');
     exit;
 }
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['language_default'] . '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -37,6 +38,11 @@ foreach (glob('../incfiles/languages/*/_core.ini') as $val) {
 Автоустановка языков
 -----------------------------------------------------------------
 */
+if(isset($_GET['refresh'])){
+    mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'lng_list'");
+    $core->lng_list = array();
+    echo '<div class="gmenu"><p>' . $lng['refresh_descriptions_ok'] . '</p></div>';
+}
 $lng_add = array_diff(array_keys($lng_list), $core->lng_list);
 $lng_del = array_diff($core->lng_list, array_keys($lng_list));
 if (!empty($lng_add) || !empty($lng_del)) {
@@ -72,7 +78,6 @@ switch ($mod) {
         Выводим список доступных языков
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['language_default'] . '</div>';
         echo '<div class="menu"><form action="index.php?act=languages&amp;mod=set" method="post"><p>';
         echo '<table><tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3>' . $lng['language_system'] . '</h3></td></tr>';
         foreach ($lng_desc as $key => $val) {
@@ -93,6 +98,6 @@ switch ($mod) {
         echo '<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . $lng['save'] . '" /></td></tr>' .
              '</table></p>' .
              '</form></div><div class="phdr">' . $lng['total'] . ': ' . count($lng_desc) . '</div>' .
-             '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+             '<p><a href="index.php?act=languages&amp;refresh">' . $lng['refresh_descriptions'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
 ?>

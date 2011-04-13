@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('INSTALL') or die('Error: restricted access');
 $lng_id = 0; // Delete!!!
@@ -17,14 +17,16 @@ function show_errors($error) {
     if (!empty($error)) {
         // Показываем ошибки
         $out = '<div class="red" style="margin-bottom: 4px"><b>' . $lng['error'] . '</b>';
-        foreach ($error as $val)$out .= '<div>' . $val . '</div>';
+        foreach ($error as $val) $out .= '<div>' . $val . '</div>';
         $out .= '</div>';
         return $out;
     } else {
         return false;
     }
 }
-switch ($_GET['mod']) {
+
+$mod = isset($_REQUEST['mod']) ? trim($_REQUEST['mod']) : '';
+switch ($mod) {
     case 'final':
         /*
         -----------------------------------------------------------------
@@ -33,11 +35,11 @@ switch ($_GET['mod']) {
         */
         functions::smileys(0, 2);
         echo '<h2 class="blue">' . $lng['congratulations'] . '</h2>' .
-            $lng['installation_completed'] . '<p><ul>' .
-            '<li><a href="../panel">' . $lng['admin_panel'] . '</a></li>' .
-            '<li><a href="../index.php">' . $lng['to_site'] . '</a></li>' .
-            '</ul></p>' .
-            $lng['final_warning'];
+             $lng['installation_completed'] . '<p><ul>' .
+             '<li><a href="../panel">' . $lng['admin_panel'] . '</a></li>' .
+             '<li><a href="../index.php">' . $lng['to_site'] . '</a></li>' .
+             '</ul></p>' .
+             $lng['final_warning'];
         break;
 
     case 'set':
@@ -47,9 +49,9 @@ switch ($_GET['mod']) {
         -----------------------------------------------------------------
         */
         $db_check = false;
-        $db_error = array ();
-        $site_error = array ();
-        $admin_error = array ();
+        $db_error = array();
+        $site_error = array();
+        $admin_error = array();
         // Принимаем данные формы
         $db_host = isset($_POST['dbhost']) ? htmlentities(trim($_POST['dbhost'])) : 'localhost';
         $db_name = isset($_POST['dbname']) ? htmlentities(trim($_POST['dbname'])) : 'johncms';
@@ -107,12 +109,12 @@ switch ($_GET['mod']) {
             if ($db_check && empty($site_error) && empty($admin_error)) {
                 // Создаем системный файл db.php
                 $dbfile = "<?php\r\n\r\n" .
-                    "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" .
-                    '$db_host = ' . "'$db_host';\r\n" .
-                    '$db_name = ' . "'$db_name';\r\n" .
-                    '$db_user = ' . "'$db_user';\r\n" .
-                    '$db_pass = ' . "'$db_pass';\r\n\r\n" .
-                    '?>';
+                          "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" .
+                          '$db_host = ' . "'$db_host';\r\n" .
+                          '$db_name = ' . "'$db_name';\r\n" .
+                          '$db_user = ' . "'$db_user';\r\n" .
+                          '$db_pass = ' . "'$db_pass';\r\n\r\n" .
+                          '?>';
                 if (!file_put_contents('../incfiles/db.php', $dbfile)) {
                     echo 'ERROR: Can not write db.php</body></html>';
                     exit;
@@ -125,18 +127,18 @@ switch ($_GET['mod']) {
                 require('includes/parse_sql.php');
                 $sql = new parse_sql('data/install.sql');
                 if (!empty($sql->errors)) {
-                    foreach ($sql->errors as $val)echo $val . '<br />';
+                    foreach ($sql->errors as $val) echo $val . '<br />';
                     echo '</body></html>';
                     exit;
                 }
                 // Добавляем в базу системный язык
-                $attr = serialize(array (
-                    'author' => $lng_set[$lng_id]['author'],
-                    'author_email' => $lng_set[$lng_id]['author_email'],
-                    'author_url' => $lng_set[$lng_id]['author_url'],
-                    'description' => $lng_set[$lng_id]['description'],
-                    'version' => $lng_set[$lng_id]['version']
-                ));
+                $attr = serialize(array(
+                                      'author' => $lng_set[$lng_id]['author'],
+                                      'author_email' => $lng_set[$lng_id]['author_email'],
+                                      'author_url' => $lng_set[$lng_id]['author_url'],
+                                      'description' => $lng_set[$lng_id]['description'],
+                                      'version' => $lng_set[$lng_id]['version']
+                                  ));
                 mysql_query("INSERT INTO `cms_lng_list` SET
                     `iso` = '" . $lng_set[$lng_id]['iso'] . "',
                     `name` = '" . $lng_set[$lng_id]['name'] . "',
@@ -146,7 +148,7 @@ switch ($_GET['mod']) {
                 $lng_insert_id = mysql_insert_id();
                 $lng_array = parse_ini_file('languages/' . $lng_set[$lng_id]['filename'] . '.ini', true);
                 unset($lng_array['description']); // Удаляем описание языка
-                unset($lng_array['install']);     // Удаляем фразы инсталлятора
+                unset($lng_array['install']); // Удаляем фразы инсталлятора
                 foreach ($lng_array as $module => $phr_array) {
                     foreach ($phr_array as $keyword => $phrase) {
                         mysql_query("INSERT INTO `cms_lng_phrases` SET
@@ -184,7 +186,7 @@ switch ($_GET['mod']) {
                 setcookie("cuid", base64_encode($user_id), time() + 3600 * 24 * 365);
                 setcookie("cups", md5($admin_pass), time() + 3600 * 24 * 365);
                 // Установка ДЕМО данных
-                if($demo){
+                if ($demo) {
                     $demo_data = new parse_sql('data/demo.sql');
                 }
                 // Установка завершена
@@ -192,34 +194,34 @@ switch ($_GET['mod']) {
             }
         }
         echo '<form action="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '" method="post">' .
-            '<h2 class="blue">' . $lng['database'] . '</h2>' . show_errors($db_error) .
-            '<small class="blue"><b>MySQL Host:</b></small><br />' .
-            '<input type="text" name="dbhost" value="' . $db_host . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
-            '<small class="blue"><b>MySQL Database:</b></small><br />' .
-            '<input type="text" name="dbname" value="' . $db_name . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['name']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
-            '<small class="blue"><b>MySQL User:</b></small><br />' .
-            '<input type="text" name="dbuser" value="' . $db_user . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) || isset($db_error['user']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
-            '<small class="blue"><b>MySQL Password:</b></small><br />' .
-            '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
+             '<h2 class="blue">' . $lng['database'] . '</h2>' . show_errors($db_error) .
+             '<small class="blue"><b>MySQL Host:</b></small><br />' .
+             '<input type="text" name="dbhost" value="' . $db_host . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+             '<small class="blue"><b>MySQL Database:</b></small><br />' .
+             '<input type="text" name="dbname" value="' . $db_name . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['name']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+             '<small class="blue"><b>MySQL User:</b></small><br />' .
+             '<input type="text" name="dbuser" value="' . $db_user . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) || isset($db_error['user']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+             '<small class="blue"><b>MySQL Password:</b></small><br />' .
+             '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
         if ($db_check) {
             // Настройки Сайта
             echo '<p><h2 class="blue">' . $lng['site_settings'] . '</h2>' . show_errors($site_error) .
-                '<small class="blue"><b>' . $lng['site_url'] . ':</b></small><br />' .
-                '<input type="text" name="siteurl" value="' . $site_url . '"' . (isset($site_error['url']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
-                '<small class="gray">' . $lng['site_url_help'] . '</small><br />' .
-                '<small class="blue"><b>' . $lng['site_email'] . ':</b></small><br />' .
-                '<input type="text" name="sitemail" value="' . $site_mail . '"><br />' .
-                '<small class="gray">' . $lng['site_email_help'] . '</small><br />' .
-                '<input type="checkbox" name="demo" value="1"><small class="blue">&#160;<b>' . $lng['install_demo'] . '</b></small><br />' .
-                '<small class="gray">' . $lng['install_demo_help'] . '</small></p>' .
-                '<p><h2 class="blue">' . $lng['admin'] . '</h2>' . show_errors($admin_error) .
-                '<small class="blue"><b>' . $lng['admin_login'] . ':</b></small><br />' .
-                '<input type="text" name="admin" value="' . $admin_user . '"' . (isset($admin_error['admin']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
-                '<small class="gray">' . $lng['admin_login_help'] . '</small><br />' .
-                '<small class="blue"><b>' . $lng['admin_password'] . ':</b></small><br />' .
-                '<input type="text" name="password" value="' . $admin_pass . '"' . (isset($admin_error['pass']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
-                '<small class="gray">' . $lng['admin_password_help'] . '</small></p>' .
-                '<p><input type="submit" name="install" value="' . $lng['setup'] . '"></p>';
+                 '<small class="blue"><b>' . $lng['site_url'] . ':</b></small><br />' .
+                 '<input type="text" name="siteurl" value="' . $site_url . '"' . (isset($site_error['url']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+                 '<small class="gray">' . $lng['site_url_help'] . '</small><br />' .
+                 '<small class="blue"><b>' . $lng['site_email'] . ':</b></small><br />' .
+                 '<input type="text" name="sitemail" value="' . $site_mail . '"><br />' .
+                 '<small class="gray">' . $lng['site_email_help'] . '</small><br />' .
+                 '<input type="checkbox" name="demo" value="1"><small class="blue">&#160;<b>' . $lng['install_demo'] . '</b></small><br />' .
+                 '<small class="gray">' . $lng['install_demo_help'] . '</small></p>' .
+                 '<p><h2 class="blue">' . $lng['admin'] . '</h2>' . show_errors($admin_error) .
+                 '<small class="blue"><b>' . $lng['admin_login'] . ':</b></small><br />' .
+                 '<input type="text" name="admin" value="' . $admin_user . '"' . (isset($admin_error['admin']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+                 '<small class="gray">' . $lng['admin_login_help'] . '</small><br />' .
+                 '<small class="blue"><b>' . $lng['admin_password'] . ':</b></small><br />' .
+                 '<input type="text" name="password" value="' . $admin_pass . '"' . (isset($admin_error['pass']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+                 '<small class="gray">' . $lng['admin_password_help'] . '</small></p>' .
+                 '<p><input type="submit" name="install" value="' . $lng['setup'] . '"></p>';
         } else {
             echo '<p><input type="submit" name="check" value="' . $lng['check'] . '"></p>';
         }
@@ -233,8 +235,8 @@ switch ($_GET['mod']) {
         Проверка настроек PHP и прав доступа
         -----------------------------------------------------------------
         */
-        echo '<h2 class="blue">' . $lng['check_settings'] . '</h2>';
-        $folders = array (
+        echo '<h3>' . $lng['check_settings'] . '</h3>';
+        $folders = array(
             '/download/arctemp/',
             '/download/files/',
             '/download/graftemp/',
@@ -250,26 +252,25 @@ switch ($_GET['mod']) {
             '/gallery/temp/',
             '/incfiles/'
         );
-        $files = array (
+        $files = array(
             '/library/java/textfile.txt',
             '/library/java/META-INF/MANIFEST.MF'
         );
         require('check.php');
-        echo '<hr />';
         if (!empty($error_php) || !empty($error_rights_folders) || !empty($error_rights_files)) {
             echo '<p>' . $lng['critical_errors'] . '</p>' .
-                '<p><a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
-                '<a href="index.php?act=install&amp;lng=' . $lng_iso . '">' . $lng['check_again'] . '</a></p>';
+                 '<p><a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                 '<a href="index.php?act=install&amp;lng=' . $lng_iso . '">' . $lng['check_again'] . '</a></p>';
         } elseif (!empty($warning)) {
             echo '<p>' . $lng['are_warnings'] . '</p>' .
-                '<p><a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
-                '<a href="index.php?act=install&amp;lng=' . $lng_iso . '">' . $lng['check_again'] . '</a></p>' .
-                '<p>' . $lng['ignore_warnings'] . '</p>' .
-                '<p><a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['start_installation'] . '</a> ' . $lng['not_recommended'] . '</p>';
+                 '<p><a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                 '<a href="index.php?act=install&amp;lng=' . $lng_iso . '">' . $lng['check_again'] . '</a></p>' .
+                 '<p>' . $lng['ignore_warnings'] . '</p>' .
+                 '<p><a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['start_installation'] . '</a> ' . $lng['not_recommended'] . '</p>';
         } else {
             echo '<p>' . $lng['configuration_successful'] . '</p>' .
-                '<a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
-                '<a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['start_installation'] . ' &gt;&gt;</a>';
+                 '<a href="index.php?lng=' . $lng_iso . '">&lt;&lt; ' . $lng['back'] . '</a> | ' .
+                 '<a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['start_installation'] . ' &gt;&gt;</a>';
             echo '</p>';
         }
         break;
