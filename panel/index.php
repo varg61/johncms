@@ -32,7 +32,6 @@ $array = array (
     'ads',
     'counters',
     'languages',
-    'seo',
     'settings',
     'sitemap',
     'smileys',
