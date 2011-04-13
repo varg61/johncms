@@ -93,7 +93,10 @@ class functions {
     -----------------------------------------------------------------
     */
     static function auto_bb($form, $field) {
-        global $set, $datauser, $lng, $user_id;
+        global $set, $datauser, $lng, $user_id, $is_mobile;
+        if($is_mobile){
+            return false;
+        }
         $smileys = !empty($datauser['smileys']) ? unserialize($datauser['smileys']) : '';
         if (!empty($smileys)) {
             $res_sm = '';
