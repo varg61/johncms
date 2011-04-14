@@ -44,13 +44,11 @@ class core {
 
         // Проверка адреса IP на флуд
         if ($this->flood_chk && !$this->ip_whitelist($this->ip)) {
-            if ($this->ip_reqcount() > $this->flood_limit)
-                die('Error: exceeded limit of allowed requests (FLOOD)');
+            if ($this->ip_reqcount() > $this->flood_limit) die('Error: exceeded limit of allowed requests (FLOOD)');
         }
 
         // Удаляем слэши
-        if (get_magic_quotes_gpc())
-            $this->del_slashes();
+        if (get_magic_quotes_gpc()) $this->del_slashes();
 
         // Получаем User Agent
         $this->user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? htmlentities(substr($_SERVER['HTTP_USER_AGENT'], 0, 150), ENT_QUOTES) : 'Not Recognised';
@@ -105,10 +103,8 @@ class core {
         $file = $rootpath . 'files/cache/ip_flood.dat';
         $tmp = array();
         $requests = 1;
-        if (!file_exists($file))
-            $in = fopen($file, "w+");
-        else
-            $in = fopen($file, "r+");
+        if (!file_exists($file)) $in = fopen($file, "w+");
+        else $in = fopen($file, "r+");
         flock($in, LOCK_EX) or die("Cannot flock ANTIFLOOD file.");
         $now = time();
         while ($block = fread($in, 8)) {
@@ -137,13 +133,9 @@ class core {
     -----------------------------------------------------------------
     */
     public function ip_valid($ip = '') {
-        if (empty($ip))
-            return false;
+        if (empty($ip)) return false;
         $d = explode('.', $ip);
-
-        for ($x = 0; $x < 4; $x++)
-            if (!is_numeric($d[$x]) || ($d[$x] < 0) || ($d[$x] > 255))
-                return false;
+        for ($x = 0; $x < 4; $x++) if (!is_numeric($d[$x]) || ($d[$x] < 0) || ($d[$x] > 255)) return false;
         return $ip;
     }
 
@@ -158,10 +150,8 @@ class core {
         if (file_exists($file)) {
             foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $val) {
                 $tmp = explode(':', $val);
-                if (!$tmp[1])
-                    $tmp[1] = $tmp[0];
-                if ($ip >= $tmp[0] && $ip <= $tmp[1])
-                    return true;
+                if (!$tmp[1]) $tmp[1] = $tmp[0];
+                if ($ip >= $tmp[0] && $ip <= $tmp[1]) return true;
             }
         }
         return false;
@@ -188,11 +178,7 @@ class core {
             }
         }
         unset($in);
-        if (!empty($_FILES)) {
-            foreach ($_FILES as $k => $v) {
-                $_FILES[$k]['name'] = stripslashes((string)$v['name']);
-            }
-        }
+        if (!empty($_FILES)) foreach ($_FILES as $k => $v) $_FILES[$k]['name'] = stripslashes((string)$v['name']);
     }
 
     /*
@@ -206,15 +192,15 @@ class core {
             $res = mysql_fetch_array($req);
             switch ($res['ban_type']) {
                 case 2:
-                    if (!empty($res['link']))
-                        header('Location: ' . $res['link']);
-                    else
-                        header('Location: http://johncms.com');
+                    if (!empty($res['link'])) header('Location: ' . $res['link']);
+                    else header('Location: http://johncms.com');
                     exit;
                     break;
+
                 case 3:
                     $this->regban = true;
                     break;
+
                 default :
                     header("HTTP/1.0 404 Not Found");
                     exit;
@@ -230,9 +216,7 @@ class core {
     private function system_settings() {
         $set = array();
         $req = mysql_query("SELECT * FROM `cms_settings`");
-        while (($res = mysql_fetch_row($req)) !== false) {
-            $set[$res[0]] = $res[1];
-        }
+        while (($res = mysql_fetch_row($req)) !== false) $set[$res[0]] = $res[1];
         $this->lng = isset($set['lng']) && !empty($set['lng']) ? $set['lng'] : 'en';
         $this->lng_list = isset($set['lng_list']) ? unserialize($set['lng_list']) : array();
         $this->system_time = time() + $set['timeshift'] * 3600;
@@ -246,11 +230,11 @@ class core {
     */
     private function lng_detect() {
         $setlng = isset($_POST['setlng']) ? substr(trim($_POST['setlng']), 0, 2) : '';
-        if(!empty($setlng) && array_key_exists($setlng, $this->lng_list)){
+        if (!empty($setlng) && array_key_exists($setlng, $this->lng_list)) {
             // Переключатель языка
             $_SESSION['lng'] = $setlng;
         }
-        if(isset($_SESSION['lng']) && array_key_exists($_SESSION['lng'], $this->lng_list)){
+        if (isset($_SESSION['lng']) && array_key_exists($_SESSION['lng'], $this->lng_list)) {
             // По сессии
             $this->lng = $_SESSION['lng'];
         } elseif ($this->user_id && isset($this->user_set['lng']) && array_key_exists($this->user_set['lng'], $this->lng_list)) {
@@ -291,7 +275,6 @@ class core {
     private function authorize() {
         $user_id = false;
         $user_ps = false;
-
         if (isset($_SESSION['uid']) && isset($_SESSION['ups'])) {
             // Авторизация по сессии
             $user_id = abs(intval($_SESSION['uid']));
@@ -340,9 +323,7 @@ class core {
         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '" . $this->user_id . "' AND `ban_time` > '" . $this->system_time . "'");
         if (mysql_num_rows($req)) {
             $this->user_rights = 0;
-            while (($res = mysql_fetch_row($req)) !== false) {
-                $this->user_ban[$res[4]] = 1;
-            }
+            while (($res = mysql_fetch_row($req)) !== false) $this->user_ban[$res[4]] = 1;
         }
     }
 
@@ -414,9 +395,7 @@ class core {
     -----------------------------------------------------------------
     */
     private function clean() {
-        if (!isset($this->system_settings['clean_time']))
-            mysql_query("INSERT INTO `cms_settings` SET `key` = 'clean_time', `val` = '0'");
-
+        if (!isset($this->system_settings['clean_time'])) mysql_query("INSERT INTO `cms_settings` SET `key` = 'clean_time', `val` = '0'");
         if ($this->system_settings['clean_time'] < $this->system_time - 86400) {
             // Очищаем таблицу статистики гостей (удаляем записи старше 1 дня)
             mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($this->system_time - 86400) . "'");
