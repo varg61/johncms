@@ -80,39 +80,6 @@ switch ($mod) {
         */
         echo '<ul class="gray"><li>' . $lng['check_settings'] . '</li><li>' . $lng['prepare_tables'] . '</li><li><h3 class="blue">' . $lng['data_conversion'] . '</h3></li><li>' . $lng['photoalbums_move'] . '</li></ul><hr />';
 
-        // Добавляем в базу системный язык
-        $attr = serialize(array (
-            'author' => $lng_set[$lng_id]['author'],
-            'author_email' => $lng_set[$lng_id]['author_email'],
-            'author_url' => $lng_set[$lng_id]['author_url'],
-            'description' => $lng_set[$lng_id]['description'],
-            'version' => $lng_set[$lng_id]['version']
-        ));
-        mysql_query("INSERT INTO `cms_lng_list` SET
-            `iso` = '" . $lng_set[$lng_id]['iso'] . "',
-            `name` = '" . $lng_set[$lng_id]['name'] . "',
-            `build` = '" . $lng_set[$lng_id]['build'] . "',
-            `attr` = '" . mysql_real_escape_string($attr) . "'
-        ");
-        $lng_insert_id = mysql_insert_id();
-        $lng_array = parse_ini_file('languages/' . $lng_set[$lng_id]['filename'] . '.ini', true);
-        unset($lng_array['description']); // Удаляем описание языка
-        unset($lng_array['install']);     // Удаляем фразы инсталлятора
-        foreach ($lng_array as $module => $phr_array) {
-            foreach ($phr_array as $keyword => $phrase) {
-                mysql_query("INSERT INTO `cms_lng_phrases` SET
-                    `language_id` = '$lng_insert_id',
-                    `module` = '" . mysql_real_escape_string($module) . "',
-                    `keyword` = '" . mysql_real_escape_string($keyword) . "',
-                    `default` = '" . mysql_real_escape_string($phrase) . "'
-                ");
-            }
-        }
-        
-        // Обновляем настройки
-        mysql_query("UPDATE `cms_settings` SET `val`='$lng_insert_id' WHERE `key`='lng_id'");
-        mysql_query("UPDATE `cms_settings` SET `val`='" . $lng_set[$lng_id]['iso'] . "' WHERE `key`='lng_iso'");
-
         // Конвертируем Карму
         $req = mysql_query("SELECT `id`, `plus_minus` FROM `users`");
         while ($res = mysql_fetch_assoc($req)) {
@@ -220,20 +187,6 @@ switch ($mod) {
         Обновление успешно завершено
         -----------------------------------------------------------------
         */
-        // Пересоздаем системный файл db.php
-        require('../incfiles/db.php');
-        $dbfile = "<?php\r\n\r\n" .
-            "defined('_IN_JOHNCMS') or die ('Error: restricted access');\r\n\r\n" .
-            '$db_host = ' . "'$db_host';\r\n" .
-            '$db_name = ' . "'$db_name';\r\n" .
-            '$db_user = ' . "'$db_user';\r\n" .
-            '$db_pass = ' . "'$db_pass';\r\n\r\n" .
-            '$system_build = ' . "'$system_build';\r\n\r\n" .
-            '?>';
-        if (!file_put_contents('../incfiles/db.php', $dbfile)) {
-            echo 'ERROR: Can not write db.php</body></html>';
-            exit;
-        }
         echo '<h2 class="blue">' . $lng['site_updated'] . '</h2>' . $lng['final_note'];
         echo '<p><a href="index.php">Установить дополнительные языки</a><br /><a href="' . $set['homeurl'] . '">Перейти на Сайт</a></p>';
         break;

@@ -100,17 +100,15 @@ if (!empty($_SESSION['uid'])) {
                     echo "Девушка<br/>";
                 }
                 echo "Дата добавления: $dtime<br/>";
-                if ($userr['mailact'] == 1) {
-                    if (!empty($userr['icq'])) {
-                        echo '<img src="http://web.icq.com/whitepages/online?icq=' . $userr['icq'] . '&amp;img=5" alt=""/> ICQ:' . $userr['icq'] . ' <br/> ';
-                    }
-                    if (!empty($userr['mail'])) {
-                        echo "E-mail:";
-                        if ($userr['mailvis'] == 1) {
-                            echo "$userr[mail]<br/>";
-                        } else {
-                            echo "скрыт<br/>";
-                        }
+                if (!empty($userr['icq'])) {
+                    echo '<img src="http://web.icq.com/whitepages/online?icq=' . $userr['icq'] . '&amp;img=5" alt=""/> ICQ:' . $userr['icq'] . ' <br/> ';
+                }
+                if (!empty($userr['mail'])) {
+                    echo "E-mail:";
+                    if ($userr['mailvis'] == 1) {
+                        echo "$userr[mail]<br/>";
+                    } else {
+                        echo "скрыт<br/>";
                     }
                 }
                 if (!empty($userr['www']) && $userr['www'] !== "http://" && stristr($userr['www'], "http://")) {
