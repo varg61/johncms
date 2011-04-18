@@ -11,7 +11,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$textl = 'Почта(письма)';
+$textl = 'Mail';
 $headmod = 'pradd';
 require_once("../incfiles/core.php");
 $lng_pm = $core->load_lng('pm');
