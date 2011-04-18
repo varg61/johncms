@@ -21,6 +21,7 @@ ALTER TABLE `users` DROP `cctx`;
 ALTER TABLE `users` DROP `alls`;
 ALTER TABLE `users` DROP `balans`;
 ALTER TABLE `users` DROP `set_chat`;
+ALTER TABLE `users` DROP `kod`;
 ALTER TABLE `users` CHANGE `id` `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `users` CHANGE `failed_login` `failed_login` TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `users` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0';

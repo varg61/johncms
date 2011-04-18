@@ -533,7 +533,6 @@ CREATE TABLE `users` (
   `time` int(11) NOT NULL DEFAULT '0',
   `preg` tinyint(1) NOT NULL DEFAULT '0',
   `regadm` varchar(25) NOT NULL DEFAULT '',
-  `kod` int(15) NOT NULL DEFAULT '0',
   `mailvis` tinyint(1) NOT NULL DEFAULT '0',
   `dayb` int(2) NOT NULL DEFAULT '0',
   `monthb` int(2) NOT NULL DEFAULT '0',
