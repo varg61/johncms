@@ -35,7 +35,7 @@ if(isset($_GET['lng'])){
         }
         echo '</p>';
     }
-    echo '</p><p><input type="submit" name="submit" value="Submit" /></p>' .
+    echo '</p><p><input type="submit" name="submit" value="' . $lng['apply'] . '" /></p>' .
          '<p><a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '">' . $lng['back'] . '</a></p></form></div>';
     require('incfiles/end.php');
 }
