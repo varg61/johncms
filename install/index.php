@@ -210,7 +210,9 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
              '<p><h3 class="green">' . $lng['change_language'] . '</h3>' .
              '<div><input type="radio" name="lng" value="en" ' . ($language == 'en' ? 'checked="checked"' : '') . ' />&#160;English</div>' .
              '<div><input type="radio" name="lng" value="ru" ' . ($language == 'ru' ? 'checked="checked"' : '') . ' />&#160;Русский</div>' .
-             '</p><p><input type="submit" name="submit" value="' . $lng['change'] . '" /></p><hr />';
+             '</p><p><input type="submit" name="submit" value="' . $lng['change'] . '" /></p>' .
+             '<p>' . $lng['languages'] . '</p>' .
+             '<hr />';
     }
     require(MODE . '/install.php');
     echo '<hr />&copy;&#160;Powered by <a href="http://johncms.com">JohnCMS</a></body></html>';
