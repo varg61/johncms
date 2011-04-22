@@ -13,8 +13,13 @@ define('_IN_JOHNCMS', 1);
 @ini_set("max_execution_time", "600");
 
 define('INSTALL_VERSION', '4.2.0'); // Инсталлируемая версия
-define('UPDATE_VERSION', '3.2.2'); // Обновление с версии
-define('MODE', 'install'); // Задаем режим работы инсталлятора
+define('UPDATE_VERSION', '4.1.0'); // Обновление с версии
+
+// Задаем режим работы инсталлятора
+//define('MODE', 'install');
+//define('MODE', 'update_322-420');
+//define('MODE', 'update_400-420');
+define('MODE', 'update_410-420');
 
 class install
 {
@@ -167,9 +172,9 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
         session_start();
     }
 
-    if (isset($_POST['lng']) && $_POST['lng'] == 'ru') $_SESSION['language'] = 1;
-    elseif (isset($_POST['lng']) && $_POST['lng'] == 'en') unset($_SESSION['language']);
-    $language = isset($_SESSION['language']) ? 'ru' : 'en';
+    // Загружаем язык интерфейса
+    if (isset($_POST['lng']) && ($_POST['lng'] == 'ru' || $_POST['lng'] == 'en')) $_SESSION['language'] = $_POST['lng'];
+    $language = isset($_SESSION['language']) ? $_SESSION['language'] : 'en';
     $lng_file = 'languages/' . $language . '.lng';
     if (file_exists($lng_file)) {
         $lng = parse_ini_file($lng_file) or die('ERROR: language file');

@@ -1,14 +1,12 @@
-------------------------------------------------------------
+--
 -- Удаляем ненужные таблицы
-------------------------------------------------------------
+--
 DROP TABLE IF EXISTS `cms_lng_list`;
 DROP TABLE IF EXISTS `cms_lng_phrases`;
-DROP TABLE IF EXISTS `chat`;
-DROP TABLE IF EXISTS `vik`;
 
-------------------------------------------------------------
+--
 -- Модифицируем таблицы
-------------------------------------------------------------
+--
 ALTER TABLE `users` DROP `set_language`;
 ALTER TABLE `users` DROP `postchat`;
 ALTER TABLE `users` DROP `otvetov`;
