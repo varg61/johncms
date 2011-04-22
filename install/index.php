@@ -13,13 +13,13 @@ define('_IN_JOHNCMS', 1);
 @ini_set("max_execution_time", "600");
 
 define('INSTALL_VERSION', '4.2.0'); // Инсталлируемая версия
-define('UPDATE_VERSION', '4.1.0'); // Обновление с версии
+define('UPDATE_VERSION', '3.2.2'); // Обновление с версии
 
 // Задаем режим работы инсталлятора
-//define('MODE', 'install');
+define('MODE', 'install');
 //define('MODE', 'update_322-420');
 //define('MODE', 'update_400-420');
-define('MODE', 'update_410-420');
+//define('MODE', 'update_410-420');
 
 class install
 {
@@ -185,8 +185,9 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
     ob_start();
     echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' .
          '<html xmlns="http://www.w3.org/1999/xhtml">' .
-         '<title>JohnCMS ' . INSTALL_VERSION . (MODE == 'install' ? '' : ' | Update from ' . UPDATE_VERSION) . '</title>' .
+         '<title>JohnCMS ' . INSTALL_VERSION . (MODE == 'install' ? '' : ' | ' . $lng['update_from'] . ' ' . UPDATE_VERSION) . '</title>' .
          '<style type="text/css">' .
+         'a, a:link, a:visited{color: blue;}' .
          'body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}' .
          'h1{margin: 0; padding: 0; padding-bottom: 4px;}' .
          'h2{margin: 0; padding: 0; padding-bottom: 4px;}' .
@@ -196,15 +197,17 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
          '.red{color: #FF0000;}' .
          '.green{color: #009933;}' .
          '.blue{color: #0000EE;}' .
-         '.gray{color: #888888;}' .
-         '.pgl{padding-left: 6px}' .
+         '.gray{color: gray;}' .
+         '.pgl{padding-left: 8px}' .
+         '.select{color: blue; font-size: medium; font-weight: bold}' .
          '.small{font-size: x-small}' .
+         '.st{color: gray; text-decoration: line-through}' .
          '</style>' .
          '</head><body>' .
-         '<div><h1>JohnCMS ' . INSTALL_VERSION . '</h1>' . (MODE == 'install1' ? '' : '<b>Update from ' . UPDATE_VERSION . '</b>') . '</div><hr />';
+         '<h1 class="green">JohnCMS <span class="red">' . INSTALL_VERSION . '</span></h1>' . (MODE == 'install' ? '' : '<h3>' . $lng['update_from'] . ' ' . UPDATE_VERSION . '</h3>') . '<hr />';
     if (!$act) {
         echo '<form action="index.php" method="post">' .
-             '<p><h2 class="blue">' . $lng['change_language'] . '</h3>' .
+             '<p><h3 class="green">' . $lng['change_language'] . '</h3>' .
              '<div><input type="radio" name="lng" value="en" ' . ($language == 'en' ? 'checked="checked"' : '') . ' />&#160;English</div>' .
              '<div><input type="radio" name="lng" value="ru" ' . ($language == 'ru' ? 'checked="checked"' : '') . ' />&#160;Русский</div>' .
              '</p><p><input type="submit" name="submit" value="' . $lng['change'] . '" /></p><hr />';

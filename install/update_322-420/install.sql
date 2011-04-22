@@ -1,23 +1,20 @@
-------------------------------------------------------------
+--
 -- Удаляем ненужные таблицы
-------------------------------------------------------------
+--
 DROP TABLE IF EXISTS `cms_lng_list`;
 DROP TABLE IF EXISTS `cms_lng_phrases`;
 DROP TABLE IF EXISTS `chat`;
 DROP TABLE IF EXISTS `vik`;
 
-------------------------------------------------------------
+--
 -- Модифицируем таблицы
-------------------------------------------------------------
+--
 ALTER TABLE `users` DROP `immunity`;
 ALTER TABLE `users` DROP `set_user`;
 ALTER TABLE `users` DROP `set_forum`;
-ALTER TABLE `users` DROP `set_language`;
 ALTER TABLE `users` DROP `postchat`;
 ALTER TABLE `users` DROP `otvetov`;
-ALTER TABLE `users` DROP `mailact`;
 ALTER TABLE `users` DROP `vrrat`;
-ALTER TABLE `users` DROP `cctx`;
 ALTER TABLE `users` DROP `alls`;
 ALTER TABLE `users` DROP `balans`;
 ALTER TABLE `users` DROP `set_chat`;
@@ -27,7 +24,7 @@ ALTER TABLE `users` CHANGE `failed_login` `failed_login` TINYINT( 4 ) UNSIGNED N
 ALTER TABLE `users` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0';
 ALTER TABLE `users` CHANGE `mailvis` `mailvis` BOOLEAN NOT NULL DEFAULT '0';
 ALTER TABLE `users` CHANGE `preg` `preg` BOOLEAN NOT NULL DEFAULT '0';
-ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `set_language`;
+ALTER TABLE `users` ADD `set_user` TEXT NOT NULL AFTER `place`;
 ALTER TABLE `users` ADD `set_forum` TEXT NOT NULL AFTER `set_user`;
 ALTER TABLE `users` ADD `karma_plus` INT NOT NULL DEFAULT '0' AFTER `set_forum`;
 ALTER TABLE `users` ADD `karma_minus` INT NOT NULL DEFAULT '0' AFTER `karma_plus`;
@@ -65,9 +62,9 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('activity', '1'),
 ('lng', 'en');
 
-------------------------------------------------------------
+--
 -- Создаем новые таблицы
-------------------------------------------------------------
+--
 DROP TABLE IF EXISTS `cms_album_cat`;
 CREATE TABLE `cms_album_cat` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

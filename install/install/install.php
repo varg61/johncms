@@ -14,7 +14,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 function show_errors($error)
 {
     global $lng;
-
     if (!empty($error)) {
         // Показываем ошибки
         $out = '<div class="red" style="margin-bottom: 4px"><b>' . $lng['error'] . '</b>';
@@ -34,7 +33,12 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         functions::smileys(0, 2);
-        echo '<h2 class="blue">' . $lng['congratulations'] . '</h2>' .
+        echo '<span class="st">' . $lng['check_1'] . '</span><br />' .
+             '<span class="st">' . $lng['database'] . '</span><br />' .
+             '<span class="st">' . $lng['site_settings'] . '</span>' .
+             '<h2 class="green">' . $lng['final'] . '</h2>' .
+             '<hr />';
+        echo '<h3 class="blue">' . $lng['congratulations'] . '</h3>' .
              $lng['installation_completed'] . '<p><ul>' .
              '<li><a href="../panel">' . $lng['admin_panel'] . '</a></li>' .
              '<li><a href="../index.php">' . $lng['to_site'] . '</a></li>' .
@@ -163,8 +167,18 @@ switch ($act) {
                 header('Location: index.php?act=final');
             }
         }
-        echo '<form action="index.php?act=set" method="post">' .
-             '<h2 class="blue">' . $lng['database'] . '</h2>' . show_errors($db_error) .
+        echo '<span class="st">' . $lng['check_1'] . '</span>';
+        if ($db_check) {
+            echo '<br /><span class="st">' . $lng['database'] . '</span>' .
+                 '<h2 class="green">' . $lng['site_settings'] . '</h2>';
+        } else {
+            echo '<h2 class="green">' . $lng['database'] . '</h2>' .
+                 '<span class="gray">' . $lng['site_settings'] . '</span><br />';
+        }
+        echo '<span class="gray">' . $lng['final'] . '</span>' .
+             '<hr />' .
+             '<form action="index.php?act=set" method="post">' .
+             show_errors($db_error) .
              '<small class="blue"><b>MySQL Host:</b></small><br />' .
              '<input type="text" name="dbhost" value="' . $db_host . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['host']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
              '<small class="blue"><b>MySQL Database:</b></small><br />' .
@@ -175,14 +189,14 @@ switch ($act) {
              '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
         if ($db_check) {
             // Настройки Сайта
-            echo '<p><h2 class="blue">' . $lng['site_settings'] . '</h2>' . show_errors($site_error) .
+            echo '<p>' . show_errors($site_error) .
                  '<small class="blue"><b>' . $lng['site_url'] . ':</b></small><br />' .
                  '<input type="text" name="siteurl" value="' . $site_url . '"' . (isset($site_error['url']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
                  '<small class="gray">' . $lng['site_url_help'] . '</small><br />' .
                  '<small class="blue"><b>' . $lng['site_email'] . ':</b></small><br />' .
                  '<input type="text" name="sitemail" value="' . $site_mail . '"><br />' .
                  '<small class="gray">' . $lng['site_email_help'] . '</small></p>' .
-                 '<p><h2 class="blue">' . $lng['admin'] . '</h2>' . show_errors($admin_error) .
+                 '<p>' . show_errors($admin_error) .
                  '<small class="blue"><b>' . $lng['admin_login'] . ':</b></small><br />' .
                  '<input type="text" name="admin" value="' . $admin_user . '"' . (isset($admin_error['admin']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
                  '<small class="gray">' . $lng['admin_login_help'] . '</small><br />' .
@@ -196,7 +210,7 @@ switch ($act) {
             echo '<p><input type="submit" name="check" value="' . $lng['check'] . '"></p>';
         }
         echo '</form>';
-        echo '<p><a href="index.php?act=install&amp;mod=set&amp;lng=' . $lng_iso . '">' . $lng['reset_form'] . '</a></p>';
+        echo '<p><a href="index.php?act=set">' . $lng['reset_form'] . '</a></p>';
         break;
 
     default:
@@ -205,37 +219,45 @@ switch ($act) {
         Проверка настроек PHP и прав доступа
         -----------------------------------------------------------------
         */
-        echo '<h2 class="blue">' . $lng['check_1'] . '</h2>';
+        echo '<p>' . $lng['install_note'] . '</p>';
+        echo '<p><h3 class="green">' . $lng['check_1'] . '</h3>';
+        // Проверка критических ошибок PHP
         if (($php_errors = install::check_php_errors()) !== false) {
             echo '<h3>' . $lng['php_critical_error'] . '</h3><ul>';
             foreach ($php_errors as $val) echo '<li>' . $val . '</li>';
             echo '</ul>';
         }
+        // Проверка предупреждений PHP
         if (($php_warnings = install::check_php_warnings()) !== false) {
             echo '<h3>' . $lng['php_warnings'] . '</h3><ul>';
             foreach ($php_warnings as $val) echo '<li>' . $val . '</li>';
             echo '</ul>';
         }
+        // Проверка прав доступа к папкам
         if (($folders = install::check_folders_rights()) !== false) {
             echo '<h3>' . $lng['access_rights'] . ' 777</h3><ul>';
             foreach ($folders as $val) echo '<li>' . $val . '</li>';
             echo '</ul>';
         }
+        // Проверка прав доступа к файлам
         if (($files = install::check_files_rights()) !== false) {
             echo '<h3>' . $lng['access_rights'] . ' 666</h3><ul>';
             foreach ($files as $val) echo '<li>' . $val . '</li>';
             echo '</ul>';
         }
-        echo '<hr />';
+        if (!$php_errors && !$php_warnings && !$folders && !$files) {
+            echo '<div class="pgl">' . $lng['configuration_successful'] . '</div>';
+        }
+        echo '</p><hr />';
         if ($php_errors || $folders || $files) {
             echo '<h3 class="red">' . $lng['critical_errors'] . '</h3>' .
-                 '<a href="index.php">' . $lng['check_again'] . '</a>';
+                 '<h3><a href="index.php">' . $lng['check_again'] . '</a></h3>';
         } elseif ($php_warnings) {
             echo '<h3 class="red">' . $lng['are_warnings'] . '</h3>' .
-                 '<a href="index.php">' . $lng['check_again'] . '</a><br />' .
+                 '<h3><a href="index.php">' . $lng['check_again'] . '</a></h3>' .
                  '<a href="index.php?act=set">' . $lng['ignore_warnings'] . '</a>';
         } else {
-            echo '<a href="index.php?act=set">' . $lng['install'] . '</a>';
+            echo '<h3><a href="index.php?act=set">' . $lng['install'] . '</a></h3>';
         }
         break;
 }

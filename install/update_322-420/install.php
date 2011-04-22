@@ -1,75 +1,38 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
-defined('INSTALL') or die('Error: restricted access');
-switch ($mod) {
-    case 'step1':
-        /*
-        -----------------------------------------------------------------
-        Проверка настроек PHP и прав доступа
-        -----------------------------------------------------------------
-        */
-        echo '<ul class="gray"><li><h3 class="blue">' . $lng['check_settings'] . '</h3></li><li>' . $lng['prepare_tables'] . '</li><li>' . $lng['data_conversion'] . '</li><li>' . $lng['photoalbums_move'] . '</li></ul><hr />';
-        $folders = array (
-            '/download/arctemp/',
-            '/download/files/',
-            '/download/graftemp/',
-            '/download/screen/',
-            '/files/cache/',
-            '/files/forum/attach/',
-            '/files/library/',
-            '/files/users/album/',
-            '/files/users/avatar/',
-            '/files/users/photo/',
-            '/files/users/pm/',
-            '/gallery/foto/',
-            '/gallery/temp/'
-        );
-        $files = array (
-            '/library/java/textfile.txt',
-            '/library/java/META-INF/MANIFEST.MF',
-            '/incfiles/db.php'
-        );
-        require('check.php');
-        if (!empty($error_php) || !empty($error_rights_folders) || !empty($error_rights_files)) {
-            // Если есть критические ошибки
-            echo '<p class="red">' . $lng['critical_errors'] . '</p>' .
-                '<p><a href="index.php?act=update&amp;mod=step1&amp;lng_id=' . $lng_id . '">' . $lng['check_again'] . '</a></p>';
-        } elseif (!empty($warning)) {
-            // Если есть предупреждения
-            echo '<p class="red">' . $lng['are_warnings'] . '</p>' .
-                '<p><a href="index.php?act=update&amp;mod=step1&amp;lng_id=' . $lng_id . '">' . $lng['check_again'] . '</a></p>' .
-                '<p>' . $lng['ignore_warnings'] . '</p>' .
-                '<p><a href="index.php?act=update&amp;mod=step2&amp;lng_id=' . $lng_id . '">' . $lng['start_update'] . '</a> ' . $lng['not_recommended'] . '</p>';
-        } else {
-            // Если проверка завершилась удачно
-            echo '<p class="green">' . $lng['configuration_successful'] . '<br /><a href="index.php?act=update&amp;mod=step2&amp;lng_id=' . $lng_id . '">' . $lng['start_update'] . '</a></p>';
-        }
-        break;
-
+defined('_IN_JOHNCMS') or die('Error: restricted access');
+switch ($act) {
     case 'step2':
         /*
         -----------------------------------------------------------------
         Подготовка таблиц
         -----------------------------------------------------------------
         */
-        echo '<ul class="gray"><li>' . $lng['check_settings'] . '</li><li><h3 class="blue">' . $lng['prepare_tables'] . '</h3></li><li>' . $lng['data_conversion'] . '</li><li>' . $lng['photoalbums_move'] . '</li></ul><hr />';
-        require('includes/parse_sql.php');
-        $sql = new parse_sql('data/update.sql');
-        if (!empty($sql->errors)) {
-            echo '<span class="red">' . $lng['error_table_prepare'] . ':</span><br /><small>';
-            foreach ($sql->errors as $val)echo $val . '<br />';
-            echo '</small>';
+        echo '<span class="st">' . $lng['check_1'] . '</span>' .
+             '<h2 class="green">' . $lng['prepare_tables'] . '</h2>' .
+             '<span class="gray">' . $lng['data_conversion'] . '</span><br />' .
+             '<span class="gray">' . $lng['photoalbums_move'] . '</span><br />' .
+             '<span class="gray">' . $lng['final'] . '</span>' .
+             '<hr />';
+        if (!isset($_SESSION['step2'])) {
+            $sql_errors = install::parse_sql(MODE . '/install.sql');
+            if (!empty($sql_errors)) {
+                echo '<span class="red">' . $lng['error_table_prepare'] . ':</span><br /><small>';
+                foreach ($sql_errors as $val) echo $val . '<br />';
+                echo '</small>';
+            }
+            $_SESSION['step2'] = 1;
         }
-        echo '<p class="green">' . $lng['table_prepared'] . '<br /><a href="index.php?act=update&amp;mod=step3&amp;lng_id=' . $lng_id . '">' . $lng['continue'] . '</a></p>';
+        echo '<h3><a href="index.php?act=step3">' . $lng['continue'] . '</a></h3>';
         break;
 
     case 'step3':
@@ -78,24 +41,32 @@ switch ($mod) {
         Конвертация данных
         -----------------------------------------------------------------
         */
-        echo '<ul class="gray"><li>' . $lng['check_settings'] . '</li><li>' . $lng['prepare_tables'] . '</li><li><h3 class="blue">' . $lng['data_conversion'] . '</h3></li><li>' . $lng['photoalbums_move'] . '</li></ul><hr />';
-
-        // Конвертируем Карму
-        $req = mysql_query("SELECT `id`, `plus_minus` FROM `users`");
-        while ($res = mysql_fetch_assoc($req)) {
-            $karma = explode('|', $res['plus_minus']);
-            $karma_plus = $karma[0] ? $karma[0] : '0';
-            $karma_minus = $karma[1] ? $karma[1] : '0';
-            mysql_query("UPDATE `users` SET
-                `karma_plus` = '$karma_plus',
-                `karma_minus` = '$karma_minus'
-                WHERE `id` = '" . $res['id'] . "'
-            ");
+        echo '<div>' .
+             '<span class="st">' . $lng['check_1'] . '</span><br />' .
+             '<span class="st">' . $lng['prepare_tables'] . '</span>' .
+             '<h2 class="green">' . $lng['data_conversion'] . '</h2>' .
+             '<span class="gray">' . $lng['photoalbums_move'] . '</span><br />' .
+             '<span class="gray">' . $lng['final'] . '</span>' .
+             '</div><hr />';
+        if (!isset($_SESSION['step3'])) {
+            // Конвертируем Карму
+            $req = mysql_query("SELECT `id`, `plus_minus` FROM `users`");
+            while (($res = mysql_fetch_assoc($req)) !== false) {
+                $karma = explode('|', $res['plus_minus']);
+                $karma_plus = $karma[0] ? $karma[0] : '0';
+                $karma_minus = $karma[1] ? $karma[1] : '0';
+                mysql_query("UPDATE `users` SET
+                            `karma_plus` = '$karma_plus',
+                            `karma_minus` = '$karma_minus'
+                            WHERE `id` = '" . $res['id'] . "'
+                        ");
+            }
+            mysql_query("ALTER TABLE `users` DROP `karma`");
+            mysql_query("ALTER TABLE `users` DROP `plus_minus`");
+            mysql_query("OPTIMIZE TABLE `users`");
+            $_SESSION['step3'] = 1;
         }
-        mysql_query("ALTER TABLE `users` DROP `karma`");
-        mysql_query("ALTER TABLE `users` DROP `plus_minus`");
-        mysql_query("OPTIMIZE TABLE `users`");
-        echo '<p class="green">' . $lng['data_converted'] . '<br /><a href="index.php?act=update&amp;mod=step4&amp;lng_id=' . $lng_id . '">' . $lng['continue'] . '</a></p>';
+        echo '<h3><a href="index.php?act=step4">' . $lng['continue'] . '</a></h3>';
         break;
 
     case 'step4':
@@ -104,81 +75,90 @@ switch ($mod) {
         Перенос Фотоальбомов
         -----------------------------------------------------------------
         */
-        echo '<ul class="gray"><li>' . $lng['check_settings'] . '</li><li>' . $lng['prepare_tables'] . '</li><li>' . $lng['data_conversion'] . '</li><li><h3 class="blue">' . $lng['photoalbums_move'] . '</h3></li></ul><hr />';
-        require('../incfiles/lib/class.upload.php');
-        $req_a = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `user` = '1'");
-        // Получаем список альбомов юзера
-        while ($res_a = mysql_fetch_assoc($req_a)) {
-            // Проверяем, есть ли юзер?
-            $req_u = mysql_query("SELECT `id` FROM `users` WHERE `name` = '" . $res_a['avtor'] . "' LIMIT 1");
-            if (mysql_num_rows($req_u)) {
-                // Если юзер есть, обрабатываем дальше
-                $file_list = array ();
-                $res_u = mysql_fetch_assoc($req_u);
-                $req_f = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'ft' AND `refid` = '" . $res_a['id'] . "'");
-                if (mysql_num_rows($req_f)) {
-                    // Получаем список фотографий юзера
-                    while ($res_f = mysql_fetch_assoc($req_f)) {
-                        if (file_exists('../gallery/foto/' . $res_f['name'])) {
-                            $file_list[] = $res_f['name'];
+        echo '<div>' .
+             '<span class="st">' . $lng['check_1'] . '</span><br />' .
+             '<span class="st">' . $lng['prepare_tables'] . '</span><br />' .
+             '<span class="st">' . $lng['data_conversion'] . '</span>' .
+             '<h2 class="green">' . $lng['photoalbums_move'] . '</h2>' .
+             '<span class="gray">' . $lng['final'] . '</span>' .
+             '</div><hr />';
+        if (!isset($_SESSION['step4'])) {
+            require('../incfiles/lib/class.upload.php');
+            $req_a = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `user` = '1'");
+            // Получаем список альбомов юзера
+            while (($res_a = mysql_fetch_assoc($req_a)) !== false) {
+                // Проверяем, есть ли юзер?
+                $req_u = mysql_query("SELECT `id` FROM `users` WHERE `name` = '" . $res_a['avtor'] . "' LIMIT 1");
+                if (mysql_num_rows($req_u)) {
+                    // Если юзер есть, обрабатываем дальше
+                    $file_list = array();
+                    $res_u = mysql_fetch_assoc($req_u);
+                    $req_f = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'ft' AND `refid` = '" . $res_a['id'] . "'");
+                    if (mysql_num_rows($req_f)) {
+                        // Получаем список фотографий юзера
+                        while (($res_f = mysql_fetch_assoc($req_f)) !== false) {
+                            if (file_exists('../gallery/foto/' . $res_f['name'])) {
+                                $file_list[] = $res_f['name'];
+                            }
                         }
                     }
-                }
-                // Если есть файлы, конвертируем их
-                if (count($file_list)) {
-                    // Создаем альбом
-                    mysql_query("INSERT INTO `cms_album_cat` SET
-                        `user_id` = '" . $res_u['id'] . "',
-                        `sort` = '1',
-                        `name` = 'Old Album',
-                        `description` = 'It is transferred from old Gallery',
-                        `access` = '4'
-                    ");
-                    $al = mysql_insert_id();
-                    foreach ($file_list as $file) {
-                        $handle = new upload('../gallery/foto/' . $file);
-                        $handle->file_new_name_body = 'img_' . $realtime;
-                        $handle->allowed = array (
-                            'image/jpeg',
-                            'image/gif',
-                            'image/png'
-                        );
-                        $handle->image_resize = true;
-                        $handle->image_x = 640;
-                        $handle->image_y = 480;
-                        $handle->image_ratio_no_zoom_in = true;
-                        $handle->image_convert = 'jpg';
-                        $handle->process('../files/users/album/' . $res_u['id'] . '/');
-                        $img_name = $handle->file_dst_name;
-                        if ($handle->processed) {
-                            // Обрабатываем превьюшку
-                            $handle->file_new_name_body = 'tmb_' . $realtime;
+                    // Если есть файлы, конвертируем их
+                    if (count($file_list)) {
+                        // Создаем альбом
+                        mysql_query("INSERT INTO `cms_album_cat` SET
+                                    `user_id` = '" . $res_u['id'] . "',
+                                    `sort` = '1',
+                                    `name` = 'Old Album',
+                                    `description` = 'It is transferred from old Gallery',
+                                    `access` = '4'
+                                ");
+                        $al = mysql_insert_id();
+                        foreach ($file_list as $file) {
+                            $handle = new upload('../gallery/foto/' . $file);
+                            $handle->file_new_name_body = 'img_' . $realtime;
+                            $handle->allowed = array(
+                                'image/jpeg',
+                                'image/gif',
+                                'image/png'
+                            );
                             $handle->image_resize = true;
-                            $handle->image_x = 80;
-                            $handle->image_y = 80;
+                            $handle->image_x = 640;
+                            $handle->image_y = 480;
                             $handle->image_ratio_no_zoom_in = true;
                             $handle->image_convert = 'jpg';
                             $handle->process('../files/users/album/' . $res_u['id'] . '/');
-                            $tmb_name = $handle->file_dst_name;
+                            $img_name = $handle->file_dst_name;
                             if ($handle->processed) {
-                                mysql_query("INSERT INTO `cms_album_files` SET
-                                    `album_id` = '$al',
-                                    `user_id` = '" . $res_u['id'] . "',
-                                    `img_name` = '" . mysql_real_escape_string($img_name) . "',
-                                    `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',
-                                    `time` = '$realtime',
-                                    `access` = '4'
-                                ");
+                                // Обрабатываем превьюшку
+                                $handle->file_new_name_body = 'tmb_' . $realtime;
+                                $handle->image_resize = true;
+                                $handle->image_x = 80;
+                                $handle->image_y = 80;
+                                $handle->image_ratio_no_zoom_in = true;
+                                $handle->image_convert = 'jpg';
+                                $handle->process('../files/users/album/' . $res_u['id'] . '/');
+                                $tmb_name = $handle->file_dst_name;
+                                if ($handle->processed) {
+                                    mysql_query("INSERT INTO `cms_album_files` SET
+                                                `album_id` = '$al',
+                                                `user_id` = '" . $res_u['id'] . "',
+                                                `img_name` = '" . mysql_real_escape_string($img_name) . "',
+                                                `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',
+                                                `time` = '$realtime',
+                                                `access` = '4'
+                                            ");
+                                }
                             }
+                            $handle->clean();
+                            unset($handle);
                         }
-                        $handle->clean();
-                        unset($handle);
+                        mysql_query("DELETE FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "'");
                     }
-                    mysql_query("DELETE FROM `gallery` WHERE `refid` = '" . $res_a['id'] . "'");
                 }
             }
+            $_SESSION['step4'] = 1;
         }
-        echo '<p class="green">' . $lng['photoalbums_moved'] . '<br /><a href="index.php?act=update&amp;mod=final&amp;lng_id=' . $lng_id . '">' . $lng['continue'] . '</a></p>';
+        echo '<h3><a href="index.php?act=final">' . $lng['continue'] . '</a></h3>';
         break;
 
     case 'final':
@@ -187,12 +167,63 @@ switch ($mod) {
         Обновление успешно завершено
         -----------------------------------------------------------------
         */
-        echo '<h2 class="blue">' . $lng['site_updated'] . '</h2>' . $lng['final_note'];
-        echo '<p><a href="index.php">Установить дополнительные языки</a><br /><a href="' . $set['homeurl'] . '">Перейти на Сайт</a></p>';
+        echo '<div>' .
+             '<span class="st">' . $lng['check_1'] . '</span><br />' .
+             '<span class="st">' . $lng['prepare_tables'] . '</span><br />' .
+             '<span class="st">' . $lng['data_conversion'] . '</span><br />' .
+             '<span class="st">' . $lng['photoalbums_move'] . '</span>' .
+             '<h2 class="green">' . $lng['final'] . '</h2>' .
+             '</div><hr />';
+        echo '<p><h3 class="green">' . str_replace('INSTALL_VERSION', INSTALL_VERSION, $lng['successfully_updated']) . '</h3></p>' .
+             '<p>' . $lng['final_note'] . '</p>' .
+             '<hr /><h3><a href="' . $set['homeurl'] . '">' . $lng['go_to_site'] . '</a></h3>';
         break;
 
     default:
-        echo $lng['update_warning'];
-        echo '<br /><a href="index.php?act=update&amp;mod=step1&amp;lng_id=' . $lng_id . '">' . $lng['start_update'] . '</a>';
+        /*
+        -----------------------------------------------------------------
+        Проверка настроек PHP и прав доступа
+        -----------------------------------------------------------------
+        */
+        echo str_replace('UPDATE_VERSION', UPDATE_VERSION, $lng['update_warning']);
+        echo '<p><h3 class="green">' . $lng['check_1'] . '</h3>';
+        // Проверка критических ошибок PHP
+        if (($php_errors = install::check_php_errors()) !== false) {
+            echo '<h3>' . $lng['php_critical_error'] . '</h3><ul>';
+            foreach ($php_errors as $val) echo '<li>' . $val . '</li>';
+            echo '</ul>';
+        }
+        // Проверка предупреждений PHP
+        if (($php_warnings = install::check_php_warnings()) !== false) {
+            echo '<h3>' . $lng['php_warnings'] . '</h3><ul>';
+            foreach ($php_warnings as $val) echo '<li>' . $val . '</li>';
+            echo '</ul>';
+        }
+        // Проверка прав доступа к папкам
+        if (($folders = install::check_folders_rights()) !== false) {
+            echo '<h3>' . $lng['access_rights'] . ' 777</h3><ul>';
+            foreach ($folders as $val) echo '<li>' . $val . '</li>';
+            echo '</ul>';
+        }
+        // Проверка прав доступа к файлам
+        if (($files = install::check_files_rights()) !== false) {
+            echo '<h3>' . $lng['access_rights'] . ' 666</h3><ul>';
+            foreach ($files as $val) echo '<li>' . $val . '</li>';
+            echo '</ul>';
+        }
+        if (!$php_errors && !$php_warnings && !$folders && !$files) {
+            echo '<div class="pgl">' . $lng['configuration_successful'] . '</div>';
+        }
+        echo '</p><hr />';
+        if ($php_errors || $folders || $files) {
+            echo '<h3 class="red">' . $lng['critical_errors'] . '</h3>' .
+                 '<h3><a href="index.php">' . $lng['check_again'] . '</a></h3>';
+        } elseif ($php_warnings) {
+            echo '<h3 class="red">' . $lng['are_warnings'] . '</h3>' .
+                 '<h3><a href="index.php">' . $lng['check_again'] . '</a></h3>' .
+                 '<a href="index.php?act=set">' . $lng['ignore_warnings'] . '</a>';
+        } else {
+            echo '<h3><a href="index.php?act=step2">' . $lng['start_update'] . '</a></h3>';
+        }
 }
 ?>

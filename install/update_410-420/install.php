@@ -17,7 +17,8 @@ switch ($act) {
         Проводим обновление
         -----------------------------------------------------------------
         */
-        $update_errors = install::parse_sql(MODE . '/install.sql');
+        if(!isset($_SESSION['updated'])) install::parse_sql(MODE . '/install.sql');
+        $_SESSION['updated'] = 1;
         echo '<p><h3 class="green">' . str_replace('INSTALL_VERSION', INSTALL_VERSION, $lng['successfully_updated']) . '</h3></p>' .
              '<p>' . $lng['final_note'] . '</p>' .
              '<hr /><h3><a href="' . $set['homeurl'] . '">' . $lng['go_to_site'] . '</a></h3>';
