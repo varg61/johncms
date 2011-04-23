@@ -1,5 +1,4 @@
 Options -Indexes
-Options -Multiviews
 ErrorDocument 402 http://johncms.com/?err
 ErrorDocument 403 http://johncms.com/?err
 ErrorDocument 404 http://johncms.com/?err

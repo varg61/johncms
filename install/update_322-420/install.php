@@ -64,6 +64,7 @@ switch ($act) {
             mysql_query("ALTER TABLE `users` DROP `karma`");
             mysql_query("ALTER TABLE `users` DROP `plus_minus`");
             mysql_query("OPTIMIZE TABLE `users`");
+            mysql_query("UPDATE `cms_settings` SET `val`='$language' WHERE `key`='lng'");
             $_SESSION['step3'] = 1;
         }
         echo '<h3><a href="index.php?act=step4">' . $lng['continue'] . '</a></h3>';
