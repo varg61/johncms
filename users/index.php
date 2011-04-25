@@ -61,10 +61,10 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
         '<small>' . $lng['search_nick_help'] . '</small></p></form></div>' .
         '<div class="menu"><p>' .
-        '<img src="../images/contacts.png" width="16" height="16" />&#160;<a href="index.php?act=userlist">' . $lng['users'] . '</a> (' . functions::stat_users() . ')<br />' .
+        '<img src="../images/contacts.png" width="16" height="16" />&#160;<a href="index.php?act=userlist">' . $lng['users'] . '</a> (' . counters::users() . ')<br />' .
         '<img src="../images/users.png" width="16" height="16" />&#160;<a href="index.php?act=admlist">' . $lng['administration'] . '</a> (' . $count_adm . ')' .
         ($brth ? '<br /><img src="../images/award.png" width="16" height="16" />&#160;<a href="index.php?act=birth">' . $lng['birthday_men'] . '</a> (' . $brth . ')' : '') .
-        '</p><p><img src="../images/photo.gif" width="16" height="16" />&#160;<a href="album.php">' . $lng['photo_albums'] . '</a> (' . functions::count_photo() . ')</p>' .
+        '</p><p><img src="../images/photo.gif" width="16" height="16" />&#160;<a href="album.php">' . $lng['photo_albums'] . '</a> (' . counters::album() . ')</p>' .
         '<p><img src="../images/rate.gif" width="16" height="16" />&#160;<a href="index.php?act=top">' . $lng['users_top'] . '</a></p>' .
         '</div>' .
         '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';

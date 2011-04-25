@@ -150,7 +150,7 @@ if ($user_id) {
             Вывод непрочитанных тем (для зарегистрированных)
             -----------------------------------------------------------------
             */
-            $total = functions::forum_new();
+            $total = counters::forum_new();
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['unread'] . '</div>';
             if ($total > $kmess)
                 echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>';

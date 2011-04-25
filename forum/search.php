@@ -21,25 +21,12 @@ require('../incfiles/head.php');
 Функция подсветки результатов запроса
 -----------------------------------------------------------------
 */
-function ReplaceKeywords($keywords, $value) {
-    $a = stripos(mb_strtolower($value), mb_strtolower($keywords));
-    if ($a === false)
-        return $value;
-    else {
-        $zamen = 'qwertyzxcytrewq';
-        $b = substr($value, $a, strlen($keywords));
-        preg_match_all("/<.*>/Usi", $value, $out);
-        $value = preg_replace('/<.*>/Usi', $zamen, $value);
-        $value = str_replace($b, '<span style="background-color: #FFFF33">' . $b . '</span>', $value);
-        $heck = 0;
-        for ($i = 0; $i < count($out[0]); $i++) {
-            $heck = strpos($value, $zamen, $heck);
-            $value = substr($value, 0, $heck) . $out[0][$i] . substr($value, $heck + strlen($zamen));
-        }
-        return $value;
-    }
+function ReplaceKeywords($search, $text) {
+    $search = str_replace('*', '', $search);
+    return mb_strlen($search) < 3 ? $text : preg_replace('|('.preg_quote($search, '/').')|siu','<span style="background-color: #FFFF33">$1</span>',$text);
 }
-echo '<p>' . functions::forum_new(1) . '</p>';
+
+echo '<p>' . counters::forum_new(1) . '</p>';
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['search'] . '</div>';
 
 /*
@@ -47,12 +34,13 @@ echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | '
 Принимаем данные, выводим форму поиска
 -----------------------------------------------------------------
 */
-$search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$search = $search ? $search : rawurldecode(trim($_GET['search']));
-$search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
+$search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
+$search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : false;
+$search = $search_post ? $search_post : $search_get;
+//TODO: Разобраться!
+//$search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
 $search_t = isset($_REQUEST['t']) ? 1 : 0;
-$search = preg_replace('/ {2,}/', ' ', $search);
-$search = str_replace('qwertyzxcytrewq', '', $search);
+//$search = preg_replace('/ {2,}/', ' ', $search);
 echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
     '<input type="text" value="' . ($search ? functions::checkout($search) : '') . '" name="search" />' .
     '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
@@ -65,8 +53,8 @@ echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
 -----------------------------------------------------------------
 */
 $error = false;
-if ($search && (mb_strlen($search) < 4 || mb_strlen($search) > 64))
-    $error = $lng_forum['error_search_lenght'];
+if ($search && (mb_strlen($search) < 2 || mb_strlen($search) > 64))
+    $error = $lng['error_search_length'];
 
 if ($search && !$error) {
     /*
@@ -77,51 +65,51 @@ if ($search && !$error) {
     $array = explode(' ', $search);
     $count = count($array);
     echo '<div class="bmenu">' . $lng['search_results'] . '</div>';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum`
-    WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "')
-    AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
+    $query = mysql_real_escape_string($search);
+    $total = mysql_result(mysql_query("
+        SELECT COUNT(*) FROM `forum`
+        WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
+        AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($rights >= 7 ? "" : " AND `close` != '1'
+    ")), 0);
     if ($total) {
-        $searchs = str_replace(' ', '|', $search);
-        $req = mysql_query("SELECT * FROM `forum` WHERE MATCH (`text`) AGAINST ('" . mysql_real_escape_string($search) . "') AND `type` = '" . ($search_t ? 't' : 'm') . "' LIMIT $start, $kmess");
+        $req = mysql_query("
+            SELECT *, MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
+            FROM `forum`
+            WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
+            AND `type` = '" . ($search_t ? 't' : 'm') . "'
+            ORDER BY `rel` DESC
+            LIMIT $start, $kmess
+        ");
+        $i = 0;
         while (($res = mysql_fetch_assoc($req)) !== false) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             if (!$search_t) {
+                // Поиск только в тексте
                 $req_t = mysql_query("SELECT `id`,`text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
                 $res_t = mysql_fetch_assoc($req_t);
                 echo '<b>' . $res_t['text'] . '</b><br />';
             } else {
+                // Поиск в названиях тем
                 $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = '" . $res['id'] . "' ORDER BY `id` ASC LIMIT 1");
                 $res_p = mysql_fetch_assoc($req_p);
-                if ($count > 1) {
-                    for ($s = 0; $s <= count($array); $s++) {
-                        if (mb_strlen($array[$s]) >= 3) {
-                            $res['text'] = ReplaceKeywords($array[$s], $res['text']);
-                        }
-                    }
-                } else {
-                    $res['text'] = ReplaceKeywords($search, $res['text']);
+                foreach($array as $val){
+                    $res['text'] = ReplaceKeywords($val, $res['text']);
                 }
                 echo '<b>' . $res['text'] . '</b><br />';
             }
             echo '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
             echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
             $text = $search_t ? $res_p['text'] : $res['text'];
-            $text = functions::checkout(mb_substr($text, 0, 400), 2, 1);
+            $text = functions::checkout(mb_substr($text, 0, 500), 1);
             $text = str_replace('qwertyzxcytrewq', '', $text);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
             if (!$search_t) {
-                if ($count > 1) {
-                    for ($s = 0; $s <= count($array); $s++) {
-                        if (mb_strlen($array[$s]) >= 3) {
-                            $text = ReplaceKeywords($array[$s], $text);
-                        }
-                    }
-                } else {
-                    $text = ReplaceKeywords($search, $text);
+                foreach($array as $val){
+                    $text = ReplaceKeywords($val, $text);
                 }
             }
             echo $text;
-            if (mb_strlen($res['text']) > 400)
+            if (mb_strlen($res['text']) > 500)
                 echo '...<a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>';
             echo '<br /><a href="index.php?id=' . ($search_t ? $res['id'] : $res_t['id']) . '">' . $lng_forum['to_topic'] . '</a>'
                 . ($search_t ? '' : ' | <a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['to_post'] . '</a>');

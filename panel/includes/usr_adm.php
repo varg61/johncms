@@ -57,7 +57,7 @@ if (mysql_num_rows($req)) {
     }
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . ($sw + $adm + $smd + $mod) . '</div>' .
-    '<p><a href="index.php?act=users">' . $lng['users_list'] . '</a><br />' .
+    '<p><a href="index.php?act=usr">' . $lng['users_list'] . '</a><br />' .
     '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 
 ?>

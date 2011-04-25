@@ -315,7 +315,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Главная страница Галлереи
         -----------------------------------------------------------------
         */
-        echo '<p><a href="index.php?act=new">' . $lng_gal['new_photo'] . '</a> (' . functions::stat_gallery(1) . ')</p>';
+        echo '<p><a href="index.php?act=new">' . $lng_gal['new_photo'] . '</a> (' . counters::gallery(1) . ')</p>';
         echo '<div class="phdr"><b>' . $lng['gallery'] . '</b></div>';
         $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'rz'");
         $total = mysql_num_rows($req);

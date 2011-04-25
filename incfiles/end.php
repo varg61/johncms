@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -26,6 +23,7 @@ if ($mad_siteid) {
 // Рекламный блок сайта
 if (!empty($cms_ads[2]))
     echo '<div class="gmenu">' . $cms_ads[2] . '</div>';
+
 echo '</div><div class="fmenu">';
 if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act))
     echo '<a href=\'' . $set['homeurl'] . '\'>' . $lng['homepage'] . '</a><br/>';
@@ -46,20 +44,24 @@ if ($set_user['quick_go']) {
     echo '</div></form>';
 }
 // Счетчик посетителей онлайн
-echo '</div><div class="footer">' . functions::stat_online() . '</div>';
+echo '</div><div class="footer">' . counters::online() . '</div>';
 
 ////////////////////////////////////////////////////////////
 // Выводим информацию внизу страницы                      //
 ////////////////////////////////////////////////////////////
 echo '<div style="text-align:center">';
 echo '<p><b>' . $set['copyright'] . '</b></p>';
-if (!$user_id || ($user_id && $set_user['gzip']))
-    functions::stat_gzip();                    // Индикатор сжатия
+
+// Время, проведенное на сайте
 if (!$user_id || ($user_id && $set_user['online']))
-    functions::stat_timeonline();                  // Время, проведенное в онлайне
+    echo '<div>' . $lng['online'] . ': ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
+
+// Счетчик перемещений по сайту
 if (!$user_id || ($user_id && $set_user['movings']))
-    echo $lng['transitions'] . ': ' . $movings; // Счетчик перемещений по сайту
-functions::display_counters();                        // Счетчики каталогов
+    echo $lng['transitions'] . ': ' . $movings;
+
+// Счетчики каталогов
+functions::display_counters();
 
 // Рекламный блок сайта
 if (!empty($cms_ads[3]))

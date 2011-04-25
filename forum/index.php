@@ -269,7 +269,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
         Выводим верхнюю панель навигации
         -----------------------------------------------------------------
         */
-        echo '<p>' . functions::forum_new(1) . '</p>' .
+        echo '<p>' . counters::forum_new(1) . '</p>' .
              '<div class="phdr">' . functions::display_menu($tree) . '</div>' .
              '<div class="topmenu"><a href="search.php?id=' . $id . '">' . $lng['search'] . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
@@ -737,7 +737,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
         -----------------------------------------------------------------
         */
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . ($rights >= 7 ? '' : " WHERE `del` != '1'")), 0);
-        echo '<p>' . functions::forum_new(1) . '</p>' .
+        echo '<p>' . counters::forum_new(1) . '</p>' .
              '<div class="phdr"><b>' . $lng['forum'] . '</b></div>' .
              '<div class="topmenu"><a href="search.php">' . $lng['search'] . '</a> | <a href="index.php?act=files">' . $lng_forum['files_forum'] . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");

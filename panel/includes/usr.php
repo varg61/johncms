@@ -17,18 +17,18 @@ echo '<div class="topmenu"><span class="gray">' . $lng['sorting'] . ':</span> ';
 switch ($sort) {
     case 'nick':
         $sort = 'nick';
-        echo '<a href="index.php?act=users&amp;sort=id">ID</a> | ' . $lng['nick'] . ' | <a href="index.php?act=users&amp;sort=ip">IP</a></div>';
+        echo '<a href="index.php?act=usr&amp;sort=id">ID</a> | ' . $lng['nick'] . ' | <a href="index.php?act=usr&amp;sort=ip">IP</a></div>';
         $order = '`name` ASC';
         break;
 
     case 'ip':
         $sort = 'ip';
-        echo '<a href="index.php?act=users&amp;sort=id">ID</a> | <a href="index.php?act=users&amp;sort=nick">' . $lng['nick'] . '</a> | IP</div>';
+        echo '<a href="index.php?act=usr&amp;sort=id">ID</a> | <a href="index.php?act=usr&amp;sort=nick">' . $lng['nick'] . '</a> | IP</div>';
         $order = '`ip` ASC';
         break;
         default :
     $sort = 'id';
-        echo 'ID | <a href="index.php?act=users&amp;sort=nick">' . $lng['nick'] . '</a> | <a href="index.php?act=users&amp;sort=ip">IP</a></div>';
+        echo 'ID | <a href="index.php?act=usr&amp;sort=nick">' . $lng['nick'] . '</a> | <a href="index.php?act=usr&amp;sort=ip">IP</a></div>';
         $order = '`id` ASC';
 }
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
@@ -47,8 +47,8 @@ while ($res = mysql_fetch_array($req)) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . functions::display_pagination('index.php?act=users&amp;sort=' . $sort . '&amp;', $start, $total, $kmess) . '</p>';
-    echo '<p><form action="index.php?act=users&amp;sort=' . $sort . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+    echo '<p>' . functions::display_pagination('index.php?act=usr&amp;sort=' . $sort . '&amp;', $start, $total, $kmess) . '</p>';
+    echo '<p><form action="index.php?act=usr&amp;sort=' . $sort . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
 echo '<p><a href="index.php?act=search_user">' . $lng['search_user'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 

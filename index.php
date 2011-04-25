@@ -63,7 +63,7 @@ switch ($act) {
             $total_libmod = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 0"), 0);
             if ($total_libmod > 0)
                 echo '<li><a href="library/index.php?act=moder">' . $lng['library_on_moderation'] . '</a> (' . $total_libmod . ')</li>';
-            $total_admin = functions::stat_guestbook(2);
+            $total_admin = counters::guestbook(2);
             if ($total_admin > 0)
                 echo '<li><a href="guestbook/index.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a> (' . $total_admin . ')</li>';
             if (!$new_users_total && !$reg_total && !$ban_total && !$total_libmod && !$total_admin)
@@ -75,13 +75,13 @@ switch ($act) {
         $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
         if ($total_news > 0)
             echo '<li><a href="news/index.php">' . $lng['news'] . '</a> (' . $total_news . ')</li>';
-        $total_forum = functions::forum_new();
+        $total_forum = counters::forum_new();
         if ($total_forum > 0)
             echo '<li><a href="forum/index.php?act=new">' . $lng['forum'] . '</a> (' . $total_forum . ')</li>';
-        $total_guest = functions::stat_guestbook(1);
+        $total_guest = counters::guestbook(1);
         if ($total_guest > 0)
             echo '<li><a href="guestbook/index.php?act=ga">' . $lng['guestbook'] . '</a> (' . $total_guest . ')</li>';
-        $total_gal = functions::stat_gallery(1);
+        $total_gal = counters::gallery(1);
         if ($total_gal > 0)
             echo '<li><a href="gallery/index.php?act=new">' . $lng['gallery'] . '</a> (' . $total_gal . ')</li>';
         if ($set_karma['on']) {

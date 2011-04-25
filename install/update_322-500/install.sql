@@ -56,6 +56,7 @@ DELETE FROM `cms_settings` WHERE `key` = 'nickadmina';
 DELETE FROM `cms_settings` WHERE `key` = 'nickadmina2';
 DELETE FROM `cms_settings` WHERE `key` = 'rashstr';
 DELETE FROM `cms_settings` WHERE `key` = 'mod_chat';
+DELETE FROM `cms_settings` WHERE `key` = 'gzip' LIMIT 1;
 UPDATE `cms_settings` SET `key` = 'email' WHERE `key` = 'emailadmina';
 UPDATE `cms_settings` SET `key` = 'timeshift' WHERE `key` = 'sdvigclock';
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
