@@ -11,7 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-class functions {
+class functions
+{
 
     /*
     -----------------------------------------------------------------
@@ -24,7 +25,8 @@ class functions {
     4 - Ночь
     -----------------------------------------------------------------
     */
-    static function antiflood() {
+    static function antiflood()
+    {
         global $set, $datauser, $realtime;
         $default = array(
             'mode' => 2,
@@ -68,22 +70,23 @@ class functions {
     Маскировка ссылок в тексте
     -----------------------------------------------------------------
     */
-    static function antilink($var) {
+    static function antilink($var)
+    {
         $var = preg_replace('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', '###', $var);
         $var = strtr($var, array(
-            '.ru' => '***',
-            '.com' => '***',
-            '.biz' => '***',
-            '.cn' => '***',
-            '.in' => '***',
-            '.net' => '***',
-            '.org' => '***',
-            '.info' => '***',
-            '.mobi' => '***',
-            '.wen' => '***',
-            '.kmx' => '***',
-            '.h2m' => '***'
-        ));
+                                '.ru' => '***',
+                                '.com' => '***',
+                                '.biz' => '***',
+                                '.cn' => '***',
+                                '.in' => '***',
+                                '.net' => '***',
+                                '.org' => '***',
+                                '.info' => '***',
+                                '.mobi' => '***',
+                                '.wen' => '***',
+                                '.kmx' => '***',
+                                '.h2m' => '***'
+                           ));
         return $var;
     }
 
@@ -92,9 +95,10 @@ class functions {
     ББ панель (для компьютеров)
     -----------------------------------------------------------------
     */
-    static function auto_bb($form, $field) {
+    static function auto_bb($form, $field)
+    {
         global $set, $datauser, $lng, $user_id, $is_mobile;
-        if($is_mobile){
+        if ($is_mobile) {
             return false;
         }
         $smileys = !empty($datauser['smileys']) ? unserialize($datauser['smileys']) : '';
@@ -157,43 +161,44 @@ class functions {
     Проверка переменных
     -----------------------------------------------------------------
     */
-    static function check($str) {
+    static function check($str)
+    {
         $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
         $str = nl2br($str);
         $str = strtr($str, array(
-            chr(0) => '',
-            chr(1) => '',
-            chr(2) => '',
-            chr(3) => '',
-            chr(4) => '',
-            chr(5) => '',
-            chr(6) => '',
-            chr(7) => '',
-            chr(8) => '',
-            chr(9) => '',
-            chr(10) => '',
-            chr(11) => '',
-            chr(12) => '',
-            chr(13) => '',
-            chr(14) => '',
-            chr(15) => '',
-            chr(16) => '',
-            chr(17) => '',
-            chr(18) => '',
-            chr(19) => '',
-            chr(20) => '',
-            chr(21) => '',
-            chr(22) => '',
-            chr(23) => '',
-            chr(24) => '',
-            chr(25) => '',
-            chr(26) => '',
-            chr(27) => '',
-            chr(28) => '',
-            chr(29) => '',
-            chr(30) => '',
-            chr(31) => ''
-        ));
+                                chr(0) => '',
+                                chr(1) => '',
+                                chr(2) => '',
+                                chr(3) => '',
+                                chr(4) => '',
+                                chr(5) => '',
+                                chr(6) => '',
+                                chr(7) => '',
+                                chr(8) => '',
+                                chr(9) => '',
+                                chr(10) => '',
+                                chr(11) => '',
+                                chr(12) => '',
+                                chr(13) => '',
+                                chr(14) => '',
+                                chr(15) => '',
+                                chr(16) => '',
+                                chr(17) => '',
+                                chr(18) => '',
+                                chr(19) => '',
+                                chr(20) => '',
+                                chr(21) => '',
+                                chr(22) => '',
+                                chr(23) => '',
+                                chr(24) => '',
+                                chr(25) => '',
+                                chr(26) => '',
+                                chr(27) => '',
+                                chr(28) => '',
+                                chr(29) => '',
+                                chr(30) => '',
+                                chr(31) => ''
+                           ));
         $str = str_replace("'", "&#39;", $str);
         $str = str_replace('\\', "&#92;", $str);
         $str = str_replace("|", "I", $str);
@@ -213,7 +218,8 @@ class functions {
     $tags=2         вырезание тэгов
     -----------------------------------------------------------------
     */
-    static function checkout($str, $br = 0, $tags = 0) {
+    static function checkout($str, $br = 0, $tags = 0)
+    {
         $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
         if ($br == 1)
             $str = nl2br($str);
@@ -225,38 +231,38 @@ class functions {
         elseif ($tags == 2)
             $str = self::notags($str);
         $str = strtr($str, array(
-            chr(0) => '',
-            chr(1) => '',
-            chr(2) => '',
-            chr(3) => '',
-            chr(4) => '',
-            chr(5) => '',
-            chr(6) => '',
-            chr(7) => '',
-            chr(8) => '',
-            chr(9) => '',
-            chr(11) => '',
-            chr(12) => '',
-            chr(13) => '',
-            chr(14) => '',
-            chr(15) => '',
-            chr(16) => '',
-            chr(17) => '',
-            chr(18) => '',
-            chr(19) => '',
-            chr(20) => '',
-            chr(21) => '',
-            chr(22) => '',
-            chr(23) => '',
-            chr(24) => '',
-            chr(25) => '',
-            chr(26) => '',
-            chr(27) => '',
-            chr(28) => '',
-            chr(29) => '',
-            chr(30) => '',
-            chr(31) => ''
-        ));
+                                chr(0) => '',
+                                chr(1) => '',
+                                chr(2) => '',
+                                chr(3) => '',
+                                chr(4) => '',
+                                chr(5) => '',
+                                chr(6) => '',
+                                chr(7) => '',
+                                chr(8) => '',
+                                chr(9) => '',
+                                chr(11) => '',
+                                chr(12) => '',
+                                chr(13) => '',
+                                chr(14) => '',
+                                chr(15) => '',
+                                chr(16) => '',
+                                chr(17) => '',
+                                chr(18) => '',
+                                chr(19) => '',
+                                chr(20) => '',
+                                chr(21) => '',
+                                chr(22) => '',
+                                chr(23) => '',
+                                chr(24) => '',
+                                chr(25) => '',
+                                chr(26) => '',
+                                chr(27) => '',
+                                chr(28) => '',
+                                chr(29) => '',
+                                chr(30) => '',
+                                chr(31) => ''
+                           ));
         return $str;
     }
 
@@ -265,7 +271,8 @@ class functions {
     Показ различных счетчиков внизу страницы
     -----------------------------------------------------------------
     */
-    static function display_counters() {
+    static function display_counters()
+    {
         global $headmod;
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
         if (mysql_num_rows($req) > 0) {
@@ -284,7 +291,8 @@ class functions {
     Сообщения об ошибках
     -----------------------------------------------------------------
     */
-    static function display_error($error = '', $link = '') {
+    static function display_error($error = '', $link = '')
+    {
         global $lng;
         if ($error) {
             $out = '<div class="rmenu"><p><b>' . $lng['error'] . '!</b><br />';
@@ -304,7 +312,8 @@ class functions {
     $end_space - выводится в конце
     -----------------------------------------------------------------
     */
-    static function display_menu($val = array(), $delimiter = ' | ', $end_space = '') {
+    static function display_menu($val = array(), $delimiter = ' | ', $end_space = '')
+    {
         return implode($delimiter, array_diff($val, array(''))) . $end_space;
     }
 
@@ -314,7 +323,8 @@ class functions {
     За основу взята аналогичная функция от форума SMF2.0
     -----------------------------------------------------------------
     */
-    static function display_pagination($base_url, $start, $max_value, $num_per_page) {
+    static function display_pagination($base_url, $start, $max_value, $num_per_page)
+    {
         $neighbors = 2;
         if ($start >= $max_value)
             $start = max(0, (int)$max_value - (((int)$max_value % (int)$num_per_page) == 0 ? $num_per_page : ((int)$max_value % (int)$num_per_page)));
@@ -366,7 +376,8 @@ class functions {
        [footer]    (string)    Строка выводится внизу области "sub"
     -----------------------------------------------------------------
     */
-    static function display_user($user = false, $arg = false) {
+    static function display_user($user = false, $arg = false)
+    {
         global $set, $set_user, $realtime, $user_id, $rights, $lng, $rootpath;
         $out = false;
 
@@ -447,7 +458,8 @@ class functions {
     Форматирование имени файла
     -----------------------------------------------------------------
     */
-    static function format($name) {
+    static function format($name)
+    {
         $f1 = strrpos($name, ".");
         $f2 = substr($name, $f1 + 1, 999);
         $fname = strtolower($f2);
@@ -459,7 +471,8 @@ class functions {
     Вспомогательная Функция обработки ссылок форума
     -----------------------------------------------------------------
     */
-    static function forum_link($m) {
+    static function forum_link($m)
+    {
         global $set;
         if (!isset($m[3])) {
             return '[url=' . $m[1] . ']' . $m[2] . '[/url]';
@@ -471,14 +484,14 @@ class functions {
                 if (mysql_num_rows($req) > 0) {
                     $res = mysql_fetch_array($req);
                     $name = strtr($res['text'], array(
-                        '&quot;' => '',
-                        '&amp;' => '',
-                        '&lt;' => '',
-                        '&gt;' => '',
-                        '&#039;' => '',
-                        '[' => '',
-                        ']' => ''
-                    ));
+                                                     '&quot;' => '',
+                                                     '&amp;' => '',
+                                                     '&lt;' => '',
+                                                     '&gt;' => '',
+                                                     '&#039;' => '',
+                                                     '[' => '',
+                                                     ']' => ''
+                                                ));
                     if (mb_strlen($name) > 40)
                         $name = mb_substr($name, 0, 40) . '...';
                     return '[url=' . $m[3] . ']' . $name . '[/url]';
@@ -495,7 +508,8 @@ class functions {
     Получаем данные пользователя
     -----------------------------------------------------------------
     */
-    static function get_user($id = false) {
+    static function get_user($id = false)
+    {
         global $datauser, $user_id;
         if ($id && $id != $user_id) {
             $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
@@ -514,25 +528,26 @@ class functions {
     Вырезание BBcode тэгов из текста
     -----------------------------------------------------------------
     */
-    static function notags($var = '') {
+    static function notags($var = '')
+    {
         $var = strtr($var, array(
-            '[green]' => '',
-            '[/green]' => '',
-            '[red]' => '',
-            '[/red]' => '',
-            '[blue]' => '',
-            '[/blue]' => '',
-            '[b]' => '',
-            '[/b]' => '',
-            '[i]' => '',
-            '[/i]' => '',
-            '[u]' => '',
-            '[/u]' => '',
-            '[s]' => '',
-            '[/s]' => '',
-            '[c]' => '',
-            '[/c]' => ''
-        ));
+                                '[green]' => '',
+                                '[/green]' => '',
+                                '[red]' => '',
+                                '[/red]' => '',
+                                '[blue]' => '',
+                                '[/blue]' => '',
+                                '[b]' => '',
+                                '[/b]' => '',
+                                '[i]' => '',
+                                '[/i]' => '',
+                                '[u]' => '',
+                                '[/u]' => '',
+                                '[s]' => '',
+                                '[/s]' => '',
+                                '[c]' => '',
+                                '[/c]' => ''
+                           ));
         return $var;
     }
 
@@ -541,42 +556,43 @@ class functions {
     Транслитерация с Русского в латиницу
     -----------------------------------------------------------------
     */
-    static function rus_lat($str) {
+    static function rus_lat($str)
+    {
         $str = strtr($str, array(
-            'а' => 'a',
-            'б' => 'b',
-            'в' => 'v',
-            'г' => 'g',
-            'д' => 'd',
-            'е' => 'e',
-            'ё' => 'e',
-            'ж' => 'j',
-            'з' => 'z',
-            'и' => 'i',
-            'й' => 'i',
-            'к' => 'k',
-            'л' => 'l',
-            'м' => 'm',
-            'н' => 'n',
-            'о' => 'o',
-            'п' => 'p',
-            'р' => 'r',
-            'с' => 's',
-            'т' => 't',
-            'у' => 'u',
-            'ф' => 'f',
-            'х' => 'h',
-            'ц' => 'c',
-            'ч' => 'ch',
-            'ш' => 'sh',
-            'щ' => 'sch',
-            'ъ' => "",
-            'ы' => 'y',
-            'ь' => "",
-            'э' => 'ye',
-            'ю' => 'yu',
-            'я' => 'ya'
-        ));
+                                'а' => 'a',
+                                'б' => 'b',
+                                'в' => 'v',
+                                'г' => 'g',
+                                'д' => 'd',
+                                'е' => 'e',
+                                'ё' => 'e',
+                                'ж' => 'j',
+                                'з' => 'z',
+                                'и' => 'i',
+                                'й' => 'i',
+                                'к' => 'k',
+                                'л' => 'l',
+                                'м' => 'm',
+                                'н' => 'n',
+                                'о' => 'o',
+                                'п' => 'p',
+                                'р' => 'r',
+                                'с' => 's',
+                                'т' => 't',
+                                'у' => 'u',
+                                'ф' => 'f',
+                                'х' => 'h',
+                                'ц' => 'c',
+                                'ч' => 'ch',
+                                'ш' => 'sh',
+                                'щ' => 'sch',
+                                'ъ' => "",
+                                'ы' => 'y',
+                                'ь' => "",
+                                'э' => 'ye',
+                                'ю' => 'yu',
+                                'я' => 'ya'
+                           ));
         return $str;
     }
 
@@ -588,7 +604,8 @@ class functions {
     $adm=2 пересоздаст кэш смайлов
     -----------------------------------------------------------------
     */
-    static function smileys($str, $adm = 0) {
+    static function smileys($str, $adm = 0)
+    {
         global $rootpath, $set;
         // Записываем КЭШ смайлов
         if ($adm == 2) {
@@ -665,7 +682,8 @@ class functions {
     Функция пересчета на дни, или часы
     -----------------------------------------------------------------
     */
-    static function timecount($var) {
+    static function timecount($var)
+    {
         global $lng;
         if ($var < 0)
             $var = 0;
@@ -687,73 +705,74 @@ class functions {
     Транслитерация текста
     -----------------------------------------------------------------
     */
-    static function trans($str) {
+    static function trans($str)
+    {
         $str = strtr($str, array(
-            'a' => 'а',
-            'b' => 'б',
-            'v' => 'в',
-            'g' => 'г',
-            'd' => 'д',
-            'e' => 'е',
-            'yo' => 'ё',
-            'zh' => 'ж',
-            'z' => 'з',
-            'i' => 'и',
-            'j' => 'й',
-            'k' => 'к',
-            'l' => 'л',
-            'm' => 'м',
-            'n' => 'н',
-            'o' => 'о',
-            'p' => 'п',
-            'r' => 'р',
-            's' => 'с',
-            't' => 'т',
-            'u' => 'у',
-            'f' => 'ф',
-            'h' => 'х',
-            'c' => 'ц',
-            'ch' => 'ч',
-            'w' => 'ш',
-            'sh' => 'щ',
-            'q' => 'ъ',
-            'y' => 'ы',
-            'x' => 'э',
-            'yu' => 'ю',
-            'ya' => 'я',
-            'A' => 'А',
-            'B' => 'Б',
-            'V' => 'В',
-            'G' => 'Г',
-            'D' => 'Д',
-            'E' => 'Е',
-            'YO' => 'Ё',
-            'ZH' => 'Ж',
-            'Z' => 'З',
-            'I' => 'И',
-            'J' => 'Й',
-            'K' => 'К',
-            'L' => 'Л',
-            'M' => 'М',
-            'N' => 'Н',
-            'O' => 'О',
-            'P' => 'П',
-            'R' => 'Р',
-            'S' => 'С',
-            'T' => 'Т',
-            'U' => 'У',
-            'F' => 'Ф',
-            'H' => 'Х',
-            'C' => 'Ц',
-            'CH' => 'Ч',
-            'W' => 'Ш',
-            'SH' => 'Щ',
-            'Q' => 'Ъ',
-            'Y' => 'Ы',
-            'X' => 'Э',
-            'YU' => 'Ю',
-            'YA' => 'Я'
-        ));
+                                'a' => 'а',
+                                'b' => 'б',
+                                'v' => 'в',
+                                'g' => 'г',
+                                'd' => 'д',
+                                'e' => 'е',
+                                'yo' => 'ё',
+                                'zh' => 'ж',
+                                'z' => 'з',
+                                'i' => 'и',
+                                'j' => 'й',
+                                'k' => 'к',
+                                'l' => 'л',
+                                'm' => 'м',
+                                'n' => 'н',
+                                'o' => 'о',
+                                'p' => 'п',
+                                'r' => 'р',
+                                's' => 'с',
+                                't' => 'т',
+                                'u' => 'у',
+                                'f' => 'ф',
+                                'h' => 'х',
+                                'c' => 'ц',
+                                'ch' => 'ч',
+                                'w' => 'ш',
+                                'sh' => 'щ',
+                                'q' => 'ъ',
+                                'y' => 'ы',
+                                'x' => 'э',
+                                'yu' => 'ю',
+                                'ya' => 'я',
+                                'A' => 'А',
+                                'B' => 'Б',
+                                'V' => 'В',
+                                'G' => 'Г',
+                                'D' => 'Д',
+                                'E' => 'Е',
+                                'YO' => 'Ё',
+                                'ZH' => 'Ж',
+                                'Z' => 'З',
+                                'I' => 'И',
+                                'J' => 'Й',
+                                'K' => 'К',
+                                'L' => 'Л',
+                                'M' => 'М',
+                                'N' => 'Н',
+                                'O' => 'О',
+                                'P' => 'П',
+                                'R' => 'Р',
+                                'S' => 'С',
+                                'T' => 'Т',
+                                'U' => 'У',
+                                'F' => 'Ф',
+                                'H' => 'Х',
+                                'C' => 'Ц',
+                                'CH' => 'Ч',
+                                'W' => 'Ш',
+                                'SH' => 'Щ',
+                                'Q' => 'Ъ',
+                                'Y' => 'Ы',
+                                'X' => 'Э',
+                                'YU' => 'Ю',
+                                'YA' => 'Я'
+                           ));
         return $str;
     }
 
@@ -761,447 +780,28 @@ class functions {
     -----------------------------------------------------------------
     Проверка, мобильный ли браузер?
     -----------------------------------------------------------------
-    За основу взята функция от ManHunter http://www.manhunter.ru
-    -----------------------------------------------------------------
     */
-    static function mobile_detect() {
+    static function mobile_detect()
+    {
         if (isset($_SESSION['is_mobile'])) {
-            return $_SESSION['is_mobile'];
+            return $_SESSION['is_mobile'] == 1 ? true : false;
         }
         $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
         $accept = strtolower($_SERVER['HTTP_ACCEPT']);
         if ((strpos($accept, 'text/vnd.wap.wml') !== false) || (strpos($accept, 'application/vnd.wap.xhtml+xml') !== false)) {
             $_SESSION['is_mobile'] = 1;
-            return 1;
+            return true;
         }
         if (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
-            $_SESSION['is_mobile'] = 2;
-            return 2;
+            $_SESSION['is_mobile'] = 1;
+            return true;
         }
-        if (preg_match('/(mini 9.5|vx1000|lge |m800|e860|u940|ux840|compal|' .
-                       'wireless| mobi|ahong|lg380|lgku|lgu900|lg210|lg47|lg920|lg840|' .
-                       'lg370|sam-r|mg50|s55|g83|t66|vx400|mk99|d615|d763|el370|sl900|' .
-                       'mp500|samu3|samu4|vx10|xda_|samu5|samu6|samu7|samu9|a615|b832|' .
-                       'm881|s920|n210|s700|c-810|_h797|mob-x|sk16d|848b|mowser|s580|' .
-                       'r800|471x|v120|rim8|c500foma:|160x|x160|480x|x640|t503|w839|' .
-                       'i250|sprint|w398samr810|m5252|c7100|mt126|x225|s5330|s820|' .
-                       'htil-g1|fly v71|s302|-x113|novarra|k610i|-three|8325rc|8352rc|' .
-                       'sanyo|vx54|c888|nx250|n120|mtk |c5588|s710|t880|c5005|i;458x|' .
-                       'p404i|s210|c5100|teleca|s940|c500|s590|foma|samsu|vx8|vx9|a1000|' .
-                       '_mms|myx|a700|gu1100|bc831|e300|ems100|me701|me702m-three|sd588|' .
-                       's800|8325rc|ac831|mw200|brew |d88|htc\/|htc_touch|355x|m50|km100|' .
-                       'd736|p-9521|telco|sl74|ktouch|m4u\/|me702|8325rc|kddi|phone|lg |' .
-                       'sonyericsson|samsung|240x|x320vx10|nokia|sony cmd|motorola|' .
-                       'up.browser|up.link|mmp|symbian|smartphone|midp|wap|vodafone|o2|' .
-                       'pocket|kindle|mobile|psp|treo)/', $user_agent)) {
-            $_SESSION['is_mobile'] = 3;
-            return 3;
+        if (preg_match('/android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i', $user_agent)
+            || preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|e\-|e\/|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(di|rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|xda(\-|2|g)|yas\-|your|zeto|zte\-/i', substr($user_agent, 0, 4))) {
+            $_SESSION['is_mobile'] = 1;
+            return true;
         }
-
-        if (in_array(substr($user_agent, 0, 4), Array(
-            "1207",
-            "3gso",
-            "4thp",
-            "501i",
-            "502i",
-            "503i",
-            "504i",
-            "505i",
-            "506i",
-            "6310",
-            "6590",
-            "770s",
-            "802s",
-            "a wa",
-            "abac",
-            "acer",
-            "acoo",
-            "acs-",
-            "aiko",
-            "airn",
-            "alav",
-            "alca",
-            "alco",
-            "amoi",
-            "anex",
-            "anny",
-            "anyw",
-            "aptu",
-            "arch",
-            "argo",
-            "aste",
-            "asus",
-            "attw",
-            "au-m",
-            "audi",
-            "aur ",
-            "aus ",
-            "avan",
-            "beck",
-            "bell",
-            "benq",
-            "bilb",
-            "bird",
-            "blac",
-            "blaz",
-            "brew",
-            "brvw",
-            "bumb",
-            "bw-n",
-            "bw-u",
-            "c55/",
-            "capi",
-            "ccwa",
-            "cdm-",
-            "cell",
-            "chtm",
-            "cldc",
-            "cmd-",
-            "cond",
-            "craw",
-            "dait",
-            "dall",
-            "dang",
-            "dbte",
-            "dc-s",
-            "devi",
-            "dica",
-            "dmob",
-            "doco",
-            "dopo",
-            "ds-d",
-            "ds12",
-            "el49",
-            "elai",
-            "eml2",
-            "emul",
-            "eric",
-            "erk0",
-            "esl8",
-            "ez40",
-            "ez60",
-            "ez70",
-            "ezos",
-            "ezwa",
-            "ezze",
-            "fake",
-            "fetc",
-            "fly-",
-            "fly_",
-            "g-mo",
-            "g1 u",
-            "g560",
-            "gene",
-            "gf-5",
-            "go.w",
-            "good",
-            "grad",
-            "grun",
-            "haie",
-            "hcit",
-            "hd-m",
-            "hd-p",
-            "hd-t",
-            "hei-",
-            "hiba",
-            "hipt",
-            "hita",
-            "hp i",
-            "hpip",
-            "hs-c",
-            "htc ",
-            "htc-",
-            "htc_",
-            "htca",
-            "htcg",
-            "htcp",
-            "htcs",
-            "htct",
-            "http",
-            "huaw",
-            "hutc",
-            "i-20",
-            "i-go",
-            "i-ma",
-            "i230",
-            "iac",
-            "iac-",
-            "iac/",
-            "ibro",
-            "idea",
-            "ig01",
-            "ikom",
-            "im1k",
-            "inno",
-            "ipaq",
-            "iris",
-            "jata",
-            "java",
-            "jbro",
-            "jemu",
-            "jigs",
-            "kddi",
-            "keji",
-            "kgt",
-            "kgt/",
-            "klon",
-            "kpt ",
-            "kwc-",
-            "kyoc",
-            "kyok",
-            "leno",
-            "lexi",
-            "lg g",
-            "lg-a",
-            "lg-b",
-            "lg-c",
-            "lg-d",
-            "lg-f",
-            "lg-g",
-            "lg-k",
-            "lg-l",
-            "lg-m",
-            "lg-o",
-            "lg-p",
-            "lg-s",
-            "lg-t",
-            "lg-u",
-            "lg-w",
-            "lg/k",
-            "lg/l",
-            "lg/u",
-            "lg50",
-            "lg54",
-            "lge-",
-            "lge/",
-            "libw",
-            "lynx",
-            "m-cr",
-            "m1-w",
-            "m3ga",
-            "m50/",
-            "mate",
-            "maui",
-            "maxo",
-            "mc01",
-            "mc21",
-            "mcca",
-            "medi",
-            "merc",
-            "meri",
-            "midp",
-            "mio8",
-            "mioa",
-            "mits",
-            "mmef",
-            "mo01",
-            "mo02",
-            "mobi",
-            "mode",
-            "modo",
-            "mot ",
-            "mot-",
-            "moto",
-            "motv",
-            "mozz",
-            "mt50",
-            "mtp1",
-            "mtv ",
-            "mwbp",
-            "mywa",
-            "n100",
-            "n101",
-            "n102",
-            "n202",
-            "n203",
-            "n300",
-            "n302",
-            "n500",
-            "n502",
-            "n505",
-            "n700",
-            "n701",
-            "n710",
-            "nec-",
-            "nem-",
-            "neon",
-            "netf",
-            "newg",
-            "newt",
-            "nok6",
-            "noki",
-            "nzph",
-            "o2 x",
-            "o2-x",
-            "o2im",
-            "opti",
-            "opwv",
-            "oran",
-            "owg1",
-            "p800",
-            "palm",
-            "pana",
-            "pand",
-            "pant",
-            "pdxg",
-            "pg-1",
-            "pg-2",
-            "pg-3",
-            "pg-6",
-            "pg-8",
-            "pg-c",
-            "pg13",
-            "phil",
-            "pire",
-            "play",
-            "pluc",
-            "pn-2",
-            "pock",
-            "port",
-            "pose",
-            "prox",
-            "psio",
-            "pt-g",
-            "qa-a",
-            "qc-2",
-            "qc-3",
-            "qc-5",
-            "qc-7",
-            "qc07",
-            "qc12",
-            "qc21",
-            "qc32",
-            "qc60",
-            "qci-",
-            "qtek",
-            "qwap",
-            "r380",
-            "r600",
-            "raks",
-            "rim9",
-            "rove",
-            "rozo",
-            "s55/",
-            "sage",
-            "sama",
-            "samm",
-            "sams",
-            "sany",
-            "sava",
-            "sc01",
-            "sch-",
-            "scoo",
-            "scp-",
-            "sdk/",
-            "se47",
-            "sec-",
-            "sec0",
-            "sec1",
-            "semc",
-            "send",
-            "seri",
-            "sgh-",
-            "shar",
-            "sie-",
-            "siem",
-            "sk-0",
-            "sl45",
-            "slid",
-            "smal",
-            "smar",
-            "smb3",
-            "smit",
-            "smt5",
-            "soft",
-            "sony",
-            "sp01",
-            "sph-",
-            "spv ",
-            "spv-",
-            "sy01",
-            "symb",
-            "t-mo",
-            "t218",
-            "t250",
-            "t600",
-            "t610",
-            "t618",
-            "tagt",
-            "talk",
-            "tcl-",
-            "tdg-",
-            "teli",
-            "telm",
-            "tim-",
-            "topl",
-            "tosh",
-            "treo",
-            "ts70",
-            "tsm-",
-            "tsm3",
-            "tsm5",
-            "tx-9",
-            "up.b",
-            "upg1",
-            "upsi",
-            "utst",
-            "v400",
-            "v750",
-            "veri",
-            "virg",
-            "vite",
-            "vk-v",
-            "vk40",
-            "vk50",
-            "vk52",
-            "vk53",
-            "vm40",
-            "voda",
-            "vulc",
-            "vx52",
-            "vx53",
-            "vx60",
-            "vx61",
-            "vx70",
-            "vx80",
-            "vx81",
-            "vx83",
-            "vx85",
-            "vx98",
-            "w3c ",
-            "w3c-",
-            "wap-",
-            "wapa",
-            "wapi",
-            "wapj",
-            "wapm",
-            "wapp",
-            "wapr",
-            "waps",
-            "wapt",
-            "wapu",
-            "wapv",
-            "wapy",
-            "webc",
-            "whit",
-            "wig ",
-            "winc",
-            "winw",
-            "wmlb",
-            "wonu",
-            "x700",
-            "xda-",
-            "xda2",
-            "xdag",
-            "yas-",
-            "your",
-            "zeto",
-            "zte-"
-        ))) {
-            $_SESSION['is_mobile'] = 4;
-            return 4;
-        }
-        $_SESSION['is_mobile'] = 0;
+        $_SESSION['is_mobile'] = 2;
         return false;
     }
 }
