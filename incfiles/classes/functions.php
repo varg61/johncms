@@ -13,6 +13,7 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 
 class functions
 {
+    static private $smileys_cache = array();
 
     /*
     -----------------------------------------------------------------
@@ -600,81 +601,13 @@ class functions
     -----------------------------------------------------------------
     Обработка смайлов
     -----------------------------------------------------------------
-    $adm=1 покажет и обычные и Админские смайлы
-    $adm=2 пересоздаст кэш смайлов
-    -----------------------------------------------------------------
     */
-    static function smileys($str, $adm = 0)
+    static function smileys($str, $adm = false)
     {
-        global $rootpath, $set;
-        // Записываем КЭШ смайлов
-        if ($adm == 2) {
-            $count = 0;
-            // Обрабатываем простые смайлы
-            $array1 = array();
-            $path = 'images/smileys/simply/';
-            $dir = opendir($rootpath . $path);
-            while (($file = readdir($dir)) !== false) {
-                $name = explode(".", $file);
-                if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png') {
-                    $array1[':' . $name[0]] = '<img src="' . $set['homeurl'] . '/' . $path . $file . '" alt="" />';
-                    ++$count;
-                }
-            }
-            closedir($dir);
-            // Обрабатываем Админские смайлы
-            $array2 = array();
-            $array3 = array();
-            $path = 'images/smileys/admin/';
-            $dir = opendir($rootpath . $path);
-            while (($file = readdir($dir)) !== false) {
-                $name = explode(".", $file);
-                if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png') {
-                    $array2[':' . self::trans($name[0]) . ':'] = '<img src="' . $set['homeurl'] . '/' . $path . $file . '" alt="" />';
-                    $array3[':' . $name[0] . ':'] = '<img src="' . $set['homeurl'] . '/' . $path . $file . '" alt="" />';
-                    ++$count;
-                }
-            }
-            // Обрабатываем смайлы в каталогах
-            $array4 = array();
-            $array5 = array();
-            $cat = glob($rootpath . 'images/smileys/user/*', GLOB_ONLYDIR);
-            $total = count($cat);
-            for ($i = 0; $i < $total; $i++) {
-                $dir = opendir($cat[$i]);
-                while (($file = readdir($dir)) !== false) {
-                    $name = explode(".", $file);
-                    if ($name[1] == 'gif' || $name[1] == 'jpg' || $name[1] == 'png') {
-                        $path = str_replace('..', $set['homeurl'], $cat[$i]);
-                        $array4[':' . self::trans($name[0]) . ':'] = '<img src="' . $path . '/' . $file . '" alt="" />';
-                        $array5[':' . $name[0] . ':'] = '<img src="' . $path . '/' . $file . '" alt="" />';
-                        ++$count;
-                    }
-                }
-                closedir($dir);
-            }
-            $smileys = serialize(array_merge($array1, $array4, $array5));
-            $smileys_adm = serialize(array_merge($array2, $array3));
-            // Записываем в файл Кэша
-            if (($fp = fopen($rootpath . 'files/cache/smileys_cache.dat', 'w')) !== false) {
-                fputs($fp, $smileys . "\r\n" . $smileys_adm);
-                fclose($fp);
-                return $count;
-            } else {
-                return false;
-            }
-        } else {
-            // Выдаем кэшированные смайлы
-            if (file_exists($rootpath . 'files/cache/smileys_cache.dat')) {
-                $file = file($rootpath . 'files/cache/smileys_cache.dat');
-                $smileys = unserialize($file[0]);
-                if ($adm)
-                    $smileys = array_merge($smileys, unserialize($file[1]));
-                return strtr($str, $smileys);
-            } else {
-                return $str;
-            }
-        }
+        global $rootpath;
+        if (empty(self::$smileys_cache) && ($file = file_get_contents($rootpath . 'files/cache/smileys.dat')) !== false)
+            self::$smileys_cache = unserialize($file);
+        return strtr($str, ($adm ? array_merge(self::$smileys_cache['usr'], self::$smileys_cache['adm']) : self::$smileys_cache['usr']));
     }
 
     /*
