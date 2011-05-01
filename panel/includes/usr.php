@@ -33,9 +33,9 @@ switch ($sort) {
 }
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0);
-$req = mysql_query("SELECT * FROM `users` WHERE `preg` = 1 ORDER BY $order LIMIT $start,$kmess");
+$req = mysql_query("SELECT * FROM `users` WHERE `preg` = 1 ORDER BY $order LIMIT " . $start . ", " . $kmess);
 $i = 0;
-while ($res = mysql_fetch_array($req)) {
+while (($res = mysql_fetch_assoc($req)) !== false) {
     $link = '';
     if ($rights >= 7)
         $link .= '<a href="../users/profile.php?act=edit&amp;user=' . $res['id'] . '">' . $lng['edit'] . '</a> | <a href="index.php?act=usr_del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a> | ';

@@ -512,6 +512,8 @@ class functions
     static function get_user($id = false)
     {
         global $datauser, $user_id;
+        if(!$id)
+            return false;
         if ($id && $id != $user_id) {
             $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {

@@ -66,7 +66,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
     if ($regtotal && $rights >= 6) echo '<li><span class="red"><b><a href="index.php?act=reg">' . $lng['users_reg'] . '</a>&#160;(' . $regtotal . ')</b></span></li>';
     echo '<li><a href="index.php?act=usr">' . $lng['users'] . '</a>&#160;(' . counters::users() . ')</li>' .
          '<li><a href="index.php?act=usr_adm">' . $lng['users_administration'] . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>' .
-         '<li><a href="index.php?act=usr_clean">' . $lng['users_clean'] . '</a></li>' .
+         ($rights >= 7 ? '<li><a href="index.php?act=usr_clean">' . $lng['users_clean'] . '</a></li>' : '') .
          '<li><a href="index.php?act=ban_panel">' . $lng['ban_panel'] . '</a>&#160;(' . $bantotal . ')</li>' .
          '<li><a href="index.php?act=antiflood">' . $lng['antiflood'] . '</a></li>' .
          '<li><a href="index.php?act=karma">' . $lng['karma'] . '</a></li><br />' .
