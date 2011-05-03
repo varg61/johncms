@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -16,8 +16,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Обработка ссылок и тэгов BBCODE в тексте
 -----------------------------------------------------------------
 */
-function tags($var = '') {
-    $var = preg_replace(array ('#\[php\](.+?)\[\/php\]#se'), array ("''.highlight('$1').''"), str_replace("]\n", "]", $var));
+function tags($var = '')
+{
+    $var = preg_replace(array('#\[php\](.+?)\[\/php\]#se'), array("''.highlight('$1').''"), str_replace("]\n", "]", $var));
     $var = preg_replace('#\[b\](.+?)\[/b\]#si', '<span style="font-weight: bold;">\1</span>', $var);
     $var = preg_replace('#\[i\](.+?)\[/i\]#si', '<span style="font-style:italic;">\1</span>', $var);
     $var = preg_replace('#\[u\](.+?)\[/u\]#si', '<span style="text-decoration:underline;">\1</span>', $var);
@@ -35,21 +36,22 @@ function tags($var = '') {
 Служебная функция подсветки PHP кода
 -----------------------------------------------------------------
 */
-function highlight($php) {
-    $php = strtr($php, array (
-        '<br />' => '',
-        '\\' => 'slash_JOHNCMS'
-    ));
+function highlight($php)
+{
+    $php = strtr($php, array(
+                            '<br />' => '',
+                            '\\' => 'slash_JOHNCMS'
+                       ));
 
     $php = html_entity_decode(trim($php), ENT_QUOTES, 'UTF-8');
     $php = substr($php, 0, 2) != "<?" ? $php = "<?php\n" . $php . "\n?>" : $php;
     $php = highlight_string(stripslashes($php), true);
-    $php = strtr($php, array (
-        'slash_JOHNCMS' => '&#92;',
-        ':' => '&#58;',
-        '[' => '&#91;',
-        '&nbsp;' => ' '
-    ));
+    $php = strtr($php, array(
+                            'slash_JOHNCMS' => '&#92;',
+                            ':' => '&#58;',
+                            '[' => '&#91;',
+                            '&nbsp;' => ' '
+                       ));
 
     return '<div class="phpcode">' . $php . '</div>';
 }
@@ -59,19 +61,20 @@ function highlight($php) {
 Служебная функция парсинга URL
 -----------------------------------------------------------------
 */
-function url_replace($m) {
+function url_replace($m)
+{
     global $set;
     if (!isset($m[3])) {
         $tmp = parse_url($m[1]);
-        if('http://' . $tmp['host'] == $set['homeurl']){
+        if ('http://' . $tmp['host'] == $set['homeurl']) {
             return '<a href="' . str_replace(':', '&#58;', $m[1]) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
         } else {
-            return '<a href="'  . $set['homeurl'] . '/go.php?url=' . base64_encode(str_replace(':', '&#58;', $m[1])) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
+            return '<a href="' . $set['homeurl'] . '/go.php?url=' . base64_encode(str_replace(':', '&#58;', $m[1])) . '">' . str_replace(':', '&#58;', $m[2]) . '</a>';
         }
     } else {
         $tmp = parse_url($m[3]);
         $m[3] = str_replace(':', '&#58;', $m[3]);
-        if('http://' . $tmp['host'] == $set['homeurl']){
+        if ('http://' . $tmp['host'] == $set['homeurl']) {
             return '<a href="' . $m[3] . '">' . $m[3] . '</a>';
         } else {
             return '<a href="' . $set['homeurl'] . '/go.php?url=' . base64_encode($m[3]) . '">' . $m[3] . '</a>';
@@ -81,76 +84,114 @@ function url_replace($m) {
 
 /*
 -----------------------------------------------------------------
+Вспомогательная Функция обработки ссылок форума
+-----------------------------------------------------------------
+*/
+function forum_link($m)
+{
+    global $set;
+    if (!isset($m[3])) {
+        return '[url=' . $m[1] . ']' . $m[2] . '[/url]';
+    } else {
+        $p = parse_url($m[3]);
+        if ('http://' . $p['host'] . $p['path'] . '?id=' == $set['homeurl'] . '/forum/index.php?id=') {
+            $thid = abs(intval(preg_replace('/(.*?)id=/si', '', $m[3])));
+            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
+            if (mysql_num_rows($req) > 0) {
+                $res = mysql_fetch_array($req);
+                $name = strtr($res['text'], array(
+                                                 '&quot;' => '',
+                                                 '&amp;' => '',
+                                                 '&lt;' => '',
+                                                 '&gt;' => '',
+                                                 '&#039;' => '',
+                                                 '[' => '',
+                                                 ']' => ''
+                                            ));
+                if (mb_strlen($name) > 40)
+                    $name = mb_substr($name, 0, 40) . '...';
+                return '[url=' . $m[3] . ']' . $name . '[/url]';
+            } else {
+                return $m[3];
+            }
+        } else
+            return $m[3];
+    }
+}
+
+/*
+-----------------------------------------------------------------
 Транслитерация текста
 -----------------------------------------------------------------
 */
-function trans($str) {
-    $str = strtr($str, array (
-        'a' => 'а',
-        'b' => 'б',
-        'v' => 'в',
-        'g' => 'г',
-        'd' => 'д',
-        'e' => 'е',
-        'yo' => 'ё',
-        'zh' => 'ж',
-        'z' => 'з',
-        'i' => 'и',
-        'j' => 'й',
-        'k' => 'к',
-        'l' => 'л',
-        'm' => 'м',
-        'n' => 'н',
-        'o' => 'о',
-        'p' => 'п',
-        'r' => 'р',
-        's' => 'с',
-        't' => 'т',
-        'u' => 'у',
-        'f' => 'ф',
-        'h' => 'х',
-        'c' => 'ц',
-        'ch' => 'ч',
-        'w' => 'ш',
-        'sh' => 'щ',
-        'q' => 'ъ',
-        'y' => 'ы',
-        'x' => 'э',
-        'yu' => 'ю',
-        'ya' => 'я',
-        'A' => 'А',
-        'B' => 'Б',
-        'V' => 'В',
-        'G' => 'Г',
-        'D' => 'Д',
-        'E' => 'Е',
-        'YO' => 'Ё',
-        'ZH' => 'Ж',
-        'Z' => 'З',
-        'I' => 'И',
-        'J' => 'Й',
-        'K' => 'К',
-        'L' => 'Л',
-        'M' => 'М',
-        'N' => 'Н',
-        'O' => 'О',
-        'P' => 'П',
-        'R' => 'Р',
-        'S' => 'С',
-        'T' => 'Т',
-        'U' => 'У',
-        'F' => 'Ф',
-        'H' => 'Х',
-        'C' => 'Ц',
-        'CH' => 'Ч',
-        'W' => 'Ш',
-        'SH' => 'Щ',
-        'Q' => 'Ъ',
-        'Y' => 'Ы',
-        'X' => 'Э',
-        'YU' => 'Ю',
-        'YA' => 'Я'
-    ));
+function trans($str)
+{
+    $str = strtr($str, array(
+                            'a' => 'а',
+                            'b' => 'б',
+                            'v' => 'в',
+                            'g' => 'г',
+                            'd' => 'д',
+                            'e' => 'е',
+                            'yo' => 'ё',
+                            'zh' => 'ж',
+                            'z' => 'з',
+                            'i' => 'и',
+                            'j' => 'й',
+                            'k' => 'к',
+                            'l' => 'л',
+                            'm' => 'м',
+                            'n' => 'н',
+                            'o' => 'о',
+                            'p' => 'п',
+                            'r' => 'р',
+                            's' => 'с',
+                            't' => 'т',
+                            'u' => 'у',
+                            'f' => 'ф',
+                            'h' => 'х',
+                            'c' => 'ц',
+                            'ch' => 'ч',
+                            'w' => 'ш',
+                            'sh' => 'щ',
+                            'q' => 'ъ',
+                            'y' => 'ы',
+                            'x' => 'э',
+                            'yu' => 'ю',
+                            'ya' => 'я',
+                            'A' => 'А',
+                            'B' => 'Б',
+                            'V' => 'В',
+                            'G' => 'Г',
+                            'D' => 'Д',
+                            'E' => 'Е',
+                            'YO' => 'Ё',
+                            'ZH' => 'Ж',
+                            'Z' => 'З',
+                            'I' => 'И',
+                            'J' => 'Й',
+                            'K' => 'К',
+                            'L' => 'Л',
+                            'M' => 'М',
+                            'N' => 'Н',
+                            'O' => 'О',
+                            'P' => 'П',
+                            'R' => 'Р',
+                            'S' => 'С',
+                            'T' => 'Т',
+                            'U' => 'У',
+                            'F' => 'Ф',
+                            'H' => 'Х',
+                            'C' => 'Ц',
+                            'CH' => 'Ч',
+                            'W' => 'Ш',
+                            'SH' => 'Щ',
+                            'Q' => 'Ъ',
+                            'Y' => 'Ы',
+                            'X' => 'Э',
+                            'YU' => 'Ю',
+                            'YA' => 'Я'
+                       ));
 
     return $str;
 }
@@ -160,7 +201,8 @@ function trans($str) {
 Функция постраничной навигации
 -----------------------------------------------------------------
 */
-function pagenav($base_url, $start, $max_value, $num_per_page) {
+function pagenav($base_url, $start, $max_value, $num_per_page)
+{
     $pgcont = 4;
     $pgcont = (int)($pgcont - ($pgcont % 2)) / 2;
 
@@ -168,7 +210,7 @@ function pagenav($base_url, $start, $max_value, $num_per_page) {
         $start = max(0, (int)$max_value - (((int)$max_value % (int)$num_per_page) == 0 ? $num_per_page : ((int)$max_value % (int)$num_per_page)));
     else
         $start = max(0, (int)$start - ((int)$start % (int)$num_per_page));
-    $base_link = '<a class="navpg" href="' . strtr($base_url, array ('%' => '%%')) . 'start=%d' . '">%s</a> ';
+    $base_link = '<a class="navpg" href="' . strtr($base_url, array('%' => '%%')) . 'start=%d' . '">%s</a> ';
     $pageindex = $start == 0 ? '' : sprintf($base_link, $start - $num_per_page, '&lt;&lt;');
 
     if ($start > $num_per_page * $pgcont)
@@ -209,15 +251,16 @@ function pagenav($base_url, $start, $max_value, $num_per_page) {
 Функция пересчета на дни, или часы
 -----------------------------------------------------------------
 */
-function timecount($var) {
+function timecount($var)
+{
     if ($var < 0)
         $var = 0;
     $day = ceil($var / 86400);
     if ($var > 345600) {
         $str = $day . ' дней';
-    }  elseif ($var >= 172800) {
+    } elseif ($var >= 172800) {
         $str = $day . ' дня';
-    }  elseif ($var >= 86400) {
+    } elseif ($var >= 86400) {
         $str = '1 день';
     } else {
         $str = gmdate('G:i:s', $var);
@@ -230,12 +273,13 @@ function timecount($var) {
 Форматирование размера файлов
 -----------------------------------------------------------------
 */
-function formatsize($size) {
+function formatsize($size)
+{
     if ($size >= 1073741824) {
         $size = round($size / 1073741824 * 100) / 100 . ' Gb';
-    }  elseif ($size >= 1048576) {
+    } elseif ($size >= 1048576) {
         $size = round($size / 1048576 * 100) / 100 . ' Mb';
-    }  elseif ($size >= 1024) {
+    } elseif ($size >= 1024) {
         $size = round($size / 1024 * 100) / 100 . ' Kb';
     } else {
         $size = $size . ' b';
@@ -248,43 +292,44 @@ function formatsize($size) {
 Проверка переменных
 -----------------------------------------------------------------
 */
-function check($str) {
+function check($str)
+{
     $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
     $str = nl2br($str);
-    $str = strtr($str, array (
-        chr(0)=> '',
-        chr(1)=> '',
-        chr(2)=> '',
-        chr(3)=> '',
-        chr(4)=> '',
-        chr(5)=> '',
-        chr(6)=> '',
-        chr(7)=> '',
-        chr(8)=> '',
-        chr(9)=> '',
-        chr(10)=> '',
-        chr(11)=> '',
-        chr(12)=> '',
-        chr(13)=> '',
-        chr(14)=> '',
-        chr(15)=> '',
-        chr(16)=> '',
-        chr(17)=> '',
-        chr(18)=> '',
-        chr(19)=> '',
-        chr(20)=> '',
-        chr(21)=> '',
-        chr(22)=> '',
-        chr(23)=> '',
-        chr(24)=> '',
-        chr(25)=> '',
-        chr(26)=> '',
-        chr(27)=> '',
-        chr(28)=> '',
-        chr(29)=> '',
-        chr(30)=> '',
-        chr(31)=> ''
-    ));
+    $str = strtr($str, array(
+                            chr(0) => '',
+                            chr(1) => '',
+                            chr(2) => '',
+                            chr(3) => '',
+                            chr(4) => '',
+                            chr(5) => '',
+                            chr(6) => '',
+                            chr(7) => '',
+                            chr(8) => '',
+                            chr(9) => '',
+                            chr(10) => '',
+                            chr(11) => '',
+                            chr(12) => '',
+                            chr(13) => '',
+                            chr(14) => '',
+                            chr(15) => '',
+                            chr(16) => '',
+                            chr(17) => '',
+                            chr(18) => '',
+                            chr(19) => '',
+                            chr(20) => '',
+                            chr(21) => '',
+                            chr(22) => '',
+                            chr(23) => '',
+                            chr(24) => '',
+                            chr(25) => '',
+                            chr(26) => '',
+                            chr(27) => '',
+                            chr(28) => '',
+                            chr(29) => '',
+                            chr(30) => '',
+                            chr(31) => ''
+                       ));
 
     $str = str_replace("'", "&#39;", $str);
     $str = str_replace('\\', "&#92;", $str);
@@ -300,7 +345,8 @@ function check($str) {
 Обработка текстов перед выводом на экран
 -----------------------------------------------------------------
 */
-function checkout($str, $br = 0, $tags = 0) {
+function checkout($str, $br = 0, $tags = 0)
+{
     $str = htmlentities($str, ENT_QUOTES, 'UTF-8');
 
     if ($br == 1)
@@ -312,40 +358,40 @@ function checkout($str, $br = 0, $tags = 0) {
         $str = tags($str);
     elseif ($tags == 2)
         $str = functions::notags($str);
-    $str = strtr($str, array (
-        chr(0)=> '',
-        chr(1)=> '',
-        chr(2)=> '',
-        chr(3)=> '',
-        chr(4)=> '',
-        chr(5)=> '',
-        chr(6)=> '',
-        chr(7)=> '',
-        chr(8)=> '',
-        chr(9)=> '',
-        chr(10)=> '',
-        chr(11)=> '',
-        chr(12)=> '',
-        chr(13)=> '',
-        chr(14)=> '',
-        chr(15)=> '',
-        chr(16)=> '',
-        chr(17)=> '',
-        chr(18)=> '',
-        chr(19)=> '',
-        chr(20)=> '',
-        chr(21)=> '',
-        chr(22)=> '',
-        chr(23)=> '',
-        chr(24)=> '',
-        chr(25)=> '',
-        chr(26)=> '',
-        chr(27)=> '',
-        chr(28)=> '',
-        chr(29)=> '',
-        chr(30)=> '',
-        chr(31)=> ''
-    ));
+    $str = strtr($str, array(
+                            chr(0) => '',
+                            chr(1) => '',
+                            chr(2) => '',
+                            chr(3) => '',
+                            chr(4) => '',
+                            chr(5) => '',
+                            chr(6) => '',
+                            chr(7) => '',
+                            chr(8) => '',
+                            chr(9) => '',
+                            chr(10) => '',
+                            chr(11) => '',
+                            chr(12) => '',
+                            chr(13) => '',
+                            chr(14) => '',
+                            chr(15) => '',
+                            chr(16) => '',
+                            chr(17) => '',
+                            chr(18) => '',
+                            chr(19) => '',
+                            chr(20) => '',
+                            chr(21) => '',
+                            chr(22) => '',
+                            chr(23) => '',
+                            chr(24) => '',
+                            chr(25) => '',
+                            chr(26) => '',
+                            chr(27) => '',
+                            chr(28) => '',
+                            chr(29) => '',
+                            chr(30) => '',
+                            chr(31) => ''
+                       ));
 
     return $str;
 }
@@ -355,7 +401,8 @@ function checkout($str, $br = 0, $tags = 0) {
 Обработка смайлов
 -----------------------------------------------------------------
 */
-function smileys($str, $adm = 0) {
+function smileys($str, $adm = 0)
+{
     global $rootpath;
 
     if (file_exists($rootpath . 'cache/smileys_cache.dat')) {
@@ -374,10 +421,11 @@ function smileys($str, $adm = 0) {
 Рекламная сеть mobileads.ru
 -----------------------------------------------------------------
 */
-function mobileads($mad_siteId = NULL) {
+function mobileads($mad_siteId = NULL)
+{
     global $realtime;
     $out = '';
-    $mad_socketTimeout = 2;      // таймаут соединения с сервером mobileads.ru
+    $mad_socketTimeout = 2; // таймаут соединения с сервером mobileads.ru
     ini_set("default_socket_timeout", $mad_socketTimeout);
     $mad_pageEncoding = "UTF-8"; // устанавливаем кодировку страницы
     $mad_ua = urlencode(@$_SERVER['HTTP_USER_AGENT']);
@@ -403,7 +451,8 @@ function mobileads($mad_siteId = NULL) {
     return $out;
 }
 
-function provcat($catalog) {
+function provcat($catalog)
+{
     $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
     $cat2 = mysql_num_rows($cat1);
     $adrdir = mysql_fetch_array($cat1);
@@ -413,4 +462,5 @@ function provcat($catalog) {
         exit;
     }
 }
+
 ?>
