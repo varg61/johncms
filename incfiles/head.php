@@ -118,6 +118,7 @@ if ($user_id) {
     if (!$datauser['karma_off'] && $set_karma['on'] && $datauser['karma_time'] <= ($realtime - 86400)) {
         $sql = "`karma_time` = '$realtime', ";
     }
+    //TODO: Разобраться со счетчиком перемещений, если не нужен, то удалить
     $movings = $datauser['movings'];
     if ($datauser['lastdate'] < ($realtime - 300)) {
         $movings = 0;

@@ -104,7 +104,6 @@ switch ($mod) {
             $set_user['kmess'] = isset($_POST['kmess']) ? abs(intval($_POST['kmess'])) : 10;
             $set_user['quick_go'] = isset($_POST['quick_go']) ? 1 : 0;
             $set_user['online'] = isset($_POST['online']) ? 1 : 0;
-            $set_user['movings'] = isset($_POST['movings']) ? 1 : 0;
             if ($set_user['sdvig'] < -12)
                 $set_user['sdvig'] = -12;
             elseif ($set_user['sdvig'] > 12)
@@ -180,7 +179,6 @@ switch ($mod) {
              '<input type="text" name="kmess" size="2" maxlength="2" value="' . $core->user_set['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
              '<input name="quick_go" type="checkbox" value="1" ' . ($core->user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] . '<br />' .
              '<input name="online" type="checkbox" value="1" ' . ($core->user_set['online'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['time_online'] . '<br />' .
-             '<input name="movings" type="checkbox" value="1" ' . ($core->user_set['movings'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['transitions_counter'] .
              '</p>';
 
         // Выбор темы оформления

@@ -285,7 +285,6 @@ top_guest                     =   "Самые активные в Гостево
 top_karma                     =   "Лучшая Карма"
 total                         =   "Всего"
 transitions                   =   "Переходы"
-transitions_counter           =   "Счетчик переходов"
 transitions_n                 =   "переходов"
 translit                      =   "Транслит"
 unread                        =   "Непрочитанное"

@@ -56,10 +56,6 @@ echo '<p><b>' . $set['copyright'] . '</b></p>';
 if (!$user_id || ($user_id && $set_user['online']))
     echo '<div>' . $lng['online'] . ': ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
 
-// Счетчик перемещений по сайту
-if (!$user_id || ($user_id && $set_user['movings']))
-    echo $lng['transitions'] . ': ' . $movings;
-
 // Счетчики каталогов
 functions::display_counters();
 
