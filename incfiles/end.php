@@ -26,7 +26,7 @@ if (!empty($cms_ads[2]))
 
 echo '</div><div class="fmenu">';
 if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act))
-    echo '<a href=\'' . $set['homeurl'] . '\'>' . $lng['homepage'] . '</a><br/>';
+    echo '<a href="' . $set['homeurl'] . '">' . $lng['homepage'] . '</a><br/>';
 
 // Меню быстрого перехода
 if ($set_user['quick_go']) {
@@ -51,10 +51,6 @@ echo '</div><div class="footer">' . counters::online() . '</div>';
 ////////////////////////////////////////////////////////////
 echo '<div style="text-align:center">';
 echo '<p><b>' . $set['copyright'] . '</b></p>';
-
-// Время, проведенное на сайте
-if (!$user_id || ($user_id && $set_user['online']))
-    echo '<div>' . $lng['online'] . ': ' . gmdate('H:i:s', ($realtime - $datauser['sestime'])) . '</div>';
 
 // Счетчики каталогов
 functions::display_counters();

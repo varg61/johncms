@@ -95,15 +95,14 @@ switch ($mod) {
             -----------------------------------------------------------------
             */
             $set_user['sdvig'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
-            $set_user['avatar'] = isset($_POST['avatar']) ? 1 : 0;
-            $set_user['smileys'] = isset($_POST['smileys']) ? 1 : 0;
-            $set_user['translit'] = isset($_POST['translit']) ? 1 : 0;
-            $set_user['digest'] = isset($_POST['digest']) ? 1 : 0;
+            $set_user['avatar'] = isset($_POST['avatar']);
+            $set_user['smileys'] = isset($_POST['smileys']);
+            $set_user['translit'] = isset($_POST['translit']);
+            $set_user['digest'] = isset($_POST['digest']);
             $set_user['field_w'] = isset($_POST['field_w']) ? abs(intval($_POST['field_w'])) : 20;
             $set_user['field_h'] = isset($_POST['field_h']) ? abs(intval($_POST['field_h'])) : 3;
             $set_user['kmess'] = isset($_POST['kmess']) ? abs(intval($_POST['kmess'])) : 10;
-            $set_user['quick_go'] = isset($_POST['quick_go']) ? 1 : 0;
-            $set_user['online'] = isset($_POST['online']) ? 1 : 0;
+            $set_user['quick_go'] = isset($_POST['quick_go']);
             if ($set_user['sdvig'] < -12)
                 $set_user['sdvig'] = -12;
             elseif ($set_user['sdvig'] > 12)
@@ -177,8 +176,7 @@ switch ($mod) {
              '<input type="text" name="field_h" size="2" maxlength="1" value="' . $core->user_set['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />' .
              '</p><p><h3>' . $lng['apperance'] . '</h3>' .
              '<input type="text" name="kmess" size="2" maxlength="2" value="' . $core->user_set['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
-             '<input name="quick_go" type="checkbox" value="1" ' . ($core->user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] . '<br />' .
-             '<input name="online" type="checkbox" value="1" ' . ($core->user_set['online'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['time_online'] . '<br />' .
+             '<input name="quick_go" type="checkbox" value="1" ' . ($core->user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .
              '</p>';
 
         // Выбор темы оформления
