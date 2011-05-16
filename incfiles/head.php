@@ -19,6 +19,8 @@ $textl = isset($textl) ? $textl : $set['copyright'];
 Выводим HTML заголовки страницы, подключаем CSS файл
 -----------------------------------------------------------------
 */
+header("Cache-Control: public");
+header("Expires: " . date("r",  time() + 60));
 header((stristr($agn, "msie") && stristr($agn, "windows")) ? 'Content-type: text/html; charset=UTF-8' : 'Content-type: application/xhtml+xml; charset=UTF-8');
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n" .
      "\n" . '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">' .
