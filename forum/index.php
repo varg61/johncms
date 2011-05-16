@@ -553,7 +553,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                         7 => '(Adm)',
                         9 => '(SV!)'
                     );
-                    echo $user_rights[$res['rights']];
+                    echo @$user_rights[$res['rights']];
                     // Метка Онлайн / Офлайн
                     echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
                     // Ссылки на ответ и цитирование

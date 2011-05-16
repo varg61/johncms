@@ -40,24 +40,22 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n" .
 Рекламный модуль
 -----------------------------------------------------------------
 */
-$cms_ads = false;
+$cms_ads = array();
 if (!isset($_GET['err']) && $act != '404' && $headmod != 'admin') {
     $view = $user_id ? 2 : 1;
     $layout = ($headmod == 'mainpage' && !$act) ? 1 : 2;
     $req = mysql_query("SELECT * FROM `cms_ads` WHERE `to` = '0' AND (`layout` = '$layout' or `layout` = '0') AND (`view` = '$view' or `view` = '0') ORDER BY  `mesto` ASC");
-    if (mysql_num_rows($req) > 0) {
+    if (mysql_num_rows($req)) {
         while (($res = mysql_fetch_assoc($req)) !== false) {
             $name = explode("|", $res['name']);
             $name = htmlentities($name[mt_rand(0, (count($name) - 1))], ENT_QUOTES, 'UTF-8');
-            if (!empty($res['color']))
-                $name = '<span style="color:#' . $res['color'] . '">' . $name . '</span>';
+            if (!empty($res['color'])) $name = '<span style="color:#' . $res['color'] . '">' . $name . '</span>';
             // Если было задано начертание шрифта, то применяем
             $font = $res['bold'] ? 'font-weight: bold;' : false;
             $font .= $res['italic'] ? ' font-style:italic;' : false;
             $font .= $res['underline'] ? ' text-decoration:underline;' : false;
-            if ($font)
-                $name = '<span style="' . $font . '">' . $name . '</span>';
-            $cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? functions::checkout($res['link']) : $set['homeurl'] . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
+            if ($font) $name = '<span style="' . $font . '">' . $name . '</span>';
+            @$cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? functions::checkout($res['link']) : $set['homeurl'] . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
             if (($res['day'] != 0 && $realtime >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
                 mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $res['id'] . "'");
         }
@@ -69,7 +67,7 @@ if (!isset($_GET['err']) && $act != '404' && $headmod != 'admin') {
 Рекламный блок сайта
 -----------------------------------------------------------------
 */
-if ($cms_ads[0]) echo $cms_ads[0];
+if (isset($cms_ads[0])) echo $cms_ads[0];
 
 /*
 -----------------------------------------------------------------
