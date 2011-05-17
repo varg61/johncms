@@ -402,7 +402,7 @@ class core
         if (!isset($this->system_settings['clean_time'])) mysql_query("INSERT INTO `cms_settings` SET `key` = 'clean_time', `val` = '0'");
         if ($this->system_settings['clean_time'] < $this->system_time - 86400) {
             // Очищаем таблицу статистики гостей (удаляем записи старше 1 дня)
-            mysql_query("DELETE FROM `cms_guests` WHERE `time` < '" . ($this->system_time - 86400) . "'");
+            mysql_query("DELETE FROM `cms_guests` WHERE `lastdate` < '" . ($this->system_time - 86400) . "'");
             mysql_query("OPTIMIZE TABLE `cms_guests`");
             // Очищаем таблицу истории IP адресов (удаляем записи старше 1 месяца)
             mysql_query("DELETE FROM `cms_users_iphistory` WHERE `time` < '" . ($this->system_time - 2592000) . "'");
