@@ -431,17 +431,22 @@ class functions extends core
             if ($lastvisit)
                 $out .= '<div><span class="gray">' . self::$lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
             $iphist = '';
-            if ($ipinf && isset($arg['iphist'])) {
-                $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-                $iphist = '&#160;<a href="' . self::$system_set['homeurl'] . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a>';
-            }
             if ($ipinf) {
-                $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
-                if (self::$user_rights)
-                    $out .= '<div><span class="gray">' . self::$lng['last_ip'] . ':</span> <a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist
-                            . '</div>';
-                else
-                    $out .= '<div><span class="gray">' . self::$lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist . '</div>';
+                $out .= '<div><span class="gray">' . self::$lng['browser'] . ':</span> ' . $user['browser'] . '</div>';
+                $out .= '<div><span class="gray">' . self::$lng['ip_address'] . ':</span> ';
+                if (self::$user_rights && $user['ip_via_proxy']) {
+                    $out .= '<b class="red"><a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></b> / ';
+                    $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip_via_proxy'] . '">' . long2ip($user['ip_via_proxy']) . '</a>';
+                } elseif (self::$user_rights) {
+                    $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>';
+                } else {
+                    $out .= '<div><span class="gray">' . self::$lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist;
+                }
+                if (isset($arg['iphist'])) {
+                    $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+                    $out .= '<div><span class="gray">' . self::$lng['ip_history'] . ':</span> <a href="' . self::$system_set['homeurl'] . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a></div>';
+                }
+                $out .= '</div>';
             }
             if (isset($arg['footer']))
                 $out .= $arg['footer'];

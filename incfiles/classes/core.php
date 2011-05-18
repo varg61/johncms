@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 class core
 {
     public static $ip;                                    // IP адрес
-    public static $ip_x_forwarded;                        // IP адрес за прокси-сервером
+    public static $ip_via_proxy;                          // IP адрес за прокси-сервером
     public static $user_agent;                            // User Agent
     public static $system_set;                            // Системные настройки
     public static $lng_iso = 'en';                        // Двухбуквенный ISO код языка
@@ -76,7 +76,8 @@ class core
     private function get_ip()
     {
         self::$ip = ip2long($_SERVER['REMOTE_ADDR']) or die('Invalid IP');
-        self::$ip_x_forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) && self::ip_valid($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
+        //self::$ip_via_proxy = isset($_SERVER['HTTP_X_FORWARDED_FOR']) && self::ip_valid($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
+        self::$ip_via_proxy = self::$ip;
     }
 
     /*
@@ -339,19 +340,29 @@ class core
     */
     private function user_ip_history()
     {
-        if (self::$user_data['ip'] != self::$ip) {
+        if (self::$user_data['ip'] != self::$ip || self::$user_data['ip_via_proxy'] != self::$ip_via_proxy) {
             // Удаляем из истории текущий адрес (если есть)
-            mysql_query("DELETE FROM `cms_users_iphistory` WHERE `user_id` = '" . self::$user_id . "' AND `ip` = '" . self::$ip . "' LIMIT 1");
+            @mysql_query("DELETE FROM `cms_users_iphistory`
+                WHERE `user_id` = '" . $this->user_id . "'
+                AND `ip` = '" . self::$ip . "'
+                AND `ip_via_proxy` = '" . self::$ip_via_proxy . "'
+                LIMIT 1
+            ");
             if (!empty(self::$user_data['ip']) && self::ip_valid(long2ip(self::$user_data['ip']))) {
                 // Вставляем в историю предыдущий адрес IP
                 mysql_query("INSERT INTO `cms_users_iphistory` SET
                     `user_id` = '" . self::$user_id . "',
                     `ip` = '" . self::$user_data['ip'] . "',
+                    `ip_via_proxy` = '" . self::$user_data['ip_via_proxy'] . "',
                     `time` = '" . self::$user_data['lastdate'] . "'
                 ");
             }
             // Обновляем текущий адрес в таблице `users`
-            mysql_query("UPDATE `users` SET `ip` = '" . self::$ip . "' WHERE `id` = '" . self::$user_id . "'");
+            mysql_query("UPDATE `users` SET
+                `ip` = '" . self::$ip . "',
+                `ip_via_proxy` = '" . self::$ip_via_proxy . "'
+                WHERE `id` = '" . self::$user_id . "'
+            ");
         }
     }
 
