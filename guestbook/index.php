@@ -273,7 +273,7 @@ switch ($act) {
             echo '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
         }
         // Форма ввода нового сообщения
-        if (($user_id || $set['mod_guest'] == 2) && !$ban['1'] && !$ban['13']) {
+        if (($user_id || $set['mod_guest'] == 2) && !isset($ban['1']) && !isset($ban['13'])) {
             echo '<div class="gmenu"><form name="form" action="index.php?act=say" method="post">';
             if (!$user_id)
                 echo $lng['name'] . ' (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>';
@@ -311,6 +311,7 @@ switch ($act) {
                 FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id`
                 WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT $start, $kmess");
             }
+            $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
                 $text = '';
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';

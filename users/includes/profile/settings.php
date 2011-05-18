@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$lng_set = $core->load_lng('settings');
+$lng_set = core::load_lng('settings');
 $textl = $lng['settings'];
 require('../incfiles/head.php');
 
@@ -127,7 +127,7 @@ switch ($mod) {
 
             // Устанавливаем язык
             $lng_select = isset($_POST['iso']) ? trim($_POST['iso']) : false;
-            if ($lng_select && array_key_exists($lng_select, $core->lng_list)) {
+            if ($lng_select && array_key_exists($lng_select, core::$lng_list)) {
                 $set_user['lng'] = $lng_select;
                 unset($_SESSION['lng']);
             }
@@ -164,19 +164,19 @@ switch ($mod) {
         }
         echo '<form action="profile.php?act=settings" method="post" >' .
              '<div class="menu"><p><h3>' . $lng['settings_clock'] . '</h3>' .
-             '<input type="text" name="sdvig" size="2" maxlength="3" value="' . $core->user_set['sdvig'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
-             '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + $core->user_set['sdvig'] * 3600) . '</span> ' . $lng['system_time'] .
+             '<input type="text" name="sdvig" size="2" maxlength="3" value="' . core::$user_set['sdvig'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
+             '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + core::$user_set['sdvig'] * 3600) . '</span> ' . $lng['system_time'] .
              '</p><p><h3>' . $lng['system_functions'] . '</h3>' .
-             '<input name="avatar" type="checkbox" value="1" ' . ($core->user_set['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .
-             '<input name="smileys" type="checkbox" value="1" ' . ($core->user_set['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>' .
-             '<input name="translit" type="checkbox" value="1" ' . ($core->user_set['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'] . '<br/>' .
-             '<input name="digest" type="checkbox" value="1" ' . ($core->user_set['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
+             '<input name="avatar" type="checkbox" value="1" ' . (core::$user_set['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .
+             '<input name="smileys" type="checkbox" value="1" ' . (core::$user_set['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>' .
+             '<input name="translit" type="checkbox" value="1" ' . (core::$user_set['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'] . '<br/>' .
+             '<input name="digest" type="checkbox" value="1" ' . (core::$user_set['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
              '</p><p><h3>' . $lng['text_input'] . '</h3>' .
-             '<input type="text" name="field_w" size="2" maxlength="2" value="' . $core->user_set['field_w'] . '"/> ' . $lng['field_width'] . ' (10-80)<br />' .
-             '<input type="text" name="field_h" size="2" maxlength="1" value="' . $core->user_set['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />' .
+             '<input type="text" name="field_w" size="2" maxlength="2" value="' . core::$user_set['field_w'] . '"/> ' . $lng['field_width'] . ' (10-80)<br />' .
+             '<input type="text" name="field_h" size="2" maxlength="1" value="' . core::$user_set['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />' .
              '</p><p><h3>' . $lng['apperance'] . '</h3>' .
-             '<input type="text" name="kmess" size="2" maxlength="2" value="' . $core->user_set['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
-             '<input name="quick_go" type="checkbox" value="1" ' . ($core->user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .
+             '<input type="text" name="kmess" size="2" maxlength="2" value="' . core::$user_set['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
+             '<input name="quick_go" type="checkbox" value="1" ' . (core::$user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .
              '</p>';
 
         // Выбор темы оформления
@@ -184,19 +184,19 @@ switch ($mod) {
         foreach (glob('../theme/*/*.css') as $val) {
             $dir = explode('/', dirname($val));
             $theme = array_pop($dir);
-            echo '<option' . ($core->user_set['skin'] == $theme ? ' selected="selected">' : '>') . $theme . '</option>';
+            echo '<option' . (core::$user_set['skin'] == $theme ? ' selected="selected">' : '>') . $theme . '</option>';
         }
         echo '</select></p>';
 
         // Выбор языка
-        if (count($core->lng_list) > 1) {
+        if (count(core::$lng_list) > 1) {
             echo '<p><h3>' . $lng['language_select'] . '</h3>';
-            $user_lng = isset($core->user_set['lng']) ? $core->user_set['lng'] : $core->lng;
-            foreach ($core->lng_list as $key => $val) {
+            $user_lng = isset(core::$user_set['lng']) ? core::$user_set['lng'] : core::$lng_iso;
+            foreach (core::$lng_list as $key => $val) {
                 echo '<div><input type="radio" value="' . $key . '" name="iso" ' . ($key == $user_lng ? 'checked="checked"' : '') . '/>&#160;' .
                      (file_exists('../images/flags/' . $key . '.gif') ? '<img src="../images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
                      $val .
-                     ($key == $core->system_settings['lng'] ? ' <small class="red">[' . $lng['default'] . ']</small>' : '') .
+                     ($key == core::$system_set['lng'] ? ' <small class="red">[' . $lng['default'] . ']</small>' : '') .
                      '</div>';
             }
             echo '</p>';

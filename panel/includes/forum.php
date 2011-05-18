@@ -18,7 +18,7 @@ if ($rights < 7) {
 }
 
 // Подключаем языковый файл форума
-$lng_forum = $core->load_lng('forum');
+$lng_forum = core::load_lng('forum');
 
 // Задаем пользовательские настройки форума
 $set_forum = unserialize($datauser['set_forum']);

@@ -114,7 +114,7 @@ if (isset($_POST['submit'])) {
     require('../incfiles/head.php');
     if ($datauser['postforum'] == 0) {
         if (!isset($_GET['yes'])) {
-            $lng_faq = $core->load_lng('faq');
+            $lng_faq = core::load_lng('faq');
             echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
             echo '<p><a href="index.php?act=nt&amp;id=' . $id . '&amp;yes">' . $lng_forum['agree'] . '</a> | <a href="index.php?id=' . $id . '">' . $lng_forum['not_agree'] . '</a></p>';
             require('../incfiles/end.php');

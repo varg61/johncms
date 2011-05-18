@@ -11,10 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-class functions
+class functions extends core
 {
-    static private $smileys_cache = array();
-
     /*
     -----------------------------------------------------------------
     Антифлуд
@@ -26,9 +24,9 @@ class functions
     4 - Ночь
     -----------------------------------------------------------------
     */
-    static function antiflood()
+    public static function antiflood()
     {
-        global $set, $datauser, $realtime;
+        global $realtime;
         $default = array(
             'mode' => 2,
             'day' => 10,
@@ -36,7 +34,7 @@ class functions
             'dayfrom' => 10,
             'dayto' => 22
         );
-        $af = isset($set['antiflood']) ? unserialize($set['antiflood']) : $default;
+        $af = isset(self::$system_set['antiflood']) ? unserialize(self::$system_set['antiflood']) : $default;
         switch ($af['mode']) {
             case 1:
                 // Адаптивный режим
@@ -57,9 +55,9 @@ class functions
                 $c_time = date('G', $realtime);
                 $limit = $c_time > $af['day'] && $c_time < $af['night'] ? $af['day'] : $af['night'];
         }
-        if ($datauser['rights'] > 0)
+        if (self::$user_rights > 0)
             $limit = 4; // Для Администрации задаем лимит в 4 секунды
-        $flood = $datauser['lastpost'] + $limit - $realtime;
+        $flood = self::$user_data['lastpost'] + $limit - $realtime;
         if ($flood > 0)
             return $flood;
         else
@@ -71,7 +69,7 @@ class functions
     Маскировка ссылок в тексте
     -----------------------------------------------------------------
     */
-    static function antilink($var)
+    public static function antilink($var)
     {
         $var = preg_replace('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', '###', $var);
         $var = strtr($var, array(
@@ -96,21 +94,20 @@ class functions
     ББ панель (для компьютеров)
     -----------------------------------------------------------------
     */
-    static function auto_bb($form, $field)
+    public static function auto_bb($form, $field)
     {
-        global $set, $datauser, $lng, $user_id, $is_mobile;
-        if ($is_mobile) {
+        if (self::$is_mobile) {
             return false;
         }
-        $smileys = !empty($datauser['smileys']) ? unserialize($datauser['smileys']) : '';
+        $smileys = !empty(self::$user_data['smileys']) ? unserialize(self::$user_data['smileys']) : '';
         if (!empty($smileys)) {
             $res_sm = '';
-            $my_smileys = '<small><a href="' . $set['homeurl'] . '/pages/faq.php?act=my_smileys">' . $lng['edit_list'] . '</a></small><br />';
+            $my_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . self::$lng['edit_list'] . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
-            $my_smileys .= functions::smileys($res_sm, $datauser['rights'] >= 1 ? 1 : 0);
+            $my_smileys .= functions::smileys($res_sm, self::$user_rights >= 1 ? 1 : 0);
         } else {
-            $my_smileys = '<small><a href="' . $set['homeurl'] . '/pages/faq.php?act=smileys">' . $lng['add_smileys'] . '</a></small>';
+            $my_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . self::$lng['add_smileys'] . '</a></small>';
         }
         $out = '<style>
             .smileys{
@@ -140,18 +137,18 @@ class functions
                 var length = element.selectionEnd - element.selectionStart;
                 element.value = str.substr(0, start) + text3 + text1 + str.substr(start, length) + text2 + text3 + str.substr(start + length);
             } else document.' . $form . '.' . $field . '.value += text3+text1+text2+text3;}</script>
-            <a href="javascript:tag(\'[b]\', \'[/b]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/b.png" alt="b" title="' . $lng['tag_bold'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[i]\', \'[/i]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/i.png" alt="i" title="' . $lng['tag_italic'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[u]\', \'[/u]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/u.png" alt="u" title="' . $lng['tag_underline'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[s]\', \'[/s]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/s.png" alt="s" title="' . $lng['tag_strike'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[c]\', \'[/c]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/q.png" alt="quote" title="' . $lng['tag_quote'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . $lng['tag_code'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/l.png" alt="url" title="' . $lng['tag_link'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[red]\', \'[/red]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/re.png" alt="red" title="' . $lng['tag_red'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[green]\', \'[/green]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . $lng['tag_green'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[blue]\', \'[/blue]\', \'\')"><img src="' . $set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . $lng['tag_blue'] . '" border="0"/></a>';
-        if ($user_id) {
-            $out .= ' <span class="smileys_from" style="display: inline-block; cursor:pointer"><img src="' . $set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . $lng['smileys'] . '" border="0"/>
+            <a href="javascript:tag(\'[b]\', \'[/b]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/b.png" alt="b" title="' . self::$lng['tag_bold'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[i]\', \'[/i]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/i.png" alt="i" title="' . self::$lng['tag_italic'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[u]\', \'[/u]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/u.png" alt="u" title="' . self::$lng['tag_underline'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[s]\', \'[/s]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/s.png" alt="s" title="' . self::$lng['tag_strike'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[c]\', \'[/c]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/q.png" alt="quote" title="' . self::$lng['tag_quote'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . self::$lng['tag_code'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/l.png" alt="url" title="' . self::$lng['tag_link'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[red]\', \'[/red]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/re.png" alt="red" title="' . self::$lng['tag_red'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[green]\', \'[/green]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . self::$lng['tag_green'] . '" border="0"/></a>
+            <a href="javascript:tag(\'[blue]\', \'[/blue]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . self::$lng['tag_blue'] . '" border="0"/></a>';
+        if (self::$user_id) {
+            $out .= ' <span class="smileys_from" style="display: inline-block; cursor:pointer"><img src="' . self::$system_set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . self::$lng['smileys'] . '" border="0"/>
                 <div class="smileys">' . $my_smileys . '</div></span>';
         }
         return $out . '<br />';
@@ -162,7 +159,7 @@ class functions
     Проверка переменных
     -----------------------------------------------------------------
     */
-    static function check($str)
+    public static function check($str)
     {
         $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
         $str = nl2br($str);
@@ -219,7 +216,7 @@ class functions
     $tags=2         вырезание тэгов
     -----------------------------------------------------------------
     */
-    static function checkout($str, $br = 0, $tags = 0)
+    public static function checkout($str, $br = 0, $tags = 0)
     {
         $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
         if ($br == 1)
@@ -272,7 +269,7 @@ class functions
     Показ различных счетчиков внизу страницы
     -----------------------------------------------------------------
     */
-    static function display_counters()
+    public static function display_counters()
     {
         global $headmod;
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
@@ -292,11 +289,10 @@ class functions
     Сообщения об ошибках
     -----------------------------------------------------------------
     */
-    static function display_error($error = '', $link = '')
+    public static function display_error($error = '', $link = '')
     {
-        global $lng;
         if ($error) {
-            $out = '<div class="rmenu"><p><b>' . $lng['error'] . '!</b><br />';
+            $out = '<div class="rmenu"><p><b>' . self::$lng['error'] . '!</b><br />';
             $out .= is_array($error) ? implode('<br />', $error) : $error;
             $out .= '</p><p>' . $link . '</p></div>';
             return $out;
@@ -313,7 +309,7 @@ class functions
     $end_space - выводится в конце
     -----------------------------------------------------------------
     */
-    static function display_menu($val = array(), $delimiter = ' | ', $end_space = '')
+    public static function display_menu($val = array(), $delimiter = ' | ', $end_space = '')
     {
         return implode($delimiter, array_diff($val, array(''))) . $end_space;
     }
@@ -324,7 +320,7 @@ class functions
     За основу взята аналогичная функция от форума SMF2.0
     -----------------------------------------------------------------
     */
-    static function display_pagination($base_url, $start, $max_value, $num_per_page)
+    public static function display_pagination($base_url, $start, $max_value, $num_per_page)
     {
         $neighbors = 2;
         if ($start >= $max_value)
@@ -379,30 +375,30 @@ class functions
     */
     static function display_user($user = false, $arg = false)
     {
-        global $set, $set_user, $realtime, $user_id, $rights, $lng, $rootpath;
+        global $realtime, $rootpath;
         $out = false;
 
         if (!$user['id']) {
-            $out = '<b>' . $lng['guest'] . '</b>';
+            $out = '<b>' . self::$lng['guest'] . '</b>';
             if (!empty($user['name']))
                 $out .= ': ' . $user['name'];
             if (!empty($arg['header']))
                 $out .= ' ' . $arg['header'];
         } else {
-            if ($set_user['avatar']) {
+            if (self::$user_set['avatar']) {
                 $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
                 if (file_exists(($rootpath . 'files/users/avatar/' . $user['id'] . '.png')))
-                    $out .= '<img src="' . $set['homeurl'] . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
+                    $out .= '<img src="' . self::$system_set['homeurl'] . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
                 else
-                    $out .= '<img src="' . $set['homeurl'] . '/images/empty.png" width="32" height="32" alt="" />&#160;';
+                    $out .= '<img src="' . self::$system_set['homeurl'] . '/images/empty.png" width="32" height="32" alt="" />&#160;';
                 $out .= '</td><td>';
             }
             if ($user['sex'])
-                $out .= '<img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '')
+                $out .= '<img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '')
                         . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
             else
-                $out .= '<img src="' . $set['homeurl'] . '/images/del.png" width="12" height="12" align="middle" />&#160;';
-            $out .= !$user_id || $user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="' . $set['homeurl'] . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
+                $out .= '<img src="' . self::$system_set['homeurl'] . '/images/del.png" width="12" height="12" align="middle" />&#160;';
+            $out .= !self::$user_id || self::$user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="' . self::$system_set['homeurl'] . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
             $rank = array(
                 0 => '',
                 1 => '(GMod)',
@@ -419,13 +415,13 @@ class functions
             if (!empty($arg['header']))
                 $out .= ' ' . $arg['header'];
             if (!isset($arg['stshide']) && !empty($user['status']))
-                $out .= '<div class="status"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
-            if ($set_user['avatar'])
+                $out .= '<div class="status"><img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
+            if (self::$user_set['avatar'])
                 $out .= '</td></tr></table>';
         }
         if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
-        $ipinf = ($rights || $user['id'] && $user['id'] == $user_id) && !isset($arg['iphide']) ? 1 : 0;
+        $ipinf = (self::$user_rights || $user['id'] && $user['id'] == self::$user_id) && !isset($arg['iphide']) ? 1 : 0;
         $lastvisit = $realtime > $user['lastdate'] + 300 && isset($arg['lastvisit']) ? date("d.m.Y (H:i)", $user['lastdate']) : false;
 
         if ($ipinf || $lastvisit || isset($arg['sub']) || isset($arg['footer'])) {
@@ -433,19 +429,19 @@ class functions
             if (isset($arg['sub']))
                 $out .= '<div>' . $arg['sub'] . '</div>';
             if ($lastvisit)
-                $out .= '<div><span class="gray">' . $lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
+                $out .= '<div><span class="gray">' . self::$lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
             $iphist = '';
             if ($ipinf && isset($arg['iphist'])) {
                 $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-                $iphist = '&#160;<a href="' . $set['homeurl'] . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a>';
+                $iphist = '&#160;<a href="' . self::$system_set['homeurl'] . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a>';
             }
             if ($ipinf) {
                 $out .= '<div><span class="gray">UserAgent:</span> ' . $user['browser'] . '</div>';
-                if ($rights)
-                    $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> <a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist
+                if (self::$user_rights)
+                    $out .= '<div><span class="gray">' . self::$lng['last_ip'] . ':</span> <a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>' . $iphist
                             . '</div>';
                 else
-                    $out .= '<div><span class="gray">' . $lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist . '</div>';
+                    $out .= '<div><span class="gray">' . self::$lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist . '</div>';
             }
             if (isset($arg['footer']))
                 $out .= $arg['footer'];
@@ -474,8 +470,7 @@ class functions
     */
     static function get_user($id = false)
     {
-        global $datauser, $user_id;
-        if ($id && $id != $user_id) {
+        if ($id && $id != self::$user_id) {
             $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 return mysql_fetch_assoc($req);
@@ -483,7 +478,7 @@ class functions
                 return false;
             }
         } else {
-            return $datauser;
+            return self::$user_data;
         }
     }
 
@@ -565,12 +560,22 @@ class functions
     Обработка смайлов
     -----------------------------------------------------------------
     */
+    static private $smileys_cache = array();
+
     static function smileys($str, $adm = false)
     {
         global $rootpath;
-        if (empty(self::$smileys_cache) && ($file = file_get_contents($rootpath . 'files/cache/smileys.dat')) !== false)
-            self::$smileys_cache = unserialize($file);
-        return strtr($str, ($adm ? array_merge(self::$smileys_cache['usr'], self::$smileys_cache['adm']) : self::$smileys_cache['usr']));
+        if(empty(self::$smileys_cache)){
+            $file = $rootpath . 'files/cache/smileys.dat';
+            if(file_exists($file) && ($smileys = file_get_contents($file)) !== false){
+                self::$smileys_cache = unserialize($smileys);
+                return strtr($str, ($adm ? array_merge(self::$smileys_cache['usr'], self::$smileys_cache['adm']) : self::$smileys_cache['usr']));
+            } else {
+                return $str;
+            }
+        } else {
+            return strtr($str, ($adm ? array_merge(self::$smileys_cache['usr'], self::$smileys_cache['adm']) : self::$smileys_cache['usr']));
+        }
     }
 
     /*
@@ -670,35 +675,6 @@ class functions
                                 'YA' => 'Я'
                            ));
         return $str;
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Проверка, мобильный ли браузер?
-    -----------------------------------------------------------------
-    */
-    static function mobile_detect()
-    {
-        if (isset($_SESSION['is_mobile'])) {
-            return $_SESSION['is_mobile'] == 1 ? true : false;
-        }
-        $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-        $accept = strtolower($_SERVER['HTTP_ACCEPT']);
-        if ((strpos($accept, 'text/vnd.wap.wml') !== false) || (strpos($accept, 'application/vnd.wap.xhtml+xml') !== false)) {
-            $_SESSION['is_mobile'] = 1;
-            return true;
-        }
-        if (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
-            $_SESSION['is_mobile'] = 1;
-            return true;
-        }
-        if (preg_match('/android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i', $user_agent)
-            || preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|e\-|e\/|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(di|rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|xda(\-|2|g)|yas\-|your|zeto|zte\-/i', substr($user_agent, 0, 4))) {
-            $_SESSION['is_mobile'] = 1;
-            return true;
-        }
-        $_SESSION['is_mobile'] = 2;
-        return false;
     }
 }
 

@@ -42,24 +42,24 @@ $core = new core() or die('Error: Core System');
 Получаем системные переменные
 -----------------------------------------------------------------
 */
-$ip = $core->ip;                                // Адрес IP
-$agn = $core->user_agent;                       // User Agent
-$set = $core->system_settings;                  // Системные настройки
-$realtime = $core->system_time;                 // Системное время с учетом сдвига
-$lng = $core->load_lng();                       // Фразы выбранного языка
-$is_mobile = functions::mobile_detect();        // Определение мобильного браузера
-$home = $set['homeurl'];                        // Домашняя страница
+$ip = core::$ip;                                          // Адрес IP
+$agn = core::$user_agent;                                 // User Agent
+$set = core::$system_set;                                 // Системные настройки
+$realtime = time() + $set['timeshift'] * 3600;            // Системное время с учетом сдвига
+$lng = core::$lng;                                        // Фразы языка
+$is_mobile = core::$is_mobile;                            // Определение мобильного браузера
+$home = $set['homeurl'];                                  // Домашняя страница
 
 /*
 -----------------------------------------------------------------
 Получаем пользовательские переменные
 -----------------------------------------------------------------
 */
-$user_id = $core->user_id;                      // Идентификатор пользователя
-$rights = $core->user_rights;                   // Права доступа
-$datauser = $core->user_data;                   // Все данные пользователя
-$set_user = $core->user_set;               // Пользовательские настройки
-$ban = $core->user_ban;                         // Бан
+$user_id = core::$user_id;                                // Идентификатор пользователя
+$rights = core::$user_rights;                             // Права доступа
+$datauser = core::$user_data;                             // Все данные пользователя
+$set_user = core::$user_set;                              // Пользовательские настройки
+$ban = core::$user_ban;                                   // Бан
 $login = isset($datauser['name']) ? $datauser['name'] : false;
 $kmess = $set_user['kmess'] > 4 && $set_user['kmess'] < 99 ? $set_user['kmess'] : 10;
 

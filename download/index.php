@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 $headmod = 'load';
 require_once('../incfiles/core.php');
-$lng_dl = $core->load_lng('downloads');
+$lng_dl = core::load_lng('downloads');
 require_once('../incfiles/lib/mp3.php');
 require_once('../incfiles/lib/pclzip.lib.php');
 $textl = $lng['downloads'];

@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 
 require_once('../incfiles/core.php');
-$lng_pm = $core->load_lng('pm');
+$lng_pm = core::load_lng('pm');
 $headmod = 'contacts';
 $textl = $lng['contacts'];
 require('../incfiles/head.php');

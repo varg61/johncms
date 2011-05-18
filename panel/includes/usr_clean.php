@@ -17,18 +17,19 @@ if ($rights < 7) {
     exit;
 }
 
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | Очистка базы</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['users_clean'] . '</div>';
 
 switch ($mod) {
     case 1:
         mysql_query("DELETE FROM `users`
-        WHERE `datereg` < '" . (time() - 2592000 * 6) . "'
-        AND `lastdate` < '" . (time() - 2592000 * 5) . "'
-        AND `postforum` = '0'
-        AND `postguest` < '10'
-        AND `komm` < '10'");
+            WHERE `datereg` < '" . (time() - 2592000 * 6) . "'
+            AND `lastdate` < '" . (time() - 2592000 * 5) . "'
+            AND `postforum` = '0'
+            AND `postguest` < '10'
+            AND `komm` < '10'
+        ");
         mysql_query("OPTIMIZE TABLE `users`");
-        echo '<div class="rmenu"><p>Неактивные профили удалены</p><p><a href="index.php">' . $lng['continue'] . '</a></p></div>';
+        echo '<div class="rmenu"><p>' . $lng['dead_profiles_deleted'] . '</p><p><a href="index.php">' . $lng['continue'] . '</a></p></div>';
         break;
 
     default:
@@ -39,8 +40,7 @@ switch ($mod) {
             AND `postguest` < '10'
             AND `komm` < '10'"), 0);
         echo '<div class="menu"><form action="index.php?act=usr_clean&amp;mod=1" method="post">' .
-             '<p><h3>Мертвые профили</h3>' .
-             'К данной категории относятся профили, зарегистрированные более 6 месяцев назад, с датой последнего визита более 5 месяцев назад и с нулевой активностью.<br />Смело можете их удалить.</p>' .
+             '<p><h3>' . $lng['dead_profiles'] . '</h3>' . $lng['dead_profiles_desc'] . '</p>' .
              '<p>' . $lng['total'] . ': <b>' . $total . '</b></p>' .
              '<p><input type="submit" name="submit" value="' . $lng['delete'] . '"/></p></form></div>' .
              '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';

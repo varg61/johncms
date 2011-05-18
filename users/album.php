@@ -11,7 +11,7 @@
 
 define('_IN_JOHNCMS', 1);
 require('../incfiles/core.php');
-$lng_profile = $core->load_lng('profile');
+$lng_profile = core::load_lng('profile');
 $textl = $lng_profile['album'];
 $headmod = 'album';
 require('../incfiles/head.php');

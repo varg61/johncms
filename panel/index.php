@@ -15,7 +15,7 @@ define('_IN_JOHNADM', 1);
 
 require('../incfiles/core.php');
 // Подключаем язык Админ-панели
-$lng = array_merge($lng, $core->load_lng('admin'));
+$lng = array_merge($lng, core::load_lng('admin'));
 
 // Проверяем права доступа
 if ($rights < 1) {

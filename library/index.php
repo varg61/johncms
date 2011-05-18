@@ -16,7 +16,7 @@ define('_IN_JOHNCMS', 1);
 
 $headmod = 'library';
 require_once('../incfiles/core.php');
-$lng_lib = $core->load_lng('library');
+$lng_lib = core::load_lng('library');
 $textl = $lng['library'];
 
 // Ограничиваем доступ к Библиотеке

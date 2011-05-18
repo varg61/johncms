@@ -12,7 +12,7 @@
 define('_IN_JOHNCMS', 1);
 $headmod = 'profile';
 require('../incfiles/core.php');
-$lng_profile = $core->load_lng('profile');
+$lng_profile = core::load_lng('profile');
 
 /*
 -----------------------------------------------------------------

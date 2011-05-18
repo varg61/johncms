@@ -17,7 +17,7 @@
 define('_IN_JOHNCMS', 1);
 
 require('../incfiles/core.php');
-$lng_pass = $core->load_lng('pass');
+$lng_pass = core::load_lng('pass');
 $textl = $lng_pass['password_restore'];
 require('../incfiles/head.php');
 

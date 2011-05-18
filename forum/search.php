@@ -12,7 +12,7 @@
 define('_IN_JOHNCMS', 1);
 $headmod = 'forumsearch';
 require('../incfiles/core.php');
-$lng_forum = $core->load_lng('forum');
+$lng_forum = core::load_lng('forum');
 $textl = $lng_forum['search_forum'];
 require('../incfiles/head.php');
 

@@ -15,10 +15,10 @@ $rootpath = '';
 require('incfiles/core.php');
 $textl = $lng['registration'];
 require('incfiles/head.php');
-$lng_reg = $core->load_lng('registration');
+$lng_reg = core::load_lng('registration');
 
 // Если регистрация закрыта, выводим предупреждение
-if ($core->regban || !$set['mod_reg']) {
+if (core::$deny_registration || !$set['mod_reg']) {
     echo '<p>' . $lng_reg['registration_closed'] . '</p>';
     require('incfiles/end.php');
     exit;

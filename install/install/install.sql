@@ -272,7 +272,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('admp', 'panel'),
 ('flsz', '4000'),
 ('gzip', '1'),
-('clean_time', '0'),
+('clean_time', '1'),
 ('mod_reg', '2'),
 ('mod_forum', '2'),
 ('mod_guest', '2'),

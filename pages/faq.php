@@ -11,7 +11,7 @@
 
 define('_IN_JOHNCMS', 1);
 require('../incfiles/core.php');
-$lng_faq = $core->load_lng('faq');
+$lng_faq = core::load_lng('faq');
 $textl = 'FAQ';
 $headmod = 'faq';
 require('../incfiles/head.php');

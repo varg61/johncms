@@ -323,7 +323,8 @@ switch ($mod) {
         if ($total > 0) {
             $start = isset($_GET['page']) ? $page * $kmess - $kmess : $start;
             $req = mysql_query("SELECT * FROM `cms_ban_ip` ORDER BY `id` ASC LIMIT $start,$kmess");
-            while ($res = mysql_fetch_array($req)) {
+            $i = 0;
+            while (($res = mysql_fetch_array($req)) !== false) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $get_ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
                 echo '<a href="index.php?act=ipban&amp;mod=detail&amp;id=' . $res['id'] . '">' . $get_ip . '</a> ';

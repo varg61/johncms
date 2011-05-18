@@ -24,13 +24,13 @@ if(isset($_GET['lng'])){
     */
     require('incfiles/head.php');
     echo '<div class="menu"><form action="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '" method="post"><p>';
-    if (count($core->lng_list) > 1) {
+    if (count(core::$lng_list) > 1) {
         echo '<p><h3>' . $lng['language_select'] . '</h3>';
-        foreach ($core->lng_list as $key => $val) {
-            echo '<div><input type="radio" value="' . $key . '" name="setlng" ' . ($key == $core->lng ? 'checked="checked"' : '') . '/>&#160;' .
+        foreach (core::$lng_list as $key => $val) {
+            echo '<div><input type="radio" value="' . $key . '" name="setlng" ' . ($key == core::$lng_iso ? 'checked="checked"' : '') . '/>&#160;' .
                  (file_exists('images/flags/' . $key . '.gif') ? '<img src="images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
                  $val .
-                 ($key == $core->system_settings['lng'] ? ' <small class="red">[' . $lng['default'] . ']</small>' : '') .
+                 ($key == core::$system_set['lng'] ? ' <small class="red">[' . $lng['default'] . ']</small>' : '') .
                  '</div>';
         }
         echo '</p>';

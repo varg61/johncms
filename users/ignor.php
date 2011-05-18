@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 
 require_once("../incfiles/core.php");
-$lng_pm = $core->load_lng('pm');
+$lng_pm = core::load_lng('pm');
 $headmod = 'ignor';
 $textl = 'Block List';
 require_once('../incfiles/head.php');

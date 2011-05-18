@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 require('../incfiles/core.php');
 $headmod = 'gallery';
-$lng_gal = $core->load_lng('gallery');
+$lng_gal = core::load_lng('gallery');
 $textl = $lng['gallery'];
 require('../incfiles/head.php');
 

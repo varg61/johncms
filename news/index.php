@@ -15,7 +15,7 @@
 define('_IN_JOHNCMS', 1);
 $headmod = 'news';
 require('../incfiles/core.php');
-$lng_news = $core->load_lng('news'); // Загружаем язык модуля
+$lng_news = core::load_lng('news'); // Загружаем язык модуля
 $textl = $lng_news['site_news'];
 require('../incfiles/head.php');
 switch ($do) {

@@ -14,7 +14,7 @@ define('_IN_JOHNCMS', 1);
 $textl = 'Mail';
 $headmod = 'pradd';
 require_once("../incfiles/core.php");
-$lng_pm = $core->load_lng('pm');
+$lng_pm = core::load_lng('pm');
 if ($user_id) {
     $msg = isset($_POST['msg']) ? functions::check($_POST['msg']) : false;
     if (isset($_POST['msgtrans'])) {

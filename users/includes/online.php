@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'online';
 $textl = $lng['online'];
-$lng_online = $core->load_lng('online');
+$lng_online = core::load_lng('online');
 require('../incfiles/head.php');
 
 /*

@@ -10,7 +10,7 @@
 */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-$lng_ban = $core->load_lng('ban');
+$lng_ban = core::load_lng('ban');
 switch ($mod) {
     case 'amnesty':
         if ($rights < 9) {

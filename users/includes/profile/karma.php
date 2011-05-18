@@ -10,7 +10,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$lng_karma = $core->load_lng('karma');
+$lng_karma = core::load_lng('karma');
 $textl = $lng['karma'];
 require('../incfiles/head.php');
 if ($set_karma['on']) {

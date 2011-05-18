@@ -101,7 +101,7 @@ switch ($type1['type']) {
             require('../incfiles/head.php');
             if ($datauser['postforum'] == 0) {
                 if (!isset($_GET['yes'])) {
-                    $lng_faq = $core->load_lng('faq');
+                    $lng_faq = core::load_lng('faq');
                     echo '<p>' . $lng_faq['forum_rules_text'] . '</p>' .
                         '<p><a href="index.php?act=say&amp;id=' . $id . '&amp;yes">' . $lng_forum['agree'] . '</a> | ' .
                         '<a href="index.php?id=' . $id . '">' . $lng_forum['not_agree'] . '</a></p>';
@@ -237,7 +237,7 @@ switch ($type1['type']) {
             $qt = " $type1[text]";
             if (($datauser['postforum'] == "" || $datauser['postforum'] == 0)) {
                 if (!isset($_GET['yes'])) {
-                    $lng_faq = $core->load_lng('faq');
+                    $lng_faq = core::load_lng('faq');
                     echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
                     echo '<p><a href="index.php?act=say&amp;id=' . $id . '&amp;yes&amp;cyt">' . $lng_forum['agree'] . '</a> | <a href="index.php?id=' . $type1['refid'] . '">' . $lng_forum['not_agree'] . '</a></p>';
                     require('../incfiles/end.php');

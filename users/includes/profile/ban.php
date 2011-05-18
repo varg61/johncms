@@ -14,7 +14,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'userban';
-$lng_ban = $core->load_lng('ban');
+$lng_ban = core::load_lng('ban');
 require('../incfiles/head.php');
 $ban = isset($_GET['ban']) ? intval($_GET['ban']) : 0;
 switch ($mod) {

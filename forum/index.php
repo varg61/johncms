@@ -12,7 +12,7 @@
 define('_IN_JOHNCMS', 1);
 
 require('../incfiles/core.php');
-$lng_forum = $core->load_lng('forum');
+$lng_forum = core::load_lng('forum');
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);
 
