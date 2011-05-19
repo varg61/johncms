@@ -30,7 +30,8 @@ if ($total) {
     $req = mysql_query("SELECT * FROM `" . ($mod == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY " . ($mod == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
     $i = 0;
     while ($res = mysql_fetch_assoc($req)) {
-        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        if($res['id'] == core::$user_id) echo '<div class="gmenu">';
+        else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $where = explode(",", $res['place']);
         // Список возможных местоположений
         $places = array (
