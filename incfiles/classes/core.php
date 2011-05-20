@@ -42,11 +42,11 @@ class core
         $this->db_connect();                              // Соединяемся с базой данных
         $this->ip_ban();                                  // Проверяем адрес IP на бан
         $this->session_start();                           // Стартуем сессию
+        self::$is_mobile = $this->mobile_detect();        // Определение мобильного браузера
         $this->system_settings();                         // Получаем системные настройки
         $this->auto_clean();                              // Автоочистка системы
         $this->authorize();                               // Авторизация пользователей
         $this->lng_detect();                              // Определяем язык системы
-        self::$is_mobile = $this->mobile_detect();        // Определение мобильного браузера
         self::$lng = self::load_lng();                    // Загружаем язык
     }
 
@@ -76,8 +76,7 @@ class core
     private function get_ip()
     {
         self::$ip = ip2long($_SERVER['REMOTE_ADDR']) or die('Invalid IP');
-        //self::$ip_via_proxy = isset($_SERVER['HTTP_X_FORWARDED_FOR']) && self::ip_valid($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
-        self::$ip_via_proxy = self::$ip;
+        self::$ip_via_proxy = isset($_SERVER['HTTP_X_FORWARDED_FOR']) && self::ip_valid($_SERVER['HTTP_X_FORWARDED_FOR']) ? ip2long($_SERVER['HTTP_X_FORWARDED_FOR']) : false;
     }
 
     /*
@@ -377,7 +376,7 @@ class core
             'avatar' => 1,                                // Показывать аватары
             'digest' => 0,                                // Показывать Дайджест
             'field_h' => 3,                               // Высота текстового поля ввода
-            'field_w' => 20,                              // Ширина текстового поля ввода
+            'field_w' => (self::$is_mobile ? 20 : 40),    // Ширина текстового поля ввода
             'kmess' => 10,                                // Число сообщений на страницу
             'quick_go' => 1,                              // Быстрый переход
             'sdvig' => 0,                                 // Временной сдвиг

@@ -1,5 +1,4 @@
 ALTER TABLE `users` ADD `ip_via_proxy` BIGINT( 11 ) NOT NULL DEFAULT '0' AFTER `ip`;
-UPDATE `users` SET `ip` = '0';
 TRUNCATE TABLE `cms_users_iphistory`;
 ALTER TABLE `cms_users_iphistory` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0';
 ALTER TABLE `cms_users_iphistory` ADD `ip_via_proxy` BIGINT( 11 ) NOT NULL DEFAULT '0' AFTER `ip`;
