@@ -445,7 +445,7 @@ class functions extends core
                 } elseif (self::$user_rights) {
                     $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>';
                 } else {
-                    $out .= '<span class="gray">' . self::$lng['last_ip'] . ':</span> ' . long2ip($user['ip']) . $iphist;
+                    $out .= long2ip($user['ip']) . $iphist;
                 }
                 if (isset($arg['iphist'])) {
                     $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
