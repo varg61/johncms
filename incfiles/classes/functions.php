@@ -99,31 +99,37 @@ class functions extends core
         if (self::$is_mobile) {
             return false;
         }
+        $colors = array(
+            'ffffff', 'bcbcbc', '708090', '6c6c6c', '454545',
+            'fcc9c9', 'fe8c8c', 'fe5e5e', 'fd5b36', 'f82e00',
+            'ffe1c6', 'ffc998', 'fcad66', 'ff9331', 'ff810f',
+            'd8ffe0', '92f9a7', '34ff5d', 'b2fb82', '89f641',
+            'b7e9ec', '56e5ed', '21cad3', '03939b', '039b80',
+            'cac8e9', '9690ea', '6a60ec', '4866e7', '173bd3',
+            'f3cafb', 'e287f4', 'c238dd', 'a476af', 'b53dd2'
+        );
+        $i = 1;
+        $bb_color = '<table><tr>';
+        foreach ($colors as $value) {
+            $bb_color .= '<a href="javascript:tag(\'[color=#' . $value . ']\', \'[/color]\', \'\');" style="background-color:#' . $value . ';"></a>';
+            if (!($i % sqrt(count($colors)))) $bb_color .= '</tr><tr>';
+            ++$i;
+        }
+        $bb_color .= '</tr></table>';
         $smileys = !empty(self::$user_data['smileys']) ? unserialize(self::$user_data['smileys']) : '';
         if (!empty($smileys)) {
             $res_sm = '';
-            $my_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . self::$lng['edit_list'] . '</a></small><br />';
+            $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . self::$lng['edit_list'] . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
-            $my_smileys .= functions::smileys($res_sm, self::$user_rights >= 1 ? 1 : 0);
+            $bb_smileys .= functions::smileys($res_sm, self::$user_data['rights'] >= 1 ? 1 : 0);
         } else {
-            $my_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . self::$lng['add_smileys'] . '</a></small>';
+            $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . self::$lng['add_smileys'] . '</a></small>';
         }
         $out = '<style>
-            .smileys{
-			background-color: rgba(178,178,178,0.5);
-            padding: 5px;
-            border-radius: 3px;
-            border: 1px solid white;
-            display: none;
-            overflow: auto;
-            max-width: 250px;
-            max-height: 100px;
-            position: absolute;
-            }
-            .smileys_from:hover .smileys{
-            display: block;
-            }
+            .bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}
+            .bb_opt:hover .bb_hide{display: block;}
+            .bb_color a {float:left;  width:9px; height:9px; margin:1px; border: 1px solid black;}
             </style>
             <script language="JavaScript" type="text/javascript">
             function tag(text1, text2, text3) {
@@ -144,12 +150,12 @@ class functions extends core
             <a href="javascript:tag(\'[c]\', \'[/c]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/q.png" alt="quote" title="' . self::$lng['tag_quote'] . '" border="0"/></a>
             <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . self::$lng['tag_code'] . '" border="0"/></a>
             <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/l.png" alt="url" title="' . self::$lng['tag_link'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[red]\', \'[/red]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/re.png" alt="red" title="' . self::$lng['tag_red'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[green]\', \'[/green]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/gr.png" alt="green" title="' . self::$lng['tag_green'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[blue]\', \'[/blue]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/bl.png" alt="blue" title="' . self::$lng['tag_blue'] . '" border="0"/></a>';
+            <span class="bb_opt" style="display: inline-block; cursor:pointer">
+            <img src="' . self::$system_set['homeurl'] . '/images/bb/color.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/on_color.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color.gif\'" alt="color" title="' . self::$lng['color'] . '" border="0"/>
+            <div class="bb_hide bb_color">' . $bb_color . '</div></span>';
         if (self::$user_id) {
-            $out .= ' <span class="smileys_from" style="display: inline-block; cursor:pointer"><img src="' . self::$system_set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . self::$lng['smileys'] . '" border="0"/>
-                <div class="smileys">' . $my_smileys . '</div></span>';
+            $out .= ' <span class="bb_opt" style="display: inline-block; cursor:pointer"><img src="' . self::$system_set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . self::$lng['smileys'] . '" border="0"/>
+                <div class="bb_hide">' . $bb_smileys . '</div></span>';
         }
         return $out . '<br />';
     }
@@ -434,7 +440,7 @@ class functions extends core
             if ($ipinf) {
                 $out .= '<div><span class="gray">' . self::$lng['browser'] . ':</span> ' . $user['browser'] . '</div>';
                 $out .= '<div><span class="gray">' . self::$lng['ip_address'] . ':</span> ';
-                if (self::$user_rights && $user['ip_via_proxy']) {
+                if (self::$user_rights && isset($user['ip_via_proxy']) && $user['ip_via_proxy']) {
                     $out .= '<b class="red"><a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></b> / ';
                     $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip_via_proxy'] . '">' . long2ip($user['ip_via_proxy']) . '</a>';
                 } elseif (self::$user_rights) {
@@ -570,9 +576,9 @@ class functions extends core
     static function smileys($str, $adm = false)
     {
         global $rootpath;
-        if(empty(self::$smileys_cache)){
+        if (empty(self::$smileys_cache)) {
             $file = $rootpath . 'files/cache/smileys.dat';
-            if(file_exists($file) && ($smileys = file_get_contents($file)) !== false){
+            if (file_exists($file) && ($smileys = file_get_contents($file)) !== false) {
                 self::$smileys_cache = unserialize($smileys);
                 return strtr($str, ($adm ? array_merge(self::$smileys_cache['usr'], self::$smileys_cache['adm']) : self::$smileys_cache['usr']));
             } else {

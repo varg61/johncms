@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @package     JohnCMS
- * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
- * @license     LICENSE.txt (see attached file)
- * @version     VERSION.txt (see attached file)
- * @author      http://johncms.com/about
- */
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
+*/
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -18,11 +18,15 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 function tags($var = '')
 {
-    $var = preg_replace(array('#\[php\](.+?)\[\/php\]#se'), array("''.highlight('$1').''"), str_replace("]\n", "]", $var));
+    $var = preg_replace(array ('#\[php\](.+?)\[\/php\]#se'), array ("''.highlight('$1').''"), str_replace("]\n", "]", $var));
     $var = preg_replace('#\[b\](.+?)\[/b\]#si', '<span style="font-weight: bold;">\1</span>', $var);
     $var = preg_replace('#\[i\](.+?)\[/i\]#si', '<span style="font-style:italic;">\1</span>', $var);
     $var = preg_replace('#\[u\](.+?)\[/u\]#si', '<span style="text-decoration:underline;">\1</span>', $var);
     $var = preg_replace('#\[s\](.+?)\[/s\]#si', '<span style="text-decoration: line-through;">\1</span>', $var);
+    $var = preg_replace('#\[red\](.+?)\[/red\]#si', '<span style="color:red">\1</span>', $var);
+    $var = preg_replace('#\[green\](.+?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
+    $var = preg_replace('#\[blue\](.+?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
+    $var = preg_replace('#\[color=(.[0-9a-f]+?)\](.+?)\[/color]#si', '<span style="color:\1;">\2</span>', $var);
     $var = preg_replace('#\[red\](.+?)\[/red\]#si', '<span style="color:red">\1</span>', $var);
     $var = preg_replace('#\[green\](.+?)\[/green\]#si', '<span style="color:green">\1</span>', $var);
     $var = preg_replace('#\[blue\](.+?)\[/blue\]#si', '<span style="color:blue">\1</span>', $var);
