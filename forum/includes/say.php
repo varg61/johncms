@@ -13,7 +13,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if (!$id || !$user_id || $ban['1'] || $ban['11']) {
+if (!$id || !$user_id || isset($ban['1']) || isset($ban['11'])) {
     header("Location: index.php");
     exit;
 }
@@ -158,6 +158,7 @@ switch ($type1['type']) {
             if (!empty($_POST['citata'])) {
                 // Если была цитата, форматируем ее и обрабатываем
                 $citata = trim($_POST['citata']);
+                $citata = functions::notags($citata);
                 $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
                 $citata = mb_substr($citata, 0, 200);
                 $tp = date("d.m.Y/H:i", $type1['time']);

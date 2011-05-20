@@ -500,6 +500,7 @@ class functions extends core
     */
     static function notags($var = '')
     {
+        $var = preg_replace('#\[color=(.+?)\](.+?)\[/color]#si', '\2', $var);
         $var = strtr($var, array(
                                 '[green]' => '',
                                 '[/green]' => '',
