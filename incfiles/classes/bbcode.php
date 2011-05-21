@@ -33,8 +33,13 @@ class bbcode extends core
     */
     static function notags($var = '')
     {
-        $var = preg_replace('#\[color=(.+?)\](.+?)\[/color]#si', '\2', $var);
+        $var = preg_replace('#\[color=(.+?)\](.+?)\[/color]#si', '$2', $var);
+        $var = preg_replace('!\[bg=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)](.+?)\[/bg]!is', '$2', $var);
         $replace = array(
+            '[small]' => '',
+            '[/small]' => '',
+            '[big]' => '',
+            '[/big]' => '',
             '[green]' => '',
             '[/green]' => '',
             '[red]' => '',
@@ -49,8 +54,12 @@ class bbcode extends core
             '[/u]' => '',
             '[s]' => '',
             '[/s]' => '',
+            '[quote]' => '',
+            '[/quote]' => '',
             '[c]' => '',
-            '[/c]' => ''
+            '[/c]' => '',
+            '[*]' => '',
+            '[/*]' => ''
         );
         return strtr($var, $replace);
     }
@@ -86,21 +95,20 @@ class bbcode extends core
         if (!function_exists('process_url')) {
             function process_url($url)
             {
-                global $set;
                 if (!isset($url[3])) {
                     $tmp = parse_url($url[1]);
-                    if ('http://' . $tmp['host'] == $set['homeurl']) {
-                        return '<a href="' . str_replace(':', '&#58;', $url[1]) . '">' . str_replace(':', '&#58;', $url[2]) . '</a>';
+                    if ('http://' . $tmp['host'] == core::$system_set['homeurl']) {
+                        return '<a href="' . $url[1] . '">' . $url[2] . '</a>';
                     } else {
-                        return '<a href="' . $set['homeurl'] . '/go.php?url=' . base64_encode(str_replace(':', '&#58;', $url[1])) . '">' . str_replace(':', '&#58;', $url[2]) . '</a>';
+                        return '<a href="' . core::$system_set['homeurl'] . '/go.php?url=' . base64_encode($url[1]) . '">' . $url[2] . '</a>';
                     }
                 } else {
                     $tmp = parse_url($url[3]);
                     $url[3] = str_replace(':', '&#58;', $url[3]);
-                    if ('http://' . $tmp['host'] == $set['homeurl']) {
+                    if ('http://' . $tmp['host'] == core::$system_set['homeurl']) {
                         return '<a href="' . $url[3] . '">' . $url[3] . '</a>';
                     } else {
-                        return '<a href="' . $set['homeurl'] . '/go.php?url=' . base64_encode($url[3]) . '">' . $url[3] . '</a>';
+                        return '<a href="' . core::$system_set['homeurl'] . '/go.php?url=' . base64_encode($url[3]) . '">' . $url[3] . '</a>';
                     }
                 }
             }
@@ -143,7 +151,7 @@ class bbcode extends core
             '<span style="color:green">$1</span>',                             // Зеленый
             '<span style="color:blue">$1</span>',                              // Синий
             '<span style="color:$1">$2</span>',                                // Цвет шрифта
-            '<span style="background-color:$1">$2</span>',      // Цвет фона
+            '<span style="background-color:$1">$2</span>',                     // Цвет фона
             '<span class="quote" style="display:block">$2</span>',             // Цитата
             '<span class="bblist">$1</span>'                                   // Список
         );
@@ -220,10 +228,10 @@ class bbcode extends core
             <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . self::$lng['tag_code'] . '" border="0"/></a>
             <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/l.png" alt="url" title="' . self::$lng['tag_link'] . '" border="0"/></a>
             <span class="bb_opt" style="display: inline-block; cursor:pointer">
-            <img src="' . self::$system_set['homeurl'] . '/images/bb/color.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color.gif\'" alt="color" title="' . self::$lng['color'] . '" border="0"/>
+            <img src="' . self::$system_set['homeurl'] . '/images/bb/color.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color.gif\'" alt="color" title="' . self::$lng['color_text'] . '" border="0"/>
             <div class="bb_hide bb_color">' . $font_color . '</div></span>
             <span class="bb_opt" style="display: inline-block; cursor:pointer">
-            <img src="' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif\'" alt="color" title="' . self::$lng['color'] . '" border="0"/>
+            <img src="' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif\'" alt="color" title="' . self::$lng['color_bg'] . '" border="0"/>
             <div class="bb_hide bb_color">' . $bg_color . '</div></span>';
         if (self::$user_id) {
             $out .= ' <span class="bb_opt" style="display: inline-block; cursor:pointer"><img src="' . self::$system_set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . self::$lng['smileys'] . '" border="0"/>
