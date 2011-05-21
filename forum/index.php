@@ -481,7 +481,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                         7 => 'Adm',
                         8 => 'SV'
                     );
-                    echo $user_rights[$postres['rights']];
+                    echo @$user_rights[$postres['rights']];
                     echo ($realtime > $postres['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
                     echo ' <span class="gray">(' . date("d.m.Y / H:i", $postres['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
                     if ($postres['close']) {
@@ -594,7 +594,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         if ($set_user['smileys'])
                             $text = functions::smileys($text, $res['rights'] ? 1 : 0);
-                        echo functions::notags($text) . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>';
+                        echo bbcode::notags($text) . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>';
                     } else {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = functions::checkout($text, 1, 1);

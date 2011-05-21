@@ -162,7 +162,7 @@ class functions extends core
         if ($tags == 1)
             $str = bbcode::tags($str);
         elseif ($tags == 2)
-            $str = self::notags($str);
+            $str = bbcode::notags($str);
         $str = strtr($str, array(
                                 chr(0) => '',
                                 chr(1) => '',
