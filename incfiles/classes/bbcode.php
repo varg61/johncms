@@ -143,7 +143,7 @@ class bbcode extends core
             '<span style="color:green">$1</span>',                             // Зеленый
             '<span style="color:blue">$1</span>',                              // Синий
             '<span style="color:$1">$2</span>',                                // Цвет шрифта
-            '<span style="background-color:$1; display:block">$2</span>',      // Цвет фона
+            '<span style="background-color:$1">$2</span>',      // Цвет фона
             '<span class="quote" style="display:block">$2</span>',             // Цитата
             '<span class="bblist">$1</span>'                                   // Список
         );
@@ -170,13 +170,21 @@ class bbcode extends core
             'f3cafb', 'e287f4', 'c238dd', 'a476af', 'b53dd2'
         );
         $i = 1;
-        $bb_color = '<table><tr>';
+        $font_color = '<table><tr>';
         foreach ($colors as $value) {
-            $bb_color .= '<a href="javascript:tag(\'[color=#' . $value . ']\', \'[/color]\', \'\');" style="background-color:#' . $value . ';"></a>';
-            if (!($i % sqrt(count($colors)))) $bb_color .= '</tr><tr>';
+            $font_color .= '<a href="javascript:tag(\'[color=#' . $value . ']\', \'[/color]\', \'\');" style="background-color:#' . $value . ';"></a>';
+            if (!($i % sqrt(count($colors)))) $font_color .= '</tr><tr>';
             ++$i;
         }
-        $bb_color .= '</tr></table>';
+        $font_color .= '</tr></table>';
+        $i = 1;
+        $bg_color = '<table><tr>';
+        foreach ($colors as $value) {
+            $bg_color .= '<a href="javascript:tag(\'[bg=#' . $value . ']\', \'[/bg]\', \'\');" style="background-color:#' . $value . ';"></a>';
+            if (!($i % sqrt(count($colors)))) $bg_color .= '</tr><tr>';
+            ++$i;
+        }
+        $bg_color .= '</tr></table>';
         $smileys = !empty(self::$user_data['smileys']) ? unserialize(self::$user_data['smileys']) : '';
         if (!empty($smileys)) {
             $res_sm = '';
@@ -212,8 +220,11 @@ class bbcode extends core
             <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . self::$lng['tag_code'] . '" border="0"/></a>
             <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/l.png" alt="url" title="' . self::$lng['tag_link'] . '" border="0"/></a>
             <span class="bb_opt" style="display: inline-block; cursor:pointer">
-            <img src="' . self::$system_set['homeurl'] . '/images/bb/color.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/on_color.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color.gif\'" alt="color" title="' . self::$lng['color'] . '" border="0"/>
-            <div class="bb_hide bb_color">' . $bb_color . '</div></span>';
+            <img src="' . self::$system_set['homeurl'] . '/images/bb/color.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color.gif\'" alt="color" title="' . self::$lng['color'] . '" border="0"/>
+            <div class="bb_hide bb_color">' . $font_color . '</div></span>
+            <span class="bb_opt" style="display: inline-block; cursor:pointer">
+            <img src="' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif\'" alt="color" title="' . self::$lng['color'] . '" border="0"/>
+            <div class="bb_hide bb_color">' . $bg_color . '</div></span>';
         if (self::$user_id) {
             $out .= ' <span class="bb_opt" style="display: inline-block; cursor:pointer"><img src="' . self::$system_set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . self::$lng['smileys'] . '" border="0"/>
                 <div class="bb_hide">' . $bb_smileys . '</div></span>';
