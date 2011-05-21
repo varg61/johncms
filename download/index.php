@@ -36,6 +36,18 @@ if ($error) {
     exit;
 }
 
+function provcat($catalog)
+{
+    $cat1 = mysql_query("select * from `download` where type = 'cat' and id = '" . $catalog . "';");
+    $cat2 = mysql_num_rows($cat1);
+    $adrdir = mysql_fetch_array($cat1);
+    if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]"))) {
+        echo 'ERROR<br/><a href="?">Back</a><br/>';
+        require_once('../incfiles/end.php');
+        exit;
+    }
+}
+
 $array = array (
     'scan_dir',
     'rat',
@@ -70,12 +82,12 @@ if (in_array($act, $array)) {
     // Ссылка на новые файлы
     $old = $realtime - (3 * 24 * 3600);
     echo '<p><a href="?act=new">' . $lng['new_files'] . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0) . ')</p>';
+    $cat = isset($_GET['cat']) ? intval($_GET['cat']) : '';
     if (empty($_GET['cat'])) {
         // Заголовок начальной страницы загрузок
         echo '<div class="phdr">' . $lng['downloads'] . '</div>';
     } else {
         // Заголовок страниц категорий
-        $cat = intval($_GET['cat']);
         $req = mysql_query("SELECT * FROM `download` WHERE `type` = 'cat' AND `id` = '" . $cat . "' LIMIT 1");
         $res = mysql_fetch_array($req);
         if (mysql_num_rows($req) == 0 || !is_dir($res['adres'] . '/' . $res['name'])) {
@@ -164,8 +176,8 @@ if (in_array($act, $array)) {
                     case "png":
                         $imt = "png.png";
                         break;
-                        default :
-                    $imt = "file.gif";
+                    default :
+                        $imt = "file.gif";
                         break;
                 }
                 echo '<img src="' . $filesroot . '/img/' . $imt . '" alt=""/><a href="?act=view&amp;file=' . $zap2['id'] . '">' . htmlentities($zap2['name'], ENT_QUOTES, 'UTF-8') . '</a>';
@@ -180,7 +192,6 @@ if (in_array($act, $array)) {
                 }
                 echo '</div>';
             }
-            ++$i;
         }
     } else {
         echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';

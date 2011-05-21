@@ -148,7 +148,7 @@ switch ($act) {
                     '<div class="quote"><b>' . $res['name'] . '</b>' .
                     '<br />' . functions::checkout($res['text']) . '</div>' .
                     '<form name="form" action="index.php?act=otvet&amp;id=' . $id . '" method="post">' .
-                    '<p><h3>' . $lng['reply'] . '</h3>' . functions::auto_bb('form', 'otv') .
+                    '<p><h3>' . $lng['reply'] . '</h3>' . bbcode::auto_bb('form', 'otv') .
                     '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="otv">' . functions::checkout($res['otvet']) . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['reply'] . '"/></p>' .
                     '</form></div>' .
@@ -248,7 +248,7 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         if ($rights >= 1) {
-            if ($_GET['do'] == 'set') {
+            if (isset($_GET['do']) && $_GET['do'] == 'set') {
                 $_SESSION['ga'] = 1;
             } else {
                 unset($_SESSION['ga']);
@@ -279,7 +279,7 @@ switch ($act) {
                 echo $lng['name'] . ' (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>';
             echo '<b>' . $lng['message'] . '</b> <small>(max 5000)</small>:<br/>';
             if(!$is_mobile)
-                echo functions::auto_bb('form', 'msg');
+                echo bbcode::auto_bb('form', 'msg');
             echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . $lng['translit'] . '<br/>';
@@ -292,14 +292,14 @@ switch ($act) {
         } else {
             echo '<div class="rmenu">' . $lng['access_guest_forbidden'] . '</div>';
         }
-        if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1")) {
+        if (isset($_SESSION['ga']) && $rights >= "1") {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1'");
         } else {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0'");
         }
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='" . (isset($_SESSION['ga']) ? 1 : 0) . "'"), 0);
         if ($total) {
-            if (isset($_SESSION['ga']) && ($login == $nickadmina || $login == $nickadmina2 || $rights >= "1")) {
+            if (isset($_SESSION['ga']) && $rights >= "1") {
                 // Запрос для Админ клуба
                 echo '<div class="rmenu"><b>АДМИН-КЛУБ</b></div>';
                 $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`

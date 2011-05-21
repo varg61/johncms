@@ -43,7 +43,7 @@ if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_lib_comm'] || $rights >=
         }
         $msg = functions::check($_POST['msg']);
         if ($_POST['msgtrans'] == 1) {
-            $msg = trans($msg);
+            $msg = functions::trans($msg);
         }
         $msg = mb_substr($msg, 0, 500);
         $agn = strtok($agn, ' ');

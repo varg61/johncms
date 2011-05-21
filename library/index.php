@@ -95,6 +95,7 @@ if (in_array($act, $do)) {
             if ($totalcat > 0) {
                 $total = $totalcat;
                 $req = mysql_query("SELECT `id`, `text`  FROM `lib` WHERE `type` = 'cat' AND `refid` = '" . $id . "' LIMIT " . $start . "," . $kmess);
+                $i = 0;
                 while ($cat1 = mysql_fetch_array($req)) {
                     $cat2 = mysql_query("select `id` from `lib` where type = 'cat' and refid = '" . $cat1['id'] . "'");
                     $totalcat2 = mysql_num_rows($cat2);
@@ -143,10 +144,10 @@ if (in_array($act, $do)) {
                 }
                 echo '<a href="index.php?act=edit&amp;id=' . $id . '">' . $lng_lib['edit_category'] . '</a><br/>';
             }
-            if (($rights == 5 || $rights >= 6) && ($zag['ip'] == 1 || $id == 0)) {
+            if (($rights == 5 || $rights >= 6) && (isset($zag['ip']) && $zag['ip'] == 1 || $id == 0)) {
                 echo '<a href="index.php?act=mkcat&amp;id=' . $id . '">' . $lng_lib['create_category'] . '</a><br/>';
             }
-            if ($zag['ip'] == 0 && $id != 0) {
+            if (isset($zag['ip']) && $zag['ip'] == 0 && $id != 0) {
                 if (($rights == 5 || $rights >= 6) || ($zag['soft'] == 1 && !empty($_SESSION['uid']))) {
                     echo "<a href='index.php?act=write&amp;id=" . $id . "'>" . $lng_lib['write_article'] . "</a><br/>";
                 }

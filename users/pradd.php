@@ -284,7 +284,7 @@ if ($user_id) {
                 '<input type="text" name="foruser" value="' . $adresat . '"/></p>' .
                 '<p><h3>' . $lng_pm['subject'] . '</h3>' .
                 '<input type="text" name="tem" value="' . $tema . '"/></p>' .
-                '<p><h3>' . $lng['message'] . '</h3>' . functions::auto_bb('form', 'msg') .
+                '<p><h3>' . $lng['message'] . '</h3>' . bbcode::auto_bb('form', 'msg') .
                 '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                 '<p><h3>' . $lng_pm['attach_file'] . '</h3>' .
                 '<input type="file" name="fail"/><br /><small>max.' . $set['flsz'] . 'kb</small></p>';
@@ -426,7 +426,7 @@ if ($user_id) {
             }
             $mass = mysql_fetch_array(mysql_query("select * from `users` where `name`='" . $massiv1['author'] . "';"));
             $text = $massiv1['text'];
-            $text = tags($text);
+            $text = bbcode::tags($text);
             if ($set_user['smileys'])
                 $text = functions::smileys($text, 1);
             echo "<p>" . $lng_pm['msg_from'] . " <a href='profile.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
@@ -523,7 +523,7 @@ if ($user_id) {
             $massiv1 = mysql_fetch_array($messages1);
             $mass = mysql_fetch_array(@mysql_query("select * from `users` where `name`='$massiv1[user]';"));
             $text = $massiv1['text'];
-            $text = tags($text);
+            $text = bbcode::tags($text);
             if ($set_user['smileys'])
                 $text = functions::smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             echo "<p>" . $lng_pm['msg_for'] . " <a href='profile.php?user=" . $mass['id'] . "'>$massiv1[user]</a><br/>";

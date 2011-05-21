@@ -48,7 +48,7 @@ class mainpage {
                         $text = str_replace("\r\n", "<br/>", $text);
                     // Обрабатываем тэги
                     if ($this->settings['tags']) {
-                        $text = call_user_func('tags', $text);
+                        $text = bbcode::tags($text);
                     } else {
                         $text = functions::notags($text);
                     }

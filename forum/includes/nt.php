@@ -17,6 +17,44 @@ if (!$id || !$user_id || $ban['1'] || $ban['11']) {
     header("Location: index.php");
     exit;
 }
+
+/*
+-----------------------------------------------------------------
+Вспомогательная Функция обработки ссылок форума
+-----------------------------------------------------------------
+*/
+function forum_link($m)
+{
+    global $set;
+    if (!isset($m[3])) {
+        return '[url=' . $m[1] . ']' . $m[2] . '[/url]';
+    } else {
+        $p = parse_url($m[3]);
+        if ('http://' . $p['host'] . $p['path'] . '?id=' == $set['homeurl'] . '/forum/index.php?id=') {
+            $thid = abs(intval(preg_replace('/(.*?)id=/si', '', $m[3])));
+            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
+            if (mysql_num_rows($req) > 0) {
+                $res = mysql_fetch_array($req);
+                $name = strtr($res['text'], array(
+                                                 '&quot;' => '',
+                                                 '&amp;' => '',
+                                                 '&lt;' => '',
+                                                 '&gt;' => '',
+                                                 '&#039;' => '',
+                                                 '[' => '',
+                                                 ']' => ''
+                                            ));
+                if (mb_strlen($name) > 40)
+                    $name = mb_substr($name, 0, 40) . '...';
+                return '[url=' . $m[3] . ']' . $name . '[/url]';
+            } else {
+                return $m[3];
+            }
+        } else
+            return $m[3];
+    }
+}
+
 // Проверка на флуд
 $flood = functions::antiflood();
 if ($flood) {
@@ -130,7 +168,7 @@ if (isset($_POST['submit'])) {
         '<input type="text" size="20" maxlength="100" name="th"/></p>' .
         '<p><h3>' . $lng_forum['post'] . '</h3>';
     if(!$is_mobile)
-        echo '</p><p>' . functions::auto_bb('form', 'msg');
+        echo '</p><p>' . bbcode::auto_bb('form', 'msg');
     echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
         '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
     if ($set_user['translit'])

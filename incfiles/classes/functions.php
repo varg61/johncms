@@ -91,77 +91,6 @@ class functions extends core
 
     /*
     -----------------------------------------------------------------
-    ББ панель (для компьютеров)
-    -----------------------------------------------------------------
-    */
-    public static function auto_bb($form, $field)
-    {
-        if (self::$is_mobile) {
-            return false;
-        }
-        $colors = array(
-            'ffffff', 'bcbcbc', '708090', '6c6c6c', '454545',
-            'fcc9c9', 'fe8c8c', 'fe5e5e', 'fd5b36', 'f82e00',
-            'ffe1c6', 'ffc998', 'fcad66', 'ff9331', 'ff810f',
-            'd8ffe0', '92f9a7', '34ff5d', 'b2fb82', '89f641',
-            'b7e9ec', '56e5ed', '21cad3', '03939b', '039b80',
-            'cac8e9', '9690ea', '6a60ec', '4866e7', '173bd3',
-            'f3cafb', 'e287f4', 'c238dd', 'a476af', 'b53dd2'
-        );
-        $i = 1;
-        $bb_color = '<table><tr>';
-        foreach ($colors as $value) {
-            $bb_color .= '<a href="javascript:tag(\'[color=#' . $value . ']\', \'[/color]\', \'\');" style="background-color:#' . $value . ';"></a>';
-            if (!($i % sqrt(count($colors)))) $bb_color .= '</tr><tr>';
-            ++$i;
-        }
-        $bb_color .= '</tr></table>';
-        $smileys = !empty(self::$user_data['smileys']) ? unserialize(self::$user_data['smileys']) : '';
-        if (!empty($smileys)) {
-            $res_sm = '';
-            $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . self::$lng['edit_list'] . '</a></small><br />';
-            foreach ($smileys as $value)
-                $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
-            $bb_smileys .= functions::smileys($res_sm, self::$user_data['rights'] >= 1 ? 1 : 0);
-        } else {
-            $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . self::$lng['add_smileys'] . '</a></small>';
-        }
-        $out = '<style>
-            .bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}
-            .bb_opt:hover .bb_hide{display: block;}
-            .bb_color a {float:left;  width:9px; height:9px; margin:1px; border: 1px solid black;}
-            </style>
-            <script language="JavaScript" type="text/javascript">
-            function tag(text1, text2, text3) {
-            if ((document.selection)) {
-                document.' . $form . '.' . $field . '.focus();
-                document.' . $form . '.document.selection.createRange().text = text3+text1+document.' . $form . '.document.selection.createRange().text+text2+text3;
-            } else if(document.forms[\'' . $form . '\'].elements[\'' . $field . '\'].selectionStart!=undefined) {
-                var element = document.forms[\'' . $form . '\'].elements[\'' . $field . '\'];
-                var str = element.value;
-                var start = element.selectionStart;
-                var length = element.selectionEnd - element.selectionStart;
-                element.value = str.substr(0, start) + text3 + text1 + str.substr(start, length) + text2 + text3 + str.substr(start + length);
-            } else document.' . $form . '.' . $field . '.value += text3+text1+text2+text3;}</script>
-            <a href="javascript:tag(\'[b]\', \'[/b]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/b.png" alt="b" title="' . self::$lng['tag_bold'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[i]\', \'[/i]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/i.png" alt="i" title="' . self::$lng['tag_italic'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[u]\', \'[/u]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/u.png" alt="u" title="' . self::$lng['tag_underline'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[s]\', \'[/s]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/s.png" alt="s" title="' . self::$lng['tag_strike'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[c]\', \'[/c]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/q.png" alt="quote" title="' . self::$lng['tag_quote'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/cod.png" alt="cod" title="' . self::$lng['tag_code'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/l.png" alt="url" title="' . self::$lng['tag_link'] . '" border="0"/></a>
-            <span class="bb_opt" style="display: inline-block; cursor:pointer">
-            <img src="' . self::$system_set['homeurl'] . '/images/bb/color.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/on_color.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color.gif\'" alt="color" title="' . self::$lng['color'] . '" border="0"/>
-            <div class="bb_hide bb_color">' . $bb_color . '</div></span>';
-        if (self::$user_id) {
-            $out .= ' <span class="bb_opt" style="display: inline-block; cursor:pointer"><img src="' . self::$system_set['homeurl'] . '/images/bb/sm.png" alt="sm" title="' . self::$lng['smileys'] . '" border="0"/>
-                <div class="bb_hide">' . $bb_smileys . '</div></span>';
-        }
-        return $out . '<br />';
-    }
-
-    /*
-    -----------------------------------------------------------------
     Проверка переменных
     -----------------------------------------------------------------
     */
@@ -231,7 +160,7 @@ class functions extends core
             $str = str_replace("\r\n", ' ', $str);
         //TODO: Передеать на новую функцию подсветки Тэгов
         if ($tags == 1)
-            $str = call_user_func('tags', $str);
+            $str = bbcode::tags($str);
         elseif ($tags == 2)
             $str = self::notags($str);
         $str = strtr($str, array(
@@ -490,35 +419,6 @@ class functions extends core
         } else {
             return self::$user_data;
         }
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Вырезание BBcode тэгов из текста
-    -----------------------------------------------------------------
-    */
-    static function notags($var = '')
-    {
-        $var = preg_replace('#\[color=(.+?)\](.+?)\[/color]#si', '\2', $var);
-        $var = strtr($var, array(
-                                '[green]' => '',
-                                '[/green]' => '',
-                                '[red]' => '',
-                                '[/red]' => '',
-                                '[blue]' => '',
-                                '[/blue]' => '',
-                                '[b]' => '',
-                                '[/b]' => '',
-                                '[i]' => '',
-                                '[/i]' => '',
-                                '[u]' => '',
-                                '[/u]' => '',
-                                '[s]' => '',
-                                '[/s]' => '',
-                                '[c]' => '',
-                                '[/c]' => ''
-                           ));
-        return $var;
     }
 
     /*

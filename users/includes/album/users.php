@@ -47,6 +47,7 @@ if ($total) {
         LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
         GROUP BY `cms_album_files`.`user_id` ORDER BY `users`.`name` ASC LIMIT $start, $kmess
     ");
+    $i = 0;
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<a href="album.php?act=list&amp;user=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';

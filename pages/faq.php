@@ -149,7 +149,7 @@ switch ($act) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (!$is_mobile)
                     $smileys = (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
-                echo $smileys . '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['lng_or'] . ' :' . trans($smile) . ':</div>';
+                echo $smileys . '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . $lng['lng_or'] . ' :' . functions::trans($smile) . ':</div>';
             }
         } else {
             echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
@@ -198,7 +198,7 @@ switch ($act) {
         foreach ($smileys as $value) {
             $smile = ':' . $value . ':';
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                 '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;' . functions::smileys($smile, $rights >= 1 ? 1 : 0) . '&#160;' . $smile . ' ' . $lng['lng_or'] . ' ' . trans($smile) . '</div>';
+                 '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;' . functions::smileys($smile, $rights >= 1 ? 1 : 0) . '&#160;' . $smile . ' ' . $lng['lng_or'] . ' ' . functions::trans($smile) . '</div>';
             $i++;
         }
         if ($total) {
