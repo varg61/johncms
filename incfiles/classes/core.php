@@ -29,7 +29,7 @@ class core
     public static $user_set = array();                    // Пользовательские настройки
     public static $user_ban = array();                    // Бан
 
-    private $flood_chk = 1;                               // Включение - выключение функции IP антифлуда
+    private $flood_chk = 0;                               // Включение - выключение функции IP антифлуда
     private $flood_interval = '120';                      // Интервал времени в секундах
     private $flood_limit = '30';                          // Число разрешенных запросов за интервал
 
@@ -48,6 +48,39 @@ class core
         $this->authorize();                               // Авторизация пользователей
         $this->lng_detect();                              // Определяем язык системы
         self::$lng = self::load_lng();                    // Загружаем язык
+    }
+
+    function __destruct()
+    {
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Валидация IP адреса
+    -----------------------------------------------------------------
+    */
+    public static function ip_valid($ip = '')
+    {
+        if (empty($ip)) return false;
+        $d = explode('.', $ip);
+        for ($x = 0; $x < 4; $x++) if (!is_numeric($d[$x]) || ($d[$x] < 0) || ($d[$x] > 255)) return false;
+        return $ip;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Загружаем фразы языка из файла
+    -----------------------------------------------------------------
+    */
+    public static function load_lng($module = '_core')
+    {
+        global $rootpath;
+        $lng_file = $rootpath . 'incfiles/languages/' . self::$lng_iso . '/' . $module . '.lng';
+        if (file_exists($lng_file)) {
+            $out = parse_ini_file($lng_file) or die('ERROR: language file');
+            return $out;
+        }
+        die('ERROR: Language file is missing');
     }
 
     /*
@@ -125,19 +158,6 @@ class core
 
     /*
     -----------------------------------------------------------------
-    Валидация IP адреса
-    -----------------------------------------------------------------
-    */
-    public static function ip_valid($ip = '')
-    {
-        if (empty($ip)) return false;
-        $d = explode('.', $ip);
-        for ($x = 0; $x < 4; $x++) if (!is_numeric($d[$x]) || ($d[$x] < 0) || ($d[$x] > 255)) return false;
-        return $ip;
-    }
-
-    /*
-    -----------------------------------------------------------------
     Обрабатываем "белый" список IP адресов
     -----------------------------------------------------------------
     */
@@ -185,7 +205,7 @@ class core
     Проверяем адрес IP на Бан
     -----------------------------------------------------------------
     */
-    public function ip_ban()
+    private function ip_ban()
     {
         $req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . self::$ip . "' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
         if (mysql_num_rows($req)) {
@@ -252,22 +272,6 @@ class core
                 }
             }
         }
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Загружаем фразы языка из файла
-    -----------------------------------------------------------------
-    */
-    public static function load_lng($module = '_core')
-    {
-        global $rootpath;
-        $lng_file = $rootpath . 'incfiles/languages/' . self::$lng_iso . '/' . $module . '.lng';
-        if (file_exists($lng_file)) {
-            $out = parse_ini_file($lng_file) or die('ERROR: language file');
-            return $out;
-        }
-        die('ERROR: Language file is missing');
     }
 
     /*

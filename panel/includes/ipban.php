@@ -41,12 +41,12 @@ switch ($mod) {
                 $mode = 1;
                 $array = explode('-', $get_ip);
                 $get_ip = trim($array[0]);
-                if (!$core->ip_valid($get_ip))
+                if (!core::ip_valid($get_ip))
                     $error[] = $lng['error_firstip'];
                 else
                     $ip1 = ip2long($get_ip);
                 $get_ip = trim($array[1]);
-                if (!$core->ip_valid($get_ip))
+                if (!core::ip_valid($get_ip))
                     $error[] = $lng['error_secondip'];
                 else
                     $ip2 = ip2long($get_ip);
@@ -70,7 +70,7 @@ switch ($mod) {
             } else {
                 // Обрабатываем одиночный адрес
                 $mode = 3;
-                if (!$core->ip_valid($get_ip)) {
+                if (!core::ip_valid($get_ip)) {
                     $error = $lng['error_address'];
                 } else {
                     $ip1 = ip2long($get_ip);

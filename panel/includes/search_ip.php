@@ -35,12 +35,12 @@ if ($search) {
         */
         $array = explode('-', $search);
         $ip = trim($array[0]);
-        if (!$core->ip_valid($ip))
+        if (!core::ip_valid($ip))
             $error[] = $lng['error_firstip'];
         else
             $ip1 = ip2long($ip);
         $ip = trim($array[1]);
-        if (!$core->ip_valid($ip))
+        if (!core::ip_valid($ip))
             $error[] = $lng['error_secondip'];
         else
             $ip2 = ip2long($ip);
@@ -70,7 +70,7 @@ if ($search) {
         Обрабатываем одиночный адрес
         -----------------------------------------------------------------
         */
-        if (!$core->ip_valid($search)) {
+        if (!core::ip_valid($search)) {
             $error = $lng['error_address'];
         } else {
             $ip1 = ip2long($search);
