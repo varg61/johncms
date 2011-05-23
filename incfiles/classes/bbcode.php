@@ -179,19 +179,17 @@ class bbcode extends core
         );
         $i = 1;
         $font_color = '<table><tr>';
+        $bg_color = '<table><tr>';
         foreach ($colors as $value) {
             $font_color .= '<a href="javascript:tag(\'[color=#' . $value . ']\', \'[/color]\', \'\');" style="background-color:#' . $value . ';"></a>';
-            if (!($i % sqrt(count($colors)))) $font_color .= '</tr><tr>';
+            $bg_color .= '<a href="javascript:tag(\'[bg=#' . $value . ']\', \'[/bg]\', \'\');" style="background-color:#' . $value . ';"></a>';
+            if (!($i % sqrt(count($colors)))){
+                $font_color .= '</tr><tr>';
+                $bg_color .= '</tr><tr>';
+            }
             ++$i;
         }
         $font_color .= '</tr></table>';
-        $i = 1;
-        $bg_color = '<table><tr>';
-        foreach ($colors as $value) {
-            $bg_color .= '<a href="javascript:tag(\'[bg=#' . $value . ']\', \'[/bg]\', \'\');" style="background-color:#' . $value . ';"></a>';
-            if (!($i % sqrt(count($colors)))) $bg_color .= '</tr><tr>';
-            ++$i;
-        }
         $bg_color .= '</tr></table>';
         $smileys = !empty(self::$user_data['smileys']) ? unserialize(self::$user_data['smileys']) : '';
         if (!empty($smileys)) {
