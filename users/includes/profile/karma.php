@@ -171,7 +171,6 @@ if ($set_karma['on']) {
             Главная страница Кармы, список отзывов
             -----------------------------------------------------------------
             */
-            $exp = explode('|', $user['plus_minus']);
             $type = isset($_GET['type']) ? abs(intval($_GET['type'])) : 0;
             $menu = array (
                 ($type == 2 ? '<b>' . $lng_karma['all'] . '</b>' : '<a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=2">' . $lng_karma['all'] . '</a>'),
