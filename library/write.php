@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (!$id) {
@@ -22,7 +19,7 @@ if (!$id) {
 //TODO: Переделать на новый антиспам
 // Проверка на спам
 $old = ($rights > 0) ? 5 : 60;
-if ($datauser['lastpost'] > ($realtime - $old)) {
+if ($datauser['lastpost'] > (time() - $old)) {
     require_once('../incfiles/head.php');
     echo '<p>' . $lng['error_flood'] . ' ' . $old . ' ' . $lng['sec'] . '<br/><br/><a href ="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
     require_once('../incfiles/end.php');
@@ -62,7 +59,7 @@ if ($ms['ip'] == 0) {
             }
             mysql_query("INSERT INTO `lib` SET
                 `refid` = '$id',
-                `time` = '$realtime',
+                `time` = '" . time() . "',
                 `type` = 'bk',
                 `name` = '" . mysql_real_escape_string(mb_substr(trim($_POST['name']), 0, 100)) . "',
                 `announce` = '" . mysql_real_escape_string($anons) . "',
@@ -78,7 +75,7 @@ if ($ms['ip'] == 0) {
             } else {
                 echo '<p>' . $lng_lib['article_added'] . '<br/>' . $lng_lib['article_added_thanks'] . '</p>';
             }
-            mysql_query("UPDATE `users` SET `lastpost` = '" . $realtime . "' WHERE `id` = '" . $user_id . "'");
+            mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = '" . $user_id . "'");
             echo '<p><a href="index.php?id=' . $cid . '">' . $lng_lib['to_article'] . '</a></p>';
         } else {
             echo '<h3>' . $lng_lib['write_article'] . '</h3><form action="index.php?act=write&amp;id=' . $id . '" method="post">';
