@@ -84,7 +84,7 @@ if ($ms['ip'] == 0) {
             echo '<h3>' . $lng_lib['write_article'] . '</h3><form action="index.php?act=write&amp;id=' . $id . '" method="post">';
             echo '<p>' . $lng['title'] . ' (max. 100):<br/><input type="text" name="name"/></p>';
             echo '<p>' . $lng_lib['announce'] . ' (max. 100):<br/><input type="text" name="anons"/></p>';
-            echo '<p>' . $lng['text'] . ':<br/><textarea name="text" cols="20" rows="5"></textarea></p>';
+            echo '<p>' . $lng['text'] . ':<br/><textarea name="text" rows="' . $set_user['field_h'] . '"></textarea></p>';
             echo '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>';
             echo '</form><p><a href ="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
         }

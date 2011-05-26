@@ -250,7 +250,7 @@ switch ($mod) {
                 '<input type="text" name="name" />' .
                 '<br /><small>' . $lng['minmax_2_30'] . '</small></p>' .
                 '<p><h3>' . $lng['description'] . '</h3>' .
-                '<textarea name="desc" cols="24" rows="4"></textarea>' .
+                '<textarea name="desc" rows="' . $set_user['field_h'] . '"></textarea>' .
                 '<br /><small>' . $lng['not_mandatory_field'] . '<br />' . $lng['minmax_2_500'] . '</small></p>' .
                 '<p><input type="submit" value="' . $lng['add'] . '" name="submit" />' .
                 '</p></div></form>' .
@@ -320,7 +320,7 @@ switch ($mod) {
                         '<input type="text" name="name" value="' . $res['text'] . '"/>' .
                         '<br /><small>' . $lng['minmax_2_30'] . '</small></p>' .
                         '<p><h3>' . $lng['description'] . '</h3>' .
-                        '<textarea name="desc" cols="24" rows="4">' . str_replace('<br />', "\r\n", $res['soft']) . '</textarea>' .
+                        '<textarea name="desc" rows="' . $set_user['field_h'] . '">' . str_replace('<br />', "\r\n", $res['soft']) . '</textarea>' .
                         '<br /><small>' . $lng['not_mandatory_field'] . '<br />' . $lng['minmax_2_500'] . '</small></p>';
                     if ($res['type'] == 'r') {
                         echo '<p><h3>' . $lng_forum['category'] . '</h3><select name="category" size="1">';

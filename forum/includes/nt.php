@@ -13,7 +13,7 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if (!$id || !$user_id || $ban['1'] || $ban['11']) {
+if (!$id || !$user_id || isset($ban['1']) || isset($ban['11'])) {
     header("Location: index.php");
     exit;
 }
@@ -169,7 +169,7 @@ if (isset($_POST['submit'])) {
         '<p><h3>' . $lng_forum['post'] . '</h3>';
     if(!$is_mobile)
         echo '</p><p>' . bbcode::auto_bb('form', 'msg');
-    echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+    echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
         '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
     if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];

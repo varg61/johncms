@@ -100,7 +100,6 @@ switch ($mod) {
             $set_user['translit'] = isset($_POST['translit']);
             $set_user['digest'] = isset($_POST['digest']);
             $set_user['direct_url'] = isset($_POST['direct_url']);
-            $set_user['field_w'] = isset($_POST['field_w']) ? abs(intval($_POST['field_w'])) : 20;
             $set_user['field_h'] = isset($_POST['field_h']) ? abs(intval($_POST['field_h'])) : 3;
             $set_user['kmess'] = isset($_POST['kmess']) ? abs(intval($_POST['kmess'])) : 10;
             $set_user['quick_go'] = isset($_POST['quick_go']);
@@ -168,14 +167,13 @@ switch ($mod) {
              '<input type="text" name="sdvig" size="2" maxlength="3" value="' . core::$user_set['sdvig'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
              '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + core::$user_set['sdvig'] * 3600) . '</span> ' . $lng['system_time'] .
              '</p><p><h3>' . $lng['system_functions'] . '</h3>' .
+             '<input name="direct_url" type="checkbox" value="1" ' . (core::$user_set['direct_url'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['direct_url'] . '<br />' .
              '<input name="avatar" type="checkbox" value="1" ' . (core::$user_set['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .
              '<input name="smileys" type="checkbox" value="1" ' . (core::$user_set['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>' .
-             '<input name="translit" type="checkbox" value="1" ' . (core::$user_set['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'] . '<br/>' .
-             '<input name="digest" type="checkbox" value="1" ' . (core::$user_set['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] . '<br />' .
-             '<input name="direct_url" type="checkbox" value="1" ' . (core::$user_set['direct_url'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['direct_url'] .
+             '<input name="digest" type="checkbox" value="1" ' . (core::$user_set['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
              '</p><p><h3>' . $lng['text_input'] . '</h3>' .
-             '<input type="text" name="field_w" size="2" maxlength="2" value="' . core::$user_set['field_w'] . '"/> ' . $lng['field_width'] . ' (10-80)<br />' .
              '<input type="text" name="field_h" size="2" maxlength="1" value="' . core::$user_set['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />' .
+             '<input name="translit" type="checkbox" value="1" ' . (core::$user_set['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'] .
              '</p><p><h3>' . $lng['apperance'] . '</h3>' .
              '<input type="text" name="kmess" size="2" maxlength="2" value="' . core::$user_set['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
              '<input name="quick_go" type="checkbox" value="1" ' . (core::$user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .

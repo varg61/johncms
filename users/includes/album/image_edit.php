@@ -151,7 +151,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 '<p><h3>' . $lng_profile['image'] . '</h3>' .
                 '<img src="../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></p>' .
                 '<p><h3>' . $lng['description'] . '</h3>' .
-                '<textarea name="description" cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '">' . functions::checkout($res['description']) . '</textarea><br />' .
+                '<textarea name="description" rows="' . $set_user['field_h'] . '">' . functions::checkout($res['description']) . '</textarea><br />' .
                 '<small>' . $lng['not_mandatory_field'] . ', max. 500</small></p>' .
                 '</div><div class="rmenu">' .
                 '<p><h3>Яркость</h3>' .

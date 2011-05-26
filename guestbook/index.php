@@ -149,7 +149,7 @@ switch ($act) {
                     '<br />' . functions::checkout($res['text']) . '</div>' .
                     '<form name="form" action="index.php?act=otvet&amp;id=' . $id . '" method="post">' .
                     '<p><h3>' . $lng['reply'] . '</h3>' . bbcode::auto_bb('form', 'otv') .
-                    '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="otv">' . functions::checkout($res['otvet']) . '</textarea></p>' .
+                    '<textarea rows="' . $set_user['field_h'] . '" name="otv">' . functions::checkout($res['otvet']) . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['reply'] . '"/></p>' .
                     '</form></div>' .
                     '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
@@ -186,7 +186,7 @@ switch ($act) {
                     '<div class="rmenu">' .
                     '<form action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
                     '<p><b>' . $lng['author'] . ':</b> ' . $res['name'] . '</p>' .
-                    '<p><textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
+                    '<p><textarea rows="' . $set_user['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
                     '</form></div>' .
                     '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
@@ -280,7 +280,7 @@ switch ($act) {
             echo '<b>' . $lng['message'] . '</b> <small>(max 5000)</small>:<br/>';
             if(!$is_mobile)
                 echo bbcode::auto_bb('form', 'msg');
-            echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
+            echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . $lng['translit'] . '<br/>';
             if (!$user_id) {

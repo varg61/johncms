@@ -334,7 +334,7 @@ class comments
         $out .= '<b>' . core::$lng['message'] . '</b>: <small>(Max. ' . $this->max_lenght . ')</small><br />';
         if (!core::$is_mobile)
             $out .= '</p><p>' . bbcode::auto_bb('form', 'message');
-        $out .= '<textarea cols="' . core::$user_set['field_w'] . '" rows="' . core::$user_set['field_h'] . '" name="message">' . $reply . '</textarea><br/>';
+        $out .= '<textarea rows="' . core::$user_set['field_h'] . '" name="message">' . $reply . '</textarea><br/>';
         if (core::$user_set['translit'])
             $out .= '<input type="checkbox" name="translit" value="1" />&nbsp;' . core::$lng['translit'] . '<br/>';
         $out .= '<input type="submit" name="submit" value="' . core::$lng['sent'] . '"/></p></form></div>';

@@ -150,7 +150,7 @@ switch ($mod) {
                     echo '&#160;' . $lng_ban['infringement'] . ' <a href="' . $set['homeurl'] . '/forum/index.php?act=post&amp;id=' . $fid . '">' . $lng_ban['in_forum'] . '</a><br />' .
                         '<input type="hidden" value="' . $fid . '" name="banref" />';
                 }
-                echo '&#160;<textarea cols="20" rows="4" name="reason"></textarea>' .
+                echo '&#160;<textarea rows="' . $set_user['field_h'] . '" name="reason"></textarea>' .
                     '</p><p><input type="submit" value="' . $lng['ban_do'] . '" name="submit" />' .
                     '</p></div></form>';
             }

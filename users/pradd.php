@@ -285,7 +285,7 @@ if ($user_id) {
                 '<p><h3>' . $lng_pm['subject'] . '</h3>' .
                 '<input type="text" name="tem" value="' . $tema . '"/></p>' .
                 '<p><h3>' . $lng['message'] . '</h3>' . bbcode::auto_bb('form', 'msg') .
-                '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+                '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                 '<p><h3>' . $lng_pm['attach_file'] . '</h3>' .
                 '<input type="file" name="fail"/><br /><small>max.' . $set['flsz'] . 'kb</small></p>';
             if ($set_user['translit'])

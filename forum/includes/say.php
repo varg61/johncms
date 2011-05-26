@@ -151,7 +151,7 @@ switch ($type1['type']) {
                 '<p><h3>' . $lng_forum['post'] . '</h3>';
             if(!$is_mobile)
                 echo '</p><p>' . bbcode::auto_bb('form', 'msg');
-            echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+            echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                 '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
@@ -292,7 +292,7 @@ switch ($type1['type']) {
                 echo '<div class="gmenu">' .
                     '<p><b>' . $type1['from'] . '</b> <span class="gray">(' . date("d.m.Y/H:i", $type1['time']) . ')</span></p>' .
                     '<p><h3>' . $lng_forum['cytate'] . '</h3>' .
-                    '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="citata">' . $qt . '</textarea>' .
+                    '<textarea rows="' . $set_user['field_h'] . '" name="citata">' . $qt . '</textarea>' .
                     '<br /><small>' . $lng_forum['cytate_help'] . '</small></p>';
             } else {
                 // Форма с репликой
@@ -306,7 +306,7 @@ switch ($type1['type']) {
             echo '<p><h3>' . $lng_forum['post'] . '</h3>';
             if(!$is_mobile)
                 echo '</p><p>' . bbcode::auto_bb('form', 'msg');
-            echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+            echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                 '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];

@@ -80,7 +80,7 @@ if ($al && $user['id'] == $user_id || $rights >= 7) {
             '<div class="menu"><p><h3>' . $lng_profile['select_image'] . '</h3>' .
             '<input type="file" name="imagefile" value="" /></p>' .
             '<p><h3>' . $lng['description'] . '</h3>' .
-            '<textarea name="description" cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '"></textarea><br />' .
+            '<textarea name="description" rows="' . $set_user['field_h'] . '"></textarea><br />' .
             '<small>' . $lng['not_mandatory_field'] . ', max. 500</small></p>' .
             '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" />' .
             '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .

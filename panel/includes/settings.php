@@ -63,8 +63,8 @@ echo '<p>' .
 // META тэги
 echo '<p>' .
     '<h3>' . $lng['meta_tags'] . '</h3>' .
-    '&#160;' . $lng['meta_keywords'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_key">' . $set['meta_key'] . '</textarea><br />' .
-    '&#160;' . $lng['meta_description'] . ':<br />&#160;<textarea cols="20" rows="4" name="meta_desc">' . $set['meta_desc'] . '</textarea>' .
+    '&#160;' . $lng['meta_keywords'] . ':<br />&#160;<textarea rows="' . $set_user['field_h'] . '" name="meta_key">' . $set['meta_key'] . '</textarea><br />' .
+    '&#160;' . $lng['meta_description'] . ':<br />&#160;<textarea rows="' . $set_user['field_h'] . '" name="meta_desc">' . $set['meta_desc'] . '</textarea>' .
     '</p>';
 // Выбор темы оформления
 echo '<p><h3>' . $lng['design_template'] . '</h3>&#160;<select name="skindef">';

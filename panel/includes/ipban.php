@@ -165,7 +165,7 @@ switch ($mod) {
                 '&nbsp;<input type="text" name="url"/><br />' .
                 '<small>&nbsp;' . $lng['not_mandatory_field'] . '<br />&nbsp;' . $lng['url_help'] . '</small></p>' .
                 '<p><h3>' . $lng['reason'] . '</h3>' .
-                '&nbsp;<textarea cols="20" rows="4" name="reason"></textarea>' .
+                '&nbsp;<textarea rows="' . $set_user['field_h'] . '" name="reason"></textarea>' .
                 '<br /><small>&nbsp;' . $lng['not_mandatory_field'] . '</small></p>' .
                 '<p><input type="submit" name="submit" value=" ' . $lng['ban_do'] . ' "/></p></div>' .
                 '<div class="phdr"><small>' . $lng['ip_ban_help'] . '</small></div>' .

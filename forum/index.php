@@ -511,7 +511,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                         echo '<p>';
                         if (!$is_mobile)
                             echo bbcode::auto_bb('form1', 'msg');
-                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
+                        echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                              '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
                         if ($set_user['translit'])
                             echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
@@ -666,7 +666,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                         echo '<p>';
                         if (!$is_mobile)
                             echo bbcode::auto_bb('form2', 'msg');
-                        echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/></p>' .
+                        echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/></p>' .
                              '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
                         if ($set_user['translit'])
                             echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];

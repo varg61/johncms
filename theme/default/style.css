@@ -1,10 +1,11 @@
 body {
-  background-color: #ffffff;
   color: #000000;
   font-family: Arial, Tahoma, sans-serif;
   font-size: small;
-  margin: 0;
   padding: 0;
+  max-width: 640px;
+  margin: 2px auto;
+  background: #CCCCCC url(images/mainbg.jpg) repeat-x top
 }
 
 form {
@@ -29,6 +30,10 @@ p {
   margin-top: 6px;
 }
 
+textarea {
+  width: 99%;
+}
+
 ul {
   margin: 0;
   padding-left: 20px;
@@ -40,6 +45,12 @@ ul {
   color: #ffffff;
   font-weight: bold;
   padding: 3px 0 3px 4px;
+}
+
+.bblist {
+  color: #FF0000;
+  background: transparent url(../../images/dot.gif) no-repeat left;
+  padding: 0px 0px 0px 10px;
 }
 
 .bmenu {
@@ -70,7 +81,7 @@ ul {
 
 .footer {
   background: #000000 url(images/bg.gif);
-  border-bottom: 1px solid red;
+  border-bottom: 2px solid #993333;
   color: #d0d7dd;
   margin: 0;
   padding: 3px 0 4px 4px;
@@ -134,12 +145,6 @@ ul {
   border: 1px solid white;
   margin: 0;
   padding: 3px 4px 4px 4px;
-}
-
-.bblist{
-  color: #FF0000;
-  background: transparent url(../../images/dot.gif) no-repeat left;
-  padding: 0px 0px 0px 10px;
 }
 
 .maintxt {

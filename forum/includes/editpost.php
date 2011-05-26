@@ -174,7 +174,7 @@ if (!$error) {
                     '<div class="rmenu"><form name="form" action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><p>';
                 if(!$is_mobile)
                     echo bbcode::auto_bb('form', 'msg');
-                echo '<textarea cols="' . $set_user['field_w'] . '" rows="' . $set_user['field_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
+                echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
                 if ($set_user['translit'])
                     echo '<input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
                 echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></form></div>' .
