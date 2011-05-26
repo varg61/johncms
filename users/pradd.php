@@ -132,7 +132,7 @@ if ($user_id) {
                         }
                         // Проверка наличия файла с таким же именем
                         if (file_exists("../files/users/pm/$fname")) {
-                            $fname = $realtime . $fname;
+                            $fname = time() . $fname;
                         }
                         // Окончательная обработка
                         if ($do_file) {
@@ -165,12 +165,12 @@ if ($user_id) {
                             }
                         }
                     }
-                    mysql_query("insert into `privat` values(0,'" . $foruser . "','" . $msg . "','" . $realtime . "','" . $login . "','in','no','" . $tem . "','0','','','','" . mysql_real_escape_string($fname) . "');");
-                    mysql_query("insert into `privat` values(0,'" . $foruser . "','" . $msg . "','" . $realtime . "','" . $login . "','out','no','" . $tem . "','0','','','','" . mysql_real_escape_string($fname) . "');");
+                    mysql_query("insert into `privat` values(0,'" . $foruser . "','" . $msg . "','" . time() . "','" . $login . "','in','no','" . $tem . "','0','','','','" . mysql_real_escape_string($fname) . "');");
+                    mysql_query("insert into `privat` values(0,'" . $foruser . "','" . $msg . "','" . time() . "','" . $login . "','out','no','" . $tem . "','0','','','','" . mysql_real_escape_string($fname) . "');");
                     if (!empty($idm)) {
                         mysql_query("update `privat` set otvet='1' where id='" . $idm . "';");
                     }
-                    mysql_query("UPDATE `users` SET `lastpost` = '" . $realtime . "' WHERE `id` = '" . $user_id . "'");
+                    mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = '" . $user_id . "'");
                     echo '<p>' . $lng_pm['message_sent'] . '</p>';
                     if (!empty($_SESSION['refpr'])) {
                         echo "<a href='" . $_SESSION['refpr'] . "'>" . $lng_pm['back'] . "</a><br/>";

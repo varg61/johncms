@@ -1,23 +1,20 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($rights == 5 || $rights >= 6) {
     echo '<div class="phdr">' . $lng_lib['articles_moderation'] . '</div>';
     if ($id && (isset($_GET['yes']))) {
-        mysql_query("UPDATE `lib` SET `moder` = '1' , `time` = '$realtime' WHERE `id` = '$id'");
+        mysql_query("UPDATE `lib` SET `moder` = '1' , `time` = '" . time() . "' WHERE `id` = '$id'");
         $req = mysql_query("SELECT `name` FROM `lib` WHERE `id` = '$id'");
         $res = mysql_fetch_array($req);
         echo '<div class="rmenu">' . $lng_lib['article'] . ' <b>' . $res['name'] . '</b> ' . $lng_lib['added_to_database'] . '</div>';
@@ -25,7 +22,7 @@ if ($rights == 5 || $rights >= 6) {
     if (isset($_GET['all'])) {
         $req = mysql_query("SELECT `id` FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'");
         while ($res = mysql_fetch_array($req)) {
-            mysql_query("UPDATE `lib` SET `moder` = '1', `time` = '$realtime' WHERE `id` = '" . $res['id'] . "'");
+            mysql_query("UPDATE `lib` SET `moder` = '1', `time` = '" . time() . "' WHERE `id` = '" . $res['id'] . "'");
         }
         echo '<p>' . $lng_lib['added_all'] . '</p>';
     }

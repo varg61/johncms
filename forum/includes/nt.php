@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (!$id || !$user_id || isset($ban['1']) || isset($ban['11'])) {
@@ -103,7 +100,7 @@ if (isset($_POST['submit'])) {
         mysql_query("INSERT INTO `forum` SET
             `refid` = '$id',
             `type` = 't',
-            `time` = '$realtime',
+            `time` = '" . time() . "',
             `user_id` = '$user_id',
             `from` = '$login',
             `text` = '$th'
@@ -113,7 +110,7 @@ if (isset($_POST['submit'])) {
         mysql_query("INSERT INTO `forum` SET
             `refid` = '$rid',
             `type` = 'm',
-            `time` = '$realtime',
+            `time` = '" . time() . "',
             `user_id` = '$user_id',
             `from` = '$login',
             `ip` = '" . long2ip($ip) . "',
@@ -125,14 +122,14 @@ if (isset($_POST['submit'])) {
         $fpst = $datauser['postforum'] + 1;
         mysql_query("UPDATE `users` SET
             `postforum` = '$fpst',
-            `lastpost` = '$realtime'
+            `lastpost` = '" . time() . "'
             WHERE `id` = '$user_id'
         ");
         // Ставим метку о прочтении
         mysql_query("INSERT INTO `cms_forum_rdm` SET
             `topic_id`='$rid',
             `user_id`='$user_id',
-            `time`='$realtime'
+            `time`='" . time() . "'
         ");
         if ($_POST['addfiles'] == 1)
             header("Location: index.php?id=$postid&act=addfile");

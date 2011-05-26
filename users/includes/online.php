@@ -24,12 +24,11 @@ echo '<div class="phdr"><b>' . $lng_online['who_on_site'] . '</b></div>';
 if ($rights > 0)
     echo '<div class="topmenu">' . ($mod == 'guest' ? '<a href="index.php?act=online">' . $lng['authorized'] . '</a> | <b>' . $lng['guests'] . '</b>' : '<b>' . $lng['authorized'] . '</b> | <a href="index.php?act=online&amp;mod=guest">' . $lng['guests'] . '</a>')
         . '</div>';
-$onltime = $realtime - 300;
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($mod == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime'"), 0);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($mod == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300)), 0);
 if ($total) {
-    $req = mysql_query("SELECT * FROM `" . ($mod == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > '$onltime' ORDER BY " . ($mod == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
+    $req = mysql_query("SELECT * FROM `" . ($mod == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300) . " ORDER BY " . ($mod == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start,$kmess");
     $i = 0;
-    while ($res = mysql_fetch_assoc($req)) {
+    while (($res = mysql_fetch_assoc($req)) !== false) {
         if($res['id'] == core::$user_id) echo '<div class="gmenu">';
         else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $where = explode(",", $res['place']);
@@ -58,7 +57,7 @@ if ($total) {
         $place = array_key_exists($where[0], $places) ? $places[$where[0]] : '<a href="../index.php">' . $lng_online['where_homepage'] . '</a>';
         $arg = array (
             'stshide' => 1,
-            'header' => (' (' . $res['movings'] . ' - ' . functions::timecount($realtime - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
+            'header' => (' (' . $res['movings'] . ' - ' . functions::timecount(time() - $res['sestime']) . ')<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
         );
         echo functions::display_user($res, $arg);
         echo '</div>';

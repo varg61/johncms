@@ -35,7 +35,6 @@ if (isset($_POST['submit'])) {
     $req = mysql_query("SELECT * FROM `cms_settings`");
     $set = array ();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
-    $realtime = time() + $set['timeshift'] * 3600;
     echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
 }
 /*
@@ -57,7 +56,7 @@ echo '<p>' .
 echo '<p>' .
     '<h3>' . $lng['clock_settings'] . '</h3>' .
     '<input type="text" name="timeshift" size="2" maxlength="3" value="' . $set['timeshift'] . '"/> ' . $lng['time_shift'] . ' (+-12)<br />' .
-    '<span style="font-weight:bold; background-color:#C0FFC0">' . date("H:i", $realtime) . '</span> ' . $lng['system_time'] .
+    '<span style="font-weight:bold; background-color:#C0FFC0">' . date("H:i", time() + $set['timeshift'] * 3600) . '</span> ' . $lng['system_time'] .
     '<br /><span style="font-weight:bold; background-color:#FFC0C0">' . date("H:i") . '</span> ' . $lng['server_time'] .
     '</p>';
 // META тэги

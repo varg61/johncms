@@ -18,7 +18,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 function mobileads($mad_siteId = NULL)
 {
-    global $realtime;
     $out = '';
     $mad_socketTimeout = 2; // таймаут соединения с сервером mobileads.ru
     ini_set("default_socket_timeout", $mad_socketTimeout);
@@ -42,7 +41,7 @@ function mobileads($mad_siteId = NULL)
         $out .= '<a href="' . $linkURL . '">' . $linkName . '</a><br />';
     }
     $_SESSION['mad_links'] = $out;
-    $_SESSION['mad_time'] = $realtime;
+    $_SESSION['mad_time'] = time();
     return $out;
 }
 

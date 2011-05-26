@@ -20,11 +20,10 @@ class counters
     */
     static function album()
     {
-        global $realtime, $set;
         $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
         $photocount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files`"), 0);
-        $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 259200) . "' AND `access` > '1'"), 0);
-        return $albumcount . '&#160;/&#160;' . $photocount . ($newcount ? '&#160;/&#160;<span class="red"><a href="' . $set['homeurl'] . '/users/album.php?act=top">+' . $newcount . '</a></span>' : '');
+        $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
+        return $albumcount . '&#160;/&#160;' . $photocount . ($newcount ? '&#160;/&#160;<span class="red"><a href="' . core::$system_set['homeurl'] . '/users/album.php?act=top">+' . $newcount . '</a></span>' : '');
     }
 
     /*
@@ -34,10 +33,8 @@ class counters
     */
     static function downloads()
     {
-        global $realtime;
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file'"), 0);
-        $old = $realtime - (3 * 24 * 3600);
-        $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0);
+        $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0);
         if ($new > 0)
             $total .= '&#160;/&#160;<span class="red"><a href="/download/?act=new">+' . $new . '</a></span>';
         return $total;
@@ -101,10 +98,7 @@ class counters
     */
     static function gallery($mod = 0)
     {
-        global $realtime;
-        $old = $realtime - (3 * 24 * 3600);
-        $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `time` > '" . $old . "' AND `type` = 'ft'"), 0);
-
+        $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'ft'"), 0);
         if ($mod == 0) {
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft'"), 0);
             $out = $total;
@@ -126,22 +120,21 @@ class counters
     */
     static function guestbook($mod = 0)
     {
-        global $realtime, $rights;
         $count = 0;
         switch ($mod) {
             case 1:
-                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . ($realtime - 86400) . "'"), 0);
+                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . (time() - 86400) . "'"), 0);
                 break;
 
             case 2:
-                if ($rights >= 1)
-                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time` > '" . ($realtime - 86400) . "'"), 0);
+                if (core::$user_rights >= 1)
+                    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time` > '" . (time() - 86400) . "'"), 0);
                 break;
 
             default:
-                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . ($realtime - 86400) . "'"), 0);
-                if ($rights >= 1) {
-                    $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time`>'" . ($realtime - 86400) . "'");
+                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . (time() - 86400) . "'"), 0);
+                if (core::$user_rights >= 1) {
+                    $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time`>'" . (time() - 86400) . "'");
                     $count = $count . '&#160;/&#160;<span class="red"><a href="guestbook/index.php?act=ga&amp;do=set">' . mysql_result($req, 0) . '</a></span>';
                 }
         }
@@ -155,10 +148,9 @@ class counters
     */
     static function library()
     {
-        global $realtime, $rights, $set;
+        global $rights, $set;
         $countf = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
-        $old = $realtime - (3 * 24 * 3600);
-        $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
+        $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
         $out = $countf;
         if ($countf1 > 0)
             $out = $out . '&#160;/&#160;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
@@ -176,9 +168,9 @@ class counters
     */
     static function online()
     {
-        global $realtime, $user_id, $lng, $set;
-        $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
-        $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_guests` WHERE `lastdate` > '" . ($realtime - 300) . "'"), 0);
+        global $user_id, $lng, $set;
+        $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . (time() - 300) . "'"), 0);
+        $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `lastdate` > '" . (time() - 300) . "'"), 0);
         return ($user_id || $set['active'] ? '<a href="' . $set['homeurl'] . '/users/index.php?act=online">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
     }
 
@@ -189,9 +181,8 @@ class counters
     */
     static function users()
     {
-        global $realtime;
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
-        $res = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "'"), 0);
+        $res = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . (time() - 86400) . "'"), 0);
         if ($res > 0)
             $total .= '&#160;/&#160;<span class="red">+' . $res . '</span>';
         return $total;

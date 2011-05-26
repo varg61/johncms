@@ -26,7 +26,6 @@ class functions extends core
     */
     public static function antiflood()
     {
-        global $realtime;
         $default = array(
             'mode' => 2,
             'day' => 10,
@@ -38,8 +37,7 @@ class functions extends core
         switch ($af['mode']) {
             case 1:
                 // Адаптивный режим
-                $onltime = $realtime - 600;
-                $adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0 AND `lastdate` > '$onltime'"), 0);
+                $adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0 AND `lastdate` > " . (time() - 300)), 0);
                 $limit = $adm > 0 ? $af['day'] : $af['night'];
                 break;
             case 3:
@@ -52,12 +50,12 @@ class functions extends core
                 break;
             default:
                 // По умолчанию день / ночь
-                $c_time = date('G', $realtime);
+                $c_time = date('G', time());
                 $limit = $c_time > $af['day'] && $c_time < $af['night'] ? $af['day'] : $af['night'];
         }
         if (self::$user_rights > 0)
             $limit = 4; // Для Администрации задаем лимит в 4 секунды
-        $flood = self::$user_data['lastpost'] + $limit - $realtime;
+        $flood = self::$user_data['lastpost'] + $limit - time();
         if ($flood > 0)
             return $flood;
         else
@@ -220,6 +218,15 @@ class functions extends core
 
     /*
     -----------------------------------------------------------------
+    Показываем дату с учетом сдвига времени
+    -----------------------------------------------------------------
+    */
+    public static function display_date($var){
+        return date("d.m.Y / H:i", $var + self::$time_shift * 3600);
+    }
+
+    /*
+    -----------------------------------------------------------------
     Сообщения об ошибках
     -----------------------------------------------------------------
     */
@@ -308,7 +315,7 @@ class functions extends core
     */
     static function display_user($user = false, $arg = false)
     {
-        global $realtime, $rootpath;
+        global $rootpath;
         $out = false;
 
         if (!$user['id']) {
@@ -327,7 +334,7 @@ class functions extends core
                 $out .= '</td><td>';
             }
             if ($user['sex'])
-                $out .= '<img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > $realtime - 86400 ? '_new' : '')
+                $out .= '<img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > time() - 86400 ? '_new' : '')
                         . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
             else
                 $out .= '<img src="' . self::$system_set['homeurl'] . '/images/del.png" width="12" height="12" align="middle" />&#160;';
@@ -344,7 +351,7 @@ class functions extends core
                 9 => '(SV!)'
             );
             $out .= ' ' . $rank[$user['rights']];
-            $out .= ($realtime > $user['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+            $out .= (time() > $user['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
             if (!empty($arg['header']))
                 $out .= ' ' . $arg['header'];
             if (!isset($arg['stshide']) && !empty($user['status']))
@@ -355,7 +362,7 @@ class functions extends core
         if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
         $ipinf = self::$user_rights || ($user['id'] && $user['id'] == self::$user_id) && (!isset($arg['iphide']) || isset($arg['iphide']) && !$arg['iphide']) ? 1 : 0;
-        $lastvisit = $realtime > $user['lastdate'] + 300 && isset($arg['lastvisit']) ? date("d.m.Y (H:i)", $user['lastdate']) : false;
+        $lastvisit = time() > $user['lastdate'] + 300 && isset($arg['lastvisit']) ? self::display_date($user['lastdate']) : false;
         if ($ipinf || $lastvisit || isset($arg['sub']) || isset($arg['footer'])) {
             $out .= '<div class="sub">';
             if (isset($arg['sub']))
@@ -505,7 +512,7 @@ class functions extends core
         } elseif ($var >= 86400) {
             $str = '1 ' . $lng['timecount_day'];
         } else {
-            $str = date('G:i', $var);
+            $str = date('H:i:s', ($var - 14400));
         }
         return $str;
     }

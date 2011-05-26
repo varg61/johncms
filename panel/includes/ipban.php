@@ -197,7 +197,7 @@ switch ($mod) {
         `link` = '$ban_url',
         `who` = '$login',
         `reason` = '$reason',
-        `date` = '$realtime'");
+        `date` = '" . time() . "'");
         header('Location: index.php?act=ipban');
         break;
 

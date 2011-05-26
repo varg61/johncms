@@ -1,18 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 define('_IN_JOHNCMS', 1);
 
@@ -52,7 +47,7 @@ switch ($act) {
                 $res = mysql_fetch_array($req);
                 if (empty($res['mail']) || $res['mail'] != $email)
                     $error = $lng_pass['error_email'];
-                if ($res['rest_time'] > $realtime - 86400)
+                if ($res['rest_time'] > time() - 86400)
                     $error = $lng_pass['restore_timelimit'];
             } else {
                 $error = $lng['error_user_not_exist'];
@@ -68,7 +63,7 @@ switch ($act) {
             $adds = "From: <" . $set['email'] . ">\r\n";
             $adds .= "Content-Type: text/plain; charset=\"utf-8\"\r\n";
             if (mail($res['mail'], $subject, $mail, $adds)) {
-                mysql_query("UPDATE `users` SET `rest_code` = '" . session_id() . "', `rest_time` = '$realtime' WHERE `id` = '" . $res['id'] . "'");
+                mysql_query("UPDATE `users` SET `rest_code` = '" . session_id() . "', `rest_time` = '" . time() . "' WHERE `id` = '" . $res['id'] . "'");
                 echo '<div class="gmenu"><p>' . $lng_pass['restore_help6'] . '</p></div>';
             } else {
                 echo '<div class="rmenu"><p>' . $lng_pass['error_email_sent'] . '</p></div>';
@@ -95,7 +90,7 @@ switch ($act) {
             if (empty($res['rest_code']) || empty($res['rest_time']) || $code != $res['rest_code']) {
                 $error = $lng_pass['error_fatal'];
             }
-            if (!$error && $res['rest_time'] < $realtime - 3600) {
+            if (!$error && $res['rest_time'] < time() - 3600) {
                 $error = $lng_pass['error_timelimit'];
                 mysql_query("UPDATE `users` SET `rest_code` = '', `rest_time` = '' WHERE `id` = '$id'");
             }

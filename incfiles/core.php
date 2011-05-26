@@ -13,7 +13,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 //Error_Reporting(E_ALL & ~E_NOTICE);
 @ini_set('session.use_trans_sid', '0');
 @ini_set('arg_separator.output', '&amp;');
-date_default_timezone_set('UTC');
+//date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 $rootpath = isset($rootpath) ? $rootpath : '../';
 
@@ -46,7 +46,6 @@ unset($core);
 $ip = core::$ip;                                          // Адрес IP
 $agn = core::$user_agent;                                 // User Agent
 $set = core::$system_set;                                 // Системные настройки
-$realtime = time() + $set['timeshift'] * 3600;            // Системное время с учетом сдвига
 $lng = core::$lng;                                        // Фразы языка
 $is_mobile = core::$is_mobile;                            // Определение мобильного браузера
 $home = $set['homeurl'];                                  // Домашняя страница
@@ -83,7 +82,7 @@ $headmod = isset($headmod) ? $headmod : '';
 Показываем Дайджест
 -----------------------------------------------------------------
 */
-if ($user_id && $datauser['lastdate'] < ($realtime - 3600) && $set_user['digest'] && $headmod == 'mainpage')
+if ($user_id && $datauser['lastdate'] < (time() - 3600) && $set_user['digest'] && $headmod == 'mainpage')
     header('Location: ' . $set['homeurl'] . '/index.php?act=digest&last=' . $datauser['lastdate']);
 
 /*

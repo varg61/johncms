@@ -113,13 +113,13 @@ switch ($mod) {
                     `layout` = '$layout',
                     `to` = '0',
                     `show` = '$show',
-                    `time` = '$realtime',
+                    `time` = '" . time() . "',
                     `bold` = '$bold',
                     `italic` = '$italic',
                     `underline` = '$underline'
                 ") or die (mysql_error());
             }
-            mysql_query("UPDATE `users` SET `lastpost` = '$realtime' WHERE `id` = '$user_id'");
+            mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = '$user_id'");
             echo '<div class="menu"><p>' . ($id ? $lng['link_edit_ok'] : $lng['link_add_ok']) . '<br />' .
                 '<a href="index.php?act=ads&amp;sort=' . $type . '">' . $lng['continue'] . '</a></p></div>';
         } else {
@@ -347,7 +347,7 @@ switch ($mod) {
                 }
                 if (!empty($res['day'])) {
                     $agreement[] = functions::timecount($res['day'] * 86400);
-                    $remains_count = $res['day'] * 86400 - ($realtime - $res['time']);
+                    $remains_count = $res['day'] * 86400 - (time() - $res['time']);
                     if ($remains_count > 0)
                         $remains[] = functions::timecount($remains_count);
                 }

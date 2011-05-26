@@ -13,41 +13,42 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 
 class core
 {
-    public static $ip;                                    // IP адрес
-    public static $ip_via_proxy;                          // IP адрес за прокси-сервером
-    public static $user_agent;                            // User Agent
-    public static $system_set;                            // Системные настройки
-    public static $lng_iso = 'en';                        // Двухбуквенный ISO код языка
-    public static $lng_list = array();                    // Список имеющихся языков
-    public static $lng = array();                         // Массив с фразами языка
-    public static $deny_registration = false;             // Запрет регистрации пользователей
-    public static $is_mobile = false;                     // Мобильный браузер
+    public static $ip;                                                         // IP адрес
+    public static $ip_via_proxy;                                               // IP адрес за прокси-сервером
+    public static $user_agent;                                                 // User Agent
+    public static $system_set;                                                 // Системные настройки
+    public static $lng_iso = 'en';                                             // Двухбуквенный ISO код языка
+    public static $lng_list = array();                                         // Список имеющихся языков
+    public static $lng = array();                                              // Массив с фразами языка
+    public static $deny_registration = false;                                  // Запрет регистрации пользователей
+    public static $is_mobile = false;                                          // Мобильный браузер
+    public static $time_shift = 0;                                             // Сдвиг времени
 
-    public static $user_id = false;                       // Идентификатор пользователя
-    public static $user_rights = 0;                       // Права доступа
-    public static $user_data = array();                   // Все данные пользователя
-    public static $user_set = array();                    // Пользовательские настройки
-    public static $user_ban = array();                    // Бан
+    public static $user_id = false;                                            // Идентификатор пользователя
+    public static $user_rights = 0;                                            // Права доступа
+    public static $user_data = array();                                        // Все данные пользователя
+    public static $user_set = array();                                         // Пользовательские настройки
+    public static $user_ban = array();                                         // Бан
 
-    private $flood_chk = 0;                               // Включение - выключение функции IP антифлуда
-    private $flood_interval = '120';                      // Интервал времени в секундах
-    private $flood_limit = '30';                          // Число разрешенных запросов за интервал
+    private $flood_chk = 0;                                                    // Включение - выключение функции IP антифлуда
+    private $flood_interval = '120';                                           // Интервал времени в секундах
+    private $flood_limit = '30';                                               // Число разрешенных запросов за интервал
 
     function __construct()
     {
-        $this->get_ip();                                  // Получаем адрес IP
-        $this->get_ua();                                  // Получаем UserAgent
-        $this->ip_flood();                                // Проверка адреса IP на флуд
-        if (get_magic_quotes_gpc()) $this->del_slashes(); // Удаляем слэши
-        $this->db_connect();                              // Соединяемся с базой данных
-        $this->ip_ban();                                  // Проверяем адрес IP на бан
-        $this->session_start();                           // Стартуем сессию
-        self::$is_mobile = $this->mobile_detect();        // Определение мобильного браузера
-        $this->system_settings();                         // Получаем системные настройки
-        $this->auto_clean();                              // Автоочистка системы
-        $this->authorize();                               // Авторизация пользователей
-        $this->lng_detect();                              // Определяем язык системы
-        self::$lng = self::load_lng();                    // Загружаем язык
+        $this->get_ip();                                                       // Получаем адрес IP
+        $this->get_ua();                                                       // Получаем UserAgent
+        $this->ip_flood();                                                     // Проверка адреса IP на флуд
+        if (get_magic_quotes_gpc()) $this->del_slashes();                      // Удаляем слэши
+        $this->db_connect();                                                   // Соединяемся с базой данных
+        $this->ip_ban();                                                       // Проверяем адрес IP на бан
+        $this->session_start();                                                // Стартуем сессию
+        self::$is_mobile = $this->mobile_detect();                             // Определение мобильного браузера
+        $this->system_settings();                                              // Получаем системные настройки
+        $this->auto_clean();                                                   // Автоочистка системы
+        $this->authorize();                                                    // Авторизация пользователей
+        $this->lng_detect();                                                   // Определяем язык системы
+        self::$lng = self::load_lng();                                         // Загружаем язык
     }
 
     function __destruct()
@@ -151,8 +152,9 @@ class core
             for ($i = 0; $i < count($tmp); $i++) fwrite($in, pack('LL', $tmp[$i]['ip'], $tmp[$i]['time']));
             fwrite($in, pack('LL', self::$ip, $now));
             fclose($in);
-            if ($requests > $this->flood_limit)
+            if ($requests > $this->flood_limit){
                 die('FLOOD: exceeded limit of allowed requests');
+            }
         }
     }
 
@@ -250,6 +252,7 @@ class core
         if (isset($set['lng']) && !empty($set['lng'])) self::$lng_iso = $set['lng'];
         if(isset($set['lng_list'])) self::$lng_list = unserialize($set['lng_list']);
         self::$system_set = $set;
+        self::$time_shift = $set['timeshift'];
     }
 
     /*
@@ -305,6 +308,7 @@ class core
                     self::$user_rights = $user_data['rights'];
                     self::$user_data = $user_data;
                     self::$user_set = !empty($user_data['set_user']) ? unserialize($user_data['set_user']) : $this->user_setings_default();
+                    self::$time_shift = self::$time_shift + self::$user_set['timeshift'];
                     $this->user_ip_history();
                     $this->user_ban_check();
                 } else {
@@ -346,7 +350,7 @@ class core
         if (self::$user_data['ip'] != self::$ip || self::$user_data['ip_via_proxy'] != self::$ip_via_proxy) {
             // Удаляем из истории текущий адрес (если есть)
             @mysql_query("DELETE FROM `cms_users_iphistory`
-                WHERE `user_id` = '" . $this->user_id . "'
+                WHERE `user_id` = '" . self::$user_id . "'
                 AND `ip` = '" . self::$ip . "'
                 AND `ip_via_proxy` = '" . self::$ip_via_proxy . "'
                 LIMIT 1
@@ -377,17 +381,17 @@ class core
     private function user_setings_default()
     {
         return array(
-            'avatar' => 1,                                // Показывать аватары
-            'digest' => 0,                                // Показывать Дайджест
-            'direct_url' => 0,                            // Внешние ссылки
-            'field_h' => 3,                               // Высота текстового поля ввода
-            'field_w' => (self::$is_mobile ? 20 : 40),    // Ширина текстового поля ввода
-            'kmess' => 10,                                // Число сообщений на страницу
-            'quick_go' => 1,                              // Быстрый переход
-            'sdvig' => 0,                                 // Временной сдвиг
-            'skin' => self::$system_set['skindef'],       // Тема оформления
-            'smileys' => 1,                               // Включить(1) выключить(0) смайлы
-            'translit' => 0                               // Транслит
+            'avatar' => 1,                                                     // Показывать аватары
+            'digest' => 0,                                                     // Показывать Дайджест
+            'direct_url' => 0,                                                 // Внешние ссылки
+            'field_h' => 3,                                                    // Высота текстового поля ввода
+            'field_w' => (self::$is_mobile ? 20 : 40),                         // Ширина текстового поля ввода
+            'kmess' => 10,                                                     // Число сообщений на страницу
+            'quick_go' => 1,                                                   // Быстрый переход
+            'timeshift' => 0,                                                  // Временной сдвиг
+            'skin' => self::$system_set['skindef'],                            // Тема оформления
+            'smileys' => 1,                                                    // Включить(1) выключить(0) смайлы
+            'translit' => 0                                                    // Транслит
         );
     }
 
@@ -416,10 +420,10 @@ class core
     private function auto_clean()
     {
         if (self::$system_set['clean_time'] < time() - 86400) {
-            mysql_query("DELETE FROM `cms_guests` WHERE `lastdate` < '" . (time() - 86400) . "'");
+            mysql_query("DELETE FROM `cms_sessions` WHERE `lastdate` < '" . (time() - 86400) . "'");
             mysql_query("DELETE FROM `cms_users_iphistory` WHERE `time` < '" . (time() - 2592000) . "'");
             mysql_query("UPDATE `cms_settings` SET  `val` = '" . time() . "' WHERE `key` = 'clean_time' LIMIT 1");
-            mysql_query("OPTIMIZE TABLE `cms_guests` , `cms_users_iphistory`");
+            mysql_query("OPTIMIZE TABLE `cms_sessions` , `cms_users_iphistory`");
         }
     }
 

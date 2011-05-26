@@ -58,7 +58,7 @@ if (!isset($_GET['err']) && $act != '404' && $headmod != 'admin') {
             $font .= $res['underline'] ? ' text-decoration:underline;' : false;
             if ($font) $name = '<span style="' . $font . '">' . $name . '</span>';
             @$cms_ads[$res['type']] .= '<a href="' . ($res['show'] ? functions::checkout($res['link']) : $set['homeurl'] . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
-            if (($res['day'] != 0 && $realtime >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
+            if (($res['day'] != 0 && time() >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
                 mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $res['id'] . "'");
         }
     }
@@ -115,14 +115,13 @@ $sql = '';
 $set_karma = unserialize($set['karma']);
 if ($user_id) {
     // Фиксируем местоположение авторизованных
-    if (!$datauser['karma_off'] && $set_karma['on'] && $datauser['karma_time'] <= ($realtime - 86400)) {
-        $sql = "`karma_time` = '$realtime', ";
+    if (!$datauser['karma_off'] && $set_karma['on'] && $datauser['karma_time'] <= (time() - 86400)) {
+        $sql = "`karma_time` = '" . time() . "', ";
     }
-    //TODO: Разобраться со счетчиком перемещений, если не нужен, то удалить
     $movings = $datauser['movings'];
-    if ($datauser['lastdate'] < ($realtime - 300)) {
+    if ($datauser['lastdate'] < (time() - 300)) {
         $movings = 0;
-        $sql .= "`sestime` = '$realtime',";
+        $sql .= "`sestime` = '" . time() . "',";
     }
     if ($datauser['place'] != $headmod) {
         $movings = $movings + 1;
@@ -131,45 +130,47 @@ if ($user_id) {
     if ($datauser['browser'] != $agn)
         $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
     $totalonsite = $datauser['total_on_site'];
-    if ($datauser['lastdate'] > ($realtime - 300))
-        $totalonsite = $totalonsite + $realtime - $datauser['lastdate'];
+    if ($datauser['lastdate'] > (time() - 300))
+        $totalonsite = $totalonsite + time() - $datauser['lastdate'];
     mysql_query("UPDATE `users` SET $sql
         `total_on_site` = '$totalonsite',
-        `lastdate` = '$realtime'
+        `lastdate` = '" . time() . "'
         WHERE `id` = '$user_id'
     ");
 } else {
     // Фиксируем местоположение гостей
-    $sid = md5($ip . $agn);
     $movings = 0;
-    $req = mysql_query("SELECT * FROM `cms_guests` WHERE `session_id` = '$sid' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_sessions` WHERE `session_id` = '" . session_id() . "' LIMIT 1");
     if (mysql_num_rows($req)) {
         // Если есть в базе, то обновляем данные
         $res = mysql_fetch_assoc($req);
         $movings = $res['movings'];
-        if ($res['sestime'] < ($realtime - 300)) {
+        if ($res['sestime'] < (time() - 300)) {
             $movings = 0;
-            $sql .= "`sestime` = '$realtime',";
+            $sql .= "`sestime` = '" . time() . "',";
         }
-        if ($res['ip'] != $ip)
-            $sql .= "`ip` = '$ip',";
+        if ($res['ip'] != core::$ip || $res['ip_via_proxy'] != core::$ip_via_proxy)
+            $sql .= "`ip` = '" . core::$ip . "', `ip_via_proxy` = '" . core::$ip_via_proxy . "',";
         if ($res['browser'] != $agn)
             $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
         if ($res['place'] != $headmod) {
             $movings = $movings + 1;
             $sql .= "`movings` = '$movings', `place` = '$headmod',";
         }
-        mysql_query("UPDATE `cms_guests` SET $sql
-        `lastdate` = '$realtime'
-        WHERE `session_id` = '$sid'");
+        mysql_query("UPDATE `cms_sessions` SET
+            $sql
+            `lastdate` = '" .time()  . "'
+            WHERE `session_id` = '" . session_id() . "'
+        ");
     } else {
         // Если еще небыло в базе, то добавляем запись
-        mysql_query("INSERT INTO `cms_guests` SET
-            `session_id` = '$sid',
-            `ip` = '$ip',
+        mysql_query("INSERT INTO `cms_sessions` SET
+            `session_id` = '" . session_id() . "',
+            `ip` = '" . core::$ip . "',
+            `ip_via_proxy` = '" . core::$ip_via_proxy . "',
             `browser` = '" . mysql_real_escape_string($agn) . "',
-            `lastdate` = '$realtime',
-            `sestime` = '$realtime',
+            `lastdate` = '" . time() . "',
+            `sestime` = '" . time() . "',
             `place` = '$headmod'
         ");
     }

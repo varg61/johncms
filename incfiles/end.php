@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 // Рекламный блок MOBILEADS.RU
 $mad_siteid = 0;
 if ($mad_siteid) {
-    if (isset($_SESSION['mad_links']) && $_SESSION['mad_time'] > ($realtime - 60 * 15))
+    if (isset($_SESSION['mad_links']) && $_SESSION['mad_time'] > (time() - 60 * 15))
         echo '<div class="gmenu">' . $_SESSION['mad_links'] . '</div>';
     else
         echo '<div class="gmenu">' . mobileads($mad_siteid) . '</div>';

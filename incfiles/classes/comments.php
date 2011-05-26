@@ -44,7 +44,7 @@ class comments
     */
     function __construct($arg = array())
     {
-        global $mod, $realtime, $start, $kmess;
+        global $mod, $start, $kmess;
         $this->comments_table = $arg['comments_table'];
         $this->object_table = !empty($arg['object_table']) ? $arg['object_table'] : false;
         if (!empty($arg['sub_id_name']) && !empty($arg['sub_id'])) {
@@ -95,7 +95,7 @@ class comments
                                 $attributes['reply_id'] = $this->user_id;
                                 $attributes['reply_rights'] = $this->rights;
                                 $attributes['reply_name'] = core::$user_data['name'];
-                                $attributes['reply_time'] = $realtime;
+                                $attributes['reply_time'] = time();
                                 mysql_query("UPDATE `" . $this->comments_table . "` SET
                                     `reply` = '" . mysql_real_escape_string($message['text']) . "',
                                     `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
@@ -139,7 +139,7 @@ class comments
                             if (empty($message['error'])) {
                                 $attributes['edit_id'] = $this->user_id;
                                 $attributes['edit_name'] = core::$user_data['name'];
-                                $attributes['edit_time'] = $realtime;
+                                $attributes['edit_time'] = time();
                                 if (isset($attributes['edit_count']))
                                     ++$attributes['edit_count'];
                                 else
@@ -233,13 +233,13 @@ class comments
                             `sub_id` = '" . intval($this->sub_id) . "',
                             `user_id` = '" . $this->user_id . "',
                             `text` = '" . mysql_real_escape_string($message['text']) . "',
-                            `time` = '$realtime',
+                            `time` = '" . time() . "',
                             `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
                         ");
                         // Обновляем счетчик комментариев
                         $this->msg_total(1);
                         // Обновляем статистику пользователя
-                        mysql_query("UPDATE `users` SET `komm` = '" . (core::$user_data['komm'] + 1) . "', `lastpost` = '$realtime' WHERE `id` = '" . $this->user_id . "'");
+                        mysql_query("UPDATE `users` SET `komm` = '" . (core::$user_data['komm'] + 1) . "', `lastpost` = '" . time() . "' WHERE `id` = '" . $this->user_id . "'");
                         header('Location: ' . str_replace('&amp;', '&', $this->url));
                     } else {
                         echo functions::display_error($message['error'], '<a href="' . $this->url . '">' . core::$lng['back'] . '</a>');

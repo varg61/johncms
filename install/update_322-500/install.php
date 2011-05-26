@@ -116,7 +116,7 @@ switch ($act) {
                         $al = mysql_insert_id();
                         foreach ($file_list as $file) {
                             $handle = new upload('../gallery/foto/' . $file);
-                            $handle->file_new_name_body = 'img_' . $realtime;
+                            $handle->file_new_name_body = 'img_' . time();
                             $handle->allowed = array(
                                 'image/jpeg',
                                 'image/gif',
@@ -131,7 +131,7 @@ switch ($act) {
                             $img_name = $handle->file_dst_name;
                             if ($handle->processed) {
                                 // Обрабатываем превьюшку
-                                $handle->file_new_name_body = 'tmb_' . $realtime;
+                                $handle->file_new_name_body = 'tmb_' . time();
                                 $handle->image_resize = true;
                                 $handle->image_x = 80;
                                 $handle->image_y = 80;
@@ -145,7 +145,7 @@ switch ($act) {
                                                 `user_id` = '" . $res_u['id'] . "',
                                                 `img_name` = '" . mysql_real_escape_string($img_name) . "',
                                                 `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',
-                                                `time` = '$realtime',
+                                                `time` = '" . time() . "',
                                                 `access` = '4'
                                             ");
                                 }

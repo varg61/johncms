@@ -84,7 +84,7 @@ switch ($mod) {
         */
         $title = $lng_profile['new_photo'];
         $select = "";
-        $where = "`cms_album_files`.`time` > '" . ($realtime - 259200) . "'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` > '1'");
+        $where = "`cms_album_files`.`time` > '" . (time() - 259200) . "'" . ($rights >= 6 ? "" : " AND `cms_album_files`.`access` > '1'");
         $order = "`cms_album_files`.`time` DESC";
         $link = '';
 }

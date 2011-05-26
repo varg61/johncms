@@ -103,7 +103,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     require_once($path . $act . '.php');
 } else {
     $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
-    $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . ($realtime - 259200) . "' AND `access` > '1'"), 0);
+    $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . $lng['photo_albums'] . '</b></div>' .
         '<div class="gmenu"><p>' .
         '<img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16"/>&#160;<a href="album.php?act=top">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .

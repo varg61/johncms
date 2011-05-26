@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 define('_IN_JOHNCMS', 1);
 $headmod = 'load';
@@ -80,8 +77,7 @@ if (in_array($act, $array)) {
     if (!$set['mod_down'])
         echo '<p><font color="#FF0000"><b>' . $lng_dl['downloads_closed'] . '</b></font></p>';
     // Ссылка на новые файлы
-    $old = $realtime - (3 * 24 * 3600);
-    echo '<p><a href="?act=new">' . $lng['new_files'] . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . $old . "' AND `type` = 'file'"), 0) . ')</p>';
+    echo '<p><a href="?act=new">' . $lng['new_files'] . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0) . ')</p>';
     $cat = isset($_GET['cat']) ? intval($_GET['cat']) : '';
     if (empty($_GET['cat'])) {
         // Заголовок начальной страницы загрузок
@@ -136,8 +132,7 @@ if (in_array($act, $array)) {
                 $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file' AND `adres` LIKE '" . ($zap2['adres'] . '/' . $zap2['name']) . "%'");
                 $g = mysql_result($req, 0);
                 // Считаем новые файлы в подкаталогах
-                $old = $realtime - (3 * 24 * 3600);
-                $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file' AND `adres` LIKE '" . ($zap2['adres'] . '/' . $zap2['name']) . "%' AND `time` > '" . $old . "'");
+                $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file' AND `adres` LIKE '" . ($zap2['adres'] . '/' . $zap2['name']) . "%' AND `time` > '" . (time() - 259200) . "'");
                 $g1 = mysql_result($req, 0);
                 echo "($g";
                 if ($g1 != 0) {

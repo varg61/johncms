@@ -1,22 +1,18 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 echo '<div class="phdr">' . $lng_gal['new_photo'] . '</div>';
-$old = $realtime - (3 * 24 * 3600);
-$newfile = mysql_query("select * from `gallery` where time > '" . $old . "' and type='ft' order by time desc;");
+$newfile = mysql_query("select * from `gallery` where time > '" . (time() - 259200) . "' and type='ft' order by time desc;");
 $totalnew = mysql_num_rows($newfile);
 if (empty($_GET['page'])) {
     $page = 1;

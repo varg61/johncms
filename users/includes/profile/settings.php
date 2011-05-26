@@ -94,7 +94,7 @@ switch ($mod) {
             Записываем новые настройки, заданные пользователем
             -----------------------------------------------------------------
             */
-            $set_user['sdvig'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
+            $set_user['timeshift'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
             $set_user['avatar'] = isset($_POST['avatar']);
             $set_user['smileys'] = isset($_POST['smileys']);
             $set_user['translit'] = isset($_POST['translit']);
@@ -103,10 +103,10 @@ switch ($mod) {
             $set_user['field_h'] = isset($_POST['field_h']) ? abs(intval($_POST['field_h'])) : 3;
             $set_user['kmess'] = isset($_POST['kmess']) ? abs(intval($_POST['kmess'])) : 10;
             $set_user['quick_go'] = isset($_POST['quick_go']);
-            if ($set_user['sdvig'] < -12)
-                $set_user['sdvig'] = -12;
-            elseif ($set_user['sdvig'] > 12)
-                $set_user['sdvig'] = 12;
+            if ($set_user['timeshift'] < -12)
+                $set_user['timeshift'] = -12;
+            elseif ($set_user['timeshift'] > 12)
+                $set_user['timeshift'] = 12;
             if ($set_user['kmess'] < 5)
                 $set_user['kmess'] = 5;
             elseif ($set_user['kmess'] > 99)
@@ -164,8 +164,8 @@ switch ($mod) {
         }
         echo '<form action="profile.php?act=settings" method="post" >' .
              '<div class="menu"><p><h3>' . $lng['settings_clock'] . '</h3>' .
-             '<input type="text" name="sdvig" size="2" maxlength="3" value="' . core::$user_set['sdvig'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
-             '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", $realtime + core::$user_set['sdvig'] * 3600) . '</span> ' . $lng['system_time'] .
+             '<input type="text" name="sdvig" size="2" maxlength="3" value="' . core::$user_set['timeshift'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
+             '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", time() + (core::$system_set['timeshift'] + core::$user_set['timeshift']) * 3600) . '</span> ' . $lng['system_time'] .
              '</p><p><h3>' . $lng['system_functions'] . '</h3>' .
              '<input name="direct_url" type="checkbox" value="1" ' . (core::$user_set['direct_url'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['direct_url'] . '<br />' .
              '<input name="avatar" type="checkbox" value="1" ' . (core::$user_set['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .

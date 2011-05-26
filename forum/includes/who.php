@@ -1,22 +1,19 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 $textl = $lng_forum['who_in_forum'];
 $headmod = $id ? 'forum,' . $id : 'forumwho';
 require_once('../incfiles/head.php');
-$onltime = $realtime - 300;
 if (!$user_id) {
     header('Location: index.php');
     exit;
@@ -36,10 +33,10 @@ if ($id) {
         echo '<div class="phdr"><b>' . $lng_forum['who_in_topic'] . ':</b> <a href="index.php?id=' . $id . '">' . $res['text'] . '</a></div>';
         if ($rights > 0)
             echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng['authorized'] . '</a> | ' . $lng['guests'] : $lng['authorized'] . ' | <a href="index.php?act=who&amp;do=guest&amp;id=' . $id . '">' . $lng['guests'] . '</a>') . '</div>';
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > $onltime AND `place` = 'forum,$id'"), 0);
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` = 'forum,$id'"), 0);
         if ($total) {
-            $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? 'cms_guests' : 'users') . "` WHERE `lastdate` > $onltime AND `place` = 'forum,$id' ORDER BY " . ($do == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start, $kmess");
-            while ($res = mysql_fetch_assoc($req)) {
+            $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` = 'forum,$id' ORDER BY " . ($do == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start, $kmess");
+            while (($res = mysql_fetch_assoc($req)) !== false) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $set_user['avatar'] = 0;
                 echo functions::display_user($res, 0, ($act == 'guest' || ($rights >= 1 && $rights >= $res['rights']) ? 1 : 0));
@@ -63,10 +60,10 @@ if ($id) {
     echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['who_in_forum'] . '</div>';
     if ($rights > 0)
         echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who">' . $lng['authorized'] . '</a> | <b>' . $lng['guests'] . '</b>' : '<b>' . $lng['authorized'] . '</b> | <a href="index.php?act=who&amp;do=guest">' . $lng['guests'] . '</a>') . '</div>';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%'"), 0);
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? "cms_sessions" : "users") . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` LIKE 'forum%'"), 0);
     if ($total) {
-        $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? "cms_guests" : "users") . "` WHERE `lastdate` > $onltime AND `place` LIKE 'forum%' ORDER BY " . ($do == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start, $kmess");
-        while ($res = mysql_fetch_assoc($req)) {
+        $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? "cms_sessions" : "users") . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` LIKE 'forum%' ORDER BY " . ($do == 'guest' ? "`movings` DESC" : "`name` ASC") . " LIMIT $start, $kmess");
+        while (($res = mysql_fetch_assoc($req)) !== false) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Вычисляем местоположение
             $place = '';

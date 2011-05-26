@@ -58,7 +58,7 @@ switch ($res['rights']) {
         break;
 }
 // Метка Онлайн / Офлайн
-echo ($realtime > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+echo (time() > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
 // Время поста
 echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
 // Статус юзера

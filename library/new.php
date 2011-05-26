@@ -1,25 +1,21 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 echo '<div class="phdr"><b>' . $lng_lib['new_articles'] . '</b></div>';
-$old = $realtime - (3 * 24 * 3600);
-$req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1'");
+$req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'");
 $total = mysql_result($req, 0);
 if ($total > 0) {
-    $req = mysql_query("SELECT * FROM `lib` WHERE `time` > '" . $old . "' AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+    $req = mysql_query("SELECT * FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
     while ($newf = mysql_fetch_array($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $vr = $newf['time'] + $set_user['sdvig'] * 3600;

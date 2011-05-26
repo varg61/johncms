@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require('../incfiles/head.php');
@@ -50,7 +47,7 @@ if (mysql_num_rows($req)) {
             $res_m = mysql_fetch_assoc($req_m);
             if ($res_m['user_id'] != $user_id)
                 $error = $lng_forum['error_edit_last'] . '<br /><a href="' . $link . '">' . $lng['back'] . '</a>';
-            elseif ($res['time'] < $realtime - 300)
+            elseif ($res['time'] < time() - 300)
                 $error = $lng_forum['error_edit_timeout'] . '<br /><a href="' . $link . '">' . $lng['back'] . '</a>';
         }
     }
@@ -162,7 +159,7 @@ if (!$error) {
                     $msg = functions::trans($msg);
                 }
                 mysql_query("UPDATE `forum` SET
-                    `tedit` = '$realtime',
+                    `tedit` = '" . time() . "',
                     `edit` = '$login',
                     `kedit` = '" . ($res['kedit'] + 1) . "',
                     `text` = '$msg'

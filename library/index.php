@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 define('_IN_JOHNCMS', 1);
 
@@ -69,10 +66,8 @@ if (in_array($act, $do)) {
             if ($res > 0)
                 echo '<div class="rmenu">' . $lng['on_moderation'] . ': <a href="index.php?act=moder">' . $res . '</a></div>';
         }
-        // Сколько суток считать статьи новыми?
-        $old = $realtime - (3 * 24 * 3600);
         // Считаем новое в библиотеке
-        $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . $old . "' AND `type`='bk' AND `moder`='1'");
+        $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type`='bk' AND `moder`='1'");
         $res = mysql_result($req, 0);
         echo '<div class="gmenu"><p>';
         if ($res > 0)

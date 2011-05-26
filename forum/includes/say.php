@@ -1,18 +1,16 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 if (!$id || !$user_id || isset($ban['1']) || isset($ban['11'])) {
     header("Location: index.php");
     exit;
@@ -109,7 +107,7 @@ switch ($type1['type']) {
             mysql_query("INSERT INTO `forum` SET
                 `refid` = '$id',
                 `type` = 'm' ,
-                `time` = '$realtime',
+                `time` = '" . time() . "',
                 `user_id` = '$user_id',
                 `from` = '$login',
                 `ip` = '" . long2ip($ip) . "',
@@ -119,13 +117,13 @@ switch ($type1['type']) {
             $fadd = mysql_insert_id();
             // Обновляем время топика
             mysql_query("UPDATE `forum` SET
-                `time` = '$realtime'
+                `time` = '" . time() . "'
                 WHERE `id` = '$id'
             ");
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET
                 `postforum`='" . ($datauser['postforum'] + 1) . "',
-                `lastpost` = '$realtime'
+                `lastpost` = '" . time() . "'
                 WHERE `id` = '$user_id'
             ");
             // Вычисляем, на какую страницу попадает добавляемый пост
@@ -178,8 +176,7 @@ switch ($type1['type']) {
             require('../incfiles/end.php');
             exit;
         }
-        $vrp = $type1['time'] + $set_user['sdvig'] * 3600;
-        $vr = date("d.m.Y / H:i", $vrp);
+        $vr = functions::display_date($type1['time']);
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
                 require('../incfiles/head.php');
@@ -215,7 +212,8 @@ switch ($type1['type']) {
                     case 4:
                         $repl = $type1['from'] . ', ' . $lng_forum['reply_4'] . ' ';
                         break;
-                        default :
+
+                    default :
                         $repl = $type1['from'] . ', ';
                 }
                 $msg = $repl . ' ' . $msg;
@@ -242,7 +240,7 @@ switch ($type1['type']) {
             mysql_query("INSERT INTO `forum` SET
                 `refid` = '$th',
                 `type` = 'm',
-                `time` = '$realtime',
+                `time` = '" . time() . "',
                 `user_id` = '$user_id',
                 `from` = '$login',
                 `ip` = '" . long2ip($ip) . "',
@@ -252,13 +250,13 @@ switch ($type1['type']) {
             $fadd = mysql_insert_id();
             // Обновляем время топика
             mysql_query("UPDATE `forum`
-                SET `time` = '$realtime'
+                SET `time` = '" . time() . "'
                 WHERE `id` = '$th'
             ");
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET
                 `postforum`='" . ($datauser['postforum'] + 1) . "',
-                `lastpost` = '$realtime'
+                `lastpost` = '" . time() . "'
                 WHERE `id` = '$user_id'
             ");
             // Вычисляем, на какую страницу попадает добавляемый пост

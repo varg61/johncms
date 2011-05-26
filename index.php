@@ -45,14 +45,14 @@ switch ($act) {
         echo '<div class="phdr"><b>' . $lng['digest'] . '</b></div>';
         echo '<div class="gmenu"><p>' . $lng['hi'] . ', <b>' . $login . '</b><br/>' . $lng['welcome_to'] . ' ' . $set['copyright'] . '!<br /><a href="index.php">' . $lng['enter_on_site'] . '</a></p></div>';
         // Поздравление с днем рождения
-        if ($datauser['dayb'] == date('j', $realtime) && $datauser['monthb'] == date('n', $realtime)) {
+        if ($datauser['dayb'] == date('j', time()) && $datauser['monthb'] == date('n', time())) {
             echo '<div class="rmenu"><p>' . $lng['happy_birthday'] . '</p></div>';
         }
         // Дайджест Администратора
         if ($rights >= 1) {
-            $new_users_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . ($realtime - 86400) . "' AND `preg` = '1'"), 0);
+            $new_users_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `datereg` > '" . (time() - 86400) . "' AND `preg` = '1'"), 0);
             $reg_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg` = 0"), 0);
-            $ban_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . $realtime . "'"), 0);
+            $ban_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
             echo '<div class="menu"><p><h3>' . $lng['administrative_events'] . '</h3><ul>';
             if ($new_users_total > 0)
                 echo '<li><a href="users/index.php?act=userlist">' . $lng['users_new'] . '</a> (' . $new_users_total . ')</li>';
@@ -72,7 +72,7 @@ switch ($act) {
         }
         // Дайджест юзеров
         echo '<div class="menu"><p><h3>' . $lng['site_new'] . '</h3><ul>';
-        $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . ($realtime - 86400)), 0);
+        $total_news = mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > " . (time() - 86400)), 0);
         if ($total_news > 0)
             echo '<li><a href="news/index.php">' . $lng['news'] . '</a> (' . $total_news . ')</li>';
         $total_forum = counters::forum_new();
@@ -85,12 +85,11 @@ switch ($act) {
         if ($total_gal > 0)
             echo '<li><a href="gallery/index.php?act=new">' . $lng['gallery'] . '</a> (' . $total_gal . ')</li>';
         if ($set_karma['on']) {
-            $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . ($realtime - 86400)), 0);
+            $total_karma = mysql_result(mysql_query("SELECT COUNT(*) FROM `karma_users` WHERE `karma_user` = '$user_id' AND `time` > " . (time() - 86400)), 0);
             if ($total_karma > 0)
                 echo '<li><a href="users/profile.php?act=karma&amp;mod=new">' . $lng['new_responses'] . '</a> (' . $total_karma . ')</li>';
         }
-        $old = $realtime - (3 * 24 * 3600);
-        $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . $old), 0);
+        $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . (time() - 259200)), 0);
         if ($total_lib > 0)
             echo '<li><a href="library/index.php?act=new">' . $lng['library'] . '</a> (' . $total_lib . ')</li>';
         // Если нового нет, выводим сообщение

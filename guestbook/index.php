@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 define('_IN_JOHNCMS', 1);
 $headmod = 'guest';
@@ -86,10 +83,10 @@ switch ($act) {
             $flood = functions::antiflood();
         } else {
             // Антифлуд для гостей
-            $req = mysql_query("SELECT `time` FROM `guest` WHERE `ip` = '$ip' AND `browser` = '" . mysql_real_escape_string($agn) . "' AND `time` > '" . ($realtime - 60) . "'");
+            $req = mysql_query("SELECT `time` FROM `guest` WHERE `ip` = '$ip' AND `browser` = '" . mysql_real_escape_string($agn) . "' AND `time` > '" . (time() - 60) . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
-                $flood = $realtime - $res['time'];
+                $flood = time() - $res['time'];
             }
         }
         if ($flood)
@@ -107,17 +104,17 @@ switch ($act) {
             // Вставляем сообщение в базу
             mysql_query("INSERT INTO `guest` SET
                 `adm` = '$admset',
-                `time` = '$realtime',
+                `time` = '" . time() . "',
                 `user_id` = '$user_id',
                 `name` = '$from',
                 `text` = '" . mysql_real_escape_string($msg) . "',
-                `ip` = '$ip',
+                `ip` = '" . core::$ip . "',
                 `browser` = '" . mysql_real_escape_string($agn) . "'
             ");
             // Фиксируем время последнего поста (антиспам)
             if ($user_id) {
                 $postguest = $datauser['postguest'] + 1;
-                mysql_query("UPDATE `users` SET `postguest` = '$postguest', `lastpost` = '$realtime' WHERE `id` = '$user_id'");
+                mysql_query("UPDATE `users` SET `postguest` = '$postguest', `lastpost` = '" . time() . "' WHERE `id` = '$user_id'");
             }
             header('location: index.php');
         } else {
@@ -136,7 +133,7 @@ switch ($act) {
                 mysql_query("UPDATE `guest` SET
                     `admin` = '$login',
                     `otvet` = '" . mysql_real_escape_string(mb_substr($_POST['otv'], 0, 5000)) . "',
-                    `otime` = '$realtime'
+                    `otime` = '" . time() . "'
                     WHERE `id` = '$id'
                 ");
                 header("location: index.php");
@@ -173,7 +170,7 @@ switch ($act) {
                 mysql_query("UPDATE `guest` SET
                     `text` = '" . mysql_real_escape_string($msg) . "',
                     `edit_who` = '$login',
-                    `edit_time` = '$realtime',
+                    `edit_time` = '" . time() . "',
                     `edit_count` = '$edit_count'
                     WHERE `id` = '$id'
                 ");
@@ -209,7 +206,7 @@ switch ($act) {
                 switch ($cl) {
                     case '1':
                         // Чистим сообщения, старше 1 дня
-                        mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time` < '" . ($realtime - 86400) . "'");
+                        mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time` < '" . (time() - 86400) . "'");
                         echo '<p>' . $lng['clear_day_ok'] . '</p>';
                         break;
 
@@ -220,7 +217,7 @@ switch ($act) {
                         break;
                         default :
                         // Чистим сообщения, старше 1 недели
-                        mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time`<='" . ($realtime - 604800) . "';");
+                        mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time`<='" . (time() - 604800) . "';");
                         echo '<p>' . $lng['clear_week_ok'] . '</p>';
                 }
                 mysql_query("OPTIMIZE TABLE `guest`");
@@ -312,7 +309,7 @@ switch ($act) {
                 WHERE `guest`.`adm`='0' ORDER BY `time` DESC LIMIT $start, $kmess");
             }
             $i = 0;
-            while ($res = mysql_fetch_assoc($req)) {
+            while (($res = mysql_fetch_assoc($req)) !== false) {
                 $text = '';
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (empty($res['id'])) {
@@ -322,7 +319,7 @@ switch ($act) {
                     $res['lastdate'] = $res_g['lastdate'];
                 }
                 // Время создания поста
-                $text = ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                $text = ' <span class="gray">(' . functions::display_date($res['time']) . ')</span>';
                 if ($res['user_id']) {
                     // Для зарегистрированных показываем ссылки и смайлы
                     $post = functions::checkout($res['text'], 1, 1);
@@ -335,17 +332,14 @@ switch ($act) {
                 }
                 if ($res['edit_count']) {
                     // Если пост редактировался, показываем кем и когда
-                    $dizm = date("d.m /H:i", $res['edit_time'] + $set_user['sdvig'] * 3600);
-                    $post .= '<br /><span class="gray"><small>Изм. <b>' . $res['edit_who'] . '</b> (' . $dizm . ') <b>[' . $res['edit_count'] . ']</b></small></span>';
+                    $post .= '<br /><span class="gray"><small>Изм. <b>' . $res['edit_who'] . '</b> (' . functions::display_date($res['edit_time']) . ') <b>[' . $res['edit_count'] . ']</b></small></span>';
                 }
                 if (!empty($res['otvet'])) {
                     // Ответ Администрации
                     $otvet = functions::checkout($res['otvet'], 1, 1);
-                    $vrp1 = $res['otime'] + $set_user['sdvig'] * 3600;
-                    $vr1 = date("d.m.Y / H:i", $vrp1);
                     if ($set_user['smileys'])
                         $otvet = functions::smileys($otvet, 1);
-                    $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . $vr1 . ')<br/>' . $otvet . '</div>';
+                    $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . functions::display_date($res['otime']) . ')<br/>' . $otvet . '</div>';
                 }
                 if ($rights >= 6) {
                     $subtext = '<a href="index.php?act=otvet&amp;id=' . $res['gid'] . '">' . $lng['reply'] . '</a>' . 

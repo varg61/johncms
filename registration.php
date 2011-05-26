@@ -76,8 +76,9 @@ if (isset($_POST['submit'])) {
             `ip` = '" . core::$ip . "',
             `ip_via_proxy` = '" . core::$ip_via_proxy . "',
             `browser` = '" . mysql_real_escape_string($agn) . "',
-            `datereg` = '$realtime',
-            `lastdate` = '$realtime',
+            `datereg` = '" . time() . "',
+            `lastdate` = '" . time() . "',
+            `sestime` = '" . time() . "',
             `preg` = '$preg'
         ");
         $usid = mysql_insert_id();

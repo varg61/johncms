@@ -54,7 +54,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
     require('includes/' . $array[$key] . '.php');
 } else {
     $regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `preg`='0'"), 0);
-    $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '$realtime'"), 0);
+    $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
     echo '<div class="phdr"><b>' . $lng['admin_panel'] . '</b></div>';
 
     /*
