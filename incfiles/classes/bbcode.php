@@ -105,7 +105,7 @@ class bbcode extends core
                 } else {
                     $tmp = parse_url($url[3]);
                     $url[3] = str_replace(':', '&#58;', $url[3]);
-                    if ('http://' . $tmp['host'] == core::$system_set['homeurl']) {
+                    if ('http://' . $tmp['host'] == core::$system_set['homeurl'] || isset(core::$user_set['direct_url']) && core::$user_set['direct_url']) {
                         return '<a href="' . $url[3] . '">' . $url[3] . '</a>';
                     } else {
                         return '<a href="' . core::$system_set['homeurl'] . '/go.php?url=' . base64_encode($url[3]) . '">' . $url[3] . '</a>';
