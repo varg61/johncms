@@ -349,8 +349,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                         if (!empty($nam['from'])) {
                             echo '&#160;/&#160;' . $nam['from'];
                         }
-                        $vrp = $res['time'] + $set_user['sdvig'] * 3600;
-                        echo ' <span class="gray">(' . date("d.m.y / H:i", $vrp) . ')</span></div></div>';
+                        echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span></div></div>';
                         ++$i;
                     }
                     unset($_SESSION['fsort_id']);

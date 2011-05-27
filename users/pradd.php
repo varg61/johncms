@@ -346,8 +346,7 @@ if ($user_id) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 }
                 echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/><a href="pradd.php?id=' . $res['id'] . '&amp;act=readmess">От: ' . $res['author'] . '</a>';
-                $vrp = $res['time'] + $set_user['sdvig'] * 3600;
-                echo '&#160;<span class="gray">(' . date("d.m.y H:i", $vrp) . ')<br/>' . $lng_pm['subject'] . ':</span> ' . $res['temka'] . '<br/>';
+                echo '&#160;<span class="gray">(' . functions::display_date($res['time']) . ')<br/>' . $lng_pm['subject'] . ':</span> ' . $res['temka'] . '<br/>';
                 if (!empty($res['attach'])) {
                     echo '+ ' . $lng_pm['attachment'] . '<br/>';
                 }
@@ -430,8 +429,7 @@ if ($user_id) {
             if ($set_user['smileys'])
                 $text = functions::smileys($text, 1);
             echo "<p>" . $lng_pm['msg_from'] . " <a href='profile.php?user=" . $mass['id'] . "'>$massiv1[author]</a><br/>";
-            $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
-            echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>" . $lng_pm['subject'] . ": $massiv1[temka]<br/></div>" . $lng['text'] . ": $text</p>";
+            echo "(" . functions::display_date($massiv1['time']) . ")</p><p><div class='b'>" . $lng_pm['subject'] . ": $massiv1[temka]<br/></div>" . $lng['text'] . ": $text</p>";
             if (!empty($massiv1['attach'])) {
                 echo "<p>" . $lng_pm['attachment'] . ": <a href='?act=load&amp;id=" . $id . "'>$massiv1[attach]</a></p>";
             }
@@ -492,8 +490,7 @@ if ($user_id) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 }
                 echo '<input type="checkbox" name="delch[]" value="' . $res['id'] . '"/>' . $lng_pm['msg_for'] . ': <a href="pradd.php?id=' . $res['id'] . '&amp;act=readout">' . $res['user'] . '</a>';
-                $vrp = $res['time'] + $set_user['sdvig'] * 3600;
-                echo '&#160;<span class="gray">(' . date("d.m.y H:i", $vrp) . ')<br/>' . $lng_pm['subject'] . ':</span> ' . $res['temka'] . '<br/>';
+                echo '&#160;<span class="gray">(' . functions::display_date($res['time']) . ')<br/>' . $lng_pm['subject'] . ':</span> ' . $res['temka'] . '<br/>';
                 if (!empty($res['attach'])) {
                     echo "+ " . $lng_pm['attachment'] . "<br/>";
                 }
@@ -527,8 +524,7 @@ if ($user_id) {
             if ($set_user['smileys'])
                 $text = functions::smileys($text, ($massiv1['from'] == $nickadmina || $massiv1['from'] == $nickadmina2 || $massiv11['rights'] >= 1) ? 1 : 0);
             echo "<p>" . $lng_pm['msg_for'] . " <a href='profile.php?user=" . $mass['id'] . "'>$massiv1[user]</a><br/>";
-            $vrp = $massiv1['time'] + $set_user['sdvig'] * 3600;
-            echo "(" . date("d.m.y H:i", $vrp) . ")</p><p><div class='b'>" . $lng_pm['subject'] . ": $massiv1[temka]<br/></div>" . $lng['text'] . ": $text</p>";
+            echo "(" . functions::display_date($massiv1['time']) . ")</p><p><div class='b'>" . $lng_pm['subject'] . ": $massiv1[temka]<br/></div>" . $lng['text'] . ": $text</p>";
             if (!empty($massiv1['attach'])) {
                 echo "<p>" . $lng_pm['attachment'] . ": $massiv1[attach]</p>";
             }

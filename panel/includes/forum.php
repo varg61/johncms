@@ -500,7 +500,7 @@ switch ($mod) {
                 while ($res = mysql_fetch_assoc($req)) {
                     $subcat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
                     $cat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $subcat['refid'] . "'"));
-                    $ttime = '<span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                    $ttime = '<span class="gray">(' . functions::display_date($res['time']) . ')</span>';
                     $text = '<a href="../forum/index.php?id=' . $res['fid'] . '"><b>' . $res['text'] . '</b></a>';
                     $text .= '<br /><small><a href="../forum/index.php?id=' . $cat['id'] . '">' . $cat['text'] . '</a> / <a href="../forum/index.php?id=' . $subcat['id'] . '">' . $subcat['text'] . '</a></small>';
                     $subtext = '<span class="gray">' . $lng_forum['filter_to'] . ':</span> ';
@@ -580,7 +580,7 @@ switch ($mod) {
                 $i = 0;
                 while ($res = mysql_fetch_assoc($req)) {
                     $res['ip'] = ip2long($res['ip']);
-                    $posttime = ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>';
+                    $posttime = ' <span class="gray">(' . functions::display_date($res['time']) . ')</span>';
                     $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['fid'] . "'"), 0) / $kmess);
                     $text = mb_substr($res['text'], 0, 500);
                     $text = functions::checkout($text, 1, 0);

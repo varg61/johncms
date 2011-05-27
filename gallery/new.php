@@ -110,11 +110,9 @@ if ($totalnew != 0) {
             }
             imagedestroy($im);
             imagedestroy($im1);
-            $vrf = $newf[time] + $set_user['sdvig'] * 3600;
-            $vrf1 = date("d.m.y / H:i", $vrf);
             $kom = mysql_query("select * from `gallery` where type='km' and refid='" . $newf['id'] . "';");
             $kom1 = mysql_num_rows($kom);
-            echo "</a><br/>" . $lng['date'] . ": $vrf1<br/>" . $lng['description'] . ": $newf[text]<br/>";
+            echo "</a><br/>" . $lng['date'] . ': ' . functions::display_date($newf['time']) . '<br/>' . $lng['description'] . ": $newf[text]<br/>";
             $al = mysql_query("select * from `gallery` where type = 'al' and id = '" . $newf['refid'] . "';");
             $al1 = mysql_fetch_array($al);
             $rz = mysql_query("select * from `gallery` where type = 'rz' and id = '" . $al1['refid'] . "';");

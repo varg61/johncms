@@ -333,7 +333,7 @@ switch ($mod) {
                 );
                 echo '<div class="sub">' .
                     '<div>' . functions::display_menu($menu) . '</div>' .
-                    '<p><span class="gray">' . $lng['installation_date'] . ':</span> ' . date('d.m.y в H:i', $res['time'] + $sdvig) . '<br />' .
+                    '<p><span class="gray">' . $lng['installation_date'] . ':</span> ' . functions::display_date($res['time']) . '<br />' .
                     '<span class="gray">' . $lng['placing'] . ':</span>&nbsp;' . $array_placing[$res['layout']] . '<br />' .
                     '<span class="gray">' . $lng['to_show'] . ':</span>&nbsp;' . $array_show[$res['view']];
                 // Вычисляем условия договора на рекламу

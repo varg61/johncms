@@ -32,10 +32,8 @@ if ($rights == 5 || $rights >= 6) {
         $req = mysql_query("SELECT * FROM `lib` WHERE `type` = 'bk' AND `moder` = '0' LIMIT " . $start . "," . $kmess);
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $vr = $res['time'] + $set_user['sdvig'] * 3600;
-            $vr = date("d.m.y / H:i", $vr);
             $tx = $res['soft'];
-            echo "<a href='index.php?id=" . $res['id'] . "'>$res[name]</a><br/>" . $lng_lib['added'] . ": $res[avtor] ($vr)<br/>$tx <br/>";
+            echo "<a href='index.php?id=" . $res['id'] . "'>$res[name]</a><br/>" . $lng_lib['added'] . ": $res[avtor] (" . functions::display_date($res['time']) . ")<br/>$tx <br/>";
             $nadir = $res['refid'];
             $pat = "";
             while ($nadir != "0") {

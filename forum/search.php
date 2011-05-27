@@ -98,7 +98,7 @@ if ($search && !$error) {
                 echo '<b>' . $res['text'] . '</b><br />';
             }
             echo '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
-            echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
+            echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span><br/>';
             $text = $search_t ? $res_p['text'] : $res['text'];
             $text = functions::checkout(mb_substr($text, 0, 500), 1);
             $text = str_replace('qwertyzxcytrewq', '', $text);

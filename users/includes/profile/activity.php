@@ -39,7 +39,7 @@ switch ($mod) {
             $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . functions::checkout($res['text'], 2, 1) . '<div class="sub">' .
-                    '<span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>' .
+                    '<span class="gray">(' . functions::display_date($res['time']) . ')</span>' .
                     '</div></div>';
                 ++$i;
             }
@@ -70,7 +70,7 @@ switch ($mod) {
                     '<div class="sub">' .
                     '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
                     '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
-                    '<br /><span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>' .
+                    '<br /><span class="gray">(' . functions::display_date($res['time']) . ')</span>' .
                     '</div></div>';
                 ++$i;
             }
@@ -102,7 +102,7 @@ switch ($mod) {
                     '<div class="sub">' .
                     '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
                     '<a href="' . $set['homeurl'] . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
-                    '<br /><span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span>' .
+                    '<br /><span class="gray">(' . functions::display_date($res['time']) . ')</span>' .
                     '</div></div>';
                 ++$i;
             }

@@ -126,7 +126,7 @@ if ($total) {
         if ($res['access'] == 4 || $rights >= 6) {
             echo vote_photo($res) .
                 '<div class="gray">' . $lng['count_views'] . ': ' . $res['views'] . ', ' . $lng['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
-                '<div class="gray">' . $lng['date'] . ': ' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . '</div>' .
+                '<div class="gray">' . $lng['date'] . ': ' . functions::display_date($res['time']) . '</div>' .
                 '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . $lng['comments'] . '</a> (' . $res['comm_count'] . ')' .
                 '<br /><a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . $lng['download'] . '</a>';
         }

@@ -94,7 +94,7 @@ switch ($mod) {
             Записываем новые настройки, заданные пользователем
             -----------------------------------------------------------------
             */
-            $set_user['timeshift'] = isset($_POST['sdvig']) ? intval($_POST['sdvig']) : 0;
+            $set_user['timeshift'] = isset($_POST['timeshift']) ? intval($_POST['timeshift']) : 0;
             $set_user['avatar'] = isset($_POST['avatar']);
             $set_user['smileys'] = isset($_POST['smileys']);
             $set_user['translit'] = isset($_POST['translit']);
@@ -164,7 +164,7 @@ switch ($mod) {
         }
         echo '<form action="profile.php?act=settings" method="post" >' .
              '<div class="menu"><p><h3>' . $lng['settings_clock'] . '</h3>' .
-             '<input type="text" name="sdvig" size="2" maxlength="3" value="' . core::$user_set['timeshift'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
+             '<input type="text" name="timeshift" size="2" maxlength="3" value="' . core::$user_set['timeshift'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
              '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", time() + (core::$system_set['timeshift'] + core::$user_set['timeshift']) * 3600) . '</span> ' . $lng['system_time'] .
              '</p><p><h3>' . $lng['system_functions'] . '</h3>' .
              '<input name="direct_url" type="checkbox" value="1" ' . (core::$user_set['direct_url'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['direct_url'] . '<br />' .

@@ -113,11 +113,9 @@ if (in_array($act, $do)) {
                 $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by `time` desc LIMIT " . $start . "," . $kmess);
                 while ($bk1 = mysql_fetch_array($bk)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    $vr = $bk1['time'] + $set_user['sdvig'] * 3600;
-                    $vr = date("d.m.y / H:i", $vr);
                     echo $div . '<b><a href="index.php?id=' . $bk1['id'] . '">' . htmlentities($bk1['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
                     echo htmlentities($bk1['announce'], ENT_QUOTES, 'UTF-8') . '<br />';
-                    echo $lng_lib['added'] . ': ' . $bk1['avtor'] . ' (' . $vr . ')<br />';
+                    echo $lng_lib['added'] . ': ' . $bk1['avtor'] . ' (' . functions::display_date($bk1['time']) . ')<br />';
                     echo $lng_lib['reads'] . ': ' . $bk1['count'] . '</div>';
                     ++$i;
                 }

@@ -48,8 +48,6 @@ while ($mass = mysql_fetch_array($mess)) {
     } else {
         echo $mass['avtor'];
     }
-    $vr = $mass['time'] + $set_user['sdvig'] * 3600;
-    $vr1 = date("d.m.Y / H:i", $vr);
     switch ($mass1['rights']) {
         case 7:
             echo ' Adm ';
@@ -74,7 +72,7 @@ while ($mass = mysql_fetch_array($mess)) {
     } else {
         echo '<font color="#00AA00"> [ON]</font>';
     }
-    echo "($vr1)<br/>";
+    echo '(' . functions::display_date($mass['time']) . ')<br/>';
     if ($set_user['smileys']) {
         $tekst = functions::smileys($mass['text'], ($mass['from'] == $nickadmina || $mass['from'] == $nickadmina2 || $mass1['rights'] >= 1) ? 1 : 0);
     } else {

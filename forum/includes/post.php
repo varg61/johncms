@@ -60,7 +60,7 @@ switch ($res['rights']) {
 // Метка Онлайн / Офлайн
 echo (time() > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
 // Время поста
-echo ' <span class="gray">(' . date("d.m.Y / H:i", $res['time'] + $set_user['sdvig'] * 3600) . ')</span><br/>';
+echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span><br/>';
 // Статус юзера
 if (!empty($res['status']))
     echo '<div class="status"><img src="../images/star.gif" alt=""/>&#160;' . $res['status'] . '</div>';

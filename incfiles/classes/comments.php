@@ -107,7 +107,7 @@ class comments
                             }
                         } else {
                             $text = '<a href="' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>' .
-                                    ' (' . date("d.m.Y / H:i:s", $res['time'] + core::$user_set['sdvig'] * 3600) . ')<br />' .
+                                    ' (' . functions::display_date($res['time']) . ')<br />' .
                                     functions::checkout($res['text']);
                             $reply = functions::checkout($res['reply']);
                             echo $this->msg_form('&amp;mod=reply&amp;item=' . $this->item, $text, $reply) .
@@ -155,7 +155,7 @@ class comments
                             }
                         } else {
                             $author = '<a href="' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
-                            $author .= ' (' . date("d.m.Y / H:i:s", $res['time'] + core::$user_set['sdvig'] * 3600) . ')<br />';
+                            $author .= ' (' . functions::display_date($res['time']) . ')<br />';
                             $text = functions::checkout($res['text']);
                             echo $this->msg_form('&amp;mod=edit&amp;item=' . $this->item, $author, $text);
                         }
@@ -283,7 +283,7 @@ class comments
                             $text = functions::smileys($text, $res['rights'] >= 1 ? 1 : 0);
                         if (isset($attributes['edit_count'])) {
                             $text .= '<br /><span class="gray"><small>' . core::$lng['edited'] . ': <b>' . $attributes['edit_name'] . '</b>' .
-                                     ' (' . date("d.m.Y / H:i", $attributes['edit_time'] + core::$user_set['sdvig'] * 3600) . ') <b>' .
+                                     ' (' . functions::display_date($attributes['edit_time']) . ') <b>' .
                                      '[' . $attributes['edit_count'] . ']</b></small></span>';
                         }
                         if (!empty($res['reply'])) {
@@ -292,10 +292,10 @@ class comments
                                 $reply = functions::smileys($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
                             $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><small>' .
                                      '<a href="' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
-                                     ' (' . date("d.m.Y / H:i:s", $attributes['reply_time'] + core::$user_set['sdvig'] * 3600) . ')</small><br/>' . $reply . '</div>';
+                                     ' (' . functions::display_date($attributes['reply_time']) . ')</small><br/>' . $reply . '</div>';
                         }
                         $user_arg = array(
-                            'header' => ' <span class="gray">(' . date("d.m.Y / H:i:s", $res['time'] + core::$user_set['sdvig'] * 3600) . ')</span>',
+                            'header' => ' <span class="gray">(' . functions::display_date($res['time']) . ')</span>',
                             'body' => $text,
                             'sub' => functions::display_menu($menu),
                             'iphide' => (core::$user_rights ? false : true)

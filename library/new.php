@@ -16,14 +16,12 @@ $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259
 $total = mysql_result($req, 0);
 if ($total > 0) {
     $req = mysql_query("SELECT * FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+    $i = 0;
     while ($newf = mysql_fetch_array($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        $vr = $newf['time'] + $set_user['sdvig'] * 3600;
-        $vr = date("d.m.y / H:i", $vr);
-        echo $div;
         echo '<b><a href="?id=' . $newf['id'] . '">' . htmlentities($newf['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
         echo htmlentities($newf['announce'], ENT_QUOTES, 'UTF-8') . '<br />';
-        echo $lng_lib['added'] . ': ' . $newf['avtor'] . ' (' . $vr . ')<br/>';
+        echo $lng_lib['added'] . ': ' . $newf['avtor'] . ' (' . functions::display_date($newf['time']) . ')<br/>';
         $nadir = $newf['refid'];
         $dirlink = $nadir;
         $pat = "";
