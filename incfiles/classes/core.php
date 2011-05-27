@@ -209,7 +209,11 @@ class core
     */
     private function ip_ban()
     {
-        $req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip` WHERE '" . self::$ip . "' BETWEEN `ip1` AND `ip2` LIMIT 1") or die('Error: table "cms_ban_ip"');
+        $req = mysql_query("SELECT `ban_type`, `link` FROM `cms_ban_ip`
+            WHERE '" . self::$ip . "' BETWEEN `ip1` AND `ip2`
+            " . (self::$ip_via_proxy ? " OR '" . self::$ip_via_proxy . "' BETWEEN `ip1` AND `ip2`" : "") . "
+            LIMIT 1
+        ") or die('Error: table "cms_ban_ip"');
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_array($req);
             switch ($res['ban_type']) {

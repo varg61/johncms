@@ -36,20 +36,24 @@ switch ($mod) {
                 require_once('../incfiles/end.php');
                 exit;
             }
+            $ip1 = 0;
+            $ip2 = 0;
+            $ipt1 = array();
+            $ipt2 = array();
             if (strstr($get_ip, '-')) {
                 // Обрабатываем диапазон адресов
                 $mode = 1;
                 $array = explode('-', $get_ip);
                 $get_ip = trim($array[0]);
                 if (!core::ip_valid($get_ip))
-                    $error[] = $lng['error_firstip'];
+                $error[] = $lng['error_firstip'];
                 else
-                    $ip1 = ip2long($get_ip);
+                $ip1 = ip2long($get_ip);
                 $get_ip = trim($array[1]);
                 if (!core::ip_valid($get_ip))
-                    $error[] = $lng['error_secondip'];
+                $error[] = $lng['error_secondip'];
                 else
-                    $ip2 = ip2long($get_ip);
+                $ip2 = ip2long($get_ip);
             } elseif (strstr($get_ip, '*')) {
                 // Обрабатываем адреса с маской
                 $mode = 2;
@@ -83,6 +87,7 @@ switch ($mod) {
                 $total = @mysql_num_rows($req);
                 if ($total > 0) {
                     echo functions::display_error($lng['ip_ban_conflict_address']);
+                    $i = 0;
                     while ($res = mysql_fetch_array($req)) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $get_ip = $res['ip1'] == $res['ip2'] ? long2ip($res['ip1']) : long2ip($res['ip1']) . ' - ' . long2ip($res['ip2']);
@@ -108,8 +113,8 @@ switch ($mod) {
                     exit;
                 }
             }
-            // Проверяем, не попадает ли IP администратора в забаниваемый диапазон
-            if ($ip >= $ip1 && $ip <= $ip2)
+            // Проверяем, не попадает ли IP администратора в диапазон
+            if ((core::$ip >= $ip1 && core::$ip <= $ip2) || (core::$ip_via_proxy >= $ip1 && core::$ip_via_proxy <= $ip2))
                 $error = $lng['ip_ban_conflict_admin'];
             if (!$error) {
                 // Окно подтверждения
@@ -165,7 +170,7 @@ switch ($mod) {
                 '&nbsp;<input type="text" name="url"/><br />' .
                 '<small>&nbsp;' . $lng['not_mandatory_field'] . '<br />&nbsp;' . $lng['url_help'] . '</small></p>' .
                 '<p><h3>' . $lng['reason'] . '</h3>' .
-                '&nbsp;<textarea rows="' . $set_user['field_h'] . '" name="reason"></textarea>' .
+                '&nbsp;<textarea rows="' . core::$user_set['field_h'] . '" name="reason"></textarea>' .
                 '<br /><small>&nbsp;' . $lng['not_mandatory_field'] . '</small></p>' .
                 '<p><input type="submit" name="submit" value=" ' . $lng['ban_do'] . ' "/></p></div>' .
                 '<div class="phdr"><small>' . $lng['ip_ban_help'] . '</small></div>' .
