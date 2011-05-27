@@ -187,7 +187,7 @@ if ($user_id) {
                     if ($cpg > 1)
                         echo '&#160;<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&gt;&gt;</a>';
                     echo '<div class="sub">' . $res['from'] . ($colmes1 > 1 ? '&#160;/&#160;' . $nick['from'] : '') .
-                        ' <span class="gray">(' . date("d.m.y / H:i", $nick['time']) . ')</span><br />' .
+                        ' <span class="gray">(' . functions::display_date($nick['time']) . ')</span><br />' .
                         '<a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a>&#160;/&#160;<a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>' .
                         '</div></div>';
                     ++$i;

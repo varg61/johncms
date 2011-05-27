@@ -221,8 +221,14 @@ class functions extends core
     Показываем дату с учетом сдвига времени
     -----------------------------------------------------------------
     */
-    public static function display_date($var){
-        return date("d.m.Y / H:i", $var + self::$time_shift * 3600);
+    public static function display_date($var)
+    {
+        $shift = (self::$system_set['timeshift'] + self::$user_set['timeshift']) * 3600;
+        if (date('z', $var + $shift) == date('z', time() + $shift))
+            return self::$lng['today'] . ', ' . date("H:i", $var + $shift);
+        if (date('z', $var + $shift) == date('z', time() + $shift) - 1)
+            return self::$lng['yesterday'] . ', ' . date("H:i", $var + $shift);
+        return date("d.m.Y / H:i", $var + $shift);
     }
 
     /*

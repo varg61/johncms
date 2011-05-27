@@ -22,7 +22,6 @@ class core
     public static $lng = array();                                              // Массив с фразами языка
     public static $deny_registration = false;                                  // Запрет регистрации пользователей
     public static $is_mobile = false;                                          // Мобильный браузер
-    public static $time_shift = 0;                                             // Сдвиг времени
 
     public static $user_id = false;                                            // Идентификатор пользователя
     public static $user_rights = 0;                                            // Права доступа
@@ -256,7 +255,6 @@ class core
         if (isset($set['lng']) && !empty($set['lng'])) self::$lng_iso = $set['lng'];
         if(isset($set['lng_list'])) self::$lng_list = unserialize($set['lng_list']);
         self::$system_set = $set;
-        self::$time_shift = $set['timeshift'];
     }
 
     /*
@@ -312,7 +310,6 @@ class core
                     self::$user_rights = $user_data['rights'];
                     self::$user_data = $user_data;
                     self::$user_set = !empty($user_data['set_user']) ? unserialize($user_data['set_user']) : $this->user_setings_default();
-                    self::$time_shift = self::$time_shift + self::$user_set['timeshift'];
                     $this->user_ip_history();
                     $this->user_ban_check();
                 } else {
