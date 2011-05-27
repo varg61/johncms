@@ -502,19 +502,13 @@ class functions extends core
     static function timecount($var)
     {
         global $lng;
-        if ($var < 0)
-            $var = 0;
+        if ($var < 0) $var = 0;
         $day = ceil($var / 86400);
-        if ($var > 345600) {
-            $str = $day . ' ' . $lng['timecount_days'];
-        } elseif ($var >= 172800) {
-            $str = $day . ' ' . $lng['timecount_days_r'];
-        } elseif ($var >= 86400) {
-            $str = '1 ' . $lng['timecount_day'];
-        } else {
-            $str = date('H:i:s', ($var - 14400));
-        }
-        return $str;
+        if ($var > 345600) return $day . ' ' . $lng['timecount_days'];
+        if ($var >= 172800) return $day . ' ' . $lng['timecount_days_r'];
+        if ($var >= 86400) return '1 ' . $lng['timecount_day'];
+        //return date('G:i:s', ($var - 14400));
+        return date("G:i:s", mktime(0, 0, $var));
     }
 
     /*

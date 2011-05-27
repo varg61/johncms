@@ -14,7 +14,7 @@ define('_IN_JOHNCMS', 1);
 $headmod = 'news';
 require('../incfiles/core.php');
 $lng_news = core::load_lng('news'); // Загружаем язык модуля
-$textl = $lng_news['site_news'];
+$textl = $lng['news'];
 require('../incfiles/head.php');
 switch ($do) {
     case 'add':
@@ -38,6 +38,7 @@ switch ($do) {
                 if ($flood)
                     $error[] = $lng['error_flood'] . ' ' . $flood . '&#160;' . $lng['seconds'];
                 if (!$error) {
+                    $rid = 0;
                     if (!empty($_POST['pf']) && ($_POST['pf'] != '0')) {
                         $pf = intval($_POST['pf']);
                         $rz = $_POST['rz'];
@@ -235,15 +236,14 @@ switch ($do) {
         $req = mysql_query("SELECT COUNT(*) FROM `news`");
         $total = mysql_result($req, 0);
         $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT $start, $kmess");
+        $i = 0;
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             $text = functions::checkout($res['text'], 1, 1);
             if ($set_user['smileys'])
                 $text = functions::smileys($text, 1);
-            $vr = $res['time'] + $set_user['sdvig'] * 3600;
-            $vr1 = date("d.m.y / H:i", $vr);
             echo '<h3>' . $res['name'] . '</h3>' .
-                 '<span class="gray"><small>' . $lng['author'] . ': ' . $res['avt'] . ' (' . $vr1 . ')</small></span>' .
+                 '<span class="gray"><small>' . $lng['author'] . ': ' . $res['avt'] . ' (' . functions::display_date($res['time']) . ')</small></span>' .
                  '<br />' . $text . '<div class="sub">';
             if ($res['kom'] != 0 && $res['kom'] != "") {
                 $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");
