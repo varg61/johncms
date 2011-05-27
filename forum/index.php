@@ -399,6 +399,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                 }
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0);
+                if($start > $colmes) $start = $colmes - $kmess;
                 // Выводим название топика
                 echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
                 if ($colmes > $kmess)
@@ -417,8 +418,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                 -----------------------------------------------------------------
                 */
                 if ($type1['realid']) {
-                    if (isset($_GET['clip']))
-                        $clip_forum = '&amp;clip';
+                    $clip_forum = isset($_GET['clip']) ? '&amp;clip' : '';
                     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user`='$user_id' AND `topic`='$id'"), 0);
                     $topic_vote = mysql_fetch_assoc(mysql_query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type`='1' AND `topic`='$id' LIMIT 1"));
                     echo '<div  class="gmenu"><b>' . functions::checkout($topic_vote['name']) . '</b><br />';

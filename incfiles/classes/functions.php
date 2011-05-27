@@ -267,33 +267,33 @@ class functions extends core
             $start = max(0, (int)$max_value - (((int)$max_value % (int)$num_per_page) == 0 ? $num_per_page : ((int)$max_value % (int)$num_per_page)));
         else
             $start = max(0, (int)$start - ((int)$start % (int)$num_per_page));
-        $base_link = '<a class="navpg" href="' . strtr($base_url, array('%' => '%%')) . 'start=%d' . '">%s</a> ';
-        $pageindex = $start == 0 ? '' : sprintf($base_link, $start - $num_per_page, '&lt;&lt;');
+        $base_link = '<a class="navpg" href="' . strtr($base_url, array('%' => '%%')) . 'page=%d' . '">%s</a> ';
+        $out = $start == 0 ? '' : sprintf($base_link, $start / $num_per_page, '&lt;&lt;');
         if ($start > $num_per_page * $neighbors)
-            $pageindex .= sprintf($base_link, 0, '1');
+            $out .= sprintf($base_link, 1, '1');
         if ($start > $num_per_page * ($neighbors + 1))
-            $pageindex .= '<span style="font-weight: bold;"> ... </span>';
+            $out .= '<span style="font-weight: bold;"> ... </span>';
         for ($nCont = $neighbors; $nCont >= 1; $nCont--)
             if ($start >= $num_per_page * $nCont) {
                 $tmpStart = $start - $num_per_page * $nCont;
-                $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
+                $out .= sprintf($base_link, $tmpStart / $num_per_page + 1, $tmpStart / $num_per_page + 1);
             }
-        $pageindex .= '[<b>' . ($start / $num_per_page + 1) . '</b>] ';
+        $out .= '[<b>' . ($start / $num_per_page + 1) . '</b>] ';
         $tmpMaxPages = (int)(($max_value - 1) / $num_per_page) * $num_per_page;
         for ($nCont = 1; $nCont <= $neighbors; $nCont++)
             if ($start + $num_per_page * $nCont <= $tmpMaxPages) {
                 $tmpStart = $start + $num_per_page * $nCont;
-                $pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
+                $out .= sprintf($base_link, $tmpStart / $num_per_page + 1, $tmpStart / $num_per_page + 1);
             }
         if ($start + $num_per_page * ($neighbors + 1) < $tmpMaxPages)
-            $pageindex .= '<span style="font-weight: bold;"> ... </span>';
+            $out .= '<span style="font-weight: bold;"> ... </span>';
         if ($start + $num_per_page * $neighbors < $tmpMaxPages)
-            $pageindex .= sprintf($base_link, $tmpMaxPages, $tmpMaxPages / $num_per_page + 1);
+            $out .= sprintf($base_link, $tmpMaxPages / $num_per_page + 1, $tmpMaxPages / $num_per_page + 1);
         if ($start + $num_per_page < $max_value) {
-            $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start + $num_per_page);
-            $pageindex .= sprintf($base_link, $display_page, '&gt;&gt;');
+            $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start / $num_per_page + 2);
+            $out .= sprintf($base_link, $display_page, '&gt;&gt;');
         }
-        return $pageindex;
+        return $out;
     }
 
     /*

@@ -22,6 +22,7 @@ require('../incfiles/head.php');
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['users_list'] . '</div>';
 $req = mysql_query("SELECT COUNT(*) FROM `users`");
 $total = mysql_result($req, 0);
+if($start > $total) $start = $total - $kmess;
 $req = mysql_query("SELECT `id`, `name`, `sex`, `lastdate`, `datereg`, `status`, `rights`, `ip`, `browser`, `rights` FROM `users` WHERE `preg` = 1 ORDER BY `datereg` DESC LIMIT $start, $kmess");
 $i = 0;
 while ($res = mysql_fetch_assoc($req)) {
