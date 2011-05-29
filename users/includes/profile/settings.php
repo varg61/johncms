@@ -172,9 +172,9 @@ switch ($mod) {
              '<input name="smileys" type="checkbox" value="1" ' . (core::$user_set['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>' .
              '<input name="digest" type="checkbox" value="1" ' . (core::$user_set['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
              '</p><p><h3>' . $lng['text_input'] . '</h3>' .
-             '<input type="text" name="field_h" size="2" maxlength="1" value="' . core::$user_set['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />' .
-             '<input name="translit" type="checkbox" value="1" ' . (core::$user_set['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'] .
-             '</p><p><h3>' . $lng['apperance'] . '</h3>' .
+             '<input type="text" name="field_h" size="2" maxlength="1" value="' . core::$user_set['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />';
+        if(core::$lng_iso == 'ru' || core::$lng_iso == 'uk') echo '<input name="translit" type="checkbox" value="1" ' . (core::$user_set['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'];
+        echo '</p><p><h3>' . $lng['apperance'] . '</h3>' .
              '<input type="text" name="kmess" size="2" maxlength="2" value="' . core::$user_set['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
              '<input name="quick_go" type="checkbox" value="1" ' . (core::$user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .
              '</p>';

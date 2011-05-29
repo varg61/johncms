@@ -51,6 +51,8 @@ class core
         $this->authorize();                                                    // Авторизация пользователей
         $this->lng_detect();                                                   // Определяем язык системы
         self::$lng = self::load_lng();                                         // Загружаем язык
+        // Оставляем транслит только для Русского
+        if(self::$lng_iso != 'ru' && self::$lng_iso != 'uk') self::$user_set['translit'] = 0;
     }
 
     function __destruct()

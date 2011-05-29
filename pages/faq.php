@@ -388,9 +388,9 @@ switch ($act) {
         */
         echo '<div class="phdr"><b>F.A.Q.</b></div>' .
              '<div class="menu"><a href="faq.php?act=forum">' . $lng_faq['forum_rules'] . '</a></div>' .
-             '<div class="menu"><a href="faq.php?act=tags">' . $lng_faq['tags_faq'] . '</a></div>' .
-             '<div class="menu"><a href="faq.php?act=trans">' . $lng_faq['translit_help'] . '</a></div>' .
-             '<div class="menu"><a href="faq.php?act=avatars">' . $lng['avatars'] . '</a></div>' .
+             '<div class="menu"><a href="faq.php?act=tags">' . $lng_faq['tags'] . '</a></div>';
+        if(core::$user_set['translit']) echo '<div class="menu"><a href="faq.php?act=trans">' . $lng_faq['translit_help'] . '</a></div>';
+        echo '<div class="menu"><a href="faq.php?act=avatars">' . $lng['avatars'] . '</a></div>' .
              '<div class="menu"><a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
              '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></div>';
 }
