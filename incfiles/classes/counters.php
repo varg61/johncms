@@ -47,14 +47,13 @@ class counters
     */
     static function forum()
     {
-        global $user_id, $rights, $set;
-        $total_thm = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
-        $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'" . ($rights >= 7 ? "" : " AND `close` != '1'")), 0);
+        $total_thm = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'" . (core::$user_rights >= 7 ? "" : " AND `close` != '1'")), 0);
+        $total_msg = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'" . (core::$user_rights >= 7 ? "" : " AND `close` != '1'")), 0);
         $out = $total_thm . '&#160;/&#160;' . $total_msg . '';
-        if ($user_id) {
+        if (core::$user_id) {
             $new = self::forum_new();
             if ($new)
-                $out .= '&#160;/&#160;<span class="red"><a href="' . $set['homeurl'] . '/forum/index.php?act=new">+' . $new . '</a></span>';
+                $out .= '&#160;/&#160;<span class="red"><a href="' . core::$system_set['homeurl'] . '/forum/index.php?act=new">+' . $new . '</a></span>';
         }
         return $out;
     }
@@ -69,21 +68,20 @@ class counters
     */
     static function forum_new($mod = 0)
     {
-        global $user_id, $rights, $lng;
-        if ($user_id) {
+        if (core::$user_id) {
             $req = mysql_query("SELECT COUNT(*) FROM `forum`
-                LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . $user_id . "'
-                WHERE `forum`.`type`='t'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "
+                LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . core::$user_id . "'
+                WHERE `forum`.`type`='t'" . (core::$user_rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                 AND (`cms_forum_rdm`.`topic_id` Is Null
                 OR `forum`.`time` > `cms_forum_rdm`.`time`)");
             $total = mysql_result($req, 0);
             if ($mod)
-                return '<a href="index.php?act=new">' . $lng['unread'] . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
+                return '<a href="index.php?act=new">' . core::$lng['unread'] . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
             else
                 return $total;
         } else {
             if ($mod)
-                return '<a href="index.php?act=new">' . $lng['last_activity'] . '</a>';
+                return '<a href="index.php?act=new">' . core::$lng['last_activity'] . '</a>';
             else
                 return false;
         }
@@ -148,7 +146,6 @@ class counters
     */
     static function library()
     {
-        global $rights, $set;
         $countf = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
         $countf1 = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
         $out = $countf;
@@ -156,8 +153,8 @@ class counters
             $out = $out . '&#160;/&#160;<span class="red"><a href="/library/index.php?act=new">+' . $countf1 . '</a></span>';
         $countm = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
 
-        if (($rights == 5 || $rights >= 6) && $countm > 0)
-            $out = $out . "/<a href='" . $set['homeurl'] . "/library/index.php?act=moder'><font color='#FF0000'> M:$countm</font></a>";
+        if ((core::$user_rights == 5 || core::$user_rights >= 6) && $countm > 0)
+            $out = $out . "/<a href='" . core::$system_set['homeurl'] . "/library/index.php?act=moder'><font color='#FF0000'> M:$countm</font></a>";
         return $out;
     }
 
@@ -168,10 +165,9 @@ class counters
     */
     static function online()
     {
-        global $user_id, $lng, $set;
         $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `lastdate` > '" . (time() - 300) . "'"), 0);
         $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `lastdate` > '" . (time() - 300) . "'"), 0);
-        return ($user_id || $set['active'] ? '<a href="' . $set['homeurl'] . '/users/index.php?act=online">' . $lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : $lng['online'] . ': ' . $users . ' / ' . $guests);
+        return (core::$user_id || core::$system_set['active'] ? '<a href="' . core::$system_set['homeurl'] . '/users/index.php?act=online">' . core::$lng['online'] . ': ' . $users . ' / ' . $guests . '</a>' : core::$lng['online'] . ': ' . $users . ' / ' . $guests);
     }
 
     /*

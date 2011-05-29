@@ -22,5 +22,4 @@ ALTER TABLE `users` DROP `kod`;
 ALTER TABLE `users` ADD `smileys` text NOT NULL;
 
 DELETE FROM `cms_settings` WHERE `key` = 'lng_id' LIMIT 1;
-DELETE FROM `cms_settings` WHERE `key` = 'gzip' LIMIT 1;
 UPDATE `cms_settings` SET `key` = 'lng' WHERE `key` = 'lng_iso' LIMIT 1;

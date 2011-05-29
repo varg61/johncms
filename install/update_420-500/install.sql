@@ -1,1 +1,0 @@
-DELETE FROM `cms_settings` WHERE `key` = 'gzip' LIMIT 1;

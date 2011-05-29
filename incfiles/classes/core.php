@@ -13,7 +13,8 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 
 class core
 {
-    public static $ip;                                                         // IP адрес
+    public static $root = '../';
+    public static $ip;                                                         // Путь к корневой папке
     public static $ip_via_proxy;                                               // IP адрес за прокси-сервером
     public static $user_agent;                                                 // User Agent
     public static $system_set;                                                 // Системные настройки
@@ -35,6 +36,8 @@ class core
 
     function __construct()
     {
+        global $rootpath;
+        if(isset($rootpath)) self::$root = $rootpath;                          // Задаем путь к корневой папке
         $this->get_ip();                                                       // Получаем адрес IP
         $this->get_ua();                                                       // Получаем UserAgent
         $this->ip_flood();                                                     // Проверка адреса IP на флуд
@@ -74,9 +77,8 @@ class core
     */
     public static function load_lng($module = '_core')
     {
-        global $rootpath;
-        if(!is_dir($rootpath . 'incfiles/languages/' . self::$lng_iso)) self::$lng_iso = 'en';
-        $lng_file = $rootpath . 'incfiles/languages/' . self::$lng_iso . '/' . $module . '.lng';
+        if(!is_dir(self::$root . 'incfiles/languages/' . self::$lng_iso)) self::$lng_iso = 'en';
+        $lng_file = self::$root . 'incfiles/languages/' . self::$lng_iso . '/' . $module . '.lng';
         if (file_exists($lng_file)) {
             $out = parse_ini_file($lng_file) or die('ERROR: language file');
             return $out;
@@ -91,8 +93,7 @@ class core
     */
     private function db_connect()
     {
-        global $rootpath;
-        require($rootpath . 'incfiles/db.php');
+        require(self::$root . 'incfiles/db.php');
         $db_host = isset($db_host) ? $db_host : 'localhost';
         $db_user = isset($db_user) ? $db_user : '';
         $db_pass = isset($db_pass) ? $db_pass : '';
@@ -130,11 +131,10 @@ class core
     */
     private function ip_flood()
     {
-        global $rootpath;
         if ($this->flood_chk) {
             if ($this->ip_whitelist(self::$ip))
                 return true;
-            $file = $rootpath . 'files/cache/ip_flood.dat';
+            $file = self::$root . 'files/cache/ip_flood.dat';
             $tmp = array();
             $requests = 1;
             if (!file_exists($file)) $in = fopen($file, "w+");
@@ -165,8 +165,7 @@ class core
     */
     private function ip_whitelist($ip)
     {
-        global $rootpath;
-        $file = $rootpath . 'files/cache/ip_wlist.dat';
+        $file = self::$root . 'files/cache/ip_wlist.dat';
         if (file_exists($file)) {
             foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $val) {
                 $tmp = explode(':', $val);
