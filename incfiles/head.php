@@ -69,9 +69,8 @@ if (!isset($_GET['err']) && $act != '404' && $headmod != 'admin') {
 Рекламный блок сайта
 -----------------------------------------------------------------
 */
-if(($advt = ad::mobileads()) !== false && isset($advt['ads']))
+if(($advt = ad::multiclick()) !== false && isset($advt['ads']))
     echo '<div style="text-align: center">' . implode('<br />', $advt['ads']) . '</div>';
-
 if (isset($cms_ads[0])) echo $cms_ads[0];
 
 /*
@@ -143,7 +142,8 @@ if ($user_id) {
 } else {
     // Фиксируем местоположение гостей
     $movings = 0;
-    $req = mysql_query("SELECT * FROM `cms_sessions` WHERE `session_id` = '" . session_id() . "' LIMIT 1");
+    $session = md5(core::$ip . core::$ip_via_proxy . core::$user_agent);
+    $req = mysql_query("SELECT * FROM `cms_sessions` WHERE `session_id` = '" . $session . "' LIMIT 1");
     if (mysql_num_rows($req)) {
         // Если есть в базе, то обновляем данные
         $res = mysql_fetch_assoc($req);
@@ -163,12 +163,12 @@ if ($user_id) {
         mysql_query("UPDATE `cms_sessions` SET
             $sql
             `lastdate` = '" .time()  . "'
-            WHERE `session_id` = '" . session_id() . "'
+            WHERE `session_id` = '" . $session . "'
         ");
     } else {
         // Если еще небыло в базе, то добавляем запись
         mysql_query("INSERT INTO `cms_sessions` SET
-            `session_id` = '" . session_id() . "',
+            `session_id` = '" . $session . "',
             `ip` = '" . core::$ip . "',
             `ip_via_proxy` = '" . core::$ip_via_proxy . "',
             `browser` = '" . mysql_real_escape_string($agn) . "',
