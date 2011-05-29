@@ -60,7 +60,7 @@ $datauser = core::$user_data;                             // Все данные
 $set_user = core::$user_set;                              // Пользовательские настройки
 $ban = core::$user_ban;                                   // Бан
 $login = isset($datauser['name']) ? $datauser['name'] : false;
-$kmess = $set_user['kmess'] > 4 && $set_user['kmess'] < 99 ? $set_user['kmess'] : 10;
+$kmess = $set_user['kmess'] > 4 && $set_user['kmess'] < 100 ? $set_user['kmess'] : 10;
 
 /*
 -----------------------------------------------------------------

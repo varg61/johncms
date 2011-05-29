@@ -82,6 +82,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
         */
         echo '<div class="gmenu"><p>';
         echo '<h3><img src="../images/modules.png" width="16" height="16" class="left" />&#160;' . $lng['modules'] . '</h3><ul>' .
+             '<li><a href="index.php?act=ads">' . $lng['advertisement'] . '</a></li>' .
              '<li><a href="index.php?act=news">' . $lng['news'] . '</a></li>' .
              '<li><a href="index.php?act=forum">' . $lng['forum'] . '</a></li>' .
              '</ul></p></div>';
@@ -100,7 +101,6 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
              '<li><a href="index.php?act=access">' . $lng['access_rights'] . '</a></li><br />' .
              ($rights == 9 ? '<li><a href="index.php?act=sitemap">' . $lng['site_map'] . '</a></li>' : '') .
              ($rights == 9 ? '<li><a href="index.php?act=counters">' . $lng['counters'] . '</a></li>' : '') .
-             '<li><a href="index.php?act=ads">' . $lng['advertisement'] . '</a></li>' .
              '</ul>' .
              '</p></div>';
 

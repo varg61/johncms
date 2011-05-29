@@ -69,6 +69,9 @@ if (!isset($_GET['err']) && $act != '404' && $headmod != 'admin') {
 Рекламный блок сайта
 -----------------------------------------------------------------
 */
+if(($advt = ad::mobileads()) !== false && isset($advt['ads']))
+    echo '<div style="text-align: center">' . implode('<br />', $advt['ads']) . '</div>';
+
 if (isset($cms_ads[0])) echo $cms_ads[0];
 
 /*

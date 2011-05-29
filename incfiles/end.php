@@ -11,15 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-// Рекламный блок MOBILEADS.RU
-$mad_siteid = 0;
-if ($mad_siteid) {
-    if (isset($_SESSION['mad_links']) && $_SESSION['mad_time'] > (time() - 60 * 15))
-        echo '<div class="gmenu">' . $_SESSION['mad_links'] . '</div>';
-    else
-        echo '<div class="gmenu">' . mobileads($mad_siteid) . '</div>';
-}
-
 // Рекламный блок сайта
 if (!empty($cms_ads[2]))
     echo '<div class="gmenu">' . $cms_ads[2] . '</div>';
@@ -65,6 +56,7 @@ if (!empty($cms_ads[3]))
 // с момента установки скриптов                           //
 ////////////////////////////////////////////////////////////
 echo '<div><small><a href="http://johncms.com">JohnCMS</a></small></div>';
+if(isset($advt['pixel'])) echo $advt['pixel'];
 echo '</div></body></html>';
 
 ?>
