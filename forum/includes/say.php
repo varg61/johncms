@@ -82,8 +82,15 @@ switch ($type1['type']) {
         }
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
             $msg = trim($_POST['msg']);
-            if ($_POST['msgtrans'] == 1) {
+            if (isset($_POST['msgtrans'])) {
                 $msg = functions::trans($msg);
+            }
+            // Проверяем на минимальную длину
+            if (mb_strlen($msg) < 4) {
+                require('../incfiles/head.php');
+                echo functions::display_error($lng['error_message_short'], '<a href="index.php?id=' . $id . '">' . $lng['back'] . '</a>');
+                require('../incfiles/end.php');
+                exit;
             }
             // Проверяем, не повторяется ли сообщение?
             $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC");
@@ -185,8 +192,15 @@ switch ($type1['type']) {
                 exit;
             }
             $msg = trim($_POST['msg']);
-            if ($_POST['msgtrans'] == 1) {
+            if (isset($_POST['msgtrans'])) {
                 $msg = functions::trans($msg);
+            }
+            // Проверяем на минимальную длину
+            if (mb_strlen($msg) < 4) {
+                require('../incfiles/head.php');
+                echo functions::display_error($lng['error_message_short'], '<a href="index.php?id=' . $id . '">' . $lng['back'] . '</a>');
+                require('../incfiles/end.php');
+                exit;
             }
             $to = $type1['from'];
             if (!empty($_POST['citata'])) {
