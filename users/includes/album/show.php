@@ -77,7 +77,7 @@ if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 6) {
 */
 if ($view) {
     $kmess = 1;
-    $start = isset($_GET['start']) ? abs(intval($_GET['start'])) : mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $al . "' AND `id` > '$img'"), 0);
+    $start = $page ? $page - 1 : mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $al . "' AND `id` > '$img'"), 0);
     // Обрабатываем ссылку для возврата
     if (empty($_SESSION['ref']))
         $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
@@ -89,7 +89,8 @@ if ($total > $kmess)
     echo '<div class="topmenu">' . functions::display_pagination('album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), $start, $total, $kmess) . '</div>';
 if ($total) {
     $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `id` DESC LIMIT $start, $kmess");
-    while ($res = mysql_fetch_assoc($req)) {
+    $i = 0;
+    while (($res = mysql_fetch_assoc($req)) !== false) {
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">');
         if ($view) {
             /*
