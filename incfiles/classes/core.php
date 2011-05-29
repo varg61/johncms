@@ -75,6 +75,7 @@ class core
     public static function load_lng($module = '_core')
     {
         global $rootpath;
+        if(!is_dir($rootpath . 'incfiles/languages/' . self::$lng_iso)) self::$lng_iso = 'en';
         $lng_file = $rootpath . 'incfiles/languages/' . self::$lng_iso . '/' . $module . '.lng';
         if (file_exists($lng_file)) {
             $out = parse_ini_file($lng_file) or die('ERROR: language file');
