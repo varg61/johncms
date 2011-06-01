@@ -90,9 +90,8 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . functions::display_pagination('index.php?act=online&amp;' . ($mod ? 'mod=' . $mod . '&amp;'
-                          : ''), $start, $total, $kmess) . '</p>';
-    echo '<p><form action="index.php?act=online' . ($mod == 'guest' ? '&amp;mod=guest' : '') . '" method="post">' .
+    echo '<p>' . functions::display_pagination('index.php?act=online&amp;' . ($mod ? 'mod=' . $mod . '&amp;' : ''), $start, $total, $kmess) . '</p>';
+    echo '<p><form action="index.php?act=online' . ($mod ? '&amp;mod=' . $mod : '') . '" method="post">' .
          '<input type="text" name="page" size="2"/>' .
          '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
          '</form></p>';
