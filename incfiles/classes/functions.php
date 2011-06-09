@@ -323,7 +323,7 @@ class functions extends core
     */
     static function display_user($user = false, $arg = false)
     {
-        global $rootpath;
+        global $rootpath, $mod;
         $out = false;
 
         if (!$user['id']) {
@@ -379,15 +379,17 @@ class functions extends core
                 $out .= '<div><span class="gray">' . self::$lng['last_visit'] . ':</span> ' . $lastvisit . '</div>';
             $iphist = '';
             if ($ipinf) {
-                $out .= '<div><span class="gray">' . self::$lng['browser'] . ':</span> ' . $user['browser'] . '</div>';
-                $out .= '<div><span class="gray">' . self::$lng['ip_address'] . ':</span> ';
+                $out .= '<div><span class="gray">' . self::$lng['browser'] . ':</span> ' . $user['browser'] . '</div>' .
+                        '<div><span class="gray">' . self::$lng['ip_address'] . ':</span> ';
+                $hist = $mod == 'history' ? '&amp;mod=history' : '';
+                $ip = long2ip($user['ip']);
                 if (self::$user_rights && isset($user['ip_via_proxy']) && $user['ip_via_proxy']) {
-                    $out .= '<b class="red"><a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a></b> / ';
-                    $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip_via_proxy'] . '">' . long2ip($user['ip_via_proxy']) . '</a>';
+                    $out .= '<b class="red"><a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $ip . $hist . '">' . $ip . '</a></b> / ';
+                    $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($user['ip_via_proxy']) . $hist . '">' . long2ip($user['ip_via_proxy']) . '</a>';
                 } elseif (self::$user_rights) {
-                    $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $user['ip'] . '">' . long2ip($user['ip']) . '</a>';
+                    $out .= '<a href="' . self::$system_set['homeurl'] . '/' . self::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . $ip . $hist . '">' . $ip . '</a>';
                 } else {
-                    $out .= long2ip($user['ip']) . $iphist;
+                    $out .= $ip . $iphist;
                 }
                 if (isset($arg['iphist'])) {
                     $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_users_iphistory` WHERE `user_id` = '" . $user['id'] . "'"), 0);
