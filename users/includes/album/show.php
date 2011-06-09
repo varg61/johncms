@@ -77,7 +77,7 @@ if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 6) {
 */
 if ($view) {
     $kmess = 1;
-    $start = $page ? $page - 1 : mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $al . "' AND `id` > '$img'"), 0);
+    $start = isset($_REQUEST['page']) ? $page - 1 : (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '$al' AND `id` > '$img'"), 0));
     // Обрабатываем ссылку для возврата
     if (empty($_SESSION['ref']))
         $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
@@ -116,7 +116,7 @@ if ($total) {
         if (!empty($res['description']))
             echo '<div class="gray">' . functions::smileys(functions::checkout($res['description'], 1)) . '</div>';
         echo '<div class="sub">';
-        if ($user['id'] == $user_id || $rights >= 6) {
+        if ($user['id'] == $user_id || core::$user_rights >= 6) {
             echo functions::display_menu(array (
                 '<a href="album.php?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . $lng['edit'] . '</a>',
                 '<a href="album.php?act=image_move&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . $lng['move'] . '</a>',
