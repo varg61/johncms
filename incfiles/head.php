@@ -133,8 +133,8 @@ if ($user_id) {
         $sql .= "`sestime` = '" . time() . "',";
     }
     if ($datauser['place'] != $headmod) {
-        $movings = $movings + 1;
-        $sql .= "`movings` = '$movings', `place` = '$headmod',";
+        ++$movings;
+        $sql .= "`place` = '$headmod',";
     }
     if ($datauser['browser'] != $agn)
         $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
@@ -142,6 +142,7 @@ if ($user_id) {
     if ($datauser['lastdate'] > (time() - 300))
         $totalonsite = $totalonsite + time() - $datauser['lastdate'];
     mysql_query("UPDATE `users` SET $sql
+        `movings` = '$movings',
         `total_on_site` = '$totalonsite',
         `lastdate` = '" . time() . "'
         WHERE `id` = '$user_id'
@@ -150,27 +151,23 @@ if ($user_id) {
     // Фиксируем местоположение гостей
     $movings = 0;
     $session = md5(core::$ip . core::$ip_via_proxy . core::$user_agent);
-    $req = mysql_query("SELECT * FROM `cms_sessions` WHERE `session_id` = '" . $session . "' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_sessions` WHERE `session_id` = '$session' LIMIT 1");
     if (mysql_num_rows($req)) {
         // Если есть в базе, то обновляем данные
         $res = mysql_fetch_assoc($req);
         $movings = $res['movings'];
         if ($res['sestime'] < (time() - 300)) {
             $movings = 0;
-            $sql .= "`sestime` = '" . time() . "',";
+            $sql .= "`sestime` = '" . time() . "', `movings` = '0'";
         }
-        if ($res['ip'] != core::$ip || $res['ip_via_proxy'] != core::$ip_via_proxy)
-            $sql .= "`ip` = '" . core::$ip . "', `ip_via_proxy` = '" . core::$ip_via_proxy . "',";
-        if ($res['browser'] != $agn)
-            $sql .= "`browser` = '" . mysql_real_escape_string($agn) . "',";
         if ($res['place'] != $headmod) {
-            $movings = $movings + 1;
-            $sql .= "`movings` = '$movings', `place` = '$headmod',";
+            ++$movings;
+            $sql .= "`place` = '$headmod',";
         }
-        mysql_query("UPDATE `cms_sessions` SET
-            $sql
+        mysql_query("UPDATE `cms_sessions` SET $sql
+            `movings` = '$movings',
             `lastdate` = '" .time()  . "'
-            WHERE `session_id` = '" . $session . "'
+            WHERE `session_id` = '$session'
         ");
     } else {
         // Если еще небыло в базе, то добавляем запись
