@@ -23,6 +23,7 @@ class core
     public static $lng = array();                                              // Массив с фразами языка
     public static $deny_registration = false;                                  // Запрет регистрации пользователей
     public static $is_mobile = false;                                          // Мобильный браузер
+    public static $core_errors = array();                                      // Ошибки ядра
 
     public static $user_id = false;                                            // Идентификатор пользователя
     public static $user_rights = 0;                                            // Права доступа
@@ -85,7 +86,17 @@ class core
             $out = parse_ini_file($lng_file) or die('ERROR: language file');
             return $out;
         }
-        die('ERROR: Language file is missing');
+        self::$core_errors[] = 'Language file <b>' . $module . '.lng</b> is missing';
+        return false;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Показываем ошибки ядра (если есть)
+    -----------------------------------------------------------------
+    */
+    public static function display_core_errors(){
+        return !empty(self::$core_errors) ? '<p style="color:#FF0000"><b>CORE ERROR</b>: ' . implode('<br />', self::$core_errors) . '</p>' : '';
     }
 
     /*

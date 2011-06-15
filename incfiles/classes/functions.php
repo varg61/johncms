@@ -306,6 +306,32 @@ class functions extends core
 
     /*
     -----------------------------------------------------------------
+    Показываем местоположение пользователя
+    -----------------------------------------------------------------
+    */
+    public static function display_place($user_id = '', $place = '')
+    {
+        //TODO: Разобраться с "Тут в списке"
+        $place = explode(",", $place);
+        $placelist = parent::load_lng('places');
+        if (array_key_exists($place[0], $placelist)) {
+            if ($place[0] == 'profile') {
+                if ($place[1] == $user_id) {
+                    return '<a href="' . self::$system_set['homeurl'] . '/users/profile.php?user=' . $place[1] . '">' . $placelist['profile_personal'] . '</a>';
+                } else {
+                    $user = self::get_user($place[1]);
+                    return $placelist['profile'] . ': <a href="' . self::$system_set['homeurl'] . '/users/profile.php?user=' . $user['id'] . '">' . $user['name'] . '</a>';
+                }
+            } else {
+                return str_replace('#home#', self::$system_set['homeurl'], $placelist[$place[0]]);
+            }
+        } else {
+            return '<a href="' . self::$system_set['homeurl'] . '/index.php">' . $placelist['homepage'] . '</a>';
+        }
+    }
+
+    /*
+    -----------------------------------------------------------------
     Отображения личных данных пользователя
     -----------------------------------------------------------------
     $user          (array)     массив запроса в таблицу `users`
@@ -321,7 +347,7 @@ class functions extends core
        [footer]    (string)    Строка выводится внизу области "sub"
     -----------------------------------------------------------------
     */
-    static function display_user($user = false, $arg = false)
+    public static function display_user($user = false, $arg = false)
     {
         global $rootpath, $mod;
         $out = false;
@@ -409,7 +435,7 @@ class functions extends core
     Форматирование имени файла
     -----------------------------------------------------------------
     */
-    static function format($name)
+    public static function format($name)
     {
         $f1 = strrpos($name, ".");
         $f2 = substr($name, $f1 + 1, 999);
@@ -422,7 +448,7 @@ class functions extends core
     Получаем данные пользователя
     -----------------------------------------------------------------
     */
-    static function get_user($id = false)
+    public static function get_user($id = false)
     {
         if ($id && $id != self::$user_id) {
             $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
@@ -441,7 +467,7 @@ class functions extends core
     Транслитерация с Русского в латиницу
     -----------------------------------------------------------------
     */
-    static function rus_lat($str)
+    public static function rus_lat($str)
     {
         $replace = array(
             'а' => 'a',
@@ -486,9 +512,9 @@ class functions extends core
     Обработка смайлов
     -----------------------------------------------------------------
     */
-    static private $smileys_cache = array();
+    private static $smileys_cache = array();
 
-    static function smileys($str, $adm = false)
+    public static function smileys($str, $adm = false)
     {
         global $rootpath;
         if (empty(self::$smileys_cache)) {
@@ -509,7 +535,7 @@ class functions extends core
     Функция пересчета на дни, или часы
     -----------------------------------------------------------------
     */
-    static function timecount($var)
+    public static function timecount($var)
     {
         global $lng;
         if ($var < 0) $var = 0;
@@ -525,7 +551,7 @@ class functions extends core
     Транслитерация текста
     -----------------------------------------------------------------
     */
-    static function trans($str)
+    public static function trans($str)
     {
         $replace = array(
             'a' => 'а',

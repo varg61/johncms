@@ -68,6 +68,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     Анкета пользователя
     -----------------------------------------------------------------
     */
+    $headmod = 'profile,' . $user['id'];
     $textl = $lng['profile'] . ': ' . htmlspecialchars($user['name']);
     require('../incfiles/head.php');
     echo '<div class="phdr"><b>' . ($user['id'] != $user_id ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';

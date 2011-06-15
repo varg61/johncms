@@ -10,7 +10,7 @@
  */
 
 define('_IN_JOHNCMS', 1);
-$headmod = 'guest';
+$headmod = 'guestbook';
 require('../incfiles/core.php');
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);

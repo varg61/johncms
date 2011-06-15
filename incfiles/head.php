@@ -19,9 +19,16 @@ $textl = isset($textl) ? $textl : $set['copyright'];
 Выводим HTML заголовки страницы, подключаем CSS файл
 -----------------------------------------------------------------
 */
-header("Cache-Control: public");
+if(stristr(core::$user_agent, "msie") && stristr(core::$user_agent, "windows")){
+    // Выдаем заголовки для Internet Explorer
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header('Content-type: text/html; charset=UTF-8');
+} else {
+    // Выдаем заголовки для остальных браузеров
+    header("Cache-Control: public");
+    header('Content-type: application/xhtml+xml; charset=UTF-8');
+}
 header("Expires: " . date("r",  time() + 60));
-header((stristr($agn, "msie") && stristr($agn, "windows")) ? 'Content-type: text/html; charset=UTF-8' : 'Content-type: application/xhtml+xml; charset=UTF-8');
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n" .
      "\n" . '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">' .
      "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">' .
@@ -35,7 +42,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n" .
      "\n" . '<link rel="shortcut icon" href="' . $set['homeurl'] . '/favicon.ico" />' .
      "\n" . '<link rel="alternate" type="application/rss+xml" title="RSS | ' . $lng['site_news'] . '" href="' . $set['homeurl'] . '/rss/rss.php" />' .
      "\n" . '<title>' . $textl . '</title>' .
-     "\n" . '</head><body>';
+     "\n" . '</head><body>' . core::display_core_errors();
 
 /*
 -----------------------------------------------------------------
