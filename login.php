@@ -51,7 +51,7 @@ if (!$error && $user_pass && ($user_login || $id)) {
             } else {
                 // Показываем CAPTCHA
                 $display_form = 0;
-                echo '<form action="login.php" method="post">' .
+                echo '<form action="login.php' . ($id ? '&ampid=' . $id : '') . '" method="post">' .
                      '<div class="menu"><p><img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng['verifying_code'] . '"/><br />' .
                      $lng['enter_code'] . ':<br/><input type="text" size="5" maxlength="5"  name="code"/>' .
                      '<input type="hidden" name="n" value="' . $user_login . '"/>' .
