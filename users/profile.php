@@ -92,6 +92,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         'iphist' => 1,
         'header' => '<b>ID:' . $user['id'] . '</b>'
     );
+    if($user['id'] != core::$user_id) $arg['footer'] = '<span class="gray">Где?:</span> ' . functions::display_place($user['id'], $user['place']);
     echo '<div class="user"><p>' . functions::display_user($user, $arg) . '</p></div>';
     // Если юзер ожидает подтверждения регистрации, выводим напоминание
     if ($rights >= 7 && !$user['preg'] && empty($user['regadm'])) {

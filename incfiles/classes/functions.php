@@ -311,7 +311,7 @@ class functions extends core
     */
     public static function display_place($user_id = '', $place = '')
     {
-        //TODO: Разобраться с "Тут в списке"
+        global $headmod;
         $place = explode(",", $place);
         $placelist = parent::load_lng('places');
         if (array_key_exists($place[0], $placelist)) {
@@ -322,12 +322,11 @@ class functions extends core
                     $user = self::get_user($place[1]);
                     return $placelist['profile'] . ': <a href="' . self::$system_set['homeurl'] . '/users/profile.php?user=' . $user['id'] . '">' . $user['name'] . '</a>';
                 }
-            } else {
-                return str_replace('#home#', self::$system_set['homeurl'], $placelist[$place[0]]);
             }
-        } else {
-            return '<a href="' . self::$system_set['homeurl'] . '/index.php">' . $placelist['homepage'] . '</a>';
+            elseif ($place[0] == 'online' && isset($headmod) && $headmod == 'online') return $placelist['here'];
+            else return str_replace('#home#', self::$system_set['homeurl'], $placelist[$place[0]]);
         }
+        else return '<a href="' . self::$system_set['homeurl'] . '/index.php">' . $placelist['homepage'] . '</a>';
     }
 
     /*
