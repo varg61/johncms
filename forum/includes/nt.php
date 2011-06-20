@@ -115,7 +115,8 @@ if (isset($_POST['submit'])) {
             `time` = '" . time() . "',
             `user_id` = '$user_id',
             `from` = '$login',
-            `ip` = '" . long2ip($ip) . "',
+            `ip` = '" . core::$ip . "',
+            `ip_via_proxy` = '" . core::$ip_via_proxy . "',
             `soft` = '" . mysql_real_escape_string($agn) . "',
             `text` = '" . mysql_real_escape_string($msg) . "'
         ");

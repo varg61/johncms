@@ -645,8 +645,15 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                         } elseif (!empty($res['close_who'])) {
                             echo '<div class="green">' . $lng_forum['who_restore_post'] . ': <b>' . $res['close_who'] . '</b></div>';
                         }
-                        if ($rights == 3 || $rights >= 6)
-                            echo '<div class="gray"><a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . ip2long($res['ip']) . '">' . $res['ip'] . '</a> - ' . $res['soft'] . '</div>';
+                        if ($rights == 3 || $rights >= 6) {
+                            if($res['ip_via_proxy']){
+                                echo '<div class="gray"><b class="red"><a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a></b> - ' .
+                                     '<a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($res['ip_via_proxy']) . '">' . long2ip($res['ip_via_proxy']) . '</a>' .
+                                     ' - ' . $res['soft'] . '</div>';
+                            } else {
+                                echo '<div class="gray"><a href="' . $set['homeurl'] . '/' . $set['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a> - ' . $res['soft'] . '</div>';
+                            }
+                        }
                         echo '</div>';
                     }
                     echo '</div>';
