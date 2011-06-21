@@ -92,6 +92,8 @@ switch ($act) {
         $total_lib = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = 1 AND `time` > " . (time() - 259200)), 0);
         if ($total_lib > 0)
             echo '<li><a href="library/index.php?act=new">' . $lng['library'] . '</a> (' . $total_lib . ')</li>';
+        $total_album = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
+            if($total_album > 0) echo '<li><a href="users/album.php?act=top">' . $lng['photo_albums'] . '</a> (' . $total_album . ')</li>';
         // Если нового нет, выводим сообщение
         if (!$total_news && !$total_forum && !$total_guest && !$total_gal && !$total_lib && !$total_karma)
             echo '<li>' . $lng['events_no_new'] . '</li>';
