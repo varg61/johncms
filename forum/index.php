@@ -172,8 +172,8 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
     Если форум закрыт, то для Админов выводим напоминание
     -----------------------------------------------------------------
     */
-    if (!$set['mod_forum'])
-        echo '<div class="alarm">' . $lng_forum['forum_closed'] . '</div>';
+    if (!$set['mod_forum']) echo '<div class="alarm">' . $lng_forum['forum_closed'] . '</div>';
+    elseif ($set['mod_forum'] == 3) echo '<div class="rmenu">' . $lng['read_only'] . '</div>';
     if (!$user_id) {
         if (isset($_GET['newup']))
             $_SESSION['uppost'] = 1;
@@ -314,7 +314,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                 -----------------------------------------------------------------
                 */
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close`!='1'")), 0);
-                if ($user_id && !isset($ban['1']) && !isset($ban['11'])) {
+                if (($user_id && !isset($ban['1']) && !isset($ban['11']) && $set['mod_forum'] != 3) || core::$user_rights) {
                     // Кнопка создания новой темы
                     echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . $id . '" method="post"><input type="submit" value="' . $lng_forum['new_topic'] . '" /></form></div>';
                 }
@@ -503,7 +503,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                 WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'"
                                    . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order LIMIT $start, $kmess");
                 // Верхнее поле "Написать"
-                if (($user_id && !$type1['edit'] && $set_forum['upfp']) || ($rights >= 7 && $set_forum['upfp'])) {
+                if (($user_id && !$type1['edit'] && $set_forum['upfp'] && $set['mod_forum'] != 3) || ($rights >= 7 && $set_forum['upfp'])) {
                     echo '<div class="gmenu"><form name="form1" action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
                         echo '<p>';
@@ -664,7 +664,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
                     echo '</form>';
                 }
                 // Нижнее поле "Написать"
-                if (($user_id && !$type1['edit'] && !$set_forum['upfp']) || ($rights >= 7 && !$set_forum['upfp'])) {
+                if (($user_id && !$type1['edit'] && !$set_forum['upfp'] && $set['mod_forum'] != 3) || ($rights >= 7 && !$set_forum['upfp'])) {
                     echo '<div class="gmenu"><form name="form2" action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
                         echo '<p>';

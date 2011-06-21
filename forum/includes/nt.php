@@ -10,8 +10,16 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-if (!$id || !$user_id || isset($ban['1']) || isset($ban['11'])) {
-    header("Location: index.php");
+
+/*
+-----------------------------------------------------------------
+Закрываем доступ для определенных ситуаций
+-----------------------------------------------------------------
+*/
+if (!$id || !$user_id || isset($ban['1']) || isset($ban['11']) || (!core::$user_rights && $set['mod_forum'] == 3)) {
+    require('../incfiles/head.php');
+    echo functions::display_error($lng['access_forbidden']);
+    require('../incfiles/end.php');
     exit;
 }
 
