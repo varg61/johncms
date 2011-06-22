@@ -78,7 +78,7 @@ if ($search && !$error) {
         $i = 0;
         while (($res = mysql_fetch_assoc($req)) !== false) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            foreach ($array as $srch) if (($pos = mb_stripos($res['text'], str_replace('*', '', $srch))) !== false) break;
+            foreach ($array as $srch) if (($pos = mb_strpos(strtolower($res['text']), strtolower(str_replace('*', '', $srch)))) !== false) break;
             if (!isset($pos) || $pos < 100) $pos = 100;
             $name = $res['name'];
             $text = functions::checkout(mb_substr($res['text'], ($pos - 100), 400), 1);

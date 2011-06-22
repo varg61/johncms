@@ -99,7 +99,7 @@ if ($search && !$error) {
             echo '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
             echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span><br/>';
             $text = $search_t ? $res_p['text'] : $res['text'];
-            foreach ($array as $srch) if (($pos = mb_stripos($res['text'], str_replace('*', '', $srch))) !== false) break;
+            foreach ($array as $srch) if (($pos = mb_strpos(strtolower($res['text']), strtolower(str_replace('*', '', $srch)))) !== false) break;
             if(!isset($pos) || $pos < 100) $pos = 100;
             $text = functions::checkout(mb_substr($text, ($pos - 100), 400), 1);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
@@ -111,8 +111,7 @@ if ($search && !$error) {
             echo $text;
             if (mb_strlen($res['text']) > 500)
                 echo '...<a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>';
-            echo '<br /><a href="index.php?id=' . ($search_t ? $res['id'] : $res_t['id']) . '">' . $lng_forum['to_topic'] . '</a>'
-                . ($search_t ? '' : ' | <a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['to_post'] . '</a>');
+            echo '<br /><a href="index.php?id=' . ($search_t ? $res['id'] : $res_t['id']) . '">' . $lng_forum['to_topic'] . '</a>' . ($search_t ? '' : ' | <a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['to_post'] . '</a>');
             echo '</div>';
             ++$i;
         }
