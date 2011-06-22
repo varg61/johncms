@@ -282,7 +282,8 @@ class core
         if (isset($_SESSION['lng']) && array_key_exists($_SESSION['lng'], self::$lng_list)) self::$lng_iso = $_SESSION['lng'];
         elseif (self::$user_id && isset(self::$user_set['lng']) && array_key_exists(self::$user_set['lng'], self::$lng_list)) self::$lng_iso = self::$user_set['lng'];
         elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            foreach (explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE']))) as $var) {
+            $accept = explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE'])));
+            foreach ($accept as $var) {
                 $lng = substr($var, 0, 2);
                 if (array_key_exists($lng, self::$lng_list)) {
                     self::$lng_iso = $lng;

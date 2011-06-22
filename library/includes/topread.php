@@ -62,7 +62,7 @@ if ($totalnew != 0) {
         $asd = $start - 10;
         $asd2 = $start + 20;
         if ($asd < $totalnew && $asd > 0) {
-            echo ' <a href="index.php?act=topread&amp;page=1">1</a> .. ';
+            echo ' <a href="../index.php?act=topread&amp;page=1">1</a> .. ';
         }
         $page2 = $ba - $page;
         $pa = ceil($page / 2);

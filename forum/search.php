@@ -10,6 +10,7 @@
 */
 
 define('_IN_JOHNCMS', 1);
+
 $headmod = 'forumsearch';
 require('../incfiles/core.php');
 $lng_forum = core::load_lng('forum');
@@ -26,9 +27,6 @@ function ReplaceKeywords($search, $text) {
     return mb_strlen($search) < 3 ? $text : preg_replace('|('.preg_quote($search, '/').')|siu','<span style="background-color: #FFFF33">$1</span>',$text);
 }
 
-echo '<p>' . counters::forum_new(1) . '</p>';
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['search'] . '</div>';
-
 /*
 -----------------------------------------------------------------
 Принимаем данные, выводим форму поиска
@@ -37,15 +35,14 @@ echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | '
 $search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : false;
 $search = $search_post ? $search_post : $search_get;
-//TODO: Разобраться!
 //$search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
-$search_t = isset($_REQUEST['t']) ? 1 : 0;
-//$search = preg_replace('/ {2,}/', ' ', $search);
-echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
-    '<input type="text" value="' . ($search ? functions::checkout($search) : '') . '" name="search" />' .
-    '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
-    '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . $lng_forum['search_topic_name'] .
-    '</p></form></div>';
+$search_t = isset($_REQUEST['t']);
+echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['search'] . '</div>' .
+     '<div class="gmenu"><form action="search.php" method="post"><p>' .
+     '<input type="text" value="' . ($search ? functions::checkout($search) : '') . '" name="search" />' .
+     '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
+     '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . $lng_forum['search_topic_name'] .
+     '</p></form></div>';
 
 /*
 -----------------------------------------------------------------
@@ -64,13 +61,15 @@ if ($search && !$error) {
     */
     $array = explode(' ', $search);
     $count = count($array);
-    echo '<div class="bmenu">' . $lng['search_results'] . '</div>';
     $query = mysql_real_escape_string($search);
     $total = mysql_result(mysql_query("
         SELECT COUNT(*) FROM `forum`
         WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
         AND `type` = '" . ($search_t ? 't' : 'm') . "'" . ($rights >= 7 ? "" : " AND `close` != '1'
     ")), 0);
+    echo '<div class="phdr">' . $lng['search_results'] . '</div>';
+    if ($total > $kmess)
+        echo '<div class="topmenu">' . functions::display_pagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', $start, $total, $kmess) . '</div>';
     if ($total) {
         $req = mysql_query("
             SELECT *, MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
@@ -100,8 +99,9 @@ if ($search && !$error) {
             echo '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ';
             echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span><br/>';
             $text = $search_t ? $res_p['text'] : $res['text'];
-            $text = functions::checkout(mb_substr($text, 0, 500), 1);
-            $text = str_replace('qwertyzxcytrewq', '', $text);
+            foreach ($array as $srch) if (($pos = mb_stripos($res['text'], str_replace('*', '', $srch))) !== false) break;
+            if(!isset($pos) || $pos < 100) $pos = 100;
+            $text = functions::checkout(mb_substr($text, ($pos - 100), 400), 1);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
             if (!$search_t) {
                 foreach($array as $val){
@@ -121,29 +121,18 @@ if ($search && !$error) {
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
-        // Навигация по страницам
-        echo '<p>' . functions::display_pagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>' .
-            '<p><form action="search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '" method="post">' .
+        echo '<div class="topmenu">' . functions::display_pagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', $start, $total, $kmess) . '</div>' .
+            '<p><form action="search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
             '</form></p>';
     }
 } else {
-    /*
-    -----------------------------------------------------------------
-    Выводим сообщение об ошибке
-    -----------------------------------------------------------------
-    */
-    if ($error)
-        echo functions::display_error($error);
-
-    /*
-    -----------------------------------------------------------------
-    Инструкции для поиска
-    -----------------------------------------------------------------
-    */
-    echo '<div class="phdr"><small>' . $lng_forum['search_help'] . '</small></div>';
+    if ($error) echo functions::display_error($error);
+    echo '<div class="phdr"><small>' . $lng['search_help'] . '</small></div>';
 }
-echo '<p>' . ($search ? '<a href="search.php">' . $lng['search_new'] . '</a><br />' : '') . '<a href="index.php">' . $lng['to_forum'] . '</a></p>';
+echo '<p>' . ($search ? '<a href="search.php">' . $lng['search_new'] . '</a><br />' : '') . '<a href="index.php">' . $lng['forum'] . '</a></p>';
+
 require('../incfiles/end.php');
+
 ?>

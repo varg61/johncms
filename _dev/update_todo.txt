@@ -1,4 +1,11 @@
 --
+-- Добавлено в Build 867
+--
+ALTER TABLE `lib` CHANGE `name` `name` TINYTEXT NOT NULL;
+ALTER TABLE `lib` ADD FULLTEXT (`name`);
+ALTER TABLE `lib` ADD FULLTEXT (`text`);
+
+--
 -- Добавлено в Build 836
 --
 UPDATE `users` SET `set_user` = '';

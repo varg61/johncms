@@ -9,9 +9,11 @@
 * @author      http://johncms.com/about
 */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
-$textl = $lng['search_user'];
+define('_IN_JOHNCMS', 1);
+
 $headmod = 'usersearch';
+require('../incfiles/core.php');
+$textl = $lng['search_user'];
 require('../incfiles/head.php');
 
 /*
@@ -23,7 +25,7 @@ $search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : '';
 $search = $search_post ? $search_post : $search_get;
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a> | ' . $lng['search_user'] . '</div>' .
-    '<form action="index.php?act=search" method="post">' .
+    '<form action="search.php" method="post">' .
     '<div class="gmenu"><p>' .
     '<input type="text" name="search" value="' . functions::checkout($search) . '" />' .
     '<input type="submit" value="' . $lng['search'] . '" name="submit" />' .
@@ -36,7 +38,7 @@ echo '<div class="phdr"><a href="index.php"><b>' . $lng['community'] . '</b></a>
 */
 $error = array();
 if (!empty($search) && (mb_strlen($search) < 2 || mb_strlen($search) > 20))
-    $error[] = $lng['nick'] . ': ' . $lng['error_nicklenght'];
+    $error[] = $lng['nick'] . ': ' . $lng['error_wrong_lenght'];
 if (preg_match("/[^1-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", functions::rus_lat(mb_strtolower($search))))
     $error[] = $lng['nick'] . ': ' . $lng['error_wrong_symbols'];
 if ($search && !$error) {
@@ -45,20 +47,22 @@ if ($search && !$error) {
     Выводим результаты поиска
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr">' . $lng['search_results'] . '</div>';
     $search_db = functions::rus_lat(mb_strtolower($search));
     $search_db = strtr($search_db, array (
         '_' => '\\_',
-        '%' => '\\%',
-        '*' => '%'
+        '%' => '\\%'
     ));
     $search_db = '%' . $search_db . '%';
-    $req = mysql_query("SELECT COUNT(*) FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "'");
-    $total = mysql_result($req, 0);
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "'"), 0);
+    echo '<div class="phdr">' . $lng['search_results'] . '</div>';
+    if ($total > $kmess)
+        echo '<div class="topmenu">' . functions::display_pagination('search.php?search=' . urlencode($search) . '&amp;', $start, $total, $kmess) . '</div>';
     if ($total > 0) {
         $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `name` ASC LIMIT $start, $kmess");
-        while ($res = mysql_fetch_array($req)) {
+        $i = 0;
+        while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+            $res['name'] = mb_strlen($search) < 2 ? $res['name'] : preg_replace('|('.preg_quote($search, '/').')|siu','<span style="background-color: #FFFF33">$1</span>', $res['name']);
             echo functions::display_user($res);
             echo '</div>';
             ++$i;
@@ -68,29 +72,19 @@ if ($search && !$error) {
     }
     echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
     if ($total > $kmess) {
-        // Навигация по страницам
-        echo '<p>' . functions::display_pagination('index.php?act=search&amp;' . ($search_t ? 't=1&amp;' : '') . 'search=' . rawurlencode($search) . '&amp;', $start, $total, $kmess) . '</p>' .
-            '<p><form action="index.php?act=search" method="post">' .
-            '<input type="hidden" name="search" value="' . functions::checkout($search) . '" />' .
-            '<input type="text" name="page" size="2"/>' .
-            '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
-            '</form></p>';
+        echo '<div class="topmenu">' . functions::display_pagination('search.php?search=' . urlencode($search) . '&amp;', $start, $total, $kmess) . '</div>' .
+             '<p><form action="search.php?search=' . urlencode($search) . '" method="post">' .
+             '<input type="text" name="page" size="2"/>' .
+             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+             '</form></p>';
     }
 } else {
-    /*
-    -----------------------------------------------------------------
-    Выводим сообщение об ошибке
-    -----------------------------------------------------------------
-    */
-    if ($error)
-        echo functions::display_error($error);
-
-    /*
-    -----------------------------------------------------------------
-    Показываем инструкцию для поиска
-    -----------------------------------------------------------------
-    */
+    if ($error)echo functions::display_error($error);
     echo '<div class="phdr"><small>' . $lng['search_nick_help'] . '</small></div>';
 }
-echo '<p>' . ($search && !$error ? '<a href="index.php?act=search">' . $lng['search_new'] . '</a><br />' : '') . '<a href="index.php">' . $lng['back'] . '</a></p>';
+echo '<p>' . ($search && !$error ? '<a href="search.php">' . $lng['search_new'] . '</a><br />' : '') .
+     '<a href="index.php">' . $lng['back'] . '</a></p>';
+
+require('../incfiles/end.php');
+
 ?>

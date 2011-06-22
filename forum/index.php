@@ -135,7 +135,7 @@ if (empty($id)) {
 Переключаем режимы работы
 -----------------------------------------------------------------
 */
-$array = array(
+$mods = array(
     'addfile',
     'addvote',
     'close',
@@ -162,8 +162,8 @@ $array = array(
     'vote',
     'who'
 );
-if ($act && ($key = array_search($act, $array)) !== false && file_exists('includes/' . $array[$key] . '.php')) {
-    require('includes/' . $array[$key] . '.php');
+if ($act && ($key = array_search($act, $mods)) !== false && file_exists('includes/' . $mods[$key] . '.php')) {
+    require('includes/' . $mods[$key] . '.php');
 } else {
     require('../incfiles/head.php');
 

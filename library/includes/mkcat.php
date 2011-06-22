@@ -12,14 +12,14 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights == 5 || $rights >= 6) {
     if ($_GET['id'] == "") {
-        echo "ERROR<br/><a href='index.php?'>Back</a><br/>";
+        echo "";
         require_once('../incfiles/end.php');
         exit;
     }
     $typ = mysql_query("select * from `lib` where id='" . $id . "';");
     $ms = mysql_fetch_array($typ);
     if ($id != 0 && ($ms['type'] == "bk" || $ms['type'] == "komm")) {
-        echo "ERROR<br/><a href='index.php?'>Back</a><br/>";
+        echo "";
         require_once('../incfiles/end.php');
         exit;
     }

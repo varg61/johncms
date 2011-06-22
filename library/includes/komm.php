@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!$id) {
-    echo '<p>ERROR<br/><a href="index.php">Back</a></p>';
+    echo '<p>ERROR<br/><a href="../index.php">Back</a></p>';
     require_once('../incfiles/end.php');
     exit;
 }
@@ -25,7 +25,7 @@ if (!$set['mod_lib_comm'] && $rights < 7) {
 $req = mysql_query("SELECT `name` FROM `lib` WHERE `type` = 'bk' AND `id` = '" . $id . "' LIMIT 1");
 if (mysql_num_rows($req) != 1) {
     // если статья не существует, останавливаем скрипт
-    echo '<p>ERROR<br/><a href="index.php">Back</a></p>';
+    echo '<p>ERROR<br/><a href="../index.php">Back</a></p>';
     require_once('../incfiles/end.php');
     exit;
 }

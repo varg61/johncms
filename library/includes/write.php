@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (!$id) {
-    echo "ERROR<br/><a href='index.php?'>Back</a><br/>";
+    echo "";
     require_once('../incfiles/end.php');
     exit;
 }
@@ -29,7 +29,7 @@ if ($datauser['lastpost'] > (time() - $old)) {
 $typ = mysql_query("select * from `lib` where id='" . $id . "';");
 $ms = mysql_fetch_array($typ);
 if ($id != 0 && $ms['type'] != "cat") {
-    echo "ERROR<br/><a href='index.php?'>Back</a><br/>";
+    echo "";
     require_once('../incfiles/end.php');
     exit;
 }

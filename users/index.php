@@ -53,7 +53,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . date('j', time()) . "' AND `monthb` = '" . date('n', time()) . "' AND `preg` = '1'"), 0);
     $count_adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0"), 0);
     echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-         '<div class="gmenu"><form action="index.php?act=search" method="post">' .
+         '<div class="gmenu"><form action="search.php" method="post">' .
          '<p><h3><img src="../images/search.png" width="16" height="16" class="left" />&#160;' . $lng['search'] . '</h3>' .
          '<input type="text" name="search"/>' .
          '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
