@@ -191,7 +191,8 @@ switch ($type1['type']) {
             require('../incfiles/end.php');
             exit;
         }
-        $vr = functions::display_date($type1['time']);
+        $shift = (core::$system_set['timeshift'] + core::$user_set['timeshift']) * 3600;
+        $vr = date("d.m.Y / H:i", $type1['time'] + $shift);
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
                 require('../incfiles/head.php');
