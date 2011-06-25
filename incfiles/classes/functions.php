@@ -394,7 +394,7 @@ class functions extends core
         }
         if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
-        $ipinf = self::$user_rights || ($user['id'] && $user['id'] == self::$user_id) && (!isset($arg['iphide']) || isset($arg['iphide']) && !$arg['iphide']) ? 1 : 0;
+        $ipinf = !isset($arg['iphide']) && (self::$user_rights || ($user['id'] && $user['id'] == self::$user_id)) ? 1 : 0;
         $lastvisit = time() > $user['lastdate'] + 300 && isset($arg['lastvisit']) ? self::display_date($user['lastdate']) : false;
         if ($ipinf || $lastvisit || isset($arg['sub']) && !empty($arg['sub']) || isset($arg['footer'])) {
             $out .= '<div class="sub">';
