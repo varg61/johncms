@@ -513,8 +513,8 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                              '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'] .
                              ($set_user['translit'] ? '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'] : '') .
                              '</p><p><input type="submit" name="submit" value="' . $lng['write'] . '" style="width: 107px; cursor: pointer;"/> ' .
-                             '<input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p>' .
-                             '</form></div>';
+                             ($set_forum['preview'] ? '<input type="submit" value="' . $lng['preview'] . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                             '</p></form></div>';
                     } else {
                         echo '<p><input type="submit" name="submit" value="' . $lng['write'] . '"/></p></form></div>';
                     }
@@ -675,9 +675,9 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                              '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
                         if ($set_user['translit'])
                             echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
-                        echo '</p>';
-                        echo '<p><input type="submit" name="submit" value="' . $lng['write'] . '" style="width: 107px; cursor: pointer;"/> <input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p>' .
-                            '</form></div>';
+                        echo '</p><p><input type="submit" name="submit" value="' . $lng['write'] . '" style="width: 107px; cursor: pointer;"/> ' .
+                             ($set_forum['preview'] ? '<input type="submit" value="' . $lng['preview'] . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                             '</p></form></div>';
                     } else {
                         echo '<p><input type="submit" name="submit" value="' . $lng['write'] . '"/></p></form></div>';
                     }
