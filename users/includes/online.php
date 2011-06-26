@@ -29,23 +29,27 @@ echo '<div class="phdr"><b>' . $lng['who_on_site'] . '</b></div>' .
 switch ($mod) {
     case 'guest':
         // Список гостей Онлайн
+        echo '<div class="phdr"><b>' . $lng['guests'] . '</b></div>';
         $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300);
         $sql_list = "SELECT * FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `movings` DESC LIMIT $start, $kmess";
         break;
 
     case 'history':
         // История посетилелей за последние 2 суток
+        echo '<div class="phdr"><b>' . $lng['history'] . '</b></div>';
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `lastdate` > " . (time() - 172800 . " AND `lastdate` < " . (time() - 310));
         $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 172800) . " AND `lastdate` < " . (time() - 310) . " ORDER BY `sestime` DESC LIMIT $start, $kmess";
         break;
 
     default:
         // Список посетителей Онлайн
+        echo '<div class="phdr"><b>' . $lng['users'] . '</b></div>';
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `lastdate` > " . (time() - 300);
         $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `name` ASC LIMIT $start, $kmess";
 }
 
 $total = mysql_result(mysql_query($sql_total), 0);
+if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;' . ($mod ? 'mod=' . $mod . '&amp;' : ''), $start, $total, $kmess) . '</div>';
 if ($total) {
     $req = mysql_query($sql_list);
     $i = 0;
@@ -66,8 +70,8 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . functions::display_pagination('index.php?act=online&amp;' . ($mod ? 'mod=' . $mod . '&amp;' : ''), $start, $total, $kmess) . '</p>';
-    echo '<p><form action="index.php?act=online' . ($mod ? '&amp;mod=' . $mod : '') . '" method="post">' .
+    echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;' . ($mod ? 'mod=' . $mod . '&amp;' : ''), $start, $total, $kmess) . '</div>' .
+         '<p><form action="index.php?act=online' . ($mod ? '&amp;mod=' . $mod : '') . '" method="post">' .
          '<input type="text" name="page" size="2"/>' .
          '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
          '</form></p>';
