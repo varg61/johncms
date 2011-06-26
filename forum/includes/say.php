@@ -87,11 +87,12 @@ switch ($type1['type']) {
             require('../incfiles/end.php');
             exit;
         }
+        $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
+        if (isset($_POST['msgtrans']))
+            $msg = functions::trans($msg);
+        //Обрабатываем ссылки
+        $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
-            $msg = trim($_POST['msg']);
-            if (isset($_POST['msgtrans'])) {
-                $msg = functions::trans($msg);
-            }
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
                 require('../incfiles/head.php');
@@ -115,8 +116,6 @@ switch ($type1['type']) {
                 unset($_SESSION['fsort_id']);
                 unset($_SESSION['fsort_users']);
             }
-            //Обрабатываем ссылки
-            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
             // Добавляем сообщение в базу
             mysql_query("INSERT INTO `forum` SET
                 `refid` = '$id',
@@ -159,16 +158,22 @@ switch ($type1['type']) {
                     exit;
                 }
             }
-            echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $type1['text'] . '</div>' .
-                '<form name="form" action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><div class="gmenu">' .
+            $msg = functions::checkout($msg, 1, 1);
+            if ($set_user['smileys'])
+                $msg = functions::smileys($msg, $datauser['rights'] ? 1 : 0);
+            $msg = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg);
+            echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $type1['text'] . '</div>';
+            if ($msg && !isset($_POST['submit']))
+                echo '<div class="list1">' . functions::display_user($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date(time()) . ')</span>', 'body' => $msg)) . '</div>';
+            echo '<form name="form" action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><div class="gmenu">' .
                 '<p><h3>' . $lng_forum['post'] . '</h3>';
             if(!$is_mobile)
                 echo '</p><p>' . bbcode::auto_bb('form', 'msg');
-            echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
-                '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
+            echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : functions::check($_POST['msg'])) . '</textarea></p>' .
+                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
-                echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
-            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '"/></p>' .
+                echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'];
+            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '" style="width: 107px; cursor: pointer;"/> <input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p>' .
                 '</div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
@@ -187,22 +192,59 @@ switch ($type1['type']) {
         $th1 = mysql_fetch_array($th2);
         if (($th1['edit'] == 1 || $th1['close'] == 1) && $rights < 7) {
             require('../incfiles/head.php');
-            echo functions::display_error($lng_forum['error_topic_closed'], '<a href="index.php?id=' . $id . '">' . $lng['back'] . '</a>');
+            echo functions::display_error($lng_forum['error_topic_closed'], '<a href="index.php?id=' . $th1['id'] . '">' . $lng['back'] . '</a>');
+            require('../incfiles/end.php');
+            exit;
+        }
+        if ($type1['user_id'] == $user_id) {
+            require('../incfiles/head.php');
+            echo functions::display_error('Нельзя отвечать на свое же сообщение', '<a href="index.php?id=' . $th1['id'] . '">' . $lng['back'] . '</a>');
             require('../incfiles/end.php');
             exit;
         }
         $shift = (core::$system_set['timeshift'] + core::$user_set['timeshift']) * 3600;
         $vr = date("d.m.Y / H:i", $type1['time'] + $shift);
+        $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
+        $txt = isset($_POST['txt']) ? intval($_POST['txt']) : false;
+        if (isset($_POST['msgtrans']))
+            $msg = functions::trans($msg);
+        $to = $type1['from'];
+        if (!empty($_POST['citata'])) {
+            // Если была цитата, форматируем ее и обрабатываем
+            $citata = isset($_POST['citata']) ? trim($_POST['citata']) : '';
+            $citata = bbcode::notags($citata);
+            $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
+            $citata = mb_substr($citata, 0, 200);
+            $tp = date("d.m.Y/H:i", $type1['time']);
+            $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
+        } elseif (isset($_POST['txt'])) {
+            // Если был ответ, обрабатываем реплику
+            switch ($txt) {
+                case 2:
+                    $repl = $type1['from'] . ', ' . $lng_forum['reply_1'] . ', ';
+                    break;
+
+                case 3:
+                    $repl = $type1['from'] . ', ' . $lng_forum['reply_2'] . ' ([url=' . $set['homeurl'] . '/forum/index.php?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . $lng_forum['reply_3'] . ', ';
+                    break;
+
+                case 4:
+                    $repl = $type1['from'] . ', ' . $lng_forum['reply_4'] . ' ';
+                    break;
+
+                default :
+                    $repl = $type1['from'] . ', ';
+            }
+            $msg = $repl . ' ' . $msg;
+        }
+        //Обрабатываем ссылки
+        $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
                 require('../incfiles/head.php');
                 echo functions::display_error($lng['error_empty_message'], '<a href="index.php?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . $lng['repeat'] . '</a>');
                 require('../incfiles/end.php');
                 exit;
-            }
-            $msg = trim($_POST['msg']);
-            if (isset($_POST['msgtrans'])) {
-                $msg = functions::trans($msg);
             }
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
@@ -211,38 +253,6 @@ switch ($type1['type']) {
                 require('../incfiles/end.php');
                 exit;
             }
-            $to = $type1['from'];
-            if (!empty($_POST['citata'])) {
-                // Если была цитата, форматируем ее и обрабатываем
-                $citata = trim($_POST['citata']);
-                $citata = bbcode::notags($citata);
-                $citata = preg_replace('#\[c\](.*?)\[/c\]#si', '', $citata);
-                $citata = mb_substr($citata, 0, 200);
-                $tp = date("d.m.Y/H:i", $type1['time']);
-                $msg = '[c]' . $to . ' (' . $tp . ")\r\n" . $citata . '[/c]' . $msg;
-            } elseif (isset($_POST['txt'])) {
-                // Если был ответ, обрабатываем реплику
-                $txt = intval($_POST['txt']);
-                switch ($txt) {
-                    case 2:
-                        $repl = $type1['from'] . ', ' . $lng_forum['reply_1'] . ', ';
-                        break;
-
-                    case 3:
-                        $repl = $type1['from'] . ', ' . $lng_forum['reply_2'] . ' ([url=' . $set['homeurl'] . '/forum/index.php?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . $lng_forum['reply_3'] . ', ';
-                        break;
-
-                    case 4:
-                        $repl = $type1['from'] . ', ' . $lng_forum['reply_4'] . ' ';
-                        break;
-
-                    default :
-                        $repl = $type1['from'] . ', ';
-                }
-                $msg = $repl . ' ' . $msg;
-            }
-            //Обрабатываем ссылки
-            $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
             // Проверяем, не повторяется ли сообщение?
             $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '$user_id' AND `type` = 'm' ORDER BY `time` DESC LIMIT 1");
             if (mysql_num_rows($req) > 0) {
@@ -304,35 +314,39 @@ switch ($type1['type']) {
                     exit;
                 }
             }
+            $msg = functions::checkout($msg, 1, 1);
+            if ($set_user['smileys'])
+                $msg = functions::smileys($msg, $datauser['rights'] ? 1 : 0);
+            $msg = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg);
             echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $th1['text'] . '</div>';
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
             $qt = functions::checkout($qt, 0, 2);
-            echo '<form name="form" action="?act=say&amp;id=' . $id . '&amp;start=' . $start . '&amp;cyt" method="post">';
+            if (!empty($_POST['msg']) && !isset($_POST['submit']))
+                echo '<div class="list1">' . functions::display_user($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date(time()) . ')</span>', 'body' => $msg)) . '</div>';
+            echo '<form name="form" action="?act=say&amp;id=' . $id . '&amp;start=' . $start . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '" method="post"><div class="gmenu">';
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
-                echo '<div class="gmenu">' .
-                    '<p><b>' . $type1['from'] . '</b> <span class="gray">(' . date("d.m.Y/H:i", $type1['time']) . ')</span></p>' .
+                echo '<p><b>' . $type1['from'] . '</b> <span class="gray">(' . date("d.m.Y/H:i", $type1['time']) . ')</span></p>' .
                     '<p><h3>' . $lng_forum['cytate'] . '</h3>' .
                     '<textarea rows="' . $set_user['field_h'] . '" name="citata">' . $qt . '</textarea>' .
                     '<br /><small>' . $lng_forum['cytate_help'] . '</small></p>';
             } else {
                 // Форма с репликой
-                echo '<div class="gmenu"><p><h3>' . $lng_forum['reference'] . '</h3>' .
-                    '<input type="radio" value="1" checked="checked" name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
-                    '<input type="radio" value="2" name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_1'] . ',<br />' .
-                    '<input type="radio" value="3" name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_2'] . ' (<a href="index.php?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . $lng_forum['reply_3']
-                    . ',<br />' .
-                    '<input type="radio" value="4" name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_4'] . '</p>';
+                echo '<p><h3>' . $lng_forum['reference'] . '</h3>' .
+                    '<input type="radio" value="0" ' . (!$txt ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
+                    '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_1'] . ',<br />' .
+                    '<input type="radio" value="3" ' . ($txt == 3 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_2'] . ' (<a href="index.php?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . $lng_forum['reply_3'] . ',<br />' .
+                    '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_4'] . '</p>';
             }
             echo '<p><h3>' . $lng_forum['post'] . '</h3>';
             if(!$is_mobile)
                 echo '</p><p>' . bbcode::auto_bb('form', 'msg');
-            echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
-                '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
+            echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : functions::check($_POST['msg'])) . '</textarea></p>' .
+                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
-                echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
-            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '"/></p></div></form>';
+                echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'];
+            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '" style="width: 107px; cursor: pointer;"/> <input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p></div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
             '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .

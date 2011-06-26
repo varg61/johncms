@@ -152,33 +152,40 @@ if (!$error) {
             Редактирование поста
             -----------------------------------------------------------------
             */
+            $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
+            if (isset($_POST['msgtrans']))
+                $msg = functions::trans($msg);
             if (isset($_POST['submit'])) {
                 if (empty($_POST['msg'])) {
                     echo functions::display_error($lng['error_empty_message'], '<a href="index.php?act=editpost&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
                     require('../incfiles/end.php');
                     exit;
                 }
-                $msg = mysql_real_escape_string(trim($_POST['msg']));
-                if ($_POST['msgtrans'] == 1) {
-                    $msg = functions::trans($msg);
-                }
                 mysql_query("UPDATE `forum` SET
                     `tedit` = '" . time() . "',
                     `edit` = '$login',
                     `kedit` = '" . ($res['kedit'] + 1) . "',
-                    `text` = '$msg'
+                    `text` = '" . mysql_real_escape_string($msg) . "'
                     WHERE `id` = '$id'
                 ");
                 header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
             } else {
-                echo '<div class="phdr"><a href="' . $link . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['edit_message'] . '</div>' .
-                    '<div class="rmenu"><form name="form" action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><p>';
+                $msg = functions::checkout($msg, 1, 1);
+                if ($set_user['smileys'])
+                    $msg = functions::smileys($msg, $datauser['rights'] ? 1 : 0);
+                $msg = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg);
+                echo '<div class="phdr"><a href="' . $link . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['edit_message'] . '</div>';
+                if ($msg && !isset($_POST['submit'])) {
+                    $user = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1"));
+                    echo '<div class="list1">' . functions::display_user($user, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date($res['time']) . ')</span>', 'body' => $msg)) . '</div>';
+                }
+                echo '<div class="rmenu"><form name="form" action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><p>';
                 if(!$is_mobile)
                     echo bbcode::auto_bb('form', 'msg');
-                echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea><br/>';
+                echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? htmlentities($res['text'], ENT_QUOTES, 'UTF-8') : functions::check($_POST['msg'])) . '</textarea><br/>';
                 if ($set_user['translit'])
-                    echo '<input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'];
-                echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></form></div>' .
+                    echo '<input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'];
+                echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '" style="width: 107px; cursor: pointer;"/> <input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p></form></div>' .
                     '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
                     '<p><a href="' . $link . '">' . $lng['back'] . '</a></p>';
             }
