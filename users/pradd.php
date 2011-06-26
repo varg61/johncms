@@ -337,6 +337,7 @@ if ($user_id) {
                 $req = mysql_query("SELECT * FROM `privat` WHERE `user` = '$login' AND `type` = 'in' ORDER BY `id` DESC LIMIT $start,$kmess");
                 echo '<div class="phdr"><b>' . $lng_pm['incoming'] . '</b></div>';
             }
+            if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('pradd.php?act=in&amp;', $start, $total, $kmess) . '</div>';
             echo '<form action="pradd.php?act=delch" method="post">';
             $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
@@ -362,8 +363,8 @@ if ($user_id) {
             echo '</form>';
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . functions::display_pagination('pradd.php?act=in&amp;', $start, $total, $kmess) . '</p>';
-                echo '<p><form action="pradd.php?act=in" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                echo '<div class="topmenu">' . functions::display_pagination('pradd.php?act=in&amp;', $start, $total, $kmess) . '</div>' .
+                     '<p><form action="pradd.php?act=in" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
                 echo "<a href='pradd.php?act=delread'>" . $lng_pm['delete_read'] . "</a><br/>";
@@ -481,6 +482,7 @@ if ($user_id) {
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `privat` WHERE `author` = '$login' AND `type` = 'out'"), 0);
             $req = mysql_query("SELECT * FROM `privat` WHERE `author` = '$login' AND `type` = 'out' ORDER BY `id` DESC LIMIT $start,$kmess");
             echo '<div class="phdr"><b>' . $lng_pm['sent'] . '</b></div>';
+            if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('pradd.php?act=out&amp;', $start, $total, $kmess) . '</div>';
             echo "<form action='pradd.php?act=delch' method='post'>";
             $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
@@ -503,8 +505,8 @@ if ($user_id) {
             echo '</form>';
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<p>' . functions::display_pagination('pradd.php?act=out&amp;', $start, $total, $kmess) . '</p>';
-                echo '<p><form action="pradd.php?act=out" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                echo '<div class="topmenu">' . functions::display_pagination('pradd.php?act=out&amp;', $start, $total, $kmess) . '</div>' .
+                     '<p><form action="pradd.php?act=out" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
             if ($total > 0) {
                 echo "<a href='pradd.php?act=delout'>" . $lng_pm['delete_all_sent'] . "</a><br/>";
