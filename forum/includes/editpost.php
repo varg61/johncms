@@ -170,19 +170,19 @@ if (!$error) {
                 ");
                 header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
             } else {
-                $msg = functions::checkout($msg, 1, 1);
+                $msg_pre = functions::checkout($msg, 1, 1);
                 if ($set_user['smileys'])
-                    $msg = functions::smileys($msg, $datauser['rights'] ? 1 : 0);
-                $msg = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg);
+                    $msg_pre = functions::smileys($msg_pre, $datauser['rights'] ? 1 : 0);
+                $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
                 echo '<div class="phdr"><a href="' . $link . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['edit_message'] . '</div>';
                 if ($msg && !isset($_POST['submit'])) {
                     $user = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1"));
-                    echo '<div class="list1">' . functions::display_user($user, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date($res['time']) . ')</span>', 'body' => $msg)) . '</div>';
+                    echo '<div class="list1">' . functions::display_user($user, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date($res['time']) . ')</span>', 'body' => $msg_pre)) . '</div>';
                 }
                 echo '<div class="rmenu"><form name="form" action="?act=editpost&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><p>';
                 if(!$is_mobile)
                     echo bbcode::auto_bb('form', 'msg');
-                echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? htmlentities($res['text'], ENT_QUOTES, 'UTF-8') : functions::check($_POST['msg'])) . '</textarea><br/>';
+                echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? htmlentities($res['text'], ENT_QUOTES, 'UTF-8') : functions::checkout($_POST['msg'])) . '</textarea><br/>';
                 if ($set_user['translit'])
                     echo '<input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'];
                 echo '</p><p><input type="submit" name="submit" value="' . $lng['save'] . '" style="width: 107px; cursor: pointer;"/> <input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p></form></div>' .

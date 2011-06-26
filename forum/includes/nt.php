@@ -173,14 +173,14 @@ if (isset($_POST['submit'])) {
             exit;
         }
     }
-    $msg = functions::checkout($msg, 1, 1);
+    $msg_pre = functions::checkout($msg, 1, 1);
     if ($set_user['smileys'])
-        $msg = functions::smileys($msg, $datauser['rights'] ? 1 : 0);
-    $msg = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg);
+        $msg_pre = functions::smileys($msg_pre, $datauser['rights'] ? 1 : 0);
+    $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
     echo '<div class="phdr"><a href="index.php?id=' . $id . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['new_topic'] . '</div>';
     if ($msg && $th && !isset($_POST['submit']))
         echo '<div class="list1"><img src="../theme/default/images/op.gif" border="0" alt="op" /> <span style="font-weight: bold">' . $th . '</span></div>' .
-            '<div class="list2">' . functions::display_user($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date(time()) . ')</span>', 'body' => $msg)) . '</div>';    
+            '<div class="list2">' . functions::display_user($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date(time()) . ')</span>', 'body' => $msg_pre)) . '</div>';
     echo '<form name="form" action="index.php?act=nt&amp;id=' . $id . '" method="post">' .
         '<div class="gmenu">' .
         '<p><h3>' . $lng['section'] . '</h3>' .
@@ -190,7 +190,7 @@ if (isset($_POST['submit'])) {
         '<p><h3>' . $lng_forum['post'] . '</h3>';
     if(!$is_mobile)
         echo '</p><p>' . bbcode::auto_bb('form', 'msg');
-    echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? functions::check($_POST['msg']) : '') . '</textarea></p>' .
+    echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? functions::checkout($_POST['msg']) : '') . '</textarea></p>' .
         '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
     if ($set_user['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'];
