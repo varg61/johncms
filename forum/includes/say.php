@@ -152,8 +152,8 @@ switch ($type1['type']) {
                 if (!isset($_GET['yes'])) {
                     $lng_faq = core::load_lng('faq');
                     echo '<p>' . $lng_faq['forum_rules_text'] . '</p>' .
-                        '<p><a href="index.php?act=say&amp;id=' . $id . '&amp;yes">' . $lng_forum['agree'] . '</a> | ' .
-                        '<a href="index.php?id=' . $id . '">' . $lng_forum['not_agree'] . '</a></p>';
+                         '<p><a href="index.php?act=say&amp;id=' . $id . '&amp;yes">' . $lng_forum['agree'] . '</a> | ' .
+                         '<a href="index.php?id=' . $id . '">' . $lng_forum['not_agree'] . '</a></p>';
                     require('../incfiles/end.php');
                     exit;
                 }
@@ -166,19 +166,20 @@ switch ($type1['type']) {
             if ($msg && !isset($_POST['submit']))
                 echo '<div class="list1">' . functions::display_user($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . functions::display_date(time()) . ')</span>', 'body' => $msg_pre)) . '</div>';
             echo '<form name="form" action="index.php?act=say&amp;id=' . $id . '&amp;start=' . $start . '" method="post"><div class="gmenu">' .
-                '<p><h3>' . $lng_forum['post'] . '</h3>';
-            if(!$is_mobile)
+                 '<p><h3>' . $lng_forum['post'] . '</h3>';
+            if (!$is_mobile)
                 echo '</p><p>' . bbcode::auto_bb('form', 'msg');
             echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : functions::checkout($msg)) . '</textarea></p>' .
-                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
+                 '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'];
-            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '" style="width: 107px; cursor: pointer;"/> <input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p>' .
-                '</div></form>';
+            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '" style="width: 107px; cursor: pointer;"/> ' .
+                 ($set_forum['preview'] ? '<input type="submit" value="' . $lng['preview'] . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                 '</p></div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
-            '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
-            '<p><a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a></p>';
+             '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+             '<p><a href="?id=' . $id . '&amp;start=' . $start . '">' . $lng['back'] . '</a></p>';
         break;
 
     case 'm':
@@ -328,29 +329,32 @@ switch ($type1['type']) {
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
                 echo '<p><b>' . $type1['from'] . '</b> <span class="gray">(' . date("d.m.Y/H:i", $type1['time']) . ')</span></p>' .
-                    '<p><h3>' . $lng_forum['cytate'] . '</h3>' .
-                    '<textarea rows="' . $set_user['field_h'] . '" name="citata">' . $qt . '</textarea>' .
-                    '<br /><small>' . $lng_forum['cytate_help'] . '</small></p>';
+                     '<p><h3>' . $lng_forum['cytate'] . '</h3>' .
+                     '<textarea rows="' . $set_user['field_h'] . '" name="citata">' . (empty($_POST['citata']) ? $qt : functions::checkout($_POST['citata'])) . '</textarea>' .
+                     '<br /><small>' . $lng_forum['cytate_help'] . '</small></p>';
             } else {
                 // Форма с репликой
                 echo '<p><h3>' . $lng_forum['reference'] . '</h3>' .
-                    '<input type="radio" value="0" ' . (!$txt ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
-                    '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_1'] . ',<br />' .
-                    '<input type="radio" value="3" ' . ($txt == 3 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_2'] . ' (<a href="index.php?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . $lng_forum['reply_3'] . ',<br />' .
-                    '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_4'] . '</p>';
+                     '<input type="radio" value="0" ' . (!$txt ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
+                     '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_1'] . ',<br />' .
+                     '<input type="radio" value="3" ' . ($txt == 3 ? 'checked="checked"'
+                        : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_2'] . ' (<a href="index.php?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . $lng_forum['reply_3'] . ',<br />' .
+                     '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . $lng_forum['reply_4'] . '</p>';
             }
             echo '<p><h3>' . $lng_forum['post'] . '</h3>';
-            if(!$is_mobile)
+            if (!$is_mobile)
                 echo '</p><p>' . bbcode::auto_bb('form', 'msg');
             echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : functions::checkout($_POST['msg'])) . '</textarea></p>' .
-                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
+                 '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
             if ($set_user['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'];
-            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '" style="width: 107px; cursor: pointer;"/> <input type="submit" value="Предпросмотр" style="width: 107px; cursor: pointer;"/></p></div></form>';
+            echo '</p><p><input type="submit" name="submit" value="' . $lng['sent'] . '" style="width: 107px; cursor: pointer;"/> ' .
+                 ($set_forum['preview'] ? '<input type="submit" value="' . $lng['preview'] . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                 '</p></div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . $lng['translit'] . '</a> | ' .
-            '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
-            '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . $start . '">' . $lng['back'] . '</a></p>';
+             '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+             '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . $start . '">' . $lng['back'] . '</a></p>';
         break;
 
     default:

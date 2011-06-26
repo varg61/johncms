@@ -29,21 +29,18 @@ echo '<div class="phdr"><b>' . $lng['who_on_site'] . '</b></div>' .
 switch ($mod) {
     case 'guest':
         // Список гостей Онлайн
-        echo '<div class="phdr"><b>' . $lng['guests'] . '</b></div>';
         $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300);
         $sql_list = "SELECT * FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `movings` DESC LIMIT $start, $kmess";
         break;
 
     case 'history':
         // История посетилелей за последние 2 суток
-        echo '<div class="phdr"><b>' . $lng['history'] . '</b></div>';
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `lastdate` > " . (time() - 172800 . " AND `lastdate` < " . (time() - 310));
         $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 172800) . " AND `lastdate` < " . (time() - 310) . " ORDER BY `sestime` DESC LIMIT $start, $kmess";
         break;
 
     default:
         // Список посетителей Онлайн
-        echo '<div class="phdr"><b>' . $lng['users'] . '</b></div>';
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `lastdate` > " . (time() - 300);
         $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `name` ASC LIMIT $start, $kmess";
 }

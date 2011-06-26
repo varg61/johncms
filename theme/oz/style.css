@@ -85,18 +85,6 @@ ul {
   padding: 2px 4px 4px 4px;
 }
 
-.clip {
-  color: #4a5663;
-  border: 1px solid white;
-  font-size: x-small;
-  background-color: #bfc6cf;
-  padding: 4px 4px 8px 4px;
-}
-
-.clip a {
-  color: #424e59;
-}
-
 .copy {
   border-top: 1px solid #c2c2c2;
   text-align: center;

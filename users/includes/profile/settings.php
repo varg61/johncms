@@ -47,8 +47,9 @@ switch ($mod) {
         $set_forum = array();
         $set_forum = unserialize($datauser['set_forum']);
         if (isset($_POST['submit'])) {
-            $set_forum['farea'] = isset($_POST['farea']) ? 1 : 0;
-            $set_forum['upfp'] = isset($_POST['upfp']) ? 1 : 0;
+            $set_forum['farea'] = isset($_POST['farea']);
+            $set_forum['upfp'] = isset($_POST['upfp']);
+            $set_forum['preview'] = isset($_POST['preview']);
             $set_forum['postclip'] = isset($_POST['postclip']) ? intval($_POST['postclip']) : 1;
             $set_forum['postcut'] = isset($_POST['postcut']) ? intval($_POST['postcut']) : 1;
             if ($set_forum['postclip'] < 0 || $set_forum['postclip'] > 2)
@@ -62,6 +63,7 @@ switch ($mod) {
             $set_forum = array();
             $set_forum['farea'] = 0;
             $set_forum['upfp'] = 0;
+            $set_forum['preview'] = 1;
             $set_forum['postclip'] = 1;
             $set_forum['postcut'] = 2;
             mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id'");
@@ -71,6 +73,7 @@ switch ($mod) {
              '<div class="menu"><p><h3>' . $lng_set['main_settings'] . '</h3>' .
              '<input name="upfp" type="checkbox" value="1" ' . ($set_forum['upfp'] ? 'checked="checked"' : '') . ' />&#160;' . $lng_set['sorting_return'] . '<br/>' .
              '<input name="farea" type="checkbox" value="1" ' . ($set_forum['farea'] ? 'checked="checked"' : '') . ' />&#160;' . $lng_set['field_on'] . '<br/>' .
+             '<input name="preview" type="checkbox" value="1" ' . ($set_forum['preview'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['preview'] . '<br/>' .
              '</p><p><h3>' . $lng_set['clip_first_post'] . '</h3>' .
              '<input type="radio" value="2" name="postclip" ' . ($set_forum['postclip'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['always'] . '<br />' .
              '<input type="radio" value="1" name="postclip" ' . ($set_forum['postclip'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng_set['in_not_read'] . '<br />' .

@@ -24,6 +24,7 @@ if (isset($_SESSION['ref']))
 $set_forum = $user_id && !empty($datauser['set_forum']) ? unserialize($datauser['set_forum']) : array(
     'farea' => 0,
     'upfp' => 0,
+    'preview' => 1,
     'postclip' => 1,
     'postcut' => 2
 );
@@ -460,7 +461,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                     WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                     ORDER BY `forum`.`id` LIMIT 1");
                     $postres = mysql_fetch_assoc($postreq);
-                    echo '<div class="clip">';
+                    echo '<div class="topmenu"><p>';
                     if ($postres['sex'])
                         echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'w') . ($postres['datereg'] > time() - 86400 ? '_new.png" width="14"' : '.png" width="10"') . ' height="10"/>&#160;';
                     else
@@ -488,7 +489,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                     echo functions::checkout(mb_substr($postres['text'], 0, 500), 0, 2);
                     if (mb_strlen($postres['text']) > 500)
                         echo '...<a href="index.php?act=post&amp;id=' . $postres['id'] . '">' . $lng_forum['read_all'] . '</a>';
-                    echo '</div>';
+                    echo '</p></div>';
                 }
                 if ($filter)
                     echo '<div class="rmenu">' . $lng_forum['filter_on'] . '</div>';
