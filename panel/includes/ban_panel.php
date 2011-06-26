@@ -81,7 +81,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . functions::display_pagination('index.php?act=ban_panel&amp;', $start, $total, $kmess) . '</p>';
+            echo '<div class="topmenu">' . functions::display_pagination('index.php?act=ban_panel&amp;', $start, $total, $kmess) . '</div>';
             echo '<p><form action="index.php?act=ban_panel" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=ban_panel&amp;mod=amnesty">' . $lng_ban['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';

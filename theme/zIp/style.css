@@ -304,3 +304,20 @@ input[type="submit"]:hover {
   margin: 2px;
   font-size: 11px;
 }
+
+.currentpage {
+    background-color: #edebeb;
+    border: 1px solid #cccccc;
+    padding: 0px 5px 0px 5px;
+}
+
+a.pagenav {
+    border: 1px solid #a7d3ff;
+    padding: 0px 2px 0px 2px;
+    text-decoration: none;
+}
+
+a.pagenav:hover {
+    background-color: #f7f7f7;
+    border: 1px solid #dedede;
+}

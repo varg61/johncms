@@ -27,16 +27,16 @@ switch ($mod) {
     case 'girls':
         $sql = "WHERE `users`.`sex` = 'zh'";
         break;
-        default:
-        $sql = '';
+    default:
+        $sql = "WHERE `users`.`sex` != ''";
 }
-$menu = array (
+$menu = array(
     (!$mod ? '<b>' . $lng['all'] . '</b>' : '<a href="album.php?act=users">' . $lng['all'] . '</a>'),
     ($mod == 'boys' ? '<b>' . $lng['mans'] . '</b>' : '<a href="album.php?act=users&amp;mod=boys">' . $lng['mans'] . '</a>'),
     ($mod == 'girls' ? '<b>' . $lng['womans'] . '</b>' : '<a href="album.php?act=users&amp;mod=girls">' . $lng['womans'] . '</a>')
 );
 echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $lng['list'] . '</div>' .
-    '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
+     '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     FROM `cms_album_files`
     LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
@@ -58,10 +58,10 @@ if ($total) {
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
-    echo '<p>' . functions::display_pagination('album.php?act=users' . ($mod ? '&amp;mod=' . $mod : '') . '&amp;', $start, $total, $kmess) . '</p>' .
-        '<p><form action="album.php?act=users' . ($mod == 'girls' ? '&amp;mod=girls' : '') . '" method="post">' .
-        '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
-        '</form></p>';
+    echo '<div class="topmenu">' . functions::display_pagination('album.php?act=users' . ($mod ? '&amp;mod=' . $mod : '') . '&amp;', $start, $total, $kmess) . '</div>' .
+         '<p><form action="album.php?act=users' . ($mod ? '&amp;mod=' . $mod : '') . '" method="post">' .
+         '<input type="text" name="page" size="2"/>' .
+         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+         '</form></p>';
 }
 ?>

@@ -54,7 +54,7 @@ if ($search && !$error) {
     ));
     $search_db = '%' . $search_db . '%';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "'"), 0);
-    echo '<div class="phdr">' . $lng['search_results'] . '</div>';
+    echo '<div class="phdr"><b>' . $lng['search_results'] . '</b></div>';
     if ($total > $kmess)
         echo '<div class="topmenu">' . functions::display_pagination('search.php?search=' . urlencode($search) . '&amp;', $start, $total, $kmess) . '</div>';
     if ($total > 0) {

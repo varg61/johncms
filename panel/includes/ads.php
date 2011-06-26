@@ -24,8 +24,7 @@ switch ($mod) {
         Добавляем / редактируем ссылку
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?act=ads"><b>' . $lng['advertisement'] . '</b></a> | ' . ($id
-                ? $lng['link_edit'] : $lng['link_add']) . '</div>';
+        echo '<div class="phdr"><a href="index.php?act=ads"><b>' . $lng['advertisement'] . '</b></a> | ' . ($id ? $lng['link_edit'] : $lng['link_add']) . '</div>';
         if ($id) {
             // Если ссылка редактироется, запрашиваем ее данные в базе
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = '$id'");
@@ -128,8 +127,7 @@ switch ($mod) {
             echo '<form action="index.php?act=ads&amp;mod=edit' . ($id ? '&amp;id=' . $id : '') . '" method="post">' .
                  '<div class="menu"><p><h3>' . $lng['link'] . '</h3>' .
                  '<input type="text" name="link" value="' . htmlentities($res['link'], ENT_QUOTES, 'UTF-8') . '"/><br />' .
-                 '<input type="checkbox" name="show" ' . ($res['show'] ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['link_direct'] . '<br />' .
+                 '<input type="checkbox" name="show" ' . ($res['show'] ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['link_direct'] . '<br />' .
                  '<small>' . $lng['link_direct_help'] . '</small></p>' .
                  '<p><h3>' . $lng['title'] . '</h3>' .
                  '<input type="text" name="name" value="' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '"/><br />' .
@@ -145,37 +143,23 @@ switch ($mod) {
                  '<small>' . $lng['link_add_days_help'] . '</small></p>' .
                  '</div><div class="gmenu">' .
                  '<p><h3>' . $lng['to_show'] . '</h3>' .
-                 '<input type="radio" name="view" value="0" ' . (!$res['view'] ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['to_all'] . '<br />' .
-                 '<input type="radio" name="view" value="1" ' . ($res['view'] == 1 ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['to_guest'] . '<br />' .
-                 '<input type="radio" name="view" value="2" ' . ($res['view'] == 2 ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['to_users'] . '</p>' .
+                 '<input type="radio" name="view" value="0" ' . (!$res['view'] ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['to_all'] . '<br />' .
+                 '<input type="radio" name="view" value="1" ' . ($res['view'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['to_guest'] . '<br />' .
+                 '<input type="radio" name="view" value="2" ' . ($res['view'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['to_users'] . '</p>' .
                  '<p><h3>' . $lng['arrangement'] . '</h3>' .
-                 '<input type="radio" name="type" value="0" ' . (!$res['type'] ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['links_armt_over_logo'] . '<br />' .
-                 '<input type="radio" name="type" value="1" ' . ($res['type'] == 1 ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['links_armt_under_usermenu'] . '<br />' .
-                 '<input type="radio" name="type" value="2" ' . ($res['type'] == 2 ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['links_armt_over_counters'] . '<br />' .
-                 '<input type="radio" name="type" value="3" ' . ($res['type'] == 3 ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['links_armt_under_counters'] . '</p>' .
+                 '<input type="radio" name="type" value="0" ' . (!$res['type'] ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['links_armt_over_logo'] . '<br />' .
+                 '<input type="radio" name="type" value="1" ' . ($res['type'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['links_armt_under_usermenu'] . '<br />' .
+                 '<input type="radio" name="type" value="2" ' . ($res['type'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['links_armt_over_counters'] . '<br />' .
+                 '<input type="radio" name="type" value="3" ' . ($res['type'] == 3 ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['links_armt_under_counters'] . '</p>' .
                  '<p><h3>' . $lng['placing'] . '</h3>' .
-                 '<input type="radio" name="layout" value="0" ' . (!$res['layout'] ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['link_add_placing_all'] . '<br />' .
-                 '<input type="radio" name="layout" value="1" ' . ($res['layout'] == 1 ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['link_add_placing_front'] . '<br />' .
-                 '<input type="radio" name="layout" value="2" ' . ($res['layout'] == 2 ? 'checked="checked"'
-                    : '') . '/>&nbsp;' . $lng['link_add_placing_child'] . '</p>' .
+                 '<input type="radio" name="layout" value="0" ' . (!$res['layout'] ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['link_add_placing_all'] . '<br />' .
+                 '<input type="radio" name="layout" value="1" ' . ($res['layout'] == 1 ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['link_add_placing_front'] . '<br />' .
+                 '<input type="radio" name="layout" value="2" ' . ($res['layout'] == 2 ? 'checked="checked"' : '') . '/>&nbsp;' . $lng['link_add_placing_child'] . '</p>' .
                  '<p><h3>' . $lng['links_allocation'] . '</h3>' .
-                 '<input type="checkbox" name="bold" ' . ($res['bold'] ? 'checked="checked"'
-                    : '') . '/>&nbsp;<b>' . $lng['font_bold'] . '</b><br />' .
-                 '<input type="checkbox" name="italic" ' . ($res['italic'] ? 'checked="checked"'
-                    : '') . '/>&nbsp;<i>' . $lng['font_italic'] . '</i><br />' .
-                 '<input type="checkbox" name="underline" ' . ($res['underline'] ? 'checked="checked"'
-                    : '') . '/>&nbsp;<u>' . $lng['font_underline'] . '</u></p></div>' .
-                 '<div class="phdr"><input type="submit" name="submit" value="' . ($id ? $lng['edit']
-                    : $lng['add']) . '" /></div></form>' .
+                 '<input type="checkbox" name="bold" ' . ($res['bold'] ? 'checked="checked"' : '') . '/>&nbsp;<b>' . $lng['font_bold'] . '</b><br />' .
+                 '<input type="checkbox" name="italic" ' . ($res['italic'] ? 'checked="checked"' : '') . '/>&nbsp;<i>' . $lng['font_italic'] . '</i><br />' .
+                 '<input type="checkbox" name="underline" ' . ($res['underline'] ? 'checked="checked"' : '') . '/>&nbsp;<u>' . $lng['font_underline'] . '</u></p></div>' .
+                 '<div class="phdr"><input type="submit" name="submit" value="' . ($id ? $lng['edit'] : $lng['add']) . '" /></div></form>' .
                  '<p><a href="index.php?act=ads">' . $lng['advertisement'] . '</a><br />' .
                  '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
@@ -287,7 +271,7 @@ switch ($mod) {
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         break;
 
-    case 'siteads':
+    default:
         /*
         -----------------------------------------------------------------
         Главное меню модуля управления рекламой
@@ -312,14 +296,10 @@ switch ($mod) {
         );
         $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
         $array_menu = array(
-            (!$type ? $lng['links_armt_over_logo']
-                    : '<a href="index.php?act=ads">' . $lng['links_armt_over_logo'] . '</a>'),
-            ($type == 1 ? $lng['links_armt_under_usermenu']
-                    : '<a href="index.php?act=ads&amp;type=1">' . $lng['links_armt_under_usermenu'] . '</a>'),
-            ($type == 2 ? $lng['links_armt_over_counters']
-                    : '<a href="index.php?act=ads&amp;type=2">' . $lng['links_armt_over_counters'] . '</a>'),
-            ($type == 3 ? $lng['links_armt_under_counters']
-                    : '<a href="index.php?act=ads&amp;type=3">' . $lng['links_armt_under_counters'] . '</a>')
+            (!$type ? $lng['links_armt_over_logo'] : '<a href="index.php?act=ads">' . $lng['links_armt_over_logo'] . '</a>'),
+            ($type == 1 ? $lng['links_armt_under_usermenu'] : '<a href="index.php?act=ads&amp;type=1">' . $lng['links_armt_under_usermenu'] . '</a>'),
+            ($type == 2 ? $lng['links_armt_over_counters'] : '<a href="index.php?act=ads&amp;type=2">' . $lng['links_armt_over_counters'] . '</a>'),
+            ($type == 3 ? $lng['links_armt_under_counters'] : '<a href="index.php?act=ads&amp;type=3">' . $lng['links_armt_under_counters'] . '</a>')
         );
         echo '<div class="topmenu">' . functions::display_menu($array_menu) . '</div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'"), 0);
@@ -342,16 +322,14 @@ switch ($mod) {
                 ////////////////////////////////////////////////////////////
                 // Выводим рекламмную ссылку с атрибутами                 //
                 ////////////////////////////////////////////////////////////
-                echo '<p><img src="../images/' . ($res['to'] ? 'red'
-                        : 'green') . '.gif" width="16" height="16" class="left"/>&#160;' .
+                echo '<p><img src="../images/' . ($res['to'] ? 'red' : 'green') . '.gif" width="16" height="16" class="left"/>&#160;' .
                      '<a href="' . htmlspecialchars($res['link']) . '">' . htmlspecialchars($res['link']) . '</a>&nbsp;[' . $res['count'] . ']<br />' . $name . '</p>';
                 $menu = array(
                     '<a href="index.php?act=ads&amp;mod=up&amp;id=' . $res['id'] . '">' . $lng['up'] . '</a>',
                     '<a href="index.php?act=ads&amp;mod=down&amp;id=' . $res['id'] . '">' . $lng['down'] . '</a>',
                     '<a href="index.php?act=ads&amp;mod=edit&amp;id=' . $res['id'] . '">' . $lng['edit'] . '</a>',
                     '<a href="index.php?act=ads&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>',
-                    '<a href="index.php?act=ads&amp;mod=show&amp;id=' . $res['id'] . '">' . ($res['to']
-                            ? $lng['to_show'] : $lng['hide']) . '</a>'
+                    '<a href="index.php?act=ads&amp;mod=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? $lng['to_show'] : $lng['hide']) . '</a>'
                 );
                 echo '<div class="sub">' .
                      '<div>' . functions::display_menu($menu) . '</div>' .
@@ -379,8 +357,7 @@ switch ($mod) {
                     if ($remains)
                         echo '<br /><span class="gray">' . $lng['remains'] . ':</span> ' . implode($remains, ', ');
                 }
-                echo ($res['show'] ? '<br /><span class="red"><b>' . $lng['link_direct'] . '</b></span>'
-                        : '') . '</p></div></div>';
+                echo ($res['show'] ? '<br /><span class="red"><b>' . $lng['link_direct'] . '</b></span>' : '') . '</p></div></div>';
                 ++$i;
             }
         } else {
@@ -388,7 +365,7 @@ switch ($mod) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . functions::display_pagination('index.php?act=ads&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</p>' .
+            echo '<div class="topmenu">' . functions::display_pagination('index.php?act=ads&amp;type=' . $type . '&amp;', $start, $total, $kmess) . '</div>' .
                  '<p><form action="index.php?act=ads&amp;type=' . $type . '" method="post">' .
                  '<input type="text" name="page" size="2"/>' .
                  '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
@@ -396,22 +373,5 @@ switch ($mod) {
         echo '<p><a href="index.php?act=ads&amp;mod=edit">' . $lng['link_add'] . '</a><br />' .
              '<a href="index.php?act=ads&amp;mod=clear">' . $lng['links_delete_hidden'] . '</a><br />' .
              '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-        break;
-
-    default:
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['advertisement'] . '</div>';
-        echo '<div class="menu">' .
-             '<p><h3>Рекламные сети</h3><ul>' .
-             '<li><a href="">admob.com</a></li>' .
-             '<li><a href="">multiclick.ru</a></li>' .
-             '<li><a href="">mobileads.ru</a></li>' .
-             '</ul></p>' .
-             '<p><h3>Реклама сайта</h3><ul>' .
-             '<li>Активная</li>' .
-             '<li>Неактивная</li>' .
-             '</ul></p>' .
-             '<p><h3>Настройки</h3><ul>' .
-             '</ul></p>' .
-             '</div>';
 }
 ?>

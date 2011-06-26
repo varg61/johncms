@@ -44,7 +44,6 @@ $array = array(
     'karma',
     'reg',
     'search_ip',
-    'search_user',
     'usr',
     'usr_adm',
     'usr_clean',
@@ -70,7 +69,7 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
          '<li><a href="index.php?act=ban_panel">' . $lng['ban_panel'] . '</a>&#160;(' . $bantotal . ')</li>' .
          '<li><a href="index.php?act=antiflood">' . $lng['antiflood'] . '</a></li>' .
          '<li><a href="index.php?act=karma">' . $lng['karma'] . '</a></li><br />' .
-         '<li><a href="index.php?act=search_user">' . $lng['search_nick'] . '</a></li>' .
+         '<li><a href="../users/search.php">' . $lng['search_nick'] . '</a></li>' .
          '<li><a href="index.php?act=search_ip">' . $lng['ip_search'] . '</a></li>' .
          '</ul></p></div>';
     if ($rights >= 7) {

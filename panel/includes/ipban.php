@@ -354,7 +354,7 @@ switch ($mod) {
         echo '<div class="rmenu"><form action="index.php?act=ipban&amp;mod=new" method="post"><input type="submit" name="" value="' . $lng['ip_ban_new'] . '" /></form></div>';
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . functions::display_pagination('index.php?act=ipban&amp;', $start, $total, $kmess) . '</p>';
+            echo '<div class="topmenu">' . functions::display_pagination('index.php?act=ipban&amp;', $start, $total, $kmess) . '</div>';
             echo '<p><form action="index.php?act=ipban" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p>';

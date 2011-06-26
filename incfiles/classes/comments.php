@@ -255,12 +255,13 @@ class comments
                 */
                 if (!empty($arg['context_top']))
                     echo $arg['context_top'];
-                echo '<div class="phdr"><b>' . $arg['title'] . '</b></div>';
                 if (!$this->ban) {
                     // Показываем форму ввода
                     echo $this->msg_form('&amp;mod=add_comment');
                 }
                 $this->total = $this->msg_total();
+                echo '<div class="phdr"><b>' . $arg['title'] . '</b></div>';
+                if ($this->total > $kmess) echo '<div class="topmenu">' . functions::display_pagination($this->url . '&amp;', $start, $this->total, $kmess) . '</div>';
                 if ($this->total) {
                     $req = mysql_query("SELECT `" . $this->comments_table . "`.*, `" . $this->comments_table . "`.`id` AS `subid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
                     FROM `" . $this->comments_table . "` LEFT JOIN `users` ON `" . $this->comments_table . "`.`user_id` = `users`.`id`
@@ -309,8 +310,8 @@ class comments
                 }
                 echo '<div class="phdr">' . core::$lng['total'] . ': ' . $this->total . '</div>';
                 if ($this->total > $kmess) {
-                    echo functions::display_pagination($this->url . '&amp;', $start, $this->total, $kmess);
-                    echo '<p><form action="' . $this->url . '" method="post">' .
+                    echo '<div class="topmenu">' . functions::display_pagination($this->url . '&amp;', $start, $this->total, $kmess) . '</div>' .
+                         '<p><form action="' . $this->url . '" method="post">' .
                          '<input type="text" name="page" size="2"/>' .
                          '<input type="submit" value="' . core::$lng['to_page'] . ' &gt;&gt;"/>' .
                          '</form></p>';

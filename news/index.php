@@ -260,8 +260,8 @@ switch ($do) {
         }
         echo '<div class="phdr">' . $lng['total'] . ':&#160;' . $total . '</div>';
         if ($total > $kmess) {
-            echo '<p>' . functions::display_pagination('index.php?', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="index.php" method="post">' .
+            echo '<div class="topmenu">' . functions::display_pagination('index.php?', $start, $total, $kmess) . '</div>' .
+                 '<p><form action="index.php" method="post">' .
                  '<input type="text" name="page" size="2"/>' .
                  '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }

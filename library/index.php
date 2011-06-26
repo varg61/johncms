@@ -79,7 +79,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
     } else {
         $tip = $zag['type'];
         if ($tip == "cat") {
-            echo '<div class="phdr"><b>' . htmlentities($zag['text'], ENT_QUOTES, 'UTF-8') . '</b></div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . $lng['library'] . '</b></a> | ' . htmlentities($zag['text'], ENT_QUOTES, 'UTF-8') . '</div>';
         }
     }
     switch ($tip) {
@@ -90,6 +90,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
             $totalbk = mysql_result($bkz, 0);
             if ($totalcat > 0) {
                 $total = $totalcat;
+                if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</div>';
                 $req = mysql_query("SELECT `id`, `text`  FROM `lib` WHERE `type` = 'cat' AND `refid` = '$id' LIMIT " . $start . "," . $kmess);
                 $i = 0;
                 while ($cat1 = mysql_fetch_array($req)) {
@@ -111,6 +112,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                 echo '<div class="phdr">' . $lng['total'] . ': ' . $totalcat . '</div>';
             } elseif ($totalbk > 0) {
                 $total = $totalbk;
+                if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</div>';
                 $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . $id . "' and moder='1' order by `time` desc LIMIT " . $start . "," . $kmess);
                 $i = 0;
                 while ($bk1 = mysql_fetch_array($bk)) {
@@ -125,12 +127,12 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
             } else {
                 $total = 0;
             }
-            echo '<p>';
             // Навигация по страницам
             if ($total > $kmess) {
-                echo '<p>' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>';
-                echo '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</div>' .
+                     '<p><form action="index.php" method="get"><input type="hidden" name="id" value="' . $id . '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
+            echo '<p>';
             if (($rights == 5 || $rights >= 6) && $id != 0) {
                 $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . $id . "'");
                 $ct1 = mysql_num_rows($ct);

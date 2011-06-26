@@ -42,9 +42,9 @@ switch ($act) {
                 header("Location: index.php");
             } else {
                 echo '<div class="phdr"><a href="index.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['delete_message'] . '</div>' .
-                    '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '?<br/>' .
-                    '<a href="index.php?act=delpost&amp;id=' . $id . '&amp;yes">' . $lng['delete'] . '</a> | ' .
-                    '<a href="index.php">' . $lng['cancel'] . '</a></p></div>';
+                     '<div class="rmenu"><p>' . $lng['delete_confirmation'] . '?<br/>' .
+                     '<a href="index.php?act=delpost&amp;id=' . $id . '&amp;yes">' . $lng['delete'] . '</a> | ' .
+                     '<a href="index.php">' . $lng['cancel'] . '</a></p></div>';
             }
         }
         break;
@@ -66,7 +66,7 @@ switch ($act) {
         if ($trans)
             $msg = functions::trans($msg);
         // Проверяем на ошибки
-        $error = array ();
+        $error = array();
         $flood = false;
         if (!$user_id && empty($_POST['name']))
             $error[] = $lng['error_empty_name'];
@@ -142,15 +142,15 @@ switch ($act) {
                 $req = mysql_query("SELECT * FROM `guest` WHERE `id` = '$id'");
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="menu">' .
-                    '<div class="quote"><b>' . $res['name'] . '</b>' .
-                    '<br />' . functions::checkout($res['text']) . '</div>' .
-                    '<form name="form" action="index.php?act=otvet&amp;id=' . $id . '" method="post">' .
-                    '<p><h3>' . $lng['reply'] . '</h3>' . bbcode::auto_bb('form', 'otv') .
-                    '<textarea rows="' . $set_user['field_h'] . '" name="otv">' . functions::checkout($res['otvet']) . '</textarea></p>' .
-                    '<p><input type="submit" name="submit" value="' . $lng['reply'] . '"/></p>' .
-                    '</form></div>' .
-                    '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
-                    '<p><a href="index.php">' . $lng['back'] . '</a></p>';
+                     '<div class="quote"><b>' . $res['name'] . '</b>' .
+                     '<br />' . functions::checkout($res['text']) . '</div>' .
+                     '<form name="form" action="index.php?act=otvet&amp;id=' . $id . '" method="post">' .
+                     '<p><h3>' . $lng['reply'] . '</h3>' . bbcode::auto_bb('form', 'otv') .
+                     '<textarea rows="' . $set_user['field_h'] . '" name="otv">' . functions::checkout($res['otvet']) . '</textarea></p>' .
+                     '<p><input type="submit" name="submit" value="' . $lng['reply'] . '"/></p>' .
+                     '</form></div>' .
+                     '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+                     '<p><a href="index.php">' . $lng['back'] . '</a></p>';
             }
         }
         break;
@@ -180,14 +180,14 @@ switch ($act) {
                 $res = mysql_fetch_assoc($req);
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
                 echo '<div class="phdr"><a href="index.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['edit'] . '</div>' .
-                    '<div class="rmenu">' .
-                    '<form action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
-                    '<p><b>' . $lng['author'] . ':</b> ' . $res['name'] . '</p>' .
-                    '<p><textarea rows="' . $set_user['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
-                    '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
-                    '</form></div>' .
-                    '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
-                    '<p><a href="index.php">' . $lng['back'] . '</a></p>';
+                     '<div class="rmenu">' .
+                     '<form action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
+                     '<p><b>' . $lng['author'] . ':</b> ' . $res['name'] . '</p>' .
+                     '<p><textarea rows="' . $set_user['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
+                     '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
+                     '</form></div>' .
+                     '<div class="phdr"><a href="faq.php?act=trans">' . $lng['translit'] . '</a> | <a href="faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
+                     '<p><a href="index.php">' . $lng['back'] . '</a></p>';
             }
         }
         break;
@@ -215,7 +215,7 @@ switch ($act) {
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm'");
                         echo '<p>' . $lng['clear_full_ok'] . '</p>';
                         break;
-                        default :
+                    default :
                         // Чистим сообщения, старше 1 недели
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time`<='" . (time() - 604800) . "';");
                         echo '<p>' . $lng['clear_week_ok'] . '</p>';
@@ -225,15 +225,15 @@ switch ($act) {
             } else {
                 // Запрос параметров очистки
                 echo '<div class="phdr"><a href="index.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['clear'] . '</div>' .
-                    '<div class="menu">' .
-                    '<form id="clean" method="post" action="index.php?act=clean">' .
-                    '<p><h3>' . $lng['clear_param'] . '</h3>' .
-                    '<input type="radio" name="cl" value="0" checked="checked" />' . $lng['clear_param_week'] . '<br />' .
-                    '<input type="radio" name="cl" value="1" />' . $lng['clear_param_day'] . '<br />' .
-                    '<input type="radio" name="cl" value="2" />' . $lng['clear_param_all'] . '</p>' .
-                    '<p><input type="submit" name="submit" value="' . $lng['clear'] . '" /></p>' .
-                    '</form></div>' .
-                    '<div class="phdr"><a href="index.php">' . $lng['cancel'] . '</a></div>';
+                     '<div class="menu">' .
+                     '<form id="clean" method="post" action="index.php?act=clean">' .
+                     '<p><h3>' . $lng['clear_param'] . '</h3>' .
+                     '<input type="radio" name="cl" value="0" checked="checked" />' . $lng['clear_param_week'] . '<br />' .
+                     '<input type="radio" name="cl" value="1" />' . $lng['clear_param_day'] . '<br />' .
+                     '<input type="radio" name="cl" value="2" />' . $lng['clear_param_all'] . '</p>' .
+                     '<p><input type="submit" name="submit" value="' . $lng['clear'] . '" /></p>' .
+                     '</form></div>' .
+                     '<div class="phdr"><a href="index.php">' . $lng['cancel'] . '</a></div>';
             }
         }
         break;
@@ -262,7 +262,7 @@ switch ($act) {
             echo '<div class="alarm">' . $lng['guestbook_closed'] . '</div>';
         echo '<div class="phdr"><b>' . $lng['guestbook'] . '</b></div>';
         if ($rights > 0) {
-            $menu = array ();
+            $menu = array();
             $menu[] = isset($_SESSION['ga']) ? '<a href="index.php?act=ga">' . $lng['guestbook'] . '</a>' : '<b>' . $lng['guestbook'] . '</b>';
             $menu[] = isset($_SESSION['ga']) ? '<b>' . $lng['admin_club'] . '</b>' : '<a href="index.php?act=ga&amp;do=set">' . $lng['admin_club'] . '</a>';
             if ($rights >= 7)
@@ -275,7 +275,7 @@ switch ($act) {
             if (!$user_id)
                 echo $lng['name'] . ' (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>';
             echo '<b>' . $lng['message'] . '</b> <small>(max 5000)</small>:<br/>';
-            if(!$is_mobile)
+            if (!$is_mobile)
                 echo bbcode::auto_bb('form', 'msg');
             echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             if ($set_user['translit'])
@@ -295,6 +295,8 @@ switch ($act) {
             $req = mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0'");
         }
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='" . (isset($_SESSION['ga']) ? 1 : 0) . "'"), 0);
+        echo '<div class="phdr"><b>' . $lng['comments'] . '</b></div>';
+        if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?', $start, $total, $kmess) . '</div>';
         if ($total) {
             if (isset($_SESSION['ga']) && $rights >= "1") {
                 // Запрос для Админ клуба
@@ -342,12 +344,12 @@ switch ($act) {
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . functions::display_date($res['otime']) . ')<br/>' . $otvet . '</div>';
                 }
                 if ($rights >= 6) {
-                    $subtext = '<a href="index.php?act=otvet&amp;id=' . $res['gid'] . '">' . $lng['reply'] . '</a>' . 
-                    ($rights >= $res['rights'] ? ' | <a href="index.php?act=edit&amp;id=' . $res['gid'] . '">' . $lng['edit'] . '</a> | <a href="index.php?act=delpost&amp;id=' . $res['gid'] . '">' . $lng['delete'] . '</a>' : '');
+                    $subtext = '<a href="index.php?act=otvet&amp;id=' . $res['gid'] . '">' . $lng['reply'] . '</a>' .
+                               ($rights >= $res['rights'] ? ' | <a href="index.php?act=edit&amp;id=' . $res['gid'] . '">' . $lng['edit'] . '</a> | <a href="index.php?act=delpost&amp;id=' . $res['gid'] . '">' . $lng['delete'] . '</a>' : '');
                 } else {
                     $subtext = '';
                 }
-                $arg = array (
+                $arg = array(
                     'header' => $text,
                     'body' => $post,
                     'sub' => $subtext
@@ -360,10 +362,10 @@ switch ($act) {
             echo '<div class="menu"><p>' . $lng['guestbook_empty'] . '</p></div>';
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-        // Навигация по страницам
         if ($total > $kmess) {
-            echo '<p>' . functions::display_pagination('index.php?', $start, $total, $kmess) . '</p>';
-            echo '<p><form action="index.php" method="get"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+            echo '<div class="topmenu">' . functions::display_pagination('index.php?', $start, $total, $kmess) . '</div>' .
+                 '<p><form action="index.php" method="get"><input type="text" name="page" size="2"/>' .
+                 '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         break;
 }

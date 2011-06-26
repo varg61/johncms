@@ -306,3 +306,20 @@ a:link, a:visited {
   color: #0000bb;
   text-decoration: underline;
 }
+
+.currentpage {
+    background-color: #edebeb;
+    border: 1px solid #cccccc;
+    padding: 0px 5px 0px 5px;
+}
+
+a.pagenav {
+    border: 1px solid #cccccc;
+    padding: 0px 2px 0px 2px;
+    text-decoration: none;
+}
+
+a.pagenav:hover {
+    background-color: #f7f7f7;
+    border: 1px solid #dedede;
+}
