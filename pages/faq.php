@@ -96,7 +96,7 @@ switch ($act) {
             if (array_key_exists($cat, $lng_smileys)) {
                 $smileys_cat[$cat] = $lng_smileys[$cat];
             } else {
-                $smileys_cat[$cat] = 'Without title ';
+                $smileys_cat[$cat] = ucfirst($cat);
             }
         }
         asort($smileys_cat);
