@@ -127,7 +127,9 @@ switch ($act) {
         $total = count($smileys);
         $end = $start + $kmess;
         if ($end > $total) $end = $total;
-        echo '<div class="phdr"><a href="faq.php?act=smileys"><b>' . $lng['smileys'] . '</b></a> | ' . $lng_smileys[$cat] . '</div>';
+        echo '<div class="phdr"><a href="faq.php?act=smileys"><b>' . $lng['smileys'] . '</b></a> | ' .
+             (array_key_exists($cat, $lng_smileys) ? $lng_smileys[$cat] : ucfirst(htmlspecialchars($cat))) .
+             '</div>';
         if ($total) {
             if (!$is_mobile) {
                 $user_sm = isset($datauser['smileys']) ? unserialize($datauser['smileys']) : '';

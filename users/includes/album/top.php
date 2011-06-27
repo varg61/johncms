@@ -100,7 +100,7 @@ $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE 
 if ($total) {
     if ($total > $kmess)
         echo '<div class="topmenu">' . functions::display_pagination('album.php?act=top' . $link . '&amp;', $start, $total, $kmess) . '</div>';
-    $req = mysql_query("SELECT `cms_album_files`.*, `cms_album_cat`.`name` AS `album_name`$select
+    $req = mysql_query("SELECT `cms_album_files`.*, `users`.`name` AS `user_name`, `cms_album_cat`.`name` AS `album_name`$select
     FROM `cms_album_files`
     INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
     INNER JOIN `cms_album_cat` ON `cms_album_files`.`album_id` = `cms_album_cat`.`id`
