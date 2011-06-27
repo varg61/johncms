@@ -1,6 +1,3 @@
---
--- Удаляем ненужные таблицы
---
 DROP TABLE IF EXISTS `cms_lng_list`;
 DROP TABLE IF EXISTS `cms_lng_phrases`;
 DROP TABLE IF EXISTS `chat`;
@@ -45,9 +42,6 @@ ALTER TABLE `cms_ads` ADD `bold` BOOLEAN NOT NULL DEFAULT '0';
 ALTER TABLE `cms_ads` ADD `italic` BOOLEAN NOT NULL DEFAULT '0';
 ALTER TABLE `cms_ads` ADD `underline` BOOLEAN NOT NULL DEFAULT '0';
 ALTER TABLE `cms_ads` ADD `show` BOOLEAN NOT NULL DEFAULT '0';
-
-TRUNCATE `cms_guests`;
-ALTER TABLE `cms_guests` CHANGE `ip` `ip` BIGINT( 11 ) NOT NULL DEFAULT '0';
 
 ALTER TABLE `cms_ban_ip` CHANGE `ip1` `ip1` BIGINT( 11 ) NOT NULL DEFAULT '0';
 ALTER TABLE `cms_ban_ip` CHANGE `ip2` `ip2` BIGINT( 11 ) NOT NULL DEFAULT '0';
@@ -161,9 +155,36 @@ DROP TABLE IF EXISTS `cms_users_iphistory`;
 CREATE TABLE `cms_users_iphistory` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `ip` bigint(11) NOT NULL,
+  `ip` bigint(11) NOT NULL DEFAULT '0',
+  `ip_via_proxy` bigint(11) NOT NULL DEFAULT '0',
   `time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `user_ip` (`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `users` ADD `ip_via_proxy` BIGINT( 11 ) NOT NULL DEFAULT '0' AFTER `ip`;
+
+UPDATE `users` SET `set_user` = '';
+UPDATE `users` SET `lastpost` = '0';
+
+DROP TABLE IF EXISTS `cms_guests`;
+DROP TABLE IF EXISTS `cms_sessions`;
+CREATE TABLE `cms_sessions` (
+  `session_id` char(32) NOT NULL DEFAULT '',
+  `ip` bigint(11) NOT NULL DEFAULT '0',
+  `ip_via_proxy` bigint(11) NOT NULL DEFAULT '0',
+  `browser` varchar(255) NOT NULL DEFAULT '',
+  `lastdate` int(10) unsigned NOT NULL DEFAULT '0',
+  `sestime` int(10) unsigned NOT NULL DEFAULT '0',
+  `views` int(10) unsigned NOT NULL DEFAULT '0',
+  `movings` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `place` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`session_id`),
+  KEY `lastdate` (`lastdate`),
+  KEY `place` (`place`(10))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `lib` CHANGE `name` `name` TINYTEXT NOT NULL;
+ALTER TABLE `lib` ADD FULLTEXT (`name`);
+ALTER TABLE `lib` ADD FULLTEXT (`text`);

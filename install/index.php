@@ -12,7 +12,7 @@
 define('_IN_JOHNCMS', 1);
 @ini_set("max_execution_time", "600");
 
-define('INSTALL_VERSION', '5.0.0'); // Инсталлируемая версия
+define('INSTALL_VERSION', '4.3.0'); // Инсталлируемая версия
 define('UPDATE_VERSION', '3.2.2'); // Обновление с версии
 
 //TODO: Добавить в таблицу настроек поле gzip
