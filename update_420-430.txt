@@ -1,0 +1,54 @@
+/**
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
+*/
+
+*english version below*
+
+################################################################################
+Обновление 4.2.0 - 4.3.0
+################################################################################
+
+ВНИМАНИЕ!!!
+Данный пакет предназначен для обновления JohnCMS с версии 4.2.0 до 4.3.0
+С другими версиями несовместим!
+
+Если Вы использовали на своем сайте какие-либо моды, затрагивающие файлы
+которые входят в данный пакет, то возможность обновления и саму процедуру
+согласовывайте с авторами модов.
+
+Перед обновлением, ОБЯЗАТЕЛЬНО сделайте резервные копии сайта и базы данных.
+
+ПРОЦЕДУРА ОБНОВЛЕНИЯ
+    1) Удаляем все папки в каталоге /images/smileys/user/
+       Если Вы загружали свои смайлы, то предварительно сохраните их.
+    2) Загружаем распакованный пакет обновлений на сервер, с заменой всех файлов
+    3) Запускаем процедуру обновления по адресу http://ваш_сайт/install
+    4) Удаляем папку /install
+    5) Заходим в Админ-панель и нажимаем "обновляем смайлы"
+
+
+################################################################################
+Update 4.2.0 - 4.3.0
+################################################################################
+
+ATTENTION!!!
+This package is designed to update JohnCMS with version 4.x.x to 4.2.0
+Not compatible with other versions!
+
+If you used on your site any mods that affect files within this package,
+the ability to update and the process itself coordinate with the authors of the mods.
+
+Prior to upgrading, BE SURE to backup your site and database.
+
+UPDATING PROCEDURE
+    1) Delete all the folders in the directory /images/smileys/user/
+       If you have installed their smileys, first save them.
+    2) Upoad the unzipped Service Pack to the server, and replace all files
+    3) Run the upgrade procedure at http://your_site/install
+    4) Delete folder /install
+    5) Go to your Admin Panel and click "update smileys"
