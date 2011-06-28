@@ -188,3 +188,7 @@ CREATE TABLE `cms_sessions` (
 ALTER TABLE `lib` CHANGE `name` `name` TINYTEXT NOT NULL;
 ALTER TABLE `lib` ADD FULLTEXT (`name`);
 ALTER TABLE `lib` ADD FULLTEXT (`text`);
+
+ALTER TABLE `forum` CHANGE `ip` `ip_old` TEXT NOT NULL;
+ALTER TABLE `forum` ADD `ip` BIGINT( 11 ) NOT NULL DEFAULT '0' AFTER `text`;
+ALTER TABLE `forum` ADD `ip_via_proxy` BIGINT( 11 ) NOT NULL DEFAULT '0' AFTER `ip`;

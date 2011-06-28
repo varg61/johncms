@@ -168,6 +168,18 @@ switch ($act) {
         Обновление успешно завершено
         -----------------------------------------------------------------
         */
+        if (!isset($_SESSION['updated'])) {
+            install::parse_sql(MODE . '/install.sql');
+            // Конвертируем IP адреса Форума
+            $req = mysql_query("SELECT `id`, `ip_old` FROM `forum` WHERE `type` = 'm'");
+            while (($res = mysql_fetch_assoc($req)) !== false) {
+                if (!empty($res['ip_old']) && core::ip_valid($res['ip_old'])) {
+                    mysql_query("UPDATE `forum` SET `ip` = '" . ip2long($res['ip_old']) . "' WHERE `id` = '" . $res['id'] . "' LIMIT 1");
+                }
+            }
+            mysql_query("ALTER TABLE `forum` DROP `ip_old`");
+        }
+        $_SESSION['updated'] = 1;
         echo '<div>' .
              '<span class="st">' . $lng['check_1'] . '</span><br />' .
              '<span class="st">' . $lng['prepare_tables'] . '</span><br />' .
