@@ -20,7 +20,7 @@ if ($total > 0) {
     ////////////////////////////////////////////////////////////
     // Выводим список новых файлов                            //
     ////////////////////////////////////////////////////////////
-    $req = mysql_query("SELECT * FROM `download` WHERE `time` > '$old' AND `type` = 'file' ORDER BY `time` DESC LIMIT $start,$kmess");
+    $req = mysql_query("SELECT * FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file' ORDER BY `time` DESC LIMIT $start,$kmess");
     while ($newf = mysql_fetch_array($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $fsz = filesize("$newf[adres]/$newf[name]");
