@@ -54,7 +54,7 @@ DELETE FROM `cms_settings` WHERE `key` = 'gzip' LIMIT 1;
 UPDATE `cms_settings` SET `key` = 'email' WHERE `key` = 'emailadmina';
 UPDATE `cms_settings` SET `key` = 'timeshift' WHERE `key` = 'sdvigclock';
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
-('activity', '1'),
+('active', '1'),
 ('lng', 'en');
 
 --
