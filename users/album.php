@@ -10,11 +10,11 @@
 */
 
 define('_IN_JOHNCMS', 1);
+
 require('../incfiles/core.php');
 $lng_profile = core::load_lng('profile');
 $textl = $lng_profile['album'];
 $headmod = 'album';
-require('../incfiles/head.php');
 
 $max_album = 10;
 $max_photo = 200;
@@ -102,6 +102,7 @@ $path = !empty($array[$act]) ? $array[$act] . '/' : '';
 if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     require_once($path . $act . '.php');
 } else {
+    require('../incfiles/head.php');
     $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
     $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . $lng['photo_albums'] . '</b></div>' .

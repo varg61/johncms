@@ -10,8 +10,33 @@
 */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 switch ($mod) {
+    case 'my_new_comm':
+        /*
+        -----------------------------------------------------------------
+        Непрочитанные комментарии в личных альбомах
+        -----------------------------------------------------------------
+        */
+        if(!core::$user_id || core::$user_id != $user['id']){
+            echo functions::display_error($lng['wrong_data']);
+            require('../incfiles/end.php');
+            exit;
+        }
+        $title = $lng_profile['unread_comments'];
+        $select = "";
+        $join = "INNER JOIN `cms_album_comments` ON `cms_album_files`.`id` = `cms_album_comments`.`sub_id`";
+        $where = "`cms_album_files`.`user_id` = '" . core::$user_id . "' AND `cms_album_files`.`unread_comments` = 1 GROUP BY `cms_album_files`.`id`";
+        $order = "`cms_album_comments`.`time` DESC";
+        $link = '&amp;mod=my_new_comm';
+        break;
+
     case 'last_comm':
+        /*
+        -----------------------------------------------------------------
+        Последние комментарии по всем альбомам
+        -----------------------------------------------------------------
+        */
         $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `sub_id`) FROM `cms_album_comments` WHERE `time` >" . (time() - 86400)), 0);
         $title = $lng_profile['new_comments'];
         $select = "";
@@ -111,8 +136,10 @@ switch ($mod) {
 -----------------------------------------------------------------
 */
 unset($_SESSION['ref']);
+require('../incfiles/head.php');
 echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' . $title . '</div>';
-if(!isset($total)) $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where"), 0);
+if($mod == 'my_new_comm') $total = $new_album_comm;
+elseif(!isset($total)) $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where"), 0);
 if ($total) {
     if ($total > $kmess)
         echo '<div class="topmenu">' . functions::display_pagination('album.php?act=top' . $link . '&amp;', $start, $total, $kmess) . '</div>';

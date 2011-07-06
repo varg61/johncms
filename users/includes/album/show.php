@@ -10,6 +10,9 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
+require('../incfiles/head.php');
+
 if (!$al) {
     echo functions::display_error($lng['error_wrong_data']);
     require('../incfiles/end.php');
