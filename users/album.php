@@ -91,7 +91,7 @@ $array = array (
     'image_move' => 'includes/album',
     'image_upload' => 'includes/album',
     'list' => 'includes/album',
-    'new' => 'includes/album',
+    'new_comm' => 'includes/album',
     'show' => 'includes/album',
     'sort' => 'includes/album',
     'top' => 'includes/album',
@@ -107,7 +107,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     echo '<div class="phdr"><b>' . $lng['photo_albums'] . '</b></div>' .
         '<div class="gmenu"><p>' .
         '<img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16"/>&#160;<a href="album.php?act=top">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
-        //'<img src="' . $set['homeurl'] . '/images/guestbook.gif" width="16" height="16"/>&#160;' . $lng_profile['new_comments'] . '' .
+        '<img src="' . $set['homeurl'] . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="album.php?act=top&amp;mod=last_comm">' . $lng_profile['new_comments'] . '</a>' .
         '</p></div>' .
         '<div class="menu">' .
         '<p><h3><img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16" class="left" />&#160;' . $lng['albums'] . '</h3><ul>' .
