@@ -97,7 +97,7 @@ switch ($mod) {
         $title = $lng_profile['top_votes'];
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
         $join = "";
-        $where = "(`vote_plus` - `vote_minus`) > 0" . (core::$user_rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
+        $where = "(`vote_plus` - `vote_minus`) > 2" . (core::$user_rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`rating` DESC";
         $link = '&amp;mod=votes';
         break;
@@ -111,7 +111,7 @@ switch ($mod) {
         $title = $lng_profile['top_trash'];
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
         $join = "";
-        $where = "(`vote_plus` - `vote_minus`) < 0" . (core::$user_rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
+        $where = "(`vote_plus` - `vote_minus`) < -2" . (core::$user_rights >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
         $order = "`rating` ASC";
         $link = '&amp;mod=trash';
         break;
