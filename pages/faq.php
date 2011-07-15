@@ -221,7 +221,7 @@ switch ($act) {
         Список своих смайлов
         -----------------------------------------------------------------
         */
-        if ($is_mobile || $page != 1) {
+        if ($is_mobile) {
             echo functions::display_error($lng['error_wrong_data'], '<a href="faq.php?act=smileys">' . $lng['smileys'] . '</a>');
             require('../incfiles/end.php');
             exit;
@@ -258,7 +258,7 @@ switch ($act) {
         }
         echo '<div class="phdr">' . $lng['total'] . ': ' . $total . ' / ' . $user_smileys . '</div>';
         if ($total > $kmess)
-            echo '<div class="topmenu"><p>' . functions::display_pagination('faq.php?act=my_smileys&amp;', $start, $total, $kmess) . '</p></div>';
+            echo '<div class="topmenu">' . functions::display_pagination('faq.php?act=my_smileys&amp;', $start, $total, $kmess) . '</div>';
         echo '<p>' . ($total ? '<a href="faq.php?act=set_my_sm&amp;clean">' . $lng['clear'] . '</a><br />'
                 : '') . '<a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></p>';
         break;
