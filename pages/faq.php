@@ -143,7 +143,7 @@ switch ($act) {
                 $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', basename($smileys[$i], 1));
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (!$is_mobile) echo (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
-                echo '<img src="../images/smileys/user/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . $lng['lng_or'] . ' :' . functions::trans($smile);
+                echo '<img src="../images/smileys/user/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . $lng['lng_or'] . ' :' . functions::trans($smile) . ':';
                 echo '</div>';
             }
         if (!$is_mobile) echo '<div class="gmenu"><input type="submit" name="add" value=" ' . $lng['add'] . ' "/></div></form>';
