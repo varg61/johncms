@@ -187,10 +187,10 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                 $simvol = 2000; // Число символов на страницу по умолчанию
             }
             // Счетчик прочтений
-            if (isset($_SESSION['lib']) && $_SESSION['lib'] != $id) {
+            if (!isset($_SESSION['lib']) || isset($_SESSION['lib']) && $_SESSION['lib'] != $id) {
                 $_SESSION['lib'] = $id;
                 $libcount = intval($zag['count']) + 1;
-                mysql_query("UPDATE `lib` SET  `count` = '" . $libcount . "' WHERE `id` = '" . $id . "'");
+                mysql_query("UPDATE `lib` SET  `count` = '$libcount' WHERE `id` = '$id'");
             }
             // Заголовок статьи
             echo '<p><b>' . htmlentities($zag['name'], ENT_QUOTES, 'UTF-8') . '</b></p>';
