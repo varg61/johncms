@@ -90,6 +90,10 @@ if ($user_id && $datauser['lastdate'] < (time() - 3600) && $set_user['digest'] &
 Буфферизация вывода
 -----------------------------------------------------------------
 */
+if(!isset($set['gzip'])) {
+    mysql_query("INSERT INTO `cms_settings` SET `key` = 'gzip', `val` = '1'");
+    $set['gzip'] = 1;
+}
 if ($set['gzip'] && @extension_loaded('zlib')) {
     @ini_set('zlib.output_compression_level', 3);
     ob_start('ob_gzhandler');
