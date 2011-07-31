@@ -236,6 +236,10 @@ ul {
   border-left: 1px solid #e1e4e8;
 }
 
+.topmenu input{
+  font-size: x-small
+}
+
 .user {
   background-color: #CBDBE7;
   border: 1px solid white;
