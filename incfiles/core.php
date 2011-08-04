@@ -100,5 +100,3 @@ if ($set['gzip'] && @extension_loaded('zlib')) {
 } else {
     ob_start();
 }
-
-?>

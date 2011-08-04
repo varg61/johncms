@@ -412,5 +412,3 @@ class comments
         return $total;
     }
 }
-
-?>

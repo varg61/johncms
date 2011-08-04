@@ -239,5 +239,3 @@ class bbcode extends core
         return $out . '<br />';
     }
 }
-
-?>

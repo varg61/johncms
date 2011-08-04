@@ -203,4 +203,3 @@ if ($user_id) {
 
     if (!empty($list)) echo '<div class="rmenu">' . $lng['unread'] . ': ' . functions::display_menu($list, ', ') . '</div>';
 }
-?>

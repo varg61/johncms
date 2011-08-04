@@ -99,5 +99,3 @@ class mainpage {
         return ($res > 0 ? '/<span class="red">+' . $res . '</span>' : false);
     }
 }
-
-?>
