@@ -27,6 +27,7 @@ $img = isset($_REQUEST['img']) ? abs(intval($_REQUEST['img'])) : NULL;
 -----------------------------------------------------------------
 */
 if (!$user_id) {
+    require('../incfiles/head.php');
     echo functions::display_error($lng['access_guest_forbidden']);
     require('../incfiles/end.php');
     exit;
@@ -39,6 +40,7 @@ if (!$user_id) {
 */
 $user = functions::get_user($user);
 if (!$user) {
+    require('../incfiles/head.php');
     echo functions::display_error($lng['user_does_not_exist']);
     require('../incfiles/end.php');
     exit;
