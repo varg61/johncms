@@ -1,3 +1,18 @@
+﻿Перевести на Грузинский
+_core.lng
+albums_comments               =   "Новые комментарии в Альбомах"
+
+forum.lng
+assign                        =   "Назначить"
+curators                      =   "Кураторы"
+curators_of_the_topic         =   "Кураторы темы"
+
+profile.lng
+photo_profile                 =   "В анкету"
+photo_profile_ok              =   "Фото установлено в анкету"
+unread_comments               =   "Непрочитанные комментарии"
+
+
 --
 -- Добавлено после Build 888
 --
