@@ -10,7 +10,7 @@
  */
 
 define('_IN_JOHNCMS', 1);
-set_time_limit(600);
+set_time_limit(1200);
 
 define('INSTALL_VERSION', '4.4.0'); // Инсталлируемая версия
 define('UPDATE_VERSION', '4.3.0'); // Обновление с версии
