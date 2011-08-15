@@ -511,21 +511,20 @@ class functions extends core
     Обработка смайлов
     -----------------------------------------------------------------
     */
-    private static $smileys_cache = array();
-
     public static function smileys($str, $adm = false)
     {
         global $rootpath;
-        if (empty(self::$smileys_cache)) {
+        static $smileys_cache = array();
+        if (empty($smileys_cache)) {
             $file = $rootpath . 'files/cache/smileys.dat';
             if (file_exists($file) && ($smileys = file_get_contents($file)) !== false) {
-                self::$smileys_cache = unserialize($smileys);
-                return strtr($str, ($adm ? array_merge(self::$smileys_cache['usr'], self::$smileys_cache['adm']) : self::$smileys_cache['usr']));
+                $smileys_cache = unserialize($smileys);
+                return strtr($str, ($adm ? array_merge($smileys_cache['usr'], $smileys_cache['adm']) : $smileys_cache['usr']));
             } else {
                 return $str;
             }
         } else {
-            return strtr($str, ($adm ? array_merge(self::$smileys_cache['usr'], self::$smileys_cache['adm']) : self::$smileys_cache['usr']));
+            return strtr($str, ($adm ? array_merge($smileys_cache['usr'], $smileys_cache['adm']) : $smileys_cache['usr']));
         }
     }
 
