@@ -44,6 +44,7 @@ switch ($mod) {
             ++$i;
         }
         if ($total && core::$user_rights) {
+            if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;mod=ip&amp;', $start, $total, $kmess) . '</div>';
             for ($i = $start; $i < $end; $i++) {
                 $out = each($ip_list[$i]);
                 if ($out[0] == core::$ip) echo '<div class="gmenu">';
@@ -54,8 +55,8 @@ switch ($mod) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
-                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;mod=ip&amp;', $start, $total, $kmess) . '</div>';
-                echo '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
+                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;mod=ip&amp;', $start, $total, $kmess) . '</div>' .
+                     '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
                      '<input type="text" name="page" size="2"/>' .
                      '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
