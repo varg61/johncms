@@ -71,4 +71,3 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
 }
 
 require_once('../incfiles/end.php');
-?>

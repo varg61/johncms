@@ -16,6 +16,7 @@ class core
     public static $root = '../';
     public static $ip;                                                         // Путь к корневой папке
     public static $ip_via_proxy;                                               // IP адрес за прокси-сервером
+    public static $ip_count = array();                                         // Счетчик обращений с IP адреса
     public static $user_agent;                                                 // User Agent
     public static $system_set;                                                 // Системные настройки
     public static $lng_iso = 'en';                                             // Двухбуквенный ISO код языка
@@ -31,7 +32,7 @@ class core
     public static $user_set = array();                                         // Пользовательские настройки
     public static $user_ban = array();                                         // Бан
 
-    private $flood_chk = 0;                                                    // Включение - выключение функции IP антифлуда
+    private $flood_chk = 1;                                                    // Включение - выключение функции IP антифлуда
     private $flood_interval = '120';                                           // Интервал времени в секундах
     private $flood_limit = '30';                                               // Число разрешенных запросов за интервал
 
@@ -145,8 +146,8 @@ class core
     private function ip_flood()
     {
         if ($this->flood_chk) {
-            if ($this->ip_whitelist(self::$ip))
-                return true;
+            //if ($this->ip_whitelist(self::$ip))
+            //    return true;
             $file = self::$root . 'files/cache/ip_flood.dat';
             $tmp = array();
             $requests = 1;
@@ -159,15 +160,16 @@ class core
                 if (($now - $arr['time']) > $this->flood_interval) continue;
                 if ($arr['ip'] == self::$ip) $requests++;
                 $tmp[] = $arr;
+                self::$ip_count[] = $arr['ip'];
             }
             fseek($in, 0);
             ftruncate($in, 0);
             for ($i = 0; $i < count($tmp); $i++) fwrite($in, pack('LL', $tmp[$i]['ip'], $tmp[$i]['time']));
             fwrite($in, pack('LL', self::$ip, $now));
             fclose($in);
-            if ($requests > $this->flood_limit){
-                die('FLOOD: exceeded limit of allowed requests');
-            }
+            //if ($requests > $this->flood_limit){
+            //    die('FLOOD: exceeded limit of allowed requests');
+            //}
         }
     }
 

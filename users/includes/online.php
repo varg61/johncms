@@ -22,11 +22,48 @@ require('../incfiles/head.php');
 */
 $menu[] = !$mod ? '<b>' . $lng['users'] . '</b>' : '<a href="index.php?act=online">' . $lng['users'] . '</a>';
 $menu[] = $mod == 'history' ? '<b>' . $lng['history'] . '</b>' : '<a href="index.php?act=online&amp;mod=history">' . $lng['history'] . '</a> ';
-if (core::$user_rights) $menu[] = $mod == 'guest' ? '<b>' . $lng['guests'] . '</b>' : '<a href="index.php?act=online&amp;mod=guest">' . $lng['guests'] . '</a>';
+if (core::$user_rights) {
+    $menu[] = $mod == 'guest' ? '<b>' . $lng['guests'] . '</b>' : '<a href="index.php?act=online&amp;mod=guest">' . $lng['guests'] . '</a>';
+    $menu[] = $mod == 'ip' ? '<b>' . $lng['ip_activity'] . '</b>' : '<a href="index.php?act=online&amp;mod=ip">' . $lng['ip_activity'] . '</a>';
+}
+
 echo '<div class="phdr"><b>' . $lng['who_on_site'] . '</b></div>' .
      '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
 
 switch ($mod) {
+    case 'ip':
+        // Список активных IP, со счетчиком обращений
+        $ip_array = array_count_values(core::$ip_count);
+        $total = count($ip_array);
+        $end = $start + $kmess;
+        if ($end > $total) $end = $total;
+        arsort($ip_array);
+        $i = 0;
+        foreach ($ip_array as $key => $val) {
+            $ip_list[$i] = array($key => $val);
+            ++$i;
+        }
+        if ($total && core::$user_rights) {
+            for ($i = $start; $i < $end; $i++) {
+                $out = each($ip_list[$i]);
+                if ($out[0] == core::$ip) echo '<div class="gmenu">';
+                else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                echo '<a href="' . core::$system_set['homeurl'] . '/' . core::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($out[0]) . '">' . long2ip($out[0]) .
+                     '</a>&#160;-&#160;[' . $out[1] . ']';
+                echo '</div>';
+            }
+            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+            if ($total > $kmess) {
+                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;mod=ip&amp;', $start, $total, $kmess) . '</div>';
+                echo '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
+                     '<input type="text" name="page" size="2"/>' .
+                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+            }
+        }
+        require_once('../incfiles/end.php');
+        exit;
+        break;
+
     case 'guest':
         // Список гостей Онлайн
         $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300);
@@ -55,7 +92,7 @@ if ($total) {
         else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $arg['stshide'] = 1;
         $arg['header'] = ' <span class="gray">(';
-        if($mod == 'history') $arg['header'] .= functions::display_date($res['sestime']);
+        if ($mod == 'history') $arg['header'] .= functions::display_date($res['sestime']);
         else $arg['header'] .= $res['movings'] . ' - ' . functions::timecount(time() - $res['sestime']);
         $arg['header'] .= ')</span><br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . functions::display_place($res['id'], $res['place']);
         echo functions::display_user($res, $arg);
@@ -73,4 +110,3 @@ if ($total > $kmess) {
          '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
          '</form></p>';
 }
-?>
