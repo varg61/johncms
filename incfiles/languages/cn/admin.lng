@@ -70,8 +70,7 @@ ip_ban_clean_warning          =   "<b>警告!</b> IP 禁止表将被清除<br />
 ip_ban_conflict_admin         =   "不能禁止自己的IP范围"
 ip_ban_conflict_address       =   "您输入的地址与数据库中的冲突"
 ip_ban_del                    =   "删除禁止"
-ip_ban_help                   =   "例如:<br /><span class='red'>10.5.7.1</span> - 禁止一个地址<br /><span class='red'>10.5.7.1-10.5.7.100</span> - 禁止这一范围的地址.<br /><span class='red'>10.5.*.*</span> - 禁止一个掩码. 将从子网禁止由0开始到
-255结束的地址"
+ip_ban_help                   =   "例如:<br /><span class='red'>10.5.7.1</span> - 禁止一个地址<br /><span class='red'>10.5.7.1-10.5.7.100</span> - 禁止这一范围的地址.<br /><span class='red'>10.5.*.*</span> - 禁止一个掩码. 将从子网禁止由0开始到 255结束的地址"
 ip_ban_new                    =   "禁止IP"
 ip_ban_search_help            =   "输入一个单一的地址，不允许掩码和范围"
 ip_ban_type1                  =   "禁止范围地址"
