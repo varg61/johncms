@@ -52,9 +52,9 @@ if (!empty($lng_add) || !empty($lng_del)) {
     }
     $req = mysql_query("SELECT * FROM `cms_settings` WHERE `key` = 'lng_list'");
     if (mysql_num_rows($req)) {
-        mysql_query("UPDATE `cms_settings` SET `val` = '" . serialize($lng_list) . "' WHERE `key` = 'lng_list' LIMIT 1");
+        mysql_query("UPDATE `cms_settings` SET `val` = '" . mysql_real_escape_string(serialize($lng_list)) . "' WHERE `key` = 'lng_list' LIMIT 1");
     } else {
-        mysql_query("INSERT INTO `cms_settings` SET `key` = 'lng_list', `val` = '" . serialize($lng_list) . "'");
+        mysql_query("INSERT INTO `cms_settings` SET `key` = 'lng_list', `val` = '" . mysql_real_escape_string(serialize($lng_list)) . "'");
     }
 }
 
