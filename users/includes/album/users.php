@@ -44,7 +44,7 @@ $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
 "), 0);
 if ($total) {
-    $req = mysql_query("SELECT `cms_album_files`.*, COUNT(`cms_album_files`.`id`) AS `count`, `users`.`id` AS `uid`, `users`.`name` AS `nick`
+    $req = mysql_query("SELECT `cms_album_files`.*, COUNT(`cms_album_files`.`id`) AS `count`, `users`.`id` AS `uid`, `users`.`name` AS `nick`, `users`.`sex`
         FROM `cms_album_files`
         LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
         GROUP BY `cms_album_files`.`user_id` ORDER BY `users`.`name` ASC LIMIT $start, $kmess
@@ -52,7 +52,7 @@ if ($total) {
     $i = 0;
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo '<a href="album.php?act=list&amp;user=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
+        echo functions::get_image('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"') . '&#160;<a href="album.php?act=list&amp;user=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
         ++$i;
     }
 } else {

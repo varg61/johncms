@@ -706,7 +706,7 @@ switch ($mod) {
         $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
         $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'"), 0);
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng_forum['forum_management'] . '</div>' .
-             '<div class="gmenu"><p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&nbsp;' . $lng['statistics'] . '</h3><ul>' .
+             '<div class="gmenu"><p><h3>' . functions::get_image('rating.png', '', 'class="left"') . '&nbsp;' . $lng['statistics'] . '</h3><ul>' .
              '<li>' . $lng['categories'] . ':&#160;' . $total_cat . '</li>' .
              '<li>' . $lng['sections'] . ':&#160;' . $total_sub . '</li>' .
              '<li>' . $lng['themes'] . ':&#160;' . $total_thm . '&#160;/&#160;<span class="red">' . $total_thm_del . '</span></li>' .
@@ -714,7 +714,7 @@ switch ($mod) {
              '<li>' . $lng['files'] . ':&#160;' . $total_files . '</li>' .
              '<li>' . $lng['votes'] . ':&#160;' . $total_votes . '</li>' .
              '</ul></p></div>' .
-             '<div class="menu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;' . $lng['settings'] . '</h3><ul>' .
+             '<div class="menu"><p><h3>' . functions::get_image('settings.png', '', 'class="left"') . '&#160;' . $lng['settings'] . '</h3><ul>' .
              '<li><a href="index.php?act=forum&amp;mod=cat"><b>' . $lng_forum['forum_structure'] . '</b></a></li>' .
              '<li><a href="index.php?act=forum&amp;mod=hposts">' . $lng_forum['hidden_posts'] . '</a> (' . $total_msg_del . ')</li>' .
              '<li><a href="index.php?act=forum&amp;mod=htopics">' . $lng_forum['hidden_topics'] . '</a> (' . $total_thm_del . ')</li>' .

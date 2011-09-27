@@ -71,7 +71,7 @@ switch ($mod) {
             while ($res = mysql_fetch_array($req)) {
                 echo '<div class="' . ($res['bantime'] > time() ? 'r' : '') . 'menu">';
                 $arg = array (
-                    'header' => '<br /><img src="../images/block.gif" width="16" height="16" align="middle" />&#160;<small><a href="../users/profile.php?act=ban&amp;user=' . $res['id'] . '">' . $lng_ban['infringements_history'] . '</a> [' . $res['bancount'] . ']</small>'
+                    'header' => '<br />' . functions::get_image('user_block.png') . '&#160;<small><a href="../users/profile.php?act=ban&amp;user=' . $res['id'] . '">' . $lng_ban['infringements_history'] . '</a> [' . $res['bancount'] . ']</small>'
                 );
                 echo functions::display_user($res, $arg);
                 echo '</div>';

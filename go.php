@@ -116,4 +116,3 @@ if (isset($_GET['lng'])) {
             break;
     }
 }
-?>

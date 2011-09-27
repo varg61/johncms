@@ -84,7 +84,7 @@ if (isset($cms_ads[0])) echo $cms_ads[0];
 -----------------------------------------------------------------
 */
 echo '<table style="width: 100%;"><tr>' .
-     '<td valign="bottom"><a href="' . $set['homeurl'] . '"><img src="' . $set['homeurl'] . '/theme/' . $set_user['skin'] . '/images/logo.gif" alt=""/></a></td>' .
+     '<td valign="bottom"><a href="' . $set['homeurl'] . '">' . functions::get_image('logo.gif', core::$system_set['copyright']) . '</a></td>' .
      ($headmod == 'mainpage' && count(core::$lng_list) > 1 ? '<td align="right"><a href="' . $set['homeurl'] . '/go.php?lng"><b>' . strtoupper(core::$lng_iso) . '</b></a>&#160;<img src="' . $set['homeurl'] . '/images/flags/' . core::$lng_iso . '.gif" alt=""/>&#160;</td>' : '') .
      '</tr></table>';
 
@@ -123,7 +123,7 @@ $set_karma = unserialize($set['karma']);
 if ($user_id) {
     // Фиксируем местоположение авторизованных
     if (!$datauser['karma_off'] && $set_karma['on'] && $datauser['karma_time'] <= (time() - 86400)) {
-        $sql = "`karma_time` = '" . time() . "', ";
+        $sql .= "`karma_time` = '" . time() . "', ";
     }
     $movings = $datauser['movings'];
     if ($datauser['lastdate'] < (time() - 300)) {
@@ -156,7 +156,7 @@ if ($user_id) {
         $movings = $res['movings'];
         if ($res['sestime'] < (time() - 300)) {
             $movings = 0;
-            $sql .= "`sestime` = '" . time() . "', `movings` = '0'";
+            $sql .= "`sestime` = '" . time() . "',";
         }
         if ($res['place'] != $headmod) {
             ++$movings;

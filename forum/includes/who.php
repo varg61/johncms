@@ -126,7 +126,7 @@ if ($id) {
             }
             $arg = array(
                 'stshide' => 1,
-                'header' => ('<br /><img src="../images/info.png" width="16" height="16" align="middle" />&#160;' . $place)
+                'header' => ('<br />' . functions::get_image('info.png', '', 'align="middle"') . '&#160;' . $place)
             );
             echo functions::display_user($res, $arg);
             echo '</div>';
@@ -145,4 +145,3 @@ if ($id) {
     }
     echo '<p><a href="index.php">' . $lng['to_forum'] . '</a></p>';
 }
-?>

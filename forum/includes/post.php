@@ -17,7 +17,7 @@ if (empty($_GET['id'])) {
     require('../incfiles/end.php');
     exit;
 }
-$s = intval($_GET['s']);
+$s = isset($_GET['s']) ? intval($_GET['s']) : false;
 // Запрос сообщения
 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
@@ -29,9 +29,9 @@ $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' 
 echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
-    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png" alt=""  width="16" height="16"/>&#160;';
+    echo functions::get_image('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
 else
-    echo '<img src="../images/del.png" width="12" height="12" />&#160;';
+    echo functions::get_image('delete.png', '', 'align="middle"') . '&#160;';
 // Ник юзера и ссылка на его анкету
 if ($user_id && $user_id != $res['user_id']) {
     echo '<a href="../users/profile.php?user=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
@@ -63,7 +63,7 @@ echo (time() > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<sp
 echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span><br/>';
 // Статус юзера
 if (!empty($res['status']))
-    echo '<div class="status"><img src="../images/star.gif" alt=""/>&#160;' . $res['status'] . '</div>';
+    echo '<div class="status">' . functions::get_image('label.png') . '&#160;' . $res['status'] . '</div>';
 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
 $text = nl2br($text);
 $text = bbcode::tags($text);

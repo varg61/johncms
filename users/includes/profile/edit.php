@@ -163,7 +163,7 @@ if (file_exists(('../files/users/photo/' . $user['id'] . '_small.jpg'))) {
 echo '<small><a href="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
     '</p></div>' .
     '<div class="menu">' .
-    '<p><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .
+    '<p><h3>' . $lng_profile['personal_data'] . '</h3>' .
     $lng_profile['name'] . ':<br /><input type="text" value="' . $user['imname'] . '" name="imname" /></p>' .
     '<p>' . $lng_profile['birth_date'] . '<br />' .
     '<input type="text" value="' . $user['dayb'] . '" size="2" maxlength="2" name="dayb" />.' .
@@ -171,7 +171,7 @@ echo '<small><a href="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user
     '<input type="text" value="' . $user['yearofbirth'] . '" size="4" maxlength="4" name="yearofbirth" /></p>' .
     '<p>' . $lng_profile['city'] . ':<br /><input type="text" value="' . $user['live'] . '" name="live" /></p>' .
     '<p>' . $lng_profile['about'] . ':<br /><textarea rows="' . $set_user['field_h'] . '" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></p>' .
-    '<p><h3><img src="../images/mail.png" width="16" height="16" class="left" />&#160;' . $lng_profile['communication'] . '</h3>' .
+    '<p><h3>' . $lng_profile['communication'] . '</h3>' .
     $lng_profile['phone_number'] . ':<br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /><br />' .
     '</p><p>E-mail:<br /><small>' . $lng_profile['email_warning'] . '</small><br />' .
     '<input type="text" value="' . $user['mail'] . '" name="mail" /><br />' .
@@ -183,7 +183,7 @@ echo '<small><a href="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user
     '</div>';
 // Административные функции
 if ($rights >= 7) {
-    echo '<div class="rmenu"><p><h3><img src="../images/settings.png" width="16" height="16" class="left" />&#160;' . $lng['settings'] . '</h3><ul>';
+    echo '<div class="rmenu"><p><h3>' . $lng['settings'] . '</h3><ul>';
     if ($rights == 9) {
         echo '<li><input name="karma_off" type="checkbox" value="1" ' . ($user['karma_off'] ? 'checked="checked"' : '') . ' />&#160;<span class="red"><b>' . $lng_profile['deny_karma'] . '</b></span></li>';
     }
@@ -195,7 +195,7 @@ if ($rights >= 7) {
         '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['sex_w'] . '</li>' .
         '</ul></p>';
     if ($user['id'] != $user_id) {
-        echo '<p><h3><img src="../images/admin.png" width="16" height="16" class="left" />&#160;' . $lng_profile['rank'] . '</h3><ul>' .
+        echo '<p><h3>' . $lng_profile['rank'] . '</h3><ul>' .
             '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&#160;<b>' . $lng_profile['rank_0'] . '</b><br />' .
             '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['rank_3'] . '<br />' .
             '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['rank_4'] . '<br />' .

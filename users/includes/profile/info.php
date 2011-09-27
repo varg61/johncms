@@ -26,7 +26,7 @@ if ($user['id'] == $user_id || ($rights >= 7 && $rights > $user['rights']))
     echo '<div class="topmenu"><a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['edit'] . '</a></div>';
 echo '<div class="user"><p>' . functions::display_user($user, array ('iphide' => 1,)) . '</p></div>' .
     '<div class="list2"><p>' .
-    '<h3><img src="../images/contacts.png" width="16" height="16" class="left" />&#160;' . $lng_profile['personal_data'] . '</h3>' .
+    '<h3>' . $lng_profile['personal_data'] . '</h3>' .
     '<ul>';
 if (file_exists('../files/users/photo/' . $user['id'] . '_small.jpg'))
     echo '<a href="../files/users/photo/' . $user['id'] . '.jpg"><img src="../files/users/photo/' . $user['id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a>';
@@ -35,7 +35,7 @@ echo '<li><span class="gray">' . $lng_profile['name'] . ':</span> ' . (empty($us
     '<li><span class="gray">' . $lng_profile['city'] . ':</span> ' . (empty($user['live']) ? '' : $user['live']) . '</li>' .
     '<li><span class="gray">' . $lng_profile['about'] . ':</span> ' . (empty($user['about']) ? '' : '<br />' . functions::smileys(bbcode::tags($user['about']))) . '</li>' .
     '</ul></p><p>' .
-    '<h3><img src="../images/mail.png" width="16" height="16" class="left" />&#160;' . $lng_profile['communication'] . '</h3><ul>' .
+    '<h3>' . $lng_profile['communication'] . '</h3><ul>' .
     '<li><span class="gray">' . $lng_profile['phone_number'] . ':</span> ' . (empty($user['mibile']) ? '' : $user['mibile']) . '</li>' .
     '<li><span class="gray">E-mail:</span> ';
 if (!empty($user['mail']) && $user['mailvis'] || $rights >= 7 || $user['id'] == $user_id) {

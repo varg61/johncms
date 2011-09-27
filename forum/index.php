@@ -336,10 +336,10 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                         $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` >= '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id`='$user_id'"), 0);
                         // Значки
                         $icons = array(
-                            ($np ? (!$res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/op.gif" alt=""/>' : '') : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
-                            ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
-                            ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
-                            ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
+                            ($np ? (!$res['vip'] ? functions::get_image('forum_normal.png') : '') : functions::get_image('forum_new.png')),
+                            ($res['vip'] ? functions::get_image('forum_pin.png') : ''),
+                            ($res['realid'] ? functions::get_image('rating.png') : ''),
+                            ($res['edit'] ? functions::get_image('forum_closed.png') : '')
                         );
                         echo functions::display_menu($icons, '&#160;', '&#160;');
                         echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
@@ -403,7 +403,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close` != '1'")), 0);
                 if ($start > $colmes) $start = $colmes - $kmess;
                 // Выводим название топика
-                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
+                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down">' . functions::get_image('down.png') . '</a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
                 if ($colmes > $kmess)
                     echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>';
                 // Метки удаления темы
@@ -468,10 +468,6 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                     ORDER BY `forum`.`id` LIMIT 1");
                     $postres = mysql_fetch_assoc($postreq);
                     echo '<div class="topmenu"><p>';
-                    if ($postres['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($postres['sex'] == 'm' ? 'm' : 'w') . ($postres['datereg'] > time() - 86400 ? '_new.png" width="14"' : '.png" width="10"') . ' height="10"/>&#160;';
-                    else
-                        echo '<img src="../images/del.png" width="10" height="10" alt=""/>&#160;';
                     if ($user_id && $user_id != $postres['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
                              '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . $start . '"> ' . $lng_forum['reply_btn'] . '</a> ' .
@@ -528,7 +524,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                 if ($rights == 3 || $rights >= 6)
                     echo '<form action="index.php?act=massdel" method="post">';
                 $i = 1;
-                while (($res = mysql_fetch_assoc($req)) !== false) {
+                while ($res = mysql_fetch_assoc($req)) {
                     if ($res['close'])
                         echo '<div class="rmenu">';
                     else
@@ -538,13 +534,13 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                         if (file_exists(('../files/users/avatar/' . $res['user_id'] . '.png')))
                             echo '<img src="../files/users/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
                         else
-                            echo '<img src="../images/empty.png" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
+                            echo functions::get_image('empty.png', $res['from']) . '&#160;';
                         echo '</td><td>';
                     }
                     if ($res['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&#160;';
+                        echo functions::get_image('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
                     else
-                        echo '<img src="../images/del.png" width="12" height="12" align="middle" alt=""/>&#160;';
+                        echo functions::get_image('delete.png', '', 'align="middle"') . '&#160;';
                     // Ник юзера и ссылка на его анкету
                     if ($user_id && $user_id != $res['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
@@ -570,7 +566,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                     echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span><br />';
                     // Статус юзера
                     if (!empty($res['status']))
-                        echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle"/>&#160;' . $res['status'] . '</div>';
+                        echo '<div class="status">' . functions::get_image('label.png', '', 'align="middle"') . '&#160;' . $res['status'] . '</div>';
                     if ($set_user['avatar'])
                         echo '</td></tr></table>';
                     /*
@@ -687,8 +683,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                         echo '<p><input type="submit" name="submit" value="' . $lng['write'] . '"/></p></form></div>';
                     }
                 }
-                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up">' .
-                     '<img src="../theme/' . $set_user['skin'] . '/images/up.png" alt="' . $lng['up'] . '" width="20" height="10" border="0"/></a>' .
+                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up">' . functions::get_image('up.png') . '</a>' .
                      '&#160;&#160;' . $lng['total'] . ': ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
                     echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>' .
@@ -796,5 +791,3 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
 }
 
 require_once('../incfiles/end.php');
-
-?>

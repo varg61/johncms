@@ -254,7 +254,7 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
 $dl_count = !empty($adrfile['ip']) ? intval($adrfile['ip']) : 0;
 echo '</p></div><div class="gmenu"><p>' .
     '<h3 class="red">' .
-    '<a href="index.php?act=down&amp;id=' . $file . '"><img src="../images/file.gif" border="0" alt=""/></a>&#160;' .
+    '<a href="index.php?act=down&amp;id=' . $file . '">' . functions::get_image('file.png') . '</a>&#160;' .
     '<a href="index.php?act=down&amp;id=' . $file . '">' . $lng['download'] . '</a></h3>' .
     '<small><span class="gray">' . $lng_dl['size'] . ':</span> <b>' . $siz . '</b> kB<br />';
 if ($prg == "zip") {

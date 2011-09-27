@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-class bbcode extends core
+class bbcode
 {
     /*
     -----------------------------------------------------------------
@@ -136,8 +136,9 @@ class bbcode extends core
             '#\[blue](.+?)\[/blue]#is',                                        // Синий
             '!\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)](.+?)\[/color]!is', // Цвет шрифта
             '!\[bg=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)](.+?)\[/bg]!is',       // Цвет фона
-            '#\[(quote|c)](.+?)\[/(quote|c)]#is',                              // Цитата
-            '#\[\*](.+?)\[/\*]#is'                                             // Список
+            '#\[(q|c)](.+?)\[/(q|c)]#is',                                      // Цитата
+            '#\[\*](.+?)\[/\*]#is',                                            // Список
+            '#\[spoiler](.+?)\[/spoiler]#is'                                   // Спойлер
         );
         // Список замены
         $replace = array(
@@ -153,7 +154,9 @@ class bbcode extends core
             '<span style="color:$1">$2</span>',                                // Цвет шрифта
             '<span style="background-color:$1">$2</span>',                     // Цвет фона
             '<span class="quote" style="display:block">$2</span>',             // Цитата
-            '<span class="bblist">$1</span>'                                   // Список
+            '<span class="bblist">$1</span>', // Список
+            '<div><div class="hidetop" style="cursor:pointer;" onclick="var _n=this.parentNode.getElementsByTagName(\'div\')[1];if(_n.style.display==\'none\'){_n.style.display=\'\';}else{_n.style.display=\'none\';}">[+/-] ' .
+            core::$lng['spoiler'] . '</div><div class="hidemain" style="display:none">$1</div></div>' // Спойлер
         );
         return preg_replace($search, $replace, $var);
     }
@@ -165,7 +168,7 @@ class bbcode extends core
     */
     public static function auto_bb($form, $field)
     {
-        if (self::$is_mobile) {
+        if (core::$is_mobile) {
             return false;
         }
         $colors = array(
@@ -183,7 +186,7 @@ class bbcode extends core
         foreach ($colors as $value) {
             $font_color .= '<a href="javascript:tag(\'[color=#' . $value . ']\', \'[/color]\', \'\');" style="background-color:#' . $value . ';"></a>';
             $bg_color .= '<a href="javascript:tag(\'[bg=#' . $value . ']\', \'[/bg]\', \'\');" style="background-color:#' . $value . ';"></a>';
-            if (!($i % sqrt(count($colors)))){
+            if (!($i % sqrt(count($colors)))) {
                 $font_color .= '</tr><tr>';
                 $bg_color .= '</tr><tr>';
             }
@@ -191,50 +194,52 @@ class bbcode extends core
         }
         $font_color .= '</tr></table>';
         $bg_color .= '</tr></table>';
-        $smileys = !empty(self::$user_data['smileys']) ? unserialize(self::$user_data['smileys']) : '';
+        $smileys = !empty(core::$user_data['smileys']) ? unserialize(core::$user_data['smileys']) : '';
         if (!empty($smileys)) {
             $res_sm = '';
-            $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . self::$lng['edit_list'] . '</a></small><br />';
+            $bb_smileys = '<small><a href="' . core::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . core::$lng['edit_list'] . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
-            $bb_smileys .= functions::smileys($res_sm, self::$user_data['rights'] >= 1 ? 1 : 0);
+            $bb_smileys .= functions::smileys($res_sm, core::$user_data['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . self::$lng['add_smileys'] . '</a></small>';
+            $bb_smileys = '<small><a href="' . core::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . core::$lng['add_smileys'] . '</a></small>';
         }
-        $out = '<style>
-            .bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}
-            .bb_opt:hover .bb_hide{display: block;}
-            .bb_color a {float:left;  width:9px; height:9px; margin:1px; border: 1px solid black;}
-            </style>
-            <script language="JavaScript" type="text/javascript">
-            function tag(text1, text2, text3) {
-            if ((document.selection)) {
-                document.' . $form . '.' . $field . '.focus();
-                document.' . $form . '.document.selection.createRange().text = text3+text1+document.' . $form . '.document.selection.createRange().text+text2+text3;
-            } else if(document.forms[\'' . $form . '\'].elements[\'' . $field . '\'].selectionStart!=undefined) {
-                var element = document.forms[\'' . $form . '\'].elements[\'' . $field . '\'];
-                var str = element.value;
-                var start = element.selectionStart;
-                var length = element.selectionEnd - element.selectionStart;
-                element.value = str.substr(0, start) + text3 + text1 + str.substr(start, length) + text2 + text3 + str.substr(start + length);
-            } else document.' . $form . '.' . $field . '.value += text3+text1+text2+text3;}</script>
-            <a href="javascript:tag(\'[b]\', \'[/b]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/bold.gif" alt="b" title="' . self::$lng['tag_bold'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[i]\', \'[/i]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/italics.gif" alt="i" title="' . self::$lng['tag_italic'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[u]\', \'[/u]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/underline.gif" alt="u" title="' . self::$lng['tag_underline'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[s]\', \'[/s]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/strike.gif" alt="s" title="' . self::$lng['tag_strike'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[*]\', \'[/*]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/list.gif" alt="s" title="' . self::$lng['tag_list'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[c]\', \'[/c]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/quote.gif" alt="quote" title="' . self::$lng['tag_quote'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[php]\', \'[/php]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/php.gif" alt="cod" title="' . self::$lng['tag_code'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/link.gif" alt="url" title="' . self::$lng['tag_link'] . '" border="0"/></a>
-            <span class="bb_opt" style="display: inline-block; cursor:pointer">
-            <img src="' . self::$system_set['homeurl'] . '/images/bb/color.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color.gif\'" alt="color" title="' . self::$lng['color_text'] . '" border="0"/>
-            <div class="bb_hide bb_color">' . $font_color . '</div></span>
-            <span class="bb_opt" style="display: inline-block; cursor:pointer">
-            <img src="' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif" onmouseover="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg_on.gif\'" onmouseout="this.src=\'' . self::$system_set['homeurl'] . '/images/bb/color_bg.gif\'" alt="color" title="' . self::$lng['color_bg'] . '" border="0"/>
-            <div class="bb_hide bb_color">' . $bg_color . '</div></span>';
-        if (self::$user_id) {
-            $out .= ' <span class="bb_opt" style="display: inline-block; cursor:pointer"><img src="' . self::$system_set['homeurl'] . '/images/bb/smileys.gif" alt="sm" title="' . self::$lng['smileys'] . '" border="0"/>
-                <div class="bb_hide">' . $bb_smileys . '</div></span>';
+        $out = '<style>' . "\n" .
+               '.bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}' . "\n" .
+               '.bb_opt:hover .bb_hide{display: block;}' . "\n" .
+               '.bb_color a {float:left;  width:9px; height:9px; margin:1px; border: 1px solid black;}' . "\n" .
+               '</style>' . "\n" .
+               '<script language="JavaScript" type="text/javascript">' . "\n" .
+               'function tag(text1, text2, text3) {' . "\n" .
+               'if ((document.selection)) {' . "\n" .
+               'document.' . $form . '.' . $field . '.focus();' . "\n" .
+               'document.' . $form . '.document.selection.createRange().text = text3+text1+document.' . $form . '.document.selection.createRange().text+text2+text3;' . "\n" .
+               '} else if(document.forms[\'' . $form . '\'].elements[\'' . $field . '\'].selectionStart!=undefined) {' . "\n" .
+               'var element = document.forms[\'' . $form . '\'].elements[\'' . $field . '\'];' . "\n" .
+               'var str = element.value;' . "\n" .
+               'var start = element.selectionStart;' . "\n" .
+               'var length = element.selectionEnd - element.selectionStart;' . "\n" .
+               'element.value = str.substr(0, start) + text3 + text1 + str.substr(start, length) + text2 + text3 + str.substr(start + length);' . "\n" .
+               '} else document.' . $form . '.' . $field . '.value += text3+text1+text2+text3;}</script>' . "\n" .
+               '<a href="javascript:tag(\'[b]\', \'[/b]\', \'\')">' . functions::get_image('bb_bold.gif', 'b', 'title="' . core::$lng['tag_bold'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[i]\', \'[/i]\', \'\')">' . functions::get_image('bb_italic.gif', 'i', 'title="' . core::$lng['tag_italic'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[u]\', \'[/u]\', \'\')">' . functions::get_image('bb_underline.gif', 'u', 'title="' . core::$lng['tag_underline'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[s]\', \'[/s]\', \'\')">' . functions::get_image('bb_strike.gif', 's', 'title="' . core::$lng['tag_strike'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[*]\', \'[/*]\', \'\')">' . functions::get_image('bb_list.gif', '*', 'title="' . core::$lng['tag_list'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[spoiler]\', \'[/spoiler]\', \'\')">' . functions::get_image('bb_spoiler.png', 'spoiler', 'title="' . core::$lng['spoiler'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[q]\', \'[/q]\', \'\')">' . functions::get_image('bb_quote.gif', 'q', 'title="' . core::$lng['tag_quote'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[php]\', \'[/php]\', \'\')">' . functions::get_image('bb_php.gif', 'php', 'title="' . core::$lng['tag_code'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')">' . functions::get_image('bb_url.gif', 'url', 'title="' . core::$lng['tag_link'] . '"') . '</a>' . "\n" .
+               '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . "\n" .
+               functions::get_image('bb_color.gif', 'color', 'title="' . core::$lng['color_text'] . '"') . "\n" .
+               '<div class="bb_hide bb_color">' . $font_color . '</div></span>' . "\n" .
+               '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . "\n" .
+               functions::get_image('bb_bgcolor.gif', 'bgcolor', 'title="' . core::$lng['color_bg'] . '"') . "\n" .
+               '<div class="bb_hide bb_color">' . $bg_color . '</div></span>';
+        if (core::$user_id) {
+            $out .= ' <span class="bb_opt" style="display: inline-block; cursor:pointer">' . "\n" .
+                    functions::get_image('bb_smileys.gif', 'smileys', 'title="' . core::$lng['smileys'] . '"') . "\n" .
+                    '<div class="bb_hide">' . $bb_smileys . '</div></span>';
         }
         return $out . '<br />';
     }

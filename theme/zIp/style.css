@@ -80,7 +80,7 @@ ul {
 
 .bblist {
   color: #4A5663;
-  background: transparent url(../../images/dot.gif) no-repeat left;
+  background: transparent url(images/dot.gif) no-repeat left;
   padding: 2px 0px 2px 10px;
 }
 
@@ -147,6 +147,19 @@ ul {
   border-bottom: 1px solid #595959;
   font-weight: bold;
   padding-left: 2px;
+}
+
+.hidetop{
+  font-size: x-small;
+  background-color : #e0e6e9;
+  border : 1px dotted #9faebb;
+  padding : 2px;
+}
+
+.hidemain{
+  border : 1px dotted black;
+  border-top: 0px;
+  padding : 2px;
 }
 
 .left {

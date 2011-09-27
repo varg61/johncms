@@ -361,16 +361,16 @@ class functions extends core
             if (self::$user_set['avatar']) {
                 $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
                 if (file_exists(($rootpath . 'files/users/avatar/' . $user['id'] . '.png')))
-                    $out .= '<img src="' . self::$system_set['homeurl'] . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
+                    $out .= '<img src="' . self::$system_set['homeurl'] . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" />&#160;';
                 else
-                    $out .= '<img src="' . self::$system_set['homeurl'] . '/images/empty.png" width="32" height="32" alt="" />&#160;';
+                    $out .= self::get_image('empty.png', $user['name']) . '&#160;';
                 $out .= '</td><td>';
             }
             if ($user['sex'])
-                $out .= '<img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > time() - 86400 ? '_new' : '')
-                        . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
+                $out .= self::get_image('usr_' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"');
             else
-                $out .= '<img src="' . self::$system_set['homeurl'] . '/images/del.png" width="12" height="12" align="middle" />&#160;';
+                $out = self::get_image('del.png', '', 'align="middle"');
+            $out .= '&#160;';
             $out .= !self::$user_id || self::$user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="' . self::$system_set['homeurl'] . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
             $rank = array(
                 0 => '',
@@ -388,7 +388,7 @@ class functions extends core
             if (!empty($arg['header']))
                 $out .= ' ' . $arg['header'];
             if (!isset($arg['stshide']) && !empty($user['status']))
-                $out .= '<div class="status"><img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
+                $out .= '<div class="status">' . self::get_image('label.png', '', 'align="middle"') . '&#160;' . $user['status'] . '</div>';
             if (self::$user_set['avatar'])
                 $out .= '</td></tr></table>';
         }
@@ -440,6 +440,24 @@ class functions extends core
         $f2 = substr($name, $f1 + 1, 999);
         $fname = strtolower($f2);
         return $fname;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Загружаем изображение
+    -----------------------------------------------------------------
+    */
+    public static function get_image($img = '', $alt = '', $style = '')
+    {
+        global $rootpath;
+        if (empty($img)) return false;
+        $theme_img = $rootpath . 'theme/' . core::$user_set['skin'] . '/images/' . $img;
+        $default_img = $rootpath . 'images/system/' . $img;
+        if (file_exists($theme_img)) $file = $theme_img;
+        elseif (file_exists($default_img)) $file = $default_img;
+        else return false;
+        $size = getimagesize($file);
+        return '<img src="' . $file . '" width="' . $size[0] . '" height="' . $size[1] . '" alt="' . $alt . '" border="0" ' . $style . '/>';
     }
 
     /*

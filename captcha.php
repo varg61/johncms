@@ -1,21 +1,22 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*
-* Данный модуль построен на основе алгоритма и кода KCAPTCHA v.1.2.6
-* KCAPTCHA PROJECT, Copyright by Kruglov Sergei, 2006, 2007, 2008
-* www.captcha.ru, www.kruglov.ru
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ *
+ * Данный модуль построен на основе алгоритма и кода KCAPTCHA v.1.2.6
+ * KCAPTCHA PROJECT, Copyright by Kruglov Sergei, 2006, 2007, 2008
+ * www.captcha.ru, www.kruglov.ru
+ */
 
-class KCAPTCHA {
-    // generates keystring and image
-    function KCAPTCHA() {
+class KCAPTCHA
+{
+    function KCAPTCHA()
+    {
         ////////////////////////////////////////////////////////////
         // Настройки CAPTCHA                                      //
         ////////////////////////////////////////////////////////////
@@ -30,21 +31,19 @@ class KCAPTCHA {
         $no_spaces = true;
         $show_credits = false;
         $credits = '';
-        $foreground_color = array (
+        $foreground_color = array(
             mt_rand(0, 100),
             mt_rand(0, 100),
             mt_rand(0, 100)
         );
-
-        $background_color = array (
+        $background_color = array(
             mt_rand(200, 255),
             mt_rand(200, 255),
             mt_rand(200, 255)
         );
-
         $jpeg_quality = 90;
-        ////////////////////////////////////////////////////////////
-        $fonts = array ();
+
+        $fonts = array();
         $fontsdir_absolute = dirname(__FILE__) . '/' . $fontsdir;
 
         if (($handle = opendir($fontsdir_absolute)) !== false) {
@@ -72,14 +71,14 @@ class KCAPTCHA {
             imagealphablending($font, true);
             $fontfile_width = imagesx($font);
             $fontfile_height = imagesy($font) - 1;
-            $font_metrics = array ();
+            $font_metrics = array();
             $symbol = 0;
             $reading_symbol = false;
             // loading font
             for ($i = 0; $i < $fontfile_width && $symbol < $alphabet_length; $i++) {
                 $transparent = (imagecolorat($font, $i, 0) >> 24) == 127;
                 if (!$reading_symbol && !$transparent) {
-                    $font_metrics[$alphabet{$symbol}] = array ('start' => $i);
+                    $font_metrics[$alphabet{$symbol}] = array('start' => $i);
                     $reading_symbol = true;
                     continue;
                 }
@@ -221,7 +220,10 @@ class KCAPTCHA {
     }
 
     // returns keystring
-    function getKeyString() { return $this->keystring; }
+    function getKeyString()
+    {
+        return $this->keystring;
+    }
 }
 
 // Обрабатываем запрос на картинку CAPTCHA
@@ -229,4 +231,3 @@ session_name('SESID');
 session_start();
 $captcha = new KCAPTCHA();
 $_SESSION['code'] = $captcha->getKeyString();
-?>

@@ -322,7 +322,7 @@ switch ($mod) {
                 ////////////////////////////////////////////////////////////
                 // Выводим рекламмную ссылку с атрибутами                 //
                 ////////////////////////////////////////////////////////////
-                echo '<p><img src="../images/' . ($res['to'] ? 'red' : 'green') . '.gif" width="16" height="16" class="left"/>&#160;' .
+                echo '<p>' . functions::get_image(($res['to'] ? 'red' : 'green') . '.png', '', 'class="left"') . '&#160;' .
                      '<a href="' . htmlspecialchars($res['link']) . '">' . htmlspecialchars($res['link']) . '</a>&nbsp;[' . $res['count'] . ']<br />' . $name . '</p>';
                 $menu = array(
                     '<a href="index.php?act=ads&amp;mod=up&amp;id=' . $res['id'] . '">' . $lng['up'] . '</a>',

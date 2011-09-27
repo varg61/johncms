@@ -109,14 +109,14 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . $lng['photo_albums'] . '</b></div>' .
         '<div class="gmenu"><p>' .
-        '<img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16"/>&#160;<a href="album.php?act=top">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
-        '<img src="' . $set['homeurl'] . '/images/guestbook.gif" width="16" height="16"/>&#160;<a href="album.php?act=top&amp;mod=last_comm">' . $lng_profile['new_comments'] . '</a>' .
+        functions::get_image('album_new.png') . '&#160;<a href="album.php?act=top">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
+        functions::get_image('comments.png') . '&#160;<a href="album.php?act=top&amp;mod=last_comm">' . $lng_profile['new_comments'] . '</a>' .
         '</p></div>' .
         '<div class="menu">' .
-        '<p><h3><img src="' . $set['homeurl'] . '/images/users.png" width="16" height="16" class="left" />&#160;' . $lng['albums'] . '</h3><ul>' .
+        '<p><h3>' . functions::get_image('users.png') . '&#160;' . $lng['albums'] . '</h3><ul>' .
         '<li><a href="album.php?act=users">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
         '</ul></p>' .
-        '<p><h3><img src="' . $set['homeurl'] . '/images/rate.gif" width="16" height="16" class="left" />&#160;' . $lng['rating'] . '</h3><ul>' .
+        '<p><h3>' . functions::get_image('rating.png') . '&#160;' . $lng['rating'] . '</h3><ul>' .
         '<li><a href="album.php?act=top&amp;mod=votes">' . $lng_profile['top_votes'] . '</a></li>' .
         '<li><a href="album.php?act=top&amp;mod=downloads">' . $lng_profile['top_downloads'] . '</a></li>' .
         '<li><a href="album.php?act=top&amp;mod=views">' . $lng_profile['top_views'] . '</a></li>' .

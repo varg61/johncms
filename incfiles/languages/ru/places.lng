@@ -1,5 +1,6 @@
 admlist                       =   "<a href='#home#/users/index.php?act=admlist'>Список Администрации</a>"
 album                         =   "<a href='#home#/users/album.php'>Фотоальбомы</a>"
+avatars                       =   "<a href='#home#/pages/avatars.php'>В каталоге Аватаров</a>"
 birth                         =   "<a href='#home#/users/index.php?act=birth'>Список именинников</a>"
 downloads                     =   "<a href='#home#/download/index.php'>Загрузки</a>"
 faq                           =   "<a href='#home#/pages/faq.php'>Читает FAQ</a>"
@@ -16,5 +17,6 @@ online                        =   "<a href='#home#/users/index.php?act=online'>�
 pm                            =   "Приват"
 profile                       =   "В Анкете"
 profile_personal              =   "В своей Анкете"
+smileys                       =   "<a href='#home#/pages/smileys.php'>В каталоге Смайлов</a>"
 userlist                      =   "<a href='#home#/users/index.php?act=userlist'>Список пользователей</a>"
 userstop                      =   "<a href='#home#/users/index.php?act=top'>Смотрит ТОП пользователей</a>"

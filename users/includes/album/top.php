@@ -166,7 +166,7 @@ if ($total) {
             echo 'Только для друзей';
         } elseif ($res['access'] == 2) {
             // Если доступ по паролю
-            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '"><img src="' . core::$system_set['homeurl'] . '/images/stop.gif" width="50" height="50"/></a>';
+            echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '">' . functions::get_image('password.gif') . '</a>';
         }
         echo '<div class="sub">' .
              '<a href="album.php?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . functions::checkout($res['album_name']) . '</a>';

@@ -134,4 +134,3 @@ echo '<form action="registration.php" method="post"><div class="gmenu">' .
      '<div class="phdr"><small>' . $lng_reg['registration_terms'] . '</small></div>';
 
 require('incfiles/end.php');
-?>

@@ -32,9 +32,9 @@ $new = time() - 86400; // Сколько времени файлы считат�
 Получаем ID раздела и подготавливаем запрос
 -----------------------------------------------------------------
 */
-$c = abs(intval($_GET['c'])); // ID раздела
-$s = abs(intval($_GET['s'])); // ID подраздела
-$t = abs(intval($_GET['t'])); // ID топика
+$c = isset($_GET['c']) ? abs(intval($_GET['c'])) : false; // ID раздела
+$s = isset($_GET['s']) ? abs(intval($_GET['s'])) : false; // ID подраздела
+$t = isset($_GET['t']) ? abs(intval($_GET['t'])) : false; // ID топика
 $do = isset($_GET['do']) && intval($_GET['do']) > 0 && intval($_GET['do']) < 10 ? intval($_GET['do']) : 0;
 if ($c) {
     $id = $c;
@@ -89,9 +89,9 @@ if ($do || isset($_GET['new'])) {
         FROM `cms_forum_files`
         LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
         LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
-        WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7
-                                   ? '' : " AND `del` != '1'") . $sql .
-                           "ORDER BY `time` DESC LIMIT $start,$kmess");
+        WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql .
+        "ORDER BY `time` DESC LIMIT $start,$kmess");
+        $i = 0;
         while ($res = mysql_fetch_assoc($req)) {
             $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
             $res_u = mysql_fetch_assoc($req_u);
@@ -121,8 +121,7 @@ if ($do || isset($_GET['new'])) {
                 $file .= '<img src="thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . $lng_forum['click_to_view'] . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
-                $file = ($res['del'] ? '<img src="../images/del.png" width="16" height="16" />'
-                        : '') . '<img src="../images/system/' . $res['filetype'] . '.png" width="16" height="16" />&#160;';
+                $file = functions::get_image(($res['del'] ? 'delete.png' : 'filetype_' . $res['filetype'] . '.png'), '', 'align="middle"') . '&#160;';
             }
             $file .= '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
             $file .= '<small><span class="gray">' . $lng_forum['size'] . ': ' . $fls . ' kb.<br />' . $lng_forum['downloaded'] . ': ' . $res['dlcount'] . ' ' . $lng_forum['time'] . '</span></small>';
@@ -166,7 +165,7 @@ if ($do || isset($_GET['new'])) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . ($rights >= 7
                                                   ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0) {
-            $link[] = '<img src="../images/system/' . $i . '.png" width="16" height="16" class="left" />&#160;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
+            $link[] = functions::get_image('filetype_' . $i . '.png') . '&#160;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
             $total = $total + $count;
         }
     }

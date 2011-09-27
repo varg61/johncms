@@ -286,8 +286,7 @@ switch ($mod) {
                 $remain = $res['ban_time'] - time();
                 $period = $res['ban_time'] - $res['ban_while'];
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/' . ($remain > 0 ? 'red'
-                        : 'green') . '.gif" width="16" height="16" align="left" />&#160;' .
+                echo functions::get_image(($remain > 0 ? 'red' : 'green') . '.png') . '&#160;' .
                      '<b>' . $lng_ban['ban_' . $res['ban_type']] . '</b>' .
                      ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>' .
                      '<br />' . functions::checkout($res['ban_reason']) .

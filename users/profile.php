@@ -111,7 +111,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             $images = 0;
             echo '<div class="menu">';
         }
-        echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $set['homeurl'] . '/images/k_' . $images . '.gif"/></td><td>' .
+        echo '<table  width="100%"><tr><td width="22" valign="top">' . functions::get_image('karma_' . $images . '.gif') . '</td><td>' .
             '<b>' . $lng['karma'] . ' (' . $karma . ')</b>' .
             '<div class="sub">' .
             '<span class="green"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . $user['karma_plus'] . ')</a></span> | ' .
@@ -134,24 +134,22 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     // Меню выбора
     $total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     echo '<div class="list2"><p>' .
-        '<div><img src="../images/contacts.png" width="16" height="16"/>&#160;<a href="profile.php?act=info&amp;user=' . $user['id'] . '">' . $lng['information'] . '</a></div>' .
-        '<div><img src="../images/activity.gif" width="16" height="16"/>&#160;<a href="profile.php?act=activity&amp;user=' . $user['id'] . '">' . $lng_profile['activity'] . '</a></div>' .
-        '<div><img src="../images/rate.gif" width="16" height="16"/>&#160;<a href="profile.php?act=stat&amp;user=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
+        '<div>' . functions::get_image('contacts.png') . '&#160;<a href="profile.php?act=info&amp;user=' . $user['id'] . '">' . $lng['information'] . '</a></div>' .
+        '<div>' . functions::get_image('user_edit.png') . '&#160;<a href="profile.php?act=activity&amp;user=' . $user['id'] . '">' . $lng_profile['activity'] . '</a></div>' .
+        '<div>' . functions::get_image('rating.png') . '&#160;<a href="profile.php?act=stat&amp;user=' . $user['id'] . '">' . $lng['statistics'] . '</a></div>';
     $bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
     if ($bancount)
-        echo '<div><img src="../images/block.gif" width="16" height="16"/>&#160;<a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
+        echo '<div>' . functions::get_image('user_block.png') . '&#160;<a href="profile.php?act=ban&amp;user=' . $user['id'] . '">' . $lng['infringements'] . '</a> (' . $bancount . ')</div>';
     echo '<br />' .
-        '<div><img src="../images/photo.gif" width="16" height="16"/>&#160;<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
-        '<div><img src="../images/guestbook.gif" width="16" height="16"/>&#160;<a href="profile.php?act=guestbook&amp;user=' . $user['id'] . '">' . $lng['guestbook'] . '</a>&#160;(' . $user['comm_count'] . ')</div>';
-    //echo '<div><img src="../images/pt.gif" width="16" height="16"/>&#160;<a href="">' . $lng['blog'] . '</a>&#160;(0)</div>';
+        '<div>' . functions::get_image('album_4.png') . '&#160;<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
+        '<div>' . functions::get_image('comments.png') . '&#160;<a href="profile.php?act=guestbook&amp;user=' . $user['id'] . '">' . $lng['guestbook'] . '</a>&#160;(' . $user['comm_count'] . ')</div>';
     if ($user['id'] != $user_id) {
-        echo '<br /><div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="">' . $lng['contacts_in'] . '</a></div>';
+        echo '<br /><div>' . functions::get_image('contacts.png') . '&#160;<a href="">' . $lng['contacts_in'] . '</a></div>';
         if (!isset($ban['1']) && !isset($ban['3']))
-            echo '<div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
+            echo '<div>' . functions::get_image('mail_write.png') . '&#160;<a href="pradd.php?act=write&amp;adr=' . $user['id'] . '"><b>' . $lng['write'] . '</b></a></div>';
     }
     echo '</p></div>';
     echo '<div class="phdr"><a href="index.php">' . $lng['users'] . '</a></div>';
 }
 
 require_once('../incfiles/end.php');
-?>

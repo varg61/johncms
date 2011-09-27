@@ -109,13 +109,13 @@ if ($user_id) {
                     $cpg = ceil($colmes1 / $kmess);
                     $nick = mysql_fetch_array($colmes);
                     if ($res['edit'])
-                        echo '<img src="../images/tz.gif" alt=""/>';
+                        echo functions::get_image('forum_closed.png');
                     elseif ($res['close'])
-                        echo '<img src="../images/dl.gif" alt=""/>';
+                        echo functions::get_image('forum_deleted.png');
                     else
-                        echo '<img src="../images/np.gif" alt=""/>';
+                        echo functions::get_image('forum_new.png');
                     if ($res['realid'] == 1)
-                        echo '&#160;<img src="../images/rate.gif" alt=""/>';
+                        echo '&#160;' . functions::get_image('rating.png');
                     echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
@@ -176,10 +176,10 @@ if ($user_id) {
                     $nick = mysql_fetch_assoc($colmes);
                     // Значки
                     $icons = array (
-                        (isset($np) ? (!$res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/op.gif" alt=""/>' : '') : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
-                        ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
-                        ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
-                        ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
+                        (isset($np) ? (!$res['vip'] ? functions::get_image('forum_normal.png') : '') : functions::get_image('forum_new.png')),
+                        ($res['vip'] ? functions::get_image('forum_pin.png') : ''),
+                        ($res['realid'] ? functions::get_image('rating.png') : ''),
+                        ($res['edit'] ? functions::get_image('forum_closed.png') : '')
                     );
                     echo functions::display_menu($icons, '&#160;', '&#160;');
                     echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
@@ -230,10 +230,10 @@ if ($user_id) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Значки
             $icons = array (
-                ($np ? (!$res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/op.gif" alt=""/>' : '') : '<img src="../theme/' . $set_user['skin'] . '/images/np.gif" alt=""/>'),
-                ($res['vip'] ? '<img src="../theme/' . $set_user['skin'] . '/images/pt.gif" alt=""/>' : ''),
-                ($res['realid'] ? '<img src="../theme/' . $set_user['skin'] . '/images/rate.gif" alt=""/>' : ''),
-                ($res['edit'] ? '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>' : '')
+                ($np ? (!$res['vip'] ? functions::get_image('forum_normal.png') : '') : functions::get_image('forum_new.png')),
+                ($res['vip'] ? functions::get_image('forum_pin.png') : ''),
+                ($res['realid'] ? functions::get_image('rating.png') : ''),
+                ($res['edit'] ? functions::get_image('forum_closed.png') : '')
             );
             echo functions::display_menu($icons, '&#160;', '&#160;');
             echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&#160;[' . $colmes1 . ']';

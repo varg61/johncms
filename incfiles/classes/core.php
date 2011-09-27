@@ -81,10 +81,20 @@ class core
     */
     public static function load_lng($module = '_core')
     {
-        if(!is_dir(self::$root . 'incfiles/languages/' . self::$lng_iso)) self::$lng_iso = 'en';
+        static $edited = false;
+        if (!is_dir(self::$root . 'incfiles/languages/' . self::$lng_iso)) self::$lng_iso = 'en';
         $lng_file = self::$root . 'incfiles/languages/' . self::$lng_iso . '/' . $module . '.lng';
+        $lng_file_edit = self::$root . 'files/lng_edit/' . self::$lng_iso . '_iso.lng';
         if (file_exists($lng_file)) {
             $out = parse_ini_file($lng_file) or die('ERROR: language file');
+            if ($edited === false) {
+                if (file_exists($lng_file_edit)) $edited = parse_ini_file($lng_file_edit, true);
+                else  $edited = array();
+            }
+            if (isset($edited[$module])) {
+                $lng_module = array_diff_key($out, $edited[$module]);
+                $out = $lng_module + $edited[$module];
+            }
             return $out;
         }
         self::$core_errors[] = 'Language file <b>' . $module . '.lng</b> is missing';

@@ -191,7 +191,7 @@ if ($set_karma['on']) {
                 $images = 0;
                 echo '<div class="menu">';
             }
-            echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $set['homeurl'] . '/images/k_' . $images . '.gif"/></td><td>' .
+            echo '<table  width="100%"><tr><td width="22" valign="top">' . functions::get_image('karma_' . $images . '.gif') . '</td><td>' .
                 '<b>' . $lng['karma'] . ' (' . $karma . ')</b>' .
                 '<div class="sub">' .
                 '<span class="green">' . $lng['vote_for'] . ' (' . $user['karma_plus'] . ')</span> | ' .
