@@ -15,6 +15,7 @@ library                       =   "<a href='#home#/library/index.php'>Читае
 news                          =   "<a href='#home#/news/index.php'>Читает новости</a>"
 online                        =   "<a href='#home#/users/index.php?act=online'>Смотрит, кто на сайте?</a>"
 pm                            =   "Приват"
+pm_write                      =   "Пишет приватное сообщение"
 profile                       =   "В Анкете"
 profile_personal              =   "В своей Анкете"
 smileys                       =   "<a href='#home#/pages/smileys.php'>В каталоге Смайлов</a>"
