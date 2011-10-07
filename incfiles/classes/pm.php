@@ -13,13 +13,57 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 class pm
 {
-    private $user_id;
-    private $max_recipients;
-
-    function __construct($arg = array())
+    /*
+    -----------------------------------------------------------------
+    Получение данных формы
+    -----------------------------------------------------------------
+    */
+    public static function get_vars()
     {
-        $this->user_id = isset($arg['user_id']) ? intval($arg['user_id']) : core::$user_id;
-        $this->max_recipients = 2; //TODO: Задать из настроек
+        global $lng_pm;
+
+        // Формируем список получателей
+        $rcp_string = isset($_POST['to']) ? trim($_POST['to']) : '';
+        $rcp_list = isset($_POST['tolist']) ? $_POST['tolist'] : array();
+        $rcp_array = !empty($rcp_string) ? explode(',', $rcp_string) : array();
+        $recipients = array_merge($rcp_list, $rcp_array);
+        foreach ($recipients as $key => $val) $recipients[$key] = trim($val);
+
+        // Обрабатываем запросы на удаление из списка получателей
+        $rcp_del = isset($_POST['todel']) && is_array($_POST['todel']) ? $_POST['todel'] : array();
+        $recipients = array_diff($recipients, $rcp_del);
+
+        // Формируем возвращаемые методом данные
+        $out['rcp_list'] = array();
+        $out['subject'] = isset($_POST['subject']) ? mb_substr(trim($_POST['subject']), 0, 100) : '';
+        $out['message'] = isset($_POST['message']) ? trim($_POST['message']) : '';
+        $out['attach'] = isset($_POST['attach']);
+        $out['translit'] = isset($_POST['translit']);
+        $out['draft'] = isset($_POST['draft']);
+
+        // Проверяем список получателей
+        if (!empty($recipients)) {
+            $count = 1;
+            foreach ($recipients as $val) {
+                if ($count > 2) break; //TODO: Поставить в зависимость от настроек в админке
+                if (($user = self::get_user($val)) !== false) {
+                    $out['recipients'][] = $user['name'];
+                } else {
+                    $out['error']['rcp'][] = '&#160;<b style="text-decoration: line-through;">' . $val . '</b> <small>' . core::$lng['error_user_not_exist'] . '</small>';
+                    continue;
+                }
+                ++$count;
+            }
+        }
+
+        // Проверяем наличие получателей
+        if(count($out['recipients']) < 1) $out['error']['rcp_empty'] = $lng_pm['error_recipients'];
+
+        // Проверяем длину сообщения
+        if(mb_strlen($out['message']) < 4) $out['error']['msg'] = $lng_pm['error_short_message'];
+
+        // Возвращаем данные
+        return $out;
     }
 
     /*
@@ -31,12 +75,6 @@ class pm
     {
         global $lng_pm;
         $error = false;
-
-        // Проверяем наличие получателей
-        if (empty($data['rcp_list']) && !$data['draft']) $error['recipient'] = $lng_pm['error_recipients'];
-
-        // Проверяем наличие сообщения
-        if (mb_strlen($data['message']) < 4) $error['body'] = $lng_pm['error_short_message'];
 
         //TODO: Проверяем на повтор сообщений
 
@@ -60,55 +98,10 @@ class pm
 
     /*
     -----------------------------------------------------------------
-    Получение данных формы
-    -----------------------------------------------------------------
-    */
-    public function get_vars()
-    {
-        // Формируем список получателей
-        $rcp_string = isset($_POST['to']) ? trim($_POST['to']) : '';
-        $rcp_list = isset($_POST['tolist']) ? $_POST['tolist'] : array();
-        $rcp_array = !empty($rcp_string) ? explode(',', $rcp_string) : array();
-        $recipients = array_merge($rcp_list, $rcp_array);
-        foreach ($recipients as $key => $val) $recipients[$key] = trim($val);
-
-        // Обрабатываем запросы на удаление из списка получателей
-        $rcp_del = isset($_POST['todel']) && is_array($_POST['todel']) ? $_POST['todel'] : array();
-        $recipients = array_diff($recipients, $rcp_del);
-
-        // Формируем фозвращаемые методом данные
-        $out['rcp_list'] = array();
-        $out['subject'] = isset($_POST['subject']) ? trim($_POST['subject']) : '';
-        $out['message'] = isset($_POST['message']) ? trim($_POST['message']) : '';
-        $out['attach'] = isset($_POST['attach']);
-        $out['translit'] = isset($_POST['translit']);
-        $out['draft'] = isset($_POST['draft']);
-
-        // Проверяем список получателей
-        if (!empty($recipients)) {
-            $count = 1;
-            foreach ($recipients as $val) {
-                if ($count > $this->max_recipients) break;
-                if (($user = $this->get_user($val)) !== false) {
-                    $out['rcp_list'][] = $user['name'];
-                } else {
-                    $out['error'][] = '&#160;<b style="text-decoration: line-through;">' . $val . '</b> <small>' . core::$lng['error_user_not_exist'] . '</small>';
-                    continue;
-                }
-                ++$count;
-            }
-        }
-
-        // Возвращаем данные
-        return $out;
-    }
-
-    /*
-    -----------------------------------------------------------------
     Поиск юзера по Нику
     -----------------------------------------------------------------
     */
-    private function get_user($name = '')
+    private static function get_user($name = '')
     {
         if(mb_strlen($name) < 2 || mb_strlen($name) > 20) return false;
         $req = mysql_query("SELECT `id`, `name` FROM `users` WHERE `name` = '" . mysql_real_escape_string($name) . "' LIMIT 1");

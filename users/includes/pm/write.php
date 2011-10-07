@@ -20,7 +20,7 @@ require('../incfiles/head.php');
 -----------------------------------------------------------------
 */
 $error = false;
-$data = $pm->get_vars();
+$data = $pm::get_vars();
 if (isset($_POST['submit']) && !isset($data['error']) && ($error = $pm->sent_message($data)) === false) {
     echo '<p>Отправлено</p>';
 } else {
@@ -37,7 +37,7 @@ if (isset($_POST['submit']) && !isset($data['error']) && ($error = $pm->sent_mes
                  '<input type="hidden" name="tolist[]" value="' . $val . '" />';
         }
     }
-    if (!empty($data['error'])) foreach ($data['error'] as $val) echo '<div>' . $val . '</div>';
+    if (!empty($data['error']['rcp'])) foreach ($data['error']['rcp'] as $val) echo '<div>' . $val . '</div>';
     echo (isset($error['recipient']) ? '<p class="red">' . core::$lng['error'] . ': ' . $error['recipient'] . '</p>' : '') .
          '<input name="to" size="15" maxlength="100" ' . (count($data['rcp_list']) >= $max_rcp ? 'disabled="disabled"' : '') . (isset($error['recipient']) ? ' style="background-color: #FFCCCC"' : '') . '/>' .
          '<input type="submit" name="add" value="+/-" /><br />' .
