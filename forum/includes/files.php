@@ -98,7 +98,7 @@ if ($do || isset($_GET['new'])) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Выводим текст поста
             $text = mb_substr($res['text'], 0, 500);
-            $text = functions::checkout($text, 1, 0);
+            $text = functions::checkout($text, 1, 1);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
             $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp']
                                                           ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / $kmess);
