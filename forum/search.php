@@ -74,9 +74,7 @@ switch ($act) {
         Проверям на ошибки
         -----------------------------------------------------------------
         */
-        $error = false;
-        if ($search && (mb_strlen($search) < 2 || mb_strlen($search) > 64))
-            $error = $lng['error_search_length'];
+        $error = $search && mb_strlen($search) < 4 || mb_strlen($search) > 64 ? true : false;
 
         /*
         -----------------------------------------------------------------
@@ -176,7 +174,7 @@ switch ($act) {
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
         } else {
-            if ($error) echo functions::display_error($error);
+            if ($error) echo functions::display_error(core::$lng['error_wrong_lenght']);
             echo '<div class="phdr"><small>' . $lng['search_help'] . '</small></div>';
         }
 
