@@ -63,6 +63,7 @@ switch ($act) {
         $search = $search_post ? $search_post : $search_get;
         //$search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
         $search_t = isset($_REQUEST['t']);
+        $to_history = false;
         echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
              '<input type="text" value="' . ($search ? functions::checkout($search) : '') . '" name="search" />' .
              '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
@@ -75,36 +76,6 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         $error = $search && mb_strlen($search) < 4 || mb_strlen($search) > 64 ? true : false;
-
-        /*
-        -----------------------------------------------------------------
-        Обрабатываем историю личных поисковых запросов
-        -----------------------------------------------------------------
-        */
-        if (core::$user_id) {
-            $req = mysql_query("SELECT * FROM `cms_users_data` WHERE `user_id` = '" . core::$user_id . "' AND `key` = 'forum_search' LIMIT 1");
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
-                $history = unserialize($res['val']);
-                if ($search && !$error && !in_array($search, $history)) {
-                    $h_count = count($history);
-                    if ($h_count > 20) array_pop($history);
-                    $history[] = $search;
-                    mysql_query("UPDATE `cms_users_data` SET
-                        `val` = '" . mysql_real_escape_string(serialize($history)) . "'
-                        WHERE `user_id` = '" . core::$user_id . "' AND `key` = 'forum_search'
-                        LIMIT 1
-                    ");
-                }
-            } elseif ($search && !$error) {
-                $history[] = $search;
-                mysql_query("INSERT INTO `cms_users_data` SET
-                    `user_id` = '" . core::$user_id . "',
-                    `key` = 'forum_search',
-                    `val` = '" . mysql_real_escape_string(serialize($history)) . "'
-                ");
-            }
-        }
 
         if ($search && !$error) {
             /*
@@ -124,6 +95,7 @@ switch ($act) {
             if ($total > $kmess)
                 echo '<div class="topmenu">' . functions::display_pagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', $start, $total, $kmess) . '</div>';
             if ($total) {
+                $to_history = true;
                 $req = mysql_query("
                     SELECT *, MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
                     FROM `forum`
@@ -178,13 +150,41 @@ switch ($act) {
             echo '<div class="phdr"><small>' . $lng['search_help'] . '</small></div>';
         }
 
-        // Показываем историю личных поисковых запросов
-        if (!empty($history)) {
-            foreach ($history as $val) $history_list[] = '<a href="search.php?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
-            echo '<div class="topmenu">' .
-                 '<b>' . core::$lng['search_history'] . '</b> <span class="red"><a href="search.php?act=reset">[x]</a></span><br />' .
-                 functions::display_menu($history_list) .
-                 '</div>';
+        /*
+        -----------------------------------------------------------------
+        Обрабатываем и показываем историю личных поисковых запросов
+        -----------------------------------------------------------------
+        */
+        if (core::$user_id) {
+            $req = mysql_query("SELECT * FROM `cms_users_data` WHERE `user_id` = '" . core::$user_id . "' AND `key` = 'forum_search' LIMIT 1");
+            if (mysql_num_rows($req)) {
+                $res = mysql_fetch_assoc($req);
+                $history = unserialize($res['val']);
+                // Добавляем запрос в историю
+                if ($to_history && !in_array($search, $history)) {
+                    if (count($history) > 20) array_shift($history);
+                    $history[] = $search;
+                    mysql_query("UPDATE `cms_users_data` SET
+                        `val` = '" . mysql_real_escape_string(serialize($history)) . "'
+                        WHERE `user_id` = '" . core::$user_id . "' AND `key` = 'forum_search'
+                        LIMIT 1
+                    ");
+                }
+                sort($history);
+                foreach ($history as $val) $history_list[] = '<a href="search.php?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
+                // Показываем историю запросов
+                echo '<div class="topmenu">' .
+                     '<b>' . core::$lng['search_history'] . '</b> <span class="red"><a href="search.php?act=reset">[x]</a></span><br />' .
+                     functions::display_menu($history_list) .
+                     '</div>';
+            } elseif ($to_history) {
+                $history[] = $search;
+                mysql_query("INSERT INTO `cms_users_data` SET
+                    `user_id` = '" . core::$user_id . "',
+                    `key` = 'forum_search',
+                    `val` = '" . mysql_real_escape_string(serialize($history)) . "'
+                ");
+            }
         }
 
         // Постраничная навигация
