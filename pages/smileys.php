@@ -44,8 +44,7 @@ switch ($act) {
              '</div>';
         if ($total) {
             if (!$is_mobile) {
-                $user_sm = isset($datauser['smileys']) ? unserialize($datauser['smileys']) : '';
-                if (!is_array($user_sm)) $user_sm = array();
+                if (($user_sm = registry::user_data_get('smileys')) === false) $user_sm = array();
                 echo '<div class="topmenu">' .
                      '<a href="smileys.php?act=my_smileys">' . $lng['my_smileys'] . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')</div>' .
                      '<form action="smileys.php?act=set_my_sm&amp;cat=' . $cat . '&amp;start=' . $start . '" method="post">';
@@ -83,11 +82,9 @@ switch ($act) {
             require('../incfiles/end.php');
             exit;
         }
-        echo '<div class="phdr"><a href="smileys.php"><b>' . $lng['smileys'] . '</b></a> | ' . $lng_faq['smileys_adm'] . '</div>';
+        echo '<div class="phdr"><a href="smileys.php"><b>' . $lng['smileys'] . '</b></a> | ' . $lng['admin_smileys'] . '</div>';
         if (!$is_mobile) {
-            $user_sm = unserialize($datauser['smileys']);
-            if (!is_array($user_sm))
-                $user_sm = array();
+            if (($user_sm = registry::user_data_get('smileys')) === false) $user_sm = array();
             echo '<div class="topmenu"><a href="smileys.php?act=my_smileys">' . $lng['my_smileys'] . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')</div>' .
                  '<form action="smileys.php?act=set_my_sm&amp;start=' . $start . '&amp;adm" method="post">';
         }
@@ -139,7 +136,7 @@ switch ($act) {
             exit;
         }
         echo '<div class="phdr"><a href="smileys.php"><b>' . $lng['smileys'] . '</b></a> | ' . $lng['my_smileys'] . '</div>';
-        $smileys = !empty($datauser['smileys']) ? unserialize($datauser['smileys']) : array();
+        if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
         $total = count($smileys);
         if ($total)
             echo '<form action="smileys.php?act=set_my_sm&amp;start=' . $start . '" method="post">';
@@ -190,7 +187,7 @@ switch ($act) {
             require('../incfiles/end.php');
             exit;
         }
-        $smileys = unserialize($datauser['smileys']);
+        if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
         if (!is_array($smileys))
             $smileys = array();
         if ($delete)
@@ -205,7 +202,8 @@ switch ($act) {
             $smileys = array_chunk($smileys, $user_smileys, TRUE);
             $smileys = $smileys[0];
         }
-        mysql_query("UPDATE `users` SET `smileys` = '" . mysql_real_escape_string(serialize($smileys)) . "' WHERE `id` = '$user_id'");
+        if (!empty($smileys)) registry::user_data_add('smileys', $smileys);
+        else registry::user_data_delete('smileys');
         if ($delete || isset($_GET['clean'])) {
             header('location: smileys.php?act=my_smileys&start=' . $start . '');
         } else {
@@ -221,7 +219,8 @@ switch ($act) {
         */
         echo '<div class="phdr"><a href="faq.php"><b>F.A.Q.</b></a> | ' . $lng['smileys'] . '</div>';
         if ($user_id && !$is_mobile) {
-            $mycount = !empty($datauser['smileys']) ? count(unserialize($datauser['smileys'])) : '0';
+            if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
+            $mycount = !empty($smileys) ? count($smileys) : '0';
             echo '<div class="topmenu"><a href="smileys.php?act=my_smileys">' . $lng['my_smileys'] . '</a> (' . $mycount . ' / ' . $user_smileys . ')</div>';
         }
         if ($rights >= 1)

@@ -194,7 +194,7 @@ class bbcode
         }
         $font_color .= '</tr></table>';
         $bg_color .= '</tr></table>';
-        $smileys = !empty(core::$user_data['smileys']) ? unserialize(core::$user_data['smileys']) : '';
+        if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
         if (!empty($smileys)) {
             $res_sm = '';
             $bb_smileys = '<small><a href="' . core::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . core::$lng['edit_list'] . '</a></small><br />';
