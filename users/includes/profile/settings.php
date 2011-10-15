@@ -57,11 +57,11 @@ switch ($mod) {
                 $set_forum['postclip'] = 1;
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
                 $set_forum['postcut'] = 1;
-            registry::user_data_add('set_forum', $set_forum);
+            registry::user_data_put('set_forum', $set_forum);
             echo '<div class="gmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_forum)) {
-            registry::user_data_delete('set_forum');
+            registry::user_data_put('set_forum');
             $set_forum = registry::set_forum_default();
             echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
@@ -132,8 +132,10 @@ switch ($mod) {
             }
 
             // Записываем настройки
-            registry::user_data_add('set_user', $set_user);
-            $_SESSION['set_ok'] = 1;
+            if (core::$user_set != $set_user) {
+                registry::user_data_put('set_user', $set_user);
+                $_SESSION['set_ok'] = 1;
+            }
             header('Location: profile.php?act=settings');
             exit;
         } elseif (isset($_GET['reset']) || empty($set_user)) {
@@ -142,7 +144,7 @@ switch ($mod) {
             Задаем настройки по-умолчанию
             -----------------------------------------------------------------
             */
-            registry::user_data_delete('set_user');
+            registry::user_data_put('set_user');
             $set_user = registry::set_user_default();
             echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         } else {

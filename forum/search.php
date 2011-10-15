@@ -38,7 +38,7 @@ switch ($act) {
         */
         if (core::$user_id) {
             if (isset($_POST['submit'])) {
-                registry::user_data_delete('forum_search');
+                registry::user_data_put('forum_search');
                 header('Location: search.php');
             } else {
                 echo '<form action="search.php?act=reset" method="post">' .
@@ -162,7 +162,7 @@ switch ($act) {
             if($to_history && !in_array($search_val, $history)){
                 if (count($history) > 20) array_shift($history);
                 $history[] = $search_val;
-                registry::user_data_add('forum_search', $history);
+                registry::user_data_put('forum_search', $history);
             }
             // Показываем историю поиска
             if(!empty($history)){

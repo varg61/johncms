@@ -202,8 +202,7 @@ switch ($act) {
             $smileys = array_chunk($smileys, $user_smileys, TRUE);
             $smileys = $smileys[0];
         }
-        if (!empty($smileys)) registry::user_data_add('smileys', $smileys);
-        else registry::user_data_delete('smileys');
+        registry::user_data_put('smileys', $smileys);
         if ($delete || isset($_GET['clean'])) {
             header('location: smileys.php?act=my_smileys&start=' . $start . '');
         } else {

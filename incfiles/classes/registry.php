@@ -32,12 +32,16 @@ class registry
 
     /*
     -----------------------------------------------------------------
-    Добавляем пользовательские данные в базу
+    Добавляем / обновляем / удаляем пользовательские данные
     -----------------------------------------------------------------
     */
-    public static function user_data_add($key = '', $val = '')
+    public static function user_data_put($key = '', $val = '')
     {
-        if (empty($key) || empty($val) || !is_array($val)) return false;
+        if(empty($key) || !empty($val) && !is_array($val)) return false;
+        if(empty($val)){
+            @mysql_query("DELETE FROM `cms_registry_users` WHERE `user_id` = '" . core::$user_id . "' AND `key` = '" . $key . "' LIMIT 1");
+            return true;
+        }
         $val = mysql_real_escape_string(serialize($val));
         if (self::user_data_get($key) === false) {
             // Добавляем новую запись
@@ -55,20 +59,6 @@ class registry
             ");
         }
         return true;
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Удаляем пользовательские данные
-    -----------------------------------------------------------------
-    */
-    public static function user_data_delete($key = '')
-    {
-        if (core::$user_id && !empty($key)) {
-            mysql_query("DELETE FROM `cms_registry_users` WHERE `user_id` = '" . core::$user_id . "' AND `key` = '" . $key . "' LIMIT 1");
-            return true;
-        }
-        return false;
     }
 
     /*
