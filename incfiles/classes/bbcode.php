@@ -197,12 +197,12 @@ class bbcode
         if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
         if (!empty($smileys)) {
             $res_sm = '';
-            $bb_smileys = '<small><a href="' . core::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . core::$lng['edit_list'] . '</a></small><br />';
+            $bb_smileys = '<small><a href="' . core::$system_set['homeurl'] . '/pages/smileys.php?act=my_smileys">' . core::$lng['edit_list'] . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
             $bb_smileys .= functions::smileys($res_sm, core::$user_data['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . core::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . core::$lng['add_smileys'] . '</a></small>';
+            $bb_smileys = '<small><a href="' . core::$system_set['homeurl'] . '/pages/smileys.php">' . core::$lng['add_smileys'] . '</a></small>';
         }
         $out = '<style>' . "\n" .
                '.bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}' . "\n" .
