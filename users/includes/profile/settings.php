@@ -44,8 +44,9 @@ switch ($mod) {
         */
         echo '<div class="phdr"><b>' . $lng['settings'] . '</b> | ' . $lng['forum'] . '</div>' .
              '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
-        $set_forum = array();
-        $set_forum = unserialize($datauser['set_forum']);
+        if (($set_forum = registry::user_data_get('set_forum')) === false) {
+            $set_forum = registry::set_forum_default();
+        }
         if (isset($_POST['submit'])) {
             $set_forum['farea'] = isset($_POST['farea']);
             $set_forum['upfp'] = isset($_POST['upfp']);
@@ -56,17 +57,12 @@ switch ($mod) {
                 $set_forum['postclip'] = 1;
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
                 $set_forum['postcut'] = 1;
-            mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id'");
+            registry::user_data_add('set_forum', $set_forum);
             echo '<div class="gmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_forum)) {
-            $set_forum = array();
-            $set_forum['farea'] = 0;
-            $set_forum['upfp'] = 0;
-            $set_forum['preview'] = 1;
-            $set_forum['postclip'] = 1;
-            $set_forum['postcut'] = 2;
-            mysql_query("UPDATE `users` SET `set_forum` = '" . mysql_real_escape_string(serialize($set_forum)) . "' WHERE `id` = '$user_id'");
+            registry::user_data_delete('set_forum');
+            $set_forum = registry::set_forum_default();
             echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
         echo '<form action="profile.php?act=settings&amp;mod=forum" method="post">' .
@@ -136,7 +132,7 @@ switch ($mod) {
             }
 
             // Записываем настройки
-            mysql_query("UPDATE `users` SET `set_user` = '" . mysql_real_escape_string(serialize($set_user)) . "' WHERE `id` = '$user_id'");
+            registry::user_data_add('set_user', $set_user);
             $_SESSION['set_ok'] = 1;
             header('Location: profile.php?act=settings');
             exit;
@@ -146,10 +142,11 @@ switch ($mod) {
             Задаем настройки по-умолчанию
             -----------------------------------------------------------------
             */
-            mysql_query("UPDATE `users` SET `set_user` = '' WHERE `id` = '$user_id'");
-            $_SESSION['reset_ok'] = 1;
-            header('Location: profile.php?act=settings');
-            exit;
+            registry::user_data_delete('set_user');
+            $set_user = registry::set_user_default();
+            echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
+        } else {
+            $set_user = core::$user_set;
         }
 
         /*
@@ -161,25 +158,21 @@ switch ($mod) {
             echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
             unset($_SESSION['set_ok']);
         }
-        if (isset($_SESSION['reset_ok'])) {
-            echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
-            unset($_SESSION['reset_ok']);
-        }
         echo '<form action="profile.php?act=settings" method="post" >' .
              '<div class="menu"><p><h3>' . $lng['settings_clock'] . '</h3>' .
-             '<input type="text" name="timeshift" size="2" maxlength="3" value="' . core::$user_set['timeshift'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
-             '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", time() + (core::$system_set['timeshift'] + core::$user_set['timeshift']) * 3600) . '</span> ' . $lng['system_time'] .
+             '<input type="text" name="timeshift" size="2" maxlength="3" value="' . $set_user['timeshift'] . '"/> ' . $lng['settings_clock_shift'] . ' (+-12)<br />' .
+             '<span style="font-weight:bold; background-color:#CCC">' . date("H:i", time() + (core::$system_set['timeshift'] + $set_user['timeshift']) * 3600) . '</span> ' . $lng['system_time'] .
              '</p><p><h3>' . $lng['system_functions'] . '</h3>' .
-             '<input name="direct_url" type="checkbox" value="1" ' . (core::$user_set['direct_url'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['direct_url'] . '<br />' .
-             '<input name="avatar" type="checkbox" value="1" ' . (core::$user_set['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .
-             '<input name="smileys" type="checkbox" value="1" ' . (core::$user_set['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>' .
-             '<input name="digest" type="checkbox" value="1" ' . (core::$user_set['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
+             '<input name="direct_url" type="checkbox" value="1" ' . ($set_user['direct_url'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['direct_url'] . '<br />' .
+             '<input name="avatar" type="checkbox" value="1" ' . ($set_user['avatar'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['avatars'] . '<br/>' .
+             '<input name="smileys" type="checkbox" value="1" ' . ($set_user['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br/>' .
+             '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
              '</p><p><h3>' . $lng['text_input'] . '</h3>' .
-             '<input type="text" name="field_h" size="2" maxlength="1" value="' . core::$user_set['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />';
-        if(core::$lng_iso == 'ru' || core::$lng_iso == 'uk') echo '<input name="translit" type="checkbox" value="1" ' . (core::$user_set['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'];
+             '<input type="text" name="field_h" size="2" maxlength="1" value="' . $set_user['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />';
+        if(core::$lng_iso == 'ru' || core::$lng_iso == 'uk') echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'];
         echo '</p><p><h3>' . $lng['apperance'] . '</h3>' .
-             '<input type="text" name="kmess" size="2" maxlength="2" value="' . core::$user_set['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
-             '<input name="quick_go" type="checkbox" value="1" ' . (core::$user_set['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .
+             '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
+             '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .
              '</p>';
 
         // Выбор темы оформления
@@ -187,14 +180,14 @@ switch ($mod) {
         foreach (glob('../theme/*/*.css') as $val) {
             $dir = explode('/', dirname($val));
             $theme = array_pop($dir);
-            echo '<option' . (core::$user_set['skin'] == $theme ? ' selected="selected">' : '>') . $theme . '</option>';
+            echo '<option' . ($set_user['skin'] == $theme ? ' selected="selected">' : '>') . $theme . '</option>';
         }
         echo '</select></p>';
 
         // Выбор языка
         if (count(core::$lng_list) > 1) {
             echo '<p><h3>' . $lng['language_select'] . '</h3>';
-            $user_lng = isset(core::$user_set['lng']) ? core::$user_set['lng'] : core::$lng_iso;
+            $user_lng = isset($set_user['lng']) ? $set_user['lng'] : core::$lng_iso;
             foreach (core::$lng_list as $key => $val) {
                 echo '<div><input type="radio" value="' . $key . '" name="iso" ' . ($key == $user_lng ? 'checked="checked"' : '') . '/>&#160;' .
                      (file_exists('../images/flags/' . $key . '.gif') ? '<img src="../images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
@@ -208,4 +201,3 @@ switch ($mod) {
         echo '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p></div></form>' .
              '<div class="phdr"><a href="profile.php?act=settings&amp;reset">' . $lng['reset_settings'] . '</a></div>';
 }
-?>

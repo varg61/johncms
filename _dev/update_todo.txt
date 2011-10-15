@@ -1,1 +1,4 @@
-﻿
+﻿Удалить таблицу `cms_users_data`
+
+ALTER TABLE `users` DROP `set_user`;
+ALTER TABLE `users` DROP `set_forum`;

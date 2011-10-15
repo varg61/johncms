@@ -21,13 +21,9 @@ if (isset($_SESSION['ref']))
 Настройки форума
 -----------------------------------------------------------------
 */
-$set_forum = $user_id && !empty($datauser['set_forum']) ? unserialize($datauser['set_forum']) : array(
-    'farea' => 0,
-    'upfp' => 0,
-    'preview' => 1,
-    'postclip' => 1,
-    'postcut' => 2
-);
+if(!core::$user_id || ($set_forum = registry::user_data_get('set_forum')) === false){
+    $set_forum = registry::set_forum_default();
+}
 
 /*
 -----------------------------------------------------------------

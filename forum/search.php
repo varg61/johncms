@@ -38,7 +38,7 @@ switch ($act) {
         */
         if (core::$user_id) {
             if (isset($_POST['submit'])) {
-                mysql_query("DELETE FROM `cms_users_data` WHERE `user_id` = '" . core::$user_id . "' AND `key` = 'forum_search' LIMIT 1");
+                registry::user_data_delete('forum_search');
                 header('Location: search.php');
             } else {
                 echo '<form action="search.php?act=reset" method="post">' .
@@ -156,34 +156,22 @@ switch ($act) {
         -----------------------------------------------------------------
         */
         if (core::$user_id) {
-            $req = mysql_query("SELECT * FROM `cms_users_data` WHERE `user_id` = '" . core::$user_id . "' AND `key` = 'forum_search' LIMIT 1");
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
-                $history = unserialize($res['val']);
-                // Добавляем запрос в историю
-                if ($to_history && !in_array($search, $history)) {
-                    if (count($history) > 20) array_shift($history);
-                    $history[] = $search;
-                    mysql_query("UPDATE `cms_users_data` SET
-                        `val` = '" . mysql_real_escape_string(serialize($history)) . "'
-                        WHERE `user_id` = '" . core::$user_id . "' AND `key` = 'forum_search'
-                        LIMIT 1
-                    ");
-                }
+            $search_val = mb_strtolower($search);
+            if(($history = registry::user_data_get('forum_search')) === false) $history = array();
+            // Записываем данные в историю
+            if($to_history && !in_array($search_val, $history)){
+                if (count($history) > 20) array_shift($history);
+                $history[] = $search_val;
+                registry::user_data_add('forum_search', $history);
+            }
+            // Показываем историю поиска
+            if(!empty($history)){
                 sort($history);
                 foreach ($history as $val) $history_list[] = '<a href="search.php?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
-                // Показываем историю запросов
                 echo '<div class="topmenu">' .
                      '<b>' . core::$lng['search_history'] . '</b> <span class="red"><a href="search.php?act=reset">[x]</a></span><br />' .
                      functions::display_menu($history_list) .
                      '</div>';
-            } elseif ($to_history) {
-                $history[] = $search;
-                mysql_query("INSERT INTO `cms_users_data` SET
-                    `user_id` = '" . core::$user_id . "',
-                    `key` = 'forum_search',
-                    `val` = '" . mysql_real_escape_string(serialize($history)) . "'
-                ");
             }
         }
 

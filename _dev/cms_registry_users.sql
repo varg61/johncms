@@ -7,15 +7,14 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 
-DROP TABLE IF EXISTS `cms_users_data`;
-CREATE TABLE `cms_users_data` (
+DROP TABLE IF EXISTS `cms_registry_users`;
+CREATE TABLE `cms_registry_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `key` varchar(30) NOT NULL DEFAULT '',
+  `key` varchar(20) NOT NULL DEFAULT '',
   `val` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `key` (`key`)
+  UNIQUE KEY `user_id` (`user_id`,`key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
