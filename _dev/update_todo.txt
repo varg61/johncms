@@ -1,5 +1,4 @@
-﻿Удалить таблицу `cms_users_data`
-
+﻿DROP TABLE IF EXISTS `cms_users_data`;
 ALTER TABLE `users` DROP `set_user`;
 ALTER TABLE `users` DROP `set_forum`;
 ALTER TABLE `users` DROP `smileys`;

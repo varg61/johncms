@@ -17,4 +17,3 @@ while ($res = mysql_fetch_assoc($req)) {
     if($res['posts'] > 5 && $res['chars'] / $res['posts'] < 10)
         echo $res['chars'] . ' - ' . $res['posts'] . ' - [' . $res['user_id'] . ']<br />';
 }
-?>

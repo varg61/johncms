@@ -33,5 +33,3 @@ if (!file_put_contents($file, implode("\r\n", $out))) {
     return 'IP Whitelist write error!';
     exit;
 }
-
-?>
