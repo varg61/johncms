@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'userstop';
@@ -19,7 +19,8 @@ require('../incfiles/head.php');
 Функция отображения списков
 -----------------------------------------------------------------
 */
-function get_top($order = 'postforum') {
+function get_top($order = 'postforum')
+{
     global $lng;
     $req = mysql_query("SELECT * FROM `users` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
     if (mysql_num_rows($req)) {
@@ -27,7 +28,7 @@ function get_top($order = 'postforum') {
         $i = 0;
         while ($res = mysql_fetch_assoc($req)) {
             $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $out .= functions::display_user($res, array ('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
+            $out .= functions::display_user($res, array('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
             ++$i;
         }
         return $out;
@@ -41,7 +42,7 @@ function get_top($order = 'postforum') {
 Меню выбора
 -----------------------------------------------------------------
 */
-$menu = array (
+$menu = array(
     (!$mod ? '<b>' . $lng['forum'] . '</b>' : '<a href="index.php?act=top">' . $lng['forum'] . '</a>'),
     ($mod == 'guest' ? '<b>' . $lng['guestbook'] . '</b>' : '<a href="index.php?act=top&amp;mod=guest">' . $lng['guestbook'] . '</a>'),
     ($mod == 'comm' ? '<b>' . $lng['comments'] . '</b>' : '<a href="index.php?act=top&amp;mod=comm">' . $lng['comments'] . '</a>')
@@ -87,7 +88,7 @@ switch ($mod) {
                 $i = 0;
                 while ($res = mysql_fetch_assoc($req)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    echo functions::display_user($res, array ('header' => ('<b>' . $res['karma']) . '</b>')) . '</div>';
+                    echo functions::display_user($res, array('header' => ('<b>' . $res['karma']) . '</b>')) . '</div>';
                     ++$i;
                 }
             } else {
@@ -109,4 +110,3 @@ switch ($mod) {
         echo '<div class="phdr"><a href="../forum/index.php">' . $lng['forum'] . '</a></div>';
 }
 echo '<p><a href="index.php">' . $lng['back'] . '</a></p>';
-?>

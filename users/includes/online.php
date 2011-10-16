@@ -93,7 +93,7 @@ if ($total) {
         else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $arg['stshide'] = 1;
         $arg['header'] = ' <span class="gray">(';
-        if($mod == 'history') $arg['header'] .= functions::display_date($res['sestime']);
+        if ($mod == 'history') $arg['header'] .= functions::display_date($res['sestime']);
         else $arg['header'] .= $res['movings'] . ' - ' . functions::timecount(time() - $res['sestime']);
         $arg['header'] .= ')</span><br />' . functions::get_image('info.png', '', 'align="middle"') . '&#160;' . functions::display_place($res['id'], $res['place']);
         echo functions::display_user($res, $arg);

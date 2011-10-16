@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 define('ROOT_DIR', '..');
@@ -17,13 +17,14 @@ if ($rights < 7) {
     header('Location: http://johncms.com/?err');
     exit;
 }
-class scaner {
+class scaner
+{
     /*
     -----------------------------------------------------------------
     Сканер - антишпион
     -----------------------------------------------------------------
     */
-    public $scan_folders = array (
+    public $scan_folders = array(
         '',
         '/download',
         '/files',
@@ -42,7 +43,7 @@ class scaner {
         '/theme',
         '/users'
     );
-    public $good_files = array (
+    public $good_files = array(
         '../.htaccess',
         '../login.php',
         '../captcha.php',
@@ -258,19 +259,23 @@ class scaner {
         '../users/skl.php'
     );
     public $snap_base = 'scan_snapshot.dat';
-    public $snap_files = array ();
-    public $bad_files = array ();
+    public $snap_files = array();
+    public $bad_files = array();
     public $snap = false;
-    public $track_files = array ();
-    private $checked_folders = array ();
-    private $cache_files = array ();
-    function scan() {
+    public $track_files = array();
+    private $checked_folders = array();
+    private $cache_files = array();
+
+    function scan()
+    {
         // Сканирование на соответствие дистрибутиву
         foreach ($this->scan_folders as $data) {
             $this->scan_files(ROOT_DIR . $data);
         }
     }
-    function snapscan() {
+
+    function snapscan()
+    {
         // Сканирование по образу
         if (file_exists('../files/cache/' . $this->snap_base)) {
             $filecontents = file('../files/cache/' . $this->snap_base);
@@ -285,7 +290,9 @@ class scaner {
             $this->scan_files(ROOT_DIR . $data);
         }
     }
-    function snap() {
+
+    function snap()
+    {
         // Добавляем снимок надежных файлов в базу
         foreach ($this->scan_folders as $data) {
             $this->scan_files(ROOT_DIR . $data, true);
@@ -300,7 +307,9 @@ class scaner {
         fclose($filehandle);
         @chmod('../files/cache/' . $this->snap_base, 0666);
     }
-    function scan_files($dir, $snap = false) {
+
+    function scan_files($dir, $snap = false)
+    {
         // Служебная функция сканирования
         if (!isset($file))
             $file = false;
@@ -325,14 +334,14 @@ class scaner {
                         $file_crc = strtoupper(dechex(crc32(file_get_contents($dir . '/' . $file))));
                         $file_date = date("d.m.Y H:i:s", filectime($dir . '/' . $file));
                         if ($snap) {
-                            $this->snap_files[] = array (
+                            $this->snap_files[] = array(
                                 'file_path' => $folder . '/' . $file,
                                 'file_crc' => $file_crc
                             );
                         } else {
                             if ($this->snap) {
                                 if ($this->track_files[$folder . '/' . $file] != $file_crc and !in_array($folder . '/' . $file, $this->cache_files))
-                                    $this->bad_files[] = array (
+                                    $this->bad_files[] = array(
                                         'file_path' => $folder . '/' . $file,
                                         'file_name' => $file,
                                         'file_date' => $file_date,
@@ -341,7 +350,7 @@ class scaner {
                                     );
                             } else {
                                 if (!in_array($folder . '/' . $file, $this->good_files) or $file_size > 300000)
-                                    $this->bad_files[] = array (
+                                    $this->bad_files[] = array(
                                         'file_path' => $folder . '/' . $file,
                                         'file_name' => $file,
                                         'file_date' => $file_date,
@@ -356,6 +365,7 @@ class scaner {
         }
     }
 }
+
 $scaner = new scaner();
 switch ($mod) {
     case 'scan':
@@ -414,13 +424,13 @@ switch ($mod) {
         if (isset($_POST['submit'])) {
             $scaner->snap();
             echo '<div class="gmenu"><p>' . $lng['antispy_snapshot_create_ok'] . '</p></div>' .
-                '<div class="phdr"><a href="index.php?act=antispy">' . $lng['continue'] . '</a></div>';
+                 '<div class="phdr"><a href="index.php?act=antispy">' . $lng['continue'] . '</a></div>';
         } else {
             echo '<form action="index.php?act=antispy&amp;mod=snap" method="post">' .
-                '<div class="menu"><p>' . $lng['antispy_snapshot_warning'] . '</p>' .
-                '<p><input type="submit" name="submit" value="' . $lng['antispy_snapshot_create'] . '" /></p>' .
-                '</div></form>' .
-                '<div class="phdr"><small>' . $lng['antispy_snapshot_help'] . '</small></div>';
+                 '<div class="menu"><p>' . $lng['antispy_snapshot_warning'] . '</p>' .
+                 '<p><input type="submit" name="submit" value="' . $lng['antispy_snapshot_create'] . '" /></p>' .
+                 '</div></form>' .
+                 '<div class="phdr"><small>' . $lng['antispy_snapshot_help'] . '</small></div>';
         }
         break;
 
@@ -431,14 +441,13 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['antispy'] . '</div>' .
-            '<div class="menu"><p><h3>' . $lng['antispy_scan_mode'] . '</h3><ul>' .
-            '<li><a href="index.php?act=antispy&amp;mod=scan">' . $lng['antispy_dist_scan'] . '</a><br />' .
-            '<small>' . $lng['antispy_dist_scan_help'] . '</small></li>' .
-            '<li><a href="index.php?act=antispy&amp;mod=snapscan">' . $lng['antispy_snapshot_scan'] . '</a><br />' .
-            '<small>' . $lng['antispy_snapshot_scan_help'] . '</small></li>' .
-            '<li><a href="index.php?act=antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a><br />' .
-            '<small>' . $lng['antispy_snapshot_create_help'] . '</small></li>' .
-            '</ul></p></div><div class="phdr">&#160;</div>';
+             '<div class="menu"><p><h3>' . $lng['antispy_scan_mode'] . '</h3><ul>' .
+             '<li><a href="index.php?act=antispy&amp;mod=scan">' . $lng['antispy_dist_scan'] . '</a><br />' .
+             '<small>' . $lng['antispy_dist_scan_help'] . '</small></li>' .
+             '<li><a href="index.php?act=antispy&amp;mod=snapscan">' . $lng['antispy_snapshot_scan'] . '</a><br />' .
+             '<small>' . $lng['antispy_snapshot_scan_help'] . '</small></li>' .
+             '<li><a href="index.php?act=antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a><br />' .
+             '<small>' . $lng['antispy_snapshot_create_help'] . '</small></li>' .
+             '</ul></p></div><div class="phdr">&#160;</div>';
 }
 echo '<p>' . ($mod ? '<a href="index.php?act=antispy">' . $lng['antispy_menu'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-?>

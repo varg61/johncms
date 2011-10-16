@@ -25,10 +25,10 @@ if (mysql_num_rows($req)) {
     -----------------------------------------------------------------
     */
     $res = mysql_fetch_assoc($req);
-	if($rights  < 6 && $rights  != 3 && $user_id) {
-    	$topic = mysql_fetch_assoc(mysql_query("SELECT `curators` FROM `forum` WHERE `id` = " . $res['refid']));
-    	$curators = !empty($topic['curators']) ? unserialize($topic['curators']) : array();
-    	if(array_key_exists($user_id, $curators)) $rights = 3;
+    if ($rights < 6 && $rights != 3 && $user_id) {
+        $topic = mysql_fetch_assoc(mysql_query("SELECT `curators` FROM `forum` WHERE `id` = " . $res['refid']));
+        $curators = !empty($topic['curators']) ? unserialize($topic['curators']) : array();
+        if (array_key_exists($user_id, $curators)) $rights = 3;
     }
     $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '$id'" . ($rights < 7 ? " AND `close` != '1'" : '')), 0) / $kmess);
     $posts = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `close` != '1'"), 0);

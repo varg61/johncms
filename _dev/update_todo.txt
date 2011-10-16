@@ -2,3 +2,5 @@
 ALTER TABLE `users` DROP `set_user`;
 ALTER TABLE `users` DROP `set_forum`;
 ALTER TABLE `users` DROP `smileys`;
+ALTER TABLE `users` DROP `name_lat`;
+ALTER TABLE `users` ADD UNIQUE (`name`);

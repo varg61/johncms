@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -57,7 +57,5 @@ if (mysql_num_rows($req)) {
     }
 }
 echo '<div class="phdr">' . $lng['total'] . ': ' . ($sw + $adm + $smd + $mod) . '</div>' .
-    '<p><a href="index.php?act=usr">' . $lng['users_list'] . '</a><br />' .
-    '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-
-?>
+     '<p><a href="index.php?act=usr">' . $lng['users_list'] . '</a><br />' .
+     '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';

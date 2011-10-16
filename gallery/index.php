@@ -329,4 +329,3 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
 }
 
 require('../incfiles/end.php');
-?>

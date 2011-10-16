@@ -90,8 +90,6 @@ echo '<div class="phdr">' . $lng['total'] . ': ' . $countm . '</div>';
 if ($countm > $kmess) {
     echo '<p>' . functions::display_pagination('index.php?act=komm&amp;id=' . $id . '&amp;', $start, $countm, $kmess) . '</p>';
     echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="komm"/><input type="hidden" name="id" value="' . $id .
-        '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+         '"/><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
 echo '<p><a href="?id=' . $id . '">' . $lng['to_article'] . '</a></p>';
-
-?>

@@ -1,31 +1,31 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-$error = array ();
+$error = array();
 $search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : false;
 $search = $search_post ? $search_post : $search_get;
 if (isset($_GET['ip']))
     $search = trim($_GET['ip']);
-$menu = array (
+$menu = array(
     (!$mod ? '<b>' . $lng['ip_actual'] . '</b>' : '<a href="index.php?act=search_ip&amp;search=' . rawurlencode($search) . '">' . $lng['ip_actual'] . '</a>'),
     ($mod == 'history' ? '<b>' . $lng['ip_history'] . '</b>' : '<a href="index.php?act=search_ip&amp;mod=history&amp;search=' . rawurlencode($search) . '">' . $lng['ip_history'] . '</a>')
 );
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['ip_search'] . '</div>' .
-    '<div class="topmenu">' . functions::display_menu($menu) . '</div>' .
-    '<form action="index.php?act=search_ip" method="post"><div class="gmenu"><p>' .
-    '<input type="text" name="search" value="' . functions::checkout($search) . '" />' .
-    '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
-    '</p></div></form>';
+     '<div class="topmenu">' . functions::display_menu($menu) . '</div>' .
+     '<form action="index.php?act=search_ip" method="post"><div class="gmenu"><p>' .
+     '<input type="text" name="search" value="' . functions::checkout($search) . '" />' .
+     '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
+     '</p></div></form>';
 if ($search) {
     if (strstr($search, '-')) {
         /*
@@ -108,7 +108,7 @@ if ($search && !$error) {
         $i = 0;
         while (($res = mysql_fetch_assoc($req)) !== false) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo functions::display_user($res, array ('iphist' => 1));
+            echo functions::display_user($res, array('iphist' => 1));
             echo '</div>';
             ++$i;
         }
@@ -132,4 +132,3 @@ if ($search && !$error) {
     echo '<div class="phdr">' . $lng['search_ip_help'] . '</div>';
     echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
-?>

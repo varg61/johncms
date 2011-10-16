@@ -1,22 +1,18 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once("../incfiles/head.php");
-function deletcat($catalog) {
+function deletcat($catalog)
+{
     $dir = opendir($catalog);
 
     while (($file = readdir($dir))) {
@@ -29,6 +25,7 @@ function deletcat($catalog) {
     closedir($dir);
     rmdir($catalog);
 }
+
 if (($rights == 4 || $rights >= 6) && (!empty($_GET['cat']))) {
     $cat = intval($_GET['cat']);
     $delcat = mysql_query("select * from `download` where type = 'cat' and refid = '$cat'");
@@ -43,10 +40,9 @@ if (($rights == 4 || $rights >= 6) && (!empty($_GET['cat']))) {
             echo '<p>' . $lng_dl['folder_deleted'] . '<br /><a href="index.php">' . $lng['continue'] . '</a></p>';
         } else {
             echo '<p>' . $lng['delete_confirmation'] . '</p>' .
-                '<form action="index.php?act=delcat&amp;cat=' . $cat . '" method="post">' .
-                '<input type="submit" name="submit" value="' . $lng['delete'] . '" />' .
-                '</form><p><a href="index.php?cat=' . $cat . '">' . $lng['cancel'] . '</a></p>';
+                 '<form action="index.php?act=delcat&amp;cat=' . $cat . '" method="post">' .
+                 '<input type="submit" name="submit" value="' . $lng['delete'] . '" />' .
+                 '</form><p><a href="index.php?cat=' . $cat . '">' . $lng['cancel'] . '</a></p>';
         }
     }
 }
-?>

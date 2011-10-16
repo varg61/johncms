@@ -87,5 +87,3 @@ else {
     echo '<p>' . $lng['list_empty'] . '</p>';
 }
 echo "<p><a href='index.php?'>" . $lng['back'] . "</a></p>";
-
-?>

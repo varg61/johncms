@@ -21,7 +21,7 @@ $mp = new mainpage();
 echo '<div class="phdr"><b>' . $lng['information'] . '</b></div>';
 echo $mp->news;
 echo '<div class="menu"><a href="news/index.php">' . $lng['news_archive'] . '</a> (' . $mp->newscount . ')</div>' .
-    '<div class="menu"><a href="pages/faq.php">' . $lng['information'] . ', FAQ</a></div>';
+     '<div class="menu"><a href="pages/faq.php">' . $lng['information'] . ', FAQ</a></div>';
 
 /*
 -----------------------------------------------------------------
@@ -40,7 +40,7 @@ if ($set['mod_forum'] || $rights >= 7)
 -----------------------------------------------------------------
 Блок полезного
 -----------------------------------------------------------------
-*/    
+*/
 echo '<div class="phdr"><b>' . $lng['useful'] . '</b></div>';
 // Ссылка на загрузки
 if ($set['mod_down'] || $rights >= 7)
@@ -53,8 +53,7 @@ if ($set['mod_gal'] || $rights >= 7)
     echo '<div class="menu"><a href="gallery/">' . $lng['gallery'] . '</a> (' . counters::gallery() . ')</div>';
 if ($user_id || $set['active']) {
     echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-        '<div class="menu"><a href="users/index.php">' . $lng['users'] . '</a> (' . counters::users() . ')</div>' .
-        '<div class="menu"><a href="users/album.php">' . $lng['photo_albums'] . '</a> (' . counters::album() . ')</div>';
+         '<div class="menu"><a href="users/index.php">' . $lng['users'] . '</a> (' . counters::users() . ')</div>' .
+         '<div class="menu"><a href="users/album.php">' . $lng['photo_albums'] . '</a> (' . counters::album() . ')</div>';
 }
 echo '<div class="phdr"><a href="http://gazenwagen.com">Gazenwagen</a></div>';
-?>

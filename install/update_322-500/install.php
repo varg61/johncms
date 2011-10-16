@@ -241,4 +241,3 @@ switch ($act) {
             echo '<h3><a href="index.php?act=step2">' . $lng['start_update'] . '</a></h3>';
         }
 }
-?>

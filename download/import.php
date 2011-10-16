@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -30,8 +30,8 @@ if ($rights == 4 || $rights >= 6) {
         $tipf = functions::format($url);
         if (eregi("[^a-z0-9.()+_-]", $newn)) {
             echo
-            "В новом названии файла <b>$newn</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=import&amp;cat="
-            . $cat . "'>Повторить</a><br/>";
+                    "В новом названии файла <b>$newn</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=import&amp;cat="
+                    . $cat . "'>Повторить</a><br/>";
             require_once ('../incfiles/end.php');
             exit;
         }
@@ -63,5 +63,3 @@ else {
     echo "Нет доступа!";
 }
 echo "&#187;<a href='?cat=" . $cat . "'>В папку</a><br/>";
-
-?>

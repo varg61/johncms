@@ -17,7 +17,7 @@ $ext = array('gif', 'jpg', 'jpeg', 'png'); // Список разрешенны�
 $smileys = array();
 
 // Обрабатываем простые смайлы
-foreach(glob($rootpath . 'images/smileys/simply/*') as $var){
+foreach (glob($rootpath . 'images/smileys/simply/*') as $var) {
     $file = basename($var);
     $name = explode(".", $file);
     if (in_array($name[1], $ext)) {
@@ -26,7 +26,7 @@ foreach(glob($rootpath . 'images/smileys/simply/*') as $var){
 }
 
 // Обрабатываем Админские смайлы
-foreach(glob($rootpath . 'images/smileys/admin/*') as $var){
+foreach (glob($rootpath . 'images/smileys/admin/*') as $var) {
     $file = basename($var);
     $name = explode(".", $file);
     if (in_array($name[1], $ext)) {
@@ -36,7 +36,7 @@ foreach(glob($rootpath . 'images/smileys/admin/*') as $var){
 }
 
 // Обрабатываем смайлы каталога
-foreach(glob($rootpath . 'images/smileys/user/*/*') as $var){
+foreach (glob($rootpath . 'images/smileys/user/*/*') as $var) {
     $file = basename($var);
     $name = explode(".", $file);
     if (in_array($name[1], $ext)) {
@@ -55,5 +55,3 @@ if (file_put_contents($rootpath . 'files/cache/smileys.dat', serialize($smileys)
 $total = count($smileys['adm']) + count($smileys['usr']);
 echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-
-?>

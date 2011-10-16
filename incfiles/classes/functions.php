@@ -363,7 +363,7 @@ class functions extends core
                 if (file_exists(($rootpath . 'files/users/avatar/' . $user['id'] . '.png')))
                     $out .= '<img src="' . self::$system_set['homeurl'] . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" />&#160;';
                 else
-                    $out .= self::get_image('empty.png', $user['name']) . '&#160;';
+                    $out .= self::get_image('empty.png') . '&#160;';
                 $out .= '</td><td>';
             }
             if ($user['sex'])

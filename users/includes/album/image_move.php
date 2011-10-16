@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -36,7 +33,7 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                     WHERE `id` = '$img'
                 ");
                 echo '<div class="gmenu"><p>' . $lng_profile['image_moved'] . '<br />' .
-                    '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                     '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
             } else {
                 echo functions::display_error($lng['error_wrong_data']);
             }
@@ -44,15 +41,15 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
             $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `id` != '" . $image['album_id'] . "' ORDER BY `sort` ASC");
             if (mysql_num_rows($req)) {
                 echo '<form action="album.php?act=image_move&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
-                    '<div class="menu"><p><h3>' . $lng_profile['album_select'] . '</h3>' .
-                    '<select name="al">';
+                     '<div class="menu"><p><h3>' . $lng_profile['album_select'] . '</h3>' .
+                     '<select name="al">';
                 while ($res = mysql_fetch_assoc($req)) {
                     echo '<option value="' . $res['id'] . '">' . functions::checkout($res['name']) . '</option>';
                 }
                 echo '</select></p>' .
-                    '<p><input type="submit" name="submit" value="' . $lng['move'] . '"/></p>' .
-                    '</div></form>' .
-                    '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
+                     '<p><input type="submit" name="submit" value="' . $lng['move'] . '"/></p>' .
+                     '</div></form>' .
+                     '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
             } else {
                 echo functions::display_error($lng_profile['image_move_error'], '<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a>');
             }
@@ -61,4 +58,3 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
         echo functions::display_error($lng['error_wrong_data']);
     }
 }
-?>

@@ -53,5 +53,3 @@ if ($rights == 4 || $rights >= 6) {
     }
 }
 echo "<a href='?'>" . $lng['back'] . "</a><br/>";
-
-?>

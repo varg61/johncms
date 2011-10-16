@@ -1,20 +1,16 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 require_once("../incfiles/head.php");
 $delimag = opendir("$filesroot/graftemp");
 while ($imd = readdir($delimag)) {
@@ -70,9 +66,9 @@ while ($nadir != "" && $nadir != "0") {
 }
 echo '</div><div class="menu"><p>';
 echo '<b>' . $lng_dl['file'] . ': <span class="red">' . $adrfile['name'] . '</span></b><br/>' .
-    '<b>' . $lng_dl['uploaded'] . ':</b> ' . $filtime . '<br/>';
+     '<b>' . $lng_dl['uploaded'] . ':</b> ' . $filtime . '<br/>';
 
-$graf = array (
+$graf = array(
     "gif",
     "jpg",
     "png"
@@ -140,18 +136,18 @@ if ($prg == "mp3") {
     $result = $id3->read("$adrfile[adres]/$adrfile[name]");
     $result = $id3->study();
     echo '<p>';
-    if(!empty($id3->artists))
+    if (!empty($id3->artists))
         echo '<div><b>' . $lng_dl['artist'] . ':</b> ' . $id3->artists . '</div>';
-    if(!empty($id3->album))
+    if (!empty($id3->album))
         echo '<div><b>' . $lng_dl['album'] . ':</b> ' . $id3->album . '</div>';
-    if(!empty($id3->year))
+    if (!empty($id3->year))
         echo '<div><b>' . $lng_dl['released'] . ':</b> ' . $id3->year . '</div>';
-    if(!empty($id3->name))
+    if (!empty($id3->name))
         echo '<div><b>' . $lng['title'] . ':</b> ' . $id3->name . '</div>';
     echo '</p>';
     if ($id3->getTag('bitrate')) {
         echo '<b>' . $lng_dl['bitrate'] . ':</b> ' . $id3->getTag('bitrate') . ' kBit/sec<br/>' .
-            '<b>' . $lng_dl['duration'] . ':</b> ' . $id3->getTag('length') . '<br/>';
+             '<b>' . $lng_dl['duration'] . ':</b> ' . $id3->getTag('length') . '<br/>';
     }
 }
 if (!empty($adrfile['text'])) {
@@ -253,10 +249,10 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
 // Ссылка на скачивание файла
 $dl_count = !empty($adrfile['ip']) ? intval($adrfile['ip']) : 0;
 echo '</p></div><div class="gmenu"><p>' .
-    '<h3 class="red">' .
-    '<a href="index.php?act=down&amp;id=' . $file . '">' . functions::get_image('file.png') . '</a>&#160;' .
-    '<a href="index.php?act=down&amp;id=' . $file . '">' . $lng['download'] . '</a></h3>' .
-    '<small><span class="gray">' . $lng_dl['size'] . ':</span> <b>' . $siz . '</b> kB<br />';
+     '<h3 class="red">' .
+     '<a href="index.php?act=down&amp;id=' . $file . '">' . functions::get_image('file.png') . '</a>&#160;' .
+     '<a href="index.php?act=down&amp;id=' . $file . '">' . $lng['download'] . '</a></h3>' .
+     '<small><span class="gray">' . $lng_dl['size'] . ':</span> <b>' . $siz . '</b> kB<br />';
 if ($prg == "zip") {
     echo "<a href='?act=zip&amp;file=" . $file . "'>Открыть архив</a><br/>";
 }
@@ -266,7 +262,7 @@ if (!empty($adrfile['soft'])) {
     $rat = $rating[0] / $rating[1];
     $rat = round($rat, 2);
     echo '<br /><span class="gray">' . $lng_dl['average_rating'] . ':</span> <b>' . $rat . '</b>' .
-    '<br /><span class="gray">' . $lng_dl['vote_count'] . ':</span> <b>' . $rating[1] . '</b>';
+         '<br /><span class="gray">' . $lng_dl['vote_count'] . ':</span> <b>' . $rating[1] . '</b>';
 }
 echo '</small></p>';
 // Рейтинг файла
@@ -292,5 +288,3 @@ if (($rights == 4 || $rights >= 6) && (!empty($_GET['file']))) {
     echo '<a href="index.php?act=dfile&amp;file=' . $file . '">' . $lng_dl['delete_file'] . '</a>';
     echo '</p>';
 }
-
-?>

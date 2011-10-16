@@ -371,4 +371,3 @@ switch ($act) {
 }
 
 require('../incfiles/end.php');
-?>

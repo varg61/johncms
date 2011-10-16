@@ -39,4 +39,3 @@ if ($total > $kmess) {
 }
 echo '<p><a href="index.php?act=search">' . $lng['search_user'] . '</a><br />' .
     '<a href="index.php">' . $lng['back'] . '</a></p>';
-?>

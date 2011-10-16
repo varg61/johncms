@@ -127,4 +127,3 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         '<div class="phdr"><a href="index.php">' . $lng['users'] . '</a></div>';
 }
 require('../incfiles/end.php');
-?>

@@ -19,9 +19,9 @@ define('UPDATE_VERSION', '4.3.0'); // Обновление с версии
 
 // Задаем режим работы инсталлятора
 define('MODE', 'install');
-//define('MODE', 'update_322-440');
-//define('MODE', 'update_400-440');
-//define('MODE', 'update_430-440');
+//define('MODE', 'update_322-500');
+//define('MODE', 'update_400-500');
+//define('MODE', 'update_440-500');
 
 class install
 {
@@ -221,5 +221,3 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
 } else {
     echo "<h2>FATAL ERROR: can't begin installation</h2>";
 }
-
-?>

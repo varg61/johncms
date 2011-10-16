@@ -11,6 +11,8 @@
 
 define('_IN_JOHNCMS', 1);
 
+//TODO: Переделать под новую систему авторизации!!!
+
 $rootpath = '';
 require('incfiles/core.php');
 $textl = $lng['registration'];

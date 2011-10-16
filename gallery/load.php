@@ -40,7 +40,7 @@ $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refi
 $rz1 = mysql_fetch_array($rz);
 if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || $rights >= 6) {
     $text = functions::check($_POST['text']);
-    $dopras = array (
+    $dopras = array(
         "gif",
         "jpg",
         "png"
@@ -92,5 +92,3 @@ if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || 
 } else {
     header("location: index.php");
 }
-
-?>

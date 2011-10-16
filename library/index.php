@@ -272,5 +272,3 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
 }
 
 require_once('../incfiles/end.php');
-
-?>

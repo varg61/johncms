@@ -72,11 +72,11 @@ if ($rights == 5 || $rights >= 6) {
                 WHERE `id` = '" . $id . "'");
                 header('location: index.php?id=' . $id);
                 break;
-                default :
-            ////////////////////////////////////////////////////////////
-            // Сохраняем отредактированный комментарий                //
-            ////////////////////////////////////////////////////////////
-            $text = functions::check($_POST['text']);
+            default :
+                ////////////////////////////////////////////////////////////
+                // Сохраняем отредактированный комментарий                //
+                ////////////////////////////////////////////////////////////
+                $text = functions::check($_POST['text']);
                 mysql_query("update `lib` set text='" . $text . "' where id='" . $id . "';");
                 header("location: index.php?id=$ms[refid]");
                 break;
@@ -88,19 +88,19 @@ if ($rights == 5 || $rights >= 6) {
                 // Форма редактирования статьи                            //
                 ////////////////////////////////////////////////////////////
                 echo '<div class="phdr"><b>' . $lng_lib['edit_article'] . '</b></div>' .
-                    '<form action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
-                    '<div class="menu"><p><h3>' . $lng['title'] . '</h3><input type="text" name="name" value="' . htmlentities($ms['name'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
-                    '<p><h3>' . $lng_lib['announce'] . '</h3><small>' . $lng_lib['announce_help'] . '</small><br/><input type="text" name="anons" value="' . htmlentities($ms['announce'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
-                    '<p><h3>' . $lng['text'] . '</h3><textarea rows="5" name="text">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p></div>' .
-                    '<div class="rmenu"><p><h3>' . $lng['author'] . '</h3><input type="text" name="autor" value="' . $ms['avtor'] . '"/></p>' .
-                    '<p><h3>' . $lng_lib['reads'] . '</h3><input type="text" name="count" value="' . $ms['count'] . '" size="4"/></p></div>' .
-                    '<div class="bmenu"><input type="submit" name="submit" value="' . $lng['save'] . '"/></div></form>' .
-                    '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
+                     '<form action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
+                     '<div class="menu"><p><h3>' . $lng['title'] . '</h3><input type="text" name="name" value="' . htmlentities($ms['name'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
+                     '<p><h3>' . $lng_lib['announce'] . '</h3><small>' . $lng_lib['announce_help'] . '</small><br/><input type="text" name="anons" value="' . htmlentities($ms['announce'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
+                     '<p><h3>' . $lng['text'] . '</h3><textarea rows="5" name="text">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p></div>' .
+                     '<div class="rmenu"><p><h3>' . $lng['author'] . '</h3><input type="text" name="autor" value="' . $ms['avtor'] . '"/></p>' .
+                     '<p><h3>' . $lng_lib['reads'] . '</h3><input type="text" name="count" value="' . $ms['count'] . '" size="4"/></p></div>' .
+                     '<div class="bmenu"><input type="submit" name="submit" value="' . $lng['save'] . '"/></div></form>' .
+                     '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
                 break;
 
             case "cat":
                 echo $lng_lib['edit_category'] . "<br/><form action='index.php?act=edit&amp;id=" . $id . "' method='post'><input type='text' name='text' value='" . $ms['text'] .
-                    "'/><br/>" . $lng_lib['edit_category_help'] . ":<br/><select name='mod'>";
+                     "'/><br/>" . $lng_lib['edit_category_help'] . ":<br/><select name='mod'>";
                 if ($ms['ip'] == 1) {
                     echo "<option value='1'>" . $lng['categories'] . "</option><option value='0'>" . $lng_lib['articles'] . "</option>";
                 } else {
@@ -119,5 +119,3 @@ if ($rights == 5 || $rights >= 6) {
 } else {
     header("location: index.php");
 }
-
-?>

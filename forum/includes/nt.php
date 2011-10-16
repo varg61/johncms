@@ -195,4 +195,3 @@ if (isset($_POST['submit'])) {
          '<a href="../pages/faq.php?act=smileys">' . $lng['smileys'] . '</a></div>' .
          '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
 }
-?>

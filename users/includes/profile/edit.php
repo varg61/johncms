@@ -136,7 +136,7 @@ if (isset($_GET['delavatar'])) {
 */
 echo '<form action="profile.php?act=edit&amp;user=' . $user['id'] . '" method="post">' .
     '<div class="gmenu"><p>' .
-    $lng['login_name'] . ': <b>' . $user['name_lat'] . '</b><br />';
+    '<h3>ID: ' . $user['id'] . '</h3>';
 if ($rights >= 7) {
     echo $lng['nick'] . ': (' . $lng_profile['nick_lenght'] . ')<br /><input type="text" value="' . $user['name'] . '" name="name" /><br />' .
         $lng['status'] . ': (' . $lng_profile['status_lenght'] . ')<br /><input type="text" value="' . $user['status'] . '" name="status" /><br />';

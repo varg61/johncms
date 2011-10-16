@@ -90,4 +90,3 @@ if ($ms['ip'] == 0) {
     }
 }
 echo "<a href='index.php?'>" . $lng_lib['to_library'] . "</a><br/>";
-?>

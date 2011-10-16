@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -53,8 +53,7 @@ if ($totalnew != 0) {
         ++$i;
     }
     echo "<hr/><p>";
-    if ($totalnew > 10)
-    {
+    if ($totalnew > 10) {
         $ba = ceil($totalnew / 10);
         if ($start != 0) {
             echo '<a href="index.php?act=topread&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
@@ -72,11 +71,11 @@ if ($totalnew != 0) {
         $paa3 = $page + (floor($page2 / 3) * 2);
         if ($page > 13) {
             echo ' <a href="index.php?act=topread&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=topread&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="index.php?act=topread&amp;page=' . ($paa * 2) . '">'
-                . ($paa * 2) . '</a> <a href="index.php?act=topread&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
+                 . ($paa * 2) . '</a> <a href="index.php?act=topread&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
         } elseif ($page > 7) {
             echo ' <a href="index.php?act=topread&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=topread&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
         }
-        for ($i = $asd; $i < $asd2; ) {
+        for ($i = $asd; $i < $asd2;) {
             if ($i < $totalnew && $i >= 0) {
                 $ii = floor(1 + $i / 10);
                 if ($start == $i) {
@@ -89,7 +88,7 @@ if ($totalnew != 0) {
         }
         if ($page2 > 12) {
             echo ' .. <a href="index.php?act=topread&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=topread&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="index.php?act=topread&amp;page=' . ($paa3) .
-                '">' . ($paa3) . '</a> <a href="index.php?act=topread&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
+                 '">' . ($paa3) . '</a> <a href="index.php?act=topread&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
         } elseif ($page2 > 6) {
             echo ' .. <a href="index.php?act=topread&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="?act=topread&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
         }
@@ -100,11 +99,9 @@ if ($totalnew != 0) {
             echo ' <a href="index.php?act=topread&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
         }
         echo
-            "<form action='index.php'>" . $lng['to_page'] . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
+                "<form action='index.php'>" . $lng['to_page'] . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
     }
 } else {
     echo "<p>" . $lng['list_empty'] . "<br/>";
 }
 echo "<a href='index.php?'>" . $lng_lib['to_library'] . "</a></p>";
-
-?>

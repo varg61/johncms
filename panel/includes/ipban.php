@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -46,14 +46,14 @@ switch ($mod) {
                 $array = explode('-', $get_ip);
                 $get_ip = trim($array[0]);
                 if (!core::ip_valid($get_ip))
-                $error[] = $lng['error_firstip'];
+                    $error[] = $lng['error_firstip'];
                 else
-                $ip1 = ip2long($get_ip);
+                    $ip1 = ip2long($get_ip);
                 $get_ip = trim($array[1]);
                 if (!core::ip_valid($get_ip))
-                $error[] = $lng['error_secondip'];
+                    $error[] = $lng['error_secondip'];
                 else
-                $ip2 = ip2long($get_ip);
+                    $ip2 = ip2long($get_ip);
             } elseif (strstr($get_ip, '*')) {
                 // Обрабатываем адреса с маской
                 $mode = 2;
@@ -145,37 +145,37 @@ switch ($mod) {
                         echo $lng['blocking'];
                 }
                 echo '</p><p><h3>' . $lng['reason'] . ':</h3>&nbsp;' . (empty($reason) ? $lng['not_specified'] : $reason) . '</p>' .
-                    '<input type="hidden" value="' . $ip1 . '" name="ip1" />' .
-                    '<input type="hidden" value="' . $ip2 . '" name="ip2" />' .
-                    '<input type="hidden" value="' . $ban_term . '" name="term" />' .
-                    '<input type="hidden" value="' . $ban_url . '" name="url" />' .
-                    '<input type="hidden" value="' . $reason . '" name="reason" />' .
-                    '<p><input type="submit" name="submit" value=" ' . $lng['ban_do'] . ' "/></p>' .
-                    '</div><div class="phdr"><small>' . $lng['check_confirmation'] . '</small></div>' .
-                    '</form>' .
-                    '<p><a href="index.php?act=ipban">' . $lng['cancel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+                     '<input type="hidden" value="' . $ip1 . '" name="ip1" />' .
+                     '<input type="hidden" value="' . $ip2 . '" name="ip2" />' .
+                     '<input type="hidden" value="' . $ban_term . '" name="term" />' .
+                     '<input type="hidden" value="' . $ban_url . '" name="url" />' .
+                     '<input type="hidden" value="' . $reason . '" name="reason" />' .
+                     '<p><input type="submit" name="submit" value=" ' . $lng['ban_do'] . ' "/></p>' .
+                     '</div><div class="phdr"><small>' . $lng['check_confirmation'] . '</small></div>' .
+                     '</form>' .
+                     '<p><a href="index.php?act=ipban">' . $lng['cancel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
             } else {
                 echo functions::display_error($error, '<a href="index.php?act=ipban&amp;mod=new">' . $lng['back'] . '</a>');
             }
         } else {
             // Форма ввода IP адреса для Бана
             echo '<form action="index.php?act=ipban&amp;mod=new" method="post">' .
-                '<div class="menu"><p><h3>' . $lng['ip_address'] . ':</h3>' .
-                '&nbsp;<input type="text" name="ip"/></p>' .
-                '<p><h3>' . $lng['ban_type'] . ':</h3>' .
-                '<input name="term" type="radio" value="1" checked="checked" />' . $lng['blocking'] . '<br />' .
-                '<input name="term" type="radio" value="3" />' . $lng['registration'] . '<br />' .
-                '<input name="term" type="radio" value="2" />' . $lng['redirect'] . '<br /></p>' .
-                '<p><h3>' . $lng['redirect_url'] . '</h3>' .
-                '&nbsp;<input type="text" name="url"/><br />' .
-                '<small>&nbsp;' . $lng['not_mandatory_field'] . '<br />&nbsp;' . $lng['url_help'] . '</small></p>' .
-                '<p><h3>' . $lng['reason'] . '</h3>' .
-                '&nbsp;<textarea rows="' . core::$user_set['field_h'] . '" name="reason"></textarea>' .
-                '<br /><small>&nbsp;' . $lng['not_mandatory_field'] . '</small></p>' .
-                '<p><input type="submit" name="submit" value=" ' . $lng['ban_do'] . ' "/></p></div>' .
-                '<div class="phdr"><small>' . $lng['ip_ban_help'] . '</small></div>' .
-                '</form>' .
-                '<p><a href="index.php?act=ipban">' . $lng['cancel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+                 '<div class="menu"><p><h3>' . $lng['ip_address'] . ':</h3>' .
+                 '&nbsp;<input type="text" name="ip"/></p>' .
+                 '<p><h3>' . $lng['ban_type'] . ':</h3>' .
+                 '<input name="term" type="radio" value="1" checked="checked" />' . $lng['blocking'] . '<br />' .
+                 '<input name="term" type="radio" value="3" />' . $lng['registration'] . '<br />' .
+                 '<input name="term" type="radio" value="2" />' . $lng['redirect'] . '<br /></p>' .
+                 '<p><h3>' . $lng['redirect_url'] . '</h3>' .
+                 '&nbsp;<input type="text" name="url"/><br />' .
+                 '<small>&nbsp;' . $lng['not_mandatory_field'] . '<br />&nbsp;' . $lng['url_help'] . '</small></p>' .
+                 '<p><h3>' . $lng['reason'] . '</h3>' .
+                 '&nbsp;<textarea rows="' . core::$user_set['field_h'] . '" name="reason"></textarea>' .
+                 '<br /><small>&nbsp;' . $lng['not_mandatory_field'] . '</small></p>' .
+                 '<p><input type="submit" name="submit" value=" ' . $lng['ban_do'] . ' "/></p></div>' .
+                 '<div class="phdr"><small>' . $lng['ip_ban_help'] . '</small></div>' .
+                 '</form>' .
+                 '<p><a href="index.php?act=ipban">' . $lng['cancel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -217,8 +217,8 @@ switch ($mod) {
             header('Location: index.php?act=ipban');
         } else {
             echo '<div class="rmenu"><p>' . $lng['ip_ban_clean_warning'] . '</p>' .
-                '<p><a href="index.php?act=ipban&amp;mod=clear&amp;yes=yes">' . $lng['do'] . '</a> | ' .
-                '<a href="index.php?act=ipban">' . $lng['cancel'] . '</a></p></div>';
+                 '<p><a href="index.php?act=ipban&amp;mod=clear&amp;yes=yes">' . $lng['do'] . '</a> | ' .
+                 '<a href="index.php?act=ipban">' . $lng['cancel'] . '</a></p></div>';
         }
         break;
 
@@ -294,8 +294,8 @@ switch ($mod) {
                 echo '<p><a href="index.php?act=ipban">' . $lng['continue'] . '</a></p>';
             } else {
                 echo '<p>' . $lng['ban_del_question'] . '</p>' .
-                    '<p><a href="index.php?act=ipban&amp;mod=del&amp;id=' . $id . '&amp;yes=yes">' . $lng['delete'] . '</a> | ' .
-                    '<a href="index.php?act=ipban&amp;mod=detail&amp;id=' . $id . '">' . $lng['cancel'] . '</a></p>';
+                     '<p><a href="index.php?act=ipban&amp;mod=del&amp;id=' . $id . '&amp;yes=yes">' . $lng['delete'] . '</a> | ' .
+                     '<a href="index.php?act=ipban&amp;mod=detail&amp;id=' . $id . '">' . $lng['cancel'] . '</a></p>';
             }
         }
         break;
@@ -307,13 +307,13 @@ switch ($mod) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><a href="index.php?act=ipban"><b>' . $lng['ip_ban'] . '</b></a> | ' . $lng['search'] . '</div>' .
-            '<form action="index.php?act=ipban&amp;mod=detail" method="post"><div class="menu"><p>' .
-            '<h3>' . $lng['ip_address'] . ':</h3>' .
-            '<input type="text" name="ip"/>' .
-            '</p><p><input type="submit" name="submit" value="' . $lng['search'] . '"/>' .
-            '</p></div><div class="phdr"><small>' . $lng['ip_ban_search_help'] . '</small></div>' .
-            '</form>' .
-            '<p><a href="index.php?act=ipban">' . $lng['back'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+             '<form action="index.php?act=ipban&amp;mod=detail" method="post"><div class="menu"><p>' .
+             '<h3>' . $lng['ip_address'] . ':</h3>' .
+             '<input type="text" name="ip"/>' .
+             '</p><p><input type="submit" name="submit" value="' . $lng['search'] . '"/>' .
+             '</p></div><div class="phdr"><small>' . $lng['ip_ban_search_help'] . '</small></div>' .
+             '</form>' .
+             '<p><a href="index.php?act=ipban">' . $lng['back'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
 
     default:
@@ -362,4 +362,3 @@ switch ($mod) {
             echo '<a href="index.php?act=ipban&amp;mod=search">' . $lng['search'] . '</a><br /><a href="index.php?act=ipban&amp;mod=clear">' . $lng['ip_ban_clean'] . '</a><br />';
         echo '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
-?>

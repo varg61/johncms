@@ -141,7 +141,6 @@ switch ($act) {
                 // Создаем Администратора
                 mysql_query("INSERT INTO `users` SET
                     `name` = '" . mysql_real_escape_string($admin_user) . "',
-                    `name_lat` = '" . mysql_real_escape_string(mb_strtolower($admin_user)) . "',
                     `password` = '" . md5(md5($admin_pass)) . "',
                     `sex` = 'm',
                     `datereg` = '" . time() . "',
@@ -184,7 +183,8 @@ switch ($act) {
              '<small class="blue"><b>MySQL Database:</b></small><br />' .
              '<input type="text" name="dbname" value="' . $db_name . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['name']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
              '<small class="blue"><b>MySQL User:</b></small><br />' .
-             '<input type="text" name="dbuser" value="' . $db_user . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) || isset($db_error['user']) ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
+             '<input type="text" name="dbuser" value="' . $db_user . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) || isset($db_error['user'])
+                ? ' style="background-color: #FFCCCC"' : '') . '><br />' .
              '<small class="blue"><b>MySQL Password:</b></small><br />' .
              '<input type="text" name="dbpass" value="' . $db_pass . '"' . ($db_check ? ' readonly="readonly" style="background-color: #CCFFCC"' : '') . (isset($db_error['access']) ? ' style="background-color: #FFCCCC"' : '') . '>';
         if ($db_check) {
@@ -261,5 +261,3 @@ switch ($act) {
         }
         break;
 }
-
-?>

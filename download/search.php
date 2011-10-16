@@ -1,20 +1,16 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 require_once ('../incfiles/head.php');
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['downloads'] . '</b></a> | ' . $lng['search'] . '</div>';
 if (!empty ($_GET['srh'])) {
@@ -82,7 +78,7 @@ if ($g > 10) {
     echo "<hr/>";
 
     $ba = ceil($g / 10);
-    echo "Pages:<br/>";    //TODO: Переделать на новый листинг по страницам
+    echo "Pages:<br/>"; //TODO: Переделать на новый листинг по страницам
     $asd = $start - 10;
     $asd2 = $start + 20;
 
@@ -100,7 +96,7 @@ if ($g > 10) {
     $paa3 = $page + (floor($page2 / 3) * 2);
     if ($page > 13) {
         echo ' <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) .
-        '</a> .. <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa * 2) . '">' . ($paa * 2) . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
+             '</a> .. <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa * 2) . '">' . ($paa * 2) . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
     }
     elseif ($page > 7) {
         echo ' <a href="?id=' . $id . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
@@ -120,7 +116,7 @@ if ($g > 10) {
     }
     if ($page2 > 12) {
         echo ' .. <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) .
-        '</a> .. <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
+             '</a> .. <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
     }
     elseif ($page2 > 6) {
         echo ' .. <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
@@ -132,11 +128,9 @@ if ($g > 10) {
         echo ' <a href="index.php?act=search&amp;srh=' . $srh . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
     }
     echo "<form action='index.php'>To Page:<br/><input type='hidden' name='act' value='search'/><input type='hidden' name='srh' value='" . $srh .
-    "'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
+         "'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
 }
 if ($g != 0) {
     echo "<div class='phdr'>" . $lng['total'] . ": $g</div>";
 }
 echo '<p><a href="?">' . $lng['downloads'] . '</a></p>';
-
-?>

@@ -38,7 +38,7 @@ foreach (glob('../incfiles/languages/*/_core.ini') as $val) {
 Автоустановка языков
 -----------------------------------------------------------------
 */
-if(isset($_GET['refresh'])){
+if (isset($_GET['refresh'])) {
     mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'lng_list'");
     core::$lng_list = array();
     echo '<div class="gmenu"><p>' . $lng['refresh_descriptions_ok'] . '</p></div>';
@@ -83,12 +83,12 @@ class ini_file
     {
         if (!$str)
             return false;
-        $str = trim($str);                
+        $str = trim($str);
         $str = str_replace('"', '', $str);
         $str = str_replace("\r\n", "", $str);
         if (!$str)
             return false;
-        return $str; 
+        return $str;
     }
 
     public static function parser($language, $name_module)
@@ -126,7 +126,7 @@ class ini_file
     }
 
     public static function save_file($language, $lng_module)
-    { 
+    {
         $ini_file = '../files/lng_edit/' . $language . '_iso.lng';
         if (!empty($lng_module)) {
             $ini_text = array();
@@ -142,8 +142,8 @@ class ini_file
             fclose($open_ini_file);
             @chmod($ini_file, 0777);
         } else {
-            unlink($ini_file);  
-        } 
+            unlink($ini_file);
+        }
     }
 }
 
@@ -207,13 +207,13 @@ switch ($mod) {
         echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
 
-        case 'info_module':
+    case 'info_module':
         /*
         -----------------------------------------------------------------
         Переименовываем языковой модуль
         -----------------------------------------------------------------
         */
-        $name_module = isset($_GET['module']) ? ini_file::key_filter($_GET['module']) : false;        
+        $name_module = isset($_GET['module']) ? ini_file::key_filter($_GET['module']) : false;
         $lng_module_standart = ini_file::parser($language, $name_module);
         $lng_edit = ini_file::parser_edit($language);
         if (!$lng_module_standart) {
@@ -228,7 +228,7 @@ switch ($mod) {
              '<li><span class="gray">' . $panel_lng['phras'] . ':</span> ' . count($lng_module) . '</li>';
         if (isset($lng_edit[$name_module])) {
             $mass_edit = count(array_intersect_key($lng_module_standart, $lng_edit[$name_module]));
-            if (!empty($mass_edit)) 
+            if (!empty($mass_edit))
                 echo '<li><span class="gray">' . $panel_lng['edit_phras'] . ':</span> ' . $mass_edit . '</li>';
             $mass_add = count(array_diff_key($lng_edit[$name_module], $lng_module_standart));
             if (!empty($mass_add))
@@ -294,7 +294,8 @@ switch ($mod) {
             $symbol_1 = substr($key, 0, 1);
             if (!in_array($symbol_1, $array_symbol)) {
                 $array_symbol[] = $symbol_1;
-                $array_menu[] = $symbol && $symbol_1 == $symbol ? '<b>' . $symbol_1 . '</b>' : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
+                $array_menu[] = $symbol && $symbol_1 == $symbol ? '<b>' . $symbol_1 . '</b>'
+                        : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
             }
             if (!$symbol || $symbol_1 == $symbol) {
                 ++$total;
@@ -315,10 +316,10 @@ switch ($mod) {
                 echo '<div class="gmenu"><b>' . $panel_lng['phrase_delete'] . '!</b></div>';
                 break;
 
-             case 'reset':
+            case 'reset':
                 echo '<div class="gmenu"><b>' . $panel_lng['phrase_default'] . '!</b></div>';
                 break;
-            
+
             case 'edit':
                 echo '<div class="gmenu"><b>' . $panel_lng['phrase_edit'] . '!</b></div>';
                 break;
@@ -334,18 +335,18 @@ switch ($mod) {
             echo '<form action="?act=languages&amp;mod=massdel_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '" method="post">';
             $i = 0;
             foreach ($lng_module as $key => $val) {
-                    echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
-                    echo $key . '<br />' . $val . '<div class="sub">';
-                    if (isset($lng_edit[$name_module]) && in_array($key, array_keys($lng_edit[$name_module])))      
-                        echo '<input type="checkbox" name="delch[]" value="' . $key . '"/>&#160;';
-                    echo '<a href="?act=languages&amp;mod=edit_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $lng['edit'] . '</a>';
-                    if (isset($lng_edit[$name_module]) && in_array($key, array_keys($lng_edit[$name_module]))) {
-                        if (!in_array($key, array_keys($lng_module_standart)))
-                            echo ' | <a href="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $lng['delete'] . '</a>';  
-                        else
-                            echo ' | <a href="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $panel_lng['default'] . '</a>';
-                    }
-                    echo '</div></div>';
+                echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
+                echo $key . '<br />' . $val . '<div class="sub">';
+                if (isset($lng_edit[$name_module]) && in_array($key, array_keys($lng_edit[$name_module])))
+                    echo '<input type="checkbox" name="delch[]" value="' . $key . '"/>&#160;';
+                echo '<a href="?act=languages&amp;mod=edit_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $lng['edit'] . '</a>';
+                if (isset($lng_edit[$name_module]) && in_array($key, array_keys($lng_edit[$name_module]))) {
+                    if (!in_array($key, array_keys($lng_module_standart)))
+                        echo ' | <a href="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $lng['delete'] . '</a>';
+                    else
+                        echo ' | <a href="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $panel_lng['default'] . '</a>';
+                }
+                echo '</div></div>';
                 ++$i;
             }
             echo '<div class="rmenu"><input type="submit" value="' . $lng['delete'] . '"/></div></form>' .
@@ -391,19 +392,20 @@ switch ($mod) {
         $array_result = array();
         $array_menu = array();
         $total = 0;
-        $array_menu[] = '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '">' . $lng['all'] . '</a>'; 
+        $array_menu[] = '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '">' . $lng['all'] . '</a>';
         foreach ($lng_module as $key => $val) {
             $symbol_1 = substr($key, 0, 1);
             if (!in_array($symbol_1, $array_symbol)) {
                 $array_symbol[] = $symbol_1;
-                $array_menu[] = $symbol && $symbol_1 == $symbol ? '<b>' . $symbol_1 . '</b>' : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
+                $array_menu[] = $symbol && $symbol_1 == $symbol ? '<b>' . $symbol_1 . '</b>'
+                        : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
             }
             if (isset($search) && (stristr($key, $search) || stristr($val, $search))) {
                 ++$total;
                 if ($total > $start && $total < $start + $kmess)
                     $array_result[$key] = $val;
             }
-        }  
+        }
         $array_menu[] = '<b>' . $lng['search'] . '</b>';
         $lng_module = $array_result;
         echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=module&amp;language=' . $language . '"><b>' . $lng['modules'] . '</b></a> | ' . $name_module . ': ' . $lng['search'] . '</div>';
@@ -416,24 +418,24 @@ switch ($mod) {
         if ($total) {
             echo '<form action="?act=languages&amp;mod=massdel_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '" method="post">';
             foreach ($lng_module as $key => $val) {
-                $search = str_replace('*', '', $search);                    
-                $search_key = mb_strlen($search) < 3 ? $key : preg_replace('|('.preg_quote($search, '/').')|siu','<span style="background-color: #FFFF33">$1</span>',$key);
-                $search_val = mb_strlen($search) < 3 ? $val : preg_replace('|('.preg_quote($search, '/').')|siu','<span style="background-color: #FFFF33">$1</span>',$val);
+                $search = str_replace('*', '', $search);
+                $search_key = mb_strlen($search) < 3 ? $key : preg_replace('|(' . preg_quote($search, '/') . ')|siu', '<span style="background-color: #FFFF33">$1</span>', $key);
+                $search_val = mb_strlen($search) < 3 ? $val : preg_replace('|(' . preg_quote($search, '/') . ')|siu', '<span style="background-color: #FFFF33">$1</span>', $val);
                 echo is_integer($i / 2) ? '<div class="list1">' : '<div class="list2">';
                 echo $search_key . '<br />' . $search_val . '<div class="sub">';
-                if (isset($lng_edit[$name_module]) && in_array($key, array_keys($lng_edit[$name_module])))     
+                if (isset($lng_edit[$name_module]) && in_array($key, array_keys($lng_edit[$name_module])))
                     echo '<input type="checkbox" name="delch[]" value="' . $key . '"/>&#160;';
                 echo '<a href="?act=languages&amp;mod=edit_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $lng['edit'] . '</a>';
-    
+
                 if (isset($lng_edit[$name_module]) && in_array($key, array_keys($lng_edit[$name_module]))) {
                     if (!in_array($key, array_keys($lng_module_standart)))
-                        echo ' | <a href="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $lng['delete'] . '</a>';  
+                        echo ' | <a href="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $lng['delete'] . '</a>';
                     else
                         echo ' | <a href="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '">' . $panel_lng['default'] . '</a>';
                 }
                 echo '</div></div>';
                 ++$i;
-            }                 
+            }
             echo '<div class="rmenu"><input type="submit" value="' . $lng['delete'] . '"/></div></form>' .
                  '<div class="phdr">' . $lng['total'] . ': <b>' . $total . '</b></div>';
             if ($total > $kmess) {
@@ -470,7 +472,7 @@ switch ($mod) {
             exit;
         }
         if (isset($_POST['submit']) && !empty($_POST['value'])) {
-            $value_edit = ini_file::value_filter($_POST['value']);                
+            $value_edit = ini_file::value_filter($_POST['value']);
             if (!$value_edit) {
                 header('Location: index.php?act=languages&mod=edit_phrase&language=' . $language . '&module=' . $name_module . '&symbol=' . $symbol . '&key=' . $key . '&start=' . $start);
                 exit;
@@ -522,16 +524,16 @@ switch ($mod) {
                 exit;
             }
             // Добавляем ключ и его значение
-            $lng_edit[$name_module][$key] = $value; 
+            $lng_edit[$name_module][$key] = $value;
             ini_file::save_file($language, $lng_edit);
             header('Location: index.php?act=languages&mod=phrases&language=' . $language . '&module=' . $name_module . '&start=' . $start . '&do=add');
             exit;
         } else {
-            echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . $panel_lng['add'] . '</div>';    
+            echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . $panel_lng['add'] . '</div>';
             if ($do == 'no_key')
                 echo '<div class="rmenu"><b>' . $panel_lng['no_key'] . '</b></div>';
             echo '<form name="form" action="?act=languages&amp;mod=add_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . $start . '" method="POST">' .
-                 '<div class="menu"><p><h3>' . $panel_lng['key'] . '</h3>' .   
+                 '<div class="menu"><p><h3>' . $panel_lng['key'] . '</h3>' .
                  '<input type="text" name="key" maxlength="27"/></p>' .
                  '<p><h3>' . $panel_lng['value'] . '</h3>' .
                  '<textarea rows="' . $set_user['field_h'] . '" name="value"></textarea></p></div>' .
@@ -572,11 +574,12 @@ switch ($mod) {
             header('Location: index.php?act=languages&mod=phrases&language=' . $language . '&module=' . $name_module . '&symbol=' . $symbol . '&start=' . $start . '&do=' . $referer);
             exit;
         } else {
-            echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . (isset($lng_module_standart[$key]) ? '' . $panel_lng['reset'] . '' : $panel_lng['delete']) . '</div>' .
+            echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . (isset($lng_module_standart[$key])
+                    ? '' . $panel_lng['reset'] . '' : $panel_lng['delete']) . '</div>' .
                  '<div class="rmenu"><p>';
             if (isset($lng_module_standart[$key]))
                 echo $panel_lng['phrase_resets'];
-            else     
+            else
                 echo $panel_lng['phrase_deletes'];
             echo '</p><p><form name="form" action="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . $start . '&amp;yes" method="POST">' .
                  '<input type="submit" name="submit" value="' . $lng['continue'] . '"/>&#160;' .
@@ -639,10 +642,10 @@ switch ($mod) {
         */
         echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['language_default'] . '</div>';
         if ($do == 'error')
-            echo '<div class="rmenu"><b>' . $panel_lng['error'] . '!</b></div>';    
+            echo '<div class="rmenu"><b>' . $panel_lng['error'] . '!</b></div>';
         echo '<div class="menu"><form action="index.php?act=languages&amp;mod=set" method="post"><p>';
         echo '<table><tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3>' . $lng['language_system'] . '</h3></td></tr>';
-        foreach ($lng_desc as $key => $val) {            
+        foreach ($lng_desc as $key => $val) {
             $lng_menu = array(
                 (!empty($val['author']) ? '<span class="gray">' . $lng['author'] . ':</span> ' . $val['author'] : ''),
                 (!empty($val['author_email']) ? '<span class="gray">E-mail:</span> ' . $val['author_email'] : ''),

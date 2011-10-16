@@ -1,20 +1,16 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                             Content Management System              //
-// Официальный сайт сайт проекта:      http://johncms.com                     //
-// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS core team:                                                         //
-// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
-// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
-//                                                                            //
-// Информацию о версиях смотрите в прилагаемом файле version.txt              //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 require_once('../incfiles/head.php');
 if ($rights == 4 || $rights >= 6) {
     if ($_GET['file'] == "") {
@@ -38,7 +34,7 @@ if ($rights == 4 || $rights >= 6) {
         $scwidth = $scsize[0];
         $scheight = $scsize[1];
         $ffot = strtolower($scrname);
-        $dopras = array (
+        $dopras = array(
             "gif",
             "jpg",
             "png"
@@ -73,10 +69,9 @@ if ($rights == 4 || $rights >= 6) {
     } else {
         echo $lng_dl['upload_screenshot'] . '<br/>';
         echo '<form action="index.php?act=screen&amp;file=' . $file . '" method="post" enctype="multipart/form-data"><p>' . $lng['select'] . ' (max. 320*320):<br/>' .
-            '<input type="file" name="screens"/>' .
-            '</p><p><input type="submit" name="submit" value="' . $lng_dl['upload'] . '"/></p>' .
-            '</form>';
+             '<input type="file" name="screens"/>' .
+             '</p><p><input type="submit" name="submit" value="' . $lng_dl['upload'] . '"/></p>' .
+             '</form>';
     }
 }
 echo '<p><a href="index.php?act=view&amp;file=' . $file . '">' . $lng['back'] . '</a></p>';
-?>

@@ -1,22 +1,25 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-class mainpage {
-    public $news;         // Текст новостей
-    public $newscount;    // Общее к-во новостей
-    public $lastnewsdate; // Дата последней новости
-    private $settings = array ();
-    function __construct() {
+class mainpage
+{
+    public $news;                                                              // Текст новостей
+    public $newscount;                                                         // Общее к-во новостей
+    public $lastnewsdate;                                                      // Дата последней новости
+    private $settings = array();
+
+    function __construct()
+    {
         global $set;
         $this->settings = unserialize($set['news']);
         $this->newscount = $this->newscount() . $this->lastnewscount();
@@ -24,7 +27,8 @@ class mainpage {
     }
 
     // Запрос свежих новостей на Главную
-    private function news() {
+    private function news()
+    {
         global $lng;
         if ($this->settings['view'] > 0) {
             $reqtime = $this->settings['days'] ? time() - ($this->settings['days'] * 86400) : 0;
@@ -65,8 +69,8 @@ class mainpage {
                         case 3:
                             $news .= $text;
                             break;
-                            default :
-                        $news .= '<b>' . $res['name'] . '</b><br />' . $text;
+                        default :
+                            $news .= '<b>' . $res['name'] . '</b><br />' . $text;
                     }
                     // Ссылка на каменты
                     if (!empty($res['kom']) && $this->settings['view'] != 2 && $this->settings['kom'] == 1) {
@@ -86,14 +90,16 @@ class mainpage {
     }
 
     // Счетчик всех новостей
-    private function newscount() {
+    private function newscount()
+    {
         $req = mysql_query("SELECT COUNT(*) FROM `news`");
         $res = mysql_result($req, 0);
         return ($res > 0 ? $res : '0');
     }
 
     // Счетчик свежих новостей
-    private function lastnewscount() {
+    private function lastnewscount()
+    {
         $req = mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > '" . (time() - 259200) . "'");
         $res = mysql_result($req, 0);
         return ($res > 0 ? '/<span class="red">+' . $res . '</span>' : false);

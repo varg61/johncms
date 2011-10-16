@@ -1,15 +1,16 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 require('../incfiles/head.php');
 $delf = opendir('../files/forum/topics');
 while ($tt = readdir($delf)) {
@@ -75,9 +76,9 @@ if (isset($_POST['submit'])) {
             // Сохраняем тему в формате HTML                          //
             ////////////////////////////////////////////////////////////
             $text =
-                "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+                    "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 <title>" . $lng['forum']
-                . "</title>
+                    . "</title>
 <style type='text/css'>
 body { color: #000000; background-color: #FFFFFF }
 div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
@@ -121,10 +122,9 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
     }
 } else {
     echo '<p>' . $lng_forum['download_topic_format'] . '<br/>' .
-        '<form action="index.php?act=tema&amp;id=' . $id . '" method="post">' .
-        '<select name="mod"><option value="1">.txt</option>' .
-        '<option value="2">.htm</option></select>' .
-        '<input type="submit" name="submit" value="' . $lng['download'] . '"/>' .
-        '</form></p>';
+         '<form action="index.php?act=tema&amp;id=' . $id . '" method="post">' .
+         '<select name="mod"><option value="1">.txt</option>' .
+         '<option value="2">.htm</option></select>' .
+         '<input type="submit" name="submit" value="' . $lng['download'] . '"/>' .
+         '</form></p>';
 }
-?>

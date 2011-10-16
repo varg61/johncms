@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -34,7 +31,7 @@ if ($ms['type'] != "al") {
 $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refid'] . "'");
 $rz1 = mysql_fetch_array($rz);
 if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || $rights >= 6) {
-    $dopras = array (
+    $dopras = array(
         "gif",
         "jpg",
         "png"
@@ -42,10 +39,8 @@ if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == $login) || 
     $tff = implode(" ,", $dopras);
     $fotsize = $set['flsz'] / 5;
     echo '<h3>' . $lng_gal['upload_photo'] . "</h3>" . $lng_gal['allowed_types'] . ": $tff<br/>" . $lng_gal['maximum_weight'] . ": $fotsize кб.<br/><form action='index.php?act=load&amp;id=" . $id .
-        "' method='post' enctype='multipart/form-data'><p>" . $lng_gal['select_photo'] . ":<br/><input type='file' name='fail'/></p><p>" . $lng['description'] . ":<br/><textarea name='text'></textarea></p><p><input type='submit' value='" . $lng['sent'] . "'/></p></form><a href='index.php?id="
-        . $id . "'>" . $lng['back'] . "</a>";
+         "' method='post' enctype='multipart/form-data'><p>" . $lng_gal['select_photo'] . ":<br/><input type='file' name='fail'/></p><p>" . $lng['description'] . ":<br/><textarea name='text'></textarea></p><p><input type='submit' value='" . $lng['sent'] . "'/></p></form><a href='index.php?id="
+         . $id . "'>" . $lng['back'] . "</a>";
 } else {
     header("location: index.php");
 }
-
-?>

@@ -41,4 +41,3 @@ if ($total) {
     echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
 }
 echo '<p><a href="index.php">' . $lng['back'] . '</a></p>';
-?>

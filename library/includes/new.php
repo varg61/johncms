@@ -46,5 +46,3 @@ if ($total > 0) {
     echo '<p>' . $lng['list_empty'] . '</p>';
 }
 echo '<p><a href="index.php">' . $lng_lib['to_library'] . '</a></p>';
-
-?>

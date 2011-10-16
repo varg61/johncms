@@ -10,6 +10,7 @@
  */
 
 define('_IN_JOHNCMS', 1);
+
 $headmod = 'load';
 require_once('../incfiles/core.php');
 $lng_dl = core::load_lng('downloads');
@@ -45,7 +46,7 @@ function provcat($catalog)
     }
 }
 
-$array = array (
+$array = array(
     'scan_dir',
     'rat',
     'delmes',
@@ -95,7 +96,7 @@ if (in_array($act, $array)) {
         ////////////////////////////////////////////////////////////
         // Получаем структуру каталогов                           //
         ////////////////////////////////////////////////////////////
-        $tree = array ();
+        $tree = array();
         $dirid = $cat;
         while ($dirid != '0' && $dirid != "") {
             $req = mysql_query("SELECT * FROM `download` WHERE `type` = 'cat' and `id` = '" . $dirid . "' LIMIT 1");
@@ -232,4 +233,3 @@ if (in_array($act, $array)) {
 }
 
 require_once('../incfiles/end.php');
-?>

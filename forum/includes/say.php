@@ -363,4 +363,3 @@ switch ($type1['type']) {
         require('../incfiles/end.php');
         break;
 }
-?>

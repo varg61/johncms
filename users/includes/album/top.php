@@ -190,4 +190,3 @@ if ($total > $kmess) {
         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-?>

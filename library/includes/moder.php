@@ -58,5 +58,3 @@ if ($rights == 5 || $rights >= 6) {
     }
 }
 echo '<a href="?">' . $lng_lib['to_library'] . '</a></p>';
-
-?>

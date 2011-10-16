@@ -102,4 +102,3 @@ if ($al && $user['id'] == $user_id || $rights >= 7) {
              '<p><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng['back'] . '</a></p>';
     }
 }
-?>

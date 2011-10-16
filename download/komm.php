@@ -156,5 +156,3 @@ if ($countm > $kmess) {
 }
 echo "<br/>" . $lng['total'] . ": $countm";
 echo '<br/><a href="?act=view&amp;file=' . $id . '">' . $lng['back'] . '</a><br/>';
-
-?>

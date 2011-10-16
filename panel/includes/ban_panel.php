@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 $lng_ban = core::load_lng('ban');
@@ -37,11 +37,11 @@ switch ($mod) {
                 }
             } else {
                 echo '<form action="index.php?act=ban_panel&amp;mod=amnesty" method="post"><div class="menu"><p>' .
-                    '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng_ban['amnesty_delban'] . '<br />' .
-                    '<input type="radio" name="term" value="1" />&#160;' . $lng_ban['amnesty_clean'] .
-                    '</p><p><input type="submit" name="submit" value="' . $lng_ban['amnesty'] . '" />' .
-                    '</p></div></form>' .
-                    '<div class="phdr"><small>' . $lng_ban['amnesty_help'] . '</small></div>';
+                     '<input type="radio" name="term" value="0" checked="checked" />&#160;' . $lng_ban['amnesty_delban'] . '<br />' .
+                     '<input type="radio" name="term" value="1" />&#160;' . $lng_ban['amnesty_clean'] .
+                     '</p><p><input type="submit" name="submit" value="' . $lng_ban['amnesty'] . '" />' .
+                     '</p></div></form>' .
+                     '<div class="phdr"><small>' . $lng_ban['amnesty_help'] . '</small></div>';
             }
             echo '<p><a href="index.php?act=ban_panel">' . $lng['ban_panel'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
@@ -70,7 +70,7 @@ switch ($mod) {
         if (mysql_num_rows($req)) {
             while ($res = mysql_fetch_array($req)) {
                 echo '<div class="' . ($res['bantime'] > time() ? 'r' : '') . 'menu">';
-                $arg = array (
+                $arg = array(
                     'header' => '<br />' . functions::get_image('user_block.png') . '&#160;<small><a href="../users/profile.php?act=ban&amp;user=' . $res['id'] . '">' . $lng_ban['infringements_history'] . '</a> [' . $res['bancount'] . ']</small>'
                 );
                 echo functions::display_user($res, $arg);
@@ -86,4 +86,3 @@ switch ($mod) {
         }
         echo '<p>' . ($rights == 9 && $total ? '<a href="index.php?act=ban_panel&amp;mod=amnesty">' . $lng_ban['amnesty'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
-?>

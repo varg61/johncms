@@ -268,4 +268,3 @@ switch ($do) {
 }
 
 require('../incfiles/end.php');
-?>

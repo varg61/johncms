@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights == 3 || $rights >= 6) {
@@ -65,19 +62,19 @@ if ($rights == 3 || $rights >= 6) {
         $fr = mysql_query("select * from `forum` where id='" . $other . "';");
         $fr1 = mysql_fetch_assoc($fr);
         echo '<div class="phdr"><a href="index.php?id=' . $id . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['topic_move'] . '</div>' .
-            '<form action="index.php?act=per&amp;id=' . $id . '" method="post">' .
-            '<div class="gmenu"><p>' .
-            '<h3>' . $lng['category'] . '</h3>' . $fr1['text'] . '</p>' .
-            '<p><h3>' . $lng['section'] . '</h3>' .
-            '<select name="razd">';
+             '<form action="index.php?act=per&amp;id=' . $id . '" method="post">' .
+             '<div class="gmenu"><p>' .
+             '<h3>' . $lng['category'] . '</h3>' . $fr1['text'] . '</p>' .
+             '<p><h3>' . $lng['section'] . '</h3>' .
+             '<select name="razd">';
         $raz = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$other' AND `type` = 'r' AND `id` != '" . $ms['refid'] . "' ORDER BY `realid` ASC");
         while ($raz1 = mysql_fetch_assoc($raz)) {
             echo '<option value="' . $raz1['id'] . '">' . $raz1['text'] . '</option>';
         }
         echo '</select></p>' .
-            '<p><input type="submit" name="submit" value="' . $lng['move'] . '"/></p>' .
-            '</div></form>' .
-            '<div class="phdr">' . $lng_forum['other_categories'] . '</div>';
+             '<p><input type="submit" name="submit" value="' . $lng['move'] . '"/></p>' .
+             '</div></form>' .
+             '<div class="phdr">' . $lng_forum['other_categories'] . '</div>';
         $frm = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$other' ORDER BY `realid` ASC");
         while ($frm1 = mysql_fetch_assoc($frm)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
@@ -87,4 +84,3 @@ if ($rights == 3 || $rights >= 6) {
         echo '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
     }
 }
-?>

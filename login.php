@@ -33,8 +33,8 @@ if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 15))
     $error[] = $lng['password'] . ': ' . $lng['error_wrong_lenght'];
 if (!$error && $user_pass && ($user_login || $id)) {
     // Запрос в базу на юзера
-    $sql = $id ? "`id` = '$id'" : "`name_lat`='" . functions::rus_lat(mb_strtolower($user_login)) . "'";
-    $req = mysql_query("SELECT * FROM `users` WHERE $sql LIMIT 1");
+    $sql = $id ? "`id` = '$id'" : "`name` = '" . $user_login . "'";
+    $req = mysql_query("SELECT * FROM `users` WHERE $sql");
     if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
         if ($user['failed_login'] > 2) {

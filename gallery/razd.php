@@ -29,5 +29,3 @@ if ($rights >= 6) {
 } else {
     header("location: index.php");
 }
-
-?>

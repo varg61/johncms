@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -54,9 +54,9 @@ switch ($mod) {
                 }
                 echo '</p></div>';
                 echo '<div class="phdr">'
-                    . ($res['switch'] == 1 ? '<a href="index.php?act=counters&amp;mod=view&amp;go=off&amp;id=' . $id . '">' . $lng['lng_off'] . '</a>'
-                        : '<a href="index.php?act=counters&amp;mod=view&amp;go=on&amp;id=' . $id . '">' . $lng['lng_on'] . '</a>')
-                        . ' | <a href="index.php?act=counters&amp;mod=edit&amp;id=' . $id . '">' . $lng['edit'] . '</a> | <a href="index.php?act=counters&amp;mod=del&amp;id=' . $id . '">' . $lng['delete'] . '</a></div>';
+                     . ($res['switch'] == 1 ? '<a href="index.php?act=counters&amp;mod=view&amp;go=off&amp;id=' . $id . '">' . $lng['lng_off'] . '</a>'
+                                : '<a href="index.php?act=counters&amp;mod=view&amp;go=on&amp;id=' . $id . '">' . $lng['lng_on'] . '</a>')
+                     . ' | <a href="index.php?act=counters&amp;mod=edit&amp;id=' . $id . '">' . $lng['edit'] . '</a> | <a href="index.php?act=counters&amp;mod=del&amp;id=' . $id . '">' . $lng['delete'] . '</a></div>';
             } else {
                 echo functions::display_error($lng['error_wrong_data']);
             }
@@ -161,15 +161,15 @@ switch ($mod) {
                 exit;
             }
             echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['preview'] . '</div>' .
-                '<div class="menu"><p><h3>' . $lng['title'] . '</h3><b>' . functions::check($name) . '</b></p>' .
-                '<p><h3>' . $lng['counter_mod1'] . '</h3>' . $link1 . '</p>' .
-                '<p><h3>' . $lng['counter_mod2'] . '</h3>' . $link2 . '</p></div>' .
-                '<div class="rmenu">' . $lng['counter_preview_help'] . '</div>' .
-                '<form action="index.php?act=counters&amp;mod=add" method="post">' .
-                '<input type="hidden" value="' . $name . '" name="name" />' .
-                '<input type="hidden" value="' . htmlspecialchars($link1) . '" name="link1" />' .
-                '<input type="hidden" value="' . htmlspecialchars($link2) . '" name="link2" />' .
-                '<input type="hidden" value="' . $mode . '" name="mode" />';
+                 '<div class="menu"><p><h3>' . $lng['title'] . '</h3><b>' . functions::check($name) . '</b></p>' .
+                 '<p><h3>' . $lng['counter_mod1'] . '</h3>' . $link1 . '</p>' .
+                 '<p><h3>' . $lng['counter_mod2'] . '</h3>' . $link2 . '</p></div>' .
+                 '<div class="rmenu">' . $lng['counter_preview_help'] . '</div>' .
+                 '<form action="index.php?act=counters&amp;mod=add" method="post">' .
+                 '<input type="hidden" value="' . $name . '" name="name" />' .
+                 '<input type="hidden" value="' . htmlspecialchars($link1) . '" name="link1" />' .
+                 '<input type="hidden" value="' . htmlspecialchars($link2) . '" name="link2" />' .
+                 '<input type="hidden" value="' . $mode . '" name="mode" />';
             if ($id)
                 echo '<input type="hidden" value="' . $id . '" name="id" />';
             echo '<div class="bmenu"><input type="submit" value="' . $lng['save'] . '" name="submit" /></div>';
@@ -196,15 +196,15 @@ switch ($mod) {
                 }
             }
             echo '<form action="index.php?act=counters&amp;mod=edit" method="post">' .
-                '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['add'] . '</div>' .
-                '<div class="menu"><p><h3>' . $lng['title'] . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
-                '<p><h3>' . $lng['counter_mod1'] . '</h3><textarea rows="3" name="link1">' . $link1 . '</textarea><br /><small>' . $lng['counter_mod1_description'] . '</small></p>' .
-                '<p><h3>' . $lng['counter_mod2'] . '</h3><textarea rows="3" name="link2">' . $link2 . '</textarea><br /><small>' . $lng['counter_mod2_description'] . '</small></p>' .
-                '<p><h3>' . $lng['view_mode'] . '</h3>' . '<input type="radio" value="1" ' . ($mode == 0 || $mode == 1 ? 'checked="checked" ' : '') . 'name="mode" />&#160;' . $lng['default'] . '<br />' .
-                '<small>' . $lng['counter_mod_default_help'] . '</small></p><p>' .
-                '<input type="radio" value="2" ' . ($mode == 2 ? 'checked="checked" ' : '') . 'name="mode" />&#160;' . $lng['counter_mod1'] . '<br />' .
-                '<input type="radio" value="3" ' . ($mode == 3 ? 'checked="checked" ' : '') . 'name="mode" />&#160;' . $lng['counter_mod2'] . '</p></div>' .
-                '<div class="rmenu"><small>' . $lng['counter_add_help'] . '</small></div>';
+                 '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['add'] . '</div>' .
+                 '<div class="menu"><p><h3>' . $lng['title'] . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
+                 '<p><h3>' . $lng['counter_mod1'] . '</h3><textarea rows="3" name="link1">' . $link1 . '</textarea><br /><small>' . $lng['counter_mod1_description'] . '</small></p>' .
+                 '<p><h3>' . $lng['counter_mod2'] . '</h3><textarea rows="3" name="link2">' . $link2 . '</textarea><br /><small>' . $lng['counter_mod2_description'] . '</small></p>' .
+                 '<p><h3>' . $lng['view_mode'] . '</h3>' . '<input type="radio" value="1" ' . ($mode == 0 || $mode == 1 ? 'checked="checked" ' : '') . 'name="mode" />&#160;' . $lng['default'] . '<br />' .
+                 '<small>' . $lng['counter_mod_default_help'] . '</small></p><p>' .
+                 '<input type="radio" value="2" ' . ($mode == 2 ? 'checked="checked" ' : '') . 'name="mode" />&#160;' . $lng['counter_mod1'] . '<br />' .
+                 '<input type="radio" value="3" ' . ($mode == 3 ? 'checked="checked" ' : '') . 'name="mode" />&#160;' . $lng['counter_mod2'] . '</p></div>' .
+                 '<div class="rmenu"><small>' . $lng['counter_add_help'] . '</small></div>';
             if ($id)
                 echo '<input type="hidden" value="' . $id . '" name="id" />';
             echo '<div class="bmenu"><input type="submit" value="' . $lng['viewing'] . '" name="submit" /></div>';
@@ -285,4 +285,3 @@ switch ($mod) {
         echo '<div class="phdr"><a href="index.php?act=counters&amp;mod=edit">' . $lng['add'] . '</a></div>';
 }
 echo '<p>' . ($mod ? '<a href="index.php?act=counters">' . $lng['counters'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-?>

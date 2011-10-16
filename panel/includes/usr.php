@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -26,8 +26,8 @@ switch ($sort) {
         echo '<a href="index.php?act=usr&amp;sort=id">ID</a> | <a href="index.php?act=usr&amp;sort=nick">' . $lng['nick'] . '</a> | IP</div>';
         $order = '`ip` ASC';
         break;
-        default :
-    $sort = 'id';
+    default :
+        $sort = 'id';
         echo 'ID | <a href="index.php?act=usr&amp;sort=nick">' . $lng['nick'] . '</a> | <a href="index.php?act=usr&amp;sort=ip">IP</a></div>';
         $order = '`id` ASC';
 }
@@ -51,5 +51,3 @@ if ($total > $kmess) {
     echo '<p><form action="index.php?act=usr&amp;sort=' . $sort . '" method="post"><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
 }
 echo '<p><a href="index.php?act=search_user">' . $lng['search_user'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-
-?>

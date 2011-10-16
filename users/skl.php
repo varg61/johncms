@@ -11,6 +11,8 @@
 
 define('_IN_JOHNCMS', 1);
 
+//TODO: Переделать на новую систему авторизации!!!
+
 require('../incfiles/core.php');
 $lng_pass = core::load_lng('pass');
 $textl = $lng_pass['password_restore'];
@@ -139,4 +141,3 @@ switch ($act) {
 }
 
 require('../incfiles/end.php');
-?>

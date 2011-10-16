@@ -35,7 +35,7 @@ switch ($mod) {
         Меняем пароль
         -----------------------------------------------------------------
         */
-        $error = array ();
+        $error = array();
         $oldpass = isset($_POST['oldpass']) ? trim($_POST['oldpass']) : '';
         $newpass = isset($_POST['newpass']) ? trim($_POST['newpass']) : '';
         $newconf = isset($_POST['newconf']) ? trim($_POST['newconf']) : '';
@@ -62,12 +62,12 @@ switch ($mod) {
             if (isset($_COOKIE['cuid']) && isset($_COOKIE['cups']))
                 setcookie('cups', md5($newpass), time() + 3600 * 24 * 365);
             echo '<div class="gmenu"><p><b>' . $lng_pass['password_changed'] . '</b><br />' .
-                '<a href="' . ($user_id == $user['id'] ? '../login.php' : 'profile.php?user=' . $user['id']) . '">' . $lng['continue'] . '</a></p>';
+                 '<a href="' . ($user_id == $user['id'] ? '../login.php' : 'profile.php?user=' . $user['id']) . '">' . $lng['continue'] . '</a></p>';
             if ($autologin) {
                 // Показываем ссылку на Автологин
                 echo '<p>' . $lng_pass['autologin_link'] . ':<br />' .
-                    '<input type="text" value="' . $set['homeurl'] . '/login.php?id=' . $user['id'] . '&amp;p=' . $newpass . '" /></p>' .
-                    '<p>' . $lng_pass['autologin_warning'] . '</p>';
+                     '<input type="text" value="' . $set['homeurl'] . '/login.php?id=' . $user['id'] . '&amp;p=' . $newpass . '" /></p>' .
+                     '<p>' . $lng_pass['autologin_warning'] . '</p>';
             }
             echo '</div>';
         } else {
@@ -86,12 +86,11 @@ switch ($mod) {
         if ($user['id'] == $user_id)
             echo '<div class="menu"><p>' . $lng_pass['input_old_password'] . ':<br /><input type="password" name="oldpass" /></p></div>';
         echo '<div class="gmenu"><p>' . $lng_pass['input_new_password'] . ':<br />' .
-            '<input type="password" name="newpass" /><br />' . $lng_pass['repeat_password'] . ':<br />' .
-            '<input type="password" name="newconf" /></p>' .
-            '<p><input type="checkbox" value="1" name="autologin" />&#160;' . $lng_pass['show_autologin'] .
-            '</p><p><input type="submit" value="' . $lng['save'] . '" name="submit" />' .
-            '</p></div></form>' .
-            '<div class="phdr"><small>' . $lng_pass['password_change_help'] . '</small></div>' .
-            '<p><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></p>';
+             '<input type="password" name="newpass" /><br />' . $lng_pass['repeat_password'] . ':<br />' .
+             '<input type="password" name="newconf" /></p>' .
+             '<p><input type="checkbox" value="1" name="autologin" />&#160;' . $lng_pass['show_autologin'] .
+             '</p><p><input type="submit" value="' . $lng['save'] . '" name="submit" />' .
+             '</p></div></form>' .
+             '<div class="phdr"><small>' . $lng_pass['password_change_help'] . '</small></div>' .
+             '<p><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></p>';
 }
-?>

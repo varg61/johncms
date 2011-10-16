@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Загрузка выбранного файла и обработка счетчика скачиваний
 -----------------------------------------------------------------
 */
-$error = array ();
+$error = array();
 $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img'");
 if (mysql_num_rows($req)) {
     $res = mysql_fetch_assoc($req);
@@ -25,7 +25,7 @@ if (mysql_num_rows($req)) {
         $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res['album_id'] . "'");
         if (mysql_num_rows($req_a)) {
             $res_a = mysql_fetch_assoc($req_a);
-            if($res_a['access'] == 1 || $res_a['access'] == 2 && (!isset($_SESSION['ap']) || $_SESSION['ap'] != $res_a['password']))
+            if ($res_a['access'] == 1 || $res_a['access'] == 2 && (!isset($_SESSION['ap']) || $_SESSION['ap'] != $res_a['password']))
                 $error[] = $lng['access_forbidden'];
         } else {
             $error[] = $lng['error_wrong_data'];
@@ -50,4 +50,3 @@ if (!$error) {
     require('../incfiles/head.php');
     echo functions::display_error($error, '<a href="album.php">' . $lng['back'] . '</a>');
 }
-?>

@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -93,7 +93,7 @@ switch ($mod) {
             mysql_query("DELETE FROM `users` WHERE `preg` = '0' AND `ip` = '$ip'");
             mysql_query("OPTIMIZE TABLE `cms_users_iphistory` , `users`");
             echo '<div class="menu"><p>' . $lng['reg_del_ip_done'] . '<br />' .
-                '<a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
+                 '<a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         } else {
             echo functions::display_error($lng['error_wrong_data']);
             require('../incfiles/end.php');
@@ -112,16 +112,16 @@ switch ($mod) {
             $req = mysql_query("SELECT * FROM `users` WHERE `preg` = '0' ORDER BY `id` DESC LIMIT $start,$kmess");
             $i = 0;
             while (($res = mysql_fetch_assoc($req)) !== false) {
-                $link = array (
+                $link = array(
                     '<a href="index.php?act=reg&amp;mod=approve&amp;id=' . $res['id'] . '">' . $lng['approve'] . '</a>',
                     '<a href="index.php?act=reg&amp;mod=del&amp;id=' . $res['id'] . '">' . $lng['delete'] . '</a>',
                     '<a href="index.php?act=reg&amp;mod=delip&amp;ip=' . $res['ip'] . '">' . $lng['reg_del_ip'] . '</a>'
                 );
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo functions::display_user($res, array (
-                    'header' => '<b>ID:' . $res['id'] . '</b>',
-                    'sub' => functions::display_menu($link)
-                ));
+                echo functions::display_user($res, array(
+                                                        'header' => '<b>ID:' . $res['id'] . '</b>',
+                                                        'sub' => functions::display_menu($link)
+                                                   ));
                 echo '</div>';
                 ++$i;
             }
@@ -138,4 +138,3 @@ switch ($mod) {
             echo '<a href="index.php?act=reg&amp;mod=massapprove">' . $lng['reg_approve_all'] . '</a><br /><a href="index.php?act=reg&amp;mod=massdel">' . $lng['reg_del_all'] . '</a><br />';
         echo '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
-?>

@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -25,7 +25,7 @@ echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></
 */
 if (!isset($set['sitemap']) || isset($_GET['reset'])) {
     // Задаем настройки по умолчанию
-    $settings = array (
+    $settings = array(
         'forum' => 1,
         'lib' => 1,
         'users' => 0,
@@ -59,17 +59,16 @@ if (!isset($set['sitemap']) || isset($_GET['reset'])) {
 -----------------------------------------------------------------
 */
 echo '<form action="index.php?act=sitemap" method="post"><div class="menu"><p>' .
-    '<h3>' . $lng['include_in_map'] . '</h3>' .
-    '<input name="forum" type="checkbox" value="1" ' . ($settings['forum'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['forum'] . '<br />' .
-    '<input name="lib" type="checkbox" value="1" ' . ($settings['lib'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['library'] . '</p>' .
-    '<p><h3>' . $lng['browsers'] . '</h3>' .
-    '<input type="radio" value="1" name="browsers" ' . ($settings['browsers'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_all'] . '<br />' .
-    '<input type="radio" value="0" name="browsers" ' . (!$settings['browsers'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_only_computers'] . '</p>' .
-    '<p><h3>' . $lng['users'] . '</h3>' .
-    '<input type="radio" value="1" name="users" ' . ($settings['users'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_all'] . '<br />' .
-    '<input type="radio" value="0" name="users" ' . (!$settings['users'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_only_guests'] . '</p>' .
-    '<p><input type="submit" value="' . $lng['save'] . '" name="submit" /></p>' .
-    '</div></form>' .
-    '<div class="phdr"><a href="index.php?act=sitemap&amp;reset">' . $lng['reset_settings'] . '</a></div>' .
-    '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-?>
+     '<h3>' . $lng['include_in_map'] . '</h3>' .
+     '<input name="forum" type="checkbox" value="1" ' . ($settings['forum'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['forum'] . '<br />' .
+     '<input name="lib" type="checkbox" value="1" ' . ($settings['lib'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['library'] . '</p>' .
+     '<p><h3>' . $lng['browsers'] . '</h3>' .
+     '<input type="radio" value="1" name="browsers" ' . ($settings['browsers'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_all'] . '<br />' .
+     '<input type="radio" value="0" name="browsers" ' . (!$settings['browsers'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_only_computers'] . '</p>' .
+     '<p><h3>' . $lng['users'] . '</h3>' .
+     '<input type="radio" value="1" name="users" ' . ($settings['users'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_all'] . '<br />' .
+     '<input type="radio" value="0" name="users" ' . (!$settings['users'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['show_only_guests'] . '</p>' .
+     '<p><input type="submit" value="' . $lng['save'] . '" name="submit" /></p>' .
+     '</div></form>' .
+     '<div class="phdr"><a href="index.php?act=sitemap&amp;reset">' . $lng['reset_settings'] . '</a></div>' .
+     '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';

@@ -45,5 +45,3 @@ switch ($mod) {
              '<p><input type="submit" name="submit" value="' . $lng['delete'] . '"/></p></form></div>' .
              '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
 }
-
-?>

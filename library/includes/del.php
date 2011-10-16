@@ -65,7 +65,7 @@ if ($rights == 5 || $rights >= 6) {
 
             case "bk":
                 echo $lng['delete_confirmation'] . "<br/><a href='index.php?act=del&amp;id=" . $id . "&amp;yes'>" . $lng['delete'] . "</a> | <a href='index.php?id=" . $id .
-                    "'>" . $lng['cancel'] . "</a><br/><a href='index.php'>" . $lng_lib['to_library'] . "</a><br/>";
+                     "'>" . $lng['cancel'] . "</a><br/><a href='index.php'>" . $lng_lib['to_library'] . "</a><br/>";
                 break;
 
             case "cat":
@@ -77,12 +77,10 @@ if ($rights == 5 || $rights >= 6) {
                     exit;
                 }
                 echo $lng['delete_confirmation'] . "<br/><a href='index.php?act=del&amp;id=" . $id . "&amp;yes'>" . $lng['delete'] . "</a> | <a href='index.php?id=" . $id .
-                    "'>" . $lng['cancel'] . "</a><br/><a href='index.php'>" . $lng['back'] . "</a><br/>";
+                     "'>" . $lng['cancel'] . "</a><br/><a href='index.php'>" . $lng['back'] . "</a><br/>";
                 break;
         }
     }
 } else {
     header("location: index.php");
 }
-
-?>

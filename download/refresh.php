@@ -1,18 +1,19 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 require_once("../incfiles/head.php");
 if ($rights == 4 || $rights >= 6) {
-    $drt = array ();
+    $drt = array();
     $dropen = opendir("$loadroot");
     while (($file1 = readdir($dropen))) {
         if ($file1 != "." && $file1 != ".." && $file1 != "index.php") {
@@ -47,7 +48,7 @@ if ($rights == 4 || $rights >= 6) {
                             mysql_query("insert into `download` values(0,'" . $obn1[id] . "','" . $pap . "','" . time() . "','" . $file . "','file','','','','','');");
                         }
                     }
-                    $fod = array (); ########## 7.02.08
+                    $fod = array(); ########## 7.02.08
                 }
             }
         }
@@ -79,4 +80,3 @@ if ($rights == 4 || $rights >= 6) {
     }
 }
 echo "<p><a href='?'>" . $lng['back'] . "</a></p>";
-?>

@@ -30,10 +30,8 @@ if ($rights >= 6) {
         header("location: index.php?id=$id");
     } else {
         echo $lng_gal['create_album'] . "<br/><form action='index.php?act=cral&amp;id=" . $id .
-            "' method='post'>" . $lng['title'] . ":<br/><input type='text' name='text'/><br/><input type='submit' name='submit' value='" . $lng['save'] . "'/></form><br/><a href='index.php?id=" . $id . "'>" . $lng_gal['to_section'] . "</a><br/>";
+             "' method='post'>" . $lng['title'] . ":<br/><input type='text' name='text'/><br/><input type='submit' name='submit' value='" . $lng['save'] . "'/></form><br/><a href='index.php?id=" . $id . "'>" . $lng_gal['to_section'] . "</a><br/>";
     }
 } else {
     header("location: index.php");
 }
-
-?>

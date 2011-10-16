@@ -37,7 +37,7 @@ if ($rights == 5 || $rights >= 6) {
             if ($fname != "") {
                 if (eregi("[^a-z0-9.()+_-]", $fname)) {
                     echo "Invalid file name<br /><a href='index.php?act=load&amp;id="
-                        . $id . "'>" . $lng['repeat'] . "</a><br/>";
+                         . $id . "'>" . $lng['repeat'] . "</a><br/>";
                     require_once('../incfiles/end.php');
                     exit;
                 }
@@ -56,9 +56,10 @@ if ($rights == 5 || $rights >= 6) {
                     @chmod("$ch", 0777);
                     @chmod("temp/$ch", 0777);
                     $txt = file_get_contents("temp/$ch");
-                    if (mb_check_encoding($txt, 'UTF-8')) { } elseif (mb_check_encoding($txt, 'windows-1251')) {
+                    if (mb_check_encoding($txt, 'UTF-8')) {
+                    } elseif (mb_check_encoding($txt, 'windows-1251')) {
                         $txt = iconv("windows-1251", "UTF-8", $txt);
-                    }  elseif (mb_check_encoding($txt, 'KOI8-R')) {
+                    } elseif (mb_check_encoding($txt, 'KOI8-R')) {
                         $txt = iconv("KOI8-R", "UTF-8", $txt);
                     } else {
                         echo "File in an unknown encoding<br /><a href='index.php?act=load&amp;id=" . $id . "'>" . $lng['repeat'] . "</a><br/>";
@@ -89,16 +90,15 @@ if ($rights == 5 || $rights >= 6) {
             }
         } else {
             echo '<h3>' . $lng_lib['upload_article'] . '</h3>' . $lng_lib['supported_encoding'] . ' Win-1251, KOI8-R, UTF-8<br/><br/>' .
-                '<form action="index.php?act=load&amp;id=' . $id . '" method="post" enctype="multipart/form-data">' .
-                $lng['title'] . ' (max. 50)<br/>' . '<input type="text" name="name"/><br/>' .
-                $lng_lib['announce'] . ' (max. 100)<br/><input type="text" name="anons"/><br/>' .
-                $lng_lib['select_text_file'] . ' ( .txt):<br/><input type="file" name="fail"/>' .
-                '<p><input type="submit" name="submit" value="' . $lng['sent'] . '"/></p>' .
-                '</form>' .
-                '<p><a href ="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
+                 '<form action="index.php?act=load&amp;id=' . $id . '" method="post" enctype="multipart/form-data">' .
+                 $lng['title'] . ' (max. 50)<br/>' . '<input type="text" name="name"/><br/>' .
+                 $lng_lib['announce'] . ' (max. 100)<br/><input type="text" name="anons"/><br/>' .
+                 $lng_lib['select_text_file'] . ' ( .txt):<br/><input type="file" name="fail"/>' .
+                 '<p><input type="submit" name="submit" value="' . $lng['sent'] . '"/></p>' .
+                 '</form>' .
+                 '<p><a href ="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
         }
     }
 } else {
     header("location: index.php");
 }
-?>

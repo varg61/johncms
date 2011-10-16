@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -18,7 +18,7 @@ if ($rights < 7) {
 }
 
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | HTTP Antiflood</div>';
-switch ($mod){
+switch ($mod) {
     case 'white':
         echo '<div class="topmenu"><a href="index.php?act=httpaf">Обзор</a> | <b>Белый список</b> | <a href="index.php?act=httpaf&amp;mod=black">Черный список</a></div>';
         echo '<div class="menu"><p>';
@@ -49,5 +49,3 @@ switch ($mod){
         echo '</p></div>';
 }
 echo '<div class="phdr">&#160;</div>';
-  
-?>

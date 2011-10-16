@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -25,7 +25,7 @@ echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></
 */
 if (!isset($set['news']) || isset($_GET['reset'])) {
     // Задаем настройки по умолчанию
-    $settings = array (
+    $settings = array(
         'view' => '1',
         'size' => '200',
         'quantity' => '3',
@@ -67,24 +67,23 @@ if (!isset($set['news']) || isset($_GET['reset'])) {
 -----------------------------------------------------------------
 */
 echo '<form action="index.php?act=news" method="post"><div class="menu"><p>' .
-    '<h3>' . $lng['apperance'] . '</h3>' .
-    '<input type="radio" value="1" name="view" ' . ($settings['view'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['heading_and_text'] . '<br />' .
-    '<input type="radio" value="2" name="view" ' . ($settings['view'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['heading'] . '<br />' .
-    '<input type="radio" value="3" name="view" ' . ($settings['view'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng['text'] . '<br />' .
-    '<input type="radio" value="0" name="view" ' . (!$settings['view'] ? 'checked="checked"' : '') . '/>&#160;<b>' . $lng['dont_display'] . '</b></p>' .
-    '<p><input name="breaks" type="checkbox" value="1" ' . ($settings['breaks'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['line_foldings'] . '<br />' .
-    '<input name="smileys" type="checkbox" value="1" ' . ($settings['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br />' .
-    '<input name="tags" type="checkbox" value="1" ' . ($settings['tags'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['bbcode'] . '<br />' .
-    '<input name="kom" type="checkbox" value="1" ' . ($settings['kom'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['comments'] . '</p>' .
-    '<p><h3>' . $lng['text_size'] . '</h3>&#160;' .
-    '<input type="text" size="3" maxlength="3" name="size" value="' . $settings['size'] . '" />&#160;(50 - 500)</p>' .
-    '<p><h3>' . $lng['news_count'] . '</h3>&#160;' .
-    '<input type="text" size="3" maxlength="2" name="quantity" value="' . $settings['quantity'] . '" />&#160;(1 - 15)</p>' .
-    '<p><h3>' . $lng['news_howmanydays_display'] . '</h3><input type="text" size="3" maxlength="2" name="days" value="' . $settings['days'] . '" />&#160;(0 - 15)<br />' .
-    '<small>0 - ' . $lng['without_limit'] . '</small></p>' .
-    '<p><input type="submit" value="' . $lng['save'] . '" name="submit" /></p></div>' .
-    '<div class="phdr"><a href="index.php?act=news&amp;reset">' . $lng['reset_settings'] . '</a>' .
-    '</div></form>' .
-    '<p><a href="index.php">' . $lng['admin_panel'] . '</a><br />' .
-    '<a href="../news/index.php">' . $lng['to_news'] . '</a></p>';
-?>
+     '<h3>' . $lng['apperance'] . '</h3>' .
+     '<input type="radio" value="1" name="view" ' . ($settings['view'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['heading_and_text'] . '<br />' .
+     '<input type="radio" value="2" name="view" ' . ($settings['view'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['heading'] . '<br />' .
+     '<input type="radio" value="3" name="view" ' . ($settings['view'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng['text'] . '<br />' .
+     '<input type="radio" value="0" name="view" ' . (!$settings['view'] ? 'checked="checked"' : '') . '/>&#160;<b>' . $lng['dont_display'] . '</b></p>' .
+     '<p><input name="breaks" type="checkbox" value="1" ' . ($settings['breaks'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['line_foldings'] . '<br />' .
+     '<input name="smileys" type="checkbox" value="1" ' . ($settings['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['smileys'] . '<br />' .
+     '<input name="tags" type="checkbox" value="1" ' . ($settings['tags'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['bbcode'] . '<br />' .
+     '<input name="kom" type="checkbox" value="1" ' . ($settings['kom'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['comments'] . '</p>' .
+     '<p><h3>' . $lng['text_size'] . '</h3>&#160;' .
+     '<input type="text" size="3" maxlength="3" name="size" value="' . $settings['size'] . '" />&#160;(50 - 500)</p>' .
+     '<p><h3>' . $lng['news_count'] . '</h3>&#160;' .
+     '<input type="text" size="3" maxlength="2" name="quantity" value="' . $settings['quantity'] . '" />&#160;(1 - 15)</p>' .
+     '<p><h3>' . $lng['news_howmanydays_display'] . '</h3><input type="text" size="3" maxlength="2" name="days" value="' . $settings['days'] . '" />&#160;(0 - 15)<br />' .
+     '<small>0 - ' . $lng['without_limit'] . '</small></p>' .
+     '<p><input type="submit" value="' . $lng['save'] . '" name="submit" /></p></div>' .
+     '<div class="phdr"><a href="index.php?act=news&amp;reset">' . $lng['reset_settings'] . '</a>' .
+     '</div></form>' .
+     '<p><a href="index.php">' . $lng['admin_panel'] . '</a><br />' .
+     '<a href="../news/index.php">' . $lng['to_news'] . '</a></p>';

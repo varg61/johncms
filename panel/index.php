@@ -121,4 +121,3 @@ if ($act && ($key = array_search($act, $array)) !== false && file_exists('includ
 }
 
 require('../incfiles/end.php');
-?>

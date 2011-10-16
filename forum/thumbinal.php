@@ -1,15 +1,16 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
-function format($name) {
+function format($name)
+{
     $f1 = strrpos($name, ".");
     $f2 = substr($name, $f1 + 1, 999);
     $fname = strtolower($f2);
@@ -19,7 +20,7 @@ function format($name) {
 $file = isset($_GET['file']) ? htmlspecialchars(urldecode($_GET['file'])) : NULL;
 if ($file && file_exists('../files/forum/attach/' . $file)) {
     $att_ext = strtolower(format('../files/forum/attach/' . $file));
-    $pic_ext = array (
+    $pic_ext = array(
         'gif',
         'jpg',
         'jpeg',
@@ -74,4 +75,3 @@ if ($file && file_exists('../files/forum/attach/' . $file)) {
         }
     }
 }
-?>

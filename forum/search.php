@@ -157,15 +157,15 @@ switch ($act) {
         */
         if (core::$user_id) {
             $search_val = mb_strtolower($search);
-            if(($history = registry::user_data_get('forum_search')) === false) $history = array();
+            if (($history = registry::user_data_get('forum_search')) === false) $history = array();
             // Записываем данные в историю
-            if($to_history && !in_array($search_val, $history)){
+            if ($to_history && !in_array($search_val, $history)) {
                 if (count($history) > 20) array_shift($history);
                 $history[] = $search_val;
                 registry::user_data_put('forum_search', $history);
             }
             // Показываем историю поиска
-            if(!empty($history)){
+            if (!empty($history)) {
                 sort($history);
                 foreach ($history as $val) $history_list[] = '<a href="search.php?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
                 echo '<div class="topmenu">' .

@@ -36,7 +36,7 @@ if ($user_id) {
         $manifest_text = 'Manifest-Version: 1.0
 MIDlet-1: Book ' . $id . ', , br.BookReader
 MIDlet-Name: Book ' . $id .
-            '
+                         '
 MIDlet-Vendor: JohnCMS
 MIDlet-Version: 1.5.3
 MIDletX-No-Command: true
@@ -67,7 +67,7 @@ TCBR-Platform: Generic version (all phones)';
         $jad_text = 'Manifest-Version: 1.0
 MIDlet-1: Book ' . $id . ', , br.BookReader
 MIDlet-Name: Book ' . $id .
-            '
+                    '
 MIDlet-Vendor: JohnCMS
 MIDlet-Version: 1.5.3
 MIDletX-No-Command: true
@@ -84,12 +84,10 @@ MIDlet-Jar-URL: ' . $set['homeurl'] . '/library/files/' . $id . '.jar';
         fclose($files);
     }
     echo $lng_lib['download_java_help'] . '<br /><br />' .
-        $lng['title'] . ': ' . $res['name'] . '<br />' .
-        $lng['download'] . ': <a href="../files/library/' . $id . '.jar">JAR</a> | <a href="../files/library/' . $id . '.jad">JAD</a>' .
-        '<p><a href="index.php?id=' . $id . '">' . $lng['to_article'] . '</a></p>';
+         $lng['title'] . ': ' . $res['name'] . '<br />' .
+         $lng['download'] . ': <a href="../files/library/' . $id . '.jar">JAR</a> | <a href="../files/library/' . $id . '.jad">JAD</a>' .
+         '<p><a href="index.php?id=' . $id . '">' . $lng['to_article'] . '</a></p>';
 } else {
     echo '<p>' . $lng['access_guest_forbidden'] . '</p>' .
-        '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
+         '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
 }
-
-?>

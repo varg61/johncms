@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if ($rights == 3 || $rights >= 6) {
@@ -54,15 +51,14 @@ if ($rights == 3 || $rights >= 6) {
         */
         require('../incfiles/head.php');
         echo '<div class="phdr"><a href="index.php?id=' . $id . '"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['topic_rename'] . '</div>' .
-            '<div class="menu"><form action="index.php?act=ren&amp;id=' . $id . '" method="post">' .
-            '<p><h3>' . $lng_forum['topic_name'] . '</h3>' .
-            '<input type="text" name="nn" value="' . $ms['text'] . '"/></p>' .
-            '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
-            '</form></div>' .
-            '<div class="phdr"><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></div>';
+             '<div class="menu"><form action="index.php?act=ren&amp;id=' . $id . '" method="post">' .
+             '<p><h3>' . $lng_forum['topic_name'] . '</h3>' .
+             '<input type="text" name="nn" value="' . $ms['text'] . '"/></p>' .
+             '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
+             '</form></div>' .
+             '<div class="phdr"><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></div>';
     }
 } else {
     require('../incfiles/head.php');
     echo functions::display_error($lng['access_forbidden']);
 }
-?>

@@ -1,37 +1,39 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Restricted access');
-class sitemap {
+class sitemap
+{
     // Настройки карты форума
-    private $cache_forum_map = 72;           // Время кэширования карты форума (часов)
-    private $cache_forum_contents = 48;      // Время кэширования оглавления форума (часов)
-    private $cache_forum_file = 'map_forum'; // Имя файла кэша (без расширения)
+    private $cache_forum_map = 72;                                             // Время кэширования карты форума (часов)
+    private $cache_forum_contents = 48;                                        // Время кэширования оглавления форума (часов)
+    private $cache_forum_file = 'map_forum';                                   // Имя файла кэша (без расширения)
 
     // Настройки карты Библиотеки
-    private $cache_lib_map = 72;         // Время кэширования карты библиотеки (часов)
-    private $cache_lib_contents = 48;    // Время кэширования оглавления библиотеки (часов)
-    private $cache_lib_file = 'map_lib'; // Имя файла кэша (без расширения)
+    private $cache_lib_map = 72;                                               // Время кэширования карты библиотеки (часов)
+    private $cache_lib_contents = 48;                                          // Время кэширования оглавления библиотеки (часов)
+    private $cache_lib_file = 'map_lib';                                       // Имя файла кэша (без расширения)
 
     // Системные настройки
-    private $links_count = 140; // Число ссылок в блоке
-    private $set;               // Системные настройки модуля
-    private $page;              //
+    private $links_count = 140;                                                // Число ссылок в блоке
+    private $set;                                                              // Системные настройки модуля
+    private $page;
 
     /*
     -----------------------------------------------------------------
     Задаем настройки
     -----------------------------------------------------------------
     */
-    function __construct() {
+    function __construct()
+    {
         global $set;
         $this->set = isset($set['sitemap']) ? unserialize($set['sitemap']) : array();
         $this->page = isset($_GET['p']) ? abs(intval($_GET['p'])) : 0;
@@ -42,9 +44,10 @@ class sitemap {
     Карта сайта
     -----------------------------------------------------------------
     */
-    public function site() {
+    public function site()
+    {
         return ($this->set['forum'] ? '<p><b>Forum Map</b><br />' . $this->forum_map() . '</p>' : '') .
-        ($this->set['lib'] ? '<p><b>Library Map</b><br />' . $this->library_map() . '</p>' : '');
+               ($this->set['lib'] ? '<p><b>Library Map</b><br />' . $this->library_map() . '</p>' : '');
     }
 
     /*
@@ -52,7 +55,8 @@ class sitemap {
     Содержание разделов форума
     -----------------------------------------------------------------
     */
-    public function forum_contents() {
+    public function forum_contents()
+    {
         global $rootpath, $set, $id, $lng;
         $file = $rootpath . 'files/cache/' . $this->cache_forum_file . '_' . $id . ($this->page ? '_' . $this->page : '') . '.dat';
         if (!$id)
@@ -80,7 +84,8 @@ class sitemap {
     Содержание разделов Библиотеки
     -----------------------------------------------------------------
     */
-    public function library_contents() {
+    public function library_contents()
+    {
         global $rootpath, $set, $id, $lng;
         $file = $rootpath . 'files/cache/' . $this->cache_lib_file . '_' . $id . ($this->page ? '_' . $this->page : '') . '.dat';
         if (!$id)
@@ -108,7 +113,8 @@ class sitemap {
     Кэш карты Форума
     -----------------------------------------------------------------
     */
-    private function forum_map() {
+    private function forum_map()
+    {
         global $rootpath, $set;
         $file = $rootpath . 'files/cache/' . $this->cache_forum_file . '.dat';
         if (file_exists($file) && filemtime($file) > (time() - $this->cache_forum_map * 3600)) {
@@ -131,7 +137,7 @@ class sitemap {
                         }
                     }
                 }
-                if(isset($out))
+                if (isset($out))
                     return file_put_contents($file, implode('<br />' . "\r\n", $out)) ? implode('<br />', $out) : 'Forum cache error';
             }
         }
@@ -143,7 +149,8 @@ class sitemap {
     Кэш карты Библиотеки
     -----------------------------------------------------------------
     */
-    private function library_map() {
+    private function library_map()
+    {
         global $rootpath, $set;
         $file = $rootpath . 'files/cache/' . $this->cache_lib_file . '.dat';
         if (file_exists($file) && filemtime($file) > (time() - $this->cache_lib_map * 3600)) {
@@ -162,11 +169,11 @@ class sitemap {
                                 $out[] = '<a href="' . $set['homeurl'] . '/library/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . functions::checkout($text) . ' (' . ($i + 1) . ')</a>';
                             }
                         } else {
-                            $out []= '<a href="../library/contents.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a>';
+                            $out [] = '<a href="../library/contents.php?id=' . $res['id'] . '">' . functions::checkout($text) . '</a>';
                         }
                     }
                 }
-                if(isset($out))
+                if (isset($out))
                     return file_put_contents($file, implode('<br />' . "\r\n", $out)) ? implode('<br />', $out) : 'Library cache error';
             }
         }

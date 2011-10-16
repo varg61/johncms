@@ -723,4 +723,3 @@ switch ($mod) {
              '<div class="phdr"><a href="../forum/index.php">' . $lng_forum['to_forum'] . '</a></div>';
 }
 echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
-?>

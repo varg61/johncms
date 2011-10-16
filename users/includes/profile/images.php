@@ -1,17 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = $lng_profile['profile_edit'];
@@ -37,7 +33,7 @@ switch ($mod) {
                 // Обрабатываем фото
                 $handle->file_new_name_body = $user['id'];
                 //$handle->mime_check = false;
-                $handle->allowed = array (
+                $handle->allowed = array(
                     'image/jpeg',
                     'image/gif',
                     'image/png'
@@ -51,8 +47,8 @@ switch ($mod) {
                 $handle->process('../files/users/avatar/');
                 if ($handle->processed) {
                     echo '<div class="gmenu"><p>' . $lng_profile['avatar_uploaded'] . '<br />' .
-                        '<a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
-                        '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
+                         '<a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>' .
+                         '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></div>';
                 } else {
                     echo functions::display_error($handle->error);
                 }
@@ -60,13 +56,13 @@ switch ($mod) {
             }
         } else {
             echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['id'] . '">' .
-                '<div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
-                '<input type="file" name="imagefile" value="" />' .
-                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" /></p>' .
-                '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" />' .
-                '</p></div></form>' .
-                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4']
-                . '</small></div>';
+                 '<div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
+                 '<input type="file" name="imagefile" value="" />' .
+                 '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" /></p>' .
+                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" />' .
+                 '</p></div></form>' .
+                 '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4']
+                 . '</small></div>';
         }
         break;
 
@@ -78,7 +74,7 @@ switch ($mod) {
                 // Обрабатываем фото
                 $handle->file_new_name_body = $user['id'];
                 //$handle->mime_check = false;
-                $handle->allowed = array (
+                $handle->allowed = array(
                     'image/jpeg',
                     'image/gif',
                     'image/png'
@@ -112,12 +108,11 @@ switch ($mod) {
             }
         } else {
             echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '"><div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
-                '<input type="file" name="imagefile" value="" />' .
-                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" /></p>' .
-                '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
-                '</div></form>' .
-                '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . 'kb.<br />' . $lng_profile['select_image_help_5'] . '<br />' . $lng_profile['select_image_help_3'] . '</small></div>';
+                 '<input type="file" name="imagefile" value="" />' .
+                 '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * $set['flsz']) . '" /></p>' .
+                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
+                 '</div></form>' .
+                 '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . $set['flsz'] . 'kb.<br />' . $lng_profile['select_image_help_5'] . '<br />' . $lng_profile['select_image_help_3'] . '</small></div>';
         }
         break;
 }
-?>

@@ -109,6 +109,6 @@ if (isset($_POST['draft'])) {
          '<input type="submit" name="submit" value="' . core::$lng['sent'] . '"/> ' .
          '<input type="submit" name="draft" value="' . $lng_pm['draft'] . '"/>' .
          '</p></form></div>' .
-         '<div class="phdr">' . (core::$user_set['translit'] ? '<a href="../pages/faq.php?act=trans">' . core::$lng['translit'] . '</a> | ' : '') . '<a href="../pages/faq.php?act=smileys">' . core::$lng['smileys'] . '</a></div>' .
+         '<div class="phdr">' . (core::$user_set['translit'] ? '<a href="../pages/faq.php?act=trans">' . core::$lng['translit'] . '</a> | ' : '') . '<a href="../pages/smileys.php">' . core::$lng['smileys'] . '</a></div>' .
          '<p><a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '">' . core::$lng['back'] . '</a></p>';
 }

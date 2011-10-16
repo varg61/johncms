@@ -47,18 +47,18 @@ if ($search && !$error) {
     Выводим результаты поиска
     -----------------------------------------------------------------
     */
-    $search_db = functions::rus_lat(mb_strtolower($search));
-    $search_db = strtr($search_db, array (
+    //$search_db = functions::rus_lat(mb_strtolower($search));
+    $search_db = strtr($search, array (
         '_' => '\\_',
         '%' => '\\%'
     ));
     $search_db = '%' . $search_db . '%';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "'"), 0);
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `name` LIKE '" . mysql_real_escape_string($search_db) . "'"), 0);
     echo '<div class="phdr"><b>' . $lng['search_results'] . '</b></div>';
     if ($total > $kmess)
         echo '<div class="topmenu">' . functions::display_pagination('search.php?search=' . urlencode($search) . '&amp;', $start, $total, $kmess) . '</div>';
     if ($total > 0) {
-        $req = mysql_query("SELECT * FROM `users` WHERE `name_lat` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `name` ASC LIMIT $start, $kmess");
+        $req = mysql_query("SELECT * FROM `users` WHERE `name` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `name` ASC LIMIT $start, $kmess");
         $i = 0;
         while ($res = mysql_fetch_assoc($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
@@ -86,5 +86,3 @@ echo '<p>' . ($search && !$error ? '<a href="search.php">' . $lng['search_new'] 
      '<a href="index.php">' . $lng['back'] . '</a></p>';
 
 require('../incfiles/end.php');
-
-?>

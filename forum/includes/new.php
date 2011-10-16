@@ -117,7 +117,7 @@ if ($user_id) {
                     if ($res['realid'] == 1)
                         echo '&#160;' . functions::get_image('rating.png');
                     echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
-                        '</a>&#160;[' . $colmes1 . ']';
+                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
                         echo '<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&#160;&gt;&gt;</a>';
                     echo '<br /><div class="sub"><a href="index.php?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
@@ -135,7 +135,7 @@ if ($user_id) {
             echo '<div class="phdr">' . $lng['total'] . ': ' . $count . '</div>';
             if ($count > $kmess) {
                 echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</div>' .
-                    '<p><form action="index.php?act=new&amp;do=period&amp;vr=' . $vr . '" method="post">
+                     '<p><form action="index.php?act=new&amp;do=period&amp;vr=' . $vr . '" method="post">
                     <input type="text" name="page" size="2"/>
                     <input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
@@ -175,7 +175,7 @@ if ($user_id) {
                     $cpg = ceil($colmes1 / $kmess);
                     $nick = mysql_fetch_assoc($colmes);
                     // Значки
-                    $icons = array (
+                    $icons = array(
                         (isset($np) ? (!$res['vip'] ? functions::get_image('forum_normal.png') : '') : functions::get_image('forum_new.png')),
                         ($res['vip'] ? functions::get_image('forum_pin.png') : ''),
                         ($res['realid'] ? functions::get_image('rating.png') : ''),
@@ -183,13 +183,13 @@ if ($user_id) {
                     );
                     echo functions::display_menu($icons, '&#160;', '&#160;');
                     echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
-                        '</a>&#160;[' . $colmes1 . ']';
+                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
                         echo '&#160;<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&gt;&gt;</a>';
                     echo '<div class="sub">' . $res['from'] . ($colmes1 > 1 ? '&#160;/&#160;' . $nick['from'] : '') .
-                        ' <span class="gray">(' . functions::display_date($nick['time']) . ')</span><br />' .
-                        '<a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a>&#160;/&#160;<a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>' .
-                        '</div></div>';
+                         ' <span class="gray">(' . functions::display_date($nick['time']) . ')</span><br />' .
+                         '<a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a>&#160;/&#160;<a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>' .
+                         '</div></div>';
                     ++$i;
                 }
             } else {
@@ -198,11 +198,11 @@ if ($user_id) {
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
             if ($total > $kmess) {
                 echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>' .
-                    '<p><form action="index.php" method="get">' .
-                    '<input type="hidden" name="act" value="new"/>' .
-                    '<input type="text" name="page" size="2"/>' .
-                    '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
-                    '</form></p>';
+                     '<p><form action="index.php" method="get">' .
+                     '<input type="hidden" name="act" value="new"/>' .
+                     '<input type="text" name="page" size="2"/>' .
+                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+                     '</form></p>';
             }
             echo '<p>';
             if ($total)
@@ -229,7 +229,7 @@ if ($user_id) {
             $nam = mysql_fetch_assoc($nikuser);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Значки
-            $icons = array (
+            $icons = array(
                 ($np ? (!$res['vip'] ? functions::get_image('forum_normal.png') : '') : functions::get_image('forum_new.png')),
                 ($res['vip'] ? functions::get_image('forum_pin.png') : ''),
                 ($res['realid'] ? functions::get_image('rating.png') : ''),
@@ -253,4 +253,3 @@ if ($user_id) {
     }
     echo '<div class="phdr"><a href="index.php">' . $lng['to_forum'] . '</a></div>';
 }
-?>

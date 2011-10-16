@@ -374,4 +374,3 @@ switch ($mod) {
              '<a href="index.php?act=ads&amp;mod=clear">' . $lng['links_delete_hidden'] . '</a><br />' .
              '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
 }
-?>

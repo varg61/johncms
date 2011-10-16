@@ -1,16 +1,13 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = htmlspecialchars($user['name']) . ': ' . $lng['ip_history'];
@@ -34,7 +31,7 @@ if (!$rights && $user_id != $user['id']) {
 */
 echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['ip_history'] . '</div>';
 echo '<div class="user"><p>';
-$arg = array (
+$arg = array(
     'lastvisit' => 1,
     'header' => '<b>ID:' . $user['id'] . '</b>'
 );
@@ -57,8 +54,7 @@ echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
 if ($total > $kmess) {
     echo '<p>' . functions::display_pagination('profile.php?act=ip&amp;user=' . $user['id'] . '&amp;', $start, $total, $kmess) . '</p>';
     echo '<p><form action="profile.php?act=ip&amp;user=' . $user['id'] . '" method="post">' .
-        '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
-        '</form></p>';
+         '<input type="text" name="page" size="2"/>' .
+         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+         '</form></p>';
 }
-?>

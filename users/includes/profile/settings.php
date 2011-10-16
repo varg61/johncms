@@ -171,7 +171,7 @@ switch ($mod) {
              '<input name="digest" type="checkbox" value="1" ' . ($set_user['digest'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['digest'] .
              '</p><p><h3>' . $lng['text_input'] . '</h3>' .
              '<input type="text" name="field_h" size="2" maxlength="1" value="' . $set_user['field_h'] . '"/> ' . $lng['field_height'] . ' (1-9)<br />';
-        if(core::$lng_iso == 'ru' || core::$lng_iso == 'uk') echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'];
+        if (core::$lng_iso == 'ru' || core::$lng_iso == 'uk') echo '<input name="translit" type="checkbox" value="1" ' . ($set_user['translit'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['translit'];
         echo '</p><p><h3>' . $lng['apperance'] . '</h3>' .
              '<input type="text" name="kmess" size="2" maxlength="2" value="' . $set_user['kmess'] . '"/> ' . $lng['lines_on_page'] . ' (5-99)<br />' .
              '<input name="quick_go" type="checkbox" value="1" ' . ($set_user['quick_go'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['quick_jump'] .

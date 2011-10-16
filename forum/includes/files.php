@@ -90,7 +90,7 @@ if ($do || isset($_GET['new'])) {
         LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
         LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
         WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . ($rights >= 7 ? '' : " AND `del` != '1'") . $sql .
-        "ORDER BY `time` DESC LIMIT $start,$kmess");
+                           "ORDER BY `time` DESC LIMIT $start,$kmess");
         $i = 0;
         while ($res = mysql_fetch_assoc($req)) {
             $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
@@ -138,7 +138,7 @@ if ($do || isset($_GET['new'])) {
         if ($total > $kmess) {
             // Постраничная навигация
             echo '<p>' . functions::display_pagination('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new'
-                                       : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>' .
+                                                                              : 'do=' . $do) . $lnk . '&amp;', $start, $total, $kmess) . '</p>' .
                  '<p><form action="index.php" method="get">' .
                  '<input type="hidden" name="act" value="files"/>' .
                  '<input type="hidden" name="do" value="' . $do . '"/>' . $input . '<input type="text" name="page" size="2"/>' .
@@ -178,4 +178,3 @@ if ($do || isset($_GET['new'])) {
 echo '<p>' . (($do || isset($_GET['new']))
         ? '<a href="index.php?act=files' . $lnk . '">' . $lng_forum['section_list'] . '</a><br />'
         : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">' . $lng['forum'] . '</a></p>';
-?>

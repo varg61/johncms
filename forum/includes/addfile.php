@@ -180,4 +180,3 @@ switch ($res['type']) {
     default:
         echo functions::display_error($lng['error_wrong_data']);
 }
-?>

@@ -1,19 +1,17 @@
 <?php
 
-/*
-////////////////////////////////////////////////////////////////////////////////
-// JohnCMS                Mobile Content Management System                    //
-// Project site:          http://johncms.com                                  //
-// Support site:          http://gazenwagen.com                               //
-////////////////////////////////////////////////////////////////////////////////
-// Lead Developer:        Oleg Kasyanov   (AlkatraZ)  alkatraz@gazenwagen.com //
-// Development Team:      Eugene Ryabinin (john77)    john77@gazenwagen.com   //
-//                        Dmitry Liseenko (FlySelf)   flyself@johncms.com     //
-////////////////////////////////////////////////////////////////////////////////
-*/
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 //TODO: Поставить настраиваемый по вызову (через ссылку) размер изображений
-function format($name) {
+function format($name)
+{
     $f1 = strrpos($name, ".");
     $f2 = substr($name, $f1 + 1, 999);
     $fname = strtolower($f2);
@@ -24,7 +22,7 @@ $u = isset($_GET['u']) ? abs(intval($_GET['u'])) : NULL;
 $file = isset($_GET['f']) ? htmlspecialchars(urldecode($_GET['f'])) : NULL;
 if ($u && $file && file_exists('../files/users/album/' . $u . '/' . $file)) {
     $att_ext = strtolower(format('../files/users/album/' . $u . '/' . $file));
-    $pic_ext = array (
+    $pic_ext = array(
         'gif',
         'jpg',
         'jpeg',
@@ -77,5 +75,3 @@ if ($u && $file && file_exists('../files/users/album/' . $u . '/' . $file)) {
         ob_end_flush();
     }
 }
-
-?>

@@ -159,4 +159,3 @@ if ($total > $kmess) {
         '</form></p>';
 }
 echo '<p><a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></p>';
-?>
