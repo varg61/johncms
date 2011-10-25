@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-class registry
+class settings
 {
     /*
     -----------------------------------------------------------------
@@ -21,10 +21,10 @@ class registry
     public static function user_data_get($key = '')
     {
         if (core::$user_id && !empty($key)) {
-            $req = mysql_query("SELECT * FROM `cms_registry_users` WHERE `user_id` = '" . core::$user_id . "' AND `key` = '" . $key . "' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `cms_users_settings` WHERE `user_id` = '" . core::$user_id . "' AND `key` = '" . $key . "' LIMIT 1");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
-                if (!empty($res['val'])) return unserialize($res['val']);
+                if (!empty($res['value'])) return unserialize($res['value']);
             }
         }
         return false;
@@ -39,21 +39,21 @@ class registry
     {
         if(empty($key) || !empty($val) && !is_array($val)) return false;
         if(empty($val)){
-            @mysql_query("DELETE FROM `cms_registry_users` WHERE `user_id` = '" . core::$user_id . "' AND `key` = '" . $key . "' LIMIT 1");
+            @mysql_query("DELETE FROM `cms_users_settings` WHERE `user_id` = '" . core::$user_id . "' AND `key` = '" . $key . "' LIMIT 1");
             return true;
         }
         $val = mysql_real_escape_string(serialize($val));
         if (self::user_data_get($key) === false) {
             // Добавляем новую запись
-            mysql_query("INSERT INTO `cms_registry_users` SET
+            mysql_query("INSERT INTO `cms_users_settings` SET
                 `user_id` = '" . core::$user_id . "',
                 `key` = '$key',
-                `val` = '$val'
+                `value` = '$val'
             ");
         } else {
             // Обновляем имеющуюся запись
-            mysql_query("UPDATE `cms_registry_users` SET
-                `val` = '$val'
+            mysql_query("UPDATE `cms_users_settings` SET
+                `value` = '$val'
                 WHERE `user_id` = '" . core::$user_id . "' AND `key` = '$key'
                 LIMIT 1
             ");

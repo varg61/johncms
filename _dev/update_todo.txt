@@ -1,6 +1,35 @@
 ﻿DROP TABLE IF EXISTS `cms_users_data`;
+DROP TABLE IF EXISTS `cms_users_settings`;
+CREATE TABLE `cms_users_settings` (
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `key` varchar(32) NOT NULL DEFAULT '',
+  `value` text NOT NULL,
+  PRIMARY KEY (`user_id`,`key`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+
+
+
+
+
+ALTER TABLE `users` DROP INDEX `name_lat`;
+ALTER TABLE `users` CHANGE `name_lat` `nickname` VARCHAR( 32 ) NOT NULL DEFAULT '';
+ALTER TABLE `users` ADD UNIQUE ( `nickname` );
+ALTER TABLE `users` ADD `email` VARCHAR( 50 ) NOT NULL DEFAULT '' AFTER `password`;
+ALTER TABLE `users` ADD INDEX `email` ( `email` ( 10 ) );
 ALTER TABLE `users` DROP `set_user`;
 ALTER TABLE `users` DROP `set_forum`;
 ALTER TABLE `users` DROP `smileys`;
+
+Убрать после выполнения скрипта
 ALTER TABLE `users` DROP `name_lat`;
-ALTER TABLE `users` ADD UNIQUE (`name`);
+
+Проверить поле E-mail на повторяющиеся записи. Удалить дубликаты.
+
+
+

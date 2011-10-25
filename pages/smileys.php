@@ -44,7 +44,7 @@ switch ($act) {
              '</div>';
         if ($total) {
             if (!$is_mobile) {
-                if (($user_sm = registry::user_data_get('smileys')) === false) $user_sm = array();
+                if (($user_sm = settings::user_data_get('smileys')) === false) $user_sm = array();
                 echo '<div class="topmenu">' .
                      '<a href="smileys.php?act=my_smileys">' . $lng['my_smileys'] . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')</div>' .
                      '<form action="smileys.php?act=set_my_sm&amp;cat=' . $cat . '&amp;start=' . $start . '" method="post">';
@@ -84,7 +84,7 @@ switch ($act) {
         }
         echo '<div class="phdr"><a href="smileys.php"><b>' . $lng['smileys'] . '</b></a> | ' . $lng['admin_smileys'] . '</div>';
         if (!$is_mobile) {
-            if (($user_sm = registry::user_data_get('smileys')) === false) $user_sm = array();
+            if (($user_sm = settings::user_data_get('smileys')) === false) $user_sm = array();
             echo '<div class="topmenu"><a href="smileys.php?act=my_smileys">' . $lng['my_smileys'] . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')</div>' .
                  '<form action="smileys.php?act=set_my_sm&amp;start=' . $start . '&amp;adm" method="post">';
         }
@@ -136,7 +136,7 @@ switch ($act) {
             exit;
         }
         echo '<div class="phdr"><a href="smileys.php"><b>' . $lng['smileys'] . '</b></a> | ' . $lng['my_smileys'] . '</div>';
-        if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
+        if (($smileys = settings::user_data_get('smileys')) === false) $smileys = array();
         $total = count($smileys);
         if ($total)
             echo '<form action="smileys.php?act=set_my_sm&amp;start=' . $start . '" method="post">';
@@ -187,7 +187,7 @@ switch ($act) {
             require('../incfiles/end.php');
             exit;
         }
-        if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
+        if (($smileys = settings::user_data_get('smileys')) === false) $smileys = array();
         if (!is_array($smileys))
             $smileys = array();
         if ($delete)
@@ -202,7 +202,7 @@ switch ($act) {
             $smileys = array_chunk($smileys, $user_smileys, TRUE);
             $smileys = $smileys[0];
         }
-        registry::user_data_put('smileys', $smileys);
+        settings::user_data_put('smileys', $smileys);
         if ($delete || isset($_GET['clean'])) {
             header('location: smileys.php?act=my_smileys&start=' . $start . '');
         } else {
@@ -218,7 +218,7 @@ switch ($act) {
         */
         echo '<div class="phdr"><a href="faq.php"><b>F.A.Q.</b></a> | ' . $lng['smileys'] . '</div>';
         if ($user_id && !$is_mobile) {
-            if (($smileys = registry::user_data_get('smileys')) === false) $smileys = array();
+            if (($smileys = settings::user_data_get('smileys')) === false) $smileys = array();
             $mycount = !empty($smileys) ? count($smileys) : '0';
             echo '<div class="topmenu"><a href="smileys.php?act=my_smileys">' . $lng['my_smileys'] . '</a> (' . $mycount . ' / ' . $user_smileys . ')</div>';
         }

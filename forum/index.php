@@ -21,8 +21,8 @@ if (isset($_SESSION['ref']))
 Настройки форума
 -----------------------------------------------------------------
 */
-if(!core::$user_id || ($set_forum = registry::user_data_get('set_forum')) === false){
-    $set_forum = registry::set_forum_default();
+if(!core::$user_id || ($set_forum = settings::user_data_get('set_forum')) === false){
+    $set_forum = settings::set_forum_default();
 }
 
 /*

@@ -44,8 +44,8 @@ switch ($mod) {
         */
         echo '<div class="phdr"><b>' . $lng['settings'] . '</b> | ' . $lng['forum'] . '</div>' .
              '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
-        if (($set_forum = registry::user_data_get('set_forum')) === false) {
-            $set_forum = registry::set_forum_default();
+        if (($set_forum = settings::user_data_get('set_forum')) === false) {
+            $set_forum = settings::set_forum_default();
         }
         if (isset($_POST['submit'])) {
             $set_forum['farea'] = isset($_POST['farea']);
@@ -57,12 +57,12 @@ switch ($mod) {
                 $set_forum['postclip'] = 1;
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
                 $set_forum['postcut'] = 1;
-            registry::user_data_put('set_forum', $set_forum);
+            settings::user_data_put('set_forum', $set_forum);
             echo '<div class="gmenu">' . $lng['settings_saved'] . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_forum)) {
-            registry::user_data_put('set_forum');
-            $set_forum = registry::set_forum_default();
+            settings::user_data_put('set_forum');
+            $set_forum = settings::set_forum_default();
             echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         }
         echo '<form action="profile.php?act=settings&amp;mod=forum" method="post">' .
@@ -133,7 +133,7 @@ switch ($mod) {
 
             // Записываем настройки
             if (core::$user_set != $set_user) {
-                registry::user_data_put('set_user', $set_user);
+                settings::user_data_put('set_user', $set_user);
                 $_SESSION['set_ok'] = 1;
             }
             header('Location: profile.php?act=settings');
@@ -144,8 +144,8 @@ switch ($mod) {
             Задаем настройки по-умолчанию
             -----------------------------------------------------------------
             */
-            registry::user_data_put('set_user');
-            $set_user = registry::set_user_default();
+            settings::user_data_put('set_user');
+            $set_user = settings::set_user_default();
             echo '<div class="rmenu">' . $lng['settings_default'] . '</div>';
         } else {
             $set_user = core::$user_set;

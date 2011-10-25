@@ -336,7 +336,7 @@ class core
                     self::$user_id = $user_id;
                     self::$user_rights = $user_data['rights'];
                     self::$user_data = $user_data;
-                    if ((self::$user_set = registry::user_data_get('set_user')) === false) self::$user_set = registry::set_user_default();
+                    if ((self::$user_set = settings::user_data_get('set_user')) === false) self::$user_set = settings::set_user_default();
                     $this->user_ip_history();
                     $this->user_ban_check();
                 } else {
@@ -350,7 +350,7 @@ class core
             }
         } else {
             // Для неавторизованных, загружаем настройки по-умолчанию
-            self::$user_set = registry::set_user_default();
+            self::$user_set = settings::set_user_default();
         }
     }
 
@@ -410,7 +410,7 @@ class core
     {
         self::$user_id = false;
         self::$user_rights = 0;
-        self::$user_set = registry::set_user_default();
+        self::$user_set = settings::set_user_default();
         self::$user_data = array();
         unset($_SESSION['uid']);
         unset($_SESSION['ups']);
@@ -429,7 +429,7 @@ class core
             mysql_query("DELETE FROM `cms_sessions` WHERE `lastdate` < '" . (time() - 86400) . "'");
             mysql_query("DELETE FROM `cms_users_iphistory` WHERE `time` < '" . (time() - 2592000) . "'");
             mysql_query("UPDATE `cms_settings` SET  `val` = '" . time() . "' WHERE `key` = 'clean_time' LIMIT 1");
-            mysql_query("OPTIMIZE TABLE `cms_sessions` , `cms_users_iphistory`, `cms_registry_users`");
+            mysql_query("OPTIMIZE TABLE `cms_sessions` , `cms_users_iphistory`, `cms_users_settings`");
         }
     }
 
