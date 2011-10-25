@@ -16,6 +16,76 @@ require('incfiles/core.php');
 require('incfiles/head.php');
 echo '<div class="phdr"><b>' . $lng['login'] . '</b></div>';
 
+$login_data['mode'] = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
+$login_data['captcha'] = isset($_POST['captcha']) ? intval($_POST['captcha']) : false;
+if (isset($_GET['id']) && isset($_GET['p'])) {
+    $login_data['login'] = trim($_GET['id']);
+    $login_data['password'] = trim($_GET['p']);
+    $login_data['mode'] = 2;
+} elseif (isset($_POST['mode']) && isset($_POST['login']) && isset($_POST['password'])) {
+    $login_data['login'] = trim($_POST['login']);
+    $login_data['password'] = trim($_POST['password']);
+    if (isset($_POST['remember'])) $login_data['remember'] = true;
+}
+
+$login = new login($login_data);
+
+switch ($login->display_mode) {
+    case 'digest':
+        /*
+        -----------------------------------------------------------------
+        Редирект на Дайджест
+        -----------------------------------------------------------------
+        */
+        header('Location: index.php?act=digest&last=' . $user['lastdate']);
+        echo '<div class="gmenu"><p><h3>Дайджест <a href="index.php?act=digest">' . $lng['enter_on_site'] . '</a></h3></p></div>';
+        break;
+
+    case 'homepage':
+        /*
+        -----------------------------------------------------------------
+        Редирект на главную
+        -----------------------------------------------------------------
+        */
+        header('Location: index.php');
+        echo '<div class="gmenu"><p><h3>Главная <a href="index.php">' . $lng['enter_on_site'] . '</a></h3></p></div>';
+        break;
+
+    case 'captcha':
+        /*
+        -----------------------------------------------------------------
+        Показываем CAPTCHA
+        -----------------------------------------------------------------
+        */
+        break;
+
+    default:
+        /*
+        -----------------------------------------------------------------
+        Показываем LOGIN форму
+        -----------------------------------------------------------------
+        */
+        $login_style = isset(login::$error['login']) ? 'style="background-color: #FFCCCC"' : '';
+        $id_style = isset(login::$error['id']) ? 'style="background-color: #FFCCCC"' : '';
+        $pass_style = isset(login::$error['password']) ? 'style="background-color: #FFCCCC"' : '';
+
+        if (login::$error) echo functions::display_error(login::$error);
+        echo '<form action="login.php" method="post">' .
+             '<div class="gmenu"><p>' .
+             '<h3>' . core::$lng['login_name'] . '</h3>' .
+             '<input type="text" name="login" value="' . htmlentities($login_data['login'], ENT_QUOTES, 'UTF-8') . '" maxlength="20" ' . $login_style . '/><br />' .
+             '<input type="radio" name="mode" value="1" ' . ($login_data['mode'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . core::$lng['nick'] . '<br />' .
+             '<input type="radio" name="mode" value="2" ' . ($login_data['mode'] == 2 ? 'checked="checked"' : '') . '/>&#160;User ID<br />' .
+             '<input type="radio" name="mode" value="3" ' . ($login_data['mode'] == 3 ? 'checked="checked"' : '') . '/>&#160;E-mail</p>' .
+             '<p><h3>' . $lng['password'] . '</h3>' .
+             '<input type="password" name="password" maxlength="20" ' . $pass_style . '/></p>' .
+             '<p><input type="checkbox" name="remember" value="1" checked="checked"/>' . $lng['remember'] . '</p>' .
+             '<p><input type="submit" value="' . $lng['login'] . '"/></p>' .
+             '</div></form>' .
+             '<div class="phdr"><a href="users/skl.php?continue">' . $lng['forgotten_password'] . '?</a></div>';
+}
+
+
 $error = array();
 $captcha = false;
 $display_form = 1;
@@ -100,18 +170,6 @@ if (!$error && $user_pass && ($user_login || $id)) {
     } else {
         $error[] = $lng['authorisation_not_passed'];
     }
-}
-if ($display_form) {
-    if ($error)
-        echo functions::display_error($error);
-    echo '<div class="gmenu"><form action="login.php" method="post"><p>' . $lng['login_name'] . ':<br/>' .
-         '<input type="text" name="n" value="' . htmlentities($user_login, ENT_QUOTES, 'UTF-8') . '" maxlength="20"/>' .
-         '<br/>' . $lng['password'] . ':<br/>' .
-         '<input type="password" name="p" maxlength="20"/></p>' .
-         '<p><input type="checkbox" name="mem" value="1" checked="checked"/>' . $lng['remember'] . '</p>' .
-         '<p><input type="submit" value="' . $lng['login'] . '"/></p>' .
-         '</form></div>' .
-         '<div class="phdr"><a href="users/skl.php?continue">' . $lng['forgotten_password'] . '?</a></div>';
 }
 
 require('incfiles/end.php');
