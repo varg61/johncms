@@ -13,45 +13,75 @@ define('_IN_JOHNCMS', 1);
 
 class login
 {
+
     public static $error = array();
-    public $display_mode = '';
+    public static $display = '';
 
-    function __construct($var = array())
+    /*
+    -----------------------------------------------------------------
+    Авторизация (LOGIN) пользователя на сайте
+    -----------------------------------------------------------------
+    */
+    public static function do_login($var)
     {
-        if (isset($var['login']) && isset($var['password']) && isset($var['mode'])) {
-            $login_query = false;
-            if ($var['mode'] == 1 && self::check_login($var['login']) === true) {
-                $login_query = "`name` = '" . mysql_real_escape_string($var['login']) . "'";
-            } elseif ($var['mode'] == 2 && self::check_id($var['login']) === true) {
-                $login_query = "`id` = " . abs(intval($var['login']));
-            } elseif ($var['mode'] == 3 && self::check_email($var['login']) === true) {
-                $login_query = "`email` = '" . mysql_real_escape_string($var['login']) . "'";
-            }
+        $display = '';
+        $login = false;
+        $password = false;
+        $sql = false;
+        $captcha = false;
 
-            if (self::check_password($var['password']) === true && $login_query) {
-                $req = mysql_query("SELECT * FROM `users` WHERE $login_query LIMIT 1");
-                if (mysql_num_rows($req)) {
-                    $res = mysql_fetch_assoc($req);
-                    //TODO: Написать обработку CAPTCHA
-                    //if ($res['failed_login'] > 2) {
-                    //    $this->display_mode = 'captcha';
-                    //}
-                    if (md5(md5($var['password'])) == $res['password']) {
+        if (isset($var['id']) && isset($var['password'])) {
+            // Авторизация по AutoLogin
+            $login = self::check_id($var['id']);
+            $password = self::check_password($var['password']);
+            $sql = "`id` = " . abs(intval($var['id']));
+        } elseif (isset($var['login']) && isset($var['password'])) {
+            // Авторизация через форму
+            if (($login = self::check_email($var['login'])) !== false) {
+                $sql = "`email` = '" . mysql_real_escape_string($var['login']) . "' OR `nickname` = '" . mysql_real_escape_string($var['login']) . "'";
+            } else {
+                self::$error = array();
+                $login = self::check_nickname($var['login']);
+                $sql = "`nickname` = '" . mysql_real_escape_string($var['login']) . "' LIMIT 1";
+            }
+            $password = self::check_password($var['password']);
+        }
+
+        if ($login && $password && $sql && empty(self::$error)) {
+            $req = mysql_query("SELECT * FROM `users` WHERE $sql");
+            if (mysql_num_rows($req)) {
+                while ($res = mysql_fetch_assoc($req)) {
+                    if($res['login_attempt'] > 2){
+                        //TODO: Написать обработку CAPTCHA
+                        $display = 'captcha';
+                    }
+
+                    if ($res['password'] == md5(md5($var['password']))) {
+                        // Если пароль совпадает, записываем сессию и COOKIE
                         if (isset($var['remember'])) {
-                            // Установка данных COOKIE
                             setcookie("cuid", base64_encode($res['id']), time() + 3600 * 24 * 365);
                             setcookie("cups", md5($var['password']), time() + 3600 * 24 * 365);
                         }
                         $_SESSION['uid'] = $res['id'];
                         $_SESSION['ups'] = md5(md5($var['password']));
                         $set_user = settings::user_data_get('set_user');
-                        $this->display_mode = $res['lastdate'] < (time() - 3600) && $set_user['digest'] ? 'digest' : 'homepage';
+                        $display = $res['lastdate'] < (time() - 3600) && $set_user['digest'] ? 'digest' : 'homepage';
+                        break;
                     } else {
-                        self::$error['password'] = core::$lng['error_wrong_password'];
+                        // Если пароль неверный
+                        self::$error = core::$lng['error_wrong_password'];
+                        if ($res['login_attempt'] < 3) {
+                            // Накручиваем счетчик неудачных Логинов
+                            mysql_query("UPDATE `users` SET `login_attempt` = '" . ++$res['login_attempt'] . "' WHERE `id` = " . $res['id']);
+                        }
                     }
                 }
+            } else {
+                // Если пользователь не найден
+                self::$error = core::$lng['error_user_not_exist'];
             }
         }
+        return $display;
     }
 
     /*
@@ -59,30 +89,9 @@ class login
     Обрабатываем CAPTCHA
     -----------------------------------------------------------------
     */
-    private function do_captcha()
+    private function captcha()
     {
 
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Проверка корректности ввода NickName
-    -----------------------------------------------------------------
-    */
-    public static function check_login($var = '')
-    {
-        if (empty($var)) {
-            self::$error['login'] = core::$lng['error_login_empty'];
-        } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
-            self::$error['login'] = core::$lng['nick'] . ': ' . core::$lng['error_wrong_lenght'];
-        } elseif (preg_match('/[^\da-zа-я\-\@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
-            self::$error['login'] = core::$lng['nick'] . ': ' . core::$lng['error_wrong_symbols'];
-        } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $var)) {
-            self::$error['login'] = core::$lng['error_double_charset'];
-        } else {
-            return true;
-        }
-        return false;
     }
 
     /*
@@ -97,7 +106,30 @@ class login
         } elseif (filter_var($var, FILTER_VALIDATE_INT) == false || $var < 1) {
             self::$error['login'] = 'User ID: ' . core::$lng['error_wrong_data'];
         } else {
-            return true;
+            return $var;
+        }
+        return false;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Проверка корректности ввода NickName
+    -----------------------------------------------------------------
+    */
+    public static function check_nickname($var = '')
+    {
+        if (empty($var)) {
+            self::$error['login'] = core::$lng['error_login_empty'];
+        } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
+            self::$error['login'] = core::$lng['nick'] . ': ' . core::$lng['error_wrong_lenght'];
+        } elseif (preg_match('/[^\da-zа-я\-\@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
+            self::$error['login'] = core::$lng['nick'] . ': ' . core::$lng['error_wrong_symbols'];
+        } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $var)) {
+            self::$error['login'] = core::$lng['error_double_charset'];
+        } elseif (filter_var($var, FILTER_VALIDATE_INT) !== false) {
+            self::$error['login'] = core::$lng['error_digits_only'];
+        } else {
+            return $var;
         }
         return false;
     }
@@ -114,7 +146,7 @@ class login
         } elseif (filter_var($var, FILTER_VALIDATE_EMAIL) == false) {
             self::$error['login'] = core::$lng['error_email'];
         } else {
-            return true;
+            return $var;
         }
         return false;
     }
@@ -131,7 +163,7 @@ class login
         } elseif (preg_match('/[^\da-z]+/i', $var)) {
             self::$error['password'] = core::$lng['error_wrong_symbols'];
         } else {
-            return true;
+            return $var;
         }
         return false;
     }

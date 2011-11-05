@@ -37,8 +37,8 @@ class settings
     */
     public static function user_data_put($key = '', $val = '')
     {
-        if(empty($key) || !empty($val) && !is_array($val)) return false;
-        if(empty($val)){
+        if (empty($key) || !empty($val) && !is_array($val)) return false;
+        if (empty($val)) {
             @mysql_query("DELETE FROM `cms_users_settings` WHERE `user_id` = '" . core::$user_id . "' AND `key` = '" . $key . "' LIMIT 1");
             return true;
         }
@@ -91,11 +91,11 @@ class settings
     public static function set_forum_default()
     {
         return array(
-            'farea' => 0,
-            'upfp' => 0,
-            'preview' => 1,
-            'postclip' => 1,
-            'postcut' => 2
+            'farea'          => 0,
+            'upfp'           => 0,
+            'preview'        => 1,
+            'postclip'       => 1,
+            'postcut'        => 2
         );
     }
 }

@@ -1,4 +1,15 @@
-﻿DROP TABLE IF EXISTS `cms_users_data`;
+﻿------------------------------------------------------------
+Предварительные проверки (отдельный файл check.php)
+------------------------------------------------------------
+1) Проверяем, есть ли совпадающие записи в поле `name` и `name_lat`
+   Если есть, выдаем список со ссылками на профили.
+2) Проверяем, есть ли совпадающие записи в поле E-mail.
+   Если есть, то вместо них, вписываем пустые значения.
+
+------------------------------------------------------------
+Для SQL файла обновления
+------------------------------------------------------------
+DROP TABLE IF EXISTS `cms_users_data`;
 DROP TABLE IF EXISTS `cms_users_settings`;
 CREATE TABLE `cms_users_settings` (
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -7,29 +18,25 @@ CREATE TABLE `cms_users_settings` (
   PRIMARY KEY (`user_id`,`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
-
-
-
-
-
-
-
-
-ALTER TABLE `users` DROP INDEX `name_lat`;
-ALTER TABLE `users` CHANGE `name_lat` `nickname` VARCHAR( 32 ) NOT NULL DEFAULT '';
+ALTER TABLE `users` CHANGE `name` `nickname` VARCHAR( 32 ) NOT NULL DEFAULT '';
 ALTER TABLE `users` ADD UNIQUE ( `nickname` );
+ALTER TABLE `users` DROP INDEX `name_lat`;
 ALTER TABLE `users` ADD `email` VARCHAR( 50 ) NOT NULL DEFAULT '' AFTER `password`;
-ALTER TABLE `users` ADD INDEX `email` ( `email` ( 10 ) );
+ALTER TABLE `users` ADD INDEX `email` ( `email` ( 9 ) );
+ALTER TABLE `users` ADD `login_attempt` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `email`;
+ALTER TABLE `users` DROP `failed_login`;
 ALTER TABLE `users` DROP `set_user`;
 ALTER TABLE `users` DROP `set_forum`;
 ALTER TABLE `users` DROP `smileys`;
 
-Убрать после выполнения скрипта
+------------------------------------------------------------
+Конвертация таблицы `users`
+------------------------------------------------------------
+1) Проверяем, если `name` не равно транслитерированному в маленькие буквы `name_lat` то записываем в `name` значение `name_lat`
+2) Если поле `mail` не пустое и там корректный E-mail адрес, то записываем его в поле `email`
+
+------------------------------------------------------------
+Удаляем ненужные поля
+------------------------------------------------------------
 ALTER TABLE `users` DROP `name_lat`;
-
-Проверить поле E-mail на повторяющиеся записи. Удалить дубликаты.
-
-
-
+ALTER TABLE `users` DROP `mail`;
