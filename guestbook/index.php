@@ -75,9 +75,9 @@ switch ($act) {
         if ($ban['1'] || $ban['13'])
             $error[] = $lng['access_forbidden'];
         // CAPTCHA для гостей
-        if (!$user_id && (empty($code) || mb_strlen($code) < 4 || $code != $_SESSION['code']))
+        if (!$user_id && (empty($code) || mb_strlen($code) < 4 || $code != $_SESSION['captcha']))
             $error[] = $lng['error_wrong_captcha'];
-        unset($_SESSION['code']);
+        unset($_SESSION['captcha']);
         if ($user_id) {
             // Антифлуд для зарегистрированных пользователей
             $flood = functions::antiflood();
