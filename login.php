@@ -22,10 +22,10 @@ if (isset($_GET['id']) && isset($_GET['p'])) {
     $login_data['password'] = trim($_GET['p']);
 } elseif (isset($_POST['login']) && isset($_POST['password'])) {
     // Принимаем данные формы авторизации
-    $login_data['id'] = trim($_POST['id']);
+    if (isset($_POST['id'])) $login_data['id'] = trim($_POST['id']);
+    if (isset($_POST['captcha'])) $login_data['captcha'] = trim($_POST['captcha']);
     $login_data['login'] = trim($_POST['login']);
     $login_data['password'] = trim($_POST['password']);
-    $login_data['captcha'] = isset($_POST['captcha']) ? trim($_POST['captcha']) : false;
     $login_data['remember'] = isset($_POST['remember']);
 } else {
     $login_data = array();
@@ -58,12 +58,13 @@ switch (login::do_login($login_data)) {
         Показываем CAPTCHA
         -----------------------------------------------------------------
         */
+        if (login::$error) echo functions::display_error(login::$error);
         echo '<form action="login.php" method="post">' .
             '<div class="menu"><p><img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng['verifying_code'] . '"/><br />' .
-            $lng['enter_code'] . ':<br/><input type="text" size="5" maxlength="5"  name="code"/>' .
-            '<input type="hidden" name="id" value="' . intval($login_data['id']) . '"/>' .
-            '<input type="hidden" name="login" value="' . htmlspecialchars($login_data['login']) . '"/>' .
-            '<input type="hidden" name="password" value="' . htmlspecialchars($login_data['login']) . '"/>' .
+            $lng['enter_code'] . ':<br/><input type="text" size="5" maxlength="5"  name="captcha"/>';
+        if (isset($login_data['id'])) echo '<input type="hidden" name="id" value="' . intval($login_data['id']) . '"/>';
+        else echo '<input type="hidden" name="login" value="' . htmlspecialchars($login_data['login']) . '"/>';
+        echo '<input type="hidden" name="password" value="' . htmlspecialchars($login_data['password']) . '"/>' .
             '<input type="hidden" name="remember" value="' . $login_data['remember'] . '"/>' .
             '<input type="submit" name="submit" value="' . $lng['continue'] . '"/></p></div></form>';
         break;
@@ -92,46 +93,3 @@ switch (login::do_login($login_data)) {
 }
 
 require('incfiles/end.php');
-
-//        if ($user['failed_login'] > 2) {
-//            if ($user_code) {
-//                if (mb_strlen($user_code) > 3 && $user_code == $_SESSION['code']) {
-//                    // Если введен правильный проверочный код
-//                    unset($_SESSION['code']);
-//                    $captcha = true;
-//                } else {
-//                    // Если проверочный код указан неверно
-//                    unset($_SESSION['code']);
-//                    $error[] = $lng['error_wrong_captcha'];
-//                }
-//            } else {
-//                // Показываем CAPTCHA
-//                $display_form = 0;
-//                echo '<form action="login.php' . ($id ? '?id=' . $id : '') . '" method="post">' .
-//                     '<div class="menu"><p><img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng['verifying_code'] . '"/><br />' .
-//                     $lng['enter_code'] . ':<br/><input type="text" size="5" maxlength="5"  name="code"/>' .
-//                     '<input type="hidden" name="n" value="' . $user_login . '"/>' .
-//                     '<input type="hidden" name="p" value="' . $user_pass . '"/>' .
-//                     '<input type="hidden" name="mem" value="' . $user_mem . '"/>' .
-//                     '<input type="submit" name="submit" value="' . $lng['continue'] . '"/></p></div></form>';
-//            }
-//        }
-//        if ($user['failed_login'] < 3 || $captcha) {
-//            if (md5(md5($user_pass)) == $user['password']) {
-//                // Если логин удачный
-//                $display_form = 0;
-//                mysql_query("UPDATE `users` SET `failed_login` = '0' WHERE `id` = '" . $user['id'] . "'");
-//                if (!$user['preg']) {
-//                    // Если регистрация не подтверждена
-//                    echo '<div class="rmenu"><p>' . $lng['registration_not_approved'] . '</p></div>';
-//                } else {
-//                    // Если все проверки прошли удачно, подготавливаем вход на сайт
-//                }
-//            } else {
-//                // Если логин неудачный
-//            }
-//        }
-//    } else {
-//        $error[] = $lng['authorisation_not_passed'];
-//    }
-//}

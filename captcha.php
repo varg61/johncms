@@ -230,4 +230,4 @@ class KCAPTCHA
 session_name('SESID');
 session_start();
 $captcha = new KCAPTCHA();
-$_SESSION['code'] = $captcha->getKeyString();
+$_SESSION['captcha'] = $captcha->getKeyString();

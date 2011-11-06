@@ -13,9 +13,7 @@ define('_IN_JOHNCMS', 1);
 
 class login
 {
-
     public static $error = array();
-    public static $display = '';
 
     /*
     -----------------------------------------------------------------
@@ -51,28 +49,45 @@ class login
             $req = mysql_query("SELECT * FROM `users` WHERE $sql");
             if (mysql_num_rows($req)) {
                 while ($res = mysql_fetch_assoc($req)) {
-                    if($res['login_attempt'] > 2){
-                        //TODO: Написать обработку CAPTCHA
-                        $display = 'captcha';
+                    self::$error = array();
+                    if ($res['login_attempt'] > 2) {
+                        // Обрабатываем CAPTCHA
+                        if (isset($var['captcha'])) {
+                            if (mb_strlen($var['captcha']) > 3 && $var['captcha'] == $_SESSION['captcha']) {
+                                $captcha = true;
+                            } else {
+                                self::$error['captcha'] = core::$lng['error_wrong_captcha'];
+                                $display = 'captcha';
+                            }
+                            unset($_SESSION['captcha']);
+                        } else {
+                            $display = 'captcha';
+                        }
                     }
 
-                    if ($res['password'] == md5(md5($var['password']))) {
-                        // Если пароль совпадает, записываем сессию и COOKIE
-                        if (isset($var['remember'])) {
-                            setcookie("cuid", base64_encode($res['id']), time() + 3600 * 24 * 365);
-                            setcookie("cups", md5($var['password']), time() + 3600 * 24 * 365);
-                        }
-                        $_SESSION['uid'] = $res['id'];
-                        $_SESSION['ups'] = md5(md5($var['password']));
-                        $set_user = settings::user_data_get('set_user');
-                        $display = $res['lastdate'] < (time() - 3600) && $set_user['digest'] ? 'digest' : 'homepage';
-                        break;
-                    } else {
-                        // Если пароль неверный
-                        self::$error = core::$lng['error_wrong_password'];
-                        if ($res['login_attempt'] < 3) {
-                            // Накручиваем счетчик неудачных Логинов
-                            mysql_query("UPDATE `users` SET `login_attempt` = '" . ++$res['login_attempt'] . "' WHERE `id` = " . $res['id']);
+                    if ($res['login_attempt'] < 3 || $res['login_attempt'] > 2 && $captcha === true) {
+                        if ($res['password'] == md5(md5($var['password']))) {
+                            // Если пароль совпадает, записываем сессию и COOKIE
+                            if (isset($var['remember'])) {
+                                setcookie("cuid", base64_encode($res['id']), time() + 3600 * 24 * 365);
+                                setcookie("cups", md5($var['password']), time() + 3600 * 24 * 365);
+                            }
+                            $_SESSION['uid'] = $res['id'];
+                            $_SESSION['ups'] = md5(md5($var['password']));
+                            $set_user = settings::user_data_get('set_user');
+                            $display = $res['lastdate'] < (time() - 3600) && $set_user['digest'] ? 'digest' : 'homepage';
+                            if ($res['login_attempt'] > 0) {
+                                // Сбрасываем счетчик неудачных Логинов
+                                mysql_query("UPDATE `users` SET `login_attempt` = 0 WHERE `id` = " . $res['id']);
+                            }
+                            break;
+                        } else {
+                            // Если пароль неверный
+                            self::$error = core::$lng['error_wrong_password'];
+                            if ($res['login_attempt'] < 3) {
+                                // Накручиваем счетчик неудачных Логинов
+                                mysql_query("UPDATE `users` SET `login_attempt` = " . ++$res['login_attempt'] . " WHERE `id` = " . $res['id']);
+                            }
                         }
                     }
                 }
@@ -82,16 +97,6 @@ class login
             }
         }
         return $display;
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Обрабатываем CAPTCHA
-    -----------------------------------------------------------------
-    */
-    private function captcha()
-    {
-
     }
 
     /*
@@ -106,7 +111,7 @@ class login
         } elseif (filter_var($var, FILTER_VALIDATE_INT) == false || $var < 1) {
             self::$error['login'] = 'User ID: ' . core::$lng['error_wrong_data'];
         } else {
-            return $var;
+            return true;
         }
         return false;
     }
@@ -129,7 +134,7 @@ class login
         } elseif (filter_var($var, FILTER_VALIDATE_INT) !== false) {
             self::$error['login'] = core::$lng['error_digits_only'];
         } else {
-            return $var;
+            return true;
         }
         return false;
     }
@@ -146,7 +151,7 @@ class login
         } elseif (filter_var($var, FILTER_VALIDATE_EMAIL) == false) {
             self::$error['login'] = core::$lng['error_email'];
         } else {
-            return $var;
+            return true;
         }
         return false;
     }
@@ -163,7 +168,7 @@ class login
         } elseif (preg_match('/[^\da-z]+/i', $var)) {
             self::$error['password'] = core::$lng['error_wrong_symbols'];
         } else {
-            return $var;
+            return true;
         }
         return false;
     }

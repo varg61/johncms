@@ -52,8 +52,8 @@ if (isset($_POST['submit'])) {
     // Проверка пола
     if ($reg_sex != 'm' && $reg_sex != 'zh') $error['sex'] = $lng_reg['error_sex'];
     // Проверка кода CAPTCHA
-    if (!$captcha || !isset($_SESSION['code']) || mb_strlen($captcha) < 4 || $captcha != $_SESSION['code']) $error['captcha'] = $lng['error_wrong_captcha'];
-    unset($_SESSION['code']);
+    if (!$captcha || !isset($_SESSION['captcha']) || mb_strlen($captcha) < 4 || $captcha != $_SESSION['captcha']) $error['captcha'] = $lng['error_wrong_captcha'];
+    unset($_SESSION['captcha']);
     // Проверка переменных
     if (empty($error)) {
         $pass = md5(md5($reg_pass));
