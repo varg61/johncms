@@ -82,7 +82,7 @@ class login
                             break;
                         } else {
                             // Если пароль неверный
-                            self::$error = core::$lng['error_wrong_password'];
+                            self::$error['password'] = core::$lng['error_wrong_password'];
                             if ($res['login_attempt'] < 3) {
                                 // Накручиваем счетчик неудачных Логинов
                                 mysql_query("UPDATE `users` SET `login_attempt` = " . ++$res['login_attempt'] . " WHERE `id` = " . $res['id']);
@@ -92,7 +92,7 @@ class login
                 }
             } else {
                 // Если пользователь не найден
-                self::$error = core::$lng['error_user_not_exist'];
+                self::$error['login'] = core::$lng['error_user_not_exist'];
             }
         }
         return $display;

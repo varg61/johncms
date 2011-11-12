@@ -16,6 +16,8 @@ require('incfiles/core.php');
 require('incfiles/head.php');
 echo '<div class="phdr"><b>' . $lng['login'] . '</b></div>';
 
+$error_style = 'style="background-color: #FFCCCC"';
+
 if (isset($_GET['id']) && isset($_GET['p'])) {
     // Принимаем данные ссылки AutoLogin
     $login_data['id'] = trim($_GET['id']);
@@ -58,15 +60,18 @@ switch (login::do_login($login_data)) {
         Показываем CAPTCHA
         -----------------------------------------------------------------
         */
-        if (!empty(login::$error)) echo functions::display_error(login::$error);
-        echo '<form action="login.php" method="post">' .
-            '<div class="menu"><p><img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng['verifying_code'] . '"/><br />' .
-            $lng['enter_code'] . ':<br/><input type="text" size="5" maxlength="5"  name="captcha"/>';
+        if (!empty(login::$error)) echo'<div class="rmenu"><p>' . core::$lng['errors_occurred'] . '</p></div>';
+        echo'<form action="login.php" method="post">' .
+            '<div class="menu">' .
+            '<p><h3>' . core::$lng['captcha'] . '</h3>' .
+            '<img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng_reg['captcha_help'] . '" border="2"/><br />' .
+            (isset(login::$error['captcha']) ? '<small class="red"><b>' . core::$lng['error'] . '</b>: ' . login::$error['captcha'] . '<br /></small>' : '') .
+            '<input type="text" size="5" maxlength="5"  name="captcha" ' . (isset(login::$error['captcha']) ? $error_style : '') . '/></p>';
         if (isset($login_data['id'])) echo '<input type="hidden" name="id" value="' . intval($login_data['id']) . '"/>';
         else echo'<input type="hidden" name="login" value="' . htmlspecialchars($login_data['login']) . '"/>';
         echo'<input type="hidden" name="password" value="' . htmlspecialchars($login_data['password']) . '"/>' .
             '<input type="hidden" name="remember" value="' . $login_data['remember'] . '"/>' .
-            '<input type="submit" name="submit" value="' . $lng['continue'] . '"/></p></div></form>';
+            '<p><input type="submit" name="submit" value="' . $lng['continue'] . '"/></p></div></form>';
         break;
 
     default:
@@ -79,14 +84,24 @@ switch (login::do_login($login_data)) {
         $id_style = isset(login::$error['id']) ? 'style="background-color: #FFCCCC"' : '';
         $pass_style = isset(login::$error['password']) ? 'style="background-color: #FFCCCC"' : '';
 
-        if (!empty(login::$error)) echo functions::display_error(login::$error);
+        if (!empty(login::$error)) echo'<div class="rmenu"><p>' . core::$lng['errors_occurred'] . '</p></div>';
         echo'<form action="login.php" method="post">' .
             '<div class="gmenu"><p>' .
+
+            // Логин
             '<h3>' . core::$lng['login_caption'] . '</h3>' .
+            (isset(login::$error['login']) ? '<small class="red"><b>' . core::$lng['error'] . '</b>: ' . login::$error['login'] . '<br /></small>' : '') .
             '<input type="text" name="login" value="' . htmlspecialchars($login_data['login']) . '" maxlength="20" ' . $login_style . '/></p>' .
+
+            // Пароль
             '<p><h3>' . $lng['password'] . '</h3>' .
+            (isset(login::$error['password']) ? '<small class="red"><b>' . core::$lng['error'] . '</b>: ' . login::$error['password'] . '<br /></small>' : '') .
             '<input type="password" name="password" maxlength="20" ' . $pass_style . '/></p>' .
+
+            // Запомнить
             '<p><input type="checkbox" name="remember" value="1" checked="checked"/>' . $lng['remember'] . '</p>' .
+
+            // Кнопка входа
             '<p><input type="submit" value="' . $lng['login'] . '"/></p>' .
             '</div></form>' .
             '<div class="phdr"><a href="users/skl.php?continue">' . $lng['forgotten_password'] . '?</a></div>';

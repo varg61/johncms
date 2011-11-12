@@ -18,6 +18,8 @@ $textl = $lng['registration'];
 require('incfiles/head.php');
 echo '<div class="phdr"><b>' . $lng['registration'] . '</b></div>';
 
+$error_style = 'style="background-color: #FFCCCC"';
+
 $reg_data['login'] = isset($_POST['login']) ? trim($_POST['login']) : '';
 $reg_data['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
 $reg_data['password_confirm'] = isset($_POST['password_confirm']) ? trim($_POST['password_confirm']) : '';
@@ -34,7 +36,6 @@ switch (login::registration($reg_data)) {
         Форма регистрации новых пользователей
         -----------------------------------------------------------------
         */
-        $error_style = 'style="background-color: #FFCCCC"';
 
         // Показываем ошибки (если есть)
         if (!empty(login::$error)) echo'<div class="rmenu"><p>' . core::$lng['errors_occurred'] . '</p></div>';
