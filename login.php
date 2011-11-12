@@ -39,7 +39,7 @@ switch (login::do_login($login_data)) {
         -----------------------------------------------------------------
         */
         header('Location: index.php?act=digest&last=' . $user['lastdate']);
-        echo '<div class="gmenu"><p><h3>Дайджест <a href="index.php?act=digest">' . $lng['enter_on_site'] . '</a></h3></p></div>';
+        echo'<div class="gmenu"><p><h3>Дайджест <a href="index.php?act=digest">' . $lng['enter_on_site'] . '</a></h3></p></div>';
         break;
 
     case 'homepage':
@@ -49,7 +49,7 @@ switch (login::do_login($login_data)) {
         -----------------------------------------------------------------
         */
         header('Location: index.php');
-        echo '<div class="gmenu"><p><h3>Главная <a href="index.php">' . $lng['enter_on_site'] . '</a></h3></p></div>';
+        echo'<div class="gmenu"><p><h3>Главная <a href="index.php">' . $lng['enter_on_site'] . '</a></h3></p></div>';
         break;
 
     case 'captcha':
@@ -58,13 +58,13 @@ switch (login::do_login($login_data)) {
         Показываем CAPTCHA
         -----------------------------------------------------------------
         */
-        if (login::$error) echo functions::display_error(login::$error);
+        if (!empty(login::$error)) echo functions::display_error(login::$error);
         echo '<form action="login.php" method="post">' .
             '<div class="menu"><p><img src="captcha.php?r=' . rand(1000, 9999) . '" alt="' . $lng['verifying_code'] . '"/><br />' .
             $lng['enter_code'] . ':<br/><input type="text" size="5" maxlength="5"  name="captcha"/>';
         if (isset($login_data['id'])) echo '<input type="hidden" name="id" value="' . intval($login_data['id']) . '"/>';
-        else echo '<input type="hidden" name="login" value="' . htmlspecialchars($login_data['login']) . '"/>';
-        echo '<input type="hidden" name="password" value="' . htmlspecialchars($login_data['password']) . '"/>' .
+        else echo'<input type="hidden" name="login" value="' . htmlspecialchars($login_data['login']) . '"/>';
+        echo'<input type="hidden" name="password" value="' . htmlspecialchars($login_data['password']) . '"/>' .
             '<input type="hidden" name="remember" value="' . $login_data['remember'] . '"/>' .
             '<input type="submit" name="submit" value="' . $lng['continue'] . '"/></p></div></form>';
         break;
@@ -79,8 +79,8 @@ switch (login::do_login($login_data)) {
         $id_style = isset(login::$error['id']) ? 'style="background-color: #FFCCCC"' : '';
         $pass_style = isset(login::$error['password']) ? 'style="background-color: #FFCCCC"' : '';
 
-        if (login::$error) echo functions::display_error(login::$error);
-        echo '<form action="login.php" method="post">' .
+        if (!empty(login::$error)) echo functions::display_error(login::$error);
+        echo'<form action="login.php" method="post">' .
             '<div class="gmenu"><p>' .
             '<h3>' . core::$lng['login_caption'] . '</h3>' .
             '<input type="text" name="login" value="' . htmlspecialchars($login_data['login']) . '" maxlength="20" ' . $login_style . '/></p>' .
