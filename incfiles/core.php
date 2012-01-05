@@ -10,9 +10,15 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-//Error_Reporting(E_ALL & ~E_NOTICE);
+Error_Reporting(E_ALL & ~E_NOTICE);
 @ini_set('session.use_trans_sid', '0');
 @ini_set('arg_separator.output', '&amp;');
+@ini_set('php_flag display_errors', '1'); //TODO: Вернуть значение к 0
+@ini_set('register_globals', '0');
+@ini_set('session.use_trans_sid', '0');
+@ini_set('magic_quotes_gpc', '0');
+@ini_set('magic_quotes_runtime', '0');
+@ini_set('allow_url_fopen', '0');
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 $rootpath = isset($rootpath) ? $rootpath : '../';
