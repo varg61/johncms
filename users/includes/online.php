@@ -3,39 +3,42 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
+//TODO: Доработать
+
 $headmod = 'online';
-$textl = $lng['online'];
-//$lng_online = core::load_lng('online');
-require('../incfiles/head.php');
+$textl = Vars::$LNG['online'];
+//$lng_online = Vars::load_lng('online');
+require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
 Показываем список Online
 -----------------------------------------------------------------
 */
-$menu[] = !$mod ? '<b>' . $lng['users'] . '</b>' : '<a href="index.php?act=online">' . $lng['users'] . '</a>';
-$menu[] = $mod == 'history' ? '<b>' . $lng['history'] . '</b>' : '<a href="index.php?act=online&amp;mod=history">' . $lng['history'] . '</a> ';
-if (core::$user_rights) {
-    $menu[] = $mod == 'guest' ? '<b>' . $lng['guests'] . '</b>' : '<a href="index.php?act=online&amp;mod=guest">' . $lng['guests'] . '</a>';
-    $menu[] = $mod == 'ip' ? '<b>' . $lng['ip_activity'] . '</b>' : '<a href="index.php?act=online&amp;mod=ip">' . $lng['ip_activity'] . '</a>';
+$menu[] = !Vars::$MOD ? '<b>' . Vars::$LNG['users'] . '</b>' : '<a href="index.php?act=online">' . Vars::$LNG['users'] . '</a>';
+$menu[] = Vars::$MOD == 'history' ? '<b>' . Vars::$LNG['history'] . '</b>' : '<a href="index.php?act=online&amp;mod=history">' . Vars::$LNG['history'] . '</a> ';
+if (Vars::$USER_RIGHTS) {
+    $menu[] = Vars::$MOD == 'guest' ? '<b>' . Vars::$LNG['guests'] . '</b>' : '<a href="index.php?act=online&amp;mod=guest">' . Vars::$LNG['guests'] . '</a>';
+    $menu[] = Vars::$MOD == 'ip' ? '<b>' . Vars::$LNG['ip_activity'] . '</b>' : '<a href="index.php?act=online&amp;mod=ip">' . Vars::$LNG['ip_activity'] . '</a>';
 }
 
-echo '<div class="phdr"><b>' . $lng['who_on_site'] . '</b></div>' .
-     '<div class="topmenu">' . functions::display_menu($menu) . '</div>';
+echo '<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
+     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
-switch ($mod) {
+switch (Vars::$MOD) {
     case 'ip':
         // Список активных IP, со счетчиком обращений
-        $ip_array = array_count_values(core::$ip_count);
+        $ip_array = array_count_values(Vars::$IP_REQUESTS_COUNT);
         $total = count($ip_array);
-        $end = $start + $kmess;
+        $end = Vars::$START + Vars::$USER_SET['page_size'];
         if ($end > $total) $end = $total;
         arsort($ip_array);
         $i = 0;
@@ -43,71 +46,71 @@ switch ($mod) {
             $ip_list[$i] = array($key => $val);
             ++$i;
         }
-        if ($total && core::$user_rights) {
-            if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;mod=ip&amp;', $start, $total, $kmess) . '</div>';
-            for ($i = $start; $i < $end; $i++) {
+        if ($total && Vars::$USER_RIGHTS) {
+            if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            for ($i = Vars::$START; $i < $end; $i++) {
                 $out = each($ip_list[$i]);
-                if ($out[0] == core::$ip) echo '<div class="gmenu">';
+                if ($out[0] == Vars::$IP) echo '<div class="gmenu">';
                 else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<a href="' . core::$system_set['homeurl'] . '/' . core::$system_set['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($out[0]) . '">' . long2ip($out[0]) .
+                echo '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($out[0]) . '">' . long2ip($out[0]) .
                      '</a>&#160;-&#160;[' . $out[1] . ']';
                 echo '</div>';
             }
-            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-            if ($total > $kmess) {
-                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;mod=ip&amp;', $start, $total, $kmess) . '</div>' .
+            echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+            if ($total > Vars::$USER_SET['page_size']) {
+                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                      '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
                      '<input type="text" name="page" size="2"/>' .
-                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
             }
         }
-        require_once('../incfiles/end.php');
+        require_once('../includes/end.php');
         exit;
         break;
 
     case 'guest':
         // Список гостей Онлайн
         $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300);
-        $sql_list = "SELECT * FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `movings` DESC LIMIT $start, $kmess";
+        $sql_list = "SELECT * FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `movings` DESC LIMIT " . Vars::db_pagination();
         break;
 
     case 'history':
         // История посетилелей за последние 2 суток
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `lastdate` > " . (time() - 172800 . " AND `lastdate` < " . (time() - 310));
-        $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 172800) . " AND `lastdate` < " . (time() - 310) . " ORDER BY `sestime` DESC LIMIT $start, $kmess";
+        $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 172800) . " AND `lastdate` < " . (time() - 310) . " ORDER BY `sestime` DESC LIMIT " . Vars::db_pagination();
         break;
 
     default:
         // Список посетителей Онлайн
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `lastdate` > " . (time() - 300);
-        $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `name` ASC LIMIT $start, $kmess";
+        $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `name` ASC LIMIT " . Vars::db_pagination();
 }
 
 $total = mysql_result(mysql_query($sql_total), 0);
-if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;' . ($mod ? 'mod=' . $mod . '&amp;' : ''), $start, $total, $kmess) . '</div>';
+if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;' . (Vars::$MOD ? 'mod=' . Vars::$MOD . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 if ($total) {
     $req = mysql_query($sql_list);
     $i = 0;
     while (($res = mysql_fetch_assoc($req)) !== false) {
-        if ($res['id'] == core::$user_id) echo '<div class="gmenu">';
+        if ($res['id'] == Vars::$USER_ID) echo '<div class="gmenu">';
         else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $arg['stshide'] = 1;
         $arg['header'] = ' <span class="gray">(';
-        if ($mod == 'history') $arg['header'] .= functions::display_date($res['sestime']);
-        else $arg['header'] .= $res['movings'] . ' - ' . functions::timecount(time() - $res['sestime']);
-        $arg['header'] .= ')</span><br />' . functions::get_image('info.png', '', 'align="middle"') . '&#160;' . functions::display_place($res['id'], $res['place']);
-        echo functions::display_user($res, $arg);
+        if (Vars::$MOD == 'history') $arg['header'] .= Functions::displayDate($res['sestime']);
+        else $arg['header'] .= $res['movings'] . ' - ' . Functions::timeCount(time() - $res['sestime']);
+        $arg['header'] .= ')</span><br />' . Functions::getImage('info.png', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
+        echo Functions::displayUser($res, $arg);
         echo '</div>';
         ++$i;
     }
 } else {
-    echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
 }
-echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-if ($total > $kmess) {
-    echo '<div class="topmenu">' . functions::display_pagination('index.php?act=online&amp;' . ($mod ? 'mod=' . $mod . '&amp;' : ''), $start, $total, $kmess) . '</div>' .
-         '<p><form action="index.php?act=online' . ($mod ? '&amp;mod=' . $mod : '') . '" method="post">' .
+echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+if ($total > Vars::$USER_SET['page_size']) {
+    echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;' . (Vars::$MOD ? 'mod=' . Vars::$MOD . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+         '<p><form action="index.php?act=online' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
          '<input type="text" name="page" size="2"/>' .
-         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
          '</form></p>';
 }

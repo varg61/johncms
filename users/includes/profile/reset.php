@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,17 +11,19 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($rights >= 7 && $rights > $user['rights']) {
+//TODO: Доработать для новых настроек!
+
+if (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
     /*
     -----------------------------------------------------------------
     Сброс настроек пользователя
     -----------------------------------------------------------------
     */
-    $textl = htmlspecialchars($user['name']) . ': ' . $lng_profile['profile_edit'];
-    require('../incfiles/head.php');
-    mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['id'] . "'");
+    $textl = htmlspecialchars($user['nickname']) . ': ' . $lng_profile['profile_edit'];
+    require_once('../includes/head.php');
+    mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['user_id'] . "'");
     echo '<div class="gmenu"><p>' . $lng_profile['reset1'] . ' <b>' . $user['name'] . '</b> ' . $lng_profile['reset2'] . '<br />' .
-         '<a href="profile.php?user=' . $user['id'] . '">' . $lng['profile'] . '</a></p></div>';
-    require_once ('../incfiles/end.php');
+         '<a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['profile'] . '</a></p></div>';
+    require_once ('../includes/end.php');
     exit;
 }

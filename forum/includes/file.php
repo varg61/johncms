@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -12,18 +12,18 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $error = false;
-if ($id) {
+if (Vars::$ID) {
     /*
     -----------------------------------------------------------------
     Скачивание прикрепленного файла Форума
     -----------------------------------------------------------------
     */
-    $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = '$id'");
+    $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = " . Vars::$ID);
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_array($req);
         if (file_exists('../files/forum/attach/' . $res['filename'])) {
             $dlcount = $res['dlcount'] + 1;
-            mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '$dlcount' WHERE `id` = '$id'");
+            mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '$dlcount' WHERE `id` = " . Vars::$ID);
             header('location: ../files/forum/attach/' . $res['filename']);
         } else {
             $error = true;
@@ -32,9 +32,9 @@ if ($id) {
         $error = true;
     }
     if ($error) {
-        require('../incfiles/head.php');
-        echo functions::display_error($lng['error_file_not_exist'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
-        require('../incfiles/end.php');
+        require_once('../includes/head.php');
+        echo Functions::displayError(Vars::$LNG['error_file_not_exist'], '<a href="index.php">' . Vars::$LNG['to_forum'] . '</a>');
+        require_once('../includes/end.php');
         exit;
     }
 } else {

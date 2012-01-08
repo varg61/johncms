@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -32,7 +32,7 @@ switch ($act) {
         $_SESSION['updated'] = 1;
         echo '<p><h3 class="green">' . str_replace('INSTALL_VERSION', INSTALL_VERSION, $lng['successfully_updated']) . '</h3></p>' .
              '<p>' . $lng['final_note'] . '</p>' .
-             '<hr /><h3><a href="' . $set['homeurl'] . '">' . $lng['go_to_site'] . '</a></h3>';
+             '<hr /><h3><a href="' . Vars::$SYSTEM_SET['homeurl'] . '">' . $lng['go_to_site'] . '</a></h3>';
         break;
 
     default:

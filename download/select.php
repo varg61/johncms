@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,17 +11,17 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../incfiles/head.php");
+require_once("../includes/head.php");
 if (!empty($_GET['cat'])) {
     $cat = $_GET['cat'];
     provcat($cat);
-    if ($rights == 4 || $rights >= 6) {
+    if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         echo "<form action='?act=upl' method='post' enctype='multipart/form-data'>
-         <p>" . $lng['select'] . " (max " . $set['flsz'] . " кб.):<br/>
+         <p>" . Vars::$LNG['select'] . " (max " . Vars::$SYSTEM_SET['flsz'] . " кб.):<br/>
          <input type='file' name='fail'/></p>
          <p>" . $lng_dl['screenshot'] . ":<br/>
          <input type='file' name='screens'/></p>
-         <p>" . $lng['description'] . ":<br/>
+         <p>" . Vars::$LNG['description'] . ":<br/>
          <textarea name='opis'></textarea></p>
          <p>" . $lng_dl['save_as'] . ":<br/>
          <input type='text' name='newname'/></p>
@@ -31,7 +31,7 @@ if (!empty($_GET['cat'])) {
     } else {
         echo "Нет доступа!<br/>";
     }
-    echo "<a href='?cat=" . $cat . "'>" . $lng['back'] . "</a><br/>";
+    echo "<a href='?cat=" . $cat . "'>" . Vars::$LNG['back'] . "</a><br/>";
 } else {
     echo 'ERROR';
 }

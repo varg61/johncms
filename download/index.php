@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -12,25 +12,25 @@
 define('_IN_JOHNCMS', 1);
 
 $headmod = 'load';
-require_once('../incfiles/core.php');
-$lng_dl = core::load_lng('downloads');
-require_once('../incfiles/lib/mp3.php');
-require_once('../incfiles/lib/pclzip.lib.php');
-$textl = $lng['downloads'];
+require_once('../includes/core.php');
+$lng_dl = Vars::loadLanguage('downloads');
+require_once('../includes/lib/mp3.php');
+require_once('../includes/lib/pclzip.lib.php');
+$textl = Vars::$LNG['downloads'];
 $filesroot = '../download';
 $screenroot = "$filesroot/screen";
 $loadroot = "$filesroot/files";
 
 // Ограничиваем доступ к Загрузкам
 $error = '';
-if (!$set['mod_down'] && $rights < 7)
+if (!Vars::$SYSTEM_SET['mod_down'] && Vars::$USER_RIGHTS < 7)
     $error = $lng_dl['downloads_closed'];
-elseif ($set['mod_down'] == 1 && !$user_id)
-    $error = $lng['access_guest_forbidden'];
+elseif (Vars::$SYSTEM_SET['mod_down'] == 1 && !Vars::$USER_ID)
+    $error = Vars::$LNG['access_guest_forbidden'];
 if ($error) {
-    require_once('../incfiles/head.php');
+    require_once('../includes/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once("../incfiles/end.php");
+    require_once("../includes/end.php");
     exit;
 }
 
@@ -41,7 +41,7 @@ function provcat($catalog)
     $adrdir = mysql_fetch_array($cat1);
     if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]"))) {
         echo 'ERROR<br/><a href="?">Back</a><br/>';
-        require_once('../incfiles/end.php');
+        require_once('../includes/end.php');
         exit;
     }
 }
@@ -71,26 +71,26 @@ $array = array(
     'delcat',
     'mp3'
 );
-if (in_array($act, $array)) {
-    require_once($act . '.php');
+if (in_array(Vars::$ACT, $array)) {
+    require_once(Vars::$ACT . '.php');
 } else {
-    require_once('../incfiles/head.php');
-    if (!$set['mod_down'])
+    require_once('../includes/head.php');
+    if (!Vars::$SYSTEM_SET['mod_down'])
         echo '<p><font color="#FF0000"><b>' . $lng_dl['downloads_closed'] . '</b></font></p>';
     // Ссылка на новые файлы
-    echo '<p><a href="?act=new">' . $lng['new_files'] . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0) . ')</p>';
+    echo '<p><a href="?act=new">' . Vars::$LNG['new_files'] . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0) . ')</p>';
     $cat = isset($_GET['cat']) ? intval($_GET['cat']) : '';
     if (empty($_GET['cat'])) {
         // Заголовок начальной страницы загрузок
-        echo '<div class="phdr">' . $lng['downloads'] . '</div>';
+        echo '<div class="phdr">' . Vars::$LNG['downloads'] . '</div>';
     } else {
         // Заголовок страниц категорий
         $req = mysql_query("SELECT * FROM `download` WHERE `type` = 'cat' AND `id` = '" . $cat . "' LIMIT 1");
         $res = mysql_fetch_array($req);
         if (mysql_num_rows($req) == 0 || !is_dir($res['adres'] . '/' . $res['name'])) {
             // Если неправильно выбран каталог, выводим ошибку
-            echo functions::display_error($lng_dl['folder_does_not_exist'], '<a href="index.php">' . $lng['back'] . '</a>');
-            require_once('../incfiles/end.php');
+            echo Functions::displayError($lng_dl['folder_does_not_exist'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+            require_once('../includes/end.php');
             exit;
         }
         ////////////////////////////////////////////////////////////
@@ -106,21 +106,19 @@ if (in_array($act, $array)) {
         }
         krsort($tree);
         $cdir = array_pop($tree);
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['downloads'] . '</b></a> | ';
+        echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['downloads'] . '</b></a> | ';
         foreach ($tree as $value) {
             echo $value . ' | ';
         }
         echo strip_tags($cdir) . '</div>';
     }
     // Подсчитываем число папок
-    $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `refid` = '$cat' AND `type` = 'cat'");
-    $totalcat = mysql_result($req, 0);
+    $totalcat = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `refid` = '$cat' AND `type` = 'cat'"), 0);
     // Подсчитываем число файлов
-    $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `refid` = '$cat' AND `type` = 'file'");
-    $totalfile = mysql_result($req, 0);
-    $total = $totalcat + $totalfile;
+    $totalfile = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `refid` = '$cat' AND `type` = 'file'"), 0);
+    $total = (int)$totalcat + $totalfile;
     if ($total > 0) {
-        $zap = mysql_query("SELECT * FROM `download` WHERE `refid` = '$cat' ORDER BY `type` ASC, `text` ASC, `name` ASC LIMIT " . $start . "," . $kmess);
+        $zap = mysql_query("SELECT * FROM `download` WHERE `refid` = '$cat' ORDER BY `type` ASC, `text` ASC, `name` ASC LIMIT " . Vars::db_pagination());
         while ($zap2 = mysql_fetch_array($zap)) {
             ////////////////////////////////////////////////////////////
             // Выводим список папок                                   //
@@ -147,7 +145,7 @@ if (in_array($act, $array)) {
             ////////////////////////////////////////////////////////////
             if ($totalfile > 0 && $zap2['type'] == 'file') {
                 echo '<div class="list2">';
-                $ft = functions::format($zap2['name']);
+                $ft = Functions::format($zap2['name']);
                 switch ($ft) {
                     case "mp3":
                         $imt = "mp3.png";
@@ -184,13 +182,13 @@ if (in_array($act, $array)) {
                         $tx = mb_substr(strip_tags($tx), 0, 90);
                         $tx .= '...';
                     }
-                    echo '<div class="sub">' . functions::checkout($tx) . '</div>';
+                    echo '<div class="sub">' . Validate::filterString($tx) . '</div>';
                 }
                 echo '</div>';
             }
         }
     } else {
-        echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+        echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
     }
     echo '<div class="phdr">';
     if ($totalcat > 0)
@@ -200,10 +198,10 @@ if (in_array($act, $array)) {
         echo $lng_dl['files'] . ': ' . $totalfile;
     echo '</div>';
     // Постраничная навигация
-    if ($total > $kmess) {
-        echo '<p>' . functions::display_pagination('index.php?cat=' . $cat . '&amp;', $start, $total, $kmess) . '</p>';
+    if ($total > Vars::$USER_SET['page_size']) {
+        echo '<p>' . Functions::displayPagination('index.php?cat=' . $cat . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
     }
-    if ($rights == 4 || $rights >= 6) {
+    if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         ////////////////////////////////////////////////////////////
         // Выводим ссылки на модерские функции                    //
         ////////////////////////////////////////////////////////////
@@ -223,13 +221,13 @@ if (in_array($act, $array)) {
         echo '</div></p>';
     }
     if (!empty($cat))
-        echo '<p><a href="index.php">' . $lng['downloads'] . '</a></p>';
+        echo '<p><a href="index.php">' . Vars::$LNG['downloads'] . '</a></p>';
     echo '<p><a href="index.php?act=preview">' . $lng_dl['images_size'] . '</a></p>';
     if (empty($cat)) {
         echo '<form action="index.php?act=search" method="post">';
         echo $lng_dl['search_file'] . ': <br/><input type="text" name="srh" size="20" maxlength="20" value=""/><br/>';
-        echo '<input type="submit" value="' . $lng['search'] . '"/></form>';
+        echo '<input type="submit" value="' . Vars::$LNG['search'] . '"/></form>';
     }
 }
 
-require_once('../incfiles/end.php');
+require_once('../includes/end.php');

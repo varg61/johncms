@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,9 +11,9 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$textl = $lng['forum'] . ' | ' . $lng['unread'];
+$textl = Vars::$LNG['forum'] . ' | ' . Vars::$LNG['unread'];
 $headmod = 'forumnew';
-require('../incfiles/head.php');
+require_once('../includes/head.php');
 unset($_SESSION['fsort_id']);
 unset($_SESSION['fsort_users']);
 if (empty($_SESSION['uid'])) {
@@ -25,6 +25,7 @@ if (empty($_SESSION['uid'])) {
     }
 }
 if ($user_id) {
+    //TODO: Переделать с $do на $mod
     switch ($do) {
         case 'reset':
             /*
@@ -33,25 +34,25 @@ if ($user_id) {
             -----------------------------------------------------------------
             */
             $req = mysql_query("SELECT `forum`.`id`
-            FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '$user_id'
+            FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = " . Vars::$USER_ID . "
             WHERE `forum`.`type`='t'
             AND `cms_forum_rdm`.`topic_id` Is Null");
             while ($res = mysql_fetch_assoc($req)) {
                 mysql_query("INSERT INTO `cms_forum_rdm` SET
                     `topic_id` = '" . $res['id'] . "',
-                    `user_id` = '$user_id',
+                    `user_id` = " . Vars::$USER_ID . ",
                     `time` = '" . time() . "'
                 ");
             }
             $req = mysql_query("SELECT `forum`.`id` AS `id`
-            FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '$user_id'
+            FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = " . Vars::$USER_ID . "
             WHERE `forum`.`type`='t'
             AND `forum`.`time` > `cms_forum_rdm`.`time`");
             while ($res = mysql_fetch_array($req)) {
                 mysql_query("UPDATE `cms_forum_rdm` SET
                     `time` = '" . time() . "'
-                    WHERE `topic_id` = '" . $res['id'] . "' AND `user_id` = '$user_id'
-                ");
+                    WHERE `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID
+                );
             }
             echo '<div class="menu"><p>' . $lng_forum['unread_reset_done'] . '<br /><a href="index.php">' . $lng_forum['to_forum'] . '</a></p></div>';
             break;
@@ -62,11 +63,11 @@ if ($user_id) {
             Форма выбора диапазона времени
             -----------------------------------------------------------------
             */
-            echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['unread_show_for_period'] . '</div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['unread_show_for_period'] . '</div>';
             echo '<div class="menu"><p><form action="index.php?act=new&amp;do=period" method="post">' . $lng_forum['unread_period'] . ':<br/>';
             echo '<input type="text" maxlength="3" name="vr" value="24" size="3"/>';
-            echo '<input type="submit" name="submit" value="' . $lng['show'] . '"/></form></p></div>';
-            echo '<div class="phdr"><a href="index.php?act=new">' . $lng['back'] . '</a></div>';
+            echo '<input type="submit" name="submit" value="' . Vars::$LNG['show'] . '"/></form></p></div>';
+            echo '<div class="phdr"><a href="index.php?act=new">' . Vars::$LNG['back'] . '</a></div>';
             break;
 
         case 'period':
@@ -77,25 +78,25 @@ if ($user_id) {
             */
             $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : null;
             if (!$vr) {
-                echo $lng_forum['error_time_empty'] . '<br/><a href="index.php?act=new&amp;do=all">' . $lng['repeat'] . '</a><br/>';
-                require('../incfiles/end.php');
+                echo $lng_forum['error_time_empty'] . '<br/><a href="index.php?act=new&amp;do=all">' . Vars::$LNG['repeat'] . '</a><br/>';
+                require_once('../includes/end.php');
                 exit;
             }
             $vr1 = time() - $vr * 3600;
-            if ($rights == 9) {
+            if (Vars::$USER_RIGHTS == 9) {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1'");
             } else {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1' AND `close` != '1'");
             }
             $count = mysql_result($req, 0);
-            echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['unread_all_for_period'] . ' ' . $vr . ' ' . $lng_forum['hours'] . '</div>';
-            if ($count > $kmess)
-                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['unread_all_for_period'] . ' ' . $vr . ' ' . $lng_forum['hours'] . '</div>';
+            if ($count > Vars::$USER_SET['page_size'])
+                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
             if ($count > 0) {
-                if ($rights == 9) {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+                if (Vars::$USER_RIGHTS == 9) {
+                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . Vars::db_pagination());
                 } else {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
+                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC LIMIT " . Vars::db_pagination());
                 }
                 $i = 0;
                 while ($res = mysql_fetch_array($req)) {
@@ -104,18 +105,18 @@ if ($user_id) {
                     $razd = mysql_fetch_array($q3);
                     $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
                     $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
-                    $cpg = ceil($colmes1 / $kmess);
+                    $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
                     $nick = mysql_fetch_array($colmes);
                     if ($res['edit'])
-                        echo functions::get_image('forum_closed.png');
+                        echo Functions::getImage('forum_closed.png');
                     elseif ($res['close'])
-                        echo functions::get_image('forum_deleted.png');
+                        echo Functions::getImage('forum_deleted.png');
                     else
-                        echo functions::get_image('forum_new.png');
+                        echo Functions::getImage('forum_new.png');
                     if ($res['realid'] == 1)
-                        echo '&#160;' . functions::get_image('rating.png');
+                        echo '&#160;' . Functions::getImage('rating.png');
                     echo '&#160;<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                          '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
@@ -132,14 +133,14 @@ if ($user_id) {
             } else {
                 echo '<div class="menu"><p>' . $lng_forum['unread_period_empty'] . '</p></div>';
             }
-            echo '<div class="phdr">' . $lng['total'] . ': ' . $count . '</div>';
-            if ($count > $kmess) {
-                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</div>' .
+            echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $count . '</div>';
+            if ($count > Vars::$USER_SET['page_size']) {
+                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>' .
                      '<p><form action="index.php?act=new&amp;do=period&amp;vr=' . $vr . '" method="post">
                     <input type="text" name="page" size="2"/>
-                    <input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                    <input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
             }
-            echo '<p><a href="index.php?act=new">' . $lng['back'] . '</a></p>';
+            echo '<p><a href="index.php?act=new">' . Vars::$LNG['back'] . '</a></p>';
             break;
 
         default:
@@ -148,18 +149,18 @@ if ($user_id) {
             Вывод непрочитанных тем (для зарегистрированных)
             -----------------------------------------------------------------
             */
-            $total = counters::forum_new();
-            echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng['unread'] . '</div>';
-            if ($total > $kmess)
-                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>';
+            $total = Counters::forumCountNew();
+            echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . Vars::$LNG['unread'] . '</div>';
+            if ($total > Vars::$USER_SET['page_size'])
+                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             if ($total > 0) {
                 $req = mysql_query("SELECT * FROM `forum`
-                LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '$user_id'
-                WHERE `forum`.`type`='t'" . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "
+                LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = " . Vars::$USER_ID . "
+                WHERE `forum`.`type`='t'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                 AND (`cms_forum_rdm`.`topic_id` Is Null
                 OR `forum`.`time` > `cms_forum_rdm`.`time`)
                 ORDER BY `forum`.`time` DESC
-                LIMIT $start, $kmess");
+                LIMIT " . Vars::db_pagination());
                 $i = 0;
                 while ($res = mysql_fetch_assoc($req)) {
                     if ($res['close'])
@@ -170,38 +171,38 @@ if ($user_id) {
                     $razd = mysql_fetch_assoc($q3);
                     $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' AND `id` = '" . $razd['refid'] . "' LIMIT 1");
                     $frm = mysql_fetch_assoc($q4);
-                    $colmes = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . ($rights >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
                     $colmes1 = mysql_num_rows($colmes);
-                    $cpg = ceil($colmes1 / $kmess);
+                    $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
                     $nick = mysql_fetch_assoc($colmes);
                     // Значки
                     $icons = array(
-                        (isset($np) ? (!$res['vip'] ? functions::get_image('forum_normal.png') : '') : functions::get_image('forum_new.png')),
-                        ($res['vip'] ? functions::get_image('forum_pin.png') : ''),
-                        ($res['realid'] ? functions::get_image('rating.png') : ''),
-                        ($res['edit'] ? functions::get_image('forum_closed.png') : '')
+                        (isset($np) ? (!$res['vip'] ? Functions::getImage('forum_normal.png') : '') : Functions::getImage('forum_new.png')),
+                        ($res['vip'] ? Functions::getImage('forum_pin.png') : ''),
+                        ($res['realid'] ? Functions::getImage('rating.png') : ''),
+                        ($res['edit'] ? Functions::getImage('forum_closed.png') : '')
                     );
-                    echo functions::display_menu($icons, '&#160;', '&#160;');
+                    echo Functions::displayMenu($icons, '&#160;', '&#160;');
                     echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                          '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
                         echo '&#160;<a href="index.php?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&gt;&gt;</a>';
                     echo '<div class="sub">' . $res['from'] . ($colmes1 > 1 ? '&#160;/&#160;' . $nick['from'] : '') .
-                         ' <span class="gray">(' . functions::display_date($nick['time']) . ')</span><br />' .
+                         ' <span class="gray">(' . Functions::displayDate($nick['time']) . ')</span><br />' .
                          '<a href="index.php?id=' . $frm['id'] . '">' . $frm['text'] . '</a>&#160;/&#160;<a href="index.php?id=' . $razd['id'] . '">' . $razd['text'] . '</a>' .
                          '</div></div>';
                     ++$i;
                 }
             } else {
-                echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+                echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
             }
-            echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-            if ($total > $kmess) {
-                echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>' .
+            echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+            if ($total > Vars::$USER_SET['page_size']) {
+                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                      '<p><form action="index.php" method="get">' .
                      '<input type="hidden" name="act" value="new"/>' .
                      '<input type="text" name="page" size="2"/>' .
-                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
                      '</form></p>';
             }
             echo '<p>';
@@ -215,7 +216,7 @@ if ($user_id) {
     Вывод 10 последних тем (для незарегистрированных)
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['unread_last_10'] . '</div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['unread_last_10'] . '</div>';
     $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT 10");
     if (mysql_num_rows($req)) {
         while ($res = mysql_fetch_assoc($req)) {
@@ -225,17 +226,17 @@ if ($user_id) {
             $frm = mysql_fetch_assoc($q4);
             $nikuser = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "'ORDER BY `time` DESC");
             $colmes1 = mysql_num_rows($nikuser);
-            $cpg = ceil($colmes1 / $kmess);
+            $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
             $nam = mysql_fetch_assoc($nikuser);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Значки
             $icons = array(
-                ($np ? (!$res['vip'] ? functions::get_image('forum_normal.png') : '') : functions::get_image('forum_new.png')),
-                ($res['vip'] ? functions::get_image('forum_pin.png') : ''),
-                ($res['realid'] ? functions::get_image('rating.png') : ''),
-                ($res['edit'] ? functions::get_image('forum_closed.png') : '')
+                ($np ? (!$res['vip'] ? Functions::getImage('forum_normal.png') : '') : Functions::getImage('forum_new.png')),
+                ($res['vip'] ? Functions::getImage('forum_pin.png') : ''),
+                ($res['realid'] ? Functions::getImage('rating.png') : ''),
+                ($res['edit'] ? Functions::getImage('forum_closed.png') : '')
             );
-            echo functions::display_menu($icons, '&#160;', '&#160;');
+            echo Functions::displayMenu($icons, '&#160;', '&#160;');
             echo '<a href="index.php?id=' . $res['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&#160;[' . $colmes1 . ']';
             if ($cpg > 1)
                 echo '&#160;<a href="index.php?id=' . $res['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
@@ -249,7 +250,7 @@ if ($user_id) {
             $i++;
         }
     } else {
-        echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+        echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
     }
-    echo '<div class="phdr"><a href="index.php">' . $lng['to_forum'] . '</a></div>';
+    echo '<div class="phdr"><a href="index.php">' . Vars::$LNG['to_forum'] . '</a></div>';
 }

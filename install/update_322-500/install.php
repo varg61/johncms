@@ -3,13 +3,14 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 switch ($act) {
     case 'step2':
         /*
@@ -84,7 +85,7 @@ switch ($act) {
              '<span class="gray">' . $lng['final'] . '</span>' .
              '</div><hr />';
         if (!isset($_SESSION['step4'])) {
-            require('../incfiles/lib/class.upload.php');
+            require_once('../includes/lib/class.upload.php');
             $req_a = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `user` = '1'");
             // Получаем список альбомов юзера
             while (($res_a = mysql_fetch_assoc($req_a)) !== false) {
@@ -173,7 +174,7 @@ switch ($act) {
             // Конвертируем IP адреса Форума
             $req = mysql_query("SELECT `id`, `ip_old` FROM `forum` WHERE `type` = 'm'");
             while (($res = mysql_fetch_assoc($req)) !== false) {
-                if (!empty($res['ip_old']) && core::ip_valid($res['ip_old'])) {
+                if (!empty($res['ip_old']) && Vars::ip_valid($res['ip_old'])) {
                     mysql_query("UPDATE `forum` SET `ip` = '" . ip2long($res['ip_old']) . "' WHERE `id` = '" . $res['id'] . "' LIMIT 1");
                 }
             }
@@ -189,7 +190,7 @@ switch ($act) {
              '</div><hr />';
         echo '<p><h3 class="green">' . str_replace('INSTALL_VERSION', INSTALL_VERSION, $lng['successfully_updated']) . '</h3></p>' .
              '<p>' . $lng['final_note'] . '</p>' .
-             '<hr /><h3><a href="' . $set['homeurl'] . '">' . $lng['go_to_site'] . '</a></h3>';
+             '<hr /><h3><a href="' . Vars::$SYSTEM_SET['homeurl'] . '">' . $lng['go_to_site'] . '</a></h3>';
         break;
 
     default:

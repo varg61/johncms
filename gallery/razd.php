@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,12 +11,12 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($rights >= 6) {
+if (Vars::$USER_RIGHTS >= 6) {
     if (isset($_POST['submit'])) {
         $user = 0;
-        $text = functions::check($_POST['text']);
+        $text = Validate::filterString($_POST['text']);
         //TODO: Переделать запрос, убрать быдлокод
-        mysql_query("insert into `gallery` values(0,'0','" . time() . "','rz','','" . $text . "','','" . $user . "','','');");
+        mysql_query("insert into `gallery` values(0,'0','" . time() . "','rz','','" . mysql_real_escape_string($text) . "','','" . $user . "','','');");
         header("location: index.php");
     } else {
         echo 'Добавление раздела.<br/>

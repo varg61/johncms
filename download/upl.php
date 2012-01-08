@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,8 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../incfiles/head.php");
-if ($rights == 4 || $rights >= 6) {
+require_once ("../includes/head.php");
+if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (empty ($_POST['cat'])) {
         $loaddir = $loadroot;
     }
@@ -23,7 +23,7 @@ if ($rights == 4 || $rights >= 6) {
         $adrdir = mysql_fetch_array($cat1);
         $loaddir = "$adrdir[adres]/$adrdir[name]";
     }
-    $opis = functions::check($_POST['opis']);
+    $opis = Validate::filterString($_POST['opis']);
     $fname = $_FILES['fail']['name'];
     $fsize = $_FILES['fail']['size'];
     $scrname = $_FILES['screens']['name'];
@@ -31,7 +31,7 @@ if ($rights == 4 || $rights >= 6) {
     $scsize = @GetImageSize($_FILES['screens']['tmp_name']);
     $scwidth = $scsize[0];
     $scheight = $scsize[1];
-    $ftip = functions::format($fname);
+    $ftip = Functions::format($fname);
     $ffot = strtolower($scrname);
     $dopras = array("gif", "jpg", "png");
     if ($fname != "") {
@@ -39,49 +39,49 @@ if ($rights == 4 || $rights >= 6) {
             $newname = str_replace(".$ftip", "", $fname);
         }
         else {
-            $newname = functions::check($_POST['newname']);
+            $newname = Validate::filterString($_POST['newname']);
         }
         if ($scrname != "") {
-            $formfot = functions::format($ffot);
+            $formfot = Functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-                require_once ('../incfiles/end.php');
+                require_once ('../includes/end.php');
                 exit;
             }
         }
         if ($scwidth > 320 || $scheight > 320) {
             echo "Размер картинки не должен превышать разрешения 320*320 px<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if (preg_match("/[^\da-z_\-.]+/", $scrname)) {
             echo "В названии изображения $scrname присутствуют недопустимые символы<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
-        if ($fsize >= 1024 * $set['flsz']) {
-            echo "Вес файла превышает " . $set['flsz'] . " кб<br/>
+        if ($fsize >= 1024 * Vars::$SYSTEM_SET['flsz']) {
+            echo "Вес файла превышает " . Vars::$SYSTEM_SET['flsz'] . " кб<br/>
 <a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if (preg_match("/[^\da-z_\-.]+/", $fname)) {
             echo
                     "В названии файла <b>$fname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if (preg_match("/[^\da-z_\-.]+/", $newname)) {
             echo
                     "В новом названии файла <b>$newname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if ((preg_match("/.php/i", $fname)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess") or (preg_match("/php/i", $newname)) or (preg_match("/.pl/i", $newname)) or ($newname == ".htaccess")) {
             echo "Попытка отправить файл запрещенного типа.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if ((move_uploaded_file($_FILES["screens"]["tmp_name"], "$screenroot/$newname.$ftip.$formfot")) == true) {
@@ -96,7 +96,7 @@ if ($rights == 4 || $rights >= 6) {
             @ chmod("$ch", 0777);
             @ chmod("$loaddir/$ch", 0777);
             echo "Файл загружен!<br/>";
-            mysql_query("insert into `download` values(0,'" . $cat . "','" . $loaddir . "','" . time() . "','" . $ch . "','file','','','','" . $opis . "','" . $ch1 . "');");
+            mysql_query("insert into `download` values(0,'" . $cat . "','" . $loaddir . "','" . time() . "','" . $ch . "','file','','','','" . mysql_real_escape_string($opis) . "','" . $ch1 . "');");
         }
         else {
             echo "Ошибка при загрузке файла<br/>";
@@ -109,12 +109,12 @@ if ($rights == 4 || $rights >= 6) {
             $tmp_name = $array [0];
             $filebase64 = $array [1];
         }
-        $ftip = functions::format($tmp_name);
+        $ftip = Functions::format($tmp_name);
         if (empty ($_POST['newname'])) {
             $newname = str_replace(".$ftip", "", $tmp_name);
         }
         else {
-            $newname = functions::check($_POST['newname']);
+            $newname = Validate::filterString($_POST['newname']);
         }
         if (!empty ($_POST['screens1'])) {
             $uploaddir1 = "$screenroot";
@@ -128,16 +128,16 @@ if ($rights == 4 || $rights >= 6) {
                 echo
                         "В названии файла <b>$tmp_name1</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                         . $cat . "'>Повторить</a></div>";
-                require_once ('../incfiles/end.php');
+                require_once ('../includes/end.php');
                 exit;
             }
             $ffot = strtolower($tmp_name1);
             $dopras = array("gif", "jpg", "png");
 
-            $formfot = functions::format($ffot);
+            $formfot = Functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-                require_once ('../incfiles/end.php');
+                require_once ('../includes/end.php');
                 exit;
             }
             if (strlen($filebas64) > 0) {
@@ -158,7 +158,7 @@ if ($rights == 4 || $rights >= 6) {
                     if ($widthf > 320 || $heightf > 320) {
                         echo "Размер картинки не должен превышать разрешения 320*320 px<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
                         unlink("$FileName1");
-                        require_once ('../incfiles/end.php');
+                        require_once ('../includes/end.php');
                         exit;
                     }
                     echo 'Скриншот загружен!<br/>';
@@ -176,19 +176,19 @@ if ($rights == 4 || $rights >= 6) {
             echo
                     "В названии файла <b>$tmp_name</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if (eregi("[^a-z0-9.()+_-]", $newname)) {
             echo
                     "В новом названии файла <b>$newname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if ((preg_match("/php/i", $tmp_name)) or (preg_match("/.pl/i", $tmp_name)) or ($fname == ".htaccess") or (preg_match("/php/i", $newname)) or (preg_match("/.pl/i", $newname)) or ($newname == ".htaccess")) {
             echo "Попытка отправить файл запрещенного типа.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         if (strlen($filebase64) > 0) {
@@ -205,17 +205,17 @@ if ($rights == 4 || $rights >= 6) {
             if (file_exists($FileName) && filesize($FileName) == strlen($filedata)) {
                 $siz = filesize("$FileName");
                 $siz = round($siz / 1024, 2);
-                if ($siz >= 1024 * $set['flsz']) {
-                    echo "Вес файла превышает " . $set['flsz'] . " кб<br/>
+                if ($siz >= 1024 * Vars::$SYSTEM_SET['flsz']) {
+                    echo "Вес файла превышает " . Vars::$SYSTEM_SET['flsz'] . " кб<br/>
 <a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
                     unlink("$FileName");
-                    require_once ('../incfiles/end.php');
+                    require_once ('../includes/end.php');
                     exit;
                 }
                 echo 'Файл загружен!<br/>';
 
                 $ch = "$newname.$ftip";
-                mysql_query("insert into `download` values(0,'" . $cat . "','" . $loaddir . "','" . time() . "','" . $ch . "','file','','','','" . $opis . "','" . $ch1 . "');");
+                mysql_query("insert into `download` values(0,'" . $cat . "','" . $loaddir . "','" . time() . "','" . mysql_real_escape_string($ch) . "','file','','','','" . mysql_real_escape_string($opis) . "','" . mysql_real_escape_string($ch1) . "');");
             }
             else {
                 echo 'Ошибка при загрузке файла<br/>';

@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../incfiles/head.php");
+require_once ("../includes/head.php");
 if (isset ($_POST['submit'])) {
     if (!empty ($_POST['razmer'])) {
         $razmer = intval($_POST['razmer']);
@@ -37,4 +37,4 @@ else {
 <option value='200'>200*200</option>
 </select><input type='submit' name='submit' value='ok'/></p></form>";
 }
-echo "<p><a href='?'>" . $lng['back'] . "</a></p>";
+echo "<p><a href='?'>" . Vars::$LNG['back'] . "</a></p>";

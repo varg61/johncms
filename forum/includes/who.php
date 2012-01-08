@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -12,63 +12,65 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = $lng_forum['who_in_forum'];
-$headmod = $id ? 'forum,' . $id : 'forumwho';
-require_once('../incfiles/head.php');
-if (!$user_id) {
+$headmod = Vars::$ID ? 'forum,' . Vars::$ID : 'forumwho';
+require_once('../includes/head.php');
+if (!Vars::$USER_ID) {
     header('Location: index.php');
     exit;
 }
 
-if ($id) {
+//TODO: Переделать с $do на $mod
+
+if (Vars::$ID) {
     /*
     -----------------------------------------------------------------
     Показываем общий список тех, кто в выбранной теме
     -----------------------------------------------------------------
     */
-    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id' AND `type` = 't'");
+    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
-        echo '<div class="phdr"><b>' . $lng_forum['who_in_topic'] . ':</b> <a href="index.php?id=' . $id . '">' . $res['text'] . '</a></div>';
-        if ($rights > 0)
-            echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who&amp;id=' . $id . '">' . $lng['authorized'] . '</a> | ' . $lng['guests']
-                    : $lng['authorized'] . ' | <a href="index.php?act=who&amp;do=guest&amp;id=' . $id . '">' . $lng['guests'] . '</a>') . '</div>';
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` = 'forum,$id'"), 0);
+        echo '<div class="phdr"><b>' . $lng_forum['who_in_topic'] . ':</b> <a href="index.php?id=' . Vars::$ID . '">' . $res['text'] . '</a></div>';
+        if (Vars::$USER_RIGHTS > 0)
+            echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who&amp;id=' . Vars::$ID . '">' . Vars::$LNG['authorized'] . '</a> | ' . Vars::$LNG['guests']
+                    : Vars::$LNG['authorized'] . ' | <a href="index.php?act=who&amp;do=guest&amp;id=' . Vars::$ID . '">' . Vars::$LNG['guests'] . '</a>') . '</div>';
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` = 'forum," . Vars::$ID . "'"), 0);
         if ($total) {
-            $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` = 'forum,$id' ORDER BY " . ($do == 'guest' ? "`movings` DESC"
-                                       : "`name` ASC") . " LIMIT $start, $kmess");
+            $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? 'cms_sessions' : 'users') . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` = 'forum," . Vars::$ID . "' ORDER BY " . ($do == 'guest' ? "`movings` DESC"
+                                       : "`name` ASC") . " LIMIT " . Vars::db_pagination());
             while (($res = mysql_fetch_assoc($req)) !== false) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                $set_user['avatar'] = 0;
-                echo functions::display_user($res, 0, ($act == 'guest' || ($rights >= 1 && $rights >= $res['rights']) ? 1 : 0));
+                Vars::$USER_SET['avatar'] = 0;
+                echo Functions::displayUser($res, 0, (Vars::$ACT == 'guest' || (Vars::$USER_RIGHTS >= 1 && Vars::$USER_RIGHTS >= $res['rights']) ? 1 : 0));
                 echo '</div>';
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+            echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
         }
     } else {
         header('Location: index.php');
     }
-    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>' .
-         '<p><a href="index.php?id=' . $id . '">' . $lng_forum['to_topic'] . '</a></p>';
+    echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>' .
+         '<p><a href="index.php?id=' . Vars::$ID . '">' . $lng_forum['to_topic'] . '</a></p>';
 } else {
     /*
     -----------------------------------------------------------------
     Показываем общий список тех, кто в форуме
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['who_in_forum'] . '</div>';
-    if ($rights > 0)
-        echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who">' . $lng['users'] . '</a> | <b>' . $lng['guests'] . '</b>'
-                : '<b>' . $lng['users'] . '</b> | <a href="index.php?act=who&amp;do=guest">' . $lng['guests'] . '</a>') . '</div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['who_in_forum'] . '</div>';
+    if (Vars::$USER_RIGHTS > 0)
+        echo '<div class="topmenu">' . ($do == 'guest' ? '<a href="index.php?act=who">' . Vars::$LNG['users'] . '</a> | <b>' . Vars::$LNG['guests'] . '</b>'
+                : '<b>' . Vars::$LNG['users'] . '</b> | <a href="index.php?act=who&amp;do=guest">' . Vars::$LNG['guests'] . '</a>') . '</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . ($do == 'guest' ? "cms_sessions" : "users") . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` LIKE 'forum%'"), 0);
-    if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=who&amp;' . ($do == 'guest' ? 'do=guest&amp;' : ''), $start, $total, $kmess) . '</div>';
+    if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=who&amp;' . ($do == 'guest' ? 'do=guest&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     if ($total) {
         $req = mysql_query("SELECT * FROM `" . ($do == 'guest' ? "cms_sessions" : "users") . "` WHERE `lastdate` > " . (time() - 300) . " AND `place` LIKE 'forum%' ORDER BY " . ($do == 'guest' ? "`movings` DESC"
-                                   : "`name` ASC") . " LIMIT $start, $kmess");
+                                   : "`name` ASC") . " LIMIT " . Vars::db_pagination());
         $i = 0;
         while (($res = mysql_fetch_assoc($req)) !== false) {
-            if ($res['id'] == core::$user_id) echo '<div class="gmenu">';
+            if ($res['id'] == Vars::$USER_ID) echo '<div class="gmenu">';
             else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Вычисляем местоположение
             $place = '';
@@ -126,22 +128,22 @@ if ($id) {
             }
             $arg = array(
                 'stshide' => 1,
-                'header' => ('<br />' . functions::get_image('info.png', '', 'align="middle"') . '&#160;' . $place)
+                'header' => ('<br />' . Functions::getImage('info.png', '', 'align="middle"') . '&#160;' . $place)
             );
-            echo functions::display_user($res, $arg);
+            echo Functions::displayUser($res, $arg);
             echo '</div>';
             ++$i;
         }
     } else {
-        echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+        echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
     }
-    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-    if ($total > $kmess) {
-        echo '<div class="topmenu">' . functions::display_pagination('index.php?act=who&amp;' . ($do == 'guest' ? 'do=guest&amp;' : ''), $start, $total, $kmess) . '</div>' .
+    echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+    if ($total > Vars::$USER_SET['page_size']) {
+        echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=who&amp;' . ($do == 'guest' ? 'do=guest&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
              '<p><form action="index.php?act=who' . ($do == 'guest' ? '&amp;do=guest' : '') . '" method="post">' .
              '<input type="text" name="page" size="2"/>' .
-             '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+             '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
              '</form></p>';
     }
-    echo '<p><a href="index.php">' . $lng['to_forum'] . '</a></p>';
+    echo '<p><a href="index.php">' . Vars::$LNG['to_forum'] . '</a></p>';
 }

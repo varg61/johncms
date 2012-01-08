@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -12,17 +12,17 @@
 define('_IN_JOHNCMS', 1);
 
 $headmod = 'users';
-require('../incfiles/core.php');
+require_once('../includes/core.php');
 
 /*
 -----------------------------------------------------------------
 Закрываем от неавторизованных юзеров
 -----------------------------------------------------------------
 */
-if (!$user_id && !$set['active']) {
-    require('../incfiles/head.php');
-    echo functions::display_error($lng['access_guest_forbidden']);
-    require('../incfiles/end.php');
+if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
+    require_once('../includes/head.php');
+    echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
+    require_once('../includes/end.php');
     exit;
 }
 
@@ -35,39 +35,35 @@ $array = array(
     'admlist' => 'includes',
     'birth' => 'includes',
     'online' => 'includes',
-    'search' => 'includes',
-    'top' => 'includes',
-    'userlist' => 'includes'
+    'top' => 'includes'
 );
-$path = !empty($array[$act]) ? $array[$act] . '/' : '';
-if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
-    require_once($path . $act . '.php');
+$path = !empty($array[Vars::$ACT]) ? $array[Vars::$ACT] . '/' : '';
+if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.php')) {
+    require_once($path . Vars::$ACT . '.php');
 } else {
     /*
     -----------------------------------------------------------------
     Актив сайта
     -----------------------------------------------------------------
     */
-    $textl = $lng['community'];
-    require('../incfiles/head.php');
-    $brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . date('j', time()) . "' AND `monthb` = '" . date('n', time()) . "' AND `preg` = '1'"), 0);
-    $count_adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0"), 0);
-    echo '<div class="phdr"><b>' . $lng['community'] . '</b></div>' .
-         '<div class="gmenu"><form action="search.php" method="post">' .
-         '<p><h3>' . $lng['search'] . '</h3>' .
-         '<input type="text" name="search"/>' .
-         '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
-         '<small>' . $lng['search_nick_help'] . '</small></p></form></div>' .
-         '<div class="menu"><p>' .
-         functions::get_image('contacts.png') . '&#160;<a href="index.php?act=userlist">' . $lng['users'] . '</a> (' . counters::users() . ')<br />' .
-         functions::get_image('users.png') . '&#160;<a href="index.php?act=admlist">' . $lng['administration'] . '</a> (' . $count_adm . ')' .
-         ($brth
-                 ? '<br />' . functions::get_image('award.png') . '&#160;<a href="index.php?act=birth">' . $lng['birthday_men'] . '</a> (' . $brth . ')'
-                 : '') .
-         '</p><p>' . functions::get_image('album_4.png') . '&#160;<a href="album.php">' . $lng['photo_albums'] . '</a> (' . counters::album() . ')</p>' .
-         '<p>' . functions::get_image('rating.png') . '&#160;<a href="index.php?act=top">' . $lng['users_top'] . '</a></p>' .
-         '</div>' .
-         '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
+    $textl = Vars::$LNG['community'];
+    require_once('../includes/head.php');
+    //TODO: Доработать!
+    //$brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . date('j', time()) . "' AND `monthb` = '" . date('n', time()) . "' AND `preg` = '1'"), 0);
+    $count_adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `rights` > 0"), 0);
+    echo'<div class="phdr"><b>' . Vars::$LNG['community'] . '</b></div>' .
+        '<div class="gmenu"><form action="users_search.php" method="post">' .
+        '<p><h3>' . Vars::$LNG['search'] . '</h3>' .
+        '<input type="text" name="search"/>' .
+        '<input type="submit" value="' . Vars::$LNG['search'] . '" name="submit" /><br />' .
+        '<small>' . Vars::$LNG['search_nick_help'] . '</small></p></form></div>' .
+        '<div class="menu"><p>' .
+        Functions::getImage('users.png') . '&#160;<a href="users_list.php">' . Vars::$LNG['users'] . '</a> (' . Counters::usersCount() . ')<br />' .
+        ($brth ? '<br />' . Functions::getImage('award.png') . '&#160;<a href="index.php?act=birth">' . Vars::$LNG['birthday_men'] . '</a> (' . $brth . ')' : '') .
+        '</p><p>' . Functions::getImage('album_4.png') . '&#160;<a href="album.php">' . Vars::$LNG['photo_albums'] . '</a> (' . Counters::albumCount() . ')</p>' .
+        '<p>' . Functions::getImage('rating.png') . '&#160;<a href="index.php?act=top">' . Vars::$LNG['users_top'] . '</a></p>' .
+        '</div>' .
+        '<div class="phdr"><a href="index.php">' . Vars::$LNG['back'] . '</a></div>';
 }
 
-require_once('../incfiles/end.php');
+require_once('../includes/end.php');

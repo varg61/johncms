@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,19 +11,19 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-switch ($mod) {
+switch (Vars::$MOD) {
     case 'up':
         /*
         -----------------------------------------------------------------
         Передвигаем альбом на позицию вверх
         -----------------------------------------------------------------
         */
-        if ($al && $user['id'] == $user_id || $rights >= 7) {
-            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
+        if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
+            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['user_id'] . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $sort = $res['sort'];
-                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
+                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['user_id'] . "' AND `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
                 if (mysql_num_rows($req)) {
                     $res = mysql_fetch_assoc($req);
                     $id2 = $res['id'];
@@ -41,12 +41,12 @@ switch ($mod) {
         Передвигаем альбом на позицию вниз
         -----------------------------------------------------------------
         */
-        if ($al && $user['id'] == $user_id || $rights >= 7) {
-            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
+        if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
+            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['user_id'] . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $sort = $res['sort'];
-                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
+                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['user_id'] . "' AND `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
                 if (mysql_num_rows($req)) {
                     $res = mysql_fetch_assoc($req);
                     $id2 = $res['id'];
@@ -59,4 +59,4 @@ switch ($mod) {
         break;
 }
 
-header('Location: album.php?act=list&user=' . $user['id']);
+header('Location: album.php?act=list&user=' . $user['user_id']);

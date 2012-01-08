@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -12,8 +12,8 @@
 define('_IN_JOHNCMS', 1);
 set_time_limit(1200);
 
-define('INSTALL_VERSION', '4.4.0'); // Инсталлируемая версия
-define('UPDATE_VERSION', '4.3.0'); // Обновление с версии
+define('INSTALL_VERSION', '1.0.0');              // Инсталлируемая версия
+define('UPDATE_VERSION', '4.4.0');               // Обновление с версии
 
 //TODO: Добавить в таблицу настроек поле gzip
 
@@ -43,8 +43,7 @@ class install
         '/files/users/photo/',
         '/files/users/pm/',
         '/gallery/foto/',
-        '/gallery/temp/',
-        '/incfiles/'
+        '/gallery/temp/'
     );
 
     /*
@@ -53,6 +52,7 @@ class install
     -----------------------------------------------------------------
     */
     private static $files = array(
+        '/includes/config.php',
         '/library/java/textfile.txt',
         '/library/java/META-INF/MANIFEST.MF'
     );
@@ -83,7 +83,7 @@ class install
         global $lng;
         $error = array();
         if (ini_get('register_globals')) $error[] = 'register_globals';
-        if (ini_get('arg_separator.output') != '&amp;') $error[] = 'arg_separator.output';
+        //if (ini_get('arg_separator.output') != '&amp;') $error[] = 'arg_separator.output';
         return !empty($error) ? $error : false;
     }
 
@@ -166,8 +166,10 @@ class install
 -----------------------------------------------------------------
 */
 if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
-    if (file_exists('../incfiles/db.php')) {
-        require('../incfiles/core.php');
+    require_once('../includes/config.php');
+    if(isset($db_host) && !empty($db_host) && isset($db_name) && !empty($db_name) && isset($db_user) &&!empty($db_user) && isset($db_pass) && ($connect = @mysql_connect($db_host, $db_user, $db_pass) !== false)){
+        @mysql_close($connect);
+        require_once('../includes/core.php');
     } else {
         $act = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : false;
         session_name('SESID');
@@ -187,7 +189,7 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
     ob_start();
     echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' .
          '<html xmlns="http://www.w3.org/1999/xhtml">' .
-         '<title>JohnCMS ' . INSTALL_VERSION . (MODE == 'install' ? '' : ' | ' . $lng['update_from'] . ' ' . UPDATE_VERSION) . '</title>' .
+         '<title>MobiCMS ' . INSTALL_VERSION . (MODE == 'install' ? '' : ' | ' . $lng['update_from'] . ' ' . UPDATE_VERSION) . '</title>' .
          '<style type="text/css">' .
          'a, a:link, a:visited{color: blue;}' .
          'body {font-family: Arial, Helvetica, sans-serif; font-size: small; color: #000000; background-color: #FFFFFF}' .
@@ -206,7 +208,7 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
          '.st{color: gray; text-decoration: line-through}' .
          '</style>' .
          '</head><body>' .
-         '<h1 class="green">JohnCMS <span class="red">' . INSTALL_VERSION . '</span></h1>' . (MODE == 'install' ? '' : '<h3>' . $lng['update_from'] . ' ' . UPDATE_VERSION . '</h3>') . '<hr />';
+         '<h1 class="green">MobiCMS <span class="red">' . INSTALL_VERSION . '</span></h1>' . (MODE == 'install' ? '' : '<h3>' . $lng['update_from'] . ' ' . UPDATE_VERSION . '</h3>') . '<hr />';
     if (!$act) {
         echo '<form action="index.php" method="post">' .
              '<p><h3 class="green">' . $lng['change_language'] . '</h3>' .
@@ -216,8 +218,8 @@ if (is_dir(MODE) && file_exists(MODE . '/install.php')) {
              '<p>' . $lng['languages'] . '</p>' .
              '<hr />';
     }
-    require(MODE . '/install.php');
-    echo '<hr />&copy;&#160;Powered by <a href="http://johncms.com">JohnCMS</a></body></html>';
+    require_once(MODE . '/install.php');
+    echo '<hr />&copy;&#160;Powered by <a href="http://mobicms.net">MobiCMS</a></body></html>';
 } else {
     echo "<h2>FATAL ERROR: can't begin installation</h2>";
 }

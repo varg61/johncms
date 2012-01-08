@@ -31,7 +31,7 @@ p {
 
 textarea {
   width: 99%;
-  max-width: 640px
+  max-width: 640px;
 }
 
 ul {
@@ -60,8 +60,29 @@ ul {
   padding: 2px 4px 4px 4px;
 }
 
+.currentpage {
+  background-color: #edebeb;
+  border: 1px solid #cccccc;
+  padding: 0px 5px 0px 5px;
+}
+
 .end {
   text-align: center;
+}
+
+.fields_block{
+  padding: 2px 0px 4px 0px;
+}
+
+.fields_title{
+  color: black;
+  font-weight: bold;
+  font-size: medium
+}
+
+.fields_description{
+  font-size: x-small;
+  color: #878787
 }
 
 .fmenu {
@@ -121,17 +142,17 @@ ul {
   padding: 5px 0 6px 4px;
 }
 
-.hidetop{
-  font-size: x-small;
-  background-color : #e0e6e9;
-  border : 1px dotted #9faebb;
-  padding : 2px;
+.hidemain{
+  border: 1px dotted black;
+  border-top: 0px;
+  padding: 2px;
 }
 
-.hidemain{
-  border : 1px dotted black;
-  border-top: 0px;
-  padding : 2px;
+.hidetop{
+  font-size: x-small;
+  background-color: #e0e6e9;
+  border: 1px dotted #9faebb;
+  padding: 2px;
 }
 
 .left {
@@ -251,7 +272,7 @@ ul {
 }
 
 .topmenu input{
-  font-size: x-small
+  font-size: x-small;
 }
 
 .user {
@@ -259,6 +280,12 @@ ul {
   border: 1px solid white;
   margin: 0;
   padding: 3px 4px 3px 4px;
+}
+
+a.pagenav {
+  border: 1px solid #cccccc;
+  padding: 0px 3px 0px 3px;
+  text-decoration: none;
 }
 
 .alarm a:link, .alarm a:visited {
@@ -302,6 +329,11 @@ ul {
   text-decoration: none;
 }
 
+a.pagenav:hover {
+  background-color: #f7f7f7;
+  border: 1px solid #dedede;
+}
+
 a:active {
   color: #666600;
   text-decoration: underline;
@@ -315,21 +347,4 @@ a:hover {
 a:link, a:visited {
   color: #0000bb;
   text-decoration: underline;
-}
-
-.currentpage {
-    background-color: #edebeb;
-    border: 1px solid #cccccc;
-    padding: 0px 5px 0px 5px;
-}
-
-a.pagenav {
-    border: 1px solid #cccccc;
-    padding: 0px 3px 0px 3px;
-    text-decoration: none;
-}
-
-a.pagenav:hover {
-    background-color: #f7f7f7;
-    border: 1px solid #dedede;
 }

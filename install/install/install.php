@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -32,7 +32,7 @@ switch ($act) {
         Установка завершена
         -----------------------------------------------------------------
         */
-        functions::smileys(0, 2);
+        Functions::smileys(0, 2);
         echo '<span class="st">' . $lng['check_1'] . '</span><br />' .
              '<span class="st">' . $lng['database'] . '</span><br />' .
              '<span class="st">' . $lng['site_settings'] . '</span>' .
@@ -58,7 +58,7 @@ switch ($act) {
         $admin_error = array();
         // Принимаем данные формы
         $db_host = isset($_POST['dbhost']) ? htmlentities(trim($_POST['dbhost'])) : 'localhost';
-        $db_name = isset($_POST['dbname']) ? htmlentities(trim($_POST['dbname'])) : 'johncms';
+        $db_name = isset($_POST['dbname']) ? htmlentities(trim($_POST['dbname'])) : 'mobicms';
         $db_user = isset($_POST['dbuser']) ? htmlentities(trim($_POST['dbuser'])) : 'root';
         $db_pass = isset($_POST['dbpass']) ? htmlentities(trim($_POST['dbpass'])) : '';
         $site_url = isset($_POST['siteurl']) ? preg_replace("#/$#", '', htmlentities(trim($_POST['siteurl']), ENT_QUOTES, 'UTF-8')) : 'http://' . $_SERVER["SERVER_NAME"];
@@ -117,10 +117,9 @@ switch ($act) {
                           '$db_host = ' . "'$db_host';\r\n" .
                           '$db_name = ' . "'$db_name';\r\n" .
                           '$db_user = ' . "'$db_user';\r\n" .
-                          '$db_pass = ' . "'$db_pass';\r\n\r\n" .
-                          '?>';
-                if (!file_put_contents('../incfiles/db.php', $dbfile)) {
-                    echo 'ERROR: Can not write db.php</body></html>';
+                          '$db_pass = ' . "'$db_pass';";
+                if (!file_put_contents('../includes/config.php', $dbfile)) {
+                    echo 'ERROR: Can not write config.php</body></html>';
                     exit;
                 }
                 // Соединяемся с базой данных

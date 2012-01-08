@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,19 +11,19 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require('../incfiles/head.php');
+require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
 Редактировать картинку
 -----------------------------------------------------------------
 */
-if ($img && $user['id'] == $user_id || $rights >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "'");
+if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
+    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['user_id'] . "'");
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $album = $res['album_id'];
-        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['id'] . '"><b>' . $lng['photo_album'] . '</b></a> | ' . $lng_profile['image_edit'] . '</div>';
+        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '"><b>' . Vars::$LNG['photo_album'] . '</b></a> | ' . $lng_profile['image_edit'] . '</div>';
         if (isset($_POST['submit'])) {
             if (!isset($_SESSION['post'])) {
                 $_SESSION['post'] = true;
@@ -34,8 +34,8 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 $description = isset($_POST['description']) ? trim($_POST['description']) : '';
                 $description = mb_substr($description, 0, 500);
                 if ($rotate == 1 || $rotate == 2 || ($brightness > 0 && $brightness < 5) || ($contrast > 0 && $contrast < 5)) {
-                    $path = '../files/users/album/' . $user['id'] . '/';
-                    require('../incfiles/lib/class.upload.php');
+                    $path = '../files/users/album/' . $user['user_id'] . '/';
+                    require_once('../includes/lib/class.upload.php');
                     $handle = new upload($path . $res['img_name']);
                     // Обрабатываем основное изображение
                     $handle->file_new_name_body = 'img_' . time();
@@ -120,8 +120,8 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                         $tmb_name = $handle->file_dst_name;
                     }
                     $handle->clean();
-                    @unlink('../files/users/album/' . $user['id'] . '/' . $res['img_name']);
-                    @unlink('../files/users/album/' . $user['id'] . '/' . $res['tmb_name']);
+                    @unlink('../files/users/album/' . $user['user_id'] . '/' . $res['img_name']);
+                    @unlink('../files/users/album/' . $user['user_id'] . '/' . $res['tmb_name']);
                     $sql = "`img_name` = '" . mysql_real_escape_string($img_name) . "', `tmb_name` = '" . mysql_real_escape_string($tmb_name) . "',";
                 }
                 mysql_query("UPDATE `cms_album_files` SET $sql
@@ -130,18 +130,19 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                 ");
             }
             echo '<div class="gmenu"><p>' . $lng_profile['image_edited'] . '<br />' .
-                 '<a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                 '<a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
         } else {
             unset($_SESSION['post']);
-            echo '<form action="album.php?act=image_edit&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
+            echo '<form action="album.php?act=image_edit&amp;img=' . $img . '&amp;user=' . $user['user_id'] . '" method="post">' .
                  '<div class="menu">' .
                  '<p><h3>' . $lng_profile['image'] . '</h3>' .
-                 '<img src="../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></p>' .
-                 '<p><h3>' . $lng['description'] . '</h3>' .
-                 '<textarea name="description" rows="' . $set_user['field_h'] . '">' . functions::checkout($res['description']) . '</textarea><br />' .
-                 '<small>' . $lng['not_mandatory_field'] . ', max. 500</small></p>' .
+                 '<img src="../files/users/album/' . $user['user_id'] . '/' . $res['tmb_name'] . '" /></p>' .
+                 '<p><h3>' . Vars::$LNG['description'] . '</h3>' .
+                 '<textarea name="description" rows="' . Vars::$USER_SET['field_h'] . '">' . Validate::filterString($res['description']) . '</textarea><br />' .
+                 '<small>' . Vars::$LNG['not_mandatory_field'] . ', max. 500</small></p>' .
                  '</div><div class="rmenu">' .
-                 '<p><h3>Яркость</h3>' .
+                //TODO: Перевести!
+                '<p><h3>Яркость</h3>' .
                  '<table border="0" cellspacing="0" cellpadding="0" style="text-align:center"><tr>' .
                  '<td><input type="radio" name="brightness" value="1"/></td>' .
                  '<td><input type="radio" name="brightness" value="2"/></td>' .
@@ -174,11 +175,11 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                  '<input type="radio" name="rotate" value="2"/>&#160;' . $lng_profile['image_rotate_right'] . '<br />' .
                  '<input type="radio" name="rotate" value="1"/>&#160;' . $lng_profile['image_rotate_left'] . '</p>' .
                  '<p><small>' . $lng_profile['image_edit_warning'] . '</small></p>' .
-                 '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
+                 '<p><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '"/></p>' .
                  '</div></form>' .
-                 '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
+                 '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['cancel'] . '</a></div>';
         }
     } else {
-        echo functions::display_error($lng['error_wrong_data']);
+        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
     }
 }

@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
+
+defined('_IN_JOHNCMS') or die('Error: restricted access');
+
 // Проверяем наличие комментируемого объекта
 $req_obj = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img'");
 if (mysql_num_rows($req_obj)) {
@@ -10,11 +21,11 @@ if (mysql_num_rows($req_obj)) {
     Получаем данные владельца Альбома
     -----------------------------------------------------------------
     */
-    $owner = functions::get_user($res_obj['user_id']);
+    $owner = Functions::getUser($res_obj['user_id']);
     if (!$owner) {
-        require('../incfiles/head.php');
-        echo functions::display_error($lng['user_does_not_exist']);
-        require('../incfiles/end.php');
+        require_once('../includes/head.php');
+        echo Functions::displayError(Vars::$LNG['user_does_not_exist']);
+        require_once('../includes/end.php');
         exit;
     }
 
@@ -26,26 +37,26 @@ if (mysql_num_rows($req_obj)) {
     unset($_SESSION['ref']);
     $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '" . $res_obj['album_id'] . "'");
     $res_a = mysql_fetch_assoc($req_a);
-    if ($res_a['access'] == 1 && $owner['id'] != $user_id && $rights < 6) {
+    if ($res_a['access'] == 1 && $owner['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
         // Если доступ закрыт
-        require('../incfiles/head.php');
-        echo functions::display_error($lng['access_forbidden']) .
+        require_once('../includes/head.php');
+        echo Functions::displayError(Vars::$LNG['access_forbidden']) .
             '<div class="phdr"><a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
-        require('../incfiles/end.php');
+        require_once('../includes/end.php');
         exit;
     }
-    $context_top = '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b></a> | ' .
-        '<a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng['personal_2'] . '</a></div>' .
+    $context_top = '<div class="phdr"><a href="album.php"><b>' . Vars::$LNG['photo_albums'] . '</b></a> | ' .
+        '<a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . Vars::$LNG['personal_2'] . '</a></div>' .
         '<div class="menu"><a href="album.php?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="../files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
     if (!empty($res_obj['description']))
-        $context_top .= '<div class="gray">' . functions::smileys(functions::checkout($res_obj['description'], 1)) . '</div>';
+        $context_top .= '<div class="gray">' . Functions::smileys(Validate::filterString($res_obj['description'], 1)) . '</div>';
     $context_top .= '<div class="sub">' .
         '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['name'] . '</b></a> | ' .
-        '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . functions::checkout($res_a['name']) . '</a>';
-    if ($res_obj['access'] == 4 || $rights >= 7) {
+        '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . Validate::filterString($res_a['name']) . '</a>';
+    if ($res_obj['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
         $context_top .= vote_photo($res_obj) .
-            '<div class="gray">' . $lng['count_views'] . ': ' . $res_obj['views'] . ', ' . $lng['count_downloads'] . ': ' . $res_obj['downloads'] . '</div>' .
-            '<a href="album.php?act=image_download&amp;img=' . $res_obj['id'] . '">' . $lng['download'] . '</a>';
+            '<div class="gray">' . Vars::$LNG['count_views'] . ': ' . $res_obj['views'] . ', ' . Vars::$LNG['count_downloads'] . ': ' . $res_obj['downloads'] . '</div>' .
+            '<a href="album.php?act=image_download&amp;img=' . $res_obj['id'] . '">' . Vars::$LNG['download'] . '</a>';
     }
     $context_top .= '</div></div>';
 
@@ -64,7 +75,7 @@ if (mysql_num_rows($req_obj)) {
         'owner_delete' => true,                                                // Возможность владельцу удалять комментарий
         'owner_reply' => true,                                                 // Возможность владельцу отвечать на комментарий
         'owner_edit' => false,                                                 // Возможность владельцу редактировать комментарий
-        'title' => $lng['comments'],                                           // Название раздела
+        'title' => Vars::$LNG['comments'],                                           // Название раздела
         'context_top' => $context_top,                                         // Выводится вверху списка
         'context_bottom' => ''                                                 // Выводится внизу списка
     );
@@ -74,7 +85,7 @@ if (mysql_num_rows($req_obj)) {
     Ставим метку прочтения
     -----------------------------------------------------------------
     */
-    if(core::$user_id == $user['id'] && $res_obj['unread_comments'])
+    if(Vars::$USER_ID == $user['user_id'] && $res_obj['unread_comments'])
         mysql_query("UPDATE `cms_album_files` SET `unread_comments` = '0' WHERE `id` = '$img' LIMIT 1");
 
     /*
@@ -82,8 +93,8 @@ if (mysql_num_rows($req_obj)) {
     Показываем комментарии
     -----------------------------------------------------------------
     */
-    require('../incfiles/head.php');
-    $comm = new comments($arg);
+    require_once('../includes/head.php');
+    $comm = new Comments($arg);
 
     /*
     -----------------------------------------------------------------
@@ -93,6 +104,6 @@ if (mysql_num_rows($req_obj)) {
     if($comm->added)
         mysql_query("UPDATE `cms_album_files` SET `unread_comments` = '1' WHERE `id` = '$img' LIMIT 1");
 } else {
-    echo functions::display_error($lng['error_wrong_data']);
+    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
 }
 ?>

@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,22 +11,22 @@
 
 define('_IN_JOHNCMS', 1);
 
-require('../incfiles/core.php');
+require_once('../includes/core.php');
 $headmod = 'gallery';
-$lng_gal = core::load_lng('gallery');
-$textl = $lng['gallery'];
-require('../incfiles/head.php');
+$lng_gal = Vars::loadLanguage('gallery');
+$textl = Vars::$LNG['gallery'];
+require_once('../includes/head.php');
 
 // Ограничиваем доступ к Галерее
 $error = '';
-if (!$set['mod_gal'] && $rights < 7)
+if (!Vars::$SYSTEM_SET['mod_gal'] && Vars::$USER_RIGHTS < 7)
     $error = $lng_gal['gallery_closed'];
-elseif ($set['mod_gal'] == 1 && !$user_id)
-    $error = $lng['access_guest_forbidden'];
+elseif (Vars::$SYSTEM_SET['mod_gal'] == 1 && !Vars::$USER_ID)
+    $error = Vars::$LNG['access_guest_forbidden'];
 if ($error) {
-    require_once('../incfiles/head.php');
+    require_once('../includes/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once('../incfiles/end.php');
+    require_once('../includes/end.php');
     exit;
 }
 
@@ -41,13 +41,13 @@ $array = array(
     'cral',
     'razd'
 );
-if (in_array($act, $array) && file_exists($act . '.php')) {
-    require_once($act . '.php');
+if (in_array(Vars::$ACT, $array) && file_exists(Vars::$ACT . '.php')) {
+    require_once(Vars::$ACT . '.php');
 } else {
-    if (!$set['mod_gal'])
+    if (!Vars::$SYSTEM_SET['mod_gal'])
         echo '<p><font color="#FF0000"><b>' . $lng_gal['gallery_closed'] . '</b></font></p>';
-    if ($id) {
-        $type = mysql_query("SELECT * FROM `gallery` WHERE `id` = '$id' LIMIT 1");
+    if (Vars::$ID) {
+        $type = mysql_query("SELECT * FROM `gallery` WHERE `id` = " . Vars::$ID . " LIMIT 1");
         $ms = mysql_fetch_assoc($type);
         switch ($ms['type']) {
             case 'rz':
@@ -56,10 +56,10 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 Просмотр раздела
                 -----------------------------------------------------------------
                 */
-                echo '<div class="phdr"><a href="index.php"><b>' . $lng['gallery'] . '</b></a> | ' . $ms['text'] . '</div>';
-                $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'al' AND `refid` = '$id'"), 0);
+                echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['gallery'] . '</b></a> | ' . $ms['text'] . '</div>';
+                $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'al' AND `refid` = " . Vars::$ID), 0);
                 if ($total) {
-                    $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `refid` = '$id' ORDER BY `time` DESC LIMIT $start, $kmess");
+                    $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'al' AND `refid` = " . Vars::$ID . " ORDER BY `time` DESC LIMIT " , Vars::db_pagination());
                     while ($res = mysql_fetch_assoc($req)) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $total_f = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft' AND `refid` = '" . $res['id'] . "'"), 0);
@@ -67,20 +67,20 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         ++$i;
                     }
                 } else {
-                    echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+                    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
                 }
-                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
-                if ($total > $kmess) {
-                    echo '<p>' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
-                         '<p><form action="index.php?id=' . $id . '" method="post">' .
+                echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div><p>';
+                if ($total > Vars::$USER_SET['page_size']) {
+                    echo '<p>' . Functions::displayPagination('index.php?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+                         '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
                          '<input type="text" name="page" size="2"/>' .
-                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+                         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
                          '</form></p>';
                 }
-                if ($rights >= 6) {
-                    echo "<a href='index.php?act=cral&amp;id=" . $id . "'>" . $lng_gal['create_album'] . "</a><br/>";
-                    echo "<a href='index.php?act=del&amp;id=" . $id . "'>" . $lng_gal['delete_section'] . "</a><br/>";
-                    echo "<a href='index.php?act=edit&amp;id=" . $id . "'>" . $lng_gal['edit_section'] . "</a><br/>";
+                if (Vars::$USER_RIGHTS >= 6) {
+                    echo "<a href='index.php?act=cral&amp;id=" . Vars::$ID . "'>" . $lng_gal['create_album'] . "</a><br/>";
+                    echo "<a href='index.php?act=del&amp;id=" . Vars::$ID . "'>" . $lng_gal['delete_section'] . "</a><br/>";
+                    echo "<a href='index.php?act=edit&amp;id=" . Vars::$ID . "'>" . $lng_gal['edit_section'] . "</a><br/>";
                 }
                 echo "<a href='index.php'>В галерею</a></p>";
                 break;
@@ -108,9 +108,9 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 }
                 $rz = mysql_query("select * from `gallery` where type='rz' and  id='" . $ms['refid'] . "';");
                 $rz1 = mysql_fetch_array($rz);
-                echo '<div class="phdr"><a href="index.php"><b>' . $lng['gallery'] . '</b></a> | <a href="index.php?id=' . $ms['refid'] . '">' . $rz1['text'] . '</a> | ' . $ms['text'] . '</div>';
-                $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft' AND `refid` = '$id'"), 0);
-                $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'ft' AND `refid` = '$id' ORDER BY `time` DESC LIMIT $start, $kmess");
+                echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['gallery'] . '</b></a> | <a href="index.php?id=' . $ms['refid'] . '">' . $rz1['text'] . '</a> | ' . $ms['text'] . '</div>';
+                $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft' AND `refid` = " . Vars::$ID), 0);
+                $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'ft' AND `refid` = " . Vars::$ID . " ORDER BY `time` DESC LIMIT " . Vars::db_pagination());
                 while ($fot1 = mysql_fetch_array($req)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     if (file_exists('foto/' . $fot1['name'])) {
@@ -137,7 +137,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                             $tn_width = ceil($y_ratio * $width);
                             $tn_height = $razm;
                         }
-                        $format = functions::format($infile);
+                        $format = Functions::format($infile);
                         switch ($format) {
                             case "gif":
                                 $im = ImageCreateFromGIF($infile);
@@ -191,29 +191,29 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                         echo '</a>';
                         if (!empty($fot1['text']))
                             echo "$fot1[text]<br/>";
-                        if ($rights >= 6) {
-                            echo "<a href='index.php?act=edf&amp;id=" . $fot1['id'] . "'>" . $lng['edit'] . "</a> | <a href='index.php?act=delf&amp;id=" . $fot1['id'] . "'>" . $lng['delete'] . "</a><br/>";
+                        if (Vars::$USER_RIGHTS >= 6) {
+                            echo "<a href='index.php?act=edf&amp;id=" . $fot1['id'] . "'>" . Vars::$LNG['edit'] . "</a> | <a href='index.php?act=delf&amp;id=" . $fot1['id'] . "'>" . Vars::$LNG['delete'] . "</a><br/>";
                         }
                     } else {
-                        echo $lng_gal['image_missing'] . '<br /><a href="index.php?act=delf&amp;id=' . $fot1['id'] . '">' . $lng['delete'] . '</a>';
+                        echo $lng_gal['image_missing'] . '<br /><a href="index.php?act=delf&amp;id=' . $fot1['id'] . '">' . Vars::$LNG['delete'] . '</a>';
                     }
                     echo "</div>";
                     ++$i;
                 }
-                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
-                if ($total > $kmess) {
-                    echo '<p>' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $total, $kmess) . '</p>' .
-                         '<p><form action="index.php?id=' . $id . '" method="post">' .
+                echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div><p>';
+                if ($total > Vars::$USER_SET['page_size']) {
+                    echo '<p>' . Functions::displayPagination('index.php?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+                         '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
                          '<input type="text" name="page" size="2"/>' .
-                         '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+                         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
                          '</form></p>';
                 }
-                if (($user_id && $rz1['user'] == 1 && $ms['text'] == $login && !$ban['1'] && !$ban['14']) || $rights >= 6) {
-                    echo '<a href="index.php?act=upl&amp;id=' . $id . '">' . $lng_gal['upload_photo'] . '</a><br/>';
+                if ((Vars::$USER_ID && $rz1['user'] == 1 && $ms['text'] == Vars::$USER_NICKNAME && !Vars::$USER_BAN['1'] && !Vars::$USER_BAN['14']) || Vars::$USER_RIGHTS >= 6) {
+                    echo '<a href="index.php?act=upl&amp;id=' . Vars::$ID . '">' . $lng_gal['upload_photo'] . '</a><br/>';
                 }
-                if ($rights >= 6) {
-                    echo "<a href='index.php?act=del&amp;id=" . $id . "'>" . $lng_gal['delete_album'] . "</a><br/>";
-                    echo "<a href='index.php?act=edit&amp;id=" . $id . "'>" . $lng_gal['edit_album'] . "</a><br/>";
+                if (Vars::$USER_RIGHTS >= 6) {
+                    echo "<a href='index.php?act=del&amp;id=" . Vars::$ID . "'>" . $lng_gal['delete_album'] . "</a><br/>";
+                    echo "<a href='index.php?act=edit&amp;id=" . Vars::$ID . "'>" . $lng_gal['edit_album'] . "</a><br/>";
                 }
                 echo "<a href='index.php'>" . $lng_gal['to_gallery'] . "</a></p>";
                 break;
@@ -235,7 +235,7 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $width = $sizs[0];
                 $height = $sizs[1];
                 $quality = 85;
-                $format = functions::format($infile);
+                $format = Functions::format($infile);
                 switch ($format) {
                     case "gif":
                         $im = ImageCreateFromGIF($infile);
@@ -290,13 +290,13 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
                 $sizs = GetImageSize("foto/$ms[name]");
                 $fwidth = $sizs[0];
                 $fheight = $sizs[1];
-                echo "<p>" . $lng['description'] . ": $ms[text]<br/>";
+                echo "<p>" . Vars::$LNG['description'] . ": $ms[text]<br/>";
                 echo $lng_gal['dimensions'] . ": $fwidth*$fheight пкс.<br/>";
                 echo $lng_gal['weight'] . ": $fotsz кб.<br/>";
-                echo $lng['date'] . ': ' . functions::display_date($ms['time']) . '<br/>';
+                echo Vars::$LNG['date'] . ': ' . Functions::displayDate($ms['time']) . '<br/>';
                 echo $lng_gal['posted_by'] . ": $ms[avtor]<br/>";
-                echo "<a href='foto/$ms[name]'>" . $lng['download'] . "</a><br /><br />";
-                echo "<a href='index.php?id=" . $ms['refid'] . "'>" . $lng['back'] . "</a><br/>";
+                echo "<a href='foto/$ms[name]'>" . Vars::$LNG['download'] . "</a><br /><br />";
+                echo "<a href='index.php?id=" . $ms['refid'] . "'>" . Vars::$LNG['back'] . "</a><br/>";
                 echo "<a href='index.php'>" . $lng_gal['to_gallery'] . "</a></p>";
                 break;
             default :
@@ -309,8 +309,8 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
         Главная страница Галлереи
         -----------------------------------------------------------------
         */
-        echo '<p><a href="index.php?act=new">' . $lng_gal['new_photo'] . '</a> (' . counters::gallery(1) . ')</p>';
-        echo '<div class="phdr"><b>' . $lng['gallery'] . '</b></div>';
+        echo '<p><a href="index.php?act=new">' . $lng_gal['new_photo'] . '</a> (' . Counters::galleryCount(1) . ')</p>';
+        echo '<div class="phdr"><b>' . Vars::$LNG['gallery'] . '</b></div>';
         $req = mysql_query("SELECT * FROM `gallery` WHERE `type` = 'rz'");
         $total = mysql_num_rows($req);
         while ($res = mysql_fetch_assoc($req)) {
@@ -320,12 +320,12 @@ if (in_array($act, $array) && file_exists($act . '.php')) {
             echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> (' . $countal . ')</div>';
             ++$i;
         }
-        echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div><p>';
-        if ($rights >= 6) {
+        echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div><p>';
+        if (Vars::$USER_RIGHTS >= 6) {
             echo "<a href='index.php?act=razd'>" . $lng_gal['create_section'] . "</a><br/>";
         }
         echo "</p>";
     }
 }
 
-require('../incfiles/end.php');
+require_once('../includes/end.php');

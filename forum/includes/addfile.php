@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,24 +11,24 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require('../incfiles/head.php');
-if (!$id || !$user_id) {
-    echo functions::display_error($lng['error_wrong_data']);
-    require('../incfiles/end.php');
+require_once('../includes/head.php');
+if (!Vars::$ID || !Vars::$USER_ID) {
+    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    require_once('../includes/end.php');
     exit;
 }
 // Проверяем, тот ли юзер заливает файл
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$id'");
+$req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
 $res = mysql_fetch_assoc($req);
-if ($res['user_id'] != $user_id) {
-    echo functions::display_error($lng['error_wrong_data']);
-    require('../incfiles/end.php');
+if ($res['user_id'] != Vars::$USER_ID) {
+    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    require_once('../includes/end.php');
     exit;
 }
-$req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = '$id'");
+$req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = " . Vars::$ID);
 if (mysql_result($req1, 0) > 0) {
-    echo functions::display_error($lng_forum['error_file_uploaded']);
-    require('../incfiles/end.php');
+    echo Functions::displayError($lng_forum['error_file_uploaded']);
+    require_once('../includes/end.php');
     exit;
 }
 switch ($res['type']) {
@@ -65,8 +65,8 @@ switch ($res['type']) {
                 $ext = explode(".", $fname);
                 $error = array();
                 // Проверка на допустимый размер файла
-                if ($fsize > 1024 * $set['flsz'])
-                    $error[] = $lng_forum['error_file_size'] . ' ' . $set['flsz'] . 'kb.';
+                if ($fsize > 1024 * Vars::$SYSTEM_SET['flsz'])
+                    $error[] = $lng_forum['error_file_size'] . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.';
                 // Проверка файла на наличие только одного расширения
                 if (count($ext) != 2)
                     $error[] = $lng_forum['error_file_name'];
@@ -144,21 +144,21 @@ switch ($res['type']) {
                         `cat` = '" . $res3['refid'] . "',
                         `subcat` = '" . $res2['refid'] . "',
                         `topic` = '" . $res['refid'] . "',
-                        `post` = '$id',
+                        `post` = " . Vars::$ID . ",
                         `time` = '" . $res['time'] . "',
                         `filename` = '" . mysql_real_escape_string($fname) . "',
                         `filetype` = '$type'
                     ");
                 } else {
-                    echo functions::display_error($error, '<a href="index.php?act=addfile&amp;id=' . $id . '">' . $lng['repeat'] . '</a>');
+                    echo Functions::displayError($error, '<a href="index.php?act=addfile&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
                 }
             } else {
                 echo $lng_forum['error_upload_error'] . '<br />';
             }
             $pa = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['refid'] . "'");
             $pa2 = mysql_num_rows($pa);
-            $page = ceil($pa2 / $kmess);
-            echo '<br/><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . $lng['continue'] . '</a><br/>';
+            $page = ceil($pa2 / Vars::$USER_SET['page_size']);
+            echo '<br/><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . Vars::$LNG['continue'] . '</a><br/>';
         } else {
             /*
             -----------------------------------------------------------------
@@ -166,17 +166,17 @@ switch ($res['type']) {
             -----------------------------------------------------------------
             */
             echo '<div class="phdr"><b>' . $lng_forum['add_file'] . '</b></div>' .
-                 '<div class="gmenu"><form action="index.php?act=addfile&amp;id=' . $id . '" method="post" enctype="multipart/form-data"><p>';
-            if (stristr($agn, 'Opera/8.01')) {
+                 '<div class="gmenu"><form action="index.php?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
+            if (stristr(Vars::$USERAGENT, 'Opera/8.01')) {
                 echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . $lng_forum['select_file'] . '</a>';
             } else {
                 echo '<input type="file" name="fail"/>';
             }
             echo '</p><p><input type="submit" name="submit" value="' . $lng_forum['upload'] . '"/></p></form></div>' .
-                 '<div class="phdr">' . $lng_forum['max_size'] . ': ' . $set['flsz'] . 'kb.</div>';
+                 '<div class="phdr">' . $lng_forum['max_size'] . ': ' . Vars::$SYSTEM_SET['flsz'] . 'kb.</div>';
         }
         break;
 
     default:
-        echo functions::display_error($lng['error_wrong_data']);
+        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
 }

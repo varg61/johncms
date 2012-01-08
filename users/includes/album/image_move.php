@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,20 +11,20 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require('../incfiles/head.php');
+require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
 Перемещение картинки в другой альбом
 -----------------------------------------------------------------
 */
-if ($img && $user['id'] == $user_id || $rights >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "'");
+if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
+    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['user_id'] . "'");
     if (mysql_num_rows($req)) {
         $image = mysql_fetch_assoc($req);
-        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '"><b>' . $lng['photo_album'] . '</b></a> | ' . $lng_profile['image_move'] . '</div>';
+        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['user_id'] . '"><b>' . Vars::$LNG['photo_album'] . '</b></a> | ' . $lng_profile['image_move'] . '</div>';
         if (isset($_POST['submit'])) {
-            $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
+            $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['user_id'] . "'");
             if (mysql_num_rows($req_a)) {
                 $res_a = mysql_fetch_assoc($req_a);
                 mysql_query("UPDATE `cms_album_files` SET
@@ -33,28 +33,28 @@ if ($img && $user['id'] == $user_id || $rights >= 6) {
                     WHERE `id` = '$img'
                 ");
                 echo '<div class="gmenu"><p>' . $lng_profile['image_moved'] . '<br />' .
-                     '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a></p></div>';
+                     '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
             } else {
-                echo functions::display_error($lng['error_wrong_data']);
+                echo Functions::displayError(Vars::$LNG['error_wrong_data']);
             }
         } else {
-            $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `id` != '" . $image['album_id'] . "' ORDER BY `sort` ASC");
+            $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['user_id'] . "' AND `id` != '" . $image['album_id'] . "' ORDER BY `sort` ASC");
             if (mysql_num_rows($req)) {
-                echo '<form action="album.php?act=image_move&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
+                echo '<form action="album.php?act=image_move&amp;img=' . $img . '&amp;user=' . $user['user_id'] . '" method="post">' .
                      '<div class="menu"><p><h3>' . $lng_profile['album_select'] . '</h3>' .
                      '<select name="al">';
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo '<option value="' . $res['id'] . '">' . functions::checkout($res['name']) . '</option>';
+                    echo '<option value="' . $res['id'] . '">' . Validate::filterString($res['name']) . '</option>';
                 }
                 echo '</select></p>' .
-                     '<p><input type="submit" name="submit" value="' . $lng['move'] . '"/></p>' .
+                     '<p><input type="submit" name="submit" value="' . Vars::$LNG['move'] . '"/></p>' .
                      '</div></form>' .
-                     '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '">' . $lng['cancel'] . '</a></div>';
+                     '<div class="phdr"><a href="album.php?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['cancel'] . '</a></div>';
             } else {
-                echo functions::display_error($lng_profile['image_move_error'], '<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng['continue'] . '</a>');
+                echo Functions::displayError($lng_profile['image_move_error'], '<a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a>');
             }
         }
     } else {
-        echo functions::display_error($lng['error_wrong_data']);
+        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
     }
 }

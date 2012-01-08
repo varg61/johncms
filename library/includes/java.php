@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,16 +11,16 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($user_id) {
-    $req = mysql_query("select `name`, `text` from `lib` where `id` = '" . $id . "' and `type` = 'bk' and `moder`='1' LIMIT 1;");
+if (Vars::$USER_ID) {
+    $req = mysql_query("select `name`, `text` from `lib` where `id` = " . Vars::$ID . " and `type` = 'bk' and `moder`='1' LIMIT 1;");
     if (mysql_num_rows($req) == 0) {
         echo '<p>ERROR</p>';
-        require_once('../incfiles/end.php');
+        require_once('../includes/end.php');
         exit;
     }
     $res = mysql_fetch_array($req);
     // Создаем JAR файл
-    if (!file_exists('../files/library/' . $id . '.jar')) {
+    if (!file_exists('../files/library/' . Vars::$ID . '.jar')) {
         $midlet_name = mb_substr($res['name'], 0, 10);
         $midlet_name = iconv('UTF-8', 'windows-1251', $midlet_name);
         // Записываем текст статьи
@@ -28,16 +28,16 @@ if ($user_id) {
         flock($files, LOCK_EX);
         $book_name = iconv('UTF-8', 'windows-1251', $res['name']);
         $book_text = iconv('UTF-8', 'windows-1251', $res['text']);
-        $result = "\r\n" . $book_name . "\r\n\r\n----------\r\n\r\n" . $book_text . "\r\n\r\nDownloaded from " . $set['homeurl'];
+        $result = "\r\n" . $book_name . "\r\n\r\n----------\r\n\r\n" . $book_text . "\r\n\r\nDownloaded from " . Vars::$SYSTEM_SET['homeurl'];
         fputs($files, $result);
         flock($files, LOCK_UN);
         fclose($files);
         // Записываем манифест
         $manifest_text = 'Manifest-Version: 1.0
-MIDlet-1: Book ' . $id . ', , br.BookReader
-MIDlet-Name: Book ' . $id .
+MIDlet-1: Book ' . Vars::$ID . ', , br.BookReader
+MIDlet-Name: Book ' . Vars::$ID .
                          '
-MIDlet-Vendor: JohnCMS
+MIDlet-Vendor: MobiCMS
 MIDlet-Version: 1.5.3
 MIDletX-No-Command: true
 MIDletX-LG-Contents: true
@@ -51,24 +51,24 @@ TCBR-Platform: Generic version (all phones)';
         fclose($files);
 
         // Создаем архив
-        require_once('../incfiles/lib/pclzip.lib.php');
-        $archive = new PclZip('../files/library/' . $id . '.jar');
+        require_once('../includes/lib/pclzip.lib.php');
+        $archive = new PclZip('../files/library/' . Vars::$ID . '.jar');
         $list = $archive->create('java', PCLZIP_OPT_REMOVE_PATH, 'java');
-        if (!file_exists('../files/library/' . $id . '.jar')) {
+        if (!file_exists('../files/library/' . Vars::$ID . '.jar')) {
             echo '<p>Error creating JAR file</p>';
-            require_once('../incfiles/end.php');
+            require_once('../includes/end.php');
             exit;
         }
     }
 
     // Создаем JAD файл
-    if (!file_exists('../files/library/' . $id . '.jad')) {
-        $filesize = filesize('../files/library/' . $id . '.jar');
+    if (!file_exists('../files/library/' . Vars::$ID . '.jad')) {
+        $filesize = filesize('../files/library/' . Vars::$ID . '.jar');
         $jad_text = 'Manifest-Version: 1.0
-MIDlet-1: Book ' . $id . ', , br.BookReader
-MIDlet-Name: Book ' . $id .
+MIDlet-1: Book ' . Vars::$ID . ', , br.BookReader
+MIDlet-Name: Book ' . Vars::$ID .
                     '
-MIDlet-Vendor: JohnCMS
+MIDlet-Vendor: MobiCMS
 MIDlet-Version: 1.5.3
 MIDletX-No-Command: true
 MIDletX-LG-Contents: true
@@ -76,18 +76,18 @@ MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
-MIDlet-Jar-URL: ' . $set['homeurl'] . '/library/files/' . $id . '.jar';
-        $files = fopen('../files/library/' . $id . '.jad', 'w+');
+MIDlet-Jar-URL: ' . Vars::$SYSTEM_SET['homeurl'] . '/library/files/' . Vars::$ID . '.jar';
+        $files = fopen('../files/library/' . Vars::$ID . '.jad', 'w+');
         flock($files, LOCK_EX);
         fputs($files, $jad_text);
         flock($files, LOCK_UN);
         fclose($files);
     }
     echo $lng_lib['download_java_help'] . '<br /><br />' .
-         $lng['title'] . ': ' . $res['name'] . '<br />' .
-         $lng['download'] . ': <a href="../files/library/' . $id . '.jar">JAR</a> | <a href="../files/library/' . $id . '.jad">JAD</a>' .
-         '<p><a href="index.php?id=' . $id . '">' . $lng['to_article'] . '</a></p>';
+         Vars::$LNG['title'] . ': ' . $res['name'] . '<br />' .
+         Vars::$LNG['download'] . ': <a href="../files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="../files/library/' . Vars::$ID . '.jad">JAD</a>' .
+         '<p><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['to_article'] . '</a></p>';
 } else {
-    echo '<p>' . $lng['access_guest_forbidden'] . '</p>' .
-         '<p><a href="index.php?id=' . $id . '">' . $lng['back'] . '</a></p>';
+    echo '<p>' . Vars::$LNG['access_guest_forbidden'] . '</p>' .
+         '<p><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a></p>';
 }

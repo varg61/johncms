@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -17,19 +17,19 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!$img) {
-    echo functions::display_error($lng['error_wrong_data']);
-    require('../incfiles/end.php');
+    echo Functions::displayError($lng['error_wrong_data']);
+    require_once('../includes/end.php');
     exit;
 }
-$check = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = '$user_id' AND `file_id` = '$img' LIMIT 1");
+$check = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = " . Vars::$USER_ID . " AND `file_id` = '$img' LIMIT 1");
 if (mysql_num_rows($check)) {
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit;
 }
-$req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` != '$user_id'");
+$req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` != " . Vars::$USER_ID);
 if (mysql_num_rows($req)) {
     $res = mysql_fetch_assoc($req);
-    switch ($mod) {
+    switch (Vars::$MOD) {
         case 'plus':
             /*
             -----------------------------------------------------------------
@@ -37,7 +37,7 @@ if (mysql_num_rows($req)) {
             -----------------------------------------------------------------
             */
             mysql_query("INSERT INTO `cms_album_votes` SET
-                `user_id` = '$user_id',
+                `user_id` = '" . Vars::$USER_ID . "',
                 `file_id` = '$img',
                 `vote` = '1'
             ");
@@ -51,7 +51,7 @@ if (mysql_num_rows($req)) {
             -----------------------------------------------------------------
             */
             mysql_query("INSERT INTO `cms_album_votes` SET
-                `user_id` = '$user_id',
+                `user_id` = '" . Vars::$USER_ID . "',
                 `file_id` = '$img',
                 `vote` = '-1'
             ");
@@ -60,5 +60,5 @@ if (mysql_num_rows($req)) {
     }
     header('Location: ' . $_SERVER['HTTP_REFERER']);
 } else {
-    echo functions::display_error($lng['error_wrong_data']);
+    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
 }

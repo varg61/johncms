@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -12,15 +12,15 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($_GET['file'] == "") {
-    require_once ('../incfiles/head.php');
-    echo functions::display_error($lng_dl['file_not_selected'], '<a href="index.php">' . $lng['back'] . '</a>');
-    require_once ('../incfiles/end.php');
+    require_once ('../includes/head.php');
+    echo Functions::displayError($lng_dl['file_not_selected'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+    require_once ('../includes/end.php');
     exit;
 }
 if ($_GET['f'] == "") {
-    require_once ('../incfiles/head.php');
+    require_once ('../includes/head.php');
     echo "Не выбран файл из архива<br/><a href='?act=zip&amp;file=" . $file . "'>В архив</a><br/>";
-    require_once ('../incfiles/end.php');
+    require_once ('../includes/end.php');
     exit;
 }
 $file = intval(trim($_GET['file']));
@@ -28,9 +28,9 @@ $file1 = mysql_query("select * from `download` where type = 'file' and id = '" .
 $file2 = mysql_num_rows($file1);
 $adrfile = mysql_fetch_array($file1);
 if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
-    require_once ("../incfiles/head.php");
+    require_once ("../includes/head.php");
     echo "Ошибка при выборе файла<br/><a href='?'>К категориям</a><br/>";
-    require_once ('../incfiles/end.php');
+    require_once ('../includes/end.php');
     exit;
 }
 $zip = new PclZip("$adrfile[adres]/$adrfile[name]");
@@ -62,7 +62,7 @@ $f = $_GET['f'];
 $path = $selectfile[$f];
 $fname = ereg_replace(".*[\\/]", "", $path);
 $zdir = ereg_replace("[\\/]?[^\\/]*$", "", $path);
-$tfl = strtolower(functions::format($fname));
+$tfl = strtolower(Functions::format($fname));
 $df = array("asp", "aspx", "shtml", "htd", "php", "php3", "php4", "php5", "phtml", "htt", "cfm", "tpl", "dtd", "hta", "pl", "js", "jsp");
 if (!in_array($tfl, $df)) {
     $content = $zip->extract(PCLZIP_OPT_BY_NAME, $path, PCLZIP_OPT_EXTRACT_AS_STRING);

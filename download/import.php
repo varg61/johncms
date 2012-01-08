@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,8 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../incfiles/head.php");
-if ($rights == 4 || $rights >= 6) {
+require_once ("../includes/head.php");
+if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (empty ($_GET['cat'])) {
         $loaddir = $loadroot;
     }
@@ -25,14 +25,14 @@ if ($rights == 4 || $rights >= 6) {
     }
     if (isset ($_POST['submit'])) {
         $url = trim($_POST['url']);
-        $opis = functions::check($_POST['opis']);
-        $newn = functions::check($_POST['newn']);
-        $tipf = functions::format($url);
+        $opis = Validate::filterString($_POST['opis']);
+        $newn = Validate::filterString($_POST['newn']);
+        $tipf = Functions::format($url);
         if (eregi("[^a-z0-9.()+_-]", $newn)) {
             echo
                     "В новом названии файла <b>$newn</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=import&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../incfiles/end.php');
+            require_once ('../includes/end.php');
             exit;
         }
         $import = "$loaddir/$newn.$tipf";

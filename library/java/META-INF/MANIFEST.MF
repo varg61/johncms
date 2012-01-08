@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 MIDlet-1: Book 130, , br.BookReader
 MIDlet-Name: Book 130
-MIDlet-Vendor: JohnCMS
+MIDlet-Vendor: MobiCMS
 MIDlet-Version: 1.5.3
 MIDletX-No-Command: true
 MIDletX-LG-Contents: true

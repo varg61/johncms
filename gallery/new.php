@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -14,12 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 echo '<div class="phdr">' . $lng_gal['new_photo'] . '</div>';
 $newfile = mysql_query("select * from `gallery` where time > '" . (time() - 259200) . "' and type='ft' order by time desc;");
 $totalnew = mysql_num_rows($newfile);
-if (empty($_GET['page'])) {
-    $page = 1;
-} else {
-    $page = intval($_GET['page']);
-}
-$start = $page * 10 - 10;
+$start = Vars::$PAGE * 10 - 10;
 if ($totalnew < $start + 10) {
     $end = $totalnew;
 } else {
@@ -60,7 +55,7 @@ if ($totalnew != 0) {
                 $tn_width = ceil($y_ratio * $width);
                 $tn_height = $razm;
             }
-            $format = functions::format($infile);
+            $format = Functions::format($infile);
             switch ($format) {
                 case "gif":
                     $im = ImageCreateFromGIF($infile);
@@ -112,7 +107,7 @@ if ($totalnew != 0) {
             imagedestroy($im1);
             $kom = mysql_query("select * from `gallery` where type='km' and refid='" . $newf['id'] . "';");
             $kom1 = mysql_num_rows($kom);
-            echo "</a><br/>" . $lng['date'] . ': ' . functions::display_date($newf['time']) . '<br/>' . $lng['description'] . ": $newf[text]<br/>";
+            echo "</a><br/>" . Vars::$LNG['date'] . ': ' . Functions::displayDate($newf['time']) . '<br/>' . Vars::$LNG['description'] . ": $newf[text]<br/>";
             $al = mysql_query("select * from `gallery` where type = 'al' and id = '" . $newf['refid'] . "';");
             $al1 = mysql_fetch_array($al);
             $rz = mysql_query("select * from `gallery` where type = 'rz' and id = '" . $al1['refid'] . "';");
@@ -126,23 +121,23 @@ if ($totalnew != 0) {
         echo "<hr/>";
         $ba = ceil($totalnew / 10);
         if ($start != 0) {
-            echo '<a href="index.php?act=new&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
+            echo '<a href="index.php?act=new&amp;page=' . (Vars::$PAGE - 1) . '">&lt;&lt;</a> ';
         }
         $asd = $start - 10;
         $asd2 = $start + 20;
         if ($asd < $totalnew && $asd > 0) {
             echo ' <a href="index.php?act=new&amp;page=1">1</a> .. ';
         }
-        $page2 = $ba - $page;
-        $pa = ceil($page / 2);
-        $paa = ceil($page / 3);
-        $pa2 = $page + floor($page2 / 2);
-        $paa2 = $page + floor($page2 / 3);
-        $paa3 = $page + (floor($page2 / 3) * 2);
-        if ($page > 13) {
+        $page2 = $ba - Vars::$PAGE;
+        $pa = ceil(Vars::$PAGE / 2);
+        $paa = ceil(Vars::$PAGE / 3);
+        $pa2 = Vars::$PAGE + floor($page2 / 2);
+        $paa2 = Vars::$PAGE + floor($page2 / 3);
+        $paa3 = Vars::$PAGE + (floor($page2 / 3) * 2);
+        if (Vars::$PAGE > 13) {
             echo ' <a href="index.php?act=new&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=new&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="index.php?act=new&amp;page=' . ($paa * 2) . '">' . ($paa * 2) .
                  '</a> <a href="index.php?act=new&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-        } elseif ($page > 7) {
+        } elseif (Vars::$PAGE > 7) {
             echo ' <a href="index.php?act=new&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=new&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
         }
         for ($i = $asd; $i < $asd2;) {
@@ -166,13 +161,13 @@ if ($totalnew != 0) {
             echo ' .. <a href="index.php?act=new&amp;page=' . $ba . '">' . $ba . '</a>';
         }
         if ($totalnew > $start + 10) {
-            echo ' <a href="index.php?act=new&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
+            echo ' <a href="index.php?act=new&amp;page=' . (Vars::$PAGE + 1) . '">&gt;&gt;</a>';
         }
         echo
-                "<form action='index.php'>" . $lng['to_page'] . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page'/><br/><input type='submit' value='Go!'/></form>";
+                "<form action='index.php'>" . Vars::$LNG['to_page'] . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page'/><br/><input type='submit' value='Go!'/></form>";
     }
-    echo "<br/>" . $lng['total'] . ": $totalnew";
+    echo "<br/>" . Vars::$LNG['total'] . ": $totalnew";
 } else {
-    echo '<p>' . $lng['list_empty'] . '</p>';
+    echo '<p>' . Vars::$LNG['list_empty'] . '</p>';
 }
-echo "<br/><a href='index.php?'>" . $lng['to_gallery'] . "</a><br/>";
+echo "<br/><a href='index.php?'>" . Vars::$LNG['to_gallery'] . "</a><br/>";

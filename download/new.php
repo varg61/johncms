@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,8 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../incfiles/head.php");
-echo '<div class="phdr">' . $lng['new_files'] . '</div>';
+require_once ("../includes/head.php");
+echo '<div class="phdr">' . Vars::$LNG['new_files'] . '</div>';
 
 $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'");
 $total = mysql_result($req, 0);
@@ -20,12 +20,12 @@ if ($total > 0) {
     ////////////////////////////////////////////////////////////
     // Выводим список новых файлов                            //
     ////////////////////////////////////////////////////////////
-    $req = mysql_query("SELECT * FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file' ORDER BY `time` DESC LIMIT $start,$kmess");
+    $req = mysql_query("SELECT * FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file' ORDER BY `time` DESC LIMIT " . Vars::db_pagination());
     while ($newf = mysql_fetch_array($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $fsz = filesize("$newf[adres]/$newf[name]");
         $fsz = round($fsz / 1024, 2);
-        $ft = functions::format("$newf[adres]/$newf[name]");
+        $ft = Functions::format("$newf[adres]/$newf[name]");
         switch ($ft) {
             case "mp3" :
                 $imt = "mp3.png";
@@ -77,13 +77,13 @@ if ($total > 0) {
         echo "[$pat1]</div>";
         ++$i;
     }
-    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+    echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
     if ($total > 10) {
-        echo '<p>' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</p>';
-        echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+        echo '<p>' . Functions::displayPagination('index.php?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
+        echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
     }
 }
 else {
-    echo '<p>' . $lng['list_empty'] . '</p>';
+    echo '<p>' . Vars::$LNG['list_empty'] . '</p>';
 }
-echo "<p><a href='index.php?'>" . $lng['back'] . "</a></p>";
+echo "<p><a href='index.php?'>" . Vars::$LNG['back'] . "</a></p>";

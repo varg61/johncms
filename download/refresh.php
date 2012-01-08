@@ -3,7 +3,7 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
@@ -11,8 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../incfiles/head.php");
-if ($rights == 4 || $rights >= 6) {
+require_once("../includes/head.php");
+if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     $drt = array();
     $dropen = opendir("$loadroot");
     while (($file1 = readdir($dropen))) {
@@ -36,7 +36,7 @@ if ($rights == 4 || $rights >= 6) {
             while (($file = readdir($diropen))) {
                 if ($file != "." && $file != ".." && $file != "index.php") {
                     $pap = "$obn1[adres]/$obn1[name]";
-                    $obn2 = mysql_query("select * from `download` where name = '" . functions::check($file) . "' and adres = '" . $pap . "' ;");
+                    $obn2 = mysql_query("select * from `download` where name = '" . mysql_real_escape_string($file) . "' and adres = '" . $pap . "' ;");
                     while ($obndir = mysql_fetch_array($obn2)) {
                         $fod[] = $obndir[name];
                     }
@@ -79,4 +79,4 @@ if ($rights == 4 || $rights >= 6) {
         echo "<a href='?act=refresh'>" . $lng_dl['refresh_continue'] . "</a><br/>";
     }
 }
-echo "<p><a href='?'>" . $lng['back'] . "</a></p>";
+echo "<p><a href='?'>" . Vars::$LNG['back'] . "</a></p>";

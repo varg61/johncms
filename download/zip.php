@@ -1,17 +1,17 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../incfiles/head.php");
+require_once ("../includes/head.php");
 $delarc = opendir("$filesroot/arctemp");
 while ($zp = readdir($delarc)) {
     if ($zp != "." && $zp != ".." && $zp != "index.php") {
@@ -30,7 +30,7 @@ for ($imp = 0; $imp < $totalmp; $imp++) {
 }
 if ($_GET['file'] == "") {
     echo "Не выбран файл<br/><a href='?'>К категориям</a><br/>";
-    require_once ('../incfiles/end.php');
+    require_once ('../includes/end.php');
     exit;
 }
 $file = intval(trim($_GET['file']));
@@ -39,7 +39,7 @@ $file2 = mysql_num_rows($file1);
 $adrfile = mysql_fetch_array($file1);
 if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
     echo "Ошибка при выборе файла<br/><a href='?'>К категориям</a><br/>";
-    require_once ('../incfiles/end.php');
+    require_once ('../includes/end.php');
     exit;
 }
 $zip = new PclZip("$adrfile[adres]/$adrfile[name]");
@@ -90,7 +90,7 @@ for ($i = $start; $i < $end; $i++) {
     $path = $selectfile[$i];
     $fname = ereg_replace(".*[\\/]", "", $path);
     $zdir = ereg_replace("[\\/]?[^\\/]*$", "", $path);
-    $tfl = strtolower(functions::format($fname));
+    $tfl = strtolower(Functions::format($fname));
     $df = array("asp", "aspx", "shtml", "htd", "php", "php3", "php4", "php5", "phtml", "htt", "cfm", "tpl", "dtd", "hta", "pl", "js", "jsp");
     if (in_array($tfl, $df)) {
         echo "$zdir/$fname";
