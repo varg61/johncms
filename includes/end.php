@@ -35,7 +35,7 @@ if (Vars::$USER_SET['quick_go']) {
     echo '</div></form>';
 }
 // Счетчик посетителей онлайн
-echo '</div><div class="footer"></div>';
+echo '</div><div class="footer">' . Counters::usersOnline() . '</div>';
 echo '<div style="text-align:center">';
 echo '<p><b>' . Vars::$SYSTEM_SET['copyright'] . '</b></p>';
 

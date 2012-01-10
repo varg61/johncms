@@ -11,12 +11,8 @@
 
 class System extends Vars
 {
-    private $session;
-
-    function __construct($session)
+    function __construct()
     {
-        $this->session = $session;
-
         // Определение мобильного браузера
         parent::$IS_MOBILE = $this->_mobileDetect();
 
@@ -169,7 +165,6 @@ class System extends Vars
 
                     //TODO: Разобраться с доп. данными, типа кармы
                     // Фиксация данных
-                    $this->session->userID = $res['id'];
                     mysql_query("UPDATE `users` SET " . implode(', ', $sql_update) . " WHERE `id` = " . parent::$USER_ID)
                         or exit(mysql_error());
 

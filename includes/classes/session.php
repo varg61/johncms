@@ -20,13 +20,8 @@
  * @version 1.0.0
  * @since 5.0.0
  */
-class Session
+class Session extends Vars
 {
-    /**
-     * @var int User ID
-     */
-    public $userID = 0;
-
     /**
      * @var string Session name
      */
@@ -118,14 +113,20 @@ class Session
      */
     public function sessionWrite($sid, $data)
     {
-        $now = time();
-        mysql_query("INSERT INTO `cms_sessions`
-            (`session_id`, `session_timestamp`, `session_data`, `user_id`)
-            VALUES('" . mysql_real_escape_string($sid) . "', $now, '" . mysql_real_escape_string($data) . "', " . $this->userID . ")
+        mysql_query("INSERT INTO `cms_sessions` SET
+            `session_id` = '" . mysql_real_escape_string($sid) . "',
+            `session_timestamp` = '" . time() . "',
+            `session_data` = '" . mysql_real_escape_string($data) . "',
+            `user_id` = " . parent::$USER_ID . ",
+            `ip` = " . parent::$IP . ",
+            `ip_via_proxy` = " . parent::$IP_VIA_PROXY . ",
+            `user_agent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "'
             ON DUPLICATE KEY UPDATE
             `session_timestamp` = VALUES(`session_timestamp`),
             `session_data` = VALUES(`session_data`),
-            `user_id` = VALUES(`user_id`)
+            `user_id` = VALUES(`user_id`),
+            `ip` = VALUES(`ip`),
+            `ip_via_proxy` = VALUES(`ip_via_proxy`)
         ") or exit ($this->_error(mysql_error()));
         return true;
     }

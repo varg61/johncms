@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-class Counters
+class Counters extends Vars
 {
     public $users;           // Зарегистрированные пользователи
     public $users_new;       // Новые зарегистрированные пользователи
@@ -70,6 +70,21 @@ class Counters
         if ($this->update_cache) {
             $this->_cacheWrite($count);
         }
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Счетчик посетителей Онлайн
+    -----------------------------------------------------------------
+    */
+    public static function usersOnline()
+    {
+        $sql = "AND `session_timestamp` > " . (time() - 300);
+        $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 $sql"), 0);
+        $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 $sql"), 0);
+        return (parent::$USER_ID || parent::$SYSTEM_SET['active']
+            ? '<a href="' . parent::$HOME_URL . '/users/index.php?act=online">' . Vars::$LNG['online'] . ': ' . $users . ' / ' . $guests . '</a>'
+            : Vars::$LNG['online'] . ': ' . $users . ' / ' . $guests);
     }
 
     /*
