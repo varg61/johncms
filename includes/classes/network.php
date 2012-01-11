@@ -86,6 +86,9 @@ class Network extends Vars
 
             // Obtain an User Agent
             parent::$USERAGENT = $this->_getUserAgent();
+
+            // Determine the location on the site
+            parent::$PLACE = $this->_getPlace();
         } catch (Exception $e) {
             die('<center><h2>NETWORK ERROR</h2>' . $e->getMessage() . '</center>');
         }
@@ -142,6 +145,17 @@ class Network extends Vars
         return isset($_SERVER['HTTP_USER_AGENT']) && !empty($_SERVER['HTTP_USER_AGENT'])
             ? htmlspecialchars((string)substr($_SERVER['HTTP_USER_AGENT'], 0, 150))
             : 'Not Recognised';
+    }
+
+    /**
+     * Determine the location on the site
+     *
+     * @return string
+     */
+    private function _getPlace()
+    {
+        $location = '';
+        return $location;
     }
 
     /**

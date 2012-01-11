@@ -32,6 +32,9 @@ class Session extends Vars
      */
     private $sessionLifeTime = 86400;
 
+    private $session_id;
+    private $session_data;
+
     /**
      * Session handler
      */
@@ -91,17 +94,23 @@ class Session extends Vars
      */
     public function sessionRead($sid)
     {
-        $data = '';
-        $req = mysql_query("SELECT `session_data`, `user_id`
+        $this->session_id = $sid;
+        $req = mysql_query("SELECT *
             FROM `cms_sessions`
             WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
             FOR UPDATE
         ") or exit ($this->_error(mysql_error()));
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
-            $data = $res['session_data'];
+            $this->session_data = $res;
+            return $res['session_data'];
+        } else {
+            mysql_query("INSERT INTO `cms_sessions` SET
+                `session_id` = '" . mysql_real_escape_string($sid) . "',
+                `session_timestamp` = " . time() . "
+            ") or exit ($this->_error(mysql_error()));
+            return '';
         }
-        return $data;
     }
 
     /**
@@ -113,20 +122,10 @@ class Session extends Vars
      */
     public function sessionWrite($sid, $data)
     {
-        mysql_query("INSERT INTO `cms_sessions` SET
-            `session_id` = '" . mysql_real_escape_string($sid) . "',
+        mysql_query("UPDATE `cms_sessions` SET
             `session_timestamp` = '" . time() . "',
-            `session_data` = '" . mysql_real_escape_string($data) . "',
-            `user_id` = " . parent::$USER_ID . ",
-            `ip` = " . parent::$IP . ",
-            `ip_via_proxy` = " . parent::$IP_VIA_PROXY . ",
-            `user_agent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "'
-            ON DUPLICATE KEY UPDATE
-            `session_timestamp` = VALUES(`session_timestamp`),
-            `session_data` = VALUES(`session_data`),
-            `user_id` = VALUES(`user_id`),
-            `ip` = VALUES(`ip`),
-            `ip_via_proxy` = VALUES(`ip_via_proxy`)
+            `session_data` = '" . mysql_real_escape_string($data) . "'
+            WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
         ") or exit ($this->_error(mysql_error()));
         return true;
     }
@@ -157,6 +156,43 @@ class Session extends Vars
             WHERE `session_timestamp` < $time
         ") or exit ($this->_error(mysql_error()));
         return true;
+    }
+
+    public function fixUserData()
+    {
+        $sql = array();
+
+        if ($this->session_data['user_id'] != parent::$USER_ID) {
+            $sql[] = "`user_id` = " . parent::$USER_ID;
+        }
+
+        if ($this->session_data['ip'] != parent::$IP) {
+            $sql[] = "`ip` = " . parent::$IP;
+        }
+
+        if ($this->session_data['ip_via_proxy'] != parent::$IP_VIA_PROXY) {
+            $sql[] = "`ip_via_proxy` = " . parent::$IP_VIA_PROXY;
+        }
+
+        if ($this->session_data['user_agent'] != parent::$USERAGENT) {
+            $sql[] = "`user_agent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "'";
+        }
+
+        if ($this->session_data['place'] != parent::$PLACE) {
+            $sql[] = "`place` = '" . mysql_real_escape_string(parent::$PLACE) . "'";
+        }
+
+        if (!empty($sql)) {
+            mysql_query("UPDATE `cms_sessions` SET " .
+                implode(', ', $sql) . "
+                WHERE `session_id` = '" . mysql_real_escape_string($this->session_id) . "'
+            ");
+            mysql_query("SELECT `session_id`
+                FROM `cms_sessions`
+                WHERE `session_id` = '" . mysql_real_escape_string($this->session_id) . "'
+                FOR UPDATE
+            ");
+        }
     }
 
     /**

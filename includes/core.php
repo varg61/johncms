@@ -69,9 +69,10 @@ $db_name = isset($db_name) ? $db_name : 'johncms';
 $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
 @mysql_select_db($db_name) or die('Error: specified database does not exist');
 @mysql_query("SET NAMES 'utf8'", $connect);
+//@mysql_query("SET autocommit=0", $connect);
 
 $session = new Session;
-$system = new System;
+$system = new System($session);
 unset($network, $system);
 
 

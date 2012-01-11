@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-class Functions
+class Functions extends Vars
 {
     /*
     -----------------------------------------------------------------
@@ -202,22 +202,7 @@ class Functions
     //TODO: Доработать!
     public static function displayPlace($user_id = '', $place = '')
     {
-//        global $headmod;
-//        $place = explode(",", $place);
-//        $placelist = Vars::load_lng('places');
-//        if (array_key_exists($place[0], $placelist)) {
-//            if ($place[0] == 'profile') {
-//                if ($place[1] == $user_id) {
-//                    return '<a href="' . Vars::$system_set['homeurl'] . '/users/profile.php?user=' . $place[1] . '">' . $placelist['profile_personal'] . '</a>';
-//                } else {
-//                    $user = self::get_user($place[1]);
-//                    return $placelist['profile'] . ': <a href="' . Vars::$system_set['homeurl'] . '/users/profile.php?user=' . $user['user_id'] . '">' . $user['name'] . '</a>';
-//                }
-//            }
-//            elseif ($place[0] == 'online' && isset($headmod) && $headmod == 'online') return $placelist['here'];
-//            else return str_replace('#home#', Vars::$system_set['homeurl'], $placelist[$place[0]]);
-//        }
-//        else return '<a href="' . Vars::$system_set['homeurl'] . '/index.php">' . $placelist['homepage'] . '</a>';
+
     }
 
     /*
@@ -239,30 +224,35 @@ class Functions
     */
     public static function displayUser($user = false, $arg = false)
     {
-        global $rootpath;
         $out = false;
 
         if (!$user['user_id']) {
             $out = '<b>' . Vars::$LNG['guest'] . '</b>';
-            if (!empty($user['nickname']))
+            if (!empty($user['nickname'])) {
                 $out .= ': ' . $user['nickname'];
-            if (!empty($arg['header']))
+            }
+            if (!empty($arg['header'])) {
                 $out .= ' ' . $arg['header'];
+            }
         } else {
-            if (Vars::$USER_SET['avatar']) {
+            if (parent::$USER_SET['avatar']) {
                 $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-                if (file_exists(($rootpath . 'files/users/avatar/' . $user['user_id'] . '.png')))
-                    $out .= '<img src="' . Vars::$SYSTEM_SET['homeurl'] . '/files/users/avatar/' . $user['user_id'] . '.png" width="32" height="32" alt="' . $user['nickname'] . '" />&#160;';
-                else
+                if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['user_id'] . '.png')) {
+                    $out .= '<img src="' . parent::$HOME_URL . '/files/users/avatar/' . $user['user_id'] . '.png" width="32" height="32" alt="' . $user['nickname'] . '" />&#160;';
+                } else {
                     $out .= self::getImage('empty.png') . '&#160;';
+                }
                 $out .= '</td><td>';
             }
-            if ($user['sex'])
+            if ($user['sex']) {
                 $out .= self::getImage('usr_' . ($user['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"');
-            else
+            } else {
                 $out = self::getImage('del.png', '', 'align="middle"');
+            }
             $out .= '&#160;';
-            $out .= !Vars::$USER_ID || Vars::$USER_ID == $user['user_id'] ? '<b>' . $user['nickname'] . '</b>' : '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/users/profile.php?user=' . $user['user_id'] . '"><b>' . $user['nickname'] . '</b></a>';
+            $out .= !Vars::$USER_ID || Vars::$USER_ID == $user['user_id']
+                ? '<b>' . $user['nickname'] . '</b>'
+                : '<a href="' . parent::$HOME_URL . '/users/profile.php?user=' . $user['user_id'] . '"><b>' . $user['nickname'] . '</b></a>';
             $rank = array(
                 0 => '',
                 1 => '(GMod)',
@@ -276,12 +266,15 @@ class Functions
             );
             $out .= ' ' . $rank[$user['rights']];
             $out .= (time() > $user['last_visit'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
-            if (!empty($arg['header']))
+            if (!empty($arg['header'])) {
                 $out .= ' ' . $arg['header'];
-            if (!isset($arg['stshide']) && !empty($user['status']))
+            }
+            if (!isset($arg['stshide']) && !empty($user['status'])) {
                 $out .= '<div class="status">' . self::getImage('label.png', '', 'align="middle"') . '&#160;' . $user['status'] . '</div>';
-            if (Vars::$USER_SET['avatar'])
+            }
+            if (Vars::$USER_SET['avatar']) {
                 $out .= '</td></tr></table>';
+            }
         }
         if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
@@ -289,13 +282,15 @@ class Functions
         $lastvisit = time() > $user['last_visit'] + 300 && isset($arg['last_visit']) ? self::displayDate($user['last_visit']) : false;
         if ($ipinf || $lastvisit || isset($arg['sub']) && !empty($arg['sub']) || isset($arg['footer'])) {
             $out .= '<div class="sub">';
-            if (isset($arg['sub']))
+            if (isset($arg['sub'])) {
                 $out .= '<div>' . $arg['sub'] . '</div>';
-            if ($lastvisit)
+            }
+            if ($lastvisit) {
                 $out .= '<div><span class="gray">' . Vars::$LNG['last_visit'] . ':</span> ' . $lastvisit . '</div>';
+            }
             $iphist = '';
             if ($ipinf) {
-                $out .= '<div><span class="gray">' . Vars::$LNG['browser'] . ':</span> ' . $user['useragent'] . '</div>' .
+                $out .= '<div><span class="gray">' . Vars::$LNG['browser'] . ':</span> ' . $user['user_agent'] . '</div>' .
                     '<div><span class="gray">' . Vars::$LNG['ip_address'] . ':</span> ';
                 $hist = Vars::$MOD == 'history' ? '&amp;mod=history' : '';
                 $ip = long2ip($user['ip']);
@@ -306,7 +301,7 @@ class Functions
                     $out .= '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($user['ip_via_proxy']) . $hist . '">' . long2ip($user['ip_via_proxy']) . '</a>';
                     $out .= '&#160;[<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=ip_whois&amp;ip=' . long2ip($user['ip_via_proxy']) . '">?</a>]';
                 } elseif (Vars::$USER_RIGHTS) {
-                    $out .= '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . $ip . $hist . '">' . $ip .'</a>';
+                    $out .= '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . $ip . $hist . '">' . $ip . '</a>';
                     $out .= '&#160;[<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/ip_whois.php?ip=' . $ip . '">?</a>]';
                 } else {
                     $out .= $ip . $iphist;
@@ -317,8 +312,9 @@ class Functions
                 }
                 $out .= '</div>';
             }
-            if (isset($arg['footer']))
+            if (isset($arg['footer'])) {
                 $out .= $arg['footer'];
+            }
             $out .= '</div>';
         }
         return $out;
@@ -344,13 +340,15 @@ class Functions
     */
     public static function getImage($img = '', $alt = '', $style = '')
     {
-        global $rootpath;
         if (empty($img)) return false;
-        $theme_img = $rootpath . 'theme/' . Vars::$USER_SET['skin'] . '/images/' . $img;
-        $default_img = $rootpath . 'images/system/' . $img;
-        if (file_exists($theme_img)) $file = $theme_img;
-        elseif (file_exists($default_img)) $file = $default_img;
-        else return false;
+        if (file_exists(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/theme/' . Vars::$USER_SET['skin'] . '/images/' . $img;
+            ;
+        } elseif (file_exists(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/images/system/' . $img;
+        } else {
+            return false;
+        }
         $size = getimagesize($file);
         return '<img src="' . $file . '" width="' . $size[0] . '" height="' . $size[1] . '" alt="' . $alt . '" border="0" ' . $style . '/>';
     }

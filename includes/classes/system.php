@@ -11,7 +11,7 @@
 
 class System extends Vars
 {
-    function __construct()
+    function __construct($session)
     {
         // Определение мобильного браузера
         parent::$IS_MOBILE = $this->_mobileDetect();
@@ -24,6 +24,9 @@ class System extends Vars
 
         // Авторизация пользователей
         $this->_authorizeUser();
+
+        // Фиксация пользовательских данных в сессии
+        $session->fixUserData();
 
         // Определяем и загружаем язык
         $this->_lngDetect();
@@ -100,7 +103,7 @@ class System extends Vars
             // Авторизация по сессии
             $id = intval($_SESSION['id']);
             $token = $_SESSION['token'];
-        } elseif (isset($_COOKIE['id']) && isset($_COOKIE['ps'])) {
+        } elseif (isset($_COOKIE['id']) && isset($_COOKIE['token'])) {
             // Авторизация по COOKIE
             $id = intval($_COOKIE['id']);
             $token = trim($_COOKIE['token']);

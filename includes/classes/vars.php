@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-class Vars
+abstract class Vars
 {
     /*
     -----------------------------------------------------------------
@@ -29,6 +29,7 @@ class Vars
     public static $IP_REQUESTS_LIST = array();   // Счетчик обращений с IP адреса
     public static $USERAGENT;                    // User Agent
     public static $IS_MOBILE = false;            // Мобильный браузер
+    public static $PLACE = '';                   // Местоположение на сайте
 
     /*
     -----------------------------------------------------------------

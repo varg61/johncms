@@ -10,7 +10,6 @@
  */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
-define('ROOT_DIR', '..');
 
 //TODO: Доработать под новый список файлов!
 
@@ -323,7 +322,7 @@ class scaner
                     continue;
                 }
                 if (is_dir($dir . '/' . $file)) {
-                    if ($dir != ROOT_DIR)
+                    if ($dir != ROOTPATH)
                         $this->scan_files($dir . '/' . $file, $snap);
                 } else {
                     if ($this->snap or $snap)

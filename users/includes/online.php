@@ -31,7 +31,7 @@ if (Vars::$USER_RIGHTS) {
 }
 
 echo '<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
-     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
+    '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
 switch (Vars::$MOD) {
     case 'ip':
@@ -53,15 +53,15 @@ switch (Vars::$MOD) {
                 if ($out[0] == Vars::$IP) echo '<div class="gmenu">';
                 else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($out[0]) . '">' . long2ip($out[0]) .
-                     '</a>&#160;-&#160;[' . $out[1] . ']';
+                    '</a>&#160;-&#160;[' . $out[1] . ']';
                 echo '</div>';
             }
             echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                     '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
-                     '<input type="text" name="page" size="2"/>' .
-                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
+                    '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
+                    '<input type="text" name="page" size="2"/>' .
+                    '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
             }
         }
         require_once('../includes/end.php');
@@ -82,8 +82,11 @@ switch (Vars::$MOD) {
 
     default:
         // Список посетителей Онлайн
-        $sql_total = "SELECT COUNT(*) FROM `users` WHERE `lastdate` > " . (time() - 300);
-        $sql_list = "SELECT * FROM `users` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `name` ASC LIMIT " . Vars::db_pagination();
+        $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 AND `session_timestamp` > " . (time() - 300);
+        $sql_list = "SELECT `cms_sessions`.`user_id`, `users`.*
+            FROM `cms_sessions` LEFT JOIN `users` ON `cms_sessions`.`user_id` = `users`.`id`
+            WHERE `cms_sessions`.`user_id` > 0 AND `cms_sessions`.`session_timestamp` > " . (time() - 300) . "
+            ORDER BY `users`.`nickname` ASC" . Vars::db_pagination();
 }
 
 $total = mysql_result(mysql_query($sql_total), 0);
@@ -91,13 +94,16 @@ if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functi
 if ($total) {
     $req = mysql_query($sql_list);
     $i = 0;
-    while (($res = mysql_fetch_assoc($req)) !== false) {
+    while ($res = mysql_fetch_assoc($req)) {
         if ($res['id'] == Vars::$USER_ID) echo '<div class="gmenu">';
         else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $arg['stshide'] = 1;
         $arg['header'] = ' <span class="gray">(';
-        if (Vars::$MOD == 'history') $arg['header'] .= Functions::displayDate($res['sestime']);
-        else $arg['header'] .= $res['movings'] . ' - ' . Functions::timeCount(time() - $res['sestime']);
+        if (Vars::$MOD == 'history') {
+            $arg['header'] .= Functions::displayDate($res['sestime']);
+        } else {
+            $arg['header'] .= $res['movings'] . ' - ' . Functions::timeCount(time() - $res['sestime']);
+        }
         $arg['header'] .= ')</span><br />' . Functions::getImage('info.png', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
         echo Functions::displayUser($res, $arg);
         echo '</div>';
@@ -109,8 +115,8 @@ if ($total) {
 echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;' . (Vars::$MOD ? 'mod=' . Vars::$MOD . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-         '<p><form action="index.php?act=online' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
-         '<input type="text" name="page" size="2"/>' .
-         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
-         '</form></p>';
+        '<p><form action="index.php?act=online' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
+        '<input type="text" name="page" size="2"/>' .
+        '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+        '</form></p>';
 }
