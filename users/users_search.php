@@ -42,14 +42,14 @@ if ($search && Validate::nickname($search, 1) === true) {
         '%' => '\\%'
     ));
     $search_db = '%' . $search_db . '%';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `nickname` LIKE '" . mysql_real_escape_string($search_db) . "'"), 0);
+    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `nickname` LIKE '" . mysql_real_escape_string($search_db) . "'"), 0);
     Vars::fixPage($total);
     echo '<div class="phdr"><b>' . Vars::$LNG['search_results'] . '</b></div>';
     if ($total > Vars::$USER_SET['page_size']) {
         echo '<div class="topmenu">' . Functions::displayPagination('users_search.php?search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
     if ($total) {
-        $req = mysql_query("SELECT * FROM `cms_user` WHERE `nickname` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `nickname` ASC LIMIT " . Vars::db_pagination());
+        $req = mysql_query("SELECT * FROM `users` WHERE `nickname` LIKE '" . mysql_real_escape_string($search_db) . "' ORDER BY `nickname` ASC LIMIT " . Vars::db_pagination());
         $i = 0;
         for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; $i++) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';

@@ -39,7 +39,7 @@ $menu = array(
 echo'<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['users_list'] . '</div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `" . (Vars::$ACT == 'adm' ? 'rights' : 'level') . "` > 0"), 0);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `" . (Vars::$ACT == 'adm' ? 'rights' : 'level') . "` > 0"), 0);
 Vars::fixPage($total);
 
 if ($total > Vars::$USER_SET['page_size']) {
@@ -47,7 +47,7 @@ if ($total > Vars::$USER_SET['page_size']) {
 }
 
 if ($total) {
-    $req = mysql_query("SELECT * FROM `cms_user` WHERE " . (Vars::$ACT == 'adm' ? '`rights` > 0 ORDER BY `rights`' : '`level` > 0 ORDER BY `user_id`') . " DESC" . Vars::db_pagination());
+    $req = mysql_query("SELECT * FROM `users` WHERE " . (Vars::$ACT == 'adm' ? '`rights` > 0 ORDER BY `rights`' : '`level` > 0 ORDER BY `user_id`') . " DESC" . Vars::db_pagination());
     for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; $i++) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo Functions::displayUser($res) . '</div>';

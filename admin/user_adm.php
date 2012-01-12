@@ -22,7 +22,7 @@ if (Vars::$USER_RIGHTS < 1) {
 require_once('../includes/head.php');
 
 echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . Vars::$LNG['administration'] . '</div>';
-$req = mysql_query("SELECT * FROM `cms_user` WHERE `rights` > '0' ORDER BY `rights` DESC, `nickname` ASC");
+$req = mysql_query("SELECT * FROM `users` WHERE `rights` > '0' ORDER BY `rights` DESC, `nickname` ASC");
 $total = mysql_num_rows($req);
 for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; ++$i) {
     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';

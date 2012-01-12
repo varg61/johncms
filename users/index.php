@@ -50,7 +50,7 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
     require_once('../includes/head.php');
     //TODO: Доработать!
     //$brth = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . date('j', time()) . "' AND `monthb` = '" . date('n', time()) . "' AND `preg` = '1'"), 0);
-    $count_adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `rights` > 0"), 0);
+    $count_adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0"), 0);
     echo'<div class="phdr"><b>' . Vars::$LNG['community'] . '</b></div>' .
         '<div class="gmenu"><form action="users_search.php" method="post">' .
         '<p><h3>' . Vars::$LNG['search'] . '</h3>' .

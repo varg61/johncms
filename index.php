@@ -50,8 +50,8 @@ switch (Vars::$ACT) {
 //        }
         // Дайджест Администратора
         if (Vars::$USER_RIGHTS) {
-            $new_users_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `join_date` > '" . (time() - 86400) . "' AND `preg` = '1'"), 0);
-            $reg_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `level` = 0"), 0);
+            $new_users_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `join_date` > '" . (time() - 86400) . "' AND `preg` = '1'"), 0);
+            $reg_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = 0"), 0);
             $ban_total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
             echo '<div class="menu"><p><h3>' . Vars::$LNG['administrative_events'] . '</h3><ul>';
             if ($new_users_total > 0)

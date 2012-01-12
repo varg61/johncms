@@ -19,7 +19,7 @@ require_once('../includes/head.php');
 Проверяем права доступа
 -----------------------------------------------------------------
 */
-if ($user['user_id'] != Vars::$USER_ID) {
+if ($user['id'] != Vars::$USER_ID) {
     echo Functions::displayError(Vars::$LNG['access_forbidden']);
     require_once('../includes/end.php');
     exit;

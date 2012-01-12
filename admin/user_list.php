@@ -62,8 +62,8 @@ else $order = $arr['idasc'];
 Выводим список пользователей
 -----------------------------------------------------------------
 */
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `level` > 0"), 0);
-$req = mysql_query("SELECT * FROM `cms_user` WHERE `level` > 0 ORDER BY $order" . Vars::db_pagination());
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
+$req = mysql_query("SELECT * FROM `users` WHERE `level` > 0 ORDER BY $order" . Vars::db_pagination());
 $i = 0;
 while (($res = mysql_fetch_assoc($req)) !== false) {
     $link = '';

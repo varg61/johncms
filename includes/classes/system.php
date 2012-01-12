@@ -13,6 +13,9 @@ class System extends Vars
 {
     function __construct($session)
     {
+        // Определение местоположения на сайте
+        parent::$PLACE = str_replace('\\', '/', ltrim(realpath($_SERVER['SCRIPT_FILENAME']), ROOTPATH));
+
         // Определение мобильного браузера
         parent::$IS_MOBILE = $this->_mobileDetect();
 
@@ -24,9 +27,6 @@ class System extends Vars
 
         // Авторизация пользователей
         $this->_authorizeUser();
-
-        // Фиксация пользовательских данных в сессии
-        $session->fixUserData();
 
         // Определяем и загружаем язык
         $this->_lngDetect();
@@ -43,6 +43,9 @@ class System extends Vars
         } elseif (isset($_REQUEST['start']) && $_REQUEST['start'] > 0) {
             parent::$START = intval($_REQUEST['start']);
         }
+
+        // Фиксация пользовательских данных в сессии
+        $session->fixUserData();
     }
 
     /*

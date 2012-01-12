@@ -361,7 +361,7 @@ class Functions extends Vars
     public static function getUser($id = false)
     {
         if ($id && $id != Vars::$USER_ID) {
-            $req = mysql_query("SELECT * FROM `cms_user` WHERE `user_id` = '$id'");
+            $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
             if (mysql_num_rows($req)) {
                 return mysql_fetch_assoc($req);
             } else {

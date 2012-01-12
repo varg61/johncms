@@ -287,8 +287,8 @@ switch (Vars::$ACT) {
             '<div class="gmenu"><input type="submit" name="delete" value="' . Vars::$LNG['add'] . '"/></div></form>';
         if ($total) {
             echo '<form action="ip_access.php?act=del&amp;mod=' . $mod . '" method="post">';
-            $req = mysql_query("SELECT `cms_ip_bwlist`.*, `cms_user`.`nickname`
-                FROM `cms_ip_bwlist` LEFT JOIN `cms_user` ON `cms_ip_bwlist`.`user_id` = `cms_user`.`user_id`
+            $req = mysql_query("SELECT `cms_ip_bwlist`.*, `users`.`nickname`
+                FROM `cms_ip_bwlist` LEFT JOIN `users` ON `cms_ip_bwlist`.`user_id` = `users`.`user_id`
                 WHERE `cms_ip_bwlist`.`mode` = '" . $mod . "'
                 ORDER BY `cms_ip_bwlist`.`timestamp` DESC
                 " . Vars::db_pagination()

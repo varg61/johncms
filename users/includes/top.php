@@ -23,7 +23,7 @@ require_once('../includes/head.php');
 function get_top($order = 'postforum')
 {
     global $lng;
-    $req = mysql_query("SELECT * FROM `cms_user` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
+    $req = mysql_query("SELECT * FROM `users` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
     if (mysql_num_rows($req)) {
         $out = '';
         $i = 0;

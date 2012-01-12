@@ -26,7 +26,7 @@ $headmod = 'admin';
 $textl = Vars::$LNG['admin_panel'];
 require_once('../includes/head.php');
 
-$regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `level`='0'"), 0);
+$regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
 $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
 echo '<div class="phdr"><b>' . Vars::$LNG['admin_panel'] . '</b></div>';
 
@@ -37,8 +37,8 @@ echo '<div class="phdr"><b>' . Vars::$LNG['admin_panel'] . '</b></div>';
 */
 echo'<div class="user"><p><h3>' . Functions::getImage('users.png', '', 'class="left"') . '&#160;' . Vars::$LNG['users'] . '</h3><ul>';
 if ($regtotal && Vars::$USER_RIGHTS >= 6) echo '<li><span class="red"><b><a href="index.php?act=reg">' . $lng_adm['users_reg'] . '</a>&#160;(' . $regtotal . ')</b></span></li>';
-echo'<li><a href="user_list.php">' . Vars::$LNG['users'] . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user`"), 0) . ')</li>' .
-    '<li><a href="user_adm.php">' . Vars::$LNG['administration'] . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user` WHERE `rights` >= '1'"), 0) . ')</li>' .
+echo'<li><a href="user_list.php">' . Vars::$LNG['users'] . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>' .
+    '<li><a href="user_adm.php">' . Vars::$LNG['administration'] . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>' .
     //TODO: Написать очистку неактивных юзеров
     //TODO: Написать новую систему бана юзеров
     (Vars::$USER_RIGHTS >= 7 ? '<li><a href="user_flood.php">' . $lng_adm['antiflood'] . '</a></li>' : '') .

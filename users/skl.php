@@ -47,7 +47,7 @@ switch (Vars::$ACT) {
         unset($_SESSION['code']);
         if (!$error) {
             // Проверяем данные по базе
-            $req = mysql_query("SELECT * FROM `cms_user` WHERE `nickname` = '" . mysql_real_escape_string($nick) . "' LIMIT 1");
+            $req = mysql_query("SELECT * FROM `users` WHERE `nickname` = '" . mysql_real_escape_string($nick) . "' LIMIT 1");
             if (mysql_num_rows($req) == 1) {
                 $res = mysql_fetch_array($req);
                 if (empty($res['mail']) || $res['mail'] != $email)

@@ -119,7 +119,7 @@ switch (Vars::$MOD) {
                 ") or die (mysql_error());
             }
             //TODO: Доработать!
-            //mysql_query("UPDATE `cms_user` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$user_id);
+            //mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$user_id);
             echo '<div class="menu"><p>' . (Vars::$ID ? $lng['link_edit_ok'] : $lng['link_add_ok']) . '<br />' .
                  '<a href="index.php?act=ads&amp;sort=' . $type . '">' . $lng['continue'] . '</a></p></div>';
         } else {
