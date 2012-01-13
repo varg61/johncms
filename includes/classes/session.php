@@ -123,7 +123,7 @@ class Session extends Vars
     public function sessionWrite($sid, $data)
     {
         mysql_query("UPDATE `cms_sessions` SET
-            `session_timestamp` = '" . time() . "',
+            `session_timestamp` = " . time() . ",
             `session_data` = '" . mysql_real_escape_string($data) . "'
             WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
         ") or exit ($this->_error(mysql_error()));
@@ -161,6 +161,10 @@ class Session extends Vars
     public function fixUserData()
     {
         $sql = array();
+
+        if ($this->session_data['session_timestamp'] < (time() - 200)) {
+            $sql[] = "`session_timestamp` = " . time();
+        }
 
         if ($this->session_data['user_id'] != parent::$USER_ID) {
             $sql[] = "`user_id` = " . parent::$USER_ID;
