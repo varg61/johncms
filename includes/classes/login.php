@@ -212,10 +212,10 @@ class Login extends Vars
     private function _userEnter($user_id, $token, $remember = true)
     {
         if ($remember) {
-            setcookie('id', $user_id, time() + 3600 * 24 * 31);
+            setcookie('uid', $user_id, time() + 3600 * 24 * 31);
             setcookie('token', $token, time() + 3600 * 24 * 31);
         }
-        $_SESSION['id'] = $user_id;
+        $_SESSION['uid'] = $user_id;
         $_SESSION['token'] = $token;
     }
 

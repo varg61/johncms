@@ -13,9 +13,6 @@ class System extends Vars
 {
     function __construct($session)
     {
-        // Определение местоположения на сайте
-        parent::$PLACE = str_replace('\\', '/', ltrim(realpath($_SERVER['SCRIPT_FILENAME']), ROOTPATH));
-
         // Определение мобильного браузера
         parent::$IS_MOBILE = $this->_mobileDetect();
 
@@ -34,7 +31,7 @@ class System extends Vars
         if (parent::$LNG_ISO != 'ru' && parent::$LNG_ISO != 'uk') parent::$USER_SET['translit'] = 0;
 
         // Принимаем суперглобальные переменные
-        parent::$ID = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : false;
+        parent::$ID = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : 0;
         parent::$ACT = isset($_REQUEST['act']) ? substr(trim($_REQUEST['act']), 0, 15) : '';
         parent::$MOD = isset($_REQUEST['mod']) ? substr(trim($_REQUEST['mod']), 0, 15) : '';
         if (isset($_REQUEST['page']) && $_REQUEST['page'] > 0) {
@@ -44,8 +41,30 @@ class System extends Vars
             parent::$START = intval($_REQUEST['start']);
         }
 
+        // Определение местоположения на сайте
+        parent::$PLACE = $this->_getPlace();
+
         // Фиксация пользовательских данных в сессии
         $session->fixUserData();
+    }
+
+    private function _getPlace()
+    {
+        $param = array();
+        if (!empty(parent::$ACT)) {
+            $param[] = 'act=' . parent::$ACT;
+        }
+        if (!empty(parent::$MOD)) {
+            $param[] = 'mod=' . parent::$MOD;
+        }
+        if (parent::$ID){
+            $param[] = 'id=' . parent::$ID;
+        }
+        $out = str_replace('\\', '/', ltrim(realpath($_SERVER['SCRIPT_FILENAME']), ROOTPATH));
+        if(!empty($param)){
+            $out .= '?' . implode('&', $param);
+        }
+        return $out;
     }
 
     /*
@@ -104,13 +123,13 @@ class System extends Vars
 
         if (isset($_SESSION['id']) && isset($_SESSION['token'])) {
             // Авторизация по сессии
-            $id = intval($_SESSION['id']);
+            $id = intval($_SESSION['uid']);
             $token = $_SESSION['token'];
-        } elseif (isset($_COOKIE['id']) && isset($_COOKIE['token'])) {
+        } elseif (isset($_COOKIE['uid']) && isset($_COOKIE['token'])) {
             // Авторизация по COOKIE
-            $id = intval($_COOKIE['id']);
+            $id = intval($_COOKIE['uid']);
             $token = trim($_COOKIE['token']);
-            if ($id < 1 || $id != $_COOKIE['id'] || strlen($_COOKIE['token']) != 32) {
+            if ($id < 1 || $id != $_COOKIE['uid'] || strlen($_COOKIE['token']) != 32) {
                 $id = false;
                 $token = false;
                 Login::userUnset();
@@ -137,7 +156,7 @@ class System extends Vars
                     parent::$USER_NICKNAME = $res['nickname'];
                     parent::$USER_RIGHTS = $res['rights'];
                     parent::$USER_DATA = $res;
-                    $_SESSION['id'] = $id;
+                    $_SESSION['uid'] = $id;
                     $_SESSION['token'] = $token;
 
                     // Получаем пользовательские настройки
