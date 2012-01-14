@@ -343,7 +343,6 @@ class Functions extends Vars
         if (empty($img)) return false;
         if (file_exists(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
             $file = parent::$HOME_URL . '/theme/' . Vars::$USER_SET['skin'] . '/images/' . $img;
-            ;
         } elseif (file_exists(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . $img)) {
             $file = parent::$HOME_URL . '/images/system/' . $img;
         } else {

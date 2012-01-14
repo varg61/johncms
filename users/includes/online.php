@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $headmod = 'online';
 $textl = Vars::$LNG['online'];
 //$lng_online = Vars::load_lng('online');
-require_once('../includes/head.php');
+require_once(SYSPATH . 'head.php');
 
 /*
 -----------------------------------------------------------------
@@ -30,41 +30,83 @@ if (Vars::$USER_RIGHTS) {
     $menu[] = Vars::$MOD == 'ip' ? '<b>' . Vars::$LNG['ip_activity'] . '</b>' : '<a href="index.php?act=online&amp;mod=ip">' . Vars::$LNG['ip_activity'] . '</a>';
 }
 
-echo '<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
+echo'<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
 switch (Vars::$MOD) {
+    case 'download_ip';
+        // Скачиваем список IP
+        if (Vars::$USER_RIGHTS < 6) {
+            echo 'dgsdg';
+            require_once(SYSPATH . 'end.php');
+            exit;
+        }
+        $file = CACHEPATH . 'ip_requests_list.txt';
+        arsort(Vars::$IP_REQUESTS_LIST);
+        $shift = (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600;
+        $out = 'IP Requests ' . date("d.m.Y / H:i", time() + $shift);
+        $out .= "\r\n------------------------------\r\n";
+        foreach (Vars::$IP_REQUESTS_LIST as $key => $val) {
+            $out .= long2ip($key) . '  [' . $val . "]\r\n";
+        }
+        file_put_contents($file, $out);
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . basename($file));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+        }
+        exit;
+        break;
+
     case 'ip':
+        if (Vars::$USER_RIGHTS < 6) {
+            require_once(SYSPATH . 'end.php');
+            exit;
+        }
         // Список активных IP, со счетчиком обращений
-        $ip_array = array_count_values(Vars::$IP_REQUESTS_COUNT);
-        $total = count($ip_array);
+        $total = count(Vars::$IP_REQUESTS_LIST);
         $end = Vars::$START + Vars::$USER_SET['page_size'];
         if ($end > $total) $end = $total;
-        arsort($ip_array);
+        arsort(Vars::$IP_REQUESTS_LIST);
         $i = 0;
-        foreach ($ip_array as $key => $val) {
+        $ip_list = array();
+        foreach (Vars::$IP_REQUESTS_LIST as $key => $val) {
             $ip_list[$i] = array($key => $val);
             ++$i;
         }
-        if ($total && Vars::$USER_RIGHTS) {
+        if ($total) {
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             for ($i = Vars::$START; $i < $end; $i++) {
                 $out = each($ip_list[$i]);
-                if ($out[0] == Vars::$IP) echo '<div class="gmenu">';
-                else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . long2ip($out[0]) . '">' . long2ip($out[0]) .
-                    '</a>&#160;-&#160;[' . $out[1] . ']';
-                echo '</div>';
+                $ip = long2ip($out[0]);
+                echo($out[0] == Vars::$IP ? '<div class="gmenu">' : ($i % 2 ? '<div class="list2">' : '<div class="list1">')) .
+                    '<div style="float:left">' . Functions::getImage('host.gif') . '</div>' .
+                    '<div style="float:left;margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/ip_whois.php?ip=' . $ip . '">[w]</a></div>' .
+                    '<div style="float:left;margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
+                    '<div style="margin-left:120px"><span class="red"><b>' . $out[1] . '</b></span></div>' .
+                    '</div>';
             }
+            echo '</table>';
             echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
-                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                echo'<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                     '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
             }
+            echo'<p><a href="index.php?act=online&amp;mod=download_ip">' . Vars::$LNG['download_list'] . '</a></p>';
+        } else {
+            echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
         }
-        require_once('../includes/end.php');
+        require_once(SYSPATH . 'end.php');
         exit;
         break;
 
