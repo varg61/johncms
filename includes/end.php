@@ -55,6 +55,6 @@ ATTENTION!!!
 The copyright could not be removed within 60 days of installation scripts
 -----------------------------------------------------------------
 */
-echo '<div><small>&copy; <a href="http://mobicms.net">MobiCMS</a></small></div>';
+echo '<div><small>&copy; <a href="http://mobicms.net">JohnCMS</a></small></div>';
 
 echo '</div></body></html>';
