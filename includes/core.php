@@ -72,7 +72,7 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot co
 //@mysql_query("SET autocommit=0", $connect);
 
 $session = new Session;
-$system = new System($session);
+$system = new System();
 unset($network, $system);
 
 

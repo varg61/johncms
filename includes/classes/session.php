@@ -122,9 +122,11 @@ class Session extends Vars
      */
     public function sessionWrite($sid, $data)
     {
-        mysql_query("UPDATE `cms_sessions` SET
-            `session_timestamp` = " . time() . ",
-            `session_data` = '" . mysql_real_escape_string($data) . "'
+        $sql = $this->_fixUserData();
+        $sql[] = "`session_timestamp` = " . time();
+        $sql[] = "`session_data` = '" . mysql_real_escape_string($data) . "'";
+
+        mysql_query("UPDATE `cms_sessions` SET " . implode(', ', $sql) . "
             WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
         ") or exit ($this->_error(mysql_error()));
         return true;
@@ -158,13 +160,9 @@ class Session extends Vars
         return true;
     }
 
-    public function fixUserData()
+    public function _fixUserData()
     {
         $sql = array();
-
-        if ($this->session_data['session_timestamp'] < (time() - 200)) {
-            $sql[] = "`session_timestamp` = " . time();
-        }
 
         if ($this->session_data['user_id'] != parent::$USER_ID) {
             $sql[] = "`user_id` = " . parent::$USER_ID;
@@ -186,17 +184,7 @@ class Session extends Vars
             $sql[] = "`place` = '" . mysql_real_escape_string(parent::$PLACE) . "'";
         }
 
-        if (!empty($sql)) {
-            mysql_query("UPDATE `cms_sessions` SET " .
-                implode(', ', $sql) . "
-                WHERE `session_id` = '" . mysql_real_escape_string($this->session_id) . "'
-            ");
-            mysql_query("SELECT `session_id`
-                FROM `cms_sessions`
-                WHERE `session_id` = '" . mysql_real_escape_string($this->session_id) . "'
-                FOR UPDATE
-            ");
-        }
+        return $sql;
     }
 
     /**

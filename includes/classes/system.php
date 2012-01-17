@@ -11,7 +11,7 @@
 
 class System extends Vars
 {
-    function __construct($session)
+    function __construct()
     {
         // Определение мобильного браузера
         parent::$IS_MOBILE = $this->_mobileDetect();
@@ -43,9 +43,6 @@ class System extends Vars
 
         // Определение местоположения на сайте
         parent::$PLACE = $this->_getPlace();
-
-        // Фиксация пользовательских данных в сессии
-        $session->fixUserData();
     }
 
     private function _getPlace()
