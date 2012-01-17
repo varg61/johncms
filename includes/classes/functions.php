@@ -226,7 +226,7 @@ class Functions extends Vars
     {
         $out = false;
 
-        if (!$user['user_id']) {
+        if (!$user['id']) {
             $out = '<b>' . Vars::$LNG['guest'] . '</b>';
             if (!empty($user['nickname'])) {
                 $out .= ': ' . $user['nickname'];
@@ -237,8 +237,8 @@ class Functions extends Vars
         } else {
             if (parent::$USER_SET['avatar']) {
                 $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-                if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['user_id'] . '.png')) {
-                    $out .= '<img src="' . parent::$HOME_URL . '/files/users/avatar/' . $user['user_id'] . '.png" width="32" height="32" alt="' . $user['nickname'] . '" />&#160;';
+                if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.png')) {
+                    $out .= '<img src="' . parent::$HOME_URL . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['nickname'] . '" />&#160;';
                 } else {
                     $out .= self::getImage('empty.png') . '&#160;';
                 }
@@ -250,9 +250,9 @@ class Functions extends Vars
                 $out = self::getImage('del.png', '', 'align="middle"');
             }
             $out .= '&#160;';
-            $out .= !Vars::$USER_ID || Vars::$USER_ID == $user['user_id']
+            $out .= !Vars::$USER_ID || Vars::$USER_ID == $user['id']
                 ? '<b>' . $user['nickname'] . '</b>'
-                : '<a href="' . parent::$HOME_URL . '/users/profile.php?user=' . $user['user_id'] . '"><b>' . $user['nickname'] . '</b></a>';
+                : '<a href="' . parent::$HOME_URL . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['nickname'] . '</b></a>';
             $rank = array(
                 0 => '',
                 1 => '(GMod)',
@@ -278,7 +278,7 @@ class Functions extends Vars
         }
         if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
-        $ipinf = !isset($arg['iphide']) && (Vars::$USER_RIGHTS || ($user['user_id'] && $user['user_id'] == Vars::$USER_ID)) ? 1 : 0;
+        $ipinf = !isset($arg['iphide']) && (Vars::$USER_RIGHTS || ($user['id'] && $user['id'] == Vars::$USER_ID)) ? 1 : 0;
         $lastvisit = time() > $user['last_visit'] + 300 && isset($arg['last_visit']) ? self::displayDate($user['last_visit']) : false;
         if ($ipinf || $lastvisit || isset($arg['sub']) && !empty($arg['sub']) || isset($arg['footer'])) {
             $out .= '<div class="sub">';
@@ -307,8 +307,8 @@ class Functions extends Vars
                     $out .= $ip . $iphist;
                 }
                 if (isset($arg['iphist'])) {
-                    $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_iphistory` WHERE `user_id` = '" . $user['user_id'] . "'"), 0);
-                    $out .= '<div><span class="gray">' . Vars::$LNG['ip_history'] . ':</span> <a href="' . Vars::$SYSTEM_SET['homeurl'] . '/users/profile.php?act=ip&amp;user=' . $user['user_id'] . '">[' . $iptotal . ']</a></div>';
+                    $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+                    $out .= '<div><span class="gray">' . Vars::$LNG['ip_history'] . ':</span> <a href="' . Vars::$SYSTEM_SET['homeurl'] . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a></div>';
                 }
                 $out .= '</div>';
             }
@@ -318,6 +318,28 @@ class Functions extends Vars
             $out .= '</div>';
         }
         return $out;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Скачка различных списков в виде файла
+    -----------------------------------------------------------------
+    */
+    public static function downloadFile($str, $file)
+    {
+        ob_clean();
+        ob_start();
+        echo $str;
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=' . $file);
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . ob_get_length());
+        flush();
+        return true;
     }
 
     /*

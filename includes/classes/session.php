@@ -122,9 +122,41 @@ class Session extends Vars
      */
     public function sessionWrite($sid, $data)
     {
-        $sql = $this->_fixUserData();
+        $movings = false;
         $sql[] = "`session_timestamp` = " . time();
         $sql[] = "`session_data` = '" . mysql_real_escape_string($data) . "'";
+
+        if ($this->session_data['user_id'] != parent::$USER_ID) {
+            $sql[] = "`user_id` = " . parent::$USER_ID;
+        }
+
+        if ($this->session_data['ip'] != parent::$IP) {
+            $sql[] = "`ip` = " . parent::$IP;
+        }
+
+        if ($this->session_data['ip_via_proxy'] != parent::$IP_VIA_PROXY) {
+            $sql[] = "`ip_via_proxy` = " . parent::$IP_VIA_PROXY;
+        }
+
+        if ($this->session_data['user_agent'] != parent::$USERAGENT) {
+            $sql[] = "`user_agent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "'";
+        }
+
+        if ($this->session_data['place'] != parent::$PLACE) {
+            $sql[] = "`place` = '" . mysql_real_escape_string(parent::$PLACE) . "'";
+            $movings = true;
+        }
+
+        if ($this->session_data['session_timestamp'] > (time() - 300)) {
+            $sql[] = "`views` = " . ++$this->session_data['views'];
+            if ($movings) {
+                $sql[] = "`movings` = " . ++$this->session_data['movings'];
+            }
+        } else {
+            $sql[] = "`views` = 1";
+            $sql[] = "`movings` = 1";
+            $sql[] = "`start_time` = " . time();
+        }
 
         mysql_query("UPDATE `cms_sessions` SET " . implode(', ', $sql) . "
             WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
@@ -158,33 +190,6 @@ class Session extends Vars
             WHERE `session_timestamp` < $time
         ") or exit ($this->_error(mysql_error()));
         return true;
-    }
-
-    public function _fixUserData()
-    {
-        $sql = array();
-
-        if ($this->session_data['user_id'] != parent::$USER_ID) {
-            $sql[] = "`user_id` = " . parent::$USER_ID;
-        }
-
-        if ($this->session_data['ip'] != parent::$IP) {
-            $sql[] = "`ip` = " . parent::$IP;
-        }
-
-        if ($this->session_data['ip_via_proxy'] != parent::$IP_VIA_PROXY) {
-            $sql[] = "`ip_via_proxy` = " . parent::$IP_VIA_PROXY;
-        }
-
-        if ($this->session_data['user_agent'] != parent::$USERAGENT) {
-            $sql[] = "`user_agent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "'";
-        }
-
-        if ($this->session_data['place'] != parent::$PLACE) {
-            $sql[] = "`place` = '" . mysql_real_escape_string(parent::$PLACE) . "'";
-        }
-
-        return $sql;
     }
 
     /**
