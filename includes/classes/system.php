@@ -118,7 +118,7 @@ class System extends Vars
         $token = false;
         $cookie = false;
 
-        if (isset($_SESSION['id']) && isset($_SESSION['token'])) {
+        if (isset($_SESSION['uid']) && isset($_SESSION['token'])) {
             // Авторизация по сессии
             $id = intval($_SESSION['uid']);
             $token = $_SESSION['token'];
