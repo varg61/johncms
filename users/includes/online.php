@@ -29,22 +29,22 @@ switch (Vars::$MOD) {
     case 'download_users':
         /*
         -----------------------------------------------------------------
-        Скачиваем список Онлайн пользователей
+        Скачиваем список пользователей
         -----------------------------------------------------------------
         */
-        if (Vars::$USER_ID) {
+        if (!Vars::$USER_ID) {
             require_once(SYSPATH . 'end.php');
             exit;
         }
         $out = 'Users Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
-        $out .= "\r\n-------------------------------\r\n";
+        $out .= "\r\n===============================\r\n";
         $req = mysql_query("SELECT `cms_sessions`.`user_id` AS `id`, `cms_sessions`.`session_timestamp` AS `last_visit`, `cms_sessions`.`ip`, `cms_sessions`.`ip_via_proxy`, `cms_sessions`.`user_agent`, `cms_sessions`.`place`, `cms_sessions`.`views`, `cms_sessions`.`movings`, `cms_sessions`.`start_time`, `users`.`nickname`, `users`.`sex`, `users`.`rights`
             FROM `cms_sessions` LEFT JOIN `users` ON `cms_sessions`.`user_id` = `users`.`id`
             WHERE `cms_sessions`.`user_id` > 0 AND `cms_sessions`.`session_timestamp` > " . (time() - 300) . "
             ORDER BY `users`.`nickname` ASC");
         while ($res = mysql_fetch_assoc($req)) {
             $out .= $res['nickname'] . ' [' . $res['sex'] . '] (' . $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']) . ')';
-            if (Vars::$USER_RIGHTS) {
+            if (Vars::$USER_RIGHTS || $res['id'] == Vars::$USER_ID) {
                 $out .= "\r\n" . '  IP: ' . long2ip($res['ip']);
                 if ($res['ip_via_proxy']) {
                     $out .= ' / ' . long2ip($res['ip_via_proxy']);
@@ -58,11 +58,40 @@ switch (Vars::$MOD) {
         break;
 
     case 'download_history':
-        // Скачиваем историю Онлайн пользователей
+        /*
+        -----------------------------------------------------------------
+        Скачиваем историю Онлайн пользователей
+        -----------------------------------------------------------------
+        */
         break;
 
     case 'download_guests':
-        // Скачиваем список Онлайн гостей
+        /*
+        -----------------------------------------------------------------
+        Скачиваем список гостей
+        -----------------------------------------------------------------
+        */
+        if (!Vars::$USER_RIGHTS) {
+            require_once(SYSPATH . 'end.php');
+            exit;
+        }
+        $out = 'Guests Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
+        $out .= "\r\n================================\r\n";
+        $req = mysql_query("SELECT `user_id` AS `id`, `session_timestamp` AS `last_visit`, `ip`, `ip_via_proxy`, `user_agent`, `place`, `views`, `movings`, `start_time`
+            FROM `cms_sessions`
+            WHERE `user_id` = 0 AND `session_timestamp` > " . (time() - 300) . "
+            ORDER BY `session_timestamp` ASC");
+        while ($res = mysql_fetch_assoc($req)) {
+            $out .= 'GUEST (' . $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']) . ')';
+            $out .= "\r\n" . '  IP: ' . long2ip($res['ip']);
+            if ($res['ip_via_proxy']) {
+                $out .= ' / ' . long2ip($res['ip_via_proxy']);
+            }
+            $out .= "\r\n" . '  UA: ' . $res['user_agent'];
+            $out .= "\r\n\r\n";
+        }
+        Functions::downloadFile($out, 'guests_online_list.txt');
+        exit;
         break;
 
     case 'download_ip';
@@ -77,7 +106,7 @@ switch (Vars::$MOD) {
         }
         arsort(Vars::$IP_REQUESTS_LIST);
         $out = 'IP Requests ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
-        $out .= "\r\n------------------------------\r\n";
+        $out .= "\r\n==============================\r\n";
         foreach (Vars::$IP_REQUESTS_LIST as $key => $val) {
             $out .= long2ip($key) . '  [' . $val . "]\r\n";
         }
@@ -86,11 +115,15 @@ switch (Vars::$MOD) {
         break;
 
     case 'ip':
+        /*
+        -----------------------------------------------------------------
+        Показываем список активных IP, со счетчиком обращений
+        -----------------------------------------------------------------
+        */
         if (Vars::$USER_RIGHTS < 6) {
             require_once(SYSPATH . 'end.php');
             exit;
         }
-        // Список активных IP, со счетчиком обращений
         $total = count(Vars::$IP_REQUESTS_LIST);
         $end = Vars::$START + Vars::$USER_SET['page_size'];
         if ($end > $total) $end = $total;
@@ -130,21 +163,36 @@ switch (Vars::$MOD) {
         break;
 
     case 'guest':
-        // Список гостей Онлайн
-        $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300);
-        $sql_list = "SELECT * FROM `cms_sessions` WHERE `lastdate` > " . (time() - 300) . " ORDER BY `movings` DESC LIMIT " . Vars::db_pagination();
-        $link = '';
+        /*
+        -----------------------------------------------------------------
+        Заппросы для списка гостей Онлайн
+        -----------------------------------------------------------------
+        */
+        $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 AND `session_timestamp` > " . (time() - 300);
+        $sql_list = "SELECT `user_id` AS `id`, `session_timestamp` AS `last_visit`, `ip`, `ip_via_proxy`, `user_agent`, `place`, `views`, `movings`, `start_time`
+            FROM `cms_sessions`
+            WHERE `user_id` = 0 AND `session_timestamp` > " . (time() - 300) . "
+            ORDER BY `session_timestamp` ASC" . Vars::db_pagination();
+        $link = 'download_guests';
         break;
 
     case 'history':
-        // История посетилелей за последние 2 суток
+        /*
+        -----------------------------------------------------------------
+        Заппросы для истории посетилелей за последние 2 суток
+        -----------------------------------------------------------------
+        */
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `last_visit` > " . (time() - 172800 . " AND `last_visit` < " . (time() - 310));
         $sql_list = "SELECT * FROM `users` WHERE `last_visit` > " . (time() - 172800) . " AND `last_visit` < " . (time() - 310) . " ORDER BY `last_visit` DESC" . Vars::db_pagination();
         $link = '';
         break;
 
     default:
-        // Список посетителей Онлайн
+        /*
+        -----------------------------------------------------------------
+        Заппросы для списка посетителей Онлайн
+        -----------------------------------------------------------------
+        */
         $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 AND `session_timestamp` > " . (time() - 300);
         $sql_list = "SELECT `cms_sessions`.`user_id` AS `id`, `cms_sessions`.`session_timestamp` AS `last_visit`, `cms_sessions`.`ip`, `cms_sessions`.`ip_via_proxy`, `cms_sessions`.`user_agent`, `cms_sessions`.`place`, `cms_sessions`.`views`, `cms_sessions`.`movings`, `cms_sessions`.`start_time`, `users`.`nickname`, `users`.`sex`, `users`.`rights`
             FROM `cms_sessions` LEFT JOIN `users` ON `cms_sessions`.`user_id` = `users`.`id`
@@ -153,6 +201,11 @@ switch (Vars::$MOD) {
         $link = 'download_users';
 }
 
+/*
+-----------------------------------------------------------------
+Показываем списки Онлайн
+-----------------------------------------------------------------
+*/
 $total = mysql_result(mysql_query($sql_total), 0);
 if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;' . (Vars::$MOD ? 'mod=' . Vars::$MOD . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 if ($total) {
@@ -184,6 +237,6 @@ if ($total > Vars::$USER_SET['page_size']) {
         '</form></p>';
 }
 
-if (Vars::$USER_ID) {
+if (Vars::$USER_ID && $total) {
     echo'<p><a href="index.php?act=online&amp;mod=' . $link . '">' . Vars::$LNG['download_list'] . '</a></p>';
 }
