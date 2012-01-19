@@ -13,7 +13,10 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = Vars::$LNG['online'];
 require_once(SYSPATH . 'head.php');
+
 $link = '';
+$sql_total = '';
+$sql_list = '';
 
 $menu[] = !Vars::$MOD ? '<b>' . Vars::$LNG['users'] . '</b>' : '<a href="index.php?act=online">' . Vars::$LNG['users'] . '</a>';
 $menu[] = Vars::$MOD == 'history' ? '<b>' . Vars::$LNG['history'] . '</b>' : '<a href="index.php?act=online&amp;mod=history">' . Vars::$LNG['history'] . '</a> ';
@@ -26,7 +29,7 @@ echo'<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
 switch (Vars::$MOD) {
-    case 'download_users':
+    case 'du':
         /*
         -----------------------------------------------------------------
         Скачиваем список пользователей
@@ -53,19 +56,39 @@ switch (Vars::$MOD) {
             }
             $out .= "\r\n\r\n";
         }
-        Functions::downloadFile($out, 'users_online_list.txt');
+        Functions::downloadFile($out, 'online_users.txt');
         exit;
         break;
 
-    case 'download_history':
+    case 'dh':
         /*
         -----------------------------------------------------------------
         Скачиваем историю Онлайн пользователей
         -----------------------------------------------------------------
         */
+        if (!Vars::$USER_ID) {
+            require_once(SYSPATH . 'end.php');
+            exit;
+        }
+        $out = 'Users Online history ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
+        $out .= "\r\n=======================================\r\n";
+        $req = mysql_query("SELECT * FROM `users` WHERE `last_visit` > " . (time() - 172800) . " AND `last_visit` < " . (time() - 310) . " ORDER BY `last_visit` DESC");
+        while ($res = mysql_fetch_assoc($req)) {
+            $out .= $res['nickname'] . ' [' . $res['sex'] . '] (' . Functions::displayDate($res['last_visit']) . ')';
+            if (Vars::$USER_RIGHTS || $res['id'] == Vars::$USER_ID) {
+                $out .= "\r\n" . '  IP: ' . long2ip($res['ip']);
+                if ($res['ip_via_proxy']) {
+                    $out .= ' / ' . long2ip($res['ip_via_proxy']);
+                }
+                $out .= "\r\n" . '  UA: ' . $res['user_agent'];
+            }
+            $out .= "\r\n\r\n";
+        }
+        Functions::downloadFile($out, 'online_history.txt');
+        exit;
         break;
 
-    case 'download_guests':
+    case 'dg':
         /*
         -----------------------------------------------------------------
         Скачиваем список гостей
@@ -80,7 +103,7 @@ switch (Vars::$MOD) {
         $req = mysql_query("SELECT `user_id` AS `id`, `session_timestamp` AS `last_visit`, `ip`, `ip_via_proxy`, `user_agent`, `place`, `views`, `movings`, `start_time`
             FROM `cms_sessions`
             WHERE `user_id` = 0 AND `session_timestamp` > " . (time() - 300) . "
-            ORDER BY `session_timestamp` ASC");
+            ORDER BY `session_timestamp` DESC");
         while ($res = mysql_fetch_assoc($req)) {
             $out .= 'GUEST (' . $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']) . ')';
             $out .= "\r\n" . '  IP: ' . long2ip($res['ip']);
@@ -90,11 +113,11 @@ switch (Vars::$MOD) {
             $out .= "\r\n" . '  UA: ' . $res['user_agent'];
             $out .= "\r\n\r\n";
         }
-        Functions::downloadFile($out, 'guests_online_list.txt');
+        Functions::downloadFile($out, 'online_guests.txt');
         exit;
         break;
 
-    case 'download_ip';
+    case 'di';
         /*
         -----------------------------------------------------------------
         Скачиваем список IP
@@ -110,7 +133,7 @@ switch (Vars::$MOD) {
         foreach (Vars::$IP_REQUESTS_LIST as $key => $val) {
             $out .= long2ip($key) . '  [' . $val . "]\r\n";
         }
-        Functions::downloadFile($out, 'ip_requests_list.txt');
+        Functions::downloadFile($out, 'online_ip.txt');
         exit;
         break;
 
@@ -154,7 +177,7 @@ switch (Vars::$MOD) {
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
             }
-            echo'<p><a href="index.php?act=online&amp;mod=download_ip">' . Vars::$LNG['download_list'] . '</a></p>';
+            echo'<p><a href="index.php?act=online&amp;mod=di">' . Vars::$LNG['download_list'] . '</a></p>';
         } else {
             echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
         }
@@ -173,7 +196,7 @@ switch (Vars::$MOD) {
             FROM `cms_sessions`
             WHERE `user_id` = 0 AND `session_timestamp` > " . (time() - 300) . "
             ORDER BY `session_timestamp` ASC" . Vars::db_pagination();
-        $link = 'download_guests';
+        $link = 'dg';
         break;
 
     case 'history':
@@ -184,7 +207,7 @@ switch (Vars::$MOD) {
         */
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `last_visit` > " . (time() - 172800 . " AND `last_visit` < " . (time() - 310));
         $sql_list = "SELECT * FROM `users` WHERE `last_visit` > " . (time() - 172800) . " AND `last_visit` < " . (time() - 310) . " ORDER BY `last_visit` DESC" . Vars::db_pagination();
-        $link = '';
+        $link = 'dh';
         break;
 
     default:
@@ -198,7 +221,7 @@ switch (Vars::$MOD) {
             FROM `cms_sessions` LEFT JOIN `users` ON `cms_sessions`.`user_id` = `users`.`id`
             WHERE `cms_sessions`.`user_id` > 0 AND `cms_sessions`.`session_timestamp` > " . (time() - 300) . "
             ORDER BY `users`.`nickname` ASC" . Vars::db_pagination();
-        $link = 'download_users';
+        $link = 'du';
 }
 
 /*
