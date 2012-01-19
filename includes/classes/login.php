@@ -109,6 +109,7 @@ class Login extends Vars
 
                             // Впускаем пользователя на сайт
                             $this->_userEnter($res['id'], $token, $user_remember);
+                            parent::$USER_ID = $res['id'];
                             break;
                         } else {
                             // Если пароль неверный
