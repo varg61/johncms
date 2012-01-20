@@ -69,7 +69,6 @@ $db_name = isset($db_name) ? $db_name : 'johncms';
 $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
 @mysql_select_db($db_name) or die('Error: specified database does not exist');
 @mysql_query("SET NAMES 'utf8'", $connect);
-//@mysql_query("SET autocommit=0", $connect);
 
 $session = new Session;
 $system = new System();
@@ -98,13 +97,9 @@ unset($network, $system);
 Буфферизация вывода
 -----------------------------------------------------------------
 */
-//if (!isset(Vars::$SYSTEM_SET['gzip'])) {
-//    mysql_query("INSERT INTO `cms_settings` SET `key` = 'gzip', `val` = '1'");
-//    Vars::$SYSTEM_SET['gzip'] = 1;
-//}
-//if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
-//    @ini_set('zlib.output_compression_level', 3);
-//    ob_start('ob_gzhandler');
-//} else {
-//    ob_start();
-//}
+if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
+    @ini_set('zlib.output_compression_level', 3);
+    ob_start('ob_gzhandler');
+} else {
+    ob_start();
+}
