@@ -57,7 +57,7 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
     '<input type="submit" value="' . Vars::$LNG['search'] . '" name="submit" /><br />' .
     '<small>' . Vars::$LNG['search_nick_help'] . '</small></p></form></div>' .
     '<div class="menu"><p>' .
-        Functions::getImage('users.png') . '&#160;<a href="users_list.php">' . Vars::$LNG['users'] . '</a> (' . $count->users . ')<br />' .
+        Functions::getImage('users.png') . '&#160;<a href="userlist.php">' . Vars::$LNG['users'] . '</a> (' . $count->users . ')<br />' .
         ($brth ? '<br />' . Functions::getImage('award.png') . '&#160;<a href="index.php?act=birth">' . Vars::$LNG['birthday_men'] . '</a> (' . $brth . ')' : '') .
         '</p><p>' . Functions::getImage('album_4.png') . '&#160;<a href="album.php">' . Vars::$LNG['photo_albums'] . '</a> (' . $count->album . ')</p>' .
         '<p>' . Functions::getImage('rating.png') . '&#160;<a href="index.php?act=top">' . Vars::$LNG['users_top'] . '</a></p>' .
