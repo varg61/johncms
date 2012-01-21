@@ -12,8 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = Vars::$LNG['forum'] . ' | ' . Vars::$LNG['unread'];
-$headmod = 'forumnew';
-require_once('../includes/head.php');
+
 unset($_SESSION['fsort_id']);
 unset($_SESSION['fsort_users']);
 if (empty($_SESSION['uid'])) {
@@ -79,7 +78,6 @@ if ($user_id) {
             $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : null;
             if (!$vr) {
                 echo $lng_forum['error_time_empty'] . '<br/><a href="index.php?act=new&amp;do=all">' . Vars::$LNG['repeat'] . '</a><br/>';
-                require_once('../includes/end.php');
                 exit;
             }
             $vr1 = time() - $vr * 3600;

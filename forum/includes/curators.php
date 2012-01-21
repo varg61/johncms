@@ -11,13 +11,10 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
-
 if (Vars::$USER_RIGHTS >= 7) {
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($req) || Vars::$USER_RIGHTS < 7) {
         echo Functions::displayError($lng_forum['error_topic_deleted']);
-        require_once('../includes/end.php');
         exit;
     }
     $topic = mysql_fetch_assoc($req);

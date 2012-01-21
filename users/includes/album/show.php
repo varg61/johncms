@@ -11,17 +11,13 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
-
 if (!$al) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al'");
 if (!mysql_num_rows($req)) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $album = mysql_fetch_assoc($req);
@@ -54,7 +50,6 @@ if ($album['access'] == 1 && $user['user_id'] != Vars::$USER_ID && Vars::$USER_R
     // Если доступ закрыт
     echo Functions::displayError(Vars::$LNG['access_forbidden']) .
         '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . $lng_profile['album_list'] . '</a></div>';
-    require_once('../includes/end.php');
     exit;
 } elseif ($album['access'] == 2 && $user['user_id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
     // Если доступ через пароль
@@ -71,7 +66,6 @@ if ($album['access'] == 1 && $user['user_id'] != Vars::$USER_ID && Vars::$USER_R
         echo '<p><input type="submit" name="submit" value="' . Vars::$LNG['login'] . '"/></p>';
         echo '</div></form>';
         echo '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . $lng_profile['album_list'] . '</a></div>';
-        require_once('../includes/end.php');
         exit;
     }
 }

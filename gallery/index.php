@@ -12,10 +12,8 @@
 define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
-$headmod = 'gallery';
 $lng_gal = Vars::loadLanguage('gallery');
 $textl = Vars::$LNG['gallery'];
-require_once('../includes/head.php');
 
 // Ограничиваем доступ к Галерее
 $error = '';
@@ -24,9 +22,7 @@ if (!Vars::$SYSTEM_SET['mod_gal'] && Vars::$USER_RIGHTS < 7)
 elseif (Vars::$SYSTEM_SET['mod_gal'] == 1 && !Vars::$USER_ID)
     $error = Vars::$LNG['access_guest_forbidden'];
 if ($error) {
-    require_once('../includes/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -327,5 +323,3 @@ if (in_array(Vars::$ACT, $array) && file_exists(Vars::$ACT . '.php')) {
         echo "</p>";
     }
 }
-
-require_once('../includes/end.php');

@@ -12,7 +12,6 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = htmlspecialchars($user['nickname']) . ': ' . $lng_profile['profile_edit'];
-require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
@@ -21,7 +20,6 @@ require_once('../includes/head.php');
 */
 if ($user['user_id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] > Vars::$USER_RIGHTS)) {
     echo Functions::displayError($lng_profile['error_rights']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -33,7 +31,6 @@ if ($user['user_id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['righ
 if (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights'] && Vars::$ACT == 'reset') {
     mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['user_id'] . "'");
     echo '<div class="gmenu"><p>' . Vars::$LNG['settings_default'] . '<br /><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['to_form'] . '</a></p></div>';
-    require_once('../includes/end.php');
     exit;
 }
 echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . ($user['user_id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $lng_profile['my_profile']) . '</b></a> | ' . Vars::$LNG['edit'] . '</div>';
@@ -214,4 +211,3 @@ if (Vars::$USER_RIGHTS >= 7) {
 echo '<div class="gmenu"><input type="submit" value="' . Vars::$LNG['save'] . '" name="submit" /></div>' .
     '</form>' .
     '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['to_form'] . '</a></div>';
-?>

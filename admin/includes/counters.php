@@ -119,7 +119,6 @@ switch (Vars::$MOD) {
         */
         if (!Vars::$ID) {
             echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
@@ -127,7 +126,6 @@ switch (Vars::$MOD) {
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 echo '<p>' . $lng['counter_deleted'] . '<br/><a href="index.php?act=counters">' . $lng['continue'] . '</a></p>';
-                require_once('../includes/end.php');
                 exit;
             } else {
                 echo '<form action="index.php?act=counters&amp;mod=del&amp;id=' . Vars::$ID . '" method="post">';
@@ -138,7 +136,6 @@ switch (Vars::$MOD) {
             }
         } else {
             echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         break;
@@ -157,7 +154,6 @@ switch (Vars::$MOD) {
             $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
             if (empty($name) || empty($link1)) {
                 echo Functions::displayError($lng['error_empty_fields'], '<a href="index.php?act=counters&amp;mod=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . $lng['back'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             echo '<div class="phdr"><a href="index.php?act=counters"><b>' . $lng['counters'] . '</b></a> | ' . $lng['preview'] . '</div>' .
@@ -191,7 +187,6 @@ switch (Vars::$MOD) {
                     $switch = 1;
                 } else {
                     echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=counters">' . $lng['back'] . '</a>');
-                    require_once('../includes/end.php');
                     exit;
                 }
             }
@@ -224,7 +219,6 @@ switch (Vars::$MOD) {
         $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
         if (empty($name) || empty($link1)) {
             echo Functions::displayError($lng['error_empty_fields'], '<a href="index.php?act=counters&amp;mod=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . $lng['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         if (Vars::$ID) {
@@ -232,7 +226,6 @@ switch (Vars::$MOD) {
             $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
             if (mysql_num_rows($req) != 1) {
                 echo Functions::displayError($lng['error_wrong_data']);
-                require_once('../includes/end.php');
                 exit;
             }
             mysql_query("UPDATE `cms_counters` SET

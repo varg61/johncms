@@ -22,7 +22,6 @@ if (isset($_GET['lng'])) {
     Переключатель языков
     -----------------------------------------------------------------
     */
-    require_once('includes/head.php');
     echo'<div class="menu"><form action="' . $referer . '" method="post"><p>';
     if (count(Vars::$LNG_LIST) > 1) {
         echo'<p><h3>' . Vars::$LNG['language_select'] . '</h3>';
@@ -37,7 +36,6 @@ if (isset($_GET['lng'])) {
     }
     echo'</p><p><input type="submit" name="submit" value="' . Vars::$LNG['apply'] . '" /></p>' .
         '<p><a href="' . $referer . '">' . Vars::$LNG['back'] . '</a></p></form></div>';
-    require_once('includes/end.php');
 } elseif ($url) {
     /*
     -----------------------------------------------------------------
@@ -47,7 +45,6 @@ if (isset($_GET['lng'])) {
     if (isset($_POST['submit'])) {
         header('Location: ' . $url);
     } else {
-        require_once('includes/head.php');
         echo'<div class="phdr"><b>' . Vars::$LNG['external_link'] . '</b></div>' .
             '<div class="rmenu">' .
             '<form action="go.php?url=' . base64_encode($url) . '" method="post">' .
@@ -57,7 +54,6 @@ if (isset($_GET['lng'])) {
             '<p><input type="submit" name="submit" value="' . Vars::$LNG['redirect_5'] . '" /></p>' .
             '</form></div>' .
             '<div class="phdr"><a href="' . $referer . '">' . Vars::$LNG['back'] . '</a></div>';
-        require_once('includes/end.php');
     }
 } elseif (Vars::$ID) {
     /*

@@ -14,8 +14,6 @@ define('_IN_JOHNCMS', 1);
 require_once('../includes/core.php');
 $lng_smileys = Vars::loadLanguage('smileys');
 $textl = 'FAQ';
-$headmod = 'smileys';
-require_once('../includes/head.php');
 
 // Сколько смайлов разрешено выбрать пользователям?
 $user_smileys = 20;
@@ -79,7 +77,6 @@ switch (Vars::$ACT) {
         */
         if (Vars::$USER_RIGHTS < 1) {
             echo Functions::displayError($lng['error_wrong_data'], '<a href="smileys.php">' . Vars::$LNG['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         echo '<div class="phdr"><a href="smileys.php"><b>' . Vars::$LNG['smileys'] . '</b></a> | ' . Vars::$LNG['admin_smileys'] . '</div>';
@@ -132,7 +129,6 @@ switch (Vars::$ACT) {
         */
         if (Vars::$IS_MOBILE) {
             echo Functions::displayError($lng['error_wrong_data'], '<a href="smileys.php">' . Vars::$LNG['smileys'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         echo '<div class="phdr"><a href="smileys.php"><b>' . Vars::$LNG['smileys'] . '</b></a> | ' . Vars::$LNG['my_smileys'] . '</div>';
@@ -184,7 +180,6 @@ switch (Vars::$ACT) {
         $cat = isset($_GET['cat']) ? trim($_GET['cat']) : '';
         if (Vars::$IS_MOBILE || ($adm && !Vars::$USER_RIGHTS) || ($add && !$adm && !$cat) || ($delete && !$_POST['delete_sm']) || ($add && !$_POST['add_sm'])) {
             echo Functions::displayError(Vars::$LNG['error_wrong_data'], '<a href="smileys.php">' . Vars::$LNG['smileys'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         if (($smileys = Vars::getUserData('smileys')) === false) $smileys = array();
@@ -244,5 +239,3 @@ switch (Vars::$ACT) {
         }
         echo '<div class="phdr"><a href="' . htmlspecialchars($_SESSION['ref']) . '">' . Vars::$LNG['back'] . '</a></div>';
 }
-
-require_once('../includes/end.php');

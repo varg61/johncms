@@ -29,7 +29,6 @@ switch (Vars::$MOD) {
         */
         if (!Vars::$ID) {
             echo Functions::displayError($lng['error_wrong_data']);
-            require_once('../includes/end.php');
             exit;
         }
         //TODO: Доработать под новые таблицы!
@@ -55,7 +54,6 @@ switch (Vars::$MOD) {
         */
         if (!Vars::$ID) {
             echo Functions::displayError($lng['error_wrong_data']);
-            require_once('../includes/end.php');
             exit;
         }
         $req = mysql_query("SELECT `id` FROM `users` WHERE `id` = " . Vars::$ID . " AND `level` = '0'");
@@ -99,7 +97,6 @@ switch (Vars::$MOD) {
                 '<a href="index.php?act=reg">' . $lng['continue'] . '</a></p></div>';
         } else {
             echo Functions::displayError($lng['error_wrong_data']);
-            require_once('../includes/end.php');
             exit;
         }
         break;

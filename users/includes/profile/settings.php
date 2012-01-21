@@ -13,7 +13,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $lng_set = Vars::loadLanguage('settings');
 $textl = Vars::$LNG['settings'];
-require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
@@ -22,7 +21,6 @@ require_once('../includes/head.php');
 */
 if ($user['user_id'] != Vars::$USER_ID) {
     echo Functions::displayError(Vars::$LNG['access_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 

@@ -23,9 +23,7 @@ if (!Vars::$SYSTEM_SET['mod_lib'] && Vars::$USER_RIGHTS < 7)
 elseif (Vars::$SYSTEM_SET['mod_lib'] == 1 && !Vars::$USER_ID)
     $error = Vars::$LNG['access_guest_forbidden'];
 if ($error) {
-    require_once('../includes/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -37,7 +35,6 @@ if (Vars::$ID) {
     $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
     $textl = mb_strlen($zag['text']) > 30 ? $hdr . '...' : $hdr;
 }
-require_once('../includes/head.php');
 
 $mods = array(
     'java',
@@ -266,8 +263,5 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
             break;
         default :
             header("location: index.php");
-            break;
     }
 }
-
-require_once('../includes/end.php');

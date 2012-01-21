@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../includes/head.php");
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     $drt = array();
     $dropen = opendir("$loadroot");

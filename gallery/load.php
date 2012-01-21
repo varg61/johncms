@@ -17,15 +17,12 @@ if (!Vars::$USER_ID || Vars::$USER_BAN['1'] || Vars::$USER_BAN['14']) {
 }
 if (empty($_GET['id'])) {
     echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-    require_once('../includes/end.php');
     exit;
 }
 // Проверка на флуд
 $flood = Functions::antiFlood();
 if ($flood) {
-    require_once('../includes/head.php');
     echo Functions::displayError('You cannot add pictures so often<br />Please wait ' . $flood . ' sec.', '<a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a>');
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -33,7 +30,6 @@ $type = mysql_query("select * from `gallery` where `id` = " . Vars::$ID);
 $ms = mysql_fetch_array($type);
 if ($ms['type'] != "al") {
     echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-    require_once('../includes/end.php');
     exit;
 }
 $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refid'] . "';");
@@ -54,22 +50,18 @@ if ((!empty($_SESSION['uid']) && $rz1['user'] == 1 && $ms['text'] == Vars::$USER
         $formfail = Functions::format($ffail);
         if ((preg_match("/php/i", $ffail)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess")) {
             echo "Trying to send a file type of prohibited.<br/><a href='index.php?act=upl&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-            require_once('../includes/end.php');
             exit;
         }
         if ($fsize >= 1024 * $ftsz) {
             echo "Weight file exceeds $ftsz kB<br/><a href='index.php?act=upl&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-            require_once('../includes/end.php');
             exit;
         }
         if (!in_array($formfail, $dopras)) {
             echo "Allowed only the following file types: $tff !.<br/><a href='index.php?act=upl&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-            require_once('../includes/end.php');
             exit;
         }
         if (preg_match("/[^\da-z_\-.]+/", $fname)) {
             echo "The image name contains invalid characters<br/><a href='index.php?act=upl&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-            require_once('../includes/end.php');
             exit;
         }
         if ($rz1['user'] == 1 && $ms['text'] == Vars::$USER_NICKNAME) {

@@ -12,31 +12,23 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     if (!Vars::$ID) {
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-        require_once('../includes/end.php');
         exit;
     }
     $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($typ)) {
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-        require_once('../includes/end.php');
         exit;
     }
     if (isset($_POST['submit'])) {
         $razd = isset($_POST['razd']) ? abs(intval($_POST['razd'])) : false;
         if (!$razd) {
-            require_once('../includes/head.php');
             echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-            require_once('../includes/end.php');
             exit;
         }
         $typ1 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$razd' AND `type` = 'r'");
         if (!mysql_num_rows($typ1)) {
-            require_once('../includes/head.php');
             echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-            require_once('../includes/end.php');
             exit;
         }
         mysql_query("UPDATE `forum` SET `refid` = '$razd' WHERE `id` = " . Vars::$ID);
@@ -48,7 +40,6 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         -----------------------------------------------------------------
         */
         $ms = mysql_fetch_assoc($typ);
-        require_once('../includes/head.php');
         if (empty($_GET['other'])) {
             $rz = mysql_query("select * from `forum` where id='" . $ms['refid'] . "';");
             $rz1 = mysql_fetch_assoc($rz);

@@ -12,8 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = $lng_forum['who_in_forum'];
-$headmod = Vars::$ID ? 'forum,' . Vars::$ID : 'forumwho';
-require_once('../includes/head.php');
+
 if (!Vars::$USER_ID) {
     header('Location: index.php');
     exit;

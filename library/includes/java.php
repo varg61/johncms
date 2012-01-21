@@ -15,7 +15,6 @@ if (Vars::$USER_ID) {
     $req = mysql_query("select `name`, `text` from `lib` where `id` = " . Vars::$ID . " and `type` = 'bk' and `moder`='1' LIMIT 1;");
     if (mysql_num_rows($req) == 0) {
         echo '<p>ERROR</p>';
-        require_once('../includes/end.php');
         exit;
     }
     $res = mysql_fetch_array($req);
@@ -56,7 +55,6 @@ TCBR-Platform: Generic version (all phones)';
         $list = $archive->create('java', PCLZIP_OPT_REMOVE_PATH, 'java');
         if (!file_exists('../files/library/' . Vars::$ID . '.jar')) {
             echo '<p>Error creating JAR file</p>';
-            require_once('../includes/end.php');
             exit;
         }
     }

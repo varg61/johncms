@@ -17,7 +17,6 @@ if (!Vars::$USER_ID || Vars::$USER_RIGHTS < 6) {
 }
 if (empty($_GET['id'])) {
     echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -25,7 +24,6 @@ $type = mysql_query("select * from `gallery` where `id` = " . Vars::$ID);
 $ms = mysql_fetch_array($type);
 if ($ms['type'] != "al") {
     echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-    require_once('../includes/end.php');
     exit;
 }
 $rz = mysql_query("select * from `gallery` where type='rz' and id='" . $ms['refid'] . "'");

@@ -11,8 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
-
 /*
 -----------------------------------------------------------------
 Создать / изменить альбом
@@ -30,7 +28,6 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             $access = $res['access'];
         } else {
             echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-            require_once('../includes/end.php');
             exit;
         }
     } else {
@@ -94,7 +91,6 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             }
             echo '<div class="gmenu"><p>' . ($al ? $lng_profile['album_changed'] : $lng_profile['album_created']) . '<br />' .
                 '<a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
-            require_once('../includes/end.php');
             exit;
         }
     }
@@ -120,4 +116,3 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         '</form></div>' .
         '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['cancel'] . '</a></div>';
 }
-?>

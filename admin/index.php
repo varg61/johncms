@@ -22,9 +22,7 @@ if (Vars::$USER_RIGHTS < 1) {
 }
 
 $lng_adm = Vars::loadLanguage('adm');
-$headmod = 'admin';
 $textl = Vars::$LNG['admin_panel'];
-require_once('../includes/head.php');
 
 $regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
 $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
@@ -92,5 +90,3 @@ if (Vars::$USER_RIGHTS >= 7) {
         '</p></div>';
 }
 echo '<div class="phdr">&#160;</div>';
-
-require_once('../includes/end.php');

@@ -11,11 +11,9 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'news';
 require_once('../includes/core.php');
 $lng_news = Vars::loadLanguage('news'); // Загружаем язык модуля
 $textl = Vars::$LNG['news'];
-require_once('../includes/head.php');
 
 //TODO: Переделать с $do на $mod
 switch ($do) {
@@ -124,7 +122,6 @@ switch ($do) {
             echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['news'] . '</b></a> | ' . Vars::$LNG['edit'] . '</div>';
             if (!Vars::$ID) {
                 echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php">' . $lng_news['to_news'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             if (isset($_POST['submit'])) {
@@ -268,5 +265,3 @@ switch ($do) {
                  '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
         }
 }
-
-require_once('../includes/end.php');

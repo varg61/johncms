@@ -11,11 +11,10 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'forumsearch';
 require_once('../includes/core.php');
 $lng_forum = Vars::loadLanguage('forum');
 $textl = $lng_forum['search_forum'];
-require_once('../includes/head.php');
+
 echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . Vars::$LNG['search'] . '</div>';
 
 /*
@@ -186,5 +185,3 @@ switch (Vars::$ACT) {
 
         echo '<p>' . ($search ? '<a href="search.php">' . Vars::$LNG['search_new'] . '</a><br />' : '') . '<a href="index.php">' . Vars::$LNG['forum'] . '</a></p>';
 }
-
-require_once('../includes/end.php');

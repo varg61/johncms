@@ -13,9 +13,10 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = Vars::$LNG['profile'] . ' | ' . Vars::$LNG['guestbook'];
 $headmod = 'my_guest';
-if (Vars::$USER_ID && $user['user_id'] == Vars::$USER_ID)
-    $datauser['comm_old'] = $datauser['comm_count']; //TODO: Доработать!
-require_once('../includes/head.php');
+if (Vars::$USER_ID && $user['user_id'] == Vars::$USER_ID) {
+    $datauser['comm_old'] = $datauser['comm_count'];
+    //TODO: Доработать!
+}
 
 $context_top = '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . Vars::$LNG['guestbook'] . '</div>' .
                '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';

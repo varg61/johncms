@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
 $textl = Vars::$LNG['community'];
-require_once(SYSPATH . 'head.php');
 
 /*
 -----------------------------------------------------------------
@@ -22,7 +21,6 @@ require_once(SYSPATH . 'head.php');
 */
 if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
     echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
-    require_once(SYSPATH . 'end.php');
     exit;
 }
 
@@ -40,11 +38,10 @@ echo'<div class="phdr"><b>' . Vars::$LNG['community'] . '</b></div>' .
     '<input type="submit" value="' . Vars::$LNG['search'] . '" name="submit" /><br />' .
     '<small>' . Vars::$LNG['search_nick_help'] . '</small></p></form></div>' .
     '<div class="menu"><p>' .
-    Functions::getImage('users.png') . '&#160;<a href="userlist.php">' . Vars::$LNG['users'] . '</a> (' . $count->users . ')<br />' .
+    '<h3>' . Functions::getImage('users.png') . '&#160;' . Vars::$LNG['users'] . '</h3>' .
+    '<a href="userlist.php">' . Vars::$LNG['users'] . '</a> (' . $count->users . ')' .
+    '</p><p>' .
     //TODO: Доработать дни рожденья!
-    '</p><p>' . Functions::getImage('album_4.png') . '&#160;<a href="album.php">' . Vars::$LNG['photo_albums'] . '</a> (' . $count->album . ')</p>' .
-    '<p>' . Functions::getImage('rating.png') . '&#160;<a href="index.php?act=top">' . Vars::$LNG['users_top'] . '</a></p>' .
-    '</div>' .
+    '<h3>' . Functions::getImage('rating.png') . '&#160;' . Vars::$LNG['users_top'] . '</h3>' .
+    '</p></div>' .
     '<div class="phdr"><a href="index.php">' . Vars::$LNG['back'] . '</a></div>';
-
-require_once(SYSPATH . 'end.php');

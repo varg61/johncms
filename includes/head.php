@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$headmod = isset($headmod) ? mysql_real_escape_string($headmod) : '';
 $textl = isset($textl) ? $textl : Vars::$SYSTEM_SET['copyright'];
 
 /*

@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../includes/head.php");
 echo '<div class="phdr">' . Vars::$LNG['new_files'] . '</div>';
 
 $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'");

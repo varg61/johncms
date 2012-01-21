@@ -15,7 +15,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $lng_karma = Vars::loadLanguage('karma');
 $textl = Vars::$LNG['karma'];
-require_once('../includes/head.php');
+
 if ($set_karma['on']) {
     switch (Vars::$MOD) {
         case 'vote':

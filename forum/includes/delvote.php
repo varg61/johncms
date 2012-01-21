@@ -12,10 +12,8 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID), 0);
-    require_once('../includes/head.php');
     if ($topic_vote == 0) {
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-        require_once('../includes/end.php');
         exit;
     }
     if (isset($_GET['yes'])) {

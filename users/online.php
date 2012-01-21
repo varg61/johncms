@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
 $textl = Vars::$LNG['online'];
-require_once(SYSPATH . 'head.php');
 
 /*
 -----------------------------------------------------------------
@@ -22,7 +21,6 @@ require_once(SYSPATH . 'head.php');
 */
 if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
     echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -48,7 +46,6 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (!Vars::$USER_ID) {
-            require_once(SYSPATH . 'end.php');
             exit;
         }
         $out = 'Users Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
@@ -79,7 +76,6 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (!Vars::$USER_ID) {
-            require_once(SYSPATH . 'end.php');
             exit;
         }
         $out = 'Users Online history ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
@@ -107,7 +103,6 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (!Vars::$USER_RIGHTS) {
-            require_once(SYSPATH . 'end.php');
             exit;
         }
         $out = 'Guests Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
@@ -136,7 +131,6 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS < 6) {
-            require_once(SYSPATH . 'end.php');
             exit;
         }
         arsort(Vars::$IP_REQUESTS_LIST);
@@ -156,7 +150,6 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS < 6) {
-            require_once(SYSPATH . 'end.php');
             exit;
         }
         $total = count(Vars::$IP_REQUESTS_LIST);
@@ -195,7 +188,6 @@ switch (Vars::$ACT) {
         } else {
             echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
         }
-        require_once(SYSPATH . 'end.php');
         exit;
         break;
 
@@ -279,5 +271,3 @@ if ($total > Vars::$USER_SET['page_size']) {
 if (Vars::$USER_ID && $total) {
     echo'<p><a href="online.php?act=' . $link . '">' . Vars::$LNG['download_list'] . '</a></p>';
 }
-
-require_once(SYSPATH . 'end.php');

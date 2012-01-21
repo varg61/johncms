@@ -11,11 +11,9 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../includes/head.php");
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['file'] == "") {
         echo $lng_dl['file_not_selected'] . "<br/><a href='?'>" . Vars::$LNG['back'] . "</a><br/>";
-        require_once ('../includes/end.php');
         exit;
     }
     $file = intval($_GET['file']);
@@ -24,7 +22,6 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     $adrfile = mysql_fetch_array($file1);
     if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
         echo $lng_dl['file_not_selected'] . "<br/><a href='?'>" . Vars::$LNG['back'] . "</a><br/>";
-        require_once ('../includes/end.php');
         exit;
     }
     $stt = "$adrfile[text]";

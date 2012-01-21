@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../includes/head.php");
 $delimag = opendir("$filesroot/graftemp");
 while ($imd = readdir($delimag)) {
     if ($imd != "." && $imd != ".." && $imd != "index.php") {
@@ -30,7 +29,6 @@ for ($imi = 0; $imi < $totalim; $imi++) {
 }
 if ($_GET['file'] == '') {
     echo Functions::displayError($lng_dl['file_not_selected'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
-    require_once('../includes/end.php');
     exit;
 }
 $file = intval(trim($_GET['file']));
@@ -39,7 +37,6 @@ $file2 = mysql_num_rows($file1);
 $adrfile = mysql_fetch_array($file1);
 if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
     echo Functions::displayError($lng_dl['file_select_error'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
-    require_once('../includes/end.php');
     exit;
 }
 $_SESSION['downl'] = mt_rand(1000, 9999);

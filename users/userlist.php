@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
 $textl = Vars::$LNG['users_list'];
-require_once(SYSPATH . 'head.php');
 
 /*
 -----------------------------------------------------------------
@@ -22,7 +21,6 @@ require_once(SYSPATH . 'head.php');
 */
 if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
     echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
-    require_once(SYSPATH . 'end.php');
     exit;
 }
 
@@ -65,5 +63,3 @@ if ($total > Vars::$USER_SET['page_size']) {
 }
 echo '<p><a href="search.php">' . Vars::$LNG['search_user'] . '</a><br />' .
     '<a href="index.php">' . Vars::$LNG['back'] . '</a></p>';
-
-require_once(SYSPATH . 'end.php');

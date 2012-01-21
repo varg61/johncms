@@ -21,9 +21,7 @@ $user = isset($_REQUEST['user']) ? abs(intval($_REQUEST['user'])) : Vars::$USER_
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_ID) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -34,9 +32,7 @@ if (!Vars::$USER_ID) {
 */
 $user = Functions::getUser($user);
 if (!$user) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['user_does_not_exist']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -71,7 +67,6 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
     */
     $headmod = 'profile,' . $user['user_id'];
     $textl = Vars::$LNG['profile'] . ': ' . htmlspecialchars($user['nickname']);
-    require_once('../includes/head.php');
     echo '<div class="phdr"><b>' . ($user['user_id'] != Vars::$USER_ID ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты
     $menu = array ();
@@ -152,5 +147,3 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
     echo '</p></div>';
     echo '<div class="phdr"><a href="index.php">' . Vars::$LNG['users'] . '</a></div>';
 }
-
-require_once('../includes/end.php');

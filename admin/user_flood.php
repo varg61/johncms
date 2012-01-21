@@ -19,7 +19,6 @@ if (Vars::$USER_RIGHTS < 7) {
     exit;
 }
 
-require_once('../includes/head.php');
 $lng_adm = Vars::loadLanguage('adm');
 
 $set_af = isset(Vars::$SYSTEM_SET['antiflood']) ? unserialize(Vars::$SYSTEM_SET['antiflood']) : array();
@@ -86,5 +85,3 @@ echo'<form action="user_flood.php" method="post">' .
     '</p><p><br /><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '"/></p></div></form>' .
     '<div class="phdr"><a href="user_flood.php?reset">' . Vars::$LNG['reset_settings'] . '</a></div>' .
     '<p><a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
-
-require_once('../includes/end.php');

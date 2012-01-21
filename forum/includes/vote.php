@@ -16,10 +16,8 @@ if (Vars::$USER_ID) {
     $vote = abs(intval($_POST['vote']));
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '2' AND `id` = '$vote' AND `topic` = " . Vars::$ID), 0);
     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user` = " . Vars::$USER_ID . " AND `topic` = " . Vars::$ID), 0);
-    require_once('../includes/head.php');
     if ($topic_vote == 0 || $vote_user > 0 || $topic == 0) {
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-        require_once('../includes/end.php');
         exit;
     }
     mysql_query("INSERT INTO `cms_forum_vote_users` SET `topic` = " . Vars::$ID . ", `user` = " . Vars::$USER_ID . ", `vote` = '$vote'");

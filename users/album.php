@@ -27,9 +27,7 @@ $img = isset($_REQUEST['img']) ? abs(intval($_REQUEST['img'])) : NULL;
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_ID) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -40,9 +38,7 @@ if (!Vars::$USER_ID) {
 */
 $user = Functions::getUser($user);
 if (!$user) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['user_does_not_exist']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -104,7 +100,6 @@ $path = !empty($array[Vars::$ACT]) ? $array[Vars::$ACT] . '/' : '';
 if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.php')) {
     require_once($path . Vars::$ACT . '.php');
 } else {
-    require_once('../includes/head.php');
     $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
     $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . Vars::$LNG['photo_albums'] . '</b></div>' .
@@ -126,4 +121,3 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
         '</div>' .
         '<div class="phdr"><a href="index.php">' . Vars::$LNG['users'] . '</a></div>';
 }
-require_once('../includes/end.php');

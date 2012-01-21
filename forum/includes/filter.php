@@ -10,10 +10,9 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-require_once('../includes/head.php');
+
 if (!Vars::$ID) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data'], '<a href="index.php">' . Vars::$LNG['to_forum'] . '</a>');
-    require_once('../includes/end.php');
     exit;
 }
 //TODO: Переделать с $do на $mod
@@ -38,7 +37,6 @@ switch ($do) {
         $users = isset($_POST['users']) ? $_POST['users'] : '';
         if (empty($_POST['users'])) {
             echo '<div class="rmenu"><p>' . $lng_forum['error_author_select'] . '<br /><a href="index.php?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . Vars::$LNG['back'] . '</a></p></div>';
-            require_once('../includes/end.php');
             exit;
         }
         $array = array();

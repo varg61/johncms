@@ -11,8 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
-
 /*
 -----------------------------------------------------------------
 Удалить картинку
@@ -47,4 +45,3 @@ if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
     }
 }
-?>

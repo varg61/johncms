@@ -23,9 +23,7 @@ if (mysql_num_rows($req_obj)) {
     */
     $owner = Functions::getUser($res_obj['user_id']);
     if (!$owner) {
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['user_does_not_exist']);
-        require_once('../includes/end.php');
         exit;
     }
 
@@ -39,10 +37,8 @@ if (mysql_num_rows($req_obj)) {
     $res_a = mysql_fetch_assoc($req_a);
     if ($res_a['access'] == 1 && $owner['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
         // Если доступ закрыт
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['access_forbidden']) .
             '<div class="phdr"><a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
-        require_once('../includes/end.php');
         exit;
     }
     $context_top = '<div class="phdr"><a href="album.php"><b>' . Vars::$LNG['photo_albums'] . '</b></a> | ' .
@@ -65,19 +61,19 @@ if (mysql_num_rows($req_obj)) {
     Параметры комментариев
     -----------------------------------------------------------------
     */
-    $arg = array (
-        'comments_table' => 'cms_album_comments',                              // Таблица с комментариями
-        'object_table' => 'cms_album_files',                                   // Таблица комментируемых объектов
-        'script' => 'album.php?act=comments',                                  // Имя скрипта (с параметрами вызова)
-        'sub_id_name' => 'img',                                                // Имя идентификатора комментируемого объекта
-        'sub_id' => $img,                                                      // Идентификатор комментируемого объекта
-        'owner' => $owner['id'],                                               // Владелец объекта
-        'owner_delete' => true,                                                // Возможность владельцу удалять комментарий
-        'owner_reply' => true,                                                 // Возможность владельцу отвечать на комментарий
-        'owner_edit' => false,                                                 // Возможность владельцу редактировать комментарий
-        'title' => Vars::$LNG['comments'],                                           // Название раздела
-        'context_top' => $context_top,                                         // Выводится вверху списка
-        'context_bottom' => ''                                                 // Выводится внизу списка
+    $arg = array(
+        'comments_table' => 'cms_album_comments', // Таблица с комментариями
+        'object_table' => 'cms_album_files', // Таблица комментируемых объектов
+        'script' => 'album.php?act=comments', // Имя скрипта (с параметрами вызова)
+        'sub_id_name' => 'img', // Имя идентификатора комментируемого объекта
+        'sub_id' => $img, // Идентификатор комментируемого объекта
+        'owner' => $owner['id'], // Владелец объекта
+        'owner_delete' => true, // Возможность владельцу удалять комментарий
+        'owner_reply' => true, // Возможность владельцу отвечать на комментарий
+        'owner_edit' => false, // Возможность владельцу редактировать комментарий
+        'title' => Vars::$LNG['comments'], // Название раздела
+        'context_top' => $context_top, // Выводится вверху списка
+        'context_bottom' => '' // Выводится внизу списка
     );
 
     /*
@@ -85,7 +81,7 @@ if (mysql_num_rows($req_obj)) {
     Ставим метку прочтения
     -----------------------------------------------------------------
     */
-    if(Vars::$USER_ID == $user['user_id'] && $res_obj['unread_comments'])
+    if (Vars::$USER_ID == $user['user_id'] && $res_obj['unread_comments'])
         mysql_query("UPDATE `cms_album_files` SET `unread_comments` = '0' WHERE `id` = '$img' LIMIT 1");
 
     /*
@@ -93,7 +89,6 @@ if (mysql_num_rows($req_obj)) {
     Показываем комментарии
     -----------------------------------------------------------------
     */
-    require_once('../includes/head.php');
     $comm = new Comments($arg);
 
     /*
@@ -101,9 +96,8 @@ if (mysql_num_rows($req_obj)) {
     Обрабатываем метки непрочитанных комментариев
     -----------------------------------------------------------------
     */
-    if($comm->added)
+    if ($comm->added)
         mysql_query("UPDATE `cms_album_files` SET `unread_comments` = '1' WHERE `id` = '$img' LIMIT 1");
 } else {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
 }
-?>

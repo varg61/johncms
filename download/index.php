@@ -28,9 +28,7 @@ if (!Vars::$SYSTEM_SET['mod_down'] && Vars::$USER_RIGHTS < 7)
 elseif (Vars::$SYSTEM_SET['mod_down'] == 1 && !Vars::$USER_ID)
     $error = Vars::$LNG['access_guest_forbidden'];
 if ($error) {
-    require_once('../includes/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once("../includes/end.php");
     exit;
 }
 
@@ -41,7 +39,6 @@ function provcat($catalog)
     $adrdir = mysql_fetch_array($cat1);
     if (($cat2 == 0) || (!is_dir("$adrdir[adres]/$adrdir[name]"))) {
         echo 'ERROR<br/><a href="?">Back</a><br/>';
-        require_once('../includes/end.php');
         exit;
     }
 }
@@ -74,7 +71,6 @@ $array = array(
 if (in_array(Vars::$ACT, $array)) {
     require_once(Vars::$ACT . '.php');
 } else {
-    require_once('../includes/head.php');
     if (!Vars::$SYSTEM_SET['mod_down'])
         echo '<p><font color="#FF0000"><b>' . $lng_dl['downloads_closed'] . '</b></font></p>';
     // Ссылка на новые файлы
@@ -90,7 +86,6 @@ if (in_array(Vars::$ACT, $array)) {
         if (mysql_num_rows($req) == 0 || !is_dir($res['adres'] . '/' . $res['name'])) {
             // Если неправильно выбран каталог, выводим ошибку
             echo Functions::displayError($lng_dl['folder_does_not_exist'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         ////////////////////////////////////////////////////////////
@@ -229,5 +224,3 @@ if (in_array(Vars::$ACT, $array)) {
         echo '<input type="submit" value="' . Vars::$LNG['search'] . '"/></form>';
     }
 }
-
-require_once('../includes/end.php');

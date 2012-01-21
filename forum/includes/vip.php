@@ -13,9 +13,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     if (empty($_GET['id'])) {
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-        require_once('../includes/end.php');
         exit;
     }
     $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
@@ -23,9 +21,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         mysql_query("UPDATE `forum` SET  `vip` = '" . (isset($_GET['vip']) ? '1' : '0') . "' WHERE `id` = " . Vars::$ID);
         header('Location: index.php?id=' . Vars::$ID);
     } else {
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-        require_once('../includes/end.php');
         exit;
     }
 }

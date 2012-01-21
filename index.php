@@ -11,9 +11,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'mainpage';
 require_once('includes/core.php');
-require_once('includes/head.php');
 
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);
@@ -38,7 +36,6 @@ switch (Vars::$ACT) {
         */
         if (!Vars::$USER_ID) {
             echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
-            require_once('includes/end.php');
             exit;
         }
         echo '<div class="phdr"><b>' . Vars::$LNG['digest'] . '</b></div>';
@@ -125,5 +122,3 @@ switch (Vars::$ACT) {
             }
         }
 }
-
-require_once('includes/end.php');

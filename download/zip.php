@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../includes/head.php");
 $delarc = opendir("$filesroot/arctemp");
 while ($zp = readdir($delarc)) {
     if ($zp != "." && $zp != ".." && $zp != "index.php") {
@@ -30,7 +29,6 @@ for ($imp = 0; $imp < $totalmp; $imp++) {
 }
 if ($_GET['file'] == "") {
     echo "Не выбран файл<br/><a href='?'>К категориям</a><br/>";
-    require_once ('../includes/end.php');
     exit;
 }
 $file = intval(trim($_GET['file']));
@@ -39,7 +37,6 @@ $file2 = mysql_num_rows($file1);
 $adrfile = mysql_fetch_array($file1);
 if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
     echo "Ошибка при выборе файла<br/><a href='?'>К категориям</a><br/>";
-    require_once ('../includes/end.php');
     exit;
 }
 $zip = new PclZip("$adrfile[adres]/$adrfile[name]");

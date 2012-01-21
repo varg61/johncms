@@ -11,10 +11,8 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'libsearch';
 require_once('../includes/core.php');
 $lng_lib = Vars::loadLanguage('library');
-require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
@@ -110,5 +108,3 @@ if ($search && !$error) {
 }
 echo '<p>' . ($search ? '<a href="search.php">' . Vars::$LNG['search_new'] . '</a><br />' : '') .
      '<a href="index.php">' . Vars::$LNG['library'] . '</a></p>';
-
-require_once('../includes/end.php');

@@ -19,7 +19,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 $textl = htmlspecialchars($user['nickname']) . ': ' . Vars::$LNG['information'];
-require_once('../includes/head.php');
 echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . Vars::$LNG['information'] . '</div>';
 if ($user['user_id'] == Vars::$USER_ID || (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']))
     echo '<div class="topmenu"><a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['edit'] . '</a></div>';

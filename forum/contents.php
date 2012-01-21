@@ -12,7 +12,5 @@
 define('_IN_JOHNCMS', 1);
 require_once('../includes/core.php');
 $textl = Vars::$LNG['forum'];
-require_once('../includes/head.php');
 $map = new SiteMap();
 echo $map->mapForum();
-require_once('../includes/end.php');

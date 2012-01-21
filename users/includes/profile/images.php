@@ -12,12 +12,10 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = $lng_profile['profile_edit'];
-require_once('../includes/head.php');
 require_once('../includes/lib/class.upload.php');
 if ($user['rights'] > Vars::$USER_RIGHTS) {
     // Если не хватает прав, выводим ошибку
     echo display_error($lng_profile['error_rights']);
-    require_once('../includes/end.php');
     exit;
 }
 switch (Vars::$MOD) {

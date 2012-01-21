@@ -47,6 +47,5 @@ if (!$error) {
     // Отдаем файл
     header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/files/users/album/' . $res['user_id'] . '/' . $res['img_name']);
 } else {
-    require_once('../includes/head.php');
     echo Functions::displayError($error, '<a href="album.php">' . Vars::$LNG['back'] . '</a>');
 }

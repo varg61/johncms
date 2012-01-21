@@ -19,8 +19,6 @@ if (Vars::$USER_RIGHTS < 1) {
     exit;
 }
 
-require_once('../includes/head.php');
-
 echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . Vars::$LNG['administration'] . '</div>';
 $req = mysql_query("SELECT * FROM `users` WHERE `rights` > '0' ORDER BY `rights` DESC, `nickname` ASC");
 $total = mysql_num_rows($req);
@@ -33,5 +31,3 @@ for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; ++$i) {
 echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>' .
     '<p><a href="index.php?act=usr">' . Vars::$LNG['users_list'] . '</a><br />' .
     '<a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
-
-require_once('../includes/end.php');

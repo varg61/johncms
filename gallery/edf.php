@@ -14,14 +14,12 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "") {
         echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-        require_once('../includes/end.php');
         exit;
     }
     $typ = mysql_query("select * from `gallery` where `id` = " . Vars::$ID);
     $ms = mysql_fetch_array($typ);
     if ($ms['type'] != "ft") {
         echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-        require_once('../includes/end.php');
         exit;
     }
     if (isset($_POST['submit'])) {

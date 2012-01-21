@@ -17,9 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) || (!Vars::$USER_RIGHTS && Vars::$SYSTEM_SET['mod_forum'] == 3)) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['access_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -62,16 +60,12 @@ function forum_link($m)
 // Проверка на флуд
 $flood = Functions::antiFlood();
 if ($flood) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['error_flood'] . ' ' . $flood . Vars::$LNG['sec'] . ', <a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . Vars::$LNG['back'] . '</a>');
-    require_once('../includes/end.php');
     exit;
 }
 $req_r = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'r' LIMIT 1");
 if (!mysql_num_rows($req_r)) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $th = isset($_POST['th']) ? Validate::filterString(mb_substr(trim($_POST['th']), 0, 100)) : '';
@@ -148,22 +142,18 @@ if (isset($_POST['submit'])) {
             header("Location: index.php?id=$rid");
     } else {
         // Выводим сообщение об ошибке
-        require_once('../includes/head.php');
         echo Functions::displayError($error, '<a href="index.php?act=nt&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
-        require_once('../includes/end.php');
         exit;
     }
 } else {
     $res_r = mysql_fetch_assoc($req_r);
     $req_c = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res_r['refid'] . "'");
     $res_c = mysql_fetch_assoc($req_c);
-    require_once('../includes/head.php');
     if ($datauser['postforum'] == 0) {
         if (!isset($_GET['yes'])) {
             $lng_faq = Vars::loadLanguage('faq');
             echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
             echo '<p><a href="index.php?act=nt&amp;id=' . Vars::$ID . '&amp;yes">' . $lng_forum['agree'] . '</a> | <a href="index.php?id=' . Vars::$ID . '">' . $lng_forum['not_agree'] . '</a></p>';
-            require_once('../includes/end.php');
             exit;
         }
     }

@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
 $delf = opendir('../files/forum/topics');
 while ($tt = readdir($delf)) {
     if ($tt != "." && $tt != ".." && $tt != 'index.php' && $tt != '.svn') {
@@ -30,13 +29,11 @@ for ($it = 0; $it < $totalt; $it++) {
 }
 if (!Vars::$ID) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't' AND `close` != '1'");
 if (!mysql_num_rows($req)) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 if (isset($_POST['submit'])) {

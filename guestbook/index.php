@@ -10,7 +10,7 @@
  */
 
 define('_IN_JOHNCMS', 1);
-$headmod = 'guestbook';
+
 require_once('../includes/core.php');
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);
@@ -21,12 +21,10 @@ if (isset($_SESSION['ga']) && Vars::$USER_RIGHTS < 1)
 
 // Задаем заголовки страницы
 $textl = isset($_SESSION['ga']) ? Vars::$LNG['admin_club'] : Vars::$LNG['guestbook'];
-require_once('../includes/head.php');
 
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
 if (!Vars::$SYSTEM_SET['mod_guest'] && Vars::$USER_RIGHTS < 7) {
     echo '<div class="rmenu"><p>' . Vars::$LNG['guestbook_closed'] . '</p></div>';
-    require_once('../includes/end.php');
     exit;
 }
 switch (Vars::$ACT) {
@@ -366,7 +364,4 @@ switch (Vars::$ACT) {
                  '<p><form action="index.php" method="get"><input type="text" name="page" size="2"/>' .
                  '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
         }
-        break;
 }
-
-require_once('../includes/end.php');

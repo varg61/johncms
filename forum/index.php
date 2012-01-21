@@ -103,9 +103,7 @@ if (!Vars::$SYSTEM_SET['mod_forum'] && Vars::$USER_RIGHTS < 7)
 elseif (Vars::$SYSTEM_SET['mod_forum'] == 1 && !Vars::$USER_ID)
     $error = Vars::$LNG['access_guest_forbidden'];
 if ($error) {
-    require_once('../includes/head.php');
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -169,8 +167,6 @@ $mods = array(
 if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exists('includes/' . $mods[$key] . '.php')) {
     require_once('includes/' . $mods[$key] . '.php');
 } else {
-    require_once('../includes/head.php');
-
     /*
     -----------------------------------------------------------------
     Если форум закрыт, то для Админов выводим напоминание
@@ -194,7 +190,6 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         if (!mysql_num_rows($type)) {
             // Если темы не существует, показываем ошибку
             echo Functions::displayError($lng_forum['error_topic_deleted'], '<a href="index.php">' . Vars::$LNG['to_forum'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         $type1 = mysql_fetch_assoc($type);
@@ -399,7 +394,6 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                 }
                 if (Vars::$USER_RIGHTS < 7 && $type1['close'] == 1) {
                     echo '<div class="rmenu"><p>' . $lng_forum['topic_deleted'] . '<br/><a href="?id=' . $type1['refid'] . '">' . $lng_forum['to_section'] . '</a></p></div>';
-                    require_once('../includes/end.php');
                     exit;
                 }
                 // Счетчик постов темы
@@ -791,5 +785,3 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         }
     }
 }
-
-require_once('../includes/end.php');

@@ -11,9 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$headmod = 'userban';
 $lng_ban = Vars::loadLanguage('ban');
-require_once('../includes/head.php');
 $ban = isset($_GET['ban']) ? intval($_GET['ban']) : 0;
 switch (Vars::$MOD) {
     case 'do':
@@ -319,5 +317,3 @@ switch (Vars::$MOD) {
                  '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
         }
 }
-
-?>

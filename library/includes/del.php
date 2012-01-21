@@ -14,7 +14,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "" || $_GET['id'] == "0") {
         echo "";
-        require_once('../includes/end.php');
         exit;
     }
     $typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
@@ -41,7 +40,6 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
                     echo $lng_lib['first_delete_category'] . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . Vars::$LNG['back'] . "</a><br/>";
-                    require_once('../includes/end.php');
                     exit;
                 }
                 $st = mysql_query("select `id` from `lib` where `type` = 'bk' and `refid` = " . Vars::$ID);
@@ -73,7 +71,6 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
                     echo $lng_lib['first_delete_category'] . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . Vars::$LNG['back'] . "</a><br/>";
-                    require_once('../includes/end.php');
                     exit;
                 }
                 echo Vars::$LNG['delete_confirmation'] . "<br/><a href='index.php?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . Vars::$LNG['delete'] . "</a> | <a href='index.php?id=" . Vars::$ID .

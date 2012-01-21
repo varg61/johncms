@@ -16,7 +16,6 @@ define('_IN_JOHNCMS', 1);
 require_once('../includes/core.php');
 $lng_pass = Vars::loadLanguage('pass');
 $textl = $lng_pass['password_restore'];
-require_once('../includes/head.php');
 
 function passgen($length) {
     $vals = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -140,5 +139,3 @@ switch (Vars::$ACT) {
         echo '<div class="phdr"><small>' . $lng_pass['restore_help'] . '</small></div>';
         break;
 }
-
-require_once('../includes/end.php');

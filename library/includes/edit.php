@@ -14,7 +14,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "" || $_GET['id'] == "0") {
         echo "";
-        require_once('../includes/end.php');
         exit;
     }
     $req = mysql_query("SELECT * FROM `lib` WHERE `id` = " . Vars::$ID);
@@ -27,12 +26,10 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 ////////////////////////////////////////////////////////////
                 if (empty($_POST['name'])) {
                     echo Functions::displayError(Vars::$LNG['error_empty_title'], '<a href="index.php?act=edit&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
-                    require_once('../includes/end.php');
                     exit;
                 }
                 if (empty($_POST['text'])) {
                     echo Functions::displayError(Vars::$LNG['error_empty_text'], '<a href="index.php?act=edit&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
-                    require_once('../includes/end.php');
                     exit;
                 }
                 $text = trim($_POST['text']);

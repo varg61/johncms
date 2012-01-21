@@ -14,7 +14,7 @@ define('_IN_JOHNCMS', 1);
 require_once('includes/core.php');
 $lng_reg = Vars::loadLanguage('registration');
 $textl = Vars::$LNG['registration'];
-require_once('includes/head.php');
+
 echo '<div class="phdr"><b>' . Vars::$LNG['registration'] . '</b></div>';
 
 $error_style = 'style="background-color: #FFCCCC"';
@@ -141,5 +141,3 @@ switch ($login->userRegistration($reg_data)) {
             (Vars::$USER_ID ? $lng_reg['already_registered'] : $lng_reg['registration_closed']) .
             '</p></div>';
 }
-
-require_once('includes/end.php');

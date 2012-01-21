@@ -17,10 +17,8 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     else if ($vote_count < 2) $vote_count = 2;
     $topic = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `id` = " . Vars::$ID . " AND `edit` != '1'"), 0);
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID), 0);
-    require_once('../includes/head.php');
     if ($topic_vote != 0 || $topic == 0) {
         echo Functions::displayError(Vars::$LNG['error_wrong_data'], '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . Vars::$LNG['back'] . '</a>');
-        require_once('../includes/end.php');
         exit;
     }
     if (isset($_POST['submit'])) {

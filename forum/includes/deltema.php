@@ -12,17 +12,13 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     if (!Vars::$ID) {
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-        require_once('../includes/end.php');
         exit;
     }
     // Проверяем, существует ли тема
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($req)) {
-        require_once('../includes/head.php');
         echo Functions::displayError($lng_forum['error_topic_deleted']);
-        require_once('../includes/end.php');
         exit;
     }
     $res = mysql_fetch_assoc($req);
@@ -60,7 +56,6 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         Меню выбора режима удаления темы
         -----------------------------------------------------------------
         */
-        require_once('../includes/head.php');
         echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['topic_delete'] . '</div>' .
              '<div class="rmenu"><form method="post" action="index.php?act=deltema&amp;id=' . Vars::$ID . '">' .
              '<p><h3>' . Vars::$LNG['delete_confirmation'] . '</h3>' .

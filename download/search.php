@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ('../includes/head.php');
 echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['downloads'] . '</b></a> | ' . Vars::$LNG['search'] . '</div>';
 if (isset($_GET['srh']) && !empty ($_GET['srh'])) {
     $srh = Validate::filterString($_GET['srh']);
@@ -20,7 +19,6 @@ if (isset($_GET['srh']) && !empty ($_GET['srh'])) {
 } else {
     if ($_POST['srh'] == "") {
         echo Functions::displayError($lng_dl['search_string_empty'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
-        require_once ('../includes/end.php');
         exit;
     }
 }

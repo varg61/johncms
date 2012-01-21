@@ -13,7 +13,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!Vars::$ID) {
     echo "";
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -21,9 +20,7 @@ if (!Vars::$ID) {
 // Проверка на спам
 $old = (Vars::$USER_RIGHTS > 0) ? 5 : 60;
 if ($datauser['lastpost'] > (time() - $old)) {
-    require_once('../includes/head.php');
     echo '<p>' . Vars::$LNG['error_flood'] . ' ' . $old . ' ' . Vars::$LNG['sec'] . '<br/><br/><a href ="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a></p>';
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -31,7 +28,6 @@ $typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
 $ms = mysql_fetch_array($typ);
 if (Vars::$ID != 0 && $ms['type'] != "cat") {
     echo "";
-    require_once('../includes/end.php');
     exit;
 }
 if ($ms['ip'] == 0) {
@@ -39,12 +35,10 @@ if ($ms['ip'] == 0) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['name'])) {
                 echo Vars::$LNG['error_empty_title'] . "<br/><a href='index.php?act=write&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                require_once('../includes/end.php');
                 exit;
             }
             if (empty($_POST['text'])) {
                 echo Vars::$LNG['error_empty_text'] . "<br/><a href='index.php?act=write&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                require_once('../includes/end.php');
                 exit;
             }
             $text = trim($_POST['text']);

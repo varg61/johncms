@@ -39,7 +39,6 @@ switch (Vars::$MOD) {
         */
         if (!Vars::$ID) {
             echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r')");
@@ -57,13 +56,11 @@ switch (Vars::$MOD) {
                         $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
                         if (!$category || $category == Vars::$ID) {
                             echo Functions::displayError($lng['error_wrong_data']);
-                            require_once('../includes/end.php');
                             exit;
                         }
                         $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'"), 0);
                         if (!$check) {
                             echo Functions::displayError($lng['error_wrong_data']);
-                            require_once('../includes/end.php');
                             exit;
                         }
                         // Вычисляем правила сортировки и перемещаем разделы
@@ -102,13 +99,11 @@ switch (Vars::$MOD) {
                         $subcat = isset($_POST['subcat']) ? intval($_POST['subcat']) : 0;
                         if (!$subcat || $subcat == Vars::$ID) {
                             echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
-                            require_once('../includes/end.php');
                             exit;
                         }
                         $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$subcat' AND `type` = 'r'"), 0);
                         if (!$check) {
                             echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
-                            require_once('../includes/end.php');
                             exit;
                         }
                         mysql_query("UPDATE `forum` SET `refid` = '$subcat' WHERE `refid` = " . Vars::$ID);
@@ -119,7 +114,6 @@ switch (Vars::$MOD) {
                     } elseif (isset($_POST['delete'])) {
                         if (Vars::$USER_RIGHTS != 9) {
                             echo Functions::displayError($lng['access_forbidden']);
-                            require_once('../includes/end.php');
                             exit;
                         }
                         // Удаляем файлы
@@ -202,7 +196,6 @@ switch (Vars::$MOD) {
                 $cat_name = $res['text'];
             } else {
                 echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
         }
@@ -265,7 +258,6 @@ switch (Vars::$MOD) {
         */
         if (!Vars::$ID) {
             echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
@@ -470,7 +462,6 @@ switch (Vars::$MOD) {
         if (isset($_POST['deltopic'])) {
             if (Vars::$USER_RIGHTS != 9) {
                 echo Functions::displayError($lng['access_forbidden']);
-                require_once('../includes/end.php');
                 exit;
             }
             $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 't' AND `close` = '1' $sort");
@@ -555,7 +546,6 @@ switch (Vars::$MOD) {
         if (isset($_POST['delpost'])) {
             if (Vars::$USER_RIGHTS != 9) {
                 echo Functions::displayError($lng['access_forbidden']);
-                require_once('../includes/end.php');
                 exit;
             }
             $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` = '1' $sort");
@@ -625,7 +615,6 @@ switch (Vars::$MOD) {
         if (isset($_POST['submit'])) {
             if (!Vars::$ID) {
                 echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             if (isset($_POST['moder'])) {
@@ -657,7 +646,6 @@ switch (Vars::$MOD) {
                 $ms = mysql_fetch_array($typ);
                 if ($ms['type'] != "f") {
                     echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
-                    require_once('../includes/end.php');
                     exit;
                 }
                 echo '<div class="bmenu"><b>' . $lng_forum['category'] . ':</b> ' . $ms['text'] . '</div>';

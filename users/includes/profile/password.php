@@ -20,12 +20,10 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 if ($user['user_id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] > Vars::$USER_RIGHTS)) {
     echo Functions::displayError($lng['access_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 $lng_pass = Vars::loadLanguage('pass');
 $textl = htmlspecialchars($user['name']) . ': ' . $lng_pass['change_password'];
-require_once('../includes/head.php');
 
 switch (Vars::$MOD) {
     case 'change':

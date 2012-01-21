@@ -16,7 +16,6 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     Массовое удаление выбранных постов форума
     -----------------------------------------------------------------
     */
-    require_once('../includes/head.php');
     if (isset($_GET['yes'])) {
         $dc = $_SESSION['dc'];
         $prd = $_SESSION['prd'];
@@ -31,7 +30,6 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     } else {
         if (empty($_POST['delch'])) {
             echo '<p>' . $lng_forum['error_mass_delete'] . '<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . Vars::$LNG['back'] . '</a></p>';
-            require_once('../includes/end.php');
             exit;
         }
         foreach ($_POST['delch'] as $v) {

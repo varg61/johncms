@@ -11,10 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
 if (!Vars::$ID || !Vars::$USER_ID) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 // Проверяем, тот ли юзер заливает файл
@@ -22,13 +20,11 @@ $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
 $res = mysql_fetch_assoc($req);
 if ($res['user_id'] != Vars::$USER_ID) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = " . Vars::$ID);
 if (mysql_result($req1, 0) > 0) {
     echo Functions::displayError($lng_forum['error_file_uploaded']);
-    require_once('../includes/end.php');
     exit;
 }
 switch ($res['type']) {

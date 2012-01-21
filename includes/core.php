@@ -34,11 +34,11 @@ mb_internal_encoding('UTF-8');
 Задаем пути
 -----------------------------------------------------------------
 */
-define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR);                    // Системная папка
-define('ROOTPATH', dirname(realpath(__DIR__)) . DIRECTORY_SEPARATOR);          // Корневая папка
-define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
-define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);                // Папка с языками
-define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
+define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR);           // Системная папка
+define('ROOTPATH', dirname(realpath(__DIR__)) . DIRECTORY_SEPARATOR); // Корневая папка
+define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);         // Папка для кэша
+define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);       // Папка с языками
+define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);       // Папка с конфигурационными файлами
 
 /*
 -----------------------------------------------------------------
@@ -71,17 +71,31 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot co
 @mysql_query("SET NAMES 'utf8'", $connect);
 
 $session = new Session;
-$system = new System();
+$system = new System;
 unset($network, $system);
-
 
 /*
 -----------------------------------------------------------------
-Получаем и фильтруем основные переменные для системы
+Подключение шаблонов оформления и вывод информации
 -----------------------------------------------------------------
 */
-//$user    = isset($_REQUEST['user']) ? abs(intval($_REQUEST['user'])) : false;
-//$headmod = isset($headmod) ? $headmod : '';
+ob_start();
+register_shutdown_function('template');
+
+function template()
+{
+    $contents = ob_get_contents();
+    ob_clean();
+    if (!empty($contents)) {
+        if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
+            @ini_set('zlib.output_compression_level', 3);
+            ob_start('ob_gzhandler');
+        }
+        require_once(SYSPATH . 'head.php');
+        echo $contents;
+        require_once(SYSPATH . 'end.php');
+    }
+}
 
 /*
 -----------------------------------------------------------------
@@ -91,15 +105,3 @@ unset($network, $system);
 //if (Vars::$USER_ID && Vars::$USER_DATA['last_visit'] < (time() - 3600) && Vars::$USER_SET['digest'] && $headmod == 'mainpage') {
 //    header('Location: ' . Vars::$SYSTEM_SET['homeurl'] . '/index.php?act=digest&last=' . Vars::$USER_DATA['last_visit']);
 //}
-
-/*
------------------------------------------------------------------
-Буфферизация вывода
------------------------------------------------------------------
-*/
-if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
-    @ini_set('zlib.output_compression_level', 3);
-    ob_start('ob_gzhandler');
-} else {
-    ob_start();
-}

@@ -32,7 +32,6 @@ switch (Vars::$MOD) {
                 $res = mysql_fetch_assoc($req);
             } else {
                 echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=ads">' . $lng['back'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
         } else {
@@ -72,7 +71,6 @@ switch (Vars::$MOD) {
             }
             if ($error) {
                 echo Functions::displayError($error, '<a href="index.php?act=ads&amp;from=addlink">' . $lng['back'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             if (Vars::$ID) {

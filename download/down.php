@@ -22,6 +22,5 @@ if (!empty ($mas[name])) {
     }
 }
 else {
-    require_once ("../includes/head.php");
     echo "ERROR<br/>&#187;<a href='?'>Back</a><br/>";
 }

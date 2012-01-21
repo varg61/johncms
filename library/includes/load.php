@@ -13,21 +13,18 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "") {
         echo "";
-        require_once('../includes/end.php');
         exit;
     }
     $typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
     $ms = mysql_fetch_array($typ);
     if (Vars::$ID != 0 && $ms['type'] != "cat") {
         echo "";
-        require_once('../includes/end.php');
         exit;
     }
     if ($ms['ip'] == 0) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['name'])) {
                 echo Functions::displayError(Vars::$LNG['error_empty_title'], '<a href="index.php?act=load&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             $name = mb_substr($_POST['name'], 0, 50);
@@ -37,17 +34,14 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             if ($fname != "") {
                 if (eregi("[^a-z0-9.()+_-]", $fname)) {
                     echo "Invalid file name<br /><a href='index.php?act=load&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                    require_once('../includes/end.php');
                     exit;
                 }
                 if ((preg_match("/.php/i", $fname)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess")) {
                     echo "Invalid file format<br/><a href='index.php?act=load&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                    require_once('../includes/end.php');
                     exit;
                 }
                 if ($ftip != "txt") {
                     echo "This is not a text file<br/><a href='index.php?act=load&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                    require_once('../includes/end.php');
                     exit;
                 }
                 if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "temp/$fname")) == true) {
@@ -62,7 +56,6 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                         $txt = iconv("KOI8-R", "UTF-8", $txt);
                     } else {
                         echo "File in an unknown encoding<br /><a href='index.php?act=load&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                        require_once('../includes/end.php');
                         exit;
                     }
                     $anons = !empty($_POST['anons']) ? mb_substr($_POST['anons'], 0, 100) : mb_substr($txt, 0, 100);
@@ -83,7 +76,6 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                     echo $lng_lib['article_added'] . "<br/><a href='index.php?id=" . $cid . "'>" . $lng_lib['to_article'] . "</a><br/>";
                 } else {
                     echo $lng_lib['error_uploading'] . "<br/><a href='index.php?act=load&amp;id=" . Vars::$ID . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                    require_once('../includes/end.php');
                     exit;
                 }
             }

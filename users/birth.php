@@ -14,8 +14,6 @@ define('_IN_JOHNCMS', 1);
 //TODO: Доработать!
 
 $textl = Vars::$LNG['birthday_men'];
-$headmod = 'birth';
-require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------

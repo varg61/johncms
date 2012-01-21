@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../includes/head.php");
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (empty ($_GET['cat'])) {
         $loaddir = $loadroot;
@@ -32,7 +31,6 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             echo
                     "В новом названии файла <b>$newn</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=import&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         $import = "$loaddir/$newn.$tipf";

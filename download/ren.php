@@ -11,11 +11,9 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../includes/head.php");
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (empty($_GET['cat'])) {
         echo "ERROR<br /><a href='?'>Back</a><br/>";
-        require_once('../includes/end.php');
         exit;
     }
     $cat = intval(trim($_GET['cat']));

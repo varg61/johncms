@@ -11,11 +11,9 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['file'] == "") {
         echo Functions::displayError($lng_dl['file_not_selected'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
-        require_once('../includes/end.php');
         exit;
     }
     $file = intval(trim($_GET['file']));
@@ -24,7 +22,6 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     $adrfile = mysql_fetch_array($file1);
     if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
         echo Functions::displayError($lng_dl['file_select_error'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
-        require_once('../includes/end.php');
         exit;
     }
     if (isset($_POST['submit'])) {
@@ -43,17 +40,14 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $formfot = Functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo $lng_dl['screenshot_upload_error'] . '<br/><a href="index.php?act=screen&amp;file=' . $file . '">' . Vars::$LNG['repeat'] . '</a><br/>';
-                require_once('../includes/end.php');
                 exit;
             }
             if ($scwidth > 320 || $scheight > 320) {
                 echo $lng_dl['screenshot_size_error'] . '<br/><a href="index.php?act=screen&amp;file=' . $file . '">' . Vars::$LNG['repeat'] . '</a><br/>';
-                require_once('../includes/end.php');
                 exit;
             }
             if (preg_match("/[^\da-z_\-.]+/", $scrname)) {
                 echo $lng_dl['screenshot_name_error'] . "<br/><a href='?act=screen&amp;file=" . $file . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
-                require_once('../includes/end.php');
                 exit;
             }
             $filnam = "$adrfile[name]";

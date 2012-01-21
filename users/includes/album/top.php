@@ -20,7 +20,6 @@ switch (Vars::$MOD) {
         */
         if(!Vars::$USER_ID || Vars::$USER_ID != $user['user_id']){
             echo Functions::displayError($lng['wrong_data']);
-            require_once('../includes/end.php');
             exit;
         }
         $title = $lng_profile['unread_comments'];
@@ -136,7 +135,6 @@ switch (Vars::$MOD) {
 -----------------------------------------------------------------
 */
 unset($_SESSION['ref']);
-require_once('../includes/head.php');
 echo '<div class="phdr"><a href="album.php"><b>' . Vars::$LNG['photo_albums'] . '</b></a> | ' . $title . '</div>';
 if(Vars::$MOD == 'my_new_comm') $total = $new_album_comm;
 elseif(!isset($total)) $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where"), 0);

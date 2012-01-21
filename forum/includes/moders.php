@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
 echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . Vars::$LNG['moders'] . '</div>';
 $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid`");
 while ($f1 = mysql_fetch_array($req)) {

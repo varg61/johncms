@@ -11,11 +11,9 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
 $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1' AND `topic` = " . Vars::$ID), 0);
 if ($topic_vote == 0) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 } else {
     $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type` = '1' AND `topic` = " . Vars::$ID . " LIMIT 1"));
@@ -42,5 +40,3 @@ if ($topic_vote == 0) {
     }
     echo '<p><a href="index.php?id=' . Vars::$ID . '">' . $lng_forum['to_topic'] . '</a></p>';
 }
-
-require_once('../includes/end.php');

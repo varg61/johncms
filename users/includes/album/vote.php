@@ -18,7 +18,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 if (!$img) {
     echo Functions::displayError($lng['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $check = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = " . Vars::$USER_ID . " AND `file_id` = '$img' LIMIT 1");

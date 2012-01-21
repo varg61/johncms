@@ -10,11 +10,10 @@
  */
 
 define('_IN_JOHNCMS', 1);
+
 require_once('../includes/core.php');
 $lng_faq = Vars::loadLanguage('faq');
 $textl = 'FAQ';
-$headmod = 'faq';
-require_once('../includes/head.php');
 
 // Обрабатываем ссылку для возврата
 if (empty($_SESSION['ref'])) {
@@ -89,5 +88,3 @@ switch (Vars::$ACT) {
              '<div class="menu"><a href="smileys.php">' . Vars::$LNG['smileys'] . '</a></div>' .
              '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></div>';
 }
-
-require_once('../includes/end.php');

@@ -32,9 +32,7 @@ if (Vars::$ID) {
         $error = true;
     }
     if ($error) {
-        require_once('../includes/head.php');
         echo Functions::displayError(Vars::$LNG['error_file_not_exist'], '<a href="index.php">' . Vars::$LNG['to_forum'] . '</a>');
-        require_once('../includes/end.php');
         exit;
     }
 } else {

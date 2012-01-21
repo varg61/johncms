@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-require_once("../includes/head.php");
+
 function deletcat($catalog)
 {
     $dir = opendir($catalog);

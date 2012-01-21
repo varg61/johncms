@@ -19,7 +19,6 @@ if (Vars::$USER_RIGHTS < 1) {
     exit;
 }
 
-require_once('../includes/head.php');
 $lng_adm = Vars::loadLanguage('adm');
 
 echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . Vars::$LNG['users_list'] . '</div>';
@@ -82,5 +81,3 @@ if ($total > Vars::$USER_SET['page_size']) {
 }
 echo'<p><a href="index.php?act=search_user">' . Vars::$LNG['search_user'] . '</a><br />' .
     '<a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
-
-require_once('../includes/end.php');

@@ -20,7 +20,6 @@ if (isset($_POST['submit'])) {
     header('Location: index.php');
     exit;
 } else {
-    require_once('includes/head.php');
     echo'<div class="rmenu">' .
         '<p><h3>' . Vars::$LNG['exit_warning'] . '</h3></p>' .
         '<form action="exit.php" method="post">' .
@@ -29,5 +28,4 @@ if (isset($_POST['submit'])) {
         '</form>' .
         '<p><a href="' . $referer . '">' . Vars::$LNG['cancel'] . '</a></p>' .
         '</div>';
-    require_once('includes/end.php');
 }

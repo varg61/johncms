@@ -13,20 +13,17 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "") {
         echo "";
-        require_once('../includes/end.php');
         exit;
     }
     $typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
     $ms = mysql_fetch_array($typ);
     if (Vars::$ID != 0 && ($ms['type'] == "bk" || $ms['type'] == "komm")) {
         echo "";
-        require_once('../includes/end.php');
         exit;
     }
     if (isset($_POST['submit'])) {
         if (empty($_POST['text'])) {
             echo Functions::displayError(Vars::$LNG['error_empty_title'], '<a href="index.php?act=mkcat&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         $text = Validate::filterString($_POST['text']);

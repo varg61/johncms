@@ -11,10 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
 if (!Vars::$USER_ID || !Vars::$ID) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'm' " . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'"));
@@ -165,7 +163,6 @@ if (!$error) {
             if (isset($_POST['submit'])) {
                 if (empty($_POST['msg'])) {
                     echo Functions::displayError(Vars::$LNG['error_empty_message'], '<a href="index.php?act=editpost&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
-                    require_once('../includes/end.php');
                     exit;
                 }
                 mysql_query("UPDATE `forum` SET

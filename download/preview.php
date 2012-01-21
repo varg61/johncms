@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../includes/head.php");
 if (isset ($_POST['submit'])) {
     if (!empty ($_POST['razmer'])) {
         $razmer = intval($_POST['razmer']);

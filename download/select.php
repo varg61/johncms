@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once("../includes/head.php");
 if (!empty($_GET['cat'])) {
     $cat = $_GET['cat'];
     provcat($cat);

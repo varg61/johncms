@@ -19,8 +19,6 @@ if (Vars::$USER_RIGHTS < 1) {
     exit;
 }
 
-require_once('../includes/head.php');
-
 $ip = isset($_GET['ip']) ? trim($_GET['ip']) : false;
 
 echo'<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | IP WHOIS</div>';
@@ -111,5 +109,3 @@ if ($ip) {
 }
 echo'<div class="menu"><small>' . nl2br($ipwhois) . '</small></div>' .
     '<div class="phdr"><a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '">' . Vars::$LNG['back'] . '</a></div>';
-
-require_once('../includes/end.php');

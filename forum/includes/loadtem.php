@@ -12,9 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (empty($_GET['n'])) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $n = trim($_GET['n']);
@@ -29,9 +27,7 @@ while ($f = readdir($o)) {
 }
 $tt = count($a);
 if (!in_array($n, $b)) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 for ($i = 0; $i < $tt; $i++) {

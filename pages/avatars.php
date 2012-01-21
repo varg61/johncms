@@ -14,8 +14,6 @@ define('_IN_JOHNCMS', 1);
 require_once('../includes/core.php');
 $lng_avatars = Vars::loadLanguage('avatars');
 $textl = 'FAQ';
-$headmod = 'avatars';
-require_once('../includes/head.php');
 
 // Обрабатываем ссылку для возврата
 if (empty($_SESSION['ref'])) $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
@@ -105,5 +103,3 @@ switch (Vars::$ACT) {
         }
         echo '<div class="phdr"><a href="' . htmlspecialchars($_SESSION['ref']) . '">' . Vars::$LNG['back'] . '</a></div>';
 }
-
-require_once('../includes/end.php');

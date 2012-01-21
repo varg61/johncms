@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = htmlspecialchars($user['nickname']) . ': ' . Vars::$LNG['ip_history'];
-require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
@@ -20,7 +19,6 @@ require_once('../includes/head.php');
 */
 if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['user_id']) {
     echo Functions::displayError(Vars::$LNG['access_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 

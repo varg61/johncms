@@ -12,7 +12,7 @@
 define('_IN_JOHNCMS', 1);
 
 require_once('includes/core.php');
-require_once('includes/head.php');
+
 echo '<div class="phdr"><b>' . Vars::$LNG['login'] . '</b></div>';
 
 $error_style = 'style="background-color: #FFCCCC"';
@@ -91,5 +91,3 @@ switch ($login->userLogin()) {
             '</div></form>' .
             '<div class="phdr"><a href="users/skl.php?continue">' . Vars::$LNG['forgotten_password'] . '?</a></div>';
 }
-
-require_once('includes/end.php');

@@ -11,10 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/head.php');
 if (empty($_GET['id'])) {
     echo Functions::displayError(Vars::$LNG['error_wrong_data']);
-    require_once('../includes/end.php');
     exit;
 }
 $s = isset($_GET['s']) ? intval($_GET['s']) : false;

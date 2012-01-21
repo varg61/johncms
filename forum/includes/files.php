@@ -11,9 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$headmod = 'forumfiles';
-require_once('../includes/head.php');
-
 $types = array(
     1 => $lng_forum['files_type_win'],
     2 => $lng_forum['files_type_java'],
@@ -69,7 +66,6 @@ if ($c || $s || $t) {
         $caption .= $res['text'];
     } else {
         echo Functions::displayError(Vars::$LNG['error_wrong_data'], '<a href="index.php">' . Vars::$LNG['to_forum'] . '</a>');
-        require_once('../includes/end.php');
         exit;
     }
 }

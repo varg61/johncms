@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once ("../includes/head.php");
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (empty ($_POST['cat'])) {
         $loaddir = $loadroot;
@@ -45,43 +44,36 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $formfot = Functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-                require_once ('../includes/end.php');
                 exit;
             }
         }
         if ($scwidth > 320 || $scheight > 320) {
             echo "Размер картинки не должен превышать разрешения 320*320 px<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if (preg_match("/[^\da-z_\-.]+/", $scrname)) {
             echo "В названии изображения $scrname присутствуют недопустимые символы<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if ($fsize >= 1024 * Vars::$SYSTEM_SET['flsz']) {
             echo "Вес файла превышает " . Vars::$SYSTEM_SET['flsz'] . " кб<br/>
 <a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if (preg_match("/[^\da-z_\-.]+/", $fname)) {
             echo
                     "В названии файла <b>$fname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if (preg_match("/[^\da-z_\-.]+/", $newname)) {
             echo
                     "В новом названии файла <b>$newname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if ((preg_match("/.php/i", $fname)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess") or (preg_match("/php/i", $newname)) or (preg_match("/.pl/i", $newname)) or ($newname == ".htaccess")) {
             echo "Попытка отправить файл запрещенного типа.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if ((move_uploaded_file($_FILES["screens"]["tmp_name"], "$screenroot/$newname.$ftip.$formfot")) == true) {
@@ -128,7 +120,6 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 echo
                         "В названии файла <b>$tmp_name1</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                         . $cat . "'>Повторить</a></div>";
-                require_once ('../includes/end.php');
                 exit;
             }
             $ffot = strtolower($tmp_name1);
@@ -137,7 +128,6 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $formfot = Functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
                 echo "Ошибка при загрузке скриншота.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-                require_once ('../includes/end.php');
                 exit;
             }
             if (strlen($filebas64) > 0) {
@@ -158,7 +148,6 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                     if ($widthf > 320 || $heightf > 320) {
                         echo "Размер картинки не должен превышать разрешения 320*320 px<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
                         unlink("$FileName1");
-                        require_once ('../includes/end.php');
                         exit;
                     }
                     echo 'Скриншот загружен!<br/>';
@@ -176,19 +165,16 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             echo
                     "В названии файла <b>$tmp_name</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if (eregi("[^a-z0-9.()+_-]", $newname)) {
             echo
                     "В новом названии файла <b>$newname</b> присутствуют недопустимые символы<br/>Разрешены только латинские символы, цифры и некоторые знаки ( .()+_- )<br /><a href='?act=select&amp;cat="
                     . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if ((preg_match("/php/i", $tmp_name)) or (preg_match("/.pl/i", $tmp_name)) or ($fname == ".htaccess") or (preg_match("/php/i", $newname)) or (preg_match("/.pl/i", $newname)) or ($newname == ".htaccess")) {
             echo "Попытка отправить файл запрещенного типа.<br/><a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
-            require_once ('../includes/end.php');
             exit;
         }
         if (strlen($filebase64) > 0) {
@@ -209,7 +195,6 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                     echo "Вес файла превышает " . Vars::$SYSTEM_SET['flsz'] . " кб<br/>
 <a href='?act=select&amp;cat=" . $cat . "'>Повторить</a><br/>";
                     unlink("$FileName");
-                    require_once ('../includes/end.php');
                     exit;
                 }
                 echo 'Файл загружен!<br/>';

@@ -13,8 +13,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 //TODO: Доработать!
 
-require_once('../includes/head.php');
-
 /*
 -----------------------------------------------------------------
 Список посетителей. у которых есть фотографии

@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
 $textl = Vars::$LNG['search_user'];
-require_once(SYSPATH . 'head.php');
 
 /*
 -----------------------------------------------------------------
@@ -75,5 +74,3 @@ if ($search && Validate::nickname($search, 1) === true) {
 }
 echo '<p>' . ($search && empty(Validate::$error) ? '<a href="search.php">' . Vars::$LNG['search_new'] . '</a><br />' : '') .
     '<a href="index.php">' . Vars::$LNG['back'] . '</a></p>';
-
-require_once(SYSPATH . 'end.php');

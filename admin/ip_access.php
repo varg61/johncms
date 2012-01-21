@@ -20,7 +20,6 @@ if (Vars::$USER_RIGHTS < 9) {
 }
 
 $lng_adm = Vars::loadLanguage('adm');
-require_once('../includes/head.php');
 
 $mod = Vars::$MOD == 'white' ? 'white' : 'black';
 $color = Vars::$MOD == 'white' ? 'green' : 'red';
@@ -129,7 +128,6 @@ switch (Vars::$ACT) {
                     }
                     echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
                     echo '<p><a href="index.php?act=ipban&amp;mod=new">' . Vars::$LNG['back'] . '</a><br /><a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
-                    require_once('../includes/end.php');
                     exit;
                 }
 
@@ -329,5 +327,3 @@ switch (Vars::$ACT) {
         echo'<p>' . ($total ? '<a href="ip_access.php?act=clear&amp;mod=' . $mod . '">' . $lng_adm['clear_list'] . '</a><br />' : '') .
             '<a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
 }
-
-require_once('../includes/end.php');

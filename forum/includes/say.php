@@ -17,9 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) || (!Vars::$USER_RIGHTS && Vars::$SYSTEM_SET['mod_forum'] == 3)) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['access_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -63,9 +61,7 @@ function forum_link($m)
 // Проверка на флуд
 $flood = Functions::antiFlood();
 if ($flood) {
-    require_once('../includes/head.php');
     echo Functions::displayError(Vars::$LNG['error_flood'] . ' ' . $flood . Vars::$LNG['sec'], '<a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . Vars::$LNG['back'] . '</a>');
-    require_once('../includes/end.php');
     exit;
 }
 
@@ -82,9 +78,7 @@ switch ($type1['type']) {
         */
         if (($type1['edit'] == 1 || $type1['close'] == 1) && Vars::$USER_RIGHTS < 7) {
             // Проверка, закрыта ли тема
-            require_once('../includes/head.php');
             echo Functions::displayError($lng_forum['error_topic_closed'], '<a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
@@ -95,9 +89,7 @@ switch ($type1['type']) {
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
-                require_once('../includes/head.php');
                 echo Functions::displayError(Vars::$LNG['error_message_short'], '<a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             // Проверяем, не повторяется ли сообщение?
@@ -105,9 +97,7 @@ switch ($type1['type']) {
             if (mysql_num_rows($req) > 0) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
-                    require_once('../includes/head.php');
                     echo Functions::displayError(Vars::$LNG['error_message_exists'], '<a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . Vars::$LNG['back'] . '</a>');
-                    require_once('../includes/end.php');
                     exit;
                 }
             }
@@ -144,14 +134,12 @@ switch ($type1['type']) {
             else
                 header("Location: index.php?id=" . Vars::$ID . "&page=$page");
         } else {
-            require_once('../includes/head.php');
             if ($datauser['postforum'] == 0) {
                 if (!isset($_GET['yes'])) {
                     $lng_faq = Vars::loadLanguage('faq');
                     echo '<p>' . $lng_faq['forum_rules_text'] . '</p>' .
                          '<p><a href="index.php?act=say&amp;id=' . Vars::$ID . '&amp;yes">' . $lng_forum['agree'] . '</a> | ' .
                          '<a href="index.php?id=' . Vars::$ID . '">' . $lng_forum['not_agree'] . '</a></p>';
-                    require_once('../includes/end.php');
                     exit;
                 }
             }
@@ -190,15 +178,11 @@ switch ($type1['type']) {
         $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
         if (($th1['edit'] == 1 || $th1['close'] == 1) && Vars::$USER_RIGHTS < 7) {
-            require_once('../includes/head.php');
             echo Functions::displayError($lng_forum['error_topic_closed'], '<a href="index.php?id=' . $th1['id'] . '">' . Vars::$LNG['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         if ($type1['user_id'] == Vars::$USER_ID) {
-            require_once('../includes/head.php');
             echo Functions::displayError('Нельзя отвечать на свое же сообщение', '<a href="index.php?id=' . $th1['id'] . '">' . Vars::$LNG['back'] . '</a>');
-            require_once('../includes/end.php');
             exit;
         }
         $shift = (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600;
@@ -240,16 +224,12 @@ switch ($type1['type']) {
         $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
-                require_once('../includes/head.php');
                 echo Functions::displayError(Vars::$LNG['error_empty_message'], '<a href="index.php?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . Vars::$LNG['repeat'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
-                require_once('../includes/head.php');
                 echo Functions::displayError(Vars::$LNG['error_message_short'], '<a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a>');
-                require_once('../includes/end.php');
                 exit;
             }
             // Проверяем, не повторяется ли сообщение?
@@ -257,9 +237,7 @@ switch ($type1['type']) {
             if (mysql_num_rows($req) > 0) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
-                    require_once('../includes/head.php');
                     echo Functions::displayError(Vars::$LNG['error_message_exists'], '<a href="index.php?id=' . $th . '&amp;start=' . Vars::$START . '">' . Vars::$LNG['back'] . '</a>');
-                    require_once('../includes/end.php');
                     exit;
                 }
             }
@@ -303,14 +281,12 @@ switch ($type1['type']) {
             }
         } else {
             $textl = Vars::$LNG['forum'];
-            require_once('../includes/head.php');
             $qt = " $type1[text]";
             if (($datauser['postforum'] == "" || $datauser['postforum'] == 0)) {
                 if (!isset($_GET['yes'])) {
                     $lng_faq = Vars::loadLanguage('faq');
                     echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
                     echo '<p><a href="index.php?act=say&amp;id=' . Vars::$ID . '&amp;yes&amp;cyt">' . $lng_forum['agree'] . '</a> | <a href="index.php?id=' . $type1['refid'] . '">' . $lng_forum['not_agree'] . '</a></p>';
-                    require_once('../includes/end.php');
                     exit;
                 }
             }
@@ -358,8 +334,5 @@ switch ($type1['type']) {
         break;
 
     default:
-        require_once('../includes/head.php');
         echo Functions::displayError($lng_forum['error_topic_deleted'], '<a href="index.php">' . Vars::$LNG['to_forum'] . '</a>');
-        require_once('../includes/end.php');
-        break;
 }

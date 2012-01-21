@@ -14,7 +14,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "") {
         echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-        require_once('../includes/end.php');
         exit;
     }
     $typ = mysql_query("select * from `gallery` where `id` = " . Vars::$ID);
@@ -49,9 +48,7 @@ if (Vars::$USER_RIGHTS >= 6) {
 
         default:
             echo "ERROR<br/><a href='index.php'>Back</a><br/>";
-            require_once('../includes/end.php');
             exit;
-            break;
     }
 } else {
     header("location: index.php");

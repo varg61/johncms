@@ -12,7 +12,6 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $textl = $lng_profile['my_office'];
-require_once('../includes/head.php');
 
 /*
 -----------------------------------------------------------------
@@ -21,7 +20,6 @@ require_once('../includes/head.php');
 */
 if ($user['id'] != Vars::$USER_ID) {
     echo Functions::displayError(Vars::$LNG['access_forbidden']);
-    require_once('../includes/end.php');
     exit;
 }
 
