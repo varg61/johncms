@@ -9,26 +9,38 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+define('_IN_JOHNCMS', 1);
 
+require_once('../includes/core.php');
 $textl = Vars::$LNG['online'];
 require_once(SYSPATH . 'head.php');
+
+/*
+-----------------------------------------------------------------
+Закрываем от неавторизованных юзеров
+-----------------------------------------------------------------
+*/
+if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
+    echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
+    require_once('../includes/end.php');
+    exit;
+}
 
 $link = '';
 $sql_total = '';
 $sql_list = '';
 
-$menu[] = !Vars::$MOD ? '<b>' . Vars::$LNG['users'] . '</b>' : '<a href="index.php?act=online">' . Vars::$LNG['users'] . '</a>';
-$menu[] = Vars::$MOD == 'history' ? '<b>' . Vars::$LNG['history'] . '</b>' : '<a href="index.php?act=online&amp;mod=history">' . Vars::$LNG['history'] . '</a> ';
+$menu[] = !Vars::$ACT ? '<b>' . Vars::$LNG['users'] . '</b>' : '<a href="online.php">' . Vars::$LNG['users'] . '</a>';
+$menu[] = Vars::$ACT == 'history' ? '<b>' . Vars::$LNG['history'] . '</b>' : '<a href="online.php?act=history">' . Vars::$LNG['history'] . '</a> ';
 if (Vars::$USER_RIGHTS) {
-    $menu[] = Vars::$MOD == 'guest' ? '<b>' . Vars::$LNG['guests'] . '</b>' : '<a href="index.php?act=online&amp;mod=guest">' . Vars::$LNG['guests'] . '</a>';
-    $menu[] = Vars::$MOD == 'ip' ? '<b>' . Vars::$LNG['ip_activity'] . '</b>' : '<a href="index.php?act=online&amp;mod=ip">' . Vars::$LNG['ip_activity'] . '</a>';
+    $menu[] = Vars::$ACT == 'guest' ? '<b>' . Vars::$LNG['guests'] . '</b>' : '<a href="online.php?act=guest">' . Vars::$LNG['guests'] . '</a>';
+    $menu[] = Vars::$ACT == 'ip' ? '<b>' . Vars::$LNG['ip_activity'] . '</b>' : '<a href="online.php?act=ip">' . Vars::$LNG['ip_activity'] . '</a>';
 }
 
 echo'<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
-switch (Vars::$MOD) {
+switch (Vars::$ACT) {
     case 'du':
         /*
         -----------------------------------------------------------------
@@ -158,26 +170,28 @@ switch (Vars::$MOD) {
             ++$i;
         }
         if ($total) {
-            if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            if ($total > Vars::$USER_SET['page_size']) {
+                echo '<div class="topmenu">' . Functions::displayPagination('online.php?act=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            }
             for ($i = Vars::$START; $i < $end; $i++) {
                 $out = each($ip_list[$i]);
                 $ip = long2ip($out[0]);
                 echo($out[0] == Vars::$IP ? '<div class="gmenu">' : ($i % 2 ? '<div class="list2">' : '<div class="list1">')) .
                     '<div style="float:left">' . Functions::getImage('host.gif') . '</div>' .
-                    '<div style="float:left;margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/ip_whois.php?ip=' . $ip . '">[w]</a></div>' .
                     '<div style="float:left;margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
+                    '<div style="float:left;margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/ip_whois.php?ip=' . $ip . '">[w]</a></div>' .
                     '<div style="margin-left:120px"><span class="red"><b>' . $out[1] . '</b></span></div>' .
                     '</div>';
             }
             echo '</table>';
             echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
-                echo'<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;mod=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                    '<p><form action="index.php?act=online&amp;mod=ip" method="post">' .
+                echo'<div class="topmenu">' . Functions::displayPagination('online.php?act=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                    '<p><form action="online.php?act=ip" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
             }
-            echo'<p><a href="index.php?act=online&amp;mod=di">' . Vars::$LNG['download_list'] . '</a></p>';
+            echo'<p><a href="online.php?act=di">' . Vars::$LNG['download_list'] . '</a></p>';
         } else {
             echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
         }
@@ -230,7 +244,9 @@ switch (Vars::$MOD) {
 -----------------------------------------------------------------
 */
 $total = mysql_result(mysql_query($sql_total), 0);
-if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;' . (Vars::$MOD ? 'mod=' . Vars::$MOD . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+if ($total > Vars::$USER_SET['page_size']) {
+    echo '<div class="topmenu">' . Functions::displayPagination('online.php?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+}
 if ($total) {
     $req = mysql_query($sql_list);
     $i = 0;
@@ -238,7 +254,7 @@ if ($total) {
         if ($res['id'] == Vars::$USER_ID) echo '<div class="gmenu">';
         else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $arg['header'] = ' <span class="gray">(';
-        if (Vars::$MOD == 'history') {
+        if (Vars::$ACT == 'history') {
             $arg['header'] .= Functions::displayDate($res['last_visit']) . ')</span>';
         } else {
             $arg['header'] .= $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']);
@@ -253,13 +269,15 @@ if ($total) {
 }
 echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=online&amp;' . (Vars::$MOD ? 'mod=' . Vars::$MOD . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="index.php?act=online' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
+    echo '<div class="topmenu">' . Functions::displayPagination('online.php?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="online.php' . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 
 if (Vars::$USER_ID && $total) {
-    echo'<p><a href="index.php?act=online&amp;mod=' . $link . '">' . Vars::$LNG['download_list'] . '</a></p>';
+    echo'<p><a href="online.php?act=' . $link . '">' . Vars::$LNG['download_list'] . '</a></p>';
 }
+
+require_once(SYSPATH . 'end.php');

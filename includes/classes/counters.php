@@ -83,7 +83,7 @@ class Counters extends Vars
         $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 $sql"), 0);
         $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 $sql"), 0);
         return (parent::$USER_ID || parent::$SYSTEM_SET['active']
-            ? '<a href="' . parent::$HOME_URL . '/users/index.php?act=online">' . Vars::$LNG['online'] . ': ' . $users . ' / ' . $guests . '</a>'
+            ? '<a href="' . parent::$HOME_URL . '/users/online.php">' . Vars::$LNG['online'] . ': ' . $users . ' / ' . $guests . '</a>'
             : Vars::$LNG['online'] . ': ' . $users . ' / ' . $guests);
     }
 

@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
 $textl = Vars::$LNG['users_list'];
-$headmod = 'userlist';
 require_once('../includes/head.php');
 
 /*
@@ -47,8 +46,8 @@ if ($total > Vars::$USER_SET['page_size']) {
 }
 
 if ($total) {
-    $req = mysql_query("SELECT * FROM `users` WHERE " . (Vars::$ACT == 'adm' ? '`rights` > 0 ORDER BY `rights`' : '`level` > 0 ORDER BY `user_id`') . " DESC" . Vars::db_pagination());
-    for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; $i++) {
+    $req = mysql_query("SELECT * FROM `users` WHERE " . (Vars::$ACT == 'adm' ? '`rights` > 0 ORDER BY `rights`' : '`level` > 0 ORDER BY `id`') . " DESC" . Vars::db_pagination());
+    for ($i = 0; $res = mysql_fetch_assoc($req); $i++) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo Functions::displayUser($res) . '</div>';
     }
@@ -67,4 +66,4 @@ if ($total > Vars::$USER_SET['page_size']) {
 echo '<p><a href="search.php">' . Vars::$LNG['search_user'] . '</a><br />' .
     '<a href="index.php">' . Vars::$LNG['back'] . '</a></p>';
 
-require_once('../includes/end.php');
+require_once(SYSPATH . 'end.php');
