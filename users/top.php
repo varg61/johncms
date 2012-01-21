@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$headmod = 'userstop';
 $textl = Vars::$LNG['users_top'];
 
 /*

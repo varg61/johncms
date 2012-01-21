@@ -65,7 +65,6 @@ if ($flood) {
     exit;
 }
 
-$headmod = 'forum,' . Vars::$ID . ',1';
 $agn1 = strtok(Vars::$USERAGENT, ' ');
 $type = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
 $type1 = mysql_fetch_assoc($type);

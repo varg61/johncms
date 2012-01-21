@@ -92,13 +92,12 @@ class Functions extends Vars
     */
     public static function displayCounters()
     {
-        global $headmod;
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
         if (mysql_num_rows($req) > 0) {
             while (($res = mysql_fetch_array($req)) !== false) {
                 $link1 = ($res['mode'] == 1 || $res['mode'] == 2) ? $res['link1'] : $res['link2'];
                 $link2 = $res['mode'] == 2 ? $res['link1'] : $res['link2'];
-                $count = ($headmod == 'mainpage') ? $link1 : $link2;
+                $count = (parent::$PLACE == 'index.php') ? $link1 : $link2;
                 if (!empty($count))
                     echo $count;
             }
@@ -363,9 +362,9 @@ class Functions extends Vars
     public static function getImage($img = '', $alt = '', $style = '')
     {
         if (empty($img)) return false;
-        if (file_exists(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
+        if (is_file(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
             $file = parent::$HOME_URL . '/theme/' . Vars::$USER_SET['skin'] . '/images/' . $img;
-        } elseif (file_exists(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . $img)) {
+        } elseif (is_file(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . $img)) {
             $file = parent::$HOME_URL . '/images/system/' . $img;
         } else {
             return false;

@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'library';
 require_once('../includes/core.php');
 $lng_lib = Vars::loadLanguage('library');
 $textl = Vars::$LNG['library'];

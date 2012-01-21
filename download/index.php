@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-$headmod = 'load';
 require_once('../includes/core.php');
 $lng_dl = Vars::loadLanguage('downloads');
 require_once('../includes/lib/mp3.php');

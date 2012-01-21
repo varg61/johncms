@@ -91,9 +91,9 @@ function template()
             @ini_set('zlib.output_compression_level', 3);
             ob_start('ob_gzhandler');
         }
-        require_once(SYSPATH . 'head.php');
+        require_once(SYSPATH . 'header.php');
         echo $contents;
-        require_once(SYSPATH . 'end.php');
+        require_once(SYSPATH . 'footer.php');
     }
 }
 
