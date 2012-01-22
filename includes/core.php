@@ -34,11 +34,11 @@ mb_internal_encoding('UTF-8');
 Задаем пути
 -----------------------------------------------------------------
 */
-define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR);           // Системная папка
+define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR); // Системная папка
 define('ROOTPATH', dirname(realpath(__DIR__)) . DIRECTORY_SEPARATOR); // Корневая папка
-define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);         // Папка для кэша
-define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);       // Папка с языками
-define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);       // Папка с конфигурационными файлами
+define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR); // Папка для кэша
+define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR); // Папка с языками
+define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR); // Папка с конфигурационными файлами
 
 /*
 -----------------------------------------------------------------
@@ -76,34 +76,8 @@ unset($network, $system);
 
 /*
 -----------------------------------------------------------------
-Подключение шаблонов оформления и вывод информации
+Буферизация вывода, инициализация шаблонов
 -----------------------------------------------------------------
 */
 ob_start();
-register_shutdown_function('template');
-
-function template()
-{
-    global $no_out;
-    if(isset($no_out)){
-        return;
-    }
-    $contents = ob_get_contents();
-    if (!empty($contents)) {
-        ob_end_clean();
-        if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
-            @ini_set('zlib.output_compression_level', 3);
-            ob_start('ob_gzhandler');
-        }
-        require_once(SYSPATH . 'template.php');
-    }
-}
-
-/*
------------------------------------------------------------------
-Показываем Дайджест
------------------------------------------------------------------
-*/
-//if (Vars::$USER_ID && Vars::$USER_DATA['last_visit'] < (time() - 3600) && Vars::$USER_SET['digest'] && $headmod == 'mainpage') {
-//    header('Location: ' . Vars::$SYSTEM_SET['homeurl'] . '/index.php?act=digest&last=' . Vars::$USER_DATA['last_visit']);
-//}
+register_shutdown_function(create_function('', 'new Template;'));

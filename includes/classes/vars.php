@@ -31,6 +31,9 @@ abstract class Vars
     public static $IS_MOBILE = false;            // Мобильный браузер
     public static $PLACE = '';                   // Местоположение на сайте
 
+    public static $TITLE = '';                   // Заголовок страницы
+    public static $TEMPLATE = 'default';         // Шаблон вывода информации
+
     /*
     -----------------------------------------------------------------
     Пользовательские переменные
