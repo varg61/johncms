@@ -35,7 +35,7 @@ echo'<?xml version="1.0" encoding="utf-8"?>' . "\n" .
     "\n" . '<head>' .
     "\n" . '<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>' .
     "\n" . '<meta http-equiv="Content-Style-Type" content="text/css" />' .
-    "\n" . '<meta name="Generator" content="MobiCMS, http://mobicms.net" />' . // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
+    "\n" . '<meta name="Generator" content="JohnCMS, http://johncms.com" />' . // ВНИМАНИЕ!!! Данный копирайт удалять нельзя
     (!empty(Vars::$SYSTEM_SET['meta_key']) ? "\n" . '<meta name="keywords" content="' . Vars::$SYSTEM_SET['meta_key'] . '" />' : '') .
     (!empty(Vars::$SYSTEM_SET['meta_desc']) ? "\n" . '<meta name="description" content="' . Vars::$SYSTEM_SET['meta_desc'] . '" />' : '') .
     "\n" . '<link rel="stylesheet" href="' . Vars::$HOME_URL . '/theme/' . Vars::$USER_SET['skin'] . '/style.css" type="text/css" />' .
@@ -51,8 +51,8 @@ echo'<?xml version="1.0" encoding="utf-8"?>' . "\n" .
 если нет, то используем системную шапку.
 -----------------------------------------------------------------
 */
-if (is_file(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'header.php')) {
-    include_once(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'header.php');
+if (is_file(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'default.php')) {
+    include_once(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'default.php');
 } else {
     /*
     -----------------------------------------------------------------
@@ -118,4 +118,65 @@ if (is_file(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] .
 
         //if (!empty($list)) echo '<div class="rmenu">' . Vars::$lng['unread'] . ': ' . Functions::display_menu($list, ', ') . '</div>';
     }
+
+    /*
+    -----------------------------------------------------------------
+    Выводим основное содержание
+    -----------------------------------------------------------------
+    */
+    echo $contents;
+
+    /*
+    -----------------------------------------------------------------
+    Низ сайта (ноги)
+    -----------------------------------------------------------------
+    */
+
+    // Рекламный блок сайта
+    if (!empty($cms_ads[2]))
+        echo '<div class="gmenu">' . $cms_ads[2] . '</div>';
+
+    echo '</div><div class="fmenu">';
+    if (Vars::$PLACE != 'index.php' || (Vars::$PLACE == 'index.php' && Vars::$ACT))
+        echo '<a href="' . Vars::$HOME_URL . '">' . Vars::$LNG['homepage'] . '</a><br/>';
+
+    // Меню быстрого перехода
+    if (Vars::$USER_SET['quick_go']) {
+        echo '<form action="' . Vars::$HOME_URL . '/go.php" method="post">';
+        echo '<div><select name="adres" style="font-size:x-small">
+    <option selected="selected">' . Vars::$LNG['quick_jump'] . '</option>
+    <option value="guest">' . Vars::$LNG['guestbook'] . '</option>
+    <option value="forum">' . Vars::$LNG['forum'] . '</option>
+    <option value="news">' . Vars::$LNG['news'] . '</option>
+    <option value="gallery">' . Vars::$LNG['gallery'] . '</option>
+    <option value="down">' . Vars::$LNG['downloads'] . '</option>
+    <option value="lib">' . Vars::$LNG['library'] . '</option>
+    <option value="gazen">Gazenwagen :)</option>
+    </select><input type="submit" value="Go!" style="font-size:x-small"/>';
+        echo '</div></form>';
+    }
+    // Счетчик посетителей онлайн
+    echo '</div><div class="footer">' . Counters::usersOnline() . '</div>';
+    echo '<div style="text-align:center">';
+    echo '<p><b>' . Vars::$SYSTEM_SET['copyright'] . '</b></p>';
+
+    // Счетчики каталогов
+    Functions::displayCounters();
+
+    // Рекламный блок сайта
+    if (!empty($cms_ads[3]))
+        echo '<br />' . $cms_ads[3];
+    echo '</div>';
 }
+
+/*
+-----------------------------------------------------------------
+ВНИМАНИЕ!!!
+Данный копирайт нельзя убирать в течение 60 дней с момента установки скриптов
+-----------------------------------------------------------------
+ATTENTION!!!
+The copyright could not be removed within 60 days of installation scripts
+-----------------------------------------------------------------
+*/
+echo'<div style="text-align:center"><small>&copy; <a href="http://johncms.com">JohnCMS</a></small></div>' .
+    '</body></html>';

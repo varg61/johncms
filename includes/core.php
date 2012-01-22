@@ -85,15 +85,13 @@ register_shutdown_function('template');
 function template()
 {
     $contents = ob_get_contents();
-    ob_clean();
     if (!empty($contents)) {
+        ob_clean();
         if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
             @ini_set('zlib.output_compression_level', 3);
             ob_start('ob_gzhandler');
         }
-        require_once(SYSPATH . 'header.php');
-        echo $contents;
-        require_once(SYSPATH . 'footer.php');
+        require_once(SYSPATH . 'template.php');
     }
 }
 
