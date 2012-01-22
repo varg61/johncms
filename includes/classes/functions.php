@@ -326,7 +326,7 @@ class Functions extends Vars
     */
     public static function downloadFile($str, $file)
     {
-        ob_clean();
+        ob_end_clean();
         ob_start();
         echo $str;
         header('Content-Description: File Transfer');

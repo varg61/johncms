@@ -84,6 +84,10 @@ register_shutdown_function('template');
 
 function template()
 {
+    global $no_out;
+    if(isset($no_out)){
+        return;
+    }
     $contents = ob_get_contents();
     if (!empty($contents)) {
         ob_end_clean();

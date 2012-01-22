@@ -48,6 +48,7 @@ switch (Vars::$ACT) {
         if (!Vars::$USER_ID) {
             exit;
         }
+        $no_out = 1;
         $out = 'Users Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n===============================\r\n";
         $req = mysql_query("SELECT `cms_sessions`.`user_id` AS `id`, `cms_sessions`.`session_timestamp` AS `last_visit`, `cms_sessions`.`ip`, `cms_sessions`.`ip_via_proxy`, `cms_sessions`.`user_agent`, `cms_sessions`.`place`, `cms_sessions`.`views`, `cms_sessions`.`movings`, `cms_sessions`.`start_time`, `users`.`nickname`, `users`.`sex`, `users`.`rights`
@@ -78,6 +79,7 @@ switch (Vars::$ACT) {
         if (!Vars::$USER_ID) {
             exit;
         }
+        $no_out = 1;
         $out = 'Users Online history ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n=======================================\r\n";
         $req = mysql_query("SELECT * FROM `users` WHERE `last_visit` > " . (time() - 172800) . " AND `last_visit` < " . (time() - 310) . " ORDER BY `last_visit` DESC");
@@ -105,6 +107,7 @@ switch (Vars::$ACT) {
         if (!Vars::$USER_RIGHTS) {
             exit;
         }
+        $no_out = 1;
         $out = 'Guests Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n================================\r\n";
         $req = mysql_query("SELECT `user_id` AS `id`, `session_timestamp` AS `last_visit`, `ip`, `ip_via_proxy`, `user_agent`, `place`, `views`, `movings`, `start_time`
@@ -133,6 +136,7 @@ switch (Vars::$ACT) {
         if (Vars::$USER_RIGHTS < 6) {
             exit;
         }
+        $no_out = 1;
         arsort(Vars::$IP_REQUESTS_LIST);
         $out = 'IP Requests ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n==============================\r\n";
