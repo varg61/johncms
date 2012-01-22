@@ -86,7 +86,7 @@ function template()
 {
     $contents = ob_get_contents();
     if (!empty($contents)) {
-        ob_clean();
+        ob_end_clean();
         if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
             @ini_set('zlib.output_compression_level', 3);
             ob_start('ob_gzhandler');
