@@ -53,7 +53,7 @@ switch ($login->userRegistration($reg_data)) {
         // Показываем ссылку на Автологин
         if (isset($_GET['auto'])) {
             echo'</p><p>' . Vars::$LNG['autologin_link'] .
-                '<br /><input type="text" value="' . Vars::$SYSTEM_SET['homeurl'] . '/login.php?id=' . $_SESSION['id'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) . '"/>';
+                '<br /><input type="text" value="' . Vars::$SYSTEM_SET['homeurl'] . '/login.php?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) . '"/>';
         } else {
             echo'<br /><small><a href="registration.php?auto' . (isset($_GET['pass']) ? '&amp;pass' : '') . '">' . Vars::$LNG['show_autologin_link'] . '</a></small>';
         }
