@@ -11,6 +11,30 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+if (stristr(Vars::$USERAGENT, "msie") && stristr(Vars::$USERAGENT, "windows")) {
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header('Content-type: text/html; charset=UTF-8');
+} else {
+    header("Cache-Control: public");
+    header('Content-type: application/xhtml+xml; charset=UTF-8');
+}
+header("Expires: " . date("r", time() + 60));
+echo'<?xml version="1.0" encoding="utf-8"?>' . "\n" .
+    '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">' . "\n" .
+    '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">' . "\n" .
+    '<head>' . "\n" .
+    '<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>' . "\n" .
+    '<meta http-equiv="Content-Style-Type" content="text/css"/>' . "\n" .
+    '<meta name="Generator" content="JohnCMS, http://johncms.com"/>' . "\n" . // Данный копирайт удалять нельзя!
+    '<meta name="keywords" content="' . Vars::$SYSTEM_SET['meta_key'] . '"/>' . "\n" .
+    '<meta name="description" content="' . Vars::$SYSTEM_SET['meta_desc'] . '"/>' . "\n" .
+    '<link rel="stylesheet" href="' . Vars::$HOME_URL . '/theme/' . Vars::$USER_SET['skin'] . '/style.css" type="text/css"/>' . "\n" .
+    '<link rel="shortcut icon" href="' . Vars::$HOME_URL . '/favicon.ico"/>' . "\n" .
+    '<link rel="alternate" type="application/rss+xml" title="RSS | ' . Vars::$LNG['site_news'] . '" href="' . Vars::$HOME_URL . '/rss/rss.php"/>' . "\n" .
+    '<title>' . Vars::$TITLE . '</title>' . "\n" .
+    '</head>' . "\n" .
+    '<body>' . "\n";
+
 /*
 -----------------------------------------------------------------
 Рекламный блок сайта
@@ -124,3 +148,17 @@ Functions::displayCounters();
 if (!empty($cms_ads[3]))
     echo '<br />' . $cms_ads[3];
 echo '</div>';
+
+/*
+-----------------------------------------------------------------
+ВНИМАНИЕ!!!
+Данный копирайт нельзя убирать в течение 60 дней с момента установки скриптов
+-----------------------------------------------------------------
+ATTENTION!!!
+The copyright could not be removed within 60 days of installation scripts
+-----------------------------------------------------------------
+*/
+echo '<div style="text-align:center"><small>&copy; <a href="http://johncms.com">JohnCMS</a></small></div>';
+
+echo"\n" . '</body>' .
+    "\n" . '</html>';
