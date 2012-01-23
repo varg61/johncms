@@ -9,9 +9,19 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+define('_IN_JOHNCMS', 1);
 
-$textl = Vars::$LNG['users_top'];
+require_once('../includes/core.php');
+
+/*
+-----------------------------------------------------------------
+Закрываем от неавторизованных юзеров
+-----------------------------------------------------------------
+*/
+if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
+    echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
+    exit;
+}
 
 /*
 -----------------------------------------------------------------
