@@ -80,27 +80,4 @@ unset($network, $system);
 -----------------------------------------------------------------
 */
 ob_start();
-register_shutdown_function('template');
-
-function template()
-{
-    $contents = ob_get_contents();
-    if (Vars::$TEMPLATE !== false && !empty($contents)) {
-        ob_end_clean();
-        if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
-            @ini_set('zlib.output_compression_level', 3);
-            ob_start('ob_gzhandler');
-        }
-
-        $system_template = SYSPATH . 'templates' . DIRECTORY_SEPARATOR . Vars::$TEMPLATE . '.php';
-        $user_template = ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . Vars::$TEMPLATE . '.php';
-        // Подключаем файл шаблона оформления
-        if (is_file($user_template)) {
-            include_once($user_template);
-        } elseif (is_file($system_template)) {
-            include_once($system_template);
-        } else {
-            echo Functions::displayError('Template &laquo;<b>' . Vars::$TEMPLATE . '</b>&raquo; not found');
-        }
-    }
-}
+register_shutdown_function(create_function('', 'new Template;'));
