@@ -68,7 +68,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                         `avtor` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
                         `text` = '" . mysql_real_escape_string($txt) . "',
                         `ip` = '" . Vars::$IP . "',
-                        `soft` = '" . mysql_real_escape_string(Vars::$USERAGENT) . "',
+                        `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
                         `moder` = '1'
                     ");
                     unlink("temp/$ch");

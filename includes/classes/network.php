@@ -85,7 +85,7 @@ class Network extends Vars
             parent::$IP_VIA_PROXY = $this->_getIpViaProxy(parent::$IP);
 
             // Obtain an User Agent
-            parent::$USERAGENT = $this->_getUserAgent();
+            parent::$USER_AGENT = $this->_getUserAgent();
         } catch (Exception $e) {
             die('<center><h2>NETWORK ERROR</h2>' . $e->getMessage() . '</center>');
         }

@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
             `from` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
             `ip` = '" . Vars::$IP . "',
             `ip_via_proxy` = '" . Vars::$IP_VIA_PROXY . "',
-            `soft` = '" . mysql_real_escape_string(Vars::$USERAGENT) . "',
+            `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
             `text` = '" . mysql_real_escape_string($msg) . "'
         ");
         $postid = mysql_insert_id();

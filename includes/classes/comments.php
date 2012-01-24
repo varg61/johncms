@@ -320,7 +320,7 @@ class Comments
             'author_name' => Vars::$USER_DATA['name'],
             'author_ip' => Vars::$IP,
             'author_ip_via_proxy' => Vars::$IP_VIA_PROXY,
-            'author_browser' => Vars::$USERAGENT
+            'author_browser' => Vars::$USER_AGENT
         );
         // Записываем комментарий в базу
         mysql_query("INSERT INTO `" . $this->comments_table . "` SET

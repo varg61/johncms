@@ -138,8 +138,8 @@ class Session extends Vars
             $sql[] = "`ip_via_proxy` = " . parent::$IP_VIA_PROXY;
         }
 
-        if ($this->session_data['user_agent'] != parent::$USERAGENT) {
-            $sql[] = "`user_agent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "'";
+        if ($this->session_data['user_agent'] != parent::$USER_AGENT) {
+            $sql[] = "`user_agent` = '" . mysql_real_escape_string(parent::$USER_AGENT) . "'";
         }
 
         if ($this->session_data['place'] != parent::$PLACE) {

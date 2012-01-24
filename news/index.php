@@ -64,7 +64,7 @@ switch ($do) {
                                     `user_id` = " . Vars::$USER_ID . ",
                                     `from` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
                                     `ip` = '" . long2ip(Vars::$IP) . "',
-                                    `soft` = '" . mysql_real_escape_string(Vars::$USERAGENT) . "',
+                                    `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
                                     `text` = '" . mysql_real_escape_string($text) . "'
                                 ");
                             }

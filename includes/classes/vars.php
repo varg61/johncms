@@ -27,12 +27,9 @@ abstract class Vars
     public static $IP;                           // IP адрес
     public static $IP_VIA_PROXY = 0;             // IP адрес за прокси-сервером
     public static $IP_REQUESTS_LIST = array();   // Счетчик обращений с IP адреса
-    public static $USERAGENT;                    // User Agent
+    public static $USER_AGENT;                    // User Agent
     public static $IS_MOBILE = false;            // Мобильный браузер
     public static $PLACE = '';                   // Местоположение на сайте
-
-    public static $TITLE = '';                   // Заголовок страницы
-    public static $TEMPLATE = 'default';         // Шаблон вывода информации
 
     /*
     -----------------------------------------------------------------

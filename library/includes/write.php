@@ -61,7 +61,7 @@ if ($ms['ip'] == 0) {
                 `text` = '" . mysql_real_escape_string($text) . "',
                 `avtor` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
                 `ip` = " . Vars::$IP . ",
-                `soft` = '" . mysql_real_escape_string(Vars::$USERAGENT) . "',
+                `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
                 `moder` = '$md'
             ");
             $cid = mysql_insert_id();

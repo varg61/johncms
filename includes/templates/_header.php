@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if (stristr(Vars::$USERAGENT, "msie") && stristr(Vars::$USERAGENT, "windows")) {
+if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows")) {
     header("Cache-Control: no-store, no-cache, must-revalidate");
     header('Content-type: text/html; charset=UTF-8');
 } else {
@@ -33,7 +33,7 @@ echo'<?xml version="1.0" encoding="utf-8"?>' . "\n";
     <link rel="stylesheet" href="<?= Vars::$HOME_URL . '/theme/' . Vars::$USER_SET['skin'] ?>/style.css" type="text/css"/>
     <link rel="shortcut icon" href="<?= Vars::$HOME_URL ?>/favicon.ico"/>
     <link rel="alternate" type="application/rss+xml" title="RSS | <?= Vars::$LNG['site_news'] ?>" href="<?= Vars::$HOME_URL ?>/rss/rss.php"/>
-    <title><?= Vars::$TITLE ?></title>
+    <title><?= isset($title) ? $title : Vars::$SYSTEM_SET['copyright'] ?></title>
 </head>
 <body>
 <?php

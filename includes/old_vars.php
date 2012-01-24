@@ -13,7 +13,7 @@
  */
 
 $ip        = Vars::$IP;                        // Адрес IP
-$agn       = Vars::$USERAGENT;                 // User Agent
+$agn       = Vars::$USER_AGENT;                 // User Agent
 $set       = Vars::$SYSTEM_SET;                // Системные настройки
 $lng       = Vars::$LNG;                       // Фразы языка
 $is_mobile = Vars::$IS_MOBILE;                 // Определение мобильного браузера

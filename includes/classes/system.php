@@ -141,7 +141,7 @@ class System extends Vars
                 $res = mysql_fetch_assoc($req);
 
                 // Допуск на авторизацию с COOKIE
-                if ($cookie && $res['login_try'] > 2 && ($res['ip'] != parent::$IP || $res['ip_via_proxy'] != parent::$IP_VIA_PROXY || $res['useragent'] != parent::$USERAGENT)) {
+                if ($cookie && $res['login_try'] > 2 && ($res['ip'] != parent::$IP || $res['ip_via_proxy'] != parent::$IP_VIA_PROXY || $res['useragent'] != parent::$USER_AGENT)) {
                     $permit = false;
                 } else {
                     $permit = true;
@@ -174,8 +174,8 @@ class System extends Vars
                     $sql_update[] = "`last_visit` = " . time();
 
                     // Обработка User Agent
-                    if ($res['user_agent'] != parent::$USERAGENT) {
-                        $sql_update[] = "`user_agent` = '" . parent::$USERAGENT . "'";
+                    if ($res['user_agent'] != parent::$USER_AGENT) {
+                        $sql_update[] = "`user_agent` = '" . parent::$USER_AGENT . "'";
                     }
 
                     // Обработка IP адресов и фиксация истории
@@ -232,7 +232,7 @@ class System extends Vars
         if (mysql_num_rows($req)) {
             // Если текущие адреса найдены, обновляем метку времени
             $res = mysql_fetch_assoc($req);
-            mysql_query("UPDATE `cms_user_ip` SET " . ($res['useragent'] != parent::$USERAGENT ? "`useragent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "'," : '') . "
+            mysql_query("UPDATE `cms_user_ip` SET " . ($res['useragent'] != parent::$USER_AGENT ? "`useragent` = '" . mysql_real_escape_string(parent::$USER_AGENT) . "'," : '') . "
                 `timestamp` = " . time() . "
                 WHERE `id` = " . $res['id']
             );
@@ -242,7 +242,7 @@ class System extends Vars
                 `user_id` = " . parent::$USER_ID . ",
                 `ip` = " . parent::$IP . ",
                 `ip_via_proxy` = " . parent::$IP_VIA_PROXY . ",
-                `useragent` = '" . mysql_real_escape_string(parent::$USERAGENT) . "',
+                `useragent` = '" . mysql_real_escape_string(parent::$USER_AGENT) . "',
                 `timestamp` = " . time()
             );
         }

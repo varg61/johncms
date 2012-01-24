@@ -163,7 +163,7 @@ switch ($res['type']) {
             */
             echo '<div class="phdr"><b>' . $lng_forum['add_file'] . '</b></div>' .
                  '<div class="gmenu"><form action="index.php?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
-            if (stristr(Vars::$USERAGENT, 'Opera/8.01')) {
+            if (stristr(Vars::$USER_AGENT, 'Opera/8.01')) {
                 echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . $lng_forum['select_file'] . '</a>';
             } else {
                 echo '<input type="file" name="fail"/>';
