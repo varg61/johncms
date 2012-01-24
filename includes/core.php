@@ -80,4 +80,4 @@ unset($network, $system);
 -----------------------------------------------------------------
 */
 ob_start();
-register_shutdown_function(create_function('', 'new Template;'));
+register_shutdown_function(create_function('', 'Template::getInstance()->display();'));
