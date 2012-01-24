@@ -35,7 +35,7 @@ class Template extends Vars
         return self::$instance;
     }
 
-    private function __set($name, $value)
+    public function __set($name, $value)
     {
         if (!array_key_exists($name, $this->data)) {
             $this->data[$name] = $value;
