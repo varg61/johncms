@@ -58,7 +58,7 @@ class Session extends Vars
 
         session_name($this->sessionName);
         session_set_cookie_params($this->sessionLifeTime);
-        register_shutdown_function('session_write_close');
+        //register_shutdown_function('session_write_close');
         session_start();
         setcookie(session_name(), session_id(), (time() + $this->sessionLifeTime));
     }

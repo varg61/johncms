@@ -34,11 +34,11 @@ mb_internal_encoding('UTF-8');
 Задаем пути
 -----------------------------------------------------------------
 */
-define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);          // Системная папка
-define('ROOTPATH', dirname(realpath(dirname(__FILE__))) . DIRECTORY_SEPARATOR);// Корневая папка
-define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
-define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);                // Папка с языками
-define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
+define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR); // Системная папка
+define('ROOTPATH', dirname(realpath(dirname(__FILE__))) . DIRECTORY_SEPARATOR); // Корневая папка
+define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR); // Папка для кэша
+define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR); // Папка с языками
+define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR); // Папка с конфигурационными файлами
 
 /*
 -----------------------------------------------------------------
@@ -80,4 +80,5 @@ unset($network, $system);
 -----------------------------------------------------------------
 */
 ob_start();
-register_shutdown_function(create_function('', 'Template::getInstance()->display();'));
+register_shutdown_function(create_function('', 'echo Template::getInstance()->loadTemplate();'));
+register_shutdown_function('session_write_close');

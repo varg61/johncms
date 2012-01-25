@@ -55,9 +55,7 @@ switch (Vars::$ACT) {
         //$total_album = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
         $tpl->last = isset($_GET['last']) ? intval($_GET['last']) : Vars::$USER_DATA['lastdate'];
         $tpl->count = new Counters();
-        $tpl->load('_header');
-        $tpl->load('digest'); // Шаблон Главной страницы сайта
-        $tpl->load('_footer');
+        $tpl->contents = $tpl->includeTpl('digest');
         break;
 
     default:
@@ -72,10 +70,7 @@ switch (Vars::$ACT) {
         // Загружаем шаблон вывода
         $tpl->mp = new HomePage();
         $tpl->count = new Counters();
-
-        $tpl->load('_header');
-        $tpl->load('homepage'); // Шаблон Главной страницы сайта
-        $tpl->load('_footer');
+        $tpl->contents = $tpl->includeTpl('homepage');
 
         /*
         -----------------------------------------------------------------
