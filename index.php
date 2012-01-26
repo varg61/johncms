@@ -70,7 +70,7 @@ switch (Vars::$ACT) {
         // Загружаем шаблон вывода
         $tpl->mp = new HomePage();
         $tpl->count = new Counters();
-        $tpl->contents = $tpl->includeTpl('homepage');
+        $tpl->contents = $tpl->includeTpl('index');
 
         /*
         -----------------------------------------------------------------

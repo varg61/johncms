@@ -12,43 +12,52 @@
 define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
+$tpl = Template::getInstance();
 
-/*
------------------------------------------------------------------
-Закрываем от неавторизованных юзеров
------------------------------------------------------------------
-*/
 if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
     echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
     exit;
 }
 
-/*
------------------------------------------------------------------
-Актив сайта
------------------------------------------------------------------
-*/
-$count = new Counters();
-$count_adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0"), 0);
-echo'<div class="phdr"><b>' . Vars::$LNG['community'] . '</b></div>' .
-    '<div class="gmenu"><form action="search.php" method="post">' .
-    '<p><h3>' . Vars::$LNG['search'] . '</h3>' .
-    '<input type="text" name="search"/>' .
-    '<input type="submit" value="' . Vars::$LNG['search'] . '" name="submit" /><br />' .
-    '<small>' . Vars::$LNG['search_nick_help'] . '</small></p></form></div>' .
-    '<div class="menu"><p>' .
-    '<h3>' . Functions::getImage('users.png') . '&#160;' . Vars::$LNG['community'] . ' <span class="green">(' . $count->users . ')</span></h3>' .
-    '<ul>' .
-    '<li><a href="userlist.php">' . Vars::$LNG['users'] . '</a></li>' .
-    '<li><a href="userlist.php?act=adm">' . Vars::$LNG['administration'] . '</a></li>' .
-    '</ul>' .
-    '</p><p>' .
-    //TODO: Доработать дни рожденья!
-    '<h3>' . Functions::getImage('rating.png') . '&#160;' . Vars::$LNG['users_top'] . '</h3>' .
-    '<ul>' .
-    '<li><a href="top.php">' . Vars::$LNG['forum'] . '</a></li>' .
-    '<li><a href="top.php">' . Vars::$LNG['comments'] . '</a></li>' .
-    '<li><a href="top.php">' . Vars::$LNG['karma'] . '</a></li>' .
-    '</ul>' .
-    '</p></div>' .
-    '<div class="phdr"><a href="index.php">' . Vars::$LNG['back'] . '</a></div>';
+switch (Vars::$ACT) {
+    /*
+     * Списки пользователей и администрации
+     */
+    case 'userlist':
+        $tpl->menu = array(
+            (Vars::$MOD != 'adm' ? Vars::$LNG['users'] : '<a href="index.php?act=userlist">' . Vars::$LNG['users'] . '</a>'),
+            (Vars::$MOD == 'adm' ? Vars::$LNG['administration'] : '<a href="index.php?act=userlist&amp;mod=adm">' . Vars::$LNG['administration'] . '</a>')
+        );
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `" . (Vars::$MOD == 'adm' ? 'rights' : 'level') . "` > 0"), 0);
+        $tpl->total = $total;
+        Vars::fixPage($total);
+
+        if ($total) {
+            $req = mysql_query("SELECT * FROM `users` WHERE " . (Vars::$MOD == 'adm' ? '`rights` > 0 ORDER BY `rights`' : '`level` > 0 ORDER BY `id`') . " DESC" . Vars::db_pagination());
+            for ($i = 0; $res = mysql_fetch_assoc($req); $i++) {
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                echo Functions::displayUser($res) . '</div>';
+            }
+        } else {
+            echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+        }
+
+        echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+        if ($total > Vars::$USER_SET['page_size']) {
+            echo'<div class="topmenu">' . Functions::displayPagination('userlist.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                '<p><form action="userlist.php" method="post">' .
+                '<input type="text" name="page" size="2"/>' .
+                '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+                '</form></p>';
+        }
+        echo '<p><a href="search.php">' . Vars::$LNG['search_user'] . '</a><br />' .
+            '<a href="index.php">' . Vars::$LNG['back'] . '</a></p>';
+        break;
+
+    /*
+     * Главное меню раздела пользователей
+     */
+    default:
+        $tpl->count    = new Counters();
+        $tpl->contents = $tpl->includeTpl('users/index');
+}
