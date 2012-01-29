@@ -29,6 +29,23 @@ switch (Vars::$ACT) {
         echo Functions::displayError(Vars::$LNG['error_404']);
         break;
 
+    case 'registration':
+        $reg_data['login'] = isset($_POST['login']) ? trim($_POST['login']) : '';
+        $reg_data['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
+        $reg_data['password_confirm'] = isset($_POST['password_confirm']) ? trim($_POST['password_confirm']) : '';
+        $reg_data['captcha'] = isset($_POST['captcha']) ? trim($_POST['captcha']) : '';
+        $reg_data['email'] = isset($_POST['email']) ? trim($_POST['email']) : '';
+        $reg_data['about'] = isset($_POST['about']) ? trim($_POST['about']) : '';
+        $reg_data['name'] = isset($_POST['name']) ? trim($_POST['name']) : '';
+        $reg_data['sex'] = isset($_POST['sex']) ? intval($_POST['sex']) : 0;
+
+        $tpl->login = new Login;
+        $tpl->reg_data = $reg_data;
+        $tpl->lng_reg = Vars::loadLanguage('registration');
+        $tpl->mode = $tpl->login->userRegistration($reg_data);
+        $tpl->contents = $tpl->includeTpl('registration');
+        break;
+
     case 'digest':
         /*
         -----------------------------------------------------------------
@@ -70,7 +87,7 @@ switch (Vars::$ACT) {
         // Загружаем шаблон вывода
         $tpl->mp = new HomePage();
         $tpl->count = new Counters();
-        $tpl->contents = $tpl->includeTpl('index');
+        $tpl->contents = $tpl->includeTpl('mainmenu');
 
         /*
         -----------------------------------------------------------------

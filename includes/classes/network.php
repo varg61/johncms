@@ -38,7 +38,7 @@ class Network extends Vars
     private $_floodInterval = 120;
 
     /**
-     * @var bool Enable / Disable HTTP flood check
+     * @var boolean Enable / Disable HTTP flood check
      */
     private $_floodCheck = true;
 
@@ -94,7 +94,7 @@ class Network extends Vars
     /**
      * Obtain an IP address
      *
-     * @return int|false unsigned IP address,
+     * @return int|boolean false unsigned IP address,
      *                   false if the address is not valid
      */
     private function _getIp()
@@ -110,7 +110,7 @@ class Network extends Vars
      * Trying to get an IP via Proxy [HTTP_X_FORWARDED_FOR]
      *
      * @param int $ip unsigned IP address
-     * @return int|false unsigned IP via Proxy address,
+     * @return int|boolean false unsigned IP via Proxy address,
      *                   false if unable to get the address
      */
     private function _getIpViaProxy($ip)

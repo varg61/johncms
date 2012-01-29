@@ -122,7 +122,7 @@ class Template extends Vars
             $menu[] = '<a href="' . parent::$HOME_URL . '/exit.php">' . parent::$LNG['exit'] . '</a>';
         } else {
             $menu[] = '<a href="' . Vars::$HOME_URL . '/login.php">' . Vars::$LNG['login'] . '</a>';
-            $menu[] = '<a href="' . Vars::$HOME_URL . '/registration.php">' . Vars::$LNG['registration'] . '</a>';
+            $menu[] = '<a href="' . Vars::$HOME_URL . '/index.php?act=registration">' . Vars::$LNG['registration'] . '</a>';
         }
 
         return Functions::displayMenu($menu, $delimiter);

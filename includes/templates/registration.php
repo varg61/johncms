@@ -32,7 +32,7 @@ switch ($this->mode) {
             echo'<strong>' . htmlspecialchars($_SESSION['password']) . '</strong>';
         } else {
             for ($i = 0; $i < strlen($_SESSION['password']); ++$i) echo'*';
-            echo'<br /><small><a href="registration.php?pass' . (isset($_GET['auto']) ? '&amp;auto' : '') . '">' . Vars::$LNG['show_password'] . '</a></small>';
+            echo'<br /><small><a href="index.php?act=registration&amp;pass' . (isset($_GET['auto']) ? '&amp;auto' : '') . '">' . Vars::$LNG['show_password'] . '</a></small>';
         }
 
         // Показываем ссылку на Автологин
@@ -40,7 +40,7 @@ switch ($this->mode) {
             echo'</p><p>' . Vars::$LNG['autologin_link'] .
                 '<br /><input type="text" value="' . Vars::$SYSTEM_SET['homeurl'] . '/login.php?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) . '"/>';
         } else {
-            echo'<br /><small><a href="registration.php?auto' . (isset($_GET['pass']) ? '&amp;pass' : '') . '">' . Vars::$LNG['show_autologin_link'] . '</a></small>';
+            echo'<br /><small><a href="index.php?act=registration&amp;auto' . (isset($_GET['pass']) ? '&amp;pass' : '') . '">' . Vars::$LNG['show_autologin_link'] . '</a></small>';
         }
         echo '</p></div>';
 
@@ -63,7 +63,7 @@ switch ($this->mode) {
         // Показываем ошибки (если есть)
         if (isset($_POST['submit']) && !empty($this->login->error)) echo'<div class="rmenu"><p>' . Vars::$LNG['errors_occurred'] . '</p></div>';
 
-        echo'<form action="registration.php" method="post">' .
+        echo'<form action="index.php?act=registration" method="post">' .
             '<div class="gmenu">' .
 
             // Логин

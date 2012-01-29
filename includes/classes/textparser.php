@@ -29,7 +29,7 @@ class TextParser
     Удаление bbCode из текста
     -----------------------------------------------------------------
     */
-    static function noTags($var = '')
+    public static function noTags($var = '')
     {
         $var = preg_replace('#\[color=(.+?)\](.+?)\[/color]#si', '$2', $var);
         $var = preg_replace('!\[bg=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)](.+?)\[/bg]!is', '$2', $var);
