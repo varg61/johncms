@@ -85,33 +85,122 @@ class TextParser
 
     /*
     -----------------------------------------------------------------
-    Обработка URL
+    Парсинг ссылок
+    За основу взята доработанная функция от форума phpBB 3
     -----------------------------------------------------------------
     */
-    public static function highlightUrl($var)
+    public static function highlightUrl($text)
     {
-        if (!function_exists('process_url')) {
-            function process_url($url)
+        if (!function_exists('url_callback')) {
+            function url_callback($type, $whitespace, $url, $relative_url)
             {
-                if (!isset($url[3])) {
-                    $tmp = parse_url($url[1]);
-                    if ('http://' . $tmp['host'] == Vars::$SYSTEM_SET['homeurl'] || isset(Vars::$USER_SET['direct_url']) && Vars::$USER_SET['direct_url']) {
-                        return '<a href="' . $url[1] . '">' . $url[2] . '</a>';
-                    } else {
-                        return '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/go.php?url=' . base64_encode($url[1]) . '">' . $url[2] . '</a>';
-                    }
-                } else {
-                    $tmp = parse_url($url[3]);
-                    $url[3] = str_replace(':', '&#58;', $url[3]);
-                    if ('http://' . $tmp['host'] == Vars::$SYSTEM_SET['homeurl'] || isset(Vars::$USER_SET['direct_url']) && Vars::$USER_SET['direct_url']) {
-                        return '<a href="' . $url[3] . '">' . $url[3] . '</a>';
-                    } else {
-                        return '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/go.php?url=' . base64_encode($url[3]) . '">' . $url[3] . '</a>';
+                $orig_url = $url;
+                $orig_relative = $relative_url;
+                $url = htmlspecialchars_decode($url);
+                $relative_url = htmlspecialchars_decode($relative_url);
+                $text = '';
+                $chars = array('<', '>', '"');
+                $split = false;
+                foreach ($chars as $char) {
+                    $next_split = strpos($url, $char);
+                    if ($next_split !== false) {
+                        $split = ($split !== false) ? min($split, $next_split) : $next_split;
                     }
                 }
+                if ($split !== false) {
+                    $url = substr($url, 0, $split);
+                    $relative_url = '';
+                } else if ($relative_url) {
+                    $split = false;
+                    foreach ($chars as $char) {
+                        $next_split = strpos($relative_url, $char);
+                        if ($next_split !== false) {
+                            $split = ($split !== false) ? min($split, $next_split) : $next_split;
+                        }
+                    }
+                    if ($split !== false) {
+                        $relative_url = substr($relative_url, 0, $split);
+                    }
+                }
+                $last_char = ($relative_url) ? $relative_url[strlen($relative_url) - 1] : $url[strlen($url) - 1];
+                switch ($last_char)
+                {
+                    case '.':
+                    case '?':
+                    case '!':
+                    case ':':
+                    case ',':
+                        $append = $last_char;
+                        if ($relative_url) $relative_url = substr($relative_url, 0, -1);
+                        else $url = substr($url, 0, -1);
+                        break;
+
+                    default:
+                        $append = '';
+                        break;
+                }
+                $short_url = (mb_strlen($url) > 40) ? mb_substr($url, 0, 30) . ' ... ' . mb_substr($url, -5) : $url;
+                switch ($type)
+                {
+                    case 1:
+                        $relative_url = preg_replace('/[&?]sid=[0-9a-f]{32}$/', '', preg_replace('/([&?])sid=[0-9a-f]{32}&/', '$1', $relative_url));
+                        $url = $url . '/' . $relative_url;
+                        $text = $relative_url;
+                        if (!$relative_url) {
+                            return $whitespace . $orig_url . '/' . $orig_relative;
+                        }
+                        break;
+
+                    case 2:
+                        $text = $short_url;
+                        if (!isset(Vars::$USER_SET['direct_url']) || !Vars::$USER_SET['direct_url']) {
+                            $url = Vars::$HOME_URL . '/go.php?url=' . rawurlencode($url);
+                        }
+                        break;
+
+                    case 3:
+                        $url = 'http://' . $url;
+                        $text = $short_url;
+                        if (!isset(Vars::$USER_SET['direct_url']) || !Vars::$USER_SET['direct_url']) {
+                            $url = Vars::$HOME_URL . '/go.php?url=' . rawurlencode($url);
+                        }
+                        break;
+
+                    case 4:
+                        $text = $short_url;
+                        $url = 'mailto:' . $url;
+                        break;
+                }
+                $url = htmlspecialchars($url);
+                $text = htmlspecialchars($text);
+                $append = htmlspecialchars($append);
+                return $whitespace . '<a href="' . $url . '">' . $text . '</a>' . $append;
             }
         }
-        return preg_replace_callback('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'process_url', $var);
+
+        static $url_match;
+        static $url_replace;
+
+        if (!is_array($url_match)) {
+            $url_match = $url_replace = array();
+
+            // Обработка внутренние ссылки
+            $url_match[] = '#(^|[\n\t (>.])(' . preg_quote(Vars::$HOME_URL, '#') . ')/((?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})*(?:/(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})*)*(?:\?(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?(?:\#(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?)#ieu';
+            $url_replace[] = "url_callback(1, '\$1', '\$2', '\$3')";
+
+            // Обработка обычных ссылок типа xxxx://aaaaa.bbb.cccc. ...
+            $url_match[] = '#(^|[\n\t (>.])([a-z][a-z\d+]*:/{2}(?:(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})+|[0-9.]+|\[[a-zа-яё0-9.]+:[a-zа-яё0-9.]+:[a-zа-яё0-9.:]+\])(?::\d*)?(?:/(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})*)*(?:\?(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?(?:\#(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?)#ieu';
+            $url_replace[] = "url_callback(2, '\$1', '\$2', '')";
+
+            // Обработка сокращенных ссылок, без указания протокола "www.xxxx.yyyy[/zzzz]"
+            $url_match[] = '#(^|[\n\t (>])(www\.(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})+(?::\d*)?(?:/(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})*)*(?:\?(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?(?:\#(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?)#ieu';
+            $url_replace[] = "url_callback(3, '\$1', '\$2', '')";
+
+            // Обработка адресов E-mail
+            $url_match[] = '/(^|[\n\t (>])(([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*(?:[\w\!\#$\%\'\*\+\-\/\=\?\^\`{\|\}\~]|&amp;)+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?))/ie';
+            $url_replace[] = "url_callback(4, '\$1', '\$2', '')";
+        }
+        return preg_replace($url_match, $url_replace, $text);
     }
 
     /*

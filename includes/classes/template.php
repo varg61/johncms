@@ -43,6 +43,9 @@ class Template extends Vars
 
     public function __get($name)
     {
+        if(!isset($this->vars[$name])){
+            return false;
+        }
         return $this->vars[$name];
     }
 

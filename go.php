@@ -14,7 +14,7 @@ define('_IN_JOHNCMS', 1);
 require_once('includes/core.php');
 
 $referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$SYSTEM_SET['homeurl'];
-$url = isset($_REQUEST['url']) ? strip_tags(html_entity_decode(base64_decode(trim($_REQUEST['url'])))) : false;
+$url = isset($_REQUEST['url']) ? strip_tags(rawurldecode(trim($_REQUEST['url']))) : false;
 
 if (isset($_GET['lng'])) {
     /*
@@ -45,12 +45,12 @@ if (isset($_GET['lng'])) {
     if (isset($_POST['submit'])) {
         header('Location: ' . $url);
     } else {
-        echo'<div class="phdr"><b>' . Vars::$LNG['external_link'] . '</b></div>' .
+        echo '<div class="phdr"><b>' . Vars::$LNG['external_link'] . '</b></div>' .
             '<div class="rmenu">' .
-            '<form action="go.php?url=' . base64_encode($url) . '" method="post">' .
-            '<p>' . Vars::$LNG['redirect_1'] . ':<br /><span class="red">' . Validate::filterString($url) . '</span></p>' .
+            '<form action="go.php?url=' . rawurlencode($url) . '" method="post">' .
+            '<p>' . Vars::$LNG['redirect_1'] . ':<br /><span class="red">' . htmlspecialchars($url) . '</span></p>' .
             '<p>' . Vars::$LNG['redirect_2'] . '.<br />' .
-            Vars::$LNG['redirect_3'] . ' <span class="green">' . Vars::$SYSTEM_SET['homeurl'] . '</span> ' . Vars::$LNG['redirect_4'] . '.</p>' .
+            Vars::$LNG['redirect_3'] . ' <span class="green">' . Vars::$HOME_URL . '</span> ' . Vars::$LNG['redirect_4'] . '.</p>' .
             '<p><input type="submit" name="submit" value="' . Vars::$LNG['redirect_5'] . '" /></p>' .
             '</form></div>' .
             '<div class="phdr"><a href="' . $referer . '">' . Vars::$LNG['back'] . '</a></div>';

@@ -50,8 +50,8 @@ switch ($this->mode) {
         -----------------------------------------------------------------
         */
         echo'<div class="rmenu"><p><h3>Не забудьте заполнить свою Анкету</h3></p></div>' .
-            '<div class="menu">' . Profile::edit('registration.php') . '</div>';
-        echo '<div class="phdr"><p><small>Дополнительная информация не обязательна, форма заполняется по желанию</small></p></div>';
+            '<div class="menu">' . Profile::edit('registration.php') . '</div>' .
+            '<div class="phdr"><p><small>Дополнительная информация не обязательна, форма заполняется по желанию</small></p></div>';
         break;
 
     case 'step1':
