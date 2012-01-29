@@ -17,7 +17,7 @@ require_once('../includes/core.php');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 1) {
-    header('Location: http://mobicms.org/404.php');
+    header('Location: http://johncms.com/404.php');
     exit;
 }
 

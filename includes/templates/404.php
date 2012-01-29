@@ -1,0 +1,1 @@
+<?= Functions::displayError(Vars::$LNG['error_404']) ?>

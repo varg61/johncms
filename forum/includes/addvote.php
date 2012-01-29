@@ -59,5 +59,5 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         echo '<a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a>';
     }
 } else {
-    header('location: ../index.php?err');
+    header('location: ../404.php');
 }

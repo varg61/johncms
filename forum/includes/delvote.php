@@ -28,5 +28,5 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         $_SESSION['prd'] = htmlspecialchars(getenv("HTTP_REFERER"));
     }
 } else {
-    header('location: ../index.php?err');
+    header('location: ../404.php');
 }

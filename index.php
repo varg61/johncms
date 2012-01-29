@@ -20,16 +20,12 @@ if (isset($_GET['err']))
     Vars::$ACT = 404;
 
 switch (Vars::$ACT) {
-    case '404':
+    case 'registration':
         /*
         -----------------------------------------------------------------
-        Сообщение об ошибке 404
+        Регистрация новых пользователей
         -----------------------------------------------------------------
         */
-        echo Functions::displayError(Vars::$LNG['error_404']);
-        break;
-
-    case 'registration':
         $reg_data['login'] = isset($_POST['login']) ? trim($_POST['login']) : '';
         $reg_data['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
         $reg_data['password_confirm'] = isset($_POST['password_confirm']) ? trim($_POST['password_confirm']) : '';
