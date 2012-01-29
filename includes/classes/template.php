@@ -13,6 +13,7 @@ class Template extends Vars
 {
     public $vars = array();
     public $template = '_default';
+    public $extract = false;
     private static $instance;
 
     private function __construct()
@@ -40,9 +41,16 @@ class Template extends Vars
         $this->vars[$name] = $value;
     }
 
+    public function __get($name)
+    {
+        return $this->vars[$name];
+    }
+
     public function includeTpl($tpl = null)
     {
-        extract($this->vars);
+        if ($this->extract) {
+            extract($this->vars);
+        }
         ob_start();
         // Загружаем шаблоны
         $system_template = SYSPATH . 'templates' . DIRECTORY_SEPARATOR . $tpl . '.php';

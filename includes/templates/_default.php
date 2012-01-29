@@ -48,7 +48,7 @@ $this->httpHeaders()
 
 <div class="maintxt">
     <!-- Выводим основное содержимое -->
-    <?= $contents ?>
+    <?= $this->contents ?>
 </div>
 
 <div class="fmenu">
