@@ -9,11 +9,9 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/core.php');
 $lng_gal = Vars::loadLanguage('gallery');
-$textl = Vars::$LNG['gallery'];
 
 // Ограничиваем доступ к Галерее
 $error = '';
