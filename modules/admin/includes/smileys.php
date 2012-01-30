@@ -21,7 +21,7 @@ foreach (glob($rootpath . 'images/smileys/simply/*') as $var) {
     $file = basename($var);
     $name = explode(".", $file);
     if (in_array($name[1], $ext)) {
-        $smileys['usr'][':' . $name[0]] = '<img src="' . Vars::$SYSTEM_SET['homeurl'] . '/images/smileys/simply/' . $file . '" alt="" />';
+        $smileys['usr'][':' . $name[0]] = '<img src="' . Vars::$HOME_URL . '/images/smileys/simply/' . $file . '" alt="" />';
     }
 }
 
@@ -30,8 +30,8 @@ foreach (glob($rootpath . 'images/smileys/admin/*') as $var) {
     $file = basename($var);
     $name = explode(".", $file);
     if (in_array($name[1], $ext)) {
-        $smileys['adm'][':' . Functions::translit($name[0]) . ':'] = '<img src="' . Vars::$SYSTEM_SET['homeurl'] . '/images/smileys/admin/' . $file . '" alt="" />';
-        $smileys['adm'][':' . $name[0] . ':'] = '<img src="' . Vars::$SYSTEM_SET['homeurl'] . '/images/smileys/admin/' . $file . '" alt="" />';
+        $smileys['adm'][':' . Functions::translit($name[0]) . ':'] = '<img src="' . Vars::$HOME_URL . '/images/smileys/admin/' . $file . '" alt="" />';
+        $smileys['adm'][':' . $name[0] . ':'] = '<img src="' . Vars::$HOME_URL . '/images/smileys/admin/' . $file . '" alt="" />';
     }
 }
 
@@ -40,7 +40,7 @@ foreach (glob($rootpath . 'images/smileys/user/*/*') as $var) {
     $file = basename($var);
     $name = explode(".", $file);
     if (in_array($name[1], $ext)) {
-        $path = str_replace('..', Vars::$SYSTEM_SET['homeurl'], dirname($var));
+        $path = str_replace('..', Vars::$HOME_URL, dirname($var));
         $smileys['usr'][':' . Functions::translit($name[0]) . ':'] = '<img src="' . $path . '/' . $file . '" alt="" />';
         $smileys['usr'][':' . $name[0] . ':'] = '<img src="' . $path . '/' . $file . '" alt="" />';
     }

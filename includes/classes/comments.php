@@ -104,7 +104,7 @@ class Comments
                                 echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $this->item . '">' . Vars::$LNG['back'] . '</a>');
                             }
                         } else {
-                            $text = '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>' .
+                            $text = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>' .
                                     ' (' . Functions::displayDate($res['time']) . ')<br />' .
                                     Validate::filterString($res['text']);
                             $reply = Validate::filterString($res['reply']);
@@ -152,7 +152,7 @@ class Comments
                                 echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $this->item . '">' . Vars::$LNG['back'] . '</a>');
                             }
                         } else {
-                            $author = '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
+                            $author = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
                             $author .= ' (' . Functions::displayDate($res['time']) . ')<br />';
                             $text = Validate::filterString($res['text']);
                             echo $this->_messageForm('&amp;mod=edit&amp;item=' . $this->item, $author, $text);
@@ -279,7 +279,7 @@ class Comments
                             if (Vars::$USER_SET['smileys'])
                                 $reply = Functions::smileys($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
                             $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><small>' .
-                                     '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/users/profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
+                                     '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
                                      ' (' . Functions::displayDate($attributes['reply_time']) . ')</small><br/>' . $reply . '</div>';
                         }
                         $user_arg = array(

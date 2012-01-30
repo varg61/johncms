@@ -46,7 +46,7 @@ echo '<form action="index.php?act=settings" method="post"><div class="menu">';
 // Общие настройки
 echo '<p>' .
      '<h3>' . $lng['common_settings'] . '</h3>' .
-     $lng['site_url'] . ':<br/>' . '<input type="text" name="homeurl" value="' . htmlentities(Vars::$SYSTEM_SET['homeurl']) . '"/><br/>' .
+     $lng['site_url'] . ':<br/>' . '<input type="text" name="homeurl" value="' . htmlentities(Vars::$HOME_URL) . '"/><br/>' .
      $lng['site_copyright'] . ':<br/>' . '<input type="text" name="copyright" value="' . htmlentities(Vars::$SYSTEM_SET['copyright'], ENT_QUOTES, 'UTF-8') . '"/><br/>' .
      $lng['site_email'] . ':<br/>' . '<input name="madm" maxlength="50" value="' . htmlentities(Vars::$SYSTEM_SET['email']) . '"/><br />' .
      $lng['file_maxsize'] . ' (kb):<br />' . '<input type="text" name="flsz" value="' . intval(Vars::$SYSTEM_SET['flsz']) . '"/><br />' .

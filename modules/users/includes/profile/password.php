@@ -63,7 +63,7 @@ switch (Vars::$MOD) {
             if ($autologin) {
                 // Показываем ссылку на Автологин
                 echo '<p>' . $lng_pass['autologin_link'] . ':<br />' .
-                     '<input type="text" value="' . Vars::$SYSTEM_SET['homeurl'] . '/login.php?id=' . $user['user_id'] . '&amp;p=' . $newpass . '" /></p>' .
+                     '<input type="text" value="' . Vars::$HOME_URL . '/login.php?id=' . $user['user_id'] . '&amp;p=' . $newpass . '" /></p>' .
                      '<p>' . $lng_pass['autologin_warning'] . '</p>';
             }
             echo '</div>';

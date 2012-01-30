@@ -16,7 +16,7 @@ header('content-type: application/rss+xml');
 echo '<?xml version="1.0" encoding="utf-8"?>' .
      '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel>' .
      '<title>' . htmlspecialchars(Vars::$SYSTEM_SET['copyright']) . ' | News</title>' .
-     '<link>' . Vars::$SYSTEM_SET['homeurl'] . '</link>' .
+     '<link>' . Vars::$HOME_URL . '</link>' .
      '<description>News</description>' .
      '<language>ru-RU</language>' .
      '<webMaster>' . Vars::$SYSTEM_SET['email'] . '</webMaster> ';
@@ -27,7 +27,7 @@ if (mysql_num_rows($req) > 0) {
     while ($res = mysql_fetch_assoc($req)) {
         echo '<item>' .
              '<title>News: ' . $res['name'] . '</title>' .
-             '<link>' . Vars::$SYSTEM_SET['homeurl'] . '/news/index.php</link>' .
+             '<link>' . Vars::$HOME_URL . '/news/index.php</link>' .
              '<author>' . $res['avt'] . '</author>' .
              '<description>' . $res['text'] . '</description>' .
              '<pubDate>' . date('r', $res['time']) .
@@ -42,7 +42,7 @@ if (mysql_num_rows($req) > 0) {
     while ($res = mysql_fetch_array($req)) {
         echo '<item>' .
              '<title>Library: ' . $res['name'] . '</title>' .
-             '<link>' . Vars::$SYSTEM_SET['homeurl'] . '/library/index.php?id=' . $res['id'] . '</link>' .
+             '<link>' . Vars::$HOME_URL . '/library/index.php?id=' . $res['id'] . '</link>' .
              '<author>' . $res['avtor'] . '</author>' .
              '<description>' . $res['announce'] .
              '</description>' .

@@ -45,7 +45,7 @@ if (!$error) {
         mysql_query("UPDATE `cms_album_files` SET `downloads` = '$downloads' WHERE `id` = '$img'");
     }
     // Отдаем файл
-    header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/files/users/album/' . $res['user_id'] . '/' . $res['img_name']);
+    header('location: ' . Vars::$HOME_URL . '/files/users/album/' . $res['user_id'] . '/' . $res['img_name']);
 } else {
     echo Functions::displayError($error, '<a href="album.php">' . Vars::$LNG['back'] . '</a>');
 }

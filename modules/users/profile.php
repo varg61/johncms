@@ -71,7 +71,7 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
     if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $user['rights']))
         $menu[] = '<a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['edit'] . '</a>';
     if ($user['user_id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights'])
-        $menu[] = '<a href="' . Vars::$SYSTEM_SET['homeurl'] . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=usr_del&amp;id=' . $user['user_id'] . '">' . Vars::$LNG['delete'] . '</a>';
+        $menu[] = '<a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=usr_del&amp;id=' . $user['user_id'] . '">' . Vars::$LNG['delete'] . '</a>';
     if ($user['user_id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $user['rights'])
         $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['ban_do'] . '</a>';
     if (!empty($menu))

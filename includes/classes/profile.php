@@ -27,7 +27,7 @@ class Profile
         $out .= '<p><h3>Выберите Аватар</h3>' .
             '<table cellpadding="0" cellspacing="0"><tr>' .
             '<td width="40">';
-        if (file_exists(($rootpath . $file))) $out .= '<img src="' . Vars::$SYSTEM_SET['homeurl'] . '/' . $file . '" width="32" height="32" alt="" />';
+        if (file_exists(($rootpath . $file))) $out .= '<img src="' . Vars::$HOME_URL . '/' . $file . '" width="32" height="32" alt="" />';
         else $out .= Functions::getImage('empty.png');
         $out .= '</td><td><small>' .
             '<a href="../pages/avatars.php">' . Vars::$LNG['select'] . '</a><br />' .

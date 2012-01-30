@@ -284,12 +284,12 @@ class TextParser
         if (($smileys = Vars::getUserData('smileys')) === false) $smileys = array();
         if (!empty($smileys)) {
             $res_sm = '';
-            $bb_smileys = '<small><a href="' . Vars::$SYSTEM_SET['homeurl'] . '/pages/smileys.php?act=my_smileys">' . Vars::$LNG['edit_list'] . '</a></small><br />';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/pages/smileys.php?act=my_smileys">' . Vars::$LNG['edit_list'] . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
             $bb_smileys .= Functions::smileys($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . Vars::$SYSTEM_SET['homeurl'] . '/pages/smileys.php">' . Vars::$LNG['add_smileys'] . '</a></small>';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/pages/smileys.php">' . Vars::$LNG['add_smileys'] . '</a></small>';
         }
         $out = '<style>' . "\n" .
                '.bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}' . "\n" .

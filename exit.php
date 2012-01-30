@@ -12,7 +12,7 @@
 define('_IN_JOHNCMS', 1);
 
 require_once('includes/core.php');
-$referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$SYSTEM_SET['homeurl'];
+$referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
 
 if (isset($_POST['submit'])) {
     $login = new Login;

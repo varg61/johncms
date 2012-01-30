@@ -144,7 +144,7 @@ switch (Vars::$MOD) {
                 if (isset($_GET['fid'])) {
                     // Если бан из форума, фиксируем ID поста
                     $fid = intval($_GET['fid']);
-                    echo '&#160;' . $lng_ban['infringement'] . ' <a href="' . Vars::$SYSTEM_SET['homeurl'] . '/forum/index.php?act=post&amp;id=' . $fid . '">' . $lng_ban['in_forum'] . '</a><br />' .
+                    echo '&#160;' . $lng_ban['infringement'] . ' <a href="' . Vars::$HOME_URL . '/forum/index.php?act=post&amp;id=' . $fid . '">' . $lng_ban['in_forum'] . '</a><br />' .
                          '<input type="hidden" value="' . $fid . '" name="banref" />';
                 }
                 echo '&#160;<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="reason"></textarea>' .

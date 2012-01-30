@@ -60,8 +60,8 @@ switch (Vars::$ACT) {
         if (!$error) {
             // Высылаем инструкции на E-mail
             $subject = $lng_pass['password_restore'];
-            $mail = $lng_pass['restore_help1'] . ', ' . $res['nickname'] . "\r\n" . $lng_pass['restore_help2'] . ' ' . Vars::$SYSTEM_SET['homeurl'] . "\r\n";
-            $mail .= $lng_pass['restore_help3'] . ": \r\n" . Vars::$SYSTEM_SET['homeurl'] . "/users/skl.php?act=set&id=" . $res['id'] . "&code=" . $check_code . "\n\n";
+            $mail = $lng_pass['restore_help1'] . ', ' . $res['nickname'] . "\r\n" . $lng_pass['restore_help2'] . ' ' . Vars::$HOME_URL . "\r\n";
+            $mail .= $lng_pass['restore_help3'] . ": \r\n" . Vars::$HOME_URL . "/users/skl.php?act=set&id=" . $res['id'] . "&code=" . $check_code . "\n\n";
             $mail .= $lng_pass['restore_help4'] . "\r\n";
             $mail .= $lng_pass['restore_help5'];
             $adds = "From: <" . Vars::$SYSTEM_SET['email'] . ">\r\n";
@@ -105,7 +105,7 @@ switch (Vars::$ACT) {
             // Высылаем пароль на E-mail
             $pass = passgen(4);
             $subject = $lng_pass['your_new_password'];
-            $mail = $lng_pass['restore_help1'] . ', ' . $res['nickname'] . "\r\n" . $lng_pass['restore_help8'] . ' ' . Vars::$SYSTEM_SET['homeurl'] . "\r\n";
+            $mail = $lng_pass['restore_help1'] . ', ' . $res['nickname'] . "\r\n" . $lng_pass['restore_help8'] . ' ' . Vars::$HOME_URL . "\r\n";
             $mail .= $lng_pass['your_new_password'] . ": $pass\r\n";
             $mail .= $lng_pass['restore_help7'];
             $adds = "From: <" . Vars::$SYSTEM_SET['email'] . ">\n";

@@ -113,7 +113,7 @@ class System extends Vars
         if (isset($set['lng']) && !empty($set['lng'])) parent::$LNG_ISO = $set['lng'];
         if (isset($set['lng_list'])) parent::$LNG_LIST = unserialize($set['lng_list']);
         parent::$SYSTEM_SET = $set;
-        parent::$HOME_URL = 'http://' . $_SERVER['SERVER_NAME'] . '/' . trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
+        parent::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . '/' . trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
     }
 
     /*

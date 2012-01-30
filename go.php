@@ -13,7 +13,7 @@ define('_IN_JOHNCMS', 1);
 
 require_once('includes/core.php');
 
-$referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$SYSTEM_SET['homeurl'];
+$referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
 $url = isset($_REQUEST['url']) ? strip_tags(rawurldecode(trim($_REQUEST['url']))) : false;
 
 if (isset($_GET['lng'])) {
@@ -79,31 +79,31 @@ if (isset($_GET['lng'])) {
     $adres = trim($_POST['adres']);
     switch ($adres) {
         case 'forum':
-            header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/forum/index.php');
+            header('location: ' . Vars::$HOME_URL . '/forum/index.php');
             break;
 
         case 'lib':
-            header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/library/index.php');
+            header('location: ' . Vars::$HOME_URL . '/library/index.php');
             break;
 
         case 'down':
-            header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/download/index.php');
+            header('location: ' . Vars::$HOME_URL . '/download/index.php');
             break;
 
         case 'gallery':
-            header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/gallery/index.php');
+            header('location: ' . Vars::$HOME_URL . '/gallery/index.php');
             break;
 
         case 'news':
-            header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/news/index.php');
+            header('location: ' . Vars::$HOME_URL . '/news/index.php');
             break;
 
         case 'guest':
-            header('location: ' . Vars::$SYSTEM_SET['homeurl'] . '/guestbook/index.php');
+            header('location: ' . Vars::$HOME_URL . '/guestbook/index.php');
             break;
 
         default :
-            header('location: http://mobicms.net');
+            header('location: http://johncms.com');
             break;
     }
 }

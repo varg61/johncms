@@ -38,7 +38,7 @@ switch ($this->mode) {
         // Показываем ссылку на Автологин
         if (isset($_GET['auto'])) {
             echo'</p><p>' . Vars::$LNG['autologin_link'] .
-                '<br /><input type="text" value="' . Vars::$SYSTEM_SET['homeurl'] . '/login.php?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) . '"/>';
+                '<br /><input type="text" value="' . Vars::$HOME_URL . '/login.php?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) . '"/>';
         } else {
             echo'<br /><small><a href="index.php?act=registration&amp;auto' . (isset($_GET['pass']) ? '&amp;pass' : '') . '">' . Vars::$LNG['show_autologin_link'] . '</a></small>';
         }

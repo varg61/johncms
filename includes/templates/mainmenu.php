@@ -43,7 +43,7 @@ if (Vars::$SYSTEM_SET['mod_lib'] || Vars::$USER_RIGHTS >= 7) {
     echo'<div class="menu"><a href="library/">' . Vars::$LNG['library'] . '</a> (' .
         $this->count->library .
         ($this->count->library_new ? '&#160;/&#160;<span class="red">+' . $this->count->library_new . '</span>' : '') .
-        ($this->count->library_mod ? '&#160;/&#160;<span class="red"><a href="' . Vars::$SYSTEM_SET['homeurl'] . '/library/index.php?act=moder">mod:' . $this->count->library_mod . '</a></span>' : '') .
+        ($this->count->library_mod ? '&#160;/&#160;<span class="red"><a href="' . Vars::$HOME_URL . '/library/index.php?act=moder">mod:' . $this->count->library_mod . '</a></span>' : '') .
         ')</div>';
 }
 

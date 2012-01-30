@@ -27,7 +27,7 @@ if (Vars::$USER_ID) {
         flock($files, LOCK_EX);
         $book_name = iconv('UTF-8', 'windows-1251', $res['name']);
         $book_text = iconv('UTF-8', 'windows-1251', $res['text']);
-        $result = "\r\n" . $book_name . "\r\n\r\n----------\r\n\r\n" . $book_text . "\r\n\r\nDownloaded from " . Vars::$SYSTEM_SET['homeurl'];
+        $result = "\r\n" . $book_name . "\r\n\r\n----------\r\n\r\n" . $book_text . "\r\n\r\nDownloaded from " . Vars::$HOME_URL;
         fputs($files, $result);
         flock($files, LOCK_UN);
         fclose($files);
@@ -74,7 +74,7 @@ MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
-MIDlet-Jar-URL: ' . Vars::$SYSTEM_SET['homeurl'] . '/library/files/' . Vars::$ID . '.jar';
+MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/library/files/' . Vars::$ID . '.jar';
         $files = fopen('../files/library/' . Vars::$ID . '.jad', 'w+');
         flock($files, LOCK_EX);
         fputs($files, $jad_text);
