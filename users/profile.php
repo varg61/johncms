@@ -50,7 +50,6 @@ $array = array (
     'ip' => 'includes/profile',
     'guestbook' => 'includes/profile',
     'karma' => 'includes/profile',
-    'office' => 'includes/profile',
     'password' => 'includes/profile',
     'reset' => 'includes/profile',
     'settings' => 'includes/profile',

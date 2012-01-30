@@ -7,13 +7,13 @@
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
+ *
+ * Главное меню сайта
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('../includes/core.php');
 $lng_smileys = Vars::loadLanguage('smileys');
-$textl = 'FAQ';
 
 // Сколько смайлов разрешено выбрать пользователям?
 $user_smileys = 20;
@@ -30,22 +30,22 @@ switch (Vars::$ACT) {
         Каталог пользовательских Смайлов
         -----------------------------------------------------------------
         */
-        $dir = glob($rootpath . 'images/smileys/user/*', GLOB_ONLYDIR);
+        $dir = glob(ROOTPATH . 'images/smileys/user/*', GLOB_ONLYDIR);
         foreach ($dir as $val) $cat[] = array_pop(explode('/', $val));
         $cat = isset($_GET['cat']) && in_array(trim($_GET['cat']), $cat) ? trim($_GET['cat']) : $cat[0];
-        $smileys = glob($rootpath . 'images/smileys/user/' . $cat . '/*.{gif,jpg,png}', GLOB_BRACE);
+        $smileys = glob(ROOTPATH . 'images/smileys/user/' . $cat . '/*.{gif,jpg,png}', GLOB_BRACE);
         $total = count($smileys);
         $end = Vars::$START + Vars::$USER_SET['page_size'];
         if ($end > $total) $end = $total;
         echo '<div class="phdr"><a href="smileys.php"><b>' . Vars::$LNG['smileys'] . '</b></a> | ' .
-             (array_key_exists($cat, $lng_smileys) ? $lng_smileys[$cat] : ucfirst(htmlspecialchars($cat))) .
-             '</div>';
+            (array_key_exists($cat, $lng_smileys) ? $lng_smileys[$cat] : ucfirst(htmlspecialchars($cat))) .
+            '</div>';
         if ($total) {
             if (!Vars::$IS_MOBILE) {
                 if (($user_sm = Vars::getUserData('smileys')) === false) $user_sm = array();
                 echo '<div class="topmenu">' .
-                     '<a href="smileys.php?act=my_smileys">' . Vars::$LNG['my_smileys'] . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')</div>' .
-                     '<form action="smileys.php?act=set_my_sm&amp;cat=' . $cat . '&amp;start=' . Vars::$START . '" method="post">';
+                    '<a href="smileys.php?act=my_smileys">' . Vars::$LNG['my_smileys'] . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')</div>' .
+                    '<form action="smileys.php?act=set_my_sm&amp;cat=' . $cat . '&amp;start=' . Vars::$START . '" method="post">';
             }
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('smileys.php?act=smusr&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             for ($i = Vars::$START; $i < $end; $i++) {
@@ -53,7 +53,7 @@ switch (Vars::$ACT) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (!Vars::$IS_MOBILE) echo (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
                 echo '<img src="../images/smileys/user/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . Vars::$LNG['lng_or'] . ' :' . Functions::translit($smile) . ':' .
-                     '</div>';
+                    '</div>';
             }
             if (!Vars::$IS_MOBILE) echo '<div class="gmenu"><input type="submit" name="add" value=" ' . Vars::$LNG['add'] . ' "/></div></form>';
         } else {
@@ -62,9 +62,9 @@ switch (Vars::$ACT) {
         echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
             echo '<div class="topmenu">' . Functions::displayPagination('smileys.php?act=smusr&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                 '<p><form action="smileys.php?act=smusr&amp;cat=' . urlencode($cat) . '" method="post">' .
-                 '<input type="text" name="page" size="2"/>' .
-                 '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
+                '<p><form action="smileys.php?act=smusr&amp;cat=' . urlencode($cat) . '" method="post">' .
+                '<input type="text" name="page" size="2"/>' .
+                '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></p>';
         break;
@@ -83,7 +83,7 @@ switch (Vars::$ACT) {
         if (!Vars::$IS_MOBILE) {
             if (($user_sm = Vars::getUserData('smileys')) === false) $user_sm = array();
             echo '<div class="topmenu"><a href="smileys.php?act=my_smileys">' . Vars::$LNG['my_smileys'] . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')</div>' .
-                 '<form action="smileys.php?act=set_my_sm&amp;start=' . Vars::$START . '&amp;adm" method="post">';
+                '<form action="smileys.php?act=set_my_sm&amp;start=' . Vars::$START . '&amp;adm" method="post">';
         }
         $array = array();
         $dir = opendir('../images/smileys/admin');
@@ -103,7 +103,7 @@ switch (Vars::$ACT) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 if (!Vars::$IS_MOBILE)
                     $smileys = (in_array($smile, $user_sm) ? ''
-                            : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
+                        : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
                 echo $smileys . '<img src="../images/smileys/admin/' . $array[$i] . '" alt="" /> - :' . $smile . ': ' . Vars::$LNG['lng_or'] . ' :' . Functions::translit($smile) . ':</div>';
             }
         } else {
@@ -114,9 +114,9 @@ switch (Vars::$ACT) {
         echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
             echo '<div class="topmenu">' . Functions::displayPagination('smileys.php?act=smadm&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                 '<p><form action="smileys.php?act=smadm" method="post">' .
-                 '<input type="text" name="page" size="2"/>' .
-                 '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
+                '<p><form action="smileys.php?act=smadm" method="post">' .
+                '<input type="text" name="page" size="2"/>' .
+                '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
         }
         echo '<p><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></p>';
         break;
@@ -152,8 +152,8 @@ switch (Vars::$ACT) {
         foreach ($smileys as $value) {
             $smile = ':' . $value . ':';
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                 '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;' .
-                 Functions::smileys($smile, Vars::$USER_RIGHTS >= 1 ? 1 : 0) . '&#160;' . $smile . ' ' . Vars::$LNG['lng_or'] . ' ' . Functions::translit($smile) . '</div>';
+                '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;' .
+                Functions::smileys($smile, Vars::$USER_RIGHTS >= 1 ? 1 : 0) . '&#160;' . $smile . ' ' . Vars::$LNG['lng_or'] . ' ' . Functions::translit($smile) . '</div>';
             $i++;
         }
         if ($total) {
@@ -165,7 +165,7 @@ switch (Vars::$ACT) {
         if ($total > Vars::$USER_SET['page_size'])
             echo '<div class="topmenu">' . Functions::displayPagination('smileys.php?act=my_smileys&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         echo '<p>' . ($total ? '<a href="smileys.php?act=set_my_sm&amp;clean">' . Vars::$LNG['clear'] . '</a><br />'
-                : '') . '<a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></p>';
+            : '') . '<a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></p>';
         break;
 
     case 'set_my_sm':
@@ -218,8 +218,8 @@ switch (Vars::$ACT) {
             echo '<div class="topmenu"><a href="smileys.php?act=my_smileys">' . Vars::$LNG['my_smileys'] . '</a> (' . $mycount . ' / ' . $user_smileys . ')</div>';
         }
         if (Vars::$USER_RIGHTS >= 1)
-            echo '<div class="gmenu"><a href="smileys.php?act=smadm">' . Vars::$LNG['admin_smileys'] . '</a> (' . count(glob($rootpath . 'images/smileys/admin/*.gif')) . ')</div>';
-        $dir = glob($rootpath . 'images/smileys/user/*', GLOB_ONLYDIR);
+            echo '<div class="gmenu"><a href="smileys.php?act=smadm">' . Vars::$LNG['admin_smileys'] . '</a> (' . count(glob(ROOTPATH . 'images/smileys/admin/*.gif')) . ')</div>';
+        $dir = glob(ROOTPATH . 'images/smileys/user/*', GLOB_ONLYDIR);
         foreach ($dir as $val) {
             $cat = array_pop(explode('/', $val));
             if (array_key_exists($cat, $lng_smileys)) {
@@ -232,9 +232,9 @@ switch (Vars::$ACT) {
         $i = 0;
         foreach ($smileys_cat as $key => $val) {
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                 '<a href="smileys.php?act=smusr&amp;cat=' . urlencode($key) . '">' . htmlspecialchars($val) . '</a>' .
-                 ' (' . count(glob($rootpath . 'images/smileys/user/' . $key . '/*.{gif,jpg,png}', GLOB_BRACE)) . ')' .
-                 '</div>';
+                '<a href="smileys.php?act=smusr&amp;cat=' . urlencode($key) . '">' . htmlspecialchars($val) . '</a>' .
+                ' (' . count(glob(ROOTPATH . 'images/smileys/user/' . $key . '/*.{gif,jpg,png}', GLOB_BRACE)) . ')' .
+                '</div>';
             ++$i;
         }
         echo '<div class="phdr"><a href="' . htmlspecialchars($_SESSION['ref']) . '">' . Vars::$LNG['back'] . '</a></div>';

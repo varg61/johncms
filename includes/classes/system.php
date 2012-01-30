@@ -41,27 +41,63 @@ class System extends Vars
             parent::$START = intval($_REQUEST['start']);
         }
 
-        // Определение местоположения на сайте
-        parent::$PLACE = $this->_getPlace();
+        $this->_router();
     }
 
-    private function _getPlace()
+    /*
+    -----------------------------------------------------------------
+    Роутер
+    -----------------------------------------------------------------
+    */
+    private function _router()
     {
-        $param = array();
-        if (!empty(parent::$ACT)) {
-            $param[] = 'act=' . parent::$ACT;
+        //TODO: продумать обработку опасных данных
+        $route = isset($_GET['route']) ? trim($_GET['route'], '/\\') : '';
+        if (empty($route)) {
+            // Если находимся на Главной странице
+            $route = 'mainmenu/index.php';
+            Vars::$URI = Vars::$HOME_URL;
+            $place = '';
+        } else {
+            // Если вызван какой-либо модуль
+            if (!preg_match('/\.php$/i', $route)) {
+                $route .= '/index.php';
+            }
+            Vars::$URI = Vars::$HOME_URL . '/' . $route;
+            $place = $route;
         }
-        if (!empty(parent::$MOD)) {
-            $param[] = 'mod=' . parent::$MOD;
+
+        $path = explode('/', $route);
+        $include = trim(ltrim($route, $path[0]), '/\\');
+
+        $req = mysql_query("SELECT * FROM `cms_modules` WHERE `module` = '" . mysql_real_escape_string($path[0]) . "'");
+        if (mysql_num_rows($req)) {
+            $res = mysql_fetch_assoc($req);
+            if (is_file(MODPATH . $res['path'] . DIRECTORY_SEPARATOR . $include)) {
+                // Задаем файл модуля для подключения
+                parent::$ROUTE_INCLUDE = MODPATH . $res['path'] . DIRECTORY_SEPARATOR . $include;
+                parent::$MODULE = $res['path'];
+
+                // Фиксируем местоположение на сайте
+                if (!empty($place)) {
+                    $param = array();
+                    if (!empty(parent::$ACT)) {
+                        $param[] = 'act=' . parent::$ACT;
+                    }
+                    if (!empty(parent::$MOD)) {
+                        $param[] = 'mod=' . parent::$MOD;
+                    }
+                    if (parent::$ID) {
+                        $param[] = 'id=' . parent::$ID;
+                    }
+                    parent::$PLACE = $place . (!empty($param) ? '?' . implode('&', $param) : '');
+                }
+            } else {
+                // Редирект на страницу 404
+            }
+        } else {
+            // Редирект на страницу 404
         }
-        if (parent::$ID){
-            $param[] = 'id=' . parent::$ID;
-        }
-        $out = str_replace('\\', '/', ltrim(realpath($_SERVER['SCRIPT_FILENAME']), ROOTPATH));
-        if(!empty($param)){
-            $out .= '?' . implode('&', $param);
-        }
-        return $out;
     }
 
     /*
@@ -77,7 +113,7 @@ class System extends Vars
         if (isset($set['lng']) && !empty($set['lng'])) parent::$LNG_ISO = $set['lng'];
         if (isset($set['lng_list'])) parent::$LNG_LIST = unserialize($set['lng_list']);
         parent::$SYSTEM_SET = $set;
-        parent::$HOME_URL = $set['homeurl'];
+        parent::$HOME_URL = 'http://' . $_SERVER['SERVER_NAME'] . '/' . trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
     }
 
     /*

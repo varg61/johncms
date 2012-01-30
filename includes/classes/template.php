@@ -72,6 +72,9 @@ class Template extends Vars
 
     public function loadTemplate()
     {
+        if($this->template === false){
+            return false;
+        }
         if (!isset($this->vars['contents'])) {
             // Получаем содержимое вывода старых модулей
             $this->vars['contents'] = ob_get_contents();
@@ -116,12 +119,12 @@ class Template extends Vars
     public function userMenu($delimiter = ' | ')
     {
         $menu = array();
-        if (isset($_GET['err']) || parent::$PLACE != 'index.php' || (parent::$PLACE == 'index.php' && parent::$ACT)) {
-            $menu[] = '<a href="' . parent::$SYSTEM_SET['homeurl'] . '">' . parent::$LNG['homepage'] . '</a>';
+        if (!empty(parent::$PLACE) || parent::$ACT) {
+            $menu[] = '<a href="' . parent::$HOME_URL . '">' . parent::$LNG['homepage'] . '</a>';
         }
 
         if (parent::$USER_ID) {
-            $menu[] = '<a href="' . parent::$HOME_URL . '/users/profile.php?act=office">' . parent::$LNG['personal'] . '</a>';
+            $menu[] = '<a href="' . parent::$HOME_URL . '/office">' . parent::$LNG['personal'] . '</a>';
             $menu[] = '<a href="' . parent::$HOME_URL . '/exit.php">' . parent::$LNG['exit'] . '</a>';
         } else {
             $menu[] = '<a href="' . Vars::$HOME_URL . '/login.php">' . Vars::$LNG['login'] . '</a>';
@@ -133,7 +136,7 @@ class Template extends Vars
 
     public function homeLink()
     {
-        if (Vars::$PLACE != 'index.php' || (Vars::$PLACE == 'index.php' && Vars::$ACT)) {
+        if (!empty(parent::$PLACE) || parent::$ACT) {
             return '<div><a href="' . Vars::$HOME_URL . '">' . Vars::$LNG['homepage'] . '</a></div>';
         }
         return '';

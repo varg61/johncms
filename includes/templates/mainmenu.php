@@ -8,7 +8,7 @@
 echo'<div class="phdr"><b>' . Vars::$LNG['information'] . '</b></div>' .
     $this->mp->news .
     '<div class="menu"><a href="news/index.php">' . Vars::$LNG['news_archive'] . '</a> (' . $this->mp->newscount . ')</div>' .
-    '<div class="menu"><a href="pages/faq.php">' . Vars::$LNG['information'] . ', FAQ</a></div>' .
+    '<div class="menu"><a href="' . Vars::$URI . '/help">' . Vars::$LNG['information'] . ', FAQ</a></div>' .
     '<div class="phdr"><b>' . Vars::$LNG['dialogue'] . '</b></div>';
 
 // Ссылка на гостевую

@@ -22,3 +22,8 @@ RewriteEngine On
 RewriteCond %{REQUEST_METHOD} ^TRACE
 RewriteCond %{HTTP:range} !(^bytes=[^,]+(,[^,]+){0,4}$|^$)
 RewriteRule .* - [F]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !=/favicon.ico
+RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]

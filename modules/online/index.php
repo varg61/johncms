@@ -7,12 +7,11 @@
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
+ *
+ * Главное меню сайта
  */
 
-define('_IN_JOHNCMS', 1);
-
-require_once('../includes/core.php');
-$textl = Vars::$LNG['online'];
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 /*
 -----------------------------------------------------------------
@@ -28,11 +27,11 @@ $link = '';
 $sql_total = '';
 $sql_list = '';
 
-$menu[] = !Vars::$ACT ? '<b>' . Vars::$LNG['users'] . '</b>' : '<a href="online.php">' . Vars::$LNG['users'] . '</a>';
-$menu[] = Vars::$ACT == 'history' ? '<b>' . Vars::$LNG['history'] . '</b>' : '<a href="online.php?act=history">' . Vars::$LNG['history'] . '</a> ';
+$menu[] = !Vars::$ACT ? '<b>' . Vars::$LNG['users'] . '</b>' : '<a href="' . Vars::$URI . '">' . Vars::$LNG['users'] . '</a>';
+$menu[] = Vars::$ACT == 'history' ? '<b>' . Vars::$LNG['history'] . '</b>' : '<a href="' . Vars::$URI . '?act=history">' . Vars::$LNG['history'] . '</a> ';
 if (Vars::$USER_RIGHTS) {
-    $menu[] = Vars::$ACT == 'guest' ? '<b>' . Vars::$LNG['guests'] . '</b>' : '<a href="online.php?act=guest">' . Vars::$LNG['guests'] . '</a>';
-    $menu[] = Vars::$ACT == 'ip' ? '<b>' . Vars::$LNG['ip_activity'] . '</b>' : '<a href="online.php?act=ip">' . Vars::$LNG['ip_activity'] . '</a>';
+    $menu[] = Vars::$ACT == 'guest' ? '<b>' . Vars::$LNG['guests'] . '</b>' : '<a href="' . Vars::$URI . '?act=guest">' . Vars::$LNG['guests'] . '</a>';
+    $menu[] = Vars::$ACT == 'ip' ? '<b>' . Vars::$LNG['ip_activity'] . '</b>' : '<a href="' . Vars::$URI . '?act=ip">' . Vars::$LNG['ip_activity'] . '</a>';
 }
 
 echo'<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
@@ -48,7 +47,8 @@ switch (Vars::$ACT) {
         if (!Vars::$USER_ID) {
             exit;
         }
-        Vars::$TEMPLATE = false;
+        $tpl = Template::getInstance();
+        $tpl->template = false;
         $out = 'Users Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n===============================\r\n";
         $req = mysql_query("SELECT `cms_sessions`.`user_id` AS `id`, `cms_sessions`.`session_timestamp` AS `last_visit`, `cms_sessions`.`ip`, `cms_sessions`.`ip_via_proxy`, `cms_sessions`.`user_agent`, `cms_sessions`.`place`, `cms_sessions`.`views`, `cms_sessions`.`movings`, `cms_sessions`.`start_time`, `users`.`nickname`, `users`.`sex`, `users`.`rights`
@@ -79,7 +79,8 @@ switch (Vars::$ACT) {
         if (!Vars::$USER_ID) {
             exit;
         }
-        Vars::$TEMPLATE = false;
+        $tpl = Template::getInstance();
+        $tpl->template = false;
         $out = 'Users Online history ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n=======================================\r\n";
         $req = mysql_query("SELECT * FROM `users` WHERE `last_visit` > " . (time() - 172800) . " AND `last_visit` < " . (time() - 310) . " ORDER BY `last_visit` DESC");
@@ -107,7 +108,8 @@ switch (Vars::$ACT) {
         if (!Vars::$USER_RIGHTS) {
             exit;
         }
-        Vars::$TEMPLATE = false;
+        $tpl = Template::getInstance();
+        $tpl->template = false;
         $out = 'Guests Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n================================\r\n";
         $req = mysql_query("SELECT `user_id` AS `id`, `session_timestamp` AS `last_visit`, `ip`, `ip_via_proxy`, `user_agent`, `place`, `views`, `movings`, `start_time`
@@ -133,10 +135,12 @@ switch (Vars::$ACT) {
         Скачиваем список IP
         -----------------------------------------------------------------
         */
+        echo 'IP';
         if (Vars::$USER_RIGHTS < 6) {
             exit;
         }
-        Vars::$TEMPLATE = false;
+        $tpl = Template::getInstance();
+        $tpl->template = false;
         arsort(Vars::$IP_REQUESTS_LIST);
         $out = 'IP Requests ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n==============================\r\n";
@@ -188,7 +192,7 @@ switch (Vars::$ACT) {
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
             }
-            echo'<p><a href="online.php?act=di">' . Vars::$LNG['download_list'] . '</a></p>';
+            echo'<p><a href="' . Vars::$URI . '?act=di">' . Vars::$LNG['download_list'] . '</a></p>';
         } else {
             echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
         }
@@ -241,7 +245,7 @@ switch (Vars::$ACT) {
 */
 $total = mysql_result(mysql_query($sql_total), 0);
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination('online.php?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 }
 if ($total) {
     $req = mysql_query($sql_list);
@@ -265,13 +269,13 @@ if ($total) {
 }
 echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination('online.php?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="online.php' . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
+    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . Vars::$URI . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 
 if (Vars::$USER_ID && $total) {
-    echo'<p><a href="online.php?act=' . $link . '">' . Vars::$LNG['download_list'] . '</a></p>';
+    echo'<p><a href="' . Vars::$URI . '?act=' . $link . '">' . Vars::$LNG['download_list'] . '</a></p>';
 }
