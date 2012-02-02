@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$textl = htmlspecialchars($user['nickname']) . ': ' . $lng_profile['profile_edit'];
 
 /*
 -----------------------------------------------------------------

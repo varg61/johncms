@@ -25,13 +25,13 @@ if ($error) {
 }
 
 // Заголовки библиотеки
-if (Vars::$ID) {
-    $req = mysql_query("SELECT * FROM `lib` WHERE `id`= " . Vars::$ID);
-    $zag = mysql_fetch_array($req);
-    $hdr = $zag['type'] == 'bk' ? $zag['name'] : $zag['text'];
-    $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
-    $textl = mb_strlen($zag['text']) > 30 ? $hdr . '...' : $hdr;
-}
+//if (Vars::$ID) {
+//    $req = mysql_query("SELECT * FROM `lib` WHERE `id`= " . Vars::$ID);
+//    $zag = mysql_fetch_array($req);
+//    $hdr = $zag['type'] == 'bk' ? $zag['name'] : $zag['text'];
+//    $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
+//    $textl = mb_strlen($zag['text']) > 30 ? $hdr . '...' : $hdr;
+//}
 
 $mods = array(
     'java',

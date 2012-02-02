@@ -18,9 +18,6 @@ if (isset($_SESSION['ref']))
 if (isset($_SESSION['ga']) && Vars::$USER_RIGHTS < 1)
     unset($_SESSION['ga']);
 
-// Задаем заголовки страницы
-$textl = isset($_SESSION['ga']) ? Vars::$LNG['admin_club'] : Vars::$LNG['guestbook'];
-
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
 if (!Vars::$SYSTEM_SET['mod_guest'] && Vars::$USER_RIGHTS < 7) {
     echo '<div class="rmenu"><p>' . Vars::$LNG['guestbook_closed'] . '</p></div>';

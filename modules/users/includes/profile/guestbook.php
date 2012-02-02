@@ -11,7 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$textl = Vars::$LNG['profile'] . ' | ' . Vars::$LNG['guestbook'];
 if (Vars::$USER_ID && $user['user_id'] == Vars::$USER_ID) {
     $datauser['comm_old'] = $datauser['comm_count'];
     //TODO: Доработать!

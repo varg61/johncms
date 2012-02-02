@@ -10,7 +10,6 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$textl = htmlspecialchars($user['nickname']) . ': ' . Vars::$LNG['ip_history'];
 
 /*
 -----------------------------------------------------------------

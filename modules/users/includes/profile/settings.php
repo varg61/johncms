@@ -12,7 +12,6 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $lng_set = Vars::loadLanguage('settings');
-$textl = Vars::$LNG['settings'];
 
 /*
 -----------------------------------------------------------------

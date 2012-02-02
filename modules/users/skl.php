@@ -15,7 +15,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
 $lng_pass = Vars::loadLanguage('pass');
-$textl = $lng_pass['password_restore'];
 
 function passgen($length) {
     $vals = "abcdefghijklmnopqrstuvwxyz0123456789";

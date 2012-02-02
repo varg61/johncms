@@ -14,7 +14,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 //TODO: Доработать!
 
 $lng_karma = Vars::loadLanguage('karma');
-$textl = Vars::$LNG['karma'];
 
 if ($set_karma['on']) {
     switch (Vars::$MOD) {

@@ -22,7 +22,6 @@ if (Vars::$USER_RIGHTS < 1) {
 }
 
 $lng_adm = Vars::loadLanguage('adm');
-$textl = Vars::$LNG['admin_panel'];
 
 $regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
 $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);

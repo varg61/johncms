@@ -11,8 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$textl = Vars::$LNG['forum'] . ' | ' . Vars::$LNG['unread'];
-
 unset($_SESSION['fsort_id']);
 unset($_SESSION['fsort_users']);
 if (empty($_SESSION['uid'])) {

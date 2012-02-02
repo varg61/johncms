@@ -11,8 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$textl = $lng_forum['who_in_forum'];
-
 if (!Vars::$USER_ID) {
     header('Location: index.php');
     exit;

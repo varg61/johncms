@@ -12,6 +12,5 @@
 define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
-$textl = Vars::$LNG['library'];
 $map = new SiteMap();
 echo $map->mapLibrary();

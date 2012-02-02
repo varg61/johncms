@@ -64,7 +64,6 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
     Анкета пользователя
     -----------------------------------------------------------------
     */
-    $textl = Vars::$LNG['profile'] . ': ' . htmlspecialchars($user['nickname']);
     echo '<div class="phdr"><b>' . ($user['user_id'] != Vars::$USER_ID ? $lng_profile['user_profile'] : $lng_profile['my_profile']) . '</b></div>';
     // Меню анкеты
     $menu = array ();

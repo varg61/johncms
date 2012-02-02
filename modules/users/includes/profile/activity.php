@@ -16,7 +16,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 История активности
 -----------------------------------------------------------------
 */
-$textl = htmlspecialchars($user['nickname']) . ': ' . $lng_profile['activity'];
 echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng_profile['activity'] . '</div>';
 $menu = array(
     (!Vars::$MOD ? '<b>' . Vars::$LNG['messages'] . '</b>' : '<a href="profile.php?act=activity&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['messages'] . '</a>'),

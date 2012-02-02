@@ -279,7 +279,6 @@ switch ($type1['type']) {
                 header("Location: index.php?id=$th&page=$page");
             }
         } else {
-            $textl = Vars::$LNG['forum'];
             $qt = " $type1[text]";
             if (($datauser['postforum'] == "" || $datauser['postforum'] == 0)) {
                 if (!isset($_GET['yes'])) {

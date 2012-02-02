@@ -23,7 +23,6 @@ if ($user['user_id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['righ
     exit;
 }
 $lng_pass = Vars::loadLanguage('pass');
-$textl = htmlspecialchars($user['name']) . ': ' . $lng_pass['change_password'];
 
 switch (Vars::$MOD) {
     case 'change':

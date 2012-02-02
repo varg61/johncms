@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('../includes/core.php');
 $lng_news = Vars::loadLanguage('news'); // Загружаем язык модуля
-$textl = Vars::$LNG['news'];
 
 //TODO: Переделать с $do на $mod
 switch ($do) {

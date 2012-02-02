@@ -112,22 +112,22 @@ if ($error) {
 Заголовки страниц форума
 -----------------------------------------------------------------
 */
-if (!Vars::$ID) {
-    $textl = '' . Vars::$LNG['forum'] . '';
-} else {
-    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= " . Vars::$ID);
-    $res = mysql_fetch_assoc($req);
-    $hdr = strtr($res['text'], array(
-        '&quot;' => '',
-        '&amp;' => '',
-        '&lt;' => '',
-        '&gt;' => '',
-        '&#039;' => ''
-    ));
-    $hdr = mb_substr($hdr, 0, 30);
-    $hdr = Validate::filterString($hdr);
-    $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
-}
+//if (!Vars::$ID) {
+//    $textl = '' . Vars::$LNG['forum'] . '';
+//} else {
+//    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= " . Vars::$ID);
+//    $res = mysql_fetch_assoc($req);
+//    $hdr = strtr($res['text'], array(
+//        '&quot;' => '',
+//        '&amp;' => '',
+//        '&lt;' => '',
+//        '&gt;' => '',
+//        '&#039;' => ''
+//    ));
+//    $hdr = mb_substr($hdr, 0, 30);
+//    $hdr = Validate::filterString($hdr);
+//    $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
+//}
 
 /*
 -----------------------------------------------------------------

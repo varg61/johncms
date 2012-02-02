@@ -18,7 +18,6 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Статистика
 -----------------------------------------------------------------
 */
-$textl = htmlspecialchars($user['nickname']) . ': ' . Vars::$LNG['statistics'];
 echo'<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . Vars::$LNG['statistics'] . '</div>' .
     '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
     '<div class="list2">' .

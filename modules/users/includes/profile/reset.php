@@ -19,7 +19,6 @@ if (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
     Сброс настроек пользователя
     -----------------------------------------------------------------
     */
-    $textl = htmlspecialchars($user['nickname']) . ': ' . $lng_profile['profile_edit'];
     mysql_query("UPDATE `users` SET `set_user` = '', `set_forum` = '', `set_chat` = '' WHERE `id` = '" . $user['user_id'] . "'");
     echo '<div class="gmenu"><p>' . $lng_profile['reset1'] . ' <b>' . $user['name'] . '</b> ' . $lng_profile['reset2'] . '<br />' .
          '<a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['profile'] . '</a></p></div>';
