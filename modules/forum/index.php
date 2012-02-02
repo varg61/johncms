@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once('../includes/core.php');
 $lng_forum = Vars::loadLanguage('forum');
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);

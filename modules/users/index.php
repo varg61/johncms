@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once('../includes/core.php');
 $tpl = Template::getInstance();
 
 if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {

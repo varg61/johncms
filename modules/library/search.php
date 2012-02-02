@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once('../includes/core.php');
 $lng_lib = Vars::loadLanguage('library');
 
 /*

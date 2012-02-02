@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once('../includes/core.php');
 $lng_forum = Vars::loadLanguage('forum');
 
 echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . Vars::$LNG['search'] . '</div>';

@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 //TODO: Переделать на новую систему авторизации!!!
 
-require_once('../includes/core.php');
 $lng_pass = Vars::loadLanguage('pass');
 
 function passgen($length) {

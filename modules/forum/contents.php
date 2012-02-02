@@ -10,6 +10,5 @@
  */
 
 define('_IN_JOHNCMS', 1);
-require_once('../includes/core.php');
 $map = new SiteMap();
 echo $map->mapForum();

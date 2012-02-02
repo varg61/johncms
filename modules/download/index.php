@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once('../includes/core.php');
 $lng_dl = Vars::loadLanguage('downloads');
 require_once('../includes/lib/mp3.php');
 require_once('../includes/lib/pclzip.lib.php');

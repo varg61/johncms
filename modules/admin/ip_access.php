@@ -11,8 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once('../includes/core.php');
-
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 9) {
     header('Location: http://johncms.com/404.php');

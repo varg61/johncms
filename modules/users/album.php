@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-require_once('../includes/core.php');
 $lng_profile = Vars::loadLanguage('profile');
 
 $max_album = 10;
