@@ -30,7 +30,7 @@ abstract class Vars
     public static $USER_AGENT;                   // User Agent
     public static $IS_MOBILE = false;            // Мобильный браузер
     public static $PLACE = '';                   // Местоположение на сайте
-    public static $ROUTE_INCLUDE = '';           // Подключаемый файл Роутера
+    public static $MODULE_INCLUDE = '';           // Подключаемый файл Роутера
     public static $MODULE = '';                  // Активный модуль
     public static $URI = '';                     // URI подключаемого модуля
 

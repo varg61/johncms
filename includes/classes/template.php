@@ -125,10 +125,10 @@ class Template extends Vars
 
         if (parent::$USER_ID) {
             $menu[] = '<a href="' . parent::$HOME_URL . '/office">' . parent::$LNG['personal'] . '</a>';
-            $menu[] = '<a href="' . parent::$HOME_URL . '/exit.php">' . parent::$LNG['exit'] . '</a>';
+            $menu[] = '<a href="' . parent::$HOME_URL . '/exit">' . parent::$LNG['exit'] . '</a>';
         } else {
-            $menu[] = '<a href="' . Vars::$HOME_URL . '/login.php">' . Vars::$LNG['login'] . '</a>';
-            $menu[] = '<a href="' . Vars::$HOME_URL . '/index.php?act=registration">' . Vars::$LNG['registration'] . '</a>';
+            $menu[] = '<a href="' . Vars::$HOME_URL . '/login">' . Vars::$LNG['login'] . '</a>';
+            $menu[] = '<a href="' . Vars::$HOME_URL . '/registration">' . Vars::$LNG['registration'] . '</a>';
         }
 
         return Functions::displayMenu($menu, $delimiter);

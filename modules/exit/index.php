@@ -9,9 +9,8 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-require_once('includes/core.php');
 $referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
 
 if (isset($_POST['submit'])) {
@@ -22,7 +21,7 @@ if (isset($_POST['submit'])) {
 } else {
     echo'<div class="rmenu">' .
         '<p><h3>' . Vars::$LNG['exit_warning'] . '</h3></p>' .
-        '<form action="exit.php" method="post">' .
+        '<form action="' . Vars::$HOME_URL . '/exit' . '" method="post">' .
         '<p><input type="checkbox" name="clear" value="1"/>&#160;' . Vars::$LNG['clear_authorisation'] . '</p>' .
         '<p><input type="submit" name="submit" value="' . Vars::$LNG['exit'] . '" /></p>' .
         '</form>' .

@@ -73,10 +73,10 @@ class System extends Vars
         $req = mysql_query("SELECT * FROM `cms_modules` WHERE `module` = '" . mysql_real_escape_string($path[0]) . "'");
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
-            if (is_file(MODPATH . $res['path'] . DIRECTORY_SEPARATOR . $include)) {
+            if (is_file(MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $include)) {
                 // Задаем файл модуля для подключения
-                parent::$ROUTE_INCLUDE = MODPATH . $res['path'] . DIRECTORY_SEPARATOR . $include;
-                parent::$MODULE = $res['path'];
+                parent::$MODULE_INCLUDE = MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $include;
+                parent::$MODULE = $res['module'];
 
                 // Фиксируем местоположение на сайте
                 if (!empty($place)) {
