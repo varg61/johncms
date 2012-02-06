@@ -51,14 +51,14 @@ class System extends Vars
     */
     private function _router()
     {
-        $route = isset($_GET['route']) ? substr(trim($_GET['route']), 0, 27) : '';
+        $route = isset($_GET['route']) ? substr(trim($_GET['route']), 0, 50) : '';
         $place = '';
         if (!empty($route)) {
             $path = array();
             $file = 'index.php';
             $array = explode('/', $route);
             foreach ($array as $val) {
-                if (preg_match('/\.php$/i', $val)) {
+                if (preg_match('/.php$/i', $val)) {
                     $file = $val;
                 } else {
                     $path[] = $val;
