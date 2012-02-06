@@ -66,7 +66,7 @@ switch (Vars::$ACT) {
         }
         break;
 
-    case 'avlist':
+    case 'list':
         /*
         -----------------------------------------------------------------
         Показываем список аватаров
@@ -75,13 +75,18 @@ switch (Vars::$ACT) {
         $avatars = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
         $total = count($avatars);
         $end = Vars::$START + Vars::$USER_SET['page_size'];
-        if ($end > $total) $end = $total;
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . Vars::$LNG['avatars'] . '</b></a> | ' . (array_key_exists($cat, $lng_avatars) ? $lng_avatars[$cat] : ucfirst(htmlspecialchars($cat))) . '</div>';
+        if ($end > $total) {
+            $end = $total;
+        }
+        echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . Vars::$LNG['avatars'] . '</b></a> | ' .
+            (array_key_exists($cat, $lng_avatars) ? $lng_avatars[$cat] : ucfirst(htmlspecialchars($cat))) . '</div>';
         if ($total) {
-            if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('avatars.php?act=avlist&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            if ($total > Vars::$USER_SET['page_size']) {
+                echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=list&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            }
             for ($i = Vars::$START; $i < $end; $i++) {
-                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="' . Vars::$HOME_URL . '/images/avatars/' . $cat . '/' . basename($avatars[$i]) . '" alt="" />';
+                echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
+                    '<img src="' . Vars::$HOME_URL . '/images/avatars/' . $cat . '/' . basename($avatars[$i]) . '" alt="" />';
                 if (Vars::$USER_ID) {
                     echo '&#160;<a href="' . Vars::$URI . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode(basename($avatars[$i])) . '">' . Vars::$LNG['select'] . '</a>';
                 }
@@ -90,14 +95,14 @@ switch (Vars::$ACT) {
         } else {
             echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
         }
-        echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+        echo'<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
-            echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=avlist&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . Vars::$URI . '?act=avlist&amp;cat=' . urlencode($cat) . '" method="post">' .
+            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=list&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                '<p><form action="' . Vars::$URI . '?act=list&amp;cat=' . urlencode($cat) . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
         }
-        echo '<p><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></p>';
+        echo'<p><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></p>';
         break;
 
     default:
@@ -110,11 +115,12 @@ switch (Vars::$ACT) {
         asort($avatar_cat);
         $i = 0;
         foreach ($avatar_cat as $key => $val) {
-            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<a href="' . Vars::$URI . '?act=avlist&amp;cat=' . urlencode($key) . '">' . htmlspecialchars($val) . '</a>' .
-                ' (' . count(glob(ROOTPATH . 'images/avatars/' . $key . '/*.{gif,jpg,png}', GLOB_BRACE)) . ')' .
+            $count = count(glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE));
+            echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
+                '<a href="' . Vars::$URI . '?act=list&amp;cat=' . urlencode($key) . '">' . htmlspecialchars($val) . '</a>' .
+                ' (' . $count . ')' .
                 '</div>';
             ++$i;
         }
-        echo '<div class="phdr"><a href="' . htmlspecialchars($_SESSION['ref']) . '">' . Vars::$LNG['back'] . '</a></div>';
+        echo '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></div>';
 }
