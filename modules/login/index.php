@@ -23,6 +23,8 @@ switch ($login->userLogin()) {
         Редирект на главную
         -----------------------------------------------------------------
         */
+        $tpl = Template::getInstance();
+        $tpl->template = false;
         header('Location: ' . Vars::$HOME_URL);
         echo'<div class="gmenu"><p><h3><a href="index.php">' . Vars::$LNG['enter_on_site'] . '</a></h3></p></div>';
         break;
