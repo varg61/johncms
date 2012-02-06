@@ -211,7 +211,7 @@ switch (Vars::$ACT) {
         Выводим каталог смайлов
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="faq.php"><b>F.A.Q.</b></a> | ' . Vars::$LNG['smileys'] . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$HOME_URL . '/help"><b>F.A.Q.</b></a> | ' . Vars::$LNG['smileys'] . '</div>';
         if (Vars::$USER_ID && !Vars::$IS_MOBILE) {
             if (($smileys = Vars::getUserData('smileys')) === false) $smileys = array();
             $mycount = !empty($smileys) ? count($smileys) : '0';

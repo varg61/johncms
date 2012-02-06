@@ -16,12 +16,20 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $lng_avatars = Vars::loadLanguage('avatars');
 
 // Обрабатываем ссылку для возврата
-if (empty($_SESSION['ref'])) $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
+if (empty($_SESSION['ref'])) {
+    $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
+}
+
 // Обрабатываем глобальные переменные
-foreach (glob(ROOTPATH . 'images/avatars/*', GLOB_ONLYDIR) as $val) {
-    $dir = array_pop(explode('/', $val));
-    if (array_key_exists($dir, $lng_avatars)) $avatar_cat[$dir] = $lng_avatars[$dir];
-    else $avatar_cat[$dir] = ucfirst($dir);
+$cat_list = array();
+$dir_list = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
+foreach ($dir_list as $val) {
+    $dir = basename($val);
+    if (array_key_exists($dir, $lng_avatars)) {
+        $avatar_cat[$dir] = $lng_avatars[$dir];
+    } else {
+        $avatar_cat[$dir] = ucfirst($dir);
+    }
     $cat_list[] = $dir;
 }
 $cat = isset($_GET['cat']) && in_array(trim($_GET['cat']), $cat_list) ? trim($_GET['cat']) : $cat_list[0];
@@ -29,12 +37,17 @@ $cat = isset($_GET['cat']) && in_array(trim($_GET['cat']), $cat_list) ? trim($_G
 switch (Vars::$ACT) {
     case 'avset':
         $select = isset($_GET['select']) ? substr(trim($_GET['select']), 0, 20) : false;
-        if (Vars::$USER_ID && $select && is_file(ROOTPATH . 'images/avatars/' . $cat . '/' . $select)) {
+        if (Vars::$USER_ID
+            && $select
+            && is_file(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . $select)
+        ) {
             if (isset($_POST['submit'])) {
                 // Устанавливаем пользовательский Аватар
-                if (@copy(ROOTPATH . 'images/avatars/' . $cat . '/' . $select, ROOTPATH . 'files/users/avatar/' . Vars::$USER_ID . '.png')) {
+                if (@copy(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . $select,
+                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '.png')
+                ) {
                     echo '<div class="gmenu"><p>' . Vars::$LNG['avatar_applied'] . '<br />' .
-                        '<a href="../users/profile.php?act=edit">' . Vars::$LNG['continue'] . '</a></p></div>';
+                        '<a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
                 } else {
                     echo Functions::displayError(Vars::$LNG['error_avatar_select'], '<a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a>');
                 }
@@ -59,7 +72,7 @@ switch (Vars::$ACT) {
         Показываем список аватаров
         -----------------------------------------------------------------
         */
-        $avatars = glob(ROOTPATH . 'images/avatars/' . $cat . '/*.{gif,jpg,png}', GLOB_BRACE);
+        $avatars = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
         $total = count($avatars);
         $end = Vars::$START + Vars::$USER_SET['page_size'];
         if ($end > $total) $end = $total;
@@ -68,8 +81,10 @@ switch (Vars::$ACT) {
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('avatars.php?act=avlist&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             for ($i = Vars::$START; $i < $end; $i++) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<img src="../images/avatars/' . $cat . '/' . basename($avatars[$i]) . '" alt="" />';
-                if (Vars::$USER_ID) echo '&#160;<a href="' . Vars::$URI . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode(basename($avatars[$i])) . '">' . Vars::$LNG['select'] . '</a>';
+                echo '<img src="' . Vars::$HOME_URL . '/images/avatars/' . $cat . '/' . basename($avatars[$i]) . '" alt="" />';
+                if (Vars::$USER_ID) {
+                    echo '&#160;<a href="' . Vars::$URI . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode(basename($avatars[$i])) . '">' . Vars::$LNG['select'] . '</a>';
+                }
                 echo '</div>';
             }
         } else {
