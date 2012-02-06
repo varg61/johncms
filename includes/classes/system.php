@@ -69,9 +69,11 @@ class System extends Vars
                 if (mysql_num_rows($req)) {
                     $include = MODPATH . implode(DIRECTORY_SEPARATOR, $path) . DIRECTORY_SEPARATOR . (isset($file) ? $file : 'index.php');
                     if (is_file($include)) {
+                        $res = mysql_fetch_assoc($req);
+                        parent::$MODULE = $res['module'];
                         parent::$MODULE_INCLUDE = $include;
                         parent::$MODULE_URI = parent::$HOME_URL . '/' . $path[0];
-                        parent::$URI = parent::$HOME_URL . '/' . implode('/', $path) . (isset($file) ? '/' . $file : '');
+                        parent::$URI = parent::$HOME_URL . '/' . implode('/', $path) . (isset($file) && $file != 'index.php' ? '/' . $file : '');
                         $place = $route;
                     } else {
                         // Ошибка 404

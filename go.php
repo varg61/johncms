@@ -16,27 +16,7 @@ require_once('includes/core.php');
 $referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
 $url = isset($_REQUEST['url']) ? strip_tags(rawurldecode(trim($_REQUEST['url']))) : false;
 
-if (isset($_GET['lng'])) {
-    /*
-    -----------------------------------------------------------------
-    Переключатель языков
-    -----------------------------------------------------------------
-    */
-    echo'<div class="menu"><form action="' . $referer . '" method="post"><p>';
-    if (count(Vars::$LNG_LIST) > 1) {
-        echo'<p><h3>' . Vars::$LNG['language_select'] . '</h3>';
-        foreach (Vars::$LNG_LIST as $key => $val) {
-            echo'<div><input type="radio" value="' . $key . '" name="setlng" ' . ($key == Vars::$LNG_ISO ? 'checked="checked"' : '') . '/>&#160;' .
-                (file_exists('images/flags/' . $key . '.gif') ? '<img src="images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
-                $val .
-                ($key == Vars::$SYSTEM_SET['lng'] ? ' <small class="red">[' . Vars::$LNG['default'] . ']</small>' : '') .
-                '</div>';
-        }
-        echo'</p>';
-    }
-    echo'</p><p><input type="submit" name="submit" value="' . Vars::$LNG['apply'] . '" /></p>' .
-        '<p><a href="' . $referer . '">' . Vars::$LNG['back'] . '</a></p></form></div>';
-} elseif ($url) {
+if ($url) {
     /*
     -----------------------------------------------------------------
     Редирект по ссылкам в текстах, обработанным функцией tags()

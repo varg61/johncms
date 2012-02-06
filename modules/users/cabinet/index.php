@@ -23,7 +23,8 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$lng_profile = Vars::loadLanguage('profile');
+$lng_profile = Vars::loadLanguage(1);
+
 $total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
 echo '<div class="phdr"><b>' . $lng_profile['my_office'] . '</b></div>' .
     '<div class="list2"><p>' .

@@ -110,7 +110,7 @@ class Template extends Vars
     public function languageSwitch($show = false)
     {
         if ($show || (parent::$PLACE == 'index.php' && count(parent::$LNG_LIST) > 1)) {
-            return '<a href="' . parent::$HOME_URL . '/go.php?lng"><b>' . strtoupper(parent::$LNG_ISO) . '</b></a>' .
+            return '<a href="' . parent::$HOME_URL . '/language"><b>' . strtoupper(parent::$LNG_ISO) . '</b></a>' .
                 '&#160;<img src="' . parent::$HOME_URL . '/images/flags/' . parent::$LNG_ISO . '.gif" alt=""/>';
         }
         return '';
@@ -124,7 +124,7 @@ class Template extends Vars
         }
 
         if (parent::$USER_ID) {
-            $menu[] = '<a href="' . parent::$HOME_URL . '/office">' . parent::$LNG['personal'] . '</a>';
+            $menu[] = '<a href="' . parent::$HOME_URL . '/users/cabinet">' . parent::$LNG['personal'] . '</a>';
             $menu[] = '<a href="' . parent::$HOME_URL . '/exit">' . parent::$LNG['exit'] . '</a>';
         } else {
             $menu[] = '<a href="' . Vars::$HOME_URL . '/login">' . Vars::$LNG['login'] . '</a>';

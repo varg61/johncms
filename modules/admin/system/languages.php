@@ -9,16 +9,18 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNADM') or die('Error: restricted access');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 //TODO: Переделать с $do на $mod
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 9) {
-    header('Location: http://mobicms.net/404.php');
+    header('Location: http://johncms.com/404.php');
     exit;
 }
+
 $panel_lng = Vars::loadLanguage('panel_lng');
+$lng_adm = Vars::loadLanguage('adm');
 
 /*
 -----------------------------------------------------------------
@@ -27,9 +29,8 @@ $panel_lng = Vars::loadLanguage('panel_lng');
 */
 $lng_list = array();
 $lng_desc = array();
-foreach (glob('../includes/languages/*/_core.ini') as $val) {
-    $dir = explode('/', dirname($val));
-    $iso = array_pop($dir);
+foreach (glob(LNGPATH . '*.ini') as $val) {
+    $iso = basename($val, '.ini');
     $desc = parse_ini_file($val);
     $lng_list[$iso] = isset($desc['name']) && !empty($desc['name']) ? $desc['name'] : $iso;
     $lng_desc[$iso] = $desc;
@@ -43,14 +44,13 @@ foreach (glob('../includes/languages/*/_core.ini') as $val) {
 if (isset($_GET['refresh'])) {
     mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'lng_list'");
     Vars::$LNG_LIST = array();
-    echo '<div class="gmenu"><p>' . $lng['refresh_descriptions_ok'] . '</p></div>';
 }
 $lng_add = array_diff(array_keys($lng_list), array_keys(Vars::$LNG_LIST));
 $lng_del = array_diff(array_keys(Vars::$LNG_LIST), array_keys($lng_list));
 if (!empty($lng_add) || !empty($lng_del)) {
     if (!empty($lng_del) && in_array(Vars::$SYSTEM_SET['lng'], $lng_del)) {
         // Если удаленный язык был системный, то меняем на первый доступный
-        mysql_query("UPDATE `cms_settings` SET `val` = '" . key($lng_list[]) . "' WHERE `key` = 'lng' LIMIT 1");
+        mysql_query("UPDATE `cms_settings` SET `val` = '" . key($lng_list) . "' WHERE `key` = 'lng' LIMIT 1");
     }
     $req = mysql_query("SELECT * FROM `cms_settings` WHERE `key` = 'lng_list'");
     if (mysql_num_rows($req)) {
@@ -149,7 +149,7 @@ class ini_file
     }
 }
 
-switch (Vars::$MOD) {
+switch (Vars::$ACT) {
     case 'set':
         /*
         -----------------------------------------------------------------
@@ -160,7 +160,7 @@ switch (Vars::$MOD) {
         if ($iso && array_key_exists($iso, $lng_list)) {
             mysql_query("UPDATE `cms_settings` SET `val` = '" . mysql_real_escape_string($iso) . "' WHERE `key` = 'lng'");
         }
-        header('Location: index.php?act=languages');
+        header('Location: ' . Vars::$URI);
         break;
 
     case 'module':
@@ -189,8 +189,8 @@ switch (Vars::$MOD) {
                 $lng_edit = ini_file::parser_edit($language);
                 $lng_module = ini_file::update_lng($name_module, $lng_edit, $lng_module_standart);
                 echo '<a href="index.php?act=languages&amp;mod=info_module&amp;language=' . $language . '&amp;module=' . $name_module . '"><b>' . $name_module . '</b></a>' .
-                     '<div class="sub">' .
-                     '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '">' . $panel_lng['phrases'] . ' (' . count($lng_module) . ')</a>';
+                    '<div class="sub">' .
+                    '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '">' . $panel_lng['phrases'] . ' (' . count($lng_module) . ')</a>';
                 if (!empty($lng_edit) && in_array($name_module, array_keys($lng_edit)))
                     echo ' | <a href="?act=languages&amp;mod=reset_module&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '">' . $panel_lng['reset'] . ' изменений</a>';
                 echo '</div></div>';
@@ -198,13 +198,13 @@ switch (Vars::$MOD) {
             echo '<div class="phdr">' . $lng['total'] . ': <b>' . $total . '</b></div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('?act=languages&amp;mod=module&amp;language=' . $language . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                     '<p><form action="?act=languages&amp;mod=module&amp;language=' . $language . '&amp;" method="post">' .
-                     '<input type="text" name="page" size="2"/>' .
-                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                    '<p><form action="?act=languages&amp;mod=module&amp;language=' . $language . '&amp;" method="post">' .
+                    '<input type="text" name="page" size="2"/>' .
+                    '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
         } else {
             echo '<div class="rmenu"><p>' . $lng['list_empty'] . '!</p></div>' .
-                 '<div class="phdr"><a href="?act=languages"><b>' . $lng['back'] . '</b></a></div>';
+                '<div class="phdr"><a href="?act=languages"><b>' . $lng['back'] . '</b></a></div>';
         }
         echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
@@ -224,10 +224,10 @@ switch (Vars::$MOD) {
         }
         $lng_module = ini_file::update_lng($name_module, $lng_edit, $lng_module_standart);
         echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=module&amp;language=' . $language . '"><b>' . $lng['modules'] . '</b></a> | ' . $panel_lng['information'] . '</div>' .
-             '<div class="menu">' .
-             '<p><h3>' . $panel_lng['information'] . '</h3></p><p><ul>' .
-             '<li><span class="gray">' . $panel_lng['name'] . ':</span> ' . $name_module . '</li>' .
-             '<li><span class="gray">' . $panel_lng['phras'] . ':</span> ' . count($lng_module) . '</li>';
+            '<div class="menu">' .
+            '<p><h3>' . $panel_lng['information'] . '</h3></p><p><ul>' .
+            '<li><span class="gray">' . $panel_lng['name'] . ':</span> ' . $name_module . '</li>' .
+            '<li><span class="gray">' . $panel_lng['phras'] . ':</span> ' . count($lng_module) . '</li>';
         if (isset($lng_edit[$name_module])) {
             $mass_edit = count(array_intersect_key($lng_module_standart, $lng_edit[$name_module]));
             if (!empty($mass_edit))
@@ -237,8 +237,8 @@ switch (Vars::$MOD) {
                 echo '<li><span class="gray">' . $panel_lng['add_phras'] . ':</span> ' . $mass_add . '</li>';
         }
         echo '</ul></p></div><div class="phdr">' .
-             '<a href="?act=languages&amp;mod=module&amp;language=' . $language . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a>' .
-             '</div><p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+            '<a href="?act=languages&amp;mod=module&amp;language=' . $language . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a>' .
+            '</div><p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
 
     case 'reset_module':
@@ -262,13 +262,13 @@ switch (Vars::$MOD) {
             exit;
         } else {
             echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=module&amp;language=' . $language . '"><b>' . $lng['modules'] . '</b></a> | ' . $panel_lng['reset'] . '</div>' .
-                 '<div class="rmenu"><p>' . $panel_lng['module_resets'] . '</p>' .
-                 '<p><form name="form" action="?act=languages&amp;mod=reset_module&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '&amp;yes" method="POST">' .
-                 '<input type="submit" name="submit" value="' . $lng['continue'] . '"/>&#160;' .
-                 '</form></p>' .
-                 '</div>' .
-                 '<div class="phdr"><a href="?act=languages&amp;mod=module&amp;language=' . $language . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
-                 '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+                '<div class="rmenu"><p>' . $panel_lng['module_resets'] . '</p>' .
+                '<p><form name="form" action="?act=languages&amp;mod=reset_module&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '&amp;yes" method="POST">' .
+                '<input type="submit" name="submit" value="' . $lng['continue'] . '"/>&#160;' .
+                '</form></p>' .
+                '</div>' .
+                '<div class="phdr"><a href="?act=languages&amp;mod=module&amp;language=' . $language . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
+                '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -297,7 +297,7 @@ switch (Vars::$MOD) {
             if (!in_array($symbol_1, $array_symbol)) {
                 $array_symbol[] = $symbol_1;
                 $array_menu[] = $symbol && $symbol_1 == $symbol ? '<b>' . $symbol_1 . '</b>'
-                        : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
+                    : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
             }
             if (!$symbol || $symbol_1 == $symbol) {
                 ++$total;
@@ -352,22 +352,22 @@ switch (Vars::$MOD) {
                 ++$i;
             }
             echo '<div class="rmenu"><input type="submit" value="' . $lng['delete'] . '"/></div></form>' .
-                 '<div class="gmenu"><form name="form" action="?act=languages&amp;mod=add_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '" method="POST">' .
-                 '<p><input type="submit" name="submit" value="' . $panel_lng['phrase_adds'] . '"/></p>' .
-                 '</form></div>' .
-                 '<div class="phdr">' . $lng['total'] . ': <b>' . $total . '</b></div>';
+                '<div class="gmenu"><form name="form" action="?act=languages&amp;mod=add_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '" method="POST">' .
+                '<p><input type="submit" name="submit" value="' . $panel_lng['phrase_adds'] . '"/></p>' .
+                '</form></div>' .
+                '<div class="phdr">' . $lng['total'] . ': <b>' . $total . '</b></div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                     '<p><form action="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '" method="post">' .
-                     '<input type="text" name="page" size="2"/>' .
-                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                    '<p><form action="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '" method="post">' .
+                    '<input type="text" name="page" size="2"/>' .
+                    '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
         } else {
             echo '<div class="rmenu"><p>' . $lng['list_empty'] . '!</p></div>' .
-                 '<div class="gmenu"><form name="form" action="?act=languages&amp;mod=add_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '" method="POST">' .
-                 '<p><input type="submit" name="submit" value="' . $panel_lng['phrase_adds'] . '"/></p>' .
-                 '</form></div>' .
-                 '<div class="phdr"><a href="?act=languages&amp;mod=module&amp;language=' . $language . '"><b>' . $lng['back'] . '</b></a></div>';
+                '<div class="gmenu"><form name="form" action="?act=languages&amp;mod=add_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '" method="POST">' .
+                '<p><input type="submit" name="submit" value="' . $panel_lng['phrase_adds'] . '"/></p>' .
+                '</form></div>' .
+                '<div class="phdr"><a href="?act=languages&amp;mod=module&amp;language=' . $language . '"><b>' . $lng['back'] . '</b></a></div>';
         }
         echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
@@ -400,7 +400,7 @@ switch (Vars::$MOD) {
             if (!in_array($symbol_1, $array_symbol)) {
                 $array_symbol[] = $symbol_1;
                 $array_menu[] = $symbol && $symbol_1 == $symbol ? '<b>' . $symbol_1 . '</b>'
-                        : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
+                    : '<a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol_1 . '">' . $symbol_1 . '</a>';
             }
             if (isset($search) && (stristr($key, $search) || stristr($val, $search))) {
                 ++$total;
@@ -413,9 +413,9 @@ switch (Vars::$MOD) {
         echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=module&amp;language=' . $language . '"><b>' . $lng['modules'] . '</b></a> | ' . $name_module . ': ' . $lng['search'] . '</div>';
         echo '<div class="topmenu">' . Functions::displayMenu($array_menu) . '</div>';
         echo '<div class="gmenu"><form action="?act=languages&amp;mod=search&amp;language=' . $language . '&amp;module=' . $name_module . '" method="post">' .
-             '<p><input type="text" value="' . ($search ? Validate::filterString($search) : '') . '" name="search" />' .
-             '<input type="submit" value="' . $lng['search'] . '" name="submit" />' .
-             '</p></form></div>';
+            '<p><input type="text" value="' . ($search ? Validate::filterString($search) : '') . '" name="search" />' .
+            '<input type="submit" value="' . $lng['search'] . '" name="submit" />' .
+            '</p></form></div>';
         $i = 0;
         if ($total) {
             echo '<form action="?act=languages&amp;mod=massdel_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '" method="post">';
@@ -439,16 +439,16 @@ switch (Vars::$MOD) {
                 ++$i;
             }
             echo '<div class="rmenu"><input type="submit" value="' . $lng['delete'] . '"/></div></form>' .
-                 '<div class="phdr">' . $lng['total'] . ': <b>' . $total . '</b></div>';
+                '<div class="phdr">' . $lng['total'] . ': <b>' . $total . '</b></div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('?act=languages&amp;mod=search&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                     '<p><form action="?act=languages&amp;mod=search&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;search=' . urlencode($search) . '" method="post">' .
-                     '<input type="text" name="page" size="2"/>' .
-                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
+                    '<p><form action="?act=languages&amp;mod=search&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;search=' . urlencode($search) . '" method="post">' .
+                    '<input type="text" name="page" size="2"/>' .
+                    '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
         } else {
             echo '<div class="rmenu"><p>' . $lng['list_empty'] . '!</p></div>' .
-                 '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '"><b>' . $lng['back'] . '</b></a></div>';
+                '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '"><b>' . $lng['back'] . '</b></a></div>';
         }
         echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         break;
@@ -494,13 +494,13 @@ switch (Vars::$MOD) {
             exit;
         } else {
             echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . $lng['edit'] . '</div>' .
-                 '<form name="form" action="?act=languages&amp;mod=edit_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '" method="POST"><div class="menu">' .
-                 '<p><h3>' . $panel_lng['value'] . '</h3>' .
-                 '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="value">' . htmlentities($lng_module[$key], ENT_QUOTES, 'UTF-8') . '</textarea></p></div>' .
-                 '<div class="gmenu"><input type="submit" name="submit" value="' . $lng['save'] . '"/>' .
-                 '</div></form>' .
-                 '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
-                 '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+                '<form name="form" action="?act=languages&amp;mod=edit_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '" method="POST"><div class="menu">' .
+                '<p><h3>' . $panel_lng['value'] . '</h3>' .
+                '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="value">' . htmlentities($lng_module[$key], ENT_QUOTES, 'UTF-8') . '</textarea></p></div>' .
+                '<div class="gmenu"><input type="submit" name="submit" value="' . $lng['save'] . '"/>' .
+                '</div></form>' .
+                '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
+                '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -535,14 +535,14 @@ switch (Vars::$MOD) {
             if ($do == 'no_key')
                 echo '<div class="rmenu"><b>' . $panel_lng['no_key'] . '</b></div>';
             echo '<form name="form" action="?act=languages&amp;mod=add_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '" method="POST">' .
-                 '<div class="menu"><p><h3>' . $panel_lng['key'] . '</h3>' .
-                 '<input type="text" name="key" maxlength="27"/></p>' .
-                 '<p><h3>' . $panel_lng['value'] . '</h3>' .
-                 '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="value"></textarea></p></div>' .
-                 '<div class="gmenu"><input type="submit" name="submit" value="' . $lng['save'] . '"/>' .
-                 '</div></form>' .
-                 '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
-                 '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+                '<div class="menu"><p><h3>' . $panel_lng['key'] . '</h3>' .
+                '<input type="text" name="key" maxlength="27"/></p>' .
+                '<p><h3>' . $panel_lng['value'] . '</h3>' .
+                '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="value"></textarea></p></div>' .
+                '<div class="gmenu"><input type="submit" name="submit" value="' . $lng['save'] . '"/>' .
+                '</div></form>' .
+                '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
+                '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -577,18 +577,18 @@ switch (Vars::$MOD) {
             exit;
         } else {
             echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . (isset($lng_module_standart[$key])
-                    ? '' . $panel_lng['reset'] . '' : $panel_lng['delete']) . '</div>' .
-                 '<div class="rmenu"><p>';
+                ? '' . $panel_lng['reset'] . '' : $panel_lng['delete']) . '</div>' .
+                '<div class="rmenu"><p>';
             if (isset($lng_module_standart[$key]))
                 echo $panel_lng['phrase_resets'];
             else
                 echo $panel_lng['phrase_deletes'];
             echo '</p><p><form name="form" action="?act=languages&amp;mod=delete_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;key=' . $key . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '&amp;yes" method="POST">' .
-                 '<input type="submit" name="submit" value="' . $lng['continue'] . '"/>&#160;' .
-                 '</form></p>' .
-                 '</div>' .
-                 '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
-                 '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+                '<input type="submit" name="submit" value="' . $lng['continue'] . '"/>&#160;' .
+                '</form></p>' .
+                '</div>' .
+                '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
+                '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -625,14 +625,14 @@ switch (Vars::$MOD) {
                 $mass_dell[] = ini_file::key_filter($key);
             }
             $_SESSION['mass_dell'] = $mass_dell;
-            echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . $panel_lng['mass_delete'] . '</div>' .
-                 '<div class="rmenu"><p>' . $panel_lng['mass_deletes'] . '</p>' .
-                 '<p><form name="form" action="?act=languages&amp;mod=massdel_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '&amp;yes" method="POST">' .
-                 '<input type="submit" name="submit" value="' . $lng['continue'] . '"/>&#160;' .
-                 '</form></p>' .
-                 '</div>' .
-                 '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
-                 '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+            echo'<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '"><b>' . $panel_lng['phrases'] . '</b></a> | ' . $panel_lng['mass_delete'] . '</div>' .
+                '<div class="rmenu"><p>' . $panel_lng['mass_deletes'] . '</p>' .
+                '<p><form name="form" action="?act=languages&amp;mod=massdel_phrase&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;symbol=' . $symbol . '&amp;start=' . Vars::$START . '&amp;yes" method="POST">' .
+                '<input type="submit" name="submit" value="' . $lng['continue'] . '"/>&#160;' .
+                '</form></p>' .
+                '</div>' .
+                '<div class="phdr"><a href="?act=languages&amp;mod=phrases&amp;language=' . $language . '&amp;module=' . $name_module . '&amp;start=' . Vars::$START . '"><b>' . $lng['back'] . '</b></a></div>' .
+                '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
         }
         break;
 
@@ -642,29 +642,37 @@ switch (Vars::$MOD) {
         Выводим список доступных языков
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['language_default'] . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . $lng_adm['language_default'] . '</div>';
+        if (isset($_GET['refresh'])) {
+            echo '<div class="gmenu"><p>' . $lng_adm['refresh_descriptions_ok'] . '</p></div>';
+        }
         if ($do == 'error')
             echo '<div class="rmenu"><b>' . $panel_lng['error'] . '!</b></div>';
-        echo '<div class="menu"><form action="index.php?act=languages&amp;mod=set" method="post"><p>';
-        echo '<table><tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3>' . $lng['language_system'] . '</h3></td></tr>';
+        echo'<div class="menu">' .
+            '<form action="' . Vars::$URI . '?act=set" method="post"><p>' .
+            '<table><tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3>' . $lng_adm['language_system'] . '</h3></td></tr>';
         foreach ($lng_desc as $key => $val) {
             $lng_menu = array(
-                (!empty($val['author']) ? '<span class="gray">' . $lng['author'] . ':</span> ' . $val['author'] : ''),
+                (!empty($val['author']) ? '<span class="gray">' . Vars::$LNG['author'] . ':</span> ' . $val['author'] : ''),
                 (!empty($val['author_email']) ? '<span class="gray">E-mail:</span> ' . $val['author_email'] : ''),
                 (!empty($val['author_url']) ? '<span class="gray">URL:</span> ' . $val['author_url'] : ''),
-                (!empty($val['description']) ? '<span class="gray">' . $lng['description'] . ':</span> ' . $val['description'] : '')
+                (!empty($val['description']) ? '<span class="gray">' . Vars::$LNG['description'] . ':</span> ' . $val['description'] : '')
             );
-            echo '<tr>' .
-                 '<td valign="top"><input type="radio" value="' . $key . '" name="iso" ' . ($key == Vars::$SYSTEM_SET['lng'] ? 'checked="checked"' : '') . '/></td>' .
-                 '<td style="padding-bottom:6px">' .
-                 (file_exists('../images/flags/' . $key . '.gif') ? '<img src="../images/flags/' . $key . '.gif" alt=""/>&#160;' : '') .
-                 '<a href="index.php?act=languages&amp;mod=module&amp;language=' . $key . '"><b>' . $val['name'] . '</b></a>&#160;<span class="green">[' . $key . ']</span>' .
-                 '<div class="sub">' . Functions::displayMenu($lng_menu, '<br />') . '</div></td>' .
-                 '</tr>';
+            echo'<tr>' .
+                '<td valign="top"><input type="radio" value="' . $key . '" name="iso" ' . ($key == Vars::$SYSTEM_SET['lng'] ? 'checked="checked"' : '') . '/></td>' .
+                '<td style="padding-bottom:6px">' .
+                (file_exists(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'flags' . DIRECTORY_SEPARATOR . $key . '.gif')
+                    ? '<img src="' . Vars::$HOME_URL . '/images/flags/' . $key . '.gif" alt=""/>&#160;'
+                    : ''
+                ) .
+                '<a href="index.php?act=languages&amp;mod=module&amp;language=' . $key . '"><b>' . $val['name'] . '</b></a>&#160;<span class="green">[' . $key . ']</span>' .
+                '<div class="sub">' . Functions::displayMenu($lng_menu, '<br />') . '</div></td>' .
+                '</tr>';
         }
-        echo '<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . $lng['save'] . '" /></td></tr>' .
-             '</table></p>' .
-             '</form></div>' .
-             '<div class="phdr">' . $lng['total'] . ': <b>' . count($lng_desc) . '</b></div>' .
-             '<p><a href="index.php?act=languages&amp;refresh">' . $lng['refresh_descriptions'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+        echo'<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '" /></td></tr>' .
+            '</table></p>' .
+            '</form></div>' .
+            '<div class="phdr">' . Vars::$LNG['total'] . ': <b>' . count($lng_desc) . '</b></div>' .
+            '<p><a href="' . Vars::$URI . '?refresh">' . $lng_adm['refresh_descriptions'] . '</a><br />' .
+            '<a href="' . Vars::$MODULE_URI . '">' . Vars::$LNG['admin_panel'] . '</a></p>';
 }
