@@ -30,6 +30,6 @@ $reg_data['sex'] = isset($_POST['sex']) ? intval($_POST['sex']) : 0;
 $tpl = Template::getInstance();
 $tpl->login = new Login;
 $tpl->reg_data = $reg_data;
-$tpl->lng_reg = Vars::loadLanguage(Vars::$MODULE);
+$tpl->lng_reg = Vars::loadLanguage('registration');
 $tpl->mode = $tpl->login->userRegistration($reg_data);
 $tpl->contents = $tpl->includeTpl('registration');

@@ -51,52 +51,61 @@ class System extends Vars
     */
     private function _router()
     {
-        //TODO: продумать обработку опасных данных
-        $route = isset($_GET['route']) ? trim($_GET['route'], '/\\') : '';
-        if (empty($route)) {
-            // Если находимся на Главной странице
-            $route = 'mainmenu/index.php';
-            Vars::$URI = Vars::$HOME_URL;
-            $place = '';
-        } else {
-            // Если вызван какой-либо модуль
-            if (!preg_match('/\.php$/i', $route)) {
-                $route .= '/index.php';
+        $route = isset($_GET['route']) ? substr(trim($_GET['route']), 0, 27) : '';
+        $place = '';
+        if (!empty($route)) {
+            $path = array();
+            $file = 'index.php';
+            $array = explode('/', $route);
+            foreach ($array as $val) {
+                if (preg_match('/\.php$/i', $val)) {
+                    $file = $val;
+                } else {
+                    $path[] = $val;
+                }
             }
-            Vars::$URI = Vars::$HOME_URL . '/' . $route;
-            $place = $route;
-        }
 
-        $path = explode('/', $route);
-        $include = trim(ltrim($route, $path[0]), '/\\');
-
-        $req = mysql_query("SELECT * FROM `cms_modules` WHERE `module` = '" . mysql_real_escape_string($path[0]) . "'");
-        if (mysql_num_rows($req)) {
-            $res = mysql_fetch_assoc($req);
-            if (is_file(MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $include)) {
-                // Задаем файл модуля для подключения
-                parent::$MODULE_INCLUDE = MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $include;
-                parent::$MODULE = $res['module'];
-
-                // Фиксируем местоположение на сайте
-                if (!empty($place)) {
-                    $param = array();
-                    if (!empty(parent::$ACT)) {
-                        $param[] = 'act=' . parent::$ACT;
+            if (isset($path[0])) {
+                $req = mysql_query("SELECT * FROM `cms_modules` WHERE `module` = '" . mysql_real_escape_string($path[0]) . "'");
+                if (mysql_num_rows($req)) {
+                    $include = MODPATH . implode(DIRECTORY_SEPARATOR, $path) . DIRECTORY_SEPARATOR . $file;
+                    if (is_file($include)) {
+                        parent::$MODULE_INCLUDE = $include;
+                        parent::$MODULE_URI = parent::$HOME_URL . '/' . $path[0];
+                        parent::$URI = parent::$HOME_URL . '/' . implode('/', $path);
+                        $place = $route;
+                    } else {
+                        // Ошибка 404
+                        parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
                     }
-                    if (!empty(parent::$MOD)) {
-                        $param[] = 'mod=' . parent::$MOD;
-                    }
-                    if (parent::$ID) {
-                        $param[] = 'id=' . parent::$ID;
-                    }
-                    parent::$PLACE = $place . (!empty($param) ? '?' . implode('&', $param) : '');
+                } else {
+                    // Ошибка 404
+                    parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
                 }
             } else {
-                // Редирект на страницу 404
+                // Ошибка 404
+                parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
             }
         } else {
-            // Редирект на страницу 404
+            // Главная страница сайта
+            parent::$MODULE_INCLUDE = MODPATH . 'mainmenu' . DIRECTORY_SEPARATOR . 'index.php';
+            parent::$MODULE_URI = parent::$HOME_URL;
+            parent::$URI = parent::$HOME_URL;
+        }
+
+        // Фиксируем местоположение на сайте
+        if (!empty($place)) {
+            $param = array();
+            if (!empty(parent::$ACT)) {
+                $param[] = 'act=' . parent::$ACT;
+            }
+            if (!empty(parent::$MOD)) {
+                $param[] = 'mod=' . parent::$MOD;
+            }
+            if (parent::$ID) {
+                $param[] = 'id=' . parent::$ID;
+            }
+            parent::$PLACE = $place . (!empty($param) ? '?' . implode('&', $param) : '');
         }
     }
 
@@ -105,7 +114,8 @@ class System extends Vars
     Получаем системные настройки
     -----------------------------------------------------------------
     */
-    private function _sysSettings()
+    private
+    function _sysSettings()
     {
         $set = array();
         $req = mysql_query("SELECT * FROM `cms_settings`");
@@ -121,7 +131,8 @@ class System extends Vars
     Определяем язык
     -----------------------------------------------------------------
     */
-    private function _lngDetect()
+    private
+    function _lngDetect()
     {
         $setlng = isset($_POST['setlng']) ? substr(trim($_POST['setlng']), 0, 2) : false;
         if ($setlng && array_key_exists($setlng, parent::$LNG_LIST)) {
@@ -148,7 +159,8 @@ class System extends Vars
     Авторизация пользователя и получение его данных из базы
     -----------------------------------------------------------------
     */
-    private function _authorizeUser()
+    private
+    function _authorizeUser()
     {
         $id = false;
         $token = false;
@@ -247,7 +259,8 @@ class System extends Vars
     Проверка пользователя на Бан
     -----------------------------------------------------------------
     */
-    private function _checkUserBan()
+    private
+    function _checkUserBan()
     {
         //TODO: Переделать!
         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '" . parent::$USER_ID . "' AND `ban_time` > '" . time() . "'");
@@ -262,7 +275,8 @@ class System extends Vars
     Фиксация истории адресов IP
     -----------------------------------------------------------------
     */
-    private function _userIpHistory()
+    private
+    function _userIpHistory()
     {
         $req = mysql_query("SELECT * FROM `cms_user_ip` WHERE `user_id` = " . parent::$USER_ID . " AND `ip` = '" . parent::$IP . "' AND `ip_via_proxy` = '" . parent::$IP_VIA_PROXY . "' LIMIT 1");
         if (mysql_num_rows($req)) {
@@ -289,7 +303,8 @@ class System extends Vars
     Автоочистка системы
     -----------------------------------------------------------------
     */
-    private function _autoClean()
+    private
+    function _autoClean()
     {
         if (parent::$SYSTEM_SET['clean_time'] < time() - 86400) {
             mysql_query("DELETE FROM `cms_sessions` WHERE `lastdate` < '" . (time() - 86400) . "'");
@@ -304,7 +319,8 @@ class System extends Vars
     Определение мобильного браузера
     -----------------------------------------------------------------
     */
-    private function _mobileDetect()
+    private
+    function _mobileDetect()
     {
         if (isset($_SESSION['is_mobile'])) {
             return $_SESSION['is_mobile'] == 1 ? true : false;

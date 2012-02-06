@@ -31,8 +31,8 @@ abstract class Vars
     public static $IS_MOBILE = false;            // Мобильный браузер
     public static $PLACE = '';                   // Местоположение на сайте
     public static $MODULE_INCLUDE = '';          // Подключаемый файл Роутера
-    public static $MODULE = '';                  // Активный модуль
-    public static $URI = '';                     // URI подключаемого модуля
+    public static $MODULE_URI = '';              // URI модуля
+    public static $URI = '';                     // URI активного скрипта
 
     /*
     -----------------------------------------------------------------

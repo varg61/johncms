@@ -17,16 +17,6 @@ require_once('includes/core.php');
 include(Vars::$MODULE_INCLUDE);
 
 
-
-
-
-
-
-
-
-
-
-
 //$tpl = Template::getInstance();
 //
 //if (isset($_SESSION['ref']))

@@ -46,5 +46,5 @@ echo '<div class="phdr"><b>' . $lng_profile['my_office'] . '</b></div>' .
     '<li><a href="profile.php?act=settings">' . Vars::$LNG['system_settings'] . '</a></li>' .
     '<li><a href="profile.php?act=edit">' . $lng_profile['profile_edit'] . '</a></li>' .
     '<li><a href="profile.php?act=password">' . Vars::$LNG['change_password'] . '</a></li>' .
-    (Vars::$USER_RIGHTS >= 1 ? '<li><span class="red"><a href="../' . Vars::$SYSTEM_SET['admp'] . '/index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a></span></li>' : '') .
+    (Vars::$USER_RIGHTS >= 1 ? '<li><span class="red"><a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a></span></li>' : '') .
     '</ul></p></div>';
