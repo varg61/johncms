@@ -9,9 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
-
-require_once('includes/core.php');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 echo '<div class="phdr"><b>' . Vars::$LNG['login'] . '</b></div>';
 
@@ -25,7 +23,7 @@ switch ($login->userLogin()) {
         Редирект на главную
         -----------------------------------------------------------------
         */
-        header('Location: index.php');
+        header('Location: ' . Vars::$HOME_URL);
         echo'<div class="gmenu"><p><h3><a href="index.php">' . Vars::$LNG['enter_on_site'] . '</a></h3></p></div>';
         break;
 
@@ -38,7 +36,7 @@ switch ($login->userLogin()) {
         if (!empty($login->error)) {
             echo'<div class="rmenu"><p>' . Vars::$LNG['errors_occurred'] . '</p></div>';
         }
-        echo'<form action="login.php" method="post">' .
+        echo'<form action="' . Vars::$URI . '" method="post">' .
             '<div class="menu">' .
             '<p><h3>' . Vars::$LNG['captcha'] . '</h3>' .
             Captcha::display(0) . '<br />' .
@@ -70,7 +68,7 @@ switch ($login->userLogin()) {
             echo'<div class="rmenu">' . Vars::$LNG['errors_occurred'] . '</div>';
         }
 
-        echo'<form action="login.php" method="post">' .
+        echo'<form action="' . Vars::$URI . '" method="post">' .
             '<div class="gmenu"><p>' .
 
             // Логин

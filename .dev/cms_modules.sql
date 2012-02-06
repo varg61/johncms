@@ -16,6 +16,7 @@ INSERT INTO `cms_modules` (`module`) VALUES
 ('exit'),
 ('help'),
 ('language'),
+('login'),
 ('mainmenu'),
 ('online'),
 ('registration'),
