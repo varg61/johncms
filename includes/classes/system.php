@@ -55,7 +55,6 @@ class System extends Vars
         $place = '';
         if (!empty($route)) {
             $path = array();
-            $file = 'index.php';
             $array = explode('/', $route);
             foreach ($array as $val) {
                 if (preg_match('/.php$/i', $val)) {
@@ -68,11 +67,11 @@ class System extends Vars
             if (isset($path[0])) {
                 $req = mysql_query("SELECT * FROM `cms_modules` WHERE `module` = '" . mysql_real_escape_string($path[0]) . "'");
                 if (mysql_num_rows($req)) {
-                    $include = MODPATH . implode(DIRECTORY_SEPARATOR, $path) . DIRECTORY_SEPARATOR . $file;
+                    $include = MODPATH . implode(DIRECTORY_SEPARATOR, $path) . DIRECTORY_SEPARATOR . (isset($file) ? $file : 'index.php');
                     if (is_file($include)) {
                         parent::$MODULE_INCLUDE = $include;
                         parent::$MODULE_URI = parent::$HOME_URL . '/' . $path[0];
-                        parent::$URI = parent::$HOME_URL . '/' . implode('/', $path);
+                        parent::$URI = parent::$HOME_URL . '/' . implode('/', $path) . (isset($file) ? '/' . $file : '');
                         $place = $route;
                     } else {
                         // Ошибка 404

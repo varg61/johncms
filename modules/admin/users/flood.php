@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
@@ -20,7 +20,7 @@ if (Vars::$USER_RIGHTS < 7) {
 $lng_adm = Vars::loadLanguage('adm');
 
 $set_af = isset(Vars::$SYSTEM_SET['antiflood']) ? unserialize(Vars::$SYSTEM_SET['antiflood']) : array();
-echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . $lng_adm['antiflood_settings'] . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . $lng_adm['antiflood_settings'] . '</div>';
 if (isset($_POST['submit']) || isset($_POST['save'])) {
     // Принимаем данные из формы
     $set_af['mode'] = isset($_POST['mode']) && $_POST['mode'] > 0 && $_POST['mode'] < 5 ? intval($_POST['mode']) : 1;
@@ -64,7 +64,7 @@ if (isset($_POST['submit']) || isset($_POST['save'])) {
 Форма ввода параметров Антифлуда
 -----------------------------------------------------------------
 */
-echo'<form action="user_flood.php" method="post">' .
+echo'<form action="' . Vars::$URI . '" method="post">' .
     '<div class="gmenu"><p><h3>' . $lng_adm['operation_mode'] . '</h3><table cellspacing="2">' .
     '<tr><td valign="top"><input type="radio" name="mode" value="3" ' . ($set_af['mode'] == 3 ? 'checked="checked"' : '') . '/></td><td>' . Vars::$LNG['day'] . '</td></tr>' .
     '<tr><td valign="top"><input type="radio" name="mode" value="4" ' . ($set_af['mode'] == 4 ? 'checked="checked"' : '') . '/></td><td>' . Vars::$LNG['night'] . '</td></tr>' .
@@ -81,5 +81,5 @@ echo'<form action="user_flood.php" method="post">' .
     '<input name="dayfrom" size="2" value="' . $set_af['dayfrom'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng_adm['day_begin'] . ' <span class="gray">(6-12)</span><br />' .
     '<input name="dayto" size="2" value="' . $set_af['dayto'] . '" maxlength="2" style="text-align:right"/>:00&#160;' . $lng_adm['day_end'] . ' <span class="gray">(17-23)</span>' .
     '</p><p><br /><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '"/></p></div></form>' .
-    '<div class="phdr"><a href="user_flood.php?reset">' . Vars::$LNG['reset_settings'] . '</a></div>' .
-    '<p><a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
+    '<div class="phdr"><a href="' . Vars::$URI . '?reset">' . Vars::$LNG['reset_settings'] . '</a></div>' .
+    '<p><a href="' . Vars::$MODULE_URI . '">' . Vars::$LNG['admin_panel'] . '</a></p>';

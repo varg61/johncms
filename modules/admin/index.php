@@ -36,7 +36,7 @@ echo'<li><a href="' . Vars::$URI . '/users">' . Vars::$LNG['users'] . '</a>&#160
     '<li><a href="' . Vars::$URI . '/users/administration.php">' . Vars::$LNG['administration'] . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>' .
     //TODO: Написать очистку неактивных юзеров
     //TODO: Написать новую систему бана юзеров
-    (Vars::$USER_RIGHTS >= 7 ? '<li><a href="user_flood.php">' . $lng_adm['antiflood'] . '</a></li>' : '') .
+    (Vars::$USER_RIGHTS >= 7 ? '<li><a href="' . Vars::$URI . '/users/flood.php">' . $lng_adm['antiflood'] . '</a></li>' : '') .
     //TODO: Написать новую систему Кармы
     '<br />' .
     //'<li><a href="../users/search.php">' . $lng['search_nick'] . '</a></li>' .
