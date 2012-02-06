@@ -11,4 +11,5 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-echo Functions::displayError(Vars::$LNG['error_404']);
+$tpl = Template::getInstance();
+$tpl->contents = $tpl->includeTpl('404');
