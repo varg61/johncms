@@ -45,7 +45,7 @@ if (isset($_REQUEST['lng_id']) && in_array($_REQUEST['lng_id'], $lng_key)) {
     $lng_id = intval($_REQUEST['lng_id']);
 }
 echo '<h3>Select language</h3>';
-echo '<form action="test.php" method="post">';
+echo '<form action="../old/test.php" method="post">';
 foreach ($lng_set as $key => $val) {
     echo '<input type="radio" name="lng_id" value="' . $key . '" ' . ($key == $lng_id ? 'checked="checked"' : '') . ' /> ' . $val['name'] . (isset($language) && !empty($language) && $language == $val['iso'] ? ' <small class="red">[' . $lng['system'] . ']</small>' : '') . '<br />';
 }
