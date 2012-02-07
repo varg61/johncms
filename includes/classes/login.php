@@ -213,8 +213,8 @@ class Login extends Vars
     private function _userEnter($user_id, $token, $remember = true)
     {
         if ($remember) {
-            setcookie('uid', $user_id, time() + 3600 * 24 * 31);
-            setcookie('token', $token, time() + 3600 * 24 * 31);
+            setcookie('uid', $user_id, time() + 3600 * 24 * 31, '/');
+            setcookie('token', $token, time() + 3600 * 24 * 31, '/');
         }
         $_SESSION['uid'] = $user_id;
         $_SESSION['token'] = $token;
@@ -276,8 +276,8 @@ class Login extends Vars
         parent::$USER_ID = false;
         parent::$USER_RIGHTS = 0;
         parent::$USER_DATA = array();
-        setcookie('id', '', time() - 3600);
-        setcookie('token', '', time() - 3600);
+        setcookie('uid', '', time() - 3600, '/');
+        setcookie('token', '', time() - 3600, '/');
         session_destroy();
     }
 }

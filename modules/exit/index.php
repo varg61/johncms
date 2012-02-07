@@ -16,7 +16,7 @@ $referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REF
 if (isset($_POST['submit'])) {
     $login = new Login;
     $login->userUnset(isset($_POST['clear']));
-    header('Location: index.php');
+    header('Location: ' . Vars::$HOME_URL);
     exit;
 } else {
     echo'<div class="rmenu">' .
