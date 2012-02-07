@@ -198,7 +198,7 @@ class Login extends Vars
                 // Пересылка на заполнение анкеты
                 $_SESSION['reg'] = 'step2';
                 $_SESSION['password'] = $var['password'];
-                header('Location: index.php?act=registration');
+                header('Location: ' . Vars::$URI);
                 return true;
             }
         }

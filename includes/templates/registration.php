@@ -63,7 +63,7 @@ switch ($this->mode) {
         // Показываем ошибки (если есть)
         if (isset($_POST['submit']) && !empty($this->login->error)) echo'<div class="rmenu"><p>' . Vars::$LNG['errors_occurred'] . '</p></div>';
 
-        echo'<form action="index.php?act=registration" method="post">' .
+        echo'<form action="' . Vars::$URI . '" method="post">' .
             '<div class="gmenu">' .
 
             // Логин
