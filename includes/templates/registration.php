@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $error_style = 'style="background-color: #FFCCCC"';
 echo '<div class="phdr"><b>' . Vars::$LNG['registration'] . '</b></div>';

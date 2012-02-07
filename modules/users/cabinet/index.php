@@ -32,7 +32,7 @@ echo '<div class="phdr"><b>' . $lng_profile['my_office'] . '</b></div>' .
     '<div>' . Functions::getImage('rating.png') . '&#160;<a href="profile.php?act=stat">' . Vars::$LNG['statistics'] . '</a></div>' .
     '</p><p>' .
     '<div>' . Functions::getImage('album_4.png') . '&#160;<a href="album.php?act=list">' . Vars::$LNG['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
-    '<div>' . Functions::getImage('comments.png') . '&#160;<a href="profile.php?act=guestbook">' . Vars::$LNG['guestbook'] . '</a>&#160;(' . $user['comm_count'] . ')</div>' .
+    '<div>' . Functions::getImage('comments.png') . '&#160;<a href="profile.php?act=guestbook">' . Vars::$LNG['guestbook'] . '</a>&#160;()</div>' .
     (Vars::$USER_RIGHTS >= 1 ? '</p><p><div>' . Functions::getImage('blocked.png') . '&#160;<a href="../guestbook/index.php?act=ga&amp;do=set">' . Vars::$LNG['admin_club'] . '</a> (<span class="red">()</span>)</div>' : '') .
     '</p></div><div class="menu"><p>' .
     '<h3>' . Functions::getImage('mail-inbox.png') . '&#160;' . $lng_profile['my_mail'] . '</h3><ul>' .

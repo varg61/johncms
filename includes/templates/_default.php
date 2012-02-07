@@ -25,7 +25,7 @@ $this->httpHeaders()
     <meta name="description" content="<?= Vars::$SYSTEM_SET['meta_desc'] ?>"/>
     <link rel="stylesheet" href="<?= Vars::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] ?>/style.css" type="text/css"/>
     <link rel="shortcut icon" href="<?= Vars::$HOME_URL ?>/favicon.ico"/>
-    <link rel="alternate" type="application/rss+xml" title="<?= Vars::$LNG['site_news'] ?>" href="http://localhost/johncms/rss/rss.php"/>
+    <link rel="alternate" type="application/rss+xml" title="<?= Vars::$LNG['site_news'] ?>" href="http://localhost/johncms/rss"/>
     <title><?= isset($this->title) ? $this->title : Vars::$SYSTEM_SET['copyright'] ?></title>
 </head>
 <body>
