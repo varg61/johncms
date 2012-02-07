@@ -13,7 +13,6 @@ define('_IN_JOHNCMS', 1);
 
 require_once('includes/core.php');
 
-
 include(Vars::$MODULE_INCLUDE);
 
 

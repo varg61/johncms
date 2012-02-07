@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 1) {

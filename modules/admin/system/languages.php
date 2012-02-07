@@ -646,8 +646,6 @@ switch (Vars::$ACT) {
         if (isset($_GET['refresh'])) {
             echo '<div class="gmenu"><p>' . $lng_adm['refresh_descriptions_ok'] . '</p></div>';
         }
-        if ($do == 'error')
-            echo '<div class="rmenu"><b>' . $panel_lng['error'] . '!</b></div>';
         echo'<div class="menu">' .
             '<form action="' . Vars::$URI . '?act=set" method="post"><p>' .
             '<table><tr><td>&nbsp;</td><td style="padding-bottom:4px"><h3>' . $lng_adm['language_system'] . '</h3></td></tr>';
