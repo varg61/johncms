@@ -24,23 +24,23 @@ echo'<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' 
     '<p><h3>' . Functions::getImage('rating.png', '', 'class="left"') . '&#160;' . Vars::$LNG['statistics'] . '</h3><ul>';
 if (Vars::$USER_RIGHTS >= 7) {
     if (!$user['preg'] && empty($user['regadm']))
-        echo'<li>' . $lng_profile['awaiting_registration'] . '</li>';
+        echo'<li>' . $lng['awaiting_registration'] . '</li>';
     elseif ($user['preg'] && !empty($user['regadm']))
-        echo'<li>' . $lng_profile['registration_approved'] . ': ' . $user['regadm'] . '</li>';
+        echo'<li>' . $lng['registration_approved'] . ': ' . $user['regadm'] . '</li>';
     else
-        echo'<li>' . $lng_profile['registration_free'] . '</li>';
+        echo'<li>' . $lng['registration_free'] . '</li>';
 }
 $lastvisit = time() > $user['last_visit'] + 300 ? date("d.m.Y (H:i)", $user['last_visit']) : false;
 if ($lastvisit) echo '<li><span class="gray">' . Vars::$LNG['last_visit'] . ':</span> ' . $lastvisit . '</li>';
-echo'<li><span class="gray">' . ($user['sex'] == 'm' ? $lng_profile['registered_m'] : $lng_profile['registered_w']) . ':</span> ' . date("d.m.Y (H:i)", $user['join_date']) . '</li>' .
-    '<li><span class="gray">' . ($user['sex'] == 'm' ? $lng_profile['stayed_m'] : $lng_profile['stayed_w']) . ':</span> ' . Functions::timeCount($user['total_on_site']) . '</li>';
+echo'<li><span class="gray">' . ($user['sex'] == 'm' ? $lng['registered_m'] : $lng['registered_w']) . ':</span> ' . date("d.m.Y (H:i)", $user['join_date']) . '</li>' .
+    '<li><span class="gray">' . ($user['sex'] == 'm' ? $lng['stayed_m'] : $lng['stayed_w']) . ':</span> ' . Functions::timeCount($user['total_on_site']) . '</li>';
 echo'</ul></p><p>' .
-    '<h3>' . Functions::getImage('user_edit.png', '', 'class="left"') . '&#160;' . $lng_profile['activity'] . '</h3><ul>' .
+    '<h3>' . Functions::getImage('user_edit.png', '', 'class="left"') . '&#160;' . $lng['activity'] . '</h3><ul>' .
     '<li><span class="gray">' . Vars::$LNG['forum'] . ':</span> <a href="profile.php?act=activity&amp;user=' . $user['user_id'] . '">' . $user['postforum'] . '</a></li>' .
     '<li><span class="gray">' . Vars::$LNG['guestbook'] . ':</span> <a href="profile.php?act=activity&amp;mod=guest&amp;user=' . $user['user_id'] . '">' . $user['postguest'] . '</a></li>' .
     '<li><span class="gray">' . Vars::$LNG['comments'] . ':</span> ' . $user['komm'] . '</li>' .
     '</ul></p>' .
-    '<p><h3>' . Functions::getImage('award.png', '', 'class="left"') . '&#160;' . $lng_profile['achievements'] . '</h3>';
+    '<p><h3>' . Functions::getImage('award.png', '', 'class="left"') . '&#160;' . $lng['achievements'] . '</h3>';
 $num = array(
     50,
     100,

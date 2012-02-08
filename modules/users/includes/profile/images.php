@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 require_once('../includes/lib/class.upload.php');
 if ($user['rights'] > Vars::$USER_RIGHTS) {
     // Если не хватает прав, выводим ошибку
-    echo display_error($lng_profile['error_rights']);
+    echo display_error($lng['error_rights']);
     exit;
 }
 switch (Vars::$MOD) {
@@ -24,7 +24,7 @@ switch (Vars::$MOD) {
         Выгружаем аватар
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng_profile['upload_avatar'] . '</div>';
+        echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng['upload_avatar'] . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
@@ -44,7 +44,7 @@ switch (Vars::$MOD) {
                 $handle->image_convert = 'png';
                 $handle->process('../files/users/avatar/');
                 if ($handle->processed) {
-                    echo '<div class="gmenu"><p>' . $lng_profile['avatar_uploaded'] . '<br />' .
+                    echo '<div class="gmenu"><p>' . $lng['avatar_uploaded'] . '<br />' .
                          '<a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>' .
                          '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['profile'] . '</a></div>';
                 } else {
@@ -54,18 +54,18 @@ switch (Vars::$MOD) {
             }
         } else {
             echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['user_id'] . '">' .
-                 '<div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
+                 '<div class="menu"><p>' . $lng['select_image'] . ':<br />' .
                  '<input type="file" name="imagefile" value="" />' .
                  '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['flsz']) . '" /></p>' .
-                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" />' .
+                 '<p><input type="submit" name="submit" value="' . $lng['upload'] . '" />' .
                  '</p></div></form>' .
-                 '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . Vars::$SYSTEM_SET['flsz'] . ' kb.<br />' . $lng_profile['select_image_help_2'] . '<br />' . $lng_profile['select_image_help_3'] . $lng_profile['select_image_help_4']
+                 '<div class="phdr"><small>' . $lng['select_image_help'] . ' ' . Vars::$SYSTEM_SET['flsz'] . ' kb.<br />' . $lng['select_image_help_2'] . '<br />' . $lng['select_image_help_3'] . $lng['select_image_help_4']
                  . '</small></div>';
         }
         break;
 
     case 'up_photo':
-        echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng_profile['upload_photo'] . '</div>';
+        echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng['upload_photo'] . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
@@ -94,7 +94,7 @@ switch (Vars::$MOD) {
                     $handle->image_convert = 'jpg';
                     $handle->process('../files/users/photo/');
                     if ($handle->processed) {
-                        echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br /><a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
+                        echo '<div class="gmenu"><p>' . $lng['photo_uploaded'] . '<br /><a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
                         echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['profile'] . '</a></div>';
                     } else {
                         echo Functions::displayError($handle->error);
@@ -105,12 +105,12 @@ switch (Vars::$MOD) {
                 $handle->clean();
             }
         } else {
-            echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['user_id'] . '"><div class="menu"><p>' . $lng_profile['select_image'] . ':<br />' .
+            echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['user_id'] . '"><div class="menu"><p>' . $lng['select_image'] . ':<br />' .
                  '<input type="file" name="imagefile" value="" />' .
                  '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['flsz']) . '" /></p>' .
-                 '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
+                 '<p><input type="submit" name="submit" value="' . $lng['upload'] . '" /></p>' .
                  '</div></form>' .
-                 '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . $lng_profile['select_image_help_5'] . '<br />' . $lng_profile['select_image_help_3'] . '</small></div>';
+                 '<div class="phdr"><small>' . $lng['select_image_help'] . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . $lng['select_image_help_5'] . '<br />' . $lng['select_image_help_3'] . '</small></div>';
         }
         break;
 }

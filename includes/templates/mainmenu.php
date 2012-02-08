@@ -61,7 +61,7 @@ if (Vars::$USER_ID || Vars::$SYSTEM_SET['active']) {
         '<div class="menu"><a href="users">' . Vars::$LNG['users'] . '</a> (' .
         $this->count->users . ($this->count->users_new ? '&#160;/&#160;<span class="red">+' . $this->count->users_new . '</span>' : '') .
         ')</div>' .
-        '<div class="menu"><a href="users/album.php">' . Vars::$LNG['photo_albums'] . '</a> (' .
+        '<div class="menu"><a href="album">' . Vars::$LNG['photo_albums'] . '</a> (' .
         $this->count->album . '&#160;/&#160;' . $this->count->album_photo . ($this->count->album_photo_new ? '&#160;/&#160;<span class="red">+' . $this->count->album_photo_new . '</span>' : '') .
         ')</div>';
 }

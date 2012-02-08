@@ -22,7 +22,7 @@ switch (Vars::$MOD) {
             echo Functions::displayError($lng['wrong_data']);
             exit;
         }
-        $title = $lng_profile['unread_comments'];
+        $title = $lng['unread_comments'];
         $select = "";
         $join = "INNER JOIN `cms_album_comments` ON `cms_album_files`.`id` = `cms_album_comments`.`sub_id`";
         $where = "`cms_album_files`.`user_id` = '" . Vars::$USER_ID . "' AND `cms_album_files`.`unread_comments` = 1 GROUP BY `cms_album_files`.`id`";
@@ -37,7 +37,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `sub_id`) FROM `cms_album_comments` WHERE `time` >" . (time() - 86400)), 0);
-        $title = $lng_profile['new_comments'];
+        $title = $lng['new_comments'];
         $select = "";
         $join = "INNER JOIN `cms_album_comments` ON `cms_album_files`.`id` = `cms_album_comments`.`sub_id`";
         $where = "`cms_album_comments`.`time` > " . (time() - 86400) . " GROUP BY `cms_album_files`.`id`";
@@ -51,7 +51,7 @@ switch (Vars::$MOD) {
         ТОП просмотров
         -----------------------------------------------------------------
         */
-        $title = $lng_profile['top_views'];
+        $title = $lng['top_views'];
         $select = "";
         $join = "";
         $where = "`cms_album_files`.`views` > '0'" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -65,7 +65,7 @@ switch (Vars::$MOD) {
         ТОП скачиваний
         -----------------------------------------------------------------
         */
-        $title = $lng_profile['top_downloads'];
+        $title = $lng['top_downloads'];
         $select = "";
         $join = "";
         $where = "`cms_album_files`.`downloads` > 0" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -79,7 +79,7 @@ switch (Vars::$MOD) {
         ТОП комментариев
         -----------------------------------------------------------------
         */
-        $title = $lng_profile['top_comments'];
+        $title = $lng['top_comments'];
         $select = "";
         $join = "";
         $where = "`cms_album_files`.`comm_count` > '0'" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -93,7 +93,7 @@ switch (Vars::$MOD) {
         ТОП положительных голосов
         -----------------------------------------------------------------
         */
-        $title = $lng_profile['top_votes'];
+        $title = $lng['top_votes'];
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
         $join = "";
         $where = "(`vote_plus` - `vote_minus`) > 2" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -107,7 +107,7 @@ switch (Vars::$MOD) {
         ТОП отрицательных голосов
         -----------------------------------------------------------------
         */
-        $title = $lng_profile['top_trash'];
+        $title = $lng['top_trash'];
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
         $join = "";
         $where = "(`vote_plus` - `vote_minus`) < -2" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -121,7 +121,7 @@ switch (Vars::$MOD) {
         Новые изображения
         -----------------------------------------------------------------
         */
-        $title = $lng_profile['new_photo'];
+        $title = $lng['new_photo'];
         $select = "";
         $join = "";
         $where = "`cms_album_files`.`time` > '" . (time() - 259200) . "'" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` > '1'");

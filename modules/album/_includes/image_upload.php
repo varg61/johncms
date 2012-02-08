@@ -25,7 +25,7 @@ if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
     }
     $res_a = mysql_fetch_assoc($req_a);
     require_once('../includes/lib/class.upload.php');
-    echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '"><b>' . Vars::$LNG['photo_album'] . '</b></a> | ' . $lng_profile['upload_photo'] . '</div>';
+    echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '"><b>' . Vars::$LNG['photo_album'] . '</b></a> | ' . $lng['upload_photo'] . '</div>';
     if (isset($_POST['submit'])) {
         $handle = new upload($_FILES['imagefile']);
         if ($handle->uploaded) {
@@ -74,7 +74,7 @@ if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                         `time` = '" . time() . "',
                         `access` = '" . $res_a['access'] . "'
                     ");
-                    echo '<div class="gmenu"><p>' . $lng_profile['photo_uploaded'] . '<br />' .
+                    echo '<div class="gmenu"><p>' . $lng['photo_uploaded'] . '<br />' .
                          '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>' .
                          '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['profile'] . '</a></div>';
                 } else {
@@ -87,15 +87,15 @@ if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         }
     } else {
         echo '<form enctype="multipart/form-data" method="post" action="album.php?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '">' .
-             '<div class="menu"><p><h3>' . $lng_profile['select_image'] . '</h3>' .
+             '<div class="menu"><p><h3>' . $lng['select_image'] . '</h3>' .
              '<input type="file" name="imagefile" value="" /></p>' .
              '<p><h3>' . Vars::$LNG['description'] . '</h3>' .
              '<textarea name="description" rows="' . Vars::$USER_SET['field_h'] . '"></textarea><br />' .
              '<small>' . Vars::$LNG['not_mandatory_field'] . ', max. 500</small></p>' .
              '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['flsz']) . '" />' .
-             '<p><input type="submit" name="submit" value="' . $lng_profile['upload'] . '" /></p>' .
+             '<p><input type="submit" name="submit" value="' . $lng['upload'] . '" /></p>' .
              '</div></form>' .
-             '<div class="phdr"><small>' . $lng_profile['select_image_help'] . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . $lng_profile['select_image_help_5'] . '</small></div>' .
+             '<div class="phdr"><small>' . $lng['select_image_help'] . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . $lng['select_image_help_5'] . '</small></div>' .
              '<p><a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['back'] . '</a></p>';
     }
 }

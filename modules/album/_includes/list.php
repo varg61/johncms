@@ -22,7 +22,7 @@ echo '<div class="phdr"><a href="album.php"><b>' . Vars::$LNG['photo_albums'] . 
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['user_id'] . "' " . ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6 ? "" : "AND `access` > 1") . " ORDER BY `sort` ASC");
 $total = mysql_num_rows($req);
 if ($user['user_id'] == Vars::$USER_ID && $total < $max_album || Vars::$USER_RIGHTS >= 7) {
-    echo '<div class="topmenu"><a href="album.php?act=edit&amp;user=' . $user['user_id'] . '">' . $lng_profile['album_create'] . '</a></div>';
+    echo '<div class="topmenu"><a href="album.php?act=edit&amp;user=' . $user['user_id'] . '">' . $lng['album_create'] . '</a></div>';
 }
 echo '<div class="user"><p>' . Functions::displayUser($user, array ('iphide' => 1,)) . '</p></div>';
 if ($total) {

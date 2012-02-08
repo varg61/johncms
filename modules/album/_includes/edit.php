@@ -20,7 +20,7 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
     if ($al) {
         $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['user_id'] . "'");
         if (mysql_num_rows($req)) {
-            echo '<div class="phdr"><b>' . $lng_profile['album_edit'] . '</b></div>';
+            echo '<div class="phdr"><b>' . $lng['album_edit'] . '</b></div>';
             $res = mysql_fetch_assoc($req);
             $name = htmlspecialchars($res['name']);
             $description = htmlspecialchars($res['description']);
@@ -31,7 +31,7 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             exit;
         }
     } else {
-        echo '<div class="phdr"><b>' . $lng_profile['album_create'] . '</b></div>';
+        echo '<div class="phdr"><b>' . $lng['album_create'] . '</b></div>';
         $name = '';
         $description = '';
         $password = '';
@@ -58,7 +58,7 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             $error[] = Vars::$LNG['error_wrong_data'];
         // Проверяем, есть ли уже альбом с таким же именем?
         if (!$al && mysql_num_rows(mysql_query("SELECT * FROM `cms_album_cat` WHERE `name` = '" . mysql_real_escape_string($name) . "' AND `user_id` = '" . $user['user_id'] . "' LIMIT 1")))
-            $error[] = $lng_profile['error_album_exists'];
+            $error[] = $lng['error_album_exists'];
         if (!$error) {
             if ($al) {
                 // Изменяем данные в базе
@@ -89,7 +89,7 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                     `sort` = '$sort'
                 ");
             }
-            echo '<div class="gmenu"><p>' . ($al ? $lng_profile['album_changed'] : $lng_profile['album_created']) . '<br />' .
+            echo '<div class="gmenu"><p>' . ($al ? $lng['album_changed'] : $lng['album_created']) . '<br />' .
                 '<a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
             exit;
         }
@@ -106,12 +106,12 @@ if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         '<small>' . Vars::$LNG['not_mandatory_field'] . '<br />Max. 500</small></p>' .
         '<p><h3>' . Vars::$LNG['password'] . '</h3>' .
         '<input type="text" name="password" value="' . Validate::filterString($password) . '" maxlength="15" /><br />' .
-        '<small>' . $lng_profile['access_help'] . '<br />Min. 3, Max. 15</small></p>' .
+        '<small>' . $lng['access_help'] . '<br />Min. 3, Max. 15</small></p>' .
         '<p><h3>Доступ</h3>' .
-        '<input type="radio" name="access" value="4" ' . (!$access || $access == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['access_all'] . '<br />' .
-        '<input type="radio" name="access" value="3" ' . ($access == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['access_friends'] . ' (временно не работает)<br />' .
-        '<input type="radio" name="access" value="2" ' . ($access == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['access_by_password'] . '<br />' .
-        '<input type="radio" name="access" value="1" ' . ($access == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['access_closed'] . '</p>' .
+        '<input type="radio" name="access" value="4" ' . (!$access || $access == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_all'] . '<br />' .
+        '<input type="radio" name="access" value="3" ' . ($access == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_friends'] . ' (временно не работает)<br />' .
+        '<input type="radio" name="access" value="2" ' . ($access == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_by_password'] . '<br />' .
+        '<input type="radio" name="access" value="1" ' . ($access == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_closed'] . '</p>' .
         '<p><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '" /></p>' .
         '</form></div>' .
         '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['cancel'] . '</a></div>';

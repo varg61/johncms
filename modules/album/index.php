@@ -9,14 +9,15 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$lng_profile = Vars::loadLanguage('profile');
+$lng = Vars::loadLanguage(1);
 
 $max_album = 10;
 $max_photo = 200;
 $al = isset($_REQUEST['al']) ? abs(intval($_REQUEST['al'])) : NULL;
 $img = isset($_REQUEST['img']) ? abs(intval($_REQUEST['img'])) : NULL;
+$user = isset($_GET['user']) ? abs(intval($_GET['user'])) : NULL;
 
 /*
 -----------------------------------------------------------------
@@ -101,19 +102,19 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
     $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
     echo '<div class="phdr"><b>' . Vars::$LNG['photo_albums'] . '</b></div>' .
         '<div class="gmenu"><p>' .
-        Functions::getImage('album_new.png') . '&#160;<a href="album.php?act=top">' . $lng_profile['new_photo'] . '</a> (' . $newcount . ')<br />' .
-        Functions::getImage('comments.png') . '&#160;<a href="album.php?act=top&amp;mod=last_comm">' . $lng_profile['new_comments'] . '</a>' .
+        Functions::getImage('album_new.png') . '&#160;<a href="album.php?act=top">' . $lng['new_photo'] . '</a> (' . $newcount . ')<br />' .
+        Functions::getImage('comments.png') . '&#160;<a href="album.php?act=top&amp;mod=last_comm">' . $lng['new_comments'] . '</a>' .
         '</p></div>' .
         '<div class="menu">' .
         '<p><h3>' . Functions::getImage('users.png') . '&#160;' . Vars::$LNG['albums'] . '</h3><ul>' .
-        '<li><a href="album.php?act=users">' . $lng_profile['album_list'] . '</a> (' . $albumcount . ')</li>' .
+        '<li><a href="album.php?act=users">' . $lng['album_list'] . '</a> (' . $albumcount . ')</li>' .
         '</ul></p>' .
         '<p><h3>' . Functions::getImage('rating.png') . '&#160;' . Vars::$LNG['rating'] . '</h3><ul>' .
-        '<li><a href="album.php?act=top&amp;mod=votes">' . $lng_profile['top_votes'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=downloads">' . $lng_profile['top_downloads'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=views">' . $lng_profile['top_views'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=comments">' . $lng_profile['top_comments'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=trash">' . $lng_profile['top_trash'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=votes">' . $lng['top_votes'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=downloads">' . $lng['top_downloads'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=views">' . $lng['top_views'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=comments">' . $lng['top_comments'] . '</a></li>' .
+        '<li><a href="album.php?act=top&amp;mod=trash">' . $lng['top_trash'] . '</a></li>' .
         '</ul></p>' .
         '</div>' .
         '<div class="phdr"><a href="index.php">' . Vars::$LNG['users'] . '</a></div>';

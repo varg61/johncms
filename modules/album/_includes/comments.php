@@ -38,7 +38,7 @@ if (mysql_num_rows($req_obj)) {
     if ($res_a['access'] == 1 && $owner['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
         // Если доступ закрыт
         echo Functions::displayError(Vars::$LNG['access_forbidden']) .
-            '<div class="phdr"><a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
+            '<div class="phdr"><a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . $lng['album_list'] . '</a></div>';
         exit;
     }
     $context_top = '<div class="phdr"><a href="album.php"><b>' . Vars::$LNG['photo_albums'] . '</b></a> | ' .

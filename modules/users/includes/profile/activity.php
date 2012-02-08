@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 История активности
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng_profile['activity'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng['activity'] . '</div>';
 $menu = array(
     (!Vars::$MOD ? '<b>' . Vars::$LNG['messages'] . '</b>' : '<a href="profile.php?act=activity&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['messages'] . '</a>'),
     (Vars::$MOD == 'topic' ? '<b>' . Vars::$LNG['themes'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=topic&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['themes'] . '</a>'),
@@ -44,7 +44,7 @@ switch (Vars::$MOD) {
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . $lng_profile['guest_empty'] . '</p></div>';
+            echo '<div class="menu"><p>' . $lng['guest_empty'] . '</p></div>';
         }
         break;
 

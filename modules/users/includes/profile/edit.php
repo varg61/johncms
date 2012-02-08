@@ -18,7 +18,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if ($user['user_id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] > Vars::$USER_RIGHTS)) {
-    echo Functions::displayError($lng_profile['error_rights']);
+    echo Functions::displayError($lng['error_rights']);
     exit;
 }
 
@@ -32,7 +32,7 @@ if (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights'] && Vars::$AC
     echo '<div class="gmenu"><p>' . Vars::$LNG['settings_default'] . '<br /><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['to_form'] . '</a></p></div>';
     exit;
 }
-echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . ($user['user_id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $lng_profile['my_profile']) . '</b></a> | ' . Vars::$LNG['edit'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . ($user['user_id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $lng['my_profile']) . '</b></a> | ' . Vars::$LNG['edit'] . '</div>';
 if (isset($_GET['delavatar'])) {
     /*
     -----------------------------------------------------------------
@@ -40,7 +40,7 @@ if (isset($_GET['delavatar'])) {
     -----------------------------------------------------------------
     */
     @unlink('../files/users/avatar/' . $user['user_id'] . '.png');
-    echo '<div class="rmenu">' . $lng_profile['avatar_deleted'] . '</div>';
+    echo '<div class="rmenu">' . $lng['avatar_deleted'] . '</div>';
 } elseif (isset($_GET['delphoto'])) {
     /*
     -----------------------------------------------------------------
@@ -49,7 +49,7 @@ if (isset($_GET['delavatar'])) {
     */
     @unlink('../files/users/photo/' . $user['user_id'] . '.jpg');
     @unlink('../files/users/photo/' . $user['user_id'] . '_small.jpg');
-    echo '<div class="rmenu">' . $lng_profile['photo_deleted'] . '</div>';
+    echo '<div class="rmenu">' . $lng['photo_deleted'] . '</div>';
 } elseif (isset($_POST['submit'])) {
     /*
     -----------------------------------------------------------------
@@ -136,8 +136,8 @@ echo '<form action="profile.php?act=edit&amp;user=' . $user['user_id'] . '" meth
     '<div class="gmenu"><p>' .
     '<h3>ID: ' . $user['user_id'] . '</h3>';
 if (Vars::$USER_RIGHTS >= 7) {
-    echo Vars::$LNG['nick'] . ': (' . $lng_profile['nick_lenght'] . ')<br /><input type="text" value="' . $user['name'] . '" name="name" /><br />' .
-        Vars::$LNG['status'] . ': (' . $lng_profile['status_lenght'] . ')<br /><input type="text" value="' . $user['status'] . '" name="status" /><br />';
+    echo Vars::$LNG['nick'] . ': (' . $lng['nick_lenght'] . ')<br /><input type="text" value="' . $user['name'] . '" name="name" /><br />' .
+        Vars::$LNG['status'] . ': (' . $lng['status_lenght'] . ')<br /><input type="text" value="' . $user['status'] . '" name="status" /><br />';
 } else {
     echo '<span class="gray">' . Vars::$LNG['nick'] . ':</span> <b>' . $user['name'] . '</b><br />' .
         '<span class="gray">' . Vars::$LNG['status'] . ':</span> ' . $user['status'] . '<br />';
@@ -148,60 +148,60 @@ if (file_exists(('../files/users/avatar/' . $user['user_id'] . '.png'))) {
     echo '<img src="../files/users/avatar/' . $user['user_id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
     $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '&amp;delavatar">' . Vars::$LNG['delete'] . '</a>';
 }
-echo '<small><a href="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['user_id'] . '">' . $lng_profile['upload'] . '</a>';
+echo '<small><a href="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['user_id'] . '">' . $lng['upload'] . '</a>';
 if($user['user_id'] == Vars::$USER_ID)
     echo ' | <a href="../pages/faq.php?act=avatars">' . Vars::$LNG['select'] . '</a>';
 echo $link . '</small></p>';
-echo '<p>' . $lng_profile['photo'] . ':<br />';
+echo '<p>' . $lng['photo'] . ':<br />';
 $link = '';
 if (file_exists(('../files/users/photo/' . $user['user_id'] . '_small.jpg'))) {
     echo '<a href="../files/users/photo/' . $user['user_id'] . '.jpg"><img src="../../files/users/photo/' . $user['user_id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
     $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '&amp;delphoto">' . Vars::$LNG['delete'] . '</a>';
 }
-echo '<small><a href="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['user_id'] . '">' . $lng_profile['upload'] . '</a>' . $link . '</small><br />' .
+echo '<small><a href="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['user_id'] . '">' . $lng['upload'] . '</a>' . $link . '</small><br />' .
     '</p></div>' .
     '<div class="menu">' .
-    '<p><h3>' . $lng_profile['personal_data'] . '</h3>' .
-    $lng_profile['name'] . ':<br /><input type="text" value="' . $user['imname'] . '" name="imname" /></p>' .
-    '<p>' . $lng_profile['birth_date'] . '<br />' .
+    '<p><h3>' . $lng['personal_data'] . '</h3>' .
+    $lng['name'] . ':<br /><input type="text" value="' . $user['imname'] . '" name="imname" /></p>' .
+    '<p>' . $lng['birth_date'] . '<br />' .
     '<input type="text" value="' . $user['dayb'] . '" size="2" maxlength="2" name="dayb" />.' .
     '<input type="text" value="' . $user['monthb'] . '" size="2" maxlength="2" name="monthb" />.' .
     '<input type="text" value="' . $user['yearofbirth'] . '" size="4" maxlength="4" name="yearofbirth" /></p>' .
-    '<p>' . $lng_profile['city'] . ':<br /><input type="text" value="' . $user['live'] . '" name="live" /></p>' .
-    '<p>' . $lng_profile['about'] . ':<br /><textarea rows="' . Vars::$USER_SET['field_h'] . '" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></p>' .
-    '<p><h3>' . $lng_profile['communication'] . '</h3>' .
-    $lng_profile['phone_number'] . ':<br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /><br />' .
-    '</p><p>E-mail:<br /><small>' . $lng_profile['email_warning'] . '</small><br />' .
+    '<p>' . $lng['city'] . ':<br /><input type="text" value="' . $user['live'] . '" name="live" /></p>' .
+    '<p>' . $lng['about'] . ':<br /><textarea rows="' . Vars::$USER_SET['field_h'] . '" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></p>' .
+    '<p><h3>' . $lng['communication'] . '</h3>' .
+    $lng['phone_number'] . ':<br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /><br />' .
+    '</p><p>E-mail:<br /><small>' . $lng['email_warning'] . '</small><br />' .
     '<input type="text" value="' . $user['mail'] . '" name="mail" /><br />' .
-    '<input name="mailvis" type="checkbox" value="1" ' . ($user['mailvis'] ? 'checked="checked"' : '') . ' />&#160;' . $lng_profile['show_in_profile'] . '</p>' .
+    '<input name="mailvis" type="checkbox" value="1" ' . ($user['mailvis'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['show_in_profile'] . '</p>' .
     '<p>ICQ:<br /><input type="text" value="' . $user['icq'] . '" name="icq" size="10" maxlength="10" /></p>' .
     '<p>Skype:<br /><input type="text" value="' . $user['skype'] . '" name="skype" /></p>' .
     '<p>Jabber:<br /><input type="text" value="' . $user['jabber'] . '" name="jabber" /></p>' .
-    '<p>' . $lng_profile['site'] . ':<br /><input type="text" value="' . $user['www'] . '" name="www" /></p>' .
+    '<p>' . $lng['site'] . ':<br /><input type="text" value="' . $user['www'] . '" name="www" /></p>' .
     '</div>';
 // Административные функции
 if (Vars::$USER_RIGHTS >= 7) {
     echo '<div class="rmenu"><p><h3>' . Vars::$LNG['settings'] . '</h3><ul>';
     if (Vars::$USER_RIGHTS == 9) {
-        echo '<li><input name="karma_off" type="checkbox" value="1" ' . ($user['karma_off'] ? 'checked="checked"' : '') . ' />&#160;<span class="red"><b>' . $lng_profile['deny_karma'] . '</b></span></li>';
+        echo '<li><input name="karma_off" type="checkbox" value="1" ' . ($user['karma_off'] ? 'checked="checked"' : '') . ' />&#160;<span class="red"><b>' . $lng['deny_karma'] . '</b></span></li>';
     }
     echo '<li><a href="profile.php?act=password&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['change_password'] . '</a></li>';
     if(Vars::$USER_RIGHTS > $user['rights'])
         echo '<li><a href="profile.php?act=reset&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['reset_settings'] . '</a></li>';
-    echo '<li>' . $lng_profile['specify_sex'] . ':<br />' .
-        '<input type="radio" value="m" name="sex" ' . ($user['sex'] == 'm' ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['sex_m'] . '<br />' .
-        '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['sex_w'] . '</li>' .
+    echo '<li>' . $lng['specify_sex'] . ':<br />' .
+        '<input type="radio" value="m" name="sex" ' . ($user['sex'] == 'm' ? 'checked="checked"' : '') . '/>&#160;' . $lng['sex_m'] . '<br />' .
+        '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&#160;' . $lng['sex_w'] . '</li>' .
         '</ul></p>';
     if ($user['user_id'] != Vars::$USER_ID) {
-        echo '<p><h3>' . $lng_profile['rank'] . '</h3><ul>' .
-            '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&#160;<b>' . $lng_profile['rank_0'] . '</b><br />' .
-            '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['rank_3'] . '<br />' .
-            '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['rank_4'] . '<br />' .
-            '<input type="radio" value="5" name="rights" ' . ($user['rights'] == 5 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['rank_5'] . '<br />' .
-            '<input type="radio" value="6" name="rights" ' . ($user['rights'] == 6 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['rank_6'] . '<br />';
+        echo '<p><h3>' . $lng['rank'] . '</h3><ul>' .
+            '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&#160;<b>' . $lng['rank_0'] . '</b><br />' .
+            '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_3'] . '<br />' .
+            '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_4'] . '<br />' .
+            '<input type="radio" value="5" name="rights" ' . ($user['rights'] == 5 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_5'] . '<br />' .
+            '<input type="radio" value="6" name="rights" ' . ($user['rights'] == 6 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_6'] . '<br />';
         if (Vars::$USER_RIGHTS == 9) {
-            echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['rank_7'] . '<br />' .
-                '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&#160;<span class="red"><b>' . $lng_profile['rank_9'] . '</b></span><br />';
+            echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_7'] . '<br />' .
+                '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&#160;<span class="red"><b>' . $lng['rank_9'] . '</b></span><br />';
         }
         echo '</ul></p>';
     }
