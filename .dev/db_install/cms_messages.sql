@@ -1,0 +1,31 @@
+-- Dumping structure for table dev_johncms.cms_messages
+DROP TABLE IF EXISTS `cms_messages`;
+CREATE TABLE IF NOT EXISTS `cms_messages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `contact_id` int(10) unsigned NOT NULL,
+  `text` text NOT NULL,
+  `time` int(10) unsigned NOT NULL,
+  `delete` int(10) unsigned NOT NULL DEFAULT '0',
+  `delete_in` int(10) unsigned NOT NULL,
+  `delete_out` int(10) unsigned NOT NULL DEFAULT '0',
+  `elected_in` int(10) unsigned NOT NULL DEFAULT '0',
+  `elected_out` int(10) unsigned NOT NULL DEFAULT '0',
+  `read` enum('0','1') NOT NULL DEFAULT '0',
+  `sys` enum('0','1') NOT NULL DEFAULT '0',
+  `filename` varchar(100) NOT NULL,
+  `filesize` int(10) unsigned NOT NULL DEFAULT '0',
+  `filecount` int(10) unsigned NOT NULL DEFAULT '0',
+  `theme` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `contact_id` (`contact_id`),
+  KEY `time` (`time`),
+  KEY `delete` (`delete`),
+  KEY `delete_in` (`delete_in`),
+  KEY `delete_out` (`delete_out`),
+  KEY `elected_in` (`elected_in`),
+  KEY `elected_out` (`elected_out`),
+  KEY `read` (`read`),
+  KEY `sys` (`sys`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
