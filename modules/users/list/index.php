@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 /*
 -----------------------------------------------------------------
@@ -27,17 +27,17 @@ if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
 -----------------------------------------------------------------
 */
 $menu = array(
-    (Vars::$ACT != 'adm' ? Vars::$LNG['users'] : '<a href="userlist.php">' . Vars::$LNG['users'] . '</a>'),
-    (Vars::$ACT == 'adm' ? Vars::$LNG['administration'] : '<a href="userlist.php?act=adm">' . Vars::$LNG['administration'] . '</a>')
+    (Vars::$ACT != 'adm' ? Vars::$LNG['users'] : '<a href="' . Vars::$URI . '">' . Vars::$LNG['users'] . '</a>'),
+    (Vars::$ACT == 'adm' ? Vars::$LNG['administration'] : '<a href="' . Vars::$URI . '?act=adm">' . Vars::$LNG['administration'] . '</a>')
 );
-echo'<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['users_list'] . '</div>' .
+echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['users_list'] . '</div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `" . (Vars::$ACT == 'adm' ? 'rights' : 'level') . "` > 0"), 0);
 Vars::fixPage($total);
 
 if ($total > Vars::$USER_SET['page_size']) {
-    echo'<div class="topmenu">' . Functions::displayPagination('userlist.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+    echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 }
 
 if ($total) {
@@ -52,11 +52,11 @@ if ($total) {
 
 echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo'<div class="topmenu">' . Functions::displayPagination('userlist.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="userlist.php" method="post">' .
+    echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . Vars::$URI . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="search.php">' . Vars::$LNG['search_user'] . '</a><br />' .
-    '<a href="index.php">' . Vars::$LNG['back'] . '</a></p>';
+echo '<p><a href="' . Vars::$MODULE_URI . '/search">' . Vars::$LNG['search_user'] . '</a><br />' .
+    '<a href="' . Vars::$MODULE_URI . '">' . Vars::$LNG['back'] . '</a></p>';
