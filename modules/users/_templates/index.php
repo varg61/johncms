@@ -1,6 +1,6 @@
 <div class="phdr"><b><?= Vars::$LNG['community'] ?></b></div>
 <div class="gmenu">
-    <form action="search.php" method="post">
+    <form action="<?= Vars::$URI ?>/search" method="post">
         <p>
         <h3><?= Vars::$LNG['search'] ?></h3>
         <input type="text" name="search"/>
@@ -11,7 +11,7 @@
 </div>
 <div class="menu">
     <p>
-    <h3><?= Functions::getImage('users.png') . '&#160;' . Vars::$LNG['community'] ?> <span class="green">(<?= $count->users ?>)</span></h3>
+    <h3><?= Functions::getImage('users.png') . '&#160;' . Vars::$LNG['community'] ?> <span class="green">(<?= $this->count->users ?>)</span></h3>
     <ul>
         <li><a href="userlist.php"><?= Vars::$LNG['users'] ?></a></li>
         <li><a href="userlist.php?act=adm"><?= Vars::$LNG['administration'] ?></a></li>

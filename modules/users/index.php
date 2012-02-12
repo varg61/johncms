@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
 
@@ -57,6 +57,6 @@ switch (Vars::$ACT) {
      * Главное меню раздела пользователей
      */
     default:
-        $tpl->count    = new Counters();
-        $tpl->contents = $tpl->includeTpl('users/index');
+        $tpl->count = new Counters();
+        $tpl->contents = $tpl->includeTpl('index');
 }

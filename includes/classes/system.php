@@ -78,14 +78,17 @@ class System extends Vars
                     } else {
                         // Ошибка 404
                         parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
+                        parent::$MODULE = '404';
                     }
                 } else {
                     // Ошибка 404
                     parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
+                    parent::$MODULE = '404';
                 }
             } else {
                 // Ошибка 404
                 parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
+                parent::$MODULE = '404';
             }
         } else {
             // Главная страница сайта
