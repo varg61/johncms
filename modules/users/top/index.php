@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 /*
 -----------------------------------------------------------------
@@ -28,15 +28,12 @@ if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
 */
 function get_top($order = 'postforum')
 {
-    global $lng;
     $req = mysql_query("SELECT * FROM `users` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
     if (mysql_num_rows($req)) {
         $out = '';
-        $i = 0;
-        while ($res = mysql_fetch_assoc($req)) {
+        for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
             $out .= $i % 2 ? '<div class="list2">' : '<div class="list1">';
             $out .= Functions::displayUser($res, array('header' => ('<b>' . $res[$order]) . '</b>')) . '</div>';
-            ++$i;
         }
         return $out;
     } else {
@@ -50,35 +47,23 @@ function get_top($order = 'postforum')
 -----------------------------------------------------------------
 */
 $menu = array(
-    (!Vars::$MOD ? '<b>' . Vars::$LNG['forum'] . '</b>' : '<a href="index.php?act=top">' . Vars::$LNG['forum'] . '</a>'),
-    (Vars::$MOD == 'guest' ? '<b>' . Vars::$LNG['guestbook'] . '</b>' : '<a href="index.php?act=top&amp;mod=guest">' . Vars::$LNG['guestbook'] . '</a>'),
-    (Vars::$MOD == 'comm' ? '<b>' . Vars::$LNG['comments'] . '</b>' : '<a href="index.php?act=top&amp;mod=comm">' . Vars::$LNG['comments'] . '</a>')
+    (!Vars::$ACT ? '<b>' . Vars::$LNG['forum'] . '</b>' : '<a href="' . Vars::$URI . '">' . Vars::$LNG['forum'] . '</a>'),
+    (Vars::$ACT == 'comm' ? '<b>' . Vars::$LNG['comments'] . '</b>' : '<a href="' . Vars::$URI . '?act=comm">' . Vars::$LNG['comments'] . '</a>')
 );
-if ($set_karma['on'])
-    $menu[] = Vars::$MOD == 'karma' ? '<b>' . Vars::$LNG['karma'] . '</b>' : '<a href="index.php?act=top&amp;mod=karma">' . Vars::$LNG['karma'] . '</a>';
-switch (Vars::$MOD) {
-    case 'guest':
-        /*
-        -----------------------------------------------------------------
-        Топ Гостевой
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['top_guest'] . '</div>';
-        echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
-        echo get_top('postguest');
-        echo '<div class="phdr"><a href="../guestbook/index.php">' . Vars::$LNG['guestbook'] . '</a></div>';
-        break;
 
+//TODO: Добавить ТОП Кармы
+
+switch (Vars::$ACT) {
     case 'comm':
         /*
         -----------------------------------------------------------------
         Топ комментариев
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['top_comm'] . '</div>';
-        echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
-        echo get_top('komm');
-        echo '<div class="phdr"><a href="../index.php">' . Vars::$LNG['homepage'] . '</a></div>';
+        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['top_comm'] . '</div>' .
+            '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
+            get_top('count_comments') .
+            '<div class="phdr"><a href="' . Vars::$HOME_URL . '">' . Vars::$LNG['homepage'] . '</a></div>';
         break;
 
     case 'karma':
@@ -88,8 +73,8 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if ($set_karma['on']) {
-            echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['top_karma'] . '</div>';
-            echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
+            echo'<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['top_karma'] . '</div>' .
+                '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
             $req = mysql_query("SELECT *, (`karma_plus` - `karma_minus`) AS `karma` FROM `users` WHERE (`karma_plus` - `karma_minus`) > 0 ORDER BY `karma` DESC LIMIT 9");
             if (mysql_num_rows($req)) {
                 $i = 0;
@@ -111,9 +96,9 @@ switch (Vars::$MOD) {
         Топ Форума
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['top_forum'] . '</div>';
-        echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
-        echo get_top('postforum');
-        echo '<div class="phdr"><a href="../forum/index.php">' . Vars::$LNG['forum'] . '</a></div>';
+        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['top_forum'] . '</div>' .
+            '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
+            get_top('count_forum') .
+            '<div class="phdr"><a href="' . Vars::$HOME_URL . '/forum">' . Vars::$LNG['forum'] . '</a></div>';
 }
-echo '<p><a href="index.php">' . Vars::$LNG['back'] . '</a></p>';
+echo '<p><a href="' . Vars::$MODULE_URI . '">' . Vars::$LNG['back'] . '</a></p>';

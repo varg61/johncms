@@ -20,9 +20,9 @@
     <p>
     <h3><?= Functions::getImage('rating.png') . '&#160;' . Vars::$LNG['users_top'] ?></h3>
     <ul>
-        <li><a href="top.php"><?= Vars::$LNG['forum'] ?></a></li>
-        <li><a href="top.php"><?= Vars::$LNG['comments'] ?></a></li>
-        <li><a href="top.php"><?= Vars::$LNG['karma'] ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/top"><?= Vars::$LNG['forum'] ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/top"><?= Vars::$LNG['comments'] ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/top"><?= Vars::$LNG['karma'] ?></a></li>
     </ul>
     </p>
 </div>
