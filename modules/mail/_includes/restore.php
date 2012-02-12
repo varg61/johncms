@@ -61,7 +61,7 @@ if ( Vars::$ID )
         $tpl->submit = $lng_mail['restore'];
         $tpl->phdr = $lng_mail['restore_message'];
         $tpl->urlBack = Vars::$MODULE_URI . '?act=basket';
-        $tpl->contents = $tpl->includeTpl( 'mail/select' );
+        $tpl->contents = $tpl->includeTpl( 'select' );
     } else
     {
         $tpl->contents = '<div class="rmenu">' . $lng_mail['page_does_not_exist'] . '</div>';

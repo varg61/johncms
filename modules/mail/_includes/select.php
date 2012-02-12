@@ -76,7 +76,7 @@ if ( Vars::$ID )
                         $tpl->phdr = $lng_mail['add_contact'];
 
                     }
-                    $tpl->contents = $tpl->includeTpl( 'mail/select' );
+                    $tpl->contents = $tpl->includeTpl( 'select' );
                 }
                 break;
 
@@ -99,7 +99,7 @@ if ( Vars::$ID )
                     $tpl->select = $lng_mail['confirm_unban_contact'];
                     $tpl->submit = $lng_mail['unban'];
                     $tpl->phdr = $lng_mail['unban_contact'];
-                    $tpl->contents = $tpl->includeTpl( 'mail/select' );
+                    $tpl->contents = $tpl->includeTpl( 'select' );
                 } else
                 {
                     $user = mysql_fetch_assoc( $q );
@@ -132,7 +132,7 @@ if ( Vars::$ID )
                         $tpl->select = $lng_mail['confirm_ban_contact'];
                         $tpl->submit = $lng_mail['ban'];
                         $tpl->phdr = $lng_mail['ban_contact'];
-                        $tpl->contents = $tpl->includeTpl( 'mail/select' );
+                        $tpl->contents = $tpl->includeTpl( 'select' );
                     }
                 }
 

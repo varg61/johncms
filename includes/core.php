@@ -35,11 +35,13 @@ mb_internal_encoding('UTF-8');
 -----------------------------------------------------------------
 */
 define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);          // Системная папка
-define('ROOTPATH', dirname(realpath(dirname(__FILE__))) . DIRECTORY_SEPARATOR);// Корневая папка
+define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR);                    // Корневая папка
 define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
 define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);                // Папка с языками
 define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
+
 define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 // Папка с модулями
+define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
 
 /*
 -----------------------------------------------------------------

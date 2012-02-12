@@ -185,10 +185,10 @@ if ( Vars::$ID )
         $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=basket&amp;',
             Vars::$START, $total, Vars::$USER_SET['page_size'] );
         $tpl->query = $array;
-        $tpl->contacts = $tpl->includeTpl( 'mail/contacts' );
+        $tpl->contacts = $tpl->includeTpl( 'contacts' );
     } else
     {
         $tpl->contacts = '<div class="rmenu">' . $lng_mail['empty_basket'] . '!</div>';
     }
-    $tpl->contents = $tpl->includeTpl( 'mail/basket' );
+    $tpl->contents = $tpl->includeTpl( 'basket' );
 }

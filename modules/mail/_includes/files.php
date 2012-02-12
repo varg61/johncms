@@ -44,4 +44,4 @@ if ( $total )
     $tpl->query = $array;
     $tpl->total = $total;
 }
-$tpl->contents = $tpl->includeTpl( 'mail/files' );
+$tpl->contents = $tpl->includeTpl( 'files' );

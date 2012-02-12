@@ -90,7 +90,7 @@ if ( Vars::$ID )
             $tpl->phdr = $lng_mail['removing_message'];
             $tpl->urlBack = Vars::$MODULE_URI . '?act=basket';
         }
-        $tpl->contents = $tpl->includeTpl( 'mail/select' );
+        $tpl->contents = $tpl->includeTpl( 'select' );
     } else
     {
         $tpl->contents = '<div class="rmenu">' . $lng_mail['page_does_not_exist'] . '</div>';

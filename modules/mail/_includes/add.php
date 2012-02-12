@@ -114,4 +114,4 @@ if ( isset( $_POST['submit'] ) )
     }
 }
 
-$tpl->contents = $tpl->includeTpl( 'mail/add' );
+$tpl->contents = $tpl->includeTpl( 'add' );

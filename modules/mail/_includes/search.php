@@ -73,4 +73,4 @@ if ( $search && Validate::nickname( $search, 1 ) === true )
 {
     $tpl->total = 0;
 }
-$tpl->contents = $tpl->includeTpl( 'mail/search' );
+$tpl->contents = $tpl->includeTpl( 'search' );

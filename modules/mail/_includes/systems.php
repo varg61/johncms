@@ -34,7 +34,7 @@ if ( Vars::$MOD == 'delete' )
             $tpl->submit = Vars::$LNG['delete'];
             $tpl->phdr = $lng_mail['removing_message'];
             $tpl->urlBack = Vars::$MODULE_URI . '?act=systems';
-            $tpl->contents = $tpl->includeTpl( 'mail/select' );
+            $tpl->contents = $tpl->includeTpl( 'select' );
         }
     } else
     {
@@ -55,7 +55,7 @@ if ( Vars::$MOD == 'delete' )
             $tpl->submit = Vars::$LNG['clear'];
             $tpl->phdr = $lng_mail['clear_systems'];
             $tpl->urlBack = Vars::$MODULE_URI . '?act=systems';
-            $tpl->contents = $tpl->includeTpl( 'mail/select' );
+            $tpl->contents = $tpl->includeTpl( 'select' );
         }
     } else
     {
@@ -93,5 +93,5 @@ if ( Vars::$MOD == 'delete' )
         {
             $tpl->error = '<div class="rmenu">' . $lng_mail['no_messages'] . '</div>';
         }
-        $tpl->contents = $tpl->includeTpl( 'mail/systems' );
+        $tpl->contents = $tpl->includeTpl( 'systems' );
     }

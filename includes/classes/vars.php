@@ -33,7 +33,7 @@ abstract class Vars
     public static $MODULE_INCLUDE = '';          // Подключаемый файл Роутера
     public static $MODULE_URI = '';              // URI модуля
     public static $URI = '';                     // URI активного скрипта
-    public static $MODULE = '';                  // Активный модуль
+    public static $MODULE = 'mainmenu';                  // Активный модуль
 
     /*
     -----------------------------------------------------------------

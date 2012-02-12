@@ -100,5 +100,5 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
     $tpl->banned = Mail::counter( 'banned' );
     $tpl->files = Mail::counter( 'files' );
     //Подключаем шаблон модуля
-    $tpl->contents = $tpl->includeTpl( 'mail/_index' );
+    $tpl->contents = $tpl->includeTpl( '_index' );
 }

@@ -89,7 +89,8 @@ class System extends Vars
             }
         } else {
             // Главная страница сайта
-            parent::$MODULE_INCLUDE = MODPATH . 'mainmenu' . DIRECTORY_SEPARATOR . 'index.php';
+            parent::$MODULE_INCLUDE = MODPATH . 'homepage' . DIRECTORY_SEPARATOR . 'index.php';
+            parent::$MODULE = 'homepage';
             parent::$MODULE_URI = parent::$HOME_URL;
             parent::$URI = parent::$HOME_URL;
         }

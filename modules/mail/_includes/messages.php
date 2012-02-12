@@ -72,7 +72,7 @@ if ( Vars::$ID == Vars::$USER_ID && empty( Vars::$MOD ) )
                 $tpl->select = $lng_mail['confirm_removing'];
                 $tpl->submit = Vars::$LNG['delete'];
                 $tpl->phdr = $lng_mail['removing_message'];
-                $tpl->contents = $tpl->includeTpl( 'mail/select' );
+                $tpl->contents = $tpl->includeTpl( 'select' );
             }
         } else
         {
@@ -275,7 +275,7 @@ if ( Vars::$ID == Vars::$USER_ID && empty( Vars::$MOD ) )
                         $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI .
                             '?act=messages&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::
                             $USER_SET['page_size'] );
-                        $tpl->list = $tpl->includeTpl( 'mail/list' );
+                        $tpl->list = $tpl->includeTpl( 'list' );
                     } else
                     {
                         $tpl->list = '<div class="rmenu">' . $lng_mail['no_messages'] . '</div>';
@@ -286,7 +286,7 @@ if ( Vars::$ID == Vars::$USER_ID && empty( Vars::$MOD ) )
 					{
 						$tpl->ignor = '<div class="rmenu">' . $lng_mail['user_banned'] . '</div>';
 					}
-                    $tpl->contents = $tpl->includeTpl( 'mail/messages' );
+                    $tpl->contents = $tpl->includeTpl( 'messages' );
                 } else
                 {
                     $tpl->contents = Functions::displayError( $lng_mail['user_does_not_exist'] . '!',

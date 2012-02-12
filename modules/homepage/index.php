@@ -20,17 +20,14 @@ if (isset($_SESSION['ref']))
 $tpl = Template::getInstance();
 $tpl->mp = new HomePage();
 $tpl->count = new Counters();
-$tpl->contents = $tpl->includeTpl('mainmenu');
 
-/*
------------------------------------------------------------------
-Карта сайта
------------------------------------------------------------------
-*/
 if (isset(Vars::$SYSTEM_SET['sitemap'])) {
     $set_map = unserialize(Vars::$SYSTEM_SET['sitemap']);
     if (($set_map['forum'] || $set_map['lib']) && ($set_map['users'] || !Vars::$USER_ID) && ($set_map['browsers'] || !Vars::$IS_MOBILE)) {
         $map = new SiteMap();
-        echo '<div class="sitemap">' . $map->mapGeneral() . '</div>';
+        $tpl->sitemap = $map->mapGeneral();
+        //echo '<div class="sitemap">' . $map->mapGeneral() . '</div>';
     }
 }
+
+$tpl->contents = $tpl->includeTpl('homepage');

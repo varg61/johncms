@@ -12,7 +12,7 @@
 class Template extends Vars
 {
     public $vars = array();
-    public $template = '_default';
+    public $template = true;
     public $extract = false;
     private static $instance;
 
@@ -54,14 +54,21 @@ class Template extends Vars
         if ($this->extract) {
             extract($this->vars);
         }
-        ob_start();
+
         // Загружаем шаблоны
-        $system_template = SYSPATH . 'templates' . DIRECTORY_SEPARATOR . $tpl . '.php';
-        $user_template = ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . $tpl . '.php';
-        if (is_file($user_template)) {
-            include_once($user_template);
-        } elseif (is_file($system_template)) {
-            include_once($system_template);
+        if($tpl === true){
+            $default_tpl = SYSPATH . 'template_default.php';
+            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'template_default.php';
+        } else {
+            $default_tpl = MODPATH . parent::$MODULE . DIRECTORY_SEPARATOR . '_templates' . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . parent::$MODULE . DIRECTORY_SEPARATOR . $tpl . '.php';
+        }
+
+        ob_start();
+        if (is_file($user_tpl)) {
+            include_once($user_tpl);
+        } elseif (is_file($default_tpl)) {
+            include_once($default_tpl);
         } else {
             echo Functions::displayError('Template &laquo;<b>' . $tpl . '</b>&raquo; not found');
         }
@@ -88,84 +95,6 @@ class Template extends Vars
         }
 
         // Подключаем файл шаблона оформления
-        return $this->includeTpl($this->template, $this->vars);
-    }
-
-    /*
-     * Вспомогательные функции, которые можно применять в шаблонах оформления
-     */
-
-    public function httpHeaders()
-    {
-        if (stristr(parent::$USER_AGENT, "msie") && stristr(parent::$USER_AGENT, "windows")) {
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header('Content-type: text/html; charset=UTF-8');
-        } else {
-            header("Cache-Control: public");
-            header('Content-type: application/xhtml+xml; charset=UTF-8');
-            echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-        }
-    }
-
-    public function languageSwitch($show = false)
-    {
-        if ($show || (parent::$PLACE == 'index.php' && count(parent::$LNG_LIST) > 1)) {
-            return '<a href="' . parent::$HOME_URL . '/language"><b>' . strtoupper(parent::$LNG_ISO) . '</b></a>' .
-                '&#160;<img src="' . parent::$HOME_URL . '/images/flags/' . parent::$LNG_ISO . '.gif" alt=""/>';
-        }
-        return '';
-    }
-
-    public function userMenu($delimiter = ' | ')
-    {
-        $menu = array();
-        if (!empty(parent::$PLACE) || parent::$ACT) {
-            $menu[] = '<a href="' . parent::$HOME_URL . '">' . parent::$LNG['homepage'] . '</a>';
-        }
-
-        if (parent::$USER_ID) {
-            $menu[] = '<a href="' . parent::$HOME_URL . '/users/cabinet">' . parent::$LNG['personal'] . '</a>';
-            $menu[] = '<a href="' . parent::$HOME_URL . '/exit">' . parent::$LNG['exit'] . '</a>';
-        } else {
-            $menu[] = '<a href="' . Vars::$HOME_URL . '/login">' . Vars::$LNG['login'] . '</a>';
-            $menu[] = '<a href="' . Vars::$HOME_URL . '/registration">' . Vars::$LNG['registration'] . '</a>';
-        }
-
-        return Functions::displayMenu($menu, $delimiter);
-    }
-
-    public function homeLink()
-    {
-        if (!empty(parent::$PLACE) || parent::$ACT) {
-            return '<div><a href="' . Vars::$HOME_URL . '">' . Vars::$LNG['homepage'] . '</a></div>';
-        }
-        return '';
-    }
-
-    public function quickGo()
-    {
-        if (Vars::$USER_SET['quick_go']) {
-            return '<form action="' . Vars::$HOME_URL . '/go.php" method="post">' .
-                '<div><select name="adres" style="font-size:x-small">' .
-                '<option selected="selected">' . Vars::$LNG['quick_jump'] . '</option>' .
-                '<option value="guest">' . Vars::$LNG['guestbook'] . '</option>' .
-                '<option value="forum">' . Vars::$LNG['forum'] . '</option>' .
-                '<option value="news">' . Vars::$LNG['news'] . '</option>' .
-                '<option value="gallery">' . Vars::$LNG['gallery'] . '</option>' .
-                '<option value="down">' . Vars::$LNG['downloads'] . '</option>' .
-                '<option value="lib">' . Vars::$LNG['library'] . '</option>' .
-                '<option value="gazen">Gazenwagen :)</option>' .
-                '</select><input type="submit" value="Go!" style="font-size:x-small"/>' .
-                '</div></form>';
-        }
-        return '';
-    }
-
-    public function userGreeting()
-    {
-        return Vars::$LNG['hi'] . ', ' .
-            (Vars::$USER_ID
-                ? '<b>' . Vars::$USER_DATA['nickname'] . '</b>'
-                : Vars::$LNG['guest']);
+        return $this->includeTpl($this->template);
     }
 }

@@ -63,9 +63,9 @@ if ( $total )
     $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=archive&amp;',
         Vars::$START, $total, Vars::$USER_SET['page_size'] );
     $tpl->query = $array;
-    $tpl->contacts = $tpl->includeTpl( 'mail/contacts' );
+    $tpl->contacts = $tpl->includeTpl( 'contacts' );
 } else
 {
     $tpl->contacts = '<div class="rmenu">' . $lng_mail['no_archive'] . '!</div>';
 }
-$tpl->contents = $tpl->includeTpl( 'mail/archive' );
+$tpl->contents = $tpl->includeTpl( 'archive' );
