@@ -40,6 +40,7 @@ define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  /
 define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);                // Папка с языками
 define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
 
+define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR);                  // Папка с пользовательскими файлами
 define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 // Папка с модулями
 define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
 

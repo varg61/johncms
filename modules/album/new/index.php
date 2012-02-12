@@ -11,7 +11,9 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-switch (Vars::$MOD) {
+$lng = Vars::loadLanguage(1);
+
+switch (Vars::$ACT) {
     case 'my_new_comm':
         /*
         -----------------------------------------------------------------
@@ -167,7 +169,7 @@ if ($total) {
             echo '<a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '">' . Functions::getImage('password.gif') . '</a>';
         }
         echo '<div class="sub">' .
-             '<a href="album.php?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::filterString($res['album_name']) . '</a>';
+            '<a href="album.php?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::filterString($res['album_name']) . '</a>';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 6) {
             echo vote_photo($res) .
                 '<div class="gray">' . Vars::$LNG['count_views'] . ': ' . $res['views'] . ', ' . Vars::$LNG['count_downloads'] . ': ' . $res['downloads'] . '</div>' .

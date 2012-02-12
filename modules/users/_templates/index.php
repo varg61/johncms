@@ -11,9 +11,9 @@
 </div>
 <div class="menu">
     <p>
-    <h3><?= Functions::getImage('users.png') . '&#160;' . Vars::$LNG['community'] ?> <span class="green">(<?= $this->count->users ?>)</span></h3>
+    <h3><?= Functions::getImage('users.png') . '&#160;' . Vars::$LNG['community'] ?></h3>
     <ul>
-        <li><a href="<?= Vars::$URI ?>/list"><?= Vars::$LNG['users'] ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/list"><?= Vars::$LNG['users'] ?></a> (<?= $this->count->users ?>)</li>
         <li><a href="<?= Vars::$URI ?>/list?act=adm"><?= Vars::$LNG['administration'] ?></a></li>
     </ul>
     </p>

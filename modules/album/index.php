@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$lng = Vars::loadLanguage(1);
+//$lng = Vars::loadLanguage(1);
 
 $max_album = 10;
 $max_photo = 200;
@@ -45,7 +45,8 @@ if (!$user) {
 Функция голосований за фотографии
 -----------------------------------------------------------------
 */
-function vote_photo($arg = null) {
+function vote_photo($arg = null)
+{
     global $datauser;
     //TODO: Разобраться со счетчиками
     if ($arg) {
@@ -77,7 +78,7 @@ function vote_photo($arg = null) {
 Переключаем режимы работы
 -----------------------------------------------------------------
 */
-$array = array (
+$array = array(
     'comments' => 'includes/album',
     'delete' => 'includes/album',
     'edit' => 'includes/album',
@@ -98,24 +99,9 @@ $path = !empty($array[Vars::$ACT]) ? $array[Vars::$ACT] . '/' : '';
 if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.php')) {
     require_once($path . Vars::$ACT . '.php');
 } else {
-    $albumcount = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
-    $newcount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
-    echo '<div class="phdr"><b>' . Vars::$LNG['photo_albums'] . '</b></div>' .
-        '<div class="gmenu"><p>' .
-        Functions::getImage('album_new.png') . '&#160;<a href="album.php?act=top">' . $lng['new_photo'] . '</a> (' . $newcount . ')<br />' .
-        Functions::getImage('comments.png') . '&#160;<a href="album.php?act=top&amp;mod=last_comm">' . $lng['new_comments'] . '</a>' .
-        '</p></div>' .
-        '<div class="menu">' .
-        '<p><h3>' . Functions::getImage('users.png') . '&#160;' . Vars::$LNG['albums'] . '</h3><ul>' .
-        '<li><a href="album.php?act=users">' . $lng['album_list'] . '</a> (' . $albumcount . ')</li>' .
-        '</ul></p>' .
-        '<p><h3>' . Functions::getImage('rating.png') . '&#160;' . Vars::$LNG['rating'] . '</h3><ul>' .
-        '<li><a href="album.php?act=top&amp;mod=votes">' . $lng['top_votes'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=downloads">' . $lng['top_downloads'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=views">' . $lng['top_views'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=comments">' . $lng['top_comments'] . '</a></li>' .
-        '<li><a href="album.php?act=top&amp;mod=trash">' . $lng['top_trash'] . '</a></li>' .
-        '</ul></p>' .
-        '</div>' .
-        '<div class="phdr"><a href="index.php">' . Vars::$LNG['users'] . '</a></div>';
+    $tpl = Template::getInstance();
+    $tpl->lng = Vars::loadLanguage(1);
+    $tpl->new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
+    $tpl->count = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
+    $tpl->contents = $tpl->includeTpl('index');
 }
