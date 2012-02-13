@@ -55,7 +55,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
     <a href="<?= Vars::$HOME_URL ?>"><?= Vars::$LNG['homepage'] ?></a> |
     <?php endif ?>
     <?php if (Vars::$USER_ID) : ?>
-    <a href="<?= Vars::$HOME_URL ?>/users/cabinet"><?= Vars::$LNG['personal'] ?></a> |
+    <a href="<?= Vars::$HOME_URL ?>/cabinet"><?= Vars::$LNG['personal'] ?></a> |
     <a href="<?= Vars::$HOME_URL ?>/exit"><?= Vars::$LNG['exit'] ?></a>
     <?php else : ?>
     <a href="<?= Vars::$HOME_URL ?>/login"><?= Vars::$LNG['login'] ?></a> |

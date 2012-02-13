@@ -60,7 +60,7 @@ class Template extends Vars
             $default_tpl = SYSPATH . 'template_default.php';
             $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'template_default.php';
         } else {
-            $default_tpl = MODPATH . parent::$MODULE . DIRECTORY_SEPARATOR . '_templates' . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $default_tpl = MODPATH . parent::$MODULE . DIRECTORY_SEPARATOR . '_tpl' . DIRECTORY_SEPARATOR . $tpl . '.php';
             $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . parent::$MODULE . DIRECTORY_SEPARATOR . $tpl . '.php';
         }
 
