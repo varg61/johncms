@@ -375,25 +375,6 @@ class Functions extends Vars
 
     /*
     -----------------------------------------------------------------
-    Получаем данные пользователя
-    -----------------------------------------------------------------
-    */
-    public static function getUser($id = false)
-    {
-        if ($id && $id != Vars::$USER_ID) {
-            $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id'");
-            if (mysql_num_rows($req)) {
-                return mysql_fetch_assoc($req);
-            } else {
-                return false;
-            }
-        } else {
-            return Vars::$USER_DATA;
-        }
-    }
-
-    /*
-    -----------------------------------------------------------------
     Обработка смайлов
     -----------------------------------------------------------------
     */

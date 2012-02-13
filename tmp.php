@@ -1,27 +1,5 @@
 <?php
 
-/**
- * @package     JohnCMS
- * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2012 JohnCMS Community
- * @license     LICENSE.txt (see attached file)
- * @version     VERSION.txt (see attached file)
- * @author      http://johncms.com/about
- */
-
-defined('_IN_JOHNCMS') or die('Error: restricted access');
-
-
-/*
------------------------------------------------------------------
-Проверяем права доступа для редактирования Профиля
------------------------------------------------------------------
-*/
-if ($user['user_id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] > Vars::$USER_RIGHTS)) {
-    echo Functions::displayError($lng['error_rights']);
-    exit;
-}
-
 /*
 -----------------------------------------------------------------
 Сброс настроек
@@ -32,7 +10,6 @@ if (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights'] && Vars::$AC
     echo '<div class="gmenu"><p>' . Vars::$LNG['settings_default'] . '<br /><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['to_form'] . '</a></p></div>';
     exit;
 }
-echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . ($user['user_id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $lng['my_profile']) . '</b></a> | ' . Vars::$LNG['edit'] . '</div>';
 if (isset($_GET['delavatar'])) {
     /*
     -----------------------------------------------------------------
@@ -57,91 +34,76 @@ if (isset($_GET['delavatar'])) {
     -----------------------------------------------------------------
     */
     //TODO: Доработать!
-//    $error = array ();
-//    $user['imname'] = isset($_POST['imname']) ? Validate::filterString(mb_substr($_POST['imname'], 0, 25)) : '';
-//    $user['live'] = isset($_POST['live']) ? Validate::filterString(mb_substr($_POST['live'], 0, 50)) : '';
-//    $user['dayb'] = isset($_POST['dayb']) ? intval($_POST['dayb']) : 0;
-//    $user['monthb'] = isset($_POST['monthb']) ? intval($_POST['monthb']) : 0;
-//    $user['yearofbirth'] = isset($_POST['yearofbirth']) ? intval($_POST['yearofbirth']) : 0;
-//    $user['about'] = isset($_POST['about']) ? Validate::filterString(mb_substr($_POST['about'], 0, 500)) : '';
-//    $user['mibile'] = isset($_POST['mibile']) ? Validate::filterString(mb_substr($_POST['mibile'], 0, 40)) : '';
-//    $user['mail'] = isset($_POST['mail']) ? Validate::filterString(mb_substr($_POST['mail'], 0, 40)) : '';
-//    $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
-//    $user['icq'] = isset($_POST['icq']) ? intval($_POST['icq']) : 0;
-//    $user['skype'] = isset($_POST['skype']) ? Validate::filterString(mb_substr($_POST['skype'], 0, 40)) : '';
-//    $user['jabber'] = isset($_POST['jabber']) ? Validate::filterString(mb_substr($_POST['jabber'], 0, 40)) : '';
-//    $user['www'] = isset($_POST['www']) ? Validate::filterString(mb_substr($_POST['www'], 0, 40)) : '';
-//    // Данные юзера (для Администраторов)
-//    $user['nickname'] = isset($_POST['name']) ? Validate::filterString(mb_substr($_POST['name'], 0, 20)) : $user['nickname'];
-//    $user['status'] = isset($_POST['status']) ? Validate::filterString(mb_substr($_POST['status'], 0, 50)) : '';
-//    $user['karma_off'] = isset($_POST['karma_off']);
-//    $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
-//    $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : $user['rights'];
-//    // Проводим необходимые проверки
-//    //TODO: Доработать!
-//    if($user['rights'] > Vars::$user_rights || $user['rights'] > 9 || $user['rights'] < 0)
-//        $user['rights'] = 0;
-//    if (Vars::$user_rights >= 7) {
-//        if (mb_strlen($user['name']) < 2 || mb_strlen($user['name']) > 20)
-//            $error[] = $lng_profile['error_nick_lenght'];
-//        $lat_nick = Functions::rus_lat(mb_strtolower($user['name']));
-//        if (preg_match("/[^0-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
-//            $error[] = $lng_profile['error_nick_symbols'];
-//    }
-//    if ($user['dayb'] || $user['monthb'] || $user['yearofbirth']) {
-//        if ($user['dayb'] < 1 || $user['dayb'] > 31 || $user['monthb'] < 1 || $user['monthb'] > 12)
-//            $error[] = $lng_profile['error_birth'];
-//    }
-//    if ($user['icq'] && ($user['icq'] < 10000 || $user['icq'] > 999999999))
-//        $error[] = $lng_profile['error_icq'];
-//    if (!$error) {
-//        mysql_query("UPDATE `users` SET
-//            `imname` = '" . $user['imname'] . "',
-//            `live` = '" . $user['live'] . "',
-//            `dayb` = '" . $user['dayb'] . "',
-//            `monthb` = '" . $user['monthb'] . "',
-//            `yearofbirth` = '" . $user['yearofbirth'] . "',
-//            `about` = '" . $user['about'] . "',
-//            `mibile` = '" . $user['mibile'] . "',
-//            `mail` = '" . $user['mail'] . "',
-//            `mailvis` = '" . $user['mailvis'] . "',
-//            `icq` = '" . $user['icq'] . "',
-//            `skype` = '" . $user['skype'] . "',
-//            `jabber` = '" . $user['jabber'] . "',
-//            `www` = '" . $user['www'] . "'
-//            WHERE `id` = '" . $user['user_id'] . "'
-//        ");
-//        if (Vars::$user_rights >= 7) {
-//            mysql_query("UPDATE `users` SET
-//                `name` = '" . $user['name'] . "',
-//                `status` = '" . $user['status'] . "',
-//                `karma_off` = '" . $user['karma_off'] . "',
-//                `sex` = '" . $user['sex'] . "',
-//                `rights` = '" . $user['rights'] . "'
-//                WHERE `id` = '" . $user['user_id'] . "'
-//            ");
-//        }
-//        echo '<div class="gmenu">' . $lng_profile['data_saved'] . '</div>';
-//    } else {
-//        echo Functions::display_error($error);
-//    }
+    //    $error = array ();
+    //    $user['imname'] = isset($_POST['imname']) ? Validate::filterString(mb_substr($_POST['imname'], 0, 25)) : '';
+    //    $user['live'] = isset($_POST['live']) ? Validate::filterString(mb_substr($_POST['live'], 0, 50)) : '';
+    //    $user['dayb'] = isset($_POST['dayb']) ? intval($_POST['dayb']) : 0;
+    //    $user['monthb'] = isset($_POST['monthb']) ? intval($_POST['monthb']) : 0;
+    //    $user['yearofbirth'] = isset($_POST['yearofbirth']) ? intval($_POST['yearofbirth']) : 0;
+    //    $user['about'] = isset($_POST['about']) ? Validate::filterString(mb_substr($_POST['about'], 0, 500)) : '';
+    //    $user['mibile'] = isset($_POST['mibile']) ? Validate::filterString(mb_substr($_POST['mibile'], 0, 40)) : '';
+    //    $user['mail'] = isset($_POST['mail']) ? Validate::filterString(mb_substr($_POST['mail'], 0, 40)) : '';
+    //    $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
+    //    $user['icq'] = isset($_POST['icq']) ? intval($_POST['icq']) : 0;
+    //    $user['skype'] = isset($_POST['skype']) ? Validate::filterString(mb_substr($_POST['skype'], 0, 40)) : '';
+    //    $user['jabber'] = isset($_POST['jabber']) ? Validate::filterString(mb_substr($_POST['jabber'], 0, 40)) : '';
+    //    $user['www'] = isset($_POST['www']) ? Validate::filterString(mb_substr($_POST['www'], 0, 40)) : '';
+    //    // Данные юзера (для Администраторов)
+    //    $user['nickname'] = isset($_POST['name']) ? Validate::filterString(mb_substr($_POST['name'], 0, 20)) : $user['nickname'];
+    //    $user['status'] = isset($_POST['status']) ? Validate::filterString(mb_substr($_POST['status'], 0, 50)) : '';
+    //    $user['karma_off'] = isset($_POST['karma_off']);
+    //    $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'm' ? 'm' : 'zh';
+    //    $user['rights'] = isset($_POST['rights']) ? abs(intval($_POST['rights'])) : $user['rights'];
+    //    // Проводим необходимые проверки
+    //    //TODO: Доработать!
+    //    if($user['rights'] > Vars::$user_rights || $user['rights'] > 9 || $user['rights'] < 0)
+    //        $user['rights'] = 0;
+    //    if (Vars::$user_rights >= 7) {
+    //        if (mb_strlen($user['name']) < 2 || mb_strlen($user['name']) > 20)
+    //            $error[] = $lng_profile['error_nick_lenght'];
+    //        $lat_nick = Functions::rus_lat(mb_strtolower($user['name']));
+    //        if (preg_match("/[^0-9a-z\-\@\*\(\)\?\!\~\_\=\[\]]+/", $lat_nick))
+    //            $error[] = $lng_profile['error_nick_symbols'];
+    //    }
+    //    if ($user['dayb'] || $user['monthb'] || $user['yearofbirth']) {
+    //        if ($user['dayb'] < 1 || $user['dayb'] > 31 || $user['monthb'] < 1 || $user['monthb'] > 12)
+    //            $error[] = $lng_profile['error_birth'];
+    //    }
+    //    if ($user['icq'] && ($user['icq'] < 10000 || $user['icq'] > 999999999))
+    //        $error[] = $lng_profile['error_icq'];
+    //    if (!$error) {
+    //        mysql_query("UPDATE `users` SET
+    //            `imname` = '" . $user['imname'] . "',
+    //            `live` = '" . $user['live'] . "',
+    //            `dayb` = '" . $user['dayb'] . "',
+    //            `monthb` = '" . $user['monthb'] . "',
+    //            `yearofbirth` = '" . $user['yearofbirth'] . "',
+    //            `about` = '" . $user['about'] . "',
+    //            `mibile` = '" . $user['mibile'] . "',
+    //            `mail` = '" . $user['mail'] . "',
+    //            `mailvis` = '" . $user['mailvis'] . "',
+    //            `icq` = '" . $user['icq'] . "',
+    //            `skype` = '" . $user['skype'] . "',
+    //            `jabber` = '" . $user['jabber'] . "',
+    //            `www` = '" . $user['www'] . "'
+    //            WHERE `id` = '" . $user['user_id'] . "'
+    //        ");
+    //        if (Vars::$user_rights >= 7) {
+    //            mysql_query("UPDATE `users` SET
+    //                `name` = '" . $user['name'] . "',
+    //                `status` = '" . $user['status'] . "',
+    //                `karma_off` = '" . $user['karma_off'] . "',
+    //                `sex` = '" . $user['sex'] . "',
+    //                `rights` = '" . $user['rights'] . "'
+    //                WHERE `id` = '" . $user['user_id'] . "'
+    //            ");
+    //        }
+    //        echo '<div class="gmenu">' . $lng_profile['data_saved'] . '</div>';
+    //    } else {
+    //        echo Functions::display_error($error);
+    //    }
 }
 
-/*
------------------------------------------------------------------
-Форма редактирования анкеты пользователя
------------------------------------------------------------------
-*/
-echo '<form action="profile.php?act=edit&amp;user=' . $user['user_id'] . '" method="post">' .
-    '<div class="gmenu"><p>' .
-    '<h3>ID: ' . $user['user_id'] . '</h3>';
-if (Vars::$USER_RIGHTS >= 7) {
-    echo Vars::$LNG['nick'] . ': (' . $lng['nick_lenght'] . ')<br /><input type="text" value="' . $user['name'] . '" name="name" /><br />' .
-        Vars::$LNG['status'] . ': (' . $lng['status_lenght'] . ')<br /><input type="text" value="' . $user['status'] . '" name="status" /><br />';
-} else {
-    echo '<span class="gray">' . Vars::$LNG['nick'] . ':</span> <b>' . $user['name'] . '</b><br />' .
-        '<span class="gray">' . Vars::$LNG['status'] . ':</span> ' . $user['status'] . '<br />';
-}
 echo '</p><p>' . Vars::$LNG['avatar'] . ':<br />';
 $link = '';
 if (file_exists(('../files/users/avatar/' . $user['user_id'] . '.png'))) {
