@@ -89,29 +89,10 @@ if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.p
             : false)
     );
     $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['user_id'] . "'"), 0);
+    $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['user_id'] . "'"), 0);
     $tpl->contents = $tpl->includeTpl('index');
 
     //TODO: Добавить информацию о дне рождении
     //TODO: Добавить информацию о подтверждении регистрации
-
-    $bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['user_id'] . "'"), 0);
-    if ($bancount)
-        echo '<div>' . Functions::getImage('user_block.png') . '&#160;<a href="profile.php?act=ban&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['infringements'] . '</a> (' . $bancount . ')</div>';
-    echo '<br/>' .
-        '<div>' . Functions::getImage('album_4.png') . '&#160;<a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
-        '<div>' . Functions::getImage('comments.png') . '&#160;<a href="profile.php?act=guestbook&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['guestbook'] . '</a>&#160;(' . $user['comm_count'] . ')</div>';
-    if ($user['user_id'] != Vars::$USER_ID) {
-        echo '<br/>
-            <div>' . Functions::getImage('contacts.png') . '&#160;<a href="">' . Vars::$LNG['contacts_in'] . '</a></div>
-            ';
-        if (!isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['3']))
-            echo '
-            <div>' . Functions::getImage('mail_write.png') . '&#160;<a href="pradd.php?act=write&amp;adr=' . $user['user_id'] . '"><b>' . Vars::$LNG['write'] . '</b></a></div>
-            ';
-    }
-    echo '</p></div>
-        ';
-    echo '
-        <div class="phdr"><a href="index.php">' . Vars::$LNG['users'] . '</a></div>
-        ';
+    //TODO: Добавить ссылки "Написать" и "В контакты"
 }
