@@ -3,8 +3,9 @@
 </div>
 <div class="list2">
     <p>
-    <div><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>/profile"><?= Vars::$LNG['my_profile'] ?></a></div>
+    <div><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile"><?= Vars::$LNG['my_profile'] ?></a></div>
     <div><?= Functions::getImage('rating.png') ?>&#160;<a href="profile.php?act=stat"><?= Vars::$LNG['statistics'] ?></a></div>
+    </p><p>
     <div><?= Functions::getImage('album_4.png') ?>&#160;<a href="album.php?act=list"><?= Vars::$LNG['photo_album'] ?></a>&#160;(<?= $this->total_photo ?>)</div>
     <div><?= Functions::getImage('comments.png') ?>&#160;<a href="profile.php?act=guestbook"><?= Vars::$LNG['guestbook'] ?></a>&#160;()</div>
     <?php if (Vars::$USER_RIGHTS) : ?>

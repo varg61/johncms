@@ -49,6 +49,11 @@ class Template extends Vars
         return $this->vars[$name];
     }
 
+    public function __isset($name)
+    {
+        return isset($this->vars[$name]);
+    }
+
     public function includeTpl($tpl = null)
     {
         if ($this->extract) {
