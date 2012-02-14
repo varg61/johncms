@@ -39,4 +39,10 @@ if ($user['id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] 
 $tpl = Template::getInstance();
 $tpl->lng = Vars::loadLanguage(1);
 $tpl->user = $user;
+if(is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')){
+    $tpl->avatar = true;
+}
+if(is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg')){
+    $tpl->photo = true;
+}
 $tpl->contents = $tpl->includeTpl('edit');

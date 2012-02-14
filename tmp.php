@@ -104,43 +104,6 @@ if (isset($_GET['delavatar'])) {
     //    }
 }
 
-echo '</p><p>' . Vars::$LNG['avatar'] . ':<br />';
-$link = '';
-if (file_exists(('../files/users/avatar/' . $user['user_id'] . '.png'))) {
-    echo '<img src="../files/users/avatar/' . $user['user_id'] . '.png" width="32" height="32" alt="' . $user['name'] . '" /><br />';
-    $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '&amp;delavatar">' . Vars::$LNG['delete'] . '</a>';
-}
-echo '<small><a href="profile.php?act=images&amp;mod=avatar&amp;user=' . $user['user_id'] . '">' . $lng['upload'] . '</a>';
-if($user['user_id'] == Vars::$USER_ID)
-    echo ' | <a href="../pages/faq.php?act=avatars">' . Vars::$LNG['select'] . '</a>';
-echo $link . '</small></p>';
-echo '<p>' . $lng['photo'] . ':<br />';
-$link = '';
-if (file_exists(('../files/users/photo/' . $user['user_id'] . '_small.jpg'))) {
-    echo '<a href="../files/users/photo/' . $user['user_id'] . '.jpg"><img src="../../files/users/photo/' . $user['user_id'] . '_small.jpg" alt="' . $user['name'] . '" border="0" /></a><br />';
-    $link = ' | <a href="profile.php?act=edit&amp;user=' . $user['user_id'] . '&amp;delphoto">' . Vars::$LNG['delete'] . '</a>';
-}
-echo '<small><a href="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['user_id'] . '">' . $lng['upload'] . '</a>' . $link . '</small><br />' .
-    '</p></div>' .
-    '<div class="menu">' .
-    '<p><h3>' . $lng['personal_data'] . '</h3>' .
-    $lng['name'] . ':<br /><input type="text" value="' . $user['imname'] . '" name="imname" /></p>' .
-    '<p>' . $lng['birth_date'] . '<br />' .
-    '<input type="text" value="' . $user['dayb'] . '" size="2" maxlength="2" name="dayb" />.' .
-    '<input type="text" value="' . $user['monthb'] . '" size="2" maxlength="2" name="monthb" />.' .
-    '<input type="text" value="' . $user['yearofbirth'] . '" size="4" maxlength="4" name="yearofbirth" /></p>' .
-    '<p>' . $lng['city'] . ':<br /><input type="text" value="' . $user['live'] . '" name="live" /></p>' .
-    '<p>' . $lng['about'] . ':<br /><textarea rows="' . Vars::$USER_SET['field_h'] . '" name="about">' . str_replace('<br />', "\r\n", $user['about']) . '</textarea></p>' .
-    '<p><h3>' . $lng['communication'] . '</h3>' .
-    $lng['phone_number'] . ':<br /><input type="text" value="' . $user['mibile'] . '" name="mibile" /><br />' .
-    '</p><p>E-mail:<br /><small>' . $lng['email_warning'] . '</small><br />' .
-    '<input type="text" value="' . $user['mail'] . '" name="mail" /><br />' .
-    '<input name="mailvis" type="checkbox" value="1" ' . ($user['mailvis'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['show_in_profile'] . '</p>' .
-    '<p>ICQ:<br /><input type="text" value="' . $user['icq'] . '" name="icq" size="10" maxlength="10" /></p>' .
-    '<p>Skype:<br /><input type="text" value="' . $user['skype'] . '" name="skype" /></p>' .
-    '<p>Jabber:<br /><input type="text" value="' . $user['jabber'] . '" name="jabber" /></p>' .
-    '<p>' . $lng['site'] . ':<br /><input type="text" value="' . $user['www'] . '" name="www" /></p>' .
-    '</div>';
 // Административные функции
 if (Vars::$USER_RIGHTS >= 7) {
     echo '<div class="rmenu"><p><h3>' . Vars::$LNG['settings'] . '</h3><ul>';
@@ -165,10 +128,3 @@ if (Vars::$USER_RIGHTS >= 7) {
             echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_7'] . '<br />' .
                 '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&#160;<span class="red"><b>' . $lng['rank_9'] . '</b></span><br />';
         }
-        echo '</ul></p>';
-    }
-    echo '</div>';
-}
-echo '<div class="gmenu"><input type="submit" value="' . Vars::$LNG['save'] . '" name="submit" /></div>' .
-    '</form>' .
-    '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['to_form'] . '</a></div>';
