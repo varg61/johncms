@@ -58,7 +58,7 @@ $tpl->userarg = array(
 );
 $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['user_id'] . "'"), 0);
 $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['user_id'] . "'"), 0);
-$tpl->contents = $tpl->includeTpl('index');
+$tpl->contents = $tpl->includeTpl('profile');
 
 //TODO: Добавить информацию о дне рождении
 //TODO: Добавить информацию о подтверждении регистрации

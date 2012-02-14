@@ -10,24 +10,6 @@ if (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights'] && Vars::$AC
     echo '<div class="gmenu"><p>' . Vars::$LNG['settings_default'] . '<br /><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['to_form'] . '</a></p></div>';
     exit;
 }
-if (isset($_GET['delavatar'])) {
-    /*
-    -----------------------------------------------------------------
-    Удаляем аватар
-    -----------------------------------------------------------------
-    */
-    @unlink('../files/users/avatar/' . $user['user_id'] . '.png');
-    echo '<div class="rmenu">' . $lng['avatar_deleted'] . '</div>';
-} elseif (isset($_GET['delphoto'])) {
-    /*
-    -----------------------------------------------------------------
-    Удаляем фото
-    -----------------------------------------------------------------
-    */
-    @unlink('../files/users/photo/' . $user['user_id'] . '.jpg');
-    @unlink('../files/users/photo/' . $user['user_id'] . '_small.jpg');
-    echo '<div class="rmenu">' . $lng['photo_deleted'] . '</div>';
-} elseif (isset($_POST['submit'])) {
     /*
     -----------------------------------------------------------------
     Принимаем данные из формы, проверяем и записываем в базу

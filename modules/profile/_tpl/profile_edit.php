@@ -1,5 +1,6 @@
 <div class="phdr">
-    <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $this->lng['my_profile']) ?></b></a> | <?= Vars::$LNG['edit'] ?>
+    <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $this->lng['my_profile']) ?></b></a> |
+    <?= Vars::$LNG['edit'] ?>
 </div>
 <form action="profile.php?act=edit&amp;user=' . $user['user_id'] . '" method="post">
     <div class="gmenu">
@@ -20,25 +21,27 @@
         <?php endif ?>
         <h3><?=  Vars::$LNG['avatar'] ?></h3>
         <?php if (isset($this->avatar)) : ?>
-        <img src="<?= Vars::$HOME_URL ?>/files/users/avatar/<?= $this->user['id'] ?>.gif" width="32" height="32" alt="<?= $this->user['nickname'] ?>"/><br/>
+        <img src="<?= Vars::$HOME_URL ?>/files/users/avatar/<?= $this->user['id'] ?>.gif" width="32" height="32" alt="<?= $this->user['nickname'] ?>" border="0"/><br/>
         <?php endif ?>
         <div style="font-size: x-small; margin-bottom: 6px">
             <a href="<?= Vars::$HOME_URL ?>/avatars"><?= Vars::$LNG['select'] ?></a> |
             <a href=""><?= $this->lng['upload'] ?></a>
             <?php if (isset($this->avatar)) : ?>
-            | <a href=""><?= Vars::$LNG['delete'] ?></a>
+            | <a href="<?= Vars::$URI ?>?act=delete_avatar&amp;user=<?= $this->user['id'] ?>"><?= Vars::$LNG['delete'] ?></a>
             <?php endif ?>
         </div>
     </div>
     <div class="menu">
         <h3><?= $this->lng['photo'] ?></h3>
         <?php if (isset($this->photo)) : ?>
-        <a href="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>.jpg"><img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/></a>
+        <a href="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>.jpg">
+            <img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/>
+        </a>
         <?php endif ?>
         <div style="font-size: x-small; margin-bottom: 6px">
             <a href=""><?= $this->lng['upload'] ?></a>
-            <?php if (isset($this->avatar)) : ?>
-            | <a href=""><?= Vars::$LNG['delete'] ?></a>
+            <?php if (isset($this->photo)) : ?>
+            | <a href="<?= Vars::$URI ?>?act=delete_photo&amp;user=<?= $this->user['id'] ?>"><?= Vars::$LNG['delete'] ?></a>
             <?php endif ?>
         </div>
         <h3><?= $this->lng['name'] ?></h3>
