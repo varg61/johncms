@@ -30,6 +30,16 @@ p {
     margin-top: 6px;
 }
 
+.formblock {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+label {
+    font-size: medium;
+    font-weight: bold;
+}
+
 textarea {
     width: 99%;
     max-width: 640px;
