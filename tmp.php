@@ -95,18 +95,3 @@ if (Vars::$USER_RIGHTS >= 7) {
     echo '<li><a href="profile.php?act=password&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['change_password'] . '</a></li>';
     if(Vars::$USER_RIGHTS > $user['rights'])
         echo '<li><a href="profile.php?act=reset&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['reset_settings'] . '</a></li>';
-    echo '<li>' . $lng['specify_sex'] . ':<br />' .
-        '<input type="radio" value="m" name="sex" ' . ($user['sex'] == 'm' ? 'checked="checked"' : '') . '/>&#160;' . $lng['sex_m'] . '<br />' .
-        '<input type="radio" value="zh" name="sex" ' . ($user['sex'] == 'zh' ? 'checked="checked"' : '') . '/>&#160;' . $lng['sex_w'] . '</li>' .
-        '</ul></p>';
-    if ($user['user_id'] != Vars::$USER_ID) {
-        echo '<p><h3>' . $lng['rank'] . '</h3><ul>' .
-            '<input type="radio" value="0" name="rights" ' . (!$user['rights'] ? 'checked="checked"' : '') . '/>&#160;<b>' . $lng['rank_0'] . '</b><br />' .
-            '<input type="radio" value="3" name="rights" ' . ($user['rights'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_3'] . '<br />' .
-            '<input type="radio" value="4" name="rights" ' . ($user['rights'] == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_4'] . '<br />' .
-            '<input type="radio" value="5" name="rights" ' . ($user['rights'] == 5 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_5'] . '<br />' .
-            '<input type="radio" value="6" name="rights" ' . ($user['rights'] == 6 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_6'] . '<br />';
-        if (Vars::$USER_RIGHTS == 9) {
-            echo '<input type="radio" value="7" name="rights" ' . ($user['rights'] == 7 ? 'checked="checked"' : '') . '/>&#160;' . $lng['rank_7'] . '<br />' .
-                '<input type="radio" value="9" name="rights" ' . ($user['rights'] == 9 ? 'checked="checked"' : '') . '/>&#160;<span class="red"><b>' . $lng['rank_9'] . '</b></span><br />';
-        }

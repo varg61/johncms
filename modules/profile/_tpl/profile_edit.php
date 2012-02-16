@@ -2,30 +2,36 @@
     <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $this->lng['my_profile']) ?></b></a> |
     <?= Vars::$LNG['edit'] ?>
 </div>
+<?php if (Vars::$USER_RIGHTS >= 7) : ?>
+<div class="topmenu"><b><?= $this->lng['user'] ?></b> | <a href="<?= Vars::$URI ?>?act=administration"><?= $this->lng['administration'] ?></a></div>
+<?php endif ?>
+<div class="user">
+    <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
+</div>
 <form action="profile.php?act=edit&amp;user=' . $user['user_id'] . '" method="post">
     <div class="gmenu">
         <div class="formblock">
             <label for="nickname"><?= Vars::$LNG['nick'] ?></label><br/>
-            <input id="nickname" type="text" value="<?= $this->user['nickname'] ?>" name="nickname"/><br/>
-            <small class="gray"><?= $this->lng['nick_lenght'] ?></small>
+            <input id="nickname" type="text" value="<?= $this->user['nickname'] ?>" name="nickname"/>
+            <div class="desc"><?= $this->lng['nick_lenght'] ?></div>
         </div>
         <div class="formblock">
             <label for="status"><?= Vars::$LNG['status'] ?></label><br/>
-            <input id="status" type="text" value="<?= $this->user['status'] ?>" name="status"/><br/>
-            <small class="gray"><?= $this->lng['status_lenght'] ?></small>
+            <input id="status" type="text" value="<?= $this->user['status'] ?>" name="status"/>
+            <div class="desc"><?= $this->lng['status_lenght'] ?></div>
         </div>
         <div class="formblock">
             <label><?=  Vars::$LNG['avatar'] ?></label>
             <?php if (isset($this->avatar)) : ?>
             <br/><img src="<?= Vars::$HOME_URL ?>/files/users/avatar/<?= $this->user['id'] ?>.gif" width="32" height="32" alt="<?= $this->user['nickname'] ?>" border="0"/><br/>
             <?php endif ?>
-            <small>
-                <br/><a href="<?= Vars::$HOME_URL ?>/avatars"><?= Vars::$LNG['select'] ?></a> |
+            <div class="small">
+                <a href="<?= Vars::$HOME_URL ?>/avatars"><?= Vars::$LNG['select'] ?></a> |
                 <a href=""><?= $this->lng['upload'] ?></a>
                 <?php if (isset($this->avatar)) : ?>
                 | <a href="<?= Vars::$URI ?>?act=delete_avatar&amp;user=<?= $this->user['id'] ?>"><?= Vars::$LNG['delete'] ?></a>
                 <?php endif ?>
-            </small>
+            </div>
         </div>
     </div>
     <div class="menu">
@@ -34,12 +40,12 @@
             <?php if (isset($this->photo)) : ?>
             <a href="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>.jpg"><img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/></a>
             <?php endif ?>
-            <small>
-                <br/><a href=""><?= $this->lng['upload'] ?></a>
+            <div class="small">
+                <a href=""><?= $this->lng['upload'] ?></a>
                 <?php if (isset($this->photo)) : ?>
                 | <a href="<?= Vars::$URI ?>?act=delete_photo&amp;user=<?= $this->user['id'] ?>"><?= Vars::$LNG['delete'] ?></a>
                 <?php endif ?>
-            </small>
+            </div>
         </div>
         <div class="formblock">
             <label for="imname"><?= $this->lng['name'] ?></label><br/>
@@ -49,8 +55,8 @@
             <label for="birth"><?= $this->lng['birthday'] ?></label><br/>
             <input id="birth" type="text" value="" size="2" maxlength="2" name="day"/>
             <input type="text" value="" size="2" maxlength="2" name="month"/>
-            <input type="text" value="" size="4" maxlength="4" name="year"/><br/>
-            <small class="gray"><?= $this->lng['birthday_desc'] ?></small>
+            <input type="text" value="" size="4" maxlength="4" name="year"/>
+            <div class="desc"><?= $this->lng['birthday_desc'] ?></div>
         </div>
         <div class="formblock">
             <label for="live"><?= $this->lng['city'] ?></label><br/>
@@ -70,10 +76,9 @@
         </div>
         <div class="formblock">
             <label for="mail">E-mail</label><br/>
-            <input id="mail" type="text" value="<?= $this->user['email'] ?>" name="mail"/><br/>
-            <small class="gray"><?= $this->lng['email_warning'] ?></small>
-            <br/>
+            <input id="mail" type="text" value="<?= $this->user['email'] ?>" name="mail"/>
             <input name="mailvis" type="checkbox" value="1"<?= ($this->user['mailvis'] ? ' checked="checked"' : '') ?>/>&#160;<?= $this->lng['show_in_profile'] ?>
+            <div class="desc"><?= $this->lng['email_warning'] ?></div>
         </div>
         <div class="formblock">
             <label for="icq">ICQ</label><br/>
