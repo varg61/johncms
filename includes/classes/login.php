@@ -188,7 +188,8 @@ class Login extends Vars
                     `level` = " . (Vars::$SYSTEM_SET['mod_reg'] > 1 ? 1 : 0) . ",
                     `sex` = '" . ($var['sex'] == 1 ? 'm' : 'w') . "',
                     `join_date` = " . time() . ",
-                    `last_visit` = " . time() . "
+                    `last_visit` = " . time() . ",
+                    `about` = ''
                 ") or exit(mysql_error());
                 $new_user_id = mysql_insert_id();
 

@@ -106,7 +106,8 @@ class Session extends Vars
         } else {
             mysql_query("INSERT INTO `cms_sessions` SET
                 `session_id` = '" . mysql_real_escape_string($sid) . "',
-                `session_timestamp` = " . time() . "
+                `session_timestamp` = " . time() . ",
+                `session_data` = ''
             ") or exit ($this->_error(mysql_error()));
             return '';
         }
