@@ -3,12 +3,12 @@
     <?= Vars::$LNG['edit'] ?>
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>
-<div class="topmenu"><b><?= $this->lng['user'] ?></b> | <a href="<?= Vars::$URI ?>?act=administration"><?= $this->lng['administration'] ?></a></div>
+<div class="topmenu"><b><?= $this->lng['user'] ?></b> | <a href="<?= Vars::$URI ?>?act=administration&amp;user=<?= $this->user['id'] ?>"><?= $this->lng['administration'] ?></a></div>
 <?php endif ?>
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
-<form action="profile.php?act=edit&amp;user=' . $user['user_id'] . '" method="post">
+<form action="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>" method="post">
     <div class="gmenu">
         <div class="formblock">
             <label for="nickname"><?= Vars::$LNG['nick'] ?></label><br/>
