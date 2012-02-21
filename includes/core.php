@@ -34,15 +34,15 @@ mb_internal_encoding('UTF-8');
 Задаем пути
 -----------------------------------------------------------------
 */
-define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);          // Системная папка
-define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR);                    // Корневая папка
-define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
-define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);                // Папка с языками
-define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
+define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR); // Системная папка
+define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR); // Корневая папка
+define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR); // Папка для кэша
+define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR); // Папка с языками
+define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR); // Папка с конфигурационными файлами
 
-define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR);                  // Папка с пользовательскими файлами
-define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 // Папка с модулями
-define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
+define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR); // Папка с пользовательскими файлами
+define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR); // Папка с модулями
+define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR); // Папка с шаблонами
 
 /*
 -----------------------------------------------------------------
@@ -52,9 +52,34 @@ define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               /
 spl_autoload_register('autoload');
 function autoload($name)
 {
-    $file = SYSPATH . 'classes/' . strtolower($name) . '.php';
-    if (file_exists($file)) {
-        require_once($file);
+    $name = strtolower($name);
+
+    // Список системных классов
+    $system = array(
+        'advt'         => 'classes/advt.php',
+        'captcha'      => 'classes/captcha.php',
+        'comments'     => 'classes/comments.php',
+        'counters'     => 'classes/counters.php',
+        'functions'    => 'classes/functions.php',
+        'homepage'     => 'classes/homepage.php',
+        'login'        => 'classes/login.php',
+        'network'      => 'classes/network.php',
+        'session'      => 'classes/session.php',
+        'sitemap'      => 'classes/sitemap.php',
+        'system'       => 'classes/system.php',
+        'template'     => 'classes/template.php',
+        'textparser'   => 'classes/textparser.php',
+        'upload'       => 'lib/class.upload.php',
+        'validate'     => 'classes/validate.php',
+        'vars'         => 'classes/vars.php'
+    );
+
+    if (isset($system[$name])) {
+        require_once(SYSPATH . $system[$name]);
+    } elseif (is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
+        include_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
+    } else {
+        exit('ERROR: class <b><i>' . $name . '</i></b> not found');
     }
 }
 
