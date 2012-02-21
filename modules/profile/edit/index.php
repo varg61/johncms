@@ -36,8 +36,8 @@ if ($user['id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] 
     exit;
 }
 
-$tpl = Template::getInstance();
-$tpl->lng = Vars::loadLanguage(1);
+$tpl       = Template::getInstance();
+$tpl->lng  = Vars::loadLanguage(1);
 $tpl->user = $user;
 
 switch (Vars::$ACT) {

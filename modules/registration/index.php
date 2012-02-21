@@ -27,9 +27,22 @@ $reg_data['about'] = isset($_POST['about']) ? trim($_POST['about']) : '';
 $reg_data['name'] = isset($_POST['name']) ? trim($_POST['name']) : '';
 $reg_data['sex'] = isset($_POST['sex']) ? intval($_POST['sex']) : 0;
 
+$login = new Login;
 $tpl = Template::getInstance();
-$tpl->login = new Login;
+
 $tpl->reg_data = $reg_data;
-$tpl->lng_reg = Vars::loadLanguage('registration');
-$tpl->mode = $tpl->login->userRegistration($reg_data);
-$tpl->contents = $tpl->includeTpl('registration');
+$tpl->lng = Vars::loadLanguage('registration');
+
+switch ($login->userRegistration($reg_data)) {
+    case 'step2':
+        $tpl->user = Vars::$USER_DATA;
+        $tpl->contents = $tpl->includeTpl('step2');
+        break;
+
+    case 'step1':
+        $tpl->contents = $tpl->includeTpl('step1');
+        break;
+
+    default:
+        $tpl->contents = $tpl->includeTpl('default');
+}

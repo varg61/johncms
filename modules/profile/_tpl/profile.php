@@ -3,7 +3,7 @@
 </div>
 <?php if (isset($this->menu)) : ?>
 <div class="topmenu">
-    <?= Functions::displayMenu($this->menu) ?>
+    <?= $this->menu ?>
 </div>
 <?php endif ?>
 <div class="user">
