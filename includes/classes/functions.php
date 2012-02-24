@@ -251,7 +251,7 @@ class Functions extends Vars
             $out .= '&#160;';
             $out .= !Vars::$USER_ID || Vars::$USER_ID == $user['id']
                 ? '<b>' . $user['nickname'] . '</b>'
-                : '<a href="' . parent::$HOME_URL . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['nickname'] . '</b></a>';
+                : '<a href="' . parent::$HOME_URL . '/profile?user=' . $user['id'] . '"><b>' . $user['nickname'] . '</b></a>';
             $rank = array(
                 0 => '',
                 1 => '(GMod)',
