@@ -60,6 +60,7 @@ function autoload($name)
         'captcha'      => 'classes/captcha.php',
         'comments'     => 'classes/comments.php',
         'counters'     => 'classes/counters.php',
+        'finfo'        => 'lib/class.upload.php',
         'functions'    => 'classes/functions.php',
         'homepage'     => 'classes/homepage.php',
         'login'        => 'classes/login.php',

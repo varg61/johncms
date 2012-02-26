@@ -44,7 +44,7 @@ switch (Vars::$ACT) {
             if (isset($_POST['submit'])) {
                 // Устанавливаем пользовательский Аватар
                 if (@copy(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . $select,
-                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '.png')
+                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '.gif')
                 ) {
                     echo '<div class="gmenu"><p>' . Vars::$LNG['avatar_applied'] . '<br />' .
                         '<a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
@@ -54,7 +54,7 @@ switch (Vars::$ACT) {
             } else {
                 echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . Vars::$LNG['avatars'] . '</b></a> | ' . Vars::$LNG['set_to_profile'] . '</div>' .
                     '<div class="rmenu"><p>' . Vars::$LNG['avatar_change_warning'] . '</p>' .
-                    '<p><img src="../images/avatars/' . $cat . '/' . $select . '" alt="" /></p>' .
+                    '<p><img src="' . Vars::$HOME_URL . '/images/avatars/' . $cat . '/' . $select . '" alt="" /></p>' .
                     '<p><form action="' . Vars::$URI . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode($select) . '" method="post">' .
                     '<input type="submit" name="submit" value="' . Vars::$LNG['save'] . '"/>' .
                     '</form></p>' .

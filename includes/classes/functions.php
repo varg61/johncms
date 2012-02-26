@@ -236,8 +236,8 @@ class Functions extends Vars
         } else {
             if (parent::$USER_SET['avatar']) {
                 $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-                if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.png')) {
-                    $out .= '<img src="' . parent::$HOME_URL . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="' . $user['nickname'] . '" />&#160;';
+                if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
+                    $out .= '<img src="' . parent::$HOME_URL . '/files/users/avatar/' . $user['id'] . '.gif" width="32" height="32" alt="' . $user['nickname'] . '" />&#160;';
                 } else {
                     $out .= self::getImage('empty.png') . '&#160;';
                 }
