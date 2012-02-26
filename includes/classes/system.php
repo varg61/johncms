@@ -248,7 +248,7 @@ class System extends Vars
                     if ($res['ban']) $this->_checkUserBan();
                 } else {
                     // Если авторизация не прошла
-                    mysql_query("UPDATE `users` SET `login_try` = '" . ++$res['login_try'] . "' WHERE `id` = " . $res['user_id']);
+                    mysql_query("UPDATE `users` SET `login_try` = '" . ++$res['login_try'] . "' WHERE `id` = " . $res['id']);
                     Login::userUnset();
                 }
             } else {

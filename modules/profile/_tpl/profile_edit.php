@@ -1,39 +1,15 @@
 <div class="phdr">
-    <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $this->lng['my_profile']) ?></b></a> |
-    <?= Vars::$LNG['edit'] ?>
+    <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $this->lng['my_profile']) ?></b></a> | <?= Vars::$LNG['edit'] ?>
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>
-<div class="topmenu"><b><?= $this->lng['user'] ?></b> | <a href="<?= Vars::$URI ?>?act=administration&amp;user=<?= $this->user['id'] ?>"><?= $this->lng['administration'] ?></a></div>
+<div class="topmenu"><b><?= $this->lng['user'] ?></b> | <a
+    href="<?= Vars::$URI ?>?act=administration&amp;user=<?= $this->user['id'] ?>"><?= $this->lng['administration'] ?></a>
+</div>
 <?php endif ?>
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
 <form action="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>" method="post">
-    <div class="gmenu">
-        <div class="formblock">
-            <label for="nickname"><?= Vars::$LNG['nick'] ?></label><br/>
-            <input id="nickname" type="text" value="<?= $this->user['nickname'] ?>" name="nickname"/>
-            <div class="desc"><?= $this->lng['nick_lenght'] ?></div>
-        </div>
-        <div class="formblock">
-            <label for="status"><?= Vars::$LNG['status'] ?></label><br/>
-            <input id="status" type="text" value="<?= $this->user['status'] ?>" name="status"/>
-            <div class="desc"><?= $this->lng['status_lenght'] ?></div>
-        </div>
-        <div class="formblock">
-            <label><?=  Vars::$LNG['avatar'] ?></label>
-            <?php if (isset($this->avatar)) : ?>
-            <br/><img src="<?= Vars::$HOME_URL ?>/files/users/avatar/<?= $this->user['id'] ?>.gif" width="32" height="32" alt="<?= $this->user['nickname'] ?>" border="0"/><br/>
-            <?php endif ?>
-            <div class="small">
-                <a href="<?= Vars::$HOME_URL ?>/avatars"><?= Vars::$LNG['select'] ?></a> |
-                <a href=""><?= $this->lng['upload'] ?></a>
-                <?php if (isset($this->avatar)) : ?>
-                | <a href="<?= Vars::$URI ?>?act=delete_avatar&amp;user=<?= $this->user['id'] ?>"><?= Vars::$LNG['delete'] ?></a>
-                <?php endif ?>
-            </div>
-        </div>
-    </div>
     <div class="menu">
         <div class="formblock">
             <label><?= $this->lng['photo'] ?></label>

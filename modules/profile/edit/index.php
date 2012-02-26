@@ -36,9 +36,15 @@ if ($user['id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] 
     exit;
 }
 
-$tpl       = Template::getInstance();
-$tpl->lng  = Vars::loadLanguage(1);
+$tpl = Template::getInstance();
+$tpl->lng = Vars::loadLanguage(1);
 $tpl->user = $user;
+
+$menu[] = '<a href="' . Vars::$URI . '?act=nick&amp;user=' . $user['id'] . '">' . $tpl->lng['change_nick'] . '</a>';
+$menu[] = '<a href="' . Vars::$URI . '?act=status&amp;user=' . $user['id'] . '">' . $tpl->lng['change_status'] . '</a>';
+$menu[] = '<a href="' . Vars::$URI . '?act=avatar&amp;user=' . $user['id'] . '">' . $tpl->lng['change_avatar'] . '</a>';
+$arg['sub'] = '<p><b>' . $tpl->lng['change'] . '</b>: ' . Functions::displayMenu($menu) . '</p>';
+$tpl->userarg = $arg;
 
 switch (Vars::$ACT) {
     case'delete_avatar':
@@ -64,6 +70,18 @@ switch (Vars::$ACT) {
 
     case 'administration':
         $tpl->contents = $tpl->includeTpl('profile_edit_adm');
+        break;
+
+    case 'nick':
+        $tpl->contents = $tpl->includeTpl('change_nickname');
+        break;
+
+    case 'status':
+        $tpl->contents = $tpl->includeTpl('change_status');
+        break;
+
+    case'avatar':
+        $tpl->contents = $tpl->includeTpl('change_avatar');
         break;
 
     default:
