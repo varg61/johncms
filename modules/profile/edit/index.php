@@ -86,7 +86,6 @@ switch (Vars::$ACT) {
             if ($handle->uploaded) {
                 // Обрабатываем фото
                 $handle->file_new_name_body = $user['id'];
-                //$handle->mime_check = false;
                 $handle->allowed = array(
                     'image/jpeg',
                     'image/gif',

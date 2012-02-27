@@ -9,4 +9,4 @@
         <p style="margin-top: 10px"><input type="submit" value="<?= Vars::$LNG['delete'] ?>" name="submit"/></p>
     </div>
 </form>
-<div class="phdr"><a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><?= Vars::$LNG['back'] ?></a></div>
+<div class="phdr"><a href="<?= Vars::$URI ?>?act=avatar&amp;user=<?= $this->user['id'] ?>"><?= Vars::$LNG['back'] ?></a></div>
