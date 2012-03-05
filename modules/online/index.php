@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
-    echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
+    echo Functions::displayError(lng('access_guest_forbidden'));
     exit;
 }
 
@@ -27,14 +27,14 @@ $link = '';
 $sql_total = '';
 $sql_list = '';
 
-$menu[] = !Vars::$ACT ? '<b>' . Vars::$LNG['users'] . '</b>' : '<a href="' . Vars::$URI . '">' . Vars::$LNG['users'] . '</a>';
-$menu[] = Vars::$ACT == 'history' ? '<b>' . Vars::$LNG['history'] . '</b>' : '<a href="' . Vars::$URI . '?act=history">' . Vars::$LNG['history'] . '</a> ';
+$menu[] = !Vars::$ACT ? '<b>' . lng('users') . '</b>' : '<a href="' . Vars::$URI . '">' . lng('users') . '</a>';
+$menu[] = Vars::$ACT == 'history' ? '<b>' . lng('history') . '</b>' : '<a href="' . Vars::$URI . '?act=history">' . lng('history') . '</a> ';
 if (Vars::$USER_RIGHTS) {
-    $menu[] = Vars::$ACT == 'guest' ? '<b>' . Vars::$LNG['guests'] . '</b>' : '<a href="' . Vars::$URI . '?act=guest">' . Vars::$LNG['guests'] . '</a>';
-    $menu[] = Vars::$ACT == 'ip' ? '<b>' . Vars::$LNG['ip_activity'] . '</b>' : '<a href="' . Vars::$URI . '?act=ip">' . Vars::$LNG['ip_activity'] . '</a>';
+    $menu[] = Vars::$ACT == 'guest' ? '<b>' . lng('guests') . '</b>' : '<a href="' . Vars::$URI . '?act=guest">' . lng('guests') . '</a>';
+    $menu[] = Vars::$ACT == 'ip' ? '<b>' . lng('ip_activity') . '</b>' : '<a href="' . Vars::$URI . '?act=ip">' . lng('ip_activity') . '</a>';
 }
 
-echo'<div class="phdr"><b>' . Vars::$LNG['who_on_site'] . '</b></div>' .
+echo'<div class="phdr"><b>' . lng('who_on_site') . '</b></div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
 switch (Vars::$ACT) {
@@ -185,16 +185,16 @@ switch (Vars::$ACT) {
                     '</div>';
             }
             echo '</table>';
-            echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+            echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo'<div class="topmenu">' . Functions::displayPagination('online.php?act=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                     '<p><form action="online.php?act=ip" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
-                    '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
+                    '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
             }
-            echo'<p><a href="' . Vars::$URI . '?act=di">' . Vars::$LNG['download_list'] . '</a></p>';
+            echo'<p><a href="' . Vars::$URI . '?act=di">' . lng('download_list') . '</a></p>';
         } else {
-            echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
         }
         exit;
         break;
@@ -265,17 +265,17 @@ if ($total) {
         ++$i;
     }
 } else {
-    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="' . Vars::$URI . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 
 if (Vars::$USER_ID && $total) {
-    echo'<p><a href="' . Vars::$URI . '?act=' . $link . '">' . Vars::$LNG['download_list'] . '</a></p>';
+    echo'<p><a href="' . Vars::$URI . '?act=' . $link . '">' . lng('download_list') . '</a></p>';
 }

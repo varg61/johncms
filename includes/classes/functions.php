@@ -114,9 +114,9 @@ class Functions extends Vars
         $shift = (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600;
         if (date('Y', $var) == date('Y', time())) {
             if (date('z', $var + $shift) == date('z', time() + $shift))
-                return Vars::$LNG['today'] . ', ' . date("H:i", $var + $shift);
+                return lng('today') . ', ' . date("H:i", $var + $shift);
             if (date('z', $var + $shift) == date('z', time() + $shift) - 1)
-                return Vars::$LNG['yesterday'] . ', ' . date("H:i", $var + $shift);
+                return lng('yesterday') . ', ' . date("H:i", $var + $shift);
         }
         return date("d.m.Y / H:i", $var + $shift);
     }
@@ -129,7 +129,7 @@ class Functions extends Vars
     public static function displayError($error = null, $link = null)
     {
         if (!empty($error)) {
-            return '<div class="rmenu"><p><b>' . Vars::$LNG['error'] . '!</b><br />' .
+            return '<div class="rmenu"><p><b>' . lng('error') . '!</b><br />' .
                 (is_array($error) ? implode('<br />', $error) : $error) . '</p>' .
                 (!empty($link) ? '<p>' . $link . '</p>' : '') . '</div>';
         } else {
@@ -226,7 +226,7 @@ class Functions extends Vars
         $out = false;
 
         if (!$user['id']) {
-            $out = '<b>' . Vars::$LNG['guest'] . '</b>';
+            $out = '<b>' . lng('guest') . '</b>';
             if (!empty($user['nickname'])) {
                 $out .= ': ' . $user['nickname'];
             }
@@ -285,12 +285,12 @@ class Functions extends Vars
                 $out .= '<div>' . $arg['sub'] . '</div>';
             }
             if ($lastvisit) {
-                $out .= '<div><span class="gray">' . Vars::$LNG['last_visit'] . ':</span> ' . $lastvisit . '</div>';
+                $out .= '<div><span class="gray">' . lng('last_visit') . ':</span> ' . $lastvisit . '</div>';
             }
             $iphist = '';
             if ($ipinf) {
-                $out .= '<div><span class="gray">' . Vars::$LNG['browser'] . ':</span> ' . $user['user_agent'] . '</div>' .
-                    '<div><span class="gray">' . Vars::$LNG['ip_address'] . ':</span> ';
+                $out .= '<div><span class="gray">' . lng('browser') . ':</span> ' . $user['user_agent'] . '</div>' .
+                    '<div><span class="gray">' . lng('ip_address') . ':</span> ';
                 $hist = Vars::$MOD == 'history' ? '&amp;mod=history' : '';
                 $ip = long2ip($user['ip']);
                 if (Vars::$USER_RIGHTS && isset($user['ip_via_proxy']) && $user['ip_via_proxy']) {
@@ -307,7 +307,7 @@ class Functions extends Vars
                 }
                 if (isset($arg['iphist'])) {
                     $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-                    $out .= '<div><span class="gray">' . Vars::$LNG['ip_history'] . ':</span> <a href="' . Vars::$HOME_URL . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a></div>';
+                    $out .= '<div><span class="gray">' . lng('ip_history') . ':</span> <a href="' . Vars::$HOME_URL . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a></div>';
                 }
                 $out .= '</div>';
             }
@@ -402,12 +402,11 @@ class Functions extends Vars
     */
     public static function timeCount($var)
     {
-        global $lng;
         if ($var < 0) $var = 0;
         $day = ceil($var / 86400);
-        if ($var > 345600) return $day . ' ' . $lng['timecount_days'];
-        if ($var >= 172800) return $day . ' ' . $lng['timecount_days_r'];
-        if ($var >= 86400) return '1 ' . $lng['timecount_day'];
+        if ($var > 345600) return $day . ' ' . lng('timecount_days');
+        if ($var >= 172800) return $day . ' ' . lng('timecount_days_r');
+        if ($var >= 86400) return '1 ' . lng('timecount_day');
         return date("G:i:s", mktime(0, 0, $var));
     }
 
