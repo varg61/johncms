@@ -18,11 +18,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 if (Vars::$USER_ID) {
     if (($user = Vars::getUser()) === false) {
-        echo Functions::displayError(Vars::$LNG['user_does_not_exist']);
+        echo Functions::displayError(lng('user_does_not_exist'));
         exit;
     }
 } else {
-    echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
+    echo Functions::displayError(lng('access_guest_forbidden'));
     exit;
 }
 
@@ -32,12 +32,11 @@ if (Vars::$USER_ID) {
 -----------------------------------------------------------------
 */
 if ($user['id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] > Vars::$USER_RIGHTS)) {
-    echo Functions::displayError(Vars::$LNG['error_rights']);
+    echo Functions::displayError(lng('error_rights'));
     exit;
 }
 
 $tpl = Template::getInstance();
-$tpl->lng = Vars::loadLanguage(1);
 $tpl->user = $user;
 
 if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
@@ -47,10 +46,10 @@ if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPAR
     $tpl->photo = true;
 }
 
-$menu[] = '<a href="' . Vars::$URI . '?act=nick&amp;user=' . $user['id'] . '">' . $tpl->lng['change_nick'] . '</a>';
-$menu[] = '<a href="' . Vars::$URI . '?act=status&amp;user=' . $user['id'] . '">' . $tpl->lng['change_status'] . '</a>';
-$menu[] = '<a href="' . Vars::$URI . '?act=avatar&amp;user=' . $user['id'] . '">' . $tpl->lng['change_avatar'] . '</a>';
-$arg['sub'] = '<p><b>' . $tpl->lng['change'] . '</b>: ' . Functions::displayMenu($menu) . '</p>';
+$menu[] = '<a href="' . Vars::$URI . '?act=nick&amp;user=' . $user['id'] . '">' . lng('change_nick') . '</a>';
+$menu[] = '<a href="' . Vars::$URI . '?act=status&amp;user=' . $user['id'] . '">' . lng('change_status') . '</a>';
+$menu[] = '<a href="' . Vars::$URI . '?act=avatar&amp;user=' . $user['id'] . '">' . lng('change_avatar') . '</a>';
+$arg['sub'] = '<p><b>' . lng('change') . '</b>: ' . Functions::displayMenu($menu) . '</p>';
 $tpl->userarg = $arg;
 
 switch (Vars::$ACT) {
@@ -99,8 +98,8 @@ switch (Vars::$ACT) {
                 $handle->image_convert = 'gif';
                 $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
                 if ($handle->processed) {
-                    echo '<div class="gmenu"><p>' . $tpl->lng['avatar_uploaded'] . '<br />' .
-                        '<a href="' . Vars::$URI . '?user=' . $user['id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
+                    echo '<div class="gmenu"><p>' . lng('avatar_uploaded') . '<br />' .
+                        '<a href="' . Vars::$URI . '?user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
                 } else {
                     echo Functions::displayError($handle->error);
                 }
@@ -112,7 +111,7 @@ switch (Vars::$ACT) {
         break;
 
     case 'upload_photo':
-        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $tpl->lng['upload_photo'] . '</div>';
+        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('upload_photo') . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
@@ -141,8 +140,8 @@ switch (Vars::$ACT) {
                     $handle->image_convert = 'jpg';
                     $handle->process('../files/users/photo/');
                     if ($handle->processed) {
-                        echo '<div class="gmenu"><p>' . $tpl->lng['photo_uploaded'] . '<br /><a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
-                        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . Vars::$LNG['profile'] . '</a></div>';
+                        echo '<div class="gmenu"><p>' . lng('photo_uploaded') . '<br /><a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
+                        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . lng('profile') . '</a></div>';
                     } else {
                         echo Functions::displayError($handle->error);
                     }
@@ -152,12 +151,12 @@ switch (Vars::$ACT) {
                 $handle->clean();
             }
         } else {
-            echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '"><div class="menu"><p>' . $tpl->lng['select_image'] . ':<br />' .
+            echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '"><div class="menu"><p>' . lng('select_image') . ':<br />' .
                 '<input type="file" name="imagefile" value="" />' .
                 '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['flsz']) . '" /></p>' .
-                '<p><input type="submit" name="submit" value="' . $tpl->lng['upload'] . '" /></p>' .
+                '<p><input type="submit" name="submit" value="' . lng('upload') . '" /></p>' .
                 '</div></form>' .
-                '<div class="phdr"><small>' . $tpl->lng['select_image_help'] . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . $tpl->lng['select_image_help_5'] . '<br />' . $tpl->lng['select_image_help_3'] . '</small></div>';
+                '<div class="phdr"><small>' . lng('select_image_help') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . lng('select_image_help_5') . '<br />' . lng('select_image_help_3') . '</small></div>';
         }
         break;
 

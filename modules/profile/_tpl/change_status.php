@@ -1,18 +1,18 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? Vars::$LNG['profile'] : $this->lng['my_profile']) ?></b></a> | <?= Vars::$LNG['edit'] ?>
+    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('profile') : lng('my_profile')) ?></b></a> | <?= lng('edit') ?>
 </div>
 <form action="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>" method="post">
     <div class="gmenu">
         <div class="formblock">
-            <label for="status"><?= Vars::$LNG['status'] ?></label><br/>
+            <label for="status"><?= lng('status') ?></label><br/>
             <input id="status" type="text" value="<?= $this->user['status'] ?>" name="status"/>
-            <div class="desc"><?= $this->lng['status_lenght'] ?></div>
+            <div class="desc"><?= lng('status_lenght') ?></div>
         </div>
         <div class="formblock">
-            <input type="submit" value="<?= Vars::$LNG['save'] ?>" name="submit"/>
+            <input type="submit" value="<?= lng('save') ?>" name="submit"/>
         </div>
     </div>
 </form>
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><?= Vars::$LNG['back'] ?></a>
+    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
 </div>

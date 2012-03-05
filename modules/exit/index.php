@@ -20,11 +20,11 @@ if (isset($_POST['submit'])) {
     exit;
 } else {
     echo'<div class="rmenu">' .
-        '<p><h3>' . Vars::$LNG['exit_warning'] . '</h3></p>' .
+        '<p><h3>' . lng('exit_warning') . '</h3></p>' .
         '<form action="' . Vars::$HOME_URL . '/exit' . '" method="post">' .
-        '<p><input type="checkbox" name="clear" value="1"/>&#160;' . Vars::$LNG['clear_authorisation'] . '</p>' .
-        '<p><input type="submit" name="submit" value="' . Vars::$LNG['exit'] . '" /></p>' .
+        '<p><input type="checkbox" name="clear" value="1"/>&#160;' . lng('clear_authorisation') . '</p>' .
+        '<p><input type="submit" name="submit" value="' . lng('exit') . '" /></p>' .
         '</form>' .
-        '<p><a href="' . $referer . '">' . Vars::$LNG['cancel'] . '</a></p>' .
+        '<p><a href="' . $referer . '">' . lng('cancel') . '</a></p>' .
         '</div>';
 }

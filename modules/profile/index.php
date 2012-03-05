@@ -23,11 +23,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 */
 if (Vars::$USER_ID) {
     if (($user = Vars::getUser()) === false) {
-        echo Functions::displayError(Vars::$LNG['user_does_not_exist']);
+        echo Functions::displayError(lng('user_does_not_exist'));
         exit;
     }
 } else {
-    echo Functions::displayError(Vars::$LNG['access_guest_forbidden']);
+    echo Functions::displayError(lng('access_guest_forbidden'));
     exit;
 }
 
@@ -37,19 +37,18 @@ if (Vars::$USER_ID) {
 -----------------------------------------------------------------
 */
 $tpl              = Template::getInstance();
-$tpl->lng         = Vars::loadLanguage(1);
 $tpl->user        = $user;
 $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 $tpl->bancount    = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 
 if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $user['rights'])) {
-    $menu[] = '<a href="' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id'] . '">' . Vars::$LNG['edit'] . '</a>';
+    $menu[] = '<a href="' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id'] . '">' . lng('edit') . '</a>';
 }
 if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
-    $menu[] = '<a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . Vars::$LNG['delete'] . '</a>';
+    $menu[] = '<a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . lng('delete') . '</a>';
 }
 if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $user['rights']) {
-    $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '">' . Vars::$LNG['ban_do'] . '</a>';
+    $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '">' . lng('ban_do') . '</a>';
 }
 if (isset($menu)) {
     $tpl->menu = Functions::displayMenu($menu);
@@ -60,7 +59,7 @@ $tpl->userarg = array(
     'iphist'    => 1,
     'header'    => '<b>ID:' . $user['id'] . '</b>',
     'footer'    => ($user['id'] != Vars::$USER_ID
-        ? '<span class="gray">' . Vars::$LNG['where'] . ':</span> ' . Functions::displayPlace($user['id'], $user['place'])
+        ? '<span class="gray">' . lng('where') . ':</span> ' . Functions::displayPlace($user['id'], $user['place'])
         : false)
 );
 
