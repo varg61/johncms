@@ -109,7 +109,7 @@ unset($network, $system);
 Загрузка языков
 -----------------------------------------------------------------
 */
-function lng($key)
+function lng($key, $force_system = false)
 {
     static $system_lng = array();
     static $module_lng = array();
@@ -121,7 +121,7 @@ function lng($key)
         $module_lng = parse_ini_file($module_file);
     }
 
-    if (isset($module_lng[$key])) {
+    if (!$force_system && isset($module_lng[$key])) {
         return $module_lng[$key];
     }
 

@@ -30,7 +30,6 @@ $reg_data['sex'] = isset($_POST['sex']) ? intval($_POST['sex']) : 0;
 $tpl = Template::getInstance();
 $tpl->login = new Login;
 $tpl->reg_data = $reg_data;
-$tpl->lng = Vars::loadLanguage('registration');
 
 switch ($tpl->login->userRegistration($reg_data)) {
     case 'step2':
