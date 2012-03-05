@@ -56,23 +56,23 @@ function autoload($name)
 
     // Список системных классов
     $system = array(
-        'advt'         => 'classes/advt.php',
-        'captcha'      => 'classes/captcha.php',
-        'comments'     => 'classes/comments.php',
-        'counters'     => 'classes/counters.php',
-        'finfo'        => 'lib/class.upload.php',
-        'functions'    => 'classes/functions.php',
-        'homepage'     => 'classes/homepage.php',
-        'login'        => 'classes/login.php',
-        'network'      => 'classes/network.php',
-        'session'      => 'classes/session.php',
-        'sitemap'      => 'classes/sitemap.php',
-        'system'       => 'classes/system.php',
-        'template'     => 'classes/template.php',
-        'textparser'   => 'classes/textparser.php',
-        'upload'       => 'lib/class.upload.php',
-        'validate'     => 'classes/validate.php',
-        'vars'         => 'classes/vars.php'
+        'advt'       => 'classes/advt.php',
+        'captcha'    => 'classes/captcha.php',
+        'comments'   => 'classes/comments.php',
+        'counters'   => 'classes/counters.php',
+        'finfo'      => 'lib/class.upload.php',
+        'functions'  => 'classes/functions.php',
+        'homepage'   => 'classes/homepage.php',
+        'login'      => 'classes/login.php',
+        'network'    => 'classes/network.php',
+        'session'    => 'classes/session.php',
+        'sitemap'    => 'classes/sitemap.php',
+        'system'     => 'classes/system.php',
+        'template'   => 'classes/template.php',
+        'textparser' => 'classes/textparser.php',
+        'upload'     => 'lib/class.upload.php',
+        'validate'   => 'classes/validate.php',
+        'vars'       => 'classes/vars.php'
     );
 
     if (isset($system[$name])) {
@@ -103,6 +103,38 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot co
 $session = new Session;
 $system = new System;
 unset($network, $system);
+
+/*
+-----------------------------------------------------------------
+Загрузка языков
+-----------------------------------------------------------------
+*/
+function lng($key)
+{
+    static $system_lng = array();
+    static $module_lng = array();
+
+    $system_file = LNGPATH . Vars::$LNG_ISO . '.lng';
+    $module_file = MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
+
+    if (empty($module_lng) && is_file($module_file)) {
+        $module_lng = parse_ini_file($module_file);
+    }
+
+    if (isset($module_lng[$key])) {
+        return $module_lng[$key];
+    }
+
+    if (empty($system_lng) && is_file($system_file)) {
+        $system_lng = parse_ini_file($system_file);
+    }
+
+    if (isset($system_lng[$key])) {
+        return $system_lng[$key];
+    }
+
+    return '#' . $key . '#';
+}
 
 /*
 -----------------------------------------------------------------

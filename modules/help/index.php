@@ -13,8 +13,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$lng_faq = Vars::loadLanguage('faq');
-
 // Обрабатываем ссылку для возврата
 if (empty($_SESSION['ref'])) {
     $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
@@ -30,9 +28,9 @@ switch (Vars::$ACT) {
         Правила Форума
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>F.A.Q.</b></a> | ' . $lng_faq['forum_rules'] . '</div>' .
-            '<div class="menu"><p>' . $lng_faq['forum_rules_text'] . '</p></div>' .
-            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>F.A.Q.</b></a> | ' . lng('forum_rules') . '</div>' .
+            '<div class="menu"><p>' . lng('forum_rules_text') . '</p></div>' .
+            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . lng('back') . '</a></div>';
         break;
 
     case 'tags':
@@ -41,26 +39,26 @@ switch (Vars::$ACT) {
         Справка по BBcode
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>F.A.Q.</b></a> | ' . $lng_faq['tags'] . '</div>' .
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>F.A.Q.</b></a> | ' . lng('tags') . '</div>' .
             '<div class="menu"><p>' .
             '<table cellpadding="3" cellspacing="0">' .
             '<tr><td align="right"><h3>BBcode</h3></td><td></td></tr>' .
-            '<tr><td align="right">[php]...[/php]</td><td>' . Vars::$LNG['tag_code'] . '</td></tr>' .
-            '<tr><td align="right"><a href="#">' . Vars::$LNG['link'] . '</a></td><td>[url=http://site_url] .]<span style="color:blue">' . $lng_faq['tags_link_name'] . '</span>[/url]</td></tr>' .
-            '<tr><td align="right">[b]...[/b]</td><td><b>' . Vars::$LNG['tag_bold'] . '</b></td></tr>' .
-            '<tr><td align="right">[i]...[/i]</td><td><i>' . Vars::$LNG['tag_italic'] . '</i></td></tr>' .
-            '<tr><td align="right">[u]...[/u]</td><td><u>' . Vars::$LNG['tag_underline'] . '</u></td></tr>' .
-            '<tr><td align="right">[s]...[/s]</td><td><strike>' . Vars::$LNG['tag_strike'] . '</strike></td></tr>' .
-            '<tr><td align="right">[red]...[/red]</td><td><span style="color:red">' . Vars::$LNG['tag_red'] . '</span></td></tr>' .
-            '<tr><td align="right">[green]...[/green]</td><td><span style="color:green">' . Vars::$LNG['tag_green'] . '</span></td></tr>' .
-            '<tr><td align="right">[blue]...[/blue]</td><td><span style="color:blue">' . Vars::$LNG['tag_blue'] . '</span></td></tr>' .
-            '<tr><td align="right">[color=]...[/color]</td><td>' . Vars::$LNG['color_text'] . '</td></tr>' .
-            '<tr><td align="right">[bg=][/bg]</td><td>' . Vars::$LNG['color_bg'] . '</td></tr>' .
-            '<tr><td align="right">[c]...[/c]</td><td><span class="quote">' . Vars::$LNG['tag_quote'] . '</span></td></tr>' .
-            '<tr><td align="right" valign="top">[*]...[/*]</td><td><span class="bblist">' . Vars::$LNG['tag_list'] . '</span></td></tr>' .
+            '<tr><td align="right">[php]...[/php]</td><td>' . lng('tag_code') . '</td></tr>' .
+            '<tr><td align="right"><a href="#">' . lng('link') . '</a></td><td>[url=http://site_url] .]<span style="color:blue">' . lng('tags_link_name') . '</span>[/url]</td></tr>' .
+            '<tr><td align="right">[b]...[/b]</td><td><b>' . lng('tag_bold') . '</b></td></tr>' .
+            '<tr><td align="right">[i]...[/i]</td><td><i>' . lng('tag_italic') . '</i></td></tr>' .
+            '<tr><td align="right">[u]...[/u]</td><td><u>' . lng('tag_underline') . '</u></td></tr>' .
+            '<tr><td align="right">[s]...[/s]</td><td><strike>' . lng('tag_strike') . '</strike></td></tr>' .
+            '<tr><td align="right">[red]...[/red]</td><td><span style="color:red">' . lng('tag_red') . '</span></td></tr>' .
+            '<tr><td align="right">[green]...[/green]</td><td><span style="color:green">' . lng('tag_green') . '</span></td></tr>' .
+            '<tr><td align="right">[blue]...[/blue]</td><td><span style="color:blue">' . lng('tag_blue') . '</span></td></tr>' .
+            '<tr><td align="right">[color=]...[/color]</td><td>' . lng('color_text') . '</td></tr>' .
+            '<tr><td align="right">[bg=][/bg]</td><td>' . lng('color_bg') . '</td></tr>' .
+            '<tr><td align="right">[c]...[/c]</td><td><span class="quote">' . lng('tag_quote') . '</span></td></tr>' .
+            '<tr><td align="right" valign="top">[*]...[/*]</td><td><span class="bblist">' . lng('tag_list') . '</span></td></tr>' .
             '</table>' .
             '</p></div>' .
-            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></div>';
+            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . lng('back') . '</a></div>';
         break;
 
     case 'trans':
@@ -69,9 +67,9 @@ switch (Vars::$ACT) {
         Справка по Транслиту
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>F.A.Q.</b></a> | ' . $lng_faq['translit_help'] . '</div>' .
-            '<div class="menu"><p>' . $lng_faq['translit_help_text'] . '</p></div>' .
-            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>F.A.Q.</b></a> | ' . lng('translit_help') . '</div>' .
+            '<div class="menu"><p>' . lng('translit_help_text') . '</p></div>' .
+            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . lng('back') . '</a></div>';
         break;
 
     default:
@@ -81,10 +79,10 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         echo '<div class="phdr"><b>F.A.Q.</b></div>' .
-            '<div class="menu"><a href="' . Vars::$URI . '?act=forum">' . $lng_faq['forum_rules'] . '</a></div>' .
-            '<div class="menu"><a href="' . Vars::$URI . '?act=tags">' . $lng_faq['tags'] . '</a></div>';
-        if (Vars::$USER_SET['translit']) echo '<div class="menu"><a href="' . Vars::$URI . '?act=trans">' . $lng_faq['translit_help'] . '</a></div>';
-        echo '<div class="menu"><a href="' . Vars::$HOME_URL . '/avatars">' . Vars::$LNG['avatars'] . '</a></div>' .
-            '<div class="menu"><a href="' . Vars::$HOME_URL . '/smileys">' . Vars::$LNG['smileys'] . '</a></div>' .
-            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . Vars::$LNG['back'] . '</a></div>';
+            '<div class="menu"><a href="' . Vars::$URI . '?act=forum">' . lng('forum_rules') . '</a></div>' .
+            '<div class="menu"><a href="' . Vars::$URI . '?act=tags">' . lng('tags') . '</a></div>';
+        if (Vars::$USER_SET['translit']) echo '<div class="menu"><a href="' . Vars::$URI . '?act=trans">' . lng('translit_help') . '</a></div>';
+        echo '<div class="menu"><a href="' . Vars::$HOME_URL . '/avatars">' . lng('avatars') . '</a></div>' .
+            '<div class="menu"><a href="' . Vars::$HOME_URL . '/smileys">' . lng('smileys') . '</a></div>' .
+            '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . lng('back') . '</a></div>';
 }

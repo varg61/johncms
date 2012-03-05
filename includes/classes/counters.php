@@ -11,22 +11,22 @@
 
 class Counters extends Vars
 {
-    public $users;           // Зарегистрированные пользователи
-    public $users_new;       // Новые зарегистрированные пользователи
-    public $album;           // Пользовательские альбомы
-    public $album_photo;     // Пользовательские фотографии
+    public $users; // Зарегистрированные пользователи
+    public $users_new; // Новые зарегистрированные пользователи
+    public $album; // Пользовательские альбомы
+    public $album_photo; // Пользовательские фотографии
     public $album_photo_new; // Новые пользовательские фотографии
-    public $downloads;       // Счетчик файлов в Загруз-центре
-    public $downloads_new;   // Счетчик новых файлов в Загруз-центре
-    public $forum_topics;    // Счетчик топиков Форума
-    public $forum_messages;  // Счетчик постов Форума
-    public $library;         // Счетчик статей Библиотеки
-    public $library_new;     // Счетчик новых статей Библиотеки
-    public $library_mod;     // Счетчик статей Библиотеки, находящихся на модерации
-    public $gallery;         // Счетчик картинок в Галерее
-    public $gallery_new;     // Счетчик новых картинок в Галерее
-    public $guestbook;       // Счетчик постов в Гостевой за последние сутки
-    public $adminclub;       // Счетчик постов в Админ-клубе за последние сутки
+    public $downloads; // Счетчик файлов в Загруз-центре
+    public $downloads_new; // Счетчик новых файлов в Загруз-центре
+    public $forum_topics; // Счетчик топиков Форума
+    public $forum_messages; // Счетчик постов Форума
+    public $library; // Счетчик статей Библиотеки
+    public $library_new; // Счетчик новых статей Библиотеки
+    public $library_mod; // Счетчик статей Библиотеки, находящихся на модерации
+    public $gallery; // Счетчик картинок в Галерее
+    public $gallery_new; // Счетчик новых картинок в Галерее
+    public $guestbook; // Счетчик постов в Гостевой за последние сутки
+    public $adminclub; // Счетчик постов в Админ-клубе за последние сутки
 
     private $cache_file = 'cache_counters.dat';
     private $update_cache = false;
@@ -83,8 +83,8 @@ class Counters extends Vars
         $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 $sql"), 0);
         $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 $sql"), 0);
         return (parent::$USER_ID || parent::$SYSTEM_SET['active']
-            ? '<a href="' . parent::$HOME_URL . '/online">' . Vars::$LNG['online'] . ': ' . $users . ' / ' . $guests . '</a>'
-            : Vars::$LNG['online'] . ': ' . $users . ' / ' . $guests);
+            ? '<a href="' . parent::$HOME_URL . '/online">' . lng('online') . ': ' . $users . ' / ' . $guests . '</a>'
+            : lng('online') . ': ' . $users . ' / ' . $guests);
     }
 
     /*
@@ -100,7 +100,8 @@ class Counters extends Vars
             $in = fopen($file, "r");
             while ($block = fread($in, 10)) {
                 $tmp = unpack('Skey/Lcount/Ltime', $block);
-                $out[$tmp['key']] = array('count' => $tmp['count'], 'time' => $tmp['time']);
+                $out[$tmp['key']] = array('count' => $tmp['count'],
+                                          'time'  => $tmp['time']);
             }
             fclose($in);
             return $out;

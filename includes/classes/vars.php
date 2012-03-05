@@ -170,7 +170,8 @@ abstract class Vars
         }
 
         //TODO: Дописать обработку отредактированных языков
-        return $out;
+        //return $out;
+        return array();
 
         //        static $edited = false;
         //        if (!is_dir(LNGPATH . self::$LNG_ISO)) self::$LNG_ISO = 'en';

@@ -33,7 +33,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
     <meta name="description" content="<?= Vars::$SYSTEM_SET['meta_desc'] ?>"/>
     <link rel="stylesheet" href="<?= Vars::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] ?>/style.css" type="text/css"/>
     <link rel="shortcut icon" href="<?= Vars::$HOME_URL ?>/favicon.ico"/>
-    <link rel="alternate" type="application/rss+xml" title="<?= Vars::$LNG['site_news'] ?>" href="http://localhost/johncms/rss"/>
+    <link rel="alternate" type="application/rss+xml" title="<?= lng('site_news') ?>" href="http://localhost/johncms/rss"/>
     <title><?= isset($this->title) ? $this->title : Vars::$SYSTEM_SET['copyright'] ?></title>
 </head>
 <body>
@@ -49,17 +49,17 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
         </td>
     </tr>
 </table>
-<div class="header"><?= Vars::$LNG['hi'] . ', ' . (Vars::$USER_ID ? '<b>' . Vars::$USER_DATA['nickname'] . '</b>' : Vars::$LNG['guest']) ?>!</div>
+<div class="header"><?= lng('hi') . ', ' . (Vars::$USER_ID ? '<b>' . Vars::$USER_DATA['nickname'] . '</b>' : lng('guest')) ?>!</div>
 <div class="tmn">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
-    <a href="<?= Vars::$HOME_URL ?>"><?= Vars::$LNG['homepage'] ?></a> |
+    <a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage') ?></a> |
     <?php endif ?>
     <?php if (Vars::$USER_ID) : ?>
-    <a href="<?= Vars::$HOME_URL ?>/cabinet"><?= Vars::$LNG['personal'] ?></a> |
-    <a href="<?= Vars::$HOME_URL ?>/exit"><?= Vars::$LNG['exit'] ?></a>
+    <a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal') ?></a> |
+    <a href="<?= Vars::$HOME_URL ?>/exit"><?= lng('exit') ?></a>
     <?php else : ?>
-    <a href="<?= Vars::$HOME_URL ?>/login"><?= Vars::$LNG['login'] ?></a> |
-    <a href="<?= Vars::$HOME_URL ?>/registration"><?= Vars::$LNG['registration'] ?></a>
+    <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login') ?></a> |
+    <a href="<?= Vars::$HOME_URL ?>/registration"><?= lng('registration') ?></a>
     <?php endif ?>
 </div>
 
@@ -70,19 +70,19 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 
 <div class="fmenu">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
-    <div><a href="<?= Vars::$HOME_URL ?>"><?= Vars::$LNG['homepage'] ?></a></div>
+    <div><a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage') ?></a></div>
     <?php endif ?>
     <?php if (Vars::$USER_SET['quick_go']) : ?>
     <form action="<?= Vars::$HOME_URL ?>/go.php" method="post">
         <div>
             <select name="adres" style="font-size:x-small">
-                <option selected="selected"><?= Vars::$LNG['quick_jump'] ?></option>
-                <option value="guest"><?= Vars::$LNG['guestbook'] ?></option>
-                <option value="forum"><?= Vars::$LNG['forum'] ?></option>
-                <option value="news"><?= Vars::$LNG['news'] ?></option>
-                <option value="gallery"><?= Vars::$LNG['gallery'] ?></option>
-                <option value="down"><?= Vars::$LNG['downloads'] ?></option>
-                <option value="lib"><?= Vars::$LNG['library'] ?></option>
+                <option selected="selected"><?= lng('quick_jump') ?></option>
+                <option value="guest"><?= lng('guestbook') ?></option>
+                <option value="forum"><?= lng('forum') ?></option>
+                <option value="news"><?= lng('news') ?></option>
+                <option value="gallery"><?= lng('gallery') ?></option>
+                <option value="down"><?= lng('downloads') ?></option>
+                <option value="lib"><?= lng('library') ?></option>
                 <option value="gazen">Gazenwagen :)</option>
             </select>
             <input type="submit" value="Go!" style="font-size:x-small"/>
