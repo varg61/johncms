@@ -19,7 +19,6 @@ abstract class Vars
     public static $SYSTEM_SET; // Системные настройки
     public static $CORE_ERRORS = array(); // Ошибки ядра
 
-    public static $LNG = array(); // Массив с фразами языка
     public static $LNG_ISO = 'en'; // Двухбуквенный ISO код языка
     public static $LNG_LIST = array(); // Список имеющихся языков
 
@@ -52,16 +51,16 @@ abstract class Vars
     -----------------------------------------------------------------
     */
     public static $USER_SET = array( // Пользователские настройки по-умолчанию
-        'avatar' => 1, // Показывать аватары
-        'digest' => 0, // Показывать Дайджест
+        'avatar'     => 1, // Показывать аватары
+        'digest'     => 0, // Показывать Дайджест
         'direct_url' => 0, // Внешние ссылки
-        'field_h' => 3, // Высота текстового поля ввода
-        'page_size' => 10, // Число сообщений на страницу в списках
-        'quick_go' => 1, // Быстрый переход
-        'timeshift' => 0, // Временной сдвиг
-        'skin' => 'default', // Тема оформления
-        'smileys' => 1, // Включить(1) выключить(0) смайлы
-        'translit' => 0 // Транслит
+        'field_h'    => 3, // Высота текстового поля ввода
+        'page_size'  => 10, // Число сообщений на страницу в списках
+        'quick_go'   => 1, // Быстрый переход
+        'timeshift'  => 0, // Временной сдвиг
+        'skin'       => 'default', // Тема оформления
+        'smileys'    => 1, // Включить(1) выключить(0) смайлы
+        'translit'   => 0 // Транслит
     );
 
     /*
@@ -145,52 +144,6 @@ abstract class Vars
             ");
         }
         return true;
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Загружаем фразы языка из файла
-    -----------------------------------------------------------------
-    */
-    public static function loadLanguage($module = false)
-    {
-        $path = $module ? MODPATH . self::$MODULE . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR : LNGPATH;
-        if (is_file($path . self::$LNG_ISO . '.lng')) {
-            $file = $path . self::$LNG_ISO . '.lng';
-        } elseif (is_file($path . 'en.lng')) {
-            $file = $path . 'en.lng';
-        } else {
-            self::$CORE_ERRORS[] = 'Language file <b>' . $module . '.lng</b> is missing';
-            return false;
-        }
-
-        if (($out = parse_ini_file($file)) === false) {
-            self::$CORE_ERRORS[] = 'Language file is corrupt';
-            return false;
-        }
-
-        //TODO: Дописать обработку отредактированных языков
-        //return $out;
-        return array();
-
-        //        static $edited = false;
-        //        if (!is_dir(LNGPATH . self::$LNG_ISO)) self::$LNG_ISO = 'en';
-        //        $lng_file = LNGPATH . self::$LNG_ISO . '/' . $module . '.lng';
-        //        $lng_file_edit = CONFIGPATH . self::$LNG_ISO . '_edited.lng';
-        //        if (file_exists($lng_file)) {
-        //            $out = parse_ini_file($lng_file) or die('ERROR: language file');
-        //            if ($edited === false) {
-        //                if (file_exists($lng_file_edit)) $edited = parse_ini_file($lng_file_edit, true);
-        //                else  $edited = array();
-        //            }
-        //            if (isset($edited[$module])) {
-        //                $lng_module = array_diff_key($out, $edited[$module]);
-        //                $out = $lng_module + $edited[$module];
-        //            }
-        //            return $out;
-        //        }
-        //        self::$CORE_ERRORS[] = 'Language file <b>' . $module . '.lng</b> is missing';
-        //        return false;
     }
 
     /*

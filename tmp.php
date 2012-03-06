@@ -1,6 +1,57 @@
 <?php
 
 
+    /*
+    -----------------------------------------------------------------
+    Загружаем фразы языка из файла
+    -----------------------------------------------------------------
+    */
+    public static function loadLanguage($module = false)
+{
+    $path = $module ? MODPATH . self::$MODULE . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR : LNGPATH;
+    if (is_file($path . self::$LNG_ISO . '.lng')) {
+        $file = $path . self::$LNG_ISO . '.lng';
+    } elseif (is_file($path . 'en.lng')) {
+        $file = $path . 'en.lng';
+    } else {
+        self::$CORE_ERRORS[] = 'Language file <b>' . $module . '.lng</b> is missing';
+        return false;
+    }
+
+    if (($out = parse_ini_file($file)) === false) {
+        self::$CORE_ERRORS[] = 'Language file is corrupt';
+        return false;
+    }
+
+    //TODO: Дописать обработку отредактированных языков
+    //return $out;
+    return array();
+
+    //        static $edited = false;
+    //        if (!is_dir(LNGPATH . self::$LNG_ISO)) self::$LNG_ISO = 'en';
+    //        $lng_file = LNGPATH . self::$LNG_ISO . '/' . $module . '.lng';
+    //        $lng_file_edit = CONFIGPATH . self::$LNG_ISO . '_edited.lng';
+    //        if (file_exists($lng_file)) {
+    //            $out = parse_ini_file($lng_file) or die('ERROR: language file');
+    //            if ($edited === false) {
+    //                if (file_exists($lng_file_edit)) $edited = parse_ini_file($lng_file_edit, true);
+    //                else  $edited = array();
+    //            }
+    //            if (isset($edited[$module])) {
+    //                $lng_module = array_diff_key($out, $edited[$module]);
+    //                $out = $lng_module + $edited[$module];
+    //            }
+    //            return $out;
+    //        }
+    //        self::$CORE_ERRORS[] = 'Language file <b>' . $module . '.lng</b> is missing';
+    //        return false;
+}
+
+
+
+
+
+
 
 
 /*

@@ -27,7 +27,6 @@ class System extends Vars
 
         // Определяем и загружаем язык
         $this->_lngDetect();
-        parent::$LNG = parent::loadLanguage();
         if (parent::$LNG_ISO != 'ru' && parent::$LNG_ISO != 'uk') parent::$USER_SET['translit'] = 0;
 
         // Принимаем суперглобальные переменные
