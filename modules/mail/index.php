@@ -11,22 +11,26 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define ('_IN_JOHNCMS_MAIL', 1);
+
 if (!Vars::$USER_ID) {
     Header('Location: ' . Vars::$HOME_URL . '/404');
     exit;
 }
-define('MAILDIR', 'mail'); //Ïàïêà ñ ìîäóëåì
+
+define('MAILDIR', 'mail'); //ÐŸÐ°Ð¿ÐºÐ° Ñ Ð¼Ð¾Ð´ÑƒÐ»ÐµÐ¼
 define('MAILPATH', MODPATH . MAILDIR . DIRECTORY_SEPARATOR);
+
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);
-//Ïîäêëþ÷àåì øàáëîíèçàòîð
+
+//ÐŸÐ¾Ð´ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ ÑˆÐ°Ð±Ð»Ð¾Ð½Ð¸Ð·Ð°Ñ‚Ð¾Ñ€
 $tpl = Template::getInstance();
-$lng_mail = Vars::loadLanguage('mail');
-$tpl->lng = $lng_mail;
 require (MAILPATH . '_inc/class.mail.php');
-//Çàãîëîâîê
-$tpl->title = Vars::$LNG['mail'];
-//Ïðîâåðÿåì è ïîäêëþ÷àåì íóæíûå ôàéëû ìîäóëÿ
+
+//Ð—Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº
+$tpl->title = lng('mail');
+
+//ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð¸ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ Ð½ÑƒÐ¶Ð½Ñ‹Ðµ Ñ„Ð°Ð¹Ð»Ñ‹ Ð¼Ð¾Ð´ÑƒÐ»Ñ
 $connect = Mail::mailConnect();
 if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== false && file_exists(MAILPATH . '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php')) {
     require (MAILPATH . '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php');
@@ -82,13 +86,15 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== false && file_
             $total, Vars::$USER_SET['page_size']);
         $tpl->query = $array;
     }
-    //Ñ÷åò÷èêè
+
+    //Ð¡Ñ‡ÐµÑ‚Ñ‡Ð¸ÐºÐ¸
     $tpl->systems = Mail::counter('systems');
     $tpl->elected = Mail::counter('elected');
     $tpl->archive = Mail::counter('archive');
     $tpl->delete = Mail::counter('delete');
     $tpl->banned = Mail::counter('banned');
     $tpl->files = Mail::counter('files');
-    //Ïîäêëþ÷àåì øàáëîí ìîäóëÿ
+
+    //ÐŸÐ¾Ð´ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ ÑˆÐ°Ð±Ð»Ð¾Ð½ Ð¼Ð¾Ð´ÑƒÐ»Ñ
     $tpl->contents = $tpl->includeTpl('_index');
 }

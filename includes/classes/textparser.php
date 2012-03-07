@@ -243,7 +243,7 @@ class TextParser
             '<span class="quote" style="display:block">$2</span>',             // Цитата
             '<span class="bblist">$1</span>', // Список
             '<div><div class="hidetop" style="cursor:pointer;" onclick="var _n=this.parentNode.getElementsByTagName(\'div\')[1];if(_n.style.display==\'none\'){_n.style.display=\'\';}else{_n.style.display=\'none\';}">[+/-] ' .
-            Vars::$LNG['spoiler'] . '</div><div class="hidemain" style="display:none">$1</div></div>' // Спойлер
+            lng('spoiler') . '</div><div class="hidemain" style="display:none">$1</div></div>' // Спойлер
         );
         return preg_replace($search, $replace, $var);
     }
@@ -284,12 +284,12 @@ class TextParser
         if (($smileys = Vars::getUserData('smileys')) === false) $smileys = array();
         if (!empty($smileys)) {
             $res_sm = '';
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/pages/smileys.php?act=my_smileys">' . Vars::$LNG['edit_list'] . '</a></small><br />';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/pages/smileys.php?act=my_smileys">' . lng('edit_list') . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
             $bb_smileys .= Functions::smileys($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/pages/smileys.php">' . Vars::$LNG['add_smileys'] . '</a></small>';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/pages/smileys.php">' . lng('add_smileys') . '</a></small>';
         }
         $out = '<style>' . "\n" .
                '.bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}' . "\n" .
@@ -308,24 +308,24 @@ class TextParser
                'var length = element.selectionEnd - element.selectionStart;' . "\n" .
                'element.value = str.substr(0, start) + text3 + text1 + str.substr(start, length) + text2 + text3 + str.substr(start + length);' . "\n" .
                '} else document.' . $form . '.' . $field . '.value += text3+text1+text2+text3;}</script>' . "\n" .
-               '<a href="javascript:tag(\'[b]\', \'[/b]\', \'\')">' . Functions::getImage('bb_bold.gif', 'b', 'title="' . Vars::$LNG['tag_bold'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[i]\', \'[/i]\', \'\')">' . Functions::getImage('bb_italic.gif', 'i', 'title="' . Vars::$LNG['tag_italic'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[u]\', \'[/u]\', \'\')">' . Functions::getImage('bb_underline.gif', 'u', 'title="' . Vars::$LNG['tag_underline'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[s]\', \'[/s]\', \'\')">' . Functions::getImage('bb_strike.gif', 's', 'title="' . Vars::$LNG['tag_strike'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[*]\', \'[/*]\', \'\')">' . Functions::getImage('bb_list.gif', '*', 'title="' . Vars::$LNG['tag_list'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[spoiler]\', \'[/spoiler]\', \'\')">' . Functions::getImage('bb_spoiler.png', 'spoiler', 'title="' . Vars::$LNG['spoiler'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[q]\', \'[/q]\', \'\')">' . Functions::getImage('bb_quote.gif', 'q', 'title="' . Vars::$LNG['tag_quote'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[php]\', \'[/php]\', \'\')">' . Functions::getImage('bb_php.gif', 'php', 'title="' . Vars::$LNG['tag_code'] . '"') . '</a>' . "\n" .
-               '<a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')">' . Functions::getImage('bb_url.gif', 'url', 'title="' . Vars::$LNG['tag_link'] . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[b]\', \'[/b]\', \'\')">' . Functions::getImage('bb_bold.gif', 'b', 'title="' . lng('tag_bold') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[i]\', \'[/i]\', \'\')">' . Functions::getImage('bb_italic.gif', 'i', 'title="' . lng('tag_italic') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[u]\', \'[/u]\', \'\')">' . Functions::getImage('bb_underline.gif', 'u', 'title="' . lng('tag_underline') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[s]\', \'[/s]\', \'\')">' . Functions::getImage('bb_strike.gif', 's', 'title="' . lng('tag_strike') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[*]\', \'[/*]\', \'\')">' . Functions::getImage('bb_list.gif', '*', 'title="' . lng('tag_list') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[spoiler]\', \'[/spoiler]\', \'\')">' . Functions::getImage('bb_spoiler.png', 'spoiler', 'title="' . lng('spoiler') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[q]\', \'[/q]\', \'\')">' . Functions::getImage('bb_quote.gif', 'q', 'title="' . lng('tag_quote') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[php]\', \'[/php]\', \'\')">' . Functions::getImage('bb_php.gif', 'php', 'title="' . lng('tag_code') . '"') . '</a>' . "\n" .
+               '<a href="javascript:tag(\'[url=]\', \'[/url]\', \'\')">' . Functions::getImage('bb_url.gif', 'url', 'title="' . lng('tag_link') . '"') . '</a>' . "\n" .
                '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . "\n" .
-               Functions::getImage('bb_color.gif', 'color', 'title="' . Vars::$LNG['color_text'] . '"') . "\n" .
+               Functions::getImage('bb_color.gif', 'color', 'title="' . lng('color_text') . '"') . "\n" .
                '<div class="bb_hide bb_color">' . $font_color . '</div></span>' . "\n" .
                '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . "\n" .
-               Functions::getImage('bb_bgcolor.gif', 'bgcolor', 'title="' . Vars::$LNG['color_bg'] . '"') . "\n" .
+               Functions::getImage('bb_bgcolor.gif', 'bgcolor', 'title="' . lng('color_bg') . '"') . "\n" .
                '<div class="bb_hide bb_color">' . $bg_color . '</div></span>';
         if (Vars::$USER_ID) {
             $out .= ' <span class="bb_opt" style="display: inline-block; cursor:pointer">' . "\n" .
-                    Functions::getImage('bb_smileys.gif', 'smileys', 'title="' . Vars::$LNG['smileys'] . '"') . "\n" .
+                    Functions::getImage('bb_smileys.gif', 'smileys', 'title="' . lng('smileys') . '"') . "\n" .
                     '<div class="bb_hide">' . $bb_smileys . '</div></span>';
         }
         return $out . '<br />';
