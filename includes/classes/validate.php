@@ -21,17 +21,17 @@ class Validate
     public static function nickname($var = '', $error_log = false)
     {
         if (empty($var)) {
-            $error = Vars::$LNG['error_login_empty'];
+            $error = lng('error_login_empty');
         } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
-            $error = Vars::$LNG['error_wrong_lenght'];
+            $error = lng('error_wrong_lenght');
         } elseif (preg_match('/[^\da-zа-я\-\.\ \@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
-            $error = Vars::$LNG['error_wrong_symbols'];
+            $error = lng('error_wrong_symbols');
         } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $var)) {
-            $error = Vars::$LNG['error_double_charset'];
+            $error = lng('error_double_charset');
         } elseif (filter_var($var, FILTER_VALIDATE_INT) !== false) {
-            $error = Vars::$LNG['error_digits_only'];
+            $error = lng('error_digits_only');
         } elseif (preg_match("/(.)\\1\\1\\1/", $var)) {
-            $error = Vars::$LNG['error_recurring_characters'];
+            $error = lng('error_recurring_characters');
         } else {
             return true;
         }
@@ -54,7 +54,7 @@ class Validate
         if ($result == 0) return true;
 
         if ($error_log) {
-            self::$error['login'] = Vars::$LNG['error_nick_occupied'];
+            self::$error['login'] = lng('error_nick_occupied');
         }
         return false;
     }
@@ -67,11 +67,11 @@ class Validate
     public static function email($var = '', $error_log = false)
     {
         if (empty($var)) {
-            $error = Vars::$LNG['error_email_empty'];
+            $error = lng('error_email_empty');
         } elseif (mb_strlen($var) < 5 || mb_strlen($var) > 50) {
-            $error = Vars::$LNG['error_wrong_lenght'];
+            $error = lng('error_wrong_lenght');
         } elseif (filter_var($var, FILTER_VALIDATE_EMAIL) == false) {
-            $error = Vars::$LNG['error_email'];
+            $error = lng('error_email');
         } else {
             return true;
         }
@@ -95,7 +95,7 @@ class Validate
         }
 
         if ($error_log) {
-            self::$error['email'] = Vars::$LNG['error_email_occupied'];
+            self::$error['email'] = lng('error_email_occupied');
         }
         return false;
     }
@@ -108,11 +108,11 @@ class Validate
     public static function password($var = '', $error_log = false)
     {
         if (empty($var)) {
-            $error = Vars::$LNG['error_empty_password'];
+            $error = lng('error_empty_password');
         } elseif (mb_strlen($var) < 3 || mb_strlen($var) > 20) {
-            $error = Vars::$LNG['error_wrong_lenght'];
+            $error = lng('error_wrong_lenght');
         } elseif (preg_match('/[^\da-z]+/i', $var)) {
-            $error = Vars::$LNG['error_wrong_symbols'];
+            $error = lng('error_wrong_symbols');
         } else {
             return true;
         }

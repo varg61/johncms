@@ -113,6 +113,7 @@ function lng($key, $force_system = false)
 {
     static $system_lng = array();
     static $module_lng = array();
+    static $edited_lng = array();
 
     $system_file = LNGPATH . Vars::$LNG_ISO . '.lng';
     $module_file = MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';

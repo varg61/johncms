@@ -17,7 +17,7 @@ if (Vars::$USER_RIGHTS < 1) {
     exit;
 }
 
-echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . Vars::$LNG['administration'] . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('admin_panel') . '</b></a> | ' . lng('administration') . '</div>';
 $req = mysql_query("SELECT * FROM `users` WHERE `rights` > 0 ORDER BY `rights` DESC, `nickname` ASC");
 $total = mysql_num_rows($req);
 for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; ++$i) {
@@ -26,6 +26,6 @@ for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; ++$i) {
         '</div>';
 }
 
-echo'<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>' .
-    '<p><a href="' . Vars::$URI . '">' . Vars::$LNG['users_list'] . '</a><br />' .
-    '<a href="' . Vars::$MODULE_URI . '">' . Vars::$LNG['admin_panel'] . '</a></p>';
+echo'<div class="phdr">' . lng('total') . ': ' . $total . '</div>' .
+    '<p><a href="' . Vars::$MODULE_URI . '/users">' . lng('users_list') . '</a><br />' .
+    '<a href="' . Vars::$MODULE_URI . '">' . lng('admin_panel') . '</a></p>';

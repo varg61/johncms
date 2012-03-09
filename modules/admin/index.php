@@ -18,8 +18,6 @@ if (Vars::$USER_RIGHTS < 1) {
     exit;
 }
 
-$lng_adm = Vars::loadLanguage('adm');
-
 $regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
 $bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
 echo '<div class="phdr"><b>' . lng('admin_panel') . '</b></div>';
@@ -81,7 +79,7 @@ if (Vars::$USER_RIGHTS >= 7) {
         '<h3>' . Functions::getImage('blocked.png', '', 'class="left"') . '&#160;' . lng('security') . '</h3>' .
         '<ul>' .
         //'<li><a href="index.php?act=antispy">' . $lng['antispy'] . '</a></li>' .
-        (Vars::$USER_RIGHTS == 9 ? '<li><a href="ip_access.php">' . lng('ip_accesslist') . '</a></li>' : '') .
+        (Vars::$USER_RIGHTS == 9 ? '<li><a href="' . Vars::$URI . '/system/ip_access.php">' . lng('ip_accesslist') . '</a></li>' : '') .
         '</ul>' .
         '</p></div>';
 }

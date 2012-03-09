@@ -9,15 +9,13 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 9) {
     header('Location: http://johncms.com/404.php');
     exit;
 }
-
-$lng_adm = Vars::loadLanguage('adm');
 
 $mod = Vars::$MOD == 'white' ? 'white' : 'black';
 $color = Vars::$MOD == 'white' ? 'green' : 'red';
@@ -48,10 +46,10 @@ switch (Vars::$ACT) {
         Добавление IP в список
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . $lng_adm['ip_accesslist'] . '</b></a> | ' . $lng_adm['add_ip'] . '</div>' .
+        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('add_ip') . '</div>' .
             ($mod == 'black'
-                ? '<div class="rmenu"><p><h3>' . $lng_adm['black_list'] . '</h3></p></div>'
-                : '<div class="gmenu"><p><h3>' . $lng_adm['white_list'] . '</h3></p></div>'
+                ? '<div class="rmenu"><p><h3>' . lng('black_list') . '</h3></p></div>'
+                : '<div class="gmenu"><p><h3>' . lng('white_list') . '</h3></p></div>'
             );
         if (isset($_POST['submit']) || isset($_POST['confirm'])) {
             $error = array();
@@ -62,7 +60,7 @@ switch (Vars::$ACT) {
 
             // Если адрес не введен, выдаем ошибку
             if (empty($get_ip)) {
-                $error[] = $lng_adm['add_ip_address_empty'];
+                $error[] = lng('add_ip_address_empty');
             }
 
             if (empty($error)) {
@@ -71,11 +69,11 @@ switch (Vars::$ACT) {
                     $array = explode('-', $get_ip);
                     $ip1 = trim($array[0]);
                     if (!Validate::ip($ip1)) {
-                        $error[] = $lng_adm['add_ip_firstaddress_error'];
+                        $error[] = lng('add_ip_firstaddress_error');
                     }
                     $ip2 = trim($array[1]);
                     if (!Validate::ip($ip2)) {
-                        $error[] = $lng_adm['add_ip_secondaddress_error'];
+                        $error[] = lng('add_ip_secondaddress_error');
                     }
                 } elseif (strstr($get_ip, '*')) {
                     // Обрабатываем адреса с маской
@@ -90,7 +88,7 @@ switch (Vars::$ACT) {
                             $ipt1[$i] = $array[$i];
                             $ipt2[$i] = $array[$i];
                         } else {
-                            $error = $lng_adm['add_ip_address_error'];
+                            $error = lng('add_ip_address_error');
                         }
                         $ip1 = $ipt1[0] . '.' . $ipt1[1] . '.' . $ipt1[2] . '.' . $ipt1[3];
                         $ip2 = $ipt2[0] . '.' . $ipt2[1] . '.' . $ipt2[2] . '.' . $ipt2[3];
@@ -98,7 +96,7 @@ switch (Vars::$ACT) {
                 } else {
                     // Обрабатываем одиночный адрес
                     if (!Validate::ip($get_ip)) {
-                        $error = $lng_adm['add_ip_address_error'];
+                        $error = lng('add_ip_address_error');
                     } else {
                         $ip1 = $get_ip;
                         $ip2 = $get_ip;
@@ -118,20 +116,20 @@ switch (Vars::$ACT) {
                 $req = mysql_query("SELECT * FROM `cms_ip_bwlist` WHERE ('$ip1' BETWEEN `ip` AND `ip_upto`) OR ('$ip2' BETWEEN `ip` AND `ip_upto`) OR (`ip` > '$ip1' AND `ip_upto` < '$ip2')");
                 $total = mysql_num_rows($req);
                 if ($total) {
-                    echo Functions::displayError($lng_adm['add_ip_address_conflict']);
+                    echo Functions::displayError(lng('add_ip_address_conflict'));
                     for ($i = 0; ($res = mysql_fetch_array($req)) !== false; ++$i) {
                         echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                             ($get_ip = $res['ip'] == $res['ip_upto'] ? long2ip($res['ip']) : long2ip($res['ip']) . ' - ' . long2ip($res['ip_upto'])) .
                             '</div>';
                     }
-                    echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
-                    echo '<p><a href="index.php?act=ipban&amp;mod=new">' . Vars::$LNG['back'] . '</a><br /><a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
+                    echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+                    echo '<p><a href="index.php?act=ipban&amp;mod=new">' . lng('back') . '</a><br /><a href="index.php">' . lng('admin_panel') . '</a></p>';
                     exit;
                 }
 
                 // Проверяем, не попадает ли IP администратора в диапазон
                 if (Vars::$MOD == 'black' && (Vars::$IP >= $ip1 && Vars::$IP <= $ip2) || Vars::$IP_VIA_PROXY && (Vars::$IP_VIA_PROXY >= $ip1 && Vars::$IP_VIA_PROXY <= $ip2)) {
-                    $error = $lng_adm['add_ip_myaddress_conflict'];
+                    $error = lng('add_ip_myaddress_conflict');
                 }
             }
 
@@ -155,18 +153,18 @@ switch (Vars::$ACT) {
                         '<input type="hidden" value="' . $mod . '" name="mod" />' .
                         '<input type="hidden" value="' . long2ip($ip1) . ($ip1 == $ip2 ? '' : '-' . long2ip($ip2)) . '" name="ip" />' .
                         '<input type="hidden" value="' . base64_encode($description) . '" name="description" />' .
-                        '<p><h3>' . Vars::$LNG['ip_address'] . ': ' .
+                        '<p><h3>' . lng('ip_address') . ': ' .
                         '<span class="' . $color . '">' . long2ip($ip1) . ($ip1 == $ip2 ? '' : '&#160;-&#160;' . long2ip($ip2)) . '</span></h3>' .
-                        ($mod == 'black' ? $lng_adm['add_ip_confirmation_black'] : $lng_adm['add_ip_confirmation_white']) .
-                        '</p><p><input type="submit" name="confirm" value="' . Vars::$LNG['save'] . '"/></p>' .
-                        '<p><a href="ip_access.php?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . Vars::$LNG['cancel'] . '</a></p>' .
+                        ($mod == 'black' ? lng('add_ip_confirmation_black') : lng('add_ip_confirmation_white')) .
+                        '</p><p><input type="submit" name="confirm" value="' . lng('save') . '"/></p>' .
+                        '<p><a href="ip_access.php?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . lng('cancel') . '</a></p>' .
                         '</div></form>';
                 }
             }
 
             // Показываем ошибки, если есть
             if (!empty($error)) {
-                echo Functions::displayError($error, '<a href="ip_access.php?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . Vars::$LNG['back'] . '</a>');
+                echo Functions::displayError($error, '<a href="ip_access.php?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . lng('back') . '</a>');
             }
         } else {
             /*
@@ -175,25 +173,25 @@ switch (Vars::$ACT) {
             -----------------------------------------------------------------
             */
             echo'<form action="ip_access.php?act=add" method="post">' .
-                '<div class="menu"><p><h3>' . Vars::$LNG['ip_address'] . ':</h3>' .
+                '<div class="menu"><p><h3>' . lng('ip_address') . ':</h3>' .
                 '<input type="hidden" value="' . htmlspecialchars(Vars::$MOD) . '" name="mod" />' .
                 '<input type="text" name="ip"/></p>' .
-                '<p><h3>' . Vars::$LNG['description'] . '</h3>' .
+                '<p><h3>' . lng('description') . '</h3>' .
                 '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="description"></textarea>' .
-                '<br /><small>&nbsp;' . Vars::$LNG['not_mandatory_field'] . '</small></p>' .
-                '<p><input type="submit" name="submit" value="' . Vars::$LNG['add'] . '"/></p></div>' .
+                '<br /><small>&nbsp;' . lng('not_mandatory_field') . '</small></p>' .
+                '<p><input type="submit" name="submit" value="' . lng('add') . '"/></p></div>' .
                 '</form>';
         }
         // Нижний блок с подсказками
-        echo'<div class="phdr"><small><p>' .
+        echo'<div class="phdr"><a href="ip_access.php' . (Vars::$MOD == 'black' ? '' : '?mod=white') . '">' . lng('back') . '</a></div>' .
+            '<div class="topmenu"><p>' .
             (Vars::$MOD == 'black'
-                ? '<strong>' . mb_strtoupper($lng_adm['black_list']) . ':</strong> ' . $lng_adm['black_list_help']
-                : '<strong>' . mb_strtoupper($lng_adm['white_list']) . ':</strong> ' . $lng_adm['white_list_help']
+                ? '<strong>' . mb_strtoupper(lng('black_list')) . ':</strong> ' . lng('black_list_help')
+                : '<strong>' . mb_strtoupper(lng('white_list')) . ':</strong> ' . lng('white_list_help')
             ) .
-            '</p>' . (isset($_POST['submit']) ? '' : '<p>' . $lng_adm['add_ip_help'] . '</p>') .
-            '</small></div>' .
-            '<p><a href="ip_access.php' . (Vars::$MOD == 'black' ? '' : '?mod=white') . '">' . Vars::$LNG['back'] . '</a><br />' .
-            '<a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
+            '</p>' . (isset($_POST['submit']) ? '' : '<p>' . lng('add_ip_help') . '</p>') .
+            '</div>' .
+            '<p><a href="index.php">' . lng('admin_panel') . '</a></p>';
         break;
 
     case 'clear':
@@ -202,10 +200,10 @@ switch (Vars::$ACT) {
         Очищаем все адреса выбранного списка
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . $lng_adm['ip_accesslist'] . '</b></a> | ' . $lng_adm['clear_list'] . '</div>' .
+        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('clear_list') . '</div>' .
             ($mod == 'black'
-                ? '<div class="rmenu"><p><h3>' . $lng_adm['black_list'] . '</h3></p></div>'
-                : '<div class="gmenu"><p><h3>' . $lng_adm['white_list'] . '</h3></p></div>'
+                ? '<div class="rmenu"><p><h3>' . lng('black_list') . '</h3></p></div>'
+                : '<div class="gmenu"><p><h3>' . lng('white_list') . '</h3></p></div>'
             );
         if (isset($_POST['submit'])) {
             mysql_query("DELETE FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'");
@@ -214,11 +212,11 @@ switch (Vars::$ACT) {
             header('Location: ip_access.php?mod=' . $mod);
         } else {
             echo'<form action="ip_access.php?act=clear&amp;mod=' . $mod . '" method="post">';
-            echo'<div class="rmenu"><p>' . $lng_adm['clear_list_warning'] . '</p>' .
-                '<p><input type="submit" name="submit" value="' . Vars::$LNG['clear'] . ' "/></p>' .
+            echo'<div class="rmenu"><p>' . lng('clear_list_warning') . '</p>' .
+                '<p><input type="submit" name="submit" value="' . lng('clear') . ' "/></p>' .
                 '</div></form>';
         }
-        echo '<div class="phdr"><a href="' . $ref . '">' . Vars::$LNG['back'] . '</a></div>';
+        echo '<div class="phdr"><a href="' . $ref . '">' . lng('back') . '</a></div>';
         break;
 
     case 'del':
@@ -228,10 +226,10 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $del = isset($_POST['del']) && is_array($_POST['del']) ? $_POST['del'] : array();
-        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . $lng_adm['ip_accesslist'] . '</b></a> | ' . $lng_adm['delete_ip'] . '</div>' .
+        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('delete_ip') . '</div>' .
             ($mod == 'black'
-                ? '<div class="rmenu"><p><h3>' . $lng_adm['black_list'] . '</h3></p></div>'
-                : '<div class="gmenu"><p><h3>' . $lng_adm['white_list'] . '</h3></p></div>'
+                ? '<div class="rmenu"><p><h3>' . lng('black_list') . '</h3></p></div>'
+                : '<div class="gmenu"><p><h3>' . lng('white_list') . '</h3></p></div>'
             );
         if (!empty($del)) {
             if (isset($_POST['submit'])) {
@@ -248,14 +246,14 @@ switch (Vars::$ACT) {
                 foreach ($del as $val) {
                     echo'<input type="hidden" value="' . $val . '" name="del[]" />';
                 }
-                echo'<div class="rmenu"><p>' . $lng_adm['delete_ip_warning'] . '</p>' .
-                    '<p><input type="submit" name="submit" value="' . Vars::$LNG['delete'] . ' "/></p>' .
+                echo'<div class="rmenu"><p>' . lng('delete_ip_warning') . '</p>' .
+                    '<p><input type="submit" name="submit" value="' . lng('delete') . ' "/></p>' .
                     '</div></form>';
             }
         } else {
-            echo Functions::displayError(Vars::$LNG['error_not_selected']);
+            echo Functions::displayError(lng('error_not_selected'));
         }
-        echo '<div class="phdr"><a href="' . $ref . '">' . Vars::$LNG['back'] . '</a></div>';
+        echo '<div class="phdr"><a href="' . $ref . '">' . lng('back') . '</a></div>';
         break;
 
     default:
@@ -265,10 +263,10 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $menu = array(
-            ($mod != 'white' ? '<strong>' . $lng_adm['black_list'] . '</strong>' : '<a href="ip_access.php">' . $lng_adm['black_list'] . '</a>'),
-            ($mod == 'white' ? '<strong>' . $lng_adm['white_list'] . '</strong>' : '<a href="ip_access.php?mod=white">' . $lng_adm['white_list'] . '</a>')
+            ($mod != 'white' ? '<strong>' . lng('black_list') . '</strong>' : '<a href="ip_access.php">' . lng('black_list') . '</a>'),
+            ($mod == 'white' ? '<strong>' . lng('white_list') . '</strong>' : '<a href="ip_access.php?mod=white">' . lng('white_list') . '</a>')
         );
-        echo'<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['admin_panel'] . '</b></a> | ' . $lng_adm['ip_accesslist'] . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('admin_panel') . '</b></a> | ' . lng('ip_accesslist') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'"), 0);
@@ -280,7 +278,7 @@ switch (Vars::$ACT) {
 
         // Выводим список IP
         echo'<form action="ip_access.php?act=add&amp;mod=' . $mod . '" method="post">' .
-            '<div class="gmenu"><input type="submit" name="delete" value="' . Vars::$LNG['add'] . '"/></div></form>';
+            '<div class="gmenu"><input type="submit" name="delete" value="' . lng('add') . '"/></div></form>';
         if ($total) {
             echo '<form action="ip_access.php?act=del&amp;mod=' . $mod . '" method="post">';
             $req = mysql_query("SELECT `cms_ip_bwlist`.*, `users`.`nickname`
@@ -295,21 +293,21 @@ switch (Vars::$ACT) {
                     '<strong>IP: <span class="' . $color . '">' . long2ip($res['ip']) . ($res['ip'] != $res['ip_upto'] ? ' - ' . long2ip($res['ip_upto']) : '') . '</span></strong>' .
                     (empty($res['description']) ? '' : '<div class="sub">' . Validate::filterString($res['description'], 1) . '</div>') .
                     '<div class="sub"><span class="gray">' .
-                    Vars::$LNG['date'] . ':&#160;' . Functions::displayDate($res['timestamp']) .
-                    '<br />' . $lng_adm['who_added'] . ':&#160;' . $res['nickname'] .
+                    lng('date') . ':&#160;' . Functions::displayDate($res['timestamp']) .
+                    '<br />' . lng('who_added') . ':&#160;' . $res['nickname'] .
                     '</span></div></div>';
             }
-            echo '<div class="rmenu"><input type="submit" name="delete" value="' . Vars::$LNG['delete'] . ' "/></div></form>';
+            echo '<div class="rmenu"><input type="submit" name="delete" value="' . lng('delete') . ' "/></div></form>';
         } else {
-            echo'<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+            echo'<div class="menu"><p>' . lng('list_empty') . '</p></div>';
         }
 
         // Нижний блок с подсказками
-        echo'<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>' .
-            '<div class="phdr"><small><p>' .
+        echo'<div class="phdr">' . lng('total') . ': ' . $total . '</div>' .
+            '<div class="topmenu"><small><p>' .
             ($mod == 'white'
-                ? '<strong>' . mb_strtoupper($lng_adm['white_list']) . ':</strong> ' . $lng_adm['white_list_help']
-                : '<strong>' . mb_strtoupper($lng_adm['black_list']) . ':</strong> ' . $lng_adm['black_list_help']
+                ? '<strong>' . mb_strtoupper(lng('white_list')) . ':</strong> ' . lng('white_list_help')
+                : '<strong>' . mb_strtoupper(lng('black_list')) . ':</strong> ' . lng('black_list_help')
             ) . '</p></small></div>';
 
         // Постраничная навигация
@@ -317,11 +315,11 @@ switch (Vars::$ACT) {
             echo'<div class="topmenu">' . Functions::displayPagination('ip_access.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                 '<p><form action="ip_access.php" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
-                '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+                '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                 '</form></p>';
         }
 
         // Ссылки внизу
-        echo'<p>' . ($total ? '<a href="ip_access.php?act=clear&amp;mod=' . $mod . '">' . $lng_adm['clear_list'] . '</a><br />' : '') .
-            '<a href="index.php">' . Vars::$LNG['admin_panel'] . '</a></p>';
+        echo'<p>' . ($total ? '<a href="ip_access.php?act=clear&amp;mod=' . $mod . '">' . lng('clear_list') . '</a><br />' : '') .
+            '<a href="index.php">' . lng('admin_panel') . '</a></p>';
 }
