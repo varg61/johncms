@@ -8,7 +8,7 @@
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  *
- * Данный модуль построен на основе алгоритма KCAPTCHA v.1.2.6
+ * Данный модуль построен на основе доработанного алгоритма KCAPTCHA v.1.2.6
  * KCAPTCHA PROJECT, Copyright by Kruglov Sergei, 2006, 2007, 2008
  * www.captcha.ru, www.kruglov.ru
  */
@@ -54,9 +54,8 @@ class Captcha
 
         // Показываем картинку CAPTCHA
         $_SESSION['captcha'] = $code;
-        $alt = isset(Vars::$LNG['captcha_help']) ? Vars::$LNG['captcha_help'] : 'captcha';
-        $input = $input_field ? '<br /><input type="text" size="' . self::$lenght_max . '" maxlength="' . self::$lenght_max . '"  name="captcha"/>&#160;' . Vars::$LNG['captcha'] : '';
-        return '<img width="' . self::$width . '" height="' . self::$height . '" alt="' . $alt . '" src="' . Vars::$HOME_URL . '/files/temp/' . $img_file . '" border="1"/>' . $input;
+        $input = $input_field ? '<br /><input type="text" size="' . self::$lenght_max . '" maxlength="' . self::$lenght_max . '"  name="captcha"/>&#160;' . lng('captcha') : '';
+        return '<img width="' . self::$width . '" height="' . self::$height . '" alt="' . lng('captcha_help') . '" src="' . Vars::$HOME_URL . '/files/temp/' . $img_file . '" border="1"/>' . $input;
     }
 
     /*
