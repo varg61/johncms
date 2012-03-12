@@ -18,7 +18,7 @@ define('_IN_JOHNCMS', 1);
 Выводим список именинников
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['community'] . '</b></a> | ' . Vars::$LNG['birthday_men'] . '</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . lng('community') . '</b></a> | ' . lng('birthday_men') . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `dayb` = '" . date('j', time()) . "' AND `monthb` = '" . date('n', time()) . "' AND `preg` = '1'"), 0);
 if ($total) {
     $req = mysql_query("SELECT * FROM `users` WHERE `dayb` = '" . date('j', time()) . "' AND `monthb` = '" . date('n', time()) . "' AND `preg` = '1' LIMIT " . Vars::db_pagination());
@@ -27,15 +27,15 @@ if ($total) {
         echo Functions::displayUser($res) . '</div>';
         ++$i;
     }
-    echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+    echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
         echo '<p>' . Functions::displayPagination('index.php?act=birth&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
         echo '<p><form action="index.php?act=birth" method="post">' .
              '<input type="text" name="page" size="2"/>' .
-             '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+             '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
              '</form></p>';
     }
 } else {
-    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<p><a href="index.php">' . Vars::$LNG['back'] . '</a></p>';
+echo '<p><a href="index.php">' . lng('back') . '</a></p>';

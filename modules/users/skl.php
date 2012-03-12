@@ -38,7 +38,7 @@ switch (Vars::$ACT) {
         $check_code = md5(mt_rand(1000, 9999));
         $error = false;
         if (!$nick || !$email || !$code)
-            $error = Vars::$LNG['error_empty_fields'];
+            $error = lng('error_empty_fields');
         elseif (!isset($_SESSION['code']) || mb_strlen($code) < 4 || $code != $_SESSION['code'])
             $error = $lng_pass['error_code'];
         unset($_SESSION['code']);
@@ -52,7 +52,7 @@ switch (Vars::$ACT) {
                 if ($res['rest_time'] > time() - 86400)
                     $error = $lng_pass['restore_timelimit'];
             } else {
-                $error = Vars::$LNG['error_user_not_exist'];
+                $error = lng('error_user_not_exist');
             }
         }
         if (!$error) {
@@ -72,7 +72,7 @@ switch (Vars::$ACT) {
             }
         } else {
             // Выводим сообщение об ошибке
-            echo Functions::displayError($error, '<a href="skl.php">' . Vars::$LNG['back'] . '</a>');
+            echo Functions::displayError($error, '<a href="skl.php">' . lng('back') . '</a>');
         }
         break;
 
@@ -85,7 +85,7 @@ switch (Vars::$ACT) {
         $code = isset($_GET['code']) ? trim($_GET['code']) : '';
         $error = false;
         if (!Vars::$ID || !$code)
-            $error = Vars::$LNG['error_wrong_data'];
+            $error = lng('error_wrong_data');
         $req = mysql_query("SELECT * FROM `users` WHERE `id` = " . Vars::$ID);
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
@@ -97,7 +97,7 @@ switch (Vars::$ACT) {
                 mysql_query("UPDATE `users` SET `rest_code` = '', `rest_time` = '' WHERE `id` = " . Vars::$ID);
             }
         } else {
-            $error = Vars::$LNG['error_user_not_exist'];
+            $error = lng('error_user_not_exist');
         }
         if (!$error) {
             // Высылаем пароль на E-mail
