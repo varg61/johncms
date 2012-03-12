@@ -9,9 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
-
-require_once('includes/core.php');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
 $url = isset($_REQUEST['url']) ? strip_tags(rawurldecode(trim($_REQUEST['url']))) : false;
@@ -25,15 +23,15 @@ if ($url) {
     if (isset($_POST['submit'])) {
         header('Location: ' . $url);
     } else {
-        echo '<div class="phdr"><b>' . Vars::$LNG['external_link'] . '</b></div>' .
+        echo '<div class="phdr"><b>' . lng('external_link') . '</b></div>' .
             '<div class="rmenu">' .
             '<form action="go.php?url=' . rawurlencode($url) . '" method="post">' .
-            '<p>' . Vars::$LNG['redirect_1'] . ':<br /><span class="red">' . htmlspecialchars($url) . '</span></p>' .
-            '<p>' . Vars::$LNG['redirect_2'] . '.<br />' .
-            Vars::$LNG['redirect_3'] . ' <span class="green">' . Vars::$HOME_URL . '</span> ' . Vars::$LNG['redirect_4'] . '.</p>' .
-            '<p><input type="submit" name="submit" value="' . Vars::$LNG['redirect_5'] . '" /></p>' .
+            '<p>' . lng('redirect_1') . ':<br /><span class="red">' . htmlspecialchars($url) . '</span></p>' .
+            '<p>' . lng('redirect_2') . '.<br />' .
+            lng('redirect_3') . ' <span class="green">' . Vars::$HOME_URL . '</span> ' . lng('redirect_4') . '.</p>' .
+            '<p><input type="submit" name="submit" value="' . lng('redirect_5') . '" /></p>' .
             '</form></div>' .
-            '<div class="phdr"><a href="' . $referer . '">' . Vars::$LNG['back'] . '</a></div>';
+            '<div class="phdr"><a href="' . $referer . '">' . lng('back') . '</a></div>';
     }
 } elseif (Vars::$ID) {
     /*
@@ -83,7 +81,7 @@ if ($url) {
             break;
 
         default :
-            header('location: http://johncms.com');
+            header('location: http://gazenwagen.com');
             break;
     }
 }

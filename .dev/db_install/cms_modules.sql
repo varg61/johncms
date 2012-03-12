@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `cms_modules` (
   PRIMARY KEY (`module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping data for table dev_johncms.cms_modules: 15 rows
+-- Dumping data for table dev_johncms.cms_modules: 16 rows
 INSERT INTO `cms_modules` (`module`) VALUES
 	('admin'),
 	('album'),
@@ -18,6 +18,7 @@ INSERT INTO `cms_modules` (`module`) VALUES
 	('mail'),
 	('online'),
 	('profile'),
+	('redirect'),
 	('registration'),
 	('rss'),
 	('smileys'),

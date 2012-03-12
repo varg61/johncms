@@ -73,7 +73,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
     <div><a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a></div>
     <?php endif ?>
     <?php if (Vars::$USER_SET['quick_go']) : ?>
-    <form action="<?= Vars::$HOME_URL ?>/go.php" method="post">
+    <form action="<?= Vars::$HOME_URL ?>/redirect" method="post">
         <div>
             <select name="adres" style="font-size:x-small">
                 <option selected="selected"><?= lng('quick_jump', 1) ?></option>
