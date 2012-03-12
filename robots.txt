@@ -1,3 +1,3 @@
 User-agent: *
-Disallow: /panel/
+Disallow: /modules/
 Allow: /

@@ -23,7 +23,7 @@ $ref = htmlspecialchars($_SERVER['HTTP_REFERER']);
 
 function update_cache()
 {
-    $file = '../files/cache/ip_list.dat';
+    $file = CACHEPATH . 'ip_list.dat';
     $req = mysql_query("SELECT * FROM `cms_ip_bwlist`");
     if (mysql_num_rows($req)) {
         $in = fopen($file, "w+");
@@ -46,7 +46,7 @@ switch (Vars::$ACT) {
         Добавление IP в список
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('add_ip') . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$URI . '?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('add_ip') . '</div>' .
             ($mod == 'black'
                 ? '<div class="rmenu"><p><h3>' . lng('black_list') . '</h3></p></div>'
                 : '<div class="gmenu"><p><h3>' . lng('white_list') . '</h3></p></div>'
@@ -104,7 +104,7 @@ switch (Vars::$ACT) {
                 }
                 $ip1 = sprintf("%u", ip2long($ip1));
                 $ip2 = sprintf("%u", ip2long($ip2));
-                if($ip1 > $ip2){
+                if ($ip1 > $ip2) {
                     $tmp = $ip2;
                     $ip2 = $ip1;
                     $ip1 = $tmp;
@@ -123,7 +123,7 @@ switch (Vars::$ACT) {
                             '</div>';
                     }
                     echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
-                    echo '<p><a href="index.php?act=ipban&amp;mod=new">' . lng('back') . '</a><br /><a href="index.php">' . lng('admin_panel') . '</a></p>';
+                    echo '<p><a href="' . Vars::$URI . '">' . lng('back') . '</a><br /><a href="' . Vars::$MODULE_URI . '">' . lng('admin_panel') . '</a></p>';
                     exit;
                 }
 
@@ -140,16 +140,16 @@ switch (Vars::$ACT) {
                         `ip` = $ip1,
                         `ip_upto` = $ip2,
                         `mode` = '" . $mod . "',
-                        `user_id` = " . Vars::$USER_ID . ",
                         `timestamp` = " . time() . ",
+                        `user_id` = " . Vars::$USER_ID . ",
                         `description` = '" . mysql_real_escape_string(base64_decode($description)) . "'
-                    ");
+                    ") or exit(mysql_error());
                     update_cache();
-                    header('Location: ip_access.php?mod=' . $mod);
+                    header('Location: ' . Vars::$URI . '?mod=' . $mod);
                     exit;
                 } else {
                     // Выводим окно подтверждения
-                    echo'<form action="ip_access.php?act=add" method="post"><div class="menu">' .
+                    echo'<form action="' . Vars::$URI . '?act=add" method="post"><div class="menu">' .
                         '<input type="hidden" value="' . $mod . '" name="mod" />' .
                         '<input type="hidden" value="' . long2ip($ip1) . ($ip1 == $ip2 ? '' : '-' . long2ip($ip2)) . '" name="ip" />' .
                         '<input type="hidden" value="' . base64_encode($description) . '" name="description" />' .
@@ -157,7 +157,6 @@ switch (Vars::$ACT) {
                         '<span class="' . $color . '">' . long2ip($ip1) . ($ip1 == $ip2 ? '' : '&#160;-&#160;' . long2ip($ip2)) . '</span></h3>' .
                         ($mod == 'black' ? lng('add_ip_confirmation_black') : lng('add_ip_confirmation_white')) .
                         '</p><p><input type="submit" name="confirm" value="' . lng('save') . '"/></p>' .
-                        '<p><a href="ip_access.php?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . lng('cancel') . '</a></p>' .
                         '</div></form>';
                 }
             }
@@ -172,7 +171,7 @@ switch (Vars::$ACT) {
             Форма ввода IP адреса для Бана
             -----------------------------------------------------------------
             */
-            echo'<form action="ip_access.php?act=add" method="post">' .
+            echo'<form action="' . Vars::$URI . '?act=add" method="post">' .
                 '<div class="menu"><p><h3>' . lng('ip_address') . ':</h3>' .
                 '<input type="hidden" value="' . htmlspecialchars(Vars::$MOD) . '" name="mod" />' .
                 '<input type="text" name="ip"/></p>' .
@@ -183,7 +182,7 @@ switch (Vars::$ACT) {
                 '</form>';
         }
         // Нижний блок с подсказками
-        echo'<div class="phdr"><a href="ip_access.php' . (Vars::$MOD == 'black' ? '' : '?mod=white') . '">' . lng('back') . '</a></div>' .
+        echo'<div class="phdr"><a href="' . Vars::$URI . (Vars::$MOD == 'black' ? '' : '?mod=white') . '">' . lng('back') . '</a></div>' .
             '<div class="topmenu"><p>' .
             (Vars::$MOD == 'black'
                 ? '<strong>' . mb_strtoupper(lng('black_list')) . ':</strong> ' . lng('black_list_help')
@@ -263,8 +262,8 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $menu = array(
-            ($mod != 'white' ? '<strong>' . lng('black_list') . '</strong>' : '<a href="ip_access.php">' . lng('black_list') . '</a>'),
-            ($mod == 'white' ? '<strong>' . lng('white_list') . '</strong>' : '<a href="ip_access.php?mod=white">' . lng('white_list') . '</a>')
+            ($mod != 'white' ? '<strong>' . lng('black_list') . '</strong>' : '<a href="' . Vars::$URI . '">' . lng('black_list') . '</a>'),
+            ($mod == 'white' ? '<strong>' . lng('white_list') . '</strong>' : '<a href="' . Vars::$URI . '?mod=white">' . lng('white_list') . '</a>')
         );
         echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('admin_panel') . '</b></a> | ' . lng('ip_accesslist') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
@@ -273,16 +272,16 @@ switch (Vars::$ACT) {
         Vars::fixPage($total);
 
         if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination('ip_access.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         }
 
         // Выводим список IP
-        echo'<form action="ip_access.php?act=add&amp;mod=' . $mod . '" method="post">' .
+        echo'<form action="' . Vars::$URI . '?act=add&amp;mod=' . $mod . '" method="post">' .
             '<div class="gmenu"><input type="submit" name="delete" value="' . lng('add') . '"/></div></form>';
         if ($total) {
-            echo '<form action="ip_access.php?act=del&amp;mod=' . $mod . '" method="post">';
+            echo '<form action="' . Vars::$URI . '?act=del&amp;mod=' . $mod . '" method="post">';
             $req = mysql_query("SELECT `cms_ip_bwlist`.*, `users`.`nickname`
-                FROM `cms_ip_bwlist` LEFT JOIN `users` ON `cms_ip_bwlist`.`user_id` = `users`.`user_id`
+                FROM `cms_ip_bwlist` LEFT JOIN `users` ON `cms_ip_bwlist`.`user_id` = `users`.`id`
                 WHERE `cms_ip_bwlist`.`mode` = '" . $mod . "'
                 ORDER BY `cms_ip_bwlist`.`timestamp` DESC
                 " . Vars::db_pagination()
@@ -321,5 +320,5 @@ switch (Vars::$ACT) {
 
         // Ссылки внизу
         echo'<p>' . ($total ? '<a href="ip_access.php?act=clear&amp;mod=' . $mod . '">' . lng('clear_list') . '</a><br />' : '') .
-            '<a href="index.php">' . lng('admin_panel') . '</a></p>';
+            '<a href="' . Vars::$MODULE_URI . '">' . lng('admin_panel') . '</a></p>';
 }
