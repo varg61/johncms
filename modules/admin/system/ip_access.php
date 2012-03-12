@@ -163,7 +163,7 @@ switch (Vars::$ACT) {
 
             // Показываем ошибки, если есть
             if (!empty($error)) {
-                echo Functions::displayError($error, '<a href="ip_access.php?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . lng('back') . '</a>');
+                echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . lng('back') . '</a>');
             }
         } else {
             /*
@@ -190,7 +190,7 @@ switch (Vars::$ACT) {
             ) .
             '</p>' . (isset($_POST['submit']) ? '' : '<p>' . lng('add_ip_help') . '</p>') .
             '</div>' .
-            '<p><a href="index.php">' . lng('admin_panel') . '</a></p>';
+            '<p><a href="' . Vars::$MODULE_URI . '">' . lng('admin_panel') . '</a></p>';
         break;
 
     case 'clear':
@@ -199,7 +199,7 @@ switch (Vars::$ACT) {
         Очищаем все адреса выбранного списка
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('clear_list') . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$URI . '?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('clear_list') . '</div>' .
             ($mod == 'black'
                 ? '<div class="rmenu"><p><h3>' . lng('black_list') . '</h3></p></div>'
                 : '<div class="gmenu"><p><h3>' . lng('white_list') . '</h3></p></div>'
@@ -208,10 +208,10 @@ switch (Vars::$ACT) {
             mysql_query("DELETE FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'");
             mysql_query("OPTIMIZE TABLE `cms_ip_bwlist`");
             update_cache();
-            header('Location: ip_access.php?mod=' . $mod);
+            header('Location: ' . Vars::$URI . '?mod=' . $mod);
         } else {
-            echo'<form action="ip_access.php?act=clear&amp;mod=' . $mod . '" method="post">';
-            echo'<div class="rmenu"><p>' . lng('clear_list_warning') . '</p>' .
+            echo'<form action="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '" method="post">' .
+                '<div class="rmenu"><p>' . lng('clear_list_warning') . '</p>' .
                 '<p><input type="submit" name="submit" value="' . lng('clear') . ' "/></p>' .
                 '</div></form>';
         }
@@ -225,7 +225,7 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $del = isset($_POST['del']) && is_array($_POST['del']) ? $_POST['del'] : array();
-        echo'<div class="phdr"><a href="ip_access.php?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('delete_ip') . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$URI . '?mod=' . $mod . '"><b>' . lng('ip_accesslist') . '</b></a> | ' . lng('delete_ip') . '</div>' .
             ($mod == 'black'
                 ? '<div class="rmenu"><p><h3>' . lng('black_list') . '</h3></p></div>'
                 : '<div class="gmenu"><p><h3>' . lng('white_list') . '</h3></p></div>'
@@ -239,9 +239,9 @@ switch (Vars::$ACT) {
                 }
                 mysql_query("OPTIMIZE TABLE `cms_ip_bwlist`");
                 update_cache();
-                header('Location: ip_access.php?mod=' . $mod);
+                header('Location: ' . Vars::$URI . '?mod=' . $mod);
             } else {
-                echo'<form action="ip_access.php?act=del&amp;mod=' . $mod . '" method="post">';
+                echo'<form action="' . Vars::$URI . '?act=del&amp;mod=' . $mod . '" method="post">';
                 foreach ($del as $val) {
                     echo'<input type="hidden" value="' . $val . '" name="del[]" />';
                 }
@@ -255,7 +255,7 @@ switch (Vars::$ACT) {
         echo '<div class="phdr"><a href="' . $ref . '">' . lng('back') . '</a></div>';
         break;
 
-    default:
+        default:
         /*
         -----------------------------------------------------------------
         Главное меню модуля
@@ -277,7 +277,7 @@ switch (Vars::$ACT) {
 
         // Выводим список IP
         echo'<form action="' . Vars::$URI . '?act=add&amp;mod=' . $mod . '" method="post">' .
-            '<div class="gmenu"><input type="submit" name="delete" value="' . lng('add') . '"/></div></form>';
+            '<div class="' . ($mod == 'white' ? 'gmenu' : 'rmenu') . '"><input type="submit" name="delete" value="' . lng('add') . '"/></div></form>';
         if ($total) {
             echo '<form action="' . Vars::$URI . '?act=del&amp;mod=' . $mod . '" method="post">';
             $req = mysql_query("SELECT `cms_ip_bwlist`.*, `users`.`nickname`
@@ -311,14 +311,14 @@ switch (Vars::$ACT) {
 
         // Постраничная навигация
         if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination('ip_access.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="ip_access.php" method="post">' .
+            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                '<p><form action="' . Vars::$URI . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                 '</form></p>';
         }
 
         // Ссылки внизу
-        echo'<p>' . ($total ? '<a href="ip_access.php?act=clear&amp;mod=' . $mod . '">' . lng('clear_list') . '</a><br />' : '') .
+        echo'<p>' . ($total ? '<a href="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '">' . lng('clear_list') . '</a><br />' : '') .
             '<a href="' . Vars::$MODULE_URI . '">' . lng('admin_panel') . '</a></p>';
 }
