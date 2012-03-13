@@ -255,7 +255,7 @@ switch (Vars::$ACT) {
         echo '<div class="phdr"><a href="' . $ref . '">' . lng('back') . '</a></div>';
         break;
 
-        default:
+    default:
         /*
         -----------------------------------------------------------------
         Главное меню модуля
@@ -273,6 +273,12 @@ switch (Vars::$ACT) {
 
         if ($total > Vars::$USER_SET['page_size']) {
             echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+        }
+
+        // Обновляем кэш IP адресов
+        if(isset($_GET['update_cache'])){
+            update_cache();
+            echo'<div class="gmenu">' . lng('cache_updated') . '</div>';
         }
 
         // Выводим список IP
@@ -320,5 +326,6 @@ switch (Vars::$ACT) {
 
         // Ссылки внизу
         echo'<p>' . ($total ? '<a href="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '">' . lng('clear_list') . '</a><br />' : '') .
+            '<a href="' . Vars::$URI . '?mod=' . $mod . '&amp;update_cache">' . lng('update_cache') . '</a><br/>' .
             '<a href="' . Vars::$MODULE_URI . '">' . lng('admin_panel') . '</a></p>';
 }
