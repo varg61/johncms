@@ -74,6 +74,55 @@ switch (Vars::$ACT) {
         }
         break;
 
+    case 'upload_animation':
+        /*
+        -----------------------------------------------------------------
+        Выгружаем анимированный аватар
+        -----------------------------------------------------------------
+        */
+        if (isset($_POST['submit'])) {
+            $error = array();
+            if ($_FILES['imagefile']['size'] > 0) {
+                // Проверка на допустимый вес файла
+                if ($_FILES['imagefile']['size'] > 10240) {
+                    $error[] = lng('error_avatar_filesize');
+                }
+
+                $param = getimagesize($_FILES['imagefile']['tmp_name']);
+
+                // Проверка на допустимый тип файла
+                if ($param == false || $param['mime'] != 'image/gif') {
+                    $error[] = lng('error_avatar_filetype');
+                }
+
+                // Проверка на допустимый размер изображения
+                if ($param != false && ($param[0] != 32 || $param[1] != 32)) {
+                    $error[] = lng('error_avatar_size');
+                }
+            } else {
+                // Если не выбран файл
+                $error[] = lng('error_file_not_selected');
+            }
+
+            if (empty($error)) {
+                if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
+                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == true
+                ) {
+                    echo'<div class="gmenu">' .
+                        '<p>' . lng('avatar_uploaded') . '<br/>' .
+                        '<a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>' .
+                        '</div>';
+                } else {
+                    $error[] = lng('error_avatar_upload');
+                }
+            } else {
+                echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=upload_animation">' . lng('back') . '</a>');
+            }
+        } else {
+            $tpl->contents = $tpl->includeTpl('upload_animation');
+        }
+        break;
+
     case 'upload_avatar':
         /*
         -----------------------------------------------------------------

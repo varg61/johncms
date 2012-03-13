@@ -36,7 +36,7 @@
     <h3><?= Functions::getImage('settings.png') ?>&#160;<?= lng('my_settings') ?></h3>
     <ul>
         <li><a href="profile.php?act=settings"><?= lng('system_settings') ?></a></li>
-        <li><a href="profile.php?act=edit"><?= lng('profile_edit') ?></a></li>
+        <li><a href="<?= Vars::$HOME_URL ?>/profile/edit"><?= lng('profile_edit') ?></a></li>
         <li><a href="profile.php?act=password"><?= lng('change_password') ?></a></li>
         <?php if (Vars::$USER_RIGHTS) : ?>
         <li><span class="red"><a href="<?= Vars::$HOME_URL ?>/admin"><b><?= lng('admin_panel') ?></b></a></span></li>

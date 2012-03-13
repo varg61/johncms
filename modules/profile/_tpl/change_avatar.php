@@ -10,7 +10,7 @@
     </div>
     <ul class="formblock">
         <li><a href="<?= Vars::$URI ?>?act=upload_avatar&amp;user=<?= $this->user['id'] ?>"><?= lng('upload_image') ?></a></li>
-        <li><a href="<?= Vars::$URI ?>?act=upload_avatar&amp;user=<?= $this->user['id'] ?>"><?= lng('upload_animation') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>?act=upload_animation&amp;user=<?= $this->user['id'] ?>"><?= lng('upload_animation') ?></a></li>
         <?php if ($this->user['id'] == Vars::$USER_ID) : ?>
         <li><a href="<?= Vars::$HOME_URL ?>/avatars"><?= lng('select_in_catalog') ?></a></li>
         <?php endif ?>

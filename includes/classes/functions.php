@@ -370,7 +370,7 @@ class Functions extends Vars
             return false;
         }
         $size = getimagesize($file);
-        return '<img src="' . $file . '" width="' . $size[0] . '" height="' . $size[1] . '" alt="' . $alt . '" border="0" ' . $style . '/>';
+        return '<img src="' . $file . '" ' . $size[3] . ' alt="' . $alt . '" border="0" ' . $style . '/>';
     }
 
     /*
