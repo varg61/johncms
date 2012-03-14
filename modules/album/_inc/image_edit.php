@@ -21,7 +21,7 @@ if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $album = $res['album_id'];
-        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '"><b>' . Vars::$LNG['photo_album'] . '</b></a> | ' . $lng['image_edit'] . '</div>';
+        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '"><b>' . lng('photo_album') . '</b></a> | ' . lng('image_edit') . '</div>';
         if (isset($_POST['submit'])) {
             if (!isset($_SESSION['post'])) {
                 $_SESSION['post'] = true;
@@ -127,17 +127,17 @@ if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
                     WHERE `id` = '$img'
                 ");
             }
-            echo '<div class="gmenu"><p>' . $lng['image_edited'] . '<br />' .
-                 '<a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
+            echo '<div class="gmenu"><p>' . lng('image_edited') . '<br />' .
+                 '<a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '">' . lng('continue') . '</a></p></div>';
         } else {
             unset($_SESSION['post']);
             echo '<form action="album.php?act=image_edit&amp;img=' . $img . '&amp;user=' . $user['user_id'] . '" method="post">' .
                  '<div class="menu">' .
-                 '<p><h3>' . $lng['image'] . '</h3>' .
+                 '<p><h3>' . lng('image') . '</h3>' .
                  '<img src="../files/users/album/' . $user['user_id'] . '/' . $res['tmb_name'] . '" /></p>' .
-                 '<p><h3>' . Vars::$LNG['description'] . '</h3>' .
+                 '<p><h3>' . lng('description') . '</h3>' .
                  '<textarea name="description" rows="' . Vars::$USER_SET['field_h'] . '">' . Validate::filterString($res['description']) . '</textarea><br />' .
-                 '<small>' . Vars::$LNG['not_mandatory_field'] . ', max. 500</small></p>' .
+                 '<small>' . lng('not_mandatory_field') . ', max. 500</small></p>' .
                  '</div><div class="rmenu">' .
                 //TODO: Перевести!
                 '<p><h3>Яркость</h3>' .
@@ -168,16 +168,16 @@ if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
                  '<td>+1</td>' .
                  '<td>+2</td>' .
                  '</tr></table></p>' .
-                 '<p><h3>' . $lng['image_rotate'] . '</h3>' .
-                 '<input type="radio" name="rotate" value="0" checked="checked"/>&#160;' . $lng['image_rotate_not'] . '<br />' .
-                 '<input type="radio" name="rotate" value="2"/>&#160;' . $lng['image_rotate_right'] . '<br />' .
-                 '<input type="radio" name="rotate" value="1"/>&#160;' . $lng['image_rotate_left'] . '</p>' .
-                 '<p><small>' . $lng['image_edit_warning'] . '</small></p>' .
-                 '<p><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '"/></p>' .
+                 '<p><h3>' . lng('image_rotate') . '</h3>' .
+                 '<input type="radio" name="rotate" value="0" checked="checked"/>&#160;' . lng('image_rotate_not') . '<br />' .
+                 '<input type="radio" name="rotate" value="2"/>&#160;' . lng('image_rotate_right') . '<br />' .
+                 '<input type="radio" name="rotate" value="1"/>&#160;' . lng('image_rotate_left') . '</p>' .
+                 '<p><small>' . lng('image_edit_warning') . '</small></p>' .
+                 '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
                  '</div></form>' .
-                 '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['cancel'] . '</a></div>';
+                 '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '">' . lng('cancel') . '</a></div>';
         }
     } else {
-        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+        echo Functions::displayError(lng('error_wrong_data'));
     }
 }

@@ -17,7 +17,7 @@ if (Vars::$USER_RIGHTS < 7) {
     exit;
 }
 
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['users_clean'] . '</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . lng('admin_panel') . '</b></a> | ' . lng('users_clean') . '</div>';
 
 switch (Vars::$MOD) {
     case 1:
@@ -29,7 +29,7 @@ switch (Vars::$MOD) {
             AND `komm` < '10'
         ");
         mysql_query("OPTIMIZE TABLE `users`");
-        echo '<div class="rmenu"><p>' . $lng['dead_profiles_deleted'] . '</p><p><a href="index.php">' . $lng['continue'] . '</a></p></div>';
+        echo '<div class="rmenu"><p>' . lng('dead_profiles_deleted') . '</p><p><a href="index.php">' . lng('continue') . '</a></p></div>';
         break;
 
     default:
@@ -40,8 +40,8 @@ switch (Vars::$MOD) {
             AND `postguest` < '10'
             AND `komm` < '10'"), 0);
         echo '<div class="menu"><form action="index.php?act=usr_clean&amp;mod=1" method="post">' .
-             '<p><h3>' . $lng['dead_profiles'] . '</h3>' . $lng['dead_profiles_desc'] . '</p>' .
-             '<p>' . $lng['total'] . ': <b>' . $total . '</b></p>' .
-             '<p><input type="submit" name="submit" value="' . $lng['delete'] . '"/></p></form></div>' .
-             '<div class="phdr"><a href="index.php">' . $lng['back'] . '</a></div>';
+             '<p><h3>' . lng('dead_profiles') . '</h3>' . lng('dead_profiles_desc') . '</p>' .
+             '<p>' . lng('total') . ': <b>' . $total . '</b></p>' .
+             '<p><input type="submit" name="submit" value="' . lng('delete') . '"/></p></form></div>' .
+             '<div class="phdr"><a href="index.php">' . lng('back') . '</a></div>';
 }

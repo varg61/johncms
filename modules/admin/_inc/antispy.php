@@ -149,18 +149,18 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $scaner->scan();
-        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_dist_scan'] . '</div>';
+        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_dist_scan') . '</div>';
         if (count($scaner->bad_files)) {
-            echo '<div class="rmenu"><small>' . $lng['antispy_dist_scan_bad'] . '</small></div>';
+            echo '<div class="rmenu"><small>' . lng('antispy_dist_scan_bad') . '</small></div>';
             echo '<div class="menu">';
             foreach ($scaner->bad_files as $idx => $data) {
                 echo $data['file_path'] . '<br />';
             }
-            echo '</div><div class="phdr">' . $lng['total'] . ': ' . count($scaner->bad_files) . '</div>';
+            echo '</div><div class="phdr">' . lng('total') . ': ' . count($scaner->bad_files) . '</div>';
         } else {
-            echo '<div class="gmenu">' . $lng['antispy_dist_scan_good'] . '</div>';
+            echo '<div class="gmenu">' . lng('antispy_dist_scan_good') . '</div>';
         }
-        echo '<p><a href="index.php?act=antispy&amp;mod=scan">' . $lng['antispy_rescan'] . '</a></p>';
+        echo '<p><a href="index.php?act=antispy&amp;mod=scan">' . lng('antispy_rescan') . '</a></p>';
         break;
 
     case 'snapscan':
@@ -170,21 +170,21 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $scaner->snapscan();
-        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_snapshot_scan'] . '</div>';
+        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_scan') . '</div>';
         if (count($scaner->track_files) == 0) {
-            echo Functions::displayError($lng['antispy_no_snapshot'], '<a href="index.php?act=antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a>');
+            echo Functions::displayError(lng('antispy_no_snapshot'), '<a href="index.php?act=antispy&amp;mod=snap">' . lng('antispy_snapshot_create') . '</a>');
         } else {
             if (count($scaner->bad_files)) {
-                echo '<div class="rmenu">' . $lng['antispy_snapshot_scan_bad'] . '</div>';
+                echo '<div class="rmenu">' . lng('antispy_snapshot_scan_bad') . '</div>';
                 echo '<div class="menu">';
                 foreach ($scaner->bad_files as $idx => $data) {
                     echo $data['file_path'] . '<br />';
                 }
                 echo '</div>';
             } else {
-                echo '<div class="gmenu">' . $lng['antispy_snapshot_scan_ok'] . '</div>';
+                echo '<div class="gmenu">' . lng('antispy_snapshot_scan_ok') . '</div>';
             }
-            echo '<div class="phdr">' . $lng['total'] . ': ' . count($scaner->bad_files) . '</div>';
+            echo '<div class="phdr">' . lng('total') . ': ' . count($scaner->bad_files) . '</div>';
         }
         break;
 
@@ -194,17 +194,17 @@ switch (Vars::$MOD) {
         Создаем снимок файлов
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . $lng['antispy'] . '</b></a> | ' . $lng['antispy_snapshot_create'] . '</div>';
+        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_create') . '</div>';
         if (isset($_POST['submit'])) {
             $scaner->snap();
-            echo '<div class="gmenu"><p>' . $lng['antispy_snapshot_create_ok'] . '</p></div>' .
-                 '<div class="phdr"><a href="index.php?act=antispy">' . $lng['continue'] . '</a></div>';
+            echo '<div class="gmenu"><p>' . lng('antispy_snapshot_create_ok') . '</p></div>' .
+                 '<div class="phdr"><a href="index.php?act=antispy">' . lng('continue') . '</a></div>';
         } else {
             echo '<form action="index.php?act=antispy&amp;mod=snap" method="post">' .
-                 '<div class="menu"><p>' . $lng['antispy_snapshot_warning'] . '</p>' .
-                 '<p><input type="submit" name="submit" value="' . $lng['antispy_snapshot_create'] . '" /></p>' .
+                 '<div class="menu"><p>' . lng('antispy_snapshot_warning') . '</p>' .
+                 '<p><input type="submit" name="submit" value="' . lng('antispy_snapshot_create') . '" /></p>' .
                  '</div></form>' .
-                 '<div class="phdr"><small>' . $lng['antispy_snapshot_help'] . '</small></div>';
+                 '<div class="phdr"><small>' . lng('antispy_snapshot_help') . '</small></div>';
         }
         break;
 
@@ -214,14 +214,14 @@ switch (Vars::$MOD) {
         Главное меню Сканера
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['antispy'] . '</div>' .
-             '<div class="menu"><p><h3>' . $lng['antispy_scan_mode'] . '</h3><ul>' .
-             '<li><a href="index.php?act=antispy&amp;mod=scan">' . $lng['antispy_dist_scan'] . '</a><br />' .
-             '<small>' . $lng['antispy_dist_scan_help'] . '</small></li>' .
-             '<li><a href="index.php?act=antispy&amp;mod=snapscan">' . $lng['antispy_snapshot_scan'] . '</a><br />' .
-             '<small>' . $lng['antispy_snapshot_scan_help'] . '</small></li>' .
-             '<li><a href="index.php?act=antispy&amp;mod=snap">' . $lng['antispy_snapshot_create'] . '</a><br />' .
-             '<small>' . $lng['antispy_snapshot_create_help'] . '</small></li>' .
+        echo '<div class="phdr"><a href="index.php"><b>' . lng('admin_panel') . '</b></a> | ' . lng('antispy') . '</div>' .
+             '<div class="menu"><p><h3>' . lng('antispy_scan_mode') . '</h3><ul>' .
+             '<li><a href="index.php?act=antispy&amp;mod=scan">' . lng('antispy_dist_scan') . '</a><br />' .
+             '<small>' . lng('antispy_dist_scan_help') . '</small></li>' .
+             '<li><a href="index.php?act=antispy&amp;mod=snapscan">' . lng('antispy_snapshot_scan') . '</a><br />' .
+             '<small>' . lng('antispy_snapshot_scan_help') . '</small></li>' .
+             '<li><a href="index.php?act=antispy&amp;mod=snap">' . lng('antispy_snapshot_create') . '</a><br />' .
+             '<small>' . lng('antispy_snapshot_create_help') . '</small></li>' .
              '</ul></p></div><div class="phdr">&#160;</div>';
 }
-echo '<p>' . (Vars::$MOD ? '<a href="index.php?act=antispy">' . $lng['antispy_menu'] . '</a><br />' : '') . '<a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+echo '<p>' . (Vars::$MOD ? '<a href="index.php?act=antispy">' . lng('antispy_menu') . '</a><br />' : '') . '<a href="index.php">' . lng('admin_panel') . '</a></p>';

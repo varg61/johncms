@@ -16,7 +16,7 @@ if (Vars::$USER_ID && $user['user_id'] == Vars::$USER_ID) {
     //TODO: Доработать!
 }
 
-$context_top = '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . Vars::$LNG['guestbook'] . '</div>' .
+$context_top = '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('guestbook') . '</div>' .
                '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';
 
 /*
@@ -33,7 +33,7 @@ $arg = array(
     'owner' => $user['user_id'],                                               // Владелец объекта
     'owner_delete' => true,                                                    // Возможность владельцу удалять комментарий
     'owner_reply' => true,                                                     // Возможность владельцу отвечать на комментарий
-    'title' => Vars::$LNG['comments'],                                         // Название раздела
+    'title' => lng('comments'),                                         // Название раздела
     'context_top' => $context_top                                              // Выводится вверху списка
 );
 

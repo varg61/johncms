@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!$img) {
-    echo Functions::displayError($lng['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 $check = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = " . Vars::$USER_ID . " AND `file_id` = '$img' LIMIT 1");
@@ -59,5 +59,5 @@ if (mysql_num_rows($req)) {
     }
     header('Location: ' . $_SERVER['HTTP_REFERER']);
 } else {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
 }

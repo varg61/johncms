@@ -19,7 +19,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_ID) {
-    echo Functions::displayError(Vars::$LNG['access_forbidden']);
+    echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
 

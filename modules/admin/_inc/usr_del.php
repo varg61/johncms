@@ -27,12 +27,12 @@ if (Vars::$ID && Vars::$ID != Vars::$USER_ID) {
     if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
         if ($user['rights'] > Vars::$USER_RIGHTS)
-            $error = $lng['error_usrdel_rights'];
+            $error = lng('error_usrdel_rights');
     } else {
-        $error = $lng['error_user_not_exist'];
+        $error = lng('error_user_not_exist');
     }
 } else {
-    $error = $lng['error_wrong_data'];
+    $error = lng('error_wrong_data');
 }
 if (!$error) {
     // Считаем комментарии в галерее
@@ -52,7 +52,7 @@ if (!$error) {
     $forumt_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['user_id'] . "' AND `type` = 't' AND `close` != '1'"), 0);
     // Считаем посты на Форуме
     $forump_count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['user_id'] . "' AND `type` = 'm'  AND `close` != '1'"), 0);
-    echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['user_del'] . '</div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . lng('admin_panel') . '</b></a> | ' . lng('user_del') . '</div>';
     // Выводим краткие данные
     echo '<div class="user"><p>' . Functions::displayUser($user, array(
                                                                        'lastvisit' => 1,
@@ -134,28 +134,28 @@ if (!$error) {
             mysql_query("DELETE FROM `users` WHERE `id` = '" . $user['user_id'] . "'");
             // Оптимизируем таблицы
             mysql_query("OPTIMIZE TABLE `cms_users_iphistory` , `cms_ban_users` , `guest`, `cms_album_comments`, `cms_users_guestbook`, `karma_users`, `cms_album_votes`, `cms_album_views`, `cms_album_downloads`, `cms_album_cat`, `cms_album_files`, `cms_forum_rdm`");
-            echo '<div class="rmenu"><p><h3>' . $lng['user_deleted'] . '</h3></p></div>';
+            echo '<div class="rmenu"><p><h3>' . lng('user_deleted') . '</h3></p></div>';
             break;
 
         default:
             ////////////////////////////////////////////////////////////
             // Форма параметров удаления                              //
             ////////////////////////////////////////////////////////////
-            echo '<form action="index.php?act=usr_del&amp;mod=del&amp;id=' . $user['user_id'] . '" method="post"><div class="menu"><p><h3>' . $lng['user_del_activity'] . '</h3>';
+            echo '<form action="index.php?act=usr_del&amp;mod=del&amp;id=' . $user['user_id'] . '" method="post"><div class="menu"><p><h3>' . lng('user_del_activity') . '</h3>';
             if ($comm_count)
-                echo '<div><input type="checkbox" value="1" name="comments" checked="checked" />&#160;' . $lng['comments'] . ' <span class="red">(' . $comm_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="comments" checked="checked" />&#160;' . lng('comments') . ' <span class="red">(' . $comm_count . ')</span></div>';
             if ($guest_count)
-                echo '<div><input type="checkbox" value="1" name="guest" checked="checked" />&#160;' . $lng['guestbook'] . ' <span class="red">(' . $guest_count . ')</span></div>';
+                echo '<div><input type="checkbox" value="1" name="guest" checked="checked" />&#160;' . lng('guestbook') . ' <span class="red">(' . $guest_count . ')</span></div>';
             if ($forumt_count || $forump_count) {
-                echo '<div><input type="checkbox" value="1" name="forum" checked="checked" />&#160;' . $lng['forum'] . ' <span class="red">(' . $forumt_count . '&nbsp;/&nbsp;' . $forump_count . ')</span></div>';
-                echo '<small><span class="gray">' . $lng['user_del_forumnote'] . '</span></small>';
+                echo '<div><input type="checkbox" value="1" name="forum" checked="checked" />&#160;' . lng('forum') . ' <span class="red">(' . $forumt_count . '&nbsp;/&nbsp;' . $forump_count . ')</span></div>';
+                echo '<small><span class="gray">' . lng('user_del_forumnote') . '</span></small>';
             }
-            echo '</p></div><div class="rmenu"><p>' . $lng['user_del_confirm'];
-            echo '</p><p><input type="submit" value="' . $lng['delete'] . '" name="submit" />';
+            echo '</p></div><div class="rmenu"><p>' . lng('user_del_confirm');
+            echo '</p><p><input type="submit" value="' . lng('delete') . '" name="submit" />';
             echo '</p></div></form>';
-            echo '<div class="phdr"><a href="../users/profile.php?user=' . $user['user_id'] . '">' . $lng['to_form'] . '</a></div>';
+            echo '<div class="phdr"><a href="../users/profile.php?user=' . $user['user_id'] . '">' . lng('to_form') . '</a></div>';
     }
 } else {
     echo Functions::displayError($error);
 }
-echo '<p><a href="index.php?act=users">' . $lng['users_list'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+echo '<p><a href="index.php?act=users">' . lng('users_list') . '</a><br /><a href="index.php">' . lng('admin_panel') . '</a></p>';

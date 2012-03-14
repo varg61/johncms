@@ -26,7 +26,7 @@ switch ($tpl->login->userLogin()) {
         $tpl = Template::getInstance();
         $tpl->template = false;
         header('Location: ' . Vars::$HOME_URL);
-        echo'<div class="gmenu"><p><h3><a href="' . Vars::$HOME_URL . '">' . Vars::$LNG['enter_on_site'] . '</a></h3></p></div>';
+        echo'<div class="gmenu"><p><a href="' . Vars::$HOME_URL . '">' . lng('enter_on_site') . '</a></p></div>';
         break;
 
     case 'captcha':

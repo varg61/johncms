@@ -36,8 +36,8 @@ echo'<li><a href="' . Vars::$URI . '/users">' . lng('users') . '</a>&#160;(' . m
     (Vars::$USER_RIGHTS >= 7 ? '<li><a href="' . Vars::$URI . '/users/flood.php">' . lng('antiflood') . '</a></li>' : '') .
     //TODO: Написать новую систему Кармы
     '<br />' .
-    //'<li><a href="../users/search.php">' . $lng['search_nick'] . '</a></li>' .
-    //'<li><a href="index.php?act=search_ip">' . $lng['ip_search'] . '</a></li>' .
+    //'<li><a href="../users/search.php">' . lng('search_nick') . '</a></li>' .
+    //'<li><a href="index.php?act=search_ip">' . lng('ip_search') . '</a></li>' .
     '</ul></p></div>';
 if (Vars::$USER_RIGHTS >= 7) {
 
@@ -50,7 +50,7 @@ if (Vars::$USER_RIGHTS >= 7) {
         '<h3>' . Functions::getImage('modules.png', '', 'class="left"') . '&#160;' . lng('modules') . '</h3><ul>' .
         //TODO: Написать новый рекламный модуль
         //TODO: Написать новый модуль новостей
-        //'<li><a href="index.php?act=forum">' . $lng['forum'] . '</a></li>' .
+        //'<li><a href="index.php?act=forum">' . lng('forum') . '</a></li>' .
         '</ul></p></div>';
 
     /*
@@ -61,12 +61,12 @@ if (Vars::$USER_RIGHTS >= 7) {
     echo'<div class="menu"><p>' .
         '<h3>' . Functions::getImage('settings.png', '', 'class="left"') . '&#160;' . lng('system') . '</h3>' .
         '<ul>' .
-        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=settings"><b>' . $lng['site_settings'] . '</b></a></li>' : '') .
-        //'<li><a href="index.php?act=smileys">' . $lng['refresh_smileys'] . '</a></li>' .
+        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=settings"><b>' . lng('site_settings') . '</b></a></li>' : '') .
+        //'<li><a href="index.php?act=smileys">' . lng('refresh_smileys') . '</a></li>' .
         (Vars::$USER_RIGHTS == 9 ? '<li><a href="' . Vars::$URI . '/system/languages.php">' . lng('language_settings') . '</a></li>' : '') .
-        //'<li><a href="index.php?act=access">' . $lng['access_rights'] . '</a></li><br />' .
-        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=sitemap">' . $lng['site_map'] . '</a></li>' : '') .
-        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=counters">' . $lng['counters'] . '</a></li>' : '') .
+        //'<li><a href="index.php?act=access">' . lng('access_rights') . '</a></li><br />' .
+        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=sitemap">' . lng('site_map') . '</a></li>' : '') .
+        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=counters">' . lng('counters') . '</a></li>' : '') .
         '</ul>' .
         '</p></div>';
 
@@ -78,7 +78,7 @@ if (Vars::$USER_RIGHTS >= 7) {
     echo'<div class="rmenu"><p>' .
         '<h3>' . Functions::getImage('blocked.png', '', 'class="left"') . '&#160;' . lng('security') . '</h3>' .
         '<ul>' .
-        //'<li><a href="index.php?act=antispy">' . $lng['antispy'] . '</a></li>' .
+        //'<li><a href="index.php?act=antispy">' . lng('antispy') . '</a></li>' .
         (Vars::$USER_RIGHTS == 9 ? '<li><a href="' . Vars::$URI . '/system/ip_access.php">' . lng('ip_accesslist') . '</a></li>' : '') .
         '</ul>' .
         '</p></div>';

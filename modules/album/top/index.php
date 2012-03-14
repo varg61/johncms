@@ -11,8 +11,6 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$lng = Vars::loadLanguage(1);
-
 switch (Vars::$ACT) {
     case 'views':
         /*
@@ -20,7 +18,7 @@ switch (Vars::$ACT) {
         ТОП просмотров
         -----------------------------------------------------------------
         */
-        $title = $lng['top_views'];
+        $title = lng('top_views');
         $select = "";
         $join = "";
         $where = "`cms_album_files`.`views` > '0'" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -34,7 +32,7 @@ switch (Vars::$ACT) {
         ТОП скачиваний
         -----------------------------------------------------------------
         */
-        $title = $lng['top_downloads'];
+        $title = lng('top_downloads');
         $select = "";
         $join = "";
         $where = "`cms_album_files`.`downloads` > 0" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -48,7 +46,7 @@ switch (Vars::$ACT) {
         ТОП комментариев
         -----------------------------------------------------------------
         */
-        $title = $lng['top_comments'];
+        $title = lng('top_comments');
         $select = "";
         $join = "";
         $where = "`cms_album_files`.`comm_count` > '0'" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -62,7 +60,7 @@ switch (Vars::$ACT) {
         ТОП отрицательных голосов
         -----------------------------------------------------------------
         */
-        $title = $lng['top_trash'];
+        $title = lng('top_trash');
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
         $join = "";
         $where = "(`vote_plus` - `vote_minus`) < -2" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -76,7 +74,7 @@ switch (Vars::$ACT) {
         ТОП положительных голосов
         -----------------------------------------------------------------
         */
-        $title = $lng['top_votes'];
+        $title = lng('top_votes');
         $select = ", (`vote_plus` - `vote_minus`) AS `rating`";
         $join = "";
         $where = "(`vote_plus` - `vote_minus`) > 2" . (Vars::$USER_RIGHTS >= 6 ? "" : " AND `cms_album_files`.`access` = '4'");
@@ -90,7 +88,7 @@ switch (Vars::$ACT) {
 -----------------------------------------------------------------
 */
 unset($_SESSION['ref']);
-echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . Vars::$LNG['photo_albums'] . '</b></a> | ' . $title . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('photo_albums') . '</b></a> | ' . $title . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where"), 0);
 if ($total) {
     if ($total > Vars::$USER_SET['page_size'])
@@ -124,22 +122,22 @@ if ($total) {
              '<a href="album.php?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="album.php?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::filterString($res['album_name']) . '</a>';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 6) {
             echo vote_photo($res) .
-                '<div class="gray">' . Vars::$LNG['count_views'] . ': ' . $res['views'] . ', ' . Vars::$LNG['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
-                '<div class="gray">' . Vars::$LNG['date'] . ': ' . Functions::displayDate($res['time']) . '</div>' .
-                '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . Vars::$LNG['comments'] . '</a> (' . $res['comm_count'] . ')' .
-                '<br /><a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . Vars::$LNG['download'] . '</a>';
+                '<div class="gray">' . lng('count_views') . ': ' . $res['views'] . ', ' . lng('count_downloads') . ': ' . $res['downloads'] . '</div>' .
+                '<div class="gray">' . lng('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
+                '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')' .
+                '<br /><a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>';
         }
         echo '</div></div>';
     }
 } else {
-    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . $link . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="' . Vars::$URI . '?' . $link . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="' . Vars::$MODULE_URI . '">' . Vars::$LNG['photo_albums'] . '</a></p>';
+echo '<p><a href="' . Vars::$MODULE_URI . '">' . lng('photo_albums') . '</a></p>';

@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['user_id']) {
-    echo Functions::displayError(Vars::$LNG['access_forbidden']);
+    echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
 
@@ -26,7 +26,7 @@ if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['user_id']) {
 История IP адресов
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . Vars::$LNG['ip_history'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('ip_history') . '</div>';
 echo '<div class="user"><p>';
 $arg = array(
     'lastvisit' => 1,
@@ -45,13 +45,13 @@ if ($total) {
         ++$i;
     }
 } else {
-    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<p>' . Functions::displayPagination('profile.php?act=ip&amp;user=' . $user['user_id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
     echo '<p><form action="profile.php?act=ip&amp;user=' . $user['user_id'] . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }

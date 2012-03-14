@@ -24,23 +24,23 @@ if ( isset( $_POST['submit'] ) )
     $text = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
     $error = array();
     if ( Vars::$USER_BAN['1'] || Vars::$USER_BAN['3'] )
-        $error[] = $lng_mail['error_banned'];
+        $error[] = lng('error_banned');
     if ( empty( $error ) )
     {
         if ( empty( $login ) )
-            $error[] = $lng_mail['error_banned'] . '!';
+            $error[] = lng('error_banned') . '!';
         else
             if ( mb_strlen( $login ) < 2 || mb_strlen( $login ) > 20 )
-                $error[] = $lng_mail['error_login'] . '!';
+                $error[] = lng('error_login') . '!';
         if ( empty( $text ) )
-            $error[] = $lng_mail['empty_message'] . '!';
+            $error[] = lng('empty_message') . '!';
         else
             if ( mb_strlen( $text ) < 2 || mb_strlen( $text ) > 5000 )
-                $error[] = $lng_mail['error_message'] . '!';
+                $error[] = lng('error_message') . '!';
 
         $flood = Functions::antiFlood();
         if ( $flood )
-            $error = Vars::$LNG['error_flood'] . '&#160;' . $flood . '&#160;' . Vars::$LNG['seconds'];
+            $error = lng('error_flood') . '&#160;' . $flood . '&#160;' . lng('seconds');
         if ( empty( $error ) )
         {
             $q = mysql_query( "SELECT * FROM `users` WHERE `nickname`='" . mysql_real_escape_string( $login ) .
@@ -50,9 +50,9 @@ if ( isset( $_POST['submit'] ) )
                 $data = mysql_fetch_assoc( $q );
                 Vars::$ID = $data['id'];
                 //if ( Vars::$ID == Vars::$USER_ID )
-                //    $error[] = $lng_mail['error_my_message'] . '!';
+                //    $error[] = lng('error_my_message') . '!';
             } else
-                $error[] = $lng_mail['user_does_not_exist'] . '!';
+                $error[] = lng('user_does_not_exist') . '!';
         }
 		
 		if( empty($error) ) {

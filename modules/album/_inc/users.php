@@ -30,11 +30,11 @@ switch (Vars::$MOD) {
         $sql = "WHERE `users`.`sex` != ''";
 }
 $menu = array(
-    (!Vars::$MOD ? '<b>' . Vars::$LNG['all'] . '</b>' : '<a href="album.php?act=users">' . Vars::$LNG['all'] . '</a>'),
-    (Vars::$MOD == 'boys' ? '<b>' . Vars::$LNG['mans'] . '</b>' : '<a href="album.php?act=users&amp;mod=boys">' . Vars::$LNG['mans'] . '</a>'),
-    (Vars::$MOD == 'girls' ? '<b>' . Vars::$LNG['womans'] . '</b>' : '<a href="album.php?act=users&amp;mod=girls">' . Vars::$LNG['womans'] . '</a>')
+    (!Vars::$MOD ? '<b>' . lng('all') . '</b>' : '<a href="album.php?act=users">' . lng('all') . '</a>'),
+    (Vars::$MOD == 'boys' ? '<b>' . lng('mans') . '</b>' : '<a href="album.php?act=users&amp;mod=boys">' . lng('mans') . '</a>'),
+    (Vars::$MOD == 'girls' ? '<b>' . lng('womans') . '</b>' : '<a href="album.php?act=users&amp;mod=girls">' . lng('womans') . '</a>')
 );
-echo '<div class="phdr"><a href="album.php"><b>' . Vars::$LNG['photo_albums'] . '</b></a> | ' . Vars::$LNG['list'] . '</div>' .
+echo '<div class="phdr"><a href="album.php"><b>' . lng('photo_albums') . '</b></a> | ' . lng('list') . '</div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     FROM `cms_album_files`
@@ -53,13 +53,13 @@ if ($total) {
         ++$i;
     }
 } else {
-    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination('album.php?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="album.php?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }

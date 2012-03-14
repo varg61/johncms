@@ -17,9 +17,6 @@ if (Vars::$USER_RIGHTS < 7) {
     exit;
 }
 
-// Подключаем языковый файл форума
-$lng_forum = Vars::loadLanguage('forum');
-
 // Задаем пользовательские настройки форума
 if (($set_forum = Vars::getUserData('set_forum')) === false) {
     $set_forum = array(
@@ -38,13 +35,13 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if (!Vars::$ID) {
-            echo Functions::displayError($lng['error_wrong_data'], '<a href="index.php?act=forum">' . $lng_forum['forum_management'] . '</a>');
+            echo Functions::displayError(lng('error_wrong_data'), '<a href="index.php?act=forum">' . lng('forum_management') . '</a>');
             exit;
         }
         $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r')");
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
-            echo '<div class="phdr"><b>' . ($res['type'] == 'r' ? $lng_forum['delete_section'] : $lng_forum['delete_catrgory']) . ':</b> ' . $res['text'] . '</div>';
+            echo '<div class="phdr"><b>' . ($res['type'] == 'r' ? lng('delete_section') : lng('delete_catrgory')) . ':</b> ' . $res['text'] . '</div>';
             // Проверяем, есть ли подчиненная информация
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r' OR `type` = 't')"), 0);
             if ($total) {

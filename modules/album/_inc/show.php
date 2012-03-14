@@ -12,12 +12,12 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!$al) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al'");
 if (!mysql_num_rows($req)) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 $album = mysql_fetch_assoc($req);
@@ -28,11 +28,11 @@ $view = isset($_GET['view']);
 Показываем выбранный альбом с фотографиями
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="album.php"><b>' . Vars::$LNG['photo_albums'] . '</b></a> | <a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['personal_2'] . '</a></div>';
+echo '<div class="phdr"><a href="album.php"><b>' . lng('photo_albums') . '</b></a> | <a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . lng('personal_2') . '</a></div>';
 if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7)
-    echo '<div class="topmenu"><a href="album.php?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '">' . $lng['image_add'] . '</a></div>';
+    echo '<div class="topmenu"><a href="album.php?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '">' . lng('image_add') . '</a></div>';
 echo'<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
-    '<div class="phdr">' . $lng['album'] . ': ';
+    '<div class="phdr">' . lng('album') . ': ';
 echo $view ? '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '"><b>' . Validate::filterString($album['name']) . '</b></a>' : '<b>' . Validate::filterString($album['name']) . '</b>';
 if (!empty($album['description'])) {
     echo '<small><br />' . Validate::filterString($album['description'], 1) . '</small>';
@@ -48,8 +48,8 @@ if ($album['access'] != 2)
     unset($_SESSION['ap']);
 if ($album['access'] == 1 && $user['user_id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
     // Если доступ закрыт
-    echo Functions::displayError(Vars::$LNG['access_forbidden']) .
-        '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . $lng['album_list'] . '</a></div>';
+    echo Functions::displayError(lng('access_forbidden')) .
+        '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . lng('album_list') . '</a></div>';
     exit;
 } elseif ($album['access'] == 2 && $user['user_id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
     // Если доступ через пароль
@@ -57,15 +57,15 @@ if ($album['access'] == 1 && $user['user_id'] != Vars::$USER_ID && Vars::$USER_R
         if ($album['password'] == trim($_POST['password']))
             $_SESSION['ap'] = $album['password'];
         else
-            echo Functions::displayError(Vars::$LNG['error_wrong_password']);
+            echo Functions::displayError(lng('error_wrong_password'));
     }
     if (!isset($_SESSION['ap']) || $_SESSION['ap'] != $album['password']) {
         echo '<form action="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '" method="post"><div class="menu"><p>';
-        echo $lng['album_password'] . '<br />';
+        echo lng('album_password') . '<br />';
         echo '<input type="text" name="password"/></p>';
-        echo '<p><input type="submit" name="submit" value="' . Vars::$LNG['login'] . '"/></p>';
+        echo '<p><input type="submit" name="submit" value="' . lng('login') . '"/></p>';
         echo '</div></form>';
-        echo '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . $lng['album_list'] . '</a></div>';
+        echo '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . lng('album_list') . '</a></div>';
         exit;
     }
 }
@@ -107,7 +107,7 @@ if ($total) {
                     '../files/users/album/' . $user['user_id'] . '/' . $res['img_name'],
                     '../files/users/photo/' . Vars::$USER_ID . '.jpg'
                 );
-                echo '<span class="green"><b>' . $lng['photo_profile_ok'] . '</b></span><br />';
+                echo '<span class="green"><b>' . lng('photo_profile_ok') . '</b></span><br />';
             }
             echo '<a href="' . $_SESSION['ref'] . '"><img src="image.php?u=' . $user['user_id'] . '&amp;f=' . $res['img_name'] . '" /></a>';
             // Счетчик просмотров
@@ -129,30 +129,30 @@ if ($total) {
         echo '<div class="sub">';
         if ($user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayMenu(array(
-                '<a href="album.php?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['edit'] . '</a>',
-                '<a href="album.php?act=image_move&amp;img=' . $res['id'] . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['move'] . '</a>',
-                '<a href="album.php?act=image_delete&amp;img=' . $res['id'] . '&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['delete'] . '</a>'
+                '<a href="album.php?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['user_id'] . '">' . lng('edit') . '</a>',
+                '<a href="album.php?act=image_move&amp;img=' . $res['id'] . '&amp;user=' . $user['user_id'] . '">' . lng('move') . '</a>',
+                '<a href="album.php?act=image_delete&amp;img=' . $res['id'] . '&amp;user=' . $user['user_id'] . '">' . lng('delete') . '</a>'
             ));
             if ($user['user_id'] == Vars::$USER_ID && $view)
-                echo ' | <a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '&amp;view&amp;img=' . $res['id'] . '&amp;profile">' . $lng['photo_profile'] . '</a>';
+                echo ' | <a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '&amp;view&amp;img=' . $res['id'] . '&amp;profile">' . lng('photo_profile') . '</a>';
         }
         echo vote_photo($res) .
-            '<div class="gray">' . Vars::$LNG['count_views'] . ': ' . $res['views'] . ', ' . Vars::$LNG['count_downloads'] . ': ' . $res['downloads'] . '</div>' .
-            '<div class="gray">' . Vars::$LNG['date'] . ': ' . Functions::displayDate($res['time']) . '</div>' .
-            '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . Vars::$LNG['comments'] . '</a> (' . $res['comm_count'] . ')<br />' .
-            '<a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . Vars::$LNG['download'] . '</a>' .
+            '<div class="gray">' . lng('count_views') . ': ' . $res['views'] . ', ' . lng('count_downloads') . ': ' . $res['downloads'] . '</div>' .
+            '<div class="gray">' . lng('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
+            '<a href="album.php?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
+            '<a href="album.php?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>' .
             '</div></div>';
         ++$i;
     }
 } else {
-    echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination('album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '&amp;' . ($view ? 'view&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['user_id'] . ($view ? '&amp;view' : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . $lng['album_list'] . '</a></p>';
+echo '<p><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . lng('album_list') . '</a></p>';

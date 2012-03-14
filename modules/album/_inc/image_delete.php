@@ -21,7 +21,7 @@ if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $album = $res['album_id'];
-        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '"><b>' . Vars::$LNG['photo_album'] . '</b></a> | ' . $lng['image_delete'] . '</div>';
+        echo '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . '&amp;user=' . $user['user_id'] . '"><b>' . lng('photo_album') . '</b></a> | ' . lng('image_delete') . '</div>';
         //TODO: Сделать проверку, чтоб администрация не могла удалять фотки старших по должности
         if (isset($_POST['submit'])) {
             // Удаляем файлы картинок
@@ -36,12 +36,12 @@ if ($img && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             header('Location: album.php?act=show&al=' . $album . '&user=' . $user['user_id']);
         } else {
             echo '<div class="rmenu"><form action="album.php?act=image_delete&amp;img=' . $img . '&amp;user=' . $user['user_id'] . '" method="post">' .
-                '<p>' . $lng['image_delete_warning'] . '</p>' .
-                '<p><input type="submit" name="submit" value="' . Vars::$LNG['delete'] . '"/></p>' .
+                '<p>' . lng('image_delete_warning') . '</p>' .
+                '<p><input type="submit" name="submit" value="' . lng('delete') . '"/></p>' .
                 '</form></div>' .
-                '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . 'user=' . $user['user_id'] . '">' . Vars::$LNG['cancel'] . '</a></div>';
+                '<div class="phdr"><a href="album.php?act=show&amp;al=' . $album . 'user=' . $user['user_id'] . '">' . lng('cancel') . '</a></div>';
         }
     } else {
-        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+        echo Functions::displayError(lng('error_wrong_data'));
     }
 }

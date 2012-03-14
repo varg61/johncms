@@ -18,29 +18,29 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Статистика
 -----------------------------------------------------------------
 */
-echo'<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . Vars::$LNG['statistics'] . '</div>' .
+echo'<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('statistics') . '</div>' .
     '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
     '<div class="list2">' .
-    '<p><h3>' . Functions::getImage('rating.png', '', 'class="left"') . '&#160;' . Vars::$LNG['statistics'] . '</h3><ul>';
+    '<p><h3>' . Functions::getImage('rating.png', '', 'class="left"') . '&#160;' . lng('statistics') . '</h3><ul>';
 if (Vars::$USER_RIGHTS >= 7) {
     if (!$user['preg'] && empty($user['regadm']))
-        echo'<li>' . $lng['awaiting_registration'] . '</li>';
+        echo'<li>' . lng('awaiting_registration') . '</li>';
     elseif ($user['preg'] && !empty($user['regadm']))
-        echo'<li>' . $lng['registration_approved'] . ': ' . $user['regadm'] . '</li>';
+        echo'<li>' . lng('registration_approved') . ': ' . $user['regadm'] . '</li>';
     else
-        echo'<li>' . $lng['registration_free'] . '</li>';
+        echo'<li>' . lng('registration_free') . '</li>';
 }
 $lastvisit = time() > $user['last_visit'] + 300 ? date("d.m.Y (H:i)", $user['last_visit']) : false;
-if ($lastvisit) echo '<li><span class="gray">' . Vars::$LNG['last_visit'] . ':</span> ' . $lastvisit . '</li>';
-echo'<li><span class="gray">' . ($user['sex'] == 'm' ? $lng['registered_m'] : $lng['registered_w']) . ':</span> ' . date("d.m.Y (H:i)", $user['join_date']) . '</li>' .
-    '<li><span class="gray">' . ($user['sex'] == 'm' ? $lng['stayed_m'] : $lng['stayed_w']) . ':</span> ' . Functions::timeCount($user['total_on_site']) . '</li>';
+if ($lastvisit) echo '<li><span class="gray">' . lng('last_visit') . ':</span> ' . $lastvisit . '</li>';
+echo'<li><span class="gray">' . ($user['sex'] == 'm' ? lng('registered_m') : lng('registered_w')) . ':</span> ' . date("d.m.Y (H:i)", $user['join_date']) . '</li>' .
+    '<li><span class="gray">' . ($user['sex'] == 'm' ? lng('stayed_m') : lng('stayed_w')) . ':</span> ' . Functions::timeCount($user['total_on_site']) . '</li>';
 echo'</ul></p><p>' .
-    '<h3>' . Functions::getImage('user_edit.png', '', 'class="left"') . '&#160;' . $lng['activity'] . '</h3><ul>' .
-    '<li><span class="gray">' . Vars::$LNG['forum'] . ':</span> <a href="profile.php?act=activity&amp;user=' . $user['user_id'] . '">' . $user['postforum'] . '</a></li>' .
-    '<li><span class="gray">' . Vars::$LNG['guestbook'] . ':</span> <a href="profile.php?act=activity&amp;mod=guest&amp;user=' . $user['user_id'] . '">' . $user['postguest'] . '</a></li>' .
-    '<li><span class="gray">' . Vars::$LNG['comments'] . ':</span> ' . $user['komm'] . '</li>' .
+    '<h3>' . Functions::getImage('user_edit.png', '', 'class="left"') . '&#160;' . lng('activity') . '</h3><ul>' .
+    '<li><span class="gray">' . lng('forum') . ':</span> <a href="profile.php?act=activity&amp;user=' . $user['user_id'] . '">' . $user['postforum'] . '</a></li>' .
+    '<li><span class="gray">' . lng('guestbook') . ':</span> <a href="profile.php?act=activity&amp;mod=guest&amp;user=' . $user['user_id'] . '">' . $user['postguest'] . '</a></li>' .
+    '<li><span class="gray">' . lng('comments') . ':</span> ' . $user['komm'] . '</li>' .
     '</ul></p>' .
-    '<p><h3>' . Functions::getImage('award.png', '', 'class="left"') . '&#160;' . $lng['achievements'] . '</h3>';
+    '<p><h3>' . Functions::getImage('award.png', '', 'class="left"') . '&#160;' . lng('achievements') . '</h3>';
 $num = array(
     50,
     100,
@@ -49,9 +49,9 @@ $num = array(
     5000
 );
 $query = array(
-    'postforum' => Vars::$LNG['forum'],
-    'postguest' => Vars::$LNG['guestbook'],
-    'komm' => Vars::$LNG['comments']
+    'postforum' => lng('forum'),
+    'postguest' => lng('guestbook'),
+    'komm' => lng('comments')
 );
 echo '<table border="0" cellspacing="0" cellpadding="0"><tr>';
 foreach ($num as $val) {
@@ -66,4 +66,4 @@ foreach ($query as $key => $val) {
     echo'<td><small><b>' . $val . '</b></small></td></tr>';
 }
 echo'</table></p></div>' .
-    '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '">' . Vars::$LNG['back'] . '</a></div>';
+    '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '">' . lng('back') . '</a></div>';

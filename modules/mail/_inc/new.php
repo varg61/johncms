@@ -72,6 +72,6 @@ if ( $total )
     $tpl->contacts = $tpl->includeTpl( 'contacts' );
 } else
 {
-    $tpl->contacts = '<div class="rmenu">' . $lng_mail['no_messages'] . '!</div>';
+    $tpl->contacts = '<div class="rmenu">' . lng('no_messages') . '!</div>';
 }
 $tpl->contents = $tpl->includeTpl( 'new' );

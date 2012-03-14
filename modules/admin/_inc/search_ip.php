@@ -18,14 +18,14 @@ $search = $search_post ? $search_post : $search_get;
 if (isset($_GET['ip']))
     $search = trim($_GET['ip']);
 $menu = array(
-    (!Vars::$MOD ? '<b>' . $lng['ip_actual'] . '</b>' : '<a href="index.php?act=search_ip&amp;search=' . rawurlencode($search) . '">' . $lng['ip_actual'] . '</a>'),
-    (Vars::$MOD == 'history' ? '<b>' . $lng['ip_history'] . '</b>' : '<a href="index.php?act=search_ip&amp;mod=history&amp;search=' . rawurlencode($search) . '">' . $lng['ip_history'] . '</a>')
+    (!Vars::$MOD ? '<b>' . lng('ip_actual') . '</b>' : '<a href="index.php?act=search_ip&amp;search=' . rawurlencode($search) . '">' . lng('ip_actual') . '</a>'),
+    (Vars::$MOD == 'history' ? '<b>' . lng('ip_history') . '</b>' : '<a href="index.php?act=search_ip&amp;mod=history&amp;search=' . rawurlencode($search) . '">' . lng('ip_history') . '</a>')
 );
-echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['ip_search'] . '</div>' .
+echo '<div class="phdr"><a href="index.php"><b>' . lng('admin_panel') . '</b></a> | ' . lng('ip_search') . '</div>' .
      '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
      '<form action="index.php?act=search_ip" method="post"><div class="gmenu"><p>' .
      '<input type="text" name="search" value="' . Validate::filterString($search) . '" />' .
-     '<input type="submit" value="' . $lng['search'] . '" name="submit" /><br />' .
+     '<input type="submit" value="' . lng('search') . '" name="submit" /><br />' .
      '</p></div></form>';
 if ($search) {
     if (strstr($search, '-')) {
@@ -37,12 +37,12 @@ if ($search) {
         $array = explode('-', $search);
         $ip = trim($array[0]);
         if (!Vars::ip_valid($ip))
-            $error[] = $lng['error_firstip'];
+            $error[] = lng('error_firstip');
         else
             $ip1 = ip2long($ip);
         $ip = trim($array[1]);
         if (!Vars::ip_valid($ip))
-            $error[] = $lng['error_secondip'];
+            $error[] = lng('error_secondip');
         else
             $ip2 = ip2long($ip);
     } elseif (strstr($search, '*')) {
@@ -60,7 +60,7 @@ if ($search) {
                 $ipt1[$i] = $array[$i];
                 $ipt2[$i] = $array[$i];
             } else {
-                $error = $lng['error_address'];
+                $error = lng('error_address');
             }
             $ip1 = ip2long($ipt1[0] . '.' . $ipt1[1] . '.' . $ipt1[2] . '.' . $ipt1[3]);
             $ip2 = ip2long($ipt2[0] . '.' . $ipt2[1] . '.' . $ipt2[2] . '.' . $ipt2[3]);
@@ -72,7 +72,7 @@ if ($search) {
         -----------------------------------------------------------------
         */
         if (!Vars::ip_valid($search)) {
-            $error = $lng['error_address'];
+            $error = lng('error_address');
         } else {
             $ip1 = ip2long($search);
             $ip2 = $ip1;
@@ -85,7 +85,7 @@ if ($search && !$error) {
     Выводим результаты поиска
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr">' . $lng['search_results'] . '</div>';
+    echo '<div class="phdr">' . lng('search_results') . '</div>';
     if (Vars::$MOD == 'history')
         $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `cms_users_iphistory`.`user_id`) FROM `cms_users_iphistory` WHERE `ip` BETWEEN $ip1 AND $ip2 OR `ip_via_proxy` BETWEEN $ip1 AND $ip2"), 0);
     else
@@ -114,22 +114,22 @@ if ($search && !$error) {
             ++$i;
         }
     } else {
-        echo '<div class="menu"><p>' . $lng['not_found'] . '</p></div>';
+        echo '<div class="menu"><p>' . lng('not_found') . '</p></div>';
     }
-    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+    echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
         // Навигация по страницам
         echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=search_ip' . (Vars::$MOD == 'history' ? '&amp;mod=history' : '') . '&amp;search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
              '<p><form action="index.php?act=search_ip' . (Vars::$MOD == 'history' ? '&amp;mod=history' : '') . '&amp;search=' . urlencode($search) . '" method="post">' .
-             '<input type="text" name="page" size="2"/><input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
+             '<input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
              '</form></p>';
     }
-    echo '<p><a href="index.php?act=search_ip">' . $lng['search_new'] . '</a><br /><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+    echo '<p><a href="index.php?act=search_ip">' . lng('search_new') . '</a><br /><a href="index.php">' . lng('admin_panel') . '</a></p>';
 } else {
     // Выводим сообщение об ошибке
     if ($error)
         echo Functions::displayError($error);
     // Инструкции для поиска
-    echo '<div class="phdr">' . $lng['search_ip_help'] . '</div>';
-    echo '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p>';
+    echo '<div class="phdr">' . lng('search_ip_help') . '</div>';
+    echo '<p><a href="index.php">' . lng('admin_panel') . '</a></p>';
 }

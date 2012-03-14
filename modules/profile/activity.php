@@ -16,11 +16,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 История активности
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . Vars::$LNG['profile'] . '</b></a> | ' . $lng['activity'] . '</div>';
+echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('activity') . '</div>';
 $menu = array(
-    (!Vars::$MOD ? '<b>' . Vars::$LNG['messages'] . '</b>' : '<a href="profile.php?act=activity&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['messages'] . '</a>'),
-    (Vars::$MOD == 'topic' ? '<b>' . Vars::$LNG['themes'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=topic&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['themes'] . '</a>'),
-    (Vars::$MOD == 'comments' ? '<b>' . Vars::$LNG['comments'] . '</b>' : '<a href="profile.php?act=activity&amp;mod=comments&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['comments'] . '</a>'),
+    (!Vars::$MOD ? '<b>' . lng('messages') . '</b>' : '<a href="profile.php?act=activity&amp;user=' . $user['user_id'] . '">' . lng('messages') . '</a>'),
+    (Vars::$MOD == 'topic' ? '<b>' . lng('themes') . '</b>' : '<a href="profile.php?act=activity&amp;mod=topic&amp;user=' . $user['user_id'] . '">' . lng('themes') . '</a>'),
+    (Vars::$MOD == 'comments' ? '<b>' . lng('comments') . '</b>' : '<a href="profile.php?act=activity&amp;mod=comments&amp;user=' . $user['user_id'] . '">' . lng('comments') . '</a>'),
 );
 echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
      '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';
@@ -32,7 +32,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `user_id` = '" . $user['user_id'] . "'" . (Vars::$USER_RIGHTS >= 1 ? '' : " AND `adm` = '0'")), 0);
-        echo '<div class="phdr"><b>' . Vars::$LNG['comments'] . '</b></div>';
+        echo '<div class="phdr"><b>' . lng('comments') . '</b></div>';
         if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity&amp;mod=comments&amp;user=' . $user['user_id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '" . $user['user_id'] . "'" . (Vars::$USER_RIGHTS >= 1 ? '' : " AND `adm` = '0'") . " ORDER BY `id` DESC LIMIT " . Vars::db_pagination());
         if (mysql_num_rows($req)) {
@@ -44,7 +44,7 @@ switch (Vars::$MOD) {
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . $lng['guest_empty'] . '</p></div>';
+            echo '<div class="menu"><p>' . lng('guest_empty') . '</p></div>';
         }
         break;
 
@@ -55,7 +55,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['user_id'] . "' AND `type` = 't'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'")), 0);
-        echo '<div class="phdr"><b>' . Vars::$LNG['forum'] . '</b>: ' . Vars::$LNG['themes'] . '</div>';
+        echo '<div class="phdr"><b>' . lng('forum') . '</b>: ' . lng('themes') . '</div>';
         if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity&amp;mod=topic&amp;user=' . $user['user_id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '" . $user['user_id'] . "' AND `type` = 't'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " ORDER BY `id` DESC LIMIT " . Vars::db_pagination());
         if (mysql_num_rows($req)) {
@@ -77,7 +77,7 @@ switch (Vars::$MOD) {
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
         }
         break;
 
@@ -88,7 +88,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['user_id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'")), 0);
-        echo '<div class="phdr"><b>' . Vars::$LNG['forum'] . '</b>: ' . Vars::$LNG['messages'] . '</div>';
+        echo '<div class="phdr"><b>' . lng('forum') . '</b>: ' . lng('messages') . '</div>';
         if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity&amp;user=' . $user['user_id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '" . $user['user_id'] . "' AND `type` = 'm' " . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " ORDER BY `id` DESC LIMIT " . Vars::db_pagination());
         if (mysql_num_rows($req)) {
@@ -111,14 +111,14 @@ switch (Vars::$MOD) {
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
         }
 }
-echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '&amp;user=' . $user['user_id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
          '<p><form action="profile.php?act=activity&amp;user=' . $user['user_id'] . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
          '<input type="text" name="page" size="2"/>' .
-         '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
          '</form></p>';
 }

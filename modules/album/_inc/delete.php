@@ -20,7 +20,7 @@ if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
     $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['user_id'] . "' LIMIT 1");
     if (mysql_num_rows($req_a)) {
         $res_a = mysql_fetch_assoc($req_a);
-        echo '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '"><b>' . Vars::$LNG['photo_album'] . '</b></a> | ' . Vars::$LNG['delete'] . '</div>';
+        echo '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '"><b>' . lng('photo_album') . '</b></a> | ' . lng('delete') . '</div>';
         if (isset($_POST['submit'])) {
             $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `album_id` = '" . $res_a['id'] . "'");
             while ($res = mysql_fetch_assoc($req)) {
@@ -38,17 +38,17 @@ if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             mysql_query("DELETE FROM `cms_album_files` WHERE `album_id` = '" . $res_a['id'] . "'");
             mysql_query("DELETE FROM `cms_album_cat` WHERE `id` = '" . $res_a['id'] . "'");
             mysql_query("OPTIMIZE TABLE `cms_album_cat`, `cms_album_downloads`, `cms_album_votes`, `cms_album_files`, `cms_album_comments`");
-            echo '<div class="menu"><p>' . $lng['album_deleted'] . '<br />' .
-                '<a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['continue'] . '</a></p></div>';
+            echo '<div class="menu"><p>' . lng('album_deleted') . '<br />' .
+                '<a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . lng('continue') . '</a></p></div>';
         } else {
             echo '<div class="rmenu"><form action="album.php?act=delete&amp;al=' . $al . '&amp;user=' . $user['user_id'] . '" method="post">' .
-                '<p>' . $lng['album'] . ': <b>' . Validate::filterString($res_a['name']) . '</b></p>' .
-                '<p>' . $lng['album_delete_warning'] . '</p>' .
-                '<p><input type="submit" name="submit" value="' . Vars::$LNG['delete'] . '"/></p>' .
+                '<p>' . lng('album') . ': <b>' . Validate::filterString($res_a['name']) . '</b></p>' .
+                '<p>' . lng('album_delete_warning') . '</p>' .
+                '<p><input type="submit" name="submit" value="' . lng('delete') . '"/></p>' .
                 '</form></div>' .
-                '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . Vars::$LNG['cancel'] . '</a></div>';
+                '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['user_id'] . '">' . lng('cancel') . '</a></div>';
         }
     } else {
-        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+        echo Functions::displayError(lng('error_wrong_data'));
     }
 }

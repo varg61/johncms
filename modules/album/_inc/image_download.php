@@ -26,16 +26,16 @@ if (mysql_num_rows($req)) {
         if (mysql_num_rows($req_a)) {
             $res_a = mysql_fetch_assoc($req_a);
             if ($res_a['access'] == 1 || $res_a['access'] == 2 && (!isset($_SESSION['ap']) || $_SESSION['ap'] != $res_a['password']))
-                $error[] = Vars::$LNG['access_forbidden'];
+                $error[] = lng('access_forbidden');
         } else {
-            $error[] = Vars::$LNG['error_wrong_data'];
+            $error[] = lng('error_wrong_data');
         }
     }
     // Проверка наличия файла
     if (!$error && !file_exists('../files/users/album/' . $res['user_id'] . '/' . $res['img_name']))
-        $error[] = Vars::$LNG['error_file_not_exist'];
+        $error[] = lng('error_file_not_exist');
 } else {
-    $error[] = Vars::$LNG['error_wrong_data'];
+    $error[] = lng('error_wrong_data');
 }
 if (!$error) {
     // Счетчик скачиваний
@@ -47,5 +47,5 @@ if (!$error) {
     // Отдаем файл
     header('location: ' . Vars::$HOME_URL . '/files/users/album/' . $res['user_id'] . '/' . $res['img_name']);
 } else {
-    echo Functions::displayError($error, '<a href="album.php">' . Vars::$LNG['back'] . '</a>');
+    echo Functions::displayError($error, '<a href="album.php">' . lng('back') . '</a>');
 }
