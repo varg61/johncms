@@ -19,7 +19,7 @@
             <td><?= lng('autologin') ?>:</td>
             <td>
                 <?php if (isset($_GET['auto'])) : ?>
-                <input type="text" value="<?= Vars::$HOME_URL . '/login.php?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) ?>"/>
+                <input type="text" value="<?= Vars::$HOME_URL . '/login?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) ?>"/>
                 <?php else : ?>
                 <a href="<?= Vars::$URI ?>?auto<?= (isset($_GET['pass']) ? '&amp;pass' : '') ?>"><?= lng('show') ?></a>
                 <?php endif ?>

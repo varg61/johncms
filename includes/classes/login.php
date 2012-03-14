@@ -66,7 +66,7 @@ class Login extends Vars
                             if (Captcha::check() === true) {
                                 $captcha = true;
                             } else {
-                                $this->error['captcha'] = Vars::$LNG['error_wrong_captcha'];
+                                $this->error['captcha'] = lng('error_wrong_captcha');
                                 $display = 'captcha';
                             }
                         } else {
@@ -113,7 +113,7 @@ class Login extends Vars
                             break;
                         } else {
                             // Если пароль неверный
-                            $this->error['password'] = Vars::$LNG['error_wrong_password'];
+                            $this->error['password'] = lng('error_wrong_password');
                             if ($res['login_try'] < 3) {
                                 // Накручиваем счетчик неудачных Логинов
                                 mysql_query("UPDATE `users` SET `login_try` = " . ++$res['login_try'] . " WHERE `id` = " . $res['id']);
@@ -123,7 +123,7 @@ class Login extends Vars
                 }
             } else {
                 // Если пользователь не найден
-                $this->error['login'] = Vars::$LNG['error_user_not_exist'];
+                $this->error['login'] = lng('error_user_not_exist');
             }
         }
         return $display;
@@ -155,17 +155,17 @@ class Login extends Vars
             }
             if (Validate::password($var['password'], true) === true) {
                 if ($var['password'] != $var['password_confirm']) {
-                    $this->error['password_confirm'] = Vars::$LNG['error_passwords_not_match'];
+                    $this->error['password_confirm'] = lng('error_passwords_not_match');
                 }
             }
             if (Validate::email($var['email'], true) === true) { //TODO: поставить в зависимость от настроек в админке
                 Validate::emailAvailability($var['email'], true);
             }
             if ($var['sex'] < 1 || $var['sex'] > 2) {
-                $this->error['sex'] = Vars::$LNG['error_sex_unknown'];
+                $this->error['sex'] = lng('error_sex_unknown');
             }
             if (mb_strlen($var['captcha']) < 3 || $var['captcha'] != $_SESSION['captcha']) {
-                $this->error['captcha'] = Vars::$LNG['error_wrong_captcha'];
+                $this->error['captcha'] = lng('error_wrong_captcha');
             }
             unset($_SESSION['captcha']);
 
@@ -229,9 +229,9 @@ class Login extends Vars
     private function checkId($var = '', $error_log = false)
     {
         if (empty($var)) {
-            $error = Vars::$LNG['error_login_empty'];
+            $error = lng('error_login_empty');
         } elseif (filter_var($var, FILTER_VALIDATE_INT) == false || $var < 1) {
-            $error = 'User ID: ' . Vars::$LNG['error_wrong_data'];
+            $error = 'User ID: ' . lng('error_wrong_data');
         } else {
             return true;
         }
