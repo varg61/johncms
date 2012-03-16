@@ -13,8 +13,8 @@
     <p>
     <h3><?= Functions::getImage('users.png') . '&#160;' . lng('community') ?></h3>
     <ul>
-        <li><a href="<?= Vars::$URI ?>/list"><?= lng('users') ?></a> (<?= $this->count->users ?>)</li>
-        <li><a href="<?= Vars::$URI ?>/list?act=adm"><?= lng('administration') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/search"><?= lng('users') ?></a> (<?= $this->count->users ?>)</li>
+        <li><a href="<?= Vars::$URI ?>/search?act=adm"><?= lng('administration') ?></a></li>
     </ul>
     </p>
     <p>
