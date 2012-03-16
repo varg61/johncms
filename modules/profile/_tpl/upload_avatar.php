@@ -7,10 +7,7 @@
             <label for="file"><?= lng('select_image') ?></label><br/>
             <input id="file" type="file" name="imagefile" value=""/>
             <div class="desc" style="padding-top: 8px">
-                <?= lng('select_image_help') . ' ' . Vars::$SYSTEM_SET['flsz'] ?> kb.<br/>
-                <?= lng('select_image_help_2') ?><br/>
-                <?= lng('select_image_help_3') ?><br/>
-                <?= lng('select_image_help_4') ?>
+                <?= lng('select_image_help')  ?>
             </div>
         </div>
         <div class="formblock">

@@ -20,11 +20,11 @@ $search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : '';
 $search = $search_post ? $search_post : $search_get;
 echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('community') . '</b></a> | ' . lng('search_user') . '</div>' .
+    '<div class="topmenu"><p>' .
     '<form action="' . Vars::$URI . '" method="post">' .
-    '<div class="gmenu"><p>' .
-    '<input type="text" name="search" value="' . Validate::filterString($search) . '" />' .
+    '<input type="text" name="search" value="' . Validate::filterString($search) . '" /> ' .
     '<input type="submit" value="' . lng('search') . '" name="submit" />' .
-    '</p></div></form>';
+    '</form></p></div>';
 
 if ($search && Validate::nickname($search, 1) === true) {
     /*
@@ -39,7 +39,7 @@ if ($search && Validate::nickname($search, 1) === true) {
     $search_db = '%' . $search_db . '%';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `nickname` LIKE '" . mysql_real_escape_string($search_db) . "'"), 0);
     Vars::fixPage($total);
-    echo '<div class="phdr"><b>' . lng('search_results') . '</b></div>';
+    //echo '<div class="phdr"><b>' . lng('search_results') . '</b></div>';
     if ($total > Vars::$USER_SET['page_size']) {
         echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }

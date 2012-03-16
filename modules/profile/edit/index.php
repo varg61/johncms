@@ -139,7 +139,7 @@ switch (Vars::$ACT) {
                     'image/gif',
                     'image/png'
                 );
-                $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['flsz'];
+                $handle->file_max_size = 102400;
                 $handle->file_overwrite = true;
                 $handle->image_resize = true;
                 $handle->image_x = 32;

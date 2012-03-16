@@ -30,7 +30,14 @@ $menu = array(
     (Vars::$ACT != 'adm' ? lng('users') : '<a href="' . Vars::$URI . '">' . lng('users') . '</a>'),
     (Vars::$ACT == 'adm' ? lng('administration') : '<a href="' . Vars::$URI . '?act=adm">' . lng('administration') . '</a>')
 );
+
 echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('community') . '</b></a> | ' . lng('users_list') . '</div>' .
+    '<div class="topmenu"><p>' .
+    '<form action="' . Vars::$MODULE_URI . '/search" method="post">' .
+    '<input type="text" name="search"/> ' .
+    '<input type="submit" value="' . lng('search') . '" name="submit"/>' .
+    '</form>' .
+    '</p></div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `" . (Vars::$ACT == 'adm' ? 'rights' : 'level') . "` > 0"), 0);
@@ -44,7 +51,15 @@ if ($total) {
     $req = mysql_query("SELECT * FROM `users` WHERE " . (Vars::$ACT == 'adm' ? '`rights` > 0 ORDER BY `rights`' : '`level` > 0 ORDER BY `id`') . " DESC" . Vars::db_pagination());
     for ($i = 0; $res = mysql_fetch_assoc($req); $i++) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo Functions::displayUser($res) . '</div>';
+        $arg = array();
+        if (Vars::$USER_RIGHTS) {
+            $arg['sub'] = Functions::displayMenu(array(
+                '<a href="">Банить</a>',
+                '<a href="' . Vars::$HOME_URL . '/profile/edit?user=' . $res['id'] . '">Редактировать</a>',
+                '<a href="">Удалить</a>',
+            ));
+        }
+        echo Functions::displayUser($res, $arg) . '</div>';
     }
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
@@ -58,5 +73,5 @@ if ($total > Vars::$USER_SET['page_size']) {
         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="' . Vars::$MODULE_URI . '/search">' . lng('search_user') . '</a><br />' .
+echo '<p>' . (Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin">' . lng('admin_panel') . '</a><br />' : '') .
     '<a href="' . Vars::$MODULE_URI . '">' . lng('back') . '</a></p>';

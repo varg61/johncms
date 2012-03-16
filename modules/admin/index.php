@@ -29,8 +29,7 @@ echo '<div class="phdr"><b>' . lng('admin_panel') . '</b></div>';
 */
 echo'<div class="user"><p><h3>' . Functions::getImage('users.png', '', 'class="left"') . '&#160;' . lng('users') . '</h3><ul>';
 if ($regtotal && Vars::$USER_RIGHTS >= 6) echo '<li><span class="red"><b><a href="index.php?act=reg">' . lng('users_reg') . '</a>&#160;(' . $regtotal . ')</b></span></li>';
-echo'<li><a href="' . Vars::$URI . '/users">' . lng('users') . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>' .
-    '<li><a href="' . Vars::$URI . '/users/administration.php">' . lng('administration') . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` >= '1'"), 0) . ')</li>' .
+echo'<li><a href="' . Vars::$HOME_URL . '/users/list">' . lng('users') . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>' .
     //TODO: Написать очистку неактивных юзеров
     //TODO: Написать новую систему бана юзеров
     (Vars::$USER_RIGHTS >= 7 ? '<li><a href="' . Vars::$URI . '/users/flood.php">' . lng('antiflood') . '</a></li>' : '') .

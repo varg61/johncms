@@ -1,13 +1,11 @@
 <div class="phdr">
     <b><?= lng('community') ?></b>
 </div>
-<div class="gmenu">
+<div class="topmenu">
     <form action="<?= Vars::$URI ?>/search" method="post">
         <p>
-        <h3><?= lng('search') ?></h3>
         <input type="text" name="search"/>
         <input type="submit" value="<?= lng('search') ?>" name="submit"/><br/>
-        <small><?= lng('search_nick_help') ?></small>
         </p>
     </form>
 </div>
