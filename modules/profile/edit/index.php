@@ -54,7 +54,11 @@ $tpl->userarg = $arg;
 
 switch (Vars::$ACT) {
     case'delete_avatar':
-        // Удаляем аватар
+        /*
+        -----------------------------------------------------------------
+        Удаление аватара
+        -----------------------------------------------------------------
+        */
         if (isset($_POST['submit'])) {
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif');
             header('Location: ' . Vars::$URI . '?user=' . $user['id']);
@@ -64,7 +68,11 @@ switch (Vars::$ACT) {
         break;
 
     case'delete_photo':
-        // Удаляем фото
+        /*
+        -----------------------------------------------------------------
+        Удаление фото
+        -----------------------------------------------------------------
+        */
         if (isset($_POST['submit'])) {
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '.jpg');
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg');
@@ -77,7 +85,7 @@ switch (Vars::$ACT) {
     case 'upload_animation':
         /*
         -----------------------------------------------------------------
-        Выгружаем анимированный аватар
+        Выгрузка анимированного аватара
         -----------------------------------------------------------------
         */
         if (isset($_POST['submit'])) {
@@ -126,7 +134,7 @@ switch (Vars::$ACT) {
     case 'upload_avatar':
         /*
         -----------------------------------------------------------------
-        Выгружаем аватар
+        Выгрузка аватара
         -----------------------------------------------------------------
         */
         if (isset($_POST['submit'])) {
@@ -160,6 +168,11 @@ switch (Vars::$ACT) {
         break;
 
     case 'upload_photo':
+        /*
+        -----------------------------------------------------------------
+        Выгрузка фотографии
+        -----------------------------------------------------------------
+        */
         echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('upload_photo') . '</div>';
         if (isset($_POST['submit'])) {
             $handle = new upload($_FILES['imagefile']);
@@ -210,22 +223,56 @@ switch (Vars::$ACT) {
         break;
 
     case 'administration':
+        /*
+        -----------------------------------------------------------------
+        Административные функции
+        -----------------------------------------------------------------
+        */
         $tpl->contents = $tpl->includeTpl('profile_edit_adm');
         break;
 
     case 'nick':
+        /*
+        -----------------------------------------------------------------
+        Смена ника
+        -----------------------------------------------------------------
+        */
         $tpl->contents = $tpl->includeTpl('change_nickname');
         break;
 
     case 'status':
+        /*
+        -----------------------------------------------------------------
+        Смена статуса
+        -----------------------------------------------------------------
+        */
+        $tpl->status = $user['status'];
+        if (isset($_POST['submit']) && isset($_POST['status']) && !empty($_POST['status'])) {
+            $tpl->status = trim($_POST['status']);
+            if (mb_strlen($tpl->status) > 2 && mb_strlen($tpl->status) < 51) {
+                mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "'");
+                header('Location: ' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id']);
+                exit;
+            }
+            $tpl->error = lng('error_status_lenght');
+        }
         $tpl->contents = $tpl->includeTpl('change_status');
         break;
 
     case'avatar':
+        /*
+        -----------------------------------------------------------------
+        Сменв аватара
+        -----------------------------------------------------------------
+        */
         $tpl->contents = $tpl->includeTpl('change_avatar');
         break;
 
     default:
-        // Редактируем анкету
+        /*
+        -----------------------------------------------------------------
+        Редактирование анкеты
+        -----------------------------------------------------------------
+        */
         $tpl->contents = $tpl->includeTpl('profile_edit');
 }
