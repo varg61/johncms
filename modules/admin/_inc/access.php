@@ -121,12 +121,6 @@ echo '<p><h3>' . Functions::getImage($color[Vars::$SYSTEM_SET['active'] + 1] . '
 Управление доступом к Регистрации
 -----------------------------------------------------------------
 */
-echo '<div class="gmenu"><h3>' . Functions::getImage($color[Vars::$SYSTEM_SET['mod_reg']] . '.png', '', 'class="left"') . '&#160;' . lng('registration') . '</h3>' .
-     '<div style="font-size: x-small">' .
-     '<input type="radio" value="2" name="reg" ' . (Vars::$SYSTEM_SET['mod_reg'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . lng('access_enabled') . '<br />' .
-     '<input type="radio" value="1" name="reg" ' . (Vars::$SYSTEM_SET['mod_reg'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . lng('access_with_moderation') . '<br />' .
-     '<input type="radio" value="0" name="reg" ' . (!Vars::$SYSTEM_SET['mod_reg'] ? 'checked="checked"' : '') . '/>&#160;' . lng('access_disabled') .
-     '</div></div>' .
-     '<div class="phdr"><small>' . lng('access_help') . '</small></div>' .
+echo '<div class="phdr"><small>' . lng('access_help') . '</small></div>' .
      '<p><input type="submit" name="submit" id="button" value="' . lng('save') . '" /></p>' .
      '<p><a href="index.php">' . lng('admin_panel') . '</a></p></form>';

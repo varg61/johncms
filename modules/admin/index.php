@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 1) {
-    header('Location: http://johncms.com/404.php');
+    header('Location: http://johncms.com/404');
     exit;
 }
 
@@ -29,12 +29,12 @@ echo '<div class="phdr"><b>' . lng('admin_panel') . '</b></div>';
 */
 echo'<div class="user"><p><h3>' . Functions::getImage('users.png', '', 'class="left"') . '&#160;' . lng('users') . '</h3><ul>';
 if ($regtotal && Vars::$USER_RIGHTS >= 6) echo '<li><span class="red"><b><a href="index.php?act=reg">' . lng('users_reg') . '</a>&#160;(' . $regtotal . ')</b></span></li>';
-echo'<li><a href="' . Vars::$HOME_URL . '/users/search">' . lng('users') . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>' .
+echo'<li><a href="' . Vars::$HOME_URL . '/users/search">' . lng('users_list') . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>' .
+    '<li><a href="' . Vars::$MODULE_URI . '/users_settings.php">' . lng('settings') . '</a></li>' .
     //TODO: Написать очистку неактивных юзеров
     //TODO: Написать новую систему бана юзеров
     (Vars::$USER_RIGHTS >= 7 ? '<li><a href="' . Vars::$URI . '/users/flood.php">' . lng('antiflood') . '</a></li>' : '') .
     //TODO: Написать новую систему Кармы
-    '<br />' .
     //'<li><a href="../users/search.php">' . lng('search_nick') . '</a></li>' .
     //'<li><a href="index.php?act=search_ip">' . lng('ip_search') . '</a></li>' .
     '</ul></p></div>';
