@@ -12,74 +12,138 @@
 @ini_set("max_execution_time", "600");
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+//TODO: Распределить права доступа!!!
+
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 1) {
     header('Location: http://johncms.com/404');
     exit;
 }
 
-$regtotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
-$bantotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
-echo '<div class="phdr"><b>' . lng('admin_panel') . '</b></div>';
+$tpl = Template::getInstance();
 
-/*
------------------------------------------------------------------
-Блок пользователей
------------------------------------------------------------------
-*/
-echo'<div class="user"><p><h3>' . Functions::getImage('users.png', '', 'class="left"') . '&#160;' . lng('users') . '</h3><ul>';
-if ($regtotal && Vars::$USER_RIGHTS >= 6) echo '<li><span class="red"><b><a href="index.php?act=reg">' . lng('users_reg') . '</a>&#160;(' . $regtotal . ')</b></span></li>';
-echo'<li><a href="' . Vars::$HOME_URL . '/users/search">' . lng('users_list') . '</a>&#160;(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0) . ')</li>' .
-    '<li><a href="' . Vars::$MODULE_URI . '/users_settings.php">' . lng('settings') . '</a></li>' .
-    //TODO: Написать очистку неактивных юзеров
-    //TODO: Написать новую систему бана юзеров
-    (Vars::$USER_RIGHTS >= 7 ? '<li><a href="' . Vars::$URI . '/users/flood.php">' . lng('antiflood') . '</a></li>' : '') .
-    //TODO: Написать новую систему Кармы
-    //'<li><a href="../users/search.php">' . lng('search_nick') . '</a></li>' .
-    //'<li><a href="index.php?act=search_ip">' . lng('ip_search') . '</a></li>' .
-    '</ul></p></div>';
-if (Vars::$USER_RIGHTS >= 7) {
+switch (Vars::$ACT) {
+    case'whois':
+        /*
+        -----------------------------------------------------------------
+        IP Whois
+        -----------------------------------------------------------------
+        */
+        $ip = isset($_GET['ip']) ? trim($_GET['ip']) : false;
+        if ($ip) {
+            $ipwhois = '';
+            if (($fsk = @fsockopen('whois.arin.net.', 43))) {
+                fputs($fsk, "$ip\r\n");
+                while (!feof($fsk)) $ipwhois .= fgets($fsk, 1024);
+                @fclose($fsk);
+            }
+            $match = array();
+            if (preg_match('#ReferralServer: whois://(.+)#im', $ipwhois, $match)) {
+                if (strpos($match[1], ':') !== false) {
+                    $pos = strrpos($match[1], ':');
+                    $server = substr($match[1], 0, $pos);
+                    $port = (int)substr($match[1], $pos + 1);
+                    unset($pos);
+                } else {
+                    $server = $match[1];
+                    $port = 43;
+                }
+                $buffer = '';
+                if (($fsk = @fsockopen($server, $port))) {
+                    fputs($fsk, "$ip\r\n");
+                    while (!feof($fsk)) $buffer .= fgets($fsk, 1024);
+                    @fclose($fsk);
+                }
+                $ipwhois = (empty($buffer)) ? $ipwhois : $buffer;
+            }
+            $array = array(
+                '%' => '#',
+                'NetRange:' => '<strong class="red">NetRange:</strong>',
+                'NetName:' => '<strong class="red">NetName:</strong>',
+                'inetnum:' => '<strong class="red">inetnum:</strong>',
+                'Ref:' => '<strong class="green">Ref:</strong>',
+                'OrgName:' => '<strong class="green">OrgName:</strong>',
+                'OrgId:' => '<strong class="green">OrgId:</strong>',
+                'Address:' => '<strong class="green">Address:</strong>',
+                'City:' => '<strong class="green">City:</strong>',
+                'StateProv:' => '<strong class="green">StateProv:</strong>',
+                'PostalCode:' => '<strong class="green">PostalCode:</strong>',
+                'netname:' => '<strong class="green">netname:</strong>',
+                'descr:' => '<strong class="red">descr:</strong>',
+                'country:' => '<strong class="red">country:</strong>',
+                'Country:' => '<strong class="red">Country:</strong>',
+                'address:' => '<strong class="green">address:</strong>',
+                'e-mail:' => '<strong class="green">e-mail:</strong>',
+                'person:' => '<strong class="green">person:</strong>',
+                'phone:' => '<strong class="green">phone:</strong>',
+                'route:' => '<strong class="red"><b>route:</b></strong>',
+                'org-name:' => '<strong class="red"><b>org-name:</b></strong>',
+                'abuse-mailbox:' => '<strong class="red"><b>abuse-mailbox:</b></strong>',
+                'fax-no:' => '<strong class="green">fax-no:</strong>'
+            );
+            $ipwhois = trim(TextParser::highlightUrl(htmlspecialchars($ipwhois)));
+            $ipwhois = strtr($ipwhois, $array);
+        } else {
+            $ipwhois = lng('error_wrong_data');
+        }
+        $tpl->ipWhois = nl2br($ipwhois);
+        $tpl->contents = $tpl->includeTpl('whois');
+        break;
 
-    /*
-    -----------------------------------------------------------------
-    Блок модулей
-    -----------------------------------------------------------------
-    */
-    echo'<div class="gmenu"><p>' .
-        '<h3>' . Functions::getImage('modules.png', '', 'class="left"') . '&#160;' . lng('modules') . '</h3><ul>' .
-        //TODO: Написать новый рекламный модуль
-        //TODO: Написать новый модуль новостей
-        //'<li><a href="index.php?act=forum">' . lng('forum') . '</a></li>' .
-        '</ul></p></div>';
+    case'set_users':
+        /*
+        -----------------------------------------------------------------
+        Настройки для пользователей
+        -----------------------------------------------------------------
+        */
+        $defaults = array(
+            'reg_mode'    => 3,
+            'flood_mode'  => 2,
+            'flood_day'   => 10,
+            'flood_night' => 30
+        );
+        $setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
+            ? unserialize(Vars::$SYSTEM_SET['users'])
+            : $defaults;
 
-    /*
-    -----------------------------------------------------------------
-    Блок системных настроек
-    -----------------------------------------------------------------
-    */
-    echo'<div class="menu"><p>' .
-        '<h3>' . Functions::getImage('settings.png', '', 'class="left"') . '&#160;' . lng('system') . '</h3>' .
-        '<ul>' .
-        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=settings"><b>' . lng('site_settings') . '</b></a></li>' : '') .
-        //'<li><a href="index.php?act=smileys">' . lng('refresh_smileys') . '</a></li>' .
-        (Vars::$USER_RIGHTS == 9 ? '<li><a href="' . Vars::$URI . '/system/languages.php">' . lng('language_settings') . '</a></li>' : '') .
-        //'<li><a href="index.php?act=access">' . lng('access_rights') . '</a></li><br />' .
-        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=sitemap">' . lng('site_map') . '</a></li>' : '') .
-        //(Vars::$USER_RIGHTS == 9 ? '<li><a href="index.php?act=counters">' . lng('counters') . '</a></li>' : '') .
-        '</ul>' .
-        '</p></div>';
+        if (isset($_POST['submit'])) {
+            $setUsers['reg_mode'] = isset($_POST['reg_mode']) && $_POST['reg_mode'] > 0 && $_POST['reg_mode'] < 4 ? intval($_POST['reg_mode']) : 3;
+            $setUsers['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
+            $setUsers['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
+            $setUsers['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
+            // Проверяем принятые данные
+            if ($setUsers['flood_day'] < 5) {
+                $setUsers['flood_day'] = 5;
+            } elseif ($setUsers['flood_day'] > 300) {
+                $setUsers['flood_day'] = 300;
+            }
+            if ($setUsers['flood_night'] < 4) {
+                $setUsers['flood_night'] = 4;
+            } elseif ($setUsers['flood_night'] > 300) {
+                $setUsers['flood_night'] = 300;
+            }
+            // Записываем настройки в базу
+            mysql_query("REPLACE INTO `cms_settings` SET
+                `key` = 'users',
+                `val` = '" . mysql_real_escape_string(serialize($setUsers)) . "'
+            ");
+            // Подтверждение сохранения настроек
+            $tpl->saved = 1;
+        } elseif (isset($_POST['reset'])) {
 
-    /*
-    -----------------------------------------------------------------
-    Блок безопасности
-    -----------------------------------------------------------------
-    */
-    echo'<div class="rmenu"><p>' .
-        '<h3>' . Functions::getImage('blocked.png', '', 'class="left"') . '&#160;' . lng('security') . '</h3>' .
-        '<ul>' .
-        //'<li><a href="index.php?act=antispy">' . lng('antispy') . '</a></li>' .
-        (Vars::$USER_RIGHTS == 9 ? '<li><a href="' . Vars::$URI . '/system/ip_access.php">' . lng('ip_accesslist') . '</a></li>' : '') .
-        '</ul>' .
-        '</p></div>';
+        }
+        $tpl->setUsers = $setUsers;
+        $tpl->contents = $tpl->includeTpl('user_settings');
+        break;
+
+    default:
+        /*
+        -----------------------------------------------------------------
+        Главное меню Админ панели
+        -----------------------------------------------------------------
+        */
+        $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
+        $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
+        $tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
+        $tpl->contents = $tpl->includeTpl('index');
 }
-echo '<div class="phdr">&#160;</div>';
