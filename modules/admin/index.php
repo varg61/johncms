@@ -80,6 +80,7 @@ switch (Vars::$ACT) {
                 $setUsers['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
                 $setUsers['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
                 $setUsers['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
+                $setUsers['change_status'] = isset($_POST['change_status']);
                 $setUsers['upload_avatars'] = isset($_POST['upload_avatars']);
                 $setUsers['upload_animation'] = isset($_POST['upload_animation']);
                 // Проверяем принятые данные

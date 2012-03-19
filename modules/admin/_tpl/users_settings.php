@@ -2,13 +2,13 @@
     <a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('admin_panel') ?></b></a> | <?= lng('users') ?>
 </div>
 
-<?php if(isset($this->save)) : ?>
+<?php if (isset($this->save)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_saved') ?>
 </div>
 <?php endif ?>
 
-<?php if(isset($this->reset)) : ?>
+<?php if (isset($this->reset)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_default') ?>
 </div>
@@ -26,7 +26,9 @@
             <?= lng('access_disabled') ?>
         </div>
         <div class="formblock">
-            <label><?= lng('avatars') ?></label><br/>
+            <label><?= lng('permissions') ?></label><br/>
+            <input name="change_status" type="checkbox" value="1" <?= ($this->setUsers['change_status'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('change_status') ?><br/>
             <input name="upload_avatars" type="checkbox" value="1" <?= ($this->setUsers['upload_avatars'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('upload_avatars') ?><br/>
             <input name="upload_animation" type="checkbox" value="1" <?= ($this->setUsers['upload_animation'] ? 'checked="checked"' : '') ?>/>&#160;

@@ -50,7 +50,12 @@ if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPAR
 }
 
 $menu[] = '<a href="' . Vars::$URI . '?act=nick&amp;user=' . $user['id'] . '">' . lng('change_nick') . '</a>';
-$menu[] = '<a href="' . Vars::$URI . '?act=status&amp;user=' . $user['id'] . '">' . lng('change_status') . '</a>';
+if ($tpl->setUsers['change_status']
+    || Vars::$USER_RIGHTS == 9
+    || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
+) {
+    $menu[] = '<a href="' . Vars::$URI . '?act=status&amp;user=' . $user['id'] . '">' . lng('change_status') . '</a>';
+}
 $menu[] = '<a href="' . Vars::$URI . '?act=avatar&amp;user=' . $user['id'] . '">' . lng('change_avatar') . '</a>';
 $arg['sub'] = '<p><b>' . lng('change') . '</b>: ' . Functions::displayMenu($menu) . '</p>';
 $tpl->userarg = $arg;
@@ -263,17 +268,24 @@ switch (Vars::$ACT) {
         Смена статуса
         -----------------------------------------------------------------
         */
-        $tpl->status = $user['status'];
-        if (isset($_POST['submit']) && isset($_POST['status']) && !empty($_POST['status'])) {
-            $tpl->status = trim($_POST['status']);
-            if (mb_strlen($tpl->status) > 2 && mb_strlen($tpl->status) < 51) {
-                mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "'");
-                header('Location: ' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id']);
-                exit;
+        if ($tpl->setUsers['change_status']
+            || Vars::$USER_RIGHTS == 9
+            || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
+        ) {
+            $tpl->status = $user['status'];
+            if (isset($_POST['submit']) && isset($_POST['status']) && !empty($_POST['status'])) {
+                $tpl->status = trim($_POST['status']);
+                if (mb_strlen($tpl->status) > 2 && mb_strlen($tpl->status) < 51) {
+                    mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "'");
+                    header('Location: ' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id']);
+                    exit;
+                }
+                $tpl->error = lng('error_status_lenght');
             }
-            $tpl->error = lng('error_status_lenght');
+            $tpl->contents = $tpl->includeTpl('change_status');
+        } else {
+            echo Functions::displayError(lng('access_forbidden'));
         }
-        $tpl->contents = $tpl->includeTpl('change_status');
         break;
 
     case'avatar':
