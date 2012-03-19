@@ -38,6 +38,9 @@ if ($user['id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] 
 
 $tpl = Template::getInstance();
 $tpl->user = $user;
+$tpl->setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
+    ? unserialize(Vars::$SYSTEM_SET['users'])
+    : Vars::$USER_SET_SYS;
 
 if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
     $tpl->avatar = true;
@@ -88,46 +91,53 @@ switch (Vars::$ACT) {
         Выгрузка анимированного аватара
         -----------------------------------------------------------------
         */
-        if (isset($_POST['submit'])) {
-            $error = array();
-            if ($_FILES['imagefile']['size'] > 0) {
-                // Проверка на допустимый вес файла
-                if ($_FILES['imagefile']['size'] > 10240) {
-                    $error[] = lng('error_avatar_filesize');
-                }
+        if ($tpl->setUsers['upload_animation']
+            || Vars::$USER_RIGHTS == 9
+            || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
+        ) {
+            if (isset($_POST['submit'])) {
+                $error = array();
+                if ($_FILES['imagefile']['size'] > 0) {
+                    // Проверка на допустимый вес файла
+                    if ($_FILES['imagefile']['size'] > 10240) {
+                        $error[] = lng('error_avatar_filesize');
+                    }
 
-                $param = getimagesize($_FILES['imagefile']['tmp_name']);
+                    $param = getimagesize($_FILES['imagefile']['tmp_name']);
 
-                // Проверка на допустимый тип файла
-                if ($param == false || $param['mime'] != 'image/gif') {
-                    $error[] = lng('error_avatar_filetype');
-                }
+                    // Проверка на допустимый тип файла
+                    if ($param == false || $param['mime'] != 'image/gif') {
+                        $error[] = lng('error_avatar_filetype');
+                    }
 
-                // Проверка на допустимый размер изображения
-                if ($param != false && ($param[0] != 32 || $param[1] != 32)) {
-                    $error[] = lng('error_avatar_size');
-                }
-            } else {
-                // Если не выбран файл
-                $error[] = lng('error_file_not_selected');
-            }
-
-            if (empty($error)) {
-                if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
-                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == true
-                ) {
-                    echo'<div class="gmenu">' .
-                        '<p>' . lng('avatar_uploaded') . '<br/>' .
-                        '<a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>' .
-                        '</div>';
+                    // Проверка на допустимый размер изображения
+                    if ($param != false && ($param[0] != 32 || $param[1] != 32)) {
+                        $error[] = lng('error_avatar_size');
+                    }
                 } else {
-                    $error[] = lng('error_avatar_upload');
+                    // Если не выбран файл
+                    $error[] = lng('error_file_not_selected');
+                }
+
+                if (empty($error)) {
+                    if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
+                        ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == true
+                    ) {
+                        echo'<div class="gmenu">' .
+                            '<p>' . lng('avatar_uploaded') . '<br/>' .
+                            '<a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>' .
+                            '</div>';
+                    } else {
+                        $error[] = lng('error_avatar_upload');
+                    }
+                } else {
+                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=upload_animation">' . lng('back') . '</a>');
                 }
             } else {
-                echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=upload_animation">' . lng('back') . '</a>');
+                $tpl->contents = $tpl->includeTpl('upload_animation');
             }
         } else {
-            $tpl->contents = $tpl->includeTpl('upload_animation');
+            echo Functions::displayError(lng('access_forbidden'));
         }
         break;
 
@@ -137,33 +147,40 @@ switch (Vars::$ACT) {
         Выгрузка аватара
         -----------------------------------------------------------------
         */
-        if (isset($_POST['submit'])) {
-            $handle = new upload($_FILES['imagefile']);
-            if ($handle->uploaded) {
-                // Обрабатываем фото
-                $handle->file_new_name_body = $user['id'];
-                $handle->allowed = array(
-                    'image/jpeg',
-                    'image/gif',
-                    'image/png'
-                );
-                $handle->file_max_size = 102400;
-                $handle->file_overwrite = true;
-                $handle->image_resize = true;
-                $handle->image_x = 32;
-                $handle->image_y = 32;
-                $handle->image_convert = 'gif';
-                $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
-                if ($handle->processed) {
-                    echo '<div class="gmenu"><p>' . lng('avatar_uploaded') . '<br />' .
-                        '<a href="' . Vars::$URI . '?user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
-                } else {
-                    echo Functions::displayError($handle->error);
+        if ($tpl->setUsers['upload_avatars']
+            || Vars::$USER_RIGHTS == 9
+            || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
+        ) {
+            if (isset($_POST['submit'])) {
+                $handle = new upload($_FILES['imagefile']);
+                if ($handle->uploaded) {
+                    // Обрабатываем фото
+                    $handle->file_new_name_body = $user['id'];
+                    $handle->allowed = array(
+                        'image/jpeg',
+                        'image/gif',
+                        'image/png'
+                    );
+                    $handle->file_max_size = 102400;
+                    $handle->file_overwrite = true;
+                    $handle->image_resize = true;
+                    $handle->image_x = 32;
+                    $handle->image_y = 32;
+                    $handle->image_convert = 'gif';
+                    $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
+                    if ($handle->processed) {
+                        echo '<div class="gmenu"><p>' . lng('avatar_uploaded') . '<br />' .
+                            '<a href="' . Vars::$URI . '?user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
+                    } else {
+                        echo Functions::displayError($handle->error);
+                    }
+                    $handle->clean();
                 }
-                $handle->clean();
+            } else {
+                $tpl->contents = $tpl->includeTpl('upload_avatar');
             }
         } else {
-            $tpl->contents = $tpl->includeTpl('upload_avatar');
+            echo Functions::displayError(lng('access_forbidden'));
         }
         break;
 
@@ -265,7 +282,7 @@ switch (Vars::$ACT) {
         Сменв аватара
         -----------------------------------------------------------------
         */
-        $tpl->contents = $tpl->includeTpl('change_avatar');
+        $tpl->contents = $tpl->includeTpl('avatar');
         break;
 
     default:
