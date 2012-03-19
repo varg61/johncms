@@ -250,7 +250,7 @@ switch (Vars::$MOD) {
                  '<p>' . ($total
                     ? '<a href="profile.php?act=ban&amp;user=' . $user['user_id'] . '">' . lng('infringements_history') . '</a><br />'
                     : '') .
-                 '<a href="../' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=ban_panel">' . lng('ban_panel') . '</a></p>';
+                 '<a href="../admin?act=ban_panel">' . lng('ban_panel') . '</a></p>';
         } else {
             echo Functions::displayError(lng('error_rights_clear'));
         }
@@ -266,7 +266,7 @@ switch (Vars::$MOD) {
         // Меню
         $menu = array();
         if (Vars::$USER_RIGHTS >= 6)
-            $menu[] = '<a href="../' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=ban_panel">' . lng('ban_panel') . '</a>';
+            $menu[] = '<a href="../admin?act=ban_panel">' . lng('ban_panel') . '</a>';
         if (Vars::$USER_RIGHTS == 9)
             $menu[] = '<a href="profile.php?act=ban&amp;mod=delhist&amp;user=' . $user['user_id'] . '">' . lng('clear_history') . '</a>';
         if (!empty($menu))

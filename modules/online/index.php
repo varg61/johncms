@@ -179,7 +179,7 @@ switch (Vars::$ACT) {
                 $ip = long2ip($out[0]);
                 echo($out[0] == Vars::$IP ? '<div class="gmenu">' : ($i % 2 ? '<div class="list2">' : '<div class="list1">')) .
                     '<div style="float:left">' . Functions::getImage('host.gif') . '</div>' .
-                    '<div style="float:left;margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
+                    '<div style="float:left;margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
                     '<div style="float:left;margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/admin?act=whois&amp;ip=' . $ip . '">[?]</a></div>' .
                     '<div style="margin-left:120px"><span class="red"><b>' . $out[1] . '</b></span></div>' .
                     '</div>';

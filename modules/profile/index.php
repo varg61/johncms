@@ -45,7 +45,7 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIG
     $menu[] = '<a href="' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id'] . '">' . lng('edit') . '</a>';
 }
 if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
-    $menu[] = '<a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=usr_del&amp;id=' . $user['id'] . '">' . lng('delete') . '</a>';
+    $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $user['id'] . '">' . lng('delete') . '</a>';
 }
 if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $user['rights']) {
     $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '">' . lng('ban_do') . '</a>';

@@ -40,7 +40,7 @@ if ($total) {
     $i = 0;
     while (($res = mysql_fetch_assoc($req)) !== false) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        $link = Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/' . Vars::$SYSTEM_SET['admp'] . '/index.php?act=search_ip&amp;mod=history&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a>' : long2ip($res['ip']);
+        $link = Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;mod=history&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a>' : long2ip($res['ip']);
         echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $res['time']) . ')</span></div>';
         ++$i;
     }
