@@ -123,8 +123,8 @@ switch (Vars::$ACT) {
         Главное меню Админ панели
         -----------------------------------------------------------------
         */
-        $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
-        //$tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
+        $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
+        $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = '0'"), 0);
         //$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
         $tpl->contents = $tpl->includeTpl('index');
 }
