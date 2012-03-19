@@ -2,14 +2,20 @@
     <a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('admin_panel') ?></b></a> | <?= lng('users') ?>
 </div>
 
-<?php if(isset($this->saved)) : ?>
+<?php if(isset($this->save)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_saved') ?>
 </div>
 <?php endif ?>
 
+<?php if(isset($this->reset)) : ?>
+<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
+    <?= lng('settings_default') ?>
+</div>
+<?php endif ?>
+
 <div class="menu">
-    <form action="<?= Vars::$URI ?>?act=set_users" method="post">
+    <form action="<?= Vars::$URI ?>?act=users_settings" method="post">
         <div class="formblock">
             <label><?= lng('registration') ?></label><br/>
             <input type="radio" value="3" name="reg_mode" <?= ($this->setUsers['reg_mode'] == 3 ? 'checked="checked"' : '') ?>/>&#160;
@@ -21,9 +27,9 @@
         </div>
         <div class="formblock">
             <label><?= lng('avatars') ?></label><br/>
-            <input name="libcomm" type="checkbox" value="1" <?= (Vars::$SYSTEM_SET['mod_lib_comm'] ? 'checked="checked"' : '') ?>/>&#160;
+            <input name="upload_avatars" type="checkbox" value="1" <?= ($this->setUsers['upload_avatars'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('upload_avatars') ?><br/>
-            <input name="libcomm" type="checkbox" value="1" <?= (Vars::$SYSTEM_SET['mod_lib_comm'] ? 'checked="checked"' : '') ?>/>&#160;
+            <input name="upload_animation" type="checkbox" value="1" <?= ($this->setUsers['upload_animation'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('upload_animation') ?>
         </div>
         <div class="formblock">
@@ -45,6 +51,6 @@
     </form>
 </div>
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?reset"><?= lng('reset_settings') ?></a>
+    <a href="<?= Vars::$URI ?>?act=users_settings&amp;reset"><?= lng('reset_settings') ?></a>
 </div>
 <p><a href="<?= Vars::$MODULE_URI ?>"><?= lng('admin_panel') ?></a></p>

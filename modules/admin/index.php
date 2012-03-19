@@ -56,33 +56,7 @@ switch (Vars::$ACT) {
                 }
                 $ipwhois = (empty($buffer)) ? $ipwhois : $buffer;
             }
-            $array = array(
-                '%' => '#',
-                'NetRange:' => '<strong class="red">NetRange:</strong>',
-                'NetName:' => '<strong class="red">NetName:</strong>',
-                'inetnum:' => '<strong class="red">inetnum:</strong>',
-                'Ref:' => '<strong class="green">Ref:</strong>',
-                'OrgName:' => '<strong class="green">OrgName:</strong>',
-                'OrgId:' => '<strong class="green">OrgId:</strong>',
-                'Address:' => '<strong class="green">Address:</strong>',
-                'City:' => '<strong class="green">City:</strong>',
-                'StateProv:' => '<strong class="green">StateProv:</strong>',
-                'PostalCode:' => '<strong class="green">PostalCode:</strong>',
-                'netname:' => '<strong class="green">netname:</strong>',
-                'descr:' => '<strong class="red">descr:</strong>',
-                'country:' => '<strong class="red">country:</strong>',
-                'Country:' => '<strong class="red">Country:</strong>',
-                'address:' => '<strong class="green">address:</strong>',
-                'e-mail:' => '<strong class="green">e-mail:</strong>',
-                'person:' => '<strong class="green">person:</strong>',
-                'phone:' => '<strong class="green">phone:</strong>',
-                'route:' => '<strong class="red"><b>route:</b></strong>',
-                'org-name:' => '<strong class="red"><b>org-name:</b></strong>',
-                'abuse-mailbox:' => '<strong class="red"><b>abuse-mailbox:</b></strong>',
-                'fax-no:' => '<strong class="green">fax-no:</strong>'
-            );
             $ipwhois = trim(TextParser::highlightUrl(htmlspecialchars($ipwhois)));
-            $ipwhois = strtr($ipwhois, $array);
         } else {
             $ipwhois = lng('error_wrong_data');
         }
@@ -90,50 +64,55 @@ switch (Vars::$ACT) {
         $tpl->contents = $tpl->includeTpl('whois');
         break;
 
-    case'set_users':
+    case'users_settings':
         /*
         -----------------------------------------------------------------
         Настройки для пользователей
         -----------------------------------------------------------------
         */
-        $defaults = array(
-            'reg_mode'    => 3,
-            'flood_mode'  => 2,
-            'flood_day'   => 10,
-            'flood_night' => 30
-        );
-        $setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
-            ? unserialize(Vars::$SYSTEM_SET['users'])
-            : $defaults;
+        if (Vars::$USER_RIGHTS >= 7) {
+            $setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
+                ? unserialize(Vars::$SYSTEM_SET['users'])
+                : Vars::$USER_SET_SYS;
 
-        if (isset($_POST['submit'])) {
-            $setUsers['reg_mode'] = isset($_POST['reg_mode']) && $_POST['reg_mode'] > 0 && $_POST['reg_mode'] < 4 ? intval($_POST['reg_mode']) : 3;
-            $setUsers['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
-            $setUsers['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
-            $setUsers['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
-            // Проверяем принятые данные
-            if ($setUsers['flood_day'] < 5) {
-                $setUsers['flood_day'] = 5;
-            } elseif ($setUsers['flood_day'] > 300) {
-                $setUsers['flood_day'] = 300;
+            if (isset($_POST['submit'])) {
+                $setUsers['reg_mode'] = isset($_POST['reg_mode']) && $_POST['reg_mode'] > 0 && $_POST['reg_mode'] < 4 ? intval($_POST['reg_mode']) : 3;
+                $setUsers['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
+                $setUsers['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
+                $setUsers['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
+                $setUsers['upload_avatars'] = isset($_POST['upload_avatars']);
+                $setUsers['upload_animation'] = isset($_POST['upload_animation']);
+                // Проверяем принятые данные
+                if ($setUsers['flood_day'] < 5) {
+                    $setUsers['flood_day'] = 5;
+                } elseif ($setUsers['flood_day'] > 300) {
+                    $setUsers['flood_day'] = 300;
+                }
+                if ($setUsers['flood_night'] < 4) {
+                    $setUsers['flood_night'] = 4;
+                } elseif ($setUsers['flood_night'] > 300) {
+                    $setUsers['flood_night'] = 300;
+                }
+                // Записываем настройки в базу
+                mysql_query("REPLACE INTO `cms_settings` SET
+                    `key` = 'users',
+                    `val` = '" . mysql_real_escape_string(serialize($setUsers)) . "'
+                ");
+                // Подтверждение сохранения настроек
+                $tpl->save = 1;
+            } elseif (isset($_POST['reset'])) {
+                @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'users'");
+                $setUsers = Vars::$USER_SET_SYS;
+                $tpl->reset = 1;
+            } elseif (isset($_GET['reset'])) {
+                $tpl->contents = $tpl->includeTpl('users_settings_reset');
+                exit;
             }
-            if ($setUsers['flood_night'] < 4) {
-                $setUsers['flood_night'] = 4;
-            } elseif ($setUsers['flood_night'] > 300) {
-                $setUsers['flood_night'] = 300;
-            }
-            // Записываем настройки в базу
-            mysql_query("REPLACE INTO `cms_settings` SET
-                `key` = 'users',
-                `val` = '" . mysql_real_escape_string(serialize($setUsers)) . "'
-            ");
-            // Подтверждение сохранения настроек
-            $tpl->saved = 1;
-        } elseif (isset($_POST['reset'])) {
-
+            $tpl->setUsers = $setUsers;
+            $tpl->contents = $tpl->includeTpl('users_settings');
+        } else {
+            echo Functions::displayError(lng('access_forbidden'));
         }
-        $tpl->setUsers = $setUsers;
-        $tpl->contents = $tpl->includeTpl('user_settings');
         break;
 
     default:
@@ -143,7 +122,7 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`"), 0);
-        $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
-        $tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
+        //$tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level`='0'"), 0);
+        //$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
         $tpl->contents = $tpl->includeTpl('index');
 }

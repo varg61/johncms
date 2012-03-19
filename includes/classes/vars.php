@@ -16,51 +16,59 @@ abstract class Vars
     Системные переменные
     -----------------------------------------------------------------
     */
-    public static $SYSTEM_SET; // Системные настройки
-    public static $CORE_ERRORS = array(); // Ошибки ядра
+    public static $SYSTEM_SET;                                                 // Системные настройки
+    public static $CORE_ERRORS = array();                                      // Ошибки ядра
 
-    public static $LNG_ISO = 'en'; // Двухбуквенный ISO код языка
-    public static $LNG_LIST = array(); // Список имеющихся языков
+    public static $LNG_ISO = 'en';                                             // Двухбуквенный ISO код языка
+    public static $LNG_LIST = array();                                         // Список имеющихся языков
 
-    public static $HOME_URL; // URL сайта
-    public static $IP; // IP адрес
-    public static $IP_VIA_PROXY = 0; // IP адрес за прокси-сервером
-    public static $IP_REQUESTS_LIST = array(); // Счетчик обращений с IP адреса
-    public static $USER_AGENT; // User Agent
-    public static $IS_MOBILE = false; // Мобильный браузер
-    public static $PLACE = ''; // Местоположение на сайте
-    public static $MODULE_INCLUDE = ''; // Подключаемый файл Роутера
-    public static $MODULE_URI = ''; // URI модуля
-    public static $URI = ''; // URI активного скрипта
-    public static $MODULE = 'mainmenu'; // Активный модуль
+    public static $HOME_URL;                                                   // URL сайта
+    public static $IP;                                                         // IP адрес
+    public static $IP_VIA_PROXY = 0;                                           // IP адрес за прокси-сервером
+    public static $IP_REQUESTS_LIST = array();                                 // Счетчик обращений с IP адреса
+    public static $USER_AGENT;                                                 // User Agent
+    public static $IS_MOBILE = false;                                          // Мобильный браузер
+    public static $PLACE = '';                                                 // Местоположение на сайте
+    public static $MODULE_INCLUDE = '';                                        // Подключаемый файл Роутера
+    public static $MODULE_URI = '';                                            // URI модуля
+    public static $URI = '';                                                   // URI активного скрипта
+    public static $MODULE = 'mainmenu';                                        // Активный модуль
 
     /*
     -----------------------------------------------------------------
     Пользовательские переменные
     -----------------------------------------------------------------
     */
-    public static $USER_ID = 0; // Идентификатор пользователя
-    public static $USER_NICKNAME = false; // Ник пользователя
-    public static $USER_RIGHTS = 0; // Права доступа
-    public static $USER_DATA = array(); // Все данные пользователя
-    public static $USER_BAN = array(); // Бан
+    public static $USER_ID = 0;                                                // Идентификатор пользователя
+    public static $USER_NICKNAME = false;                                      // Ник пользователя
+    public static $USER_RIGHTS = 0;                                            // Права доступа
+    public static $USER_DATA = array();                                        // Все данные пользователя
+    public static $USER_BAN = array();                                         // Бан
 
     /*
     -----------------------------------------------------------------
     Пользователские настройки
     -----------------------------------------------------------------
     */
-    public static $USER_SET = array( // Пользователские настройки по-умолчанию
-        'avatar'     => 1, // Показывать аватары
-        'digest'     => 0, // Показывать Дайджест
-        'direct_url' => 0, // Внешние ссылки
-        'field_h'    => 3, // Высота текстового поля ввода
-        'page_size'  => 10, // Число сообщений на страницу в списках
-        'quick_go'   => 1, // Быстрый переход
-        'timeshift'  => 0, // Временной сдвиг
-        'skin'       => 'default', // Тема оформления
-        'smileys'    => 1, // Включить(1) выключить(0) смайлы
-        'translit'   => 0 // Транслит
+    public static $USER_SET = array(                                           // Пользователские настройки по-умолчанию
+        'avatar'     => 1,                                                     // Показывать аватары
+        'digest'     => 0,                                                     // Показывать Дайджест
+        'direct_url' => 0,                                                     // Внешние ссылки
+        'field_h'    => 3,                                                     // Высота текстового поля ввода
+        'page_size'  => 10,                                                    // Число сообщений на страницу в списках
+        'quick_go'   => 1,                                                     // Быстрый переход
+        'timeshift'  => 0,                                                     // Временной сдвиг
+        'skin'       => 'default',                                             // Тема оформления
+        'smileys'    => 1,                                                     // Включить(1) выключить(0) смайлы
+        'translit'   => 0,                                                     // Транслит
+    );
+    public static $USER_SET_SYS = array(                                       // Системные настройки для пользователей по-умолчанию
+        'reg_mode'         => 3,                                               // Режим работы регистрации на сайте
+        'flood_mode'       => 2,                                               // Режим работы системы АнтиФлуда
+        'flood_day'        => 10,                                              // Время АнтиФлуда днем (сек.)
+        'flood_night'      => 30,                                              // Время АнтиФлуда ночью (сек.)
+        'upload_animation' => 1,                                               // Разрешить выгрузку анимированных аватаров
+        'upload_avatars'   => 1,                                               // Разрешить выгрузку аватаров
     );
 
     /*
