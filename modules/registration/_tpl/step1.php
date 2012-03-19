@@ -63,7 +63,7 @@
     <p><b class="green"><?= mb_strtoupper(lng('login')) ?></b>: <?= lng('login_help') ?></p>
     <p><b class="green"><?= mb_strtoupper(lng('password')) ?></b>: <?= lng('password_help') ?></p>
 </div>
-<?php if (Vars::$SYSTEM_SET['mod_reg'] == 1) : ?>
+<?php if ($this->setUsers['reg_mode'] == 2) : ?>
 <div class="topmenu">
     <small class="red"><p><?= lng('moderation_warning') ?></p></small>
 </div>

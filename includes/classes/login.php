@@ -134,7 +134,7 @@ class Login extends Vars
     Регистрация новых пользователей
     -----------------------------------------------------------------
     */
-    public function userRegistration($var)
+    public function userRegistration($var, $reg_mode = 3)
     {
         // Дополнительные шаги регистрации
         if (isset($_SESSION['reg'])) {
@@ -143,7 +143,7 @@ class Login extends Vars
         }
 
         // Если регистрация закрыта, или юзер уже авторизован
-        if (!Vars::$SYSTEM_SET['mod_reg'] || Vars::$USER_ID) return false;
+        if ($reg_mode < 2 || Vars::$USER_ID) return false;
 
         if (isset($_POST['check_login']) && Validate::nickname($var['login'], true) === true) {
             // Проверка доступности Ника
@@ -185,7 +185,7 @@ class Login extends Vars
                     `salt` = '" . mysql_real_escape_string($salt) . "',
                     `email` = '" . mysql_real_escape_string($var['email']) . "',
                     `rights` = 0,
-                    `level` = " . (Vars::$SYSTEM_SET['mod_reg'] > 1 ? 1 : 0) . ",
+                    `level` = " . ($reg_mode == 3 ? 1 : 0) . ",
                     `sex` = '" . ($var['sex'] == 1 ? 'm' : 'w') . "',
                     `join_date` = " . time() . ",
                     `last_visit` = " . time() . ",

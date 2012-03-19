@@ -30,8 +30,11 @@ $reg_data['sex'] = isset($_POST['sex']) ? intval($_POST['sex']) : 0;
 $tpl = Template::getInstance();
 $tpl->login = new Login;
 $tpl->reg_data = $reg_data;
+$tpl->setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
+    ? unserialize(Vars::$SYSTEM_SET['users'])
+    : Vars::$USER_SET_SYS;
 
-switch ($tpl->login->userRegistration($reg_data)) {
+switch ($tpl->login->userRegistration($reg_data, $tpl->setUsers['reg_mode'])) {
     case 'step2':
         $tpl->user = Vars::$USER_DATA;
         $tpl->contents = $tpl->includeTpl('step2');
