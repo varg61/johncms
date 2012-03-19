@@ -13,12 +13,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-/*
------------------------------------------------------------------
-Закрываем от неавторизованных юзеров
------------------------------------------------------------------
-*/
-if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
+// Закрываем от неавторизованных юзеров
+if ((!Vars::$USER_ID || Vars::$USER_DATA['level'] < 1) && !Vars::$USER_SYS['view_online']) {
     echo Functions::displayError(lng('access_guest_forbidden'));
     exit;
 }
@@ -28,7 +24,9 @@ $sql_total = '';
 $sql_list = '';
 
 $menu[] = !Vars::$ACT ? '<b>' . lng('users') . '</b>' : '<a href="' . Vars::$URI . '">' . lng('users') . '</a>';
-$menu[] = Vars::$ACT == 'history' ? '<b>' . lng('history') . '</b>' : '<a href="' . Vars::$URI . '?act=history">' . lng('history') . '</a> ';
+if ((Vars::$USER_ID && Vars::$USER_DATA['level']) || Vars::$USER_SYS['viev_history']) {
+    $menu[] = Vars::$ACT == 'history' ? '<b>' . lng('history') . '</b>' : '<a href="' . Vars::$URI . '?act=history">' . lng('history') . '</a> ';
+}
 if (Vars::$USER_RIGHTS) {
     $menu[] = Vars::$ACT == 'guest' ? '<b>' . lng('guests') . '</b>' : '<a href="' . Vars::$URI . '?act=guest">' . lng('guests') . '</a>';
     $menu[] = Vars::$ACT == 'ip' ? '<b>' . lng('ip_activity') . '</b>' : '<a href="' . Vars::$URI . '?act=ip">' . lng('ip_activity') . '</a>';
@@ -44,7 +42,7 @@ switch (Vars::$ACT) {
         Скачиваем список пользователей
         -----------------------------------------------------------------
         */
-        if (!Vars::$USER_ID) {
+        if (!Vars::$USER_ID || !Vars::$USER_DATA['level']) {
             exit;
         }
         $tpl = Template::getInstance();
@@ -76,7 +74,7 @@ switch (Vars::$ACT) {
         Скачиваем историю Онлайн пользователей
         -----------------------------------------------------------------
         */
-        if (!Vars::$USER_ID) {
+        if (!Vars::$USER_ID || !Vars::$USER_DATA['level']) {
             exit;
         }
         $tpl = Template::getInstance();
@@ -105,7 +103,7 @@ switch (Vars::$ACT) {
         Скачиваем список гостей
         -----------------------------------------------------------------
         */
-        if (!Vars::$USER_RIGHTS) {
+        if (Vars::$USER_RIGHTS < 6) {
             exit;
         }
         $tpl = Template::getInstance();
@@ -179,9 +177,9 @@ switch (Vars::$ACT) {
                 $ip = long2ip($out[0]);
                 echo($out[0] == Vars::$IP ? '<div class="gmenu">' : ($i % 2 ? '<div class="list2">' : '<div class="list1">')) .
                     '<div style="float:left">' . Functions::getImage('host.gif') . '</div>' .
-                    '<div style="float:left;margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
-                    '<div style="float:left;margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/admin?act=whois&amp;ip=' . $ip . '">[?]</a></div>' .
-                    '<div style="margin-left:120px"><span class="red"><b>' . $out[1] . '</b></span></div>' .
+                    '<div style="float:left; margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
+                    '<div style="float:left; margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/admin?act=whois&amp;ip=' . $ip . '">[?]</a></div>' .
+                    '<div style="margin-left:150px"><span class="red"><b>' . $out[1] . '</b></span></div>' .
                     '</div>';
             }
             echo '</table>';
@@ -205,6 +203,9 @@ switch (Vars::$ACT) {
         Заппросы для списка гостей Онлайн
         -----------------------------------------------------------------
         */
+        if (Vars::$USER_RIGHTS < 6) {
+            exit;
+        }
         $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 AND `session_timestamp` > " . (time() - 300);
         $sql_list = "SELECT `user_id` AS `id`, `session_timestamp` AS `last_visit`, `ip`, `ip_via_proxy`, `user_agent`, `place`, `views`, `movings`, `start_time`
             FROM `cms_sessions`
@@ -219,6 +220,10 @@ switch (Vars::$ACT) {
         Заппросы для истории посетилелей за последние 2 суток
         -----------------------------------------------------------------
         */
+        if ((!Vars::$USER_ID || !Vars::$USER_DATA['level']) && !Vars::$USER_SYS['viev_history']) {
+            echo Functions::displayError(lng('access_guest_forbidden'));
+            exit;
+        }
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `last_visit` > " . (time() - 172800 . " AND `last_visit` < " . (time() - 310));
         $sql_list = "SELECT * FROM `users` WHERE `last_visit` > " . (time() - 172800) . " AND `last_visit` < " . (time() - 310) . " ORDER BY `last_visit` DESC" . Vars::db_pagination();
         $link = 'dh';

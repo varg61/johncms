@@ -56,7 +56,7 @@ if (Vars::$SYSTEM_SET['mod_gal'] || Vars::$USER_RIGHTS >= 7) {
 }
 
 // Ссылки на пользователей и фотоальбомы
-if (Vars::$USER_ID || Vars::$SYSTEM_SET['active']) {
+if (Vars::$USER_ID || Vars::$USER_SYS['view_userlist']) {
     echo'<div class="phdr"><b>' . lng('community') . '</b></div>' .
         '<div class="menu"><a href="users">' . lng('users') . '</a> (' .
         $this->count->users . ($this->count->users_new ? '&#160;/&#160;<span class="red">+' . $this->count->users_new . '</span>' : '') .

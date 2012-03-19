@@ -71,45 +71,46 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 7) {
-            $setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
-                ? unserialize(Vars::$SYSTEM_SET['users'])
-                : Vars::$USER_SET_SYS;
-
             if (isset($_POST['submit'])) {
-                $setUsers['reg_mode'] = isset($_POST['reg_mode']) && $_POST['reg_mode'] > 0 && $_POST['reg_mode'] < 4 ? intval($_POST['reg_mode']) : 3;
-                $setUsers['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
-                $setUsers['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
-                $setUsers['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
-                $setUsers['change_status'] = isset($_POST['change_status']);
-                $setUsers['upload_avatars'] = isset($_POST['upload_avatars']);
-                $setUsers['upload_animation'] = isset($_POST['upload_animation']);
+                Vars::$USER_SYS['reg_mode'] = isset($_POST['reg_mode']) && $_POST['reg_mode'] > 0 && $_POST['reg_mode'] < 4 ? intval($_POST['reg_mode']) : 3;
+                Vars::$USER_SYS['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
+                Vars::$USER_SYS['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
+                Vars::$USER_SYS['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
+                Vars::$USER_SYS['change_status'] = isset($_POST['change_status']);
+                Vars::$USER_SYS['upload_avatars'] = isset($_POST['upload_avatars']);
+                Vars::$USER_SYS['upload_animation'] = isset($_POST['upload_animation']);
+                Vars::$USER_SYS['view_online'] = isset($_POST['view_online']);
+                Vars::$USER_SYS['viev_history'] = isset($_POST['viev_history']);
+                Vars::$USER_SYS['view_userlist'] = isset($_POST['view_userlist']);
+                Vars::$USER_SYS['view_profiles'] = isset($_POST['view_profiles']);
                 // Проверяем принятые данные
-                if ($setUsers['flood_day'] < 5) {
-                    $setUsers['flood_day'] = 5;
-                } elseif ($setUsers['flood_day'] > 300) {
-                    $setUsers['flood_day'] = 300;
+                if (Vars::$USER_SYS['flood_day'] < 5) {
+                    Vars::$USER_SYS['flood_day'] = 5;
+                } elseif (Vars::$USER_SYS['flood_day'] > 300) {
+                    Vars::$USER_SYS['flood_day'] = 300;
                 }
-                if ($setUsers['flood_night'] < 4) {
-                    $setUsers['flood_night'] = 4;
-                } elseif ($setUsers['flood_night'] > 300) {
-                    $setUsers['flood_night'] = 300;
+                if (Vars::$USER_SYS['flood_night'] < 4) {
+                    Vars::$USER_SYS['flood_night'] = 4;
+                } elseif (Vars::$USER_SYS['flood_night'] > 300) {
+                    Vars::$USER_SYS['flood_night'] = 300;
                 }
                 // Записываем настройки в базу
                 mysql_query("REPLACE INTO `cms_settings` SET
                     `key` = 'users',
-                    `val` = '" . mysql_real_escape_string(serialize($setUsers)) . "'
+                    `val` = '" . mysql_real_escape_string(serialize(Vars::$USER_SYS)) . "'
                 ");
                 // Подтверждение сохранения настроек
                 $tpl->save = 1;
             } elseif (isset($_POST['reset'])) {
                 @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'users'");
-                $setUsers = Vars::$USER_SET_SYS;
-                $tpl->reset = 1;
+                header('Location: ' . Vars::$HOME_URL . '/admin?act=users_settings&default');
             } elseif (isset($_GET['reset'])) {
                 $tpl->contents = $tpl->includeTpl('users_settings_reset');
                 exit;
             }
-            $tpl->setUsers = $setUsers;
+            if(isset($_GET['default'])){
+                $tpl->reset = 1;
+            }
             $tpl->contents = $tpl->includeTpl('users_settings');
         } else {
             echo Functions::displayError(lng('access_forbidden'));

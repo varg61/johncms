@@ -311,7 +311,6 @@ CREATE TABLE IF NOT EXISTS `cms_settings` (
 
 -- Dumping data for table dev_johncms.cms_settings: 26 rows
 INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
-        ('homeurl', 'http://localhost/johncms'),
         ('email', 'oleg@batumi.biz'),
         ('timeshift', '0'),
         ('copyright', 'Powered by JohnCMS'),
@@ -330,7 +329,6 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
         ('meta_desc', 'Powered by JohnCMS http://johncms.com'),
         ('skindef', 'default'),
         ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smileys";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}'),
-        ('active', '1'),
         ('lng_list', 'a:2:{s:2:"en";s:7:"English";s:2:"ru";s:14:"Русский";}');
 
 -- Dumping structure for table dev_johncms.cms_user_guestbook

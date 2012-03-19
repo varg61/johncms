@@ -119,14 +119,20 @@ class System extends Vars
     Получаем системные настройки
     -----------------------------------------------------------------
     */
-    private
-    function _sysSettings()
+    private function _sysSettings()
     {
         $set = array();
         $req = mysql_query("SELECT * FROM `cms_settings`");
         while (($res = mysql_fetch_row($req)) !== false) $set[$res[0]] = $res[1];
-        if (isset($set['lng']) && !empty($set['lng'])) parent::$LNG_ISO = $set['lng'];
-        if (isset($set['lng_list'])) parent::$LNG_LIST = unserialize($set['lng_list']);
+        if (isset($set['lng']) && !empty($set['lng'])) {
+            parent::$LNG_ISO = $set['lng'];
+        }
+        if (isset($set['lng_list'])) {
+            parent::$LNG_LIST = unserialize($set['lng_list']);
+        }
+        if (isset($set['users'])) {
+            parent::$USER_SYS = unserialize($set['users']);
+        }
         parent::$SYSTEM_SET = $set;
         parent::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . '/' . trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
     }
@@ -136,8 +142,7 @@ class System extends Vars
     Определяем язык
     -----------------------------------------------------------------
     */
-    private
-    function _lngDetect()
+    private function _lngDetect()
     {
         $setlng = isset($_POST['setlng']) ? substr(trim($_POST['setlng']), 0, 2) : false;
         if ($setlng && array_key_exists($setlng, parent::$LNG_LIST)) {
@@ -164,8 +169,7 @@ class System extends Vars
     Авторизация пользователя и получение его данных из базы
     -----------------------------------------------------------------
     */
-    private
-    function _authorizeUser()
+    private function _authorizeUser()
     {
         $id = false;
         $token = false;
@@ -264,8 +268,7 @@ class System extends Vars
     Проверка пользователя на Бан
     -----------------------------------------------------------------
     */
-    private
-    function _checkUserBan()
+    private function _checkUserBan()
     {
         //TODO: Переделать!
         $req = mysql_query("SELECT * FROM `cms_ban_users` WHERE `user_id` = '" . parent::$USER_ID . "' AND `ban_time` > '" . time() . "'");
@@ -280,8 +283,7 @@ class System extends Vars
     Фиксация истории адресов IP
     -----------------------------------------------------------------
     */
-    private
-    function _userIpHistory()
+    private function _userIpHistory()
     {
         $req = mysql_query("SELECT * FROM `cms_user_ip` WHERE `user_id` = " . parent::$USER_ID . " AND `ip` = '" . parent::$IP . "' AND `ip_via_proxy` = '" . parent::$IP_VIA_PROXY . "' LIMIT 1");
         if (mysql_num_rows($req)) {
@@ -308,8 +310,7 @@ class System extends Vars
     Автоочистка системы
     -----------------------------------------------------------------
     */
-    private
-    function _autoClean()
+    private function _autoClean()
     {
         if (parent::$SYSTEM_SET['clean_time'] < time() - 86400) {
             mysql_query("DELETE FROM `cms_sessions` WHERE `lastdate` < '" . (time() - 86400) . "'");
@@ -324,8 +325,7 @@ class System extends Vars
     Определение мобильного браузера
     -----------------------------------------------------------------
     */
-    private
-    function _mobileDetect()
+    private function _mobileDetect()
     {
         if (isset($_SESSION['is_mobile'])) {
             return $_SESSION['is_mobile'] == 1 ? true : false;

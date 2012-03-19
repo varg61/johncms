@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Закрываем от неавторизованных юзеров
 -----------------------------------------------------------------
 */
-if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
+if (!Vars::$USER_ID && !Vars::$USER_SYS['view_userlist']) {
     echo Functions::displayError(lng('access_guest_forbidden'));
     exit;
 }
