@@ -9,158 +9,184 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
-defined('_IN_JOHNCMS_MAIL') or die('Error: restricted access');
-if (!Vars::$USER_ID) {
-    Header('Location: ' . Vars::$HOME_URL . '/404.php');
+defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
+//Закрываем прямой доступ к файлу
+defined( '_IN_JOHNCMS_MAIL' ) or die( 'Error: restricted access' );
+//Закрываем доступ гостям
+if ( !Vars::$USER_ID )
+{
+    Header( 'Location: ' . Vars::$HOME_URL . '/404' );
     exit;
 }
-if (Vars::$ID) {
-    if (Vars::$ID == Vars::$USER_ID) {
-        $tpl->contents = Functions::displayError(lng('error_request') . '!', '<a href="' . Vars::$MODULE_URI . '">' . lng('contacts') . '</a>');
+//Заголовок
+$tpl->title = lng( 'mail' ) . ' | ' . lng( 'elected' );
+if ( Vars::$ID )
+{
+    if ( Vars::$ID == Vars::$USER_ID )
+    {
+        $tpl->contents = Functions::displayError( lng( 'error_request' ), '<a href="' . Vars::
+            $MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
     } else
     {
-        $q = mysql_query("SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
-        if (mysql_num_rows($q)) {
-            $total = mysql_result(mysql_query("SELECT COUNT(*)
-			FROM `cms_messages`
+        $q = mysql_query( "SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1" );
+        if ( mysql_num_rows( $q ) )
+        {
+            $total = mysql_result( mysql_query( "SELECT COUNT(*)
+			FROM `cms_mail_messages`
 			WHERE ((`user_id`='" . Vars::$USER_ID . "'
 			AND `contact_id`='" . Vars::$ID . "')
 			OR (`contact_id`='" . Vars::$USER_ID . "'
 			AND `user_id`='" . Vars::$ID . "'))
 			AND (`elected_in`='" . Vars::$USER_ID . "'
-			OR `elected_out`='" . Vars::$USER_ID . "') AND `delete`!='" . Vars::$USER_ID . "'"), 0);
-            if ($total) {
-                $query = mysql_query("SELECT `cms_messages`.*, `cms_messages`.`id` as `mid`, `users`.*
-				FROM `cms_messages`
+			OR `elected_out`='" . Vars::$USER_ID . "') AND `delete`!='" . Vars::$USER_ID . "'" ), 0 );
+            if ( $total )
+            {
+                //Формируем список избранных сообщений определенного контакта
+				$query = mysql_query( "SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.*
+				FROM `cms_mail_messages`
 				LEFT JOIN `users` 
-				ON `cms_messages`.`user_id`=`users`.`id` 
-				WHERE ((`cms_messages`.`user_id`='" . Vars::$USER_ID . "'
-				AND `cms_messages`.`contact_id`='" . Vars::$ID . "')
-				OR (`cms_messages`.`contact_id`='" . Vars::$USER_ID . "'
-				AND `cms_messages`.`user_id`='" . Vars::$ID . "'))
-				AND (`cms_messages`.`elected_in`='" . Vars::$USER_ID . "'
-				OR `cms_messages`.`elected_out`='" . Vars::$USER_ID . "')
+				ON `cms_mail_messages`.`user_id`=`users`.`id` 
+				WHERE ((`cms_mail_messages`.`user_id`='" . Vars::$USER_ID . "'
+				AND `cms_mail_messages`.`contact_id`='" . Vars::$ID . "')
+				OR (`cms_mail_messages`.`contact_id`='" . Vars::$USER_ID . "'
+				AND `cms_mail_messages`.`user_id`='" . Vars::$ID . "'))
+				AND (`cms_mail_messages`.`elected_in`='" . Vars::$USER_ID . "'
+				OR `cms_mail_messages`.`elected_out`='" . Vars::$USER_ID . "')
 				AND `delete`!='" . Vars::$USER_ID . "'
-				ORDER BY `cms_messages`.`time` DESC" . Vars::db_pagination());
+				ORDER BY `cms_mail_messages`.`time` DESC" . Vars::db_pagination() );
                 $array = array();
 
                 $i = 1;
-                while ($row = mysql_fetch_assoc($query))
+                while ( $row = mysql_fetch_assoc( $query ) )
                 {
-                    $text = Validate::filterString($row['text'], 1, 1);
-                    if (Vars::$USER_SET['smileys'])
-                        $text = Functions::smileys($text, $row['rights'] >= 1 ? 1 : 0);
+                    $text = Validate::filterString( $row['text'], 1, 1 );
+                    if ( Vars::$USER_SET['smileys'] )
+                        $text = Functions::smileys( $text, $row['rights'] >= 1 ? 1 : 0 );
                     $array[] = array(
-                        'id'        => $row['id'],
-                        'mid'       => $row['mid'],
-                        'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') .
-                            '.png', '', 'align="middle"'),
-                        'list'      => (($i % 2) ? 'list1' : 'list2'),
-                        'nickname'  => $row['nickname'],
-                        'file'      => $row['filename'] ? '<a href="' . Vars::$MODULE_URI . '?act=load&amp;id=' .
-                            $row['mid'] . '">' . $row['filename'] . '</a> (' . Mail::formatsize($row['filesize']) .
+                        'id' => $row['id'],
+                        'mid' => $row['mid'],
+                        'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' : 'w' ) .
+                            '.png', '', 'align="middle"' ),
+                        'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
+                        'nickname' => $row['nickname'],
+                        'file' => $row['filename'] ? '<a href="' . Vars::$MODULE_URI . '?act=load&amp;id=' .
+                            $row['mid'] . '">' . $row['filename'] . '</a> (' . Mail::formatsize( $row['filesize'] ) .
                             ')(' . $row['filecount'] . ')' : '',
-                        'time'      => Functions::displayDate($row['time']),
-                        'text'      => $text,
+                        'time' => Functions::displayDate( $row['time'] ),
+                        'text' => $text,
                         'urlDelete' => Vars::$MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'],
-                        'url'       => (Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id']),
-                        'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
-                            '<span class="green"> [ON]</span>'),
-                        'elected'   => (($row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
-                            Vars::$USER_ID) ? true : false),
+                        'url' => ( Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id'] ),
+                        'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
+                            '<span class="green"> [ON]</span>' ),
+                        'elected' => ( ( $row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
+                            Vars::$USER_ID ) ? true : false ),
                         'selectBar' => '[<span class="red">х</span> <a href="' . Vars::$MODULE_URI .
-                            '?act=delete&amp;id=' . $row['mid'] . '">' . lng('delete') . '</a>]');
+                            '?act=delete&amp;id=' . $row['mid'] . '">' . lng( 'delete' ) . '</a>]' );
                     ++$i;
                 }
 
                 $tpl->query = $array;
-                $tpl->titleTest = '<div class="phdr"><h3>' . lng('elected') . '</h3></div>';
-                $tpl->urlTest = '<div class="menu"><a href="' . Vars::$URI . '">' . lng('contacts') .
+                $tpl->titleTest = '<div class="phdr"><h3>' . lng( 'elected' ) . '</h3></div>';
+                $tpl->urlTest = '<div class="menu"><a href="' . Vars::$URI . '">' . lng( 'contacts' ) .
                     '</a></div>';
                 $tpl->total = $total;
-                $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?act=elected&amp;id=' .
-                    Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']);
-                $tpl->contents = $tpl->includeTpl('mail/list');
+                //Навигация
+				$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=elected&amp;id=' .
+                    Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size'] );
+                //Подключаем шаблон модуля list.php
+				$tpl->contents = $tpl->includeTpl( 'list' );
             } else
             {
-                Header('Location: ' . Vars::$MODULE_URI . '?act=elected');
+                Header( 'Location: ' . Vars::$MODULE_URI . '?act=elected' );
                 exit;
             }
         } else
         {
-            $tpl->contents = Functions::displayError(lng('user_does_not_exist') . '!', '<a href="' .
-                Vars::$MODULE_URI . '">' . lng('contacts') . '</a>');
+            //Если пользователь не существует, показываем ошибку
+			$tpl->contents = Functions::displayError( lng( 'user_does_not_exist' ), '<a href="' .
+                Vars::$MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
         }
     }
 } else
 {
-    $total = mysql_result(mysql_query("SELECT COUNT(*)
-	FROM (SELECT DISTINCT `cms_contacts`.`contact_id` 
-	FROM `cms_contacts` 
-	LEFT JOIN `cms_messages` 
-	ON `cms_contacts`.`contact_id`=`cms_messages`.`user_id` 
-	OR `cms_contacts`.`contact_id`=`cms_messages`.`contact_id` 
-	WHERE ((`cms_contacts`.`contact_id`!='" . Vars::$USER_ID . "' 
-	AND (`cms_messages`.`contact_id`!='" . Vars::$USER_ID . "' 
-	OR `cms_messages`.`user_id`!='" . Vars::$USER_ID . "') 
-	AND (`cms_messages`.`elected_out`='" . Vars::$USER_ID . "' 
-	OR `cms_messages`.`elected_in`='" . Vars::$USER_ID . "') 
-	AND (`cms_messages`.`delete_out`!='" . Vars::$USER_ID . "' 
-	OR `cms_messages`.`delete_in`!='" . Vars::$USER_ID . "')) 
-	AND (`cms_contacts`.`delete`='0' 
-	AND `cms_contacts`.`user_id`='" . Vars::$USER_ID . "')) 
-	AND `cms_messages`.`delete`!='" . Vars::$USER_ID . "') a"), 0);
+    $total = mysql_result( mysql_query( "SELECT COUNT(*) 
+	FROM (SELECT DISTINCT `cms_mail_contacts`.`contact_id` 
+	FROM `cms_mail_contacts` 
+	LEFT JOIN `cms_mail_messages` 
+	ON `cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`user_id` 
+	OR `cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`contact_id` 
+	WHERE ((`cms_mail_contacts`.`contact_id`!='" . Vars::$USER_ID . "' 
+	AND (`cms_mail_messages`.`contact_id`!='" . Vars::$USER_ID . "' 
+	OR `cms_mail_messages`.`user_id`!='" . Vars::$USER_ID . "') 
+	AND (`cms_mail_messages`.`elected_out`='" . Vars::$USER_ID . "' 
+	OR `cms_mail_messages`.`elected_in`='" . Vars::$USER_ID . "') 
+	AND (`cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "' 
+	OR `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "')) 
+	AND (`cms_mail_contacts`.`delete`='0' 
+	AND `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "')) 
+	AND `cms_mail_messages`.`delete`!='" . Vars::$USER_ID . "') a" ), 0 );
     $tpl->total = $total;
-    if ($total) {
-        if (isset($_POST['delete'])) {
-            if (!empty($_POST['delch']) && is_array($_POST['delch'])) {
-                Mail::mailSelectContacts($_POST['delch'], 'elected');
+    if ( $total )
+    {
+        //Удаляем сообщения
+		if ( isset( $_POST['delete'] ) )
+        {
+            if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
+            {
+                Mail::mailSelectContacts( $_POST['delch'], 'elected' );
             }
-            Header('Location: ' . Vars::$MODULE_URI . '?act=elected');
+            Header( 'Location: ' . Vars::$MODULE_URI . '?act=elected' );
             exit;
         }
-
-        $query = mysql_query("SELECT * FROM `cms_contacts`
-		LEFT JOIN `cms_messages`
-		ON `cms_contacts`.`contact_id`=`cms_messages`.`user_id`
-		OR `cms_contacts`.`contact_id`=`cms_messages`.`contact_id`
+		//Формируем список избранных сообщений по контактам
+        $query = mysql_query( "SELECT * FROM `cms_mail_contacts`
+		LEFT JOIN `cms_mail_messages`
+		ON `cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`user_id`
+		OR `cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`contact_id`
 		LEFT JOIN `users`
-		ON `cms_contacts`.`contact_id`=`users`.`id`
-		WHERE ((`cms_contacts`.`contact_id`!='" . Vars::$USER_ID . "' 
-		AND (`cms_messages`.`contact_id`!='" . Vars::$USER_ID . "' 
-		OR `cms_messages`.`user_id`!='" . Vars::$USER_ID . "') 
-		AND (`cms_messages`.`elected_out`='" . Vars::$USER_ID . "' 
-		OR `cms_messages`.`elected_in`='" . Vars::$USER_ID . "') 
-		AND (`cms_messages`.`delete_out`!='" . Vars::$USER_ID . "' 
-		OR `cms_messages`.`delete_in`!='" . Vars::$USER_ID . "')) 
-		AND (`cms_contacts`.`delete`='0' 
-		AND `cms_contacts`.`user_id`='" . Vars::$USER_ID . "')) 
-		AND `cms_messages`.`delete`!='" . Vars::$USER_ID . "'
-		GROUP BY `cms_contacts`.`contact_id`");
+		ON `cms_mail_contacts`.`contact_id`=`users`.`id`
+		WHERE ((`cms_mail_contacts`.`contact_id`!='" . Vars::$USER_ID . "' 
+		AND (`cms_mail_messages`.`contact_id`!='" . Vars::$USER_ID . "' 
+		OR `cms_mail_messages`.`user_id`!='" . Vars::$USER_ID . "') 
+		AND (`cms_mail_messages`.`elected_out`='" . Vars::$USER_ID . "' 
+		OR `cms_mail_messages`.`elected_in`='" . Vars::$USER_ID . "') 
+		AND (`cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "' 
+		OR `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "')) 
+		AND (`cms_mail_contacts`.`delete`='0' 
+		AND `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "')) 
+		AND `cms_mail_messages`.`delete`!='" . Vars::$USER_ID . "'
+		GROUP BY `cms_mail_contacts`.`contact_id`" );
         $array = array();
         $i = 1;
-        while ($row = mysql_fetch_assoc($query))
+        while ( $row = mysql_fetch_assoc( $query ) )
         {
             $array[] = array(
-                'id'        => $row['id'],
-                'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"'),
-                'list'      => (($i % 2) ? 'list1' : 'list2'),
-                'nickname'  => $row['nickname'],
-                'count_in'  => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_messages` WHERE `user_id`='{$row['id']}' AND `elected_in`='" . Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'"), 0),
-                'count_out' => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_messages` WHERE `contact_id`='{$row['id']}' AND `elected_out`='" . Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'"), 0),
+                'id' => $row['id'],
+                'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' : 'w' ) . '.png',
+                    '', 'align="middle"' ),
+                'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
+                'nickname' => $row['nickname'],
+                'count_in' => mysql_result( mysql_query( "SELECT COUNT(*) FROM `cms_mail_messages` WHERE `user_id`='{$row['id']}' AND `elected_in`='" .
+                    Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'" ), 0 ),
+                'count_out' => mysql_result( mysql_query( "SELECT COUNT(*) FROM `cms_mail_messages` WHERE `contact_id`='{$row['id']}' AND `elected_out`='" .
+                    Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'" ), 0 ),
                 'count_new' => '',
-                'url'       => (Vars::$MODULE_URI . '?act=elected&amp;id=' . $row['id']),
-                'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>'));
+                'url' => ( Vars::$MODULE_URI . '?act=elected&amp;id=' . $row['id'] ),
+                'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
+                    '<span class="green"> [ON]</span>' ) );
             ++$i;
         }
-        $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?act=elected&amp;',
-            Vars::$START, $total, Vars::$USER_SET['page_size']);
+		//Навигация
+        $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=elected&amp;',
+            Vars::$START, $total, Vars::$USER_SET['page_size'] );
         $tpl->query = $array;
-        $tpl->contacts = $tpl->includeTpl('contacts');
+        //Подключаем шаблон модуля contacts.php
+		$tpl->contacts = $tpl->includeTpl( 'contacts' );
     } else
     {
-        $tpl->contacts = '<div class="rmenu">' . lng('no_elected') . '</div>';
+        //Выводим сообщение если нет избранных
+		$tpl->contacts = '<div class="rmenu">' . lng( 'no_elected' ) . '</div>';
     }
-    $tpl->contents = $tpl->includeTpl('elected');
+	//Подключаем шаблон модуля elected.php
+    $tpl->contents = $tpl->includeTpl( 'elected' );
 }

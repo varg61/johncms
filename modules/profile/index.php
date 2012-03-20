@@ -11,7 +11,6 @@
 
 //TODO: Добавить информацию о дне рождении
 //TODO: Добавить информацию о подтверждении регистрации
-//TODO: Добавить ссылки "Написать" и "В контакты"
 //TODO: Возможность из админки открывать просмотр профилей для гостей
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
@@ -63,4 +62,15 @@ $tpl->userarg = array(
         : false)
 );
 
+//Управление контактами
+$contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $user['id'] . "'");
+$num_cont = mysql_num_rows($contacts);
+if($num_cont) {
+	$rows = mysql_fetch_assoc($contacts);
+	$tpl->banned = $rows['banned'];
+	if($rows['delete'] == 1) $num_cont = 0;
+}
+$tpl->textbanned = $num_cont && $rows['banned'] == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor');
+$tpl->textcontact = $num_cont ? lng('contact_delete') : lng('contact_add');
+//Подключаем шаблон profile
 $tpl->contents = $tpl->includeTpl('profile');

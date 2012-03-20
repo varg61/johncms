@@ -485,4 +485,67 @@ class Functions extends Vars
         );
         return strtr($str, $replace);
     }
+	
+	/**
+    *-----------------------------------------------------------------
+    *Функция почты "добавление системных сообщений"
+    *-----------------------------------------------------------------
+    */
+	public static function notificationSis(
+		$contact_id,      // ID получателя
+		$theme,           // Тема сообщения
+		$text,            // Текст сообщения
+		$user_id = 0      // ID отправителя
+		) {
+		mysql_query("INSERT INTO `cms_mail_messages` SET
+		`user_id`='" . $user_id . "',
+		`contact_id`='" . $contact_id . "',
+		`text`='" . mysql_real_escape_string( $text ) . "',
+		`time`='" . time() . "',
+		`sys`='1',
+		`theme`='" . mysql_real_escape_string( $theme ) . "'");
+		return true;
+	}
+	
+	/**
+    *-----------------------------------------------------------------
+    *Функция почты "Счетчики сообщений"
+    *-----------------------------------------------------------------
+    */
+	public static function mailCount($var = null) {
+		if($var == null) {
+			//Всего сообщений (входящих / исходящих) без учета удаленных
+			return mysql_result( mysql_query( "SELECT COUNT(*) 
+			FROM `cms_mail_messages` 
+			WHERE (`user_id` = '" . parent::$USER_ID . "' 
+			OR `contact_id` = '" . parent::$USER_ID . "') 
+			AND (`delete_out`!='" . parent::$USER_ID . "' 
+			AND `delete_in`!='" . parent::$USER_ID . "') 
+			AND `delete`!='" . parent::$USER_ID . "'" ), 0 );
+		}
+		switch($var) {
+			//Новые сообщения
+			case 'new':
+				return mysql_result( mysql_query( "SELECT COUNT(*) 
+				FROM `cms_mail_messages` 
+				LEFT JOIN `cms_mail_contacts` 
+				ON `cms_mail_messages`.`user_id`=`cms_mail_contacts`.`contact_id` 
+				AND `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "' 
+				WHERE `cms_mail_messages`.`contact_id`='" . parent::$USER_ID . "' 
+				AND `cms_mail_messages`.`sys`='0' 
+				AND `cms_mail_messages`.`read`='0' 
+				AND (`cms_mail_messages`.`delete_in`!='" . parent::$USER_ID . "' 
+				AND `cms_mail_messages`.`delete_out`!='" . parent::$USER_ID . "')
+				AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "' 
+				AND `cms_mail_contacts`.`banned`!='1'" ), 0 );
+			//Новые системные
+			case 'newsys':
+				return mysql_result( mysql_query( "SELECT COUNT(*) 
+				FROM `cms_mail_messages` 
+				WHERE `contact_id`='" . parent::$USER_ID . "'
+				AND `sys`='1'" ), 0 );
+			default;
+				return false;
+		}
+	}
 }

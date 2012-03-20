@@ -1,41 +1,32 @@
-<p><a href="<?= Vars::$MODULE_URI ?>?act=add"><?= lng('write_message') ?></a></p>
-<div class="phdr"><strong><?= lng('mail') ?></strong></div>
+<p><a href="<?php echo Vars::$MODULE_URI ?>?act=add"><?php echo lng( 'write_message' ) ?></a></p>
+<div class="phdr"><strong><?php echo lng( 'mail' ) ?></strong></div>
 
-<?php if ($this->total): ?>
-<div>
-    <form action="<?= Vars::$MODULE_URI ?>" method="post">
-        <?php foreach ($this->query as $row): ?>
-        <div class="<?=$row['list']?>">
-            <input type="checkbox" name="delch[]" value="<?= $row['id'] ?>"/> <?= $row['icon'] ?> <a
-            href="<?= $row['url'] ?>"><?= $row['nickname'] ?></a> <?= $row['online'] ?> (<?= $row['count_in'] ?>&#160;/&#160;<?= $row['count_out'] ?>
-            ) <span class="red"><?= $row['count_new'] ?></span>
-        </div>
-        <?php endforeach ?>
-        <div class="gmenu"><?= lng('noted_contacts') ?>:<br/>
-            <input type="submit" name="archive" value="<?= lng('in_archive') ?>"/>&#160;<input type="submit" name="delete" value="<?= lng('delete') ?>"/><br/>
-        </div>
-        <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
-        <div class="phdr"><?= lng('total') ?>: <?= $this->total ?></div>
-        <div class="topmenu"><?= $this->display_pagination ?></div>
-        <form action="" method="post"><p><input type="text" name="page" size="2" value="<?=Vars::$PAGE?>"
-                                                style="font-size: x-small;"/>
-            <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
-        <?php endif ?>
-
-    </form>
+<?php if($this->total): ?>
+<div><form action="<?php echo Vars::$MODULE_URI ?>" method="post">
+  <?php foreach($this->query as $row): ?>
+   <div class="<?php echo $row['list'] ?>">
+    <input type="checkbox" name="delch[]" value="<?php echo $row['id'] ?>"/> <?php echo $row['icon'] ?> <a href="<?php echo $row['url'] ?>"><?php echo $row['nickname'] ?></a> <?php echo $row['online'] ?> (<?php echo $row['count_in'] ?>&#160;/&#160;<?php echo $row['count_out'] ?>) <span class="red"><?php echo $row['count_new'] ?></span>
+   </div>
+  <?php endforeach ?>
+  <div class="gmenu"><?php echo lng( 'noted_contacts' ) ?>:<br />
+   <input type="submit" name="archive" value="<?php echo lng( 'in_archive' ) ?>"/>&#160;<input type="submit" name="delete" value="<?php echo lng( 'delete' ) ?>"/><br />
+  </div>
+	<?php if($this->total > Vars::$USER_SET['page_size']): ?>
+   <div class="phdr"><?php echo lng( 'total' ) ?>: <?php echo $this->total ?></div>
+   <div class="topmenu"><?php echo $this->display_pagination ?></div>
+   <form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>" style="font-size: x-small;"/>
+   <input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
+  <?php endif ?>
+ </form>
 </div>
 <?php endif ?>
-
 <div class="list2"><p>
-    <ul>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=systems"><?= lng('system') ?></a>&#160;(<?=$this->systems?>)</li>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=elected"><?= lng('elected') ?></a>&#160;(<?=$this->elected?>)
-        </li>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=archive"><?= lng('archive') ?></a>&#160;(<?=$this->archive?>)
-        </li>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=banned"><?= lng('banned') ?></a>&#160;(<?=$this->banned?>)</li>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=files"><?= lng('files') ?></a>&#160;(<?=$this->files?>)</li>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=basket"><?= lng('basket') ?></a>&#160;(<?=$this->delete?>)</li>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=search"><?= lng('search_contact') ?></a></li>
-    </ul>
-    </p></div>
+<?php echo Functions::getImage('mail-systems.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=systems"><?php echo lng( 'system' ) ?></a>&#160;(<?php echo $this->systems ?>)<br />
+<?php echo Functions::getImage('mail-elected.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=elected"><?php echo lng( 'elected' ) ?></a>&#160;(<?php echo $this->elected ?>)<br />
+<?php echo Functions::getImage('mail-archive.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=archive"><?php echo lng( 'archive' ) ?></a>&#160;(<?php echo $this->archive ?>)<br />
+<?php echo Functions::getImage('mail-blocked.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=banned"><?php echo lng( 'banned' ) ?></a>&#160;(<?php echo $this->banned ?>)<br />
+<?php echo Functions::getImage('mail-files.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=files"><?php echo lng( 'files' ) ?></a>&#160;(<?php echo $this->files ?>)<br />
+<?php echo Functions::getImage('mail-trash.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=basket"><?php echo lng( 'basket' ) ?></a>&#160;(<?php echo $this->delete ?>)<br />
+<?php echo Functions::getImage('mail-search.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=search"><?php echo lng( 'search_contact' ) ?></a>
+</p></div>
+<!-- http://johncms.com -->

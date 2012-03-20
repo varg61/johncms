@@ -13,40 +13,47 @@ defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
 defined( '_IN_JOHNCMS_MAIL' ) or die( 'Error: restricted access' );
 if ( !Vars::$USER_ID )
 {
-    Header( 'Location: ' . Vars::$HOME_URL . '/404.php' );
+    Header( 'Location: ' . Vars::$HOME_URL . '/404' );
     exit;
 }
-
+//Заголовок
+$tpl->title = lng( 'mail' ) . ' | ' . lng( 'search' );
+//Получаем данные из формы поиска
 $search = isset( $_REQUEST['q'] ) ? rawurldecode( trim( $_REQUEST['q'] ) ) : '';
+
+//Проверяем длинну запроса
 if ( $search && Validate::nickname( $search, 1 ) === true )
 {
-    $search_db = strtr( $search, array( '_' => '\\_', '%' => '\\%' ) );
+    //Проверяем валидность введенных данных
+	$search_db = strtr( $search, array( '_' => '\\_', '%' => '\\%' ) );
     $tpl->search = Validate::filterString( $search );
     $search_db = '%' . $search_db . '%';
-
+	//Считаем количество найденных контактов
     $total = mysql_result( mysql_query( "SELECT COUNT(*) 
-	FROM `cms_contacts`
+	FROM `cms_mail_contacts`
 	LEFT JOIN `users` 
-	ON `cms_contacts`.`contact_id`=`users`.`id`
-	WHERE `cms_contacts`.`user_id`='" . Vars::$USER_ID . "'
-	AND `cms_contacts`.`delete`='0'
+	ON `cms_mail_contacts`.`contact_id`=`users`.`id`
+	WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
+	AND `cms_mail_contacts`.`delete`='0'
 	AND `users`.`nickname`
 	LIKE '" . $search_db . "'" ), 0 );
     if ( $total )
     {
-        $query = mysql_query( "SELECT * 
-		FROM `cms_contacts`
+        //Формируем список контактов
+		$query = mysql_query( "SELECT * 
+		FROM `cms_mail_contacts`
 		LEFT JOIN `users` 
-		ON `cms_contacts`.`contact_id`=`users`.`id`
-		WHERE `cms_contacts`.`user_id`='" . Vars::$USER_ID . "'
-		AND `cms_contacts`.`delete`='0'
+		ON `cms_mail_contacts`.`contact_id`=`users`.`id`
+		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
+		AND `cms_mail_contacts`.`delete`='0'
 		AND `users`.`nickname`
 		LIKE '" . $search_db . "'
-		ORDER BY `cms_contacts`.`time` DESC 
+		ORDER BY `cms_mail_contacts`.`time` DESC 
 		" . Vars::db_pagination() );
         $array = array();
         $i = 1;
-        while ( $row = mysql_fetch_assoc( $query ) )
+        
+		while ( $row = mysql_fetch_assoc( $query ) )
         {
             $array[] = array(
                 'id' => $row['id'],
@@ -67,10 +74,12 @@ if ( $search && Validate::nickname( $search, 1 ) === true )
         unset( $array );
     }
     $tpl->total = $total;
-    $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=search&amp;q=' .
+    //Навигация
+	$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=search&amp;q=' .
         rawurlencode( $search ) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size'] );
 } else
 {
     $tpl->total = 0;
 }
+//Подключаем шаблон модуля search.php
 $tpl->contents = $tpl->includeTpl( 'search' );

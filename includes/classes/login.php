@@ -192,7 +192,11 @@ class Login extends Vars
                     `about` = ''
                 ") or exit(mysql_error());
                 $new_user_id = mysql_insert_id();
-
+				Functions::notificationSis(
+				$new_user_id,  // ID получателя
+				'Спасибо за регистрацию',  // Тема сообщения
+				"Привет, [b]" . $var['login'] . "[/b]!\r\nДобро пожаловать на мой сайт. Надеюсь тебе здесь понравится и ты будишь заходить регулярно.\r\nC уважением, Admin."
+				);
                 // Запускаем пользователя на сайт
                 $this->_userEnter($new_user_id, $token);
 

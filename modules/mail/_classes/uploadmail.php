@@ -15,11 +15,10 @@
  * @link        http://johncms.com
  */
 defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
+//Закрываем прямой доступ к файлу
 defined( '_IN_JOHNCMS_MAIL' ) or die( 'Error: restricted access' );
-
-class Upload
+class UploadMail
 {
-
     public $DIR;
     public $ERROR_EMPTY = false;
     public $FILE_TYPE;
@@ -27,6 +26,7 @@ class Upload
     public $NEW_NAME_FILE;
     public $ALLOWED_TYPE = array(
         'zip',
+		'apk',
         'rar',
         '7z',
         'tar',
@@ -65,11 +65,16 @@ class Upload
     private $FILE_BODY;
     private $FILE_EXT;
     private $ERRORS;
-
+	
+	/**
+	---------------------------------------------
+	Конструктор класса
+	---------------------------------------------
+	*/
     public function __construct( array $file = null )
     {
-
-        $this->coutFiles = count( $file );
+        //Получаем и проверяем один ли файл грузится
+		$this->coutFiles = count( $file );
         if ( $this->coutFiles == 1 )
         {
             $this->INFO = $file[0];
@@ -78,7 +83,12 @@ class Upload
             $this->MULTI = $file;
         }
     }
-
+	
+	/**
+	---------------------------------------------
+	Вспомогательная функция загрузки файла
+	---------------------------------------------
+	*/
     public function upload()
     {
         if ( $this->INFO['error'] == 4 && $this->ERROR_EMPTY == false )
@@ -88,7 +98,8 @@ class Upload
         {
             if ( empty( $this->ERRORS ) )
             {
-                if ( empty( $this->MULTI ) )
+                //Проверя на мульти загрузку
+				if ( empty( $this->MULTI ) )
                 {
                     return $this->uploadFile( $this->INFO['name'] );
                 } else
@@ -100,6 +111,11 @@ class Upload
         return false;
     }
 
+	/**
+	---------------------------------------------
+	Функция загрузки файла
+	---------------------------------------------
+	*/
     private function uploadFile( $file )
     {
         if ( $this->fileChecked( $file ) )
@@ -142,12 +158,22 @@ class Upload
         return $res;
     }
 
+	/**
+	---------------------------------------------
+	Функция для рекурсивного создания дирректорий загрузки файла
+	---------------------------------------------
+	*/
     private function rmkdir( $path, $mode = 0777 )
     {
         return is_dir( $path ) || ( $this->rmkdir( dirname( $path ), $mode ) && $this->_mkdir( $path,
             $mode ) );
     }
 
+	/**
+	---------------------------------------------
+	Подставляем префикс, если файл уже есть такой
+	---------------------------------------------
+	*/
     private function prefixFile()
     {
         $i = 1;
@@ -158,21 +184,41 @@ class Upload
         }
     }
 
+	/**
+	-----------------------------------
+	Получение расширения файла
+	-----------------------------------
+	*/
     private function fileExt( $file )
     {
         return mb_strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
     }
 
+	/**
+	-----------------------------------
+	Получение названия файла
+	-----------------------------------
+	*/
     private function fileBody( $file )
     {
         return mb_substr( $file, 0, mb_strripos( $file, '.' ) );
     }
-
+	
+	/**
+	-----------------------------------
+	Получение типа файла
+	-----------------------------------
+	*/
     public function fileMime( $file )
     {
         return $this->mimes( $this->fileExt( $file ) );
     }
-
+	
+	/**
+	-----------------------------------
+	Проверка функция вывода ошибки
+	-----------------------------------
+	*/
     public function errors()
     {
         if ( $this->ERRORS )
@@ -183,28 +229,40 @@ class Upload
             return false;
         }
     }
-
+	
+	/**
+	-----------------------------------
+	Проверка валидности файла
+	-----------------------------------
+	*/
     private function fileChecked( $file )
     {
-        $this->FILE_BODY = $this->translit( $this->fileBody( $file ) );
-        $this->FILE_EXT = $this->fileExt( $file );
-
+        //Получаем и отсекаем все не нужные символы в имени файла
+		$this->FILE_BODY = $this->translit( $this->fileBody( $file ) );
+        //Получаем расширение
+		$this->FILE_EXT = $this->fileExt( $file );
+		
+		//Проверяем что файл с расширением
         if ( $this->INFO['error'] == 0 && !$this->FILE_EXT )
             $this->ERRORS[] = 'Запрещены файлы без расширения!';
-        else
-            if ( $this->INFO['error'] == 0 && !in_array( $this->FILE_EXT, $this->ALLOWED_TYPE ) )
+        //Проверяем на допустимое расширение
+		else if ( $this->INFO['error'] == 0 && !in_array( $this->FILE_EXT, $this->ALLOWED_TYPE ) )
                 $this->ERRORS[] = 'Недопустимое расширение файла! К загрузке разрешены только файлы с расширениями: ' .
                     implode( ', ', $this->ALLOWED_TYPE );
-        if ( $this->INFO['error'] == 0 && !$this->FILE_BODY )
+        //Проверяем что файл имеет имя
+		if ( $this->INFO['error'] == 0 && !$this->FILE_BODY )
             $this->ERRORS[] = 'Запрещены файлы без имени!';
-        if ( $this->INFO['error'] == 0 && $this->MAX_LEN && ( strlen( $this->FILE_BODY ) > $this->MAX_LEN ) )
+        //Проверяем длинну файла
+		if ( $this->INFO['error'] == 0 && $this->MAX_LEN && ( strlen( $this->FILE_BODY ) > $this->MAX_LEN ) )
             $this->ERRORS[] = 'Название файла превышает максимальное количество символов!';
-        if ( $this->INFO['error'] == 0 && ( $this->MAX_FILE_SIZE < $this->INFO['size'] ) )
-            $this->ERRORS[] = 'Размер файла привышает максимально допустимый!';
-        if ( $this->INFO['error'] == 1 )
-            $this->ERRORS[] = 'Размер файла привышает максимально допустимый!';
+        //Проверяем максимальный вес файла
+		if ( $this->INFO['error'] == 0 && ( $this->MAX_FILE_SIZE < $this->INFO['size'] ) )
+            $this->ERRORS[] = 'Размер файла превышает максимально допустимый!';
+        //Проверяем серверные ошибки при загрузке
+		if ( $this->INFO['error'] == 1 )
+            $this->ERRORS[] = 'Размер файла превышает максимально допустимый!';
         if ( $this->INFO['error'] == 2 )
-            $this->ERRORS[] = 'Размер файла привышает максимально допустимый!';
+            $this->ERRORS[] = 'Размер файла превышает максимально допустимый!';
         if ( $this->INFO['error'] == 3 )
             $this->ERRORS[] = 'Загружаемый файл был получен только частично!';
         if ( $this->INFO['error'] == 4 )
@@ -215,19 +273,26 @@ class Upload
             $this->ERRORS[] = 'Не удалось записать файл на диск!';
         if ( $this->INFO['error'] == 8 )
             $this->ERRORS[] = 'PHP-расширение остановило загрузку файла!';
-        if ( preg_match( '/[^a-z0-9()\.\-\_]/i', $this->FILE_BODY ) )
+        //Проверяем на запрещенные символы в файле
+		if ( preg_match( '/[^a-z0-9()\.\-\_]/i', $this->FILE_BODY ) )
             $this->ERRORS[] = 'Запрещенные символы в названии';
 
         if ( empty( $this->ERRORS ) )
         {
-            $this->FILE_UPLOAD = $this->FILE_BODY . '.' . $this->FILE_EXT;
+            //Если ошибкок нет
+			$this->FILE_UPLOAD = $this->FILE_BODY . '.' . $this->FILE_EXT;
             return true;
         } else
         {
             return false;
         }
     }
-
+	
+	/**
+	-----------------------------------
+	Транслит
+	-----------------------------------
+	*/
     private static function translit( $text )
     {
         $rus = array(
@@ -385,7 +450,12 @@ class Upload
         $text = str_replace( $rus, $lat, $text );
         return preg_replace( '/[^a-z0-9()\.\-\_]/i', '', $text );
     }
-
+	
+	/**
+	-----------------------------------
+	Функция типов файлов для скачивания
+	-----------------------------------
+	*/
     private function mimes( $ext = '' )
     {
         $array = array(
@@ -617,9 +687,144 @@ class Upload
                 'application/x-zip-compressed' ) );
         return isset( $array[$ext] ) ? $array[$ext][0] : 'application/octet-stream';
     }
-
-    private function clean( $file )
+	
+	/**
+	----------------------
+	Функция удаления файла
+	----------------------
+	*/
+    public function clean( $file )
     {
         @unlink( $file );
+    }
+	
+	/**
+	------------------------
+	Функция скачивание файла
+	------------------------
+	*/
+	public function downloadFile($filename, $realname) {
+		$ext = end(explode('.', $filename));
+		$mimetype = self::mimes($ext);
+		if(!file_exists($filename)) die('Файл не найден!');
+		$from = $to = 0;
+		$cr = NULL;
+		if(isset($_SERVER['HTTP_RANGE'])) {
+			$range = substr($_SERVER['HTTP_RANGE'], strpos($_SERVER['HTTP_RANGE'], '=')+1);
+			$from = strtok($range, '-');
+			$to = strtok('/');
+			if($to > 0) $to++;
+			if($to) $to-=$from;
+			Header('HTTP/1.1 206 Partial Content');
+			$cr = 'Content-Range: bytes ' . $from . '-'.($to ? ($to.'/'.$to+1):filesize($filename));
+		} else {
+			Header('HTTP/1.1 200 OK');
+		}
+		$etag = md5($filename);
+		$etag = substr($etag, 0, 8) . '-' . substr($etag, 8, 7) . '-' . substr($etag, 15, 8);
+		Header('ETag: "'.$etag.'"');
+		Header('Content-Range: bytes');
+		Header('Content-Length: '.(filesize($filename)-$to+$from));
+		if($cr) Header($cr);
+		Header('Connection: close');
+		Header('Content-Type: '.$mimetype);
+		Header('Last-Modified: '.gmdate('r', filemtime($filename)));
+		@ob_end_clean();
+		$f = fopen($filename, 'r');
+		Header('Content-Disposition: attachment; filename="'.$realname.'";');
+		if($from) fseek($f, $from, SEEK_SET);
+		if(!isset($to) || empty($to)) {
+			$size = filesize($filename)-$from;
+		} else {
+			$size = $to;
+		}
+		$downloaded = 0;
+		while(!feof($f) && ($downloaded < $size)) {
+			echo fread($f, 512000);
+			$downloaded+=512000;
+			@ob_flush();
+			@flush();
+		}
+		fclose($f);
+		@ob_end_flush();
+	}
+		/*
+    -----------------------------------------------------------------
+    Форматируем размер файла
+    -----------------------------------------------------------------
+    */
+    public static function formatsize( $var = 0 )
+    {
+        if ( $var >= 1073741824 )
+            $var = round( $var / 1073741824 * 100 ) / 100 . ' Gb';
+        elseif ( $var >= 1048576 )
+            $var = round( $var / 1048576 * 100 ) / 100 . ' Mb';
+        elseif ( $var >= 1024 )
+            $var = round( $var / 1024 * 100 ) / 100 . ' Kb';
+        else
+            $var = $var . ' b';
+        return $var;
+    }
+	/*
+    -----------------------------------------------------------------
+    Иконки к файлам
+    -----------------------------------------------------------------
+    */
+    public static function fileicon( $file = null )
+    {
+        if ( $file == null )
+            return false;
+        $ext = pathinfo( $file, PATHINFO_EXTENSION );
+        switch ( $ext )
+        {
+            case 'zip':
+            case 'rar':
+            case '7z':
+            case 'tar':
+            case 'gz':
+                return 'filetype_6.png';
+
+            case 'mp3':
+            case 'amr':
+                return 'filetype_8.png';
+
+            case 'txt':
+            case 'pdf':
+            case 'doc':
+            case 'rtf':
+            case 'djvu':
+            case 'xls':
+                return 'filetype_4.png';
+
+            case 'jar':
+			case 'apk':
+            case 'jad':
+                return 'filetype_2.png';
+
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+            case 'bmp':
+                return 'filetype_5.png';
+
+            case 'sis':
+            case 'sisx':
+                return 'filetype_3.png';
+
+            case '3gp':
+            case 'avi':
+            case 'flv':
+            case 'mpeg':
+            case 'mp4':
+                return 'filetype_7.png';
+
+            case 'exe':
+            case 'msi':
+                return 'filetype_1.png';
+
+            default:
+                return 'filetype_9.png';
+        }
     }
 }

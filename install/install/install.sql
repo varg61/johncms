@@ -122,29 +122,6 @@ CREATE TABLE IF NOT EXISTS `cms_ban_users` (
   KEY `ban_time` (`ban_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_contacts
-DROP TABLE IF EXISTS `cms_contacts`;
-CREATE TABLE IF NOT EXISTS `cms_contacts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `contact_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `count_in` int(10) unsigned NOT NULL DEFAULT '0',
-  `count_out` int(10) unsigned NOT NULL DEFAULT '0',
-  `time` int(10) unsigned NOT NULL,
-  `delete` enum('0','1') NOT NULL DEFAULT '0',
-  `banned` enum('0','1') NOT NULL DEFAULT '0',
-  `archive` enum('0','1') NOT NULL DEFAULT '0',
-  `access` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`,`contact_id`),
-  UNIQUE KEY `contact_id` (`contact_id`,`user_id`),
-  KEY `time` (`time`),
-  KEY `delete` (`delete`),
-  KEY `banned` (`banned`),
-  KEY `archive` (`archive`),
-  KEY `access` (`access`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- Dumping structure for table dev_johncms.cms_counters
 DROP TABLE IF EXISTS `cms_counters`;
 CREATE TABLE IF NOT EXISTS `cms_counters` (
@@ -226,9 +203,35 @@ CREATE TABLE IF NOT EXISTS `cms_ip_bwlist` (
   UNIQUE KEY `ip_upto` (`ip_upto`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_messages
+DROP TABLE IF EXISTS `cms_contacts`;
 DROP TABLE IF EXISTS `cms_messages`;
-CREATE TABLE IF NOT EXISTS `cms_messages` (
+
+-- Dumping structure for table cms_mail_contacts
+DROP TABLE IF EXISTS `cms_mail_contacts`;
+CREATE TABLE IF NOT EXISTS `cms_mail_contacts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `contact_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `count_in` int(10) unsigned NOT NULL DEFAULT '0',
+  `count_out` int(10) unsigned NOT NULL DEFAULT '0',
+  `time` int(10) unsigned NOT NULL,
+  `delete` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `banned` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `archive` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `access` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`contact_id`),
+  UNIQUE KEY `contact_id` (`contact_id`,`user_id`),
+  KEY `time` (`time`),
+  KEY `delete` (`delete`),
+  KEY `banned` (`banned`),
+  KEY `archive` (`archive`),
+  KEY `access` (`access`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+-- Dumping structure for table cms_mail_messages
+DROP TABLE IF EXISTS `cms_mail_messages`;
+CREATE TABLE IF NOT EXISTS `cms_mail_messages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `contact_id` int(10) unsigned NOT NULL,
@@ -239,8 +242,8 @@ CREATE TABLE IF NOT EXISTS `cms_messages` (
   `delete_out` int(10) unsigned NOT NULL DEFAULT '0',
   `elected_in` int(10) unsigned NOT NULL DEFAULT '0',
   `elected_out` int(10) unsigned NOT NULL DEFAULT '0',
-  `read` enum('0','1') NOT NULL DEFAULT '0',
-  `sys` enum('0','1') NOT NULL DEFAULT '0',
+  `read` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `sys` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `filename` varchar(100) NOT NULL,
   `filesize` int(10) unsigned NOT NULL DEFAULT '0',
   `filecount` int(10) unsigned NOT NULL DEFAULT '0',
@@ -256,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `cms_messages` (
   KEY `elected_out` (`elected_out`),
   KEY `read` (`read`),
   KEY `sys` (`sys`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
 -- Dumping structure for table dev_johncms.cms_modules
 DROP TABLE IF EXISTS `cms_modules`;
