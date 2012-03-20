@@ -4,7 +4,7 @@
 <div class="user" style="padding-top: 2px; padding-bottom: 6px">
     <h3><?= Functions::getImage('users.png', '', 'class="left"') ?>&#160;<?= lng('users') ?></h3>
     <ul>
-        <?php if (Vars::$USER_RIGHTS >= 7) : ?>
+        <?php if (Vars::$USER_RIGHTS >= 7 && $this->regTotal) : ?>
         <li><span class="red"><a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('users_reg') ?></a>&#160;(<?= $this->regTotal ?>)</b></span></li>
         <?php endif ?>
         <li><a href="<?= Vars::$HOME_URL ?>/users/search"><?= lng('users_list') ?></a>&#160;(<?= $this->usrTotal ?>)</li>

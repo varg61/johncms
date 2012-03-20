@@ -1,3 +1,6 @@
+<div class="phdr">
+    <b><?= lng('registration') ?></b>
+</div>
 <?php $error_style = 'style="background-color: #FFCCCC"'; ?>
 <?php if (isset($_POST['submit']) && !empty($this->login->error)) : ?>
 <div class="rmenu"><p><?= lng('errors_occurred') ?></p></div>
@@ -54,17 +57,20 @@
             <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->login->error['captcha']) ? $error_style : '') ?>/>
         </div>
         <div class="formblock">
-            <input type="submit" name="submit" value="<?= lng('do_registration') ?>"/>
+            <input type="submit" name="submit" value="<?= lng('registration') ?>"/>
         </div>
     </div>
 </form>
-<div class="phdr" style="font-size: x-small;">
-    <p><b><?= lng('mandatory_fields') ?></b></p>
-    <p><b class="green"><?= mb_strtoupper(lng('login')) ?></b>: <?= lng('login_help') ?></p>
-    <p><b class="green"><?= mb_strtoupper(lng('password')) ?></b>: <?= lng('password_help') ?></p>
+<div class="phdr">
+    <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('already_registered') ?>?</a>
 </div>
 <?php if (Vars::$USER_SYS['reg_mode'] == 2) : ?>
 <div class="topmenu">
     <small class="red"><p><?= lng('moderation_warning') ?></p></small>
 </div>
 <?php endif ?>
+<div class="topmenu"">
+    <p><b><?= lng('mandatory_fields') ?></b></p>
+    <p><b class="green"><?= mb_strtoupper(lng('nickname')) ?></b>: <?= lng('login_help') ?></p>
+    <p><b class="green"><?= mb_strtoupper(lng('password')) ?></b>: <?= lng('password_help') ?></p>
+</div>
