@@ -6,6 +6,7 @@
         <div class="formblock">
             <label for="file"><?= lng('select_image') ?></label><br/>
             <input id="file" type="file" name="imagefile" value=""/>
+            <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <div class="desc" style="padding-top: 8px">
                 <?= lng('select_image_help')  ?>
             </div>

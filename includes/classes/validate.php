@@ -64,8 +64,12 @@ class Validate
     Проверка корректности ввода E-mail
     -----------------------------------------------------------------
     */
-    public static function email($var = '', $error_log = false)
+    public static function email($var = '', $error_log = false, $allow_empty = false)
     {
+        if ($allow_empty && empty($var)) {
+            return true;
+        }
+
         if (empty($var)) {
             $error = lng('error_email_empty');
         } elseif (mb_strlen($var) < 5 || mb_strlen($var) > 50) {

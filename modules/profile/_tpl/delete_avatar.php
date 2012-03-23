@@ -7,6 +7,7 @@
         <p><img src="<?= Vars::$HOME_URL ?>/files/users/avatar/<?= $this->user['id'] ?>.gif" width="32" height="32" alt="" border="0"/></p>
         <p><?= lng('delete_avatar_warning') ?></p>
         <p style="margin-top: 10px"><input type="submit" value="<?= lng('delete') ?>" name="submit"/></p>
+        <input type="hidden" name="token" value="<?= $this->token ?>"/>
     </div>
 </form>
 <div class="phdr"><a href="<?= Vars::$URI ?>?act=avatar&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a></div>

@@ -329,7 +329,8 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
         ('mod_lib_comm', '1'),
         ('mod_gal_comm', '1'),
         ('meta_key', ''),
-        ('meta_desc', 'Powered by JohnCMS http://johncms.com'),
+        ('meta_desc',
+                'Powered by JohnCMS http://johncms.com'),
         ('skindef', 'default'),
         ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smileys";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}'),
         ('lng_list', 'a:2:{s:2:"en";s:7:"English";s:2:"ru";s:14:"Русский";}');
@@ -517,7 +518,7 @@ CREATE TABLE `users` (
   `level` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `ban` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `sex` enum('m','w') NOT NULL DEFAULT 'm',
-  `imname` varchar(25) NOT NULL DEFAULT '',
+  `imname` varchar(50) NOT NULL DEFAULT '',
   `birth` date NOT NULL DEFAULT '0000-00-00',
   `count_comments` int(10) unsigned NOT NULL DEFAULT '0',
   `count_forum` int(10) unsigned NOT NULL DEFAULT '0',
@@ -525,12 +526,11 @@ CREATE TABLE `users` (
   `last_visit` int(10) unsigned NOT NULL DEFAULT '0',
   `icq` int(10) unsigned NOT NULL DEFAULT '0',
   `skype` varchar(50) NOT NULL DEFAULT '',
-  `jabber` varchar(50) NOT NULL DEFAULT '',
-  `www` varchar(50) NOT NULL DEFAULT '',
+  `siteurl` varchar(100) NOT NULL DEFAULT '',
   `about` text NOT NULL,
-  `live` varchar(50) NOT NULL DEFAULT '',
-  `tel` varchar(50) NOT NULL DEFAULT '',
-  `status` varchar(100) NOT NULL DEFAULT '',
+  `live` varchar(100) NOT NULL DEFAULT '',
+  `tel` varchar(100) NOT NULL DEFAULT '',
+  `status` varchar(50) NOT NULL DEFAULT '',
   `mailvis` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `lastpost` int(10) unsigned NOT NULL DEFAULT '0',
   `rest_code` varchar(32) NOT NULL DEFAULT '',
@@ -543,3 +543,15 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `lastdate` (`last_visit`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- Создаем тестового суперпользователя
+-- LOGIN:    admin
+-- PASSWORD: admin
+INSERT INTO `users` SET
+        `nickname` = 'admin',
+        `password` = 'f30834d2dd2fc48dcb88502021e910ca',
+        `salt` = '-|tgJjVnuU',
+        `email` = 'admin@test.com',
+        `rights` = 9,
+        `level` = 1,
+        `sex` = 'm';

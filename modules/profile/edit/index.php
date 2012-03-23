@@ -40,7 +40,7 @@ $tpl = Template::getInstance();
 $tpl->user = $user;
 $tpl->setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
     ? unserialize(Vars::$SYSTEM_SET['users'])
-    : Vars::$USER_SET_SYS;
+    : Vars::$USER_SYS;
 
 if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
     $tpl->avatar = true;
@@ -67,10 +67,18 @@ switch (Vars::$ACT) {
         Удаление аватара
         -----------------------------------------------------------------
         */
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit'])
+            && isset($_POST['token'])
+            && isset($_SESSION['token_delete_avatar'])
+            && $_POST['token'] == $_SESSION['token_delete_avatar']
+        ) {
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif');
+            unset($_SESSION['token_delete_avatar']);
             header('Location: ' . Vars::$URI . '?user=' . $user['id']);
+            exit;
         } else {
+            $tpl->token = mt_rand(100, 10000);
+            $_SESSION['token_delete_avatar'] = $tpl->token;
             $tpl->contents = $tpl->includeTpl('delete_avatar');
         }
         break;
@@ -100,7 +108,11 @@ switch (Vars::$ACT) {
             || Vars::$USER_RIGHTS == 9
             || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
         ) {
-            if (isset($_POST['submit'])) {
+            if (isset($_POST['submit'])
+                && isset($_POST['token'])
+                && isset($_SESSION['token_animation'])
+                && $_POST['token'] == $_SESSION['token_animation']
+            ) {
                 $error = array();
                 if ($_FILES['imagefile']['size'] > 0) {
                     // Проверка на допустимый вес файла
@@ -128,6 +140,7 @@ switch (Vars::$ACT) {
                     if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
                         ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == true
                     ) {
+                        unset($_SESSION['token_animation']);
                         echo'<div class="gmenu">' .
                             '<p>' . lng('avatar_uploaded') . '<br/>' .
                             '<a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>' .
@@ -139,6 +152,8 @@ switch (Vars::$ACT) {
                     echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=upload_animation">' . lng('back') . '</a>');
                 }
             } else {
+                $tpl->token = mt_rand(100, 10000);
+                $_SESSION['token_animation'] = $tpl->token;
                 $tpl->contents = $tpl->includeTpl('upload_animation');
             }
         } else {
@@ -156,7 +171,11 @@ switch (Vars::$ACT) {
             || Vars::$USER_RIGHTS == 9
             || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
         ) {
-            if (isset($_POST['submit'])) {
+            if (isset($_POST['submit'])
+                && isset($_POST['token'])
+                && isset($_SESSION['token_avatar'])
+                && $_POST['token'] == $_SESSION['token_avatar']
+            ) {
                 $handle = new upload($_FILES['imagefile']);
                 if ($handle->uploaded) {
                     // Обрабатываем фото
@@ -180,8 +199,11 @@ switch (Vars::$ACT) {
                         echo Functions::displayError($handle->error);
                     }
                     $handle->clean();
+                    unset($_SESSION['token_avatar']);
                 }
             } else {
+                $tpl->token = mt_rand(100, 10000);
+                $_SESSION['token_avatar'] = $tpl->token;
                 $tpl->contents = $tpl->includeTpl('upload_avatar');
             }
         } else {
@@ -273,15 +295,23 @@ switch (Vars::$ACT) {
             || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
         ) {
             $tpl->status = $user['status'];
-            if (isset($_POST['submit']) && isset($_POST['status']) && !empty($_POST['status'])) {
+            if (isset($_POST['submit'])
+                && isset($_POST['status'])
+                && isset($_POST['token'])
+                && isset($_SESSION['token_status'])
+                && $_POST['token'] == $_SESSION['token_status']
+            ) {
                 $tpl->status = trim($_POST['status']);
-                if (mb_strlen($tpl->status) > 2 && mb_strlen($tpl->status) < 51) {
+                if (mb_strlen($tpl->status) < 51) {
+                    unset($_SESSION['token_status']);
                     mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "'");
                     header('Location: ' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id']);
                     exit;
                 }
                 $tpl->error = lng('error_status_lenght');
             }
+            $tpl->token = mt_rand(100, 10000);
+            $_SESSION['token_status'] = $tpl->token;
             $tpl->contents = $tpl->includeTpl('change_status');
         } else {
             echo Functions::displayError(lng('access_forbidden'));
@@ -291,7 +321,7 @@ switch (Vars::$ACT) {
     case'avatar':
         /*
         -----------------------------------------------------------------
-        Сменв аватара
+        Меню смены аватара
         -----------------------------------------------------------------
         */
         $tpl->contents = $tpl->includeTpl('avatar');
@@ -303,5 +333,94 @@ switch (Vars::$ACT) {
         Редактирование анкеты
         -----------------------------------------------------------------
         */
+        if (isset($_POST['submit'])
+            && isset($_POST['token'])
+            && isset($_SESSION['token_profile'])
+            && $_POST['token'] == $_SESSION['token_profile']
+        ) {
+            $error = array();
+
+            // Принимаем и обрабатываем Имя
+            if (isset($_POST['imname'])) {
+                $user['imname'] = mb_substr(trim($_POST['imname']), 0, 50);
+            }
+
+            // Принимаем и обрабатываем дату рожденья
+            if (isset($_POST['day'])
+                && isset($_POST['month'])
+                && isset($_POST['year'])
+            ) {
+                $day = intval($_POST['day']);
+                $month = intval($_POST['month']);
+                $year = intval($_POST['year']);
+                if (!checkdate($month, $day, $year)) {
+                    //TODO: Дописать обработку даты
+                    //echo'ERROR: date';
+                    //exit;
+                }
+            }
+
+            // Принимаем и обрабатываем данные о месте проживания
+            if (isset($_POST['live'])) {
+                $user['live'] = mb_substr(trim($_POST['live']), 0, 100);
+            }
+
+            // Принимаем и обрабатываем дополнительную информацию "о себе"
+            if (isset($_POST['about'])) {
+                $user['about'] = mb_substr(trim($_POST['about']), 0, 5000);
+            }
+
+            // Принимаем и обрабатываем номер телефона
+            if (isset($_POST['tel'])) {
+                $user['tel'] = mb_substr(trim($_POST['tel']), 0, 100);
+            }
+
+            // Принимаем и обрабатываем URL сайта
+            if (isset($_POST['siteurl'])) {
+                $user['siteurl'] = mb_substr(trim($_POST['siteurl']), 0, 100);
+            }
+
+            // Принимаем и обрабатываем e-mail
+            if (isset($_POST['email'])) {
+                $user['email'] = mb_substr(trim($_POST['email']), 0, 50);
+                $email_valid = Validate::email($user['email'], 1, 1);
+                if ($email_valid) {
+                    $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
+                } else {
+                    $tpl->email_error = Validate::$error;
+                }
+            }
+
+            // Принимаем и обрабатываем ICQ
+            if (isset($_POST['icq']) && (empty($_POST['icq']) || intval($_POST['icq']) > 10000)) {
+                $user['icq'] = intval($_POST['icq']);
+            }
+
+            // Принимаем и обрабатываем Skype
+            if (isset($_POST['skype'])) {
+                $user['skype'] = mb_substr(trim($_POST['skype']), 0, 50);
+            }
+
+            if (isset($tpl->email_error)) {
+                $tpl->error = 1;
+            }
+
+            $tpl->user = $user;
+            mysql_query("UPDATE `users` SET
+                `imname` = '" . mysql_real_escape_string($user['imname']) . "',
+                `live` = '" . mysql_real_escape_string($user['live']) . "',
+                `about` = '" . mysql_real_escape_string($user['about']) . "',
+                `tel` = '" . mysql_real_escape_string($user['tel']) . "',
+                `siteurl` = '" . mysql_real_escape_string($user['siteurl']) . "',
+                " . (isset($email_valid) && $email_valid ? "`email` = '" . mysql_real_escape_string($user['email']) . "'," : "") . "
+                `mailvis` = " . $user['mailvis'] . ",
+                `icq` = " . $user['icq'] . ",
+                `skype` = '" . mysql_real_escape_string($user['skype']) . "'
+                WHERE `id` = " . $user['id']
+            ) or exit(mysql_error());
+            $tpl->save = 1;
+        }
+        $tpl->token = mt_rand(100, 10000);
+        $_SESSION['token_profile'] = $tpl->token;
         $tpl->contents = $tpl->includeTpl('profile_edit');
 }
