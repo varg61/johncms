@@ -86,7 +86,7 @@ class TextParser
     /*
     -----------------------------------------------------------------
     Парсинг ссылок
-    За основу взята доработанная функция от форума phpBB 3
+    За основу взята доработанная функция от форума phpBB3
     -----------------------------------------------------------------
     */
     public static function highlightUrl($text)
@@ -154,7 +154,7 @@ class TextParser
                     case 2:
                         $text = $short_url;
                         if (!isset(Vars::$USER_SET['direct_url']) || !Vars::$USER_SET['direct_url']) {
-                            $url = Vars::$HOME_URL . '/go.php?url=' . rawurlencode($url);
+                            $url = Vars::$HOME_URL . '/redirect?url=' . rawurlencode($url);
                         }
                         break;
 
@@ -162,7 +162,7 @@ class TextParser
                         $url = 'http://' . $url;
                         $text = $short_url;
                         if (!isset(Vars::$USER_SET['direct_url']) || !Vars::$USER_SET['direct_url']) {
-                            $url = Vars::$HOME_URL . '/go.php?url=' . rawurlencode($url);
+                            $url = Vars::$HOME_URL . '/redirect?url=' . rawurlencode($url);
                         }
                         break;
 
@@ -289,7 +289,7 @@ class TextParser
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\', \':\');">:' . $value . ':</a> ';
             $bb_smileys .= Functions::smileys($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/pages/smileys.php">' . lng('add_smileys') . '</a></small>';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys">' . lng('add_smileys') . '</a></small>';
         }
         $out = '<style>' . "\n" .
                '.bb_hide{background-color: rgba(178,178,178,0.5); padding: 5px; border-radius: 3px; border: 1px solid #708090; display: none; overflow: auto; max-width: 300px; max-height: 150px; position: absolute;}' . "\n" .
