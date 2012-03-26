@@ -2,7 +2,8 @@
 <div class="gmenu">
   <form action="<?php echo Vars::$MODULE_URI ?>?act=search" method="post">
    <div><?php echo lng( 'search_contact' ) ?>:<br />
-    <input type="text" name="q" value="<?php echo $this->search ?>"/>&#160;<input type="submit" name="search" value="<?php echo lng( 'search' ) ?>"/>
+    <input type="hidden" name="token" value="<?= $this->token ?>"/>
+	<input type="text" name="q" value="<?php echo $this->search ?>"/>&#160;<input type="submit" name="search" value="<?php echo lng( 'search' ) ?>"/>
    </div>
   </form>
 </div>

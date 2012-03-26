@@ -27,7 +27,7 @@ if ( Vars::$ID )
     if ( mysql_num_rows( $q ) )
     {
         $data = mysql_fetch_assoc( $q );
-        if ( isset( $_POST['submit'] ) )
+        if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
         {
             if ( $data['user_id'] == Vars::$USER_ID )
             {
@@ -64,7 +64,9 @@ if ( Vars::$ID )
         $tpl->submit = lng( 'restore' );
         $tpl->phdr = lng( 'restore_message' );
         $tpl->urlBack = Vars::$MODULE_URI . '?act=basket';
-        $tpl->contents = $tpl->includeTpl( 'select' );
+        $tpl->token = mt_rand(100, 10000);
+		$_SESSION['token_status'] = $tpl->token;
+		$tpl->contents = $tpl->includeTpl( 'select' );
     } else
     {
         //Если собщение не существует, информируем об этом)

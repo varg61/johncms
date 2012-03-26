@@ -24,6 +24,7 @@ Class ValidMail extends Vars {
 	public $error_test;
 	private $file_name;
 	private $file_size;
+	
 	/*
     -----------------------------------------------------------------
     Конструктор класса
@@ -33,6 +34,7 @@ Class ValidMail extends Vars {
 		$this->id = $id;
 		$this->array = $array;
 	}
+	
 	/*
     -----------------------------------------------------------------
     Проверяем запрос к странице
@@ -136,7 +138,7 @@ Class ValidMail extends Vars {
     -----------------------------------------------------------------
     */
 	function validateForm() {
-		if (isset($_POST['submit']) && $this->id !== false) {
+		if (isset($_POST['submit']) && $this->id !== false && self::checkCSRF() === true) {
 			if($this->valIgnor() === false)
 				return false;
 			if($this->valRequest() === false)
@@ -147,7 +149,7 @@ Class ValidMail extends Vars {
 				return false;
 			$this->addMessage();
 			return true;
-		} else if(isset($_POST['login'])) {
+		} else if(isset($_POST['login']) && self::checkCSRF() === true) {
 			if($this->checkLogin($this->array['login']) === false)
 				return false;
 			if($this->valIgnor() === false)
@@ -172,8 +174,9 @@ Class ValidMail extends Vars {
     */
 	function addMessage() {
 		if(empty($this->error_log)) {
-			//Отправляем сообщение
+			//Обновляем, добавляем контакт
 			$this->checkContact( $this->id );
+			//Отправляем сообщение
 			mysql_query( "INSERT INTO `cms_mail_messages` SET
 			`user_id`='" . parent::$USER_ID . "',
 			`contact_id`='" . $this->id . "',
@@ -181,7 +184,6 @@ Class ValidMail extends Vars {
 			`time`='" . time() . "',
 			`filename`='" . $this->file_name . "',
 			`filesize`='" . $this->file_size . "'" );
-			$this->countPlus( $this->id, parent::$USER_ID );
 			mysql_query( "UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . parent::$USER_ID );
 			Header( 'Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $this->id );
 			return true;
@@ -241,7 +243,7 @@ Class ValidMail extends Vars {
 	function valFile() {
 		//Загружаем файл
 		$handle = new UploadMail( $_FILES );
-		$handle->DIR = ROOTPATH . 'files/' . MAILDIR;
+		$handle->DIR = ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'pm';
 		$handle->MAX_FILE_SIZE = 1024 * Vars::$SYSTEM_SET['flsz'];
 		$handle->PREFIX_FILE = true;
 		if ( $handle->upload() == true )
@@ -257,6 +259,7 @@ Class ValidMail extends Vars {
 				return true;
 		}
 	}
+	
 	/*
     -----------------------------------------------------------------
     Добавляем или обновляем контакт
@@ -264,80 +267,20 @@ Class ValidMail extends Vars {
     */
     private function checkContact( $id )
     {
-        $count = mysql_result( mysql_query( "SELECT COUNT(*) 
-        FROM `cms_mail_contacts` 
-        WHERE `user_id`='$id' 
-        AND `contact_id`='" . parent::$USER_ID . "'" ), 0 );
-        $total = mysql_result( mysql_query( "SELECT COUNT(*) 
-        FROM `cms_mail_contacts` 
-        WHERE `user_id`='" . parent::$USER_ID . "' 
-        AND `contact_id`='$id'" ), 0 );
-        if ( $total )
-        {
-            mysql_query( "UPDATE `cms_mail_contacts` SET
-			`time`='" . time() . "' 
-            WHERE `user_id`='" . parent::$USER_ID . "' 
-            AND `contact_id`='$id'" );
-            if ( $count )
-            {
-                mysql_query( "UPDATE `cms_mail_contacts` SET
-				`time`='" . time() . "' 
-                WHERE `user_id`='$id' 
-                AND `contact_id`='" . parent::$USER_ID . "'" );
-            } else
-            {
-                mysql_query( "INSERT INTO `cms_mail_contacts` SET
-				`user_id`='$id',
-				`contact_id`='" . parent::$USER_ID . "',
-				`time`='" . time() . "'" );
-            }
-        } else
-        {
-            mysql_query( "INSERT INTO `cms_mail_contacts` SET
-			`user_id`='" . parent::$USER_ID . "',
-			`contact_id`='$id',
-			`time`='" . time() . "'" );
-            if ( $count )
-            {
-                mysql_query( "UPDATE `cms_mail_contacts` SET
-				`time`='" . time() . "' 
-                WHERE `user_id`='$id' 
-                AND `contact_id`='" . parent::$USER_ID . "'" );
-            } else
-            {
-                mysql_query( "INSERT INTO `cms_mail_contacts` SET
-				`user_id`='$id',
-				`contact_id`='" . parent::$USER_ID . "',
-				`time`='" . time() . "'" );
-            }
-        }
+		mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `count_in`, `time`)
+		VALUES ('$id', '" . parent::$USER_ID . "', '1', '" . time() . "')
+		ON DUPLICATE KEY UPDATE `count_in`=`count_in`+1, `time`='" . time() . "', `archive`='0', `delete`='0'");
+		mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `count_out`, `time`)
+		VALUES ('" . parent::$USER_ID . "', '$id', '1', '" . time() . "')
+		ON DUPLICATE KEY UPDATE `count_out`=`count_out`+1, `time`='" . time() . "', `archive`='0', `delete`='0'");
+		return true;
     }
 	
-	/*
-    -----------------------------------------------------------------
-    Добавляем +1 к счетчику
-    -----------------------------------------------------------------
-    */
-    private function countPlus( $id, $user_id )
-    {
-        if ( $id == null )
-            return false;
-        mysql_query( "UPDATE `cms_mail_contacts` SET
-		`count_out`=`count_out`+1,
-        `time`='" . time() . "', 
-        `archive`='0', 
-        `delete`='0' 
-        WHERE `user_id`='$user_id' 
-        AND `contact_id`='$id'" );
-        mysql_query( "UPDATE `cms_mail_contacts` SET
-        `count_in`=`count_in`+1, 
-        `time`='" . time() . "', 
-        `archive`='0', 
-        `delete`='0' 
-        WHERE `user_id`='$id' 
-        AND `contact_id`='$user_id'" );
-		return;
-    }
-	
-	
+	public static function checkCSRF() {
+		if (isset($_POST['token']) && isset($_SESSION['token_status'])&& $_POST['token'] == $_SESSION['token_status']) {
+			unset($_SESSION['token_status']);
+			return true;
+		}
+		return false;
+	}
 }

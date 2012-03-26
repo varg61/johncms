@@ -30,7 +30,7 @@ $tpl->total = $total;
 if ( $total )
 {
     //Удаляем контакты из игнора
-	if ( isset( $_POST['unban'] ) )
+	if ( isset( $_POST['unban'] )  && ValidMail::checkCSRF() === true )
     {
         if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
         {
@@ -69,6 +69,8 @@ if ( $total )
     $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=banned&amp;',
         Vars::$START, $total, Vars::$USER_SET['page_size'] );
     $tpl->query = $array;
+	$tpl->token = mt_rand(100, 10000);
+	$_SESSION['token_status'] = $tpl->token;
 	//Подключаем шаблон модуля contacts.php
     $tpl->contacts = $tpl->includeTpl( 'contacts' );
 } else

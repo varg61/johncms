@@ -27,7 +27,7 @@ if ( Vars::$MOD == 'delete' )
         "' AND `contact_id`='" . Vars::$USER_ID . "' AND `sys`='1'" ), 0 );
     if ( $total )
     {
-        if ( isset( $_POST['submit'] ) )
+        if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
         {
             mysql_query( "DELETE FROM `cms_mail_messages` WHERE `id`='" . Vars::$ID . "' AND `contact_id`='" .
                 Vars::$USER_ID . "' AND `sys`='1'" );
@@ -39,7 +39,9 @@ if ( Vars::$MOD == 'delete' )
             $tpl->submit = lng( 'delete' );
             $tpl->phdr = lng( 'removing_message' );
             $tpl->urlBack = Vars::$MODULE_URI . '?act=systems';
-            $tpl->contents = $tpl->includeTpl( 'select' );
+            $tpl->token = mt_rand(100, 10000);
+			$_SESSION['token_status'] = $tpl->token;
+			$tpl->contents = $tpl->includeTpl( 'select' );
         }
     } else
     {
@@ -50,7 +52,7 @@ if ( Vars::$MOD == 'delete' )
     //Очищаем системные сообщения
 	if ( Vars::$MOD == 'clear' )
     {
-        if ( isset( $_POST['submit'] ) )
+        if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
         {
             mysql_query( "DELETE FROM `cms_mail_messages` WHERE `contact_id`='" . Vars::$USER_ID . "' AND `sys`='1'" );
             Header( 'Location: ' . Vars::$MODULE_URI . '?act=systems' );
@@ -61,6 +63,8 @@ if ( Vars::$MOD == 'delete' )
             $tpl->submit = lng( 'clear' );
             $tpl->phdr = lng( 'clear_systems' );
             $tpl->urlBack = Vars::$MODULE_URI . '?act=systems';
+			$tpl->token = mt_rand(100, 10000);
+			$_SESSION['token_status'] = $tpl->token;
             $tpl->contents = $tpl->includeTpl( 'select' );
         }
     } else

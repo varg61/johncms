@@ -38,7 +38,7 @@ if ( Vars::$ID )
                     $result = mysql_fetch_assoc( $cont );
                     if ( $result && $result['delete'] == 0 )
                     {
-                        if ( isset( $_POST['submit'] ) )
+                        if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
                         {
                             Mail::mailSelectContacts( array( Vars::$ID ), 'delete' );
                             Header( 'Location: ' . Vars::$HOME_URL . '/profile?user=' . Vars::
@@ -55,7 +55,7 @@ if ( Vars::$ID )
                     } else
                     {
 
-                        if ( isset( $_POST['submit'] ) )
+                        if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
                         {
                             if ( $result['delete'] == 1 )
                             {
@@ -79,6 +79,8 @@ if ( Vars::$ID )
                         $tpl->phdr = lng( 'add_contact' );
 
                     }
+					$tpl->token = mt_rand(100, 10000);
+					$_SESSION['token_status'] = $tpl->token;
                     $tpl->contents = $tpl->includeTpl( 'select' );
                 }
                 break;

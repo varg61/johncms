@@ -6,6 +6,7 @@
 <?if($this->total): ?>
 	<div class="gmenu">
 	<?php echo lng( 'noted_contacts' ) ?>:<br />
+	<input type="hidden" name="token" value="<?= $this->token ?>"/>
 	<input type="submit" name="restore" value="<?php echo lng( 'restore' ) ?>"/> <input type="submit" name="delete" value="<?php echo lng( 'delete' ) ?>"/> <input type="submit" name="clear" value="<?php echo lng( 'clean_basket' ) ?>"/><br />
 	</div>
 	</div></form>

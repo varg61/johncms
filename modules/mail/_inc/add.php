@@ -33,4 +33,6 @@ if($addmail->validateForm() === false) {
 }
 $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
 $tpl->size = Vars::$SYSTEM_SET['flsz'];
+$tpl->token = mt_rand(100, 10000);
+$_SESSION['token_status'] = $tpl->token;
 $tpl->contents = $tpl->includeTpl( 'add' );

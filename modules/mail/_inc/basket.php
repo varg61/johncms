@@ -112,13 +112,12 @@ if ( Vars::$ID )
     }
 } else
 {
-    
 	$total = Mail::counter( 'delete' );
     $tpl->total = $total;
     if ( $total )
     {
         //Восстанавливаем сообщения
-		if ( isset( $_POST['restore'] ) )
+		if ( isset( $_POST['restore'] ) && ValidMail::checkCSRF() === true )
         {
             if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
             {
@@ -128,7 +127,7 @@ if ( Vars::$ID )
             exit;
         }
         //Удаляем сообщения
-		if ( isset( $_POST['delete'] ) )
+		if ( isset( $_POST['delete'] ) && ValidMail::checkCSRF() === true )
         {
             if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
             {
@@ -138,7 +137,7 @@ if ( Vars::$ID )
             exit;
         }
 		//Очищаем корзину
-        if ( isset( $_POST['clear'] ) )
+        if ( isset( $_POST['clear'] ) && ValidMail::checkCSRF() === true )
         {
             Mail::mailSelectContacts( array(), 'clear' );
             Header( 'Location: ' . Vars::$MODULE_URI . '?act=basket' );
@@ -188,7 +187,9 @@ if ( Vars::$ID )
 		$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=basket&amp;',
             Vars::$START, $total, Vars::$USER_SET['page_size'] );
         $tpl->query = $array;
-        //Подключаем шаблон модуля contacts.php
+        $tpl->token = mt_rand(100, 10000);
+		$_SESSION['token_status'] = $tpl->token;
+		//Подключаем шаблон модуля contacts.php
 		$tpl->contacts = $tpl->includeTpl( 'contacts' );
     } else
     {

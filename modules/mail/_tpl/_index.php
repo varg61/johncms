@@ -9,15 +9,17 @@
    </div>
   <?php endforeach ?>
   <div class="gmenu"><?php echo lng( 'noted_contacts' ) ?>:<br />
+  <input type="hidden" name="token" value="<?= $this->token ?>"/>
    <input type="submit" name="archive" value="<?php echo lng( 'in_archive' ) ?>"/>&#160;<input type="submit" name="delete" value="<?php echo lng( 'delete' ) ?>"/><br />
   </div>
-	<?php if($this->total > Vars::$USER_SET['page_size']): ?>
+	
+ </form>
+ <?php if($this->total > Vars::$USER_SET['page_size']): ?>
    <div class="phdr"><?php echo lng( 'total' ) ?>: <?php echo $this->total ?></div>
    <div class="topmenu"><?php echo $this->display_pagination ?></div>
    <form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>" style="font-size: x-small;"/>
    <input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
   <?php endif ?>
- </form>
 </div>
 <?php endif ?>
 <div class="list2"><p>

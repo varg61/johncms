@@ -47,7 +47,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
     if ( $total )
     {
         //Перемещаем контакты в корзину
-		if ( isset( $_POST['delete'] ) )
+		if ( isset( $_POST['delete'] ) && ValidMail::checkCSRF() === true )
         {
             if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
             {
@@ -56,7 +56,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
             Header( 'Location: ' . Vars::$MODULE_URI );
             exit;
         } //Перемещаем контакты в архив
-		else if ( isset( $_POST['archive'] ) )
+		else if ( isset( $_POST['archive'] ) && ValidMail::checkCSRF() === true )
             {
                 if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
                 {
@@ -106,6 +106,8 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
     $tpl->delete = Mail::counter( 'delete' );   //Счетчик удаленных
     $tpl->banned = Mail::counter( 'banned' );   //Счетчик заблокированных
     $tpl->files = Mail::counter( 'files' );     //Счетчик файлов
-    //Подключаем шаблон модуля
+    $tpl->token = mt_rand(100, 10000);
+	$_SESSION['token_status'] = $tpl->token;
+	//Подключаем шаблон модуля
     $tpl->contents = $tpl->includeTpl( '_index' );
 }

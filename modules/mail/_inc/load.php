@@ -33,7 +33,7 @@ if ( Vars::$ID )
     }
     $res = mysql_fetch_assoc( $req );
     //Проверяем существование файла на сервере
-	if ( file_exists( FILEPATH . MAILDIR . DIRECTORY_SEPARATOR . $res['filename'] ) )
+	if ( file_exists( FILEPATH . 'users/pm/' . $res['filename'] ) )
     {
         if ( empty( $_SESSION['file_' . Vars::$ID] ) )
         {
@@ -42,7 +42,7 @@ if ( Vars::$ID )
             $_SESSION['file_' . Vars::$ID] = 1;
         }
 		//Загрузка файла
-		Header( 'Location: ' . Vars::$HOME_URL . '/files/' . MAILDIR . '/' . $res['filename'] );
+		Header( 'Location: ' . Vars::$HOME_URL . '/files/users/pm/' . $res['filename'] );
         exit;
     } else
     {

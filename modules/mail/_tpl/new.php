@@ -6,6 +6,7 @@
 	
 	<div class="gmenu">
 	<?php echo lng( 'noted_contacts' ) ?>:<br />
+	<input type="hidden" name="token" value="<?= $this->token ?>"/>
 	<input type="submit" name="addnew" value="<?php echo lng( 'select_read' ) ?>"/><br />
 	</div>
 	</div></form>

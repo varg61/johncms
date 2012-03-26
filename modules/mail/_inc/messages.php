@@ -36,7 +36,7 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
         if ( mysql_num_rows( $q ) )
         {
             $data = mysql_fetch_assoc( $q );
-            if ( isset( $_POST['submit'] ) )
+            if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
             {
                 if ( $data['user_id'] == Vars::$USER_ID )
                 {
@@ -79,7 +79,9 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
                 $tpl->select = lng( 'confirm_removing' );
                 $tpl->submit = lng( 'delete' );
                 $tpl->phdr = lng( 'removing_message' );
-                $tpl->contents = $tpl->includeTpl( 'select' );
+				$tpl->token = mt_rand(100, 10000);
+				$_SESSION['token_status'] = $tpl->token;
+				$tpl->contents = $tpl->includeTpl( 'select' );
             }
         } else
         {
@@ -215,6 +217,8 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 			$tpl->ignor = Mail::ignor(Vars::$ID) === true ? '<div class="rmenu">' . lng( 'user_banned' ) . '</div>' : '';
 			$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
 			$tpl->size = Vars::$SYSTEM_SET['flsz'];
+			$tpl->token = mt_rand(100, 10000);
+			$_SESSION['token_status'] = $tpl->token;
 			$tpl->contents = $tpl->includeTpl( 'messages' );
 		}
 	}

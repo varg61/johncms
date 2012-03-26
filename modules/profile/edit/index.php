@@ -304,7 +304,7 @@ switch (Vars::$ACT) {
                 $tpl->status = trim($_POST['status']);
                 if (mb_strlen($tpl->status) < 51) {
                     unset($_SESSION['token_status']);
-                    mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "'");
+                    mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "' WHERE `id` = " . $user['id']);
                     header('Location: ' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id']);
                     exit;
                 }

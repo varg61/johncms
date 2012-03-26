@@ -129,7 +129,7 @@ if ( Vars::$ID )
     if ( $total )
     {
         //Удаляем сообщения
-		if ( isset( $_POST['delete'] ) )
+		if ( isset( $_POST['delete'] ) && ValidMail::checkCSRF() === true )
         {
             if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
             {
@@ -180,6 +180,8 @@ if ( Vars::$ID )
         $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=elected&amp;',
             Vars::$START, $total, Vars::$USER_SET['page_size'] );
         $tpl->query = $array;
+		$tpl->token = mt_rand(100, 10000);
+		$_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля contacts.php
 		$tpl->contacts = $tpl->includeTpl( 'contacts' );
     } else

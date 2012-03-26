@@ -32,7 +32,7 @@ if ( Vars::$ID )
 		$data = mysql_fetch_assoc( $q );
         if ( $data['elected_in'] == Vars::$USER_ID || $data['elected_out'] == Vars::$USER_ID )
         {
-            if ( isset( $_POST['submit'] ) )
+            if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
             {
                 if ( $data['user_id'] == Vars::$USER_ID )
                 {
@@ -51,10 +51,6 @@ if ( Vars::$ID )
 						`elected_in`='0' WHERE `id`='" . Vars::$ID . "'" );
                     }
                 }
-				$counter['elected'] = Mail::counter( 'elected' );
-				mysql_query( "UPDATE `users` 
-				SET	`count_mail`='" . Mail::updateCount( $counter ) . "' 
-				WHERE `id`='" . Vars::$USER_ID . "'" );
                 if ( $data['user_id'] == Vars::$USER_ID )
                 {
                     Header( 'Location: ' . Vars::$MODULE_URI . '?act=elected&id=' . $data['contact_id'] );
@@ -72,7 +68,7 @@ if ( Vars::$ID )
             $tpl->urlBack = Vars::$MODULE_URI . '?act=elected';
         } else
         {
-            if ( isset( $_POST['submit'] ) )
+            if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
             {
                 if ( $data['delete'] )
                 {
@@ -104,6 +100,8 @@ if ( Vars::$ID )
             $tpl->phdr = lng( 'removing_message' );
             $tpl->urlBack = Vars::$MODULE_URI . '?act=basket';
         }
+		$tpl->token = mt_rand(100, 10000);
+		$_SESSION['token_status'] = $tpl->token;
 		//Подключаем шаблон модуля select.php
         $tpl->contents = $tpl->includeTpl( 'select' );
     } else

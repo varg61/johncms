@@ -14,6 +14,7 @@
 <strong><?php echo lng( 'file' ) ?>:</strong><br />
 <input type="file" name="0"/><br />
 <small><?php echo lng( 'max_file_size' ) ?> <?php echo $this->size ?> кб.</small><br />
+<input type="hidden" name="token" value="<?= $this->token ?>"/>
 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $this->maxsize ?>" />
 <p><input type="submit" name="submit" value="<?php echo lng( 'sent' ) ?>"/></p>
 </div>

@@ -36,7 +36,7 @@ if ( $total == 1 )
 if ( $total )
 {
     //Отмечаем сообщения как прочитанные
-	if ( isset( $_POST['addnew'] ) )
+	if ( isset( $_POST['addnew'] ) && ValidMail::checkCSRF() === true )
     {
         if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
         {
@@ -79,6 +79,8 @@ if ( $total )
         $START, $total, Vars::$USER_SET['page_size'] );
     $tpl->query = $array;
     //Подключем шаблон contact.php
+	$tpl->token = mt_rand(100, 10000);
+	$_SESSION['token_status'] = $tpl->token;
 	$tpl->contacts = $tpl->includeTpl( 'contacts' );
 }
 //Подключем шаблон new.php
