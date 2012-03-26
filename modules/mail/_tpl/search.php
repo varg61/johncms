@@ -13,11 +13,11 @@
 		<a href="<?php echo $row['url'] ?>"><?php echo $row['nickname'] ?></a> <?php echo $row['online'] ?> (<?php echo $row['count_in'] ?>&#160;/&#160;<?php echo $row['count_out'] ?>) <span class="red"><?php echo $row['count_new'] ?></span>
 	</div>
 	<? endforeach ?>
-<? endif ?>
+<? endif; ?>
 <?php if($this->total > Vars::$USER_SET['page_size']): ?>
 <div class="phdr"><?php echo lng( 'total' ) ?>: <?php echo $this->total ?></div>
 <div class="topmenu"><?php echo $this->display_pagination ?></div>
 <form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>"/>
 <input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;"/></p></form>
-<? endif ?>
+<? endif; ?>
 <p><a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'contacts' ) ?></a></p>

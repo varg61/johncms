@@ -12,7 +12,7 @@
                 <strong><?= htmlspecialchars($_SESSION['password']) ?></strong>
                 <?php else : ?>
                 <a href="<?= Vars::$URI ?>?pass<?= (isset($_GET['auto']) ? '&amp;auto' : '') ?>"><?= lng('show') ?></a>
-                <?php endif ?>
+                <?php endif; ?>
             </td>
         </tr>
         <tr>
@@ -22,7 +22,7 @@
                 <input type="text" value="<?= Vars::$HOME_URL . '/login?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) ?>"/>
                 <?php else : ?>
                 <a href="<?= Vars::$URI ?>?auto<?= (isset($_GET['pass']) ? '&amp;pass' : '') ?>"><?= lng('show') ?></a>
-                <?php endif ?>
+                <?php endif; ?>
             </td>
         </tr>
     </table>
@@ -32,7 +32,7 @@
     <h3><?= lng('thanks_for_registration') ?>!</h3>
     <?php if (Vars::$USER_SYS['reg_mode'] == 2) : ?>
     <p style="font-size: x-small"><?= lng('moderation_warning') ?></p>
-    <?php endif ?>
+    <?php endif; ?>
 </div>
 <div class="phdr">
     <a href="<?= Vars::$HOME_URL ?>"><?= lng('enter_on_site') ?></a>

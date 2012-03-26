@@ -6,21 +6,21 @@
         <label><?=  lng('avatar') ?></label>
         <?php if (isset($this->avatar)) : ?>
         <br/><img src="<?= Vars::$HOME_URL ?>/files/users/avatar/<?= $this->user['id'] ?>.gif" width="32" height="32" alt="<?= $this->user['nickname'] ?>" border="0"/><br/>
-        <?php endif ?>
+        <?php endif; ?>
     </div>
     <ul class="formblock">
         <?php if ($this->setUsers['upload_avatars'] || Vars::$USER_RIGHTS >= 7) : ?>
         <li><a href="<?= Vars::$URI ?>?act=upload_avatar&amp;user=<?= $this->user['id'] ?>"><?= lng('upload_image') ?></a></li>
-        <?php endif ?>
+        <?php endif; ?>
         <?php if ($this->setUsers['upload_animation'] || Vars::$USER_RIGHTS >= 7) : ?>
         <li><a href="<?= Vars::$URI ?>?act=upload_animation&amp;user=<?= $this->user['id'] ?>"><?= lng('upload_animation') ?></a></li>
-        <?php endif ?>
+        <?php endif; ?>
         <?php if ($this->user['id'] == Vars::$USER_ID) : ?>
         <li><a href="<?= Vars::$HOME_URL ?>/avatars"><?= lng('select_in_catalog') ?></a></li>
-        <?php endif ?>
+        <?php endif; ?>
         <?php if (isset($this->avatar)) : ?>
         <li><a href="<?= Vars::$URI ?>?act=delete_avatar&amp;user=<?= $this->user['id'] ?>"><?= lng('delete') ?></a></li>
-        <?php endif ?>
+        <?php endif; ?>
     </ul>
 </div>
 <div class="phdr">

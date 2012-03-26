@@ -6,13 +6,13 @@
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_saved') ?>
 </div>
-<?php endif ?>
+<?php endif; ?>
 
 <?php if (isset($this->reset)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_default') ?>
 </div>
-<?php endif ?>
+<?php endif; ?>
 
 <div class="menu">
     <form action="<?= Vars::$URI ?>?act=users_settings" method="post">

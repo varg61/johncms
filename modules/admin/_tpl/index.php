@@ -6,11 +6,11 @@
     <ul>
         <?php if (Vars::$USER_RIGHTS >= 7 && $this->regTotal) : ?>
         <li><span class="red"><a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('users_reg') ?></a>&#160;(<?= $this->regTotal ?>)</b></span></li>
-        <?php endif ?>
+        <?php endif; ?>
         <li><a href="<?= Vars::$HOME_URL ?>/users/search"><?= lng('users_list') ?></a>&#160;(<?= $this->usrTotal ?>)</li>
         <?php if (Vars::$USER_RIGHTS >= 7) : ?>
         <li><a href="<?= Vars::$MODULE_URI ?>?act=users_settings"><?= lng('settings') ?></a></li>
-        <?php endif ?>
+        <?php endif; ?>
     </ul>
 </div>
 <div class="gmenu" style="padding-top: 2px; padding-bottom: 6px">
@@ -20,18 +20,19 @@
 <div class="menu" style="padding-top: 2px; padding-bottom: 6px">
     <h3><?= Functions::getImage('settings.png', '', 'class="left"') ?>&#160;<?= lng('system') ?></h3>
     <ul>
-        <li><a href="<?= Vars::$URI ?>/system/languages.php"><?= lng('language_settings') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/languages.php"><?= lng('language_settings') ?></a></li>
+        <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><?= lng('refresh_smileys') ?></a></li>
     </ul>
 </div>
 <div class="rmenu" style="padding-top: 2px; padding-bottom: 6px">
     <h3><?= Functions::getImage('blocked.png', '', 'class="left"') ?>&#160;<?= lng('security') ?></h3>
     <ul>
         <?php if (Vars::$USER_RIGHTS == 9) : ?>
-        <li><a href="<?= Vars::$URI ?>/system/ip_access.php"><?= lng('ip_accesslist') ?></a></li>
-        <?php endif ?>
+        <li><a href="<?= Vars::$URI ?>/ip_acl.php"><?= lng('ip_accesslist') ?></a></li>
+        <?php endif; ?>
     </ul>
 </div>
-<?php endif ?>
+<?php endif; ?>
 <div class="phdr">
     &#160;
 </div>

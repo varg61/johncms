@@ -25,7 +25,7 @@
             <?php if (Vars::$USER_RIGHTS == 9) : ?>
             <br/><input type="radio" value="7" name="rights" <?= ($this->user['rights'] == 7 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('rank_7') ?>
             <br/><input type="radio" value="9" name="rights" <?= ($this->user['rights'] == 9 ? 'checked="checked"' : '') ?>/>&#160;<span class="red"><b><?= lng('rank_9') ?></b></span>
-            <?php endif ?>
+            <?php endif; ?>
         </div>
         <div class="formblock">
             <input type="submit" value="<?= lng('save') ?>" name="submit"/>

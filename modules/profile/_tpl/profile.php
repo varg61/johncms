@@ -5,7 +5,7 @@
 <div class="topmenu">
     <?= $this->menu ?>
 </div>
-<?php endif ?>
+<?php endif; ?>
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
@@ -16,7 +16,7 @@
     <div><?= Functions::getImage('rating.png') ?>&#160;<a href="profile.php?act=stat&amp;user=<?= $this->user['id'] ?>"><?= lng('statistics') ?></a></div>
     <?php if ($this->bancount) : ?>
     <div><?= Functions::getImage('user_block.png') ?>&#160;<a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><?= lng('infringements') ?></a> (<?= $this->bancount ?>)</div>
-    <?php endif ?>
+    <?php endif; ?>
     <br/>
     <div><?= Functions::getImage('album_4.png') ?>&#160;<a href="album.php?act=list&amp;user=<?= $this->user['id'] ?>"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</div>
     <div><?= Functions::getImage('comments.png') ?>&#160;<a href="profile.php?act=guestbook&amp;user=<?= $this->user['id'] ?>"><?= lng('guestbook') ?></a>&#160;(<?= $this->user['comm_count'] ?>)</div>
@@ -26,11 +26,11 @@
 	<div><?= Functions::getImage('mail-blocked.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail?act=select&amp;mod=banned&amp;id=<?php echo $this->user['id'] ?>"><?php echo $this->textbanned ?></a></div>
 	<?php if(empty($this->banned)): ?>
 	<div><?= Functions::getImage('mail-outbox.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail?act=select&amp;mod=contact&amp;id=<?php echo $this->user['id'] ?>"><?php echo $this->textcontact ?></a></div>
-	<?php endif ?>
+	<?php endif; ?>
 	<?php if(empty($this->banned)): ?>
 	<div><?= Functions::getImage('mail_write.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail?act=messages&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('contact_write') ?></a></div>
-	<?php endif ?>
-	<?php endif ?>
+	<?php endif; ?>
+	<?php endif; ?>
 	<!--// Block contacts -->
 	</p>
 </div>

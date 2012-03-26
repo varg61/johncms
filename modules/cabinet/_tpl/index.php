@@ -12,7 +12,7 @@
     <div><?php echo Functions::getImage('mail-inbox.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail"><?php echo lng('mail') ?></a>&#160;(<?php echo Functions::mailCount() ?>)</div>
 	<?php if (Vars::$USER_RIGHTS) : ?>
     <div><?= Functions::getImage('blocked.png') ?>&#160;<a href="../guestbook/index.php?act=ga&amp;do=set"><?= lng('admin_club') ?></a> (<span class="red">()</span>)</div>
-    <?php endif ?>
+    <?php endif; ?>
     </p>
 </div>
 <div class="bmenu">
@@ -24,7 +24,7 @@
         <li><a href="profile.php?act=password"><?= lng('change_password') ?></a></li>
         <?php if (Vars::$USER_RIGHTS) : ?>
         <li><span class="red"><a href="<?= Vars::$HOME_URL ?>/admin"><b><?= lng('admin_panel') ?></b></a></span></li>
-        <?php endif ?>
+        <?php endif; ?>
     </ul>
     </p>
 </div>

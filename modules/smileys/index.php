@@ -26,12 +26,58 @@ $cat_list = array();
 $dir_list = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
 foreach ($dir_list as $val) {
     $dir = basename($val);
+    if (!Vars::$USER_RIGHTS && $dir == '_admin') {
+        continue;
+    }
     $smileys_cat[$dir] = lng($dir);
     $cat_list[] = $dir;
 }
 $cat = isset($_GET['cat']) && in_array(trim($_GET['cat']), $cat_list) ? trim($_GET['cat']) : $cat_list[0];
 
 switch (Vars::$ACT) {
+    case 'refresh':
+        /*
+        -----------------------------------------------------------------
+        Обновляем кэш смайлов
+        -----------------------------------------------------------------
+        */
+        if (Vars::$USER_RIGHTS == 9) {
+            $cache = array();
+            $smileys = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
+            foreach ($smileys as $val) {
+                $file = basename($val);
+                $name = explode(".", $file);
+                $parent = basename(dirname($val));
+                $image = '<img src="' . Vars::$HOME_URL . '/images/smileys/' . $parent . '/' . $file . '" alt="" />';
+                if ($parent == '_admin') {
+                    $cache['adm_s'][] = '/:' . preg_quote($name[0]) . ':/';
+                    $cache['adm_r'][] = $image;
+                    $cache['adm_s'][] = '/:' . preg_quote(Functions::translit($name[0])) . ':/';
+                    $cache['adm_r'][] = $image;
+                } elseif ($parent == '_simply') {
+                    $cache['usr_s'][] = '/:' . preg_quote($name[0]) . '/';
+                    $cache['usr_r'][] = $image;
+                } else {
+                    $cache['usr_s'][] = '/:' . preg_quote($name[0]) . ':/';
+                    $cache['usr_r'][] = $image;
+                    $cache['usr_s'][] = '/:' . preg_quote(Functions::translit($name[0])) . ':/';
+                    $cache['usr_r'][] = $image;
+                }
+            }
+            if (file_put_contents(CACHEPATH . 'smileys.dat', serialize($cache))) {
+                echo'<div class="gmenu">' .
+                    '<p>' . lng('smileys_updated') . '</p>' .
+                    '<p><a href="' . Vars::$HOME_URL . '/smileys">' . lng('smileys_catalog') . '</a><br/>' .
+                    '<a href="' . Vars::$HOME_URL . '/admin">' . lng('admin_panel') . '</a></p>' .
+                    '</div>';
+            } else {
+                echo '<div class="rmenu"><p>' . lng('smileys_error') . '</p></div>';
+            }
+        } else {
+            echo Functions::displayError(lng('access_forbidden'));
+        }
+        break;
+
     case 'list':
         /*
         -----------------------------------------------------------------

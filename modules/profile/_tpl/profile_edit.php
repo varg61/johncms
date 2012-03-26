@@ -5,18 +5,18 @@
 <div class="topmenu"><b><?= lng('user') ?></b> | <a
     href="<?= Vars::$URI ?>?act=administration&amp;user=<?= $this->user['id'] ?>"><?= lng('administration') ?></a>
 </div>
-<?php endif ?>
+<?php endif; ?>
 
 <?php if (isset($this->save)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_saved') ?>
 </div>
-<?php endif ?>
+<?php endif; ?>
 <?php if (isset($this->error)) : ?>
 <div class="rmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('errors_occurred') ?>
 </div>
-<?php endif ?>
+<?php endif; ?>
 
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
@@ -27,12 +27,12 @@
             <label><?= lng('photo') ?></label>
             <?php if (isset($this->photo)) : ?>
             <a href="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>.jpg"><img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/></a>
-            <?php endif ?>
+            <?php endif; ?>
             <div class="small">
                 <a href=""><?= lng('upload') ?></a>
                 <?php if (isset($this->photo)) : ?>
                 | <a href="<?= Vars::$URI ?>?act=delete_photo&amp;user=<?= $this->user['id'] ?>"><?= lng('delete') ?></a>
-                <?php endif ?>
+                <?php endif; ?>
             </div>
         </div>
         <div class="formblock">

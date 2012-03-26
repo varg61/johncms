@@ -8,14 +8,14 @@
             <label for="login"><?= lng('login_caption') ?></label><br/>
             <?php if (isset($this->login->error['login'])) : ?>
             <small class="red"><b><?= lng('error') ?></b>: <?= $this->login->error['login'] ?><br/></small>
-            <?php endif ?>
+            <?php endif; ?>
             <input id="login" type="text" name="login" value="<?= (isset($_POST['login']) ? htmlspecialchars(trim($_POST['login'])) : '') ?>" maxlength="20" <?= (isset($this->login->error['login']) ? $error_style : '') ?>/>
         </div>
         <div class="formblock">
             <label for="password"><?= lng('password') ?></label><br/>
             <?php if (isset($this->login->error['password'])) : ?>
             <small class="red"><b><?= lng('error') ?></b>: <?= $this->login->error['password'] ?><br/></small>
-            <?php endif ?>
+            <?php endif; ?>
             <input id="password" type="password" name="password" maxlength="20" <?= (isset($this->login->error['password']) ? $error_style : '') ?>/>
         </div>
         <div class="formblock">

@@ -380,19 +380,21 @@ class Functions extends Vars
     */
     public static function smileys($str, $adm = false)
     {
-        global $rootpath;
-        static $smileys_cache = array();
-        if (empty($smileys_cache)) {
-            $file = $rootpath . 'files/cache/smileys.dat';
+        static $pattern = array();
+        if (empty($pattern)) {
+            $file = CACHEPATH . 'smileys.dat';
             if (file_exists($file) && ($smileys = file_get_contents($file)) !== false) {
-                $smileys_cache = unserialize($smileys);
-                return strtr($str, ($adm ? array_merge($smileys_cache['usr'], $smileys_cache['adm']) : $smileys_cache['usr']));
+                $pattern = unserialize($smileys);
             } else {
                 return $str;
             }
-        } else {
-            return strtr($str, ($adm ? array_merge($smileys_cache['usr'], $smileys_cache['adm']) : $smileys_cache['usr']));
         }
+        //TODO: Добавить настраиваемое ограничение на к-во обработанных смайлов
+        return preg_replace(
+            ($adm ? array_merge($pattern['usr_s'], $pattern['adm_s']) : $pattern['usr_s']),
+            ($adm ? array_merge($pattern['usr_r'], $pattern['adm_r']) : $pattern['usr_r']),
+            $str
+        );
     }
 
     /*
@@ -485,48 +487,50 @@ class Functions extends Vars
         );
         return strtr($str, $replace);
     }
-	
-	/**
-    *-----------------------------------------------------------------
-    *Функция почты "добавление системных сообщений"
-    *-----------------------------------------------------------------
-    */
-	public static function notificationSis(
-		$contact_id,      // ID получателя
-		$theme,           // Тема сообщения
-		$text,            // Текст сообщения
-		$user_id = 0      // ID отправителя
-		) {
-		mysql_query("INSERT INTO `cms_mail_messages` SET
+
+    /**
+     *-----------------------------------------------------------------
+     *Функция почты "добавление системных сообщений"
+     *-----------------------------------------------------------------
+     */
+    public static function notificationSis(
+        $contact_id, // ID получателя
+        $theme, // Тема сообщения
+        $text, // Текст сообщения
+        $user_id = 0 // ID отправителя
+    )
+    {
+        mysql_query("INSERT INTO `cms_mail_messages` SET
 		`user_id`='" . $user_id . "',
 		`contact_id`='" . $contact_id . "',
-		`text`='" . mysql_real_escape_string( $text ) . "',
+		`text`='" . mysql_real_escape_string($text) . "',
 		`time`='" . time() . "',
 		`sys`='1',
-		`theme`='" . mysql_real_escape_string( $theme ) . "'");
-		return true;
-	}
-	
-	/**
-    *-----------------------------------------------------------------
-    *Функция почты "Счетчики сообщений"
-    *-----------------------------------------------------------------
-    */
-	public static function mailCount($var = null) {
-		if($var == null) {
-			//Всего сообщений (входящих / исходящих) без учета удаленных
-			return mysql_result( mysql_query( "SELECT COUNT(*) 
+		`theme`='" . mysql_real_escape_string($theme) . "'");
+        return true;
+    }
+
+    /**
+     *-----------------------------------------------------------------
+     *Функция почты "Счетчики сообщений"
+     *-----------------------------------------------------------------
+     */
+    public static function mailCount($var = null)
+    {
+        if ($var == null) {
+            //Всего сообщений (входящих / исходящих) без учета удаленных
+            return mysql_result(mysql_query("SELECT COUNT(*)
 			FROM `cms_mail_messages` 
 			WHERE (`user_id` = '" . parent::$USER_ID . "' 
 			OR `contact_id` = '" . parent::$USER_ID . "') 
 			AND (`delete_out`!='" . parent::$USER_ID . "' 
 			AND `delete_in`!='" . parent::$USER_ID . "') 
-			AND `delete`!='" . parent::$USER_ID . "'" ), 0 );
-		}
-		switch($var) {
-			//Новые сообщения
-			case 'new':
-				return mysql_result( mysql_query( "SELECT COUNT(*) 
+			AND `delete`!='" . parent::$USER_ID . "'"), 0);
+        }
+        switch ($var) {
+            //Новые сообщения
+            case 'new':
+                return mysql_result(mysql_query("SELECT COUNT(*)
 				FROM `cms_mail_messages` 
 				LEFT JOIN `cms_mail_contacts` 
 				ON `cms_mail_messages`.`user_id`=`cms_mail_contacts`.`contact_id` 
@@ -537,15 +541,15 @@ class Functions extends Vars
 				AND (`cms_mail_messages`.`delete_in`!='" . parent::$USER_ID . "' 
 				AND `cms_mail_messages`.`delete_out`!='" . parent::$USER_ID . "')
 				AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "' 
-				AND `cms_mail_contacts`.`banned`!='1'" ), 0 );
-			//Новые системные
-			case 'newsys':
-				return mysql_result( mysql_query( "SELECT COUNT(*) 
+				AND `cms_mail_contacts`.`banned`!='1'"), 0);
+            //Новые системные
+            case 'newsys':
+                return mysql_result(mysql_query("SELECT COUNT(*)
 				FROM `cms_mail_messages` 
 				WHERE `contact_id`='" . parent::$USER_ID . "'
-				AND `sys`='1'" ), 0 );
-			default;
-				return false;
-		}
-	}
+				AND `sys`='1'"), 0);
+            default;
+                return false;
+        }
+    }
 }

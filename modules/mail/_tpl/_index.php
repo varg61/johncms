@@ -19,9 +19,9 @@
    <div class="topmenu"><?php echo $this->display_pagination ?></div>
    <form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>" style="font-size: x-small;"/>
    <input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
-  <?php endif ?>
+  <?php endif; ?>
 </div>
-<?php endif ?>
+<?php endif; ?>
 <div class="list2"><p>
 <?php echo Functions::getImage('mail-systems.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=systems"><?php echo lng( 'system' ) ?></a>&#160;(<?php echo $this->systems ?>)<br />
 <?php echo Functions::getImage('mail-elected.png') ?> <a href="<?php echo Vars::$MODULE_URI ?>?act=elected"><?php echo lng( 'elected' ) ?></a>&#160;(<?php echo $this->elected ?>)<br />

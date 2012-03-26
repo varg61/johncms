@@ -16,8 +16,8 @@
 	<div class="topmenu"><?php echo $this->display_pagination ?></div>
 	<form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>"/>
 	<input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;"/></p></form>
-	<? endif ?>
+	<? endif; ?>
 <?php else: ?>
 <div class="rmenu"><?php echo lng( 'no_messages' ) ?>!</div>
-<? endif ?>
+<? endif; ?>
 <p><a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'contacts' ) ?></a></p>

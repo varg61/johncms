@@ -8,7 +8,7 @@
             <?= Captcha::display(0) ?><br/>
             <?php if (isset($this->login->error['captcha'])) : ?>
             <small class="red"><b><?= lng('error') ?></b>: <?= $this->login->error['captcha'] ?><br/></small>
-            <?php endif ?>
+            <?php endif; ?>
             <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->login->error['captcha']) ? 'style="background-color: #FFCCCC"' : '') ?>/>
         </div>
         <div class="formblock">
@@ -22,5 +22,5 @@
     <input type="hidden" name="login" value="<?= htmlspecialchars($_POST['login']) ?>"/>
     <input type="hidden" name="password" value="<?= htmlspecialchars($_POST['password']) ?>"/>
     <input type="hidden" name="remember" value="<?= $_POST['remember'] ?>"/>
-    <?php endif ?>
+    <?php endif; ?>
 </form>

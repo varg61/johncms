@@ -7,7 +7,7 @@
             <label for="status"><?= lng('status') ?></label><br/>
             <?php if(isset($this->error)) : ?>
             <span class="red"><?= $this->error ?></span><br/>
-            <?php endif ?>
+            <?php endif; ?>
             <input id="status" type="text" value="<?= htmlspecialchars($this->status) ?>" name="status"/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <div class="desc"><?= lng('status_lenght') ?></div>
