@@ -393,7 +393,7 @@ class Functions extends Vars
         return preg_replace(
             ($adm ? array_merge($pattern['usr_s'], $pattern['adm_s']) : $pattern['usr_s']),
             ($adm ? array_merge($pattern['usr_r'], $pattern['adm_r']) : $pattern['usr_r']),
-            $str
+            $str, 3
         );
     }
 

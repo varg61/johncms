@@ -108,7 +108,7 @@ switch (Vars::$ACT) {
                 $tpl->contents = $tpl->includeTpl('users_settings_reset');
                 exit;
             }
-            if(isset($_GET['default'])){
+            if (isset($_GET['default'])) {
                 $tpl->reset = 1;
             }
             $tpl->contents = $tpl->includeTpl('users_settings');
