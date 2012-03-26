@@ -20,8 +20,9 @@
 <div class="menu" style="padding-top: 2px; padding-bottom: 6px">
     <h3><?= Functions::getImage('settings.png', '', 'class="left"') ?>&#160;<?= lng('system') ?></h3>
     <ul>
+        <li><a href="<?= Vars::$URI ?>?act=system"><?= lng('system_settings') ?></a></li>
         <li><a href="<?= Vars::$URI ?>/languages.php"><?= lng('language_settings') ?></a></li>
-        <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><?= lng('refresh_smileys') ?></a></li>
+        <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><?= lng('smileys') ?></a></li>
     </ul>
 </div>
 <div class="rmenu" style="padding-top: 2px; padding-bottom: 6px">

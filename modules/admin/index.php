@@ -71,7 +71,11 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 7) {
-            if (isset($_POST['submit'])) {
+            if (isset($_POST['submit'])
+                && isset($_POST['token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['token'] == $_SESSION['form_token']
+            ) {
                 Vars::$USER_SYS['reg_mode'] = isset($_POST['reg_mode']) && $_POST['reg_mode'] > 0 && $_POST['reg_mode'] < 4 ? intval($_POST['reg_mode']) : 3;
                 Vars::$USER_SYS['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
                 Vars::$USER_SYS['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
@@ -101,20 +105,32 @@ switch (Vars::$ACT) {
                 ");
                 // Подтверждение сохранения настроек
                 $tpl->save = 1;
-            } elseif (isset($_POST['reset'])) {
+            } elseif (isset($_POST['reset'])
+                && isset($_POST['token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['token'] == $_SESSION['form_token']
+            ) {
                 @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'users'");
                 header('Location: ' . Vars::$HOME_URL . '/admin?act=users_settings&default');
             } elseif (isset($_GET['reset'])) {
+                $tpl->token = mt_rand(100, 10000);
+                $_SESSION['form_token'] = $tpl->token;
                 $tpl->contents = $tpl->includeTpl('users_settings_reset');
                 exit;
             }
             if (isset($_GET['default'])) {
                 $tpl->reset = 1;
             }
+            $tpl->token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->token;
             $tpl->contents = $tpl->includeTpl('users_settings');
         } else {
             echo Functions::displayError(lng('access_forbidden'));
         }
+        break;
+
+    case 'system':
+        $tpl->contents = $tpl->includeTpl('system_settings');
         break;
 
     default:
@@ -123,6 +139,7 @@ switch (Vars::$ACT) {
         Главное меню Админ панели
         -----------------------------------------------------------------
         */
+        unset($_SESSION['form_token']);
         $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
         $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = '0'"), 0);
         //$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
