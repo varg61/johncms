@@ -139,7 +139,7 @@ switch (Vars::$ACT) {
         if (($smileys = Vars::getUserData('smileys')) === false) $smileys = array();
         $total = count($smileys);
         if ($total)
-            echo '<form action="' . Vars::$URI . '?act=set_my_sm&amp;start=' . Vars::$START . '" method="post">';
+            echo '<form action="' . Vars::$URI . '?act=set&amp;start=' . Vars::$START . '" method="post">';
         if ($total > Vars::$USER_SET['page_size']) {
             $smileys = array_chunk($smileys, Vars::$USER_SET['page_size'], TRUE);
             if (Vars::$START) {
@@ -168,7 +168,7 @@ switch (Vars::$ACT) {
         echo '<div class="phdr">' . lng('total') . ': ' . $total . ' / ' . $user_smileys . '</div>';
         if ($total > Vars::$USER_SET['page_size'])
             echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=my_smileys&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-        echo '<p>' . ($total ? '<a href="' . Vars::$URI . '?act=set_my_sm&amp;clean">' . lng('clear') . '</a><br />'
+        echo '<p>' . ($total ? '<a href="' . Vars::$URI . '?act=set&amp;clean">' . lng('clear') . '</a><br />'
             : '') . '<a href="' . $_SESSION['ref'] . '">' . lng('back') . '</a></p>';
         break;
 
