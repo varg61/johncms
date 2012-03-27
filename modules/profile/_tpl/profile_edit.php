@@ -35,6 +35,13 @@
                 <?php endif; ?>
             </div>
         </div>
+        <?php if (Vars::$USER_SYS['change_sex']) : ?>
+        <div class="formblock">
+            <label for="sex"><?= lng('sex') ?></label><br/>
+            <input id="sex" type="radio" value="m" name="sex" <?= ($this->user['sex'] == 'm' ? 'checked="checked"' : '') ?>/>&#160;<?= lng('sex_m') ?><br/>
+            <input type="radio" value="w" name="sex" <?= ($this->user['sex'] == 'w' ? 'checked="checked"' : '') ?>/>&#160;<?= lng('sex_w') ?>
+        </div>
+        <?php endif; ?>
         <div class="formblock">
             <label for="imname"><?= lng('name') ?></label><br/>
             <input id="imname" type="text" value="<?= $this->user['imname'] ?>" name="imname"/>

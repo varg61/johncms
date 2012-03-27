@@ -7,14 +7,14 @@
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
 <form action="<?= Vars::$URI ?>?act=administration&amp;user=<?= $this->user['id'] ?>" method="post">
-    <div class="gmenu">
+    <div class="rmenu">
+        <?php if (!Vars::$USER_SYS['change_sex']) : ?>
         <div class="formblock">
             <label for="sex"><?= lng('sex') ?></label><br/>
             <input id="sex" type="radio" value="m" name="sex" <?= ($this->user['sex'] == 'm' ? 'checked="checked"' : '') ?>/>&#160;<?= lng('sex_m') ?><br/>
             <input type="radio" value="w" name="sex" <?= ($this->user['sex'] == 'w' ? 'checked="checked"' : '') ?>/>&#160;<?= lng('sex_w') ?>
         </div>
-    </div>
-    <div class="rmenu">
+        <?php endif; ?>
         <div class="formblock">
             <label><?= lng('rank') ?></label><br/>
             <input type="radio" value="0" name="rights" <?= (!$this->user['rights'] ? 'checked="checked"' : '') ?>/>&#160;<b><?= lng('rank_0') ?></b><br/>

@@ -340,6 +340,11 @@ switch (Vars::$ACT) {
         ) {
             $error = array();
 
+            // Принимаем данные о половой принадлежности
+            if (Vars::$USER_SYS['change_sex']){
+                $user['sex'] = isset($_POST['sex']) && trim($_POST['sex']) == 'w' ? 'w' : 'm';
+            }
+
             // Принимаем и обрабатываем Имя
             if (isset($_POST['imname'])) {
                 $user['imname'] = mb_substr(trim($_POST['imname']), 0, 50);
@@ -407,6 +412,7 @@ switch (Vars::$ACT) {
 
             $tpl->user = $user;
             mysql_query("UPDATE `users` SET
+                `sex` = '" . $user['sex'] . "',
                 `imname` = '" . mysql_real_escape_string($user['imname']) . "',
                 `live` = '" . mysql_real_escape_string($user['live']) . "',
                 `about` = '" . mysql_real_escape_string($user['about']) . "',
