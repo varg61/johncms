@@ -31,7 +31,10 @@ if (Vars::$USER_ID) {
 Проверяем права доступа для редактирования Профиля
 -----------------------------------------------------------------
 */
-if ($user['id'] != Vars::$USER_ID && (Vars::$USER_RIGHTS < 7 || $user['rights'] > Vars::$USER_RIGHTS)) {
+if ($user['id'] != Vars::$USER_ID
+    && Vars::$USER_RIGHTS != 9
+    && (Vars::$USER_RIGHTS < 7 || $user['rights'] >= Vars::$USER_RIGHTS)
+) {
     echo Functions::displayError(lng('error_rights'));
     exit;
 }
@@ -69,16 +72,15 @@ switch (Vars::$ACT) {
         */
         if (isset($_POST['submit'])
             && isset($_POST['token'])
-            && isset($_SESSION['token_delete_avatar'])
-            && $_POST['token'] == $_SESSION['token_delete_avatar']
+            && isset($_SESSION['token_profile'])
+            && $_POST['token'] == $_SESSION['token_profile']
         ) {
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif');
-            unset($_SESSION['token_delete_avatar']);
             header('Location: ' . Vars::$URI . '?user=' . $user['id']);
             exit;
         } else {
             $tpl->token = mt_rand(100, 10000);
-            $_SESSION['token_delete_avatar'] = $tpl->token;
+            $_SESSION['token_profile'] = $tpl->token;
             $tpl->contents = $tpl->includeTpl('delete_avatar');
         }
         break;
@@ -104,14 +106,11 @@ switch (Vars::$ACT) {
         Выгрузка анимированного аватара
         -----------------------------------------------------------------
         */
-        if ($tpl->setUsers['upload_animation']
-            || Vars::$USER_RIGHTS == 9
-            || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
-        ) {
+        if ($tpl->setUsers['upload_animation'] || Vars::$USER_RIGHTS >= 7) {
             if (isset($_POST['submit'])
                 && isset($_POST['token'])
-                && isset($_SESSION['token_animation'])
-                && $_POST['token'] == $_SESSION['token_animation']
+                && isset($_SESSION['token_profile'])
+                && $_POST['token'] == $_SESSION['token_profile']
             ) {
                 $error = array();
                 if ($_FILES['imagefile']['size'] > 0) {
@@ -140,7 +139,6 @@ switch (Vars::$ACT) {
                     if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
                         ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == true
                     ) {
-                        unset($_SESSION['token_animation']);
                         echo'<div class="gmenu">' .
                             '<p>' . lng('avatar_uploaded') . '<br/>' .
                             '<a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>' .
@@ -153,7 +151,7 @@ switch (Vars::$ACT) {
                 }
             } else {
                 $tpl->token = mt_rand(100, 10000);
-                $_SESSION['token_animation'] = $tpl->token;
+                $_SESSION['token_profile'] = $tpl->token;
                 $tpl->contents = $tpl->includeTpl('upload_animation');
             }
         } else {
@@ -167,14 +165,11 @@ switch (Vars::$ACT) {
         Выгрузка аватара
         -----------------------------------------------------------------
         */
-        if ($tpl->setUsers['upload_avatars']
-            || Vars::$USER_RIGHTS == 9
-            || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
-        ) {
+        if ($tpl->setUsers['upload_avatars'] || Vars::$USER_RIGHTS >= 7) {
             if (isset($_POST['submit'])
                 && isset($_POST['token'])
-                && isset($_SESSION['token_avatar'])
-                && $_POST['token'] == $_SESSION['token_avatar']
+                && isset($_SESSION['token_profile'])
+                && $_POST['token'] == $_SESSION['token_profile']
             ) {
                 $handle = new upload($_FILES['imagefile']);
                 if ($handle->uploaded) {
@@ -199,11 +194,10 @@ switch (Vars::$ACT) {
                         echo Functions::displayError($handle->error);
                     }
                     $handle->clean();
-                    unset($_SESSION['token_avatar']);
                 }
             } else {
                 $tpl->token = mt_rand(100, 10000);
-                $_SESSION['token_avatar'] = $tpl->token;
+                $_SESSION['token_profile'] = $tpl->token;
                 $tpl->contents = $tpl->includeTpl('upload_avatar');
             }
         } else {
@@ -290,20 +284,16 @@ switch (Vars::$ACT) {
         Смена статуса
         -----------------------------------------------------------------
         */
-        if ($tpl->setUsers['change_status']
-            || Vars::$USER_RIGHTS == 9
-            || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
-        ) {
+        if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
             $tpl->status = $user['status'];
             if (isset($_POST['submit'])
                 && isset($_POST['status'])
                 && isset($_POST['token'])
-                && isset($_SESSION['token_status'])
-                && $_POST['token'] == $_SESSION['token_status']
+                && isset($_SESSION['token_profile'])
+                && $_POST['token'] == $_SESSION['token_profile']
             ) {
                 $tpl->status = trim($_POST['status']);
                 if (mb_strlen($tpl->status) < 51) {
-                    unset($_SESSION['token_status']);
                     mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "' WHERE `id` = " . $user['id']);
                     header('Location: ' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id']);
                     exit;
@@ -311,7 +301,7 @@ switch (Vars::$ACT) {
                 $tpl->error = lng('error_status_lenght');
             }
             $tpl->token = mt_rand(100, 10000);
-            $_SESSION['token_status'] = $tpl->token;
+            $_SESSION['token_profile'] = $tpl->token;
             $tpl->contents = $tpl->includeTpl('change_status');
         } else {
             echo Functions::displayError(lng('access_forbidden'));
@@ -341,7 +331,7 @@ switch (Vars::$ACT) {
             $error = array();
 
             // Принимаем данные о половой принадлежности
-            if (Vars::$USER_SYS['change_sex']){
+            if (Vars::$USER_SYS['change_sex']) {
                 $user['sex'] = isset($_POST['sex']) && trim($_POST['sex']) == 'w' ? 'w' : 'm';
             }
 
