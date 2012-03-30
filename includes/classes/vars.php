@@ -137,25 +137,14 @@ abstract class Vars
         if (!self::$USER_ID || empty($key) || !empty($val) && !is_array($val)) {
             return false;
         }
-        if (empty($val)) {
-            @mysql_query("DELETE FROM `cms_user_settings` WHERE `user_id` = '" . self::$USER_ID . "' AND `key` = '" . $key . "' LIMIT 1");
-            return true;
-        }
-        $val = mysql_real_escape_string(serialize($val));
-        if (self::getUserData($key) === false) {
-            // Добавляем новую запись
-            mysql_query("INSERT INTO `cms_user_settings` SET
+        if (!empty($val)) {
+            mysql_query("REPLACE INTO `cms_user_settings` SET
                 `user_id` = '" . self::$USER_ID . "',
                 `key` = '$key',
-                `value` = '$val'
+                `value` = '" . mysql_real_escape_string(serialize($val)) . "'
             ");
         } else {
-            // Обновляем имеющуюся запись
-            mysql_query("UPDATE `cms_user_settings` SET
-                `value` = '$val'
-                WHERE `user_id` = '" . self::$USER_ID . "' AND `key` = '$key'
-                LIMIT 1
-            ");
+            @mysql_query("DELETE FROM `cms_user_settings` WHERE `user_id` = '" . self::$USER_ID . "' AND `key` = '" . $key . "' LIMIT 1");
         }
         return true;
     }
