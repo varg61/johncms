@@ -40,7 +40,6 @@ if ($user['id'] != Vars::$USER_ID
 }
 
 $tpl = Template::getInstance();
-$tpl->user = $user;
 $tpl->setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
     ? unserialize(Vars::$SYSTEM_SET['users'])
     : Vars::$USER_SYS;
@@ -323,6 +322,17 @@ switch (Vars::$ACT) {
         Редактирование анкеты
         -----------------------------------------------------------------
         */
+        $birth = strtotime($user['birth']);
+        if ($birth) {
+            $tpl->day = date('d', $birth);
+            $tpl->month = date('m', $birth);
+            $tpl->year = date('Y', $birth);
+        } else {
+            $tpl->day = '';
+            $tpl->month = '';
+            $tpl->year = '';
+        }
+
         if (isset($_POST['submit'])
             && isset($_POST['token'])
             && isset($_SESSION['token_profile'])
@@ -345,13 +355,27 @@ switch (Vars::$ACT) {
                 && isset($_POST['month'])
                 && isset($_POST['year'])
             ) {
-                $day = intval($_POST['day']);
-                $month = intval($_POST['month']);
-                $year = intval($_POST['year']);
-                if (!checkdate($month, $day, $year)) {
-                    //TODO: Дописать обработку даты
-                    //echo'ERROR: date';
-                    //exit;
+                if (empty($_POST['day'])
+                    && empty($_POST['month'])
+                    && empty($_POST['year'])
+                ) {
+                    // Удаляем дату рожденья
+                    $user['birth'] = '00-00-0000';
+                    $tpl->day = '';
+                    $tpl->month = '';
+                    $tpl->year = '';
+                } else {
+                    $tpl->day = trim($_POST['day']);
+                    $tpl->month = trim($_POST['month']);
+                    $tpl->year = trim($_POST['year']);
+                    $user['birth'] = intval($tpl->year) . '-' . intval($tpl->month) . '-' . intval($tpl->day);
+                    if (!checkdate($tpl->month, $tpl->day, $tpl->year)
+                        || $tpl->year < 1940
+                        || $tpl->year > 2010
+                    ) {
+                        // Если дата рожденья указана неверно, показываем ошибку
+                        $tpl->birth_error = lng('error_birth');
+                    }
                 }
             }
 
@@ -396,14 +420,10 @@ switch (Vars::$ACT) {
                 $user['skype'] = mb_substr(trim($_POST['skype']), 0, 50);
             }
 
-            if (isset($tpl->email_error)) {
-                $tpl->error = 1;
-            }
-
-            $tpl->user = $user;
             mysql_query("UPDATE `users` SET
                 `sex` = '" . $user['sex'] . "',
                 `imname` = '" . mysql_real_escape_string($user['imname']) . "',
+                " . (isset($tpl->birth_error) ? '' : "`birth` = '" . $user['birth'] . "',") . "
                 `live` = '" . mysql_real_escape_string($user['live']) . "',
                 `about` = '" . mysql_real_escape_string($user['about']) . "',
                 `tel` = '" . mysql_real_escape_string($user['tel']) . "',
@@ -416,6 +436,8 @@ switch (Vars::$ACT) {
             ) or exit(mysql_error());
             $tpl->save = 1;
         }
+
+        $tpl->user = $user;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_profile'] = $tpl->token;
         $tpl->contents = $tpl->includeTpl('profile_edit');

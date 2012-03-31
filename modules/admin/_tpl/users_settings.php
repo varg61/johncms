@@ -19,11 +19,11 @@
         <div class="formblock">
             <label><?= lng('registration') ?></label><br/>
             <input type="radio" value="3" name="reg_mode" <?= (Vars::$USER_SYS['reg_mode'] == 3 ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('access_enabled') ?><br/>
+            <?= lng('registration_free') ?><br/>
             <input type="radio" value="2" name="reg_mode" <?= (Vars::$USER_SYS['reg_mode'] == 2 ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('access_with_moderation') ?><br/>
+            <?= lng('registration_moderation') ?><br/>
             <input type="radio" value="1" name="reg_mode" <?= (Vars::$USER_SYS['reg_mode'] == 1 ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('access_disabled') ?>
+            <?= lng('registration_closed') ?>
         </div>
 </div>
 <div class="menu">
