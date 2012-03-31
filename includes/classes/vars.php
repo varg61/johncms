@@ -138,10 +138,12 @@ abstract class Vars
             return false;
         }
         if (!empty($val)) {
-            mysql_query("REPLACE INTO `cms_user_settings` SET
+            $val = mysql_real_escape_string(serialize($val));
+            mysql_query("INSERT INTO `cms_user_settings` SET
                 `user_id` = '" . self::$USER_ID . "',
                 `key` = '$key',
-                `value` = '" . mysql_real_escape_string(serialize($val)) . "'
+                `value` = '$val'
+                ON DUPLICATE KEY UPDATE `value` = '$val'
             ");
         } else {
             @mysql_query("DELETE FROM `cms_user_settings` WHERE `user_id` = '" . self::$USER_ID . "' AND `key` = '" . $key . "' LIMIT 1");
