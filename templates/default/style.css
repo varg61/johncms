@@ -87,6 +87,10 @@ ul {
     text-align: center;
 }
 
+.error {
+    background-color: #e9ccd2;
+}
+
 .fields_block {
     padding: 2px 0 4px 0;
 }

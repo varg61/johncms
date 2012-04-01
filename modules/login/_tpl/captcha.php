@@ -9,7 +9,7 @@
             <?php if (isset($this->login->error['captcha'])) : ?>
             <small class="red"><b><?= lng('error') ?></b>: <?= $this->login->error['captcha'] ?><br/></small>
             <?php endif; ?>
-            <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->login->error['captcha']) ? 'style="background-color: #FFCCCC"' : '') ?>/>
+            <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->login->error['captcha']) ? 'class="error"' : '') ?>/>
         </div>
         <div class="formblock">
             <input type="submit" name="submit" value="<?= lng('continue') ?>"/>

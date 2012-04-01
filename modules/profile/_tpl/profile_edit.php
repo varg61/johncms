@@ -52,9 +52,9 @@
             <?php if (isset($this->birth_error)) : ?>
             <small class="red"><?= $this->birth_error ?></small><br/>
             <?php endif; ?>
-            <input id="birth" type="text" value="<?= htmlspecialchars($this->day) ?>" size="2" maxlength="2" name="day"/>
-            <input type="text" value="<?= htmlspecialchars($this->month) ?>" size="2" maxlength="2" name="month"/>
-            <input type="text" value="<?= htmlspecialchars($this->year) ?>" size="4" maxlength="4" name="year"/>
+            <input id="birth" type="text" value="<?= htmlspecialchars($this->day) ?>" size="2" maxlength="2" name="day" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
+            <input type="text" value="<?= htmlspecialchars($this->month) ?>" size="2" maxlength="2" name="month" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
+            <input type="text" value="<?= htmlspecialchars($this->year) ?>" size="4" maxlength="4" name="year" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
             <div class="desc"><?= lng('description_birth') ?></div>
         </div>
         <div class="formblock">
@@ -82,10 +82,8 @@
             <label for="email">E-mail</label><br/>
             <?php if (isset($this->email_error)) : ?>
             <small class="red"><?= implode(' ', $this->email_error) ?></small><br/>
-            <input id="email" type="text" value="<?= htmlspecialchars($this->user['email']) ?>" name="email" style="background-color: #FFCCCC"/>
-            <?php else : ?>
-            <input id="email" type="text" value="<?= htmlspecialchars($this->user['email']) ?>" name="email"/>
             <?php endif; ?>
+            <input id="email" type="text" value="<?= htmlspecialchars($this->user['email']) ?>" name="email" <?= (isset($this->email_error) ? 'class="error"' : '') ?>/>
             <input name="mailvis" type="checkbox" value="1"<?= ($this->user['mailvis'] ? ' checked="checked"' : '') ?>/>&#160;<?= lng('show_in_profile') ?>
             <div class="desc"><?= lng('description_email') ?></div>
         </div>
