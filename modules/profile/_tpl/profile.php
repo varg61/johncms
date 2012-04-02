@@ -11,7 +11,7 @@
 </div>
 <div class="list2">
     <p>
-    <div><?= Functions::getImage('contacts.png') ?>&#160;<a href="profile.php?act=info&amp;user=<?= $this->user['id'] ?>"><?= lng('information') ?></a></div>
+    <div><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=info&amp;user=<?= $this->user['id'] ?>"><?= lng('information') ?></a></div>
     <div><?= Functions::getImage('user_edit.png') ?>&#160;<a href="profile.php?act=activity&amp;user=<?= $this->user['id'] ?>"><?= lng('activity') ?></a></div>
     <div><?= Functions::getImage('rating.png') ?>&#160;<a href="profile.php?act=stat&amp;user=<?= $this->user['id'] ?>"><?= lng('statistics') ?></a></div>
     <?php if ($this->bancount) : ?>

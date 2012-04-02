@@ -19,7 +19,7 @@ class TextParser
     public static function tags($var)
     {
         $var = self::_highlightCode($var);                                     // Подсветка кода
-        $var = self::highlightUrl($var);                                      // Обработка ссылок
+        $var = self::highlightUrl($var);                                       // Обработка ссылок
         $var = self::_highlightBB($var);                                       // Обработка BBcode тэгов
         return $var;
     }
