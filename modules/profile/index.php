@@ -35,7 +35,8 @@ $tpl->user = $user;
 
 $actions = array(
     'activity' => 'activity.php',
-    'edit'     => 'edit.php'
+    'edit'     => 'edit.php',
+    'settings' => 'settings.php'
 );
 
 if (isset($actions[Vars::$ACT])
