@@ -34,7 +34,8 @@ $tpl = Template::getInstance();
 $tpl->user = $user;
 
 $actions = array(
-    'activity' => 'activity.php'
+    'activity' => 'activity.php',
+    'edit'     => 'edit.php'
 );
 
 if (isset($actions[Vars::$ACT])
@@ -63,7 +64,7 @@ if (isset($actions[Vars::$ACT])
             $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 
             if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $user['rights'])) {
-                $menu[] = '<a href="' . Vars::$HOME_URL . '/profile/edit.php?user=' . $user['id'] . '">' . lng('edit') . '</a>';
+                $menu[] = '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $user['id'] . '">' . lng('edit') . '</a>';
             }
             if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
                 $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $user['id'] . '">' . lng('delete') . '</a>';

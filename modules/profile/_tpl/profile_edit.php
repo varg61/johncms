@@ -3,7 +3,7 @@
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>
 <div class="topmenu"><b><?= lng('user') ?></b> | <a
-    href="<?= Vars::$URI ?>?act=administration&amp;user=<?= $this->user['id'] ?>"><?= lng('administration') ?></a>
+    href="<?= Vars::$URI ?>?act=edit&amp;mod=administration&amp;user=<?= $this->user['id'] ?>"><?= lng('administration') ?></a>
 </div>
 <?php endif; ?>
 
@@ -21,7 +21,7 @@
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
-<form name="form" action="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>" method="post">
+<form name="form" action="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="menu">
         <div class="formblock">
             <label><?= lng('photo') ?></label>

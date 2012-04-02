@@ -11,20 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-/*
------------------------------------------------------------------
-Получаем данные пользователя
------------------------------------------------------------------
-*/
-if (Vars::$USER_ID) {
-    if (($user = Vars::getUser()) === false) {
-        echo Functions::displayError(lng('user_does_not_exist'));
-        exit;
-    }
-} else {
-    echo Functions::displayError(lng('access_guest_forbidden'));
-    exit;
-}
+global $user, $tpl;
 
 /*
 -----------------------------------------------------------------
@@ -39,7 +26,7 @@ if ($user['id'] != Vars::$USER_ID
     exit;
 }
 
-$tpl = Template::getInstance();
+//$tpl = Template::getInstance();
 $tpl->setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
     ? unserialize(Vars::$SYSTEM_SET['users'])
     : Vars::$USER_SYS;
@@ -62,7 +49,7 @@ $menu[] = '<a href="' . Vars::$URI . '?act=avatar&amp;user=' . $user['id'] . '">
 $arg['sub'] = '<p><b>' . lng('change') . '</b>: ' . Functions::displayMenu($menu) . '</p>';
 $tpl->userarg = $arg;
 
-switch (Vars::$ACT) {
+switch (Vars::$MOD) {
     case'delete_avatar':
         /*
         -----------------------------------------------------------------

@@ -2,11 +2,13 @@
     <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('profile') : lng('my_profile')) ?></b></a> |
     <?= lng('edit') ?>
 </div>
-<div class="topmenu"><a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><?= lng('user') ?></a> | <b><?= lng('administration') ?></b></div>
+<div class="topmenu">
+    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= lng('user') ?></a> | <b><?= lng('administration') ?></b>
+</div>
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
-<form action="<?= Vars::$URI ?>?act=administration&amp;user=<?= $this->user['id'] ?>" method="post">
+<form action="<?= Vars::$URI ?>?act=edit&amp;mod=administration&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="rmenu">
         <?php if (!Vars::$USER_SYS['change_sex']) : ?>
         <div class="formblock">
