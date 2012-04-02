@@ -1,11 +1,6 @@
 <div class="phdr">
-    <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $this->user['id'] ?>"><b><?= lng('profile') ?></b></a> | <?= lng('information') ?>
+    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('user_profile') : lng('my_profile')) ?></b></a> | <?= lng('information') ?>
 </div>
-<?php if ($this->user['id'] == Vars::$USER_ID || (Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $this->user['rights'])) : ?>
-<div class="topmenu">
-    <a href="profile.php?act=edit&amp;user=<?= $this->user['id'] ?>"><?= lng('edit') ?></a>
-</div>
-<?php endif; ?>
 <div class="user">
     <p><?= Functions::displayUser($this->user, array('iphide' => 1,)) ?></p>
 </div>

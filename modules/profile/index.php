@@ -33,58 +33,68 @@ if (Vars::$USER_ID) {
 $tpl = Template::getInstance();
 $tpl->user = $user;
 
-switch (Vars::$ACT) {
-    case 'info':
-        /*
-        -----------------------------------------------------------------
-        Подробная информация о пользователе
-        -----------------------------------------------------------------
-        */
-        //TODO: Добавить вывод даты рожденья
-        $tpl->contents = $tpl->includeTpl('info');
-        break;
+$actions = array(
+    'activity' => 'activity.php'
+);
 
-    default:
-        /*
-        -----------------------------------------------------------------
-        Анкета пользователя
-        -----------------------------------------------------------------
-        */
-        $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-        $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+if (isset($actions[Vars::$ACT])
+    && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])
+) {
+    require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
+} else {
+    switch (Vars::$ACT) {
+        case 'info':
+            /*
+            -----------------------------------------------------------------
+            Подробная информация о пользователе
+            -----------------------------------------------------------------
+            */
+            //TODO: Добавить вывод даты рожденья
+            $tpl->contents = $tpl->includeTpl('info');
+            break;
 
-        if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $user['rights'])) {
-            $menu[] = '<a href="' . Vars::$HOME_URL . '/profile/edit.php?user=' . $user['id'] . '">' . lng('edit') . '</a>';
-        }
-        if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
-            $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $user['id'] . '">' . lng('delete') . '</a>';
-        }
-        if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $user['rights']) {
-            $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '">' . lng('ban_do') . '</a>';
-        }
-        if (isset($menu)) {
-            $tpl->menu = Functions::displayMenu($menu);
-        }
+        default:
+            /*
+            -----------------------------------------------------------------
+            Анкета пользователя
+            -----------------------------------------------------------------
+            */
+            $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+            $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 
-        $tpl->userarg = array(
-            'lastvisit' => 1,
-            'iphist'    => 1,
-            'header'    => '<b>ID:' . $user['id'] . '</b>',
-            'footer'    => ($user['id'] != Vars::$USER_ID
-                ? '<span class="gray">' . lng('where') . ':</span> ' . Functions::displayPlace($user['id'], $user['place'])
-                : false)
-        );
+            if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $user['rights'])) {
+                $menu[] = '<a href="' . Vars::$HOME_URL . '/profile/edit.php?user=' . $user['id'] . '">' . lng('edit') . '</a>';
+            }
+            if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
+                $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $user['id'] . '">' . lng('delete') . '</a>';
+            }
+            if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $user['rights']) {
+                $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '">' . lng('ban_do') . '</a>';
+            }
+            if (isset($menu)) {
+                $tpl->menu = Functions::displayMenu($menu);
+            }
 
-        //Управление контактами
-        $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $user['id'] . "'");
-        $num_cont = mysql_num_rows($contacts);
-        if ($num_cont) {
-            $rows = mysql_fetch_assoc($contacts);
-            $tpl->banned = $rows['banned'];
-            if ($rows['delete'] == 1) $num_cont = 0;
-        }
-        $tpl->textbanned = $num_cont && $rows['banned'] == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor');
-        $tpl->textcontact = $num_cont ? lng('contact_delete') : lng('contact_add');
-        //Подключаем шаблон profile
-        $tpl->contents = $tpl->includeTpl('profile');
+            $tpl->userarg = array(
+                'lastvisit' => 1,
+                'iphist'    => 1,
+                'header'    => '<b>ID:' . $user['id'] . '</b>',
+                'footer'    => ($user['id'] != Vars::$USER_ID
+                    ? '<span class="gray">' . lng('where') . ':</span> ' . Functions::displayPlace($user['id'], $user['place'])
+                    : false)
+            );
+
+            //Управление контактами
+            $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $user['id'] . "'");
+            $num_cont = mysql_num_rows($contacts);
+            if ($num_cont) {
+                $rows = mysql_fetch_assoc($contacts);
+                $tpl->banned = $rows['banned'];
+                if ($rows['delete'] == 1) $num_cont = 0;
+            }
+            $tpl->textbanned = $num_cont && $rows['banned'] == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor');
+            $tpl->textcontact = $num_cont ? lng('contact_delete') : lng('contact_add');
+            //Подключаем шаблон profile
+            $tpl->contents = $tpl->includeTpl('profile');
+    }
 }

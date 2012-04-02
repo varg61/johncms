@@ -1,5 +1,5 @@
 <div class="phdr">
-    <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('profile') : lng('my_profile')) ?></b></a> | <?= lng('edit') ?>
+    <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('user_profile') : lng('my_profile')) ?></b></a> | <?= lng('edit') ?>
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>
 <div class="topmenu"><b><?= lng('user') ?></b> | <a
