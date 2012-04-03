@@ -35,8 +35,7 @@ $tpl->user = $user;
 
 $actions = array(
     'activity' => 'activity.php',
-    'edit'     => 'edit.php',
-    'settings' => 'settings.php'
+    'edit' => 'edit.php',
 );
 
 if (isset($actions[Vars::$ACT])
@@ -45,6 +44,109 @@ if (isset($actions[Vars::$ACT])
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     switch (Vars::$ACT) {
+        case 'reset':
+            /*
+            -----------------------------------------------------------------
+            Сброс пользовательских настроек системы (настройки по-умолчанию)
+            -----------------------------------------------------------------
+            */
+            if (!Vars::$USER_ID
+                || ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 7)
+                || ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS != 9 && Vars::$USER_RIGHTS <= $user['rights'])
+            ) {
+                // Закрываем настройки от посторонних
+                echo Functions::displayError(lng('access_forbidden'));
+                exit;
+            }
+
+            if (isset($_POST['submit'])
+                && isset($_POST['token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['token'] == $_SESSION['form_token']
+            ) {
+                unset($_SESSION['user_set']);
+                Vars::setUserData('user_set');
+                header('Location: ' . Vars::$URI . '?act=settings&reset');
+                exit;
+            }
+            $tpl->token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->token;
+            $tpl->contents = $tpl->includeTpl('settings_reset');
+            break;
+
+        case 'settings':
+            /*
+            -----------------------------------------------------------------
+            Пользовательские настройки системы
+            -----------------------------------------------------------------
+            */
+            if (!Vars::$USER_ID || $user['id'] != Vars::$USER_ID) {
+                // Закрываем настройки от посторонних
+                echo Functions::displayError(lng('access_forbidden'));
+                exit;
+            }
+
+            $tpl_list = array();
+            $templates = glob(TPLPATH . '*' . DIRECTORY_SEPARATOR . '*.css');
+            foreach ($templates as $val) {
+                $dir = explode(DIRECTORY_SEPARATOR, dirname($val));
+                $tpl_list[] = array_pop($dir);
+            }
+            sort($tpl_list);
+            $tpl->tpl_list = $tpl_list;
+
+            if (isset($_POST['submit'])
+                && isset($_POST['token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['token'] == $_SESSION['form_token']
+            ) {
+                // Принимаем данные из формы
+                if (isset($_POST['timeshift']) && $_POST['timeshift'] > -13 && $_POST['timeshift'] < 13) {
+                    Vars::$USER_SET['timeshift'] = intval($_POST['timeshift']);
+                }
+                if (isset($_POST['field_h']) && $_POST['field_h'] > 0 && $_POST['field_h'] < 10) {
+                    Vars::$USER_SET['field_h'] = intval($_POST['field_h']);
+                }
+                if (isset($_POST['page_size']) && $_POST['page_size'] > 4 && $_POST['page_size'] < 100) {
+                    Vars::$USER_SET['page_size'] = intval($_POST['page_size']);
+                }
+                if (isset($_POST['skin']) && in_array($_POST['skin'], $tpl_list)) {
+                    Vars::$USER_SET['skin'] = trim($_POST['skin']);
+                }
+                $lng_select = isset($_POST['iso']) ? trim($_POST['iso']) : false;
+                if ($lng_select && array_key_exists($lng_select, Vars::$LNG_LIST)) {
+                    Vars::$USER_SET['lng'] = $lng_select;
+                    unset($_SESSION['lng']);
+                }
+                Vars::$USER_SET['avatar'] = isset($_POST['avatar']);
+                Vars::$USER_SET['smileys'] = isset($_POST['smileys']);
+                Vars::$USER_SET['translit'] = isset($_POST['translit']);
+                Vars::$USER_SET['digest'] = isset($_POST['digest']);
+                Vars::$USER_SET['direct_url'] = isset($_POST['direct_url']);
+                Vars::$USER_SET['quick_go'] = isset($_POST['quick_go']);
+
+                // Записываем настройки
+                unset($_SESSION['user_set']);
+                Vars::setUserData('user_set', Vars::$USER_SET);
+                header('Location: ' . Vars::$URI . '?act=settings&save');
+                exit;
+            } elseif (isset($_POST['reset'])) {
+
+            } elseif (isset($_GET['reset'])) {
+
+            }
+
+            if (isset($_GET['save'])) {
+                $tpl->save = 1;
+            } elseif (isset($_GET['reset'])) {
+                $tpl->reset = 1;
+            }
+
+            $tpl->token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->token;
+            $tpl->contents = $tpl->includeTpl('settings');
+            break;
+
         case 'info':
             /*
             -----------------------------------------------------------------
@@ -79,9 +181,9 @@ if (isset($actions[Vars::$ACT])
 
             $tpl->userarg = array(
                 'lastvisit' => 1,
-                'iphist'    => 1,
-                'header'    => '<b>ID:' . $user['id'] . '</b>',
-                'footer'    => ($user['id'] != Vars::$USER_ID
+                'iphist' => 1,
+                'header' => '<b>ID:' . $user['id'] . '</b>',
+                'footer' => ($user['id'] != Vars::$USER_ID
                     ? '<span class="gray">' . lng('where') . ':</span> ' . Functions::displayPlace($user['id'], $user['place'])
                     : false)
             );

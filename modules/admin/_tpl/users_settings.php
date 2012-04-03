@@ -7,7 +7,6 @@
     <?= lng('settings_saved') ?>
 </div>
 <?php endif; ?>
-
 <?php if (isset($this->reset)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_default') ?>

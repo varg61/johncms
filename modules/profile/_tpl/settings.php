@@ -1,13 +1,15 @@
 <div class="phdr">
     <b><?= lng('settings') ?></b> | <?= lng('common_settings') ?>
 </div>
-<div class="topmenu">
-    <?= Functions::displayMenu($this->menu) ?>
-</div>
 
 <?php if (isset($this->save)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_saved') ?>
+</div>
+<?php endif; ?>
+<?php if (isset($this->reset)) : ?>
+<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
+    <?= lng('settings_default') ?>
 </div>
 <?php endif; ?>
 
@@ -70,5 +72,5 @@
     <input type="hidden" name="token" value="<?= $this->token ?>"/>
 </form>
 <div class="phdr">
-    <a href="profile.php?act=settings&amp;reset"><?= lng('reset_settings') ?></a>
+    <a href="<?= Vars::$URI ?>?act=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
 </div>
