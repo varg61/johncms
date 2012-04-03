@@ -1,7 +1,16 @@
 <div class="phdr">
     <b><?= lng('settings') ?></b> | <?= lng('common_settings') ?>
 </div>
-<div class="topmenu"><?= Functions::displayMenu($this->menu) ?></div>
+<div class="topmenu">
+    <?= Functions::displayMenu($this->menu) ?>
+</div>
+
+<?php if (isset($this->save)) : ?>
+<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
+    <?= lng('settings_saved') ?>
+</div>
+<?php endif; ?>
+
 <form action="<?= Vars::$URI ?>?act=settings" method="post">
     <div class="menu">
         <div class="formblock">
@@ -17,20 +26,20 @@
             <input name="digest" type="checkbox" value="1" <?= (Vars::$USER_SET['digest'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('digest') ?>
         </div>
         <div class="formblock">
-            <label><?= lng('text_input') ?></label><br/>
-            <input type="text" name="field_h" size="2" maxlength="1" value="<?= Vars::$USER_SET['field_h'] ?>"/> <?= lng('field_height') ?> (1-9)<br/>
+            <label for="field_h"><?= lng('text_input') ?></label><br/>
+            <input id="field_h" type="text" name="field_h" size="2" maxlength="1" value="<?= Vars::$USER_SET['field_h'] ?>"/> <?= lng('field_height') ?> (1-9)<br/>
             <?php if (Vars::$LNG_ISO == 'ru' || Vars::$LNG_ISO == 'uk') : ?>
             <input name="translit" type="checkbox" value="1" <?= (Vars::$USER_SET['translit'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('translit') ?>
             <?php endif; ?>
         </div>
         <div class="formblock">
-            <label><?= lng('apperance') ?></label><br/>
-            <input type="text" name="page_size" size="2" maxlength="2" value="<?= Vars::$USER_SET['page_size'] ?>"/> <?= lng('lines_on_page') ?> (5-99)<br/>
+            <label for="page_size"><?= lng('apperance') ?></label><br/>
+            <input id="page_size" type="text" name="page_size" size="2" maxlength="2" value="<?= Vars::$USER_SET['page_size'] ?>"/> <?= lng('lines_on_page') ?> (5-99)<br/>
             <input name="quick_go" type="checkbox" value="1" <?= (Vars::$USER_SET['quick_go'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('quick_jump') ?>
         </div>
         <div class="formblock">
-            <label><?= lng('design_template') ?></label><br/>
-            <select name="skin">
+            <label for="skin"><?= lng('design_template') ?></label><br/>
+            <select id="skin" name="skin">
                 <?php foreach ($this->tpl_list as $theme) : ?>
                 <option <?= (Vars::$USER_SET['skin'] == $theme ? 'selected="selected"' : '') ?>><?= $theme ?></option>
                 <?php endforeach; ?>
@@ -58,6 +67,7 @@
             <input type="submit" name="submit" value="<?= lng('save') ?>"/>
         </div>
     </div>
+    <input type="hidden" name="token" value="<?= $this->token ?>"/>
 </form>
 <div class="phdr">
     <a href="profile.php?act=settings&amp;reset"><?= lng('reset_settings') ?></a>

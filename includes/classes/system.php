@@ -214,16 +214,16 @@ class System extends Vars
                     $_SESSION['token'] = $token;
 
                     // Получаем пользовательские настройки
-                    if (isset($_SESSION['user_settings'])) {
-                        if ($_SESSION['user_settings'] != '#') {
-                            parent::$USER_SET = unserialize($_SESSION['settings']);
+                    if (isset($_SESSION['user_set'])) {
+                        if ($_SESSION['user_set'] != '#') {
+                            parent::$USER_SET = unserialize($_SESSION['user_set']);
                         }
                     } else {
-                        if (($user_set = parent::getUserData('set_user')) !== false) {
+                        if (($user_set = parent::getUserData('user_set')) !== false) {
                             parent::$USER_SET = $user_set;
-                            $_SESSION['user_settings'] = serialize(parent::$USER_SET);
+                            $_SESSION['user_set'] = serialize(parent::$USER_SET);
                         } else {
-                            $_SESSION['user_settings'] = '#';
+                            $_SESSION['user_set'] = '#';
                         }
                     }
 

@@ -44,11 +44,11 @@ switch (Vars::$MOD) {
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
         if (($set_forum = Vars::getUserData('set_forum')) === false) {
             $set_forum = array(
-                'farea'    => 0,
-                'upfp'     => 0,
-                'preview'  => 1,
+                'farea' => 0,
+                'upfp' => 0,
+                'preview' => 1,
                 'postclip' => 1,
-                'postcut'  => 2
+                'postcut' => 2
             );
         }
         if (isset($_POST['submit'])) {
@@ -67,11 +67,11 @@ switch (Vars::$MOD) {
         if (isset($_GET['reset']) || empty($set_forum)) {
             Vars::setUserData('set_forum');
             $set_forum = array(
-                'farea'    => 0,
-                'upfp'     => 0,
-                'preview'  => 1,
+                'farea' => 0,
+                'upfp' => 0,
+                'preview' => 1,
                 'postclip' => 1,
-                'postcut'  => 2
+                'postcut' => 2
             );
             echo '<div class="rmenu">' . lng('settings_default') . '</div>';
         }
@@ -95,27 +95,20 @@ switch (Vars::$MOD) {
         break;
 
     default:
-//            // Устанавливаем скин
-//            $theme_list = array();
-//            foreach (glob('../theme/*/*.css') as $val)
-//                $theme_list[] = array_pop(explode('/', dirname($val)));
-//            $set_user['skin'] = isset($_POST['skin']) && in_array($_POST['skin'], $theme_list) ? Validate::filterString($_POST['skin']) : Vars::$SYSTEM_SET['skindef'];
-//
-//            // Устанавливаем язык
-//            $lng_select = isset($_POST['iso']) ? trim($_POST['iso']) : false;
-//            if ($lng_select && array_key_exists($lng_select, Vars::$LNG_LIST)) {
-//                $set_user['lng'] = $lng_select;
-//                unset($_SESSION['lng']);
-//            }
-//
-//            // Записываем настройки
-//            if (Vars::$USER_SET != $set_user) {
-//                unset($_SESSION['settings']);
-//                Vars::setUserData('set_user', $set_user);
-//                $_SESSION['ok'] = lng('settings_saved');
-//            }
-//            header('Location: profile.php?act=settings');
-//            exit;
+        /*
+        -----------------------------------------------------------------
+        Пользовательские настройки системы
+        -----------------------------------------------------------------
+        */
+        $tpl_list = array();
+        $templates = glob(TPLPATH . '*' . DIRECTORY_SEPARATOR . '*.css');
+        foreach ($templates as $val) {
+            $dir = explode(DIRECTORY_SEPARATOR, dirname($val));
+            $tpl_list[] = array_pop($dir);
+        }
+        sort($tpl_list);
+        $tpl->tpl_list = $tpl_list;
+
 //        } elseif (isset($_GET['reset'])) {
 //            /*
 //            -----------------------------------------------------------------
@@ -136,7 +129,12 @@ switch (Vars::$MOD) {
 //            unset($_SESSION['ok']);
 //        }
 
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit'])
+            && isset($_POST['token'])
+            && isset($_SESSION['form_token'])
+            && $_POST['token'] == $_SESSION['form_token']
+        ) {
+            // Принимаем данные из формы
             if (isset($_POST['timeshift']) && $_POST['timeshift'] > -13 && $_POST['timeshift'] < 13) {
                 Vars::$USER_SET['timeshift'] = intval($_POST['timeshift']);
             }
@@ -146,26 +144,35 @@ switch (Vars::$MOD) {
             if (isset($_POST['page_size']) && $_POST['page_size'] > 4 && $_POST['page_size'] < 100) {
                 Vars::$USER_SET['page_size'] = intval($_POST['page_size']);
             }
+            if (isset($_POST['skin']) && in_array($_POST['skin'], $tpl_list)) {
+                Vars::$USER_SET['skin'] = trim($_POST['skin']);
+            }
+            $lng_select = isset($_POST['iso']) ? trim($_POST['iso']) : false;
+            if ($lng_select && array_key_exists($lng_select, Vars::$LNG_LIST)) {
+                Vars::$USER_SET['lng'] = $lng_select;
+                unset($_SESSION['lng']);
+            }
             Vars::$USER_SET['avatar'] = isset($_POST['avatar']);
             Vars::$USER_SET['smileys'] = isset($_POST['smileys']);
             Vars::$USER_SET['translit'] = isset($_POST['translit']);
             Vars::$USER_SET['digest'] = isset($_POST['digest']);
             Vars::$USER_SET['direct_url'] = isset($_POST['direct_url']);
             Vars::$USER_SET['quick_go'] = isset($_POST['quick_go']);
+
+            // Записываем настройки
+            unset($_SESSION['user_set']);
+            Vars::setUserData('user_set', Vars::$USER_SET);
+            header('Location: ' . Vars::$URI . '?act=settings&save');
+            exit;
         } elseif (isset($_POST['reset'])) {
 
         } elseif (isset($_GET['reset'])) {
 
         }
 
-        $tpl_list = array();
-        $templates = glob(TPLPATH . '*' . DIRECTORY_SEPARATOR . '*.css');
-        foreach ($templates as $val) {
-            $dir = explode(DIRECTORY_SEPARATOR, dirname($val));
-            $tpl_list[] = array_pop($dir);
+        if(isset($_GET['save'])){
+            $tpl->save = 1;
         }
-        sort($tpl_list);
-        $tpl->tpl_list = $tpl_list;
 
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['form_token'] = $tpl->token;
