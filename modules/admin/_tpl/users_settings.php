@@ -13,16 +13,22 @@
 </div>
 <?php endif; ?>
 
-<div class="gmenu">
+<div class="<?= (Vars::$USER_SYS['reg_open'] ? 'g' : 'r') ?>menu">
     <form action="<?= Vars::$URI ?>?act=users_settings" method="post">
         <div class="formblock">
             <label><?= lng('registration') ?></label><br/>
-            <input type="radio" value="3" name="reg_mode" <?= (Vars::$USER_SYS['reg_mode'] == 3 ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('registration_free') ?><br/>
-            <input type="radio" value="2" name="reg_mode" <?= (Vars::$USER_SYS['reg_mode'] == 2 ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('registration_moderation') ?><br/>
-            <input type="radio" value="1" name="reg_mode" <?= (Vars::$USER_SYS['reg_mode'] == 1 ? 'checked="checked"' : '') ?>/>&#160;
+            <input type="radio" value="1" name="reg_open" <?= (Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('registration_open') ?><br/>
+            <input type="radio" value="0" name="reg_open" <?= (!Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('registration_closed') ?>
+        </div>
+        <div class="formblock">
+            <input name="reg_moderation" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_moderation'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('registration_moderation') ?><br/>
+            <input name="reg_email" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_email'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('registration_email') ?><br/>
+            <input name="reg_quarantine" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_quarantine'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('registration_quarantine') ?> <small>[<a href=""><?= lng('settings') ?></a>]</small><br/>
         </div>
 </div>
 <div class="menu">
