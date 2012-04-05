@@ -86,11 +86,11 @@ if (isset($actions[Vars::$ACT])
                 exit;
             }
 
+            // Получаем список пользовательских шаблонов оформления
             $tpl_list = array();
             $templates = glob(TPLPATH . '*' . DIRECTORY_SEPARATOR . '*.css');
             foreach ($templates as $val) {
-                $dir = explode(DIRECTORY_SEPARATOR, dirname($val));
-                $tpl_list[] = array_pop($dir);
+                $tpl_list[] = basename(dirname($val));
             }
             sort($tpl_list);
             $tpl->tpl_list = $tpl_list;
