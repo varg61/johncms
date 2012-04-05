@@ -25,6 +25,8 @@
         <div class="formblock">
             <input name="reg_moderation" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_moderation'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('registration_moderation') ?><br/>
+            <input name="reg_welcome" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_welcome'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('welcome_message') ?><br/>
             <input name="reg_email" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_email'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('registration_email') ?><br/>
             <input name="reg_quarantine" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_quarantine'] ? 'checked="checked"' : '') ?>/>&#160;

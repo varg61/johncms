@@ -78,6 +78,7 @@ switch (Vars::$ACT) {
             ) {
                 Vars::$USER_SYS['reg_open'] = isset($_POST['reg_open']) && $_POST['reg_open'] ? 1 : 0;
                 Vars::$USER_SYS['reg_moderation'] = isset($_POST['reg_moderation']);
+                Vars::$USER_SYS['reg_welcome'] = isset($_POST['reg_welcome']);
                 Vars::$USER_SYS['reg_email'] = isset($_POST['reg_email']);
                 Vars::$USER_SYS['reg_quarantine'] = isset($_POST['reg_quarantine']);
                 Vars::$USER_SYS['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;

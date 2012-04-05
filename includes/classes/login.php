@@ -131,87 +131,6 @@ class Login extends Vars
 
     /*
     -----------------------------------------------------------------
-    Регистрация новых пользователей
-    -----------------------------------------------------------------
-    */
-    public function userRegistration($var, $reg_mode = 3)
-    {
-        // Дополнительные шаги регистрации
-        if (isset($_SESSION['reg'])) {
-            return 'step2';
-            //unset($_SESSION['reg']);
-        }
-
-        // Если регистрация закрыта, или юзер уже авторизован
-        if ($reg_mode < 2 || Vars::$USER_ID) return false;
-
-        if (isset($_POST['check_login']) && Validate::nickname($var['login'], true) === true) {
-            // Проверка доступности Ника
-            Validate::nicknameAvailability($var['login'], true);
-        } elseif (isset($_POST['submit'])) {
-            // Проверяем данные
-            if (Validate::nickname($var['login'], true) === true) {
-                Validate::nicknameAvailability($var['login'], true);
-            }
-            if (Validate::password($var['password'], true) === true) {
-                if ($var['password'] != $var['password_confirm']) {
-                    $this->error['password_confirm'] = lng('error_passwords_not_match');
-                }
-            }
-            if (Validate::email($var['email'], true) === true) { //TODO: поставить в зависимость от настроек в админке
-                Validate::emailAvailability($var['email'], true);
-            }
-            if ($var['sex'] < 1 || $var['sex'] > 2) {
-                $this->error['sex'] = lng('error_sex_unknown');
-            }
-            if (mb_strlen($var['captcha']) < 3 || $var['captcha'] != $_SESSION['captcha']) {
-                $this->error['captcha'] = lng('error_wrong_captcha');
-            }
-            unset($_SESSION['captcha']);
-
-            // Регистрируем пользователя
-            if (empty($this->error) && empty(Validate::$error)) {
-                // Формируем Хэш пароля
-                $salt = $this->_generateSalt();
-                $password = md5(md5($var['password']) . md5($salt));
-
-                // Формируем Токен
-                $token = $this->_generateToken();
-
-                mysql_query("INSERT INTO `users` SET
-                    `nickname` = '" . mysql_real_escape_string($var['login']) . "',
-                    `password` = '" . mysql_real_escape_string($password) . "',
-                    `token` = '" . mysql_real_escape_string($token) . "',
-                    `salt` = '" . mysql_real_escape_string($salt) . "',
-                    `email` = '" . mysql_real_escape_string($var['email']) . "',
-                    `rights` = 0,
-                    `level` = " . ($reg_mode == 3 ? 1 : 0) . ",
-                    `sex` = '" . ($var['sex'] == 1 ? 'm' : 'w') . "',
-                    `join_date` = " . time() . ",
-                    `last_visit` = " . time() . ",
-                    `about` = ''
-                ") or exit(mysql_error());
-                $new_user_id = mysql_insert_id();
-				Functions::notificationSis(
-				$new_user_id,  // ID получателя
-				'Спасибо за регистрацию',  // Тема сообщения
-				"Привет, [b]" . $var['login'] . "[/b]!\r\nДобро пожаловать на мой сайт. Надеюсь тебе здесь понравится и ты будишь заходить регулярно.\r\nC уважением, Admin."
-				);
-                // Запускаем пользователя на сайт
-                $this->_userEnter($new_user_id, $token);
-
-                // Пересылка на заполнение анкеты
-                $_SESSION['reg'] = 'step2';
-                $_SESSION['password'] = $var['password'];
-                header('Location: ' . Vars::$URI);
-                return true;
-            }
-        }
-        return 'step1';
-    }
-
-    /*
-    -----------------------------------------------------------------
     Запись данных сессии и COOKIE
     -----------------------------------------------------------------
     */
@@ -241,31 +160,6 @@ class Login extends Vars
         }
         if ($error_log) $this->error['login'] = $error;
         return false;
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Генерация соли для пароля
-    -----------------------------------------------------------------
-    */
-    private function _generateSalt()
-    {
-        $salt = '';
-        $length = rand(5, 10);
-        for ($i = 0; $i < $length; $i++) {
-            $salt .= chr(rand(33, 126));
-        }
-        return $salt;
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Генерация Токена
-    -----------------------------------------------------------------
-    */
-    private function _generateToken()
-    {
-        return md5($this->_generateSalt() . microtime(true));
     }
 
     /*
