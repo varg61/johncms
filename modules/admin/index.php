@@ -84,6 +84,7 @@ switch (Vars::$ACT) {
                 Vars::$USER_SYS['flood_mode'] = isset($_POST['flood_mode']) && $_POST['flood_mode'] > 0 && $_POST['flood_mode'] < 5 ? intval($_POST['flood_mode']) : 1;
                 Vars::$USER_SYS['flood_day'] = isset($_POST['flood_day']) ? intval($_POST['flood_day']) : 10;
                 Vars::$USER_SYS['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
+                Vars::$USER_SYS['change_nickname'] = isset($_POST['change_nickname']);
                 Vars::$USER_SYS['change_sex'] = isset($_POST['change_sex']);
                 Vars::$USER_SYS['change_status'] = isset($_POST['change_status']);
                 Vars::$USER_SYS['upload_avatars'] = isset($_POST['upload_avatars']);

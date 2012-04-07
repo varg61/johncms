@@ -30,12 +30,14 @@
             <input name="reg_email" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_email'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('registration_email') ?><br/>
             <input name="reg_quarantine" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_quarantine'] ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('registration_quarantine') ?> <small>[<a href=""><?= lng('settings') ?></a>]</small><br/>
+            <a href=""><?= lng('registration_quarantine') ?></a><br/>
         </div>
 </div>
 <div class="menu">
     <div class="formblock">
         <label><?= lng('permissions') ?></label><br/>
+        <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('change_nickname') ?><br/>
         <input name="change_sex" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_sex'] ? 'checked="checked"' : '') ?>/>&#160;
         <?= lng('change_sex') ?><br/>
         <input name="change_status" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_status'] ? 'checked="checked"' : '') ?>/>&#160;
