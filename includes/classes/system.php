@@ -186,7 +186,7 @@ class System extends Vars
             if ($id < 1 || $id != $_COOKIE['uid'] || strlen($_COOKIE['token']) != 32) {
                 $id = false;
                 $token = false;
-                Login::userUnset();
+                parent::userUnset();
             } else {
                 $cookie = true;
             }
@@ -252,11 +252,11 @@ class System extends Vars
                 } else {
                     // Если авторизация не прошла
                     mysql_query("UPDATE `users` SET `login_try` = '" . ++$res['login_try'] . "' WHERE `id` = " . $res['id']);
-                    Login::userUnset();
+                    parent::userUnset();
                 }
             } else {
                 // Если пользователь не существует
-                Login::userUnset();
+                parent::userUnset();
             }
         } else {
             // Для неавторизованных

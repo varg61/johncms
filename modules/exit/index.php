@@ -11,20 +11,19 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
+$tpl = Template::getInstance();
 
-if (isset($_POST['submit'])) {
-    $login = new Login;
-    $login->userUnset(isset($_POST['clear']));
+if (isset($_POST['submit'])
+    && isset($_POST['form_token'])
+    && isset($_SESSION['form_token'])
+    && $_POST['form_token'] == $_SESSION['form_token']
+) {
+    Vars::userUnset(isset($_POST['clear']));
     header('Location: ' . Vars::$HOME_URL);
     exit;
-} else {
-    echo'<div class="rmenu">' .
-        '<p><h3>' . lng('exit_warning') . '</h3></p>' .
-        '<form action="' . Vars::$HOME_URL . '/exit' . '" method="post">' .
-        '<p><input type="checkbox" name="clear" value="1"/>&#160;' . lng('clear_authorisation') . '</p>' .
-        '<p><input type="submit" name="submit" value="' . lng('exit') . '" /></p>' .
-        '</form>' .
-        '<p><a href="' . $referer . '">' . lng('cancel') . '</a></p>' .
-        '</div>';
 }
+
+$tpl->token = mt_rand(100, 10000);
+$_SESSION['form_token'] = $tpl->token;
+$tpl->referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
+$tpl->contents = $tpl->includeTpl('exit');

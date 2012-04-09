@@ -78,8 +78,8 @@ if ($sql && empty(Validate::$error)) {
             }
         }
 
-        if (($autologin && $login_data['token'] == $res['token'])
-            || (!$autologin && crypt($login_data['password'], $res['password']) == $res['password'])
+        if (($autologin && $login_data['token'] === $res['token'])
+            || (!$autologin && crypt($login_data['password'], $res['password']) === $res['password'])
         ) {
             /**
              * Если пароль, или токен совпадают, авторизуем пользователя
