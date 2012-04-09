@@ -36,6 +36,8 @@
 <div class="menu">
     <div class="formblock">
         <label><?= lng('permissions') ?></label><br/>
+        <input name="autologin" type="checkbox" value="1" <?= (Vars::$USER_SYS['autologin'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('autologin') ?><br/>
         <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
         <?= lng('change_nickname') ?><br/>
         <input name="change_sex" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_sex'] ? 'checked="checked"' : '') ?>/>&#160;
