@@ -509,9 +509,8 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nickname` varchar(32) NOT NULL DEFAULT '',
-  `password` char(32) NOT NULL DEFAULT '',
+  `password` char(60) NOT NULL DEFAULT '',
   `token` char(32) NOT NULL DEFAULT '',
-  `salt` varchar(10) NOT NULL DEFAULT '',
   `login_try` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `email` varchar(50) NOT NULL DEFAULT '',
   `rights` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -549,8 +548,7 @@ CREATE TABLE `users` (
 -- PASSWORD: admin
 INSERT INTO `users` SET
         `nickname` = 'admin',
-        `password` = 'f30834d2dd2fc48dcb88502021e910ca',
-        `salt` = '-|tgJjVnuU',
+        `password` = '$2a$09$3dc6eee4535ff2912c44fO4djfEMWdsfFM9dw4NKsWCaeLIRyzB6u',
         `email` = 'admin@test.com',
         `rights` = 9,
         `level` = 1,

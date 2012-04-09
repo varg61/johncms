@@ -28,7 +28,6 @@ class Login extends Vars
         $user_token = isset($_REQUEST['token']) ? trim($_REQUEST['token']) : false;
         $user_login = isset($_POST['login']) ? mb_substr(trim($_POST['login']), 0, 50) :false;
         $user_password = isset($_POST['password']) ? trim($_POST['password']) : false;
-        $user_captcha = isset($_POST['captcha']) ? trim($_POST['captcha']) : false;
         $user_remember = isset($_POST['remember']);
 
         if ($user_id

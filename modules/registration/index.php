@@ -33,7 +33,7 @@ switch ($reg_step) {
         Форма регистрации новых пользователей
         -----------------------------------------------------------------
         */
-        $error = Validate::$error;
+        $error = array();
 
         $reg_data['login'] = isset($_POST['login']) ? trim($_POST['login']) : '';
         $reg_data['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
@@ -69,10 +69,9 @@ switch ($reg_step) {
             unset($_SESSION['captcha']);
 
             // Регистрируем пользователя
-            if (empty($error)) {
+            if (empty(Validate::$error) && empty($error)) {
                 // Формируем Хэш пароля
-                $salt = Functions::generateSalt();
-                $password = md5(md5($reg_data['password']) . md5($salt));
+                $password = crypt($reg_data['password'], '$2a$09$' . md5(uniqid()) . '$');
 
                 // Формируем Токен
                 $token = Functions::generateToken();
@@ -82,7 +81,6 @@ switch ($reg_step) {
                     `nickname` = '" . mysql_real_escape_string($reg_data['login']) . "',
                     `password` = '" . mysql_real_escape_string($password) . "',
                     `token` = '" . mysql_real_escape_string($token) . "',
-                    `salt` = '" . mysql_real_escape_string($salt) . "',
                     `email` = '" . mysql_real_escape_string($reg_data['email']) . "',
                     `rights` = 0,
                     `level` = " . (Vars::$USER_SYS['reg_moderation'] ? 0 : 1) . ",
@@ -112,7 +110,7 @@ switch ($reg_step) {
             }
         }
 
-        $tpl->error = $error;
         $tpl->reg_data = $reg_data;
+        $tpl->error = array_merge($error, Validate::$error);
         $tpl->contents = $tpl->includeTpl('step1');
 }
