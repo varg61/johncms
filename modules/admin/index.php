@@ -76,6 +76,7 @@ switch (Vars::$ACT) {
                 && isset($_SESSION['form_token'])
                 && $_POST['token'] == $_SESSION['form_token']
             ) {
+                //TODO: Добавить переключатель АвтоЛогина
                 Vars::$USER_SYS['reg_open'] = isset($_POST['reg_open']) && $_POST['reg_open'] ? 1 : 0;
                 Vars::$USER_SYS['reg_moderation'] = isset($_POST['reg_moderation']);
                 Vars::$USER_SYS['reg_welcome'] = isset($_POST['reg_welcome']);

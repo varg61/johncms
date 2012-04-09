@@ -356,27 +356,12 @@ class Functions extends Vars
 
     /*
     -----------------------------------------------------------------
-    Генерация соли
-    -----------------------------------------------------------------
-    */
-    public static function generateSalt()
-    {
-        $salt = '';
-        $length = rand(5, 10);
-        for ($i = 0; $i < $length; $i++) {
-            $salt .= chr(rand(33, 126));
-        }
-        return $salt;
-    }
-
-    /*
-    -----------------------------------------------------------------
     Генерация Токена
     -----------------------------------------------------------------
     */
     public static function generateToken()
     {
-        return md5(self::generateSalt() . microtime(true));
+        return md5(uniqid(parent::$HOME_URL, 1));
     }
 
     /*

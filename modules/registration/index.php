@@ -70,11 +70,11 @@ switch ($reg_step) {
 
             // Регистрируем пользователя
             if (empty(Validate::$error) && empty($error)) {
-                // Формируем Хэш пароля
-                $password = crypt($reg_data['password'], '$2a$09$' . md5(uniqid()) . '$');
-
                 // Формируем Токен
                 $token = Functions::generateToken();
+
+                // Формируем Хэш пароля
+                $password = crypt($reg_data['password'], '$2a$09$' . $token . '$');
 
                 // Добавляем пользователя в базу данных
                 mysql_query("INSERT INTO `users` SET

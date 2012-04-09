@@ -21,9 +21,11 @@ class Validate
     public static function nickname($var = '', $error_log = false)
     {
         if (empty($var)) {
-            $error = lng('error_login_empty');
+            $error = lng('error_empty_nickname');
         } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
             $error = lng('error_wrong_lenght');
+        } elseif (self::email($var) === true){
+            $error = lng('error_email_login');
         } elseif (preg_match('/[^\da-zа-я\-\.\ \@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
             $error = lng('error_wrong_symbols');
         } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $var)) {

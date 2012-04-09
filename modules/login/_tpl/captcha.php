@@ -1,26 +1,24 @@
 <div class="phdr">
     <b><?= lng('login') ?></b>
 </div>
-<form action="<?= Vars::$URI ?>" method="post">
-    <div class="rmenu">
+<form action="<?= Vars::$URI . (isset($this->data['id']) && isset($this->data['token']) ? '?id=' . $this->data['id'] . '&amp;token=' . htmlspecialchars($this->data['token']) : '') ?>" method="post">
+    <div class="menu">
         <div class="formblock">
             <label for="captcha"><?= lng('captcha') ?></label><br/>
             <?= Captcha::display(0) ?><br/>
-            <?php if (isset($this->login->error['captcha'])) : ?>
-            <small class="red"><b><?= lng('error') ?></b>: <?= $this->login->error['captcha'] ?><br/></small>
+            <?php if (isset($this->error['captcha'])) : ?>
+            <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['captcha'] ?><br/></small>
             <?php endif; ?>
-            <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->login->error['captcha']) ? 'class="error"' : '') ?>/>
+            <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->error['captcha']) ? 'class="error"' : '') ?>/>
         </div>
         <div class="formblock">
             <input type="submit" name="submit" value="<?= lng('continue') ?>"/>
         </div>
     </div>
-    <?php if (isset($_REQUEST['id']) && isset($_REQUEST['token'])) : ?>
-    <input type="hidden" name="id" value="<?= intval($_REQUEST['id']) ?>"/>
-    <input type="hidden" name="token" value="<?= htmlspecialchars($_REQUEST['token']) ?>"/>
-    <?php else : ?>
-    <input type="hidden" name="login" value="<?= htmlspecialchars($_POST['login']) ?>"/>
-    <input type="hidden" name="password" value="<?= htmlspecialchars($_POST['password']) ?>"/>
-    <input type="hidden" name="remember" value="<?= $_POST['remember'] ?>"/>
+    <input type="hidden" name="login" value="<?= htmlspecialchars($this->data['login']) ?>"/>
+    <input type="hidden" name="password" value="<?= htmlspecialchars($this->data['password']) ?>"/>
+    <?php if (isset($_POST['remember'])) : ?>
+    <input type="hidden" name="remember" value="1"/>
     <?php endif; ?>
+    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
