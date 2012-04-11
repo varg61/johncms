@@ -188,16 +188,19 @@ if (isset($actions[Vars::$ACT])
                     : false)
             );
 
-            //Управление контактами
-            $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $user['id'] . "'");
-            $num_cont = mysql_num_rows($contacts);
-            if ($num_cont) {
-                $rows = mysql_fetch_assoc($contacts);
-                $tpl->banned = $rows['banned'];
-                if ($rows['delete'] == 1) $num_cont = 0;
+            if($user['id'] != Vars::$USER_ID) {
+                //Управление друзьями
+                $tpl->friend = Functions::checkFriend($user['id']);
+                
+                //Управление контактами
+                $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $user['id'] . "'");
+                $tpl->num_cont = mysql_num_rows($contacts);
+                if($tpl->num_cont) {
+                	$rows = mysql_fetch_assoc($contacts);
+                	$tpl->banned = $rows['banned'];
+                	if($rows['delete'] == 1) $tpl->num_cont = 0;
+                }
             }
-            $tpl->textbanned = $num_cont && $rows['banned'] == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor');
-            $tpl->textcontact = $num_cont ? lng('contact_delete') : lng('contact_add');
             //Подключаем шаблон profile
             $tpl->contents = $tpl->includeTpl('profile');
     }

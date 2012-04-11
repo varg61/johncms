@@ -9,7 +9,10 @@
 	<p>
     <div><?= Functions::getImage('album_4.png') ?>&#160;<a href=""><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</div>
     <div><?= Functions::getImage('comments.png') ?>&#160;<a href=""><?= lng('guestbook') ?></a>&#160;()</div>
-    <div><?php echo Functions::getImage('mail-inbox.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail"><?php echo lng('mail') ?></a>&#160;(<?php echo Functions::mailCount() ?>)</div>
+    <div><?php echo Functions::getImage('mail-copy.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail"><?php echo lng('mail') ?></a>&#160;(<?php echo Functions::mailCount() ?>)</div>
+    <div>
+        <?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?id=<?php echo $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)
+    </div>
 	<?php if (Vars::$USER_RIGHTS) : ?>
     <div><?= Functions::getImage('blocked.png') ?>&#160;<a href="../guestbook/index.php?act=ga&amp;do=set"><?= lng('admin_club') ?></a> (<span class="red">()</span>)</div>
     <?php endif; ?>

@@ -32,7 +32,7 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 	if ( Vars::$ID && Vars::$MOD == 'delete' )
     {
         $q = mysql_query( "SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
-            Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "'" );
+            Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "' AND `sys`='0'" );
         if ( mysql_num_rows( $q ) )
         {
             $data = mysql_fetch_assoc( $q );
@@ -92,7 +92,7 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 		if ( Vars::$ID && Vars::$MOD == 'elected' )
         {
             $q = mysql_query( "SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
-                Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "'" );
+                Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "' AND `sys`='0'" );
             if ( mysql_num_rows( $q ) )
             {
                 $data = mysql_fetch_assoc( $q );
@@ -141,7 +141,8 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 			OR (`contact_id`='" . Vars::$USER_ID . "'
 			AND `user_id`='" . Vars::$ID . "'))
 			AND `delete_in`!='" . Vars::$USER_ID . "'
-			AND `delete_out`!='" . Vars::$USER_ID . "'" ), 0 );
+			AND `delete_out`!='" . Vars::$USER_ID . "'
+            AND `sys`='0'" ), 0 );
 			if ( $total )
 			{
 				//Формируем список сообщений
@@ -155,6 +156,7 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 				AND `cms_mail_messages`.`user_id`='" . Vars::$ID . "'))
 				AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "'
 				AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "'
+                AND `cms_mail_messages`.`sys`='0'
 				ORDER BY `cms_mail_messages`.`time` DESC" . Vars::db_pagination() );
 
 				$array = array();

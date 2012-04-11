@@ -18,6 +18,10 @@ Class ValidMail extends Vars {
 	public $error_log = array();
 	public $nickname;
 	public $banned;
+	public $access = array();
+	public $contact;
+	public $friends;
+	public $friends_friends;
 	public $archive;
 	public $count_mail;
 	public $array = array();
@@ -64,6 +68,7 @@ Class ValidMail extends Vars {
 		}
 		return false;
 	}
+	
 	/*
     -----------------------------------------------------------------
     Проверяем ID
@@ -73,10 +78,12 @@ Class ValidMail extends Vars {
 		if($this->valRequest() === false) {
 			return false;
 		} else {
-			$q = mysql_query( "SELECT `users`.`id`, `users`.`nickname`, `cms_mail_contacts`.`banned`
+			$q = mysql_query( "SELECT `users`.`id`, `users`.`nickname`, `cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`banned`, `cms_mail_contacts`.`delete`, `cms_user_settings`.`value`
 			FROM `users` 
 			LEFT JOIN `cms_mail_contacts` ON
 			`users`.`id`=`cms_mail_contacts`.`user_id`
+			LEFT JOIN `cms_user_settings` ON
+			`users`.`id`=`cms_user_settings`.`user_id` AND `cms_user_settings`.`key`='settings_mail'
 			WHERE `users`.`id`='" . $this->id . "' LIMIT 1" );
 			if ( mysql_num_rows( $q ) )
 			{
@@ -84,8 +91,26 @@ Class ValidMail extends Vars {
 				$this->id = $res['id'];
 				$this->nickname = $res['nickname'];
 				$this->banned = $res['banned'];
+				if($res['value'])
+					$this->access = unserialize($res['value']);
+				if(parent::$USER_RIGHTS == false)
+					if(isset($res['contact_id']) && $res['contact_id'] == parent::$USER_ID && !$res['banned'] && !$res['delete'])
+						$this->contact = true;
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	/*
+    -----------------------------------------------------------------
+    Проверяем является ли контакт другом
+    -----------------------------------------------------------------
+    */
+	private function checkFriends() {
+		$friends = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contact` WHERE `access`='2' AND ((`contact_id`='" . $this->id . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $this->id . "'))"), 0);  
+		if($friends == 2) {
+			return true;
 		}
 		return false;
 	}
@@ -98,10 +123,12 @@ Class ValidMail extends Vars {
 		if($this->valLogin($login) === false) {
 			return false;
 		} else {
-			$q = mysql_query( "SELECT `users`.`id`, `users`.`nickname`, `cms_mail_contacts`.`banned`
+			$q = mysql_query( "SELECT `users`.`id`, `users`.`nickname`, `cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`banned`, `cms_mail_contacts`.`delete`, `cms_user_settings`.`value`
 			FROM `users` 
 			LEFT JOIN `cms_mail_contacts` ON
 			`users`.`id`=`cms_mail_contacts`.`user_id`
+			LEFT JOIN `cms_user_settings` ON
+			`users`.`id`=`cms_user_settings`.`user_id` AND `cms_user_settings`.`key`='settings_mail'
 			WHERE `users`.`nickname`='" . mysql_real_escape_string( $login ) . "' LIMIT 1" );
 			if ( mysql_num_rows( $q ) )
 			{
@@ -110,6 +137,11 @@ Class ValidMail extends Vars {
 				$this->nickname = $res['nickname'];
 				if(parent::$USER_RIGHTS == false)
 					$this->banned = $res['banned'];
+				if($res['value'])
+					$this->access = unserialize($res['value']);
+				if(parent::$USER_RIGHTS == false)
+					if(isset($res['contact_id']) && $res['contact_id'] == parent::$USER_ID && !$res['banned'] && !$res['delete'])
+						$this->contact = true;
 				return true;
 			} else {
 				$this->error_log[] = lng( 'user_does_not_exist' );
@@ -117,6 +149,7 @@ Class ValidMail extends Vars {
 			}
 		}
 	}
+	
 	/*
     -----------------------------------------------------------------
     Проверяем логин
@@ -139,9 +172,12 @@ Class ValidMail extends Vars {
     */
 	function validateForm() {
 		if (isset($_POST['submit']) && $this->id !== false && self::checkCSRF() === true) {
+			
 			if($this->valIgnor() === false)
 				return false;
 			if($this->valRequest() === false)
+				return false;
+			if($this->valSetting() === false)
 				return false;
 			if($this->valText($this->array['text']) === false)
 				return false;
@@ -155,6 +191,8 @@ Class ValidMail extends Vars {
 			if($this->valIgnor() === false)
 				return false;
 			if($this->valRequest() === false)
+				return false;
+			if($this->valSetting() === false)
 				return false;
 			if($this->valText($this->array['text']) === false)
 				return false;
@@ -185,11 +223,12 @@ Class ValidMail extends Vars {
 			`filename`='" . $this->file_name . "',
 			`filesize`='" . $this->file_size . "'" );
 			mysql_query( "UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . parent::$USER_ID );
-			Header( 'Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $this->id );
+			Header ( 'Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $this->id );
 			return true;
 		}
 		return false;
 	}
+	
 	/*
     -----------------------------------------------------------------
     Проверяем пользователя на игнор
@@ -209,6 +248,7 @@ Class ValidMail extends Vars {
 			return true;
         }
     }
+	
 	/*
     -----------------------------------------------------------------
     Проверяем текст
@@ -217,12 +257,33 @@ Class ValidMail extends Vars {
 	function valText($var) {
 		if ( empty( $var ) )
 			$this->error_log[] = lng( 'empty_message' );
-		else if ( mb_strlen( $var ) < 2 || mb_strlen( $var ) > 5000 )
+		else if ( mb_strlen( $var ) < 2 )
 			$this->error_log[] = lng( 'error_message' );
 		else 
 			return true;
 		return false;
 	}
+	
+	/*
+    -----------------------------------------------------------------
+    Проверяем на отправку сообщения с учетом настроек
+    -----------------------------------------------------------------
+    */
+	private function valSetting() {
+		if($this->access) {
+			if($this->access['access'] > 0) {
+				if($this->access['access'] == 1 && $this->contact !== true) {
+					$this->error_log[] = lng('access_contact');
+					return false;
+				} else if($this->access['access'] == 2 && $this->checkFriends() !== true) {
+					$this->error_log[] = lng('access_friends');
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
 	/*
     -----------------------------------------------------------------
     Проверяем на отправку сообщения самому себе
@@ -235,6 +296,7 @@ Class ValidMail extends Vars {
 		}
 		return true;
 	}
+	
 	/*
     -----------------------------------------------------------------
     Проверяем загрузку файла
@@ -275,6 +337,7 @@ Class ValidMail extends Vars {
 		ON DUPLICATE KEY UPDATE `count_out`=`count_out`+1, `time`='" . time() . "', `archive`='0', `delete`='0'");
 		return true;
     }
+	
 	
 	public static function checkCSRF() {
 		if (isset($_POST['token']) && isset($_SESSION['token_status'])&& $_POST['token'] == $_SESSION['token_status']) {

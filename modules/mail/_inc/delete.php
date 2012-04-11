@@ -80,10 +80,6 @@ if ( Vars::$ID )
                     mysql_query( "UPDATE `cms_mail_messages` SET
 					`delete`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'" );
                 }
-				$counter['delete'] = Mail::counter( 'delete' );
-				mysql_query( "UPDATE `users` 
-				SET	`count_mail`='" . Mail::updateCount( $counter ) . "' 
-				WHERE `id`='" . Vars::$USER_ID . "'" );
                 if ( $data['user_id'] == Vars::$USER_ID )
                 {
                     Header( 'Location: ' . Vars::$MODULE_URI . '?act=basket&id=' . $data['contact_id'] );

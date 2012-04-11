@@ -78,6 +78,22 @@ class Mail extends Vars
                 WHERE `banned`='1' 
                 AND `user_id`='" . parent::$USER_ID . "' 
                 AND `cms_mail_contacts`.`delete`='0'" ), 0 );
+			//Входящие
+            case 'inmess':
+                return mysql_result( mysql_query( "SELECT COUNT(*)
+				FROM `cms_mail_messages`
+				WHERE `contact_id`='" . Vars::$USER_ID . "' 
+				AND `sys`='0' 
+				AND `delete_in`!='" . Vars::$USER_ID . "' 
+				AND `delete_out`!='" . Vars::$USER_ID . "'" ), 0 );
+			//Исходящие
+            case 'outmess':
+                return mysql_result( mysql_query( "SELECT COUNT(*)
+				FROM `cms_mail_messages`
+				WHERE `user_id`='" . Vars::$USER_ID . "' 
+				AND `sys`='0' 
+				AND `delete_in`!='" . Vars::$USER_ID . "' 
+				AND `delete_out`!='" . Vars::$USER_ID . "'" ), 0 );
             //Файлы
 			case 'files':
                 return mysql_result( mysql_query( "SELECT COUNT(*) 
@@ -502,6 +518,7 @@ class Mail extends Vars
                 break;
         }
     }
+	
 	/*
     -----------------------------------------------------------------
     Подключаем файлы
@@ -514,16 +531,21 @@ class Mail extends Vars
             'archive',
             'banned',
             'basket',
+			'contacts',
             'delete',
             'elected',
             'elected',
             'files',
+			'inmess',
             'load',
             'messages',
             'new',
+			'outmess',
+			'read',
             'restore',
             'search',
             'select',
+			'settings',
             'systems' );
     }
 	

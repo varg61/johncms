@@ -356,12 +356,27 @@ class Functions extends Vars
 
     /*
     -----------------------------------------------------------------
+    Генерация соли
+    -----------------------------------------------------------------
+    */
+    public static function generateSalt()
+    {
+        $salt = '';
+        $length = rand(5, 10);
+        for ($i = 0; $i < $length; $i++) {
+            $salt .= chr(rand(33, 126));
+        }
+        return $salt;
+    }
+
+    /*
+    -----------------------------------------------------------------
     Генерация Токена
     -----------------------------------------------------------------
     */
     public static function generateToken()
     {
-        return md5(uniqid(parent::$HOME_URL, 1));
+        return md5(self::generateSalt() . microtime(true));
     }
 
     /*
@@ -561,5 +576,47 @@ class Functions extends Vars
             default;
                 return false;
         }
+    }
+    
+    /**
+     *-----------------------------------------------------------------
+     *Функция определения друга
+     *-----------------------------------------------------------------
+     */
+    public static function checkFriend (
+        $id, //ID пользователя для проверки
+        $param = false //если true, то выполняется просто проверка на дружбу
+        ) {
+        //Проверяем является ли пользователь другом 
+        $friend = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $id . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $id . "'))"), 0); 
+        if($friend != 2) {
+            if($param === false) { //Если функция вызвана без дополнительного параметра, то проверяем заявки
+                //Проверяем есть ли заявка от выбранного пользователя
+                if(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $id . "'"), 0) == 1) return 2; //Подтверждаем дружбу
+                //Проверяем подавали ли мы заявку
+                elseif(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $id . "'"), 0) == 1) return 3; //Отменяем заявку
+            }
+            return 0; //Пользователь не является другом
+        } else return 1; //Пользователь друг
+    }
+    
+    /**
+     *-----------------------------------------------------------------
+     *Функция друзей "Счетчик друзей"
+     *-----------------------------------------------------------------
+     */
+    public static function friendsCount($var = null)
+    {
+        //Количество друзей пользователя с вызванным ID
+        if($var == null)
+            return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
+			LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
+			WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
+			"), 0);
+        //Количество своих друзей
+        return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
+			LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
+			WHERE `cms_mail_contacts`.`user_id`='" . $var . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
+			"), 0);
     }
 }

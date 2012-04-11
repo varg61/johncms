@@ -3,7 +3,7 @@
 <div class="topmenu">
  <?php echo $this->display_pagination ?>
 </div>
-<? endif; ?>
+<? endif ?>
 <?php if($this->total): ?>
 <?php foreach($this->query as $row): ?>
 	<div class="<?php echo $row['list'] ?>">
@@ -17,7 +17,7 @@
 	</div>
 <? endforeach ?>
 <div class="phdr"><?php echo lng( 'total' ) ?>: <?php echo $this->total ?></div>
-<? endif; ?>
+<? endif ?>
 <?php echo $this->error ?>
 <?php if($this->total > Vars::$USER_SET['page_size']): ?>
 <div class="topmenu">
@@ -25,8 +25,11 @@
  <form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>"/>
 <input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;"/></p></form>
 </div>
-<? endif; ?>
+<? endif ?>
 <?php if($this->total): ?>
 <p><a href="<?php echo Vars::$MODULE_URI ?>?act=systems&amp;mod=clear"><?php echo lng( 'cleaning' ) ?></a></p>
-<? endif; ?>
-<p><a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'contacts' ) ?></a></p>
+<? endif ?>
+<p>
+<a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'mail' ) ?></a><br />
+<a href="<?php echo Vars::$MODULE_URI ?>?act=contacts"><?php echo lng( 'contacts' ) ?></a>
+</p>

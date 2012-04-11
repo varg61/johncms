@@ -6,7 +6,7 @@
 <strong><?php echo lng( 'message' ) ?>:</strong><br />
 <?php if (!Vars::$IS_MOBILE): ?>
 	<?php echo TextParser::autoBB('form', 'text') ?>
-<? endif; ?>
+<?php endif ?>
 <textarea rows="<?php echo Vars::$USER_SET['field_h'] ?>" name="text"><?php echo $this->text ?></textarea><br />
 <small><?php echo lng( 'text_size' ) ?></small><br />
 <strong><?php echo lng( 'file' ) ?>:</strong><br />
@@ -19,8 +19,11 @@
 </form>
 </div>
 <div class="phdr"><a href="<?php echo Vars::$HOME_URL ?>/help?act=trans"><?php echo lng( 'translit' ) ?></a> | <a href="<?php echo Vars::$HOME_URL ?>/smileys"><?php echo lng( 'smileys' ) ?></a></div>
-<? endif; ?>
+<?php endif ?>
 <?php echo $this->ignor ?>
 <?php echo $this->list ?>
 
-<p><a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'contacts' ) ?></a></p>
+<p>
+<a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'mail' ) ?></a><br />
+<a href="<?php echo Vars::$MODULE_URI ?>?act=contacts"><?php echo lng( 'contacts' ) ?></a>
+</p>
