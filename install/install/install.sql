@@ -212,13 +212,12 @@ CREATE TABLE IF NOT EXISTS `cms_mail_contacts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `contact_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `count_in` int(10) unsigned NOT NULL DEFAULT '0',
-  `count_out` int(10) unsigned NOT NULL DEFAULT '0',
   `time` int(10) unsigned NOT NULL,
   `delete` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `banned` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `archive` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `access` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `friends` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`,`contact_id`),
   UNIQUE KEY `contact_id` (`contact_id`,`user_id`),
@@ -227,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `cms_mail_contacts` (
   KEY `banned` (`banned`),
   KEY `archive` (`archive`),
   KEY `access` (`access`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 -- Dumping structure for table cms_mail_messages
 DROP TABLE IF EXISTS `cms_mail_messages`;
@@ -274,6 +273,7 @@ INSERT INTO `cms_modules` (`module`) VALUES ('admin'),
         ('avatars'),
         ('cabinet'),
         ('exit'),
+        ('friends'),
         ('help'),
         ('language'),
         ('login'),
@@ -543,7 +543,7 @@ CREATE TABLE `users` (
   KEY `lastdate` (`last_visit`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- Создаем тестового суперпользователя
+-- Создаем суперпользователя
 -- LOGIN:    admin
 -- PASSWORD: admin
 INSERT INTO `users` SET

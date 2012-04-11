@@ -93,7 +93,7 @@ switch ($reg_step) {
 
                 // Отправляем приветственное письмо
                 if (Vars::$USER_SYS['reg_welcome']) {
-                    Functions::notificationSis($new_user_id, lng('welcome_msg_head'), lng('welcome_msg_body'));
+                    
                 }
 
                 // Запускаем пользователя на сайт

@@ -44,8 +44,6 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
                     {
                         mysql_query( "UPDATE `cms_mail_messages` SET
 						`delete_out`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'" );
-                        mysql_query( "UPDATE `cms_mail_contacts` SET
-						`count_out`=`count_out`-1 WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='{$data['contact_id']}'" );
                     }
                 }
                 if ( $data['contact_id'] == Vars::$USER_ID )
@@ -54,8 +52,6 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
                     {
                         mysql_query( "UPDATE `cms_mail_messages` SET
 						`delete_in`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'" );
-                        mysql_query( "UPDATE `cms_mail_contacts` SET
-						`count_in`=`count_in`-1 WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='{$data['user_id']}'" );
                     }
                 }
                 if ( $data['user_id'] == Vars::$USER_ID )
@@ -101,7 +97,7 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
                     if ( $data['elected_out'] != Vars::$USER_ID )
                     {
                         mysql_query( "UPDATE `cms_mail_messages` SET
-					`elected_out`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'" );
+						`elected_out`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'" );
                     }
                 }
                 if ( $data['contact_id'] == Vars::$USER_ID )
@@ -109,7 +105,7 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
                     if ( $data['elected_in'] != Vars::$USER_ID )
                     {
                         mysql_query( "UPDATE `cms_mail_messages` SET
-					`elected_in`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'" );
+						`elected_in`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'" );
                     }
                 }
                 if ( $data['user_id'] == Vars::$USER_ID )

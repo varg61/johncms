@@ -40,16 +40,26 @@ class Mail extends Vars
                  OR `cms_mail_messages`.`delete_in`!='" . parent::$USER_ID . "')) 
                  AND (`cms_mail_contacts`.`delete`='0' 
                  AND `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "')) 
-                 AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "' 
-                 AND `cms_mail_messages`.`sys`='0') a" ), 0 );
+                 AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "') a" ), 0 );
 			//Счетчик архива
             case 'archive':
-                return mysql_result( mysql_query( "SELECT COUNT(*) 
-                FROM `cms_mail_contacts` 
-                WHERE `archive`='1' 
-                AND `banned`='0' 
-                AND `user_id`='" . parent::$USER_ID . "' 
-                AND `cms_mail_contacts`.`delete`='0'" ), 0 );
+				return mysql_result( mysql_query( "SELECT COUNT(*)
+                FROM (SELECT DISTINCT `cms_mail_contacts`.`contact_id` 
+                FROM `cms_mail_contacts`
+				LEFT JOIN `cms_mail_messages`
+				ON (`cms_mail_contacts`.`user_id`=`cms_mail_messages`.`user_id` 
+				OR `cms_mail_contacts`.`user_id`=`cms_mail_messages`.`contact_id`)
+				AND (`cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`user_id` 
+				OR `cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`contact_id`)
+				LEFT JOIN `users` 
+				ON `cms_mail_contacts`.`contact_id`=`users`.`id` 
+				WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
+				AND `cms_mail_contacts`.`archive`='1'
+				AND `cms_mail_contacts`.`banned`='0'
+				AND `cms_mail_contacts`.`delete`='0'
+				AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "' 
+				AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "'
+				AND `users`.`id` IS NOT NULL) a" ), 0 );
 			//Счетчик удаленных
             case 'delete':
                 return mysql_result(mysql_query("SELECT COUNT(*)
@@ -63,14 +73,7 @@ class Mail extends Vars
 				OR `cms_mail_messages`.`contact_id`='" . parent::$USER_ID . "')
 				AND (`cms_mail_messages`.`delete_out`='" . parent::$USER_ID . "' 
 				OR `cms_mail_messages`.`delete_in`='" . parent::$USER_ID . "' OR (`cms_mail_contacts`.`delete`='1' AND `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "')))
-				AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "'
-				AND `cms_mail_messages`.`sys`='0'
-				) a"), 0);
-			//Системные
-            case 'systems':
-                return mysql_result( mysql_query( "SELECT COUNT(*) 
-     			FROM `cms_mail_messages` 
-     			WHERE `contact_id`='" . parent::$USER_ID . "'  AND `sys`='1'" ), 0 );
+				AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "') a"), 0);
 			//Игнор
             case 'banned':
                 return mysql_result( mysql_query( "SELECT COUNT(*) 
@@ -180,29 +183,6 @@ class Mail extends Vars
                         `delete_in`='" . parent::$USER_ID . "' 
                         WHERE `id` IN (" . $in_str . ")" );
                     }
-                    $query3 = mysql_query( "SELECT * 
-                    FROM `cms_mail_contacts` 
-                    WHERE `user_id`='" . parent::$USER_ID . "' 
-                    AND `contact_id` IN (" . $id . ")" );
-                    while ( $rows3 = mysql_fetch_assoc( $query3 ) )
-                    {
-                        $count_mess_in = mysql_result( mysql_query( "SELECT COUNT(*) 
-                        FROM `cms_mail_messages` 
-                        WHERE `contact_id`='" . parent::$USER_ID . "' 
-                        AND `user_id`='{$rows3['user_id']}' 
-                        AND `delete`!='" . parent::$USER_ID . "'" ), 0 );
-                        $count_mess_out = mysql_result( mysql_query( "SELECT COUNT(*) 
-                        FROM `cms_mail_messages` WHERE `user_id`='" . parent::$USER_ID . "'
-                        AND `contact_id`='{$rows3['user_id']}' 
-                        AND `delete`!='" . parent::$USER_ID . "'" ), 0 );
-                        mysql_query( "UPDATE `cms_mail_contacts` SET
-							`count_in`='$count_mess_in',
-							`count_out`='$count_mess_out',
-							`delete`='1' 
-                            WHERE `user_id`='" . parent::$USER_ID . "' 
-                            AND `contact_id`='{$rows3['contact_id']}'" );
-                    }
-
                 }
                 break;
 			//Добавляем в игнор
@@ -258,22 +238,6 @@ class Mail extends Vars
                 {
                     $mass[] = $rows['id'];
                     $mass_contact[] = $rows['contact_id'];
-                    $count_mess_in = mysql_result( mysql_query( "SELECT COUNT(*) 
-                    FROM `cms_mail_messages` 
-                    WHERE `contact_id`='" . parent::$USER_ID . "' 
-                    AND `user_id`='{$rows['contact_id']}' 
-                    AND `delete`!='" . parent::$USER_ID . "'" ), 0 );
-                    $count_mess_out = mysql_result( mysql_query( "SELECT COUNT(*) 
-                    FROM `cms_mail_messages` 
-                    WHERE `user_id`='" . parent::$USER_ID . "' 
-                    AND `contact_id`='{$rows['contact_id']}' 
-                    AND `delete`!='" . parent::$USER_ID . "'" ), 0 );
-                    mysql_query( "UPDATE `cms_mail_contacts` SET
-					`count_in`='$count_mess_in',
-					`count_out`='$count_mess_out',
-					`delete`='0'
-                     WHERE `user_id`='" . parent::$USER_ID . "'
-                     AND `contact_id`='{$rows['contact_id']}'" );
                 }
                 if ( !empty( $mass ) )
                 {
@@ -383,7 +347,6 @@ class Mail extends Vars
 				AND `delete`!='" . parent::$USER_ID . "'" );
 				$update = array();
 				$delete = array();
-
 				while($row = mysql_fetch_assoc($query)) {
 					if($row['delete'] && $row['delete'] != parent::$USER_ID) {
 						$delete[] = $row['id'];
@@ -391,55 +354,29 @@ class Mail extends Vars
 						$update[] = $row['id'];
 					}
 				}
-
 				if($delete) {
 					$delete = implode(',', $delete);
 					echo 'Удаляем ' . $delete . '<br />';
 					$q = mysql_query( "SELECT * FROM `cms_mail_messages`
 					WHERE `id` IN (" . $delete . ") AND `filename`!=''");
 					while($res = mysql_fetch_assoc($q)) {
-						if(file_exists(ROOTPATH . 'files/' . MAILDIR . '/' . $res['filename']) !== false) {
-							@unlink( ROOTPATH . 'files/' . MAILDIR . '/' . $res['filename'] );
+						if(file_exists(FILEPATH . 'users/pm/' . $res['filename']) !== false) {
+							@unlink( FILEPATH . 'users/pm/' . $res['filename'] );
 						}
 					}
 					mysql_query( "DELETE FROM `cms_mail_messages` 
 					WHERE `id` IN (" . $delete . ")" );
 				}
-
 				if($update) {
 					$update = implode(',', $update);
-					echo 'Обновляем ' . $update . '<br />';
 					mysql_query( "UPDATE `cms_mail_messages` SET
 					`delete`='" . parent::$USER_ID . "' 
 					WHERE `id` IN (" . $update . ")" );
 				}
-				
 				unset($delete, $update);
-				
-				$query3 = mysql_query( "SELECT * FROM `cms_mail_contacts` 
-				WHERE `user_id`='" . parent::$USER_ID . "' 
-				AND `contact_id` IN (" . $id . ")" );
-				while ( $rows3 = mysql_fetch_assoc( $query3 ) )
-				{
-					$count_mess_in = mysql_result( mysql_query( "SELECT COUNT(*) 
-					FROM `cms_mail_messages` WHERE `contact_id`='" . parent::$USER_ID . "' 
-					AND `user_id`='{$rows3['contact_id']}' 
-					AND `delete`!='" . parent::$USER_ID . "';" ), 0 );
-					$count_mess_out = mysql_result( mysql_query( "SELECT COUNT(*) 
-					FROM `cms_mail_messages` WHERE `user_id`='" . parent::$USER_ID . "' 
-					AND `contact_id`='{$rows3['contact_id']}' 
-					AND `delete`!='" . parent::$USER_ID . "';" ), 0 );
-					mysql_query( "UPDATE `cms_mail_contacts` SET
-					`count_in`='$count_mess_in',
-					`count_out`='$count_mess_out' 
-					WHERE `user_id`='" . parent::$USER_ID . "' 
-					AND `contact_id`='{$rows3['contact_id']}'" );
-				}
-
                 break;
 			//Полная очистка сообщений
             case 'clear':
-
                 $query = mysql_query( "SELECT * 
                 FROM `cms_mail_messages` 
                 WHERE `delete_in`='" . parent::$USER_ID . "' 
@@ -464,7 +401,7 @@ class Mail extends Vars
                     AND `id` IN (" . $del . ")" );
                     while ( $r1 = mysql_fetch_assoc( $qq1 ) )
                     {
-                        @unlink( ROOTPATH . 'files/' . MAILDIR . '/' . $r1['filename'] );
+                        @unlink( FILEPATH . 'users/pm/' . $r1['filename'] );
                     }
                     mysql_query( "DELETE FROM `cms_mail_messages` 
                     WHERE `id` IN (" . $del . ")" );
@@ -565,7 +502,7 @@ class Mail extends Vars
 			AND `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "' 
 			WHERE `cms_mail_messages`.`user_id`='" . $id . "' 
 			AND `cms_mail_messages`.`contact_id`='" . parent::$USER_ID . "' 
-			AND `cms_mail_messages`.`sys`='0' 
+
 			AND `cms_mail_messages`.`read`='0' 
 			AND (`cms_mail_messages`.`delete_in`!='" . parent::$USER_ID . "' 
 			AND `cms_mail_messages`.`delete_out`!='" . parent::$USER_ID . "')

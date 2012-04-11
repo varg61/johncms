@@ -144,7 +144,8 @@ if ( Vars::$ID )
             exit;
         }
 		//Формируем список удаленных сообщений по контактам
-        $query = mysql_query("SELECT `users`.*
+        $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`, 
+		`cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`user_id`, COUNT(*) as `count`
 		FROM `cms_mail_contacts`
 		LEFT JOIN `users`
 		ON `cms_mail_contacts`.`contact_id`=`users`.`id`
@@ -159,9 +160,10 @@ if ( Vars::$ID )
 		OR (`cms_mail_contacts`.`delete`='1' 
 		AND `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "')))
 		AND `cms_mail_messages`.`delete`!='" . Vars::$USER_ID . "'
-		AND `cms_mail_messages`.`sys`='0'
+
 		GROUP BY `cms_mail_contacts`.`contact_id`
 		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination() );
+		
 		
 		$array = array();
         $i = 1;
@@ -173,10 +175,8 @@ if ( Vars::$ID )
                     '', 'align="middle"' ),
                 'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
                 'nickname' => $row['nickname'],
-                'count_in' => mysql_result( mysql_query( "SELECT COUNT(*) FROM `cms_mail_messages` WHERE `user_id`='{$row['id']}' AND `delete_in`='" .
-                    Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'" ), 0 ),
-                'count_out' => mysql_result( mysql_query( "SELECT COUNT(*) FROM `cms_mail_messages` WHERE `contact_id`='{$row['id']}' AND `delete_out`='" .
-                    Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'" ), 0 ),
+                'count' => $row['count'],
+
                 'count_new' => '',
                 'url' => ( Vars::$MODULE_URI . '?act=basket&amp;id=' . $row['id'] ),
                 'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :

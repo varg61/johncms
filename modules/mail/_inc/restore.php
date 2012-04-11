@@ -45,8 +45,6 @@ if ( Vars::$ID )
                 {
                     mysql_query( "UPDATE `cms_mail_messages` SET
 					`delete_in`='0' WHERE `id`='" . Vars::$ID . "'" );
-                    mysql_query( "UPDATE `cms_mail_contacts` SET
-					`count_in`=`count_in`+1, `delete`='0' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='{$data['user_id']}'" );
                 }
             }
             if ( $data['user_id'] == Vars::$USER_ID )

@@ -40,16 +40,29 @@ if ( $search && Validate::nickname( $search, 1 ) === true )
     if ( $total )
     {
         //Формируем список контактов
-		$query = mysql_query( "SELECT * 
+		$query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`, 
+		`cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`user_id`, COUNT(*) as `count`
 		FROM `cms_mail_contacts`
+		LEFT JOIN `cms_mail_messages`
+		ON (`cms_mail_contacts`.`user_id`=`cms_mail_messages`.`user_id` 
+		OR `cms_mail_contacts`.`user_id`=`cms_mail_messages`.`contact_id`)
+		AND (`cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`user_id` 
+		OR `cms_mail_contacts`.`contact_id`=`cms_mail_messages`.`contact_id`)
 		LEFT JOIN `users` 
-		ON `cms_mail_contacts`.`contact_id`=`users`.`id`
+		ON `cms_mail_contacts`.`contact_id`=`users`.`id` 
 		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
+		AND `cms_mail_contacts`.`archive`='0'
+		AND `cms_mail_contacts`.`banned`='0'
 		AND `cms_mail_contacts`.`delete`='0'
+		AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "' 
+		AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "'
+		AND `users`.`id` IS NOT NULL
 		AND `users`.`nickname`
 		LIKE '" . $search_db . "'
-		ORDER BY `cms_mail_contacts`.`time` DESC 
-		" . Vars::db_pagination() );
+		GROUP BY `cms_mail_contacts`.`contact_id`
+		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination() );
+		
+		
         $array = array();
         $i = 1;
         
@@ -61,9 +74,8 @@ if ( $search && Validate::nickname( $search, 1 ) === true )
                 'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
                 'nickname' => preg_replace( '|(' . preg_quote( $search, '/' ) . ')|siu', '<span style="background-color: #FFFF33">$1</span>',
                     $row['nickname'] ),
-                'count_in' => $row['count_in'],
-                'count_out' => $row['count_out'],
-                'count_new' => Mail::countNew( $row['contact_id'] ),
+                'count' => $row['count'],
+                'count_new' => Mail::countNew( $row['id'] ),
                 'url' => ( Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id'] ),
                 'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
                     '<span class="green"> [ON]</span>' ) );

@@ -236,7 +236,7 @@ Class ValidMail extends Vars {
     */
     function valIgnor()
     {
-        if (!Vars::$USER_RIGHTS && $this->banned == true )
+        if (!Vars::$USER_RIGHTS && (Mail::myIgnor($this->id) === true) )
         {
             $this->error_log[] = lng( 'you_banned' );
 			return false;
