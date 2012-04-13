@@ -1,10 +1,7 @@
 <div class="phdr">
     <strong>
-        <?php echo lng('friends')?>
+        <?php echo lng('friends_online')?>
     </strong>
-</div>
-<div class="topmenu">
-    <a href="<?php Vars::$MODULE_URI ?>?act=demands"><?php echo lng('my_demand') ?></a> <?php echo ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?>| <a href="<?php Vars::$MODULE_URI ?>?act=offers"><?php echo lng('my_offers') ?></a> <?php echo ($this->offers ? '(<span class="red">' . $this->offers . '</span>)' : '') ?><?php echo ($this->total ? ' | <a href="' . Vars::$MODULE_URI . '?act=online">' . lng('online') . '</a>' : '')?>
 </div>
 
 <?php if($this->total):?>
@@ -31,5 +28,6 @@
 </form>
 <?php endif ?>
 <?php else: ?>
-    <div class="rmenu"><?php echo lng('friends_not') ?></div>
+    <div class="rmenu"><?php echo lng('friends_not_online') ?></div>
 <?php endif ?>
+<p><a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng('friends') ?></a></p>

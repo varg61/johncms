@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
@@ -8,16 +7,22 @@
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  */
-
+//TODO: Доработать под новую систему оповещений
 defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
 define ('_IN_JOHNCMS_FRIENDS', 1);
 define( 'FRIENDSDIR', 'friends' ); //Папка с модулем
 define( 'FRIENDSPATH', MODPATH . FRIENDSDIR . DIRECTORY_SEPARATOR );//Абсолютный путь до модуля
 //Подключаем шаблонизатор
 $tpl = Template::getInstance();
-
 $connect = array(
-'add'
+'add',
+'cancel',
+'ok',
+'delete',
+'demands',
+'no',
+'offers',
+'online'
 );
 if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && file_exists( FRIENDSPATH .
     '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php' ) )
@@ -38,7 +43,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
     		LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
     		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
     		"), 0);
-    		if ($tpl->total) 
+    		if ($tpl->total)
             {
     			$query = mysql_query( "SELECT `users`.* FROM `cms_mail_contacts`
                 LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`

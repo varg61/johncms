@@ -12,7 +12,12 @@
 defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
 //Закрываем прямой доступ к файлу
 defined( '_IN_JOHNCMS_FRIENDS' ) or die( 'Error: restricted access' );
-
+//Закрываем доступ гостям
+if ( !Vars::$USER_ID )
+{
+	Header( 'Location: ' . Vars::$HOME_URL . '/404' );
+    exit;
+}
 $fr = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . Vars::$ID . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'))"), 0); 
 if($fr != 2) 
 {
@@ -21,33 +26,32 @@ if($fr != 2)
         $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "'"), 0); 
         if($fr_out) 
         {
-			echo functions::displayError( lng('already_demand'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a>' );
-			require_once('../incfiles/end.php');
-			exit;
-        }
-		$fr_in = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'"), 0); 
-		if($fr_in) 
+			$tpl->contents = Functions::displayError(lng('already_demand'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a>' );
+        } else 
         {
-			echo functions::displayError( lng('offer_already'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a>' );
-			require_once('../incfiles/end.php');
-			exit;
-		}
-
-        mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `access`, `time`)
-		VALUES ('" . Vars::$USER_ID . "', '" . Vars::$ID . "', '2', '" . time() . "')
-		ON DUPLICATE KEY UPDATE `access`='2', `time`='" . time() . "', `delete`='0'");
-        
-		$text = '[url=' . Vars::$HOME_URL . '/profile?user=' . Vars::$USER_ID . ']' . Vars::$USER_NICKNAME . '[/url] ' . lng('offers_friends') . '\r\n[url=' . Vars::$MODULE_URI . '?act=ok&id=' . Vars::$USER_ID . ']' . lng('confirm') . '[/url] | [url=' . Vars::$MODULE_URI . '?act=no&id=' . Vars::$USER_ID . ']' . lng('decline') . '[/url]';
-		mysql_query("INSERT INTO `cms_mail_messages` SET
-		`user_id` = '" . Vars::$USER_ID . "', 
-		`contact_id` = '" . Vars::$ID . "',
-		`text` = '$text',
-		`time` = '" . time() . "',
-		`sys` = '1',
-		`theme` = '" . lng('friendship') . "'");
-		$tpl->contents = '<div class="rmenu"><p>' . lng('demand_friends_sent') . '</p>
-        <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p>
-        </div>';
+    		$fr_in = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'"), 0); 
+    		if($fr_in) 
+            {
+    			$tpl->contents = Functions::displayError(lng('offer_already'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a>' );
+    		} else 
+            {
+                mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `access`, `time`)
+        		VALUES ('" . Vars::$USER_ID . "', '" . Vars::$ID . "', '2', '" . time() . "')
+        		ON DUPLICATE KEY UPDATE `access`='2', `time`='" . time() . "', `delete`='0'");
+                //TODO: Переделать под новую систему оповещения
+        		//$text = '[url=' . Vars::$HOME_URL . '/profile?user=' . Vars::$USER_ID . ']' . Vars::$USER_NICKNAME . '[/url] ' . lng('offers_friends') . '\r\n[url=' . Vars::$MODULE_URI . '?act=ok&id=' . Vars::$USER_ID . ']' . lng('confirm') . '[/url] | [url=' . Vars::$MODULE_URI . '?act=no&id=' . Vars::$USER_ID . ']' . lng('decline') . '[/url]';
+        		//mysql_query("INSERT INTO `cms_mail_messages` SET
+        		//`user_id` = '" . Vars::$USER_ID . "', 
+        		//`contact_id` = '" . Vars::$ID . "',
+        		//`text` = '$text',
+        		//`time` = '" . time() . "',
+        		//`sys` = '1',
+        		//`theme` = '" . lng('friendship') . "'");
+        		$tpl->contents = '<div class="rmenu"><p>' . lng('demand_friends_sent') . '</p>
+                <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p>
+                </div>';
+            }
+        }
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=add&amp;id=' . Vars::$ID;
         $tpl->select = lng( 'confirm_offer_friendship' );

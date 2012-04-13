@@ -1,18 +1,17 @@
 <div class="phdr">
     <strong>
-        <?php echo lng('friends')?>
+        <?php echo lng('my_demand')?>
     </strong>
 </div>
 <div class="topmenu">
-    <a href="<?php Vars::$MODULE_URI ?>?act=demands"><?php echo lng('my_demand') ?></a> <?php echo ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?>| <a href="<?php Vars::$MODULE_URI ?>?act=offers"><?php echo lng('my_offers') ?></a> <?php echo ($this->offers ? '(<span class="red">' . $this->offers . '</span>)' : '') ?><?php echo ($this->total ? ' | <a href="' . Vars::$MODULE_URI . '?act=online">' . lng('online') . '</a>' : '')?>
+    <a href="<?php echo Vars::$MODULE_URI ?>?act=offers"><?php echo lng('my_offers') ?></a> <?php echo ($this->offers ? '(<span class="red">' . $this->offers . '</span>)' : '') ?>
 </div>
-
 <?php if($this->total):?>
     <?php foreach($this->query as $row): ?>
         <div class="<?php echo $row['list'] ?>">
         <?php echo $row['icon'] ?> <a href="<?php echo Vars::$HOME_URL ?>/profile?user=<?php echo $row['id'] ?>"><?php echo $row['nickname'] ?></a>
         <div class="sub">
-            <a href="<?php echo Vars::$MODULE_URI ?>?act=delete&amp;id=<?php echo $row['id']?>"><?php echo lng('delete') ?></a>
+			<a href="<?php echo Vars::$MODULE_URI ?>?act=cancel&amp;id=<?php echo $row['id']?>"><?php echo lng('cancel') ?></a>
         </div>
         </div>
     <?php endforeach ?>
@@ -31,5 +30,6 @@
 </form>
 <?php endif ?>
 <?php else: ?>
-    <div class="rmenu"><?php echo lng('friends_not') ?></div>
+    <div class="rmenu"><?php echo lng('demands_not') ?></div>
 <?php endif ?>
+<p><a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng('friends') ?></a></p>
