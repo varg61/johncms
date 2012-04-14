@@ -57,7 +57,7 @@ class System extends Vars
             $path = array();
             $array = explode('/', $route);
             foreach ($array as $val) {
-                if (preg_match('/.php$/i', $val)) {
+                if (strrpos($val, '.php')) {
                     $file = $val;
                 } else {
                     $path[] = $val;
