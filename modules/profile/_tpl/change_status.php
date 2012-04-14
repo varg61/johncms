@@ -1,7 +1,7 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('profile') : lng('my_profile')) ?></b></a> | <?= lng('change_status') ?>
+    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('profile') : lng('my_profile')) ?></b></a> | <?= lng('change_status') ?>
 </div>
-<form action="<?= Vars::$URI ?>?act=status&amp;user=<?= $this->user['id'] ?>" method="post">
+<form action="<?= Vars::$URI ?>?act=edit&amp;mod=status&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="gmenu">
         <div class="formblock">
             <label for="status"><?= lng('status') ?></label><br/>
@@ -18,5 +18,5 @@
     </div>
 </form>
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
+    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
 </div>

@@ -26,26 +26,35 @@ if ($user['id'] != Vars::$USER_ID
     exit;
 }
 
-//$tpl = Template::getInstance();
-$tpl->setUsers = isset(Vars::$SYSTEM_SET['users']) && !empty(Vars::$SYSTEM_SET['users'])
-    ? unserialize(Vars::$SYSTEM_SET['users'])
-    : Vars::$USER_SYS;
+$tpl->setUsers = Vars::$USER_SYS;
 
 if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
-    $tpl->avatar = true;
-}
-if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg')) {
-    $tpl->photo = true;
+    $tpl->avatar = TRUE;
 }
 
-$menu[] = '<a href="' . Vars::$URI . '?act=nick&amp;user=' . $user['id'] . '">' . lng('change_nick') . '</a>';
+if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg')) {
+    $tpl->photo = TRUE;
+}
+
+// Ссылка на смену Ника
+if ($tpl->setUsers['change_nickname']
+    || Vars::$USER_RIGHTS == 9
+    || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
+) {
+    $menu[] = '<a href="' . Vars::$URI . '?act=nick&amp;user=' . $user['id'] . '">' . lng('change_nick') . '</a>';
+}
+
+// Ссылка на смену статуса
 if ($tpl->setUsers['change_status']
     || Vars::$USER_RIGHTS == 9
     || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
 ) {
-    $menu[] = '<a href="' . Vars::$URI . '?act=status&amp;user=' . $user['id'] . '">' . lng('change_status') . '</a>';
+    $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=status&amp;user=' . $user['id'] . '">' . lng('change_status') . '</a>';
 }
-$menu[] = '<a href="' . Vars::$URI . '?act=avatar&amp;user=' . $user['id'] . '">' . lng('change_avatar') . '</a>';
+
+// Ссылка на смену аватара
+$menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=avatar&amp;user=' . $user['id'] . '">' . lng('change_avatar') . '</a>';
+
 $arg['sub'] = '<p><b>' . lng('change') . '</b>: ' . Functions::displayMenu($menu) . '</p>';
 $tpl->userarg = $arg;
 
@@ -57,16 +66,16 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if (isset($_POST['submit'])
-            && isset($_POST['token'])
-            && isset($_SESSION['token_profile'])
-            && $_POST['token'] == $_SESSION['token_profile']
+            && isset($_POST['form_token'])
+            && isset($_SESSION['form_token'])
+            && $_POST['form_token'] == $_SESSION['form_token']
         ) {
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif');
-            header('Location: ' . Vars::$URI . '?user=' . $user['id']);
+            header('Location: ' . Vars::$URI . '?act=edit&amp;user=' . $user['id']);
             exit;
         } else {
-            $tpl->token = mt_rand(100, 10000);
-            $_SESSION['token_profile'] = $tpl->token;
+            $tpl->form_token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->form_token;
             $tpl->contents = $tpl->includeTpl('delete_avatar');
         }
         break;
@@ -94,9 +103,9 @@ switch (Vars::$MOD) {
         */
         if ($tpl->setUsers['upload_animation'] || Vars::$USER_RIGHTS >= 7) {
             if (isset($_POST['submit'])
-                && isset($_POST['token'])
-                && isset($_SESSION['token_profile'])
-                && $_POST['token'] == $_SESSION['token_profile']
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
             ) {
                 $error = array();
                 if ($_FILES['imagefile']['size'] > 0) {
@@ -108,12 +117,12 @@ switch (Vars::$MOD) {
                     $param = getimagesize($_FILES['imagefile']['tmp_name']);
 
                     // Проверка на допустимый тип файла
-                    if ($param == false || $param['mime'] != 'image/gif') {
+                    if ($param == FALSE || $param['mime'] != 'image/gif') {
                         $error[] = lng('error_avatar_filetype');
                     }
 
                     // Проверка на допустимый размер изображения
-                    if ($param != false && ($param[0] != 32 || $param[1] != 32)) {
+                    if ($param != FALSE && ($param[0] != 32 || $param[1] != 32)) {
                         $error[] = lng('error_avatar_size');
                     }
                 } else {
@@ -123,21 +132,21 @@ switch (Vars::$MOD) {
 
                 if (empty($error)) {
                     if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
-                        ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == true
+                        ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == TRUE
                     ) {
                         echo'<div class="gmenu">' .
                             '<p>' . lng('avatar_uploaded') . '<br/>' .
-                            '<a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>' .
+                            '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p>' .
                             '</div>';
                     } else {
                         $error[] = lng('error_avatar_upload');
                     }
                 } else {
-                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=upload_animation">' . lng('back') . '</a>');
+                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit&amp;mod=upload_animation&amp;user=' . $user['id'] . '">' . lng('back') . '</a>');
                 }
             } else {
-                $tpl->token = mt_rand(100, 10000);
-                $_SESSION['token_profile'] = $tpl->token;
+                $tpl->form_token = mt_rand(100, 10000);
+                $_SESSION['form_token'] = $tpl->form_token;
                 $tpl->contents = $tpl->includeTpl('upload_animation');
             }
         } else {
@@ -153,9 +162,9 @@ switch (Vars::$MOD) {
         */
         if ($tpl->setUsers['upload_avatars'] || Vars::$USER_RIGHTS >= 7) {
             if (isset($_POST['submit'])
-                && isset($_POST['token'])
-                && isset($_SESSION['token_profile'])
-                && $_POST['token'] == $_SESSION['token_profile']
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
             ) {
                 $handle = new upload($_FILES['imagefile']);
                 if ($handle->uploaded) {
@@ -167,23 +176,23 @@ switch (Vars::$MOD) {
                         'image/png'
                     );
                     $handle->file_max_size = 102400;
-                    $handle->file_overwrite = true;
-                    $handle->image_resize = true;
+                    $handle->file_overwrite = TRUE;
+                    $handle->image_resize = TRUE;
                     $handle->image_x = 32;
                     $handle->image_y = 32;
                     $handle->image_convert = 'gif';
                     $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
                     if ($handle->processed) {
                         echo '<div class="gmenu"><p>' . lng('avatar_uploaded') . '<br />' .
-                            '<a href="' . Vars::$URI . '?user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
+                            '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
                     } else {
                         echo Functions::displayError($handle->error);
                     }
                     $handle->clean();
                 }
             } else {
-                $tpl->token = mt_rand(100, 10000);
-                $_SESSION['token_profile'] = $tpl->token;
+                $tpl->form_token = mt_rand(100, 10000);
+                $_SESSION['form_token'] = $tpl->form_token;
                 $tpl->contents = $tpl->includeTpl('upload_avatar');
             }
         } else {
@@ -210,19 +219,19 @@ switch (Vars::$MOD) {
                     'image/png'
                 );
                 $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['flsz'];
-                $handle->file_overwrite = true;
-                $handle->image_resize = true;
+                $handle->file_overwrite = TRUE;
+                $handle->image_resize = TRUE;
                 $handle->image_x = 320;
-                $handle->image_ratio_y = true;
+                $handle->image_ratio_y = TRUE;
                 $handle->image_convert = 'jpg';
                 $handle->process('../files/users/photo/');
                 if ($handle->processed) {
                     // Обрабатываем превьюшку
                     $handle->file_new_name_body = $user['id'] . '_small';
-                    $handle->file_overwrite = true;
-                    $handle->image_resize = true;
+                    $handle->file_overwrite = TRUE;
+                    $handle->image_resize = TRUE;
                     $handle->image_x = 100;
-                    $handle->image_ratio_y = true;
+                    $handle->image_ratio_y = TRUE;
                     $handle->image_convert = 'jpg';
                     $handle->process('../files/users/photo/');
                     if ($handle->processed) {
@@ -281,7 +290,7 @@ switch (Vars::$MOD) {
                 $tpl->status = trim($_POST['status']);
                 if (mb_strlen($tpl->status) < 51) {
                     mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "' WHERE `id` = " . $user['id']);
-                    header('Location: ' . Vars::$HOME_URL . '/profile/edit?user=' . $user['id']);
+                    header('Location: ' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $user['id']);
                     exit;
                 }
                 $tpl->error = lng('error_status_lenght');
@@ -300,7 +309,7 @@ switch (Vars::$MOD) {
         Меню смены аватара
         -----------------------------------------------------------------
         */
-        $tpl->contents = $tpl->includeTpl('avatar');
+        $tpl->contents = $tpl->includeTpl('change_avatar');
         break;
 
     default:
