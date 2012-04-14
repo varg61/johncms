@@ -34,62 +34,63 @@ mb_internal_encoding('UTF-8');
 Задаем пути
 -----------------------------------------------------------------
 */
-define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);          // Системная папка
-define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR);                    // Корневая папка
-define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
-define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR);                // Папка с языками
-define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
+define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR); // Системная папка
+define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR); // Корневая папка
+define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR); // Папка для кэша
+define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR); // Папка с языками
+define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR); // Папка с конфигурационными файлами
 
-define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR);                  // Папка с пользовательскими файлами
-define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 // Папка с модулями
-define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
+define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR); // Папка с пользовательскими файлами
+define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR); // Папка с модулями
+define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR); // Папка с шаблонами
 
 /*
 -----------------------------------------------------------------
 Автозагрузка Классов
 -----------------------------------------------------------------
 */
-spl_autoload_register('autoload');
-function autoload($name)
-{
-    $name = strtolower($name);
+spl_autoload_register(
+    function($name)
+    {
+        $name = strtolower($name);
 
-    // Список системных классов
-    $system = array(
-        'advt'       => 'classes/advt.php',
-        'captcha'    => 'classes/captcha.php',
-        'comments'   => 'classes/comments.php',
-        'counters'   => 'classes/counters.php',
-        'finfo'      => 'lib/class.upload.php',
-        'functions'  => 'classes/functions.php',
-        'homepage'   => 'classes/homepage.php',
-        'login'      => 'classes/login.php',
-        'network'    => 'classes/network.php',
-        'session'    => 'classes/session.php',
-        'sitemap'    => 'classes/sitemap.php',
-        'system'     => 'classes/system.php',
-        'template'   => 'classes/template.php',
-        'textparser' => 'classes/textparser.php',
-        'upload'     => 'lib/class.upload.php',
-        'validate'   => 'classes/validate.php',
-        'vars'       => 'classes/vars.php'
-    );
+        // Список системных классов
+        $system = array(
+            'advt'       => 'classes/advt.php',
+            'captcha'    => 'classes/captcha.php',
+            'comments'   => 'classes/comments.php',
+            'counters'   => 'classes/counters.php',
+            'finfo'      => 'lib/class.upload.php',
+            'functions'  => 'classes/functions.php',
+            'homepage'   => 'classes/homepage.php',
+            'login'      => 'classes/login.php',
+            'network'    => 'classes/network.php',
+            'session'    => 'classes/session.php',
+            'sitemap'    => 'classes/sitemap.php',
+            'system'     => 'classes/system.php',
+            'template'   => 'classes/template.php',
+            'textparser' => 'classes/textparser.php',
+            'upload'     => 'lib/class.upload.php',
+            'validate'   => 'classes/validate.php',
+            'vars'       => 'classes/vars.php'
+        );
 
-    if (isset($system[$name])) {
-        require_once(SYSPATH . $system[$name]);
-    } elseif (is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
-        include_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
-    } else {
-        exit('ERROR: class <b><i>' . $name . '</i></b> not found');
+        if (isset($system[$name])) {
+            require_once(SYSPATH . $system[$name]);
+        } elseif (is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
+            include_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
+        } else {
+            exit('ERROR: class <b><i>' . $name . '</i></b> not found');
+        }
     }
-}
+);
 
 /*
 -----------------------------------------------------------------
 Инициализируем Ядро системы
 -----------------------------------------------------------------
 */
-new Network;
+$network = new Network;
 
 require_once(CONFIGPATH . 'config.php');
 $db_host = isset($db_host) ? $db_host : 'localhost';
@@ -100,15 +101,16 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot co
 @mysql_select_db($db_name) or die('Error: specified database does not exist');
 @mysql_query("SET NAMES 'utf8'", $connect);
 
-new Session;
-new System;
+$session = new Session;
+$system = new System;
+unset($network, $system);
 
 /*
 -----------------------------------------------------------------
 Загрузка языков
 -----------------------------------------------------------------
 */
-function lng($key, $force_system = false)
+function lng($key, $force_system = FALSE)
 {
     static $system_lng = array();
     static $module_lng = array();
@@ -142,5 +144,17 @@ function lng($key, $force_system = false)
 -----------------------------------------------------------------
 */
 ob_start();
-register_shutdown_function(create_function('', 'echo Template::getInstance()->loadTemplate();'));
+
+register_shutdown_function(
+    function()
+    {
+        echo Template::getInstance()->loadTemplate();
+    }
+);
+
+/*
+-----------------------------------------------------------------
+Запись и закрытие сессии
+-----------------------------------------------------------------
+*/
 register_shutdown_function('session_write_close');
