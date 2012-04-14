@@ -39,6 +39,7 @@ error_nick_lenght             =   "Минимальная длина Ника - 
 error_nick_symbols            =   "Недопустимые символы в Нике"
 error_rights                  =   "Вы не можете редактировать анкету старшего Вас по должности"
 error_status_lenght           =   "Неверая длина статуса"
+field_height                  =   "Высота поля ввода"
 friends_add                   =   "В друзья"
 friends_delete                =   "Удалить из друзей"
 friends_demands_cancel        =   "Отменить заявку"
