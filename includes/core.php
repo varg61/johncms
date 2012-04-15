@@ -90,7 +90,7 @@ spl_autoload_register(
 Инициализируем Ядро системы
 -----------------------------------------------------------------
 */
-$network = new Network;
+new Network;
 
 require_once(CONFIGPATH . 'config.php');
 $db_host = isset($db_host) ? $db_host : 'localhost';
@@ -101,9 +101,8 @@ $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot co
 @mysql_select_db($db_name) or die('Error: specified database does not exist');
 @mysql_query("SET NAMES 'utf8'", $connect);
 
-$session = new Session;
-$system = new System;
-unset($network, $system);
+new Session;
+new System;
 
 /*
 -----------------------------------------------------------------
@@ -135,7 +134,7 @@ function lng($key, $force_system = FALSE)
         return $system_lng[$key];
     }
 
-    return '#' . $key . '#';
+    return '# ' . $key . ' #';
 }
 
 /*

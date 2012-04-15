@@ -41,7 +41,7 @@ if ($tpl->setUsers['change_nickname']
     || Vars::$USER_RIGHTS == 9
     || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
 ) {
-    $menu[] = '<a href="' . Vars::$URI . '?act=nick&amp;user=' . $user['id'] . '">' . lng('change_nick') . '</a>';
+    $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=nick&amp;user=' . $user['id'] . '">' . lng('change_nick') . '</a>';
 }
 
 // Ссылка на смену статуса
