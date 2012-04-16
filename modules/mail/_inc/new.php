@@ -40,7 +40,41 @@ if ( $total )
     {
         if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
         {
-            Mail::mailSelectContacts( $_POST['delch'], 'read' );
+            $id = implode(',', $_POST['delch']);
+			if (!empty($id)) {
+				$mass = array();
+                $mass_contact = array();
+                $query = mysql_query( "SELECT * 
+                FROM `cms_mail_contacts` 
+                WHERE `user_id`='" . Vars::$USER_ID . "' 
+                AND `contact_id` IN (" . $id . ")" );
+                while ( $rows = mysql_fetch_assoc( $query ) )
+                {
+                    $mass[] = $rows['id'];
+                    $mass_contact[] = $rows['contact_id'];
+                }
+                if ( !empty( $mass ) )
+                {
+                    $sms = implode( ',', $mass_contact );
+                    $out = array();
+                    $query1 = mysql_query( "SELECT * 
+                    FROM `cms_mail_messages` 
+                    WHERE `user_id` IN (" . $sms . ") 
+                    AND `contact_id`='" . Vars::$USER_ID . "' 
+                    AND `read`='0' AND `delete`!='" . Vars::$USER_ID . "'" );
+                    while ( $rows1 = mysql_fetch_assoc( $query1 ) )
+                    {
+                        $out[] = $rows1['id'];
+                    }
+                    if ( !empty( $out ) )
+                    {
+                        $in_str = implode( ',', $out );
+                        mysql_query( "UPDATE `cms_mail_messages` SET
+						`read`='1' 
+                        WHERE `id` IN (" . $in_str . ")" );
+                    }
+                }
+			}
         }
         Header( 'Location: ' . Vars::$MODULE_URI . '?act=new' );
         exit;

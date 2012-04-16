@@ -67,11 +67,11 @@
     <!-- Block contacts -->
     <div class="formblock">
     	<div>
-            <?= Functions::getImage('mail-blocked.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail?act=select&amp;mod=banned&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?></a>
+            <?= Functions::getImage('mail-blocked.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?></a>
     	</div>
         <?php if(empty($this->banned)): ?>
     	<div>
-            <?= Functions::getImage('mail-outbox.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail?act=select&amp;mod=contact&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?></a>
+            <?= Functions::getImage('mail-outbox.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?></a>
     	</div>
         <?php endif ?>
     	<?php if(empty($this->banned)): ?>

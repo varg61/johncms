@@ -15,5 +15,5 @@
 </div>
 <p>
 <a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng('mail') ?></a><br />
-<a href="<?php echo Vars::$MODULE_URI ?>?act=contacts"><?php echo lng('contacts') ?></a>
+<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?php echo lng('contacts') ?></a>
 </p>

@@ -2,24 +2,42 @@
     <b><?= lng('my_office') ?></b>
 </div>
 <div class="list2">
-    <p>
-    <div><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile"><?= lng('my_profile') ?></a></div>
-    <div><?= Functions::getImage('rating.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=stat"><?= lng('statistics') ?></a></div>
-    </p>
-	<p>
-    <div><?= Functions::getImage('album_4.png') ?>&#160;<a href=""><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</div>
-    <div><?= Functions::getImage('comments.png') ?>&#160;<a href=""><?= lng('guestbook') ?></a>&#160;()</div>
-    <div><?php echo Functions::getImage('mail-copy.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail"><?php echo lng('mail') ?></a>&#160;(<?php echo Functions::mailCount() ?>)</div>
-    <div>
-        <?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?id=<?php echo $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)
+    <div class="formblock">
+        <div><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile"><?= lng('my_profile') ?></a></div>
+        <div><?= Functions::getImage('rating.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=stat"><?= lng('statistics') ?></a></div>
     </div>
-	<?php if (Vars::$USER_RIGHTS) : ?>
-    <div><?= Functions::getImage('blocked.png') ?>&#160;<a href="../guestbook/index.php?act=ga&amp;do=set"><?= lng('admin_club') ?></a> (<span class="red">()</span>)</div>
+    <div class="formblock">
+        <div>
+            <?= Functions::getImage('album_4.png') ?>&#160;<a href=""><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)
+        </div>
+        <div>
+            <?= Functions::getImage('comments.png') ?>&#160;<a href=""><?= lng('guestbook') ?></a>&#160;()
+        </div>
+    </div>
+    <?php if (Vars::$USER_RIGHTS) : ?>
+    <div class="formblock">
+        <?= Functions::getImage('blocked.png') ?>&#160;<a href="../guestbook/index.php?act=ga&amp;do=set"><?= lng('admin_club') ?></a> (<span class="red">()</span>)
+    </div>
     <?php endif; ?>
-    </p>
+</div>
+<div class="menu">
+    <div class="formblock">
+        <div>
+            <?php echo Functions::getImage('mail-copy.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail"><?php echo lng('mail') ?></a>&#160;(<?php echo Functions::mailCount() ?>)
+        </div>
+    </div>
+    <div class="formblock">
+        <div>
+            <?= Functions::getImage('users.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>&#160;(<?php echo Functions::contactsCount() ?>)
+        </div>
+        <div>
+            <?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)
+        </div>
+    </div>
 </div>
 <div class="bmenu">
-	<p>
+    <p>
+
     <h3><?= Functions::getImage('settings.png') ?>&#160;<?= lng('my_settings') ?></h3>
     <ul>
         <li><a href="<?= Vars::$HOME_URL ?>/profile?act=settings"><?= lng('system_settings') ?></a></li>

@@ -23,5 +23,5 @@
 <div class="phdr"><a href="<?php echo Vars::$HOME_URL ?>/help?act=trans"><?php echo lng( 'translit' ) ?></a> | <a href="<?php echo Vars::$HOME_URL ?>/smileys"><?php echo lng( 'smileys' ) ?></a></div>
 <p>
 <a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'mail' ) ?></a><br />
-<a href="<?php echo Vars::$MODULE_URI ?>?act=contacts"><?php echo lng( 'contacts' ) ?></a>
+<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?php echo lng( 'contacts' ) ?></a>
 </p>

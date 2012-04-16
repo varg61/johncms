@@ -25,6 +25,9 @@ if(Vars::$ID) {
 				$tpl->pref = lng('pref_in');
 				$tpl->back = 'inmess';
 			}
+			if ( $result['read'] == 0 && $result['contact_id'] == Vars::$USER_ID )
+				mysql_query( "UPDATE `cms_mail_messages` SET `read`='1' WHERE `contact_id`='" .
+					Vars::$USER_ID . "' AND `id`='{$result['id']}'" );
 			$row = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id`='$id'"));
 			$text = Validate::filterString( $result['text'], 1, 1 );
 			if ( Vars::$USER_SET['smileys'] )
@@ -32,21 +35,22 @@ if(Vars::$ID) {
 			$tpl->contact_login = $row['nickname'];
 			$tpl->user_id = $id;
 			$tpl->text = $text;
+			$tpl->file = $result['filename'] ? Functions::getImage( UploadMail::fileicon( $result['filename'] ),
+			'', 'style="margin: 0 0 -4px 0;"' ) . '&#160;<a href="' . Vars::
+			$MODULE_URI . '?act=load&amp;id=' . $result['id'] . '">' . $result['filename'] .
+			'</a> (' . UploadMail::formatsize( $result['filesize'] ) . ')(' . $result['filecount'] . ')' : '';
 			$tpl->time_message = Functions::displayDate( $result['time'] );
 			//Подключаем шаблон read.php
 			$tpl->contents = $tpl->includeTpl( 'read' );
 		} else {
-			$tpl->contents = Functions::displayError( lng( 'page_does_not_exist' ), '<a href="' . Vars::
-			$MODULE_URI . '?act=contacts">' . lng( 'contacts' ) . '</a><br />
+			$tpl->contents = Functions::displayError( lng( 'page_does_not_exist' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . lng( 'contacts' ) . '</a><br />
 			<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
 		}
 	} else {
-		$tpl->contents = Functions::displayError( lng( 'page_does_not_exist' ), '<a href="' . Vars::
-		$MODULE_URI . '?act=contacts">' . lng( 'contacts' ) . '</a><br />
+		$tpl->contents = Functions::displayError( lng( 'page_does_not_exist' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . lng( 'contacts' ) . '</a><br />
 		<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
 	}
 } else {
-	$tpl->contents = Functions::displayError( lng( 'message_no_select' ), '<a href="' . Vars::
-	$MODULE_URI . '?act=contacts">' . lng( 'contacts' ) . '</a><br />
+	$tpl->contents = Functions::displayError( lng( 'message_no_select' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . lng( 'contacts' ) . '</a><br />
 	<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
 }

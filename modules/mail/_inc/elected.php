@@ -86,9 +86,9 @@ if ( Vars::$ID )
                 }
 
                 $tpl->query = $array;
-                $tpl->titleTest = '<div class="phdr"><h3>' . lng( 'elected' ) . '</h3></div>';
-                $tpl->urlTest = '<div class="menu"><a href="' . Vars::$URI . '">' . lng( 'contacts' ) .
-                    '</a></div>';
+                $tpl->titleTest = '<div class="phdr"><strong>' . lng( 'elected' ) . '</strong></div>';
+                $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . lng( 'contacts' ) .
+                    '</a></p>';
                 $tpl->total = $total;
                 //Навигация
 				$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=elected&amp;id=' .
@@ -157,7 +157,8 @@ if ( Vars::$ID )
 		AND (`cms_mail_contacts`.`delete`='0' 
 		AND `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "')) 
 		AND `cms_mail_messages`.`delete`!='" . Vars::$USER_ID . "'
-		GROUP BY `cms_mail_contacts`.`contact_id`" );
+		GROUP BY `cms_mail_contacts`.`contact_id`
+		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination() );
         $array = array();
         $i = 1;
         while ( $row = mysql_fetch_assoc( $query ) )

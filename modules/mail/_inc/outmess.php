@@ -23,7 +23,7 @@ if ( !Vars::$USER_ID )
 
 $total = mysql_result( mysql_query( "SELECT COUNT(*)
 FROM `cms_mail_messages`
-WHERE `user_id`='" . Vars::$USER_ID . "' AND `sys`='0' AND `delete_in`!='" . Vars::$USER_ID . "' AND `delete_out`!='" . Vars::$USER_ID . "'" ), 0 );
+WHERE `user_id`='" . Vars::$USER_ID . "' AND `delete_in`!='" . Vars::$USER_ID . "' AND `delete_out`!='" . Vars::$USER_ID . "'" ), 0 );
 $tpl->total = $total;
 if ( $total )
 {
@@ -32,15 +32,34 @@ if ( $total )
 	{
 		if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
 		{
-			Mail::mailSelectContacts( $_POST['delch'], 'delete_mess' );
+			$id = implode(',', $_POST['delch']);
+			if (!empty($id)) {
+				$out = array();
+				$in = array();
+				$query = mysql_query( "SELECT * 
+                FROM `cms_mail_messages` 
+                WHERE (`user_id`='" . Vars::$USER_ID . "' 
+                OR `contact_id`='" . Vars::$USER_ID . "') AND `id` IN (" . $id . ")" );
+                while ( $row = mysql_fetch_assoc( $query ) )
+                {
+					if( $row['contact_id'] == Vars::$USER_ID ) {
+						mysql_query( "UPDATE `cms_mail_messages` SET
+						`delete_in`='" . Vars::$USER_ID . "' WHERE `id`='" . $row['id'] . "'" );
+					}
+					if( $row['user_id'] == Vars::$USER_ID ) {
+						mysql_query( "UPDATE `cms_mail_messages` SET
+						`delete_out`='" . Vars::$USER_ID . "' WHERE `id`='" . $row['id'] . "'" );
+					}
+                }
+			}
 		}
-		Header( 'Location: ' . Vars::$MODULE_URI . '?act=inmess' );
+		Header( 'Location: ' . Vars::$MODULE_URI . '?act=outmess' );
 		exit;
 	}
-	$query = mysql_query( "SELECT `cms_mail_messages`.*, `users`.`nickname`, `users`.`last_visit` FROM `cms_mail_messages`
+	$query = mysql_query( "SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.`nickname`, `users`.`last_visit` FROM `cms_mail_messages`
 	LEFT JOIN `users` ON
 	`cms_mail_messages`.`contact_id`=`users`.`id`
-	WHERE `cms_mail_messages`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_messages`.`sys`='0' AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "' AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "' ORDER BY `cms_mail_messages`.`time` DESC" . Vars::db_pagination() );
+	WHERE `cms_mail_messages`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "' AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "' ORDER BY `cms_mail_messages`.`time` DESC" . Vars::db_pagination() );
 	$array = array();
 	$i = 1;
 	while ( $row = mysql_fetch_assoc( $query ) )
@@ -51,8 +70,8 @@ if ( $total )
 		'nickname' => $row['nickname'], 
 		'time' => Functions::displayDate( $row['time'] ), 
 		'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
-			'<span class="green"> [ON]</span>' ),
-		'file' => true, 
+		'<span class="green"> [ON]</span>' ),
+		'file' => $row['filename'] ? true : ''
 		);
 		++$i;
 	}
@@ -60,14 +79,14 @@ if ( $total )
 	
 	//Навигация
 	$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI .
-	'?act=outmes&amp;', Vars::$START, $total, Vars::
+	'?act=outmess&amp;', Vars::$START, $total, Vars::
 	$USER_SET['page_size'] );
 }
 
 //Подключаем шаблон inout.php
 $tpl->pref_in = lng( 'pref_out' );
 $tpl->tit = lng( 'outmess' );
-
+$tpl->pages_type = 'outmess';
 $tpl->token = mt_rand(100, 10000);
 $_SESSION['token_status'] = $tpl->token;
 $tpl->mess_err = lng( 'outmess_not' );

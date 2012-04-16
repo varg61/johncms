@@ -29,7 +29,21 @@ if ( isset( $_SESSION['ref'] ) )
 $tpl = Template::getInstance();
 
 //Проверяем и подключаем нужные файлы модуля
-$connect = Mail::mailConnect();
+$connect = array(
+'add',
+'basket',
+'delete',
+'elected',
+'elected',
+'files',
+'inmess',
+'load',
+'messages',
+'new',
+'outmess',
+'read',
+'restore',
+'settings' );
 if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && file_exists( MAILPATH .
     '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php' ) )
 {
@@ -46,17 +60,12 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 	$arr = array(lng('all'), lng('contact_friends'), lng('only_friends'));
 	
 	$tpl->receive_mail = $arr[$settings['access']]; //Информер "От кого принимать почту"
-	
-    $tpl->systems = Mail::counter( 'systems' );   //Счетчик системных сообщений
-    $tpl->elected = Mail::counter( 'elected' );   //Счетчик избранных
-
+    
+	$tpl->elected = Mail::counter( 'elected' );   //Счетчик избранных
     $tpl->delete  = Mail::counter( 'delete' );    //Счетчик удаленных
-	
-    $tpl->inmess  = Mail::counter( 'inmess' );    //Счетчик удаленных
-	$tpl->outmess = Mail::counter( 'outmess' );   //Счетчик удаленных
-	
+    $tpl->inmess  = Mail::counter( 'inmess' );    //Счетчик входящих
+	$tpl->outmess = Mail::counter( 'outmess' );   //Счетчик исходящих
 	$tpl->newmess = $new ? '+' . $new : '';       //Счетчик новых
-	
     $tpl->files   = Mail::counter( 'files' );     //Счетчик файлов
     
 	//Подключаем шаблон модуля

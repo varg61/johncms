@@ -512,34 +512,12 @@ class Functions extends Vars
         );
         return strtr($str, $replace);
     }
-
+	
     /**
-     *-----------------------------------------------------------------
-     *Функция почты "добавление системных сообщений"
-     *-----------------------------------------------------------------
-     */
-    public static function notificationSis(
-        $contact_id, // ID получателя
-        $theme, // Тема сообщения
-        $text, // Текст сообщения
-        $user_id = 0 // ID отправителя
-    )
-    {
-        mysql_query("INSERT INTO `cms_mail_messages` SET
-		`user_id`='" . $user_id . "',
-		`contact_id`='" . $contact_id . "',
-		`text`='" . mysql_real_escape_string($text) . "',
-		`time`='" . time() . "',
-		`sys`='1',
-		`theme`='" . mysql_real_escape_string($theme) . "'");
-        return true;
-    }
-
-    /**
-     *-----------------------------------------------------------------
-     *Функция почты "Счетчики сообщений"
-     *-----------------------------------------------------------------
-     */
+    -----------------------------------------------------------------
+    Функция почты "Счетчики сообщений"
+    -----------------------------------------------------------------
+    */
     public static function mailCount($var = null)
     {
         if ($var == null) {
@@ -561,57 +539,65 @@ class Functions extends Vars
 				ON `cms_mail_messages`.`user_id`=`cms_mail_contacts`.`contact_id` 
 				AND `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "' 
 				WHERE `cms_mail_messages`.`contact_id`='" . parent::$USER_ID . "' 
-				AND `cms_mail_messages`.`sys`='0' 
 				AND `cms_mail_messages`.`read`='0' 
 				AND (`cms_mail_messages`.`delete_in`!='" . parent::$USER_ID . "' 
 				AND `cms_mail_messages`.`delete_out`!='" . parent::$USER_ID . "')
 				AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "' 
 				AND `cms_mail_contacts`.`banned`!='1'"), 0);
-            //Новые системные
-            case 'newsys':
-                return mysql_result(mysql_query("SELECT COUNT(*)
-				FROM `cms_mail_messages` 
-				WHERE `contact_id`='" . parent::$USER_ID . "'
-				AND `sys`='1'"), 0);
             default;
                 return false;
         }
     }
-    
+	
     /**
-     *-----------------------------------------------------------------
-     *Функция определения друга
-     *-----------------------------------------------------------------
-     */
+    -----------------------------------------------------------------
+    Функция подсчета контактов
+    -----------------------------------------------------------------
+    */
+	 
+	public static function contactsCount()
+    {
+		return mysql_result(mysql_query("SELECT COUNT(*)
+		FROM `cms_mail_contacts`
+		WHERE `user_id`='" . parent::$USER_ID .
+		"' AND `delete`='0' AND `banned`='0' AND `archive`='0'"), 0);
+
+	}
+	
+    /**
+    -----------------------------------------------------------------
+    Функция определения друга
+    -----------------------------------------------------------------
+    */
     public static function checkFriend (
         $id, //ID пользователя для проверки
         $param = false //если true, то выполняется просто проверка на дружбу
         ) {
         //Проверяем является ли пользователь другом 
-        $friend = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $id . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $id . "'))"), 0); 
+        $friend = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $id . "' AND `user_id`='" . parent::$USER_ID . "') OR (`contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'))"), 0); 
         if($friend != 2) {
             if($param === false) { //Если функция вызвана без дополнительного параметра, то проверяем заявки
                 //Проверяем есть ли заявка от выбранного пользователя
-                if(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $id . "'"), 0) == 1) return 2; //Подтверждаем дружбу
+                if(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'"), 0) == 1) return 2; //Подтверждаем дружбу
                 //Проверяем подавали ли мы заявку
-                elseif(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $id . "'"), 0) == 1) return 3; //Отменяем заявку
+                elseif(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . parent::$USER_ID . "' AND `contact_id`='" . $id . "'"), 0) == 1) return 3; //Отменяем заявку
             }
             return 0; //Пользователь не является другом
         } else return 1; //Пользователь друг
     }
     
     /**
-     *-----------------------------------------------------------------
-     *Функция друзей "Счетчик друзей"
-     *-----------------------------------------------------------------
-     */
+    -----------------------------------------------------------------
+    Функция друзей "Счетчик друзей"
+    -----------------------------------------------------------------
+    */
     public static function friendsCount($var = null)
     {
         //Количество друзей пользователя с вызванным ID
         if($var == null)
             return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
 			LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
-			WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
+			WHERE `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
 			"), 0);
         //Количество своих друзей
         return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
@@ -619,4 +605,33 @@ class Functions extends Vars
 			WHERE `cms_mail_contacts`.`user_id`='" . $var . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
 			"), 0);
     }
+	
+	/*
+    -----------------------------------------------------------------
+    Проверка пользователя на игнор
+    -----------------------------------------------------------------
+    */
+	public static function checkIgnor(
+		$var = null, //ID пользователя
+		$param = false)
+    {
+		if ( $var == null )
+            return false;
+		if($param === false) {
+			$query = mysql_query( "SELECT * FROM `cms_mail_contacts` 
+			WHERE `user_id`='" . parent::$USER_ID . "' 
+			AND `contact_id`='" . $var . "' 
+			AND `banned`='1' LIMIT 1" );
+			if ( mysql_num_rows( $query ) )
+				return true;
+		} else {
+			$query = mysql_query( "SELECT * FROM `cms_mail_contacts` 
+			WHERE `user_id`='" . $var . "' 
+			AND `contact_id`='" . parent::$USER_ID . "' 
+			AND `banned`='1' LIMIT 1" );
+			if ( mysql_num_rows( $query ) )
+				return true;
+		}
+		return false;
+	}
 }

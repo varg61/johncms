@@ -17,11 +17,9 @@ Class ValidMail extends Vars {
 	public $error_request;
 	public $error_log = array();
 	public $nickname;
-	public $banned;
 	public $access = array();
 	public $contact;
 	public $friends;
-	public $friends_friends;
 	public $archive;
 	public $count_mail;
 	public $array = array();
@@ -90,7 +88,6 @@ Class ValidMail extends Vars {
 				$res = mysql_fetch_assoc( $q );
 				$this->id = $res['id'];
 				$this->nickname = $res['nickname'];
-				$this->banned = $res['banned'];
 				if($res['value'])
 					$this->access = unserialize($res['value']);
 				if(parent::$USER_RIGHTS == false)
@@ -135,8 +132,6 @@ Class ValidMail extends Vars {
 				$res = mysql_fetch_assoc( $q );
 				$this->id = $res['id'];
 				$this->nickname = $res['nickname'];
-				if(parent::$USER_RIGHTS == false)
-					$this->banned = $res['banned'];
 				if($res['value'])
 					$this->access = unserialize($res['value']);
 				if(parent::$USER_RIGHTS == false)
@@ -236,11 +231,11 @@ Class ValidMail extends Vars {
     */
     function valIgnor()
     {
-        if (!Vars::$USER_RIGHTS && (Mail::myIgnor($this->id) === true) )
+        if (!Vars::$USER_RIGHTS && (Functions::checkIgnor($this->id, true) === true) )
         {
             $this->error_log[] = lng( 'you_banned' );
 			return false;
-        } elseif(Mail::ignor($this->id) === true) {
+        } elseif(Functions::checkIgnor($this->id) === true) {
 			$this->error_log[] = lng( 'user_banned' );
 			return false;
 		} else 
@@ -329,12 +324,12 @@ Class ValidMail extends Vars {
     */
     private function checkContact( $id )
     {
-		mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `count_in`, `time`)
-		VALUES ('$id', '" . parent::$USER_ID . "', '1', '" . time() . "')
-		ON DUPLICATE KEY UPDATE `count_in`=`count_in`+1, `time`='" . time() . "', `archive`='0', `delete`='0'");
-		mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `count_out`, `time`)
-		VALUES ('" . parent::$USER_ID . "', '$id', '1', '" . time() . "')
-		ON DUPLICATE KEY UPDATE `count_out`=`count_out`+1, `time`='" . time() . "', `archive`='0', `delete`='0'");
+		mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `time`)
+		VALUES ('$id', '" . parent::$USER_ID . "', '" . time() . "')
+		ON DUPLICATE KEY UPDATE `time`='" . time() . "', `archive`='0', `delete`='0'");
+		mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `time`)
+		VALUES ('" . parent::$USER_ID . "', '$id', '" . time() . "')
+		ON DUPLICATE KEY UPDATE `time`='" . time() . "', `archive`='0', `delete`='0'");
 		return true;
     }
 	
