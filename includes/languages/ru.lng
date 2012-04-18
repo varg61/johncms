@@ -108,6 +108,7 @@ error_double_charset          =   "В Нике запрещено использ
 error_edit_rights             =   "Вы не можете редактировать сообщение старшего Вас по должности"
 error_email                   =   "E-mail адрес введен неверно"
 error_email_empty             =   "Вы не ввели E-mail"
+error_email_login             =   "E-mail нельзя использовать в качестве Ника"
 error_email_occupied          =   "Данный адрес E-mail уже используется"
 error_empty_fields            =   "Не заполнены обязательные поля"
 error_empty_message           =   "Вы не ввели сообщение"

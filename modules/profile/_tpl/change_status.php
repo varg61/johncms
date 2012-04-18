@@ -9,13 +9,13 @@
             <span class="red"><?= $this->error ?></span><br/>
             <?php endif; ?>
             <input id="status" type="text" value="<?= htmlspecialchars($this->status) ?>" name="status"/>
-            <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <div class="desc"><?= lng('status_lenght') ?></div>
         </div>
         <div class="formblock">
             <input type="submit" value="<?= lng('save') ?>" name="submit"/>
         </div>
     </div>
+    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
 <div class="phdr">
     <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>

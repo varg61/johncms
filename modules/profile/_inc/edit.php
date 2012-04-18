@@ -41,7 +41,7 @@ if ($tpl->setUsers['change_nickname']
     || Vars::$USER_RIGHTS == 9
     || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
 ) {
-    $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=nick&amp;user=' . $user['id'] . '">' . lng('change_nick') . '</a>';
+    $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=nick&amp;user=' . $user['id'] . '">' . lng('nickname') . '</a>';
 }
 
 // Ссылка на смену статуса
@@ -270,7 +270,32 @@ switch (Vars::$MOD) {
         Смена ника
         -----------------------------------------------------------------
         */
-        $tpl->contents = $tpl->includeTpl('change_nickname');
+        if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
+            $tpl->nickname = $user['nickname'];
+            if (isset($_POST['submit'])
+                && isset($_POST['nickname'])
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
+                && $_POST['nickname'] != $user['nickname']
+            ) {
+                $tpl->nickname = trim($_POST['nickname']);
+                if (Validate::nickname($tpl->nickname, TRUE) === TRUE
+                    && Validate::nicknameAvailability($tpl->nickname, TRUE) === TRUE
+                ) {
+                    mysql_query("UPDATE `users` SET `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "' WHERE `id` = " . $user['id']);
+                    header('Location: ' . Vars::$URI . '?act=edit&amp;user=' . $user['id']);
+                    exit;
+                } else {
+                    $tpl->error = Functions::displayError(Validate::$error);
+                }
+            }
+            $tpl->form_token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->form_token;
+            $tpl->contents = $tpl->includeTpl('change_nickname');
+        } else {
+            echo Functions::displayError(lng('access_forbidden'));
+        }
         break;
 
     case 'status':
@@ -283,20 +308,21 @@ switch (Vars::$MOD) {
             $tpl->status = $user['status'];
             if (isset($_POST['submit'])
                 && isset($_POST['status'])
-                && isset($_POST['token'])
-                && isset($_SESSION['token_profile'])
-                && $_POST['token'] == $_SESSION['token_profile']
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
+                && $_POST['status'] != $user['status']
             ) {
                 $tpl->status = trim($_POST['status']);
                 if (mb_strlen($tpl->status) < 51) {
                     mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "' WHERE `id` = " . $user['id']);
-                    header('Location: ' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $user['id']);
+                    header('Location: ' . Vars::$URI . '?act=edit&amp;user=' . $user['id']);
                     exit;
                 }
                 $tpl->error = lng('error_status_lenght');
             }
-            $tpl->token = mt_rand(100, 10000);
-            $_SESSION['token_profile'] = $tpl->token;
+            $tpl->form_token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->form_token;
             $tpl->contents = $tpl->includeTpl('change_status');
         } else {
             echo Functions::displayError(lng('access_forbidden'));
