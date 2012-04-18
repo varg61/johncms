@@ -35,6 +35,7 @@ error_nick_lenght             =   "Минимальная длина Ника - 
 error_nick_symbols            =   "Недопустимые символы в Нике"
 error_rights                  =   "Вы не можете редактировать анкету старшего Вас по должности"
 error_status_lenght           =   "Неверая длина статуса"
+field_height                  =   "Высота поля ввода"
 hidden                        =   "скрыт"
 live                          =   "Проживание"
 my_profile                    =   "Моя анкета"

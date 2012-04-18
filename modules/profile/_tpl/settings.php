@@ -1,5 +1,5 @@
 <div class="phdr">
-    <b><?= lng('settings') ?></b> | <?= lng('common_settings') ?>
+    <b><?= lng('system_settings') ?></b>
 </div>
 
 <?php if (isset($this->save)) : ?>
