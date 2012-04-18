@@ -1,7 +1,6 @@
 <div class="phdr">
     <a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('admin_panel') ?></b></a> | <?= lng('users') ?>
 </div>
-
 <?php if (isset($this->save)) : ?>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
     <?= lng('settings_saved') ?>
@@ -12,43 +11,43 @@
     <?= lng('settings_default') ?>
 </div>
 <?php endif; ?>
-
+<form action="<?= Vars::$URI ?>?act=users_settings" method="post">
 <div class="<?= (Vars::$USER_SYS['reg_open'] ? 'g' : 'r') ?>menu">
-    <form action="<?= Vars::$URI ?>?act=users_settings" method="post">
-        <div class="formblock">
-            <label><?= lng('registration') ?></label><br/>
-            <input type="radio" value="1" name="reg_open" <?= (Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('registration_open') ?><br/>
-            <input type="radio" value="0" name="reg_open" <?= (!Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('registration_closed') ?>
-        </div>
-        <div class="formblock">
-            <input name="reg_moderation" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_moderation'] ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('registration_moderation') ?><br/>
-            <input name="reg_welcome" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_welcome'] ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('welcome_message') ?><br/>
-            <input name="reg_email" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_email'] ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('registration_email') ?><br/>
-            <input name="reg_quarantine" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_quarantine'] ? 'checked="checked"' : '') ?>/>&#160;
-            <a href=""><?= lng('registration_quarantine') ?></a><br/>
-        </div>
-</div>
-<div class="menu">
     <div class="formblock">
-        <label><?= lng('permissions') ?></label><br/>
-        <input name="autologin" type="checkbox" value="1" <?= (Vars::$USER_SYS['autologin'] ? 'checked="checked"' : '') ?>/>&#160;
-        <?= lng('autologin') ?><br/>
-        <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
-        <?= lng('change_nickname') ?><br/>
-        <input name="change_sex" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_sex'] ? 'checked="checked"' : '') ?>/>&#160;
-        <?= lng('change_sex') ?><br/>
-        <input name="change_status" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_status'] ? 'checked="checked"' : '') ?>/>&#160;
-        <?= lng('change_status') ?><br/>
-        <input name="upload_avatars" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_avatars'] ? 'checked="checked"' : '') ?>/>&#160;
-        <?= lng('upload_avatars') ?><br/>
-        <input name="upload_animation" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_animation'] ? 'checked="checked"' : '') ?>/>&#160;
-        <?= lng('upload_animation') ?>
+        <label><?= lng('registration') ?></label><br/>
+        <input type="radio" value="1" name="reg_open" <?= (Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('registration_open') ?><br/>
+        <input type="radio" value="0" name="reg_open" <?= (!Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('registration_closed') ?>
     </div>
+    <div class="formblock">
+        <input name="reg_moderation" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_moderation'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('registration_moderation') ?><br/>
+        <input name="reg_welcome" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_welcome'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('welcome_message') ?><br/>
+        <input name="reg_email" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_email'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('registration_email') ?><br/>
+        <input name="reg_quarantine" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_quarantine'] ? 'checked="checked"' : '') ?>/>&#160;
+        <a href=""><?= lng('registration_quarantine') ?></a><br/>
+    </div>
+    <?php if (Vars::$USER_RIGHTS == 9) : ?>
+    </div>
+    <div class="menu">
+        <div class="formblock">
+            <label><?= lng('permissions') ?></label><br/>
+            <input name="autologin" type="checkbox" value="1" <?= (Vars::$USER_SYS['autologin'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('autologin') ?><br/>
+            <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('change_nickname') ?><br/>
+            <input name="change_sex" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_sex'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('change_sex') ?><br/>
+            <input name="change_status" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_status'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('change_status') ?><br/>
+            <input name="upload_avatars" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_avatars'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('upload_avatars') ?><br/>
+            <input name="upload_animation" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_animation'] ? 'checked="checked"' : '') ?>/>&#160;
+            <?= lng('upload_animation') ?>
+        </div>
     <div class="formblock">
         <label><?= lng('antiflood') ?></label><br/>
         <input type="radio" name="flood_mode" value="3" <?= (Vars::$USER_SYS['flood_mode'] == 3 ? 'checked="checked"' : '') ?>/>
@@ -73,13 +72,18 @@
         <input name="view_profiles" type="checkbox" value="1" <?= (Vars::$USER_SYS['view_profiles'] ? 'checked="checked"' : '') ?>/>&#160;
         <?= lng('view_profiles') ?><br/>
     </div>
+    <?php endif; ?>
     <div class="formblock">
         <input type="submit" name="submit" value="<?= lng('save') ?>"/>
     </div>
     <input type="hidden" name="token" value="<?= $this->token ?>"/>
-    </form>
 </div>
+</form>
 <div class="phdr">
+    <?php if (Vars::$USER_RIGHTS == 9) : ?>
     <a href="<?= Vars::$URI ?>?act=users_settings&amp;reset"><?= lng('reset_settings') ?></a>
+    <?php else : ?>
+    &#160;
+    <?php endif; ?>
 </div>
 <p><a href="<?= Vars::$MODULE_URI ?>"><?= lng('admin_panel') ?></a></p>

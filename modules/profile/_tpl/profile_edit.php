@@ -35,7 +35,7 @@
                 <?php endif; ?>
             </div>
         </div>
-        <?php if (Vars::$USER_SYS['change_sex']) : ?>
+        <?php if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) : ?>
         <div class="formblock">
             <label for="sex"><?= lng('sex') ?></label><br/>
             <input id="sex" type="radio" value="m" name="sex" <?= ($this->user['sex'] == 'm' ? 'checked="checked"' : '') ?>/>&#160;<?= lng('sex_m') ?><br/>

@@ -38,16 +38,14 @@ if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPAR
 
 // Ссылка на смену Ника
 if ($tpl->setUsers['change_nickname']
-    || Vars::$USER_RIGHTS == 9
-    || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
+    || Vars::$USER_RIGHTS >= 7
 ) {
     $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=nick&amp;user=' . $user['id'] . '">' . lng('nickname') . '</a>';
 }
 
 // Ссылка на смену статуса
 if ($tpl->setUsers['change_status']
-    || Vars::$USER_RIGHTS == 9
-    || (Vars::$USER_RIGHTS == 7 && $user['rights'] < 7)
+    || Vars::$USER_RIGHTS >= 7
 ) {
     $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=status&amp;user=' . $user['id'] . '">' . lng('change_status') . '</a>';
 }
@@ -71,7 +69,7 @@ switch (Vars::$MOD) {
             && $_POST['form_token'] == $_SESSION['form_token']
         ) {
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif');
-            header('Location: ' . Vars::$URI . '?act=edit&amp;user=' . $user['id']);
+            header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
             exit;
         } else {
             $tpl->form_token = mt_rand(100, 10000);
@@ -270,7 +268,7 @@ switch (Vars::$MOD) {
         Смена ника
         -----------------------------------------------------------------
         */
-        if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
+        if ($tpl->setUsers['change_nickname'] || Vars::$USER_RIGHTS >= 7) {
             $tpl->nickname = $user['nickname'];
             if (isset($_POST['submit'])
                 && isset($_POST['nickname'])
@@ -284,7 +282,7 @@ switch (Vars::$MOD) {
                     && Validate::nicknameAvailability($tpl->nickname, TRUE) === TRUE
                 ) {
                     mysql_query("UPDATE `users` SET `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "' WHERE `id` = " . $user['id']);
-                    header('Location: ' . Vars::$URI . '?act=edit&amp;user=' . $user['id']);
+                    header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
                     exit;
                 } else {
                     $tpl->error = Functions::displayError(Validate::$error);
@@ -316,7 +314,7 @@ switch (Vars::$MOD) {
                 $tpl->status = trim($_POST['status']);
                 if (mb_strlen($tpl->status) < 51) {
                     mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($tpl->status) . "' WHERE `id` = " . $user['id']);
-                    header('Location: ' . Vars::$URI . '?act=edit&amp;user=' . $user['id']);
+                    header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
                     exit;
                 }
                 $tpl->error = lng('error_status_lenght');
@@ -363,8 +361,8 @@ switch (Vars::$MOD) {
             $error = array();
 
             // Принимаем данные о половой принадлежности
-            if (Vars::$USER_SYS['change_sex']) {
-                $user['sex'] = isset($_POST['sex']) && trim($_POST['sex']) == 'w' ? 'w' : 'm';
+            if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) {
+                $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'w' ? 'w' : 'm';
             }
 
             // Принимаем и обрабатываем Имя

@@ -104,7 +104,7 @@ if ($total) {
             //TODO: Добавить ссылки на Бан и удаление профиля
             $arg['sub'] = Functions::displayMenu(array(
                 '<a href="">' . lng('ban_do') . '</a>',
-                '<a href="' . Vars::$HOME_URL . '/profile/edit?user=' . $res['id'] . '">' . lng('edit') . '</a>',
+                '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $res['id'] . '">' . lng('edit') . '</a>',
                 (Vars::$USER_RIGHTS >= 7 ? '<a href="">' . lng('delete') . '</a>' : ''),
             ));
         }
