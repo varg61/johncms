@@ -87,7 +87,7 @@ switch (Vars::$MOD) {
         if (isset($_POST['submit'])) {
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '.jpg');
             @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg');
-            header('Location: ' . Vars::$URI . '?user=' . $user['id']);
+            header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
         } else {
             $tpl->contents = $tpl->includeTpl('delete_photo');
         }
@@ -181,7 +181,7 @@ switch (Vars::$MOD) {
                     $handle->image_convert = 'gif';
                     $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
                     if ($handle->processed) {
-                        echo '<div class="gmenu"><p>' . lng('avatar_uploaded') . '<br />' .
+                        echo'<div class="gmenu"><p>' . lng('avatar_uploaded') . '<br />' .
                             '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
                     } else {
                         echo Functions::displayError($handle->error);
@@ -204,8 +204,11 @@ switch (Vars::$MOD) {
         Выгрузка фотографии
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('upload_photo') . '</div>';
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit'])
+            && isset($_POST['form_token'])
+            && isset($_SESSION['form_token'])
+            && $_POST['form_token'] == $_SESSION['form_token']
+        ) {
             $handle = new upload($_FILES['imagefile']);
             if ($handle->uploaded) {
                 // Обрабатываем фото
@@ -222,7 +225,7 @@ switch (Vars::$MOD) {
                 $handle->image_x = 320;
                 $handle->image_ratio_y = TRUE;
                 $handle->image_convert = 'jpg';
-                $handle->process('../files/users/photo/');
+                $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
                 if ($handle->processed) {
                     // Обрабатываем превьюшку
                     $handle->file_new_name_body = $user['id'] . '_small';
@@ -231,10 +234,10 @@ switch (Vars::$MOD) {
                     $handle->image_x = 100;
                     $handle->image_ratio_y = TRUE;
                     $handle->image_convert = 'jpg';
-                    $handle->process('../files/users/photo/');
+                    $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
                     if ($handle->processed) {
-                        echo '<div class="gmenu"><p>' . lng('photo_uploaded') . '<br /><a href="profile.php?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
-                        echo '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . lng('profile') . '</a></div>';
+                        echo'<div class="gmenu"><p>' . lng('photo_uploaded') . '<br />' .
+                            '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
                     } else {
                         echo Functions::displayError($handle->error);
                     }
@@ -244,12 +247,9 @@ switch (Vars::$MOD) {
                 $handle->clean();
             }
         } else {
-            echo '<form enctype="multipart/form-data" method="post" action="profile.php?act=images&amp;mod=up_photo&amp;user=' . $user['id'] . '"><div class="menu"><p>' . lng('select_image') . ':<br />' .
-                '<input type="file" name="imagefile" value="" />' .
-                '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['flsz']) . '" /></p>' .
-                '<p><input type="submit" name="submit" value="' . lng('upload') . '" /></p>' .
-                '</div></form>' .
-                '<div class="phdr"><small>' . lng('select_image_help') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . lng('select_image_help_5') . '<br />' . lng('select_image_help_3') . '</small></div>';
+            $tpl->form_token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->form_token;
+            $tpl->contents = $tpl->includeTpl('upload_photo');
         }
         break;
 

@@ -26,12 +26,12 @@
         <div class="formblock">
             <label><?= lng('photo') ?></label>
             <?php if (isset($this->photo)) : ?>
-            <a href="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>.jpg"><img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/></a>
+            <br/><a href="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>.jpg"><img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/></a>
             <?php endif; ?>
             <div class="small">
-                <a href=""><?= lng('upload') ?></a>
+                <a href="<?= Vars::$URI ?>?act=edit&amp;mod=upload_photo"><?= lng('upload') ?></a>
                 <?php if (isset($this->photo)) : ?>
-                | <a href="<?= Vars::$URI ?>?act=delete_photo&amp;user=<?= $this->user['id'] ?>"><?= lng('delete') ?></a>
+                | <a href="<?= Vars::$URI ?>?act=edit&amp;mod=delete_photo&amp;user=<?= $this->user['id'] ?>"><?= lng('delete') ?></a>
                 <?php endif; ?>
             </div>
         </div>

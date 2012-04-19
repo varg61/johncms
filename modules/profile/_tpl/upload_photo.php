@@ -1,13 +1,13 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('profile') : lng('my_profile')) ?></b></a> | <?= lng('upload_avatar') ?>
+    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('profile') : lng('my_profile')) ?></b></a> | <?= lng('upload_photo') ?>
 </div>
-<form enctype="multipart/form-data" method="post" action="<?= Vars::$URI ?>?act=edit&amp;mod=upload_avatar&amp;user=<?= $this->user['id'] ?>">
+<form enctype="multipart/form-data" method="post" action="<?= Vars::$URI ?>?act=edit&amp;mod=upload_photo&amp;user=<?= $this->user['id'] ?>">
     <div class="menu">
         <div class="formblock">
             <label for="file"><?= lng('select_image') ?></label><br/>
             <input id="file" type="file" name="imagefile" value=""/>
             <div class="desc" style="padding-top: 8px">
-                <?= lng('select_avatar_help')  ?>
+                <?= lng('select_photo_help')  ?>
             </div>
         </div>
         <div class="formblock">
@@ -17,4 +17,4 @@
         <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
     </div>
 </form>
-<div class="phdr"><a href="<?= Vars::$URI ?>?act=edit&amp;mod=avatar&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a></div>
+<div class="phdr"><a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a></div>
