@@ -37,8 +37,6 @@
             <label><?= lng('permissions') ?></label><br/>
             <input name="autologin" type="checkbox" value="1" <?= (Vars::$USER_SYS['autologin'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('autologin') ?><br/>
-            <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
-            <?= lng('change_nickname') ?><br/>
             <input name="change_sex" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_sex'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('change_sex') ?><br/>
             <input name="change_status" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_status'] ? 'checked="checked"' : '') ?>/>&#160;
@@ -48,6 +46,12 @@
             <input name="upload_animation" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_animation'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('upload_animation') ?>
         </div>
+            <div class="formblock">
+                <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
+                <?= lng('change_nickname_allow') ?><br/>
+                <input name="change_period" size="2" value="<?= Vars::$USER_SYS['change_period'] ?>" maxlength="2"/>&#160;
+                <?= lng('how_many_days') ?>
+            </div>
     <div class="formblock">
         <label><?= lng('antiflood') ?></label><br/>
         <input type="radio" name="flood_mode" value="3" <?= (Vars::$USER_SYS['flood_mode'] == 3 ? 'checked="checked"' : '') ?>/>

@@ -88,6 +88,7 @@ switch (Vars::$ACT) {
                     Vars::$USER_SYS['flood_night'] = isset($_POST['flood_night']) ? intval($_POST['flood_night']) : 30;
                     Vars::$USER_SYS['autologin'] = isset($_POST['autologin']);
                     Vars::$USER_SYS['change_nickname'] = isset($_POST['change_nickname']);
+                    Vars::$USER_SYS['change_period'] = isset($_POST['change_period']) ? intval($_POST['change_period']) : 7;
                     Vars::$USER_SYS['change_sex'] = isset($_POST['change_sex']);
                     Vars::$USER_SYS['change_status'] = isset($_POST['change_status']);
                     Vars::$USER_SYS['upload_avatars'] = isset($_POST['upload_avatars']);
@@ -96,6 +97,7 @@ switch (Vars::$ACT) {
                     Vars::$USER_SYS['viev_history'] = isset($_POST['viev_history']);
                     Vars::$USER_SYS['view_userlist'] = isset($_POST['view_userlist']);
                     Vars::$USER_SYS['view_profiles'] = isset($_POST['view_profiles']);
+
                     // Проверяем принятые данные
                     if (Vars::$USER_SYS['flood_day'] < 5) {
                         Vars::$USER_SYS['flood_day'] = 5;
@@ -106,6 +108,11 @@ switch (Vars::$ACT) {
                         Vars::$USER_SYS['flood_night'] = 4;
                     } elseif (Vars::$USER_SYS['flood_night'] > 300) {
                         Vars::$USER_SYS['flood_night'] = 300;
+                    }
+                    if (Vars::$USER_SYS['change_period'] < 0) {
+                        Vars::$USER_SYS['change_period'] = 0;
+                    } elseif (Vars::$USER_SYS['change_period'] > 99) {
+                        Vars::$USER_SYS['change_period'] = 99;
                     }
                 }
 

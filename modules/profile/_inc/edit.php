@@ -269,28 +269,39 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if ($tpl->setUsers['change_nickname'] || Vars::$USER_RIGHTS >= 7) {
-            $tpl->nickname = $user['nickname'];
-            if (isset($_POST['submit'])
-                && isset($_POST['nickname'])
-                && isset($_POST['form_token'])
-                && isset($_SESSION['form_token'])
-                && $_POST['form_token'] == $_SESSION['form_token']
-                && $_POST['nickname'] != $user['nickname']
+            if ($user['change_time'] < time() - (Vars::$USER_SYS['change_period'] * 86400)
+                || Vars::$USER_RIGHTS >= 7
             ) {
-                $tpl->nickname = trim($_POST['nickname']);
-                if (Validate::nickname($tpl->nickname, TRUE) === TRUE
-                    && Validate::nicknameAvailability($tpl->nickname, TRUE) === TRUE
+                $tpl->nickname = $user['nickname'];
+                if (isset($_POST['submit'])
+                    && isset($_POST['nickname'])
+                    && isset($_POST['form_token'])
+                    && isset($_SESSION['form_token'])
+                    && $_POST['form_token'] == $_SESSION['form_token']
+                    && $_POST['nickname'] != $user['nickname']
                 ) {
-                    mysql_query("UPDATE `users` SET `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "' WHERE `id` = " . $user['id']);
-                    header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
-                    exit;
-                } else {
-                    $tpl->error = Functions::displayError(Validate::$error);
+                    $tpl->nickname = trim($_POST['nickname']);
+                    if (Validate::nickname($tpl->nickname, TRUE) === TRUE
+                        && Validate::nicknameAvailability($tpl->nickname, TRUE) === TRUE
+                    ) {
+                        mysql_query("UPDATE `users` SET
+                        `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "',
+                        `change_time` = " . time() . "
+                        WHERE `id` = " . $user['id']
+                        );
+                        header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
+                        exit;
+                    } else {
+                        $tpl->error = Functions::displayError(Validate::$error);
+                    }
                 }
+                $tpl->form_token = mt_rand(100, 10000);
+                $_SESSION['form_token'] = $tpl->form_token;
+                $tpl->contents = $tpl->includeTpl('change_nickname');
+            } else {
+                $tpl->change_time = $user['change_time'] + (Vars::$USER_SYS['change_period'] * 86400);
+                $tpl->contents = $tpl->includeTpl('change_nickname_wait');
             }
-            $tpl->form_token = mt_rand(100, 10000);
-            $_SESSION['form_token'] = $tpl->form_token;
-            $tpl->contents = $tpl->includeTpl('change_nickname');
         } else {
             echo Functions::displayError(lng('access_forbidden'));
         }
