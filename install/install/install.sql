@@ -510,6 +510,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nickname` varchar(32) NOT NULL DEFAULT '',
+  `change_time` int(10) unsigned NOT NULL DEFAULT '0',
   `password` char(60) NOT NULL DEFAULT '',
   `token` char(32) NOT NULL DEFAULT '',
   `login_try` tinyint(1) unsigned NOT NULL DEFAULT '0',
