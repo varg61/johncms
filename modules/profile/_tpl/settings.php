@@ -64,8 +64,8 @@
             <input type="submit" name="submit" value="<?= lng('save') ?>"/>
         </div>
     </div>
-    <input type="hidden" name="token" value="<?= $this->token ?>"/>
+    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
+    <a href="<?= Vars::$URI ?>?act=settings&amp;mod=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
 </div>
