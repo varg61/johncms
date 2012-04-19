@@ -95,7 +95,7 @@ if ($search && !$error) {
     }
     if ($total) {
         if (Vars::$MOD == 'history') {
-            $req = mysql_query("SELECT `cms_users_iphistory`.*, `users`.`name`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`, `users`.`browser`
+            $req = mysql_query("SELECT `cms_users_iphistory`.*, `users`.`name`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`, `users`.`browser`
                 FROM `cms_users_iphistory` LEFT JOIN `users` ON `cms_users_iphistory`.`user_id` = `users`.`id`
                 WHERE `cms_users_iphistory`.`ip` BETWEEN $ip1 AND $ip2 OR `cms_users_iphistory`.`ip_via_proxy` BETWEEN $ip1 AND $ip2
                 GROUP BY `users`.`id`

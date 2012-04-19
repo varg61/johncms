@@ -35,7 +35,7 @@ class Functions extends Vars
         switch ($af['mode']) {
             case 1:
                 // Адаптивный режим
-                $adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0 AND `lastdate` > " . (time() - 300)), 0);
+                $adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0 AND `last_visit` > " . (time() - 300)), 0);
                 $limit = $adm > 0 ? $af['day'] : $af['night'];
                 break;
             case 3:

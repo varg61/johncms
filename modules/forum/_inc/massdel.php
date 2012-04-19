@@ -26,10 +26,10 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                 WHERE `id` = '" . intval($delid) . "'
             ");
         }
-        echo $lng_forum['mass_delete_confirm'] . '<br/><a href="' . $prd . '">' . Vars::$LNG['back'] . '</a><br/>';
+        echo lng('mass_delete_confirm') . '<br/><a href="' . $prd . '">' . lng('back') . '</a><br/>';
     } else {
         if (empty($_POST['delch'])) {
-            echo '<p>' . $lng_forum['error_mass_delete'] . '<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . Vars::$LNG['back'] . '</a></p>';
+            echo '<p>' . lng('error_mass_delete') . '<br/><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . lng('back') . '</a></p>';
             exit;
         }
         foreach ($_POST['delch'] as $v) {
@@ -37,7 +37,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         }
         $_SESSION['dc'] = $dc;
         $_SESSION['prd'] = htmlspecialchars(getenv("HTTP_REFERER"));
-        echo '<p>' . Vars::$LNG['delete_confirmation'] . '<br/><a href="index.php?act=massdel&amp;yes">' . Vars::$LNG['delete'] . '</a> | ' .
-             '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . Vars::$LNG['cancel'] . '</a></p>';
+        echo '<p>' . lng('delete_confirmation') . '<br/><a href="index.php?act=massdel&amp;yes">' . lng('delete') . '</a> | ' .
+             '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . lng('cancel') . '</a></p>';
     }
 }

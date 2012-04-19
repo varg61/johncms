@@ -11,9 +11,7 @@
 
 define('_IN_JOHNCMS', 1);
 
-$lng_forum = Vars::loadLanguage('forum');
-
-echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . Vars::$LNG['search'] . '</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . lng('forum') . '</b></a> | ' . lng('search') . '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -40,9 +38,9 @@ switch (Vars::$ACT) {
             } else {
                 echo '<form action="search.php?act=reset" method="post">' .
                      '<div class="rmenu">' .
-                     '<p>' . Vars::$LNG['search_history_reset'] . '</p>' .
-                     '<p><input type="submit" name="submit" value="' . Vars::$LNG['clear'] . '" /></p>' .
-                     '<p><a href="search.php">' . Vars::$LNG['cancel'] . '</a></p>' .
+                     '<p>' . lng('search_history_reset') . '</p>' .
+                     '<p><input type="submit" name="submit" value="' . lng('clear') . '" /></p>' .
+                     '<p><a href="search.php">' . lng('cancel') . '</a></p>' .
                      '</div>' .
                      '</form>';
             }
@@ -63,8 +61,8 @@ switch (Vars::$ACT) {
         $to_history = false;
         echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
              '<input type="text" value="' . ($search ? Validate::filterString($search) : '') . '" name="search" />' .
-             '<input type="submit" value="' . Vars::$LNG['search'] . '" name="submit" /><br />' .
-             '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . $lng_forum['search_topic_name'] .
+             '<input type="submit" value="' . lng('search') . '" name="submit" /><br />' .
+             '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . lng('search_topic_name') .
              '</p></form></div>';
 
         /*
@@ -88,7 +86,7 @@ switch (Vars::$ACT) {
                 WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
                 AND `type` = '" . ($search_t ? 't' : 'm') . "'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'
             ")), 0);
-            echo '<div class="phdr">' . Vars::$LNG['search_results'] . '</div>';
+            echo '<div class="phdr">' . lng('search_results') . '</div>';
             if ($total > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             if ($total) {
@@ -99,7 +97,7 @@ switch (Vars::$ACT) {
                     WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
                     AND `type` = '" . ($search_t ? 't' : 'm') . "'
                     ORDER BY `rel` DESC
-                    LIMIT " . Vars::db_pagination()
+                    " . Vars::db_pagination()
                 );
                 $i = 0;
                 while (($res = mysql_fetch_assoc($req)) !== false) {
@@ -132,19 +130,19 @@ switch (Vars::$ACT) {
                     }
                     echo $text;
                     if (mb_strlen($res['text']) > 500)
-                        echo '...<a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>';
-                    echo '<br /><a href="index.php?id=' . ($search_t ? $res['id'] : $res_t['id']) . '">' . $lng_forum['to_topic'] . '</a>' . ($search_t ? ''
-                            : ' | <a href="index.php?act=post&amp;id=' . $res['id'] . '">' . $lng_forum['to_post'] . '</a>');
+                        echo '...<a href="index.php?act=post&amp;id=' . $res['id'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
+                    echo '<br /><a href="index.php?id=' . ($search_t ? $res['id'] : $res_t['id']) . '">' . lng('to_topic') . '</a>' . ($search_t ? ''
+                            : ' | <a href="index.php?act=post&amp;id=' . $res['id'] . '">' . lng('to_post') . '</a>');
                     echo '</div>';
                     ++$i;
                 }
             } else {
-                echo '<div class="rmenu"><p>' . Vars::$LNG['search_results_empty'] . '</p></div>';
+                echo '<div class="rmenu"><p>' . lng('search_results_empty') . '</p></div>';
             }
-            echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+            echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
         } else {
-            if ($error) echo Functions::displayError(Vars::$LNG['error_wrong_lenght']);
-            echo '<div class="phdr"><small>' . Vars::$LNG['search_help'] . '</small></div>';
+            if ($error) echo Functions::displayError(lng('error_wrong_lenght'));
+            echo '<div class="phdr"><small>' . lng('search_help') . '</small></div>';
         }
 
         /*
@@ -166,7 +164,7 @@ switch (Vars::$ACT) {
                 sort($history);
                 foreach ($history as $val) $history_list[] = '<a href="search.php?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
                 echo '<div class="topmenu">' .
-                     '<b>' . Vars::$LNG['search_history'] . '</b> <span class="red"><a href="search.php?act=reset">[x]</a></span><br />' .
+                     '<b>' . lng('search_history') . '</b> <span class="red"><a href="search.php?act=reset">[x]</a></span><br />' .
                      Functions::displayMenu($history_list) .
                      '</div>';
             }
@@ -177,9 +175,9 @@ switch (Vars::$ACT) {
             echo '<div class="topmenu">' . Functions::displayPagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                  '<p><form action="search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
                  '<input type="text" name="page" size="2"/>' .
-                 '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+                 '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                  '</form></p>';
         }
 
-        echo '<p>' . ($search ? '<a href="search.php">' . Vars::$LNG['search_new'] . '</a><br />' : '') . '<a href="index.php">' . Vars::$LNG['forum'] . '</a></p>';
+        echo '<p>' . ($search ? '<a href="search.php">' . lng('search_new') . '</a><br />' : '') . '<a href="index.php">' . lng('forum') . '</a></p>';
 }

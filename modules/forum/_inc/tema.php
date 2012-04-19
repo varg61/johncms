@@ -28,12 +28,12 @@ for ($it = 0; $it < $totalt; $it++) {
     }
 }
 if (!Vars::$ID) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't' AND `close` != '1'");
 if (!mysql_num_rows($req)) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 if (isset($_POST['submit'])) {
@@ -46,8 +46,8 @@ if (isset($_POST['submit'])) {
             ////////////////////////////////////////////////////////////
             $text = $type1['text'] . "\r\n\r\n";
             while ($arr = mysql_fetch_assoc($tema)) {
-                $txt_tmp = str_replace('[c]', $lng_forum['cytate'] . ':{', $arr['text']);
-                $txt_tmp = str_replace('[/c]', '}-' . $lng_forum['answer'] . ':', $txt_tmp);
+                $txt_tmp = str_replace('[c]', lng('cytate') . ':{', $arr['text']);
+                $txt_tmp = str_replace('[/c]', '}-' . lng('answer') . ':', $txt_tmp);
                 $txt_tmp = str_replace("&quot;", "\"", $txt_tmp);
                 $txt_tmp = str_replace("[l]", "", $txt_tmp);
                 $txt_tmp = str_replace("[l/]", "-", $txt_tmp);
@@ -64,7 +64,7 @@ if (isset($_POST['submit'])) {
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.txt", 0777);
-            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . Vars::$LNG['download'] . '</a><br/>' . $lng_forum['download_topic_help'] . '<br/><a href="index.php">' . Vars::$LNG['to_forum'] . '</a><br/>';
+            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . lng('download') . '</a><br/>' . lng('download_topic_help') . '<br/><a href="index.php">' . lng('to_forum') . '</a><br/>';
             break;
 
         case 2:
@@ -73,7 +73,7 @@ if (isset($_POST['submit'])) {
             ////////////////////////////////////////////////////////////
             $text =
                     "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-<title>" . Vars::$LNG['forum']
+<title>" . lng('forum')
                     . "</title>
 <style type='text/css'>
 body { color: #000000; background-color: #FFFFFF }
@@ -103,7 +103,7 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
                 $text = "$text $stroka";
                 ++$i;
             }
-            $text = $text . '<p>' . $lng_forum['download_topic_note'] . ': <b>' . Vars::$SYSTEM_SET['copyright'] . '</b></p></body></html>';
+            $text = $text . '<p>' . lng('download_topic_note') . ': <b>' . Vars::$SYSTEM_SET['copyright'] . '</b></p></body></html>';
             $num = time() . Vars::$ID;
             $fp = fopen("../files/forum/topics/$num.htm", "a+");
             flock($fp, LOCK_EX);
@@ -113,14 +113,14 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.htm", 0777);
-            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . Vars::$LNG['download'] . '</a><br/>' . $lng_forum['download_topic_help'] . '<br/><a href="index.php">' . Vars::$LNG['to_forum'] . '</a><br/>';
+            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . lng('download') . '</a><br/>' . lng('download_topic_help') . '<br/><a href="index.php">' . lng('to_forum') . '</a><br/>';
             break;
     }
 } else {
-    echo '<p>' . $lng_forum['download_topic_format'] . '<br/>' .
+    echo '<p>' . lng('download_topic_format') . '<br/>' .
          '<form action="index.php?act=tema&amp;id=' . Vars::$ID . '" method="post">' .
          '<select name="mod"><option value="1">.txt</option>' .
          '<option value="2">.htm</option></select>' .
-         '<input type="submit" name="submit" value="' . Vars::$LNG['download'] . '"/>' .
+         '<input type="submit" name="submit" value="' . lng('download') . '"/>' .
          '</form></p>';
 }

@@ -250,7 +250,7 @@ class Comments
                 echo '<div class="phdr"><b>' . $arg['title'] . '</b></div>';
                 if ($this->total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination($this->url . '&amp;', Vars::$START, $this->total, Vars::$USER_SET['page_size']) . '</div>';
                 if ($this->total) {
-                    $req = mysql_query("SELECT `" . $this->comments_table . "`.*, `" . $this->comments_table . "`.`id` AS `subid`, `users`.`rights`, `users`.`lastdate`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
+                    $req = mysql_query("SELECT `" . $this->comments_table . "`.*, `" . $this->comments_table . "`.`id` AS `subid`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`datereg`, `users`.`id`
                     FROM `" . $this->comments_table . "` LEFT JOIN `users` ON `" . $this->comments_table . "`.`user_id` = `users`.`id`
                     WHERE `sub_id` = '" . $this->sub_id . "' ORDER BY `subid` DESC LIMIT " . Vars::db_pagination());
                     $i = 0;

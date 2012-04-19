@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic`=" . Vars::$ID), 0);
     if ($topic_vote == 0) {
-        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+        echo Functions::displayError(lng('error_wrong_data'));
         exit;
     }
     if (isset($_GET['delvote']) && !empty($_GET['vote'])) {
@@ -33,9 +33,9 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                 mysql_query("DELETE FROM `cms_forum_vote_users` WHERE `vote` = '$vote'");
                 header('location: ?act=editvote&id=' . Vars::$ID . '');
             } else {
-                echo '<div class="rmenu"><p>' . $lng_forum['voting_variant_warning'] . '<br />' .
-                     '<a href="index.php?act=editvote&amp;id=' . Vars::$ID . '&amp;vote=' . $vote . '&amp;delvote&amp;yes">' . Vars::$LNG['delete'] . '</a><br />' .
-                     '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . Vars::$LNG['cancel'] . '</a></p></div>';
+                echo '<div class="rmenu"><p>' . lng('voting_variant_warning') . '<br />' .
+                     '<a href="index.php?act=editvote&amp;id=' . Vars::$ID . '&amp;vote=' . $vote . '&amp;delvote&amp;yes">' . lng('delete') . '</a><br />' .
+                     '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . lng('cancel') . '</a></p></div>';
             }
         } else {
             header('location: ?act=editvote&id=' . Vars::$ID . '');
@@ -58,7 +58,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                 mysql_query("INSERT INTO `cms_forum_vote` SET `name` = '" . mysql_real_escape_string($text) . "',  `type` = '2', `topic` = " . Vars::$ID);
             }
         }
-        echo '<div class="gmenu"><p>' . $lng_forum['voting_changed'] . '<br /><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['continue'] . '</a></p></div>';
+        echo '<div class="gmenu"><p>' . lng('voting_changed') . '<br /><a href="index.php?id=' . Vars::$ID . '">' . lng('continue') . '</a></p></div>';
     } else {
         /*
         -----------------------------------------------------------------
@@ -67,16 +67,16 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         */
         $countvote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '2' AND `topic` = " . Vars::$ID), 0);
         $topic_vote = mysql_fetch_array(mysql_query("SELECT `name` FROM `cms_forum_vote` WHERE `type` = '1' AND `topic` = " . Vars::$ID . " LIMIT 1"));
-        echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['edit_vote'] . '</div>' .
+        echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('edit_vote') . '</div>' .
              '<form action="index.php?act=editvote&amp;id=' . Vars::$ID . '" method="post">' .
              '<div class="gmenu"><p>' .
-             '<b>' . $lng_forum['voting'] . ':</b><br/>' .
+             '<b>' . lng('voting') . ':</b><br/>' .
              '<input type="text" size="20" maxlength="150" name="name_vote" value="' . htmlentities($topic_vote['name'], ENT_QUOTES, 'UTF-8') . '"/>' .
              '</p></div>' .
              '<div class="menu"><p>';
         $vote_result = mysql_query("SELECT `id`, `name` FROM `cms_forum_vote` WHERE `type` = '2' AND `topic` = " . Vars::$ID);
         while ($vote = mysql_fetch_array($vote_result)) {
-            echo $lng_forum['answer'] . ' ' . ($i + 1) . ' (max. 50): <br/>' .
+            echo lng('answer') . ' ' . ($i + 1) . ' (max. 50): <br/>' .
                  '<input type="text" name="' . $vote['id'] . 'vote" value="' . htmlentities($vote['name'], ENT_QUOTES, 'UTF-8') . '"/>';
             if ($countvote > 2)
                 echo '&nbsp;<a href="index.php?act=editvote&amp;id=' . Vars::$ID . '&amp;vote=' . $vote['id'] . '&amp;delvote">[x]</a>';
@@ -95,12 +95,12 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             for ($vote = $i; $vote < $_POST['count_vote']; $vote++) {
                 echo 'Ответ ' . ($vote + 1) . '(max. 50): <br/><input type="text" name="' . $vote . '" value="' . Validate::filterString($_POST[$vote]) . '"/><br/>';
             }
-            echo '<input type="hidden" name="count_vote" value="' . abs(intval($_POST['count_vote'])) . '"/>' . ($_POST['count_vote'] < 20 ? '<input type="submit" name="plus" value="' . Vars::$LNG['add'] . '"/>' : '')
-                 . ($_POST['count_vote'] - $countvote ? '<input type="submit" name="minus" value="' . $lng_forum['delete_last'] . '"/>' : '');
+            echo '<input type="hidden" name="count_vote" value="' . abs(intval($_POST['count_vote'])) . '"/>' . ($_POST['count_vote'] < 20 ? '<input type="submit" name="plus" value="' . lng('add') . '"/>' : '')
+                 . ($_POST['count_vote'] - $countvote ? '<input type="submit" name="minus" value="' . lng('delete_last') . '"/>' : '');
         }
         echo '</p></div><div class="gmenu">' .
-             '<p><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '"/></p>' .
+             '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
              '</div></form>' .
-             '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['cancel'] . '</a></div>';
+             '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '">' . lng('cancel') . '</a></div>';
     }
 }

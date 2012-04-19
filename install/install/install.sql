@@ -274,6 +274,7 @@ INSERT INTO `cms_modules` (`module`) VALUES ('admin'),
         ('cabinet'),
         ('contacts'),
         ('exit'),
+        ('forum'),
         ('friends'),
         ('guestbook'),
         ('help'),
@@ -544,7 +545,7 @@ CREATE TABLE `users` (
   `ip_via_proxy` int(10) unsigned NOT NULL DEFAULT '0',
   `user_agent` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `lastdate` (`last_visit`)
+  KEY `last_visit` (`last_visit`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- Создаем суперпользователя

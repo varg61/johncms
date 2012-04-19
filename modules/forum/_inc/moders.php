@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . Vars::$LNG['moders'] . '</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . lng('forum') . '</b></a> | ' . lng('moders') . '</div>';
 $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid`");
 while ($f1 = mysql_fetch_array($req)) {
     $mod = mysql_query("select * from `forum` where type='a' and refid='" . $f1['id'] . "'");
@@ -34,4 +34,4 @@ while ($f1 = mysql_fetch_array($req)) {
         ++$i;
     }
 }
-echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a></div>';
+echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a></div>';

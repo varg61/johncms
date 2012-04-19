@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (empty($_GET['n'])) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 $n = trim($_GET['n']);
@@ -27,7 +27,7 @@ while ($f = readdir($o)) {
 }
 $tt = count($a);
 if (!in_array($n, $b)) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 for ($i = 0; $i < $tt; $i++) {

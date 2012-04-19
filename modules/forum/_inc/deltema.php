@@ -12,13 +12,13 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     if (!Vars::$ID) {
-        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+        echo Functions::displayError(lng('error_wrong_data'));
         exit;
     }
     // Проверяем, существует ли тема
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($req)) {
-        echo Functions::displayError($lng_forum['error_topic_deleted']);
+        echo Functions::displayError(lng('error_topic_deleted'));
         exit;
     }
     $res = mysql_fetch_assoc($req);
@@ -56,16 +56,16 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         Меню выбора режима удаления темы
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['topic_delete'] . '</div>' .
+        echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_delete') . '</div>' .
              '<div class="rmenu"><form method="post" action="index.php?act=deltema&amp;id=' . Vars::$ID . '">' .
-             '<p><h3>' . Vars::$LNG['delete_confirmation'] . '</h3>' .
-             '<input type="radio" value="1" name="del" checked="checked"/>&#160;' . Vars::$LNG['hide'] . '<br />' .
-             (Vars::$USER_RIGHTS == 9 ? '<input type="radio" value="2" name="del" />&#160;' . Vars::$LNG['delete'] : '') .
-             '</p><p><input type="submit" name="submit" value="' . Vars::$LNG['do'] . '" /></p>' .
-             '<p><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['cancel'] . '</a>' .
+             '<p><h3>' . lng('delete_confirmation') . '</h3>' .
+             '<input type="radio" value="1" name="del" checked="checked"/>&#160;' . lng('hide') . '<br />' .
+             (Vars::$USER_RIGHTS == 9 ? '<input type="radio" value="2" name="del" />&#160;' . lng('delete') : '') .
+             '</p><p><input type="submit" name="submit" value="' . lng('do') . '" /></p>' .
+             '<p><a href="index.php?id=' . Vars::$ID . '">' . lng('cancel') . '</a>' .
              '</p></form></div>' .
              '<div class="phdr">&#160;</div>';
     }
 } else {
-    echo Functions::displayError(Vars::$LNG['access_forbidden']);
+    echo Functions::displayError(lng('access_forbidden'));
 }

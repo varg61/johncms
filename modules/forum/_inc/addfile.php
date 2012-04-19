@@ -12,19 +12,19 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!Vars::$ID || !Vars::$USER_ID) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 // Проверяем, тот ли юзер заливает файл
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
 $res = mysql_fetch_assoc($req);
 if ($res['user_id'] != Vars::$USER_ID) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 $req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = " . Vars::$ID);
 if (mysql_result($req1, 0) > 0) {
-    echo Functions::displayError($lng_forum['error_file_uploaded']);
+    echo Functions::displayError(lng('error_file_uploaded'));
     exit;
 }
 switch ($res['type']) {
@@ -62,19 +62,19 @@ switch ($res['type']) {
                 $error = array();
                 // Проверка на допустимый размер файла
                 if ($fsize > 1024 * Vars::$SYSTEM_SET['flsz'])
-                    $error[] = $lng_forum['error_file_size'] . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.';
+                    $error[] = lng('error_file_size') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.';
                 // Проверка файла на наличие только одного расширения
                 if (count($ext) != 2)
-                    $error[] = $lng_forum['error_file_name'];
+                    $error[] = lng('error_file_name');
                 // Проверка допустимых расширений файлов
                 if (!in_array($ext[1], $al_ext))
-                    $error[] = $lng_forum['error_file_ext'] . ':<br />' . implode(', ', $al_ext);
+                    $error[] = lng('error_file_ext') . ':<br />' . implode(', ', $al_ext);
                 // Проверка на длину имени
                 if (strlen($fname) > 30)
-                    $error[] = $lng_forum['error_file_name_size'];
+                    $error[] = lng('error_file_name_size');
                 // Проверка на запрещенные символы
                 if (preg_match("/[^\da-z_\-.]+/", $fname))
-                    $error[] = $lng_forum['error_file_symbols'];
+                    $error[] = lng('error_file_symbols');
                 // Проверка наличия файла с таким же именем
                 if (file_exists("../files/forum/attach/$fname")) {
                     $fname = time() . $fname;
@@ -85,9 +85,9 @@ switch ($res['type']) {
                     if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "../files/forum/attach/$fname")) == true) {
                         @chmod("$fname", 0777);
                         @chmod("../files/forum/attach/$fname", 0777);
-                        echo $lng_forum['file_uploaded'] . '<br/>';
+                        echo lng('file_uploaded') . '<br/>';
                     } else {
-                        $error[] = $lng_forum['error_upload_error'];
+                        $error[] = lng('error_upload_error');
                     }
                 } elseif ($do_file_mini) {
                     // Для Opera Mini
@@ -103,9 +103,9 @@ switch ($res['type']) {
                             fclose($fid);
                         }
                         if (file_exists($FileName) && filesize($FileName) == strlen($filedata)) {
-                            echo $lng_forum['file_uploaded'] . '<br/>';
+                            echo lng('file_uploaded') . '<br/>';
                         } else {
-                            $error[] = $lng_forum['error_upload_error'];
+                            $error[] = lng('error_upload_error');
                         }
                     }
                 }
@@ -146,33 +146,33 @@ switch ($res['type']) {
                         `filetype` = '$type'
                     ");
                 } else {
-                    echo Functions::displayError($error, '<a href="index.php?act=addfile&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
+                    echo Functions::displayError($error, '<a href="index.php?act=addfile&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
                 }
             } else {
-                echo $lng_forum['error_upload_error'] . '<br />';
+                echo lng('error_upload_error') . '<br />';
             }
             $pa = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['refid'] . "'");
             $pa2 = mysql_num_rows($pa);
             $page = ceil($pa2 / Vars::$USER_SET['page_size']);
-            echo '<br/><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . Vars::$LNG['continue'] . '</a><br/>';
+            echo '<br/><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('continue') . '</a><br/>';
         } else {
             /*
             -----------------------------------------------------------------
             Форма выбора файла для выгрузки
             -----------------------------------------------------------------
             */
-            echo '<div class="phdr"><b>' . $lng_forum['add_file'] . '</b></div>' .
+            echo '<div class="phdr"><b>' . lng('add_file') . '</b></div>' .
                  '<div class="gmenu"><form action="index.php?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
             if (stristr(Vars::$USER_AGENT, 'Opera/8.01')) {
-                echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . $lng_forum['select_file'] . '</a>';
+                echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . lng('select_file') . '</a>';
             } else {
                 echo '<input type="file" name="fail"/>';
             }
-            echo '</p><p><input type="submit" name="submit" value="' . $lng_forum['upload'] . '"/></p></form></div>' .
-                 '<div class="phdr">' . $lng_forum['max_size'] . ': ' . Vars::$SYSTEM_SET['flsz'] . 'kb.</div>';
+            echo '</p><p><input type="submit" name="submit" value="' . lng('upload') . '"/></p></form></div>' .
+                 '<div class="phdr">' . lng('max_size') . ': ' . Vars::$SYSTEM_SET['flsz'] . 'kb.</div>';
         }
         break;
 
     default:
-        echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+        echo Functions::displayError(lng('error_wrong_data'));
 }

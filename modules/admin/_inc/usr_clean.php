@@ -23,7 +23,7 @@ switch (Vars::$MOD) {
     case 1:
         mysql_query("DELETE FROM `users`
             WHERE `datereg` < '" . (time() - 2592000 * 6) . "'
-            AND `lastdate` < '" . (time() - 2592000 * 5) . "'
+            AND `last_visit` < '" . (time() - 2592000 * 5) . "'
             AND `postforum` = '0'
             AND `postguest` < '10'
             AND `komm` < '10'
@@ -35,7 +35,7 @@ switch (Vars::$MOD) {
     default:
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `users`
             WHERE `datereg` < '" . (time() - 2592000 * 6) . "'
-            AND `lastdate` < '" . (time() - 2592000 * 5) . "'
+            AND `last_visit` < '" . (time() - 2592000 * 5) . "'
             AND `postforum` = '0'
             AND `postguest` < '10'
             AND `komm` < '10'"), 0);

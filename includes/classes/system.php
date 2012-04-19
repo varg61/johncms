@@ -313,7 +313,7 @@ class System extends Vars
     private function _autoClean()
     {
         if (parent::$SYSTEM_SET['clean_time'] < time() - 86400) {
-            mysql_query("DELETE FROM `cms_sessions` WHERE `lastdate` < '" . (time() - 86400) . "'");
+            mysql_query("DELETE FROM `cms_sessions` WHERE `last_visit` < '" . (time() - 86400) . "'");
             mysql_query("DELETE FROM `cms_users_iphistory` WHERE `time` < '" . (time() - 2592000) . "'");
             mysql_query("UPDATE `cms_settings` SET  `val` = '" . time() . "' WHERE `key` = 'clean_time' LIMIT 1");
             mysql_query("OPTIMIZE TABLE `cms_sessions` , `cms_users_iphistory`, `cms_users_settings`");

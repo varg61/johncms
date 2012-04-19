@@ -12,15 +12,15 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $types = array(
-    1 => $lng_forum['files_type_win'],
-    2 => $lng_forum['files_type_java'],
-    3 => $lng_forum['files_type_sis'],
-    4 => $lng_forum['files_type_txt'],
-    5 => $lng_forum['files_type_pic'],
-    6 => $lng_forum['files_type_arc'],
-    7 => $lng_forum['files_type_video'],
-    8 => $lng_forum['files_type_audio'],
-    9 => $lng_forum['files_type_other']
+    1 => lng('files_type_win'),
+    2 => lng('files_type_java'),
+    3 => lng('files_type_sis'),
+    4 => lng('files_type_txt'),
+    5 => lng('files_type_pic'),
+    6 => lng('files_type_arc'),
+    7 => lng('files_type_video'),
+    8 => lng('files_type_audio'),
+    9 => lng('files_type_other')
 );
 $new = time() - 86400; // Сколько времени файлы считать новыми?
 
@@ -37,25 +37,25 @@ if ($c) {
     $id = $c;
     $lnk = '&amp;c=' . $c;
     $sql = " AND `cat` = '" . $c . "'";
-    $caption = '<b>' . $lng_forum['files_category'] . '</b>: ';
+    $caption = '<b>' . lng('files_category') . '</b>: ';
     $input = '<input type="hidden" name="c" value="' . $c . '"/>';
 } elseif ($s) {
     $id = $s;
     $lnk = '&amp;s=' . $s;
     $sql = " AND `subcat` = '" . $s . "'";
-    $caption = '<b>' . $lng_forum['files_section'] . '</b>: ';
+    $caption = '<b>' . lng('files_section') . '</b>: ';
     $input = '<input type="hidden" name="s" value="' . $s . '"/>';
 } elseif ($t) {
     $id = $t;
     $lnk = '&amp;t=' . $t;
     $sql = " AND `topic` = '" . $t . "'";
-    $caption = '<b>' . $lng_forum['files_topic'] . '</b>: ';
+    $caption = '<b>' . lng('files_topic') . '</b>: ';
     $input = '<input type="hidden" name="t" value="' . $t . '"/>';
 } else {
     $id = false;
     $sql = '';
     $lnk = '';
-    $caption = '<b>' . $lng_forum['files_forum'] . '</b>';
+    $caption = '<b>' . lng('files_forum') . '</b>';
     $input = '';
 }
 if ($c || $s || $t) {
@@ -65,7 +65,7 @@ if ($c || $s || $t) {
         $res = mysql_fetch_array($req);
         $caption .= $res['text'];
     } else {
-        echo Functions::displayError(Vars::$LNG['error_wrong_data'], '<a href="index.php">' . Vars::$LNG['to_forum'] . '</a>');
+        echo Functions::displayError(lng('error_wrong_data'), '<a href="index.php">' . lng('to_forum') . '</a>');
         exit;
     }
 }
@@ -79,17 +79,17 @@ if ($do || isset($_GET['new'])) {
                                               ? " `time` > '$new'" : " `filetype` = '$do'") . $sql), 0);
     if ($total > 0) {
         // Заголовок раздела
-        echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />' . Vars::$LNG['new_files'] : '') . '</div>' . ($do ? '<div class="bmenu">' . $types[$do] . '</div>' : '');
+        echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />' . lng('new_files') : '') . '</div>' . ($do ? '<div class="bmenu">' . $types[$do] . '</div>' : '');
         $req = mysql_query("SELECT `cms_forum_files`.*, `forum`.`user_id`, `forum`.`text`, `topicname`.`text` AS `topicname`
             FROM `cms_forum_files`
             LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
             LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
             WHERE " . (isset($_GET['new']) ? " `cms_forum_files`.`time` > '$new'" : " `filetype` = '$do'") . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `del` != '1'") . $sql .
-            "ORDER BY `time` DESC LIMIT " . Vars::db_pagination()
+            "ORDER BY `time` DESC " . Vars::db_pagination()
         );
         $i = 0;
         while ($res = mysql_fetch_assoc($req)) {
-            $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `lastdate`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+            $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `last_visit`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
             $res_u = mysql_fetch_assoc($req_u);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Выводим текст поста
@@ -100,7 +100,7 @@ if ($do || isset($_GET['new'])) {
                                                           ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / Vars::$USER_SET['page_size']);
             $text = '<b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text;
             if (mb_strlen($res['text']) > 500)
-                $text .= '<br /><a href="index.php?act=post&amp;id=' . $res['post'] . '">' . $lng_forum['read_all'] . ' &gt;&gt;</a>';
+                $text .= '<br /><a href="index.php?act=post&amp;id=' . $res['post'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
             // Формируем ссылку на файл
             $fls = @filesize('../files/forum/attach/' . $res['filename']);
             $fls = round($fls / 1024, 0);
@@ -114,13 +114,13 @@ if ($do || isset($_GET['new'])) {
             if (in_array($att_ext, $pic_ext)) {
                 // Если картинка, то выводим предпросмотр
                 $file = '<div><a href="index.php?act=file&amp;id=' . $res['id'] . '">';
-                $file .= '<img src="thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . $lng_forum['click_to_view'] . '" /></a></div>';
+                $file .= '<img src="thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
                 $file = Functions::getImage(($res['del'] ? 'delete.png' : 'filetype_' . $res['filetype'] . '.png'), '', 'align="middle"') . '&#160;';
             }
             $file .= '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
-            $file .= '<small><span class="gray">' . $lng_forum['size'] . ': ' . $fls . ' kb.<br />' . $lng_forum['downloaded'] . ': ' . $res['dlcount'] . ' ' . $lng_forum['time'] . '</span></small>';
+            $file .= '<small><span class="gray">' . lng('size') . ': ' . $fls . ' kb.<br />' . lng('downloaded') . ': ' . $res['dlcount'] . ' ' . lng('time') . '</span></small>';
             $arg = array(
                 'iphide' => 1,
                 'sub' => $file,
@@ -130,17 +130,17 @@ if ($do || isset($_GET['new'])) {
             echo '</div>';
             ++$i;
         }
-        echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+        echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
             // Постраничная навигация
             echo '<p>' . Functions::displayPagination('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
                  '<p><form action="index.php" method="get">' .
                  '<input type="hidden" name="act" value="files"/>' .
                  '<input type="hidden" name="do" value="' . $do . '"/>' . $input . '<input type="text" name="page" size="2"/>' .
-                 '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
+                 '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
         }
     } else {
-        echo '<div class="list1">' . Vars::$LNG['list_empty'] . '</div>';
+        echo '<div class="list1">' . lng('list_empty') . '</div>';
     }
 } else {
     /*
@@ -149,7 +149,7 @@ if ($do || isset($_GET['new'])) {
     -----------------------------------------------------------------
     */
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
-    echo '<p>' . ($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">' . Vars::$LNG['new_files'] . ' (' . $countnew . ')</a>' : $lng_forum['new_files_empty']) . '</p>';
+    echo '<p>' . ($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">' . lng('new_files') . ' (' . $countnew . ')</a>' : lng('new_files_empty')) . '</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array();
     $total = 0;
@@ -165,8 +165,8 @@ if ($do || isset($_GET['new'])) {
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . $var . '</div>';
         ++$i;
     }
-    echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+    echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 }
 echo '<p>' . (($do || isset($_GET['new']))
-        ? '<a href="index.php?act=files' . $lnk . '">' . $lng_forum['section_list'] . '</a><br />'
-        : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">' . Vars::$LNG['forum'] . '</a></p>';
+        ? '<a href="index.php?act=files' . $lnk . '">' . lng('section_list') . '</a><br />'
+        : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">' . lng('forum') . '</a></p>';

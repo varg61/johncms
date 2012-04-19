@@ -12,19 +12,19 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (empty($_GET['id'])) {
-    echo Functions::displayError(Vars::$LNG['error_wrong_data']);
+    echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
 $s = isset($_GET['s']) ? intval($_GET['s']) : false;
 // Запрос сообщения
-$req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
+$req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`datereg`
 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
 WHERE `forum`.`type` = 'm' AND `forum`.`id` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . " LIMIT 1");
 $res = mysql_fetch_array($req);
 
 // Запрос темы
 $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
-echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $them['text'] . '</div><div class="menu">';
+echo '<div class="phdr"><b>' . lng('topic') . ':</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
     echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
@@ -56,7 +56,7 @@ switch ($res['rights']) {
         break;
 }
 // Метка Онлайн / Офлайн
-echo (time() > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
+echo (time() > $res['last_visit'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
 // Время поста
 echo ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br/>';
 // Статус юзера
@@ -70,5 +70,5 @@ if (Vars::$USER_SET['smileys'])
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID), 0) / Vars::$USER_SET['page_size']);
-echo '<div class="phdr"><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . $lng_forum['back_to_topic'] . '</a></div>';
-echo '<p><a href="index.php">' . Vars::$LNG['to_forum'] . '</a></p>';
+echo '<div class="phdr"><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('back_to_topic') . '</a></div>';
+echo '<p><a href="index.php">' . lng('to_forum') . '</a></p>';

@@ -51,7 +51,7 @@ if ($user_id) {
                     WHERE `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID
                 );
             }
-            echo '<div class="menu"><p>' . $lng_forum['unread_reset_done'] . '<br /><a href="index.php">' . $lng_forum['to_forum'] . '</a></p></div>';
+            echo '<div class="menu"><p>' . lng('unread_reset_done') . '<br /><a href="index.php">' . lng('to_forum') . '</a></p></div>';
             break;
 
         case 'select':
@@ -60,11 +60,11 @@ if ($user_id) {
             Форма выбора диапазона времени
             -----------------------------------------------------------------
             */
-            echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['unread_show_for_period'] . '</div>';
-            echo '<div class="menu"><p><form action="index.php?act=new&amp;do=period" method="post">' . $lng_forum['unread_period'] . ':<br/>';
+            echo '<div class="phdr"><a href="index.php"><b>' . lng('forum') . '</b></a> | ' . lng('unread_show_for_period') . '</div>';
+            echo '<div class="menu"><p><form action="index.php?act=new&amp;do=period" method="post">' . lng('unread_period') . ':<br/>';
             echo '<input type="text" maxlength="3" name="vr" value="24" size="3"/>';
-            echo '<input type="submit" name="submit" value="' . Vars::$LNG['show'] . '"/></form></p></div>';
-            echo '<div class="phdr"><a href="index.php?act=new">' . Vars::$LNG['back'] . '</a></div>';
+            echo '<input type="submit" name="submit" value="' . lng('show') . '"/></form></p></div>';
+            echo '<div class="phdr"><a href="index.php?act=new">' . lng('back') . '</a></div>';
             break;
 
         case 'period':
@@ -75,7 +75,7 @@ if ($user_id) {
             */
             $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : null;
             if (!$vr) {
-                echo $lng_forum['error_time_empty'] . '<br/><a href="index.php?act=new&amp;do=all">' . Vars::$LNG['repeat'] . '</a><br/>';
+                echo lng('error_time_empty') . '<br/><a href="index.php?act=new&amp;do=all">' . lng('repeat') . '</a><br/>';
                 exit;
             }
             $vr1 = time() - $vr * 3600;
@@ -85,14 +85,14 @@ if ($user_id) {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1' AND `close` != '1'");
             }
             $count = mysql_result($req, 0);
-            echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['unread_all_for_period'] . ' ' . $vr . ' ' . $lng_forum['hours'] . '</div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . lng('forum') . '</b></a> | ' . lng('unread_all_for_period') . ' ' . $vr . ' ' . lng('hours') . '</div>';
             if ($count > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
             if ($count > 0) {
                 if (Vars::$USER_RIGHTS == 9) {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . Vars::db_pagination());
+                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC " . Vars::db_pagination());
                 } else {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC LIMIT " . Vars::db_pagination());
+                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC " . Vars::db_pagination());
                 }
                 $i = 0;
                 while ($res = mysql_fetch_array($req)) {
@@ -127,16 +127,16 @@ if ($user_id) {
                     ++$i;
                 }
             } else {
-                echo '<div class="menu"><p>' . $lng_forum['unread_period_empty'] . '</p></div>';
+                echo '<div class="menu"><p>' . lng('unread_period_empty') . '</p></div>';
             }
-            echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $count . '</div>';
+            echo '<div class="phdr">' . lng('total') . ': ' . $count . '</div>';
             if ($count > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>' .
                      '<p><form action="index.php?act=new&amp;do=period&amp;vr=' . $vr . '" method="post">
                     <input type="text" name="page" size="2"/>
-                    <input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
+                    <input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
             }
-            echo '<p><a href="index.php?act=new">' . Vars::$LNG['back'] . '</a></p>';
+            echo '<p><a href="index.php?act=new">' . lng('back') . '</a></p>';
             break;
 
         default:
@@ -146,7 +146,7 @@ if ($user_id) {
             -----------------------------------------------------------------
             */
             $total = Counters::forumCountNew();
-            echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . Vars::$LNG['unread'] . '</div>';
+            echo '<div class="phdr"><a href="index.php"><b>' . lng('forum') . '</b></a> | ' . lng('unread') . '</div>';
             if ($total > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             if ($total > 0) {
@@ -156,7 +156,7 @@ if ($user_id) {
                 AND (`cms_forum_rdm`.`topic_id` Is Null
                 OR `forum`.`time` > `cms_forum_rdm`.`time`)
                 ORDER BY `forum`.`time` DESC
-                LIMIT " . Vars::db_pagination());
+                " . Vars::db_pagination());
                 $i = 0;
                 while ($res = mysql_fetch_assoc($req)) {
                     if ($res['close'])
@@ -190,21 +190,21 @@ if ($user_id) {
                     ++$i;
                 }
             } else {
-                echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+                echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
             }
-            echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+            echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                      '<p><form action="index.php" method="get">' .
                      '<input type="hidden" name="act" value="new"/>' .
                      '<input type="text" name="page" size="2"/>' .
-                     '<input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/>' .
+                     '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                      '</form></p>';
             }
             echo '<p>';
             if ($total)
-                echo '<a href="index.php?act=new&amp;do=reset">' . $lng_forum['unread_reset'] . '</a><br/>';
-            echo '<a href="index.php?act=new&amp;do=select">' . $lng_forum['unread_show_for_period'] . '</a></p>';
+                echo '<a href="index.php?act=new&amp;do=reset">' . lng('unread_reset') . '</a><br/>';
+            echo '<a href="index.php?act=new&amp;do=select">' . lng('unread_show_for_period') . '</a></p>';
     }
 } else {
     /*
@@ -212,7 +212,7 @@ if ($user_id) {
     Вывод 10 последних тем (для незарегистрированных)
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['forum'] . '</b></a> | ' . $lng_forum['unread_last_10'] . '</div>';
+    echo '<div class="phdr"><a href="index.php"><b>' . lng('forum') . '</b></a> | ' . lng('unread_last_10') . '</div>';
     $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT 10");
     if (mysql_num_rows($req)) {
         while ($res = mysql_fetch_assoc($req)) {
@@ -246,7 +246,7 @@ if ($user_id) {
             $i++;
         }
     } else {
-        echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+        echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
     }
-    echo '<div class="phdr"><a href="index.php">' . Vars::$LNG['to_forum'] . '</a></div>';
+    echo '<div class="phdr"><a href="index.php">' . lng('to_forum') . '</a></div>';
 }
