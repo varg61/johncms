@@ -33,9 +33,13 @@
             <input id="password" type="password" name="password"/>
         </div>
         <div class="formblock">
+            <?= lng('password_warning') ?>
+        </div>
+        <div class="formblock">
             <input type="submit" value="<?= lng('save') ?>" name="submit"/>
         </div>
     </div>
+    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
 <div class="phdr">
     <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>

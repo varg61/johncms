@@ -259,7 +259,42 @@ switch (Vars::$MOD) {
         Административные функции
         -----------------------------------------------------------------
         */
-        $tpl->contents = $tpl->includeTpl('profile_edit_adm');
+        if (Vars::$USER_RIGHTS >= 7) {
+            if (isset($_POST['submit'])
+                && isset($_POST['rights'])
+                && isset($_POST['password'])
+                && !empty($_POST['password'])
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
+                && $_POST['rights'] != $user['rights']
+                && $_POST['rights'] >= 0
+                && $_POST['rights'] != 8
+                && $_POST['rights'] <= 9
+            ) {
+                $rights = intval($_POST['rights']);
+                $password = trim($_POST['password']);
+                if (Validate::password($password) === TRUE
+                    && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
+                    && (Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && $rights < 7))
+                ) {
+                    // Если пароль совпадает, обрабатываем форму
+                    mysql_query("UPDATE `users` SET `rights` = '$rights' WHERE `id` = " . $user['id']);
+                    header('Location: ' . Vars::$URI . '?act=edit');
+                    exit;
+                } else {
+                    // Если пароль не совпадает, разлогиниваем пользователя
+                    Vars::userUnset(TRUE);
+                    header('Location: ' . Vars::$HOME_URL);
+                    exit;
+                }
+            }
+            $tpl->form_token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->form_token;
+            $tpl->contents = $tpl->includeTpl('profile_edit_adm');
+        } else {
+            echo Functions::displayError(lng('access_forbidden'));
+        }
         break;
 
     case 'nick':
@@ -285,9 +320,9 @@ switch (Vars::$MOD) {
                         && Validate::nicknameAvailability($tpl->nickname, TRUE) === TRUE
                     ) {
                         mysql_query("UPDATE `users` SET
-                        `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "',
-                        `change_time` = " . time() . "
-                        WHERE `id` = " . $user['id']
+                            `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "',
+                            `change_time` = " . time() . "
+                            WHERE `id` = " . $user['id']
                         );
                         header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
                         exit;
