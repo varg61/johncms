@@ -23,7 +23,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     }
     if (isset($_POST['submit'])) {
         if (empty($_POST['text'])) {
-            echo Functions::displayError(Vars::$LNG['error_empty_title'], '<a href="index.php?act=mkcat&amp;id=' . Vars::$ID . '">' . Vars::$LNG['repeat'] . '</a>');
+            echo Functions::displayError(lng('error_empty_title'), '<a href="index.php?act=mkcat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
             exit;
         }
         $text = Validate::filterString($_POST['text']);
@@ -38,21 +38,21 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             `soft` = '$user'
         ");
         $cid = mysql_insert_id();
-        echo $lng_lib['category_created'] . "<br/><a href='index.php?id=" . $cid . "'>" . $lng_lib['to_category'] . "</a><br/>";
+        echo lng('category_created') . "<br/><a href='index.php?id=" . $cid . "'>" . lng('to_category') . "</a><br/>";
     } else {
-        echo $lng_lib['create_category'] . '<br/>' .
+        echo lng('create_category') . '<br/>' .
              '<form action="index.php?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
-             Vars::$LNG['title'] . ':<br/>' .
+             lng('title') . ':<br/>' .
              '<input type="text" name="text"/>' .
-             '<p>' . $lng_lib['category_type'] . '<br/>' .
+             '<p>' . lng('category_type') . '<br/>' .
              '<select name="typs">' .
-             '<option value="1">' . $lng_lib['categories'] . '</option>' .
-             '<option value="0">' . $lng_lib['articles'] . '</option>' .
+             '<option value="1">' . lng('categories') . '</option>' .
+             '<option value="0">' . lng('articles') . '</option>' .
              '</select></p>' .
-             '<p><input type="checkbox" name="user" value="1"/>' . $lng_lib['if_articles'] . '</p>' .
-             '<p><input type="submit" name="submit" value="' . Vars::$LNG['save'] . '"/></p>' .
+             '<p><input type="checkbox" name="user" value="1"/>' . lng('if_articles') . '</p>' .
+             '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
              '</form>' .
-             '<p><a href ="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a></p>';
+             '<p><a href ="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
     }
 } else {
     header("location: index.php");

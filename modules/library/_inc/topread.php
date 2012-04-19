@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Рейтинг самых читаемых статей
-echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['library'] . '</b></a> | ' . $lng_lib['top_read'] . '</div>';
+echo '<div class="phdr"><a href="index.php"><b>' . lng('library') . '</b></a> | ' . lng('top_read') . '</div>';
 $req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC LIMIT 50");
 $totalnew = mysql_num_rows($req);
 $start = Vars::$PAGE * 10 - 10;
@@ -36,7 +36,7 @@ if ($totalnew != 0) {
             echo $div;
             echo '<b><a href="?id=' . $res['id'] . '">' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
             echo htmlentities($res['announce'], ENT_QUOTES, 'UTF-8') . '<br />';
-            echo $lng_lib['reads'] . ': ' . $res['count'] . '<br/>';
+            echo lng('reads') . ': ' . $res['count'] . '<br/>';
             $nadir = $res['refid'];
             $dirlink = $nadir;
             $pat = "";
@@ -99,9 +99,9 @@ if ($totalnew != 0) {
             echo ' <a href="index.php?act=topread&amp;page=' . (Vars::$PAGE + 1) . '">&gt;&gt;</a>';
         }
         echo
-                "<form action='index.php'>" . Vars::$LNG['to_page'] . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
+                "<form action='index.php'>" . lng('to_page') . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
     }
 } else {
-    echo "<p>" . Vars::$LNG['list_empty'] . "<br/>";
+    echo "<p>" . lng('list_empty') . "<br/>";
 }
-echo "<a href='index.php?'>" . $lng_lib['to_library'] . "</a></p>";
+echo "<a href='index.php?'>" . lng('to_library') . "</a></p>";

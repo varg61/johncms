@@ -81,11 +81,11 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/library/files/' . Vars::$ID . '.jar';
         flock($files, LOCK_UN);
         fclose($files);
     }
-    echo $lng_lib['download_java_help'] . '<br /><br />' .
-         Vars::$LNG['title'] . ': ' . $res['name'] . '<br />' .
-         Vars::$LNG['download'] . ': <a href="../files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="../files/library/' . Vars::$ID . '.jad">JAD</a>' .
-         '<p><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['to_article'] . '</a></p>';
+    echo lng('download_java_help') . '<br /><br />' .
+         lng('title') . ': ' . $res['name'] . '<br />' .
+         lng('download') . ': <a href="../files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="../files/library/' . Vars::$ID . '.jad">JAD</a>' .
+         '<p><a href="index.php?id=' . Vars::$ID . '">' . lng('to_article') . '</a></p>';
 } else {
-    echo '<p>' . Vars::$LNG['access_guest_forbidden'] . '</p>' .
-         '<p><a href="index.php?id=' . Vars::$ID . '">' . Vars::$LNG['back'] . '</a></p>';
+    echo '<p>' . lng('access_guest_forbidden') . '</p>' .
+         '<p><a href="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
 }

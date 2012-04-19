@@ -39,7 +39,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 $ct = mysql_query("select `id` from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID);
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
-                    echo $lng_lib['first_delete_category'] . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . Vars::$LNG['back'] . "</a><br/>";
+                    echo lng('first_delete_category') . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";
                     exit;
                 }
                 $st = mysql_query("select `id` from `lib` where `type` = 'bk' and `refid` = " . Vars::$ID);
@@ -62,19 +62,19 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 break;
 
             case "bk":
-                echo Vars::$LNG['delete_confirmation'] . "<br/><a href='index.php?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . Vars::$LNG['delete'] .
-                    "</a> | <a href='index.php?id=" . Vars::$ID . "'>" . Vars::$LNG['cancel'] . "</a><br/><a href='index.php'>" . $lng_lib['to_library'] . "</a><br/>";
+                echo lng('delete_confirmation') . "<br/><a href='index.php?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . lng('delete') .
+                    "</a> | <a href='index.php?id=" . Vars::$ID . "'>" . lng('cancel') . "</a><br/><a href='index.php'>" . lng('to_library') . "</a><br/>";
                 break;
 
             case "cat":
                 $ct = mysql_query("select `id` from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID);
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
-                    echo $lng_lib['first_delete_category'] . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . Vars::$LNG['back'] . "</a><br/>";
+                    echo lng('first_delete_category') . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";
                     exit;
                 }
-                echo Vars::$LNG['delete_confirmation'] . "<br/><a href='index.php?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . Vars::$LNG['delete'] . "</a> | <a href='index.php?id=" . Vars::$ID .
-                     "'>" . Vars::$LNG['cancel'] . "</a><br/><a href='index.php'>" . Vars::$LNG['back'] . "</a><br/>";
+                echo lng('delete_confirmation') . "<br/><a href='index.php?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . lng('delete') . "</a> | <a href='index.php?id=" . Vars::$ID .
+                     "'>" . lng('cancel') . "</a><br/><a href='index.php'>" . lng('back') . "</a><br/>";
                 break;
         }
     }
