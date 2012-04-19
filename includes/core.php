@@ -56,23 +56,24 @@ spl_autoload_register(
 
         // Список системных классов
         $system = array(
-            'advt'       => 'classes/advt.php',
-            'captcha'    => 'classes/captcha.php',
-            'comments'   => 'classes/comments.php',
-            'counters'   => 'classes/counters.php',
-            'finfo'      => 'lib/class.upload.php',
-            'functions'  => 'classes/functions.php',
-            'homepage'   => 'classes/homepage.php',
-            'login'      => 'classes/login.php',
-            'network'    => 'classes/network.php',
-            'session'    => 'classes/session.php',
-            'sitemap'    => 'classes/sitemap.php',
-            'system'     => 'classes/system.php',
-            'template'   => 'classes/template.php',
-            'textparser' => 'classes/textparser.php',
-            'upload'     => 'lib/class.upload.php',
-            'validate'   => 'classes/validate.php',
-            'vars'       => 'classes/vars.php'
+            'advt'       => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
+            'captcha'    => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
+            'comments'   => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
+            'counters'   => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
+            'finfo'      => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'functions'  => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
+            'homepage'   => 'classes' . DIRECTORY_SEPARATOR . 'homepage.php',
+            'login'      => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
+            'network'    => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
+            'pclzip'     => 'lib' . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
+            'session'    => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
+            'sitemap'    => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
+            'system'     => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
+            'template'   => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
+            'textparser' => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
+            'upload'     => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'validate'   => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
+            'vars'       => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
         );
 
         if (isset($system[$name])) {

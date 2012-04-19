@@ -19,11 +19,11 @@ if (Vars::$USER_ID) {
     }
     $res = mysql_fetch_array($req);
     // Создаем JAR файл
-    if (!file_exists('../files/library/' . Vars::$ID . '.jar')) {
+    if (!file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
         $midlet_name = mb_substr($res['name'], 0, 10);
         $midlet_name = iconv('UTF-8', 'windows-1251', $midlet_name);
         // Записываем текст статьи
-        $files = fopen("java/textfile.txt", 'w+');
+        $files = fopen(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'java' . DIRECTORY_SEPARATOR . 'textfile.txt', 'w+') or exit('ERROR: textfile.txt');
         flock($files, LOCK_EX);
         $book_name = iconv('UTF-8', 'windows-1251', $res['name']);
         $book_text = iconv('UTF-8', 'windows-1251', $res['text']);
@@ -43,25 +43,24 @@ MIDletX-LG-Contents: true
 MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)';
-        $files = fopen("java/META-INF/MANIFEST.MF", 'w+');
+        $files = fopen(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'java' . DIRECTORY_SEPARATOR . 'META-INF' . DIRECTORY_SEPARATOR . 'MANIFEST.MF', 'w+') or exit('ERROR: MANIFEST.MF');
         flock($files, LOCK_EX);
         fputs($files, $manifest_text);
         flock($files, LOCK_UN);
         fclose($files);
 
         // Создаем архив
-        require_once('../includes/lib/pclzip.lib.php');
-        $archive = new PclZip('../files/library/' . Vars::$ID . '.jar');
-        $list = $archive->create('java', PCLZIP_OPT_REMOVE_PATH, 'java');
-        if (!file_exists('../files/library/' . Vars::$ID . '.jar')) {
+        $archive = new PclZip(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar');
+        $list = $archive->create(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'java', PCLZIP_OPT_REMOVE_PATH, MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'java');
+        if (!file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
             echo '<p>Error creating JAR file</p>';
             exit;
         }
     }
 
     // Создаем JAD файл
-    if (!file_exists('../files/library/' . Vars::$ID . '.jad')) {
-        $filesize = filesize('../files/library/' . Vars::$ID . '.jar');
+    if (!file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jad')) {
+        $filesize = filesize(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar');
         $jad_text = 'Manifest-Version: 1.0
 MIDlet-1: Book ' . Vars::$ID . ', , br.BookReader
 MIDlet-Name: Book ' . Vars::$ID .
@@ -74,8 +73,8 @@ MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
-MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/library/files/' . Vars::$ID . '.jar';
-        $files = fopen('../files/library/' . Vars::$ID . '.jad', 'w+');
+MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar';
+        $files = fopen(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jad', 'w+');
         flock($files, LOCK_EX);
         fputs($files, $jad_text);
         flock($files, LOCK_UN);
@@ -83,7 +82,7 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/library/files/' . Vars::$ID . '.jar';
     }
     echo lng('download_java_help') . '<br /><br />' .
          lng('title') . ': ' . $res['name'] . '<br />' .
-         lng('download') . ': <a href="../files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="../files/library/' . Vars::$ID . '.jad">JAD</a>' .
+         lng('download') . ': <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jad">JAD</a>' .
          '<p><a href="index.php?id=' . Vars::$ID . '">' . lng('to_article') . '</a></p>';
 } else {
     echo '<p>' . lng('access_guest_forbidden') . '</p>' .
