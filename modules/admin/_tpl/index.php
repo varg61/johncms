@@ -15,6 +15,9 @@
 </div>
 <div class="gmenu" style="padding-top: 2px; padding-bottom: 6px">
     <h3><?= Functions::getImage('modules.png', '', 'class="left"') ?>&#160;<?= lng('modules') ?></h3>
+    <ul>
+        <li><a href="<?= Vars::$HOME_URL ?>/forum/admin"><?= lng('forum') ?></a></li>
+    </ul>
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>
 <div class="menu" style="padding-top: 2px; padding-bottom: 6px">

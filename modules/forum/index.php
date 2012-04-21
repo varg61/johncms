@@ -264,7 +264,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         */
         echo '<p>' . Counters::forumCountNew(1) . '</p>' .
              '<div class="phdr">' . Functions::displayMenu($tree) . '</div>' .
-             '<div class="topmenu"><a href="search.php?id=' . Vars::$ID . '">' . lng('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
+             '<div class="topmenu"><a href="' . Vars::$URI . '/search.php?id=' . Vars::$ID . '">' . lng('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
         /*
         -----------------------------------------------------------------
@@ -745,7 +745,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . (Vars::$USER_RIGHTS >= 7 ? '' : " WHERE `del` != '1'")), 0);
         echo '<p>{}</p>' .
              '<div class="phdr"><b>' . lng('forum') . '</b></div>' .
-             '<div class="topmenu"><a href="search.php">' . lng('search') . '</a> | <a href="index.php?act=files">' . lng('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
+             '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . lng('search') . '</a> | <a href="index.php?act=files">' . lng('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         $i = 0;
         while (($res = mysql_fetch_array($req)) !== false) {

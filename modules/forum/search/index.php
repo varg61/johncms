@@ -9,8 +9,6 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
-
 echo '<div class="phdr"><a href="index.php"><b>' . lng('forum') . '</b></a> | ' . lng('search') . '</div>';
 
 /*
@@ -34,13 +32,13 @@ switch (Vars::$ACT) {
         if (Vars::$USER_ID) {
             if (isset($_POST['submit'])) {
                 settings::user_data_put('forum_search');
-                header('Location: search.php');
+                header('Location: ' . Vars::$URI);
             } else {
-                echo '<form action="search.php?act=reset" method="post">' .
+                echo '<form action="' . Vars::$URI . '?act=reset" method="post">' .
                      '<div class="rmenu">' .
                      '<p>' . lng('search_history_reset') . '</p>' .
                      '<p><input type="submit" name="submit" value="' . lng('clear') . '" /></p>' .
-                     '<p><a href="search.php">' . lng('cancel') . '</a></p>' .
+                     '<p><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></p>' .
                      '</div>' .
                      '</form>';
             }
@@ -59,7 +57,7 @@ switch (Vars::$ACT) {
         //$search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
         $search_t = isset($_REQUEST['t']);
         $to_history = false;
-        echo '<div class="gmenu"><form action="search.php" method="post"><p>' .
+        echo '<div class="gmenu"><form action="' . Vars::$URI . '" method="post"><p>' .
              '<input type="text" value="' . ($search ? Validate::filterString($search) : '') . '" name="search" />' .
              '<input type="submit" value="' . lng('search') . '" name="submit" /><br />' .
              '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . lng('search_topic_name') .
@@ -88,7 +86,7 @@ switch (Vars::$ACT) {
             ")), 0);
             echo '<div class="phdr">' . lng('search_results') . '</div>';
             if ($total > Vars::$USER_SET['page_size'])
-                echo '<div class="topmenu">' . Functions::displayPagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+                echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             if ($total) {
                 $to_history = true;
                 $req = mysql_query("
@@ -162,9 +160,9 @@ switch (Vars::$ACT) {
             // Показываем историю поиска
             if (!empty($history)) {
                 sort($history);
-                foreach ($history as $val) $history_list[] = '<a href="search.php?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
+                foreach ($history as $val) $history_list[] = '<a href="' . Vars::$URI . '?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
                 echo '<div class="topmenu">' .
-                     '<b>' . lng('search_history') . '</b> <span class="red"><a href="search.php?act=reset">[x]</a></span><br />' .
+                     '<b>' . lng('search_history') . '</b> <span class="red"><a href="' . Vars::$URI . '?act=reset">[x]</a></span><br />' .
                      Functions::displayMenu($history_list) .
                      '</div>';
             }
@@ -172,12 +170,12 @@ switch (Vars::$ACT) {
 
         // Постраничная навигация
         if (isset($total) && $total > Vars::$USER_SET['page_size']) {
-            echo '<div class="topmenu">' . Functions::displayPagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                 '<p><form action="search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
+            echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                 '<p><form action="' . Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
                  '<input type="text" name="page" size="2"/>' .
                  '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                  '</form></p>';
         }
 
-        echo '<p>' . ($search ? '<a href="search.php">' . lng('search_new') . '</a><br />' : '') . '<a href="index.php">' . lng('forum') . '</a></p>';
+        echo '<p>' . ($search ? '<a href="' . Vars::$URI . '">' . lng('search_new') . '</a><br />' : '') . '<a href="index.php">' . lng('forum') . '</a></p>';
 }

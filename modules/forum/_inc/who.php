@@ -89,7 +89,7 @@ if (Vars::$ID) {
                     break;
 
                 case 'forumsearch':
-                    $place = '<a href="search.php">' . lng('place_search') . '</a>';
+                    $place = '<a href="' . Vars::$URI . '/search">' . lng('place_search') . '</a>';
                     break;
 
                 default:

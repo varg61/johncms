@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNADM') or die('Error: restricted access');
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
@@ -18,13 +18,13 @@ if (Vars::$USER_RIGHTS < 7) {
 }
 
 // Задаем пользовательские настройки форума
-if (($set_forum = Vars::getUserData('set_forum')) === false) {
+if (($set_forum = Vars::getUserData('set_forum')) === FALSE) {
     $set_forum = array(
-        'farea' => 0,
-        'upfp' => 0,
-        'preview' => 1,
+        'farea'    => 0,
+        'upfp'     => 0,
+        'preview'  => 1,
         'postclip' => 1,
-        'postcut' => 2
+        'postcut'  => 2
     );
 }
 switch (Vars::$MOD) {
@@ -233,7 +233,7 @@ switch (Vars::$MOD) {
             echo '<div class="phdr"><b>' . (Vars::$ID ? lng('add_section') : lng('add_category')) . '</b></div>';
             if (Vars::$ID)
                 echo '<div class="bmenu"><b>' . lng('to_category') . ':</b> ' . $cat_name . '</div>';
-            echo '<form action="index.php?act=forum&amp;mod=add' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '" method="post">' .
+            echo '<form action="' . Vars::$URI . '?mod=add' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '" method="post">' .
                 '<div class="gmenu">' .
                 '<p><h3>' . lng('title') . '</h3>' .
                 '<input type="text" name="name" />' .
@@ -243,7 +243,7 @@ switch (Vars::$MOD) {
                 '<br /><small>' . lng('not_mandatory_field') . '<br />' . lng('minmax_2_500') . '</small></p>' .
                 '<p><input type="submit" value="' . lng('add') . '" name="submit" />' .
                 '</p></div></form>' .
-                '<div class="phdr"><a href="index.php?act=forum&amp;mod=cat' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . lng('back') . '</a></div>';
+                '<div class="phdr"><a href="' . Vars::$URI . '?mod=cat' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . lng('back') . '</a></div>';
         }
         break;
 
@@ -351,7 +351,7 @@ switch (Vars::$MOD) {
                 }
             }
         }
-        header('Location: index.php?act=forum&mod=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
+        header('Location: ' . Vars::$URI . '?mod=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
         break;
 
     case 'down':
@@ -375,7 +375,7 @@ switch (Vars::$MOD) {
                 }
             }
         }
-        header('Location: index.php?act=forum&mod=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
+        header('Location: ' . Vars::$URI . '?mod=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
         break;
 
     case 'cat':
@@ -384,25 +384,25 @@ switch (Vars::$MOD) {
         Управление категориями и разделами
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?act=forum"><b>' . lng('forum_management') . '</b></a> | ' . lng('forum_structure') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('forum_management') . '</b></a> | ' . lng('forum_structure') . '</div>';
         if (Vars::$ID) {
             // Управление разделами
             $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'f'");
             $res = mysql_fetch_assoc($req);
-            echo '<div class="bmenu"><a href="index.php?act=forum&amp;mod=cat"><b>' . $res['text'] . '</b></a> | ' . lng('section_list') . '</div>';
+            echo '<div class="bmenu"><a href="' . Vars::$URI . '?mod=cat"><b>' . $res['text'] . '</b></a> | ' . lng('section_list') . '</div>';
             $req = mysql_query("SELECT * FROM `forum` WHERE `refid` = " . Vars::$ID . " AND `type` = 'r' ORDER BY `realid` ASC");
             if (mysql_num_rows($req)) {
                 while ($res = mysql_fetch_assoc($req)) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b>' . $res['text'] . '</b>' .
-                        '&#160;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
+                        '&#160;<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '">&gt;&gt;</a>';
                     if (!empty($res['soft']))
                         echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                     echo '<div class="sub">' .
-                        '<a href="index.php?act=forum&amp;mod=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a> | ' .
-                        '<a href="index.php?act=forum&amp;mod=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a> | ' .
-                        '<a href="index.php?act=forum&amp;mod=edit&amp;id=' . $res['id'] . '">' . lng('edit') . '</a> | ' .
-                        '<a href="index.php?act=forum&amp;mod=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>' .
+                        '<a href="' . Vars::$URI . '?mod=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a> | ' .
+                        '<a href="' . Vars::$URI . '?mod=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a> | ' .
+                        '<a href="' . Vars::$URI . '?mod=edit&amp;id=' . $res['id'] . '">' . lng('edit') . '</a> | ' .
+                        '<a href="' . Vars::$URI . '?mod=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>' .
                         '</div></div>';
                     ++$i;
                 }
@@ -416,25 +416,25 @@ switch (Vars::$MOD) {
             $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<a href="index.php?act=forum&amp;mod=cat&amp;id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a> ' .
+                echo '<a href="' . Vars::$URI . '?mod=cat&amp;id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a> ' .
                     '(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $res['id'] . "'"), 0) . ')' .
-                    '&#160;<a href="../forum/index.php?id=' . $res['id'] . '">&gt;&gt;</a>';
+                    '&#160;<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '">&gt;&gt;</a>';
                 if (!empty($res['soft']))
                     echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                 echo '<div class="sub">' .
-                    '<a href="index.php?act=forum&amp;mod=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a> | ' .
-                    '<a href="index.php?act=forum&amp;mod=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a> | ' .
-                    '<a href="index.php?act=forum&amp;mod=edit&amp;id=' . $res['id'] . '">' . lng('edit') . '</a> | ' .
-                    '<a href="index.php?act=forum&amp;mod=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>' .
+                    '<a href="' . Vars::$URI . '?mod=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a> | ' .
+                    '<a href="' . Vars::$URI . '?mod=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a> | ' .
+                    '<a href="' . Vars::$URI . '?mod=edit&amp;id=' . $res['id'] . '">' . lng('edit') . '</a> | ' .
+                    '<a href="' . Vars::$URI . '?mod=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>' .
                     '</div></div>';
                 ++$i;
             }
         }
-        echo '<div class="gmenu">' .
-            '<form action="index.php?act=forum&amp;mod=add' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '" method="post">' .
+        echo'<div class="gmenu">' .
+            '<form action="' . Vars::$URI . '?mod=add' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '" method="post">' .
             '<input type="submit" value="' . lng('add') . '" />' .
             '</form></div>' .
-            '<div class="phdr">' . (Vars::$MOD == 'cat' && Vars::$ID ? '<a href="index.php?act=forum&amp;mod=cat">' . lng('category_list') . '</a>' : '<a href="index.php?act=forum">' . lng('forum_management') . '</a>') . '</div>';
+            '<div class="phdr">' . (Vars::$MOD == 'cat' && Vars::$ID ? '<a href="' . Vars::$URI . '?mod=cat">' . lng('category_list') . '</a>' : '<a href="' . Vars::$URI . '">' . lng('forum_management') . '</a>') . '</div>';
         break;
 
     case 'htopics':
@@ -480,7 +480,7 @@ switch (Vars::$MOD) {
         } else {
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1' $sort"), 0);
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=htopics&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-            $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`datereg`
+            $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
             FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
             WHERE `forum`.`type` = 't' AND `forum`.`close` = '1' $sort ORDER BY `forum`.`id` DESC " . Vars::db_pagination());
             if (mysql_num_rows($req)) {
@@ -497,8 +497,8 @@ switch (Vars::$MOD) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo Functions::displayUser($res, array(
                         'header' => $ttime,
-                        'body' => $text,
-                        'sub' => $subtext
+                        'body'   => $text,
+                        'sub'    => $subtext
                     ));
                     echo '</div>';
                     ++$i;
@@ -561,7 +561,7 @@ switch (Vars::$MOD) {
         } else {
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1' $sort"), 0);
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=hposts&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-            $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`datereg`
+            $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
             FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
             WHERE `forum`.`type` = 'm' AND `forum`.`close` = '1' $sort ORDER BY `forum`.`id` DESC " . Vars::db_pagination());
             if (mysql_num_rows($req)) {
@@ -581,8 +581,8 @@ switch (Vars::$MOD) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo Functions::displayUser($res, array(
                         'header' => $posttime,
-                        'body' => $text,
-                        'sub' => $subtext
+                        'body'   => $text,
+                        'sub'    => $subtext
                     ));
                     echo '</div>';
                     ++$i;
@@ -689,21 +689,21 @@ switch (Vars::$MOD) {
         $total_msg_del = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'"), 0);
         $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
         $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'"), 0);
-        echo '<div class="phdr"><a href="index.php"><b>' . lng('admin_panel') . '</b></a> | ' . lng('forum_management') . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$HOME_URL . '/admin"><b>' . lng('admin_panel') . '</b></a> | ' . lng('forum_management') . '</div>' .
             '<div class="gmenu"><p><h3>' . Functions::getImage('rating.png', '', 'class="left"') . '&nbsp;' . lng('statistics') . '</h3><ul>' .
             '<li>' . lng('categories') . ':&#160;' . $total_cat . '</li>' .
             '<li>' . lng('sections') . ':&#160;' . $total_sub . '</li>' .
             '<li>' . lng('themes') . ':&#160;' . $total_thm . '&#160;/&#160;<span class="red">' . $total_thm_del . '</span></li>' .
-            '<li>Посты:&#160;' . $total_msg . '&#160;/&#160;<span class="red">' . $total_msg_del . '</span></li>' .
+            '<li>' . lng('posts_adm') . ':&#160;' . $total_msg . '&#160;/&#160;<span class="red">' . $total_msg_del . '</span></li>' .
             '<li>' . lng('files') . ':&#160;' . $total_files . '</li>' .
             '<li>' . lng('votes') . ':&#160;' . $total_votes . '</li>' .
             '</ul></p></div>' .
             '<div class="menu"><p><h3>' . Functions::getImage('settings.png', '', 'class="left"') . '&#160;' . lng('settings') . '</h3><ul>' .
-            '<li><a href="index.php?act=forum&amp;mod=cat"><b>' . lng('forum_structure') . '</b></a></li>' .
-            '<li><a href="index.php?act=forum&amp;mod=hposts">' . lng('hidden_posts') . '</a> (' . $total_msg_del . ')</li>' .
-            '<li><a href="index.php?act=forum&amp;mod=htopics">' . lng('hidden_topics') . '</a> (' . $total_thm_del . ')</li>' .
-            '<li><a href="index.php?act=forum&amp;mod=moders">' . lng('moders') . '</a></li>' .
+            '<li><a href="' . Vars::$URI . '?mod=cat"><b>' . lng('forum_structure') . '</b></a></li>' .
+            '<li><a href="' . Vars::$URI . '?mod=hposts">' . lng('hidden_posts') . '</a> (' . $total_msg_del . ')</li>' .
+            '<li><a href="' . Vars::$URI . '?mod=htopics">' . lng('hidden_topics') . '</a> (' . $total_thm_del . ')</li>' .
+            '<li><a href="' . Vars::$URI . '?mod=moders">' . lng('moders') . '</a></li>' .
             '</ul></p></div>' .
-            '<div class="phdr"><a href="../forum/index.php">' . lng('to_forum') . '</a></div>';
+            '<div class="phdr"><a href="' . Vars::$MODULE_URI . '">' . lng('to_forum') . '</a></div>';
 }
-echo '<p><a href="index.php">' . lng('admin_panel') . '</a></p>';
+echo '<p><a href="' . Vars::$HOME_URL . '/admin">' . lng('admin_panel') . '</a></p>';
