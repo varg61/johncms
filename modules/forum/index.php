@@ -17,7 +17,7 @@ if (isset($_SESSION['ref']))
 Настройки форума
 -----------------------------------------------------------------
 */
-if (!Vars::$USER_ID || ($set_forum = Vars::getUserData('set_forum')) === false) {
+if (!Vars::$USER_ID || ($set_forum = Vars::getUserData('set_forum')) === FALSE) {
     $set_forum = array(
         'farea'    => 0,
         'upfp'     => 0,
@@ -108,22 +108,22 @@ if ($error) {
 Заголовки страниц форума
 -----------------------------------------------------------------
 */
-//if (!Vars::$ID) {
-//    $textl = '' . lng('forum') . '';
-//} else {
-//    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= " . Vars::$ID);
-//    $res = mysql_fetch_assoc($req);
-//    $hdr = strtr($res['text'], array(
-//        '&quot;' => '',
-//        '&amp;' => '',
-//        '&lt;' => '',
-//        '&gt;' => '',
-//        '&#039;' => ''
-//    ));
-//    $hdr = mb_substr($hdr, 0, 30);
-//    $hdr = Validate::filterString($hdr);
-//    $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
-//}
+if (!Vars::$ID) {
+    $textl = '' . lng('forum') . '';
+} else {
+    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= " . Vars::$ID);
+    $res = mysql_fetch_assoc($req);
+    $hdr = strtr($res['text'], array(
+        '&quot;' => '',
+        '&amp;'  => '',
+        '&lt;'   => '',
+        '&gt;'   => '',
+        '&#039;' => ''
+    ));
+    $hdr = mb_substr($hdr, 0, 30);
+    $hdr = Validate::filterString($hdr);
+    $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
+}
 
 /*
 -----------------------------------------------------------------
@@ -158,7 +158,7 @@ $mods = array(
     'who',
     'curators'
 );
-if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exists('includes/' . $mods[$key] . '.php')) {
+if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== FALSE && file_exists('includes/' . $mods[$key] . '.php')) {
     require_once('includes/' . $mods[$key] . '.php');
 } else {
     /*
@@ -209,9 +209,9 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         Получаем структуру форума
         -----------------------------------------------------------------
         */
-        $res = true;
+        $res = TRUE;
         $parent = $type1['refid'];
-        while ($parent != '0' && $res != false) {
+        while ($parent != '0' && $res != FALSE) {
             $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
             $res = mysql_fetch_assoc($req);
             if ($res['type'] == 'f' || $res['type'] == 'r')
@@ -242,7 +242,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
             if ($count > 0)
                 $filelink = '<a href="index.php?act=files&amp;t=' . Vars::$ID . '">' . lng('files_topic') . '</a>';
         }
-        $filelink = isset($filelink) ? $filelink . '&#160;<span class="red">(' . $count . ')</span>' : false;
+        $filelink = isset($filelink) ? $filelink . '&#160;<span class="red">(' . $count . ')</span>' : FALSE;
 
         /*
         -----------------------------------------------------------------
@@ -250,7 +250,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         -----------------------------------------------------------------
         */
         //TODO: Доработать!
-        $wholink = false;
+        $wholink = FALSE;
 //        if (Vars::$user_id && $type1['type'] == 't') {
 //            $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `last_visit` > " . (time() - 300) . " AND `place` = 'forum,$id'"), 0);
 //            $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `last_visit` > " . (time() - 300) . " AND `place` = 'forum,$id'"), 0);
@@ -263,8 +263,8 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         -----------------------------------------------------------------
         */
         echo '<p>' . Counters::forumCountNew(1) . '</p>' .
-             '<div class="phdr">' . Functions::displayMenu($tree) . '</div>' .
-             '<div class="topmenu"><a href="' . Vars::$URI . '/search.php?id=' . Vars::$ID . '">' . lng('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
+            '<div class="phdr">' . Functions::displayMenu($tree) . '</div>' .
+            '<div class="topmenu"><a href="' . Vars::$URI . '/search.php?id=' . Vars::$ID . '">' . lng('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
         /*
         -----------------------------------------------------------------
@@ -282,7 +282,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                 $total = mysql_num_rows($req);
                 if ($total) {
                     $i = 0;
-                    while (($res = mysql_fetch_assoc($req)) !== false) {
+                    while (($res = mysql_fetch_assoc($req)) !== FALSE) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
                         echo '<a href="?id=' . $res['id'] . '">' . $res['text'] . '</a>';
@@ -315,7 +315,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                 if ($total) {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " AND `refid` = " . Vars::$ID . " ORDER BY `vip` DESC, `time` DESC " . Vars::db_pagination());
                     $i = 0;
-                    while (($res = mysql_fetch_assoc($req)) !== false) {
+                    while (($res = mysql_fetch_assoc($req)) !== FALSE) {
                         if ($res['close'])
                             echo '<div class="rmenu">';
                         else
@@ -354,10 +354,10 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                 echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
                 if ($total > Vars::$USER_SET['page_size']) {
                     echo '<div class="topmenu">' . Functions::displayPagination('index.php?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                         '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
-                         '<input type="text" name="page" size="2"/>' .
-                         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
-                         '</form></p>';
+                        '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
+                        '<input type="text" name="page" size="2"/>' .
+                        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+                        '</form></p>';
                 }
                 break;
 
@@ -419,15 +419,15 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                     if (!$type1['edit'] && !isset($_GET['vote_result']) && Vars::$USER_ID && $vote_user == 0) {
                         // Выводим форму с опросами
                         echo '<form action="index.php?act=vote&amp;id=' . Vars::$ID . '" method="post">';
-                        while (($vote = mysql_fetch_assoc($vote_result)) !== false) {
+                        while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . Validate::filterString($vote['name'], 0, 1) . '<br />';
                         }
                         echo '<p><input type="submit" name="submit" value="' . lng('vote') . '"/><br /><a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
-                             '">' . lng('results') . '</a></p></form></div>';
+                            '">' . lng('results') . '</a></p></form></div>';
                     } else {
                         // Выводим результаты голосования
                         echo '<small>';
-                        while (($vote = mysql_fetch_assoc($vote_result)) !== false) {
+                        while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
                             $count_vote = $topic_vote['count'] ? round(100 / $topic_vote['count'] * $vote['count']) : 0;
                             echo Validate::filterString($vote['name'], 0, 1) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="vote_img.php?img=' . $count_vote . '" alt="' . lng('rating') . ': ' . $count_vote . '%" /><br />';
@@ -443,9 +443,9 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                     }
                 }
                 $curators = !empty($type1['curators']) ? unserialize($type1['curators']) : array();
-                $curator = false;
+                $curator = FALSE;
                 if (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 3 && Vars::$USER_ID) {
-                    if (array_key_exists(Vars::$USER_ID, $curators)) $curator = true;
+                    if (array_key_exists(Vars::$USER_ID, $curators)) $curator = TRUE;
                 }
                 /*
                 -----------------------------------------------------------------
@@ -461,8 +461,8 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                     echo '<div class="topmenu"><p>';
                     if (Vars::$USER_ID && Vars::$USER_ID != $postres['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
-                             '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '"> ' . lng('reply_btn') . '</a> ' .
-                             '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> ' . lng('cytate_btn') . '</a> ';
+                            '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '"> ' . lng('reply_btn') . '</a> ' .
+                            '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> ' . lng('cytate_btn') . '</a> ';
                     } else {
                         echo '<b>' . $postres['from'] . '</b> ';
                     }
@@ -500,13 +500,13 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                     echo '<div class="gmenu"><form name="form1" action="index.php?act=say&amp;id=' . Vars::$ID . '" method="post">';
                     if ($set_forum['farea']) {
                         echo '<p>' .
-                             (!Vars::$IS_MOBILE ? TextParser::autoBB('form1', 'msg') : '') .
-                             '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg"></textarea></p>' .
-                             '<p><input type="checkbox" name="addfiles" value="1" /> ' . lng('add_file') .
-                             (Vars::$USER_SET['translit'] ? '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . lng('translit') : '') .
-                             '</p><p><input type="submit" name="submit" value="' . lng('write') . '" style="width: 107px; cursor: pointer;"/> ' .
-                             ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
-                             '</p></form></div>';
+                            (!Vars::$IS_MOBILE ? TextParser::autoBB('form1', 'msg') : '') .
+                            '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg"></textarea></p>' .
+                            '<p><input type="checkbox" name="addfiles" value="1" /> ' . lng('add_file') .
+                            (Vars::$USER_SET['translit'] ? '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . lng('translit') : '') .
+                            '</p><p><input type="submit" name="submit" value="' . lng('write') . '" style="width: 107px; cursor: pointer;"/> ' .
+                            ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                            '</p></form></div>';
                     } else {
                         echo '<p><input type="submit" name="submit" value="' . lng('write') . '"/></p></form></div>';
                     }
@@ -550,7 +550,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                     // Ссылки на ответ и цитирование
                     if (Vars::$USER_ID && Vars::$USER_ID != $res['user_id']) {
                         echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '">' . lng('reply_btn') . '</a>&#160;' .
-                             '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt">' . lng('cytate_btn') . '</a> ';
+                            '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt">' . lng('cytate_btn') . '</a> ';
                     }
                     // Время поста
                     echo ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br />';
@@ -640,8 +640,8 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                         if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                             if ($res['ip_via_proxy']) {
                                 echo '<div class="gray"><b class="red"><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a></b> - ' .
-                                     '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($res['ip_via_proxy']) . '">' . long2ip($res['ip_via_proxy']) . '</a>' .
-                                     ' - ' . $res['soft'] . '</div>';
+                                    '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($res['ip_via_proxy']) . '">' . long2ip($res['ip_via_proxy']) . '</a>' .
+                                    ' - ' . $res['soft'] . '</div>';
                             } else {
                                 echo '<div class="gray"><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a> - ' . $res['soft'] . '</div>';
                             }
@@ -663,24 +663,24 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                         if (!Vars::$IS_MOBILE)
                             echo TextParser::autoBB('form2', 'msg');
                         echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg"></textarea><br/></p>' .
-                             '<p><input type="checkbox" name="addfiles" value="1" /> ' . lng('add_file');
+                            '<p><input type="checkbox" name="addfiles" value="1" /> ' . lng('add_file');
                         if (Vars::$USER_SET['translit'])
                             echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . lng('translit');
                         echo '</p><p><input type="submit" name="submit" value="' . lng('write') . '" style="width: 107px; cursor: pointer;"/> ' .
-                             ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
-                             '</p></form></div>';
+                            ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                            '</p></form></div>';
                     } else {
                         echo '<p><input type="submit" name="submit" value="' . lng('write') . '"/></p></form></div>';
                     }
                 }
                 echo '<div class="phdr"><a name="down" id="down"></a><a href="#up">' . Functions::getImage('up.png') . '</a>' .
-                     '&#160;&#160;' . lng('total') . ': ' . $colmes . '</div>';
+                    '&#160;&#160;' . lng('total') . ': ' . $colmes . '</div>';
                 if ($colmes > Vars::$USER_SET['page_size']) {
                     echo '<div class="topmenu">' . Functions::displayPagination('index.php?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>' .
-                         '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
-                         '<input type="text" name="page" size="2"/>' .
-                         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
-                         '</form></p>';
+                        '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
+                        '<input type="text" name="page" size="2"/>' .
+                        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+                        '</form></p>';
                 } else {
                     echo '<br />';
                 }
@@ -700,8 +700,8 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
                     if (Vars::$USER_RIGHTS >= 7)
                         echo '<a href="index.php?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('curators_of_the_topic') . '</a><br />';
                     echo isset($topic_vote) && $topic_vote > 0
-                            ? '<a href="index.php?act=editvote&amp;id=' . Vars::$ID . '">' . lng('edit_vote') . '</a><br/><a href="index.php?act=delvote&amp;id=' . Vars::$ID . '">' . lng('delete_vote') . '</a><br/>'
-                            : '<a href="index.php?act=addvote&amp;id=' . Vars::$ID . '">' . lng('add_vote') . '</a><br/>';
+                        ? '<a href="index.php?act=editvote&amp;id=' . Vars::$ID . '">' . lng('edit_vote') . '</a><br/><a href="index.php?act=delvote&amp;id=' . Vars::$ID . '">' . lng('delete_vote') . '</a><br/>'
+                        : '<a href="index.php?act=addvote&amp;id=' . Vars::$ID . '">' . lng('add_vote') . '</a><br/>';
                     echo '<a href="index.php?act=ren&amp;id=' . Vars::$ID . '">' . lng('topic_rename') . '</a><br/>';
                     // Закрыть - открыть тему
                     if ($type1['edit'] == 1)
@@ -743,19 +743,21 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== false && file_exi
         -----------------------------------------------------------------
         */
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . (Vars::$USER_RIGHTS >= 7 ? '' : " WHERE `del` != '1'")), 0);
-        echo '<p>{}</p>' .
-             '<div class="phdr"><b>' . lng('forum') . '</b></div>' .
-             '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . lng('search') . '</a> | <a href="index.php?act=files">' . lng('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
+        echo '<p>' . Counters::forumCountNew(1) . '</p>' .
+            '<div class="phdr"><b>' . lng('forum') . '</b></div>' .
+            '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . lng('search') . '</a> | <a href="index.php?act=files">' . lng('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
-        $i = 0;
-        while (($res = mysql_fetch_array($req)) !== false) {
-            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
-            echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
-            if (!empty($res['soft']))
-                echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
-            echo '</div>';
-            ++$i;
+        if (mysql_num_rows($req)) {
+            for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
+                echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
+                if (!empty($res['soft']))
+                    echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
+                echo '</div>';
+            }
+        } else {
+            echo'<div class="menu"><p>' . lng('list_empty') . '</p></div>';
         }
         //TODO: Доработать счетчики
         $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `session_timestamp` > " . (time() - 300) . " AND `place` LIKE 'forum%'"), 0);

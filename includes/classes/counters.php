@@ -11,22 +11,22 @@
 
 class Counters extends Vars
 {
-    public $users; // Зарегистрированные пользователи
-    public $users_new; // Новые зарегистрированные пользователи
-    public $album; // Пользовательские альбомы
-    public $album_photo; // Пользовательские фотографии
-    public $album_photo_new; // Новые пользовательские фотографии
-    public $downloads; // Счетчик файлов в Загруз-центре
-    public $downloads_new; // Счетчик новых файлов в Загруз-центре
-    public $forum_topics; // Счетчик топиков Форума
-    public $forum_messages; // Счетчик постов Форума
-    public $library; // Счетчик статей Библиотеки
-    public $library_new; // Счетчик новых статей Библиотеки
-    public $library_mod; // Счетчик статей Библиотеки, находящихся на модерации
-    public $gallery; // Счетчик картинок в Галерее
-    public $gallery_new; // Счетчик новых картинок в Галерее
-    public $guestbook; // Счетчик постов в Гостевой за последние сутки
-    public $adminclub; // Счетчик постов в Админ-клубе за последние сутки
+    public $users;                     // Зарегистрированные пользователи
+    public $users_new;                 // Новые зарегистрированные пользователи
+    public $album;                     // Пользовательские альбомы
+    public $album_photo;               // Пользовательские фотографии
+    public $album_photo_new;           // Новые пользовательские фотографии
+    public $downloads;                 // Счетчик файлов в Загруз-центре
+    public $downloads_new;             // Счетчик новых файлов в Загруз-центре
+    public $forum_topics;              // Счетчик топиков Форума
+    public $forum_messages;            // Счетчик постов Форума
+    public $library;                   // Счетчик статей Библиотеки
+    public $library_new;               // Счетчик новых статей Библиотеки
+    public $library_mod;               // Счетчик статей Библиотеки, находящихся на модерации
+    public $gallery;                   // Счетчик картинок в Галерее
+    public $gallery_new;               // Счетчик новых картинок в Галерее
+    public $guestbook;                 // Счетчик постов в Гостевой за последние сутки
+    public $adminclub;                 // Счетчик постов в Админ-клубе за последние сутки
 
     private $cache_file = 'cache_counters.dat';
     private $update_cache = false;
@@ -74,14 +74,39 @@ class Counters extends Vars
 
     /*
     -----------------------------------------------------------------
+    Счетчик не прочитанных тем Форума
+    -----------------------------------------------------------------
+    */
+    public static function forumCountNew($mod = 0){
+        if (Vars::$USER_ID) {
+            $req = mysql_query("SELECT COUNT(*) FROM `forum`
+                LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . Vars::$USER_ID . "'
+                WHERE `forum`.`type`='t'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "
+                AND (`cms_forum_rdm`.`topic_id` Is Null
+                OR `forum`.`time` > `cms_forum_rdm`.`time`)");
+            $total = mysql_result($req, 0);
+            if ($mod)
+                return '<a href="index.php?act=new">' . lng('unread') . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
+            else
+                return $total;
+        } else {
+            if ($mod)
+                return '<a href="index.php?act=new">' . lng('last_activity') . '</a>';
+            else
+                return false;
+        }
+    }
+
+    /*
+    -----------------------------------------------------------------
     Счетчик посетителей Онлайн
     -----------------------------------------------------------------
     */
     public static function usersOnline()
     {
         $sql = "AND `session_timestamp` > " . (time() - 300);
-        $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 $sql"), 0);
-        $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 $sql"), 0);
+        $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 " . $sql), 0);
+        $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 " . $sql), 0);
         return (parent::$USER_ID || parent::$USER_SYS['view_online']
             ? '<a href="' . parent::$HOME_URL . '/online">' . lng('online') . ': ' . $users . ' / ' . $guests . '</a>'
             : lng('online') . ': ' . $users . ' / ' . $guests);
