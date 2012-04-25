@@ -130,49 +130,53 @@ if (!Vars::$ID) {
 Переключаем режимы работы
 -----------------------------------------------------------------
 */
-$mods = array(
-    'addfile',
-    'addvote',
-    'close',
-    'deltema',
-    'delvote',
-    'editpost',
-    'editvote',
-    'file',
-    'files',
-    'filter',
-    'loadtem',
-    'massdel',
-    'moders',
-    'new',
-    'nt',
-    'per',
-    'post',
-    'ren',
-    'restore',
-    'say',
-    'tema',
-    'users',
-    'vip',
-    'vote',
-    'who',
-    'curators'
+$actions = array(
+    'addfile'  => 'addfile.php',
+    'addvote'  => 'addvote.php',
+    'close'    => 'close.php',
+    'curators' => 'curators.php',
+    'deltema'  => 'deltema.php',
+    'delvote'  => 'delvote.php',
+    'editpost' => 'editpost.php',
+    'editvote' => 'editvote.php',
+    'file'     => 'file.php',
+    'files'    => 'files.php',
+    'filter'   => 'filter.php',
+    'loadtem'  => 'loadtem.php',
+    'massdel'  => 'massdel.php',
+    'moders'   => 'moders.php',
+    'nt'       => 'nt.php',
+    'per'      => 'per.php',
+    'post'     => 'post.php',
+    'ren'      => 'ren.php',
+    'restore'  => 'restore.php',
+    'say'      => 'say.php',
+    'tema'     => 'tema.php',
+    'users'    => 'users.php',
+    'vip'      => 'vip.php',
+    'vote'     => 'vote.php',
+    'who'      => 'who.php'
 );
-if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== FALSE && file_exists('includes/' . $mods[$key] . '.php')) {
-    require_once('includes/' . $mods[$key] . '.php');
+if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
+    require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     /*
     -----------------------------------------------------------------
     Если форум закрыт, то для Админов выводим напоминание
     -----------------------------------------------------------------
     */
-    if (!Vars::$SYSTEM_SET['mod_forum']) echo '<div class="alarm">' . lng('forum_closed') . '</div>';
-    elseif (Vars::$SYSTEM_SET['mod_forum'] == 3) echo '<div class="rmenu">' . lng('read_only') . '</div>';
+    if (!Vars::$SYSTEM_SET['mod_forum']) {
+        echo '<div class="alarm">' . lng('forum_closed') . '</div>';
+    } elseif (Vars::$SYSTEM_SET['mod_forum'] == 3) {
+        echo '<div class="rmenu">' . lng('read_only') . '</div>';
+    }
     if (!Vars::$USER_ID) {
-        if (isset($_GET['newup']))
+        if (isset($_GET['newup'])) {
             $_SESSION['uppost'] = 1;
-        if (isset($_GET['newdown']))
+        }
+        if (isset($_GET['newdown'])) {
             $_SESSION['uppost'] = 0;
+        }
     }
     if (Vars::$ID) {
         /*
@@ -743,7 +747,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $mods)) !== FALSE && file_exi
         -----------------------------------------------------------------
         */
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . (Vars::$USER_RIGHTS >= 7 ? '' : " WHERE `del` != '1'")), 0);
-        echo '<p>' . Counters::forumCountNew(1) . '</p>' .
+        echo'<p>' . Counters::forumCountNew(1) . '</p>' .
             '<div class="phdr"><b>' . lng('forum') . '</b></div>' .
             '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . lng('search') . '</a> | <a href="index.php?act=files">' . lng('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");

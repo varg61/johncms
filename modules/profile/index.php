@@ -21,7 +21,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (Vars::$USER_ID) {
-    if (($user = Vars::getUser()) === false) {
+    if (($user = Vars::getUser()) === FALSE) {
         echo Functions::displayError(lng('user_does_not_exist'));
         exit;
     }
@@ -39,9 +39,7 @@ $actions = array(
     'settings' => 'settings.php',
 );
 
-if (isset($actions[Vars::$ACT])
-    && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])
-) {
+if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     switch (Vars::$ACT) {
@@ -79,24 +77,24 @@ if (isset($actions[Vars::$ACT])
 
             $tpl->userarg = array(
                 'lastvisit' => 1,
-                'iphist' => 1,
-                'header' => '<b>ID:' . $user['id'] . '</b>',
-                'footer' => ($user['id'] != Vars::$USER_ID
+                'iphist'    => 1,
+                'header'    => '<b>ID:' . $user['id'] . '</b>',
+                'footer'    => ($user['id'] != Vars::$USER_ID
                     ? '<span class="gray">' . lng('where') . ':</span> ' . Functions::displayPlace($user['id'], $user['place'])
-                    : false)
+                    : FALSE)
             );
 
-            if($user['id'] != Vars::$USER_ID) {
+            if ($user['id'] != Vars::$USER_ID) {
                 //Управление друзьями
                 $tpl->friend = Functions::checkFriend($user['id']);
-                
+
                 //Управление контактами
                 $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $user['id'] . "'");
                 $tpl->num_cont = mysql_num_rows($contacts);
-                if($tpl->num_cont) {
-                	$rows = mysql_fetch_assoc($contacts);
-                	$tpl->banned = $rows['banned'];
-                	if($rows['delete'] == 1) $tpl->num_cont = 0;
+                if ($tpl->num_cont) {
+                    $rows = mysql_fetch_assoc($contacts);
+                    $tpl->banned = $rows['banned'];
+                    if ($rows['delete'] == 1) $tpl->num_cont = 0;
                 }
             }
             //Подключаем шаблон profile

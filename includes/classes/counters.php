@@ -11,25 +11,25 @@
 
 class Counters extends Vars
 {
-    public $users;                     // Зарегистрированные пользователи
-    public $users_new;                 // Новые зарегистрированные пользователи
-    public $album;                     // Пользовательские альбомы
-    public $album_photo;               // Пользовательские фотографии
-    public $album_photo_new;           // Новые пользовательские фотографии
-    public $downloads;                 // Счетчик файлов в Загруз-центре
-    public $downloads_new;             // Счетчик новых файлов в Загруз-центре
-    public $forum_topics;              // Счетчик топиков Форума
-    public $forum_messages;            // Счетчик постов Форума
-    public $library;                   // Счетчик статей Библиотеки
-    public $library_new;               // Счетчик новых статей Библиотеки
-    public $library_mod;               // Счетчик статей Библиотеки, находящихся на модерации
-    public $gallery;                   // Счетчик картинок в Галерее
-    public $gallery_new;               // Счетчик новых картинок в Галерее
-    public $guestbook;                 // Счетчик постов в Гостевой за последние сутки
-    public $adminclub;                 // Счетчик постов в Админ-клубе за последние сутки
+    public $users; // Зарегистрированные пользователи
+    public $users_new; // Новые зарегистрированные пользователи
+    public $album; // Пользовательские альбомы
+    public $album_photo; // Пользовательские фотографии
+    public $album_photo_new; // Новые пользовательские фотографии
+    public $downloads; // Счетчик файлов в Загруз-центре
+    public $downloads_new; // Счетчик новых файлов в Загруз-центре
+    public $forum_topics; // Счетчик топиков Форума
+    public $forum_messages; // Счетчик постов Форума
+    public $library; // Счетчик статей Библиотеки
+    public $library_new; // Счетчик новых статей Библиотеки
+    public $library_mod; // Счетчик статей Библиотеки, находящихся на модерации
+    public $gallery; // Счетчик картинок в Галерее
+    public $gallery_new; // Счетчик новых картинок в Галерее
+    public $guestbook; // Счетчик постов в Гостевой за последние сутки
+    public $adminclub; // Счетчик постов в Админ-клубе за последние сутки
 
     private $cache_file = 'cache_counters.dat';
-    private $update_cache = false;
+    private $update_cache = FALSE;
 
     function __construct()
     {
@@ -77,7 +77,8 @@ class Counters extends Vars
     Счетчик не прочитанных тем Форума
     -----------------------------------------------------------------
     */
-    public static function forumCountNew($mod = 0){
+    public static function forumCountNew($mod = 0)
+    {
         if (Vars::$USER_ID) {
             $req = mysql_query("SELECT COUNT(*) FROM `forum`
                 LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . Vars::$USER_ID . "'
@@ -85,15 +86,17 @@ class Counters extends Vars
                 AND (`cms_forum_rdm`.`topic_id` Is Null
                 OR `forum`.`time` > `cms_forum_rdm`.`time`)");
             $total = mysql_result($req, 0);
-            if ($mod)
-                return '<a href="index.php?act=new">' . lng('unread') . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
-            else
+            if ($mod) {
+                return '<a href="' . Vars::$HOME_URL . '/forum/new">' . lng('unread') . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
+            } else {
                 return $total;
+            }
         } else {
-            if ($mod)
-                return '<a href="index.php?act=new">' . lng('last_activity') . '</a>';
-            else
-                return false;
+            if ($mod) {
+                return '<a href="' . Vars::$HOME_URL . '/forum/new">' . lng('last_activity') . '</a>';
+            } else {
+                return FALSE;
+            }
         }
     }
 
@@ -131,7 +134,7 @@ class Counters extends Vars
             fclose($in);
             return $out;
         }
-        return false;
+        return FALSE;
     }
 
     /*
@@ -159,7 +162,7 @@ class Counters extends Vars
     private function _users(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
             $var['time'] = time();
         }
@@ -174,7 +177,7 @@ class Counters extends Vars
     private function _usersNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `join_date` > '" . (time() - 86400) . "'"), 0);
             $var['time'] = time();
         }
@@ -189,7 +192,7 @@ class Counters extends Vars
     private function _album(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
             $var['time'] = time();
         }
@@ -204,7 +207,7 @@ class Counters extends Vars
     private function _albumPhoto(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files`"), 0);
             $var['time'] = time();
         }
@@ -219,7 +222,7 @@ class Counters extends Vars
     private function _albumPhotoNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
             $var['time'] = time();
         }
@@ -234,7 +237,7 @@ class Counters extends Vars
     private function _downloads(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file'"), 0);
             $var['time'] = time();
         }
@@ -249,7 +252,7 @@ class Counters extends Vars
     private function _downloadsNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0);
             $var['time'] = time();
         }
@@ -264,7 +267,7 @@ class Counters extends Vars
     private function _forumTopics(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` != '1'"), 0);
             $var['time'] = time();
         }
@@ -279,7 +282,7 @@ class Counters extends Vars
     private function _forumMessages(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1'"), 0);
             $var['time'] = time();
         }
@@ -294,7 +297,7 @@ class Counters extends Vars
     public static function forumMessagesNew()
     {
         if (!Vars::$USER_ID) {
-            return false;
+            return FALSE;
         }
         return mysql_result(mysql_query("SELECT COUNT(*) FROM `forum`
                 LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . Vars::$USER_ID . "'
@@ -311,7 +314,7 @@ class Counters extends Vars
     private function _library(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
             $var['time'] = time();
         }
@@ -326,7 +329,7 @@ class Counters extends Vars
     private function _libraryNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
             $var['time'] = time();
         }
@@ -341,7 +344,7 @@ class Counters extends Vars
     private function _libraryMod(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
             $var['time'] = time();
         }
@@ -356,7 +359,7 @@ class Counters extends Vars
     private function _gallery(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft'"), 0);
             $var['time'] = time();
         }
@@ -371,7 +374,7 @@ class Counters extends Vars
     private function _galleryNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'ft'"), 0);
             $var['time'] = time();
         }
@@ -386,7 +389,7 @@ class Counters extends Vars
     private function _guestBook(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 60) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . (time() - 86400) . "'"), 0);
             $var['time'] = time();
         }
@@ -401,7 +404,7 @@ class Counters extends Vars
     private function _adminClub(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 60) {
-            $this->update_cache = true;
+            $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time` > '" . (time() - 86400) . "'"), 0);
             $var['time'] = time();
         }
