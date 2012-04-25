@@ -11,8 +11,6 @@
  * Главное меню сайта
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
-
 $tpl = Template::getInstance();
 
-$tpl->contents = $tpl->includeTpl('index');
+$tpl->contents = $tpl->includeTpl('tags');

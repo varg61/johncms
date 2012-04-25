@@ -144,7 +144,6 @@ $actions = array(
     'filter'   => 'filter.php',
     'loadtem'  => 'loadtem.php',
     'massdel'  => 'massdel.php',
-    'moders'   => 'moders.php',
     'nt'       => 'nt.php',
     'per'      => 'per.php',
     'post'     => 'post.php',
@@ -774,8 +773,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     // Навигация внизу страницы
     echo '<p>' . (Vars::$ID ? '<a href="index.php">' . lng('to_forum') . '</a><br />' : '');
     if (!Vars::$ID) {
-        echo '<a href="../pages/faq.php?act=forum">' . lng('forum_rules') . '</a><br/>';
-        echo '<a href="index.php?act=moders">' . lng('moders') . '</a>';
+        echo'<a href="' . Vars::$URI . '/rules">' . lng('forum_rules') . '</a><br/>';
+        if (Vars::$USER_RIGHTS >= 7) {
+            echo'<a href="' . Vars::$URI . '/admin">' . lng('admin_panel') . '</a><br/>';
+        }
     }
     echo '</p>';
     if (!Vars::$USER_ID) {

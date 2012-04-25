@@ -7,12 +7,8 @@
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
- *
- * Главное меню сайта
  */
-
-defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
 
-$tpl->contents = $tpl->includeTpl('index');
+$tpl->contents = $tpl->includeTpl('rules');
