@@ -223,7 +223,7 @@ switch (Vars::$MOD) {
                 `text` = '" . mysql_real_escape_string($name) . "',
                 `soft` = '" . mysql_real_escape_string($desc) . "',
                 `realid` = '$sort'");
-                header('Location: index.php?act=forum&mod=cat' . (Vars::$ID ? '&id=' . Vars::$ID : ''));
+                header('Location: ' . Vars::$URI . '?mod=cat' . (Vars::$ID ? '&id=' . Vars::$ID : ''));
             } else {
                 // Выводим сообщение об ошибках
                 echo Functions::displayError($error);
@@ -392,19 +392,18 @@ switch (Vars::$MOD) {
             echo '<div class="bmenu"><a href="' . Vars::$URI . '?mod=cat"><b>' . $res['text'] . '</b></a> | ' . lng('section_list') . '</div>';
             $req = mysql_query("SELECT * FROM `forum` WHERE `refid` = " . Vars::$ID . " AND `type` = 'r' ORDER BY `realid` ASC");
             if (mysql_num_rows($req)) {
-                while ($res = mysql_fetch_assoc($req)) {
+                for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b>' . $res['text'] . '</b>' .
                         '&#160;<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '">&gt;&gt;</a>';
                     if (!empty($res['soft']))
                         echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
-                    echo '<div class="sub">' .
+                    echo'<div class="sub">' .
                         '<a href="' . Vars::$URI . '?mod=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a> | ' .
                         '<a href="' . Vars::$URI . '?mod=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a> | ' .
                         '<a href="' . Vars::$URI . '?mod=edit&amp;id=' . $res['id'] . '">' . lng('edit') . '</a> | ' .
                         '<a href="' . Vars::$URI . '?mod=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>' .
                         '</div></div>';
-                    ++$i;
                 }
             } else {
                 echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';

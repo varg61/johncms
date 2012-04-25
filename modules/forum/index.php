@@ -748,13 +748,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . (Vars::$USER_RIGHTS >= 7 ? '' : " WHERE `del` != '1'")), 0);
         echo'<p>' . Counters::forumCountNew(1) . '</p>' .
             '<div class="phdr"><b>' . lng('forum') . '</b></div>' .
-            '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . lng('search') . '</a> | <a href="index.php?act=files">' . lng('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
+            '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . lng('search') . '</a> | <a href="' . Vars::$URI . '?act=files">' . lng('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         if (mysql_num_rows($req)) {
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
-                echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
+                echo '<a href="' . Vars::$URI . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
                 if (!empty($res['soft']))
                     echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
                 echo '</div>';
