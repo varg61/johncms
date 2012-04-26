@@ -32,7 +32,7 @@ function forum_link($m)
         return '[url=' . $m[1] . ']' . $m[2] . '[/url]';
     } else {
         $p = parse_url($m[3]);
-        if ('http://' . $p['host'] . $p['path'] . '?id=' == Vars::$HOME_URL . '/forum/index.php?id=') {
+        if ('http://' . $p['host'] . $p['path'] . '?id=' == Vars::$HOME_URL . '/forum?id=') {
             $thid = abs(intval(preg_replace('/(.*?)id=/si', '', $m[3])));
             $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
             if (mysql_num_rows($req) > 0) {
@@ -60,7 +60,7 @@ function forum_link($m)
 // Проверка на флуд
 $flood = Functions::antiFlood();
 if ($flood) {
-    echo Functions::displayError(lng('error_flood') . ' ' . $flood . lng('sec') . ', <a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a>');
+    echo Functions::displayError(lng('error_flood') . ' ' . $flood . lng('sec') . ', <a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a>');
     exit;
 }
 $req_r = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'r' LIMIT 1");
@@ -137,23 +137,22 @@ if (isset($_POST['submit'])) {
             `time`='" . time() . "'
         ");
         if ($_POST['addfiles'] == 1)
-            header("Location: index.php?id=$postid&act=addfile");
+            header("Location: " . Vars::$URI . "?id=$postid&act=addfile");
         else
-            header("Location: index.php?id=$rid");
+            header("Location: " . Vars::$URI . "?id=$rid");
     } else {
         // Выводим сообщение об ошибке
-        echo Functions::displayError($error, '<a href="index.php?act=nt&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+        echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
         exit;
     }
 } else {
     $res_r = mysql_fetch_assoc($req_r);
     $req_c = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res_r['refid'] . "'");
     $res_c = mysql_fetch_assoc($req_c);
-    if ($datauser['postforum'] == 0) {
+    if (Vars::$USER_DATA['count_forum'] == 0) {
         if (!isset($_GET['yes'])) {
-            $lng_faq = Vars::loadLanguage('faq');
-            echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
-            echo '<p><a href="index.php?act=nt&amp;id=' . Vars::$ID . '&amp;yes">' . lng('agree') . '</a> | <a href="index.php?id=' . Vars::$ID . '">' . lng('not_agree') . '</a></p>';
+            echo '<p>' . lng('forum_rules_text') . '</p>';
+            echo '<p><a href="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '&amp;yes">' . lng('agree') . '</a> | <a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('not_agree') . '</a></p>';
             exit;
         }
     }
@@ -161,15 +160,14 @@ if (isset($_POST['submit'])) {
     if (Vars::$USER_SET['smileys'])
         $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
     $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
-    echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('new_topic') . '</div>';
+    echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('new_topic') . '</div>';
     if ($msg && $th && !isset($_POST['submit']))
-        //TODO: Разобраться с $datauser
         echo '<div class="list1">' . Functions::getImage('forum_normal.png') . '&#160;<span style="font-weight: bold">' . $th . '</span></div>' .
-             '<div class="list2">' . Functions::displayUser($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>', 'body' => $msg_pre)) . '</div>';
-    echo '<form name="form" action="index.php?act=nt&amp;id=' . Vars::$ID . '" method="post">' .
+             '<div class="list2">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1, 'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>', 'body' => $msg_pre)) . '</div>';
+    echo '<form name="form" action="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '" method="post">' .
          '<div class="gmenu">' .
          '<p><h3>' . lng('section') . '</h3>' .
-         '<a href="index.php?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="index.php?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
+         '<a href="' . Vars::$URI . '?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="' . Vars::$URI . '?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
          '<p><h3>' . lng('new_topic_name') . '</h3>' .
          '<input type="text" size="20" maxlength="100" name="th" value="' . $th . '"/></p>' .
          '<p><h3>' . lng('post') . '</h3>';
@@ -184,5 +182,5 @@ if (isset($_POST['submit'])) {
          '</p></div></form>' .
          '<div class="phdr"><a href="../pages/faq.php?act=trans">' . lng('translit') . '</a> | ' .
          '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-         '<p><a href="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+         '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
 }

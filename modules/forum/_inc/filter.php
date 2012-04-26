@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!Vars::$ID) {
-    echo Functions::displayError(lng('error_wrong_data'), '<a href="index.php">' . lng('to_forum') . '</a>');
+    echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('to_forum') . '</a>');
     exit;
 }
 //TODO: Переделать с $do на $mod
@@ -25,7 +25,7 @@ switch ($do) {
         */
         unset($_SESSION['fsort_id']);
         unset($_SESSION['fsort_users']);
-        header("Location: index.php?id=" . Vars::$ID);
+        header("Location: " . Vars::$URI . "?id=" . Vars::$ID);
         break;
 
     case 'set':
@@ -36,7 +36,7 @@ switch ($do) {
         */
         $users = isset($_POST['users']) ? $_POST['users'] : '';
         if (empty($_POST['users'])) {
-            echo '<div class="rmenu"><p>' . lng('error_author_select') . '<br /><a href="index.php?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p></div>';
+            echo '<div class="rmenu"><p>' . lng('error_author_select') . '<br /><a href="' . Vars::$URI . '?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p></div>';
             exit;
         }
         $array = array();
@@ -45,7 +45,7 @@ switch ($do) {
         }
         $_SESSION['fsort_id'] = Vars::$ID;
         $_SESSION['fsort_users'] = serialize($array);
-        header("Location: index.php?id=" . Vars::$ID);
+        header("Location: " . Vars::$URI . "?id=" . Vars::$ID);
         break;
 
     default :
@@ -58,8 +58,8 @@ switch ($do) {
         $req = mysql_query("SELECT *, COUNT(`from`) AS `count` FROM `forum` WHERE `refid` = " . Vars::$ID . " GROUP BY `from` ORDER BY `from`");
         $total = mysql_num_rows($req);
         if ($total > 0) {
-            echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '"><b>' . lng('forum') . '</b></a> | ' . lng('filter_on_author') . '</div>' .
-                 '<form action="index.php?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;do=set" method="post">';
+            echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '"><b>' . lng('forum') . '</b></a> | ' . lng('filter_on_author') . '</div>' .
+                 '<form action="' . Vars::$URI . '?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;do=set" method="post">';
             while ($res = mysql_fetch_array($req)) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<input type="checkbox" name="users[]" value="' . $res['user_id'] . '"/>&#160;' .
@@ -73,4 +73,4 @@ switch ($do) {
             echo Functions::displayError(lng('error_wrong_data'));
         }
 }
-echo '<p><a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('return_to_topic') . '</a></p>';
+echo '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('return_to_topic') . '</a></p>';

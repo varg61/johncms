@@ -186,7 +186,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         $type = mysql_query("SELECT * FROM `forum` WHERE `id`= " . Vars::$ID);
         if (!mysql_num_rows($type)) {
             // Если темы не существует, показываем ошибку
-            echo Functions::displayError(lng('error_topic_deleted'), '<a href="index.php">' . lng('to_forum') . '</a>');
+            echo Functions::displayError(lng('error_topic_deleted'), '<a href="' . Vars::$URI . '">' . lng('to_forum') . '</a>');
             exit;
         }
         $type1 = mysql_fetch_assoc($type);
@@ -218,10 +218,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
             $res = mysql_fetch_assoc($req);
             if ($res['type'] == 'f' || $res['type'] == 'r')
-                $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
+                $tree[] = '<a href="' . Vars::$URI . '?id=' . $parent . '">' . $res['text'] . '</a>';
             $parent = $res['refid'];
         }
-        $tree[] = '<a href="index.php">' . lng('forum') . '</a>';
+        $tree[] = '<a href="' . Vars::$URI . '">' . lng('forum') . '</a>';
         krsort($tree);
         if ($type1['type'] != 't' && $type1['type'] != 'm')
             $tree[] = '<b>' . $type1['text'] . '</b>';
@@ -235,15 +235,15 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         if ($type1['type'] == 'f') {
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = " . Vars::$ID . $sql), 0);
             if ($count > 0)
-                $filelink = '<a href="index.php?act=files&amp;c=' . Vars::$ID . '">' . lng('files_category') . '</a>';
+                $filelink = '<a href="' . Vars::$URI . '?act=files&amp;c=' . Vars::$ID . '">' . lng('files_category') . '</a>';
         } elseif ($type1['type'] == 'r') {
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID . $sql), 0);
             if ($count > 0)
-                $filelink = '<a href="index.php?act=files&amp;s=' . Vars::$ID . '">' . lng('files_section') . '</a>';
+                $filelink = '<a href="' . Vars::$URI . '?act=files&amp;s=' . Vars::$ID . '">' . lng('files_section') . '</a>';
         } elseif ($type1['type'] == 't') {
             $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID . $sql), 0);
             if ($count > 0)
-                $filelink = '<a href="index.php?act=files&amp;t=' . Vars::$ID . '">' . lng('files_topic') . '</a>';
+                $filelink = '<a href="' . Vars::$URI . '?act=files&amp;t=' . Vars::$ID . '">' . lng('files_topic') . '</a>';
         }
         $filelink = isset($filelink) ? $filelink . '&#160;<span class="red">(' . $count . ')</span>' : FALSE;
 
@@ -257,7 +257,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
 //        if (Vars::$user_id && $type1['type'] == 't') {
 //            $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `last_visit` > " . (time() - 300) . " AND `place` = 'forum,$id'"), 0);
 //            $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `last_visit` > " . (time() - 300) . " AND `place` = 'forum,$id'"), 0);
-//            $wholink = '<a href="index.php?act=who&amp;id=' . $id . '">' . lng('who_here') . '?</a>&#160;<span class="red">(' . $online_u . '&#160;/&#160;' . $online_g . ')</span><br/>';
+//            $wholink = '<a href="' . Vars::$URI . '?act=who&amp;id=' . $id . '">' . lng('who_here') . '?</a>&#160;<span class="red">(' . $online_u . '&#160;/&#160;' . $online_g . ')</span><br/>';
 //        }
 
         /*
@@ -267,7 +267,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         */
         echo '<p>' . Counters::forumCountNew(1) . '</p>' .
             '<div class="phdr">' . Functions::displayMenu($tree) . '</div>' .
-            '<div class="topmenu"><a href="' . Vars::$URI . '/search.php?id=' . Vars::$ID . '">' . lng('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
+            '<div class="topmenu"><a href="' . Vars::$URI . '/search?id=' . Vars::$ID . '">' . lng('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
         /*
         -----------------------------------------------------------------
@@ -313,7 +313,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'")), 0);
                 if ((Vars::$USER_ID && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['11']) && Vars::$SYSTEM_SET['mod_forum'] != 3) || Vars::$USER_RIGHTS) {
                     // Кнопка создания новой темы
-                    echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . Vars::$ID . '" method="post"><input type="submit" value="' . lng('new_topic') . '" /></form></div>';
+                    echo '<div class="gmenu"><form action="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '" method="post"><input type="submit" value="' . lng('new_topic') . '" /></form></div>';
                 }
                 if ($total) {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " AND `refid` = " . Vars::$ID . " ORDER BY `vip` DESC, `time` DESC " . Vars::db_pagination());
@@ -337,9 +337,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                             ($res['edit'] ? Functions::getImage('forum_closed.png') : '')
                         );
                         echo Functions::displayMenu($icons, '&#160;', '&#160;');
-                        echo '<a href="index.php?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
+                        echo '<a href="' . Vars::$URI . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
                         if ($cpg > 1) {
-                            echo '<a href="index.php?id=' . $res['id'] . '&amp;page=' . $cpg . '">&#160;&gt;&gt;</a>';
+                            echo '<a href="' . Vars::$URI . '?id=' . $res['id'] . '&amp;page=' . $cpg . '">&#160;&gt;&gt;</a>';
                         }
                         echo '<div class="sub">';
                         echo $res['from'];
@@ -356,8 +356,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 }
                 echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
                 if ($total > Vars::$USER_SET['page_size']) {
-                    echo '<div class="topmenu">' . Functions::displayPagination('index.php?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                        '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
+                    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                        '<p><form action="' . Vars::$URI . '?id=' . Vars::$ID . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                         '</form></p>';
@@ -395,11 +395,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 }
                 // Счетчик постов темы
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'")), 0);
-                Vars::set_total($colmes);
                 // Выводим название топика
                 echo '<div class="phdr"><a name="up" id="up"></a><a href="#down">' . Functions::getImage('down.png') . '</a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
                 if ($colmes > Vars::$USER_SET['page_size'])
-                    echo '<div class="topmenu">' . Functions::displayPagination('index.php?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>';
+                    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>';
                 // Метки удаления темы
                 if ($type1['close'])
                     echo '<div class="rmenu">' . lng('topic_delete_who') . ': <b>' . $type1['close_who'] . '</b></div>';
@@ -421,11 +420,11 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID . " ORDER BY `id` ASC");
                     if (!$type1['edit'] && !isset($_GET['vote_result']) && Vars::$USER_ID && $vote_user == 0) {
                         // Выводим форму с опросами
-                        echo '<form action="index.php?act=vote&amp;id=' . Vars::$ID . '" method="post">';
+                        echo '<form action="' . Vars::$URI . '?act=vote&amp;id=' . Vars::$ID . '" method="post">';
                         while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . Validate::filterString($vote['name'], 0, 1) . '<br />';
                         }
-                        echo '<p><input type="submit" name="submit" value="' . lng('vote') . '"/><br /><a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
+                        echo '<p><input type="submit" name="submit" value="' . lng('vote') . '"/><br /><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
                             '">' . lng('results') . '</a></p></form></div>';
                     } else {
                         // Выводим результаты голосования
@@ -437,12 +436,12 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         }
                         echo '</small></div><div class="bmenu">' . lng('total_votes') . ': ';
                         if (Vars::$USER_RIGHTS > 6)
-                            echo '<a href="index.php?act=users&amp;id=' . Vars::$ID . '">' . $topic_vote['count'] . '</a>';
+                            echo '<a href="' . Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '">' . $topic_vote['count'] . '</a>';
                         else
                             echo $topic_vote['count'];
                         echo '</div>';
                         if (Vars::$USER_ID && $vote_user == 0)
-                            echo '<div class="bmenu"><a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . $clip_forum . '">' . lng('vote') . '</a></div>';
+                            echo '<div class="bmenu"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . $clip_forum . '">' . lng('vote') . '</a></div>';
                     }
                 }
                 $curators = !empty($type1['curators']) ? unserialize($type1['curators']) : array();
@@ -464,8 +463,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     echo '<div class="topmenu"><p>';
                     if (Vars::$USER_ID && Vars::$USER_ID != $postres['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
-                            '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '"> ' . lng('reply_btn') . '</a> ' .
-                            '<a href="index.php?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> ' . lng('cytate_btn') . '</a> ';
+                            '<a href="' . Vars::$URI . '?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '"> ' . lng('reply_btn') . '</a> ' .
+                            '<a href="' . Vars::$URI . '?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> ' . lng('cytate_btn') . '</a> ';
                     } else {
                         echo '<b>' . $postres['from'] . '</b> ';
                     }
@@ -484,7 +483,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     }
                     echo Validate::filterString(mb_substr($postres['text'], 0, 500), 0, 2);
                     if (mb_strlen($postres['text']) > 500)
-                        echo '...<a href="index.php?act=post&amp;id=' . $postres['id'] . '">' . lng('read_all') . '</a>';
+                        echo '...<a href="' . Vars::$URI . '?act=post&amp;id=' . $postres['id'] . '">' . lng('read_all') . '</a>';
                     echo '</p></div>';
                 }
                 if ($filter)
@@ -495,12 +494,12 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 else
                     $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 // Запрос в базу
-                $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`datereg`
+                $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
                 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
                 WHERE `forum`.`type` = 'm' AND `forum`.`refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order " . Vars::db_pagination());
                 // Верхнее поле "Написать"
                 if ((Vars::$USER_ID && !$type1['edit'] && $set_forum['upfp'] && Vars::$SYSTEM_SET['mod_forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && $set_forum['upfp'])) {
-                    echo '<div class="gmenu"><form name="form1" action="index.php?act=say&amp;id=' . Vars::$ID . '" method="post">';
+                    echo '<div class="gmenu"><form name="form1" action="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
                     if ($set_forum['farea']) {
                         echo '<p>' .
                             (!Vars::$IS_MOBILE ? TextParser::autoBB('form1', 'msg') : '') .
@@ -515,9 +514,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     }
                 }
                 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6)
-                    echo '<form action="index.php?act=massdel" method="post">';
-                $i = 1;
-                while ($res = mysql_fetch_assoc($req)) {
+                    echo '<form action="' . Vars::$URI . '?act=massdel" method="post">';
+                for($i = 1; $res = mysql_fetch_assoc($req); ++$i) {
                     if ($res['close'])
                         echo '<div class="rmenu">';
                     else
@@ -531,7 +529,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         echo '</td><td>';
                     }
                     if ($res['sex'])
-                        echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
+                        echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['join_date'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
                     else
                         echo Functions::getImage('delete.png', '', 'align="middle"') . '&#160;';
                     // Ник юзера и ссылка на его анкету
@@ -552,8 +550,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     echo (time() > $res['last_visit'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
                     // Ссылки на ответ и цитирование
                     if (Vars::$USER_ID && Vars::$USER_ID != $res['user_id']) {
-                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '">' . lng('reply_btn') . '</a>&#160;' .
-                            '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt">' . lng('cytate_btn') . '</a> ';
+                        echo '<a href="' . Vars::$URI . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '">' . lng('reply_btn') . '</a>&#160;' .
+                            '<a href="' . Vars::$URI . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt">' . lng('cytate_btn') . '</a> ';
                     }
                     // Время поста
                     echo ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br />';
@@ -588,7 +586,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         if (Vars::$USER_SET['smileys'])
                             $text = Functions::smileys($text, $res['rights'] ? 1 : 0);
-                        echo TextParser::noTags($text) . '...<br /><a href="index.php?act=post&amp;id=' . $res['id'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
+                        echo TextParser::noTags($text) . '...<br /><a href="' . Vars::$URI . '?act=post&amp;id=' . $res['id'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
                     } else {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = Validate::filterString($text, 1, 1);
@@ -615,10 +613,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                             'png'
                         );
                         if (in_array($att_ext, $pic_ext)) {
-                            echo '<div><a href="index.php?act=file&amp;id=' . $fres['id'] . '">';
+                            echo '<div><a href="' . Vars::$URI . '?act=file&amp;id=' . $fres['id'] . '">';
                             echo '<img src="thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
                         } else {
-                            echo '<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
+                            echo '<br /><a href="' . Vars::$URI . '?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
                         }
                         echo ' (' . $fls . ' кб.)<br/>';
                         echo lng('downloads') . ': ' . $fres['dlcount'] . ' ' . lng('time') . '</span>';
@@ -627,9 +625,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     if (((Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6 || $curator) && Vars::$USER_RIGHTS >= $res['rights']) || ($res['user_id'] == Vars::$USER_ID && !$set_forum['upfp'] && (Vars::$START + $i) == $colmes && $res['time'] > time() - 300) || ($res['user_id'] == Vars::$USER_ID && $set_forum['upfp'] && Vars::$START == 0 && $i == 1 && $res['time'] > time() - 300)) {
                         // Ссылки на редактирование / удаление постов
                         $menu = array(
-                            '<a href="index.php?act=editpost&amp;id=' . $res['id'] . '">' . lng('edit') . '</a>',
-                            (Vars::$USER_RIGHTS >= 7 && $res['close'] == 1 ? '<a href="index.php?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">' . lng('restore') . '</a>' : ''),
-                            ($res['close'] == 1 ? '' : '<a href="index.php?act=editpost&amp;do=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>')
+                            '<a href="' . Vars::$URI . '?act=editpost&amp;id=' . $res['id'] . '">' . lng('edit') . '</a>',
+                            (Vars::$USER_RIGHTS >= 7 && $res['close'] == 1 ? '<a href="' . Vars::$URI . '?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">' . lng('restore') . '</a>' : ''),
+                            ($res['close'] == 1 ? '' : '<a href="' . Vars::$URI . '?act=editpost&amp;do=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>')
                         );
                         echo '<div class="sub">';
                         if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6)
@@ -652,7 +650,6 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         echo '</div>';
                     }
                     echo '</div>';
-                    ++$i;
                 }
                 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                     echo '<div class="rmenu"><input type="submit" value=" ' . lng('delete') . ' "/></div>';
@@ -660,7 +657,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 }
                 // Нижнее поле "Написать"
                 if ((Vars::$USER_ID && !$type1['edit'] && !$set_forum['upfp'] && Vars::$SYSTEM_SET['mod_forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && !$set_forum['upfp'])) {
-                    echo '<div class="gmenu"><form name="form2" action="index.php?act=say&amp;id=' . Vars::$ID . '" method="post">';
+                    echo '<div class="gmenu"><form name="form2" action="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
                     if ($set_forum['farea']) {
                         echo '<p>';
                         if (!Vars::$IS_MOBILE)
@@ -679,8 +676,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 echo '<div class="phdr"><a name="down" id="down"></a><a href="#up">' . Functions::getImage('up.png') . '</a>' .
                     '&#160;&#160;' . lng('total') . ': ' . $colmes . '</div>';
                 if ($colmes > Vars::$USER_SET['page_size']) {
-                    echo '<div class="topmenu">' . Functions::displayPagination('index.php?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>' .
-                        '<p><form action="index.php?id=' . Vars::$ID . '" method="post">' .
+                    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>' .
+                        '<p><form action="' . Vars::$URI . '?id=' . Vars::$ID . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                         '</form></p>';
@@ -701,33 +698,33 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                     echo '<p><div class="func">';
                     if (Vars::$USER_RIGHTS >= 7)
-                        echo '<a href="index.php?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('curators_of_the_topic') . '</a><br />';
+                        echo '<a href="' . Vars::$URI . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('curators_of_the_topic') . '</a><br />';
                     echo isset($topic_vote) && $topic_vote > 0
-                        ? '<a href="index.php?act=editvote&amp;id=' . Vars::$ID . '">' . lng('edit_vote') . '</a><br/><a href="index.php?act=delvote&amp;id=' . Vars::$ID . '">' . lng('delete_vote') . '</a><br/>'
-                        : '<a href="index.php?act=addvote&amp;id=' . Vars::$ID . '">' . lng('add_vote') . '</a><br/>';
-                    echo '<a href="index.php?act=ren&amp;id=' . Vars::$ID . '">' . lng('topic_rename') . '</a><br/>';
+                        ? '<a href="' . Vars::$URI . '?act=editvote&amp;id=' . Vars::$ID . '">' . lng('edit_vote') . '</a><br/><a href="' . Vars::$URI . '?act=delvote&amp;id=' . Vars::$ID . '">' . lng('delete_vote') . '</a><br/>'
+                        : '<a href="' . Vars::$URI . '?act=addvote&amp;id=' . Vars::$ID . '">' . lng('add_vote') . '</a><br/>';
+                    echo '<a href="' . Vars::$URI . '?act=ren&amp;id=' . Vars::$ID . '">' . lng('topic_rename') . '</a><br/>';
                     // Закрыть - открыть тему
                     if ($type1['edit'] == 1)
-                        echo '<a href="index.php?act=close&amp;id=' . Vars::$ID . '">' . lng('topic_open') . '</a><br/>';
+                        echo '<a href="' . Vars::$URI . '?act=close&amp;id=' . Vars::$ID . '">' . lng('topic_open') . '</a><br/>';
                     else
-                        echo '<a href="index.php?act=close&amp;id=' . Vars::$ID . '&amp;closed">' . lng('topic_close') . '</a><br/>';
+                        echo '<a href="' . Vars::$URI . '?act=close&amp;id=' . Vars::$ID . '&amp;closed">' . lng('topic_close') . '</a><br/>';
                     // Удалить - восстановить тему
                     if ($type1['close'] == 1)
-                        echo '<a href="index.php?act=restore&amp;id=' . Vars::$ID . '">' . lng('topic_restore') . '</a><br/>';
-                    echo '<a href="index.php?act=deltema&amp;id=' . Vars::$ID . '">' . lng('topic_delete') . '</a><br/>';
+                        echo '<a href="' . Vars::$URI . '?act=restore&amp;id=' . Vars::$ID . '">' . lng('topic_restore') . '</a><br/>';
+                    echo '<a href="' . Vars::$URI . '?act=deltema&amp;id=' . Vars::$ID . '">' . lng('topic_delete') . '</a><br/>';
                     if ($type1['vip'] == 1)
-                        echo '<a href="index.php?act=vip&amp;id=' . Vars::$ID . '">' . lng('topic_unfix') . '</a>';
+                        echo '<a href="' . Vars::$URI . '?act=vip&amp;id=' . Vars::$ID . '">' . lng('topic_unfix') . '</a>';
                     else
-                        echo '<a href="index.php?act=vip&amp;id=' . Vars::$ID . '&amp;vip">' . lng('topic_fix') . '</a>';
-                    echo '<br/><a href="index.php?act=per&amp;id=' . Vars::$ID . '">' . lng('topic_move') . '</a></div></p>';
+                        echo '<a href="' . Vars::$URI . '?act=vip&amp;id=' . Vars::$ID . '&amp;vip">' . lng('topic_fix') . '</a>';
+                    echo '<br/><a href="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '">' . lng('topic_move') . '</a></div></p>';
                 }
                 if ($wholink)
                     echo '<div>' . $wholink . '</div>';
                 if ($filter)
-                    echo '<div><a href="index.php?act=filter&amp;id=' . Vars::$ID . '&amp;do=unset">' . lng('filter_cancel') . '</a></div>';
+                    echo '<div><a href="' . Vars::$URI . '?act=filter&amp;id=' . Vars::$ID . '&amp;do=unset">' . lng('filter_cancel') . '</a></div>';
                 else
-                    echo '<div><a href="index.php?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('filter_on_author') . '</a></div>';
-                echo '<a href="index.php?act=tema&amp;id=' . Vars::$ID . '">' . lng('download_topic') . '</a>';
+                    echo '<div><a href="' . Vars::$URI . '?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('filter_on_author') . '</a></div>';
+                echo '<a href="' . Vars::$URI . '?act=tema&amp;id=' . Vars::$ID . '">' . lng('download_topic') . '</a>';
                 break;
 
             default:
@@ -765,13 +762,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         //TODO: Доработать счетчики
         $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `session_timestamp` > " . (time() - 300) . " AND `place` LIKE 'forum%'"), 0);
         $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `session_timestamp` > " . (time() - 300) . " AND `place` LIKE 'forum%'"), 0);
-        echo '<div class="phdr">' . (Vars::$USER_ID ? '<a href="index.php?act=who">' . lng('who_in_forum') . '</a>' : lng('who_in_forum')) . '&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</div>';
+        echo '<div class="phdr">' . (Vars::$USER_ID ? '<a href="' . Vars::$URI . '?act=who">' . lng('who_in_forum') . '</a>' : lng('who_in_forum')) . '&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</div>';
         unset($_SESSION['fsort_id']);
         unset($_SESSION['fsort_users']);
     }
 
     // Навигация внизу страницы
-    echo '<p>' . (Vars::$ID ? '<a href="index.php">' . lng('to_forum') . '</a><br />' : '');
+    echo '<p>' . (Vars::$ID ? '<a href="' . Vars::$URI . '">' . lng('to_forum') . '</a><br />' : '');
     if (!Vars::$ID) {
         echo'<a href="' . Vars::$URI . '/rules">' . lng('forum_rules') . '</a><br/>';
         if (Vars::$USER_RIGHTS >= 7) {
@@ -781,9 +778,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     echo '</p>';
     if (!Vars::$USER_ID) {
         if ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) {
-            echo '<a href="index.php?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newup">' . lng('new_on_top') . '</a>';
+            echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newup">' . lng('new_on_top') . '</a>';
         } else {
-            echo '<a href="index.php?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newdown">' . lng('new_on_bottom') . '</a>';
+            echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newdown">' . lng('new_on_bottom') . '</a>';
         }
     }
 }

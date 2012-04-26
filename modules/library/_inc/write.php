@@ -20,7 +20,7 @@ if (!Vars::$ID) {
 // Проверка на спам
 $old = (Vars::$USER_RIGHTS > 0) ? 5 : 60;
 if (Vars::$USER_DATA['lastpost'] > (time() - $old)) {
-    echo '<p>' . lng('error_flood') . ' ' . $old . ' ' . lng('sec') . '<br/><br/><a href ="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+    echo '<p>' . lng('error_flood') . ' ' . $old . ' ' . lng('sec') . '<br/><br/><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
     exit;
 }
 
@@ -34,11 +34,11 @@ if ($ms['ip'] == 0) {
     if ((Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) || ($ms['soft'] == 1 && !empty($_SESSION['uid']))) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['name'])) {
-                echo lng('error_empty_title') . "<br/><a href='index.php?act=write&amp;id=" . Vars::$ID . "'>" . lng('repeat') . "</a><br/>";
+                echo lng('error_empty_title') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . lng('repeat') . "</a><br/>";
                 exit;
             }
             if (empty($_POST['text'])) {
-                echo lng('error_empty_text') . "<br/><a href='index.php?act=write&amp;id=" . Vars::$ID . "'>" . lng('repeat') . "</a><br/>";
+                echo lng('error_empty_text') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . lng('repeat') . "</a><br/>";
                 exit;
             }
             $text = trim($_POST['text']);
@@ -72,17 +72,17 @@ if ($ms['ip'] == 0) {
             }
             //TODO: Доработать!
             //mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$user_id);
-            echo '<p><a href="index.php?id=' . $cid . '">' . lng('to_article') . '</a></p>';
+            echo '<p><a href="' . Vars::$URI . '?id=' . $cid . '">' . lng('to_article') . '</a></p>';
         } else {
-            echo '<h3>' . lng('write_article') . '</h3><form action="index.php?act=write&amp;id=' . Vars::$ID . '" method="post">';
+            echo '<h3>' . lng('write_article') . '</h3><form action="' . Vars::$URI . '?act=write&amp;id=' . Vars::$ID . '" method="post">';
             echo '<p>' . lng('title') . ' (max. 100):<br/><input type="text" name="name"/></p>';
             echo '<p>' . lng('announce') . ' (max. 100):<br/><input type="text" name="anons"/></p>';
             echo '<p>' . lng('text') . ':<br/><textarea name="text" rows="' . Vars::$USER_SET['field_h'] . '"></textarea></p>';
             echo '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>';
-            echo '</form><p><a href ="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+            echo '</form><p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
         }
     } else {
-        header("location: index.php");
+        header("location: " . Vars::$URI);
     }
 }
-echo "<a href='index.php?'>" . lng('to_library') . "</a><br/>";
+echo "<a href='" . Vars::$URI . "'>" . lng('to_library') . "</a><br/>";

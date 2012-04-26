@@ -49,20 +49,20 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
             mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `topic` = " . Vars::$ID);
         }
-        header('Location: index.php?id=' . $res['refid']);
+        header('Location: ' . Vars::$URI . '?id=' . $res['refid']);
     } else {
         /*
         -----------------------------------------------------------------
         Меню выбора режима удаления темы
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_delete') . '</div>' .
-             '<div class="rmenu"><form method="post" action="index.php?act=deltema&amp;id=' . Vars::$ID . '">' .
+        echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_delete') . '</div>' .
+             '<div class="rmenu"><form method="post" action="' . Vars::$URI . '?act=deltema&amp;id=' . Vars::$ID . '">' .
              '<p><h3>' . lng('delete_confirmation') . '</h3>' .
              '<input type="radio" value="1" name="del" checked="checked"/>&#160;' . lng('hide') . '<br />' .
              (Vars::$USER_RIGHTS == 9 ? '<input type="radio" value="2" name="del" />&#160;' . lng('delete') : '') .
              '</p><p><input type="submit" name="submit" value="' . lng('do') . '" /></p>' .
-             '<p><a href="index.php?id=' . Vars::$ID . '">' . lng('cancel') . '</a>' .
+             '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('cancel') . '</a>' .
              '</p></form></div>' .
              '<div class="phdr">&#160;</div>';
     }

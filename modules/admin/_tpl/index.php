@@ -24,7 +24,7 @@
     <h3><?= Functions::getImage('settings.png', '', 'class="left"') ?>&#160;<?= lng('system') ?></h3>
     <ul>
         <li><a href="<?= Vars::$URI ?>?act=system"><?= lng('system_settings') ?></a></li>
-        <li><a href="<?= Vars::$URI ?>/languages.php"><?= lng('language_settings') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/languages"><?= lng('language_settings') ?></a></li>
         <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><?= lng('smileys') ?></a></li>
     </ul>
 </div>
@@ -32,7 +32,7 @@
     <h3><?= Functions::getImage('blocked.png', '', 'class="left"') ?>&#160;<?= lng('security') ?></h3>
     <ul>
         <?php if (Vars::$USER_RIGHTS == 9) : ?>
-        <li><a href="<?= Vars::$URI ?>/ip_acl.php"><?= lng('ip_accesslist') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/ip_acl"><?= lng('ip_accesslist') ?></a></li>
         <?php endif; ?>
     </ul>
 </div>

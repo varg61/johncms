@@ -146,7 +146,7 @@ switch ($res['type']) {
                         `filetype` = '$type'
                     ");
                 } else {
-                    echo Functions::displayError($error, '<a href="index.php?act=addfile&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
                 }
             } else {
                 echo lng('error_upload_error') . '<br />';
@@ -154,7 +154,7 @@ switch ($res['type']) {
             $pa = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['refid'] . "'");
             $pa2 = mysql_num_rows($pa);
             $page = ceil($pa2 / Vars::$USER_SET['page_size']);
-            echo '<br/><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('continue') . '</a><br/>';
+            echo '<br/><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('continue') . '</a><br/>';
         } else {
             /*
             -----------------------------------------------------------------
@@ -162,7 +162,7 @@ switch ($res['type']) {
             -----------------------------------------------------------------
             */
             echo '<div class="phdr"><b>' . lng('add_file') . '</b></div>' .
-                 '<div class="gmenu"><form action="index.php?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
+                 '<div class="gmenu"><form action="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
             if (stristr(Vars::$USER_AGENT, 'Opera/8.01')) {
                 echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . lng('select_file') . '</a>';
             } else {

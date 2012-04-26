@@ -65,7 +65,7 @@ if ($c || $s || $t) {
         $res = mysql_fetch_array($req);
         $caption .= $res['text'];
     } else {
-        echo Functions::displayError(lng('error_wrong_data'), '<a href="index.php">' . lng('to_forum') . '</a>');
+        echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('to_forum') . '</a>');
         exit;
     }
 }
@@ -98,9 +98,9 @@ if ($do || isset($_GET['new'])) {
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
             $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp']
                                                           ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / Vars::$USER_SET['page_size']);
-            $text = '<b><a href="index.php?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text;
+            $text = '<b><a href="' . Vars::$URI . '?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text;
             if (mb_strlen($res['text']) > 500)
-                $text .= '<br /><a href="index.php?act=post&amp;id=' . $res['post'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
+                $text .= '<br /><a href="' . Vars::$URI . '?act=post&amp;id=' . $res['post'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
             // Формируем ссылку на файл
             $fls = @filesize('../files/forum/attach/' . $res['filename']);
             $fls = round($fls / 1024, 0);
@@ -113,13 +113,13 @@ if ($do || isset($_GET['new'])) {
             );
             if (in_array($att_ext, $pic_ext)) {
                 // Если картинка, то выводим предпросмотр
-                $file = '<div><a href="index.php?act=file&amp;id=' . $res['id'] . '">';
+                $file = '<div><a href="' . Vars::$URI . '?act=file&amp;id=' . $res['id'] . '">';
                 $file .= '<img src="thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
                 $file = Functions::getImage(($res['del'] ? 'delete.png' : 'filetype_' . $res['filetype'] . '.png'), '', 'align="middle"') . '&#160;';
             }
-            $file .= '<a href="index.php?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
+            $file .= '<a href="' . Vars::$URI . '?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
             $file .= '<small><span class="gray">' . lng('size') . ': ' . $fls . ' kb.<br />' . lng('downloaded') . ': ' . $res['dlcount'] . ' ' . lng('time') . '</span></small>';
             $arg = array(
                 'iphide' => 1,
@@ -133,8 +133,8 @@ if ($do || isset($_GET['new'])) {
         echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
             // Постраничная навигация
-            echo '<p>' . Functions::displayPagination('index.php?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
-                 '<p><form action="index.php" method="get">' .
+            echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+                 '<p><form action="' . Vars::$URI . '" method="get">' .
                  '<input type="hidden" name="act" value="files"/>' .
                  '<input type="hidden" name="do" value="' . $do . '"/>' . $input . '<input type="text" name="page" size="2"/>' .
                  '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
@@ -149,7 +149,7 @@ if ($do || isset($_GET['new'])) {
     -----------------------------------------------------------------
     */
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
-    echo '<p>' . ($countnew > 0 ? '<a href="index.php?act=files&amp;new' . $lnk . '">' . lng('new_files') . ' (' . $countnew . ')</a>' : lng('new_files_empty')) . '</p>';
+    echo '<p>' . ($countnew > 0 ? '<a href="' . Vars::$URI . '?act=files&amp;new' . $lnk . '">' . lng('new_files') . ' (' . $countnew . ')</a>' : lng('new_files_empty')) . '</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array();
     $total = 0;
@@ -157,7 +157,7 @@ if ($do || isset($_GET['new'])) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . (Vars::$USER_RIGHTS >= 7
                                                   ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0) {
-            $link[] = Functions::getImage('filetype_' . $i . '.png') . '&#160;<a href="index.php?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
+            $link[] = Functions::getImage('filetype_' . $i . '.png') . '&#160;<a href="' . Vars::$URI . '?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
             $total = $total + $count;
         }
     }
@@ -168,5 +168,5 @@ if ($do || isset($_GET['new'])) {
     echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 }
 echo '<p>' . (($do || isset($_GET['new']))
-        ? '<a href="index.php?act=files' . $lnk . '">' . lng('section_list') . '</a><br />'
-        : '') . '<a href="index.php' . ($id ? '?id=' . $id : '') . '">' . lng('forum') . '</a></p>';
+        ? '<a href="' . Vars::$URI . '?act=files' . $lnk . '">' . lng('section_list') . '</a><br />'
+        : '') . '<a href="' . Vars::$URI . ($id ? '?id=' . $id : '') . '">' . lng('forum') . '</a></p>';

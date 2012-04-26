@@ -33,16 +33,16 @@ if ($total > 0) {
         }
         $l = mb_strlen($pat);
         $pat1 = mb_substr($pat, 0, $l - 1);
-        echo '[<a href="index.php?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
+        echo '[<a href="' . Vars::$URI . '?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
         ++$i;
     }
     echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
     // Навигация по страницам
     if ($total > Vars::$USER_SET['page_size']) {
-        echo '<p>' . Functions::displayPagination('index.php?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
-        echo '<p><form action="index.php" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+        echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
+        echo '<p><form action="' . Vars::$URI . '" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
     }
 } else {
     echo '<p>' . lng('list_empty') . '</p>';
 }
-echo '<p><a href="index.php">' . lng('to_library') . '</a></p>';
+echo '<p><a href="' . Vars::$MODULE_URI . '">' . lng('to_library') . '</a></p>';

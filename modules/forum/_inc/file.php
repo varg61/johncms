@@ -32,9 +32,9 @@ if (Vars::$ID) {
         $error = true;
     }
     if ($error) {
-        echo Functions::displayError(lng('error_file_not_exist'), '<a href="index.php">' . lng('to_forum') . '</a>');
+        echo Functions::displayError(lng('error_file_not_exist'), '<a href="' . Vars::$URI . '">' . lng('to_forum') . '</a>');
         exit;
     }
 } else {
-    header('location: index.php');
+    header('location: ' . Vars::$URI);
 }

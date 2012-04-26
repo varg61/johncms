@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Рейтинг самых читаемых статей
-echo '<div class="phdr"><a href="index.php"><b>' . lng('library') . '</b></a> | ' . lng('top_read') . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('library') . '</b></a> | ' . lng('top_read') . '</div>';
 $req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC LIMIT 50");
 $totalnew = mysql_num_rows($req);
 $start = Vars::$PAGE * 10 - 10;
@@ -48,60 +48,15 @@ if ($totalnew != 0) {
             }
             $l = mb_strlen($pat);
             $pat1 = mb_substr($pat, 0, $l - 1);
-            echo '[<a href="index.php?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
+            echo '[<a href="' . Vars::$URI . '?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
         }
         ++$i;
     }
     echo "<hr/><p>";
     if ($totalnew > 10) {
-        $ba = ceil($totalnew / 10);
-        if ($start != 0) {
-            echo '<a href="index.php?act=topread&amp;page=' . (Vars::$PAGE - 1) . '">&lt;&lt;</a> ';
-        }
-        $asd = $start - 10;
-        $asd2 = $start + 20;
-        if ($asd < $totalnew && $asd > 0) {
-            echo ' <a href="../index.php?act=topread&amp;page=1">1</a> .. ';
-        }
-        $page2 = $ba - Vars::$PAGE;
-        $pa = ceil(Vars::$PAGE / 2);
-        $paa = ceil(Vars::$PAGE / 3);
-        $pa2 = Vars::$PAGE + floor($page2 / 2);
-        $paa2 = Vars::$PAGE + floor($page2 / 3);
-        $paa3 = Vars::$PAGE + (floor($page2 / 3) * 2);
-        if (Vars::$PAGE > 13) {
-            echo ' <a href="index.php?act=topread&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=topread&amp;page=' . ($paa + 1) . '">' . ($paa + 1) . '</a> .. <a href="index.php?act=topread&amp;page=' . ($paa * 2) . '">'
-                 . ($paa * 2) . '</a> <a href="index.php?act=topread&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-        } elseif (Vars::$PAGE > 7) {
-            echo ' <a href="index.php?act=topread&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=topread&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-        }
-        for ($i = $asd; $i < $asd2;) {
-            if ($i < $totalnew && $i >= 0) {
-                $ii = floor(1 + $i / 10);
-                if ($start == $i) {
-                    echo " <b>$ii</b>";
-                } else {
-                    echo ' <a href="index.php?act=topread&amp;page=' . $ii . '">' . $ii . '</a> ';
-                }
-            }
-            $i = $i + 10;
-        }
-        if ($page2 > 12) {
-            echo ' .. <a href="index.php?act=topread&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=topread&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) . '</a> .. <a href="index.php?act=topread&amp;page=' . ($paa3) .
-                 '">' . ($paa3) . '</a> <a href="index.php?act=topread&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-        } elseif ($page2 > 6) {
-            echo ' .. <a href="index.php?act=topread&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="?act=topread&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
-        }
-        if ($asd2 < $totalnew) {
-            echo ' .. <a href="index.php?act=topread&amp;page=' . $ba . '">' . $ba . '</a>';
-        }
-        if ($totalnew > $start + 10) {
-            echo ' <a href="index.php?act=topread&amp;page=' . (Vars::$PAGE + 1) . '">&gt;&gt;</a>';
-        }
-        echo
-                "<form action='index.php'>" . lng('to_page') . ":<br/><input type='hidden' name='act' value='new'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
+        //TODO: Добавить новую навигацию по страницам
     }
 } else {
     echo "<p>" . lng('list_empty') . "<br/>";
 }
-echo "<a href='index.php?'>" . lng('to_library') . "</a></p>";
+echo '<a href="' . Vars::$URI . '">' . lng('to_library') . '</a></p>';

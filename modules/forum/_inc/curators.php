@@ -23,7 +23,7 @@ if (Vars::$USER_RIGHTS >= 7) {
         WHERE `forum`.`refid` = " . Vars::$ID . " AND `users`.`rights` < 6 AND `users`.`rights` != 3 GROUP BY `forum`.`from` ORDER BY `forum`.`from`");
     $total = mysql_num_rows($req);
     $res = mysql_fetch_assoc($req);
-    echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '"><b>' . lng('forum') . '</b></a> | ' . lng('curators') . '</div>' .
+    echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '"><b>' . lng('forum') . '</b></a> | ' . lng('curators') . '</div>' .
          '<div class="bmenu">' . $res['text'] . '</div>';
     $curators = array();
     $users = !empty($topic['curators']) ? unserialize($topic['curators']) : array();
@@ -32,7 +32,7 @@ if (Vars::$USER_RIGHTS >= 7) {
         if (!is_array($users)) $users = array();
     }
     if ($total > 0) {
-        echo '<form action="index.php?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post">';
+        echo '<form action="' . Vars::$URI . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post">';
         $i = 0;
         while ($res = mysql_fetch_array($req)) {
             $checked = array_key_exists($res['user_id'], $users) ? true : false;
@@ -47,5 +47,5 @@ if (Vars::$USER_RIGHTS >= 7) {
     } else
         echo Functions::displayError(lng('list_empty'));
     echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>' .
-         '<p><a href="index.php?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
+         '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
 }

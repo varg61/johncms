@@ -23,7 +23,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
         switch ($ms['type']) {
             case "komm":
                 mysql_query("delete from `lib` where `id` = " . Vars::$ID);
-                header("location: index.php?act=komm&id=$rid");
+                header("location: " . Vars::$URI . "?act=komm&id=$rid");
                 break;
 
             case "bk":
@@ -32,14 +32,14 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                     mysql_query("delete from `lib` where `id`='" . $km1['id'] . "';");
                 }
                 mysql_query("delete from `lib` where `id` = " . Vars::$ID);
-                header("location: index.php?id=$rid");
+                header("location: " . Vars::$URI . "?id=$rid");
                 break;
 
             case "cat":
                 $ct = mysql_query("select `id` from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID);
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
-                    echo lng('first_delete_category') . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";
+                    echo lng('first_delete_category') . "<br/><a href='" . Vars::$URI . "?id=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";
                     exit;
                 }
                 $st = mysql_query("select `id` from `lib` where `type` = 'bk' and `refid` = " . Vars::$ID);
@@ -52,32 +52,32 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                     mysql_query("delete from `lib` where `id`='" . $st1['id'] . "';");
                 }
                 mysql_query("delete from `lib` where `id`='" . Vars::$ID . "';");
-                header("location: index.php?id=$rid");
+                header("location: " . Vars::$URI . "?id=$rid");
                 break;
         }
     } else {
         switch ($ms['type']) {
             case "komm":
-                header("location: index.php?act=del&id=" . Vars::$ID . "&yes");
+                header("location: " . Vars::$URI . "?act=del&id=" . Vars::$ID . "&yes");
                 break;
 
             case "bk":
-                echo lng('delete_confirmation') . "<br/><a href='index.php?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . lng('delete') .
-                    "</a> | <a href='index.php?id=" . Vars::$ID . "'>" . lng('cancel') . "</a><br/><a href='index.php'>" . lng('to_library') . "</a><br/>";
+                echo lng('delete_confirmation') . "<br/><a href='" . Vars::$URI . "?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . lng('delete') .
+                    "</a> | <a href='" . Vars::$URI . "?id=" . Vars::$ID . "'>" . lng('cancel') . "</a><br/><a href='" . Vars::$URI . "'>" . lng('to_library') . "</a><br/>";
                 break;
 
             case "cat":
                 $ct = mysql_query("select `id` from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID);
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 != 0) {
-                    echo lng('first_delete_category') . "<br/><a href='index.php?id=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";
+                    echo lng('first_delete_category') . "<br/><a href='" . Vars::$URI . "?id=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";
                     exit;
                 }
-                echo lng('delete_confirmation') . "<br/><a href='index.php?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . lng('delete') . "</a> | <a href='index.php?id=" . Vars::$ID .
-                     "'>" . lng('cancel') . "</a><br/><a href='index.php'>" . lng('back') . "</a><br/>";
+                echo lng('delete_confirmation') . "<br/><a href='" . Vars::$URI . "?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . lng('delete') . "</a> | <a href='" . Vars::$URI . "?id=" . Vars::$ID .
+                     "'>" . lng('cancel') . "</a><br/><a href='" . Vars::$URI . "'>" . lng('back') . "</a><br/>";
                 break;
         }
     }
 } else {
-    header("location: index.php");
+    header("location: " . Vars::$URI);
 }

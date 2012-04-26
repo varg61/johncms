@@ -30,7 +30,7 @@ if (mysql_num_rows($req)) {
     }
     $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID . (Vars::$USER_RIGHTS < 7 ? " AND `close` != '1'" : '')), 0) / Vars::$USER_SET['page_size']);
     $posts = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `close` != '1'"), 0);
-    $link = 'index.php?id=' . $res['refid'] . '&amp;page=' . $page;
+    $link = Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page;
     $error = false;
     if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         // Проверка для Администрации
@@ -56,7 +56,7 @@ if (mysql_num_rows($req)) {
         }
     }
 } else {
-    $error = lng('error_post_deleted') . '<br /><a href="index.php">' . lng('forum') . '</a>';
+    $error = lng('error_post_deleted') . '<br /><a href="' . Vars::$URI . '">' . lng('forum') . '</a>';
 }
 if (!$error) {
     //TODO: Переделать с $do на $mod
@@ -110,9 +110,9 @@ if (!$error) {
                 mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                 if ($posts < 2) {
                     // Пересылка на удаление всей темы
-                    header('Location: index.php?act=deltema&id=' . $res['refid']);
+                    header('Location: ' . Vars::$URI . '?act=deltema&id=' . $res['refid']);
                 } else {
-                    header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
+                    header('Location: ' . Vars::$URI . '?id=' . $res['refid'] . '&page=' . $page);
                 }
             } else {
                 // Скрытие поста
@@ -125,10 +125,10 @@ if (!$error) {
                     // Если это был последний пост темы, то скрываем саму тему
                     $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
                     mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't'");
-                    header('Location: index.php?id=' . $res_l['refid']);
+                    header('Location: ' . Vars::$URI . '?id=' . $res_l['refid']);
                 } else {
                     mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
-                    header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
+                    header('Location: ' . Vars::$URI . '?id=' . $res['refid'] . '&page=' . $page);
                 }
             }
             break;
@@ -144,9 +144,9 @@ if (!$error) {
             if ($posts == 1)
                 echo lng('delete_last_post_warning') . '<br />';
             echo lng('delete_confirmation') . '</p>' .
-                 '<p><a href="' . $link . '">' . lng('cancel') . '</a> | <a href="index.php?act=editpost&amp;do=delete&amp;id=' . Vars::$ID . '">' . lng('delete') . '</a>';
+                 '<p><a href="' . $link . '">' . lng('cancel') . '</a> | <a href="' . Vars::$URI . '?act=editpost&amp;do=delete&amp;id=' . Vars::$ID . '">' . lng('delete') . '</a>';
             if (Vars::$USER_RIGHTS == 9)
-                echo ' | <a href="index.php?act=editpost&amp;do=delete&amp;hide&amp;id=' . Vars::$ID . '">' . lng('hide') . '</a>';
+                echo ' | <a href="' . Vars::$URI . '?act=editpost&amp;do=delete&amp;hide&amp;id=' . Vars::$ID . '">' . lng('hide') . '</a>';
             echo '</p></div>';
             echo '<div class="phdr"><small>' . lng('delete_post_help') . '</small></div>';
             break;
@@ -162,7 +162,7 @@ if (!$error) {
                 $msg = Functions::translit($msg);
             if (isset($_POST['submit'])) {
                 if (empty($_POST['msg'])) {
-                    echo Functions::displayError(lng('error_empty_message'), '<a href="index.php?act=editpost&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                    echo Functions::displayError(lng('error_empty_message'), '<a href="' . Vars::$URI . '?act=editpost&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
                     exit;
                 }
                 mysql_query("UPDATE `forum` SET
@@ -171,7 +171,7 @@ if (!$error) {
                     `kedit` = '" . ($res['kedit'] + 1) . "',
                     `text` = '" . mysql_real_escape_string($msg) . "'
                     WHERE `id` = " . Vars::$ID);
-                header('Location: index.php?id=' . $res['refid'] . '&page=' . $page);
+                header('Location: ' . Vars::$URI . '?id=' . $res['refid'] . '&page=' . $page);
             } else {
                 $msg_pre = Validate::filterString($msg, 1, 1);
                 if (Vars::$USER_SET['smileys'])

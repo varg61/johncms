@@ -29,8 +29,8 @@ $search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : false;
 $search = $search_post ? $search_post : $search_get;
 $search_t = isset($_REQUEST['t']);
-echo '<div class="phdr"><a href="index.php"><b>' . lng('library') . '</b></a> | ' . lng('search') . '</div>' .
-     '<div class="gmenu"><form action="search.php" method="post"><p>' .
+echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('library') . '</b></a> | ' . lng('search') . '</div>' .
+     '<div class="gmenu"><form action="' . Vars::$URI . '" method="post"><p>' .
      '<input type="text" value="' . ($search ? Validate::filterString($search) : '') . '" name="search" />' .
      '<input type="submit" value="' . lng('search') . '" name="submit" /><br />' .
      '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . lng('search_name') .
@@ -60,7 +60,7 @@ if ($search && !$error) {
         AND `type` = 'bk'"), 0);
     echo '<div class="phdr">' . lng('search_results') . '</div>';
     if ($total > Vars::$USER_SET['page_size'])
-        echo '<div class="topmenu">' . Functions::displayPagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+        echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     if ($total) {
         $req = mysql_query("
             SELECT *, MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
@@ -79,7 +79,7 @@ if ($search && !$error) {
             $text = Validate::filterString(mb_substr($res['text'], ($pos - 100), 400), 1);
             if ($search_t) foreach ($array as $val) $name = ReplaceKeywords($val, $name);
             else foreach ($array as $val) $text = ReplaceKeywords($val, $text);
-            echo '<b><a href="index.php?id=' . $res['id'] . '">' . $name . '</a></b><br />' . $text .
+            echo '<b><a href="' . Vars::$MODULE_URI . '?id=' . $res['id'] . '">' . $name . '</a></b><br />' . $text .
                  ' <div class="sub"><span class="gray">' . lng('added') . ':</span> ' . $res['avtor'] .
                  ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br />' .
                  '<span class="gray">' . lng('reads') . ':</span> ' . $res['count'] .
@@ -91,8 +91,8 @@ if ($search && !$error) {
     }
     echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
-        echo '<div class="topmenu">' . Functions::displayPagination('search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-             '<p><form action="search.php?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
+        echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+             '<p><form action="' . Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
              '<input type="text" name="page" size="2"/>' .
              '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
              '</form></p>';
@@ -101,5 +101,5 @@ if ($search && !$error) {
     if ($error) echo Functions::displayError($error);
     echo '<div class="phdr"><small>' . lng('search_help') . '</small></div>';
 }
-echo '<p>' . ($search ? '<a href="search.php">' . lng('search_new') . '</a><br />' : '') .
-     '<a href="index.php">' . lng('library') . '</a></p>';
+echo '<p>' . ($search ? '<a href="' . Vars::$URI . '">' . lng('search_new') . '</a><br />' : '') .
+     '<a href="' . Vars::$MODULE_URI . '">' . lng('library') . '</a></p>';

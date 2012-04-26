@@ -64,7 +64,7 @@ if (isset($_POST['submit'])) {
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.txt", 0777);
-            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . lng('download') . '</a><br/>' . lng('download_topic_help') . '<br/><a href="index.php">' . lng('to_forum') . '</a><br/>';
+            echo '<a href="' . Vars::$URI . '?act=loadtem&amp;n=' . $num . '">' . lng('download') . '</a><br/>' . lng('download_topic_help') . '<br/><a href="' . Vars::$URI . '">' . lng('to_forum') . '</a><br/>';
             break;
 
         case 2:
@@ -113,12 +113,12 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.htm", 0777);
-            echo '<a href="index.php?act=loadtem&amp;n=' . $num . '">' . lng('download') . '</a><br/>' . lng('download_topic_help') . '<br/><a href="index.php">' . lng('to_forum') . '</a><br/>';
+            echo '<a href="' . Vars::$URI . '?act=loadtem&amp;n=' . $num . '">' . lng('download') . '</a><br/>' . lng('download_topic_help') . '<br/><a href="' . Vars::$URI . '">' . lng('to_forum') . '</a><br/>';
             break;
     }
 } else {
     echo '<p>' . lng('download_topic_format') . '<br/>' .
-         '<form action="index.php?act=tema&amp;id=' . Vars::$ID . '" method="post">' .
+         '<form action="' . Vars::$URI . '?act=tema&amp;id=' . Vars::$ID . '" method="post">' .
          '<select name="mod"><option value="1">.txt</option>' .
          '<option value="2">.htm</option></select>' .
          '<input type="submit" name="submit" value="' . lng('download') . '"/>' .

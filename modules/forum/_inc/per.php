@@ -32,7 +32,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             exit;
         }
         mysql_query("UPDATE `forum` SET `refid` = '$razd' WHERE `id` = " . Vars::$ID);
-        header("Location: index.php?id=" . Vars::$ID);
+        header("Location: " . Vars::$URI . "?id=" . Vars::$ID);
     } else {
         /*
         -----------------------------------------------------------------
@@ -49,8 +49,8 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         }
         $fr = mysql_query("select * from `forum` where id='" . $other . "';");
         $fr1 = mysql_fetch_assoc($fr);
-        echo '<div class="phdr"><a href="index.php?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_move') . '</div>' .
-             '<form action="index.php?act=per&amp;id=' . Vars::$ID . '" method="post">' .
+        echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_move') . '</div>' .
+             '<form action="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '" method="post">' .
              '<div class="gmenu"><p>' .
              '<h3>' . lng('category') . '</h3>' . $fr1['text'] . '</p>' .
              '<p><h3>' . lng('section') . '</h3>' .
@@ -66,9 +66,9 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         $frm = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$other' ORDER BY `realid` ASC");
         while ($frm1 = mysql_fetch_assoc($frm)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<a href="index.php?act=per&amp;id=' . Vars::$ID . '&amp;other=' . $frm1['id'] . '">' . $frm1['text'] . '</a></div>';
+            echo '<a href="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '&amp;other=' . $frm1['id'] . '">' . $frm1['text'] . '</a></div>';
             ++$i;
         }
-        echo '<div class="phdr"><a href="index.php">' . lng('back') . '</a></div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('back') . '</a></div>';
     }
 }

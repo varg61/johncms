@@ -11,6 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+//TODO: Написать загрузку тем без создания файлов
+
 if (empty($_GET['n'])) {
     echo Functions::displayError(lng('error_wrong_data'));
     exit;

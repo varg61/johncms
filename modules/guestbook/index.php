@@ -33,12 +33,12 @@ switch (Vars::$ACT) {
         if (Vars::$USER_RIGHTS >= 6 && Vars::$ID) {
             if (isset($_GET['yes'])) {
                 mysql_query("DELETE FROM `guest` WHERE `id` = " . Vars::$ID);
-                header("Location: index.php");
+                header("Location: " . Vars::$URI);
             } else {
-                echo '<div class="phdr"><a href="index.php"><b>' . lng('guestbook') . '</b></a> | ' . lng('delete_message') . '</div>' .
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('delete_message') . '</div>' .
                      '<div class="rmenu"><p>' . lng('delete_confirmation') . '?<br/>' .
-                     '<a href="index.php?act=delpost&amp;id=' . Vars::$ID . '&amp;yes">' . lng('delete') . '</a> | ' .
-                     '<a href="index.php">' . lng('cancel') . '</a></p></div>';
+                     '<a href="' . Vars::$URI . '?act=delpost&amp;id=' . Vars::$ID . '&amp;yes">' . lng('delete') . '</a> | ' .
+                     '<a href="' . Vars::$URI . '">' . lng('cancel') . '</a></p></div>';
             }
         }
         break;
@@ -95,7 +95,7 @@ switch (Vars::$ACT) {
             $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = " . Vars::$USER_ID . " ORDER BY `time` DESC");
             $res = mysql_fetch_array($req);
             if ($res['text'] == $msg) {
-                header("location: index.php");
+                header("location: " , Vars::$URI);
                 exit;
             }
         }
@@ -109,16 +109,16 @@ switch (Vars::$ACT) {
                 `text` = '" . mysql_real_escape_string($msg) . "',
                 `ip` = '" . Vars::$IP . "',
                 `user_agent` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "'
-            ");
+            ") or exit(mysql_error());
             // Фиксируем время последнего поста (антиспам)
             //TODO: Разобраться с записью последней активности
             //if (Vars::$USER_ID) {
             //    $postguest = $datauser['postguest'] + 1;
             //    mysql_query("UPDATE `users` SET `postguest` = '$postguest', `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$USER_ID);
             //}
-            header('location: index.php');
+            header('location: ' . Vars::$URI);
         } else {
-            echo Functions::displayError($error, '<a href="index.php">' . lng('back') . '</a>');
+            echo Functions::displayError($error, '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
         }
         break;
 
@@ -136,21 +136,21 @@ switch (Vars::$ACT) {
                     `otime` = '" . time() . "'
                     WHERE `id` = " . Vars::$ID
                 );
-                header("location: index.php");
+                header("location: " . Vars::$URI);
             } else {
-                echo '<div class="phdr"><a href="index.php"><b>' . lng('guestbook') . '</b></a> | ' . lng('reply') . '</div>';
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('reply') . '</div>';
                 $req = mysql_query("SELECT * FROM `guest` WHERE `id` = " . Vars::$ID);
                 $res = mysql_fetch_assoc($req);
                 echo '<div class="menu">' .
-                     '<div class="quote"><b>' . $res['name'] . '</b>' .
+                     '<div class="quote"><b>' . $res['nickname'] . '</b>' .
                      '<br />' . Validate::filterString($res['text']) . '</div>' .
-                     '<form name="form" action="index.php?act=otvet&amp;id=' . Vars::$ID . '" method="post">' .
+                     '<form name="form" action="' . Vars::$URI . '?act=otvet&amp;id=' . Vars::$ID . '" method="post">' .
                      '<p><h3>' . lng('reply') . '</h3>' . TextParser::autoBB('form', 'otv') .
                      '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="otv">' . Validate::filterString($res['otvet']) . '</textarea></p>' .
                      '<p><input type="submit" name="submit" value="' . lng('reply') . '"/></p>' .
                      '</form></div>' .
                      '<div class="phdr"><a href="faq.php?act=trans">' . lng('translit') . '</a> | <a href="faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-                     '<p><a href="index.php">' . lng('back') . '</a></p>';
+                     '<p><a href="' . Vars::$URI . '">' . lng('back') . '</a></p>';
             }
         }
         break;
@@ -174,20 +174,20 @@ switch (Vars::$ACT) {
                     `edit_count` = '$edit_count'
                     WHERE `id` = " . Vars::$ID
                 );
-                header("location: index.php");
+                header("location: " . Vars::$URI);
             } else {
                 $req = mysql_query("SELECT * FROM `guest` WHERE `id` = " . Vars::$ID);
                 $res = mysql_fetch_assoc($req);
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
-                echo '<div class="phdr"><a href="index.php"><b>' . lng('guestbook') . '</b></a> | ' . lng('edit') . '</div>' .
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('edit') . '</div>' .
                      '<div class="rmenu">' .
-                     '<form action="index.php?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
+                     '<form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
                      '<p><b>' . lng('author') . ':</b> ' . $res['name'] . '</p>' .
                      '<p><textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
                      '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
                      '</form></div>' .
                      '<div class="phdr"><a href="faq.php?act=trans">' . lng('translit') . '</a> | <a href="faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-                     '<p><a href="index.php">' . lng('back') . '</a></p>';
+                     '<p><a href="' . Vars::$URI . '">' . lng('back') . '</a></p>';
             }
         }
         break;
@@ -221,19 +221,19 @@ switch (Vars::$ACT) {
                         echo '<p>' . lng('clear_week_ok') . '</p>';
                 }
                 mysql_query("OPTIMIZE TABLE `guest`");
-                echo '<p><a href="index.php">' . lng('guestbook') . '</a></p>';
+                echo '<p><a href="' . Vars::$URI . '">' . lng('guestbook') . '</a></p>';
             } else {
                 // Запрос параметров очистки
-                echo '<div class="phdr"><a href="index.php"><b>' . lng('guestbook') . '</b></a> | ' . lng('clear') . '</div>' .
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('clear') . '</div>' .
                      '<div class="menu">' .
-                     '<form id="clean" method="post" action="index.php?act=clean">' .
+                     '<form id="clean" method="post" action="' . Vars::$URI . '?act=clean">' .
                      '<p><h3>' . lng('clear_param') . '</h3>' .
                      '<input type="radio" name="cl" value="0" checked="checked" />' . lng('clear_param_week') . '<br />' .
                      '<input type="radio" name="cl" value="1" />' . lng('clear_param_day') . '<br />' .
                      '<input type="radio" name="cl" value="2" />' . lng('clear_param_all') . '</p>' .
                      '<p><input type="submit" name="submit" value="' . lng('clear') . '" /></p>' .
                      '</form></div>' .
-                     '<div class="phdr"><a href="index.php">' . lng('cancel') . '</a></div>';
+                     '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></div>';
             }
         }
         break;
@@ -263,15 +263,15 @@ switch (Vars::$ACT) {
         echo '<div class="phdr"><b>' . lng('guestbook') . '</b></div>';
         if (Vars::$USER_RIGHTS > 0) {
             $menu = array();
-            $menu[] = isset($_SESSION['ga']) ? '<a href="index.php?act=ga">' . lng('guestbook') . '</a>' : '<b>' . lng('guestbook') . '</b>';
-            $menu[] = isset($_SESSION['ga']) ? '<b>' . lng('admin_club') . '</b>' : '<a href="index.php?act=ga&amp;do=set">' . lng('admin_club') . '</a>';
+            $menu[] = isset($_SESSION['ga']) ? '<a href="' . Vars::$URI . '?act=ga">' . lng('guestbook') . '</a>' : '<b>' . lng('guestbook') . '</b>';
+            $menu[] = isset($_SESSION['ga']) ? '<b>' . lng('admin_club') . '</b>' : '<a href="' . Vars::$URI . '?act=ga&amp;do=set">' . lng('admin_club') . '</a>';
             if (Vars::$USER_RIGHTS >= 7)
-                $menu[] = '<a href="index.php?act=clean">' . lng('clear') . '</a>';
+                $menu[] = '<a href="' . Vars::$URI . '?act=clean">' . lng('clear') . '</a>';
             echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
         }
         // Форма ввода нового сообщения
         if ((Vars::$USER_ID || Vars::$SYSTEM_SET['mod_guest'] == 2) && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['13'])) {
-            echo '<div class="gmenu"><form name="form" action="index.php?act=say" method="post">';
+            echo '<div class="gmenu"><form name="form" action="' . Vars::$URI . '?act=say" method="post">';
             if (!Vars::$USER_ID)
                 echo lng('name') . ' (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>';
             echo '<b>' . lng('message') . '</b> <small>(max 5000)</small>:<br/>';
@@ -295,7 +295,7 @@ switch (Vars::$ACT) {
         }
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='" . (isset($_SESSION['ga']) ? 1 : 0) . "'"), 0);
         echo '<div class="phdr"><b>' . lng('comments') . '</b></div>';
-        if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+        if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         if ($total) {
             if (isset($_SESSION['ga']) && Vars::$USER_RIGHTS >= "1") {
                 // Запрос для Админ клуба
@@ -337,8 +337,8 @@ switch (Vars::$ACT) {
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . Functions::displayDate($res['otime']) . ')<br/>' . $otvet . '</div>';
                 }
                 if (Vars::$USER_RIGHTS >= 6) {
-                    $subtext = '<a href="index.php?act=otvet&amp;id=' . $res['gid'] . '">' . lng('reply') . '</a>' .
-                               (Vars::$USER_RIGHTS >= $res['rights'] ? ' | <a href="index.php?act=edit&amp;id=' . $res['gid'] . '">' . lng('edit') . '</a> | <a href="index.php?act=delpost&amp;id=' . $res['gid'] . '">' . lng('delete') . '</a>' : '');
+                    $subtext = '<a href="' . Vars::$URI . '?act=otvet&amp;id=' . $res['gid'] . '">' . lng('reply') . '</a>' .
+                               (Vars::$USER_RIGHTS >= $res['rights'] ? ' | <a href="' . Vars::$URI . '?act=edit&amp;id=' . $res['gid'] . '">' . lng('edit') . '</a> | <a href="' . Vars::$URI . '?act=delpost&amp;id=' . $res['gid'] . '">' . lng('delete') . '</a>' : '');
                 } else {
                     $subtext = '';
                 }
@@ -356,8 +356,8 @@ switch (Vars::$ACT) {
         }
         echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
-            echo '<div class="topmenu">' . Functions::displayPagination('index.php?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                 '<p><form action="index.php" method="get"><input type="text" name="page" size="2"/>' .
+            echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                 '<p><form action="' . Vars::$URI . '" method="get"><input type="text" name="page" size="2"/>' .
                  '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
         }
 }

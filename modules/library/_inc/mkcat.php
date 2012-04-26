@@ -23,7 +23,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     }
     if (isset($_POST['submit'])) {
         if (empty($_POST['text'])) {
-            echo Functions::displayError(lng('error_empty_title'), '<a href="index.php?act=mkcat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+            echo Functions::displayError(lng('error_empty_title'), '<a href="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
             exit;
         }
         $text = Validate::filterString($_POST['text']);
@@ -38,10 +38,10 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             `soft` = '$user'
         ");
         $cid = mysql_insert_id();
-        echo lng('category_created') . "<br/><a href='index.php?id=" . $cid . "'>" . lng('to_category') . "</a><br/>";
+        echo lng('category_created') . "<br/><a href='" . Vars::$URI . "?id=" . $cid . "'>" . lng('to_category') . "</a><br/>";
     } else {
         echo lng('create_category') . '<br/>' .
-             '<form action="index.php?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
+             '<form action="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
              lng('title') . ':<br/>' .
              '<input type="text" name="text"/>' .
              '<p>' . lng('category_type') . '<br/>' .
@@ -52,8 +52,8 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
              '<p><input type="checkbox" name="user" value="1"/>' . lng('if_articles') . '</p>' .
              '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
              '</form>' .
-             '<p><a href ="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+             '<p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
     }
 } else {
-    header("location: index.php");
+    header("location: " . Vars::$URI);
 }

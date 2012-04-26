@@ -33,10 +33,10 @@ if ($topic_vote == 0) {
         echo '<div class="menu">' . lng('voting_users_empty') . '</div>';
     echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
-        echo '<p>' . Functions::displayPagination('index.php?act=users&amp;id=' . Vars::$ID . '&amp;', $start, $total, Vars::$USER_SET['page_size']) . '</p>' .
-             '<p><form action="index.php?act=users&amp;id=' . Vars::$ID . '" method="post">' .
+        echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '&amp;', $start, $total, Vars::$USER_SET['page_size']) . '</p>' .
+             '<p><form action="' . Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '" method="post">' .
              '<input type="text" name="page" size="2"/>' .
              '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="index.php?id=' . Vars::$ID . '">' . lng('to_topic') . '</a></p>';
+    echo '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('to_topic') . '</a></p>';
 }

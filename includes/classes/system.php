@@ -51,39 +51,29 @@ class System extends Vars
     */
     private function _router()
     {
-        $route = isset($_GET['route']) ? substr(trim($_GET['route']), 0, 50) : '';
         $place = '';
-        if (!empty($route)) {
-            $path = array();
-            $array = explode('/', $route);
-            foreach ($array as $val) {
-                if (strrpos($val, '.php')) {
-                    $file = $val;
+        if (isset($_GET['route'])
+            && strlen($_GET['route']) > 2
+            && strlen($_GET['route']) < 30
+            && !preg_match('/[^\da-z\/\_]+/i', $_GET['route'])
+        ) {
+            $route = explode('/', $_GET['route']);
+            $req = mysql_query("SELECT * FROM `cms_modules` WHERE `module` = '" . mysql_real_escape_string(trim($route[0])) . "'");
+            if (mysql_num_rows($req)) {
+                $res = mysql_fetch_assoc($req);
+                parent::$MODULE = $res['module'];
+                parent::$MODULE_URI = parent::$HOME_URL . '/' . $res['module'];
+                parent::$URI = parent::$HOME_URL . '/' . $res['module'];
+                $place = $res['module'];
+                if(isset($route[1])
+                    && !empty($route[1])
+                    && is_file(MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $route[1] . '.php')
+                ){
+                    parent::$MODULE_INCLUDE = MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $route[1] . '.php';
+                    parent::$URI .= '/' . $route[1];
+                    $place .= '/' . $route[1];
                 } else {
-                    $path[] = $val;
-                }
-            }
-
-            if (isset($path[0])) {
-                $req = mysql_query("SELECT * FROM `cms_modules` WHERE `module` = '" . mysql_real_escape_string($path[0]) . "'");
-                if (mysql_num_rows($req)) {
-                    $include = MODPATH . implode(DIRECTORY_SEPARATOR, $path) . DIRECTORY_SEPARATOR . (isset($file) ? $file : 'index.php');
-                    if (is_file($include)) {
-                        $res = mysql_fetch_assoc($req);
-                        parent::$MODULE = $res['module'];
-                        parent::$MODULE_INCLUDE = $include;
-                        parent::$MODULE_URI = parent::$HOME_URL . '/' . $path[0];
-                        parent::$URI = parent::$HOME_URL . '/' . implode('/', $path) . (isset($file) && $file != 'index.php' ? '/' . $file : '');
-                        $place = $route;
-                    } else {
-                        // Ошибка 404
-                        parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
-                        parent::$MODULE = '404';
-                    }
-                } else {
-                    // Ошибка 404
-                    parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
-                    parent::$MODULE = '404';
+                    parent::$MODULE_INCLUDE = MODPATH . $res['module'] . DIRECTORY_SEPARATOR . 'index.php';
                 }
             } else {
                 // Ошибка 404

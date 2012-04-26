@@ -43,7 +43,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         } else
             echo lng('error_empty_fields') . '<br /><a href="?act=addvote&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>';
     } else {
-        echo '<form action="index.php?act=addvote&amp;id=' . Vars::$ID . '" method="post">' .
+        echo '<form action="' . Vars::$URI . '?act=addvote&amp;id=' . Vars::$ID . '" method="post">' .
              '<br />' . lng('voting') . ':<br/>' .
              '<input type="text" size="20" maxlength="150" name="vote_name" value="' . Validate::filterString($vote_name) . '"/><br/>';
         if (isset($_POST['plus'])) ++$vote_count;
@@ -56,7 +56,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         echo ($vote_count < 20) ? '<br/><input type="submit" name="plus" value="' . lng('add_answer') . '"/>' : '';
         echo $vote_count > 2 ? '<input type="submit" name="minus" value="' . lng('delete_last') . '"/><br/>' : '<br/>';
         echo '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p></form>';
-        echo '<a href="index.php?id=' . Vars::$ID . '">' . lng('back') . '</a>';
+        echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a>';
     }
 } else {
     header('location: ../404.php');

@@ -33,7 +33,7 @@ else
 // Ник юзера и ссылка на его анкету
 if (Vars::$USER_ID && Vars::$USER_ID != $res['user_id']) {
     echo '<a href="../users/profile.php?user=' . $res['user_id'] . '&amp;fid=' . $res['id'] . '"><b>' . $res['from'] . '</b></a> ';
-    echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '"> [о]</a> <a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> [ц]</a>';
+    echo '<a href="' . Vars::$URI . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '"> [о]</a> <a href="' . Vars::$URI . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> [ц]</a>';
 } else {
     echo '<b>' . $res['from'] . '</b>';
 }
@@ -70,5 +70,5 @@ if (Vars::$USER_SET['smileys'])
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID), 0) / Vars::$USER_SET['page_size']);
-echo '<div class="phdr"><a href="index.php?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('back_to_topic') . '</a></div>';
-echo '<p><a href="index.php">' . lng('to_forum') . '</a></p>';
+echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('back_to_topic') . '</a></div>';
+echo '<p><a href="' . Vars::$URI . '">' . lng('to_forum') . '</a></p>';

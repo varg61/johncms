@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-MIDlet-1: Book 130, , br.BookReader
-MIDlet-Name: Book 130
+MIDlet-1: Book 2, , br.BookReader
+MIDlet-Name: Book 2
 MIDlet-Vendor: MobiCMS
 MIDlet-Version: 1.5.3
 MIDletX-No-Command: true
