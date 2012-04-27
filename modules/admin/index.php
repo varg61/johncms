@@ -16,54 +16,32 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 1) {
-    header('Location: http://johncms.com/404');
+    echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
 
 $tpl = Template::getInstance();
 
-switch (Vars::$ACT) {
-    case'whois':
-        /*
-        -----------------------------------------------------------------
-        IP Whois
-        -----------------------------------------------------------------
-        */
-        $ip = isset($_GET['ip']) ? trim($_GET['ip']) : FALSE;
-        if ($ip) {
-            $ipwhois = '';
-            if (($fsk = @fsockopen('whois.arin.net.', 43))) {
-                fputs($fsk, "$ip\r\n");
-                while (!feof($fsk)) $ipwhois .= fgets($fsk, 1024);
-                @fclose($fsk);
-            }
-            $match = array();
-            if (preg_match('#ReferralServer: whois://(.+)#im', $ipwhois, $match)) {
-                if (strpos($match[1], ':') !== FALSE) {
-                    $pos = strrpos($match[1], ':');
-                    $server = substr($match[1], 0, $pos);
-                    $port = (int)substr($match[1], $pos + 1);
-                    unset($pos);
-                } else {
-                    $server = $match[1];
-                    $port = 43;
-                }
-                $buffer = '';
-                if (($fsk = @fsockopen($server, $port))) {
-                    fputs($fsk, "$ip\r\n");
-                    while (!feof($fsk)) $buffer .= fgets($fsk, 1024);
-                    @fclose($fsk);
-                }
-                $ipwhois = (empty($buffer)) ? $ipwhois : $buffer;
-            }
-            $ipwhois = trim(TextParser::highlightUrl(htmlspecialchars($ipwhois)));
-        } else {
-            $ipwhois = lng('error_wrong_data');
-        }
-        $tpl->ipWhois = nl2br($ipwhois);
-        $tpl->contents = $tpl->includeTpl('whois');
-        break;
+$actions = array(
+    'whois' => 'whois.php',
+);
 
+if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
+    require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
+} else {
+    /*
+    -----------------------------------------------------------------
+    Главное меню Админ панели
+    -----------------------------------------------------------------
+    */
+    unset($_SESSION['form_token']);
+    $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
+    $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = '0'"), 0);
+    //$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
+    $tpl->contents = $tpl->includeTpl('index');
+}
+
+switch (Vars::$ACT) {
     case'users_settings':
         /*
         -----------------------------------------------------------------
@@ -153,14 +131,5 @@ switch (Vars::$ACT) {
         break;
 
     default:
-        /*
-        -----------------------------------------------------------------
-        Главное меню Админ панели
-        -----------------------------------------------------------------
-        */
-        unset($_SESSION['form_token']);
-        $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
-        $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = '0'"), 0);
-        //$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
-        $tpl->contents = $tpl->includeTpl('index');
+
 }

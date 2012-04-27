@@ -9,15 +9,12 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNADM') or die('Error: restricted access');
-
-//TODO: Доработать под новый список файлов!
-
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
-    header('Location: http://mobicms.net/404.php');
+    echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
+
 class scaner
 {
     /*
@@ -26,8 +23,7 @@ class scaner
     -----------------------------------------------------------------
     */
     public $scan_folders = array(
-        '',
-        '/users'
+        'includes',
     );
     public $good_files = array(
         '../users/skl.php'
@@ -44,7 +40,7 @@ class scaner
     {
         // Сканирование на соответствие дистрибутиву
         foreach ($this->scan_folders as $data) {
-            $this->scan_files(ROOT_DIR . $data);
+            $this->scan_files(ROOTPATH . $data);
         }
     }
 
@@ -61,7 +57,7 @@ class scaner
         }
 
         foreach ($this->scan_folders as $data) {
-            $this->scan_files(ROOT_DIR . $data);
+            $this->scan_files(ROOTPATH . $data);
         }
     }
 
@@ -69,7 +65,7 @@ class scaner
     {
         // Добавляем снимок надежных файлов в базу
         foreach ($this->scan_folders as $data) {
-            $this->scan_files(ROOT_DIR . $data, true);
+            $this->scan_files(ROOTPATH . $data, true);
         }
         $filecontents = "";
 
@@ -141,7 +137,9 @@ class scaner
 }
 
 $scaner = new scaner();
-switch (Vars::$MOD) {
+$tpl = Template::getInstance();
+
+switch (Vars::$ACT) {
     case 'scan':
         /*
         -----------------------------------------------------------------
@@ -149,7 +147,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $scaner->scan();
-        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_dist_scan') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_dist_scan') . '</div>';
         if (count($scaner->bad_files)) {
             echo '<div class="rmenu"><small>' . lng('antispy_dist_scan_bad') . '</small></div>';
             echo '<div class="menu">';
@@ -214,14 +212,5 @@ switch (Vars::$MOD) {
         Главное меню Сканера
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php"><b>' . lng('admin_panel') . '</b></a> | ' . lng('antispy') . '</div>' .
-             '<div class="menu"><p><h3>' . lng('antispy_scan_mode') . '</h3><ul>' .
-             '<li><a href="index.php?act=antispy&amp;mod=scan">' . lng('antispy_dist_scan') . '</a><br />' .
-             '<small>' . lng('antispy_dist_scan_help') . '</small></li>' .
-             '<li><a href="index.php?act=antispy&amp;mod=snapscan">' . lng('antispy_snapshot_scan') . '</a><br />' .
-             '<small>' . lng('antispy_snapshot_scan_help') . '</small></li>' .
-             '<li><a href="index.php?act=antispy&amp;mod=snap">' . lng('antispy_snapshot_create') . '</a><br />' .
-             '<small>' . lng('antispy_snapshot_create_help') . '</small></li>' .
-             '</ul></p></div><div class="phdr">&#160;</div>';
+        $tpl->contents = $tpl->includeTpl('antispy_menu');
 }
-echo '<p>' . (Vars::$MOD ? '<a href="index.php?act=antispy">' . lng('antispy_menu') . '</a><br />' : '') . '<a href="index.php">' . lng('admin_panel') . '</a></p>';
