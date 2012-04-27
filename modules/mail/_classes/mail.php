@@ -60,7 +60,6 @@ class Mail extends Vars
                 return mysql_result( mysql_query( "SELECT COUNT(*)
 				FROM `cms_mail_messages`
 				WHERE `contact_id`='" . Vars::$USER_ID . "' 
-
 				AND `delete_in`!='" . Vars::$USER_ID . "' 
 				AND `delete_out`!='" . Vars::$USER_ID . "'" ), 0 );
 			//Исходящие
@@ -68,7 +67,6 @@ class Mail extends Vars
                 return mysql_result( mysql_query( "SELECT COUNT(*)
 				FROM `cms_mail_messages`
 				WHERE `user_id`='" . Vars::$USER_ID . "' 
-
 				AND `delete_in`!='" . Vars::$USER_ID . "' 
 				AND `delete_out`!='" . Vars::$USER_ID . "'" ), 0 );
             //Файлы

@@ -1,10 +1,19 @@
 <div class="phdr"><strong><?php echo lng( 'write_message' ) ?></strong></div>
 <?php echo $this->mail_error ?>
 <div>
-<form name="form" action="<?php echo Vars::$MODULE_URI ?>?act=add" method="post" enctype="multipart/form-data">
+<form name="form" action="<?php echo $this->url ?>" method="post" enctype="multipart/form-data">
 <div class="gmenu">
-<b><?php echo lng( 'nick' ) ?>:</b><br />
+<strong><?php echo lng( 'nick' ) ?>:</strong><br />
 <input type="text" name="login" value="<?php echo $this->login ?>"/><br />
+<?php if($this->count_contact): ?>
+<strong>Или выберите из списка:</strong><br />
+<select name="contact_id">
+	<option value="">Выбрать контакт</option>
+<?php foreach($this->query as $row): ?>	
+	<option value="<?php echo $row['id'] ?>"><?php echo $row['nickname'] ?></option>
+<?php endforeach ?>
+</select><br />
+<? endif ?>
 <strong><?php echo lng( 'message' ) ?>:</strong><br />
 <?php if (!Vars::$IS_MOBILE): ?>
 	<?php echo TextParser::autoBB('form', 'text') ?>
@@ -14,6 +23,7 @@
 <strong><?php echo lng( 'file' ) ?>:</strong><br />
 <input type="file" name="0"/><br />
 <small><?php echo lng( 'max_file_size' ) ?> <?php echo $this->size ?> кб.</small><br />
+<input type="checkbox" name="draft" value="1" /> <?= lng('save_draft') ?><br />
 <input type="hidden" name="token" value="<?= $this->token ?>"/>
 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $this->maxsize ?>" />
 <p><input type="submit" name="submit" value="<?php echo lng( 'sent' ) ?>"/></p>

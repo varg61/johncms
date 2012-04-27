@@ -34,6 +34,8 @@ if(Vars::$ID) {
 				$text = Functions::smileys( $text, $result['rights'] >= 1 ? 1 : 0 );
 			$tpl->contact_login = $row['nickname'];
 			$tpl->user_id = $id;
+			$tpl->users_id = $result['user_id'];
+			$tpl->read = $result['read'];
 			$tpl->text = $text;
 			$tpl->file = $result['filename'] ? Functions::getImage( UploadMail::fileicon( $result['filename'] ),
 			'', 'style="margin: 0 0 -4px 0;"' ) . '&#160;<a href="' . Vars::

@@ -22,7 +22,11 @@
 <?php endif ?>
 <?php echo $this->ignor ?>
 <?php echo $this->list ?>
-
+<p>
+	<div class="func">
+		<a href="<?php echo Vars::$MODULE_URI ?>?act=messages&amp;mod=cleaning&amp;id=<?php echo Vars::$ID ?>"><?php echo lng('cleaning') ?></a>
+	</div>
+</p>
 <p>
 <a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'mail' ) ?></a><br />
 <a href="<?php echo Vars::$HOME_URL ?>/contacts"><?php echo lng( 'contacts' ) ?></a>

@@ -73,7 +73,7 @@ if ( Vars::$ID )
                 if ( $data['delete'] )
                 {
                     if ( $data['filename'] )
-                        @unlink( ROOTPATH . 'files/' . MAILDIR . '/' . $data['filename'] );
+                        @unlink( ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'pm' . DIRECTORY_SEPARATOR . $data['filename'] );
                     mysql_query( "DELETE FROM `cms_mail_messages` WHERE `id`='" . Vars::$ID . "'" );
                 } else
                 {

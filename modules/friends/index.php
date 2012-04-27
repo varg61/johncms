@@ -45,7 +45,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
     		"), 0);
     		if ($tpl->total)
             {
-    			$query = mysql_query( "SELECT `users`.* FROM `cms_mail_contacts`
+    			$query = mysql_query( "SELECT `users`.`id`, `users`.`nickname`, `users`.`last_visit`, `users`.`sex` FROM `cms_mail_contacts`
                 LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
                 WHERE `cms_mail_contacts`.`user_id`='" . Vars::$ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1' ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination() );
                 
@@ -59,7 +59,8 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
                     'nickname' => $row['nickname'],
                     'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' :
 					'w' ) . '.png', '', 'align="middle"' ),
-                    );
+                    'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
+					'<span class="green"> [ON]</span>' ));
                     ++$i;
                 }
                 $tpl->query = $array;
@@ -81,7 +82,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 		"), 0);
 		if ($tpl->total) 
         {
-			$query = mysql_query("SELECT `users`.* FROM `cms_mail_contacts`
+			$query = mysql_query("SELECT `users`.`id`, `users`.`nickname`, `users`.`last_visit`, `users`.`sex` FROM `cms_mail_contacts`
             LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
             WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1' ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination() );
             
@@ -95,7 +96,8 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
                 'nickname' => $row['nickname'],
                 'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' :
 				'w' ) . '.png', '', 'align="middle"' ),
-                );
+				'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
+				'<span class="green"> [ON]</span>' ));
                 ++$i;
             }
             $tpl->query = $array;

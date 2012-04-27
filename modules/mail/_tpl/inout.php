@@ -26,7 +26,16 @@
    <form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>" style="font-size: x-small;"/>
    <input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
 <?php endif ?>
-
+	<p>
+		<div class="func">
+			<?php if($this->pages_type == 'inmess'): ?>
+				<a href="<?php echo Vars::$MODULE_URI ?>?act=inmess&amp;mod=delete_read"><?php echo lng('delete_read') ?></a><br />
+				<a href="<?php echo Vars::$MODULE_URI ?>?act=inmess&amp;mod=cleaning"><?php echo lng('cleaning') ?></a><br />
+			<?php else: ?>
+				<a href="<?php echo Vars::$MODULE_URI ?>?act=outmess&amp;mod=cleaning"><?php echo lng('cleaning') ?></a><br />
+			<?php endif ?>
+		</div>
+	</p>
 <?php else: ?>
 <div class="rmenu"><?php echo $this->mess_err ?></div>
 <?php endif ?>

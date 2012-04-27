@@ -10,6 +10,14 @@
 //TODO: Доработать под новую систему оповещений
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('_IN_JOHNCMS_CONTACTS', 1);
+
+//Закрываем доступ гостям
+if ( !Vars::$USER_ID )
+{
+    Header( 'Location: ' . Vars::$HOME_URL . '/404' );
+    exit;
+}
+
 define('CONTACTSDIR', 'contacts'); //Папка с модулем
 define('CONTACTSPATH', MODPATH . CONTACTSDIR . DIRECTORY_SEPARATOR); //Абсолютный путь до модуля
 //Подключаем шаблонизатор
@@ -56,56 +64,21 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 	$total = Functions::contactsCount();
 	$tpl->total = $total;
 	if ($total) {
-		//Перемещаем контакты в корзину
+		//Перемещаем контакты и сообщения в корзину
 		if (isset($_POST['delete']) && isset($_POST['token']) && isset($_SESSION['token_status']) &&
 			$_POST['token'] == $_SESSION['token_status']) {
 			if (!empty($_POST['delch']) && is_array($_POST['delch'])) {
-				$id = implode(',', $_POST['delch']);
+				$id = array_map('intval', $_POST['delch']);
+				$id = implode(',', $id);
 				if (!empty($id)) {
-					$mass = array();
-					$mass_contact = array();
-					$query = mysql_query("SELECT * 
-					FROM `cms_mail_contacts` 
-					WHERE `user_id`='" . Vars::$USER_ID . "' 
-					AND `contact_id` IN (" . $id . ")");
-					while ($rows = mysql_fetch_assoc($query)) {
-						$mass[] = $rows['id'];
-						$mass_contact[] = $rows['contact_id'];
-					}
-					if (!empty($mass)) {
-						$exp = implode(',', $mass);
-						$sms = implode(',', $mass_contact);
-						$out = array();
-						$query1 = mysql_query("SELECT * 
-						FROM `cms_mail_messages` 
-						WHERE `user_id`='" . Vars::$USER_ID . "'
-						AND `contact_id` IN (" . $sms . ")");
-						while ($rows1 = mysql_fetch_assoc($query1)) {
-							$out[] = $rows1['id'];
-						}
-						$out_str = implode(',', $out);
-						if (!empty($out_str)) {
-							mysql_query("UPDATE `cms_mail_messages`
-							 SET `delete_out`='" . Vars::$USER_ID . "' 
-							 WHERE `id` IN (" . $out_str . ")");
-						}
-						$in = array();
-						$query2 = mysql_query("SELECT * 
-						FROM `cms_mail_messages` 
-						WHERE `contact_id`='" . Vars::$USER_ID . "' 
-						AND `user_id` IN (" . $sms . ")");
-						while ($rows2 = mysql_fetch_assoc($query2)) {
-							$in[] = $rows2['id'];
-						}
-						$in_str = implode(',', $in);
-						if (!empty($in_str)) {
-							mysql_query("UPDATE `cms_mail_messages` SET 
-							`delete_in`='" . Vars::$USER_ID . "' 
-							WHERE `id` IN (" . $in_str . ")");
-						}
-					}
+					mysql_query("UPDATE `cms_mail_messages` SET 
+					`delete_in`='" . Vars::$USER_ID . "'
+					WHERE `user_id` IN (" . $id . ") AND `contact_id`='" . Vars::$USER_ID . "'");
+					mysql_query("UPDATE `cms_mail_messages` SET 
+					`delete_out`='" . Vars::$USER_ID . "'
+					WHERE `contact_id` IN (" . $id . ") AND `user_id`='" . Vars::$USER_ID . "'");
 					mysql_query("UPDATE `cms_mail_contacts` SET 
-					`delete`='1' , 
+					`delete`='1', 
 					`archive`='0'
 					WHERE `user_id`='" . Vars::$USER_ID . "' 
 					AND `contact_id` IN (" . $id . ")");
@@ -118,12 +91,13 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 		if (isset($_POST['archive']) && isset($_POST['token']) && isset($_SESSION['token_status']) &&
 			$_POST['token'] == $_SESSION['token_status']) {
 			if (!empty($_POST['delch']) && is_array($_POST['delch'])) {
-				$id = implode(',', $_POST['delch']);
+				$id = array_map('intval', $_POST['delch']);
+				$id = implode(',', $id);
 				if (!empty($id)) {
 					mysql_query("UPDATE `cms_mail_contacts` 
-				SET	`archive`='1' 
-				WHERE `user_id`='" . Vars::$USER_ID . "' 
-				AND `contact_id` IN (" . $id . ") AND `archive`='0'");
+					SET	`archive`='1' 
+					WHERE `user_id`='" . Vars::$USER_ID . "' 
+					AND `contact_id` IN (" . $id . ") AND `archive`='0'");
 				}
 			}
 			Header('Location: ' . Vars::$MODULE_URI);
@@ -147,7 +121,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 				'', 'style="margin: 0 0 -3px 0;"' ),
 			'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
 			'nickname' => $row['nickname'],
-			'count' => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $row['id'] . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $row['id'] . "')) AND `delete_in`!='" . Vars::$USER_ID . "' AND `delete_out`!='" . Vars::$USER_ID . "'"), 0),
+			'count' => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ") OR (`contact_id`=" . Vars::$USER_ID . " AND `user_id`=" . $row['id'] . ")) AND `delete_in`!=" . Vars::$USER_ID . " AND `delete_out`!=" . Vars::$USER_ID . ""), 0),
 			'count_new' => countNew( $row['id'] ),
 			'url' => ( Vars::$HOME_URL . '/mail?act=messages&amp;id=' . $row['id'] ),
 			'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
@@ -173,6 +147,6 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 	WHERE `banned`='1' 
 	AND `user_id`='" . Vars::$USER_ID . "' 
 	AND `cms_mail_contacts`.`delete`='0'" ), 0 ); //Счетчик заблокированных
-	//Подключаем шаблон модуля index.php
+	//Подключаем шаблон модуля archive.php
 	$tpl->contents = $tpl->includeTpl('index');
 }

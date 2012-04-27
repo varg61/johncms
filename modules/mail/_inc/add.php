@@ -20,10 +20,10 @@ if ( !Vars::$USER_ID )
 }
 //Заголовок
 $tpl->title = lng( 'mail' ) . ' | ' . lng( 'write_message' );
-
+$id = isset( $_POST['contact_id'] ) ? trim( $_POST['contact_id'] ) : '';
 $add_message['login'] = isset( $_POST['login'] ) ? trim( $_POST['login'] ) : '';
 $add_message['text'] = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
-$addmail = new ValidMail($add_message);
+$addmail = new ValidMail($add_message, ($id ? $id: false));
 if($addmail->validateForm() === false) {
 	//Передаем переменные в шаблон
 	$tpl->login = Validate::filterString($add_message['login']);
@@ -31,6 +31,19 @@ if($addmail->validateForm() === false) {
 	//Выводим на экран ошибку
 	$tpl->mail_error = Functions::displayError( $addmail->error_log );
 }
+
+$tpl->count_contact = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `delete`!='1' AND `archive`!='1' AND `banned`!='1'"), 0);
+if($tpl->count_contact) {
+	$query = mysql_query("SELECT `users`.`id`, `users`.`nickname` FROM `cms_mail_contacts` LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id` WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`delete`!='1' AND `cms_mail_contacts`.`archive`!='1' AND `cms_mail_contacts`.`banned`!='1' ORDER BY `cms_mail_contacts`.`time` DESC LIMIT 0,20");
+	$array = array();
+	while($row = mysql_fetch_assoc($query)) {
+		$array[] = array(
+		'id' => $row['id'],
+		'nickname' => $row['nickname']);
+	}
+	$tpl->query = $array;
+}
+$tpl->url = Vars::$MODULE_URI . '?act=send';
 $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
 $tpl->size = Vars::$SYSTEM_SET['flsz'];
 $tpl->token = mt_rand(100, 10000);

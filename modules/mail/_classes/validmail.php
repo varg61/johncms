@@ -167,7 +167,6 @@ Class ValidMail extends Vars {
     */
 	function validateForm() {
 		if (isset($_POST['submit']) && $this->id !== false && self::checkCSRF() === true) {
-			
 			if($this->valIgnor() === false)
 				return false;
 			if($this->valRequest() === false)
@@ -208,16 +207,17 @@ Class ValidMail extends Vars {
 	function addMessage() {
 		if(empty($this->error_log)) {
 			//Обновляем, добавляем контакт
-			$this->checkContact( $this->id );
-			//Отправляем сообщение
-			mysql_query( "INSERT INTO `cms_mail_messages` SET
-			`user_id`='" . parent::$USER_ID . "',
-			`contact_id`='" . $this->id . "',
-			`text`='" . mysql_real_escape_string( $this->array['text'] ) . "',
-			`time`='" . time() . "',
-			`filename`='" . $this->file_name . "',
-			`filesize`='" . $this->file_size . "'" );
-			mysql_query( "UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . parent::$USER_ID );
+			if($this->checkContact( $this->id ) === true) {
+				//Отправляем сообщение
+				mysql_query( "INSERT INTO `cms_mail_messages` SET
+				`user_id`='" . parent::$USER_ID . "',
+				`contact_id`='" . $this->id . "',
+				`text`='" . mysql_real_escape_string( $this->array['text'] ) . "',
+				`time`='" . time() . "',
+				`filename`='" . $this->file_name . "',
+				`filesize`='" . $this->file_size . "'" );
+				mysql_query( "UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . parent::$USER_ID );
+			}
 			Header ( 'Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $this->id );
 			return true;
 		}
@@ -324,6 +324,7 @@ Class ValidMail extends Vars {
     */
     private function checkContact( $id )
     {
+		if(empty($id)) return false;
 		mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `time`)
 		VALUES ('$id', '" . parent::$USER_ID . "', '" . time() . "')
 		ON DUPLICATE KEY UPDATE `time`='" . time() . "', `archive`='0', `delete`='0'");

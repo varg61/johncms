@@ -35,7 +35,8 @@ if ( $total )
     {
         if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
         {
-            $id = implode(',', $_POST['delch']);
+            $id = array_map('intval', $_POST['delch']);
+			$id = implode(',', $id);
 			if (!empty($id)) {
 				$mass = array();
                 $query = mysql_query( "SELECT * 

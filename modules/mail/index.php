@@ -43,7 +43,8 @@ $connect = array(
 'outmess',
 'read',
 'restore',
-'settings' );
+'settings',
+'send' );
 if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && file_exists( MAILPATH .
     '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php' ) )
 {

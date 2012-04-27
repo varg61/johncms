@@ -70,7 +70,7 @@ if ( Vars::$ID )
                         'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
                         'nickname' => $row['nickname'],
                         'file' => $row['filename'] ? '<a href="' . Vars::$MODULE_URI . '?act=load&amp;id=' .
-                            $row['mid'] . '">' . $row['filename'] . '</a> (' . Mail::formatsize( $row['filesize'] ) .
+                            $row['mid'] . '">' . $row['filename'] . '</a> (' . UploadMail::formatsize( $row['filesize'] ) .
                             ')(' . $row['filecount'] . ')' : '',
                         'time' => Functions::displayDate( $row['time'] ),
                         'text' => $text,

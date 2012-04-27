@@ -1,8 +1,10 @@
 <div class="phdr"><strong><?php echo $this->phdr ?></strong></div>
 <div class="gmenu">
 <form name="form" action="<?php echo $this->urlSelect ?>" method="post"><div>
-<strong><?php echo $this->select ?></strong><br />
-<?php echo $this->new_input ?>
+<p><h3><?php echo lng('clear_param') ?></h3>
+<input type="radio" name="cl" value="0" checked="checked" /><?php echo lng('clear_month') ?><br />
+<input type="radio" name="cl" value="1" /><?php echo lng('clear_week') ?><br />
+<input type="radio" name="cl" value="2" /><?php echo lng('clear_all') ?></p>
 <input type="hidden" name="token" value="<?= $this->token ?>"/>
 <input type="submit" name="submit" value="<?php echo $this->submit ?>"/>
 </div></form></div>

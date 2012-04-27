@@ -10,7 +10,7 @@
 <?php if($this->total):?>
     <?php foreach($this->query as $row): ?>
         <div class="<?php echo $row['list'] ?>">
-        <?php echo $row['icon'] ?> <a href="<?php echo Vars::$HOME_URL ?>/profile?user=<?php echo $row['id'] ?>"><?php echo $row['nickname'] ?></a>
+        <?php echo $row['icon'] ?> <a href="<?php echo Vars::$HOME_URL ?>/profile?user=<?php echo $row['id'] ?>"><?php echo $row['nickname'] ?></a><?php echo $row['online'] ?>
         <div class="sub">
             <a href="<?php echo Vars::$MODULE_URI ?>?act=delete&amp;id=<?php echo $row['id']?>"><?php echo lng('delete') ?></a>
         </div>

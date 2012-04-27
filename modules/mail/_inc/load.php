@@ -43,7 +43,7 @@ if ( Vars::$ID )
         }
 		//Загрузка файла
 		Header( 'Location: ' . Vars::$HOME_URL . '/files/users/pm/' . $res['filename'] );
-        exit;
+		exit;
     } else
     {
         //Если файл не существует, показываем сообщение об ошибке

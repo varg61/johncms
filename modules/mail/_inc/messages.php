@@ -25,11 +25,53 @@ $add_message['text'] = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
 $addmail = new ValidMail($add_message, Vars::$ID);
 
 if($addmail->request() !== true && empty( Vars::$MOD )) {
-	$tpl->error = Functions::displayError( $addmail->error_request, '<a href="' . Vars::
-	$MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+	$tpl->contents = Functions::displayError( $addmail->error_request, '<a href="' . Vars::
+	$HOME_URL . '/contacts">' . lng( 'contacts' ) . '</a>' );
 } else {
-	//Удаляем собщение
-	if ( Vars::$ID && Vars::$MOD == 'delete' )
+	//Очистка сообщений
+	if( Vars::$ID && isset($_POST['delete_mess']) && is_array($_POST['delch']) && ValidMail::checkCSRF() === true  ) {
+		$delch = array_map('intval', $_POST['delch']);
+		$delch = implode(',', $delch);
+		mysql_query( "UPDATE `cms_mail_messages` SET
+		`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `id` IN (" . $delch . ")" );
+		mysql_query( "UPDATE `cms_mail_messages` SET
+		`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `id` IN (" . $delch . ")" );
+		Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . Vars::$ID);
+		exit;
+	} else if( Vars::$ID && Vars::$MOD == 'cleaning') {
+		if(isset($_POST['submit']) && ValidMail::checkCSRF() === true ) {
+			$cl = isset($_POST['cl']) ? (int)$_POST['cl'] : '';
+			switch($cl) {
+				case 1:
+					mysql_query( "UPDATE `cms_mail_messages` SET
+					`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `time`<='" . (time() - 604800) . "'" );
+					mysql_query( "UPDATE `cms_mail_messages` SET
+					`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `time`<='" . (time() - 604800) . "'" );
+				break;
+				
+				case 2:
+					mysql_query( "UPDATE `cms_mail_messages` SET
+					`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'" );
+					mysql_query( "UPDATE `cms_mail_messages` SET
+					`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "'" );
+				break;
+				
+				default:
+					mysql_query( "UPDATE `cms_mail_messages` SET
+					`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `time`<='" . (time() - 2592000) . "'" );
+					mysql_query( "UPDATE `cms_mail_messages` SET
+					`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `time`<='" . (time() - 2592000) . "'" );
+			}
+			Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . Vars::$ID);
+			exit;
+		}
+		$tpl->urlSelect = Vars::$MODULE_URI . '?act=messages&amp;mod=cleaning&amp;id=' . Vars::$ID;
+		$tpl->submit = lng( 'clear' );
+		$tpl->phdr = lng( 'cleaning' );
+		$tpl->token = mt_rand(100, 10000);
+		$_SESSION['token_status'] = $tpl->token;
+		$tpl->contents = $tpl->includeTpl( 'time' );
+	} else if ( Vars::$ID && Vars::$MOD == 'delete' ) //Удаляем собщение
     {
         $q = mysql_query( "SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
             Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "'" );
@@ -128,7 +170,15 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 				//Выводим на экран ошибку
 				$tpl->error_add = Functions::displayError( $addmail->error_log );
 			}
+			//$tpl->error = $addmail->error_test;
 			//Считаем количество сообщений
+			$tpl->login = $addmail->nickname;
+			$tpl->ignor = Functions::checkIgnor(Vars::$ID) === true ? '<div class="rmenu">' . lng( 'user_banned' ) . '</div>' : '';
+			$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
+			$tpl->size = Vars::$SYSTEM_SET['flsz'];
+			$tpl->token = mt_rand(100, 10000);
+			$_SESSION['token_status'] = $tpl->token;
+			
 			$total = mysql_result( mysql_query( "SELECT COUNT(*)
 			FROM `cms_mail_messages`
 			WHERE ((`user_id`='" . Vars::$USER_ID . "'
@@ -176,6 +226,8 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 					')' : '',
 					'time' => Functions::displayDate( $row['time'] ),
 					'text' => $text,
+					'read' => $row['read'],
+					'user_id' => $row['user_id'],
 					'url' => ( Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id'] ),
 					'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
 						'<span class="green"> [ON]</span>' ),
@@ -202,18 +254,13 @@ if($addmail->request() !== true && empty( Vars::$MOD )) {
 				$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI .
 				'?act=messages&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::
 				$USER_SET['page_size'] );
+				$tpl->url_type = Vars::$MODULE_URI . '?act=messages&amp;id=' . Vars::$ID;
 				//Подключаем шаблон list.php
 				$tpl->list = $tpl->includeTpl( 'list' );
 			} else
 			{
 				$tpl->list = '<div class="rmenu">' . lng( 'no_messages' ) . '</div>';
 			}
-			$tpl->login = $addmail->nickname;
-			$tpl->ignor = Functions::checkIgnor(Vars::$ID) === true ? '<div class="rmenu">' . lng( 'user_banned' ) . '</div>' : '';
-			$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
-			$tpl->size = Vars::$SYSTEM_SET['flsz'];
-			$tpl->token = mt_rand(100, 10000);
-			$_SESSION['token_status'] = $tpl->token;
 			$tpl->contents = $tpl->includeTpl( 'messages' );
 		}
 	}

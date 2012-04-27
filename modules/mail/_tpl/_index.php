@@ -11,7 +11,11 @@
 <div class="list2">
 <p>
 <?php echo Functions::getImage('mail-elected.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=elected"><?php echo lng( 'elected' ) ?></a>&#160;(<?php echo $this->elected ?>)<br />
+<?php echo Functions::getImage('mail-draft.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=draft"><?php echo lng( 'draft' ) ?></a>&#160;(<?php echo $this->draft ?>)<br />
 <?php echo Functions::getImage('mail-files.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=files"><?php echo lng( 'files' ) ?></a>&#160;(<?php echo $this->files ?>)<br />
 <?php echo Functions::getImage('mail-trash.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=basket"><?php echo lng( 'basket' ) ?></a>&#160;(<?php echo $this->delete ?>)<br />
+<?php if(Vars::$USER_RIGHTS == 9): ?>
+<?php echo Functions::getImage('mail-sending-out.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=sending_out"><?php echo lng( 'sending_out' ) ?></a><br />
+<?php endif ?>
 </p>
 </div>
