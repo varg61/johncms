@@ -9,13 +9,9 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
-
-//TODO: Переделать с $do на $mod
-
 // Проверяем права доступа
-if (Vars::$USER_RIGHTS < 9) {
-    header('Location: http://johncms.com/404.php');
+if (Vars::$USER_RIGHTS != 9) {
+    echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
 

@@ -31,13 +31,14 @@
 <div class="rmenu" style="padding-top: 8px; padding-bottom: 9px">
     <label><?= Functions::getImage('blocked.png', '', 'class="left"') ?>&#160;<?= lng('security') ?></label>
     <ul>
+        <li><a href="<?= Vars::$URI ?>/acl"><?= lng('acl') ?></a></li>
         <?php if (Vars::$USER_RIGHTS == 9) : ?>
-        <li><a href="<?= Vars::$URI ?>/ip_acl"><?= lng('ip_accesslist') ?></a></li>
-        <?php endif; ?>
+        <li><a href="<?= Vars::$URI ?>/ip"><?= lng('ip_accesslist') ?></a></li>
+        <?php endif ?>
         <li><a href="<?= Vars::$URI ?>/antispy"><?= lng('antispy') ?></a></li>
     </ul>
 </div>
-<?php endif; ?>
+<?php endif ?>
 <div class="phdr">
     &#160;
 </div>
