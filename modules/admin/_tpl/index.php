@@ -17,6 +17,7 @@
     <label><?= Functions::getImage('modules.png', '', 'class="left"') ?>&#160;<?= lng('modules') ?></label>
     <ul>
         <li><a href="<?= Vars::$HOME_URL ?>/forum/admin"><?= lng('forum') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/counters"><?= lng('counters') ?></a></li>
     </ul>
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>
