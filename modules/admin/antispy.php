@@ -9,6 +9,8 @@
  * @author      http://johncms.com/about
  */
 
+define('ROOT_DIR', '.');
+
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
     echo Functions::displayError(lng('access_forbidden'));
@@ -23,15 +25,66 @@ class scaner
     -----------------------------------------------------------------
     */
     public $scan_folders = array(
-        'includes',
+        '',
+        '/files',
+        '/images',
+        '/includes',
+        '/install',
+        '/modules',
+        '/templates',
     );
     public $good_files = array(
-        '../users/skl.php'
+        './.htaccess',
+        './index.php',
+
+        './files/.htaccess',
+        './files/forum/index.php',
+        './files/library/index.php',
+        './files/users/album/index.php',
+        './files/users/avatar/index.php',
+        './files/users/index.php',
+        './files/users/photo/index.php',
+        './files/users/pm/index.php',
+
+        './images/avatars/index.php',
+        './images/captcha/.htaccess',
+        './images/index.php',
+        './images/smileys/index.php',
+
+        './includes/.htaccess',
+        './includes/classes/advt.php',
+        './includes/classes/captcha.php',
+        './includes/classes/comments.php',
+        './includes/classes/counters.php',
+        './includes/classes/functions.php',
+        './includes/classes/homepage.php',
+        './includes/classes/network.php',
+        './includes/classes/session.php',
+        './includes/classes/sitemap.php',
+        './includes/classes/system.php',
+        './includes/classes/template.php',
+        './includes/classes/textparser.php',
+        './includes/classes/validate.php',
+        './includes/classes/vars.php',
+        './includes/config/config.php',
+        './includes/core.php',
+        './includes/lib/class.upload.php',
+        './includes/lib/mp3.php',
+        './includes/lib/pclerror.lib.php',
+        './includes/lib/pcltar.lib.php',
+        './includes/lib/pcltrace.lib.php',
+        './includes/lib/pclzip.lib.php',
+        './includes/lib/pear.php',
+        './includes/old_vars.php',
+        './includes/template_default.php',
+
+        './modules/.htaccess',
+        '',
     );
     public $snap_base = 'scan_snapshot.dat';
     public $snap_files = array();
     public $bad_files = array();
-    public $snap = false;
+    public $snap = FALSE;
     public $track_files = array();
     private $checked_folders = array();
     private $cache_files = array();
@@ -40,24 +93,24 @@ class scaner
     {
         // Сканирование на соответствие дистрибутиву
         foreach ($this->scan_folders as $data) {
-            $this->scan_files(ROOTPATH . $data);
+            $this->scan_files(ROOT_DIR . $data);
         }
     }
 
     function snapscan()
     {
         // Сканирование по образу
-        if (file_exists('../files/cache/' . $this->snap_base)) {
-            $filecontents = file('../files/cache/' . $this->snap_base);
+        if (file_exists(CACHEPATH . $this->snap_base)) {
+            $filecontents = file(CACHEPATH . $this->snap_base);
             foreach ($filecontents as $name => $value) {
                 $filecontents[$name] = explode("|", trim($value));
                 $this->track_files[$filecontents[$name][0]] = $filecontents[$name][1];
             }
-            $this->snap = true;
+            $this->snap = TRUE;
         }
 
         foreach ($this->scan_folders as $data) {
-            $this->scan_files(ROOTPATH . $data);
+            $this->scan_files(ROOT_DIR . $data);
         }
     }
 
@@ -65,33 +118,33 @@ class scaner
     {
         // Добавляем снимок надежных файлов в базу
         foreach ($this->scan_folders as $data) {
-            $this->scan_files(ROOTPATH . $data, true);
+            $this->scan_files(ROOT_DIR . $data, TRUE);
         }
         $filecontents = "";
 
         foreach ($this->snap_files as $idx => $data) {
             $filecontents .= $data['file_path'] . "|" . $data['file_crc'] . "\r\n";
         }
-        $filehandle = fopen('../files/cache/' . $this->snap_base, "w+");
+        $filehandle = fopen(CACHEPATH . $this->snap_base, "w+");
         fwrite($filehandle, $filecontents);
         fclose($filehandle);
-        @chmod('../files/cache/' . $this->snap_base, 0666);
+        @chmod(CACHEPATH . $this->snap_base, 0666);
     }
 
-    function scan_files($dir, $snap = false)
+    function scan_files($dir, $snap = FALSE)
     {
         // Служебная функция сканирования
         if (!isset($file))
-            $file = false;
+            $file = FALSE;
         $this->checked_folders[] = $dir . '/' . $file;
 
         if ($dh = @opendir($dir)) {
-            while (false !== ($file = readdir($dh))) {
+            while (FALSE !== ($file = readdir($dh))) {
                 if ($file == '.' or $file == '..' or $file == '.svn' or $file == '.DS_store') {
                     continue;
                 }
                 if (is_dir($dir . '/' . $file)) {
-                    if ($dir != ROOTPATH)
+                    if ($dir != ROOT_DIR)
                         $this->scan_files($dir . '/' . $file, $snap);
                 } else {
                     if ($this->snap or $snap)
@@ -106,7 +159,7 @@ class scaner
                         if ($snap) {
                             $this->snap_files[] = array(
                                 'file_path' => $folder . '/' . $file,
-                                'file_crc' => $file_crc
+                                'file_crc'  => $file_crc
                             );
                         } else {
                             if ($this->snap) {
@@ -115,7 +168,7 @@ class scaner
                                         'file_path' => $folder . '/' . $file,
                                         'file_name' => $file,
                                         'file_date' => $file_date,
-                                        'type' => 1,
+                                        'type'      => 1,
                                         'file_size' => $file_size
                                     );
                             } else {
@@ -124,7 +177,7 @@ class scaner
                                         'file_path' => $folder . '/' . $file,
                                         'file_name' => $file,
                                         'file_date' => $file_date,
-                                        'type' => 0,
+                                        'type'      => 0,
                                         'file_size' => $file_size
                                     );
                             }
@@ -154,11 +207,12 @@ switch (Vars::$ACT) {
             foreach ($scaner->bad_files as $idx => $data) {
                 echo $data['file_path'] . '<br />';
             }
-            echo '</div><div class="phdr">' . lng('total') . ': ' . count($scaner->bad_files) . '</div>';
+            echo'</div>';
         } else {
-            echo '<div class="gmenu">' . lng('antispy_dist_scan_good') . '</div>';
+            echo '<div class="gmenu"><p>' . lng('antispy_dist_scan_good') . '</p></div>';
         }
-        echo '<p><a href="index.php?act=antispy&amp;mod=scan">' . lng('antispy_rescan') . '</a></p>';
+        echo'<div class="phdr">' . lng('total') . ': ' . count($scaner->bad_files) . '</div>' .
+            '<p><a href="' . Vars::$URI . '?act=scan">' . lng('antispy_rescan') . '</a></p>';
         break;
 
     case 'snapscan':
@@ -168,9 +222,9 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $scaner->snapscan();
-        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_scan') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_scan') . '</div>';
         if (count($scaner->track_files) == 0) {
-            echo Functions::displayError(lng('antispy_no_snapshot'), '<a href="index.php?act=antispy&amp;mod=snap">' . lng('antispy_snapshot_create') . '</a>');
+            echo Functions::displayError(lng('antispy_no_snapshot'), '<a href="' . Vars::$URI . '?act=snap">' . lng('antispy_snapshot_create') . '</a>');
         } else {
             if (count($scaner->bad_files)) {
                 echo '<div class="rmenu">' . lng('antispy_snapshot_scan_bad') . '</div>';
@@ -180,7 +234,7 @@ switch (Vars::$ACT) {
                 }
                 echo '</div>';
             } else {
-                echo '<div class="gmenu">' . lng('antispy_snapshot_scan_ok') . '</div>';
+                echo '<div class="gmenu"><p>' . lng('antispy_snapshot_scan_ok') . '</p></div>';
             }
             echo '<div class="phdr">' . lng('total') . ': ' . count($scaner->bad_files) . '</div>';
         }
@@ -192,17 +246,17 @@ switch (Vars::$ACT) {
         Создаем снимок файлов
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?act=antispy"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_create') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_create') . '</div>';
         if (isset($_POST['submit'])) {
             $scaner->snap();
-            echo '<div class="gmenu"><p>' . lng('antispy_snapshot_create_ok') . '</p></div>' .
-                 '<div class="phdr"><a href="index.php?act=antispy">' . lng('continue') . '</a></div>';
+            echo'<div class="gmenu"><p>' . lng('antispy_snapshot_create_ok') . '</p></div>' .
+                '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('continue') . '</a></div>';
         } else {
-            echo '<form action="index.php?act=antispy&amp;mod=snap" method="post">' .
-                 '<div class="menu"><p>' . lng('antispy_snapshot_warning') . '</p>' .
-                 '<p><input type="submit" name="submit" value="' . lng('antispy_snapshot_create') . '" /></p>' .
-                 '</div></form>' .
-                 '<div class="phdr"><small>' . lng('antispy_snapshot_help') . '</small></div>';
+            echo'<form action="' . Vars::$URI . '?act=snap" method="post">' .
+                '<div class="menu"><p>' . lng('antispy_snapshot_warning') . '</p>' .
+                '<p><input type="submit" name="submit" value="' . lng('antispy_snapshot_create') . '" /></p>' .
+                '</div></form>' .
+                '<div class="phdr"><small>' . lng('antispy_snapshot_help') . '</small></div>';
         }
         break;
 
