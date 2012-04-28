@@ -39,14 +39,14 @@ function forum_link($m)
             if (mysql_num_rows($req) > 0) {
                 $res = mysql_fetch_array($req);
                 $name = strtr($res['text'], array(
-                                                 '&quot;' => '',
-                                                 '&amp;' => '',
-                                                 '&lt;' => '',
-                                                 '&gt;' => '',
-                                                 '&#039;' => '',
-                                                 '[' => '',
-                                                 ']' => ''
-                                            ));
+                    '&quot;' => '',
+                    '&amp;'  => '',
+                    '&lt;'   => '',
+                    '&gt;'   => '',
+                    '&#039;' => '',
+                    '['      => '',
+                    ']'      => ''
+                ));
                 if (mb_strlen($name) > 40)
                     $name = mb_substr($name, 0, 40) . '...';
                 return '[url=' . $m[3] . ']' . $name . '[/url]';
@@ -122,7 +122,7 @@ switch ($type1['type']) {
             mysql_query("UPDATE `forum` SET `time` = '" . time() . "' WHERE `id` = " . Vars::$ID);
             // Обновляем статистику юзера
             mysql_query("UPDATE `users` SET
-                `postforum`='" . ($datauser['postforum'] + 1) . "',
+                `count_forum` = '" . ++Vars::$USER_DATA['count_forum'] . "',
                 `lastpost` = '" . time() . "'
                 WHERE `id` = " . Vars::$USER_ID
             );
@@ -133,12 +133,11 @@ switch ($type1['type']) {
             else
                 header("Location: " . Vars::$URI . "?id=" . Vars::$ID . "&page=$page");
         } else {
-            if ($datauser['postforum'] == 0) {
+            if (!Vars::$USER_DATA['count_forum']) {
                 if (!isset($_GET['yes'])) {
-                    $lng_faq = Vars::loadLanguage('faq');
-                    echo '<p>' . $lng_faq['forum_rules_text'] . '</p>' .
-                         '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes">' . lng('agree') . '</a> | ' .
-                         '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('not_agree') . '</a></p>';
+                    echo'<p>' . lng('forum_rules_text') . '</p>' .
+                        '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes">' . lng('agree') . '</a> | ' .
+                        '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('not_agree') . '</a></p>';
                     exit;
                 }
             }
@@ -149,22 +148,24 @@ switch ($type1['type']) {
             echo '<div class="phdr"><b>' . lng('topic') . ':</b> ' . $type1['text'] . '</div>';
             //TODO: Разобраться с $datauser
             if ($msg && !isset($_POST['submit']))
-                echo '<div class="list1">' . Functions::displayUser($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>', 'body' => $msg_pre)) . '</div>';
+                echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
+                                                                                     'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
+                                                                                     'body'   => $msg_pre)) . '</div>';
             echo '<form name="form" action="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><div class="gmenu">' .
-                 '<p><h3>' . lng('post') . '</h3>';
+                '<p><h3>' . lng('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
             echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Validate::filterString($msg)) . '</textarea></p>' .
-                 '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
+                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
             if (Vars::$USER_SET['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . lng('translit');
             echo '</p><p><input type="submit" name="submit" value="' . lng('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
-                 ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
-                 '</p></div></form>';
+                ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                '</p></div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . lng('translit') . '</a> | ' .
-             '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-             '<p><a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
+            '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
+            '<p><a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
         break;
 
     case 'm':
@@ -187,7 +188,7 @@ switch ($type1['type']) {
         $shift = (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600;
         $vr = date("d.m.Y / H:i", $type1['time'] + $shift);
         $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
-        $txt = isset($_POST['txt']) ? intval($_POST['txt']) : false;
+        $txt = isset($_POST['txt']) ? intval($_POST['txt']) : FALSE;
         if (isset($_POST['msgtrans']))
             $msg = Functions::translit($msg);
         $to = $type1['from'];
@@ -266,7 +267,7 @@ switch ($type1['type']) {
             // Обновляем статистику юзера
             //TODO: Разобраться со счетчиком!
             mysql_query("UPDATE `users` SET
-                `postforum`='" . ($datauser['postforum'] + 1) . "',
+                `count_forum`='" . ++Vars::$USER_DATA['count_forum'] . "',
                 `lastpost` = '" . time() . "'
                 WHERE `id` = " . Vars::$USER_ID
             );
@@ -280,10 +281,9 @@ switch ($type1['type']) {
             }
         } else {
             $qt = " $type1[text]";
-            if (($datauser['postforum'] == "" || $datauser['postforum'] == 0)) {
+            if ((Vars::$USER_DATA['count_forum'] == "" || Vars::$USER_DATA['count_forum'] == 0)) {
                 if (!isset($_GET['yes'])) {
-                    $lng_faq = Vars::loadLanguage('faq');
-                    echo '<p>' . $lng_faq['forum_rules_text'] . '</p>';
+                    echo '<p>' . lng('forum_rules_text') . '</p>';
                     echo '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes&amp;cyt">' . lng('agree') . '</a> | <a href="' . Vars::$URI . '?id=' . $type1['refid'] . '">' . lng('not_agree') . '</a></p>';
                     exit;
                 }
@@ -298,37 +298,39 @@ switch ($type1['type']) {
             $qt = Validate::filterString($qt, 0, 2);
             //TODO: Разобраться с $datauser
             if (!empty($_POST['msg']) && !isset($_POST['submit']))
-                echo '<div class="list1">' . Functions::displayUser($datauser, array('iphide' => 1, 'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>', 'body' => $msg_pre)) . '</div>';
+                echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
+                                                                                     'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
+                                                                                     'body'   => $msg_pre)) . '</div>';
             echo '<form name="form" action="?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '" method="post"><div class="gmenu">';
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
                 echo '<p><b>' . $type1['from'] . '</b> <span class="gray">(' . date("d.m.Y/H:i", $type1['time']) . ')</span></p>' .
-                     '<p><h3>' . lng('cytate') . '</h3>' .
-                     '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="citata">' . (empty($_POST['citata']) ? $qt : Validate::filterString($_POST['citata'])) . '</textarea>' .
-                     '<br /><small>' . lng('cytate_help') . '</small></p>';
+                    '<p><h3>' . lng('cytate') . '</h3>' .
+                    '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="citata">' . (empty($_POST['citata']) ? $qt : Validate::filterString($_POST['citata'])) . '</textarea>' .
+                    '<br /><small>' . lng('cytate_help') . '</small></p>';
             } else {
                 // Форма с репликой
                 echo '<p><h3>' . lng('reference') . '</h3>' .
-                     '<input type="radio" value="0" ' . (!$txt ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
-                     '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_1') . ',<br />' .
-                     '<input type="radio" value="3" ' . ($txt == 3 ? 'checked="checked"'
-                        : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_2') . ' (<a href="' . Vars::$URI . '?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . lng('reply_3') . ',<br />' .
-                     '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_4') . '</p>';
+                    '<input type="radio" value="0" ' . (!$txt ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
+                    '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_1') . ',<br />' .
+                    '<input type="radio" value="3" ' . ($txt == 3 ? 'checked="checked"'
+                    : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_2') . ' (<a href="' . Vars::$URI . '?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . lng('reply_3') . ',<br />' .
+                    '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_4') . '</p>';
             }
             echo '<p><h3>' . lng('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
             echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Validate::filterString($_POST['msg'])) . '</textarea></p>' .
-                 '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
+                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
             if (Vars::$USER_SET['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . lng('translit');
             echo '</p><p><input type="submit" name="submit" value="' . lng('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
-                 ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
-                 '</p></div></form>';
+                ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                '</p></div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . lng('translit') . '</a> | ' .
-             '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-             '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
+            '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
+            '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
         break;
 
     default:
