@@ -13,50 +13,34 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Рейтинг самых читаемых статей
 echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('library') . '</b></a> | ' . lng('top_read') . '</div>';
-$req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC LIMIT 50");
-$totalnew = mysql_num_rows($req);
-$start = Vars::$PAGE * 10 - 10;
-if ($totalnew < $start + 10) {
-    $end = $totalnew;
-} else {
-    $end = $start + 10;
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1' AND `count`>'0'"), 0);
+if ($total > 100) {
+    $total = 100;
 }
-if ($totalnew != 0) {
-    while ($res = mysql_fetch_array($req)) {
-        if ($i >= $start && $i < $end) {
-            $d = $i / 2;
-            $d1 = ceil($d);
-            $d2 = $d1 - $d;
-            $d3 = ceil($d2);
-            if ($d3 == 0) {
-                $div = "<div class='c'>";
-            } else {
-                $div = "<div class='b'>";
-            }
-            echo $div;
-            echo '<b><a href="?id=' . $res['id'] . '">' . htmlentities($res['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
-            echo htmlentities($res['announce'], ENT_QUOTES, 'UTF-8') . '<br />';
-            echo lng('reads') . ': ' . $res['count'] . '<br/>';
-            $nadir = $res['refid'];
-            $dirlink = $nadir;
-            $pat = "";
-            while ($nadir != "0") {
-                $dnew = mysql_query("select * from `lib` where type = 'cat' and id = '" . $nadir . "';");
-                $dnew1 = mysql_fetch_array($dnew);
-                $pat = $dnew1['text'] . '/' . $pat;
-                $nadir = $dnew1['refid'];
-            }
-            $l = mb_strlen($pat);
-            $pat1 = mb_substr($pat, 0, $l - 1);
-            echo '[<a href="' . Vars::$URI . '?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
-        }
-        ++$i;
+$req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC " . Vars::db_pagination());
+if ($total) {
+    if ($total > Vars::$USER_SET['page_size']) {
+        echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=topread&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
-    echo "<hr/><p>";
-    if ($totalnew > 10) {
-        //TODO: Добавить новую навигацию по страницам
+    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+        echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        echo '<b><a href="?id=' . $res['id'] . '">' . htmlspecialchars($res['name']) . '</a></b>';
+        echo '<div class="sub">' . Validate::filterString($res['announce']) . '<br/>';
+        echo '<span class="gray">' . lng('reads') . ': ' . $res['count'] . '</span>';
+        echo'</div></div>';
     }
+
 } else {
     echo "<p>" . lng('list_empty') . "<br/>";
 }
+echo'<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+
+if ($total > Vars::$USER_SET['page_size']) {
+    echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=topread&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . Vars::$URI . '?act=topread" method="post">' .
+        '<input type="text" name="page" size="2"/>' .
+        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+        '</form></p>';
+}
+
 echo '<a href="' . Vars::$URI . '">' . lng('to_library') . '</a></p>';
