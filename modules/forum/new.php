@@ -21,6 +21,22 @@ if (empty($_SESSION['uid'])) {
         $_SESSION['uppost'] = 0;
     }
 }
+
+/*
+-----------------------------------------------------------------
+Настройки форума
+-----------------------------------------------------------------
+*/
+if (!Vars::$USER_ID || ($set_forum = Vars::getUserData('set_forum')) === FALSE) {
+    $set_forum = array(
+        'farea'    => 0,
+        'upfp'     => 0,
+        'preview'  => 1,
+        'postclip' => 1,
+        'postcut'  => 2
+    );
+}
+
 if (Vars::$USER_ID) {
     switch (Vars::$ACT) {
         case 'reset':
