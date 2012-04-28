@@ -7,9 +7,9 @@
         <?php if (Vars::$USER_RIGHTS >= 7 && $this->regTotal) : ?>
         <li><span class="red"><a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('users_reg') ?></a>&#160;(<?= $this->regTotal ?>)</b></span></li>
         <?php endif; ?>
-        <li><a href="<?= Vars::$HOME_URL ?>/users/search"><?= lng('users_list') ?></a>&#160;(<?= $this->usrTotal ?>)</li>
+        <li><a href="<?= Vars::$HOME_URL ?>/users/search"><?= lng('community') ?></a>&#160;(<?= $this->usrTotal ?>)</li>
         <?php if (Vars::$USER_RIGHTS >= 7) : ?>
-        <li><a href="<?= Vars::$MODULE_URI ?>?act=users_settings"><?= lng('settings') ?></a></li>
+        <li><a href="<?= Vars::$MODULE_URI ?>/users_settings"><?= lng('settings') ?></a></li>
         <?php endif; ?>
     </ul>
 </div>
@@ -25,7 +25,7 @@
 <div class="menu" style="padding-top: 8px; padding-bottom: 9px">
     <label><?= Functions::getImage('settings.png', '', 'class="left"') ?>&#160;<?= lng('system') ?></label>
     <ul>
-        <li><a href="<?= Vars::$URI ?>?act=system"><?= lng('system_settings') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/settings"><?= lng('system_settings') ?></a></li>
         <li><a href="<?= Vars::$URI ?>/languages"><?= lng('language_settings') ?></a></li>
         <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><?= lng('smileys') ?></a></li>
     </ul>

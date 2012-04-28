@@ -16,9 +16,6 @@ abstract class Vars
     Системные переменные
     -----------------------------------------------------------------
     */
-    public static $SYSTEM_SET;                   // Системные настройки
-    public static $CORE_ERRORS = array();        // Ошибки ядра
-
     public static $LNG_ISO = 'en';               // Двухбуквенный ISO код языка
     public static $LNG_LIST = array();           // Список имеющихся языков
 
@@ -33,6 +30,9 @@ abstract class Vars
     public static $MODULE_URI = '';              // URI модуля
     public static $URI = '';                     // URI активного скрипта
     public static $MODULE = 'mainmenu';          // Активный модуль
+    public static $CORE_ERRORS = array();        // Ошибки ядра
+
+    public static $SYSTEM_SET;                   // Системные настройки
 
     /*
     -----------------------------------------------------------------

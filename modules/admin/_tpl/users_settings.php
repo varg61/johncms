@@ -11,7 +11,7 @@
     <?= lng('settings_default') ?>
 </div>
 <?php endif; ?>
-<form action="<?= Vars::$URI ?>?act=users_settings" method="post">
+<form action="<?= Vars::$URI ?>" method="post">
 <div class="<?= (Vars::$USER_SYS['reg_open'] ? 'g' : 'r') ?>menu">
     <div class="formblock">
         <label><?= lng('registration') ?></label><br/>
@@ -46,12 +46,12 @@
             <input name="upload_animation" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_animation'] ? 'checked="checked"' : '') ?>/>&#160;
             <?= lng('upload_animation') ?>
         </div>
-            <div class="formblock">
-                <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
-                <?= lng('change_nickname_allow') ?><br/>
-                <input name="change_period" size="2" value="<?= Vars::$USER_SYS['change_period'] ?>" maxlength="2"/>&#160;
-                <?= lng('how_many_days') ?>
-            </div>
+    <div class="formblock">
+        <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('change_nickname_allow') ?><br/>
+        <input name="change_period" size="2" value="<?= Vars::$USER_SYS['change_period'] ?>" maxlength="2"/>&#160;
+        <?= lng('how_many_days') ?>
+    </div>
     <div class="formblock">
         <label><?= lng('antiflood') ?></label><br/>
         <input type="radio" name="flood_mode" value="3" <?= (Vars::$USER_SYS['flood_mode'] == 3 ? 'checked="checked"' : '') ?>/>
@@ -85,7 +85,7 @@
 </form>
 <div class="phdr">
     <?php if (Vars::$USER_RIGHTS == 9) : ?>
-    <a href="<?= Vars::$URI ?>?act=users_settings&amp;reset"><?= lng('reset_settings') ?></a>
+    <a href="<?= Vars::$URI ?>?reset"><?= lng('reset_settings') ?></a>
     <?php else : ?>
     &#160;
     <?php endif; ?>

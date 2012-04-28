@@ -1,8 +1,8 @@
 <div class="phdr">
-    <a href="<?= Vars::$MODULE_URI ?>?act=users_settings"><b><?= lng('users') ?></b></a> | <?= lng('reset_settings') ?>
+    <a href="<?= Vars::$URI ?>"><b><?= lng('users') ?></b></a> | <?= lng('reset_settings') ?>
 </div>
 <div class="menu">
-    <form action="<?= Vars::$URI ?>?act=users_settings" method="post">
+    <form action="<?= Vars::$URI ?>" method="post">
         <div class="formblock">
             <?= lng('reset_settings_warning') ?>
         </div>
@@ -13,5 +13,5 @@
     </form>
 </div>
 <div class="phdr">
-    <a href="<?= Vars::$MODULE_URI ?>?act=users_settings"><?= lng('back') ?></a>
+    <a href="<?= Vars::$URI ?>?act=users_settings"><?= lng('back') ?></a>
 </div>

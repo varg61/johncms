@@ -59,8 +59,7 @@ if (mysql_num_rows($req)) {
     $error = lng('error_post_deleted') . '<br /><a href="' . Vars::$URI . '">' . lng('forum') . '</a>';
 }
 if (!$error) {
-    //TODO: Переделать с $do на $mod
-    switch ($do) {
+    switch (Vars::$MOD) {
         case 'restore':
             /*
             -----------------------------------------------------------------
@@ -144,9 +143,9 @@ if (!$error) {
             if ($posts == 1)
                 echo lng('delete_last_post_warning') . '<br />';
             echo lng('delete_confirmation') . '</p>' .
-                 '<p><a href="' . $link . '">' . lng('cancel') . '</a> | <a href="' . Vars::$URI . '?act=editpost&amp;do=delete&amp;id=' . Vars::$ID . '">' . lng('delete') . '</a>';
+                 '<p><a href="' . $link . '">' . lng('cancel') . '</a> | <a href="' . Vars::$URI . '?act=editpost&amp;mod=delete&amp;id=' . Vars::$ID . '">' . lng('delete') . '</a>';
             if (Vars::$USER_RIGHTS == 9)
-                echo ' | <a href="' . Vars::$URI . '?act=editpost&amp;do=delete&amp;hide&amp;id=' . Vars::$ID . '">' . lng('hide') . '</a>';
+                echo ' | <a href="' . Vars::$URI . '?act=editpost&amp;mod=delete&amp;hide&amp;id=' . Vars::$ID . '">' . lng('hide') . '</a>';
             echo '</p></div>';
             echo '<div class="phdr"><small>' . lng('delete_post_help') . '</small></div>';
             break;

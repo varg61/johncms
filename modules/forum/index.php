@@ -626,8 +626,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         // Ссылки на редактирование / удаление постов
                         $menu = array(
                             '<a href="' . Vars::$URI . '?act=editpost&amp;id=' . $res['id'] . '">' . lng('edit') . '</a>',
-                            (Vars::$USER_RIGHTS >= 7 && $res['close'] == 1 ? '<a href="' . Vars::$URI . '?act=editpost&amp;do=restore&amp;id=' . $res['id'] . '">' . lng('restore') . '</a>' : ''),
-                            ($res['close'] == 1 ? '' : '<a href="' . Vars::$URI . '?act=editpost&amp;do=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>')
+                            (Vars::$USER_RIGHTS >= 7 && $res['close'] == 1 ? '<a href="' . Vars::$URI . '?act=editpost&amp;mod=restore&amp;id=' . $res['id'] . '">' . lng('restore') . '</a>' : ''),
+                            ($res['close'] == 1 ? '' : '<a href="' . Vars::$URI . '?act=editpost&amp;mod=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>')
                         );
                         echo '<div class="sub">';
                         if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6)
