@@ -43,6 +43,32 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     switch (Vars::$ACT) {
+        case 'stat':
+            /*
+            -----------------------------------------------------------------
+            Статистика пользователя
+            -----------------------------------------------------------------
+            */
+            if (time() > $user['last_visit'] + 300) {
+                $tpl->lastvisit = date("d.m.Y (H:i)", $user['last_visit']);
+            }
+
+            $tpl->num = array(
+                50,
+                100,
+                500,
+                1000,
+                5000
+            );
+
+            $tpl->query = array(
+                'count_forum'    => lng('forum'),
+                'count_comments' => lng('comments')
+            );
+
+            $tpl->contents = $tpl->includeTpl('stat');
+            break;
+
         case 'info':
             /*
             -----------------------------------------------------------------
