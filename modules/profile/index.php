@@ -11,7 +11,6 @@
 
 //TODO: Добавить информацию о дне рождении
 //TODO: Добавить информацию о подтверждении регистрации
-//TODO: Возможность из админки открывать просмотр профилей для гостей
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
@@ -49,23 +48,6 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             Статистика пользователя
             -----------------------------------------------------------------
             */
-            if (time() > $user['last_visit'] + 300) {
-                $tpl->lastvisit = date("d.m.Y (H:i)", $user['last_visit']);
-            }
-
-            $tpl->num = array(
-                50,
-                100,
-                500,
-                1000,
-                5000
-            );
-
-            $tpl->query = array(
-                'count_forum'    => lng('forum'),
-                'count_comments' => lng('comments')
-            );
-
             $tpl->contents = $tpl->includeTpl('stat');
             break;
 
@@ -77,6 +59,15 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             */
             //TODO: Добавить вывод даты рожденья
             $tpl->contents = $tpl->includeTpl('info');
+            break;
+
+        case 'password':
+            /*
+            -----------------------------------------------------------------
+            Меняем пароль
+            -----------------------------------------------------------------
+            */
+            $tpl->contents = $tpl->includeTpl('password');
             break;
 
         default:

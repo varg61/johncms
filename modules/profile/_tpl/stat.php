@@ -1,3 +1,10 @@
+<?php
+$num = array(50, 100, 500, 1000, 5000);
+$query = array(
+    'count_forum'    => lng('forum'),
+    'count_comments' => lng('comments')
+);
+?>
 <div class="phdr">
     <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= lng('profile') ?></b></a> | <?= lng('statistics') ?>
 </div>
@@ -9,8 +16,8 @@
             <?php if (Vars::$USER_RIGHTS && !$this->user['level']) : ?>
             <li><?= lng('awaiting_registration') ?></li>
             <?php endif; ?>
-            <?php if (isset($this->lastvisit)) : ?>
-            <li><span class="gray"><?= lng('last_visit') ?>:</span> <?= $this->lastvisit ?></li>
+            <?php if (time() > $this->user['last_visit'] + 300) : ?>
+            <li><span class="gray"><?= lng('last_visit') ?>:</span> <?= date("d.m.Y (H:i)", $this->user['last_visit']) ?></li>
             <?php endif; ?>
             <li><span class="gray"><?= ($this->user['sex'] == 'm' ? lng('registered_m') : lng('registered_w')) ?>:</span> <?= date("d.m.Y (H:i)", $this->user['join_date']) ?></li>
         </ul>
@@ -26,16 +33,16 @@
         <label><?= Functions::getImage('award.png', '', 'class="left"') . '&#160;' . lng('achievements') ?></label><br/>
         <table border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <?php foreach ($this->num as $val) : ?>
+                <?php foreach ($num as $val) : ?>
                 <td width="28" align="center">
                     <small><?= $val ?></small>
                 </td>
                 <?php endforeach; ?>
                 <td></td>
             </tr>
-            <?php foreach ($this->query as $key => $val) : ?>
+            <?php foreach ($query as $key => $val) : ?>
             <tr>
-                <?php foreach ($this->num as $achieve) : ?>
+                <?php foreach ($num as $achieve) : ?>
                 <td align="center"><?= Functions::getImage(($this->user[$key] >= $achieve ? 'green' : 'red') . '.png') ?></td>
                 <?php endforeach; ?>
                 <td>
