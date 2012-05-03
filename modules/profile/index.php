@@ -20,7 +20,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Получаем данные пользователя
 -----------------------------------------------------------------
 */
-if (Vars::$USER_ID) {
+if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
     if (($user = Vars::getUser()) === FALSE) {
         echo Functions::displayError(lng('user_does_not_exist'));
         exit;

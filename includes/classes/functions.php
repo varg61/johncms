@@ -249,7 +249,7 @@ class Functions extends Vars
                 $out = self::getImage('del.png', '', 'align="middle"');
             }
             $out .= '&#160;';
-            $out .= !Vars::$USER_ID || Vars::$USER_ID == $user['id']
+            $out .= (!Vars::$USER_ID && !Vars::$USER_SYS['view_profiles']) || Vars::$USER_ID == $user['id']
                 ? '<b>' . $user['nickname'] . '</b>'
                 : '<a href="' . parent::$HOME_URL . '/profile?user=' . $user['id'] . '"><b>' . $user['nickname'] . '</b></a>';
             $rank = array(
