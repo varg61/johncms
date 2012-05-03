@@ -30,7 +30,7 @@ class Validate
             $error = lng('error_wrong_symbols');
         } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $var)) {
             $error = lng('error_double_charset');
-        } elseif (filter_var($var, FILTER_VALIDATE_INT) !== false) {
+        } elseif (filter_var($var, FILTER_VALIDATE_INT) !== false && !Vars::$USER_SYS['digits_only']) {
             $error = lng('error_digits_only');
         } elseif (preg_match("/(.)\\1\\1\\1/", $var)) {
             $error = lng('error_recurring_characters');

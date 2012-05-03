@@ -50,7 +50,9 @@
         <input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;
         <?= lng('change_nickname_allow') ?><br/>
         <input name="change_period" size="2" value="<?= Vars::$USER_SYS['change_period'] ?>" maxlength="2"/>&#160;
-        <?= lng('how_many_days') ?>
+        <?= lng('how_many_days') ?><br/>
+        <input name="digits_only" type="checkbox" value="1" <?= (Vars::$USER_SYS['digits_only'] ? 'checked="checked"' : '') ?>/>&#160;
+        <?= lng('digits_only') ?>
     </div>
     <div class="formblock">
         <label><?= lng('antiflood') ?></label><br/>

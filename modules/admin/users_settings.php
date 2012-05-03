@@ -43,6 +43,7 @@ if (Vars::$USER_RIGHTS >= 7) {
             Vars::$USER_SYS['change_period'] = isset($_POST['change_period']) ? intval($_POST['change_period']) : 7;
             Vars::$USER_SYS['change_sex'] = isset($_POST['change_sex']);
             Vars::$USER_SYS['change_status'] = isset($_POST['change_status']);
+            Vars::$USER_SYS['digits_only'] = isset($_POST['digits_only']);
             Vars::$USER_SYS['upload_avatars'] = isset($_POST['upload_avatars']);
             Vars::$USER_SYS['upload_animation'] = isset($_POST['upload_animation']);
             Vars::$USER_SYS['view_online'] = isset($_POST['view_online']);
