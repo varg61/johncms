@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_PROFILE') or die('Error: restricted access');
 
 global $user, $tpl;
 
@@ -262,7 +262,6 @@ switch (Vars::$MOD) {
         if (Vars::$USER_RIGHTS >= 7) {
             if (isset($_POST['submit'])
                 && isset($_POST['rights'])
-                && isset($_POST['password'])
                 && !empty($_POST['password'])
                 && isset($_POST['form_token'])
                 && isset($_SESSION['form_token'])
@@ -400,9 +399,9 @@ switch (Vars::$MOD) {
         }
 
         if (isset($_POST['submit'])
-            && isset($_POST['token'])
-            && isset($_SESSION['token_profile'])
-            && $_POST['token'] == $_SESSION['token_profile']
+            && isset($_POST['form_token'])
+            && isset($_SESSION['form_token'])
+            && $_POST['form_token'] == $_SESSION['form_token']
         ) {
             $error = array();
 
@@ -504,7 +503,7 @@ switch (Vars::$MOD) {
         }
 
         $tpl->user = $user;
-        $tpl->token = mt_rand(100, 10000);
-        $_SESSION['token_profile'] = $tpl->token;
+        $tpl->form_token = mt_rand(100, 10000);
+        $_SESSION['form_token'] = $tpl->form_token;
         $tpl->contents = $tpl->includeTpl('profile_edit');
 }

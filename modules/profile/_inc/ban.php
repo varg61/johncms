@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_PROFILE') or die('Error: restricted access');
 
 $ban = isset($_GET['ban']) ? intval($_GET['ban']) : 0;
 switch (Vars::$MOD) {

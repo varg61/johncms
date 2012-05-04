@@ -13,6 +13,7 @@
 //TODO: Добавить информацию о подтверждении регистрации
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+define('_IN_PROFILE', 1);
 
 /*
 -----------------------------------------------------------------
@@ -35,6 +36,7 @@ $tpl->user = $user;
 $actions = array(
     'activity' => 'activity.php',
     'edit'     => 'edit.php',
+    'password' => 'password.php',
     'settings' => 'settings.php',
 );
 
@@ -59,15 +61,6 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             */
             //TODO: Добавить вывод даты рожденья
             $tpl->contents = $tpl->includeTpl('info');
-            break;
-
-        case 'password':
-            /*
-            -----------------------------------------------------------------
-            Меняем пароль
-            -----------------------------------------------------------------
-            */
-            $tpl->contents = $tpl->includeTpl('password');
             break;
 
         default:

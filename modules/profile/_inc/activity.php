@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_PROFILE') or die('Error: restricted access');
 
 /*
 -----------------------------------------------------------------

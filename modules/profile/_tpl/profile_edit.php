@@ -45,7 +45,9 @@
         <div class="formblock">
             <label for="imname"><?= lng('name') ?></label><br/>
             <input id="imname" type="text" value="<?= htmlspecialchars($this->user['imname']) ?>" name="imname"/>
-            <div class="desc"><?= lng('description_name') ?></div>
+            <div class="desc">
+                <?= lng('description_name') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="birth"><?= lng('birthday') ?></label><br/>
@@ -55,28 +57,38 @@
             <input id="birth" type="text" value="<?= htmlspecialchars($this->day) ?>" size="2" maxlength="2" name="day" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
             <input type="text" value="<?= htmlspecialchars($this->month) ?>" size="2" maxlength="2" name="month" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
             <input type="text" value="<?= htmlspecialchars($this->year) ?>" size="4" maxlength="4" name="year" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
-            <div class="desc"><?= lng('description_birth') ?></div>
+            <div class="desc">
+                <?= lng('description_birth') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="live"><?= lng('live') ?></label><br/>
             <input id="live" type="text" value="<?= htmlspecialchars($this->user['live']) ?>" name="live"/>
-            <div class="desc"><?= lng('description_live') ?></div>
+            <div class="desc">
+                <?= lng('description_live') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="about"><?= lng('about') ?></label><br/>
             <?php if (!Vars::$IS_MOBILE) echo TextParser::autoBB('form', 'about') ?>
             <textarea id="about" rows="<?= Vars::$USER_SET['field_h'] ?>" cols="20" name="about"><?= htmlspecialchars($this->user['about']) ?></textarea>
-            <div class="desc"><?= lng('description_about') ?></div>
+            <div class="desc">
+                <?= lng('description_about') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="tel"><?= lng('phone_number') ?></label><br/>
             <input id="tel" type="text" value="<?= htmlspecialchars($this->user['tel']) ?>" name="tel"/>
-            <div class="desc"><?= lng('description_phone_number') ?></div>
+            <div class="desc">
+                <?= lng('description_phone_number') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="siteurl"><?= lng('site') ?></label><br/>
             <input id="siteurl" type="text" value="<?= htmlspecialchars($this->user['siteurl']) ?>" name="siteurl"/>
-            <div class="desc"><?= lng('description_siteurl') ?></div>
+            <div class="desc">
+                <?= lng('description_siteurl') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="email">E-mail</label><br/>
@@ -85,23 +97,29 @@
             <?php endif; ?>
             <input id="email" type="text" value="<?= htmlspecialchars($this->user['email']) ?>" name="email" <?= (isset($this->email_error) ? 'class="error"' : '') ?>/>
             <input name="mailvis" type="checkbox" value="1"<?= ($this->user['mailvis'] ? ' checked="checked"' : '') ?>/>&#160;<?= lng('show_in_profile') ?>
-            <div class="desc"><?= lng('description_email') ?></div>
+            <div class="desc">
+                <?= lng('description_email') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="icq">ICQ</label><br/>
             <input id="icq" type="text" value="<?= $this->user['icq'] ?>" name="icq" size="10" maxlength="10"/>
-            <div class="desc"><?= lng('description_icq') ?></div>
+            <div class="desc">
+                <?= lng('description_icq') ?>
+            </div>
         </div>
         <div class="formblock">
             <label for="skype">Skype</label><br/>
             <input id="skype" type="text" value="<?= htmlspecialchars($this->user['skype']) ?>" name="skype"/>
-            <div class="desc"><?= lng('description_skype') ?></div>
+            <div class="desc">
+                <?= lng('description_skype') ?>
+            </div>
         </div>
         <div class="formblock">
             <input type="submit" value="<?= lng('save') ?>" name="submit"/>
         </div>
     </div>
-    <input type="hidden" name="token" value="<?= $this->token ?>"/>
+    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
 <div class="phdr">
     <a href="<?= Vars::$MODULE_URI ?>?user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
