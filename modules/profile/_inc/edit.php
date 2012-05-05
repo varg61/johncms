@@ -27,6 +27,7 @@ if ($user['id'] != Vars::$USER_ID
 }
 
 $tpl->setUsers = Vars::$USER_SYS;
+$error = array();
 
 if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
     $tpl->avatar = TRUE;
@@ -105,7 +106,6 @@ switch (Vars::$MOD) {
                 && isset($_SESSION['form_token'])
                 && $_POST['form_token'] == $_SESSION['form_token']
             ) {
-                $error = array();
                 if ($_FILES['imagefile']['size'] > 0) {
                     // Проверка на допустимый вес файла
                     if ($_FILES['imagefile']['size'] > 10240) {
@@ -260,11 +260,9 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 7) {
-            $error = array();
             if (isset($_POST['submit'])
                 && isset($_POST['rights'])
-                && !empty($_POST['password'])
-                && isset($_POST['captcha'])
+                && isset($_POST['password'])
                 && isset($_POST['form_token'])
                 && isset($_SESSION['form_token'])
                 && $_POST['form_token'] == $_SESSION['form_token']
@@ -273,9 +271,7 @@ switch (Vars::$MOD) {
                 && $_POST['rights'] != 8
                 && $_POST['rights'] <= 9
             ) {
-                if (mb_strlen($_POST['captcha']) < 3 || $_POST['captcha'] != $_SESSION['captcha']) {
-                    $error['captcha'] = lng('error_wrong_captcha');
-                } else {
+                if (Captcha::check()) {
                     $rights = intval($_POST['rights']);
                     $password = trim($_POST['password']);
                     if (Validate::password($password) === TRUE
@@ -287,13 +283,15 @@ switch (Vars::$MOD) {
                         $user['rights'] = $rights;
                         $tpl->user = $user;
                         $tpl->save = 1;
-                        if($user['id'] == Vars::$USER_ID){
+                        if ($user['id'] == Vars::$USER_ID) {
                             header('Location: ' . Vars::$URI . '?act=edit');
                             exit;
                         }
                     } else {
                         $error['password'] = lng('error_wrong_password');
                     }
+                } else {
+                    $error['captcha'] = lng('error_wrong_captcha');
                 }
             }
 
@@ -316,29 +314,42 @@ switch (Vars::$MOD) {
             if ($user['change_time'] < time() - (Vars::$USER_SYS['change_period'] * 86400)
                 || Vars::$USER_RIGHTS >= 7
             ) {
-                $tpl->nickname = $user['nickname'];
-                if (isset($_POST['submit'])
-                    && isset($_POST['nickname'])
+                $tpl->nickname = isset($_POST['nickname']) ? trim($_POST['nickname']) : $user['nickname'];
+                if ((isset($_POST['check_login']) || isset($_POST['submit']))
+                    && isset($_POST['password'])
                     && isset($_POST['form_token'])
                     && isset($_SESSION['form_token'])
                     && $_POST['form_token'] == $_SESSION['form_token']
-                    && $_POST['nickname'] != $user['nickname']
+                    && $tpl->nickname != $user['nickname']
+                    && Validate::nickname($tpl->nickname, TRUE)
+                    && Validate::nicknameAvailability($tpl->nickname, TRUE)
                 ) {
-                    $tpl->nickname = trim($_POST['nickname']);
-                    if (Validate::nickname($tpl->nickname, TRUE) === TRUE
-                        && Validate::nicknameAvailability($tpl->nickname, TRUE) === TRUE
-                    ) {
-                        mysql_query("UPDATE `users` SET
-                            `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "',
-                            `change_time` = " . time() . "
-                            WHERE `id` = " . $user['id']
-                        );
-                        header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
-                        exit;
+                    if (isset($_POST['submit'])) {
+                        if (Captcha::check()) {
+                            $password = trim($_POST['password']);
+                            if (Validate::password($password) === TRUE
+                                && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
+                            ) {
+                                mysql_query("UPDATE `users` SET
+                                    `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "',
+                                    `change_time` = " . time() . "
+                                    WHERE `id` = " . $user['id']
+                                );
+                                $tpl->contents = $tpl->includeTpl('change_nickname_confirmation');
+                                exit;
+                            } else {
+                                $error['password'] = lng('error_wrong_password');
+                            }
+                        } else {
+                            $error['captcha'] = lng('error_wrong_captcha');
+                        }
                     } else {
-                        $tpl->error = Functions::displayError(Validate::$error);
+                        $tpl->available = 1;
                     }
                 }
+
+                $tpl->user = $user;
+                $tpl->error = array_merge($error, Validate::$error);
                 $tpl->form_token = mt_rand(100, 10000);
                 $_SESSION['form_token'] = $tpl->form_token;
                 $tpl->contents = $tpl->includeTpl('change_nickname');
