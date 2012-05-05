@@ -32,7 +32,7 @@ class Captcha
     Показываем картинку CAPTCHA и форму ввода кода
     -----------------------------------------------------------------
     */
-    public static function display($input_field = true)
+    public static function display($input_field = false)
     {
         $captcha_path = ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
         $img_file = md5(mt_rand(0, 1000) . microtime(true)) . '.png';
@@ -54,7 +54,7 @@ class Captcha
 
         // Показываем картинку CAPTCHA
         $_SESSION['captcha'] = $code;
-        $input = $input_field ? '<br /><input type="text" size="' . self::$lenght_max . '" maxlength="' . self::$lenght_max . '"  name="captcha"/>&#160;' . lng('captcha') : '';
+        $input = $input_field ? '<br /><input type="text" id="captcha" size="' . self::$lenght_max . '" maxlength="' . self::$lenght_max . '"  name="captcha"/>&#160;' . lng('captcha') : '';
         return '<img width="' . self::$width . '" height="' . self::$height . '" alt="' . lng('captcha_help') . '" src="' . Vars::$HOME_URL . '/files/temp/' . $img_file . '" border="1"/>' . $input;
     }
 

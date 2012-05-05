@@ -5,11 +5,21 @@
 <div class="topmenu">
     <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= lng('user') ?></a> | <b><?= lng('administration') ?></b>
 </div>
+<?php if (!empty($this->error)) : ?>
+<div class="rmenu" style="padding-top: 8px; padding-bottom: 10px">
+    <?= lng('errors_occurred') ?>
+</div>
+<?php endif; ?>
+<?php if (isset($this->save)) : ?>
+<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
+    <?= lng('settings_saved') ?>
+</div>
+<?php endif; ?>
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
 <form action="<?= Vars::$URI ?>?act=edit&amp;mod=administration&amp;user=<?= $this->user['id'] ?>" method="post">
-    <div class="rmenu">
+    <div class="gmenu">
         <div class="formblock">
             <label><?= lng('rank') ?></label><br/>
             <p>
@@ -30,10 +40,18 @@
         </div>
         <div class="formblock">
             <label for="password"><?= lng('your_password') ?></label><br/>
-            <input id="password" type="password" name="password"/>
+            <?php if (isset($this->error['password'])) : ?>
+            <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['password'] ?><br/></small>
+            <?php endif; ?>
+            <input id="password" type="password" name="password" <?= (isset($this->error['password']) ? 'class="error"' : '') ?>/>
         </div>
         <div class="formblock">
-            <?= lng('password_warning') ?>
+            <label for="captcha"><?= lng('captcha') ?></label><br/>
+            <?= Captcha::display() ?><br/>
+            <?php if (isset($this->error['captcha'])) : ?>
+            <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['captcha'] ?><br/></small>
+            <?php endif; ?>
+            <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->error['captcha']) ? 'class="error"' : '') ?>/>
         </div>
         <div class="formblock">
             <input type="submit" value="<?= lng('save') ?>" name="submit"/>

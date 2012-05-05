@@ -40,7 +40,7 @@ if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPAR
 if ($tpl->setUsers['change_nickname']
     || Vars::$USER_RIGHTS >= 7
 ) {
-    $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=nick&amp;user=' . $user['id'] . '">' . lng('nickname') . '</a>';
+    $menu[] = '<a href="' . Vars::$URI . '?act=edit&amp;mod=nickname&amp;user=' . $user['id'] . '">' . lng('nickname') . '</a>';
 }
 
 // Ссылка на смену статуса
@@ -260,9 +260,11 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 7) {
+            $error = array();
             if (isset($_POST['submit'])
                 && isset($_POST['rights'])
                 && !empty($_POST['password'])
+                && isset($_POST['captcha'])
                 && isset($_POST['form_token'])
                 && isset($_SESSION['form_token'])
                 && $_POST['form_token'] == $_SESSION['form_token']
@@ -271,23 +273,31 @@ switch (Vars::$MOD) {
                 && $_POST['rights'] != 8
                 && $_POST['rights'] <= 9
             ) {
-                $rights = intval($_POST['rights']);
-                $password = trim($_POST['password']);
-                if (Validate::password($password) === TRUE
-                    && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
-                    && (Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && $rights < 7))
-                ) {
-                    // Если пароль совпадает, обрабатываем форму
-                    mysql_query("UPDATE `users` SET `rights` = '$rights' WHERE `id` = " . $user['id']);
-                    header('Location: ' . Vars::$URI . '?act=edit');
-                    exit;
+                if (mb_strlen($_POST['captcha']) < 3 || $_POST['captcha'] != $_SESSION['captcha']) {
+                    $error['captcha'] = lng('error_wrong_captcha');
                 } else {
-                    // Если пароль не совпадает, разлогиниваем пользователя
-                    Vars::userUnset(TRUE);
-                    header('Location: ' . Vars::$HOME_URL);
-                    exit;
+                    $rights = intval($_POST['rights']);
+                    $password = trim($_POST['password']);
+                    if (Validate::password($password) === TRUE
+                        && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
+                        && (Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && $rights < 7))
+                    ) {
+                        // Если пароль совпадает, обрабатываем форму
+                        mysql_query("UPDATE `users` SET `rights` = '$rights' WHERE `id` = " . $user['id']);
+                        $user['rights'] = $rights;
+                        $tpl->user = $user;
+                        $tpl->save = 1;
+                        if($user['id'] == Vars::$USER_ID){
+                            header('Location: ' . Vars::$URI . '?act=edit');
+                            exit;
+                        }
+                    } else {
+                        $error['password'] = lng('error_wrong_password');
+                    }
                 }
             }
+
+            $tpl->error = $error;
             $tpl->form_token = mt_rand(100, 10000);
             $_SESSION['form_token'] = $tpl->form_token;
             $tpl->contents = $tpl->includeTpl('profile_edit_adm');
@@ -296,7 +306,7 @@ switch (Vars::$MOD) {
         }
         break;
 
-    case 'nick':
+    case 'nickname':
         /*
         -----------------------------------------------------------------
         Смена ника

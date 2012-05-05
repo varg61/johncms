@@ -29,7 +29,7 @@
         </div>
         <div class="formblock">
             <label for="captcha"><?= lng('captcha') ?></label><br/>
-            <?= Captcha::display(0) ?><br/>
+            <?= Captcha::display() ?><br/>
             <?php if (isset($this->error['captcha'])) : ?>
             <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['captcha'] ?><br/></small>
             <?php endif; ?>
