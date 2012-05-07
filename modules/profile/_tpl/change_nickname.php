@@ -37,14 +37,6 @@
             <input id="password" type="password" name="password" <?= (isset($this->error['password']) ? 'class="error"' : '') ?>/>
         </div>
         <div class="formblock">
-            <label for="captcha"><?= lng('captcha') ?></label><br/>
-            <?= Captcha::display() ?><br/>
-            <?php if (isset($this->error['captcha'])) : ?>
-            <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['captcha'] ?><br/></small>
-            <?php endif; ?>
-            <input id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->error['captcha']) ? 'class="error"' : '') ?>/>
-        </div>
-        <div class="formblock">
             <input type="submit" value="<?= lng('save') ?>" name="submit"/>
         </div>
     </div>

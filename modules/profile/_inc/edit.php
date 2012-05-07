@@ -271,27 +271,23 @@ switch (Vars::$MOD) {
                 && $_POST['rights'] != 8
                 && $_POST['rights'] <= 9
             ) {
-                if (Captcha::check()) {
-                    $rights = intval($_POST['rights']);
-                    $password = trim($_POST['password']);
-                    if (Validate::password($password) === TRUE
-                        && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
-                        && (Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && $rights < 7))
-                    ) {
-                        // Если пароль совпадает, обрабатываем форму
-                        mysql_query("UPDATE `users` SET `rights` = '$rights' WHERE `id` = " . $user['id']);
-                        $user['rights'] = $rights;
-                        $tpl->user = $user;
-                        $tpl->save = 1;
-                        if ($user['id'] == Vars::$USER_ID) {
-                            header('Location: ' . Vars::$URI . '?act=edit');
-                            exit;
-                        }
-                    } else {
-                        $error['password'] = lng('error_wrong_password');
+                $rights = intval($_POST['rights']);
+                $password = trim($_POST['password']);
+                if (Validate::password($password) === TRUE
+                    && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
+                    && (Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && $rights < 7))
+                ) {
+                    // Если пароль совпадает, обрабатываем форму
+                    mysql_query("UPDATE `users` SET `rights` = '$rights' WHERE `id` = " . $user['id']);
+                    $user['rights'] = $rights;
+                    $tpl->user = $user;
+                    $tpl->save = 1;
+                    if ($user['id'] == Vars::$USER_ID) {
+                        header('Location: ' . Vars::$URI . '?act=edit');
+                        exit;
                     }
                 } else {
-                    $error['captcha'] = lng('error_wrong_captcha');
+                    $error['password'] = lng('error_wrong_password');
                 }
             }
 
@@ -325,23 +321,19 @@ switch (Vars::$MOD) {
                     && Validate::nicknameAvailability($tpl->nickname, TRUE)
                 ) {
                     if (isset($_POST['submit'])) {
-                        if (Captcha::check()) {
-                            $password = trim($_POST['password']);
-                            if (Validate::password($password) === TRUE
-                                && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
-                            ) {
-                                mysql_query("UPDATE `users` SET
+                        $password = trim($_POST['password']);
+                        if (Validate::password($password) === TRUE
+                            && crypt($password, Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']
+                        ) {
+                            mysql_query("UPDATE `users` SET
                                     `nickname` = '" . mysql_real_escape_string($tpl->nickname) . "',
                                     `change_time` = " . time() . "
                                     WHERE `id` = " . $user['id']
-                                );
-                                $tpl->contents = $tpl->includeTpl('change_nickname_confirmation');
-                                exit;
-                            } else {
-                                $error['password'] = lng('error_wrong_password');
-                            }
+                            );
+                            $tpl->contents = $tpl->includeTpl('change_nickname_confirmation');
+                            exit;
                         } else {
-                            $error['captcha'] = lng('error_wrong_captcha');
+                            $error['password'] = lng('error_wrong_password');
                         }
                     } else {
                         $tpl->available = 1;

@@ -46,18 +46,9 @@ if (isset($_POST['submit'])
     $newpass = trim($_POST['newpass']);
     $newconf = trim($_POST['newconf']);
 
-    // Проверяем CAPTCHA
-    if (mb_strlen($_POST['captcha']) < 3 || $_POST['captcha'] != $_SESSION['captcha']) {
-        $error['captcha'] = lng('error_wrong_captcha');
-    } else {
-        // Проверяем исходный пароль
-        if (Validate::password($oldpass, TRUE) === TRUE) {
-            if (crypt($oldpass, Vars::$USER_DATA['password']) !== Vars::$USER_DATA['password']) {
-                $error['oldpass'] = lng('error_wrong_password');
-            }
-        } else {
-            $error['oldpass'] = Validate::$error['password'];
-        }
+    // Проверяем исходный пароль
+    if (crypt($oldpass, Vars::$USER_DATA['password']) !== Vars::$USER_DATA['password']) {
+        $error['oldpass'] = lng('error_wrong_password');
     }
 
     // Проверяем новый пароль
