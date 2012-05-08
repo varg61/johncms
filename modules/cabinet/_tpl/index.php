@@ -8,7 +8,7 @@
     </div>
     <div class="formblock">
         <div>
-            <?= Functions::getImage('album_4.png') ?>&#160;<a href=""><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)
+            <?= Functions::getImage('album_4.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)
         </div>
         <div>
             <?= Functions::getImage('comments.png') ?>&#160;<a href=""><?= lng('guestbook') ?></a>&#160;()

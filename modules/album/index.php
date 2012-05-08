@@ -43,7 +43,7 @@ if (!$user) {
 Функция голосований за фотографии
 -----------------------------------------------------------------
 */
-function vote_photo($arg = null)
+function vote_photo($arg = NULL)
 {
     global $datauser;
     //TODO: Разобраться со счетчиками
@@ -61,13 +61,13 @@ function vote_photo($arg = null)
             // Проверяем, имеет ли юзер право голоса
             $req = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = " . Vars::$USER_ID . " AND `file_id` = '" . $arg['id'] . "' LIMIT 1");
             if (!mysql_num_rows($req))
-                $out .= '<br />' . lng('vote') . ': <a href="album.php?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | ' .
-                    '<a href="album.php?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
+                $out .= '<br />' . lng('vote') . ': <a href="' . Vars::$URI . '?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | ' .
+                    '<a href="' . Vars::$URI . '?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
         }
         $out .= '</div>';
         return $out;
     } else {
-        return false;
+        return FALSE;
     }
 }
 
@@ -76,26 +76,25 @@ function vote_photo($arg = null)
 Переключаем режимы работы
 -----------------------------------------------------------------
 */
-$array = array(
-    'comments' => 'includes/album',
-    'delete' => 'includes/album',
-    'edit' => 'includes/album',
-    'image_delete' => 'includes/album',
-    'image_download' => 'includes/album',
-    'image_edit' => 'includes/album',
-    'image_move' => 'includes/album',
-    'image_upload' => 'includes/album',
-    'list' => 'includes/album',
-    'new_comm' => 'includes/album',
-    'show' => 'includes/album',
-    'sort' => 'includes/album',
-    'top' => 'includes/album',
-    'users' => 'includes/album',
-    'vote' => 'includes/album'
+$actions = array(
+    'comments'       => 'comments.php',
+    'delete'         => 'delete.php',
+    'edit'           => 'edit.php',
+    'image_delete'   => 'image_delete.php',
+    'image_download' => 'image_download.php',
+    'image_edit'     => 'image_edit.php',
+    'image_move'     => 'image_move.php',
+    'image_upload'   => 'image_upload.php',
+    'list'           => 'list.php',
+    'new_comm'       => 'new_comm.php',
+    'show'           => 'show.php',
+    'sort'           => 'sort.php',
+    'users'          => 'users.php',
+    'vote'           => 'vote.php',
 );
-$path = !empty($array[Vars::$ACT]) ? $array[Vars::$ACT] . '/' : '';
-if (array_key_exists(Vars::$ACT, $array) && file_exists($path . Vars::$ACT . '.php')) {
-    require_once($path . Vars::$ACT . '.php');
+
+if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
+    require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     $tpl = Template::getInstance();
     $tpl->new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);

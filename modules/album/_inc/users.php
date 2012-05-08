@@ -30,16 +30,16 @@ switch (Vars::$MOD) {
         $sql = "WHERE `users`.`sex` != ''";
 }
 $menu = array(
-    (!Vars::$MOD ? '<b>' . lng('all') . '</b>' : '<a href="album.php?act=users">' . lng('all') . '</a>'),
-    (Vars::$MOD == 'boys' ? '<b>' . lng('mans') . '</b>' : '<a href="album.php?act=users&amp;mod=boys">' . lng('mans') . '</a>'),
-    (Vars::$MOD == 'girls' ? '<b>' . lng('womans') . '</b>' : '<a href="album.php?act=users&amp;mod=girls">' . lng('womans') . '</a>')
+    (!Vars::$MOD ? '<b>' . lng('all') . '</b>' : '<a href="' . Vars::$URI . '?act=users">' . lng('all') . '</a>'),
+    (Vars::$MOD == 'boys' ? '<b>' . lng('mans') . '</b>' : '<a href="' . Vars::$URI . '?act=users&amp;mod=boys">' . lng('mans') . '</a>'),
+    (Vars::$MOD == 'girls' ? '<b>' . lng('womans') . '</b>' : '<a href="' . Vars::$URI . '?act=users&amp;mod=girls">' . lng('womans') . '</a>')
 );
-echo '<div class="phdr"><a href="album.php"><b>' . lng('photo_albums') . '</b></a> | ' . lng('list') . '</div>' .
+echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | ' . lng('list') . '</div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     FROM `cms_album_files`
-    LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
-"), 0);
+    LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
+" . $sql), 0);
 if ($total) {
     $req = mysql_query("SELECT `cms_album_files`.*, COUNT(`cms_album_files`.`id`) AS `count`, `users`.`id` AS `uid`, `users`.`name` AS `nick`, `users`.`sex`
         FROM `cms_album_files`
@@ -49,7 +49,7 @@ if ($total) {
     $i = 0;
     while ($res = mysql_fetch_assoc($req)) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"') . '&#160;<a href="album.php?act=list&amp;user=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
+        echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"') . '&#160;<a href="' . Vars::$URI . '?act=list&amp;user=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
         ++$i;
     }
 } else {
@@ -57,8 +57,8 @@ if ($total) {
 }
 echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination('album.php?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="album.php?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
+    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . Vars::$URI . '?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';

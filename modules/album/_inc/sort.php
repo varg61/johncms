@@ -18,12 +18,12 @@ switch (Vars::$MOD) {
         Передвигаем альбом на позицию вверх
         -----------------------------------------------------------------
         */
-        if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
-            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['user_id'] . "'");
+        if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
+            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $sort = $res['sort'];
-                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['user_id'] . "' AND `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
+                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
                 if (mysql_num_rows($req)) {
                     $res = mysql_fetch_assoc($req);
                     $id2 = $res['id'];
@@ -41,12 +41,12 @@ switch (Vars::$MOD) {
         Передвигаем альбом на позицию вниз
         -----------------------------------------------------------------
         */
-        if ($al && $user['user_id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
-            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['user_id'] . "'");
+        if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
+            $req = mysql_query("SELECT `sort` FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 $sort = $res['sort'];
-                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['user_id'] . "' AND `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
+                $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
                 if (mysql_num_rows($req)) {
                     $res = mysql_fetch_assoc($req);
                     $id2 = $res['id'];
@@ -59,4 +59,4 @@ switch (Vars::$MOD) {
         break;
 }
 
-header('Location: album.php?act=list&user=' . $user['user_id']);
+header('Location: ' . Vars::$URI . '?act=list&user=' . $user['id']);

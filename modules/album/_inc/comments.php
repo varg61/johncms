@@ -38,21 +38,21 @@ if (mysql_num_rows($req_obj)) {
     if ($res_a['access'] == 1 && $owner['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
         // Если доступ закрыт
         echo Functions::displayError(lng('access_forbidden')) .
-            '<div class="phdr"><a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . lng('album_list') . '</a></div>';
+            '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $owner['id'] . '">' . lng('album_list') . '</a></div>';
         exit;
     }
-    $context_top = '<div class="phdr"><a href="album.php"><b>' . lng('photo_albums') . '</b></a> | ' .
-        '<a href="album.php?act=list&amp;user=' . $owner['id'] . '">' . lng('personal_2') . '</a></div>' .
-        '<div class="menu"><a href="album.php?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="../files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
+    $context_top = '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | ' .
+        '<a href="' . Vars::$URI . '?act=list&amp;user=' . $owner['id'] . '">' . lng('personal_2') . '</a></div>' .
+        '<div class="menu"><a href="' . Vars::$URI . '?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="../files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
     if (!empty($res_obj['description']))
         $context_top .= '<div class="gray">' . Functions::smileys(Validate::filterString($res_obj['description'], 1)) . '</div>';
     $context_top .= '<div class="sub">' .
         '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['name'] . '</b></a> | ' .
-        '<a href="album.php?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . Validate::filterString($res_a['name']) . '</a>';
+        '<a href="' . Vars::$URI . '?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . Validate::filterString($res_a['name']) . '</a>';
     if ($res_obj['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
         $context_top .= vote_photo($res_obj) .
             '<div class="gray">' . lng('count_views') . ': ' . $res_obj['views'] . ', ' . lng('count_downloads') . ': ' . $res_obj['downloads'] . '</div>' .
-            '<a href="album.php?act=image_download&amp;img=' . $res_obj['id'] . '">' . lng('download') . '</a>';
+            '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res_obj['id'] . '">' . lng('download') . '</a>';
     }
     $context_top .= '</div></div>';
 
@@ -64,7 +64,7 @@ if (mysql_num_rows($req_obj)) {
     $arg = array(
         'comments_table' => 'cms_album_comments', // Таблица с комментариями
         'object_table' => 'cms_album_files', // Таблица комментируемых объектов
-        'script' => 'album.php?act=comments', // Имя скрипта (с параметрами вызова)
+        'script' =>  Vars::$URI . '?act=comments', // Имя скрипта (с параметрами вызова)
         'sub_id_name' => 'img', // Имя идентификатора комментируемого объекта
         'sub_id' => $img, // Идентификатор комментируемого объекта
         'owner' => $owner['id'], // Владелец объекта
@@ -81,7 +81,7 @@ if (mysql_num_rows($req_obj)) {
     Ставим метку прочтения
     -----------------------------------------------------------------
     */
-    if (Vars::$USER_ID == $user['user_id'] && $res_obj['unread_comments'])
+    if (Vars::$USER_ID == $user['id'] && $res_obj['unread_comments'])
         mysql_query("UPDATE `cms_album_files` SET `unread_comments` = '0' WHERE `id` = '$img' LIMIT 1");
 
     /*
