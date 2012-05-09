@@ -24,7 +24,6 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         exit;
     }
     $res_a = mysql_fetch_assoc($req_a);
-    require_once('../includes/lib/class.upload.php');
     echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . lng('photo_album') . '</b></a> | ' . lng('upload_photo') . '</div>';
     if (isset($_POST['submit'])) {
         $handle = new upload($_FILES['imagefile']);
@@ -50,7 +49,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             //$handle->image_text_background = '#AAAAAA';
             //$handle->image_text_background_percent = 50;
             //$handle->image_text_padding = 1;
-            $handle->process('../files/users/album/' . $user['id'] . '/');
+            $handle->process(ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR);
             $img_name = $handle->file_dst_name;
             if ($handle->processed) {
                 // Обрабатываем превьюшку
@@ -60,7 +59,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                 $handle->image_y = 80;
                 $handle->image_ratio_no_zoom_in = true;
                 $handle->image_convert = 'jpg';
-                $handle->process('../files/users/album/' . $user['id'] . '/');
+                $handle->process(ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR);
                 $tmb_name = $handle->file_dst_name;
                 if ($handle->processed) {
                     $description = isset($_POST['description']) ? trim($_POST['description']) : '';

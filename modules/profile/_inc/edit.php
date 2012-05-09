@@ -18,12 +18,11 @@ global $user, $tpl;
 Проверяем права доступа для редактирования Профиля
 -----------------------------------------------------------------
 */
-if ($user['id'] != Vars::$USER_ID
-    && Vars::$USER_RIGHTS != 9
-    && (Vars::$USER_RIGHTS < 7 || $user['rights'] >= Vars::$USER_RIGHTS)
-) {
-    echo Functions::displayError(lng('error_rights'));
-    exit;
+if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 7) {
+    exit(Functions::displayError(lng('access_forbidden')));
+}
+if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS != 9 && $user['rights'] >= Vars::$USER_RIGHTS) {
+    exit(Functions::displayError(lng('error_rights')));
 }
 
 $tpl->setUsers = Vars::$USER_SYS;

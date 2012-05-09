@@ -25,8 +25,8 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `album_id` = '" . $res_a['id'] . "'");
             while ($res = mysql_fetch_assoc($req)) {
                 // Удаляем файлы фотографий
-                @unlink('../files/users/album/' . $user['id'] . '/' . $res['img_name']);
-                @unlink('../files/users/album/' . $user['id'] . '/' . $res['tmb_name']);
+                @unlink(ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR . $res['img_name']);
+                @unlink(ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR . $res['tmb_name']);
                 // Удаляем записи из таблицы скачиваний
                 mysql_query("DELETE FROM `cms_album_downloads` WHERE `file_id` = '" . $res['id'] . "'");
                 // Удаляем записи из таблицы голосований

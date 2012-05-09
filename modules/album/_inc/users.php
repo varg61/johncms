@@ -24,10 +24,10 @@ switch (Vars::$MOD) {
         break;
 
     case 'girls':
-        $sql = "WHERE `users`.`sex` = 'zh'";
+        $sql = "WHERE `users`.`sex` = 'w'";
         break;
     default:
-        $sql = "WHERE `users`.`sex` != ''";
+        $sql = "";
 }
 $menu = array(
     (!Vars::$MOD ? '<b>' . lng('all') . '</b>' : '<a href="' . Vars::$URI . '?act=users">' . lng('all') . '</a>'),
@@ -41,16 +41,16 @@ $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
 " . $sql), 0);
 if ($total) {
-    $req = mysql_query("SELECT `cms_album_files`.*, COUNT(`cms_album_files`.`id`) AS `count`, `users`.`id` AS `uid`, `users`.`name` AS `nick`, `users`.`sex`
+    $req = mysql_query("SELECT `cms_album_files`.*, COUNT(`cms_album_files`.`id`) AS `count`, `users`.`id` AS `uid`, `users`.`nickname`, `users`.`sex`
         FROM `cms_album_files`
         LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` $sql
-        GROUP BY `cms_album_files`.`user_id` ORDER BY `users`.`name` ASC LIMIT " . Vars::db_pagination()
+        GROUP BY `cms_album_files`.`user_id` ORDER BY `users`.`nickname` ASC " . Vars::db_pagination()
     );
     $i = 0;
-    while ($res = mysql_fetch_assoc($req)) {
+    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"') . '&#160;<a href="' . Vars::$URI . '?act=list&amp;user=' . $res['uid'] . '">' . $res['nick'] . '</a> (' . $res['count'] . ')</div>';
-        ++$i;
+        echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"') . '&#160;' .
+            '<a href="' . Vars::$URI . '?act=list&amp;user=' . $res['uid'] . '">' . $res['nickname'] . '</a> (' . $res['count'] . ')</div>';
     }
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';

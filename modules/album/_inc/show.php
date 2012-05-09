@@ -88,9 +88,8 @@ $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE 
 if ($total > Vars::$USER_SET['page_size'])
     echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 if ($total) {
-    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `id` DESC LIMIT " . Vars::db_pagination());
-    $i = 0;
-    while (($res = mysql_fetch_assoc($req)) !== false) {
+    $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `id` DESC " . Vars::db_pagination());
+    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">');
         if ($view) {
             /*
@@ -122,7 +121,7 @@ if ($total) {
             Предпросмотр изображения в списке
             -----------------------------------------------------------------
             */
-            echo '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="../files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
+            echo '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
         }
         if (!empty($res['description']))
             echo '<div class="gray">' . Functions::smileys(Validate::filterString($res['description'], 1)) . '</div>';
@@ -142,7 +141,6 @@ if ($total) {
             '<a href="' . Vars::$URI . '?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
             '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>' .
             '</div></div>';
-        ++$i;
     }
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';

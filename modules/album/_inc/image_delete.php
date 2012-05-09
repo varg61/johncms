@@ -25,17 +25,16 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
         //TODO: Сделать проверку, чтоб администрация не могла удалять фотки старших по должности
         if (isset($_POST['submit'])) {
             // Удаляем файлы картинок
-            @unlink('../files/users/album/' . $user['id'] . '/' . $res['img_name']);
-            @unlink('../files/users/album/' . $user['id'] . '/' . $res['tmb_name']);
+            @unlink(ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR . $res['img_name']);
+            @unlink(ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR . $res['tmb_name']);
             // Удаляем записи из таблиц
             mysql_query("DELETE FROM `cms_album_files` WHERE `id` = '$img'");
             mysql_query("DELETE FROM `cms_album_votes` WHERE `file_id` = '$img'");
-            mysql_query("OPTIMIZE TABLE `cms_album_votes`");
             mysql_query("DELETE FROM `cms_album_comments` WHERE `sub_id` = '$img'");
-            mysql_query("OPTIMIZE TABLE `cms_album_comments`");
+            mysql_query("OPTIMIZE TABLE `cms_album_comments`, `cms_album_votes`");
             header('Location: ' . Vars::$URI . '?act=show&al=' . $album . '&user=' . $user['id']);
         } else {
-            echo '<div class="rmenu"><form action="' . Vars::$URI . '?act=image_delete&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
+            echo'<div class="rmenu"><form action="' . Vars::$URI . '?act=image_delete&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
                 '<p>' . lng('image_delete_warning') . '</p>' .
                 '<p><input type="submit" name="submit" value="' . lng('delete') . '"/></p>' .
                 '</form></div>' .

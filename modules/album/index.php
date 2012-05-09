@@ -11,6 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+define('ALBUMPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'album' . DIRECTORY_SEPARATOR);
 $max_album = 10;
 $max_photo = 200;
 $al = isset($_REQUEST['al']) ? abs(intval($_REQUEST['al'])) : NULL;
