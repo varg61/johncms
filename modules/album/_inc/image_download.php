@@ -32,7 +32,7 @@ if (mysql_num_rows($req)) {
         }
     }
     // Проверка наличия файла
-    if (!$error && !file_exists('../files/users/album/' . $res['user_id'] . '/' . $res['img_name']))
+    if (!$error && !file_exists(ALBUMPATH . $res['user_id'] . DIRECTORY_SEPARATOR . $res['img_name']))
         $error[] = lng('error_file_not_exist');
 } else {
     $error[] = lng('error_wrong_data');

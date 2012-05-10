@@ -39,6 +39,10 @@ if (!$user) {
     exit;
 }
 
+$tpl = Template::getInstance();
+$tpl->img = $img;
+$tpl->user = $user;
+
 /*
 -----------------------------------------------------------------
 Функция голосований за фотографии
@@ -87,6 +91,7 @@ $actions = array(
     'image_move'     => 'image_move.php',
     'image_upload'   => 'image_upload.php',
     'list'           => 'list.php',
+    'new'            => 'new.php',
     'new_comm'       => 'new_comm.php',
     'show'           => 'show.php',
     'sort'           => 'sort.php',
@@ -97,7 +102,6 @@ $actions = array(
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
-    $tpl = Template::getInstance();
     $tpl->new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
     $tpl->count = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
     $tpl->contents = $tpl->includeTpl('index');

@@ -1,6 +1,6 @@
 <div class="phdr"><b><?= lng('photo_albums') ?></b></div>
 <div class="gmenu"><p>
-    <?= Functions::getImage('album_new.png') ?>&#160;<a href="<?= Vars::$URI ?>/new"><?= lng('new_photo') ?></a> (<?= $this->new ?>)<br />
+    <?= Functions::getImage('album_new.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=new"><?= lng('new_photo') ?></a> (<?= $this->new ?>)<br />
     <?= Functions::getImage('comments.png') ?>&#160;<a href="<?= Vars::$URI ?>/new?act=last_comm"><?= lng('new_comments') ?></a>
     </p></div>
 <div class="menu">
