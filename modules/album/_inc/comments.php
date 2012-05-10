@@ -43,11 +43,11 @@ if (mysql_num_rows($req_obj)) {
     }
     $context_top = '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | ' .
         '<a href="' . Vars::$URI . '?act=list&amp;user=' . $owner['id'] . '">' . lng('personal_2') . '</a></div>' .
-        '<div class="menu"><a href="' . Vars::$URI . '?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="../files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
+        '<div class="menu"><a href="' . Vars::$URI . '?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
     if (!empty($res_obj['description']))
         $context_top .= '<div class="gray">' . Functions::smileys(Validate::filterString($res_obj['description'], 1)) . '</div>';
     $context_top .= '<div class="sub">' .
-        '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['name'] . '</b></a> | ' .
+        '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['nickname'] . '</b></a> | ' .
         '<a href="' . Vars::$URI . '?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . Validate::filterString($res_a['name']) . '</a>';
     if ($res_obj['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
         $context_top .= vote_photo($res_obj) .
@@ -62,18 +62,18 @@ if (mysql_num_rows($req_obj)) {
     -----------------------------------------------------------------
     */
     $arg = array(
-        'comments_table' => 'cms_album_comments', // Таблица с комментариями
-        'object_table' => 'cms_album_files', // Таблица комментируемых объектов
-        'script' =>  Vars::$URI . '?act=comments', // Имя скрипта (с параметрами вызова)
-        'sub_id_name' => 'img', // Имя идентификатора комментируемого объекта
-        'sub_id' => $img, // Идентификатор комментируемого объекта
-        'owner' => $owner['id'], // Владелец объекта
-        'owner_delete' => true, // Возможность владельцу удалять комментарий
-        'owner_reply' => true, // Возможность владельцу отвечать на комментарий
-        'owner_edit' => false, // Возможность владельцу редактировать комментарий
-        'title' => lng('comments'), // Название раздела
-        'context_top' => $context_top, // Выводится вверху списка
-        'context_bottom' => '' // Выводится внизу списка
+        'comments_table' => 'cms_album_comments',          // Таблица с комментариями
+        'object_table'   => 'cms_album_files',             // Таблица комментируемых объектов
+        'script'         => Vars::$URI . '?act=comments',  // Имя скрипта (с параметрами вызова)
+        'sub_id_name'    => 'img',                         // Имя идентификатора комментируемого объекта
+        'sub_id'         => $img,                          // Идентификатор комментируемого объекта
+        'owner'          => $owner['id'],                  // Владелец объекта
+        'owner_delete'   => TRUE,                          // Возможность владельцу удалять комментарий
+        'owner_reply'    => TRUE,                          // Возможность владельцу отвечать на комментарий
+        'owner_edit'     => FALSE,                         // Возможность владельцу редактировать комментарий
+        'title'          => lng('comments'),               // Название раздела
+        'context_top'    => $context_top,                  // Выводится вверху списка
+        'context_bottom' => ''                             // Выводится внизу списка
     );
 
     /*
