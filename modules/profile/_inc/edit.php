@@ -28,11 +28,11 @@ if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS != 9 && $user['rights'] 
 $tpl->setUsers = Vars::$USER_SYS;
 $error = array();
 
-if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
+if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
     $tpl->avatar = TRUE;
 }
 
-if (is_file(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg')) {
+if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg')) {
     $tpl->photo = TRUE;
 }
 
@@ -68,7 +68,7 @@ switch (Vars::$MOD) {
             && isset($_SESSION['form_token'])
             && $_POST['form_token'] == $_SESSION['form_token']
         ) {
-            @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif');
+            @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif');
             header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
             exit;
         } else {
@@ -85,8 +85,8 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if (isset($_POST['submit'])) {
-            @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '.jpg');
-            @unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg');
+            @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '.jpg');
+            @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $user['id'] . '_small.jpg');
             header('Location: ' . Vars::$URI . '?act=edit&user=' . $user['id']);
         } else {
             $tpl->contents = $tpl->includeTpl('delete_photo');
@@ -129,7 +129,7 @@ switch (Vars::$MOD) {
 
                 if (empty($error)) {
                     if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
-                        ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == TRUE
+                        FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) == TRUE
                     ) {
                         echo'<div class="gmenu">' .
                             '<p>' . lng('avatar_uploaded') . '<br/>' .
@@ -178,7 +178,7 @@ switch (Vars::$MOD) {
                     $handle->image_x = 32;
                     $handle->image_y = 32;
                     $handle->image_convert = 'gif';
-                    $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
+                    $handle->process(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
                     if ($handle->processed) {
                         echo'<div class="gmenu"><p>' . lng('avatar_uploaded') . '<br />' .
                             '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
@@ -224,7 +224,7 @@ switch (Vars::$MOD) {
                 $handle->image_x = 320;
                 $handle->image_ratio_y = TRUE;
                 $handle->image_convert = 'jpg';
-                $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
+                $handle->process(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
                 if ($handle->processed) {
                     // Обрабатываем превьюшку
                     $handle->file_new_name_body = $user['id'] . '_small';
@@ -233,7 +233,7 @@ switch (Vars::$MOD) {
                     $handle->image_x = 100;
                     $handle->image_ratio_y = TRUE;
                     $handle->image_convert = 'jpg';
-                    $handle->process(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
+                    $handle->process(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
                     if ($handle->processed) {
                         echo'<div class="gmenu"><p>' . lng('photo_uploaded') . '<br />' .
                             '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';

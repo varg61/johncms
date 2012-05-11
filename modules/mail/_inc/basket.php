@@ -9,73 +9,67 @@
  * @author      http://johncms.com/about
  */
 
-defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
+defined('_IN_JOHNCMS') or die('Error: restricted access');
 //Закрываем прямой доступ к файлу
-defined( '_IN_JOHNCMS_MAIL' ) or die( 'Error: restricted access' );
+defined('_IN_JOHNCMS_MAIL') or die('Error: restricted access');
 //Закрываем доступ гостям
-if ( !Vars::$USER_ID )
-{
-    Header( 'Location: ' . Vars::$HOME_URL . '/404' );
+if (!Vars::$USER_ID) {
+    Header('Location: ' . Vars::$HOME_URL . '/404');
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'basket' );
-if ( Vars::$ID )
-{
-    if( isset($_POST['delete_mess']) && is_array($_POST['delch']) && ValidMail::checkCSRF() === true ) {
-		$delch = array_map('intval', $_POST['delch']);
-		$delch = implode(',', $delch);
-		
-		$q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `id` IN (" . $delch . ")");
-		$delete = array();
-		$update = array();
-		while($row = mysql_fetch_assoc($q)) {
-			if(!empty($row['delete']) && $row['delete'] != Vars::$USER_ID) {
-				$delete[] = $row['id'];
-				if($row['filename'])
-					@unlink( ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'pm' . DIRECTORY_SEPARATOR . $row['filename'] );
-			} else {
-				$update[] = $row['id'];
-			}
-		}
-		
-		if($delete) {
-			$delete = implode(',', $delete);
-			mysql_query( "DELETE FROM `cms_mail_messages` 
-			WHERE `id` IN (" . $delete . ")" );
-		}
-		if($update) {
-			$update = implode(',', $update);
-			mysql_query( "UPDATE `cms_mail_messages` SET
+$tpl->title = lng('mail') . ' | ' . lng('basket');
+if (Vars::$ID) {
+    if (isset($_POST['delete_mess']) && is_array($_POST['delch']) && ValidMail::checkCSRF() === TRUE) {
+        $delch = array_map('intval', $_POST['delch']);
+        $delch = implode(',', $delch);
+
+        $q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `id` IN (" . $delch . ")");
+        $delete = array();
+        $update = array();
+        while ($row = mysql_fetch_assoc($q)) {
+            if (!empty($row['delete']) && $row['delete'] != Vars::$USER_ID) {
+                $delete[] = $row['id'];
+                if ($row['filename'])
+                    @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'pm' . DIRECTORY_SEPARATOR . $row['filename']);
+            } else {
+                $update[] = $row['id'];
+            }
+        }
+
+        if ($delete) {
+            $delete = implode(',', $delete);
+            mysql_query("DELETE FROM `cms_mail_messages`
+			WHERE `id` IN (" . $delete . ")");
+        }
+        if ($update) {
+            $update = implode(',', $update);
+            mysql_query("UPDATE `cms_mail_messages` SET
 			`delete`='" . Vars::$USER_ID . "' 
-			WHERE `id` IN (" . $update . ")" );
-		}
-		unset($delete, $update);
-		
-		Header('Location: ' . Vars::$MODULE_URI . '?act=basket&id=' . Vars::$ID);
-		exit;
-	} else {
-		if ( Vars::$ID == Vars::$USER_ID )
-		{
-			$tpl->contents = Functions::displayError( lng( 'error_request' ), '<a href="' . Vars::
-				$MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
-		} else
-		{
-			$q = mysql_query( "SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1" );
-			if ( mysql_num_rows( $q ) )
-			{
-				$total = mysql_result( mysql_query( "SELECT COUNT(*)
+			WHERE `id` IN (" . $update . ")");
+        }
+        unset($delete, $update);
+
+        Header('Location: ' . Vars::$MODULE_URI . '?act=basket&id=' . Vars::$ID);
+        exit;
+    } else {
+        if (Vars::$ID == Vars::$USER_ID) {
+            $tpl->contents = Functions::displayError(lng('error_request'), '<a href="' . Vars::
+            $MODULE_URI . '">' . lng('contacts') . '</a>');
+        } else {
+            $q = mysql_query("SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
+            if (mysql_num_rows($q)) {
+                $total = mysql_result(mysql_query("SELECT COUNT(*)
 				FROM `cms_mail_messages`
 				WHERE ((`user_id`='" . Vars::$USER_ID . "'
 				AND `contact_id`='" . Vars::$ID . "')
 				OR (`contact_id`='" . Vars::$USER_ID . "'
 				AND `user_id`='" . Vars::$ID . "'))
 				AND (`delete_in`='" . Vars::$USER_ID . "'
-				OR `delete_out`='" . Vars::$USER_ID . "') AND `delete`!='" . Vars::$USER_ID . "'" ), 0 );
-				if ( $total )
-				{
-					//Формируем список удаленных сообщений определенного контакта
-					$query = mysql_query( "SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.*
+				OR `delete_out`='" . Vars::$USER_ID . "') AND `delete`!='" . Vars::$USER_ID . "'"), 0);
+                if ($total) {
+                    //Формируем список удаленных сообщений определенного контакта
+                    $query = mysql_query("SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.*
 					FROM `cms_mail_messages`
 					LEFT JOIN `users` 
 					ON `cms_mail_messages`.`user_id`=`users`.`id` 
@@ -86,182 +80,167 @@ if ( Vars::$ID )
 					AND (`cms_mail_messages`.`delete_in`='" . Vars::$USER_ID . "'
 					OR `cms_mail_messages`.`delete_out`='" . Vars::$USER_ID . "')
 					AND `delete`!='" . Vars::$USER_ID . "'
-					ORDER BY `cms_mail_messages`.`time` DESC" . Vars::db_pagination() );
-					$array = array();
-					
-					$i = 1;
-					while ( $row = mysql_fetch_assoc( $query ) )
-					{
-						$text = Validate::filterString( $row['text'], 1, 1 );
-						if ( Vars::$USER_SET['smileys'] )
-							$text = Functions::smileys( $text, $row['rights'] >= 1 ? 1 : 0 );
-						$array[] = array(
-							'id' => $row['id'],
-							'mid' => $row['mid'],
-							'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' : 'w' ) .
-								'.png', '', 'align="middle"' ),
-							'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
-							'nickname' => $row['nickname'],
-							'file' => $row['filename'] ? '<a href="' . Vars::$MODULE_URI . '?act=load&amp;id=' .
-								$row['mid'] . '">' . $row['filename'] . '</a> (' . UploadMail::formatsize( $row['filesize'] ) .
-								')(' . $row['filecount'] . ')' : '',
-							'time' => Functions::displayDate( $row['time'] ),
-							'text' => $text,
-							'urlDelete' => Vars::$MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'],
-							'url' => ( Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id'] ),
-							'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
-								'<span class="green"> [ON]</span>' ),
-							'elected' => ( ( $row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
-								Vars::$USER_ID ) ? true : false ),
-							'selectBar' => '[<span class="green">&laquo;</span> <a href="' . Vars::$MODULE_URI .
-								'?act=restore&amp;id=' . $row['mid'] . '">' . lng( 'rest' ) . '</a>] [<span class="red">х</span> <a href="' .
-								Vars::$MODULE_URI . '?act=delete&amp;id=' . $row['mid'] . '">' . lng( 'delete' ) .
-								'</a>]' );
-						++$i;
-					}
+					ORDER BY `cms_mail_messages`.`time` DESC" . Vars::db_pagination());
+                    $array = array();
 
-					$tpl->query = $array;
-					$tpl->titleTest = '<div class="phdr">' . lng( 'deleted_message' ) . '</div>';
-					$tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . lng( 'mail' ) .
-						'</a></p>';
-					$tpl->total = $total;
-					//Навигация
-					$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=basket&amp;id=' .
-						Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size'] );
-					$tpl->token = mt_rand(100, 10000);
-					$_SESSION['token_status'] = $tpl->token;
-					$tpl->url_type = Vars::$MODULE_URI . '?act=basket&amp;id=' . Vars::$ID;
-					//Подключаем шаблон модуля list.php
-					$tpl->contents = $tpl->includeTpl( 'list' );
-				} else
-				{
-					Header( 'Location: ' . Vars::$MODULE_URI . '?act=basket' );
-					exit;
-				}
-			} else
-			{
-				//Если пользователь не существует, показываем ошибку
-				$tpl->contents = Functions::displayError( lng( 'user_does_not_exist' ), '<a href="' .
-					Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
-			}
-		}
-	}
-} else
-{
-	$total = Mail::counter( 'delete' );
+                    $i = 1;
+                    while ($row = mysql_fetch_assoc($query)) {
+                        $text = Validate::filterString($row['text'], 1, 1);
+                        if (Vars::$USER_SET['smileys'])
+                            $text = Functions::smileys($text, $row['rights'] >= 1 ? 1 : 0);
+                        $array[] = array(
+                            'id'        => $row['id'],
+                            'mid'       => $row['mid'],
+                            'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') .
+                                '.png', '', 'align="middle"'),
+                            'list'      => (($i % 2) ? 'list1' : 'list2'),
+                            'nickname'  => $row['nickname'],
+                            'file'      => $row['filename'] ? '<a href="' . Vars::$MODULE_URI . '?act=load&amp;id=' .
+                                $row['mid'] . '">' . $row['filename'] . '</a> (' . UploadMail::formatsize($row['filesize']) .
+                                ')(' . $row['filecount'] . ')' : '',
+                            'time'      => Functions::displayDate($row['time']),
+                            'text'      => $text,
+                            'urlDelete' => Vars::$MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'],
+                            'url'       => (Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id']),
+                            'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
+                                '<span class="green"> [ON]</span>'),
+                            'elected'   => (($row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
+                                Vars::$USER_ID) ? TRUE : FALSE),
+                            'selectBar' => '[<span class="green">&laquo;</span> <a href="' . Vars::$MODULE_URI .
+                                '?act=restore&amp;id=' . $row['mid'] . '">' . lng('rest') . '</a>] [<span class="red">х</span> <a href="' .
+                                Vars::$MODULE_URI . '?act=delete&amp;id=' . $row['mid'] . '">' . lng('delete') .
+                                '</a>]');
+                        ++$i;
+                    }
+
+                    $tpl->query = $array;
+                    $tpl->titleTest = '<div class="phdr">' . lng('deleted_message') . '</div>';
+                    $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . lng('mail') .
+                        '</a></p>';
+                    $tpl->total = $total;
+                    //Навигация
+                    $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?act=basket&amp;id=' .
+                        Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']);
+                    $tpl->token = mt_rand(100, 10000);
+                    $_SESSION['token_status'] = $tpl->token;
+                    $tpl->url_type = Vars::$MODULE_URI . '?act=basket&amp;id=' . Vars::$ID;
+                    //Подключаем шаблон модуля list.php
+                    $tpl->contents = $tpl->includeTpl('list');
+                } else {
+                    Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
+                    exit;
+                }
+            } else {
+                //Если пользователь не существует, показываем ошибку
+                $tpl->contents = Functions::displayError(lng('user_does_not_exist'), '<a href="' .
+                    Vars::$MODULE_URI . '">' . lng('mail') . '</a>');
+            }
+        }
+    }
+} else {
+    $total = Mail::counter('delete');
     $tpl->total = $total;
-    if ( $total )
-    {
+    if ($total) {
         //Восстанавливаем сообщения
-		if ( isset( $_POST['restore'] ) && ValidMail::checkCSRF() === true )
-        {
-            if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
-            {
+        if (isset($_POST['restore']) && ValidMail::checkCSRF() === TRUE) {
+            if (!empty($_POST['delch']) && is_array($_POST['delch'])) {
                 $id = array_map('intval', $_POST['delch']);
-				$id = implode(',', $id);
-				if (!empty($id)) {
-					mysql_query("UPDATE `cms_mail_messages` SET 
+                $id = implode(',', $id);
+                if (!empty($id)) {
+                    mysql_query("UPDATE `cms_mail_messages` SET
 					`delete_in`='0'
 					WHERE `user_id` IN (" . $id . ") AND `contact_id`='" . Vars::$USER_ID . "' AND `delete_in`='" . Vars::$USER_ID . "'");
-					mysql_query("UPDATE `cms_mail_messages` SET 
+                    mysql_query("UPDATE `cms_mail_messages` SET
 					`delete_out`='0'
 					WHERE `contact_id` IN (" . $id . ") AND `user_id`='" . Vars::$USER_ID . "' AND `delete_out`='" . Vars::$USER_ID . "'");
-					mysql_query("UPDATE `cms_mail_contacts` SET 
+                    mysql_query("UPDATE `cms_mail_contacts` SET
 					`delete`='0'
 					WHERE `user_id`='" . Vars::$USER_ID . "' 
 					AND `contact_id` IN (" . $id . ")");
-				}
+                }
             }
-            Header( 'Location: ' . Vars::$MODULE_URI . '?act=basket' );
+            Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
             exit;
         }
         //Удаляем сообщения
-		if ( isset( $_POST['delete'] ) && ValidMail::checkCSRF() === true )
-        {
-            if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
-            {
+        if (isset($_POST['delete']) && ValidMail::checkCSRF() === TRUE) {
+            if (!empty($_POST['delch']) && is_array($_POST['delch'])) {
                 $id = array_map('intval', $_POST['delch']);
-				$id = implode(',', $id);
-				if (!empty($id)) {
-					$query = mysql_query( "SELECT * 
+                $id = implode(',', $id);
+                if (!empty($id)) {
+                    $query = mysql_query("SELECT *
 					FROM `cms_mail_messages` 
 					WHERE ((`delete_out`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id` IN (" . $id . "))
 					OR (`delete_in`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `user_id` IN (" . $id . ")))
-					AND `delete`!='" . Vars::$USER_ID . "'" );
-					$update = array();
-					$delete = array();
-					while($row = mysql_fetch_assoc($query)) {
-						if($row['delete'] && $row['delete'] != Vars::$USER_ID) 
-							$delete[] = $row['id'];
-						else 
-							$update[] = $row['id'];
-					}
-					if($delete) {
-						$delete = implode(',', $delete);
-						$q = mysql_query( "SELECT * FROM `cms_mail_messages`
+					AND `delete`!='" . Vars::$USER_ID . "'");
+                    $update = array();
+                    $delete = array();
+                    while ($row = mysql_fetch_assoc($query)) {
+                        if ($row['delete'] && $row['delete'] != Vars::$USER_ID)
+                            $delete[] = $row['id'];
+                        else
+                            $update[] = $row['id'];
+                    }
+                    if ($delete) {
+                        $delete = implode(',', $delete);
+                        $q = mysql_query("SELECT * FROM `cms_mail_messages`
 						WHERE `id` IN (" . $delete . ") AND `filename`!=''");
-						while($res = mysql_fetch_assoc($q)) {
-							if(file_exists(FILEPATH . 'users/pm/' . $res['filename']) !== false)
-								@unlink( FILEPATH . 'users/pm/' . $res['filename'] );
-						}
-						mysql_query( "DELETE FROM `cms_mail_messages` 
-						WHERE `id` IN (" . $delete . ")" );
-					}
-					if($update) {
-						$update = implode(',', $update);
-						mysql_query( "UPDATE `cms_mail_messages` SET
+                        while ($res = mysql_fetch_assoc($q)) {
+                            if (file_exists(FILEPATH . 'users/pm/' . $res['filename']) !== FALSE)
+                                @unlink(FILEPATH . 'users/pm/' . $res['filename']);
+                        }
+                        mysql_query("DELETE FROM `cms_mail_messages`
+						WHERE `id` IN (" . $delete . ")");
+                    }
+                    if ($update) {
+                        $update = implode(',', $update);
+                        mysql_query("UPDATE `cms_mail_messages` SET
 						`delete`='" . Vars::$USER_ID . "' 
-						WHERE `id` IN (" . $update . ")" );
-					}
-					unset($delete, $update);
-				}
+						WHERE `id` IN (" . $update . ")");
+                    }
+                    unset($delete, $update);
+                }
             }
-            Header( 'Location: ' . Vars::$MODULE_URI . '?act=basket' );
+            Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
             exit;
         }
-		//Очищаем корзину
-        if ( isset( $_POST['clear'] ) && ValidMail::checkCSRF() === true )
-        {
-			$query = mysql_query( "SELECT * 
+        //Очищаем корзину
+        if (isset($_POST['clear']) && ValidMail::checkCSRF() === TRUE) {
+            $query = mysql_query("SELECT *
 			FROM `cms_mail_messages` 
 			WHERE `delete_in`='" . Vars::$USER_ID . "' 
-			OR `delete_out`='" . Vars::$USER_ID . "'" );
-			$update = array();
-			$delete = array();
-			while ( $row = mysql_fetch_assoc( $query ) )
-			{
-				if ( !empty( $row['delete'] ) && $row['delete'] != Vars::$USER_ID )
-				{
-					$delete[] = $row['id'];
-				}
-				$update[] = $row['id'];
-			}
+			OR `delete_out`='" . Vars::$USER_ID . "'");
+            $update = array();
+            $delete = array();
+            while ($row = mysql_fetch_assoc($query)) {
+                if (!empty($row['delete']) && $row['delete'] != Vars::$USER_ID) {
+                    $delete[] = $row['id'];
+                }
+                $update[] = $row['id'];
+            }
 
-			if ( $delete )
-			{
-				$del = implode( ',', $delete );
-				$qq1 = mysql_query( "SELECT `filename` 
+            if ($delete) {
+                $del = implode(',', $delete);
+                $qq1 = mysql_query("SELECT `filename`
 				FROM `cms_mail_messages` 
 				WHERE `filename`!='' 
-				AND `id` IN (" . $del . ")" );
-				while ( $r1 = mysql_fetch_assoc( $qq1 ) )
-				{
-					@unlink( FILEPATH . 'users/pm/' . $r1['filename'] );
-				}
-				mysql_query( "DELETE FROM `cms_mail_messages` 
-				WHERE `id` IN (" . $del . ")" );
-			}
+				AND `id` IN (" . $del . ")");
+                while ($r1 = mysql_fetch_assoc($qq1)) {
+                    @unlink(FILEPATH . 'users/pm/' . $r1['filename']);
+                }
+                mysql_query("DELETE FROM `cms_mail_messages`
+				WHERE `id` IN (" . $del . ")");
+            }
 
-			if ( $update )
-			{
-				$id = implode( ',', $update );
-				mysql_query( "UPDATE `cms_mail_messages` SET `delete`='" . Vars::$USER_ID . "' 
-				WHERE `id` IN (" . $id . ")" );
-			}
-            Header( 'Location: ' . Vars::$MODULE_URI . '?act=basket' );
+            if ($update) {
+                $id = implode(',', $update);
+                mysql_query("UPDATE `cms_mail_messages` SET `delete`='" . Vars::$USER_ID . "'
+				WHERE `id` IN (" . $id . ")");
+            }
+            Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
             exit;
         }
-		//Формируем список удаленных сообщений по контактам
+        //Формируем список удаленных сообщений по контактам
         $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`, 
 		`cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`user_id`, COUNT(*) as `count`
 		FROM `cms_mail_contacts`
@@ -279,38 +258,36 @@ if ( Vars::$ID )
 		AND `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "')))
 		AND `cms_mail_messages`.`delete`!='" . Vars::$USER_ID . "'
 		GROUP BY `cms_mail_contacts`.`contact_id`
-		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination() );
+		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination());
 
-		$array = array();
+        $array = array();
         $i = 1;
-        while ( $row = mysql_fetch_assoc( $query ) )
-        {
+        while ($row = mysql_fetch_assoc($query)) {
             $array[] = array(
-                'id' => $row['id'],
-                'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' : 'w' ) . '.png',
-                    '', 'align="middle"' ),
-                'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
-                'nickname' => $row['nickname'],
-                'count' => $row['count'],
-				'count_new' => '',
-                'url' => ( Vars::$MODULE_URI . '?act=basket&amp;id=' . $row['id'] ),
-                'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
-                    '<span class="green"> [ON]</span>' ) );
+                'id'        => $row['id'],
+                'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') . '.png',
+                    '', 'align="middle"'),
+                'list'      => (($i % 2) ? 'list1' : 'list2'),
+                'nickname'  => $row['nickname'],
+                'count'     => $row['count'],
+                'count_new' => '',
+                'url'       => (Vars::$MODULE_URI . '?act=basket&amp;id=' . $row['id']),
+                'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
+                    '<span class="green"> [ON]</span>'));
             ++$i;
         }
         //Навигация
-		$tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=basket&amp;',
-            Vars::$START, $total, Vars::$USER_SET['page_size'] );
+        $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?act=basket&amp;',
+            Vars::$START, $total, Vars::$USER_SET['page_size']);
         $tpl->query = $array;
         $tpl->token = mt_rand(100, 10000);
-		$_SESSION['token_status'] = $tpl->token;
-		//Подключаем шаблон модуля contacts.php
-		$tpl->contacts = $tpl->includeTpl( 'contacts' );
-    } else
-    {
+        $_SESSION['token_status'] = $tpl->token;
+        //Подключаем шаблон модуля contacts.php
+        $tpl->contacts = $tpl->includeTpl('contacts');
+    } else {
         //Выводим сообщение если корзина пустая
-		$tpl->contacts = '<div class="rmenu">' . lng( 'empty_basket' ) . '</div>';
+        $tpl->contacts = '<div class="rmenu">' . lng('empty_basket') . '</div>';
     }
-	//Подключаем шаблон модуля basket.php
-    $tpl->contents = $tpl->includeTpl( 'basket' );
+    //Подключаем шаблон модуля basket.php
+    $tpl->contents = $tpl->includeTpl('basket');
 }

@@ -19,7 +19,7 @@ if (Vars::$USER_ID) {
     }
     $res = mysql_fetch_array($req);
     // Создаем JAR файл
-    if (!file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
+    if (!file_exists(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
         $midlet_name = mb_substr($res['name'], 0, 10);
         $midlet_name = iconv('UTF-8', 'windows-1251', $midlet_name);
         // Записываем текст статьи
@@ -50,17 +50,17 @@ TCBR-Platform: Generic version (all phones)';
         fclose($files);
 
         // Создаем архив
-        $archive = new PclZip(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar');
+        $archive = new PclZip(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar');
         $list = $archive->create(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_java', PCLZIP_OPT_REMOVE_PATH, MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_java');
-        if (!file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
+        if (!file_exists(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
             echo '<p>Error creating JAR file</p>';
             exit;
         }
     }
 
     // Создаем JAD файл
-    if (!file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jad')) {
-        $filesize = filesize(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar');
+    if (!file_exists(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jad')) {
+        $filesize = filesize(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar');
         $jad_text = 'Manifest-Version: 1.0
 MIDlet-1: Book ' . Vars::$ID . ', , br.BookReader
 MIDlet-Name: Book ' . Vars::$ID .
@@ -74,7 +74,7 @@ MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
 MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar';
-        $files = fopen(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jad', 'w+');
+        $files = fopen(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jad', 'w+');
         flock($files, LOCK_EX);
         fputs($files, $jad_text);
         flock($files, LOCK_UN);

@@ -34,7 +34,7 @@ class Captcha
     */
     public static function display($input_field = false)
     {
-        $captcha_path = ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
+        $captcha_path = FILEPATH . 'temp' . DIRECTORY_SEPARATOR;
         $img_file = md5(mt_rand(0, 1000) . microtime(true)) . '.png';
 
         // Удаляем старые картинки

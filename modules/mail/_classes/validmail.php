@@ -300,7 +300,7 @@ Class ValidMail extends Vars {
 	function valFile() {
 		//Загружаем файл
 		$handle = new UploadMail( $_FILES );
-		$handle->DIR = ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'pm';
+		$handle->DIR = FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'pm';
 		$handle->MAX_FILE_SIZE = 1024 * Vars::$SYSTEM_SET['flsz'];
 		$handle->PREFIX_FILE = true;
 		if ( $handle->upload() == true )

@@ -38,7 +38,7 @@ switch (Vars::$ACT) {
             if (isset($_POST['submit'])) {
                 // Устанавливаем пользовательский Аватар
                 if (@copy(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . $select,
-                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '.gif')
+                    FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '.gif')
                 ) {
                     echo '<div class="gmenu"><p>' . lng('avatar_applied') . '<br />' .
                         '<a href="' . $_SESSION['ref'] . '">' . lng('continue') . '</a></p></div>';

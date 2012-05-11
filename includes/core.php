@@ -34,15 +34,14 @@ mb_internal_encoding('UTF-8');
 Задаем пути
 -----------------------------------------------------------------
 */
-define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR); // Системная папка
-define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR); // Корневая папка
-define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR); // Папка для кэша
-define('LNGPATH', SYSPATH . 'languages' . DIRECTORY_SEPARATOR); // Папка с языками
-define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR); // Папка с конфигурационными файлами
+define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);          // Системная папка
+define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR);                    // Корневая папка
+define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
+define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
 
-define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR); // Папка с пользовательскими файлами
-define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR); // Папка с модулями
-define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR); // Папка с шаблонами
+define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR);                  // Папка с пользовательскими файлами
+define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 // Папка с модулями
+define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
 
 /*
 -----------------------------------------------------------------
@@ -116,7 +115,7 @@ function lng($key, $force_system = FALSE)
     static $module_lng = array();
     static $edited_lng = array();
 
-    $system_file = LNGPATH . Vars::$LNG_ISO . '.lng';
+    $system_file = SYSPATH . 'languages' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
     $module_file = MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
 
     if (empty($module_lng) && is_file($module_file)) {

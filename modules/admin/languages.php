@@ -22,7 +22,7 @@ if (Vars::$USER_RIGHTS != 9) {
 */
 $lng_list = array();
 $lng_desc = array();
-foreach (glob(LNGPATH . '*.ini') as $val) {
+foreach (glob(SYSPATH . 'languages' . DIRECTORY_SEPARATOR . '*.ini') as $val) {
     $iso = basename($val, '.ini');
     $desc = parse_ini_file($val);
     $lng_list[$iso] = isset($desc['name']) && !empty($desc['name']) ? $desc['name'] : $iso;
