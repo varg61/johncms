@@ -31,7 +31,7 @@
             <?= Functions::getImage('album_4.png') ?>&#160;<a href="album.php?act=list&amp;user=<?= $this->user['id'] ?>"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)
         </div>
         <div>
-            <?= Functions::getImage('comments.png') ?>&#160;<a href="profile.php?act=guestbook&amp;user=<?= $this->user['id'] ?>"><?= lng('guestbook') ?></a>&#160;(<?= $this->user['comm_count'] ?>)
+            <?= Functions::getImage('comments.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><?= lng('guestbook') ?></a>&#160;(<?= $this->user['comm_count'] ?>)
         </div>
         <div>
             <?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?id=<?php echo $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)

@@ -11,7 +11,7 @@
             <?= Functions::getImage('album_4.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)
         </div>
         <div>
-            <?= Functions::getImage('comments.png') ?>&#160;<a href=""><?= lng('guestbook') ?></a>&#160;()
+            <?= Functions::getImage('comments.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=guestbook"><?= lng('guestbook') ?></a>&#160;(<?= Vars::$USER_DATA['comm_count'] ?>)
         </div>
     </div>
     <?php if (Vars::$USER_RIGHTS) : ?>

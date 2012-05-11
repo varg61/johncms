@@ -36,6 +36,7 @@ $tpl->user = $user;
 $actions = array(
     'activity' => 'activity.php',
     'edit'     => 'edit.php',
+    'guestbook' => 'guestbook.php',
     'password' => 'password.php',
     'settings' => 'settings.php',
 );

@@ -325,9 +325,10 @@ class Comments
             `sub_id` = '" . intval($this->sub_id) . "',
             `user_id` = '" . $this->user_id . "',
             `text` = '" . mysql_real_escape_string($message) . "',
+            `reply` = '',
             `time` = '" . time() . "',
             `attributes` = '" . mysql_real_escape_string(serialize($attributes)) . "'
-        ");
+        ") or die(mysql_error());
         // Обновляем статистику пользователя
         mysql_query("UPDATE `users` SET `comm_count` = '" . (++Vars::$USER_DATA['comm_count']) . "', `lastpost` = '" . time() . "' WHERE `id` = '" . $this->user_id . "'");
         $this->added = TRUE;
