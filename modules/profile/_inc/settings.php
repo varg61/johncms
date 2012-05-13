@@ -95,7 +95,6 @@ switch (Vars::$MOD) {
             Vars::$USER_SET['smileys'] = isset($_POST['smileys']);
             Vars::$USER_SET['translit'] = isset($_POST['translit']);
             Vars::$USER_SET['direct_url'] = isset($_POST['direct_url']);
-            Vars::$USER_SET['quick_go'] = isset($_POST['quick_go']);
 
             // Записываем настройки
             unset($_SESSION['user_set']);

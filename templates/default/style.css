@@ -114,11 +114,16 @@ ul {
 }
 
 .footer {
-    background: #000000 url(images/bg.gif);
-    border-bottom: 2px solid #993333;
-    color: #d0d7dd;
-    margin: 0;
-    padding: 3px 0 4px 4px;
+    background-color: #586776;
+
+    /*background: #000000 url(images/bg.gif);*/
+    /*border-bottom: 2px solid #993333;*/
+    /*color: #d0d7dd;*/
+    /*margin: 0;*/
+    padding: 0px 0 6px 6px;
+    border-radius: 0 0 8px 8px;
+    -moz-border-radius:0 0 6px 6px;
+    -khtml-border-radius: 0 0 6px 6px;
 }
 
 .func {
@@ -160,7 +165,7 @@ ul {
     border-top: 1px solid red;
     color: #d0d7dd;
     margin: 0;
-    padding: 6px 0px 6px 0px;
+    padding: 7px 0px 7px 0px;
 }
 
 .header a:link, .header a:visited {
@@ -387,13 +392,13 @@ a:link, a:visited {
 }
 
 .userbtn {
-    /*background-color: #393a3e;*/
-    /*border: 1px solid #565a5e;*/
-    /*border-top: 1px solid #6f7479;*/
-    /*border-radius: 8px;*/
-    /*-moz-border-radius:0 0 6px 6px;*/
-    /*-khtml-border-radius: 0 0 6px 6px;*/
-    /*margin-left: 4px;*/
-    padding-left: 5px;
-    padding-right: 6px;
+    background-color: #586776;
+    border: 1px solid #565a5e;
+    border-top: 1px solid #6f7479;
+    border-radius: 8px;
+    -moz-border-radius:0 0 6px 6px;
+    -khtml-border-radius: 0 0 6px 6px;
+    margin-left: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
 }

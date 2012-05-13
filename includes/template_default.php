@@ -52,7 +52,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 <div class="header">
     <span class="userbtn">
         <?php if (Vars::$USER_ID): ?>
-        <?= Functions::getImage('notice_home.png', 'Ban', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/notifications"><?= Vars::$USER_DATA['nickname'] ?></a>
+        <a href="<?= Vars::$HOME_URL ?>/notifications"><?= Vars::$USER_DATA['nickname'] ?></a>
         <?php else: ?>
         <?= lng('guest', 1) ?>
         <?php endif; ?>
@@ -100,23 +100,6 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 <div class="fmenu">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
     <div><?= Functions::getImage('menu_home.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a></div>
-    <?php endif ?>
-    <?php if (Vars::$USER_SET['quick_go']) : ?>
-    <form action="<?= Vars::$HOME_URL ?>/redirect" method="post">
-        <div>
-            <select name="adres" style="font-size:x-small">
-                <option selected="selected"><?= lng('quick_jump', 1) ?></option>
-                <option value="guest"><?= lng('guestbook', 1) ?></option>
-                <option value="forum"><?= lng('forum', 1) ?></option>
-                <option value="news"><?= lng('news', 1) ?></option>
-                <option value="gallery"><?= lng('gallery', 1) ?></option>
-                <option value="down"><?= lng('downloads', 1) ?></option>
-                <option value="lib"><?= lng('library', 1) ?></option>
-                <option value="gazen">Gazenwagen :)</option>
-            </select>
-            <input type="submit" value="Go!" style="font-size:x-small"/>
-        </div>
-    </form>
     <?php endif ?>
 </div>
 <div class="footer"><?= Counters::usersOnline() ?></div>

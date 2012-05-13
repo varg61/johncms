@@ -26,7 +26,6 @@
             <input id="field_h" type="text" name="field_h" size="2" maxlength="1" value="<?= Vars::$USER_SET['field_h'] ?>"/> <?= lng('field_height') ?> (1-9)
             </div>
         <div class="formblock">
-            <input name="quick_go" type="checkbox" value="1" <?= (Vars::$USER_SET['quick_go'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('quick_jump') ?><br/>
             <input name="direct_url" type="checkbox" value="1" <?= (Vars::$USER_SET['direct_url'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('direct_url') ?><br/>
             <?php if (Vars::$LNG_ISO == 'ru' || Vars::$LNG_ISO == 'uk') : ?>
             <input name="translit" type="checkbox" value="1" <?= (Vars::$USER_SET['translit'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('translit') ?><br/>
