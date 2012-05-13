@@ -111,8 +111,8 @@ class Counters extends Vars
         $users = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 " . $sql), 0);
         $guests = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 " . $sql), 0);
         return (parent::$USER_ID || parent::$USER_SYS['view_online']
-            ? '<a href="' . parent::$HOME_URL . '/online">' . lng('online') . ': ' . $users . ' / ' . $guests . '</a>'
-            : lng('online') . ': ' . $users . ' / ' . $guests);
+            ? '<a href="' . parent::$HOME_URL . '/online">' . $users . ' / ' . $guests . '</a>'
+            : $users . ' / ' . $guests);
     }
 
     /*

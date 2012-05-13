@@ -50,13 +50,11 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
     </tr>
 </table>
 <div class="header">
-    <span class="userbtn">
-        <?php if (Vars::$USER_ID): ?>
-        <a href="<?= Vars::$HOME_URL ?>/notifications"><?= Vars::$USER_DATA['nickname'] ?></a>
-        <?php else: ?>
-        <?= lng('guest', 1) ?>
-        <?php endif; ?>
-    </span>
+    <?php if (Vars::$USER_ID): ?>
+    <?= Functions::getImage('menu_user.png', 'Friend', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/notifications"><?= Vars::$USER_DATA['nickname'] ?></a>
+    <?php else: ?>
+    <?= lng('guest', 1) ?>
+    <?php endif; ?>
     <?php if (isset(Vars::$NOTIFICATIONS['ban'])) : ?>
     <span class="topbtn"><a href=""><?= Functions::getImage('notice_ban.png', 'Ban', 'align="middle"') ?></a></span>
     <?php endif ?>
@@ -87,8 +85,8 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
     <?= Functions::getImage('menu_cabinet.png', 'Cabinet', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a><br/>
     <?php endif ?>
     <?php if (!Vars::$USER_ID) : ?>
-    <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login', 1) ?></a> |
-    <a href="<?= Vars::$HOME_URL ?>/registration"><?= lng('registration', 1) ?></a>
+    <a href="<?= Vars::$HOME_URL ?>/registration"><?= lng('registration', 1) ?></a><br/>
+    <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login', 1) ?></a>
     <?php endif ?>
 </div>
 <div class="maintxt">
@@ -101,7 +99,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
     <?= Functions::getImage('menu_home.png', 'Home', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a><br/>
     <?php endif ?>
-    <?= Functions::getImage('online.png', 'Cabinet', 'align="middle"') ?>&#160;<?= Counters::usersOnline() ?>
+    <?= Functions::getImage('menu_online.png', 'Cabinet', 'align="middle"') ?>&#160;<?= Counters::usersOnline() ?>
 </div>
 <div style="text-align:center"><p><b><?= Vars::$SYSTEM_SET['copyright'] ?></b></p></div>
 <div style="text-align:center">

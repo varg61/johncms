@@ -111,10 +111,10 @@ ul {
     border-bottom: 2px solid #404b56;
     color: #FFFFFF;
     margin: 0;
-    padding: 3px 1px 6px 6px;
+    padding: 3px 1px 7px 7px;
     border-radius: 0 0 8px 8px;
-    -moz-border-radius: 0 0 6px 6px;
-    -khtml-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 8px 8px;
+    -khtml-border-radius: 0 0 8px 8px;
 }
 
 .func {
@@ -156,7 +156,7 @@ ul {
     border-top: 1px solid red;
     color: #d0d7dd;
     margin: 0;
-    padding: 7px 0px 7px 0px;
+    padding: 7px 0px 7px 7px;
 }
 
 .header a:link, .header a:visited {
@@ -285,7 +285,7 @@ ul {
     border-top: 3px solid #45515d;
     color: #FFFFFF;
     margin: 0;
-    padding: 5px 0 4px 6px;
+    padding: 4px 0 4px 7px;
 }
 
 .topmenu {
@@ -380,16 +380,4 @@ a:link, a:visited {
 .topbtn {
     padding-left: 8px;
     /*padding-right: 6px*/
-}
-
-.userbtn {
-    background-color: #586776;
-    border: 1px solid #565a5e;
-    border-top: 1px solid #6f7479;
-    border-radius: 8px;
-    -moz-border-radius: 0 0 6px 6px;
-    -khtml-border-radius: 0 0 6px 6px;
-    margin-left: 5px;
-    padding-left: 8px;
-    padding-right: 8px;
 }
