@@ -9,4 +9,5 @@
  * @author      http://johncms.com/about
  */
 
-echo'<div class="phdr">1</div>';
+$tpl = Template::getInstance();
+$tpl->contents = $tpl->includeTpl('index');

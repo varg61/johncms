@@ -52,7 +52,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 <div class="header">
     <span class="userbtn">
         <?php if (Vars::$USER_ID): ?>
-        <a href="<?= Vars::$HOME_URL ?>/notifications"><b><?= Vars::$USER_DATA['nickname'] ?></b></a>
+        <?= Functions::getImage('notice_home.png', 'Ban', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/notifications"><?= Vars::$USER_DATA['nickname'] ?></a>
         <?php else: ?>
         <?= lng('guest', 1) ?>
         <?php endif; ?>
