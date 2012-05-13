@@ -49,23 +49,52 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
         </td>
     </tr>
 </table>
-<div class="header"><?= lng('hi', 1) . ', ' . (Vars::$USER_ID ? '<b>' . Vars::$USER_DATA['nickname'] . '</b>' : lng('guest', 1)) ?>!</div>
+<div class="header">
+    <span class="userbtn">
+        <?php if (Vars::$USER_ID): ?>
+        <?= Functions::getImage('notice_menu.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/notifications"><b><?= Vars::$USER_DATA['nickname'] ?></b></a>
+        <?php else: ?>
+        <?= lng('guest', 1) ?>
+        <?php endif; ?>
+    </span>
+    <?php if (isset(Vars::$NOTIFICATIONS['ban'])) : ?>
+    <span class="topbtn"><a href=""><?= Functions::getImage('notice_ban.png', 'Ban', 'align="middle"') ?></a></span>
+    <?php endif ?>
+    <?php if (isset(Vars::$NOTIFICATIONS['system'])) : ?>
+    <span class="topbtn"><a href=""><?= Functions::getImage('notice_system.png', 'System message', 'align="middle"') ?></a></span>
+    <?php endif ?>
+    <?php if (isset(Vars::$NOTIFICATIONS['mail'])) : ?>
+    <span class="topbtn"><a href=""><?= Functions::getImage('notice_mail.png', 'New mail', 'align="middle"') ?></a></span>
+    <?php endif ?>
+    <?php if (isset(Vars::$NOTIFICATIONS['comments'])) : ?>
+    <span class="topbtn"><a href=""><?= Functions::getImage('notice_comments.png', 'New comments', 'align="middle"') ?></a></span>
+    <?php endif ?>
+    <?php if (isset(Vars::$NOTIFICATIONS['friend'])) : ?>
+    <span class="topbtn"><a href=""><?= Functions::getImage('notice_friend.png', 'Friend', 'align="middle"') ?></a></span>
+    <?php endif ?>
+    <?php if (isset(Vars::$NOTIFICATIONS['info'])) : ?>
+    <span class="topbtn"><a href=""><?= Functions::getImage('notice_info.png', 'Information', 'align="middle"') ?></a></span>
+    <?php endif ?>
+    <?php if (isset(Vars::$NOTIFICATIONS['admin'])) : ?>
+    <span class="topbtn"><a href="<?= Vars::$HOME_URL ?>/admin"><?= Functions::getImage('notice_admin.png', 'Admin events', 'align="middle"') ?></a></span>
+    <?php endif ?>
+</div>
 <div class="tmn">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
-    <a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a> |
+    <?= Functions::getImage('menu_home.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a>&#160;
     <?php endif ?>
     <?php if (Vars::$USER_ID) : ?>
-    <a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a> |
-    <a href="<?= Vars::$HOME_URL ?>/exit"><?= lng('exit', 1) ?></a>
+    <?= Functions::getImage('menu_cabinet.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a>&#160;
+    <?= Functions::getImage('menu_exit.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/exit"><?= lng('exit', 1) ?></a>
     <?php else : ?>
     <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login', 1) ?></a> |
     <a href="<?= Vars::$HOME_URL ?>/registration"><?= lng('registration', 1) ?></a>
     <?php endif ?>
 </div>
-
 <div class="maintxt">
-    <!-- Выводим основное содержимое -->
+    <!-- Начало вывода основного содержимого -->
     <?= $this->contents ?>
+    <!-- Окончание вывода основного содержимого -->
 </div>
 
 <div class="fmenu">

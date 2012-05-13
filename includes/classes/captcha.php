@@ -20,12 +20,12 @@ class Captcha
     Настройки модуля
     -----------------------------------------------------------------
     */
-    private static $width = 100; // Ширина картинки
-    private static $height = 50; // Высота картинки
-    private static $lenght_min = 3; // Минимальное число символов в CAPTCHA
-    private static $lenght_max = 5; // Максимальное число символов в CAPTCHA
-    private static $alphabet = '0123456789abcdefghijklmnopqrstuvwxyz'; // Доступный алфавит
-    private static $allowed_symbols = '23456789abcdeghkmnpqsuvxyz'; // Используемые символы. Не ставить похожие! (o=0, 1=l, i=j, t=f)
+    private static $width = 100;                                               // Ширина картинки
+    private static $height = 50;                                               // Высота картинки
+    private static $lenght_min = 3;                                            // Минимальное число символов в CAPTCHA
+    private static $lenght_max = 5;                                            // Максимальное число символов в CAPTCHA
+    private static $alphabet = '0123456789abcdefghijklmnopqrstuvwxyz';         // Доступный алфавит
+    private static $allowed_symbols = '23456789abcdeghkmnpqsuvxyz';            // Используемые символы. Не ставить похожие! (o=0, 1=l, i=j, t=f)
 
     /*
     -----------------------------------------------------------------

@@ -160,7 +160,12 @@ ul {
     border-top: 1px solid red;
     color: #d0d7dd;
     margin: 0;
-    padding: 5px 0 6px 4px;
+    padding: 6px 0px 6px 0px;
+}
+
+.header a:link, .header a:visited {
+    color: #F7F7F7;
+    text-decoration: none
 }
 
 .hidemain {
@@ -283,7 +288,7 @@ ul {
     border-top: 3px solid #45515d;
     color: #FFFFFF;
     margin: 0;
-    padding: 5px 0 5px 4px;
+    padding: 5px 0 5px 8px;
 }
 
 .topmenu {
@@ -373,4 +378,21 @@ a:hover {
 a:link, a:visited {
     color: #0000bb;
     text-decoration: underline;
+}
+
+.topbtn {
+    padding-left: 8px;
+    /*padding-right: 6px*/
+}
+
+.userbtn {
+    /*background-color: #393a3e;*/
+    /*border: 1px solid #565a5e;*/
+    /*border-top: 1px solid #6f7479;*/
+    /*border-radius: 5px;*/
+    /*-moz-border-radius:0 0 6px 6px;*/
+    /*-khtml-border-radius: 0 0 6px 6px;*/
+    /*margin-left: 4px;*/
+    padding-left: 7px;
+    padding-right: 8px;
 }

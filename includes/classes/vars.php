@@ -31,6 +31,7 @@ abstract class Vars
     public static $URI = '';                     // URI активного скрипта
     public static $MODULE = 'mainmenu';          // Активный модуль
     public static $CORE_ERRORS = array();        // Ошибки ядра
+    public static $NOTIFICATIONS = array();      // Уведомления
 
     public static $SYSTEM_SET;                   // Системные настройки
 
