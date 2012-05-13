@@ -52,7 +52,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 <div class="header">
     <span class="userbtn">
         <?php if (Vars::$USER_ID): ?>
-        <?= Functions::getImage('notice_menu.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/notifications"><b><?= Vars::$USER_DATA['nickname'] ?></b></a>
+        <a href="<?= Vars::$HOME_URL ?>/notifications"><b><?= Vars::$USER_DATA['nickname'] ?></b></a>
         <?php else: ?>
         <?= lng('guest', 1) ?>
         <?php endif; ?>
@@ -81,12 +81,12 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 </div>
 <div class="tmn">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
-    <?= Functions::getImage('menu_home.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a>&#160;
+    <?= Functions::getImage('menu_home.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a><br/>
     <?php endif ?>
-    <?php if (Vars::$USER_ID) : ?>
-    <?= Functions::getImage('menu_cabinet.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a>&#160;
-    <?= Functions::getImage('menu_exit.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/exit"><?= lng('exit', 1) ?></a>
-    <?php else : ?>
+    <?php if (Vars::$USER_ID && Vars::$PLACE != 'cabinet') : ?>
+    <?= Functions::getImage('menu_cabinet.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a><br/>
+    <?php endif ?>
+    <?php if (!Vars::$USER_ID) : ?>
     <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login', 1) ?></a> |
     <a href="<?= Vars::$HOME_URL ?>/registration"><?= lng('registration', 1) ?></a>
     <?php endif ?>
@@ -99,7 +99,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 
 <div class="fmenu">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
-    <div><a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a></div>
+    <div><?= Functions::getImage('menu_home.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a></div>
     <?php endif ?>
     <?php if (Vars::$USER_SET['quick_go']) : ?>
     <form action="<?= Vars::$HOME_URL ?>/redirect" method="post">

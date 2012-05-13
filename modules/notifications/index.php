@@ -8,3 +8,5 @@
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  */
+
+echo'<div class="phdr">1</div>';
