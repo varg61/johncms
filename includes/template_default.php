@@ -81,10 +81,10 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 </div>
 <div class="tmn">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
-    <?= Functions::getImage('menu_home.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a><br/>
+    <?= Functions::getImage('menu_home.png', 'Home', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a><br/>
     <?php endif ?>
     <?php if (Vars::$USER_ID && Vars::$PLACE != 'cabinet') : ?>
-    <?= Functions::getImage('menu_cabinet.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a><br/>
+    <?= Functions::getImage('menu_cabinet.png', 'Cabinet', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a><br/>
     <?php endif ?>
     <?php if (!Vars::$USER_ID) : ?>
     <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login', 1) ?></a> |
@@ -99,10 +99,10 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 
 <div class="fmenu">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>
-    <div><?= Functions::getImage('menu_home.png', 'Notifications', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a></div>
+    <?= Functions::getImage('menu_home.png', 'Home', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a><br/>
     <?php endif ?>
+    <?= Functions::getImage('online.png', 'Cabinet', 'align="middle"') ?>&#160;<?= Counters::usersOnline() ?>
 </div>
-<div class="footer"><?= Counters::usersOnline() ?></div>
 <div style="text-align:center"><p><b><?= Vars::$SYSTEM_SET['copyright'] ?></b></p></div>
 <div style="text-align:center">
     <small>Powered by <a href="http://johncms.com">JohnCMS</a></small>

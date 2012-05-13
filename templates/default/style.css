@@ -108,21 +108,12 @@ ul {
 
 .fmenu {
     background-color: #586776;
+    border-bottom: 2px solid #404b56;
     color: #FFFFFF;
     margin: 0;
     padding: 3px 1px 6px 6px;
-}
-
-.footer {
-    background-color: #586776;
-
-    /*background: #000000 url(images/bg.gif);*/
-    /*border-bottom: 2px solid #993333;*/
-    /*color: #d0d7dd;*/
-    /*margin: 0;*/
-    padding: 0px 0 6px 6px;
     border-radius: 0 0 8px 8px;
-    -moz-border-radius:0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
     -khtml-border-radius: 0 0 6px 6px;
 }
 
@@ -396,7 +387,7 @@ a:link, a:visited {
     border: 1px solid #565a5e;
     border-top: 1px solid #6f7479;
     border-radius: 8px;
-    -moz-border-radius:0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
     -khtml-border-radius: 0 0 6px 6px;
     margin-left: 5px;
     padding-left: 8px;
