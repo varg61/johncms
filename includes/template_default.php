@@ -84,10 +84,12 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
     <?php if (Vars::$USER_ID && Vars::$PLACE != 'cabinet') : ?>
     <?= Functions::getImage('menu_cabinet.png', 'Cabinet', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/cabinet"><?= lng('personal', 1) ?></a><br/>
     <?php endif ?>
-    <?php if (!Vars::$USER_ID) : ?>
-    <a href="<?= Vars::$HOME_URL ?>/registration"><?= lng('registration', 1) ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login', 1) ?></a>
-    <?php endif ?>
+    <?php if (!Vars::$USER_ID && Vars::$PLACE != 'registration') : ?>
+    <?= Functions::getImage('menu_registration.png', 'Cabinet', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/registration"><?= lng('registration', 1) ?></a><br/>
+    <?php endif; ?>
+    <?php if (!Vars::$USER_ID && Vars::$PLACE != 'login') : ?>
+    <?= Functions::getImage('menu_login.png', 'Cabinet', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/login"><?= lng('login', 1) ?></a>
+    <?php endif; ?>
 </div>
 <div class="maintxt">
     <!-- Начало вывода основного содержимого -->
