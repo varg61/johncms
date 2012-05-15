@@ -37,12 +37,12 @@ if ((Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) && (!empty($_GET['cat']
             $adrdir = mysql_fetch_array($cat1);
             deletcat("$adrdir[adres]/$adrdir[name]");
             mysql_query("DELETE FROM `download` WHERE `id` = '$cat'");
-            echo '<p>' . $lng_dl['folder_deleted'] . '<br /><a href="index.php">' . Vars::$LNG['continue'] . '</a></p>';
+            echo '<p>' . lng('folder_deleted') . '<br /><a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>';
         } else {
-            echo '<p>' . Vars::$LNG['delete_confirmation'] . '</p>' .
-                 '<form action="index.php?act=delcat&amp;cat=' . $cat . '" method="post">' .
-                 '<input type="submit" name="submit" value="' . Vars::$LNG['delete'] . '" />' .
-                 '</form><p><a href="index.php?cat=' . $cat . '">' . Vars::$LNG['cancel'] . '</a></p>';
+            echo '<p>' . lng('delete_confirmation') . '</p>' .
+                 '<form action="' . Vars::$URI . '?act=delcat&amp;cat=' . $cat . '" method="post">' .
+                 '<input type="submit" name="submit" value="' . lng('delete') . '" />' .
+                 '</form><p><a href="' . Vars::$URI . '?cat=' . $cat . '">' . lng('cancel') . '</a></p>';
         }
     }
 }

@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-echo '<div class="phdr">' . Vars::$LNG['new_files'] . '</div>';
+echo '<div class="phdr">' . lng('new_files') . '</div>';
 
 $req = mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'");
 $total = mysql_result($req, 0);
@@ -27,25 +27,25 @@ if ($total > 0) {
         $ft = Functions::format("$newf[adres]/$newf[name]");
         switch ($ft) {
             case "mp3" :
-                $imt = "mp3.png";
+                $imt = "download_mp3.png";
                 break;
             case "zip" :
-                $imt = "rar.png";
+                $imt = "download_rar.png";
                 break;
             case "jar" :
-                $imt = "jar.png";
+                $imt = "download_jar.png";
                 break;
             case "gif" :
-                $imt = "gif.png";
+                $imt = "download_gif.png";
                 break;
             case "jpg" :
-                $imt = "jpg.png";
+                $imt = "download_jpg.png";
                 break;
             case "png" :
-                $imt = "png.png";
+                $imt = "download_png.png";
                 break;
             default :
-                $imt = "file.gif";
+                $imt = "download_file.gif";
                 break;
         }
         if ($newf['text'] != "") {
@@ -62,7 +62,7 @@ if ($total > 0) {
         else {
             $tx = "";
         }
-        echo '<img src="' . $filesroot . '/img/' . $imt . '" alt=""/><a href="?act=view&amp;file=' . $newf['id'] . '">' . htmlentities($newf['name'], ENT_QUOTES, 'UTF-8') . '</a> (' . $fsz . ' кб)' . $tx . '<br/>';
+        echo Functions::getImage($imt) . '<a href="?act=view&amp;file=' . $newf['id'] . '">' . htmlentities($newf['name'], ENT_QUOTES, 'UTF-8') . '</a> (' . $fsz . ' кб)' . $tx . '<br/>';
         $nadir = $newf['refid'];
         $pat = "";
         while ($nadir != "") {
@@ -76,13 +76,13 @@ if ($total > 0) {
         echo "[$pat1]</div>";
         ++$i;
     }
-    echo '<div class="phdr">' . Vars::$LNG['total'] . ': ' . $total . '</div>';
+    echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
     if ($total > 10) {
-        echo '<p>' . Functions::displayPagination('index.php?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
-        echo '<p><form action="index.php" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . Vars::$LNG['to_page'] . ' &gt;&gt;"/></form></p>';
+        echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
+        echo '<p><form action="' . Vars::$URI . '" method="get"><input type="hidden" value="new" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
     }
 }
 else {
-    echo '<p>' . Vars::$LNG['list_empty'] . '</p>';
+    echo '<p>' . lng('list_empty') . '</p>';
 }
-echo "<p><a href='index.php?'>" . Vars::$LNG['back'] . "</a></p>";
+echo '<p><a href="' . Vars::$URI . '">' . lng('back') . '</a></p>';

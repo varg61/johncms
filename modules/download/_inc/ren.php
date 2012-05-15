@@ -28,12 +28,12 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $newrus = "$adrdir[text]";
         }
         if (mysql_query("update `download` set text='" . mysql_real_escape_string($newrus) . "' where id='" . $cat . "';")) {
-            echo '<p>' . $lng_dl['name_changed'] . '</p>';
+            echo '<p>' . lng('name_changed') . '</p>';
         }
     } else {
         echo "<form action='?act=ren&amp;cat=" . $cat . "' method='post'><p>";
-        echo $lng_dl['folder_name_for_list'] . "<br/><input type='text' name='newrus' value='" . $adrdir[text] . "'/></p>";
-        echo "<p><input type='submit' name='submit' value='" . $lng_dl['change'] . "'/></p></form>";
+        echo lng('folder_name_for_list') . "<br/><input type='text' name='newrus' value='" . $adrdir[text] . "'/></p>";
+        echo "<p><input type='submit' name='submit' value='" . lng('change') . "'/></p></form>";
     }
 }
-echo "<p><a href='?cat=" . $cat . "'>" . Vars::$LNG['back'] . "</a></p>";
+echo "<p><a href='?cat=" . $cat . "'>" . lng('back') . "</a></p>";

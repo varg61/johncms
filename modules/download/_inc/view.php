@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$delimag = opendir("$filesroot/graftemp");
+$delimag = opendir($filesroot . 'graftemp');
 while ($imd = readdir($delimag)) {
     if ($imd != "." && $imd != ".." && $imd != "index.php") {
         $im[] = $imd;
@@ -20,15 +20,15 @@ while ($imd = readdir($delimag)) {
 closedir($delimag);
 $totalim = count($im);
 for ($imi = 0; $imi < $totalim; $imi++) {
-    $filtime[$imi] = filemtime("$filesroot/graftemp/$im[$imi]");
+    $filtime[$imi] = filemtime($filesroot . 'graftemp' . DIRECTORY_SEPARATOR . $im[$imi]);
     $tim = time();
     $ftime1 = $tim - 10;
     if ($filtime[$imi] < $ftime1) {
-        @unlink("$filesroot/graftemp/$im[$imi]");
+        @unlink($filesroot . 'graftemp' . DIRECTORY_SEPARATOR . $im[$imi]);
     }
 }
 if ($_GET['file'] == '') {
-    echo Functions::displayError($lng_dl['file_not_selected'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+    echo Functions::displayError(lng('file_not_selected'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
     exit;
 }
 $file = intval(trim($_GET['file']));
@@ -36,7 +36,7 @@ $file1 = mysql_query("select * from `download` where type = 'file' and id = '" .
 $file2 = mysql_num_rows($file1);
 $adrfile = mysql_fetch_array($file1);
 if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
-    echo Functions::displayError($lng_dl['file_select_error'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+    echo Functions::displayError(lng('file_select_error'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
     exit;
 }
 $_SESSION['downl'] = mt_rand(1000, 9999);
@@ -50,7 +50,7 @@ $dnam1 = mysql_fetch_array($dnam);
 $dirname = "$dnam1[text]";
 $dirid = "$dnam1[id]";
 $nadir = $adrfile['refid'];
-echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['downloads'] . '</b></a>';
+echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('downloads') . '</b></a>';
 // Получаем структуру каталогов
 while ($nadir != "" && $nadir != "0") {
     echo ' | <a href="?cat=' . $nadir . '">' . $dirname . '</a><br/>';
@@ -62,8 +62,8 @@ while ($nadir != "" && $nadir != "0") {
     $dirname = $dnamm3['text'];
 }
 echo '</div><div class="menu"><p>';
-echo '<b>' . $lng_dl['file'] . ': <span class="red">' . $adrfile['name'] . '</span></b><br/>' .
-     '<b>' . $lng_dl['uploaded'] . ':</b> ' . $filtime . '<br/>';
+echo '<b>' . lng('file') . ': <span class="red">' . $adrfile['name'] . '</span></b><br/>' .
+    '<b>' . lng('uploaded') . ':</b> ' . $filtime . '<br/>';
 
 $graf = array(
     "gif",
@@ -118,7 +118,7 @@ if (in_array($prg, $graf)) {
     }
     $im1 = ImageCreateTrueColor($tn_width, $tn_height);
     imagecopyresized($im1, $im, 0, 0, 0, 0, $tn_width, $tn_height, $width, $height);
-    $path = "$filesroot/graftemp";
+    $path = $filesroot . 'graftemp';
     $imagnam = "$path/$namefile.temp.png";
     imageJpeg($im1, $imagnam, $quality);
     echo "<p><img src='" . $imagnam . "' alt=''/></p>";
@@ -134,17 +134,17 @@ if ($prg == "mp3") {
     $result = $id3->study();
     echo '<p>';
     if (!empty($id3->artists))
-        echo '<div><b>' . $lng_dl['artist'] . ':</b> ' . $id3->artists . '</div>';
+        echo '<div><b>' . lng('artist') . ':</b> ' . $id3->artists . '</div>';
     if (!empty($id3->album))
-        echo '<div><b>' . $lng_dl['album'] . ':</b> ' . $id3->album . '</div>';
+        echo '<div><b>' . lng('album') . ':</b> ' . $id3->album . '</div>';
     if (!empty($id3->year))
-        echo '<div><b>' . $lng_dl['released'] . ':</b> ' . $id3->year . '</div>';
+        echo '<div><b>' . lng('released') . ':</b> ' . $id3->year . '</div>';
     if (!empty($id3->name))
-        echo '<div><b>' . Vars::$LNG['title'] . ':</b> ' . $id3->name . '</div>';
+        echo '<div><b>' . lng('title') . ':</b> ' . $id3->name . '</div>';
     echo '</p>';
     if ($id3->getTag('bitrate')) {
-        echo '<b>' . $lng_dl['bitrate'] . ':</b> ' . $id3->getTag('bitrate') . ' kBit/sec<br/>' .
-             '<b>' . $lng_dl['duration'] . ':</b> ' . $id3->getTag('length') . '<br/>';
+        echo '<b>' . lng('bitrate') . ':</b> ' . $id3->getTag('bitrate') . ' kBit/sec<br/>' .
+            '<b>' . lng('duration') . ':</b> ' . $id3->getTag('length') . '<br/>';
     }
 }
 if (!empty($adrfile['text'])) {
@@ -197,7 +197,7 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
                 break;
         }
         $color = imagecolorallocate($im, 55, 255, 255);
-        $fontdir = opendir("$filesroot/fonts");
+        $fontdir = opendir($filesroot . 'fonts');
         while ($ttf = readdir($fontdir)) {
             if ($ttf != "." && $ttf != ".." && $ttf != "index.php") {
                 $arr[] = $ttf;
@@ -205,13 +205,13 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
         }
         $it = count($arr);
         $ii = mt_rand(0, $it - 1);
-        $fontus = "$filesroot/fonts/$arr[$ii]";
+        $fontus = $filesroot . 'fonts' . DIRECTORY_SEPARATOR . $arr[$ii];
         $font_size = ceil(($width + $height) / 15);
         @imagettftext($im, $font_size, $angle, '10', $height - 10, $color, $fontus, $tekst);
         $im1 = imagecreatetruecolor($tn_width, $tn_height);
         $namefile = "$adrfile[name]";
         imagecopyresized($im1, $im, 0, 0, 0, 0, $tn_width, $tn_height, $width, $height);
-        $path = "$filesroot/graftemp";
+        $path = $filesroot . 'graftemp';
         switch ($format) {
             case "gif":
                 $imagnam = "$path/$namefile.temp.gif";
@@ -246,42 +246,42 @@ if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
 // Ссылка на скачивание файла
 $dl_count = !empty($adrfile['ip']) ? intval($adrfile['ip']) : 0;
 echo '</p></div><div class="gmenu"><p>' .
-     '<h3 class="red">' .
-     '<a href="index.php?act=down&amp;id=' . $file . '">' . Functions::getImage('file.png') . '</a>&#160;' .
-     '<a href="index.php?act=down&amp;id=' . $file . '">' . Vars::$LNG['download'] . '</a></h3>' .
-     '<small><span class="gray">' . $lng_dl['size'] . ':</span> <b>' . $siz . '</b> kB<br />';
+    '<h3 class="red">' .
+    '<a href="' . Vars::$URI . '?act=down&amp;id=' . $file . '">' . Functions::getImage('file.png') . '</a>&#160;' .
+    '<a href="' . Vars::$URI . '?act=down&amp;id=' . $file . '">' . lng('download') . '</a></h3>' .
+    '<small><span class="gray">' . lng('size') . ':</span> <b>' . $siz . '</b> kB<br />';
 if ($prg == "zip") {
     echo "<a href='?act=zip&amp;file=" . $file . "'>Открыть архив</a><br/>";
 }
-echo '<span class="gray">' . $lng_dl['downloads'] . ':</span> <b>' . $dl_count . '</b>';
+echo '<span class="gray">' . lng('downloads') . ':</span> <b>' . $dl_count . '</b>';
 if (!empty($adrfile['soft'])) {
     $rating = explode(",", $adrfile['soft']);
     $rat = $rating[0] / $rating[1];
     $rat = round($rat, 2);
-    echo '<br /><span class="gray">' . $lng_dl['average_rating'] . ':</span> <b>' . $rat . '</b>' .
-         '<br /><span class="gray">' . $lng_dl['vote_count'] . ':</span> <b>' . $rating[1] . '</b>';
+    echo '<br /><span class="gray">' . lng('average_rating') . ':</span> <b>' . $rat . '</b>' .
+        '<br /><span class="gray">' . lng('vote_count') . ':</span> <b>' . $rating[1] . '</b>';
 }
 echo '</small></p>';
 // Рейтинг файла
-echo '<p><form action="index.php?act=rat&amp;id=' . $file . '" method="post"><select name="rat" style="font-size: x-small;">';
+echo '<p><form action="' . Vars::$URI . '?act=rat&amp;id=' . $file . '" method="post"><select name="rat" style="font-size: x-small;">';
 for ($i = 10; $i >= 1; --$i) {
     echo "<option>$i</option>";
 }
-echo '</select><input type="submit" value="' . $lng_dl['rate'] . '" style="font-size: x-small;"/></form></p>';
+echo '</select><input type="submit" value="' . lng('rate') . '" style="font-size: x-small;"/></form></p>';
 
 if (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7) {
     $totalkomm = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'komm' AND `refid` = '$file'"), 0);
-    echo '<p><small><a href="index.php?act=komm&amp;id=' . $file . '">' . Vars::$LNG['comments'] . '</a> (' . $totalkomm . ')</small></p>';
+    echo '<p><small><a href="' . Vars::$URI . '?act=komm&amp;id=' . $file . '">' . lng('comments') . '</a> (' . $totalkomm . ')</small></p>';
 }
 
 echo '</div>';
-echo '<div class="phdr"><a href="index.php">' . Vars::$LNG['downloads'] . '</a></div>';
+echo '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('downloads') . '</a></div>';
 if ((Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) && (!empty($_GET['file']))) {
     echo '<p>';
     if ((!in_array($prg, $graf)) && ($prg != "mp3")) {
-        echo '<a href="index.php?act=screen&amp;file=' . $file . '">' . $lng_dl['change_screenshot'] . '</a><br/>';
+        echo '<a href="' . Vars::$URI . '?act=screen&amp;file=' . $file . '">' . lng('change_screenshot') . '</a><br/>';
     }
-    echo '<a href="index.php?act=opis&amp;file=' . $file . '">' . $lng_dl['change_description'] . '</a><br/>';
-    echo '<a href="index.php?act=dfile&amp;file=' . $file . '">' . $lng_dl['delete_file'] . '</a>';
+    echo '<a href="' . Vars::$URI . '?act=opis&amp;file=' . $file . '">' . lng('change_description') . '</a><br/>';
+    echo '<a href="' . Vars::$URI . '?act=dfile&amp;file=' . $file . '">' . lng('delete_file') . '</a>';
     echo '</p>';
 }

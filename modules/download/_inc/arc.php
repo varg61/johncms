@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($_GET['file'] == "") {
-    echo Functions::displayError($lng_dl['file_not_selected'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+    echo Functions::displayError(lng('file_not_selected'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
     exit;
 }
 if ($_GET['f'] == "") {
@@ -62,7 +62,7 @@ if (!in_array($tfl, $df)) {
     $content = $zip->extract(PCLZIP_OPT_BY_NAME, $path, PCLZIP_OPT_EXTRACT_AS_STRING);
     $content1 = $zip->extract(PCLZIP_OPT_BY_NAME, $open, PCLZIP_OPT_EXTRACT_IN_OUTPUT);
     $content = $content[0]['content'];
-    $FileName = "$filesroot/arctemp/$fname";
+    $FileName = $filesroot . 'arctemp' . DIRECTORY_SEPARATOR . $fname;
     $fid = @ fopen($FileName, "wb");
     if ($fid) {
         if (flock($fid, LOCK_EX)) {
@@ -71,7 +71,8 @@ if (!in_array($tfl, $df)) {
         }
         fclose($fid);
     }
-    if (is_file("$filesroot/arctemp/$fname")) {
+    if (is_file($FileName)) {
+        //TODO: Доработать!
         header("location: $filesroot/arctemp/$fname");
     }
 }

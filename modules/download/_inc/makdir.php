@@ -43,12 +43,12 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     }
     else {
         echo "<form action='?act=makdir&amp;cat=" . intval($_GET['cat']) . "' method='post'>
-         <p>" . $lng_dl['folder_name'] . "<br />
+         <p>" . lng('folder_name') . "<br />
          <input type='text' name='drn'/></p>
-         <p>" . $lng_dl['folder_name_for_list'] . ":<br/>
+         <p>" . lng('folder_name_for_list') . ":<br/>
          <input type='text' name='rusn'/></p>
          <p><input type='submit' name='submit' value='Создать'/></p>
          </form>";
     }
 }
-echo "<a href='?'>" . Vars::$LNG['back'] . "</a><br/>";
+echo "<a href='?'>" . lng('back') . "</a><br/>";

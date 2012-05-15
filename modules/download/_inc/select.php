@@ -16,21 +16,21 @@ if (!empty($_GET['cat'])) {
     provcat($cat);
     if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         echo "<form action='?act=upl' method='post' enctype='multipart/form-data'>
-         <p>" . Vars::$LNG['select'] . " (max " . Vars::$SYSTEM_SET['flsz'] . " кб.):<br/>
+         <p>" . lng('select') . " (max " . Vars::$SYSTEM_SET['flsz'] . " кб.):<br/>
          <input type='file' name='fail'/></p>
-         <p>" . $lng_dl['screenshot'] . ":<br/>
+         <p>" . lng('screenshot') . ":<br/>
          <input type='file' name='screens'/></p>
-         <p>" . Vars::$LNG['description'] . ":<br/>
+         <p>" . lng('description') . ":<br/>
          <textarea name='opis'></textarea></p>
-         <p>" . $lng_dl['save_as'] . ":<br/>
+         <p>" . lng('save_as') . ":<br/>
          <input type='text' name='newname'/></p>
          <input type='hidden' name='cat' value='" . $cat . "'/>
-         <p><input type='submit' value='" . $lng_dl['upload'] . "'/></p>
+         <p><input type='submit' value='" . lng('upload') . "'/></p>
          </form>";
     } else {
         echo "Нет доступа!<br/>";
     }
-    echo "<a href='?cat=" . $cat . "'>" . Vars::$LNG['back'] . "</a><br/>";
+    echo "<a href='?cat=" . $cat . "'>" . lng('back') . "</a><br/>";
 } else {
     echo 'ERROR';
 }

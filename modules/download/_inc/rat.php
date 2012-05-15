@@ -12,17 +12,17 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if ($_GET['id'] == "") {
-    echo "ERROR<br/><a href='index.php?'>Back</a><br/>";
+    echo "ERROR<br/><a href='" . Vars::$URI . "'>Back</a><br/>";
     exit;
 }
 $typ = mysql_query("select * from `download` where `id` = " . Vars::$ID);
 $ms = mysql_fetch_array($typ);
 if ($ms[type] != "file") {
-    echo "ERROR<br/><a href='index.php?'>Back</a><br/>";
+    echo "ERROR<br/><a href='" . Vars::$URI . "'>Back</a><br/>";
     exit;
 }
 if ($_SESSION['rat'] == Vars::$ID) {
-    echo $lng_dl['already_rated'] . "<br/><a href='index.php?act=view&amp;file=" . Vars::$ID . "'>" . Vars::$LNG['back'] . "</a><br/>";
+    echo lng('already_rated') . "<br/><a href='" . Vars::$URI . "?act=view&amp;file=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";
     exit;
 }
 $rat = intval($_POST['rat']);
@@ -36,4 +36,4 @@ if (!empty($ms[soft])) {
 }
 $_SESSION['rat'] = Vars::$ID;
 mysql_query("update `download` set soft = '" . $rat1 . "' where id = '" . Vars::$ID . "';");
-echo $lng_dl['vote_adopted'] . "<br/><a href='index.php?act=view&amp;file=" . Vars::$ID . "'>" . Vars::$LNG['back'] . "</a><br/>";
+echo lng('vote_adopted') . "<br/><a href='" . Vars::$URI . "?act=view&amp;file=" . Vars::$ID . "'>" . lng('back') . "</a><br/>";

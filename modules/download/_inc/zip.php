@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$delarc = opendir("$filesroot/arctemp");
+$delarc = opendir($filesroot . 'arctemp');
 while ($zp = readdir($delarc)) {
     if ($zp != "." && $zp != ".." && $zp != "index.php") {
         $mp[] = $zp;
@@ -20,11 +20,11 @@ while ($zp = readdir($delarc)) {
 closedir($delarc);
 $totalmp = count($mp);
 for ($imp = 0; $imp < $totalmp; $imp++) {
-    $filtime[$imp] = filemtime("$filesroot/arctemp/$mp[$imp]");
+    $filtime[$imp] = filemtime($filesroot . "arctemp" . DIRECTORY_SEPARATOR . $mp[$imp]);
     $tim = time();
     $ftime1 = $tim - 300;
     if ($filtime[$imp] < $ftime1) {
-        @unlink("$filesroot/arctemp/$mp[$imp]");
+        @unlink($filesroot . "arctemp" . DIRECTORY_SEPARATOR . $mp[$imp]);
     }
 }
 if ($_GET['file'] == "") {
@@ -42,7 +42,7 @@ if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
 $zip = new PclZip("$adrfile[adres]/$adrfile[name]");
 
 if (($list = $zip->listContent()) == 0) {
-    die("Ошибка: " . $zip->errorInfo(true));
+    die("Ошибка: " . $zip->errorInfo(TRUE));
 }
 for ($i = 0; $i < sizeof($list); $i++) {
     for (reset($list[$i]); $key = key($list[$i]); next($list[$i])) {
@@ -105,14 +105,14 @@ for ($i = $start; $i < $end; $i++) {
 if ($count > 10) {
     echo "<hr/>";
     $ba = ceil($count / 10);
-    echo "Страницы:<br/>";    //TODO: Переделать на новый листинг по страницам
+    echo "Страницы:<br/>"; //TODO: Переделать на новый листинг по страницам
     if ($start != 0) {
-        echo '<a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
+        echo '<a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
     }
     $asd = $start - 10;
     $asd2 = $start + 20;
     if ($asd < $count && $asd > 0) {
-        echo ' <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=1">1</a> .. ';
+        echo ' <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=1">1</a> .. ';
     }
     $page2 = $ba - $page;
     $pa = ceil($page / 2);
@@ -121,11 +121,11 @@ if ($count > 10) {
     $paa2 = $page + floor($page2 / 3);
     $paa3 = $page + (floor($page2 / 3) * 2);
     if ($page > 13) {
-        echo ' <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) .
-        '</a> .. <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($paa * 2) . '">' . ($paa * 2) . '</a> <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
+        echo ' <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) .
+            '</a> .. <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($paa * 2) . '">' . ($paa * 2) . '</a> <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
     }
     elseif ($page > 7) {
-        echo ' <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
+        echo ' <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
     }
     for ($i = $asd; $i < $asd2;) {
         if ($i < $count && $i >= 0) {
@@ -135,26 +135,26 @@ if ($count > 10) {
                 echo " <b>$ii</b>";
             }
             else {
-                echo ' <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . $ii . '">' . $ii . '</a> ';
+                echo ' <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . $ii . '">' . $ii . '</a> ';
             }
         }
         $i = $i + 10;
     }
     if ($page2 > 12) {
-        echo ' .. <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) .
-        '</a> .. <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
+        echo ' .. <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) .
+            '</a> .. <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
     }
     elseif ($page2 > 6) {
-        echo ' .. <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
+        echo ' .. <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
     }
     if ($asd2 < $count) {
-        echo ' .. <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . $ba . '">' . $ba . '</a>';
+        echo ' .. <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . $ba . '">' . $ba . '</a>';
     }
     if ($count > $start + 10) {
-        echo ' <a href="index.php?act=zip&amp;file=' . $file . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
+        echo ' <a href="' . Vars::$URI . '?act=zip&amp;file=' . $file . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
     }
-    echo "<form action='index.php'>Перейти к странице:<br/><input type='hidden' name='act' value='zip'/><input type='hidden' name='file' value='" . $file .
-    "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
+    echo "<form action='" . Vars::$URI . "'>Перейти к странице:<br/><input type='hidden' name='act' value='zip'/><input type='hidden' name='file' value='" . $file .
+        "'/><input type='text' name='page' title='Введите номер страницы'/><br/><input type='submit' title='Нажмите для перехода' value='Go!'/></form>";
 }
 
 echo '<br/><br/><a href="?act=view&amp;file=' . $file . '">К файлу</a><br/>';

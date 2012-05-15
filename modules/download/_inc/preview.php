@@ -16,11 +16,11 @@ if (isset ($_POST['submit'])) {
         $razmer = intval($_POST['razmer']);
     }
     $_SESSION['razm'] = $razmer;
-    echo $lng_dl['preview_size_set'] . " $razmer*$razmer px<br/>";
+    echo lng('preview_size_set') . " $razmer*$razmer px<br/>";
 }
 else {
     echo "<form action='?act=preview' method='post'><p>
-	" . $lng_dl['select_preview_size'] . ":<br/><select name='razmer'>";
+	" . lng('select_preview_size') . ":<br/><select name='razmer'>";
     if (!empty ($_SESSION['razm'])) {
         $realr = $_SESSION['razm'];
         echo "<option value='" . $realr . "'>" . $realr . "*" . $realr . "</option>";
@@ -36,4 +36,4 @@ else {
 <option value='200'>200*200</option>
 </select><input type='submit' name='submit' value='ok'/></p></form>";
 }
-echo "<p><a href='?'>" . Vars::$LNG['back'] . "</a></p>";
+echo "<p><a href='?'>" . lng('back') . "</a></p>";

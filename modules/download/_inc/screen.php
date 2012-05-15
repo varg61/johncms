@@ -13,7 +13,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['file'] == "") {
-        echo Functions::displayError($lng_dl['file_not_selected'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+        echo Functions::displayError(lng('file_not_selected'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
         exit;
     }
     $file = intval(trim($_GET['file']));
@@ -21,7 +21,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     $file2 = mysql_num_rows($file1);
     $adrfile = mysql_fetch_array($file1);
     if (($file1 == 0) || (!is_file("$adrfile[adres]/$adrfile[name]"))) {
-        echo Functions::displayError($lng_dl['file_select_error'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+        echo Functions::displayError(lng('file_select_error'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
         exit;
     }
     if (isset($_POST['submit'])) {
@@ -39,15 +39,15 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         if ($scrname != "") {
             $formfot = Functions::format($ffot);
             if (!in_array($formfot, $dopras)) {
-                echo $lng_dl['screenshot_upload_error'] . '<br/><a href="index.php?act=screen&amp;file=' . $file . '">' . Vars::$LNG['repeat'] . '</a><br/>';
+                echo lng('screenshot_upload_error') . '<br/><a href="' . Vars::$URI . '?act=screen&amp;file=' . $file . '">' . lng('repeat') . '</a><br/>';
                 exit;
             }
             if ($scwidth > 320 || $scheight > 320) {
-                echo $lng_dl['screenshot_size_error'] . '<br/><a href="index.php?act=screen&amp;file=' . $file . '">' . Vars::$LNG['repeat'] . '</a><br/>';
+                echo lng('screenshot_size_error') . '<br/><a href="' . Vars::$URI . '?act=screen&amp;file=' . $file . '">' . lng('repeat') . '</a><br/>';
                 exit;
             }
             if (preg_match("/[^\da-z_\-.]+/", $scrname)) {
-                echo $lng_dl['screenshot_name_error'] . "<br/><a href='?act=screen&amp;file=" . $file . "'>" . Vars::$LNG['repeat'] . "</a><br/>";
+                echo lng('screenshot_name_error') . "<br/><a href='?act=screen&amp;file=" . $file . "'>" . lng('repeat') . "</a><br/>";
                 exit;
             }
             $filnam = "$adrfile[name]";
@@ -56,16 +56,16 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 $ch1 = "$filnam.$formfot";
                 @chmod("$ch1", 0777);
                 @chmod("$screenroot/$ch1", 0777);
-                echo $lng_dl['screenshot_uploaded'] . '<br/>';
+                echo lng('screenshot_uploaded') . '<br/>';
                 mysql_query("update `download` set screen='" . $ch1 . "' where id='" . $file . "';");
             }
         }
     } else {
-        echo $lng_dl['upload_screenshot'] . '<br/>';
-        echo '<form action="index.php?act=screen&amp;file=' . $file . '" method="post" enctype="multipart/form-data"><p>' . Vars::$LNG['select'] . ' (max. 320*320):<br/>' .
+        echo lng('upload_screenshot') . '<br/>';
+        echo '<form action="' . Vars::$URI . '?act=screen&amp;file=' . $file . '" method="post" enctype="multipart/form-data"><p>' . lng('select') . ' (max. 320*320):<br/>' .
              '<input type="file" name="screens"/>' .
-             '</p><p><input type="submit" name="submit" value="' . $lng_dl['upload'] . '"/></p>' .
+             '</p><p><input type="submit" name="submit" value="' . lng('upload') . '"/></p>' .
              '</form>';
     }
 }
-echo '<p><a href="index.php?act=view&amp;file=' . $file . '">' . Vars::$LNG['back'] . '</a></p>';
+echo '<p><a href="' . Vars::$URI . '?act=view&amp;file=' . $file . '">' . lng('back') . '</a></p>';

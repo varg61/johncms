@@ -9,21 +9,16 @@
  * @author      http://johncms.com/about
  */
 
-define('_IN_JOHNCMS', 1);
-
-$lng_dl = Vars::loadLanguage('downloads');
-require_once('../includes/lib/mp3.php');
-require_once('../includes/lib/pclzip.lib.php');
-$filesroot = '../download';
-$screenroot = "$filesroot/screen";
-$loadroot = "$filesroot/files";
+$filesroot = ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'download' . DIRECTORY_SEPARATOR;
+$screenroot = $filesroot . 'screen';
+$loadroot = $filesroot . 'files';
 
 // Ограничиваем доступ к Загрузкам
 $error = '';
 if (!Vars::$SYSTEM_SET['mod_down'] && Vars::$USER_RIGHTS < 7)
-    $error = $lng_dl['downloads_closed'];
+    $error = lng('downloads_closed');
 elseif (Vars::$SYSTEM_SET['mod_down'] == 1 && !Vars::$USER_ID)
-    $error = Vars::$LNG['access_guest_forbidden'];
+    $error = lng('access_guest_forbidden');
 if ($error) {
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
     exit;
@@ -40,49 +35,50 @@ function provcat($catalog)
     }
 }
 
-$array = array(
-    'scan_dir',
-    'rat',
-    'delmes',
-    'search',
-    'addkomm',
-    'komm',
-    'new',
-    'zip',
-    'arc',
-    'down',
-    'dfile',
-    'opis',
-    'screen',
-    'ren',
-    'import',
-    'refresh',
-    'upl',
-    'view',
-    'makdir',
-    'select',
-    'preview',
-    'delcat',
-    'mp3'
+$actions = array(
+    'scan_dir'  => 'scan_dir.php',
+    'rat'       => 'rat.php',
+    'delmes'    => 'delmes.php',
+    'search'    => 'search.php',
+    'addkomm'   => 'addkomm.php',
+    'komm'      => 'komm.php',
+    'new'       => 'new.php',
+    'zip'       => 'zip.php',
+    'arc'       => 'arc.php',
+    'down'      => 'down.php',
+    'dfile'     => 'dfile.php',
+    'opis'      => 'opis.php',
+    'screen'    => 'screen.php',
+    'ren'       => 'ren.php',
+    'import'    => 'import.php',
+    'refresh'   => 'refresh.php',
+    'upl'       => 'upl.php',
+    'view'      => 'view.php',
+    'makdir'    => 'makdir.php',
+    'select'    => 'select.php',
+    'preview'   => 'preview.php',
+    'delcat'    => 'delcat.php',
+    'mp3'       => 'mp3.php',
 );
-if (in_array(Vars::$ACT, $array)) {
-    require_once(Vars::$ACT . '.php');
+
+if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
+    require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     if (!Vars::$SYSTEM_SET['mod_down'])
-        echo '<p><font color="#FF0000"><b>' . $lng_dl['downloads_closed'] . '</b></font></p>';
+        echo '<p><font color="#FF0000"><b>' . lng('downloads_closed') . '</b></font></p>';
     // Ссылка на новые файлы
-    echo '<p><a href="?act=new">' . Vars::$LNG['new_files'] . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0) . ')</p>';
+    echo '<p><a href="?act=new">' . lng('new_files') . '</a> (' . mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0) . ')</p>';
     $cat = isset($_GET['cat']) ? intval($_GET['cat']) : '';
     if (empty($_GET['cat'])) {
         // Заголовок начальной страницы загрузок
-        echo '<div class="phdr">' . Vars::$LNG['downloads'] . '</div>';
+        echo '<div class="phdr"><b>' . lng('downloads', 1) . '</b></div>';
     } else {
         // Заголовок страниц категорий
         $req = mysql_query("SELECT * FROM `download` WHERE `type` = 'cat' AND `id` = '" . $cat . "' LIMIT 1");
         $res = mysql_fetch_array($req);
-        if (mysql_num_rows($req) == 0 || !is_dir($res['adres'] . '/' . $res['name'])) {
+        if (mysql_num_rows($req) == 0 || !is_dir($res['adres'] . DIRECTORY_SEPARATOR . $res['name'])) {
             // Если неправильно выбран каталог, выводим ошибку
-            echo Functions::displayError($lng_dl['folder_does_not_exist'], '<a href="index.php">' . Vars::$LNG['back'] . '</a>');
+            echo Functions::displayError(lng('folder_does_not_exist'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
             exit;
         }
         ////////////////////////////////////////////////////////////
@@ -93,12 +89,12 @@ if (in_array(Vars::$ACT, $array)) {
         while ($dirid != '0' && $dirid != "") {
             $req = mysql_query("SELECT * FROM `download` WHERE `type` = 'cat' and `id` = '" . $dirid . "' LIMIT 1");
             $res = mysql_fetch_array($req);
-            $tree[] = '<a href="index.php?cat=' . $dirid . '">' . $res['text'] . '</a>';
+            $tree[] = '<a href="' . Vars::$URI . '?cat=' . $dirid . '">' . $res['text'] . '</a>';
             $dirid = $res['refid'];
         }
         krsort($tree);
         $cdir = array_pop($tree);
-        echo '<div class="phdr"><a href="index.php"><b>' . Vars::$LNG['downloads'] . '</b></a> | ';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('downloads', 1) . '</b></a> | ';
         foreach ($tree as $value) {
             echo $value . ' | ';
         }
@@ -110,7 +106,7 @@ if (in_array(Vars::$ACT, $array)) {
     $totalfile = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `refid` = '$cat' AND `type` = 'file'"), 0);
     $total = (int)$totalcat + $totalfile;
     if ($total > 0) {
-        $zap = mysql_query("SELECT * FROM `download` WHERE `refid` = '$cat' ORDER BY `type` ASC, `text` ASC, `name` ASC LIMIT " . Vars::db_pagination());
+        $zap = mysql_query("SELECT * FROM `download` WHERE `refid` = '$cat' ORDER BY `type` ASC, `text` ASC, `name` ASC " . Vars::db_pagination());
         while ($zap2 = mysql_fetch_array($zap)) {
             ////////////////////////////////////////////////////////////
             // Выводим список папок                                   //
@@ -140,33 +136,33 @@ if (in_array(Vars::$ACT, $array)) {
                 $ft = Functions::format($zap2['name']);
                 switch ($ft) {
                     case "mp3":
-                        $imt = "mp3.png";
+                        $imt = "download_mp3.png";
                         break;
 
                     case "zip":
-                        $imt = "rar.png";
+                        $imt = "download_rar.png";
                         break;
 
                     case "jar":
-                        $imt = "jar.png";
+                        $imt = "download_jar.png";
                         break;
 
                     case "gif":
-                        $imt = "gif.png";
+                        $imt = "download_gif.png";
                         break;
 
                     case "jpg":
-                        $imt = "jpg.png";
+                        $imt = "download_jpg.png";
                         break;
 
                     case "png":
-                        $imt = "png.png";
+                        $imt = "download_png.png";
                         break;
                     default :
-                        $imt = "file.gif";
+                        $imt = "download_file.gif";
                         break;
                 }
-                echo '<img src="' . $filesroot . '/img/' . $imt . '" alt=""/><a href="?act=view&amp;file=' . $zap2['id'] . '">' . htmlentities($zap2['name'], ENT_QUOTES, 'UTF-8') . '</a>';
+                echo Functions::getImage($imt) . '<a href="?act=view&amp;file=' . $zap2['id'] . '">' . htmlentities($zap2['name'], ENT_QUOTES, 'UTF-8') . '</a>';
                 if ($zap2['text'] != "") {
                     // Выводим анонс текстового описания (если есть)
                     $tx = $zap2['text'];
@@ -180,44 +176,44 @@ if (in_array(Vars::$ACT, $array)) {
             }
         }
     } else {
-        echo '<div class="menu"><p>' . Vars::$LNG['list_empty'] . '</p></div>';
+        echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
     }
     echo '<div class="phdr">';
     if ($totalcat > 0)
-        echo $lng_dl['folders'] . ': ' . $totalcat;
+        echo lng('folders') . ': ' . $totalcat;
     echo '&#160;&#160;';
     if ($totalfile > 0)
-        echo $lng_dl['files'] . ': ' . $totalfile;
+        echo lng('files') . ': ' . $totalfile;
     echo '</div>';
     // Постраничная навигация
     if ($total > Vars::$USER_SET['page_size']) {
-        echo '<p>' . Functions::displayPagination('index.php?cat=' . $cat . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
+        echo '<p>' . Functions::displayPagination(Vars::$URI . '?cat=' . $cat . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
     }
     if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         ////////////////////////////////////////////////////////////
         // Выводим ссылки на модерские функции                    //
         ////////////////////////////////////////////////////////////
         echo '<p><div class="func">';
-        echo '<a href="?act=makdir&amp;cat=' . $cat . '">' . $lng_dl['make_folder'] . '</a><br/>';
+        echo '<a href="?act=makdir&amp;cat=' . $cat . '">' . lng('make_folder') . '</a><br/>';
         if (!empty($_GET['cat'])) {
             $delcat = mysql_query("select * from `download` where type = 'cat' and refid = '" . $cat . "';");
             $delcat1 = mysql_num_rows($delcat);
             if ($delcat1 == 0) {
-                echo '<a href="index.php?act=delcat&amp;cat=' . $cat . '">' . $lng_dl['delete_folder'] . '</a><br />';
+                echo '<a href="' . Vars::$URI . '?act=delcat&amp;cat=' . $cat . '">' . lng('delete_folder') . '</a><br />';
             }
-            echo '<a href="index.php?act=ren&amp;cat=' . $cat . '">' . $lng_dl['rename_folder'] . '</a><br />';
-            echo '<a href="index.php?act=select&amp;cat=' . $cat . '">' . $lng_dl['upload_file'] . '</a><br />';
-            echo '<a href="index.php?act=import&amp;cat=' . $cat . '">' . $lng_dl['import_file'] . '</a><br />';
+            echo '<a href="' . Vars::$URI . '?act=ren&amp;cat=' . $cat . '">' . lng('rename_folder') . '</a><br />';
+            echo '<a href="' . Vars::$URI . '?act=select&amp;cat=' . $cat . '">' . lng('upload_file') . '</a><br />';
+            echo '<a href="' . Vars::$URI . '?act=import&amp;cat=' . $cat . '">' . lng('import_file') . '</a><br />';
         }
-        echo '<a href="index.php?act=refresh">' . $lng_dl['refresh_downloads'] . '</a>';
+        echo '<a href="' . Vars::$URI . '?act=refresh">' . lng('refresh_downloads') . '</a>';
         echo '</div></p>';
     }
     if (!empty($cat))
-        echo '<p><a href="index.php">' . Vars::$LNG['downloads'] . '</a></p>';
-    echo '<p><a href="index.php?act=preview">' . $lng_dl['images_size'] . '</a></p>';
+        echo '<p><a href="' . Vars::$URI . '">' . lng('downloads') . '</a></p>';
+    echo '<p><a href="' . Vars::$URI . '?act=preview">' . lng('images_size') . '</a></p>';
     if (empty($cat)) {
-        echo '<form action="index.php?act=search" method="post">';
-        echo $lng_dl['search_file'] . ': <br/><input type="text" name="srh" size="20" maxlength="20" value=""/><br/>';
-        echo '<input type="submit" value="' . Vars::$LNG['search'] . '"/></form>';
+        echo '<form action="' . Vars::$URI . '?act=search" method="post">';
+        echo lng('search_file') . ': <br/><input type="text" name="srh" size="20" maxlength="20" value=""/><br/>';
+        echo '<input type="submit" value="' . lng('search') . '"/></form>';
     }
 }

@@ -274,6 +274,7 @@ INSERT INTO `cms_modules` (`module`) VALUES
         ('avatars'),
         ('cabinet'),
         ('contacts'),
+        ('download'),
         ('exit'),
         ('forum'),
         ('friends'),
