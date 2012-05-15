@@ -283,6 +283,7 @@ INSERT INTO `cms_modules` (`module`) VALUES
         ('library'),
         ('login'),
         ('mail'),
+        ('news'),
         ('notifications'),
         ('online'),
         ('profile'),
@@ -320,12 +321,12 @@ CREATE TABLE IF NOT EXISTS `cms_settings` (
 
 -- Dumping data for table dev_johncms.cms_settings: 26 rows
 INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
-        ('email', 'oleg@batumi.biz'),
+        ('email', 'user@test.com'),
         ('timeshift', '0'),
         ('copyright', 'Powered by JohnCMS'),
-        ('flsz', '4000'),
+        ('flsz', '2000'),
         ('gzip', '1'),
-        ('clean_time', '1328631879'),
+        ('clean_time', ''),
         ('mod_forum', '2'),
         ('mod_guest', '2'),
         ('mod_lib', '2'),
@@ -335,8 +336,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
         ('mod_lib_comm', '1'),
         ('mod_gal_comm', '1'),
         ('meta_key', ''),
-        ('meta_desc',
-                'Powered by JohnCMS http://johncms.com'),
+        ('meta_desc', 'Powered by JohnCMS http://johncms.com'),
         ('skindef', 'default'),
         ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smileys";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}'),
         ('lng_list', 'a:2:{s:2:"en";s:7:"English";s:2:"ru";s:14:"Русский";}');
@@ -546,6 +546,7 @@ CREATE TABLE `users` (
   `ip` int(10) unsigned NOT NULL DEFAULT '0',
   `ip_via_proxy` int(10) unsigned NOT NULL DEFAULT '0',
   `user_agent` varchar(200) NOT NULL DEFAULT '',
+  `notifications` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `last_visit` (`last_visit`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
