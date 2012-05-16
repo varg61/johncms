@@ -182,7 +182,6 @@ switch (Vars::$ACT) {
                     '<div style="margin-left:150px"><span class="red"><b>' . $out[1] . '</b></span></div>' .
                     '</div>';
             }
-            echo '</table>';
             echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo'<div class="topmenu">' . Functions::displayPagination('online.php?act=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
@@ -256,8 +255,11 @@ if ($total) {
     $req = mysql_query($sql_list);
     $i = 0;
     while ($res = mysql_fetch_assoc($req)) {
-        if ($res['id'] == Vars::$USER_ID) echo '<div class="gmenu">';
-        else echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        if ($res['id'] == Vars::$USER_ID) {
+            echo '<div class="gmenu">';
+        } else {
+            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        }
         $arg['header'] = ' <span class="gray">(';
         if (Vars::$ACT == 'history') {
             $arg['header'] .= Functions::displayDate($res['last_visit']) . ')</span>';

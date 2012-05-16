@@ -72,7 +72,7 @@
 <div class="phdr">
     <a href="<?= Vars::$HOME_URL ?>/login"><?= lng('already_registered') ?>?</a>
 </div>
-<div class="topmenu"">
+<div class="topmenu">
     <p><b><?= lng('mandatory_fields') ?></b></p>
 </div>
 <?php if (Vars::$USER_SYS['reg_moderation']) : ?>

@@ -387,8 +387,8 @@ class Functions extends Vars
     public static function getImage($img = '', $alt = '', $style = '')
     {
         if (empty($img)) return false;
-        if (is_file(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/theme/' . Vars::$USER_SET['skin'] . '/images/' . $img;
+        if (is_file(ROOTPATH . 'templates' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/images/' . $img;
         } elseif (is_file(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . $img)) {
             $file = parent::$HOME_URL . '/images/system/' . $img;
         } else {

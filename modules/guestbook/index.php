@@ -182,7 +182,7 @@ switch (Vars::$ACT) {
                 echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('edit') . '</div>' .
                      '<div class="rmenu">' .
                      '<form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
-                     '<p><b>' . lng('author') . ':</b> ' . $res['name'] . '</p>' .
+                     '<p><b>' . lng('author') . ':</b> ' . $res['nickname'] . '</p>' .
                      '<p><textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
                      '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
                      '</form></div>' .
@@ -322,7 +322,7 @@ switch (Vars::$ACT) {
                         $post = Functions::smileys($post, $res['rights'] >= 1 ? 1 : 0);
                 } else {
                     // Для гостей обрабатываем имя и фильтруем ссылки
-                    $res['name'] = Validate::filterString($res['name']);
+                    $res['nickname'] = Validate::filterString($res['nickname']);
                     $post = Functions::antiLink(Validate::filterString($res['text'], 0, 2));
                 }
                 if ($res['edit_count']) {
