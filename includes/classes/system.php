@@ -124,7 +124,8 @@ class System extends Vars
             parent::$USER_SYS = unserialize($set['users']);
         }
         parent::$SYSTEM_SET = $set;
-        parent::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . '/' . trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
+        $subpath = trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
+        parent::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . (!empty($subpath) ? '/' . $subpath : '');
     }
 
     /*
