@@ -15,7 +15,7 @@ class Advt extends Vars
     {
         $ads = array();
         $view = Vars::$USER_ID ? 2 : 1;
-        $layout = (parent::$PLACE == 'index.php' && !Vars::$ACT) ? 1 : 2;
+        $layout = (empty(parent::$PLACE) && !Vars::$ACT) ? 1 : 2;
         $req = mysql_query("SELECT * FROM `cms_ads` WHERE `to` = '0' AND (`layout` = '$layout' or `layout` = '0') AND (`view` = '$view' or `view` = '0') ORDER BY  `mesto` ASC");
         if (mysql_num_rows($req)) {
             while (($res = mysql_fetch_assoc($req)) !== false) {
