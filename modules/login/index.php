@@ -20,7 +20,7 @@ $sql = FALSE;
 $login_data['id'] = isset($_REQUEST['id']) ? trim($_REQUEST['id']) : FALSE;
 $login_data['token'] = isset($_REQUEST['token']) ? trim($_REQUEST['token']) : FALSE;
 $login_data['login'] = isset($_POST['login']) ? mb_substr(trim($_POST['login']), 0, 50) : FALSE;
-$login_data['password'] = isset($_POST['password']) ? mb_substr(trim($_POST['password']), 0, 20) : FALSE;
+$login_data['password'] = isset($_POST['password']) ? mb_substr(trim($_POST['password']), 0, 50) : FALSE;
 
 if (Vars::$USER_SYS['autologin'] && $login_data['id'] > 0 && strlen($login_data['token']) == 32) {
     /**

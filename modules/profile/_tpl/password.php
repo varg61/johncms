@@ -20,9 +20,15 @@
         </div>
         <div class="formblock">
             <label><?= lng('new_password') ?></label><br/>
-            <input type="password" name="newpass"/><br/>
+            <?php if(isset($this->error['newpass'])) : ?>
+            <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['newpass'] ?><br/></small>
+            <?php endif; ?>
+            <input type="password" name="newpass" <?= (isset($this->error['newpass']) ? 'class="error"' : '') ?>/><br/>
             <?= lng('repeat_password') ?><br/>
-            <input type="password" name="newconf"/>
+            <?php if(isset($this->error['newconf'])) : ?>
+            <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['newconf'] ?><br/></small>
+            <?php endif; ?>
+            <input type="password" name="newconf" <?= (isset($this->error['newconf']) ? 'class="error"' : '') ?>/>
             <div class="desc">
                 <?= lng('password_change_help') ?>
             </div>

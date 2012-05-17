@@ -35,16 +35,14 @@ if (isset($_POST['submit'])
     && !empty($_POST['oldpass'])
     && !empty($_POST['newpass'])
     && !empty($_POST['newconf'])
-    && isset($_POST['captcha'])
-    && isset($_SESSION['captcha'])
     && isset($_POST['form_token'])
     && isset($_SESSION['form_token'])
     && $_POST['form_token'] == $_SESSION['form_token']
 ) {
     $error = array();
-    $oldpass = trim($_POST['oldpass']);
-    $newpass = trim($_POST['newpass']);
-    $newconf = trim($_POST['newconf']);
+    $oldpass = mb_substr(trim($_POST['oldpass']), 0, 50);
+    $newpass = mb_substr(trim($_POST['newpass']), 0, 50);
+    $newconf = mb_substr(trim($_POST['newconf']), 0, 50);
 
     // Проверяем исходный пароль
     if (crypt($oldpass, Vars::$USER_DATA['password']) !== Vars::$USER_DATA['password']) {
@@ -52,12 +50,27 @@ if (isset($_POST['submit'])
     }
 
     // Проверяем новый пароль
+    if (Validate::password($newpass, TRUE) !== TRUE) {
+        $error['newpass'] = Validate::$error['password'];
+    } elseif ($newpass !== $newconf) {
+        $error['newconf'] = lng('error_passwords_not_match');
+    }
 
     if (empty($error)) {
+        $token = Functions::generateToken();
+        $password = crypt($newpass, '$2a$09$' . $token . '$');
+        mysql_query("UPDATE `users` SET
+            `password` = '" . mysql_real_escape_string($password) . "',
+            `token` = '" . mysql_real_escape_string($token) . "'
+            WHERE `id` = " . Vars::$USER_ID
+        );
+        setcookie('token', $token, time() + 3600 * 24 * 31, '/');
+        $_SESSION['token'] = $token;
+        echo'<div class="gmenu"><p>' . lng('password_changed') . '</p>' .
+            '<p><a href="' . Vars::$HOME_URL . '/cabinet">' . lng('continue') . '</a></p></div>';
         exit;
-    } else {
-        $tpl->error = $error;
     }
+    $tpl->error = $error;
 }
 
 $tpl->form_token = mt_rand(100, 10000);

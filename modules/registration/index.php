@@ -36,8 +36,8 @@ switch ($reg_step) {
         $error = array();
 
         $reg_data['login'] = isset($_POST['login']) ? trim($_POST['login']) : '';
-        $reg_data['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
-        $reg_data['password_confirm'] = isset($_POST['password_confirm']) ? trim($_POST['password_confirm']) : '';
+        $reg_data['password'] = isset($_POST['password']) ? mb_substr(trim($_POST['password']), 0, 50) : '';
+        $reg_data['password_confirm'] = isset($_POST['password_confirm']) ? mb_substr(trim($_POST['password_confirm']), 0, 50) : '';
         $reg_data['captcha'] = isset($_POST['captcha']) ? trim($_POST['captcha']) : '';
         $reg_data['email'] = isset($_POST['email']) ? trim($_POST['email']) : '';
         $reg_data['about'] = isset($_POST['about']) ? trim($_POST['about']) : '';

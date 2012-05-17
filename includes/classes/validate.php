@@ -115,10 +115,8 @@ class Validate
     {
         if (empty($var)) {
             $error = lng('error_empty_password');
-        } elseif (mb_strlen($var) < 3 || mb_strlen($var) > 20) {
+        } elseif (mb_strlen($var) < 3) {
             $error = lng('error_wrong_lenght');
-        } elseif (preg_match('/[^\da-z]+/i', $var)) {
-            $error = lng('error_wrong_symbols');
         } else {
             return true;
         }

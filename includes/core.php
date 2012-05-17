@@ -12,6 +12,9 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('CMS_VERSION', 'JohnCMS 5.0.0');
 
+// Проверяем версию PHP
+if (version_compare(phpversion(), '5.3.0', '<') == true) die ('ERROR: PHP5.3 > Only');
+
 /*
 -----------------------------------------------------------------
 Задаем базовые параметры PHP
