@@ -9,7 +9,7 @@
         <div class="formblock">
             <input type="submit" name="reset" value="<?= lng('save') ?>"/>
         </div>
-        <input type="hidden" name="token" value="<?= $this->token ?>"/>
+        <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
     </form>
 </div>
 <div class="phdr">

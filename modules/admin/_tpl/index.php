@@ -20,6 +20,7 @@
         <li><a href="<?= Vars::$HOME_URL ?>/news/admin"><?= lng('news') ?></a></li>
         <li><a href="<?= Vars::$URI ?>/counters"><?= lng('counters') ?></a></li>
         <li><a href="<?= Vars::$URI ?>/sitemap"><?= lng('sitemap') ?></a></li>
+        <li><a href="<?= Vars::$URI ?>/links"><?= lng('advertisement') ?></a></li>
     </ul>
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>

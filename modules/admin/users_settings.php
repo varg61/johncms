@@ -24,9 +24,9 @@ $tpl = Template::getInstance();
 */
 if (Vars::$USER_RIGHTS >= 7) {
     if (isset($_POST['submit'])
-        && isset($_POST['token'])
+        && isset($_POST['form_token'])
         && isset($_SESSION['form_token'])
-        && $_POST['token'] == $_SESSION['form_token']
+        && $_POST['form_token'] == $_SESSION['form_token']
     ) {
         Vars::$USER_SYS['reg_open'] = isset($_POST['reg_open']) && $_POST['reg_open'] ? 1 : 0;
         Vars::$USER_SYS['reg_moderation'] = isset($_POST['reg_moderation']);
@@ -78,23 +78,23 @@ if (Vars::$USER_RIGHTS >= 7) {
         $tpl->save = 1;
     } elseif (isset($_POST['reset'])
         && Vars::$USER_RIGHTS == 9
-        && isset($_POST['token'])
+        && isset($_POST['form_token'])
         && isset($_SESSION['form_token'])
-        && $_POST['token'] == $_SESSION['form_token']
+        && $_POST['form_token'] == $_SESSION['form_token']
     ) {
         @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'users'");
         header('Location: ' . Vars::$HOME_URL . '/admin/users_settings?default');
     } elseif (isset($_GET['reset']) && Vars::$USER_RIGHTS == 9) {
-        $tpl->token = mt_rand(100, 10000);
-        $_SESSION['form_token'] = $tpl->token;
+        $tpl->form_token = mt_rand(100, 10000);
+        $_SESSION['form_token'] = $tpl->form_token;
         $tpl->contents = $tpl->includeTpl('users_settings_reset');
         exit;
     }
     if (isset($_GET['default'])) {
         $tpl->reset = 1;
     }
-    $tpl->token = mt_rand(100, 10000);
-    $_SESSION['form_token'] = $tpl->token;
+    $tpl->form_token = mt_rand(100, 10000);
+    $_SESSION['form_token'] = $tpl->form_token;
     $tpl->contents = $tpl->includeTpl('users_settings');
 } else {
     echo Functions::displayError(lng('access_forbidden'));

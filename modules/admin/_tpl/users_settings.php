@@ -82,7 +82,7 @@
     <div class="formblock">
         <input type="submit" name="submit" value="<?= lng('save') ?>"/>
     </div>
-    <input type="hidden" name="token" value="<?= $this->token ?>"/>
+    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </div>
 </form>
 <div class="phdr">
