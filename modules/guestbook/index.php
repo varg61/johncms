@@ -282,7 +282,7 @@ switch (Vars::$ACT) {
                 echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . lng('translit') . '<br/>';
             if (!Vars::$USER_ID) {
                 // CAPTCHA для гостей
-                echo Captcha::display() . '<br />';
+                echo Captcha::display(1) . '<br />';
             }
             echo '<input type="submit" name="submit" value="' . lng('sent') . '"/></form></div>';
         } else {

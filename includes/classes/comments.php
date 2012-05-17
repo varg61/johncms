@@ -12,29 +12,30 @@
 class Comments
 {
     // Служебные данные
-    private $object_table;                                 // Таблица комментируемых объектов
-    private $comments_table;                               // Таблица с комментариями
-    private $sub_id = FALSE;                               // Идентификатор комментируемого объекта
-    private $item;                                         // Локальный идентификатор
-    private $user_id = FALSE;                              // Идентификатор авторизованного пользователя
-    private $rights = 0;                                   // Права доступа
-    private $ban = FALSE;                                  // Находится ли юзер в бане?
-    private $url;                                          // URL формируемых ссылок
+    private $object_comm_count;                  // Поле с числом комментариев
+    private $object_table;                       // Таблица комментируемых объектов
+    private $comments_table;                     // Таблица с комментариями
+    private $sub_id = FALSE;                     // Идентификатор комментируемого объекта
+    private $item;                               // Локальный идентификатор
+    private $user_id = FALSE;                    // Идентификатор авторизованного пользователя
+    private $rights = 0;                         // Права доступа
+    private $ban = FALSE;                        // Находится ли юзер в бане?
+    private $url;                                // URL формируемых ссылок
 
     // Права доступа
-    private $access_reply = FALSE;                         // Возможность отвечать на комментарий
-    private $access_edit = FALSE;                          // Возможность редактировать комментарий
-    private $access_delete = FALSE;                        // Возможность удалять комментарий
-    private $access_level = 6;                             // Уровень доступа для Администрации
+    private $access_reply = FALSE;               // Возможность отвечать на комментарий
+    private $access_edit = FALSE;                // Возможность редактировать комментарий
+    private $access_delete = FALSE;              // Возможность удалять комментарий
+    private $access_level = 6;                   // Уровень доступа для Администрации
 
     // Параметры отображения комментариев
-    public $min_lenght = 4;                                // Мин. к-во символов в комментарии
-    public $max_lenght = 5000;                             // Макс. к-во символов в комментарии
-    public $captcha = FALSE;                               // Показывать CAPTCHA
+    public $min_lenght = 4;                      // Мин. к-во символов в комментарии
+    public $max_lenght = 5000;                   // Макс. к-во символов в комментарии
+    public $captcha = FALSE;                     // Показывать CAPTCHA
 
     // Возвращаемые значения
-    public $total = 0;                                     // Общее число комментариев объекта
-    public $added = FALSE;                                 // Метка добавления нового комментария
+    public $total = 0;                           // Общее число комментариев объекта
+    public $added = FALSE;                       // Метка добавления нового комментария
 
     /*
     -----------------------------------------------------------------
@@ -43,6 +44,7 @@ class Comments
     */
     function __construct($arg = array())
     {
+        $this->object_comm_count = !empty($arg['object_comm_count']) ? $arg['object_comm_count'] : 'comm_count';
         $this->comments_table = $arg['comments_table'];
         $this->object_table = !empty($arg['object_table']) ? $arg['object_table'] : FALSE;
         if (!empty($arg['sub_id_name']) && !empty($arg['sub_id'])) {
@@ -92,7 +94,7 @@ class Comments
                             if (empty($message['error'])) {
                                 $attributes['reply_id'] = $this->user_id;
                                 $attributes['reply_rights'] = $this->rights;
-                                $attributes['reply_name'] = Vars::$USER_DATA['name'];
+                                $attributes['reply_name'] = Vars::$USER_DATA['nickname'];
                                 $attributes['reply_time'] = time();
                                 mysql_query("UPDATE `" . $this->comments_table . "` SET
                                     `reply` = '" . mysql_real_escape_string($message['text']) . "',
@@ -403,7 +405,7 @@ class Comments
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `" . $this->comments_table . "` WHERE `sub_id` = '" . $this->sub_id . "'"), 0);
         if ($update) {
             // Обновляем счетчики в таблице объекта
-            mysql_query("UPDATE `" . $this->object_table . "` SET `comm_count` = '$total' WHERE `id` = '" . $this->sub_id . "'");
+            mysql_query("UPDATE `" . $this->object_table . "` SET `" . $this->object_comm_count . "` = '$total' WHERE `id` = '" . $this->sub_id . "'");
         }
         return $total;
     }

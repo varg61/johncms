@@ -17,14 +17,14 @@ if (Vars::$USER_RIGHTS < 1) {
     exit;
 }
 
+$ipwhois = '';
+$ip = trim($_GET['ip']);
 $tpl = Template::getInstance();
 
 if (Vars::$USER_RIGHTS
-    && isset($_GET['ip'])
-    && ip2long($_GET['ip']) !== FALSE
+&& isset($_GET['ip'])
+&& ip2long($_GET['ip']) !== FALSE
 ) {
-    $ipwhois = '';
-    $ip = trim($_GET['ip']);
     if (($fsk = @fsockopen('whois.arin.net.', 43))) {
         fputs($fsk, "$ip\r\n");
         while (!feof($fsk)) $ipwhois .= fgets($fsk, 1024);
