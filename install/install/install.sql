@@ -382,25 +382,63 @@ CREATE TABLE IF NOT EXISTS `cms_user_settings` (
   PRIMARY KEY (`user_id`,`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.download
-DROP TABLE IF EXISTS `download`;
-CREATE TABLE IF NOT EXISTS `download` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `refid` int(11) NOT NULL DEFAULT '0',
-  `adres` text NOT NULL,
-  `time` int(11) NOT NULL DEFAULT '0',
-  `name` text NOT NULL,
-  `type` varchar(4) NOT NULL DEFAULT '',
-  `avtor` varchar(25) NOT NULL DEFAULT '',
-  `ip` text NOT NULL,
-  `soft` text NOT NULL,
-  `text` text NOT NULL,
-  `screen` text NOT NULL,
+CREATE TABLE IF NOT EXISTS `cms_download_bookmark` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `file_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `file_id` (`file_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `cms_download_comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sub_id` int(10) unsigned NOT NULL,
+  `time` int(11) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `text` text NOT NULL,
+  `reply` text NOT NULL,
+  `attributes` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sub_id` (`sub_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `cms_download_files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `refid` int(11) NOT NULL,
+  `dir` text NOT NULL,
+  `time` int(11) NOT NULL,
+  `sort` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `type` int(2) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `rus_name` text NOT NULL,
+  `text` text NOT NULL,
+  `field` int(11) NOT NULL DEFAULT '0',
+  `rate` varchar(30) NOT NULL DEFAULT '0|0',
+  `about` text NOT NULL,
+  `desc` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `refid` (`refid`),
+  KEY `total` (`total`),
   KEY `type` (`type`),
+  KEY `user_id` (`user_id`),
+  KEY `time` (`time`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `cms_download_more` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `refid` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `rus_name` text NOT NULL,
+  `size` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `refid` (`refid`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- Dumping structure for table dev_johncms.forum
 DROP TABLE IF EXISTS `forum`;
@@ -555,10 +593,11 @@ CREATE TABLE `users` (
 -- Создаем суперпользователя
 -- LOGIN:    admin
 -- PASSWORD: admin
-INSERT INTO `users` SET
-        `nickname` = 'admin',
+INSERT INTO `users` SET `nickname` = 'admin',
         `password` = '$2a$09$3dc6eee4535ff2912c44fO4djfEMWdsfFM9dw4NKsWCaeLIRyzB6u',
         `email` = 'admin@test.com',
         `rights` = 9,
         `level` = 1,
-        `sex` = 'm';
+        `sex` = 'm',
+        `about` = '',
+        `notifications` = '';

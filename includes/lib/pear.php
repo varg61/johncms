@@ -1,5 +1,20 @@
 <?php
+/*
+////////////////////////////////////////////////////////////////////////////////
+// JohnCMS                             Content Management System              //
+// Официальный сайт сайт проекта:      http://johncms.com                     //
+// Дополнительный сайт поддержки:      http://gazenwagen.com                  //
+////////////////////////////////////////////////////////////////////////////////
+// JohnCMS core team:                                                         //
+// Евгений Рябинин aka john77          john77@gazenwagen.com                  //
+// Олег Касьянов aka AlkatraZ          alkatraz@gazenwagen.com                //
+//                                                                            //
+// Информацию о версиях смотрите в прилагаемом файле version.txt              //
+////////////////////////////////////////////////////////////////////////////////
+// Библиотека PEAR  http://pear.php.net
+*/
 
+defined('_IN_JOHNCMS') or die('Error:restricted access');
 define('PEAR_ERROR_RETURN', 1);
 define('PEAR_ERROR_PRINT', 2);
 define('PEAR_ERROR_TRIGGER', 4);
@@ -561,3 +576,5 @@ class PEAR_Error {
         userinfo);
     }
 }
+
+?>

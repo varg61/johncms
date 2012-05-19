@@ -17,6 +17,7 @@ class Counters extends Vars
     public $album_photo; // Пользовательские фотографии
     public $album_photo_new; // Новые пользовательские фотографии
     public $downloads; // Счетчик файлов в Загруз-центре
+    public $downloads_mod; // Счетчик файлов в Загруз-центре
     public $downloads_new; // Счетчик новых файлов в Загруз-центре
     public $forum_topics; // Счетчик топиков Форума
     public $forum_messages; // Счетчик постов Форума
@@ -61,6 +62,7 @@ class Counters extends Vars
         $this->gallery_new = $this->_galleryNew($count['14']);
         $this->guestbook = $this->_guestBook($count['15']);
         $this->adminclub = $this->_adminClub($count['16']);
+        $this->downloads_mod = $this->_downloadsMod($count['17']);
 
         /*
         -----------------------------------------------------------------
@@ -238,7 +240,7 @@ class Counters extends Vars
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `type` = 'file'"), 0);
+            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'"), 0);
             $var['time'] = time();
         }
         return $var['count'];
@@ -253,13 +255,26 @@ class Counters extends Vars
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `download` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'file'"), 0);
+            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2' AND `time` > '" . (time() - 259200) . "'"), 0);
             $var['time'] = time();
         }
         return $var['count'];
     }
-
     /*
+    -----------------------------------------------------------------
+    Счетчик файлов на модерации в загруз-центре
+    -----------------------------------------------------------------
+    */
+    private function _downloadsMod(&$var)
+    {
+        if (!isset($var) || $var['time'] < time() - 600) {
+            $this->update_cache = TRUE;
+            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '3'"), 0);
+            $var['time'] = time();
+        }
+        return $var['count'];
+    }
+	/*
     -----------------------------------------------------------------
     Счетчик топиков Форума
     -----------------------------------------------------------------

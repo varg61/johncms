@@ -34,7 +34,8 @@ echo'<div class="phdr"><b>' . lng('useful') . '</b></div>';
 if (Vars::$SYSTEM_SET['mod_down'] || Vars::$USER_RIGHTS >= 7) {
     echo'<div class="menu"><a href="' . Vars::$HOME_URL . '/download">' . lng('downloads') . '</a> (' .
         $this->count->downloads .
-        ($this->count->downloads_new ? '&#160;/&#160;<span class="red">+' . $this->count->downloads_new . '</span>' : '') .
+        ($this->count->downloads_new ? '&#160;/&#160;<span class="red"><a href="' . Vars::$HOME_URL . '/download?act=new_files">+' . $this->count->downloads_new . '</a></span>' : '') .
+		($this->count->downloads_mod && Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6 ? '&#160;/&#160;<span class="red"><a href="' . Vars::$HOME_URL . '/download?act=mod_files">mod:' . $this->count->downloads_mod . '</a></span>' : '') .
         ')</div>';
 }
 

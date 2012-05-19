@@ -3,130 +3,97 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2012 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-
-echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('downloads') . '</b></a> | ' . lng('search') . '</div>';
-if (isset($_GET['srh']) && !empty ($_GET['srh'])) {
-    $srh = Validate::filterString($_GET['srh']);
-} elseif (isset($_POST['srh']) && !empty($_POST['srh'])) {
-    $srh = Validate::filterString($_POST['srh']);
-} else {
-    if ($_POST['srh'] == "") {
-        echo Functions::displayError(lng('search_string_empty'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
-        exit;
+/*
+-----------------------------------------------------------------
+Поиск файлов
+-----------------------------------------------------------------
+*/
+$search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
+$search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : '';
+$search = $search_post ? $search_post : $search_get;
+/*
+-----------------------------------------------------------------
+Форма для поиска
+-----------------------------------------------------------------
+*/
+echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a> | ' . lng('search') . '</div>' .
+'<form action="' . Vars::$URI . '?act=search" method="post"><div class="gmenu"><p>' .
+lng('name_file') . ':<br /><input type="text" name="search" value="' . Validate::filterString($search) . '" /><br />' .
+'<input name="id" type="checkbox" value="1" ' . (Vars::$ID ? 'checked="checked"' : '') . '/> ' . lng('search_for_desc') . '<br />' .
+'<input type="submit" value="Поиск" name="submit" /><br />' .
+'</p></div></form>';
+/*
+-----------------------------------------------------------------
+Проверяем на коректность ввода
+-----------------------------------------------------------------
+*/
+$error = false;
+if (!empty($search) && mb_strlen($search) < 2 || mb_strlen($search) > 64)
+    $error = lng('search_error');
+/*
+-----------------------------------------------------------------
+Выводим результаты поиска
+-----------------------------------------------------------------
+*/
+if ($search && !$error) {
+	/*
+	-----------------------------------------------------------------
+	Подготавливаем данные для запроса
+	-----------------------------------------------------------------
+	*/
+	$search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
+    $search_db = strtr($search, array ('_' => '\\_', '%' => '\\%', '*' => '%'));
+    $search_db = '%' . $search_db . '%';
+    $sql = (Vars::$ID ? '`about`' : '`rus_name`') . ' LIKE \'' . mysql_real_escape_string($search_db) . '\'';
+	/*
+	-----------------------------------------------------------------
+	Результаты поиска
+	-----------------------------------------------------------------
+	*/
+	echo '<div class="phdr"><b>' . lng('search_result') . '</b></div>';
+	$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND $sql"), 0);
+	if ($total > Vars::$USER_SET['page_size']) {
+		$check_search = Validate::filterString(rawurlencode($search));
+		echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=search&amp;search=' . $check_search . '&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
-}
-
-$psk = mysql_query("select * from `download` where  type='file' ;");
-if (empty ($_GET['start']))
-    $start = 0;
-else
-    $start = $_GET['start'];
-
-while ($array = mysql_fetch_array($psk)) {
-    if (stristr($array [name], $srh)) {
-        $res[] = lng('found_by_name') . ":<br/><a href='?act=view&amp;file=" . $array [id] . "'>$array[name]</a><br/>";
-    }
-    if (stristr($array [text], $srh)) {
-        $res[] = lng('found_by_description') . ":<br/><a href='?act=view&amp;file=" . $array [id] . "'>$array[name]</a><br/>$array[text]<br/>";
-    }
-}
-$g = count($res);
-if ($g == 0) {
-    echo '<p>' . lng('search_results_empty') . '</p>';
-}
-else {
-    echo '<p>' . lng('search_results') . '</p>';
-}
-if (empty ($_GET['page'])) {
-    $page = 1;
-}
-else {
-    $page = intval($_GET['page']);
-}
-$start = $page * 10 - 10;
-if ($g < $start + 10) {
-    $end = $g;
-}
-else {
-    $end = $start + 10;
-}
-for ($i = $start; $i < $end; $i++) {
-    $d = $i / 2;
-    $d1 = ceil($d);
-    $d2 = $d1 - $d;
-    $d3 = ceil($d2);
-    if ($d3 == 0) {
-        $div = "<div class='c'>";
-    }
-    else {
-        $div = "<div class='b'>";
-    }
-    echo "$div $res[$i]</div>";
-}
-if ($g > 10) {
-    echo "<hr/>";
-
-    $ba = ceil($g / 10);
-    echo "Pages:<br/>"; //TODO: Переделать на новый листинг по страницам
-    $asd = $start - 10;
-    $asd2 = $start + 20;
-
-    if ($start != 0) {
-        echo '<a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($page - 1) . '">&lt;&lt;</a> ';
-    }
-    if ($asd < $g && $asd > 0) {
-        echo ' <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=1&amp;">1</a> .. ';
-    }
-    $page2 = $ba - $page;
-    $pa = ceil($page / 2);
-    $paa = ceil($page / 3);
-    $pa2 = $page + floor($page2 / 2);
-    $paa2 = $page + floor($page2 / 3);
-    $paa3 = $page + (floor($page2 / 3) * 2);
-    if ($page > 13) {
-        echo ' <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . $paa . '">' . $paa . '</a> <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa + 1) . '">' . ($paa + 1) .
-            '</a> .. <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa * 2) . '">' . ($paa * 2) . '</a> <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa * 2 + 1) . '">' . ($paa * 2 + 1) . '</a> .. ';
-    }
-    elseif ($page > 7) {
-        echo ' <a href="?id=' . Vars::$ID . '&amp;page=' . $pa . '">' . $pa . '</a> <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($pa + 1) . '">' . ($pa + 1) . '</a> .. ';
-    }
-    for ($i = $asd; $i < $asd2;) {
-        if ($i < $g && $i >= 0) {
-            $ii = floor(1 + $i / 10);
-
-            if ($start == $i) {
-                echo " <b>$ii</b>";
-            }
-            else {
-                echo ' <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . $ii . '">' . $ii . '</a> ';
-            }
+    if ($total) {
+        $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = '2'  AND $sql ORDER BY `rus_name` ASC " . Vars::db_pagination());
+        $i = 0;
+        while ($res_down = mysql_fetch_assoc($req_down)) {
+            echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
         }
-        $i = $i + 10;
+    } else {
+        echo '<div class="rmenu"><p>' . lng('search_list_empty') . '</p></div>';
     }
-    if ($page2 > 12) {
-        echo ' .. <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . $paa2 . '">' . $paa2 . '</a> <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa2 + 1) . '">' . ($paa2 + 1) .
-            '</a> .. <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa3) . '">' . ($paa3) . '</a> <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($paa3 + 1) . '">' . ($paa3 + 1) . '</a> ';
-    }
-    elseif ($page2 > 6) {
-        echo ' .. <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . $pa2 . '">' . $pa2 . '</a> <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($pa2 + 1) . '">' . ($pa2 + 1) . '</a> ';
-    }
-    if ($asd2 < $g) {
-        echo ' .. <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . $ba . '">' . $ba . '</a>';
-    }
-    if ($g > $start + 10) {
-        echo ' <a href="' . Vars::$URI . '?act=search&amp;srh=' . $srh . '&amp;page=' . ($page + 1) . '">&gt;&gt;</a>';
-    }
-    echo "<form action='" . Vars::$URI . "'>To Page:<br/><input type='hidden' name='act' value='search'/><input type='hidden' name='srh' value='" . $srh .
-        "'/><input type='text' name='page' /><br/><input type='submit' value='Go!'/></form>";
+    echo '<div class="phdr">' . lng('total') . ':  ' . $total . '</div>';
+	/*
+	-----------------------------------------------------------------
+	Навигация
+	-----------------------------------------------------------------
+	*/
+	if ($total > Vars::$USER_SET['page_size']) {
+		echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=search&amp;search=' . $check_search . '&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+ 	 	'<p><form action="' . Vars::$URI . '" method="get">' .
+  		'<input type="hidden" value="' . $check_search . '" name="search" />' .
+  		'<input type="hidden" value="search" name="act" />' .
+  		'<input type="hidden" value="' . Vars::$ID . '" name="id" />' .
+    	'<input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+	}
+	echo '<p><a href="' . Vars::$URI . '?act=search">' . lng('search_new') . '</a></p>';
+} else {
+	/*
+	-----------------------------------------------------------------
+	FAQ по поиску и вывод ошибки
+	-----------------------------------------------------------------
+	*/
+    if ($error) echo Functions::displayError($error);
+	 echo '<div class="phdr"><small>' . lng('search_faq') . '</small></div>';
 }
-if ($g != 0) {
-    echo "<div class='phdr'>" . lng('total') . ": $g</div>";
-}
-echo '<p><a href="?">' . lng('downloads') . '</a></p>';
+echo '<p><a href="' . Vars::$URI . '">' . lng('download_title') . '</a></p>';
