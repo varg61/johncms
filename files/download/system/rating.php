@@ -12,7 +12,7 @@
 $vote = isset($_GET['img']) ? abs(intval($_GET['img'])) : 0;
 if ($vote > 100) $vote = 100;
 header("Content-type: image/gif");
-$vote_img = imageCreateFromGIF($_SERVER['DOCUMENT_ROOT'] . '/images/system/vote.gif');
+$vote_img = imageCreateFromGIF('vote.gif');
 $color = imagecolorallocate($vote_img, 0, 255, 0);
 $color2 = imagecolorallocate($vote_img, 255, 153, 153);
 $color3 = imagecolorallocate($vote_img, 255, 102, 102);
@@ -27,5 +27,3 @@ header("Content-Type: image/gif");
 header('Content-Disposition: inline; filename=vote.gif');
 header('Content-Length: ' . ob_get_length());
 ob_end_flush();
-
-?>

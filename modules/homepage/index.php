@@ -26,7 +26,6 @@ if (isset(Vars::$SYSTEM_SET['sitemap'])) {
     if (($set_map['forum'] || $set_map['lib']) && ($set_map['users'] || !Vars::$USER_ID) && ($set_map['browsers'] || !Vars::$IS_MOBILE)) {
         $map = new SiteMap();
         $tpl->sitemap = $map->mapGeneral();
-        //echo '<div class="sitemap">' . $map->mapGeneral() . '</div>';
     }
 }
 

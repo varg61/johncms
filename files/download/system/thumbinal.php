@@ -11,19 +11,21 @@
 
 if (!isset($_GET['img']))
     exit;
-function format($name) {
+function format($name)
+{
     $f1 = strrpos($name, ".");
     $f2 = substr($name, $f1 + 1, 999);
     $fname = strtolower($f2);
     return $fname;
 }
+
 $copyright = '';
 $type = isset($_GET['type']) ? abs(intval($_GET['type'])) : 0;
 $image = htmlspecialchars(rawurldecode($_GET['img']));
-$image = $_SERVER['DOCUMENT_ROOT'] . '/' . strtr($image, array ('../' => '', './' => '_'));
+$image = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . strtr($image, array('../' => '', './'  => '_'));
 if ($image && file_exists($image)) {
-	$att_ext = strtolower(format($image));
-    $pic_ext = array ('gif', 'jpg', 'jpeg', 'png');
+    $att_ext = strtolower(format($image));
+    $pic_ext = array('gif', 'jpg', 'jpeg', 'png');
     if (in_array($att_ext, $pic_ext)) {
         $info_file = GetImageSize($image);
         $w_or = $info_file[0];
@@ -65,18 +67,18 @@ if ($image && file_exists($image)) {
             case "image/png":
                 $image_file = ImageCreateFromPNG($image);
                 break;
-                default:
-            exit;
+            default:
+                exit;
         }
         $two_image = imagecreatetruecolor($w, $h);
         imagecopyresampled($two_image, $image_file, 0, 0, 0, 0, $w, $h, $w_or, $h_or);
         if ($w > 30 && $h > 30) {
             if ($type != 1 && $w > 100 && $h > 50) {
-                $file_copyright = $_SERVER['DOCUMENT_ROOT'] . '/images/system/copyright_2.png';
+                $file_copyright = 'copyright_2.png';
                 $w_copyright = 100;
                 $h_copyright = 20;
             } else {
-                $file_copyright = $_SERVER['DOCUMENT_ROOT'] . '/images/system/copyright.png';
+                $file_copyright = 'copyright.png';
                 $w_copyright = 16;
                 $h_copyright = 16;
             }
@@ -84,7 +86,7 @@ if ($image && file_exists($image)) {
             imagecopy($two_image, $copyright, 1, ($h - $h_copyright - 2), 0, 0, $w_copyright, $h_copyright);
         }
         ob_start();
-        imageJpeg($two_image, null, 80);
+        imageJpeg($two_image, NULL, 80);
         ImageDestroy($image_file);
         imagedestroy($two_image);
         if ($copyright)
@@ -95,4 +97,3 @@ if ($image && file_exists($image)) {
         ob_end_flush();
     }
 }
-?>
