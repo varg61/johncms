@@ -602,10 +602,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     $freq = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "'");
                     if (mysql_num_rows($freq) > 0) {
                         $fres = mysql_fetch_assoc($freq);
-                        $fls = round(@filesize('../files/forum/attach/' . $fres['filename']) / 1024, 2);
+                        $fls = round(@filesize(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fres['filename']) / 1024, 2);
                         echo '<br /><span class="gray">' . lng('attached_file') . ':';
                         // Предпросмотр изображений
-                        $att_ext = strtolower(Functions::format('./files/forum/attach/' . $fres['filename']));
+                        $att_ext = strtolower(Functions::format(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fres['filename']));
                         $pic_ext = array(
                             'gif',
                             'jpg',
@@ -614,7 +614,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         );
                         if (in_array($att_ext, $pic_ext)) {
                             echo '<div><a href="' . Vars::$URI . '?act=file&amp;id=' . $fres['id'] . '">';
-                            echo '<img src="thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
+                            echo '<img src="' . Vars::$HOME_URL . '/images/misc/forum_thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
                         } else {
                             echo '<br /><a href="' . Vars::$URI . '?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
                         }

@@ -36,26 +36,18 @@ switch ($res['type']) {
             -----------------------------------------------------------------
             */
             $do_file = false;
-            $do_file_mini = false;
             if ($_FILES['fail']['size'] > 0) {
                 // Проверка загрузки с обычного браузера
                 $do_file = true;
                 $fname = strtolower($_FILES['fail']['name']);
                 $fsize = $_FILES['fail']['size'];
-            } elseif (strlen($_POST['fail1']) > 0) {
-                // Проверка загрузки с Opera Mini
-                $do_file_mini = true;
-                $array = explode('file=', $_POST['fail1']);
-                $fname = strtolower($array[0]);
-                $filebase64 = $array[1];
-                $fsize = strlen(base64_decode($filebase64));
             }
             /*
             -----------------------------------------------------------------
             Обработка файла (если есть), проверка на ошибки
             -----------------------------------------------------------------
             */
-            if ($do_file || $do_file_mini) {
+            if ($do_file) {
                 // Список допустимых расширений файлов.
                 $al_ext = array_merge($ext_win, $ext_java, $ext_sis, $ext_doc, $ext_pic, $ext_arch, $ext_video, $ext_audio, $ext_other);
                 $ext = explode(".", $fname);
@@ -76,37 +68,18 @@ switch ($res['type']) {
                 if (preg_match("/[^\da-z_\-.]+/", $fname))
                     $error[] = lng('error_file_symbols');
                 // Проверка наличия файла с таким же именем
-                if (file_exists("../files/forum/attach/$fname")) {
+                if (file_exists(ROOTPATH .  'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) {
                     $fname = time() . $fname;
                 }
                 // Окончательная обработка
                 if (!$error && $do_file) {
                     // Для обычного браузера
-                    if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "../files/forum/attach/$fname")) == true) {
+                    if ((move_uploaded_file($_FILES["fail"]["tmp_name"], ROOTPATH .  'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) == true) {
                         @chmod("$fname", 0777);
-                        @chmod("../files/forum/attach/$fname", 0777);
+                        @chmod(ROOTPATH .  'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname, 0777);
                         echo lng('file_uploaded') . '<br/>';
                     } else {
                         $error[] = lng('error_upload_error');
-                    }
-                } elseif ($do_file_mini) {
-                    // Для Opera Mini
-                    if (strlen($filebase64) > 0) {
-                        $FileName = "../files/forum/attach/$fname";
-                        $filedata = base64_decode($filebase64);
-                        $fid = @fopen($FileName, "wb");
-                        if ($fid) {
-                            if (flock($fid, LOCK_EX)) {
-                                fwrite($fid, $filedata);
-                                flock($fid, LOCK_UN);
-                            }
-                            fclose($fid);
-                        }
-                        if (file_exists($FileName) && filesize($FileName) == strlen($filedata)) {
-                            echo lng('file_uploaded') . '<br/>';
-                        } else {
-                            $error[] = lng('error_upload_error');
-                        }
                     }
                 }
                 if (!$error) {

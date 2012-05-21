@@ -39,12 +39,12 @@ function forum_link($m)
                 $res = mysql_fetch_array($req);
                 $name = strtr($res['text'], array(
                     '&quot;' => '',
-                    '&amp;' => '',
-                    '&lt;' => '',
-                    '&gt;' => '',
+                    '&amp;'  => '',
+                    '&lt;'   => '',
+                    '&gt;'   => '',
                     '&#039;' => '',
-                    '[' => '',
-                    ']' => ''
+                    '['      => '',
+                    ']'      => ''
                 ));
                 if (mb_strlen($name) > 40)
                     $name = mb_substr($name, 0, 40) . '...';
@@ -124,9 +124,8 @@ if (isset($_POST['submit'])) {
         $postid = mysql_insert_id();
         // Записываем счетчик постов юзера
         //TODO: Разобраться со счетчиком!
-        $fpst = $datauser['postforum'] + 1;
         mysql_query("UPDATE `users` SET
-            `postforum` = '$fpst',
+            `count_forum` = '" . ++Vars::$USER_DATA['count_forum'] . "',
             `lastpost` = '" . time() . "'
             WHERE `id` = " . Vars::$USER_ID . "
         ");
@@ -136,10 +135,11 @@ if (isset($_POST['submit'])) {
             `user_id`=" . Vars::$USER_ID . ",
             `time`='" . time() . "'
         ");
-        if ($_POST['addfiles'] == 1)
+        if ($_POST['addfiles'] == 1) {
             header("Location: " . Vars::$URI . "?id=$postid&act=addfile");
-        else
+        } else {
             header("Location: " . Vars::$URI . "?id=$rid");
+        }
     } else {
         // Выводим сообщение об ошибке
         echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) {
     $res_r = mysql_fetch_assoc($req_r);
     $req_c = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res_r['refid'] . "'");
     $res_c = mysql_fetch_assoc($req_c);
-    if (Vars::$USER_DATA['count_forum'] == 0) {
+    if (!Vars::$USER_DATA['count_forum']) {
         if (!isset($_GET['yes'])) {
             echo '<p>' . lng('forum_rules_text') . '</p>';
             echo '<p><a href="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '&amp;yes">' . lng('agree') . '</a> | <a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('not_agree') . '</a></p>';
@@ -163,24 +163,26 @@ if (isset($_POST['submit'])) {
     echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('new_topic') . '</div>';
     if ($msg && $th && !isset($_POST['submit']))
         echo '<div class="list1">' . Functions::getImage('forum_normal.png') . '&#160;<span style="font-weight: bold">' . $th . '</span></div>' .
-             '<div class="list2">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1, 'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>', 'body' => $msg_pre)) . '</div>';
-    echo '<form name="form" action="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '" method="post">' .
-         '<div class="gmenu">' .
-         '<p><h3>' . lng('section') . '</h3>' .
-         '<a href="' . Vars::$URI . '?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="' . Vars::$URI . '?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
-         '<p><h3>' . lng('new_topic_name') . '</h3>' .
-         '<input type="text" size="20" maxlength="100" name="th" value="' . $th . '"/></p>' .
-         '<p><h3>' . lng('post') . '</h3>';
+            '<div class="list2">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
+                                                                                   'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
+                                                                                   'body'   => $msg_pre)) . '</div>';
+    echo'<form name="form" action="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '" method="post">' .
+        '<div class="gmenu">' .
+        '<p><h3>' . lng('section') . '</h3>' .
+        '<a href="' . Vars::$URI . '?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="' . Vars::$URI . '?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
+        '<p><h3>' . lng('new_topic_name') . '</h3>' .
+        '<input type="text" size="20" maxlength="100" name="th" value="' . $th . '"/></p>' .
+        '<p><h3>' . lng('post') . '</h3>';
     if (!Vars::$IS_MOBILE)
         echo '</p><p>' . TextParser::autoBB('form', 'msg');
     echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? Validate::filterString($_POST['msg']) : '') . '</textarea></p>' .
-         '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
+        '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
     if (Vars::$USER_SET['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . lng('translit');
-    echo '</p><p><input type="submit" name="submit" value="' . lng('save') . '" style="width: 107px; cursor: pointer;"/> ' .
-         ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
-         '</p></div></form>' .
-         '<div class="phdr"><a href="../pages/faq.php?act=trans">' . lng('translit') . '</a> | ' .
-         '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-         '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+    echo'</p><p><input type="submit" name="submit" value="' . lng('save') . '" style="width: 107px; cursor: pointer;"/> ' .
+        ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+        '</p></div></form>' .
+        '<div class="phdr"><a href="../pages/faq.php?act=trans">' . lng('translit') . '</a> | ' .
+        '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
+        '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
 }
