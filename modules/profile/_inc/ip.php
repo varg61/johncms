@@ -9,14 +9,12 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_PROFILE') or die('Error: restricted access');
-
 /*
 -----------------------------------------------------------------
 Проверяем права доступа
 -----------------------------------------------------------------
 */
-if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['user_id']) {
+if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['id']) {
     echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
@@ -26,31 +24,29 @@ if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['user_id']) {
 История IP адресов
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="profile.php?user=' . $user['user_id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('ip_history') . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$HOME_URL . '/profile?user=' . $user['id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('ip_history') . '</div>';
 echo '<div class="user"><p>';
 $arg = array(
     'lastvisit' => 1,
-    'header' => '<b>ID:' . $user['user_id'] . '</b>'
+    'header'    => '<b>ID:' . $user['id'] . '</b>'
 );
 echo Functions::displayUser($user, $arg);
 echo '</p></div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_iphistory` WHERE `user_id` = '" . $user['user_id'] . "'"), 0);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "'"), 0);
 if ($total) {
-    $req = mysql_query("SELECT * FROM `cms_user_iphistory` WHERE `user_id` = '" . $user['user_id'] . "' ORDER BY `timestamp` DESC LIMIT " . Vars::db_pagination());
-    $i = 0;
-    while (($res = mysql_fetch_assoc($req)) !== false) {
+    $req = mysql_query("SELECT * FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "' ORDER BY `timestamp` DESC " . Vars::db_pagination());
+    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         $link = Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;mod=history&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a>' : long2ip($res['ip']);
-        echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $res['time']) . ')</span></div>';
-        ++$i;
+        echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $res['timestamp']) . ')</span></div>';
     }
 } else {
-    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+    echo'<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo'<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<p>' . Functions::displayPagination('profile.php?act=ip&amp;user=' . $user['user_id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
-    echo '<p><form action="profile.php?act=ip&amp;user=' . $user['user_id'] . '" method="post">' .
+    echo'<p>' . Functions::displayPagination(Vars::$URI . '?act=ip&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+        '<p><form action="' . Vars::$URI . '?act=ip&amp;user=' . $user['id'] . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';

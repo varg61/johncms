@@ -307,7 +307,7 @@ class Functions extends Vars
                 }
                 if (isset($arg['iphist'])) {
                     $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-                    $out .= '<div><span class="gray">' . lng('ip_history') . ':</span> <a href="' . Vars::$HOME_URL . '/users/profile.php?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a></div>';
+                    $out .= '<div><span class="gray">' . lng('ip_history') . ':</span> <a href="' . Vars::$HOME_URL . '/profile?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a></div>';
                 }
                 $out .= '</div>';
             }
