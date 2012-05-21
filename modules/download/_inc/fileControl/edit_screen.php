@@ -97,7 +97,7 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
             $file = preg_replace('#^' . $screens_path . '/' . Vars::$ID . '/(.*?)$#isU', '$1', $screen_name, 1);
             echo (($i % 2) ? '<div class="list2">' : '<div class="list1">') .
             '<table  width="100%"><tr><td width="40" valign="top">' .
-            '<a href="' . $screen_name . '"><img src="' . Vars::$HOME_URL . '/files/download/system/thumbinal.php?type=1&amp;img=' . rawurlencode($screen_name) . '" alt="screen_' . $i . '" /></a></td><td>' . $file .
+            '<a href="' . $screen_name . '"><img src="' . Vars::$HOME_URL . '/images/misc/thumbinal.php?type=1&amp;img=' . rawurlencode($screen_name) . '" alt="screen_' . $i . '" /></a></td><td>' . $file .
             '<div class="sub"><a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '&amp;do=' . $file . '">' . lng('delete') . '</a></div></td></tr></table></div>';
         }
     }

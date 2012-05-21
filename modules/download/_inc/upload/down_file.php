@@ -64,7 +64,18 @@ if (mysql_num_rows($req) && is_dir($res['dir'] . '/' . $res['name'])) {
                         echo '</div>';
                         $fname = mysql_real_escape_string($fname);
                         $name = mysql_real_escape_string(mb_substr($name, 0, 200));
-                        mysql_query("INSERT INTO `cms_download_files` SET `refid`='" . Vars::$ID . "', `dir`='$load_cat', `time`='" . time() . "',`name`='$fname', `text` = '$name_link',`rus_name`='$name', `type` = '$type',`user_id`='" . Vars::$USER_ID . "', `about` = '$text'");
+                        mysql_query("INSERT INTO `cms_download_files` SET
+                            `refid`='" . Vars::$ID . "',
+                            `dir`='$load_cat',
+                            `time`='" . time() . "',
+                            `name`='$fname',
+                            `text` = '$name_link',
+                            `rus_name`='$name',
+                            `type` = '$type',
+                            `user_id`='" . Vars::$USER_ID . "',
+                            `about` = '$text',
+                            `desc` = ''
+                        ") or die('77: ' . mysql_error());
                         $file_id = mysql_insert_id();
 						$handle = new upload($_FILES['screen']);
                         if ($handle->uploaded) {

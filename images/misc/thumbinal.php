@@ -22,7 +22,7 @@ function format($name)
 $copyright = '';
 $type = isset($_GET['type']) ? abs(intval($_GET['type'])) : 0;
 $image = htmlspecialchars(rawurldecode($_GET['img']));
-$image = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . strtr($image, array('../' => '', './'  => '_'));
+$image = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . strtr($image, array('../' => '', './'  => '_'));
 if ($image && file_exists($image)) {
     $att_ext = strtolower(format($image));
     $pic_ext = array('gif', 'jpg', 'jpeg', 'png');

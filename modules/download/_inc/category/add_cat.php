@@ -21,20 +21,20 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         }
         $load_cat = $res_down['dir'] . '/' . $res_down['name'];
     }
-	if (isset($_POST['submit'])) {
+    if (isset($_POST['submit'])) {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
         $rus_name = isset($_POST['rus_name']) ? trim($_POST['rus_name']) : '';
         $desc = isset($_POST['desc']) ? trim($_POST['desc']) : '';
-        $user_down = isset($_POST['user_down']);
-        $format = $user_down && isset($_POST['format']) ? trim($_POST['format']) : false;
+        $user_down = isset($_POST['user_down']) ? 1 : 0;
+        $format = $user_down && isset($_POST['format']) ? trim($_POST['format']) : FALSE;
         $error = array();
         if (empty($name))
             $error[] = lng('error_empty_fields');
         if (preg_match("/[^0-9a-zA-Z]+/", $name))
             $error[] = $error[] = lng('error_wrong_symbols');
-		 if (Vars::$USER_RIGHTS == 9 && $user_down) {
+        if (Vars::$USER_RIGHTS == 9 && $user_down) {
             foreach (explode(',', $format) as $value) {
-                if (!in_array(trim($value), $defaultExt)){
+                if (!in_array(trim($value), $defaultExt)) {
                     $error[] = lng('extensions_ok') . ': ' . implode(', ', $defaultExt);
                     break;
                 }
@@ -46,43 +46,44 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         }
         if (empty($rus_name))
             $rus_name = $name;
-        $dir = false;
+        $dir = FALSE;
         if (!is_dir("$load_cat/$name"))
             $dir = mkdir("$load_cat/$name", 0777);
-        if ($dir == true) {
+        if ($dir == TRUE) {
             chmod("$load_cat/$name", 0777);
             mysql_query("INSERT INTO `cms_download_files` SET
-                `refid`='" . Vars::$ID . "',
-                `dir`='$load_cat',
-                `time`='" . time() . "',
-                `sort`='" . time() . "',
-                `name`='" . mysql_real_escape_string($name) . "',
-                `desc`='" . mysql_real_escape_string($desc) . "',
+                `refid` = '" . Vars::$ID . "',
+                `dir` = '$load_cat',
+                `time` = '" . time() . "',
+                `sort` = '" . time() . "',
+                `name` = '" . mysql_real_escape_string($name) . "',
+                `desc` = '" . mysql_real_escape_string($desc) . "',
                 `type` = '1',
-                `field`='$user_down',
+                `field` = '$user_down',
                 `text` = '" . mysql_real_escape_string($format) . "',
-                `rus_name`='" . mysql_real_escape_string($rus_name) . "'
-            ");
+                `rus_name` = '" . mysql_real_escape_string($rus_name) . "',
+                `about` = ''
+            ") or die(mysql_error());
             $cat_id = mysql_insert_id();
             echo '<div class="phdr"><b>' . lng('add_cat_title') . '</b></div>' .
-            '<div class="list1">' . lng('add_cat_ok') . '</div>' .
-            '<div class="list2"><a href="' . Vars::$URI . '?id=' . $cat_id . '">' . lng('continue') . '</a></div>';
+                '<div class="list1">' . lng('add_cat_ok') . '</div>' .
+                '<div class="list2"><a href="' . Vars::$URI . '?id=' . $cat_id . '">' . lng('continue') . '</a></div>';
         } else {
             echo functions::displayError(lng('add_cat_error'), '<a href="' . Vars::$URI . 'act=add_cat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
             exit;
         }
     } else {
         echo '<div class="phdr"><b>' . lng('add_cat_title') . '</b></div><div class="menu">' .
-        '<form action="' . Vars::$URI . '?act=add_cat&amp;id=' . Vars::$ID . '" method="post">' .
-         lng('dir_name') . ' [A-Za-z0-9]:<br/><input type="text" name="name"/><br/>' .
-         lng('dir_name_view') . ':<br/><input type="text" name="rus_name"/><br/>' .
-         lng('dir_desc') . ' (max. 500):<br/><textarea name="desc" cols="24" rows="4"></textarea><br/>';
+            '<form action="' . Vars::$URI . '?act=add_cat&amp;id=' . Vars::$ID . '" method="post">' .
+            lng('dir_name') . ' [A-Za-z0-9]:<br/><input type="text" name="name"/><br/>' .
+            lng('dir_name_view') . ':<br/><input type="text" name="rus_name"/><br/>' .
+            lng('dir_desc') . ' (max. 500):<br/><textarea name="desc" cols="24" rows="4"></textarea><br/>';
         if (Vars::$USER_RIGHTS == 9) {
             echo '<div class="sub"><input type="checkbox" name="user_down" value="1" /> ' . lng('user_download') . '<br/>' .
-            lng('extensions') . ':<br/><input type="text" name="format"/></div>' .
-            '<div class="sub">' . lng('extensions_ok') . ':<br /> ' . implode(', ', $defaultExt) . '</div>';
+                lng('extensions') . ':<br/><input type="text" name="format"/></div>' .
+                '<div class="sub">' . lng('extensions_ok') . ':<br /> ' . implode(', ', $defaultExt) . '</div>';
         }
-		echo ' <input type="submit" name="submit" value="' . lng('add_cat') . '"/><br/></form></div>';
+        echo ' <input type="submit" name="submit" value="' . lng('add_cat') . '"/><br/></form></div>';
     }
     echo '<div class="phdr">';
     if (Vars::$ID)
