@@ -14,5 +14,5 @@
     <a href="<?= Vars::$HOME_URL ?>/smileys"><?= lng('smileys') ?></a>
 </div>
 <div class="phdr">
-    <a href="<?= $_SESSION['ref'] ?>"><?= lng('back') ?></a>
+    <a href="<?= (isset($_SESSION['ref']) ? $_SESSION['ref'] : Vars::$HOME_URL) ?>"><?= lng('back') ?></a>
 </div>
