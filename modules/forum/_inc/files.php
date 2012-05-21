@@ -89,7 +89,7 @@ if ($do || isset($_GET['new'])) {
         );
         $i = 0;
         while ($res = mysql_fetch_assoc($req)) {
-            $req_u = mysql_query("SELECT `id`, `name`, `sex`, `rights`, `last_visit`, `status`, `datereg`, `ip`, `browser` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+            $req_u = mysql_query("SELECT `id`, `nickname`, `sex`, `rights`, `last_visit`, `status`, `join_date`, `ip`, `user_agent` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
             $res_u = mysql_fetch_assoc($req_u);
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Выводим текст поста
@@ -102,9 +102,9 @@ if ($do || isset($_GET['new'])) {
             if (mb_strlen($res['text']) > 500)
                 $text .= '<br /><a href="' . Vars::$URI . '?act=post&amp;id=' . $res['post'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
             // Формируем ссылку на файл
-            $fls = @filesize('../files/forum/attach/' . $res['filename']);
+            $fls = @filesize(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res['filename']);
             $fls = round($fls / 1024, 0);
-            $att_ext = strtolower(Functions::format('./files/forum/attach/' . $res['filename']));
+            $att_ext = strtolower(Functions::format(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res['filename']));
             $pic_ext = array(
                 'gif',
                 'jpg',
@@ -114,7 +114,7 @@ if ($do || isset($_GET['new'])) {
             if (in_array($att_ext, $pic_ext)) {
                 // Если картинка, то выводим предпросмотр
                 $file = '<div><a href="' . Vars::$URI . '?act=file&amp;id=' . $res['id'] . '">';
-                $file .= '<img src="thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
+                $file .= '<img src="' . Vars::$HOME_URL . '/images/misc/forum_thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
                 $file = Functions::getImage(($res['del'] ? 'delete.png' : 'filetype_' . $res['filetype'] . '.png'), '', 'align="middle"') . '&#160;';
