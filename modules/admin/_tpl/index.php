@@ -5,7 +5,7 @@
     <label><?= Functions::getImage('users.png', '', 'class="left"') ?>&#160;<?= lng('users') ?></label>
     <ul>
         <?php if (Vars::$USER_RIGHTS >= 7 && $this->regTotal) : ?>
-        <li><span class="red"><a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('users_reg') ?></a>&#160;(<?= $this->regTotal ?>)</b></span></li>
+        <li><span class="red"><a href="<?= Vars::$MODULE_URI ?>"><?= lng('users_reg') ?></a>&#160;(<?= $this->regTotal ?>)</span></li>
         <?php endif; ?>
         <li><a href="<?= Vars::$HOME_URL ?>/users/search"><?= lng('community') ?></a>&#160;(<?= $this->usrTotal ?>)</li>
         <?php if (Vars::$USER_RIGHTS >= 7) : ?>
