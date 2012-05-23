@@ -17,9 +17,9 @@ $query = array(
             <li><?= lng('awaiting_registration') ?></li>
             <?php endif; ?>
             <?php if (time() > $this->user['last_visit'] + 300) : ?>
-            <li><span class="gray"><?= lng('last_visit') ?>:</span> <?= date("d.m.Y (H:i)", $this->user['last_visit']) ?></li>
+            <li><span class="gray"><?= lng('last_visit') ?>:</span> <?= Functions::displayDate($this->user['last_visit']) ?></li>
             <?php endif; ?>
-            <li><span class="gray"><?= ($this->user['sex'] == 'm' ? lng('registered_m') : lng('registered_w')) ?>:</span> <?= date("d.m.Y (H:i)", $this->user['join_date']) ?></li>
+            <li><span class="gray"><?= ($this->user['sex'] == 'm' ? lng('registered_m') : lng('registered_w')) ?>:</span> <?= Functions::displayDate($this->user['join_date']) ?></li>
         </ul>
     </div>
     <div class="formblock">

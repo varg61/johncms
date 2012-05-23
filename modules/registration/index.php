@@ -44,21 +44,21 @@ switch ($reg_step) {
         $reg_data['name'] = isset($_POST['name']) ? trim($_POST['name']) : '';
         $reg_data['sex'] = isset($_POST['sex']) ? intval($_POST['sex']) : 0;
 
-        if (isset($_POST['check_login']) && Validate::nickname($reg_data['login'], true) === true) {
+        if (isset($_POST['check_login']) && Validate::nickname($reg_data['login'], TRUE) === TRUE) {
             // Проверка доступности Ника для регистрации
-            Validate::nicknameAvailability($reg_data['login'], true);
+            Validate::nicknameAvailability($reg_data['login'], TRUE);
         } elseif (isset($_POST['submit'])) {
             // Проверяем данные
-            if (Validate::nickname($reg_data['login'], true) === true) {
-                Validate::nicknameAvailability($reg_data['login'], true);
+            if (Validate::nickname($reg_data['login'], TRUE) === TRUE) {
+                Validate::nicknameAvailability($reg_data['login'], TRUE);
             }
-            if (Validate::password($reg_data['password'], true) === true) {
+            if (Validate::password($reg_data['password'], TRUE) === TRUE) {
                 if ($reg_data['password'] != $reg_data['password_confirm']) {
                     $error['password_confirm'] = lng('error_passwords_not_match');
                 }
             }
-            if (Vars::$USER_SYS['reg_email'] && Validate::email($reg_data['email'], true) === true) {
-                Validate::emailAvailability($reg_data['email'], true);
+            if (Vars::$USER_SYS['reg_email'] && Validate::email($reg_data['email'], TRUE) === TRUE) {
+                Validate::emailAvailability($reg_data['email'], TRUE);
             }
             if ($reg_data['sex'] < 1 || $reg_data['sex'] > 2) {
                 $error['sex'] = lng('error_sex_unknown');
@@ -87,13 +87,14 @@ switch ($reg_step) {
                     `sex` = '" . ($reg_data['sex'] == 1 ? 'm' : 'w') . "',
                     `join_date` = " . time() . ",
                     `last_visit` = " . time() . ",
-                    `about` = ''
-                ") or exit(mysql_error());
+                    `about` = '',
+                    `notifications` = ''
+                ") or exit(trigger_error(mysql_error(), E_USER_ERROR));
                 $new_user_id = mysql_insert_id();
 
                 // Отправляем приветственное письмо
                 if (Vars::$USER_SYS['reg_welcome']) {
-                    
+
                 }
 
                 // Запускаем пользователя на сайт
@@ -106,7 +107,7 @@ switch ($reg_step) {
                 $_SESSION['reg'] = 2;
                 $_SESSION['password'] = $reg_data['password'];
                 header('Location: ' . Vars::$URI);
-                return true;
+                exit;
             }
         }
 

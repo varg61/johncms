@@ -2,7 +2,7 @@
     <b><?= lng('registration') ?></b>
 </div>
 <div class="user">
-    <p><?= Functions::displayUser($this->user, array('iphide' => 1)) ?></p>
+    <p><?= Functions::displayUser(Vars::$USER_DATA) ?></p>
     <p>
     <table>
         <tr>
@@ -30,7 +30,7 @@
 </div>
 <div class="gmenu">
     <h3><?= lng('thanks_for_registration') ?>!</h3>
-    <?php if (Vars::$USER_SYS['reg_mode'] == 2) : ?>
+    <?php if (Vars::$USER_SYS['reg_moderation'] == 2) : ?>
     <p style="font-size: x-small"><?= lng('moderation_warning') ?></p>
     <?php endif; ?>
 </div>
