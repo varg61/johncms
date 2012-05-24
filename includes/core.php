@@ -13,7 +13,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('CMS_VERSION', 'JohnCMS 5.0.0');
 
 // Проверяем версию PHP
-if (version_compare(phpversion(), '5.3.0', '<') == true) die ('ERROR: PHP5.3 > Only');
+if (version_compare(phpversion(), '5.3.0', '<') == TRUE) die ('ERROR: PHP5.3 > Only');
 
 /*
 -----------------------------------------------------------------
@@ -37,7 +37,7 @@ mb_internal_encoding('UTF-8');
 Задаем пути
 -----------------------------------------------------------------
 */
-define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);          // Системная папка
+define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR);                    // Системная папка
 define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR);                    // Корневая папка
 define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
 define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
@@ -62,18 +62,18 @@ spl_autoload_register(
             'captcha'    => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
             'comments'   => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
             'counters'   => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
-            'finfo'      => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'finfo'      => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
             'functions'  => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
             'homepage'   => 'classes' . DIRECTORY_SEPARATOR . 'homepage.php',
             'login'      => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
             'network'    => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
-            'pclzip'     => 'lib' . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
+            'pclzip'     => 'lib'     . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
             'session'    => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
             'sitemap'    => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
             'system'     => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
             'template'   => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
             'textparser' => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
-            'upload'     => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'upload'     => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
             'validate'   => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
             'vars'       => 'classes' . DIRECTORY_SEPARATOR . 'vars.php',
             'download'   => 'classes' . DIRECTORY_SEPARATOR . 'download.php'
@@ -143,21 +143,9 @@ function lng($key, $force_system = FALSE)
 
 /*
 -----------------------------------------------------------------
-Буферизация вывода, инициализация шаблонов
+Буферизация вывода, инициализация шаблонов, закрытие сессии
 -----------------------------------------------------------------
 */
 ob_start();
-
-register_shutdown_function(
-    function()
-    {
-        echo Template::getInstance()->loadTemplate();
-    }
-);
-
-/*
------------------------------------------------------------------
-Запись и закрытие сессии
------------------------------------------------------------------
-*/
+register_shutdown_function(function(){echo Template::getInstance()->loadTemplate();});
 register_shutdown_function('session_write_close');
