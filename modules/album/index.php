@@ -62,7 +62,7 @@ function vote_photo($arg = NULL)
             $color = 'CCC';
         $out = '<div class="gray">' . lng('rating') . ': <span style="color:#000;background-color:#' . $color . '">&#160;&#160;<big><b>' . $rating . '</b></big>&#160;&#160;</span> ' .
             '(' . lng('vote_against') . ': ' . $arg['vote_minus'] . ', ' . lng('vote_for') . ': ' . $arg['vote_plus'] . ')';
-        if (Vars::$USER_ID != $arg['user_id'] && !Vars::$USER_BAN && $datauser['postforum'] > 10 && $datauser['total_on_site'] > 1200) {
+        if (Vars::$USER_ID != $arg['user_id'] && !Vars::$USER_BAN && $datauser['count_forum'] > 10 && $datauser['total_on_site'] > 1200) {
             // Проверяем, имеет ли юзер право голоса
             $req = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = " . Vars::$USER_ID . " AND `file_id` = '" . $arg['id'] . "' LIMIT 1");
             if (!mysql_num_rows($req))

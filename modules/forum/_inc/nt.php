@@ -135,10 +135,10 @@ if (isset($_POST['submit'])) {
             `user_id`=" . Vars::$USER_ID . ",
             `time`='" . time() . "'
         ");
-        if ($_POST['addfiles'] == 1) {
-            header("Location: " . Vars::$URI . "?id=$postid&act=addfile");
+        if (isset($_POST['addfiles'])) {
+            header('Location: ' . Vars::$URI . '?id=' . $postid . '&act=addfile');
         } else {
-            header("Location: " . Vars::$URI . "?id=$rid");
+            header('Location: ' . Vars::$URI . '?id=' . $rid);
         }
     } else {
         // Выводим сообщение об ошибке

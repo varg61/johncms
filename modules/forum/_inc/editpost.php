@@ -66,11 +66,11 @@ if (!$error) {
             Восстановление удаленного поста
             -----------------------------------------------------------------
             */
-            $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+            $req_u = mysql_query("SELECT `count_forum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
             if (mysql_num_rows($req_u)) {
                 // Добавляем один балл к счетчику постов юзера
                 $res_u = mysql_fetch_assoc($req_u);
-                mysql_query("UPDATE `users` SET `postforum` = '" . ($res_u['postforum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "'");
+                mysql_query("UPDATE `users` SET `count_forum` = '" . ($res_u['count_forum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "'");
             }
             mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
             $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
@@ -87,12 +87,12 @@ if (!$error) {
             -----------------------------------------------------------------
             */
             if ($res['close'] != 1) {
-                $req_u = mysql_query("SELECT `postforum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+                $req_u = mysql_query("SELECT `count_forum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
                 if (mysql_num_rows($req_u)) {
                     // Вычитаем один балл из счетчика постов юзера
                     $res_u = mysql_fetch_assoc($req_u);
-                    $postforum = $res_u['postforum'] > 0 ? $res_u['postforum'] - 1 : 0;
-                    mysql_query("UPDATE `users` SET `postforum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "'");
+                    $postforum = $res_u['count_forum'] > 0 ? $res_u['count_forum'] - 1 : 0;
+                    mysql_query("UPDATE `users` SET `count_forum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "'");
                 }
             }
             if (Vars::$USER_RIGHTS == 9 && !isset($_GET['hide'])) {

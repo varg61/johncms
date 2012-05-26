@@ -22,23 +22,28 @@ if ($res['user_id'] != Vars::$USER_ID) {
     echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
+
 $req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = " . Vars::$ID);
 if (mysql_result($req1, 0) > 0) {
     echo Functions::displayError(lng('error_file_uploaded'));
     exit;
 }
+
+// Вычисляем страницу для перехода
+$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['id'] . "'"), 0) / Vars::$USER_SET['page_size']);
+
 switch ($res['type']) {
-    case "m":
+    case 'm':
         if (isset($_POST['submit'])) {
             /*
             -----------------------------------------------------------------
             Проверка, был ли выгружен файл и с какого браузера
             -----------------------------------------------------------------
             */
-            $do_file = false;
+            $do_file = FALSE;
             if ($_FILES['fail']['size'] > 0) {
                 // Проверка загрузки с обычного браузера
-                $do_file = true;
+                $do_file = TRUE;
                 $fname = strtolower($_FILES['fail']['name']);
                 $fsize = $_FILES['fail']['size'];
             }
@@ -68,15 +73,15 @@ switch ($res['type']) {
                 if (preg_match("/[^\da-z_\-.]+/", $fname))
                     $error[] = lng('error_file_symbols');
                 // Проверка наличия файла с таким же именем
-                if (file_exists(ROOTPATH .  'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) {
+                if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) {
                     $fname = time() . $fname;
                 }
                 // Окончательная обработка
                 if (!$error && $do_file) {
                     // Для обычного браузера
-                    if ((move_uploaded_file($_FILES["fail"]["tmp_name"], ROOTPATH .  'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) == true) {
+                    if ((move_uploaded_file($_FILES["fail"]["tmp_name"], ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) == TRUE) {
                         @chmod("$fname", 0777);
-                        @chmod(ROOTPATH .  'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname, 0777);
+                        @chmod(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname, 0777);
                         echo lng('file_uploaded') . '<br/>';
                     } else {
                         $error[] = lng('error_upload_error');
@@ -124,9 +129,6 @@ switch ($res['type']) {
             } else {
                 echo lng('error_upload_error') . '<br />';
             }
-            $pa = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['refid'] . "'");
-            $pa2 = mysql_num_rows($pa);
-            $page = ceil($pa2 / Vars::$USER_SET['page_size']);
             echo '<br/><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('continue') . '</a><br/>';
         } else {
             /*
@@ -134,15 +136,17 @@ switch ($res['type']) {
             Форма выбора файла для выгрузки
             -----------------------------------------------------------------
             */
-            echo '<div class="phdr"><b>' . lng('add_file') . '</b></div>' .
-                 '<div class="gmenu"><form action="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
+            echo'<div class="phdr"><b>' . lng('add_file') . '</b></div>' .
+                '<div class="gmenu"><form action="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
             if (stristr(Vars::$USER_AGENT, 'Opera/8.01')) {
                 echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . lng('select_file') . '</a>';
             } else {
                 echo '<input type="file" name="fail"/>';
             }
-            echo '</p><p><input type="submit" name="submit" value="' . lng('upload') . '"/></p></form></div>' .
-                 '<div class="phdr">' . lng('max_size') . ': ' . Vars::$SYSTEM_SET['flsz'] . 'kb.</div>';
+            echo'</p><p>' .
+                '<input type="submit" name="submit" value="' . lng('upload') . '"/>' .
+                '</p><p><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('cancel') . '</a></p></form></div>' .
+                '<div class="phdr">' . lng('max_size') . ': ' . Vars::$SYSTEM_SET['flsz'] . 'kb.</div>';
         }
         break;
 

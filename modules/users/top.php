@@ -26,7 +26,7 @@ if (!Vars::$USER_ID && !Vars::$SYSTEM_SET['active']) {
 Функция отображения списков
 -----------------------------------------------------------------
 */
-function get_top($order = 'postforum')
+function get_top($order = 'count_forum')
 {
     $req = mysql_query("SELECT * FROM `users` WHERE `$order` > 0 ORDER BY `$order` DESC LIMIT 9");
     if (mysql_num_rows($req)) {

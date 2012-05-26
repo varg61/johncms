@@ -128,7 +128,7 @@ switch ($type1['type']) {
             );
             // Вычисляем, на какую страницу попадает добавляемый пост
             $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'")), 0) / Vars::$USER_SET['page_size']);
-            if ($_POST['addfiles'] == 1)
+            if (isset($_POST['addfiles']))
                 header("Location: " . Vars::$URI . "?id=$fadd&act=addfile");
             else
                 header("Location: " . Vars::$URI . "?id=" . Vars::$ID . "&page=$page");
@@ -149,8 +149,8 @@ switch ($type1['type']) {
             //TODO: Разобраться с $datauser
             if ($msg && !isset($_POST['submit']))
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
-                                                                                     'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
-                                                                                     'body'   => $msg_pre)) . '</div>';
+                                                                                            'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
+                                                                                            'body'   => $msg_pre)) . '</div>';
             echo '<form name="form" action="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><div class="gmenu">' .
                 '<p><h3>' . lng('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
@@ -299,8 +299,8 @@ switch ($type1['type']) {
             //TODO: Разобраться с $datauser
             if (!empty($_POST['msg']) && !isset($_POST['submit']))
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
-                                                                                     'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
-                                                                                     'body'   => $msg_pre)) . '</div>';
+                                                                                            'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
+                                                                                            'body'   => $msg_pre)) . '</div>';
             echo '<form name="form" action="?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '" method="post"><div class="gmenu">';
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
