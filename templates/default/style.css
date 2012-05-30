@@ -380,3 +380,60 @@ a:link, a:visited {
 .topbtn {
     padding-left: 8px;
 }
+
+.rel_total{
+    color: #05be3c;
+    font-size: large;
+    font-weight: bold;
+    padding-right: 4px;
+}
+
+.rel_a{
+    height: 3px;
+    background-color: #06ea4b;
+    border-top: 1px solid white;
+    border-right: 1px solid #05be3c;
+    border-bottom: 1px solid #05be3c;
+    border-left: 1px solid white;
+    margin: 2px;
+}
+
+.rel_b{
+    height: 3px;
+    background-color: #c6e361;
+    border-top: 1px solid white;
+    border-right: 1px solid #a4bb4f;
+    border-bottom: 1px solid #a4bb4f;
+    border-left: 1px solid white;
+    margin: 2px;
+}
+
+.rel_c{
+    height: 3px;
+    background-color: #cacaca;
+    border-top: 1px solid white;
+    border-right: 1px solid #9d9d9d;
+    border-bottom: 1px solid #9d9d9d;
+    border-left: 1px solid white;
+    margin: 2px;
+}
+
+.rel_d{
+    height: 3px;
+    background-color: #f0ad9e;
+    border-top: 1px solid white;
+    border-right: 1px solid #ca9285;
+    border-bottom: 1px solid #ca9285;
+    border-left: 1px solid white;
+    margin: 2px;
+}
+
+.rel_e{
+    height: 3px;
+    background-color: red;
+    border-top: 1px solid white;
+    border-right: 1px solid #a30000;
+    border-bottom: 1px solid #a30000;
+    border-left: 1px solid white;
+    margin: 2px;
+}

@@ -9,7 +9,32 @@
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
-<div class="list2">
+<div class="menu" style="padding-bottom: 8px">
+    <h3><?= lng('relationship') ?></h3>
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="rel_total">
+                125
+            </td>
+            <td align="right">
+                <div class="rel_a" style="width: 6px"></div>
+                <div class="rel_b" style="width: 0px"></div>
+                <div class="rel_c" style="width: 0px"></div>
+                <div class="rel_d" style="width: 0px"></div>
+                <div class="rel_e" style="width: 0px"></div>
+            </td>
+            <td>
+                <div class="rel_a" style="width: 20px"></div>
+                <div class="rel_b" style="width: 80px"></div>
+                <div class="rel_c" style="width: 10px"></div>
+                <div class="rel_d" style="width: 30px"></div>
+                <div class="rel_e" style="width: 60px"></div>
+            </td>
+        </tr>
+    </table>
+    <small><a href=""><?= lng('details') ?></a></small>
+    </div>
+    <div class="list2">
     <div class="formblock">
         <div>
             <?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><?= lng('information') ?></a>
@@ -37,47 +62,50 @@
             <?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?id=<?php echo $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)
         </div>
     </div>
-    
-    <?php if(Vars::$USER_ID && Vars::$USER_ID != $this->user['id']):?>
+
+    <?php if (Vars::$USER_ID && Vars::$USER_ID != $this->user['id']): ?>
     <!-- Block friends -->
     <div class="formblock">
-    	<?php if(empty($this->banned) && $this->friend == 2): ?>
-    	<div>
-            <?= Functions::getImage('mail-friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?act=ok&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_demands_ok') ?></a>&#160;|&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?act=no&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_demands_no') ?></a>
+        <?php if (empty($this->banned) && $this->friend == 2): ?>
+        <div>
+            <?= Functions::getImage('mail-friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?act=ok&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_demands_ok') ?></a>&#160;|&#160;<a
+            href="<?php echo Vars::$HOME_URL ?>/friends?act=no&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_demands_no') ?></a>
         </div>
-       	<?php endif ?>
-        <?php if(empty($this->banned) && $this->friend == 3): ?>
-    	<div>
+        <?php endif ?>
+        <?php if (empty($this->banned) && $this->friend == 3): ?>
+        <div>
             <?= Functions::getImage('mail-friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?act=cancel&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_demands_cancel') ?></a>
         </div>
-       	<?php endif ?>
-        <?php if(empty($this->banned) && $this->friend == 0): ?>
-    	<div>
+        <?php endif ?>
+        <?php if (empty($this->banned) && $this->friend == 0): ?>
+        <div>
             <?= Functions::getImage('mail-friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?act=add&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_add') ?></a>
         </div>
-       	<?php endif ?>
-        <?php if($this->friend == 1): ?>
-    	<div>
+        <?php endif ?>
+        <?php if ($this->friend == 1): ?>
+        <div>
             <?= Functions::getImage('mail-friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?act=delete&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_delete') ?></a>
         </div>
-       	<?php endif ?>
+        <?php endif ?>
     </div>
     <!--// Block friends -->
 
     <!-- Block contacts -->
     <div class="formblock">
-    	<div>
-            <?= Functions::getImage('mail-blocked.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?></a>
-    	</div>
-        <?php if(empty($this->banned)): ?>
-    	<div>
-            <?= Functions::getImage('mail-outbox.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?></a>
-    	</div>
+        <div>
+            <?= Functions::getImage('mail-blocked.png') ?>&#160;<a
+            href="<?php echo Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?></a>
+        </div>
+        <?php if (empty($this->banned)): ?>
+        <div>
+            <?= Functions::getImage('mail-outbox.png') ?>&#160;<a
+            href="<?php echo Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?php echo $this->user['id'] ?>"><?php echo ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?></a>
+        </div>
         <?php endif ?>
-    	<?php if(empty($this->banned)): ?>
-    	<div>
+        <?php if (empty($this->banned)): ?>
+        <div>
             <?= Functions::getImage('mail_write.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail?act=messages&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('contact_write') ?></a>
-    	</div>
+        </div>
         <?php endif ?>
     </div>
     <!--// Block contacts -->
