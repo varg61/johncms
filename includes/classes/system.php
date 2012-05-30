@@ -162,25 +162,26 @@ class System extends Vars
     */
     private function _authorizeUser()
     {
-        $id = false;
-        $token = false;
-        $cookie = false;
+        $id = FALSE;
+        $token = FALSE;
+        $cookie = FALSE;
 
-        if (isset($_SESSION['uid']) && isset($_SESSION['token'])) {
+        if (isset($_SESSION['uid'])
+            && isset($_SESSION['token'])
+        ) {
             // Авторизация по сессии
             $id = intval($_SESSION['uid']);
             $token = $_SESSION['token'];
-        } elseif (isset($_COOKIE['uid']) && isset($_COOKIE['token'])) {
+        } elseif (isset($_COOKIE['uid'])
+            && preg_match('|^[\d]*$|', $_COOKIE['uid'])
+            && $_COOKIE['uid'] > 0
+            && isset($_COOKIE['token'])
+            && strlen($_COOKIE['token']) == 32
+        ) {
             // Авторизация по COOKIE
             $id = intval($_COOKIE['uid']);
             $token = trim($_COOKIE['token']);
-            if ($id < 1 || $id != $_COOKIE['uid'] || strlen($_COOKIE['token']) != 32) {
-                $id = false;
-                $token = false;
-                parent::userUnset();
-            } else {
-                $cookie = true;
-            }
+            $cookie = TRUE;
         }
 
         if ($id && $token) {
@@ -190,9 +191,9 @@ class System extends Vars
 
                 // Допуск на авторизацию с COOKIE
                 if ($cookie && $res['login_try'] > 2 && ($res['ip'] != parent::$IP || $res['ip_via_proxy'] != parent::$IP_VIA_PROXY || $res['useragent'] != parent::$USER_AGENT)) {
-                    $permit = false;
+                    $permit = FALSE;
                 } else {
-                    $permit = true;
+                    $permit = TRUE;
                 }
 
                 // Если авторизация прошла успешно
@@ -210,7 +211,7 @@ class System extends Vars
                             parent::$USER_SET = unserialize($_SESSION['user_set']);
                         }
                     } else {
-                        if (($user_set = parent::getUserData('user_set')) !== false) {
+                        if (($user_set = parent::getUserData('user_set')) !== FALSE) {
                             parent::$USER_SET = $user_set;
                             $_SESSION['user_set'] = serialize(parent::$USER_SET);
                         } else {
