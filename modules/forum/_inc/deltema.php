@@ -33,7 +33,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID);
             if (mysql_num_rows($req1)) {
                 while ($res1 = mysql_fetch_assoc($req1)) {
-                    unlink('../files/forum/attach/' . $res1['filename']);
+                    unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res1['filename']);
                 }
                 mysql_query("DELETE FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID);
                 mysql_query("OPTIMIZE TABLE `cms_forum_files`");

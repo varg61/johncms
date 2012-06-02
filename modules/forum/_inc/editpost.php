@@ -101,7 +101,7 @@ if (!$error) {
                 if (mysql_num_rows($req_f)) {
                     // Если есть прикрепленный файл, удаляем его
                     $res_f = mysql_fetch_assoc($req_f);
-                    unlink('../files/forum/attach/' . $res_f['filename']);
+                    unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
                     mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
                 }
                 // Формируем ссылку на нужную страницу темы
