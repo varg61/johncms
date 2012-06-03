@@ -9,11 +9,11 @@
 <div class="user">
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
-<div class="menu" style="padding-bottom: 8px">
-    <h3><?= lng('relationship') ?></h3>
+<div class="menu">
+<!--    <h3>--><?//= lng('relationship') ?><!--</h3>-->
     <table cellpadding="0" cellspacing="0">
         <tr>
-            <td class="rel_total">
+            <td class="rel_a_font">
                 125
             </td>
             <td align="right">
@@ -31,10 +31,15 @@
                 <div class="rel_e" style="width: 60px"></div>
             </td>
         </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td><small>&#160;<a href="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>"><?= lng('details') ?></a></small></td>
+        </tr>
     </table>
-    <small><a href=""><?= lng('details') ?></a></small>
-    </div>
-    <div class="list2">
+<!--    <small>&#160;<a href="--><?//= Vars::$URI ?><!--?act=relationship&amp;user=--><?//= $this->user['id'] ?><!--">--><?//= lng('details') ?><!--</a></small>-->
+</div>
+<div class="list2">
     <div class="formblock">
         <div>
             <?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><?= lng('information') ?></a>

@@ -41,7 +41,6 @@ switch ($reg_step) {
         $reg_data['captcha'] = isset($_POST['captcha']) ? trim($_POST['captcha']) : '';
         $reg_data['email'] = isset($_POST['email']) ? trim($_POST['email']) : '';
         $reg_data['about'] = isset($_POST['about']) ? trim($_POST['about']) : '';
-        $reg_data['name'] = isset($_POST['name']) ? trim($_POST['name']) : '';
         $reg_data['sex'] = isset($_POST['sex']) ? intval($_POST['sex']) : 0;
 
         if (isset($_POST['check_login']) && Validate::nickname($reg_data['login'], TRUE) === TRUE) {

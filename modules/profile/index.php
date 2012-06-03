@@ -34,12 +34,13 @@ $tpl = Template::getInstance();
 $tpl->user = $user;
 
 $actions = array(
-    'activity'  => 'activity.php',
-    'edit'      => 'edit.php',
-    'guestbook' => 'guestbook.php',
-    'ip'        => 'ip.php',
-    'password'  => 'password.php',
-    'settings'  => 'settings.php',
+    'activity'      => 'activity.php',
+    'edit'          => 'edit.php',
+    'guestbook'     => 'guestbook.php',
+    'ip'            => 'ip.php',
+    'password'      => 'password.php',
+    'relationship'  => 'relationship.php',
+    'settings'      => 'settings.php',
 );
 
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {

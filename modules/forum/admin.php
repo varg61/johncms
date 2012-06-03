@@ -116,7 +116,7 @@ switch (Vars::$MOD) {
                         // Удаляем файлы
                         $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID);
                         while ($res_f = mysql_fetch_assoc($req_f)) {
-                            unlink('../files/forum/attach/' . $res_f['filename']);
+                            unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
                         }
                         mysql_query("DELETE FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID);
                         // Удаляем посты, голосования и метки прочтений
@@ -133,7 +133,7 @@ switch (Vars::$MOD) {
                         mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                         // Оптимизируем таблицы
                         mysql_query("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `cms_forum_vote` , `cms_forum_vote_users`");
-                        echo '<div class="rmenu"><p>' . lng('section_themes_deleted') . '<br />' .
+                        echo'<div class="rmenu"><p>' . lng('section_themes_deleted') . '<br />' .
                             '<a href="index.php?act=forum&amp;mod=cat&amp;id=' . $res['refid'] . '">' . lng('to_category') . '</a></p></div>';
                     } else {
                         echo '<form action="index.php?act=forum&amp;mod=del&amp;id=' . Vars::$ID . '" method="POST"><div class="rmenu">' .
@@ -460,13 +460,13 @@ switch (Vars::$MOD) {
                 echo Functions::displayError(lng('access_forbidden'));
                 exit;
             }
-            $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 't' AND `close` = '1' $sort");
+            $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort);
             while ($res = mysql_fetch_assoc($req)) {
                 $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '" . $res['id'] . "'");
                 if (mysql_num_rows($req_f)) {
                     // Удаляем файлы
                     while ($res_f = mysql_fetch_assoc($req_f)) {
-                        unlink('../files/forum/attach/' . $res_f['filename']);
+                        unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
                     }
                     mysql_query("DELETE FROM `cms_forum_files` WHERE `topic` = '" . $res['id'] . "'");
                 }
@@ -474,10 +474,10 @@ switch (Vars::$MOD) {
                 mysql_query("DELETE FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['id'] . "'");
             }
             // Удаляем темы
-            $req = mysql_query("DELETE FROM `forum` WHERE `type` = 't' AND `close` = '1' $sort");
+            $req = mysql_query("DELETE FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort);
             header('Location: index.php?act=forum&mod=htopics');
         } else {
-            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1' $sort"), 0);
+            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort), 0);
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=htopics&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
             FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
@@ -544,21 +544,21 @@ switch (Vars::$MOD) {
                 echo Functions::displayError(lng('access_forbidden'));
                 exit;
             }
-            $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` = '1' $sort");
+            $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort);
             while ($res = mysql_fetch_assoc($req)) {
                 $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "' LIMIT 1");
                 if (mysql_num_rows($req_f)) {
                     $res_f = mysql_fetch_assoc($req_f);
                     // Удаляем файлы
-                    unlink('../files/forum/attach/' . $res_f['filename']);
+                    unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
                     mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "' LIMIT 1");
                 }
             }
             // Удаляем посты
-            mysql_query("DELETE FROM `forum` WHERE `type` = 'm' AND `close` = '1' $sort");
+            mysql_query("DELETE FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort);
             header('Location: index.php?act=forum&mod=hposts');
         } else {
-            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1' $sort"), 0);
+            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort), 0);
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=hposts&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
             FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
