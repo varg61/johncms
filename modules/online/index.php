@@ -54,7 +54,7 @@ switch (Vars::$ACT) {
             WHERE `cms_sessions`.`user_id` > 0 AND `cms_sessions`.`session_timestamp` > " . (time() - 300) . "
             ORDER BY `users`.`nickname` ASC");
         while ($res = mysql_fetch_assoc($req)) {
-            $out .= $res['nickname'] . ' [' . $res['sex'] . '] (' . $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']) . ')';
+            $out .= 'USER: ' . $res['nickname'] . ' [' . $res['sex'] . '] (' . $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']) . ')';
             if (Vars::$USER_RIGHTS || $res['id'] == Vars::$USER_ID) {
                 $out .= "\r\n" . '  IP: ' . long2ip($res['ip']);
                 if ($res['ip_via_proxy']) {

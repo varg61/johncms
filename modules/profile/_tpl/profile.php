@@ -10,34 +10,51 @@
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
 <div class="menu">
-<!--    <h3>--><?//= lng('relationship') ?><!--</h3>-->
     <table cellpadding="0" cellspacing="0">
         <tr>
             <td class="rel_a_font">
                 125
             </td>
             <td align="right">
-                <div class="rel_a" style="width: 6px"></div>
-                <div class="rel_b" style="width: 0px"></div>
-                <div class="rel_c" style="width: 0px"></div>
-                <div class="rel_d" style="width: 0px"></div>
-                <div class="rel_e" style="width: 0px"></div>
+                <div class="bar" style="width: 8px; height: 6px">
+                    <div class="bar_a" style="width: 100%"></div>
+                </div>
+                <div class="bar" style="width: 8px; height: 6px">
+                </div>
+                <div class="bar" style="width: 8px; height: 6px">
+                </div>
+                <div class="bar" style="width: 8px; height: 6px">
+                </div>
+                <div class="bar" style="width: 8px; height: 6px">
+                </div>
             </td>
-            <td>
-                <div class="rel_a" style="width: 20px"></div>
-                <div class="rel_b" style="width: 80px"></div>
-                <div class="rel_c" style="width: 10px"></div>
-                <div class="rel_d" style="width: 30px"></div>
-                <div class="rel_e" style="width: 60px"></div>
+            <td width="90%">
+                <div class="bar" style="height: 6px">
+                    <div class="bar_a" style="width: 30%"></div>
+                </div>
+                <div class="bar" style="height: 6px">
+                    <div class="bar_b" style="width: 60%"></div>
+                </div>
+                <div class="bar" style="height: 6px">
+                    <div class="bar_c" style="width: 45%"></div>
+                </div>
+                <div class="bar" style="height: 6px">
+                    <div class="bar_d" style="width: 20%"></div>
+                </div>
+                <div class="bar" style="height: 6px">
+                    <div class="bar_e" style="width: 10%"></div>
+                </div>
             </td>
         </tr>
         <tr>
             <td></td>
             <td></td>
-            <td><small>&#160;<a href="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>"><?= lng('details') ?></a></small></td>
+            <td>
+                <small>&#160;<a href="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>"><?= lng('details') ?></a></small>
+            </td>
         </tr>
     </table>
-<!--    <small>&#160;<a href="--><?//= Vars::$URI ?><!--?act=relationship&amp;user=--><?//= $this->user['id'] ?><!--">--><?//= lng('details') ?><!--</a></small>-->
+    <!--    <small>&#160;<a href="--><?//= Vars::$URI ?><!--?act=relationship&amp;user=--><?//= $this->user['id'] ?><!--">--><?//= lng('details') ?><!--</a></small>-->
 </div>
 <div class="list2">
     <div class="formblock">

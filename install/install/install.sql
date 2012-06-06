@@ -1,6 +1,6 @@
 -- Dumping structure for table dev_johncms.cms_ads
 DROP TABLE IF EXISTS `cms_ads`;
-CREATE TABLE IF NOT EXISTS `cms_ads` (
+CREATE TABLE `cms_ads` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(2) NOT NULL,
   `view` int(2) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `cms_ads` (
 
 -- Dumping structure for table dev_johncms.cms_album_cat
 DROP TABLE IF EXISTS `cms_album_cat`;
-CREATE TABLE IF NOT EXISTS `cms_album_cat` (
+CREATE TABLE `cms_album_cat` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `sort` int(11) NOT NULL DEFAULT '0',
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `cms_album_cat` (
 
 -- Dumping structure for table dev_johncms.cms_album_comments
 DROP TABLE IF EXISTS `cms_album_comments`;
-CREATE TABLE IF NOT EXISTS `cms_album_comments` (
+CREATE TABLE `cms_album_comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sub_id` int(10) unsigned NOT NULL,
   `time` int(11) NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `cms_album_comments` (
 
 -- Dumping structure for table dev_johncms.cms_album_downloads
 DROP TABLE IF EXISTS `cms_album_downloads`;
-CREATE TABLE IF NOT EXISTS `cms_album_downloads` (
+CREATE TABLE `cms_album_downloads` (
   `user_id` int(10) unsigned NOT NULL,
   `file_id` int(10) unsigned NOT NULL,
   `time` int(10) unsigned NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `cms_album_downloads` (
 
 -- Dumping structure for table dev_johncms.cms_album_files
 DROP TABLE IF EXISTS `cms_album_files`;
-CREATE TABLE IF NOT EXISTS `cms_album_files` (
+CREATE TABLE `cms_album_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `album_id` int(10) unsigned NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `cms_album_files` (
 
 -- Dumping structure for table dev_johncms.cms_album_views
 DROP TABLE IF EXISTS `cms_album_views`;
-CREATE TABLE IF NOT EXISTS `cms_album_views` (
+CREATE TABLE `cms_album_views` (
   `user_id` int(10) unsigned NOT NULL,
   `file_id` int(10) unsigned NOT NULL,
   `time` int(10) unsigned NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `cms_album_views` (
 
 -- Dumping structure for table dev_johncms.cms_album_votes
 DROP TABLE IF EXISTS `cms_album_votes`;
-CREATE TABLE IF NOT EXISTS `cms_album_votes` (
+CREATE TABLE `cms_album_votes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `file_id` int(10) unsigned NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `cms_album_votes` (
 
 -- Dumping structure for table dev_johncms.cms_ban_users
 DROP TABLE IF EXISTS `cms_ban_users`;
-CREATE TABLE IF NOT EXISTS `cms_ban_users` (
+CREATE TABLE `cms_ban_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `ban_time` int(11) NOT NULL DEFAULT '0',
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `cms_ban_users` (
 
 -- Dumping structure for table dev_johncms.cms_counters
 DROP TABLE IF EXISTS `cms_counters`;
-CREATE TABLE IF NOT EXISTS `cms_counters` (
+CREATE TABLE `cms_counters` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sort` int(10) NOT NULL DEFAULT '1',
   `name` varchar(30) NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `cms_counters` (
 
 -- Dumping structure for table dev_johncms.cms_forum_files
 DROP TABLE IF EXISTS `cms_forum_files`;
-CREATE TABLE IF NOT EXISTS `cms_forum_files` (
+CREATE TABLE `cms_forum_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `cat` int(10) NOT NULL,
   `subcat` int(10) NOT NULL,
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `cms_forum_files` (
 
 -- Dumping structure for table dev_johncms.cms_forum_rdm
 DROP TABLE IF EXISTS `cms_forum_rdm`;
-CREATE TABLE IF NOT EXISTS `cms_forum_rdm` (
+CREATE TABLE `cms_forum_rdm` (
   `topic_id` int(11) unsigned NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
   `time` int(11) NOT NULL DEFAULT '0',
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `cms_forum_rdm` (
 
 -- Dumping structure for table dev_johncms.cms_forum_vote
 DROP TABLE IF EXISTS `cms_forum_vote`;
-CREATE TABLE IF NOT EXISTS `cms_forum_vote` (
+CREATE TABLE `cms_forum_vote` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(2) NOT NULL DEFAULT '0',
   `time` int(11) NOT NULL DEFAULT '0',
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `cms_forum_vote` (
 
 -- Dumping structure for table dev_johncms.cms_forum_vote_users
 DROP TABLE IF EXISTS `cms_forum_vote_users`;
-CREATE TABLE IF NOT EXISTS `cms_forum_vote_users` (
+CREATE TABLE `cms_forum_vote_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL DEFAULT '0',
   `topic` int(11) NOT NULL,
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `cms_forum_vote_users` (
 
 -- Dumping structure for table dev_johncms.cms_ip_bwlist
 DROP TABLE IF EXISTS `cms_ip_bwlist`;
-CREATE TABLE IF NOT EXISTS `cms_ip_bwlist` (
+CREATE TABLE `cms_ip_bwlist` (
   `ip` int(10) unsigned NOT NULL DEFAULT '0',
   `ip_upto` int(10) unsigned NOT NULL DEFAULT '0',
   `mode` enum('black','white') NOT NULL DEFAULT 'black',
@@ -203,12 +203,9 @@ CREATE TABLE IF NOT EXISTS `cms_ip_bwlist` (
   UNIQUE KEY `ip_upto` (`ip_upto`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `cms_contacts`;
-DROP TABLE IF EXISTS `cms_messages`;
-
 -- Dumping structure for table cms_mail_contacts
 DROP TABLE IF EXISTS `cms_mail_contacts`;
-CREATE TABLE IF NOT EXISTS `cms_mail_contacts` (
+CREATE TABLE `cms_mail_contacts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `contact_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -230,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `cms_mail_contacts` (
 
 -- Dumping structure for table cms_mail_messages
 DROP TABLE IF EXISTS `cms_mail_messages`;
-CREATE TABLE IF NOT EXISTS `cms_mail_messages` (
+CREATE TABLE `cms_mail_messages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `contact_id` int(10) unsigned NOT NULL,
@@ -262,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `cms_mail_messages` (
 
 -- Dumping structure for table dev_johncms.cms_modules
 DROP TABLE IF EXISTS `cms_modules`;
-CREATE TABLE IF NOT EXISTS `cms_modules` (
+CREATE TABLE `cms_modules` (
   `module` varchar(15) NOT NULL DEFAULT '',
   PRIMARY KEY (`module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -296,7 +293,7 @@ INSERT INTO `cms_modules` (`module`) VALUES
 
 -- Dumping structure for table dev_johncms.cms_sessions
 DROP TABLE IF EXISTS `cms_sessions`;
-CREATE TABLE IF NOT EXISTS `cms_sessions` (
+CREATE TABLE `cms_sessions` (
   `session_id` char(32) NOT NULL DEFAULT '',
   `session_timestamp` int(10) unsigned NOT NULL DEFAULT '0',
   `session_data` text NOT NULL,
@@ -314,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `cms_sessions` (
 
 -- Dumping structure for table dev_johncms.cms_settings
 DROP TABLE IF EXISTS `cms_settings`;
-CREATE TABLE IF NOT EXISTS `cms_settings` (
+CREATE TABLE `cms_settings` (
   `key` tinytext NOT NULL,
   `val` text NOT NULL,
   PRIMARY KEY (`key`(30))
@@ -344,7 +341,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
 
 -- Dumping structure for table dev_johncms.cms_user_guestbook
 DROP TABLE IF EXISTS `cms_user_guestbook`;
-CREATE TABLE IF NOT EXISTS `cms_user_guestbook` (
+CREATE TABLE `cms_user_guestbook` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sub_id` int(10) unsigned NOT NULL,
   `time` int(11) NOT NULL,
@@ -359,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `cms_user_guestbook` (
 
 -- Dumping structure for table dev_johncms.cms_user_ip
 DROP TABLE IF EXISTS `cms_user_ip`;
-CREATE TABLE IF NOT EXISTS `cms_user_ip` (
+CREATE TABLE `cms_user_ip` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `ip` int(10) unsigned NOT NULL DEFAULT '0',
@@ -373,16 +370,25 @@ CREATE TABLE IF NOT EXISTS `cms_user_ip` (
   KEY `timestamp` (`timestamp`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `cms_user_relationship`;
+CREATE TABLE `cms_user_relationship` (
+  `from` int(10) unsigned NOT NULL DEFAULT '0',
+  `to` int(10) unsigned NOT NULL DEFAULT '0',
+  `value` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`from`,`to`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- Dumping structure for table dev_johncms.cms_user_settings
 DROP TABLE IF EXISTS `cms_user_settings`;
-CREATE TABLE IF NOT EXISTS `cms_user_settings` (
+CREATE TABLE `cms_user_settings` (
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `key` varchar(32) NOT NULL DEFAULT '',
   `value` text NOT NULL,
   PRIMARY KEY (`user_id`,`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `cms_download_bookmark` (
+DROP TABLE IF EXISTS `cms_download_bookmark`;
+CREATE TABLE `cms_download_bookmark` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL,
@@ -391,7 +397,8 @@ CREATE TABLE IF NOT EXISTS `cms_download_bookmark` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-CREATE TABLE IF NOT EXISTS `cms_download_comments` (
+DROP TABLE IF EXISTS `cms_download_comments`;
+CREATE TABLE `cms_download_comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sub_id` int(10) unsigned NOT NULL,
   `time` int(11) NOT NULL,
@@ -404,6 +411,7 @@ CREATE TABLE IF NOT EXISTS `cms_download_comments` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+DROP TABLE IF EXISTS `cms_download_files`;
 CREATE TABLE `cms_download_files` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `refid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -428,7 +436,8 @@ CREATE TABLE `cms_download_files` (
   KEY `time` (`time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `cms_download_more` (
+DROP TABLE IF EXISTS `cms_download_more`;
+CREATE TABLE `cms_download_more` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `refid` int(11) NOT NULL,
   `time` int(11) NOT NULL,
@@ -442,7 +451,7 @@ CREATE TABLE IF NOT EXISTS `cms_download_more` (
 
 -- Dumping structure for table dev_johncms.forum
 DROP TABLE IF EXISTS `forum`;
-CREATE TABLE IF NOT EXISTS `forum` (
+CREATE TABLE `forum` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `refid` int(11) NOT NULL DEFAULT '0',
   `type` char(1) NOT NULL DEFAULT '',
@@ -470,29 +479,9 @@ CREATE TABLE IF NOT EXISTS `forum` (
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.gallery
-DROP TABLE IF EXISTS `gallery`;
-CREATE TABLE IF NOT EXISTS `gallery` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `refid` int(11) NOT NULL DEFAULT '0',
-  `time` int(11) NOT NULL DEFAULT '0',
-  `type` varchar(2) NOT NULL DEFAULT '',
-  `avtor` varchar(25) NOT NULL DEFAULT '',
-  `text` text NOT NULL,
-  `name` text NOT NULL,
-  `user` binary(1) NOT NULL DEFAULT '\0',
-  `ip` text NOT NULL,
-  `soft` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `refid` (`refid`),
-  KEY `type` (`type`),
-  KEY `time` (`time`),
-  KEY `avtor` (`avtor`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- Dumping structure for table dev_johncms.guest
 DROP TABLE IF EXISTS `guest`;
-CREATE TABLE IF NOT EXISTS `guest` (
+CREATE TABLE `guest` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `adm` tinyint(1) NOT NULL DEFAULT '0',
   `time` int(15) NOT NULL DEFAULT '0',
@@ -515,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `guest` (
 
 -- Dumping structure for table dev_johncms.lib
 DROP TABLE IF EXISTS `lib`;
-CREATE TABLE IF NOT EXISTS `lib` (
+CREATE TABLE `lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `refid` int(11) NOT NULL DEFAULT '0',
   `time` int(11) NOT NULL DEFAULT '0',
@@ -539,7 +528,7 @@ CREATE TABLE IF NOT EXISTS `lib` (
 
 -- Dumping structure for table dev_johncms.news
 DROP TABLE IF EXISTS `news`;
-CREATE TABLE IF NOT EXISTS `news` (
+CREATE TABLE `news` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `time` int(11) NOT NULL DEFAULT '0',
   `avt` varchar(25) NOT NULL DEFAULT '',

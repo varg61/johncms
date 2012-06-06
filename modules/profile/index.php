@@ -39,7 +39,6 @@ $actions = array(
     'guestbook'     => 'guestbook.php',
     'ip'            => 'ip.php',
     'password'      => 'password.php',
-    'relationship'  => 'relationship.php',
     'settings'      => 'settings.php',
 );
 
@@ -47,6 +46,21 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     switch (Vars::$ACT) {
+        case 'relationship':
+            if (isset($_POST['submit']) && isset($_POST['vote']) && $_POST['vote'] >= -2 && $_POST['vote'] <= 2) {
+                mysql_query("INSERT INTO `cms_user_relationship` SET
+                    `from` = " . Vars::$USER_ID . ",
+                    `to` = " . $tpl->user['id'] . ",
+                    `value` = '" . intval($_POST['vote']) . "'
+                    ON DUPLICATE KEY UPDATE
+                    `value` = '" . intval($_POST['vote']) . "'
+                ");
+                $tpl->save = 1;
+            }
+
+            $tpl->contents = $tpl->includeTpl('relationship');
+            break;
+
         case 'stat':
             /*
             -----------------------------------------------------------------
