@@ -47,7 +47,7 @@ $ads = Advt::getAds();
         </td>
         <td align="right">
             <?php if (Vars::$PLACE == '' && count(Vars::$LNG_LIST) > 1) : ?>
-            <a href="<?= Vars::$HOME_URL ?>/language"><b><?= strtoupper(Vars::$LNG_ISO) ?></b></a>&#160;<img src="<?= Vars::$HOME_URL ?>/images/flags/<?= Vars::$LNG_ISO ?>.gif" alt=""/>
+            <a href="<?= Vars::$HOME_URL ?>/language"><b><?= strtoupper(Vars::$LNG_ISO) ?></b></a>&#160;<?= Functions::getImage('flag_' . Vars::$LNG_ISO . '.gif') ?>
             <?php endif ?>
         </td>
     </tr>

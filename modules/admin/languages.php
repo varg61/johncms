@@ -652,11 +652,8 @@ switch (Vars::$ACT) {
             echo'<tr>' .
                 '<td valign="top"><input type="radio" value="' . $key . '" name="iso" ' . ($key == Vars::$SYSTEM_SET['lng'] ? 'checked="checked"' : '') . '/></td>' .
                 '<td style="padding-bottom:6px">' .
-                (file_exists(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'flags' . DIRECTORY_SEPARATOR . $key . '.gif')
-                    ? '<img src="' . Vars::$HOME_URL . '/images/flags/' . $key . '.gif" alt=""/>&#160;'
-                    : ''
-                ) .
-                '<a href="index.php?act=languages&amp;mod=module&amp;language=' . $key . '"><b>' . $val['name'] . '</b></a>&#160;<span class="green">[' . $key . ']</span>' .
+                Functions::getImage('flag_' . $key . '.gif') .
+                '&#160;<a href="index.php?act=languages&amp;mod=module&amp;language=' . $key . '"><b>' . $val['name'] . '</b></a>&#160;<span class="green">[' . $key . ']</span>' .
                 '<div class="sub">' . Functions::displayMenu($lng_menu, '<br />') . '</div></td>' .
                 '</tr>';
         }

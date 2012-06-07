@@ -7,8 +7,9 @@
         <h3><?= lng('language_select') ?></h3>
         <?php foreach (Vars::$LNG_LIST as $key => $val) : ?>
         <div>
-            <input type="radio" value="<?= $key ?>" name="setlng" <?= ($key == Vars::$LNG_ISO ? 'checked="checked"' : '') ?>/>&#160;
-            <?= (file_exists('images/flags/' . $key . '.gif') ? '<img src="images/flags/' . $key . '.gif" alt=""/>&#160;' : '') . $val ?>
+            <input type="radio" value="<?= $key ?>" name="setlng" <?= ($key == Vars::$LNG_ISO ? 'checked="checked"' : '') ?>/>
+            <?= Functions::getImage('flag_' . $key . '.gif') ?>&#160;
+            <?= $val ?>
             <?= ($key == Vars::$SYSTEM_SET['lng'] ? ' <small class="red">[' . lng('default') . ']</small>' : '') ?>
         </div>
         <?php endforeach ?>
