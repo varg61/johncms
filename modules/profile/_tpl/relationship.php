@@ -13,63 +13,63 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <td class="rel_a_font">
-                    26
+                    <?= $this->rel['a'] ?>
                 </td>
                 <td width="90%">
                     <small><?= lng('relationship_excellent') ?></small>
                     <div class="bar">
-                        <div class="bar_a" style="width: 30%"></div>
+                        <div class="bar_a" style="width: <?= $this->bar['a'] ?>%"></div>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="rel_b_font">
-                    150
+                    <?= $this->rel['b'] ?>
                 </td>
                 <td>
                     <small><?= lng('relationship_good') ?></small>
                     <div class="bar">
-                        <div class="bar_b" style="width: 60%"></div>
+                        <div class="bar_b" style="width: <?= $this->bar['b'] ?>%"></div>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="rel_c_font">
-                    34
+                    <?= $this->rel['c'] ?>
                 </td>
                 <td>
                     <small><?= lng('relationship_neutrally') ?></small>
                     <div class="bar">
-                        <div class="bar_c" style="width: 45%"></div>
+                        <div class="bar_c" style="width: <?= $this->bar['c'] ?>%"></div>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="rel_d_font">
-                    34
+                    <?= $this->rel['d'] ?>
                 </td>
                 <td>
                     <small><?= lng('relationship_badly') ?></small>
                     <div class="bar">
-                        <div class="bar_d" style="width: 20%"></div>
+                        <div class="bar_d" style="width: <?= $this->bar['d'] ?>%"></div>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="rel_e_font">
-                    34
+                    <?= $this->rel['e'] ?>
                 </td>
                 <td>
                     <small><?= lng('relationship_verybad') ?></small>
                     <div class="bar">
-                        <div class="bar_e" style="width: 10%"></div>
+                        <div class="bar_e" style="width: <?= $this->bar['e'] ?>%"></div>
                     </div>
                 </td>
             </tr>
         </table>
     </div>
 </div>
-<?php if($this->user['id'] != Vars::$USER_ID): ?>
+<?php if ($this->user['id'] != Vars::$USER_ID): ?>
 <form action="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="list2">
         <div class="formblock">

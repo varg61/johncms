@@ -575,6 +575,7 @@ CREATE TABLE `users` (
   `ip_via_proxy` int(10) unsigned NOT NULL DEFAULT '0',
   `user_agent` varchar(200) NOT NULL DEFAULT '',
   `notifications` text NOT NULL,
+  `relationship` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `last_visit` (`last_visit`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

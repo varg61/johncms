@@ -13,7 +13,7 @@
     <table cellpadding="0" cellspacing="0">
         <tr>
             <td class="rel_a_font">
-                125
+                <?= $this->rel_count ?>
             </td>
             <td align="right">
                 <div class="bar" style="width: 8px; height: 6px">
@@ -30,19 +30,19 @@
             </td>
             <td width="90%">
                 <div class="bar" style="height: 6px">
-                    <div class="bar_a" style="width: 30%"></div>
+                    <div class="bar_a" style="width: <?= $this->bar['a'] ?>%"></div>
                 </div>
                 <div class="bar" style="height: 6px">
-                    <div class="bar_b" style="width: 60%"></div>
+                    <div class="bar_b" style="width: <?= $this->bar['b'] ?>%"></div>
                 </div>
                 <div class="bar" style="height: 6px">
-                    <div class="bar_c" style="width: 45%"></div>
+                    <div class="bar_c" style="width: <?= $this->bar['c'] ?>%"></div>
                 </div>
                 <div class="bar" style="height: 6px">
-                    <div class="bar_d" style="width: 20%"></div>
+                    <div class="bar_d" style="width: <?= $this->bar['d'] ?>%"></div>
                 </div>
                 <div class="bar" style="height: 6px">
-                    <div class="bar_e" style="width: 10%"></div>
+                    <div class="bar_e" style="width: <?= $this->bar['e'] ?>%"></div>
                 </div>
             </td>
         </tr>
@@ -54,7 +54,6 @@
             </td>
         </tr>
     </table>
-    <!--    <small>&#160;<a href="--><?//= Vars::$URI ?><!--?act=relationship&amp;user=--><?//= $this->user['id'] ?><!--">--><?//= lng('details') ?><!--</a></small>-->
 </div>
 <div class="list2">
     <div class="formblock">

@@ -45,6 +45,27 @@ $actions = array(
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
+    if (empty($user['relationship'])) {
+        $tpl->rel_count = 0;
+        $tpl->rel = $tpl->bar = array(
+            'a' => 0,
+            'b' => 0,
+            'c' => 0,
+            'd' => 0,
+            'e' => 0,
+        );
+    } else {
+        $tpl->rel = unserialize($user['relationship']);
+        $tpl->rel_count = $tpl->rel['a'] + $tpl->rel['b'] + $tpl->rel['c'] + $tpl->rel['d'] + $tpl->rel['e'];
+        $tpl->bar = array(
+            'a' => round(100 / $tpl->rel_count * $tpl->rel['a']),
+            'b' => round(100 / $tpl->rel_count * $tpl->rel['b']),
+            'c' => round(100 / $tpl->rel_count * $tpl->rel['c']),
+            'd' => round(100 / $tpl->rel_count * $tpl->rel['d']),
+            'e' => round(100 / $tpl->rel_count * $tpl->rel['e']),
+        );
+    }
+
     switch (Vars::$ACT) {
         case 'relationship':
             if (isset($_POST['submit']) && isset($_POST['vote']) && $_POST['vote'] >= -2 && $_POST['vote'] <= 2) {
