@@ -114,7 +114,7 @@ if ($do || isset($_GET['new'])) {
             if (in_array($att_ext, $pic_ext)) {
                 // Если картинка, то выводим предпросмотр
                 $file = '<div><a href="' . Vars::$URI . '?act=file&amp;id=' . $res['id'] . '">';
-                $file .= '<img src="' . Vars::$HOME_URL . '/images/misc/forum_thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
+                $file .= '<img src="' . Vars::$HOME_URL . '/assets/misc/forum_thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
                 $file = Functions::getImage(($res['del'] ? 'delete.png' : 'filetype_' . $res['filetype'] . '.png'), '', 'align="middle"') . '&#160;';

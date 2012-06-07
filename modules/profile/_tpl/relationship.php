@@ -9,7 +9,7 @@
 </div>
 <div class="menu" style="padding-bottom: 8px">
     <div class="formblock">
-        <label><?= lng('relationship') ?></label>
+        <label><?= ($this->user['id'] == Vars::$USER_ID ? lng('myself_relationship') : lng('relationship')) ?></label>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <td class="rel_a_font">

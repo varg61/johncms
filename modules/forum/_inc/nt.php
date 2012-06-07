@@ -106,8 +106,11 @@ if (isset($_POST['submit'])) {
             `time` = '" . time() . "',
             `user_id` = " . Vars::$USER_ID . ",
             `from` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
-            `text` = '" . mysql_real_escape_string($th) . "'
-        ");
+            `text` = '" . mysql_real_escape_string($th) . "',
+            `soft` = '',
+            `edit` = '',
+            `curators` = ''
+        ") or die(mysql_error());
         $rid = mysql_insert_id();
         // Добавляем текст поста
         mysql_query("INSERT INTO `forum` SET
@@ -119,8 +122,10 @@ if (isset($_POST['submit'])) {
             `ip` = '" . Vars::$IP . "',
             `ip_via_proxy` = '" . Vars::$IP_VIA_PROXY . "',
             `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
-            `text` = '" . mysql_real_escape_string($msg) . "'
-        ");
+            `text` = '" . mysql_real_escape_string($msg) . "',
+            `edit` = '',
+            `curators` = ''
+        ") or die(mysql_error());
         $postid = mysql_insert_id();
         // Записываем счетчик постов юзера
         //TODO: Разобраться со счетчиком!

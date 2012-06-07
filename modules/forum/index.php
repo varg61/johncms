@@ -614,7 +614,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         );
                         if (in_array($att_ext, $pic_ext)) {
                             echo '<div><a href="' . Vars::$URI . '?act=file&amp;id=' . $fres['id'] . '">';
-                            echo '<img src="' . Vars::$HOME_URL . '/images/misc/forum_thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
+                            echo '<img src="' . Vars::$HOME_URL . '/assets/misc/forum_thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
                         } else {
                             echo '<br /><a href="' . Vars::$URI . '?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
                         }

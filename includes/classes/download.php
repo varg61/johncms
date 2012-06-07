@@ -118,7 +118,7 @@ class Download extends Vars
             }
         }
         if ($preview) {
-            $out = '<img src="' . Vars::$HOME_URL . '/images/misc/thumbinal.php?type=1&amp;img=' . rawurlencode($preview) . '" alt="preview" />&nbsp;';
+            $out = '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=1&amp;img=' . rawurlencode($preview) . '" alt="preview" />&nbsp;';
         }
         if ($format_file == 'jar' && $set_down['icon_java']) {
             $out = Download::javaIcon($res_down['dir'] . '/' . $res_down['name'], $res_down['id']) . '&nbsp;';

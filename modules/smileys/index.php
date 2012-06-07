@@ -23,7 +23,7 @@ if (empty($_SESSION['ref'])) {
 
 // Обрабатываем глобальные переменные
 $cat_list = array();
-$dir_list = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
+$dir_list = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
 foreach ($dir_list as $val) {
     $dir = basename($val);
     if (!Vars::$USER_RIGHTS && $dir == '_admin') {
@@ -43,12 +43,12 @@ switch (Vars::$ACT) {
         */
         if (Vars::$USER_RIGHTS == 9) {
             $cache = array();
-            $smileys = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
+            $smileys = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
             foreach ($smileys as $val) {
                 $file = basename($val);
                 $name = explode(".", $file);
                 $parent = basename(dirname($val));
-                $image = '<img src="' . Vars::$HOME_URL . '/images/smileys/' . $parent . '/' . $file . '" alt="" />';
+                $image = '<img src="' . Vars::$HOME_URL . '/assets/smileys/' . $parent . '/' . $file . '" alt="" />';
                 if ($parent == '_admin') {
                     $cache['adm_s'][] = '/:' . preg_quote($name[0]) . ':/';
                     $cache['adm_r'][] = $image;
@@ -84,7 +84,7 @@ switch (Vars::$ACT) {
         Каталог пользовательских Смайлов
         -----------------------------------------------------------------
         */
-        $smileys = glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
+        $smileys = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
         $total = count($smileys);
         $end = Vars::$START + Vars::$USER_SET['page_size'];
         if ($end > $total) {
@@ -110,7 +110,7 @@ switch (Vars::$ACT) {
                 if (Vars::$USER_ID && !Vars::$IS_MOBILE) {
                     echo (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
                 }
-                echo '<img src="' . Vars::$HOME_URL . '/images/smileys/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . lng('lng_or') . ' :' . Functions::translit($smile) . ':' .
+                echo '<img src="' . Vars::$HOME_URL . '/assets/smileys/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . lng('lng_or') . ' :' . Functions::translit($smile) . ':' .
                     '</div>';
             }
             if (Vars::$USER_ID && !Vars::$IS_MOBILE) {
@@ -225,7 +225,7 @@ switch (Vars::$ACT) {
         $i = 0;
         asort($smileys_cat);
         foreach ($smileys_cat as $key => $val) {
-            $count = count(glob(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE));
+            $count = count(glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE));
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                 '<a href="' . Vars::$URI . '?act=list&amp;cat=' . urlencode($key) . '">' . htmlspecialchars($val) . '</a>' .
                 ' (' . $count . ')' .

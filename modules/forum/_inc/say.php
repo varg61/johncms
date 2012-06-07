@@ -115,8 +115,10 @@ switch ($type1['type']) {
                 `ip` = '" . Vars::$IP . "',
                 `ip_via_proxy` = '" . Vars::$IP_VIA_PROXY . "',
                 `soft` = '" . mysql_real_escape_string($agn1) . "',
-                `text` = '" . mysql_real_escape_string($msg) . "'
-            ");
+                `text` = '" . mysql_real_escape_string($msg) . "',
+                `edit` = '',
+                `curators` = ''
+            ") or die(mysql_error());
             $fadd = mysql_insert_id();
             // Обновляем время топика
             mysql_query("UPDATE `forum` SET `time` = '" . time() . "' WHERE `id` = " . Vars::$ID);
@@ -256,7 +258,9 @@ switch ($type1['type']) {
                 `ip` = '" . Vars::$IP . "',
                 `ip_via_proxy` = '" . Vars::$IP_VIA_PROXY . "',
                 `soft` = '" . mysql_real_escape_string($agn1) . "',
-                `text` = '" . mysql_real_escape_string($msg) . "'
+                `text` = '" . mysql_real_escape_string($msg) . "',
+                `edit` = '',
+                `curators` = ''
             ");
             $fadd = mysql_insert_id();
             // Обновляем время топика

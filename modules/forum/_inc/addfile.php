@@ -122,7 +122,7 @@ switch ($res['type']) {
                         `time` = '" . $res['time'] . "',
                         `filename` = '" . mysql_real_escape_string($fname) . "',
                         `filetype` = '$type'
-                    ");
+                    ") or die(mysql_error());
                 } else {
                     echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
                 }

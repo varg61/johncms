@@ -218,11 +218,14 @@ switch (Vars::$MOD) {
                     $sort = 1;
                 }
                 mysql_query("INSERT INTO `forum` SET
-                `refid` = '" . (Vars::$ID ? Vars::$ID : '') . "',
-                `type` = '" . (Vars::$ID ? 'r' : 'f') . "',
-                `text` = '" . mysql_real_escape_string($name) . "',
-                `soft` = '" . mysql_real_escape_string($desc) . "',
-                `realid` = '$sort'");
+                    `refid` = '" . (Vars::$ID ? Vars::$ID : 0) . "',
+                    `type` = '" . (Vars::$ID ? 'r' : 'f') . "',
+                    `text` = '" . mysql_real_escape_string($name) . "',
+                    `soft` = '" . mysql_real_escape_string($desc) . "',
+                    `realid` = '$sort',
+                    `edit` = '',
+                    `curators` = ''
+                ") or die(mysql_error());
                 header('Location: ' . Vars::$URI . '?mod=cat' . (Vars::$ID ? '&id=' . Vars::$ID : ''));
             } else {
                 // Выводим сообщение об ошибках

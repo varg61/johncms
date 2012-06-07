@@ -139,21 +139,21 @@ CREATE TABLE `cms_counters` (
 DROP TABLE IF EXISTS `cms_forum_files`;
 CREATE TABLE `cms_forum_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cat` int(10) NOT NULL,
-  `subcat` int(10) NOT NULL,
-  `topic` int(10) NOT NULL,
-  `post` int(10) NOT NULL,
-  `time` int(11) NOT NULL,
+  `cat` int(10) unsigned NOT NULL DEFAULT '0',
+  `subcat` int(10) unsigned NOT NULL DEFAULT '0',
+  `topic` int(10) unsigned NOT NULL DEFAULT '0',
+  `post` int(10) unsigned NOT NULL DEFAULT '0',
+  `time` int(11) unsigned NOT NULL DEFAULT '0',
   `filename` text NOT NULL,
-  `filetype` tinyint(4) NOT NULL,
-  `dlcount` int(10) NOT NULL,
+  `filetype` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `dlcount` int(10) unsigned NOT NULL DEFAULT '0',
   `del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `cat` (`cat`),
   KEY `subcat` (`subcat`),
   KEY `topic` (`topic`),
   KEY `post` (`post`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- Dumping structure for table dev_johncms.cms_forum_rdm
 DROP TABLE IF EXISTS `cms_forum_rdm`;
@@ -456,7 +456,7 @@ CREATE TABLE `forum` (
   `refid` int(11) NOT NULL DEFAULT '0',
   `type` char(1) NOT NULL DEFAULT '',
   `time` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `from` varchar(25) NOT NULL DEFAULT '',
   `realid` int(3) NOT NULL DEFAULT '0',
   `ip` bigint(11) NOT NULL DEFAULT '0',
@@ -464,7 +464,7 @@ CREATE TABLE `forum` (
   `soft` text NOT NULL,
   `text` text NOT NULL,
   `close` tinyint(1) NOT NULL DEFAULT '0',
-  `close_who` varchar(25) NOT NULL,
+  `close_who` varchar(25) NOT NULL DEFAULT '',
   `vip` tinyint(1) NOT NULL DEFAULT '0',
   `edit` text NOT NULL,
   `tedit` int(11) NOT NULL DEFAULT '0',
@@ -477,7 +477,7 @@ CREATE TABLE `forum` (
   KEY `close` (`close`),
   KEY `user_id` (`user_id`),
   FULLTEXT KEY `text` (`text`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- Dumping structure for table dev_johncms.guest
 DROP TABLE IF EXISTS `guest`;

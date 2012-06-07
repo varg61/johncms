@@ -107,6 +107,7 @@ switch (Vars::$ACT) {
                 `user_id` = " . Vars::$USER_ID . ",
                 `nickname` = '$from',
                 `text` = '" . mysql_real_escape_string($msg) . "',
+                `otvet` = '',
                 `ip` = '" . Vars::$IP . "',
                 `user_agent` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "'
             ") or exit(mysql_error());

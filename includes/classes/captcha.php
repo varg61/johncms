@@ -101,7 +101,7 @@ class Captcha
             mt_rand(200, 255)
         );
 
-        $fonts_dir = ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'captcha' . DIRECTORY_SEPARATOR;
+        $fonts_dir = ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'captcha' . DIRECTORY_SEPARATOR;
         $fonts = glob($fonts_dir . '*.png');
 
         do {
