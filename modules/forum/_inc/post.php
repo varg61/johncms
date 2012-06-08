@@ -17,7 +17,7 @@ if (empty($_GET['id'])) {
 }
 $s = isset($_GET['s']) ? intval($_GET['s']) : false;
 // Запрос сообщения
-$req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`datereg`
+$req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
 WHERE `forum`.`type` = 'm' AND `forum`.`id` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . " LIMIT 1");
 $res = mysql_fetch_array($req);
@@ -27,7 +27,7 @@ $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' 
 echo '<div class="phdr"><b>' . lng('topic') . ':</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
-    echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
+    echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['join_date'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
 else
     echo Functions::getImage('delete.png', '', 'align="middle"') . '&#160;';
 // Ник юзера и ссылка на его анкету

@@ -67,11 +67,11 @@ switch (Vars::$MOD) {
                 $text = mb_substr($post['text'], 0, 300);
                 $text = Validate::filterString($text, 2, 1);
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                     '<a href="' . Vars::$HOME_URL . '/forum/index.php?id=' . $res['id'] . '">' . $res['text'] . '</a>' .
-                     '<br />' . $text . '...<a href="' . Vars::$HOME_URL . '/forum/index.php?id=' . $res['id'] . '"> &gt;&gt;</a>' .
+                     '<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '">' . $res['text'] . '</a>' .
+                     '<br />' . $text . '...<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '"> &gt;&gt;</a>' .
                      '<div class="sub">' .
-                     '<a href="' . Vars::$HOME_URL . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
-                     '<a href="' . Vars::$HOME_URL . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
+                     '<a href="' . Vars::$HOME_URL . '/forum?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
+                     '<a href="' . Vars::$HOME_URL . '/forum?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
                      '<br /><span class="gray">(' . Functions::displayDate($res['time']) . ')</span>' .
                      '</div></div>';
                 ++$i;
@@ -101,11 +101,11 @@ switch (Vars::$MOD) {
                 $text = Validate::filterString($text, 2, 1);
                 $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                     '<a href="' . Vars::$HOME_URL . '/forum/index.php?id=' . $topic['id'] . '">' . $topic['text'] . '</a>' .
-                     '<br />' . $text . '...<a href="' . Vars::$HOME_URL . '/forum/index.php?act=post&amp;id=' . $res['id'] . '"> &gt;&gt;</a>' .
+                     '<a href="' . Vars::$HOME_URL . '/forum?id=' . $topic['id'] . '">' . $topic['text'] . '</a>' .
+                     '<br />' . $text . '...<a href="' . Vars::$HOME_URL . '/forum?act=post&amp;id=' . $res['id'] . '"> &gt;&gt;</a>' .
                      '<div class="sub">' .
-                     '<a href="' . Vars::$HOME_URL . '/forum/index.php?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
-                     '<a href="' . Vars::$HOME_URL . '/forum/index.php?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
+                     '<a href="' . Vars::$HOME_URL . '/forum?id=' . $category['id'] . '">' . $category['text'] . '</a> | ' .
+                     '<a href="' . Vars::$HOME_URL . '/forum?id=' . $section['id'] . '">' . $section['text'] . '</a>' .
                      '<br /><span class="gray">(' . Functions::displayDate($res['time']) . ')</span>' .
                      '</div></div>';
                 ++$i;
