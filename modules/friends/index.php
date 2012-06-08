@@ -61,7 +61,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
                     ++$i;
                 }
                 $tpl->query = $array;
-                $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']);
+                $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
             }
             $tpl->contents = $tpl->includeTpl('list');
         } else {
