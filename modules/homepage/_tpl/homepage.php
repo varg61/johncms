@@ -48,14 +48,6 @@ if (Vars::$SYSTEM_SET['mod_lib'] || Vars::$USER_RIGHTS >= 7) {
         ')</div>';
 }
 
-// Ссылка на Галерею
-if (Vars::$SYSTEM_SET['mod_gal'] || Vars::$USER_RIGHTS >= 7) {
-    echo'<div class="menu"><a href="' . Vars::$HOME_URL . '/gallery">' . lng('gallery') . '</a> (' .
-        $this->count->gallery .
-        ($this->count->gallery_new ? '&#160;/&#160;<span class="red">+' . $this->count->gallery_new . '</span>' : '') .
-        ')</div>';
-}
-
 // Ссылки на пользователей и фотоальбомы
 if (Vars::$USER_ID || Vars::$USER_SYS['view_userlist']) {
     echo'<div class="phdr"><b>' . lng('community') . '</b></div>' .

@@ -11,23 +11,21 @@
 
 class Counters extends Vars
 {
-    public $users; // Зарегистрированные пользователи
-    public $users_new; // Новые зарегистрированные пользователи
-    public $album; // Пользовательские альбомы
-    public $album_photo; // Пользовательские фотографии
-    public $album_photo_new; // Новые пользовательские фотографии
-    public $downloads; // Счетчик файлов в Загруз-центре
-    public $downloads_mod; // Счетчик файлов в Загруз-центре
-    public $downloads_new; // Счетчик новых файлов в Загруз-центре
-    public $forum_topics; // Счетчик топиков Форума
-    public $forum_messages; // Счетчик постов Форума
-    public $library; // Счетчик статей Библиотеки
-    public $library_new; // Счетчик новых статей Библиотеки
-    public $library_mod; // Счетчик статей Библиотеки, находящихся на модерации
-    public $gallery; // Счетчик картинок в Галерее
-    public $gallery_new; // Счетчик новых картинок в Галерее
-    public $guestbook; // Счетчик постов в Гостевой за последние сутки
-    public $adminclub; // Счетчик постов в Админ-клубе за последние сутки
+    public $users;                     // Зарегистрированные пользователи
+    public $users_new;                 // Новые зарегистрированные пользователи
+    public $album;                     // Пользовательские альбомы
+    public $album_photo;               // Пользовательские фотографии
+    public $album_photo_new;           // Новые пользовательские фотографии
+    public $downloads;                 // Счетчик файлов в Загруз-центре
+    public $downloads_mod;             // Счетчик файлов в Загруз-центре
+    public $downloads_new;             // Счетчик новых файлов в Загруз-центре
+    public $forum_topics;              // Счетчик топиков Форума
+    public $forum_messages;            // Счетчик постов Форума
+    public $library;                   // Счетчик статей Библиотеки
+    public $library_new;               // Счетчик новых статей Библиотеки
+    public $library_mod;               // Счетчик статей Библиотеки, находящихся на модерации
+    public $guestbook;                 // Счетчик постов в Гостевой за последние сутки
+    public $adminclub;                 // Счетчик постов в Админ-клубе за последние сутки
 
     private $cache_file = 'cache_counters.dat';
     private $update_cache = FALSE;
@@ -58,8 +56,6 @@ class Counters extends Vars
         $this->library = $this->_library($count['10']);
         $this->library_new = $this->_libraryNew($count['11']);
         $this->library_mod = $this->_libraryMod($count['12']);
-        $this->gallery = $this->_gallery($count['13']);
-        $this->gallery_new = $this->_galleryNew($count['14']);
         $this->guestbook = $this->_guestBook($count['15']);
         $this->adminclub = $this->_adminClub($count['16']);
         $this->downloads_mod = $this->_downloadsMod($count['17']);
@@ -361,36 +357,6 @@ class Counters extends Vars
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
             $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
-            $var['time'] = time();
-        }
-        return $var['count'];
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Счетчик картинок в Галерее
-    -----------------------------------------------------------------
-    */
-    private function _gallery(&$var)
-    {
-        if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `type` = 'ft'"), 0);
-            $var['time'] = time();
-        }
-        return $var['count'];
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Счетчик новых картинок в Галерее (за 2 дня)
-    -----------------------------------------------------------------
-    */
-    private function _galleryNew(&$var)
-    {
-        if (!isset($var) || $var['time'] < time() - 3600) {
-            $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `gallery` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'ft'"), 0);
             $var['time'] = time();
         }
         return $var['count'];
