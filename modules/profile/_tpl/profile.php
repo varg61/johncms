@@ -10,80 +10,90 @@
     <p><?= Functions::displayUser($this->user, $this->userarg) ?></p>
 </div>
 <div class="menu">
-    <table cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="rel_a_font">
-                <?= $this->rel_count ?>
-            </td>
-            <td align="right">
-                <div class="bar" style="width: 8px; height: 6px">
-                    <div class="bar_a" style="width: 100%"></div>
-                </div>
-                <div class="bar" style="width: 8px; height: 6px">
-                </div>
-                <div class="bar" style="width: 8px; height: 6px">
-                </div>
-                <div class="bar" style="width: 8px; height: 6px">
-                </div>
-                <div class="bar" style="width: 8px; height: 6px">
-                </div>
-            </td>
-            <td width="90%">
-                <div class="bar" style="height: 6px">
-                    <div class="bar_a" style="width: <?= $this->bar['a'] ?>%"></div>
-                </div>
-                <div class="bar" style="height: 6px">
-                    <div class="bar_b" style="width: <?= $this->bar['b'] ?>%"></div>
-                </div>
-                <div class="bar" style="height: 6px">
-                    <div class="bar_c" style="width: <?= $this->bar['c'] ?>%"></div>
-                </div>
-                <div class="bar" style="height: 6px">
-                    <div class="bar_d" style="width: <?= $this->bar['d'] ?>%"></div>
-                </div>
-                <div class="bar" style="height: 6px">
-                    <div class="bar_e" style="width: <?= $this->bar['e'] ?>%"></div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td>
-                <small>&#160;<a href="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>"><?= lng('details') ?></a></small>
-            </td>
-        </tr>
-    </table>
+    <div class="formblock">
+        <label><?= lng('relationship') ?></label>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="rel_a_font">
+                    <?= $this->rel_count ?>
+                </td>
+                <td align="right">
+                    <?php if (Vars::$USER_ID): ?>
+                    <div class="bar" style="width: 8px; height: 6px">
+                        <?php if ($this->my_rel == 2): ?>
+                        <div class="bar_a" style="width: 100%"></div>
+                        <?php endif ?>
+                    </div>
+                    <div class="bar" style="width: 8px; height: 6px">
+                        <?php if ($this->my_rel == 1): ?>
+                        <div class="bar_b" style="width: 100%"></div>
+                        <?php endif ?>
+                    </div>
+                    <div class="bar" style="width: 8px; height: 6px">
+                        <?php if ($this->my_rel == 0): ?>
+                        <div class="bar_c" style="width: 100%"></div>
+                        <?php endif ?>
+                    </div>
+                    <div class="bar" style="width: 8px; height: 6px">
+                        <?php if ($this->my_rel == -1): ?>
+                        <div class="bar_d" style="width: 100%"></div>
+                        <?php endif ?>
+                    </div>
+                    <div class="bar" style="width: 8px; height: 6px">
+                        <?php if ($this->my_rel == -2): ?>
+                        <div class="bar_e" style="width: 100%"></div>
+                        <?php endif ?>
+                    </div>
+                    <?php endif ?>
+                </td>
+                <td width="90%">
+                    <div class="bar" style="height: 6px">
+                        <div class="bar_a" style="width: <?= $this->bar['a'] ?>%"></div>
+                    </div>
+                    <div class="bar" style="height: 6px">
+                        <div class="bar_b" style="width: <?= $this->bar['b'] ?>%"></div>
+                    </div>
+                    <div class="bar" style="height: 6px">
+                        <div class="bar_c" style="width: <?= $this->bar['c'] ?>%"></div>
+                    </div>
+                    <div class="bar" style="height: 6px">
+                        <div class="bar_d" style="width: <?= $this->bar['d'] ?>%"></div>
+                    </div>
+                    <div class="bar" style="height: 6px">
+                        <div class="bar_e" style="width: <?= $this->bar['e'] ?>%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    <small>&#160;<a href="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>"><?= lng('details') ?></a></small>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div class="list2">
     <div class="formblock">
-        <div>
-            <?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><?= lng('information') ?></a>
-        </div>
-        <div>
-            <?= Functions::getImage('user_edit.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><?= lng('activity') ?></a>
-        </div>
-        <div>
-            <?= Functions::getImage('rating.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=stat&amp;user=<?= $this->user['id'] ?>"><?= lng('statistics') ?></a>
-        </div>
-        <?php if ($this->bancount) : ?>
-        <div>
-            <?= Functions::getImage('user_block.png') ?>&#160;<a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><?= lng('infringements') ?></a> (<?= $this->bancount ?>)
-        </div>
-        <?php endif; ?>
+        <label><?= lng('information') ?></label>
+        <ul style="list-style: none">
+            <li><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><?= lng('personal_data') ?></a></li>
+            <li><?= Functions::getImage('user_edit.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><?= lng('activity') ?></a></li>
+            <li><?= Functions::getImage('rating.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=stat&amp;user=<?= $this->user['id'] ?>"><?= lng('statistics') ?></a></li>
+            <?php if ($this->bancount) : ?>
+            <li><?= Functions::getImage('user_block.png') ?>&#160;<a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><?= lng('infringements') ?></a> (<?= $this->bancount ?>)</li>
+            <?php endif; ?>
+        </ul>
     </div>
     <div class="formblock">
-        <div>
-            <?= Functions::getImage('album_4.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)
-        </div>
-        <div>
-            <?= Functions::getImage('comments.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><?= lng('guestbook') ?></a>&#160;(<?= $this->user['comm_count'] ?>)
-        </div>
-        <div>
-            <?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?id=<?php echo $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)
-        </div>
+        <label><?= lng('personal') ?></label>
+        <ul style="list-style: none">
+            <li><?= Functions::getImage('album_4.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</li>
+            <li><?= Functions::getImage('comments.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><?= lng('guestbook') ?></a>&#160;(<?= $this->user['comm_count'] ?>)</li>
+            <li><?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?id=<?php echo $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)</li>
+        </ul>
     </div>
-
     <?php if (Vars::$USER_ID && Vars::$USER_ID != $this->user['id']): ?>
     <!-- Block friends -->
     <div class="formblock">

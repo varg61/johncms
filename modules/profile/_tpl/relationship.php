@@ -69,21 +69,22 @@
         </table>
     </div>
 </div>
-<?php if ($this->user['id'] != Vars::$USER_ID): ?>
+<?php if (Vars::$USER_ID && $this->user['id'] != Vars::$USER_ID): ?>
 <form action="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="list2">
         <div class="formblock">
             <label><?= lng('my_relationship') ?></label><br/>
-            <input type="radio" value="2" name="vote" <?= ($this->user['rights'] == 3 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_excellent') ?><br/>
-            <input type="radio" value="1" name="vote" <?= ($this->user['rights'] == 4 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_good') ?><br/>
-            <input type="radio" value="0" name="vote" <?= ($this->user['rights'] == 5 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_neutrally') ?><br/>
-            <input type="radio" value="-1" name="vote" <?= ($this->user['rights'] == 5 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_badly') ?><br/>
-            <input type="radio" value="-2" name="vote" <?= ($this->user['rights'] == 6 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_verybad') ?>
+            <input type="radio" value="2" name="vote" <?= ($this->my_rel == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_excellent') ?><br/>
+            <input type="radio" value="1" name="vote" <?= ($this->my_rel == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_good') ?><br/>
+            <input type="radio" value="0" name="vote" <?= ($this->my_rel == 0 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_neutrally') ?><br/>
+            <input type="radio" value="-1" name="vote" <?= ($this->my_rel == -1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_badly') ?><br/>
+            <input type="radio" value="-2" name="vote" <?= ($this->my_rel == -2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_verybad') ?>
         </div>
         <div class="formblock">
             <input type="submit" name="submit" value="<?= lng('vote') ?>"/>
         </div>
     </div>
+    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
 <?php endif ?>
 <div class="phdr">

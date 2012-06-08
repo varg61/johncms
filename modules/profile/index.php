@@ -56,7 +56,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         );
     } else {
         $tpl->rel = unserialize($user['relationship']);
-        $tpl->rel_count = $tpl->rel['a'] + $tpl->rel['b'] + $tpl->rel['c'] + $tpl->rel['d'] + $tpl->rel['e'];
+        $tpl->rel_count = array_sum($tpl->rel);
         $tpl->bar = array(
             'a' => round(100 / $tpl->rel_count * $tpl->rel['a']),
             'b' => round(100 / $tpl->rel_count * $tpl->rel['b']),
@@ -66,9 +66,34 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         );
     }
 
+    if (Vars::$USER_ID) {
+        // Получаем данные своего голосования
+        $req = mysql_query("SELECT `value` FROM `cms_user_relationship` WHERE `from` = '" . Vars::$USER_ID . "' AND `to` = '" . $user['id'] . "'");
+        if (mysql_num_rows($req)) {
+            $res = mysql_fetch_assoc($req);
+            $tpl->my_rel = $res['value'];
+        } else {
+            $tpl->my_rel = 10;
+        }
+    }
+
     switch (Vars::$ACT) {
         case 'relationship':
-            if (isset($_POST['submit']) && isset($_POST['vote']) && $_POST['vote'] >= -2 && $_POST['vote'] <= 2) {
+            /*
+            -----------------------------------------------------------------
+            Система Отношений
+            -----------------------------------------------------------------
+            */
+            if (Vars::$USER_ID
+                && isset($_POST['submit'])
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
+                && isset($_POST['vote'])
+                && $_POST['vote'] >= -2
+                && $_POST['vote'] <= 2
+            ) {
+                // Записываем голос в базу данных
                 mysql_query("INSERT INTO `cms_user_relationship` SET
                     `from` = " . Vars::$USER_ID . ",
                     `to` = " . $tpl->user['id'] . ",
@@ -76,10 +101,22 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     ON DUPLICATE KEY UPDATE
                     `value` = '" . intval($_POST['vote']) . "'
                 ");
-                $tpl->save = 1;
-            }
 
-            $tpl->contents = $tpl->includeTpl('relationship');
+                // Обновляем статистику пользователя, за которого голосовали
+                $rel['a'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '2'"), 0);
+                $rel['b'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '1'"), 0);
+                $rel['c'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '0'"), 0);
+                $rel['d'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '-1'"), 0);
+                $rel['e'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '-2'"), 0);
+                mysql_query("UPDATE `users` SET `relationship` = '" . mysql_real_escape_string(serialize($rel)) . "' WHERE `id` = " . $user['id']);
+
+                header('Location: ' . Vars::$HOME_URL . '/profile?act=relationship&user=' . $user['id']);
+                exit;
+            } else {
+                $tpl->form_token = mt_rand(100, 10000);
+                $_SESSION['form_token'] = $tpl->form_token;
+                $tpl->contents = $tpl->includeTpl('relationship');
+            }
             break;
 
         case 'stat':
@@ -129,7 +166,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 'iphist'    => 1,
                 'header'    => '<b>ID:' . $user['id'] . '</b>',
                 'footer'    => ($user['id'] != Vars::$USER_ID
-                    ? '<span class="gray">' . lng('where') . ':</span> ' . Functions::displayPlace($user['id'], $user['place'])
+                    ? '<span class="gray">' . lng('where') . ':</span> '
                     : FALSE)
             );
 

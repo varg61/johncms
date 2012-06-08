@@ -1,4 +1,3 @@
--- Dumping structure for table dev_johncms.cms_ads
 DROP TABLE IF EXISTS `cms_ads`;
 CREATE TABLE `cms_ads` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -21,7 +20,7 @@ CREATE TABLE `cms_ads` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_album_cat
+
 DROP TABLE IF EXISTS `cms_album_cat`;
 CREATE TABLE `cms_album_cat` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -36,7 +35,7 @@ CREATE TABLE `cms_album_cat` (
   KEY `access` (`access`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_album_comments
+
 DROP TABLE IF EXISTS `cms_album_comments`;
 CREATE TABLE `cms_album_comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -51,7 +50,7 @@ CREATE TABLE `cms_album_comments` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_album_downloads
+
 DROP TABLE IF EXISTS `cms_album_downloads`;
 CREATE TABLE `cms_album_downloads` (
   `user_id` int(10) unsigned NOT NULL,
@@ -60,7 +59,7 @@ CREATE TABLE `cms_album_downloads` (
   PRIMARY KEY (`user_id`,`file_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_album_files
+
 DROP TABLE IF EXISTS `cms_album_files`;
 CREATE TABLE `cms_album_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -84,7 +83,7 @@ CREATE TABLE `cms_album_files` (
   KEY `access` (`access`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_album_views
+
 DROP TABLE IF EXISTS `cms_album_views`;
 CREATE TABLE `cms_album_views` (
   `user_id` int(10) unsigned NOT NULL,
@@ -93,7 +92,7 @@ CREATE TABLE `cms_album_views` (
   PRIMARY KEY (`user_id`,`file_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_album_votes
+
 DROP TABLE IF EXISTS `cms_album_votes`;
 CREATE TABLE `cms_album_votes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -105,7 +104,7 @@ CREATE TABLE `cms_album_votes` (
   KEY `file_id` (`file_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_ban_users
+
 DROP TABLE IF EXISTS `cms_ban_users`;
 CREATE TABLE `cms_ban_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -122,7 +121,7 @@ CREATE TABLE `cms_ban_users` (
   KEY `ban_time` (`ban_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_counters
+
 DROP TABLE IF EXISTS `cms_counters`;
 CREATE TABLE `cms_counters` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -135,7 +134,7 @@ CREATE TABLE `cms_counters` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_forum_files
+
 DROP TABLE IF EXISTS `cms_forum_files`;
 CREATE TABLE `cms_forum_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -155,7 +154,7 @@ CREATE TABLE `cms_forum_files` (
   KEY `post` (`post`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_forum_rdm
+
 DROP TABLE IF EXISTS `cms_forum_rdm`;
 CREATE TABLE `cms_forum_rdm` (
   `topic_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -165,7 +164,7 @@ CREATE TABLE `cms_forum_rdm` (
   KEY `time` (`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_forum_vote
+
 DROP TABLE IF EXISTS `cms_forum_vote`;
 CREATE TABLE `cms_forum_vote` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -179,7 +178,7 @@ CREATE TABLE `cms_forum_vote` (
   KEY `topic` (`topic`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_forum_vote_users
+
 DROP TABLE IF EXISTS `cms_forum_vote_users`;
 CREATE TABLE `cms_forum_vote_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -190,7 +189,7 @@ CREATE TABLE `cms_forum_vote_users` (
   KEY `topic` (`topic`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_ip_bwlist
+
 DROP TABLE IF EXISTS `cms_ip_bwlist`;
 CREATE TABLE `cms_ip_bwlist` (
   `ip` int(10) unsigned NOT NULL DEFAULT '0',
@@ -203,7 +202,7 @@ CREATE TABLE `cms_ip_bwlist` (
   UNIQUE KEY `ip_upto` (`ip_upto`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table cms_mail_contacts
+
 DROP TABLE IF EXISTS `cms_mail_contacts`;
 CREATE TABLE `cms_mail_contacts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -225,7 +224,7 @@ CREATE TABLE `cms_mail_contacts` (
   KEY `access` (`access`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
--- Dumping structure for table cms_mail_messages
+
 DROP TABLE IF EXISTS `cms_mail_messages`;
 CREATE TABLE `cms_mail_messages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -257,14 +256,14 @@ CREATE TABLE `cms_mail_messages` (
   KEY `sys` (`sys`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
--- Dumping structure for table dev_johncms.cms_modules
+
 DROP TABLE IF EXISTS `cms_modules`;
 CREATE TABLE `cms_modules` (
   `module` varchar(15) NOT NULL DEFAULT '',
   PRIMARY KEY (`module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping data for table dev_johncms.cms_modules: 16 rows
+
 INSERT INTO `cms_modules` (`module`) VALUES
         ('admin'),
         ('album'),
@@ -291,7 +290,7 @@ INSERT INTO `cms_modules` (`module`) VALUES
         ('smileys'),
         ('users');
 
--- Dumping structure for table dev_johncms.cms_sessions
+
 DROP TABLE IF EXISTS `cms_sessions`;
 CREATE TABLE `cms_sessions` (
   `session_id` char(32) NOT NULL DEFAULT '',
@@ -309,7 +308,7 @@ CREATE TABLE `cms_sessions` (
   KEY `online` (`user_id`,`session_timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_settings
+
 DROP TABLE IF EXISTS `cms_settings`;
 CREATE TABLE `cms_settings` (
   `key` tinytext NOT NULL,
@@ -317,7 +316,7 @@ CREATE TABLE `cms_settings` (
   PRIMARY KEY (`key`(30))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping data for table dev_johncms.cms_settings: 26 rows
+
 INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
         ('email', 'user@test.com'),
         ('timeshift', '0'),
@@ -339,7 +338,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
         ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smileys";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}'),
         ('lng_list', 'a:2:{s:2:"en";s:7:"English";s:2:"ru";s:14:"Русский";}');
 
--- Dumping structure for table dev_johncms.cms_user_guestbook
+
 DROP TABLE IF EXISTS `cms_user_guestbook`;
 CREATE TABLE `cms_user_guestbook` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -354,7 +353,7 @@ CREATE TABLE `cms_user_guestbook` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_user_ip
+
 DROP TABLE IF EXISTS `cms_user_ip`;
 CREATE TABLE `cms_user_ip` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -370,15 +369,17 @@ CREATE TABLE `cms_user_ip` (
   KEY `timestamp` (`timestamp`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+
 DROP TABLE IF EXISTS `cms_user_relationship`;
 CREATE TABLE `cms_user_relationship` (
   `from` int(10) unsigned NOT NULL DEFAULT '0',
   `to` int(10) unsigned NOT NULL DEFAULT '0',
   `value` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`from`,`to`)
+  PRIMARY KEY (`from`,`to`),
+  KEY `tovalue` (`to`,`value`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.cms_user_settings
+
 DROP TABLE IF EXISTS `cms_user_settings`;
 CREATE TABLE `cms_user_settings` (
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -386,6 +387,7 @@ CREATE TABLE `cms_user_settings` (
   `value` text NOT NULL,
   PRIMARY KEY (`user_id`,`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `cms_download_bookmark`;
 CREATE TABLE `cms_download_bookmark` (
@@ -396,6 +398,7 @@ CREATE TABLE `cms_download_bookmark` (
   KEY `file_id` (`file_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 
 DROP TABLE IF EXISTS `cms_download_comments`;
 CREATE TABLE `cms_download_comments` (
@@ -410,6 +413,7 @@ CREATE TABLE `cms_download_comments` (
   KEY `sub_id` (`sub_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 
 DROP TABLE IF EXISTS `cms_download_files`;
 CREATE TABLE `cms_download_files` (
@@ -436,6 +440,7 @@ CREATE TABLE `cms_download_files` (
   KEY `time` (`time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+
 DROP TABLE IF EXISTS `cms_download_more`;
 CREATE TABLE `cms_download_more` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -449,7 +454,7 @@ CREATE TABLE `cms_download_more` (
   KEY `time` (`time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- Dumping structure for table dev_johncms.forum
+
 DROP TABLE IF EXISTS `forum`;
 CREATE TABLE `forum` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -479,7 +484,7 @@ CREATE TABLE `forum` (
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.guest
+
 DROP TABLE IF EXISTS `guest`;
 CREATE TABLE `guest` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -502,7 +507,7 @@ CREATE TABLE `guest` (
   KEY `adm` (`adm`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.lib
+
 DROP TABLE IF EXISTS `lib`;
 CREATE TABLE `lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -526,7 +531,7 @@ CREATE TABLE `lib` (
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.news
+
 DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -538,7 +543,7 @@ CREATE TABLE `news` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping structure for table dev_johncms.users
+
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
