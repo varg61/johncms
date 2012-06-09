@@ -59,27 +59,6 @@ $ads = Advt::getAds();
     <?php else: ?>
     <?= lng('guest', 1) ?>
     <?php endif; ?>
-    <?php if (isset(Vars::$NOTIFICATIONS['ban'])) : ?>
-    <span class="topbtn"><a href=""><?= Functions::getImage('notice_ban.png', 'Ban', 'align="middle"') ?></a></span>
-    <?php endif ?>
-    <?php if (isset(Vars::$NOTIFICATIONS['system'])) : ?>
-    <span class="topbtn"><a href=""><?= Functions::getImage('notice_system.png', 'System message', 'align="middle"') ?></a></span>
-    <?php endif ?>
-    <?php if (isset(Vars::$NOTIFICATIONS['mail'])) : ?>
-    <span class="topbtn"><a href=""><?= Functions::getImage('notice_mail.png', 'New mail', 'align="middle"') ?></a></span>
-    <?php endif ?>
-    <?php if (isset(Vars::$NOTIFICATIONS['comments'])) : ?>
-    <span class="topbtn"><a href=""><?= Functions::getImage('notice_comments.png', 'New comments', 'align="middle"') ?></a></span>
-    <?php endif ?>
-    <?php if (isset(Vars::$NOTIFICATIONS['friend'])) : ?>
-    <span class="topbtn"><a href=""><?= Functions::getImage('notice_friend.png', 'Friend', 'align="middle"') ?></a></span>
-    <?php endif ?>
-    <?php if (isset(Vars::$NOTIFICATIONS['info'])) : ?>
-    <span class="topbtn"><a href=""><?= Functions::getImage('notice_info.png', 'Information', 'align="middle"') ?></a></span>
-    <?php endif ?>
-    <?php if (isset(Vars::$NOTIFICATIONS['admin'])) : ?>
-    <span class="topbtn"><a href="<?= Vars::$HOME_URL ?>/admin"><?= Functions::getImage('notice_admin.png', 'Admin events', 'align="middle"') ?></a></span>
-    <?php endif ?>
 </div>
 <div class="tmn">
     <?php if (!empty(Vars::$PLACE) || Vars::$ACT) : ?>

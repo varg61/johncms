@@ -51,10 +51,10 @@
             <?php if (isset($this->error['sex'])) : ?>
             <small class="red"><b><?= lng('error') ?></b>: <?= $this->error['sex'] ?><br/></small>
             <?php endif; ?>
-            <input id="sex" type="radio" value="1" name="sex" <?= ($this->reg_data['sex'] == 1 ? 'checked="checked"' : '') ?>/>&#160;
-            <?= Functions::getImage('usr_m.png', '', 'align="middle"') ?>&#160;<?= lng('sex_m') ?><br/>
-            <input type="radio" value="2" name="sex" <?= ($this->reg_data['sex'] == 2 ? 'checked="checked"' : '') ?>/>&#160;
-            <?= Functions::getImage('usr_w.png', '', 'align="middle"') ?>&#160;<?= lng('sex_w') ?>
+            <ul style="list-style: none; padding-left: 0">
+                <li><input id="sex" type="radio" value="1" name="sex" <?= ($this->reg_data['sex'] == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= Functions::getIcon('user.png') ?>&#160;<?= lng('sex_m') ?></li>
+                <li><input type="radio" value="2" name="sex" <?= ($this->reg_data['sex'] == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= Functions::getIcon('user-female.png') ?>&#160;<?= lng('sex_w') ?></li>
+            </ul>
         </div>
         <div class="formblock">
             <label for="captcha"><?= lng('captcha') ?></label><br/>

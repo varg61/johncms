@@ -244,7 +244,7 @@ class Functions extends Vars
                 $out .= '</td><td>';
             }
             if ($user['sex']) {
-                $out .= self::getImage('usr_' . ($user['sex'] == 'm' ? 'm' : 'w') . '.png', '', 'align="middle"');
+                $out .= self::getIcon(($user['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"');
             } else {
                 $out = self::getImage('del.png', '', 'align="middle"');
             }
@@ -403,7 +403,7 @@ class Functions extends Vars
     Загружаем иконки
     -----------------------------------------------------------------
     */
-    public static function getIcon($img = '', $height = 16, $width = 16, $alt = '', $style = '')
+    public static function getIcon($img = '', $height = 16, $width = 16, $style = '')
     {
         if (empty($img)) return false;
         if (is_file(ROOTPATH . 'templates' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . $img)) {
@@ -413,7 +413,7 @@ class Functions extends Vars
         } else {
             return false;
         }
-        return '<img src="' . $file . '" height="' . $height . '" width="' . $width . '"  alt="' . $alt . '" border="0" ' . $style . '/>';
+        return '<img src="' . $file . '" height="' . $height . '" width="' . $width . '"  alt="" border="0" ' . $style . '/>';
     }
 
     /*
