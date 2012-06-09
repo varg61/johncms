@@ -11,7 +11,7 @@
             <li><?= Functions::getImage('comments.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=guestbook"><?= lng('guestbook') ?></a>&#160;(<?= Vars::$USER_DATA['comm_count'] ?>)</li>
             <?php if (Vars::$USER_RIGHTS) : ?>
             <br style="line-height: 8px"/>
-            <li><?= Functions::getImage('comments_adm.png') ?>&#160;<a href="../guestbook/index.php?act=ga&amp;do=set"><?= lng('admin_club') ?></a> (<span class="red">()</span>)</li>
+            <li><?= Functions::getImage('comments_adm.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/guestbook?mod=adm"><?= lng('admin_club') ?></a> (<span class="red">()</span>)</li>
             <li><?= Functions::getImage('settings.png') ?>&#160;<span class="red"><a href="<?= Vars::$HOME_URL ?>/admin"><b><?= lng('admin_panel') ?></b></a></span></li>
             <?php endif ?>
         </ul>
