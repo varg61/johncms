@@ -2,7 +2,7 @@
     <b><?= lng('admin_panel') ?></b>
 </div>
 <div class="user" style="padding-top: 8px; padding-bottom: 9px">
-    <label><?= Functions::getImage('users.png', '', 'class="left"') ?>&#160;<?= lng('users') ?></label>
+    <label><?= Functions::getIcon('users.png') ?>&#160;<?= lng('users') ?></label>
     <ul>
         <?php if (Vars::$USER_RIGHTS >= 7 && $this->regTotal) : ?>
         <li><span class="red"><a href="<?= Vars::$MODULE_URI ?>"><?= lng('users_reg') ?></a>&#160;(<?= $this->regTotal ?>)</span></li>

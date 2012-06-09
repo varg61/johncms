@@ -42,7 +42,7 @@
     <a href="<?= Vars::$HOME_URL ?>/users"><?= lng('users') ?></a> (<?= $this->count->users . ($this->count->users_new ? '&#160;/&#160;<span class="red">+' . $this->count->users_new . '</span>' : '') ?>)
 </div>
 <div class="menu">
-    <a href="<?= Vars::$HOME_URL ?>/album"><?= lng('photo_albums') ?></a>(<?= $this->count->album . '&#160;/&#160;' . $this->count->album_photo . ($this->count->album_photo_new ? '&#160;/&#160;<span class="red">+' . $this->count->album_photo_new . '</span>' : '') ?>)
+    <a href="<?= Vars::$HOME_URL ?>/album"><?= lng('photo_albums') ?></a>(<?= $this->count->album . '&#160;/&#160;' . $this->count->album_photo . ($this->count->album_photo_new ? '&#160;/&#160;<span class="red"><a href="' . Vars::$HOME_URL . '/album?act=new">+' . $this->count->album_photo_new . '</a></span>' : '') ?>)
 </div>
 <?php endif ?>
 <div class="phdr">

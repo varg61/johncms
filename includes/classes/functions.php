@@ -400,6 +400,24 @@ class Functions extends Vars
 
     /*
     -----------------------------------------------------------------
+    Загружаем иконки
+    -----------------------------------------------------------------
+    */
+    public static function getIcon($img = '', $height = 16, $width = 16, $alt = '', $style = '')
+    {
+        if (empty($img)) return false;
+        if (is_file(ROOTPATH . 'templates' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/icons/' . $img;
+        } elseif (is_file(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/assets/icons/' . $img;
+        } else {
+            return false;
+        }
+        return '<img src="' . $file . '" height="' . $height . '" width="' . $width . '"  alt="' . $alt . '" border="0" ' . $style . '/>';
+    }
+
+    /*
+    -----------------------------------------------------------------
     Уведомления
     -----------------------------------------------------------------
     */

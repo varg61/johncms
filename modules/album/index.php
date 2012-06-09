@@ -42,6 +42,7 @@ if (!$user) {
 $tpl = Template::getInstance();
 $tpl->img = $img;
 $tpl->user = $user;
+$tpl->al = $al;
 
 /*
 -----------------------------------------------------------------

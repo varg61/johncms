@@ -333,7 +333,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         $icons = array(
                             ($np ? (!$res['vip'] ? Functions::getImage('forum_normal.png') : '') : Functions::getImage('forum_new.png')),
                             ($res['vip'] ? Functions::getImage('forum_pin.png') : ''),
-                            ($res['realid'] ? Functions::getImage('rating.png') : ''),
+                            ($res['realid'] ? Functions::getIcon('chart.png') : ''),
                             ($res['edit'] ? Functions::getImage('forum_closed.png') : '')
                         );
                         echo Functions::displayMenu($icons, '&#160;', '&#160;');

@@ -11,6 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+global $tpl, $user, $al;
+
 /*
 -----------------------------------------------------------------
 Создать / изменить альбом
@@ -37,7 +39,7 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         $password = '';
         $access = 0;
     }
-    $error = array ();
+    $error = array();
     if (isset($_POST['submit'])) {
         // Принимаем данные
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
@@ -94,25 +96,12 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             exit;
         }
     }
-    if ($error)
-        echo Functions::displayError($error);
-    echo '<div class="menu">' .
-        '<form action="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '&amp;al=' . $al . '" method="post">' .
-        '<p><h3>' . lng('title') . '</h3>' .
-        '<input type="text" name="name" value="' . Validate::filterString($name) . '" maxlength="30" /><br />' .
-        '<small>Min. 2, Max. 30</small></p>' .
-        '<p><h3>' . lng('description') . '</h3>' .
-        '<textarea name="description" rows="' . Vars::$USER_SET['field_h'] . '">' . Validate::filterString($description) . '</textarea><br />' .
-        '<small>' . lng('not_mandatory_field') . '<br />Max. 500</small></p>' .
-        '<p><h3>' . lng('password') . '</h3>' .
-        '<input type="text" name="password" value="' . Validate::filterString($password) . '" maxlength="15" /><br />' .
-        '<small>' . lng('access_help') . '<br />Min. 3, Max. 15</small></p>' .
-        '<p><h3>Доступ</h3>' .
-        '<input type="radio" name="access" value="4" ' . (!$access || $access == 4 ? 'checked="checked"' : '') . '/>&#160;' . lng('access_all') . '<br />' .
-        '<input type="radio" name="access" value="3" ' . ($access == 3 ? 'checked="checked"' : '') . '/>&#160;' . lng('access_friends') . ' (временно не работает)<br />' .
-        '<input type="radio" name="access" value="2" ' . ($access == 2 ? 'checked="checked"' : '') . '/>&#160;' . lng('access_by_password') . '<br />' .
-        '<input type="radio" name="access" value="1" ' . ($access == 1 ? 'checked="checked"' : '') . '/>&#160;' . lng('access_closed') . '</p>' .
-        '<p><input type="submit" name="submit" value="' . lng('save') . '" /></p>' .
-        '</form></div>' .
-        '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('cancel') . '</a></div>';
+    if ($error) {
+        $tpl->error = Functions::displayError($error);
+    }
+    $tpl->name = $name;
+    $tpl->access = $access;
+    $tpl->password = $password;
+    $tpl->description = $description;
+    $tpl->contents = $tpl->includeTpl('album_edit');
 }

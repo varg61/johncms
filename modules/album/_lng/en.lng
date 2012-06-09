@@ -1,3 +1,4 @@
+access                        =   "Access"
 access_all                    =   "Everyone"
 access_by_password            =   "With Password"
 access_closed                 =   "Closed"

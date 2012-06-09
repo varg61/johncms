@@ -34,10 +34,10 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7)
 echo'<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
     '<div class="phdr">' . lng('album') . ': ';
 echo $view ? '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . Validate::filterString($album['name']) . '</b></a>' : '<b>' . Validate::filterString($album['name']) . '</b>';
-if (!empty($album['description'])) {
-    echo '<small><br />' . Validate::filterString($album['description'], 1) . '</small>';
-}
 echo'</div>';
+if (!empty($album['description'])) {
+    echo '<div class="topmenu">' . Validate::filterString($album['description'], 1) . '</div>';
+}
 
 /*
 -----------------------------------------------------------------

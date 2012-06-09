@@ -80,7 +80,7 @@
         <ul style="list-style: none">
             <li><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><?= lng('personal_data') ?></a></li>
             <li><?= Functions::getImage('user_edit.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><?= lng('activity') ?></a></li>
-            <li><?= Functions::getImage('rating.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=stat&amp;user=<?= $this->user['id'] ?>"><?= lng('statistics') ?></a></li>
+            <li><?= Functions::getIcon('chart.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=stat&amp;user=<?= $this->user['id'] ?>"><?= lng('statistics') ?></a></li>
             <?php if ($this->bancount) : ?>
             <li><?= Functions::getImage('user_block.png') ?>&#160;<a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><?= lng('infringements') ?></a> (<?= $this->bancount ?>)</li>
             <?php endif; ?>

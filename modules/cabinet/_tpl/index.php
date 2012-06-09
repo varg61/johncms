@@ -5,7 +5,7 @@
     <div class="formblock">
         <ul style="list-style: none; padding-left: 0">
             <li><?= Functions::getImage('contacts.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile"><?= lng('my_profile') ?></a></li>
-            <li><?= Functions::getImage('rating.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=stat"><?= lng('statistics') ?></a></li>
+            <li><?= Functions::getIcon('chart2.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=stat"><?= lng('statistics') ?></a></li>
             <br style="line-height: 8px"/>
             <li><?= Functions::getImage('album_4.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</li>
             <li><?= Functions::getImage('comments.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=guestbook"><?= lng('guestbook') ?></a>&#160;(<?= Vars::$USER_DATA['comm_count'] ?>)</li>
@@ -21,7 +21,7 @@
     <div class="formblock">
         <ul style="list-style: none; padding-left: 0">
             <li><?php echo Functions::getImage('mail-copy.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail"><?php echo lng('mail') ?></a>&#160;(<?php echo Functions::mailCount() ?>)</li>
-            <li><?= Functions::getImage('users.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>&#160;(<?php echo Functions::contactsCount() ?>)</li>
+            <li><?= Functions::getIcon('users.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>&#160;(<?php echo Functions::contactsCount() ?>)</li>
             <li><?= Functions::getImage('friends.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)</li>
         </ul>
     </div>

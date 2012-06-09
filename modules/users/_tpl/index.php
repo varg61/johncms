@@ -11,18 +11,18 @@
 </div>
 <div class="menu">
     <div class="formblock">
-        <label><?= Functions::getImage('users.png') . '&#160;' . lng('community') ?></label><br/>
-        <ul>
-            <li><a href="<?= Vars::$URI ?>/search"><?= lng('users') ?></a> (<?= $this->count->users ?>)</li>
-            <li><a href="<?= Vars::$URI ?>/search?act=adm"><?= lng('administration') ?></a></li>
+        <label><?= lng('community') ?></label><br/>
+        <ul style="list-style: none; padding-left: 0">
+            <li><?= Functions::getIcon('users.png') ?>&#160;<a href="<?= Vars::$URI ?>/search"><?= lng('users') ?></a> (<?= $this->count->users ?>)</li>
+            <li><?= Functions::getIcon('user-boss.png') ?>&#160;<a href="<?= Vars::$URI ?>/search?act=adm"><?= lng('administration') ?></a></li>
         </ul>
     </div>
     <div class="formblock">
-        <label><?= Functions::getImage('rating.png') . '&#160;' . lng('users_top') ?></label><br/>
-        <ul>
-            <li><a href="<?= Vars::$URI ?>/top"><?= lng('forum') ?></a></li>
-            <li><a href="<?= Vars::$URI ?>/top?act=comm"><?= lng('comments') ?></a></li>
-            <li><a href="<?= Vars::$URI ?>/top?act=karma"><?= lng('karma') ?></a></li>
+        <label><?= lng('rating') ?></label><br/>
+        <ul style="list-style: none; padding-left: 0">
+            <li><?= Functions::getIcon('chart.png') ?>&#160;<a href="<?= Vars::$URI ?>/top"><?= lng('forum') ?></a></li>
+            <li><?= Functions::getIcon('chart.png') ?>&#160;<a href="<?= Vars::$URI ?>/top?act=comm"><?= lng('comments') ?></a></li>
+            <li><?= Functions::getIcon('chart.png') ?>&#160;<a href="<?= Vars::$URI ?>/top?act=karma"><?= lng('karma') ?></a></li>
         </ul>
     </div>
 </div>

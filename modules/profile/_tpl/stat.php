@@ -11,7 +11,7 @@ $query = array(
 <div class="user"><p><?= Functions::displayUser($this->user, array('iphide' => 1,)) ?></p></div>
 <div class="list2">
     <div class="formblock">
-        <label><?= Functions::getImage('rating.png', '', 'class="left"') . '&#160;' . lng('statistics') ?></label><br/>
+        <label><?= Functions::getIcon('chart.png', '', 'class="left"') . '&#160;' . lng('statistics') ?></label><br/>
         <ul>
             <?php if (Vars::$USER_RIGHTS && !$this->user['level']) : ?>
             <li><?= lng('awaiting_registration') ?></li>
