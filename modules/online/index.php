@@ -265,7 +265,7 @@ if ($total) {
             $arg['header'] .= Functions::displayDate($res['last_visit']) . ')</span>';
         } else {
             $arg['header'] .= $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']);
-            $arg['header'] .= ')</span><br />' . Functions::getImage('info.png', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
+            $arg['header'] .= ')</span><br />' . Functions::getIcon('info.png', '', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
         }
         echo Functions::displayUser($res, $arg);
         echo '</div>';

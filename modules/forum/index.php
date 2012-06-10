@@ -531,7 +531,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     if ($res['sex'])
                         echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['join_date'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
                     else
-                        echo Functions::getImage('delete.png', '', 'align="middle"') . '&#160;';
+                        echo Functions::getIcon('delete.png', '', '', 'align="middle"') . '&#160;';
                     // Ник юзера и ссылка на его анкету
                     if (Vars::$USER_ID && Vars::$USER_ID != $res['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';

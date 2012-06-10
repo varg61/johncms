@@ -36,5 +36,5 @@
     </div>
 </div>
 <div class="phdr">
-    <?= Functions::getImage('exit.png', '', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/exit"><?= lng('exit') ?></a>
+    <?= Functions::getIcon('exit.png', '', '', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/exit"><?= lng('exit') ?></a>
 </div>

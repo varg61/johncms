@@ -125,7 +125,7 @@ if (Vars::$ID) {
             }
             $arg = array(
                 'stshide' => 1,
-                'header' => ('<br />' . Functions::getImage('info.png', '', 'align="middle"') . '&#160;' . $place)
+                'header' => ('<br />' . Functions::getIcon('info.png', '', '', 'align="middle"') . '&#160;' . $place)
             );
             echo Functions::displayUser($res, $arg);
             echo '</div>';

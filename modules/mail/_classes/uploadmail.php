@@ -476,11 +476,11 @@ class UploadMail
             case '7z':
             case 'tar':
             case 'gz':
-                return 'filetype_6.png';
+                return 'filetype-6.png';
 
             case 'mp3':
             case 'amr':
-                return 'filetype_8.png';
+                return 'filetype-8.png';
 
             case 'txt':
             case 'pdf':
@@ -488,37 +488,37 @@ class UploadMail
             case 'rtf':
             case 'djvu':
             case 'xls':
-                return 'filetype_4.png';
+                return 'filetype-4.png';
 
             case 'jar':
 			case 'apk':
             case 'jad':
-                return 'filetype_2.png';
+                return 'filetype-2.png';
 
             case 'jpg':
             case 'jpeg':
             case 'png':
             case 'gif':
             case 'bmp':
-                return 'filetype_5.png';
+                return 'filetype-5.png';
 
             case 'sis':
             case 'sisx':
-                return 'filetype_3.png';
+                return 'filetype-3.png';
 
             case '3gp':
             case 'avi':
             case 'flv':
             case 'mpeg':
             case 'mp4':
-                return 'filetype_7.png';
+                return 'filetype-7.png';
 
             case 'exe':
             case 'msi':
-                return 'filetype_1.png';
+                return 'filetype-1.png';
 
             default:
-                return 'filetype_9.png';
+                return 'filetype-9.png';
         }
     }
 }

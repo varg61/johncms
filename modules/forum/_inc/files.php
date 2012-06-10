@@ -117,7 +117,7 @@ if ($do || isset($_GET['new'])) {
                 $file .= '<img src="' . Vars::$HOME_URL . '/assets/misc/forum_thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . lng('click_to_view') . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
-                $file = Functions::getImage(($res['del'] ? 'delete.png' : 'filetype_' . $res['filetype'] . '.png'), '', 'align="middle"') . '&#160;';
+                $file = Functions::getIcon(($res['del'] ? 'delete.png' : 'filetype-' . $res['filetype'] . '.png'), '', '', 'align="middle"') . '&#160;';
             }
             $file .= '<a href="' . Vars::$URI . '?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
             $file .= '<small><span class="gray">' . lng('size') . ': ' . $fls . ' kb.<br />' . lng('downloaded') . ': ' . $res['dlcount'] . ' ' . lng('time') . '</span></small>';
@@ -157,7 +157,7 @@ if ($do || isset($_GET['new'])) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . (Vars::$USER_RIGHTS >= 7
                                                   ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0) {
-            $link[] = Functions::getImage('filetype_' . $i . '.png') . '&#160;<a href="' . Vars::$URI . '?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
+            $link[] = Functions::getIcon('filetype-' . $i . '.png') . '&#160;<a href="' . Vars::$URI . '?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
             $total = $total + $count;
         }
     }
