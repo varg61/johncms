@@ -5,7 +5,7 @@
     <div class="formblock">
         <label><?= lng('albums') ?></label>
         <ul style="list-style: none; padding-left: 0">
-            <li><?= Functions::getIcon('images.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=users"><?= lng('album_list') ?></a> (<?= $this->count ?>)</li>
+            <li><?= Functions::getIcon('photo-album.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=users"><?= lng('album_list') ?></a> (<?= $this->count ?>)</li>
             <li><?= Functions::getIcon('image-plus.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=new"><?= lng('new_photo') ?></a> (<?= $this->new ?>)</li>
             <li><?= Functions::getIcon('comments-add.png') ?>&#160;<a href="<?= Vars::$URI ?>/new?act=last_comm"><?= lng('new_comments') ?></a></li>
         </ul>

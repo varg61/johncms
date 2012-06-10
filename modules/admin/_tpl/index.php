@@ -2,7 +2,7 @@
     <b><?= lng('admin_panel') ?></b>
 </div>
 <div class="user" style="padding-top: 8px; padding-bottom: 9px">
-    <label><?= Functions::getIcon('users.png') ?>&#160;<?= lng('users') ?></label>
+    <label><?= lng('users') ?></label>
     <ul>
         <?php if (Vars::$USER_RIGHTS >= 7 && $this->regTotal) : ?>
         <li><span class="red"><a href="<?= Vars::$MODULE_URI ?>"><?= lng('users_reg') ?></a>&#160;(<?= $this->regTotal ?>)</span></li>
@@ -14,7 +14,7 @@
     </ul>
 </div>
 <div class="gmenu" style="padding-top: 8px; padding-bottom: 9px">
-    <label><?= Functions::getImage('modules.png', '', 'class="left"') ?>&#160;<?= lng('modules') ?></label>
+    <label><?= lng('modules') ?></label>
     <ul>
         <li><a href="<?= Vars::$HOME_URL ?>/forum/admin"><?= lng('forum') ?></a></li>
         <li><a href="<?= Vars::$HOME_URL ?>/download/admin"><?= lng('downloads') ?></a></li>
@@ -26,7 +26,7 @@
 </div>
 <?php if (Vars::$USER_RIGHTS >= 7) : ?>
 <div class="menu" style="padding-top: 8px; padding-bottom: 9px">
-    <label><?= Functions::getImage('settings.png', '', 'class="left"') ?>&#160;<?= lng('system') ?></label>
+    <label><?= lng('system') ?></label>
     <ul>
         <li><a href="<?= Vars::$URI ?>/settings"><?= lng('system_settings') ?></a></li>
         <li><a href="<?= Vars::$URI ?>/languages"><?= lng('language_settings') ?></a></li>
@@ -34,7 +34,7 @@
     </ul>
 </div>
 <div class="rmenu" style="padding-top: 8px; padding-bottom: 9px">
-    <label><?= Functions::getImage('blocked.png', '', 'class="left"') ?>&#160;<?= lng('security') ?></label>
+    <label><?= lng('security') ?></label>
     <ul>
         <li><a href="<?= Vars::$URI ?>/acl"><?= lng('acl') ?></a></li>
         <?php if (Vars::$USER_RIGHTS == 9) : ?>

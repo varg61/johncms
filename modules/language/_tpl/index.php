@@ -3,20 +3,22 @@
 </div>
 <div class="menu">
     <form action="<?= $this->referer ?>" method="post">
-        <p>
-        <h3><?= lng('language_select') ?></h3>
-        <?php foreach (Vars::$LNG_LIST as $key => $val) : ?>
-        <div>
-            <input type="radio" value="<?= $key ?>" name="setlng" <?= ($key == Vars::$LNG_ISO ? 'checked="checked"' : '') ?>/>
-            <?= Functions::getImage('flag_' . $key . '.gif') ?>&#160;
-            <?= $val ?>
-            <?= ($key == Vars::$SYSTEM_SET['lng'] ? ' <small class="red">[' . lng('default') . ']</small>' : '') ?>
+        <div class="formblock">
+            <label><?= lng('language_select') ?></label>
+            <ul style="list-style: none; padding-left: 0">
+                <?php foreach (Vars::$LNG_LIST as $key => $val): ?>
+                <li>
+                    <input type="radio" value="<?= $key ?>" name="setlng" <?= ($key == Vars::$LNG_ISO ? 'checked="checked"' : '') ?>/>
+                    <?= Functions::getIcon('flag_' . $key . '.gif', 11) ?>&#160;
+                    <?= $val ?>
+                    <?= ($key == Vars::$SYSTEM_SET['lng'] ? ' <small class="red">[' . lng('default') . ']</small>' : '') ?>
+                </li>
+                <?php endforeach ?>
+            </ul>
         </div>
-        <?php endforeach ?>
-        </p>
-        <p>
+        <div class="formblock">
             <input type="submit" name="submit" value="<?= lng('apply') ?>"/>
-        </p>
+        </div>
     </form>
 </div>
 <div class="phdr">

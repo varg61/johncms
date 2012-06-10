@@ -38,6 +38,13 @@
             <li><span class="gray"><?= lng('site') ?>:</span> <?= Validate::filterString($this->user['siteurl'], 0, 1) ?></li>
         </ul>
     </div>
+    <div class="formblock">
+        <label><?= lng('activity') ?></label><br/>
+        <ul>
+            <li><span class="gray"><?= lng('forum') ?>:</span> <a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_forum'] ?></a></li>
+            <li><span class="gray"><?= lng('comments') ?>:</span> <a href="<?= Vars::$URI ?>?act=activity&amp;mod=comments&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_comments'] ?></a></li>
+        </ul>
+    </div>
 </div>
 <?php
 $num = array(50, 100, 500, 1000, 5000);
@@ -48,14 +55,7 @@ $query = array(
 ?>
 <div class="menu">
     <div class="formblock">
-        <label><?= Functions::getImage('user_edit.png', '', 'class="left"') . '&#160;' . lng('activity') ?></label><br/>
-        <ul>
-            <li><span class="gray"><?= lng('forum') ?>:</span> <a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_forum'] ?></a></li>
-            <li><span class="gray"><?= lng('comments') ?>:</span> <a href="<?= Vars::$URI ?>?act=activity&amp;mod=comments&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_comments'] ?></a></li>
-        </ul>
-    </div>
-    <div class="formblock">
-        <label><?= Functions::getImage('award.png', '', 'class="left"') . '&#160;' . lng('achievements') ?></label><br/>
+        <label><?= lng('achievements') ?></label><br/>
         <table border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <?php foreach ($num as $val) : ?>
@@ -78,9 +78,6 @@ $query = array(
         </table>
     </div>
 </div>
-
-
-
 <div class="phdr">
     <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
 </div>
