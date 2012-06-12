@@ -148,7 +148,6 @@ switch ($type1['type']) {
                 $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
             $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
             echo '<div class="phdr"><b>' . lng('topic') . ':</b> ' . $type1['text'] . '</div>';
-            //TODO: Разобраться с $datauser
             if ($msg && !isset($_POST['submit']))
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                             'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
@@ -269,7 +268,6 @@ switch ($type1['type']) {
                 WHERE `id` = '$th'
             ");
             // Обновляем статистику юзера
-            //TODO: Разобраться со счетчиком!
             mysql_query("UPDATE `users` SET
                 `count_forum`='" . ++Vars::$USER_DATA['count_forum'] . "',
                 `lastpost` = '" . time() . "'
@@ -300,7 +298,6 @@ switch ($type1['type']) {
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
             $qt = Validate::filterString($qt, 0, 2);
-            //TODO: Разобраться с $datauser
             if (!empty($_POST['msg']) && !isset($_POST['submit']))
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                             'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',

@@ -234,7 +234,6 @@ class System extends Vars
                         $this->_userIpHistory();
                     }
 
-                    //TODO: Разобраться с доп. данными, типа кармы
                     // Фиксация данных
                     mysql_query("UPDATE `users` SET " . implode(', ', $sql_update) . " WHERE `id` = " . parent::$USER_ID)
                         or exit(mysql_error());

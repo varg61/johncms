@@ -126,7 +126,6 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             -----------------------------------------------------------------
             */
             //TODO: Добавить вывод даты рожденья
-            //TODO: Добавить обработку при выводе (XSS)!!!
             $tpl->contents = $tpl->includeTpl('info');
             break;
 
