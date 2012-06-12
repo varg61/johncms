@@ -331,10 +331,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` >= '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID), 0);
                         // Значки
                         $icons = array(
-                            ($np ? (!$res['vip'] ? Functions::getImage('forum_normal.png') : '') : Functions::getImage('forum_new.png')),
-                            ($res['vip'] ? Functions::getImage('forum_pin.png') : ''),
+                            ($np ? (!$res['vip'] ? Functions::getIcon('forum_normal.png') : '') : Functions::getIcon('forum_new.png')),
+                            ($res['vip'] ? Functions::getIcon('forum_pin.png') : ''),
                             ($res['realid'] ? Functions::getIcon('chart.png') : ''),
-                            ($res['edit'] ? Functions::getImage('forum_closed.png') : '')
+                            ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
                         );
                         echo Functions::displayMenu($icons, '&#160;', '&#160;');
                         echo '<a href="' . Vars::$URI . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';

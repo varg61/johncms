@@ -167,7 +167,7 @@ if (isset($_POST['submit'])) {
     $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
     echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('new_topic') . '</div>';
     if ($msg && $th && !isset($_POST['submit']))
-        echo '<div class="list1">' . Functions::getImage('forum_normal.png') . '&#160;<span style="font-weight: bold">' . $th . '</span></div>' .
+        echo '<div class="list1">' . Functions::getIcon('forum_normal.png') . '&#160;<span style="font-weight: bold">' . $th . '</span></div>' .
             '<div class="list2">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                    'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
                                                                                    'body'   => $msg_pre)) . '</div>';

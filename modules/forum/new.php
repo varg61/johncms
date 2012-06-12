@@ -122,11 +122,11 @@ if (Vars::$USER_ID) {
                     $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
                     $nick = mysql_fetch_array($colmes);
                     if ($res['edit']) {
-                        echo Functions::getImage('forum_closed.png');
+                        echo Functions::getIcon('forum_closed.png');
                     } elseif ($res['close']) {
-                        echo Functions::getImage('forum_deleted.png');
+                        echo Functions::getIcon('forum_deleted.png');
                     } else {
-                        echo Functions::getImage('forum_new.png');
+                        echo Functions::getIcon('forum_new.png');
                     }
                     if ($res['realid'] == 1)
                         echo '&#160;' . Functions::getIcon('chart.png');
@@ -192,10 +192,10 @@ if (Vars::$USER_ID) {
                     $nick = mysql_fetch_assoc($colmes);
                     // Значки
                     $icons = array(
-                        (isset($np) ? (!$res['vip'] ? Functions::getImage('forum_normal.png') : '') : Functions::getImage('forum_new.png')),
-                        ($res['vip'] ? Functions::getImage('forum_pin.png') : ''),
+                        (isset($np) ? (!$res['vip'] ? Functions::getIcon('forum_normal.png') : '') : Functions::getIcon('forum_new.png')),
+                        ($res['vip'] ? Functions::getIcon('forum_pin.png') : ''),
                         ($res['realid'] ? Functions::getIcon('chart.png') : ''),
-                        ($res['edit'] ? Functions::getImage('forum_closed.png') : '')
+                        ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
                     );
                     echo Functions::displayMenu($icons, '&#160;', '&#160;');
                     echo '<a href="' . Vars::$MODULE_URI . '?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
@@ -246,10 +246,10 @@ if (Vars::$USER_ID) {
             // Значки
             $icons = array(
                 //TODO: Разобраться с переменной!
-                ($np ? (!$res['vip'] ? Functions::getImage('forum_normal.png') : '') : Functions::getImage('forum_new.png')),
-                ($res['vip'] ? Functions::getImage('forum_pin.png') : ''),
+                ($np ? (!$res['vip'] ? Functions::getIcon('forum_normal.png') : '') : Functions::getIcon('forum_new.png')),
+                ($res['vip'] ? Functions::getIcon('forum_pin.png') : ''),
                 ($res['realid'] ? Functions::getIcon('chart.png') : ''),
-                ($res['edit'] ? Functions::getImage('forum_closed.png') : '')
+                ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
             );
             echo Functions::displayMenu($icons, '&#160;', '&#160;');
             echo '<a href="' . Vars::$MODULE_URI . '?id=' . $res['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&#160;[' . $colmes1 . ']';
