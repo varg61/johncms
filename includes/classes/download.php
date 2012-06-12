@@ -10,6 +10,21 @@
  */
 class Download extends Vars
 {
+	private static $extensions = array( 'mp3' => 8,
+										'png' => 5,
+										'jpg' => 5,
+										'gif' => 5,
+										'rar' => 5,
+										'zip' => 6,
+										'3gp' => 7,
+										'mp4' => 7,
+										'txt' => 4,
+										'jar' => 2,
+										'sis' => 1,
+										'sisx' => 1,
+										'thm' => 10,
+										'nth' => 11);
+
     /*
     -----------------------------------------------------------------
     Автоматическое создание скриншотов
@@ -123,8 +138,9 @@ class Download extends Vars
         if ($format_file == 'jar' && $set_down['icon_java']) {
             $out = Download::javaIcon($res_down['dir'] . '/' . $res_down['name'], $res_down['id']) . '&nbsp;';
         } else {
-            $out .= '<img src="' . Vars::$HOME_URL . '/images/system/' . (file_exists(ROOTPATH . 'images/system/' . $format_file . '.png') ? $format_file . '.png' : 'file.gif') . '" alt="file" />&nbsp;';
-        }
+            $icon_id = isset(self::$extensions[$format_file]) ? self::$extensions[$format_file] : 9;
+			$out .= Functions::getIcon('filetype-' . $icon_id . '.png') . '&nbsp;';
+		}
         $out .= '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res_down['id'] . '">' . Validate::filterString($res_down['rus_name']) . '</a> (' . $res_down['field'] . ')';
         if ($res_down['time'] > $old) {
             $out .= ' <span class="red">(NEW)</span>';
@@ -163,7 +179,7 @@ class Download extends Vars
         } else {
             require_once (SYSPATH . 'lib/pclzip.lib.php');
             $zip = new PclZip($file);
-            if ($zip->listContent() > 0) {
+            if ($zip->listContent() == 0) {
                 if ($manifest = $zip->extract(PCLZIP_OPT_BY_NAME, 'META-INF/MANIFEST.MF', PCLZIP_OPT_EXTRACT_AS_STRING)) {
                     $text = $manifest[0]['content'];
                     if (strpos($text, 'MIDlet-Icon: ') !== FALSE) {
@@ -205,7 +221,7 @@ class Download extends Vars
                 }
             }
             if (!$out) {
-                $out = 'images/system/jar.png';
+                $out = 'assets/icons/filetype-2.png';
                 @copy($out, 'files/download/java_icons/' . $id . '.png');
             }
         }
@@ -255,8 +271,9 @@ class Download extends Vars
         if ($array['format'] == 'jar' && $set_down['icon_java']) {
             $out .= Download::javaIcon($array['res']['dir'] . '/' . $array['res']['name'], (isset($array['more']) ? $array['res']['refid'] . '_' . $array['res']['id'] : $array['res']['id']));
         } else {
-            $out .= '<img src="' . Vars::$HOME_URL . '/images/system/' . (file_exists(ROOTPATH . 'images/system/' . $array['format'] . '.png') ? $array['format'] . '.png' : 'file.gif') . '" alt="file" />';
-        }
+            $icon_id = isset(self::$extensions[ $array['format']]) ? self::$extensions[ $array['format']] : 9;
+			$out .= Functions::getIcon('filetype-' . $icon_id . '.png') . '&nbsp;';
+		}
         $out .= '</td><td><a href="' . Vars::$URI . '?act=load_file&amp;id=' . Vars::$ID . $link . '">' . $array['res']['text'] . '</a> (' . Download::displayFileSize((isset($array['res']['size']) ? $array['res']['size'] : filesize($array['res']['dir'] . '/' . $array['res']['name']))) . ')';
         if ($array['res']['time'] > $old) {
             $out .= ' <span class="red">(NEW)</span>';

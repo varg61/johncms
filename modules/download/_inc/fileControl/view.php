@@ -30,27 +30,8 @@ if ($res_down['type'] == 3) {
     }
 }
 
-/*
------------------------------------------------------------------
-Навигация
------------------------------------------------------------------
-*/
-$tree = array();
-$dirid = $res_down['refid'];
-while ($dirid != '0' && $dirid != "") {
-    $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 1 AND `id` = '$dirid' LIMIT 1");
-    $res = mysql_fetch_assoc($req);
-    $tree[] = '<a href="' . Vars::$URI . '?id=' . $dirid . '">' . Validate::filterString($res['rus_name']) . '</a>';
-    $dirid = $res['refid'];
-}
-krsort($tree);
-$cdir = array_pop($tree);
-echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a> | ';
-foreach ($tree as $value) {
-    echo $value . ' &raquo; ';
-}
-echo '<a href="' . Vars::$URI . '?id=' . $res_down['refid'] . '">' . strip_tags($cdir) . '</a></div>';
 
+echo '<div class="phdr"><b>' . Validate::filterString($res_down['rus_name']) . '</b></div>';
 $format_file = Functions::format($res_down['name']);
 
 /*
@@ -263,6 +244,27 @@ if (mysql_num_rows($req_file_more)) {
                                           'more'   => $res_file_more['id'])) . '</div>';
     }
 }
+
+/*
+-----------------------------------------------------------------
+Навигация
+-----------------------------------------------------------------
+*/
+$tree = array();
+$dirid = $res_down['refid'];
+while ($dirid != '0' && $dirid != "") {
+    $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 1 AND `id` = '$dirid' LIMIT 1");
+    $res = mysql_fetch_assoc($req);
+    $tree[] = '<a href="' . Vars::$URI . '?id=' . $dirid . '">' . Validate::filterString($res['rus_name']) . '</a>';
+    $dirid = $res['refid'];
+}
+krsort($tree);
+$cdir = array_pop($tree);
+echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a> | ';
+foreach ($tree as $value) {
+    echo $value . ' &raquo; ';
+}
+echo '<a href="' . Vars::$URI . '?id=' . $res_down['refid'] . '">' . strip_tags($cdir) . '</a></div>';
 
 /*
 -----------------------------------------------------------------

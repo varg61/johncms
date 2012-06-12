@@ -164,15 +164,11 @@ if ($edit) {
         while ($res_file_more = mysql_fetch_assoc($req_file_more)) {
             $format = explode('.', $res_file_more['name']);
             $format_file = strtolower($format[count($format) - 1]);
-			echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') .
-             '<table  width="100%"><tr><td width="16" valign="top">';
-            if ($format_file == 'jar' && $set_down['icon_java'])
-                echo Download::javaIcon($res_down['dir'] . '/' . $res_file_more['name'], 'more_' . $res_file_more['id']);
-            else
-                echo '<img src="' . Vars::$HOME_URL . '/images/system/' . (file_exists(ROOTPATH . 'images/system/' . $format_file . '.png') ? $format_file . '.png' : 'file.gif') . '" alt="file" />';
-            echo '</td><td> ' . $res_file_more['rus_name'] .
-            ' <a href="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '&amp;edit=' . $res_file_more['id'] . '">' . lng('edit') . '</a> | ' .
-            '<span class="red"><a href="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '&amp;del=' . $res_file_more['id'] . '">' . lng('delete') . '</a></span><div class="sub">' . $res_file_more['name'] . ' (' .  Download::displayFileSize($res_file_more['size']) . '), ' . functions::displayDate($res_file_more['time']) . '</div></td></tr></table></div>';
+			echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">');
+			echo '<b>' . $res_file_more['rus_name'] . '</b>' .
+			'<div class="sub">' . $res_file_more['name'] . ' (' .  Download::displayFileSize($res_file_more['size']) . '), ' . functions::displayDate($res_file_more['time']) . '<br />' .
+			'<a href="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '&amp;edit=' . $res_file_more['id'] . '">' . lng('edit') . '</a> | ' .
+            '<span class="red"><a href="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '&amp;del=' . $res_file_more['id'] . '">' . lng('delete') . '</a></span></div></div>';
         }
         echo '<div class="phdr">' . lng('total') . ': ' . $total_file . '</div>';
     }
