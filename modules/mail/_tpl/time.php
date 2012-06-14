@@ -1,14 +1,19 @@
-<div class="phdr"><strong><?php echo $this->phdr ?></strong></div>
+<div class="phdr"><strong><?= $this->phdr ?></strong></div>
 <div class="gmenu">
-<form name="form" action="<?php echo $this->urlSelect ?>" method="post"><div>
-<p><h3><?php echo lng('clear_param') ?></h3>
-<input type="radio" name="cl" value="0" checked="checked" /><?php echo lng('clear_month') ?><br />
-<input type="radio" name="cl" value="1" /><?php echo lng('clear_week') ?><br />
-<input type="radio" name="cl" value="2" /><?php echo lng('clear_all') ?></p>
-<input type="hidden" name="token" value="<?= $this->token ?>"/>
-<input type="submit" name="submit" value="<?php echo $this->submit ?>"/>
-</div></form></div>
+    <form name="form" action="<?= $this->urlSelect ?>" method="post">
+        <div>
+            <p>
+
+            <h3><?= lng('clear_param') ?></h3>
+            <input type="radio" name="cl" value="0" checked="checked"/><?= lng('clear_month') ?><br/>
+            <input type="radio" name="cl" value="1"/><?= lng('clear_week') ?><br/>
+            <input type="radio" name="cl" value="2"/><?= lng('clear_all') ?></p>
+            <input type="hidden" name="token" value="<?= $this->token ?>"/>
+            <input type="submit" name="submit" value="<?= $this->submit ?>"/>
+        </div>
+    </form>
+</div>
 <p>
-<a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'mail' ) ?></a><br />
-<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?php echo lng( 'contacts' ) ?></a>
+    <a href="<?= Vars::$MODULE_URI ?>"><?= lng('mail') ?></a><br/>
+    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>
 </p>
