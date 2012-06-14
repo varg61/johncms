@@ -87,7 +87,8 @@ switch ($reg_step) {
                     `join_date` = " . time() . ",
                     `last_visit` = " . time() . ",
                     `about` = '',
-                    `notifications` = ''
+                    `notifications` = '',
+                    `relationship` = ''
                 ") or exit(trigger_error(mysql_error(), E_USER_ERROR));
                 $new_user_id = mysql_insert_id();
 

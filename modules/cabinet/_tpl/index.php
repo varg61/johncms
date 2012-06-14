@@ -5,8 +5,6 @@
     <div class="formblock">
         <ul style="list-style: none; padding-left: 0">
             <li><?= Functions::getIcon('profile.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile"><?= lng('my_profile') ?></a></li>
-            <li><?= Functions::getIcon('chart.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=stat"><?= lng('statistics') ?></a></li>
-            <br style="line-height: 8px"/>
             <li><?= Functions::getIcon('photo-album.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</li>
             <li><?= Functions::getIcon('comments.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/profile?act=guestbook"><?= lng('guestbook') ?></a>&#160;(<?= Vars::$USER_DATA['comm_count'] ?>)</li>
             <?php if (Vars::$USER_RIGHTS) : ?>

@@ -1,11 +1,9 @@
 <div class="phdr">
-    <strong>
-        <?= lng('friends')?>
-    </strong>
+    <strong><?= lng('friendship')?></strong>
 </div>
 <div class="topmenu">
-    <a href="<?= Vars::$MODULE_URI ?>?act=demands"><?= lng('my_demand') ?></a>
-    <?= ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?> |
+    <strong><?= lng('friends_list') ?></strong> |
+    <a href="<?= Vars::$MODULE_URI ?>?act=demands"><?= lng('my_demand') ?></a><?= ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?> |
     <a href="<?= Vars::$MODULE_URI ?>?act=offers"><?= lng('my_offers') ?></a>
     <?= ($this->offers ? '(<span class="red">' . $this->offers . '</span>)' : '') ?><?= ($this->total ? ' | <a href="' . Vars::$MODULE_URI . '?act=online">' . lng('online') . '</a>' : '')?>
 </div>
