@@ -1,45 +1,45 @@
-<div class="phdr"><strong><?php echo $this->tit ?></strong></div>
-<?php if( $this->total ): ?>
-<form action="<?php echo Vars::$MODULE_URI ?>?act=<?php echo $this->pages_type ?>" method="post"><div>
-<?php foreach($this->query as $row): ?>
-	<div class="<?php echo $row['list'] ?>">
-	<input type="checkbox" name="delch[]" value="<?php echo $row['id'] ?>"/> <a href="<?php echo Vars::$MODULE_URI ?>?act=read&amp;id=<?php echo $row['id'] ?>"><?php echo $this->pref_in ?>: <?php echo $row['nickname'] ?></a> <?php echo $row['online'] ?> (<?php echo $row['time'] ?>)
-	<?php if( $row['file']): ?>
-     <div class="func">
-		+ Вложение
-     </div>
-	<? endif ?>
-	</div>
-<?php endforeach ?>
-
-<div class="gmenu">
-	<?php echo lng( 'noted_mess' ) ?>:<br />
-	<input type="hidden" name="token" value="<?= $this->token ?>"/>
-	<input type="submit" name="delete_mess" value="<?php echo lng( 'delete' ) ?>"/><br />
-	</div>
-</div>
+<div class="phdr"><strong><?= $this->tit ?></strong></div>
+<?php if ($this->total): ?>
+<form action="<?= Vars::$MODULE_URI ?>?act=<?= $this->pages_type ?>" method="post">
+    <div>
+        <?php foreach ($this->query as $row): ?>
+        <div class="<?= $row['list'] ?>">
+            <input type="checkbox" name="delch[]" value="<?= $row['id'] ?>"/> <a href="<?= Vars::$MODULE_URI ?>?act=read&amp;id=<?= $row['id'] ?>"><?= $this->pref_in ?>: <?= $row['nickname'] ?></a> <?= $row['online'] ?> (<?= $row['time'] ?>
+            )
+            <?php if ($row['file']): ?>
+            <div class="func">
+                + Вложение
+            </div>
+            <? endif ?>
+        </div>
+        <?php endforeach ?>
+        <div class="gmenu">
+            <?= lng('noted_mess') ?>:<br/>
+            <input type="hidden" name="token" value="<?= $this->token ?>"/>
+            <input type="submit" name="delete_mess" value="<?= lng('delete') ?>"/><br/>
+        </div>
+    </div>
 </form>
-
-<div class="phdr"><?php echo lng( 'total' ) ?>: <?php echo $this->total ?></div>
-<?php if($this->total > Vars::$USER_SET['page_size']): ?>
-   <div class="topmenu"><?php echo $this->display_pagination ?></div>
-   <form action="" method="post"><p><input type="text" name="page" size="2" value="<?php echo Vars::$PAGE ?>" style="font-size: x-small;"/>
-   <input type="submit" value="<?php echo lng( 'to_page' ) ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
-<?php endif ?>
-	<p>
-		<div class="func">
-			<?php if($this->pages_type == 'inmess'): ?>
-				<a href="<?php echo Vars::$MODULE_URI ?>?act=inmess&amp;mod=delete_read"><?php echo lng('delete_read') ?></a><br />
-				<a href="<?php echo Vars::$MODULE_URI ?>?act=inmess&amp;mod=cleaning"><?php echo lng('cleaning') ?></a><br />
-			<?php else: ?>
-				<a href="<?php echo Vars::$MODULE_URI ?>?act=outmess&amp;mod=cleaning"><?php echo lng('cleaning') ?></a><br />
-			<?php endif ?>
-		</div>
-	</p>
+<div class="phdr"><?= lng('total') ?>: <?= $this->total ?></div>
+<?php if ($this->total > Vars::$USER_SET['page_size']): ?>
+    <div class="topmenu"><?= $this->display_pagination ?></div>
+    <form action="" method="post"><p><input type="text" name="page" size="2" value="<?= Vars::$PAGE ?>" style="font-size: x-small;"/>
+        <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
+    <?php endif ?>
+<p>
+<div class="func">
+    <?php if ($this->pages_type == 'inmess'): ?>
+    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=delete_read"><?= lng('delete_read') ?></a><br/>
+    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=cleaning"><?= lng('cleaning') ?></a><br/>
+    <?php else: ?>
+    <a href="<?= Vars::$MODULE_URI ?>?act=outmess&amp;mod=cleaning"><?= lng('cleaning') ?></a><br/>
+    <?php endif ?>
+</div>
+</p>
 <?php else: ?>
-<div class="rmenu"><?php echo $this->mess_err ?></div>
+<div class="rmenu"><?= $this->mess_err ?></div>
 <?php endif ?>
 <p>
-<a href="<?php echo Vars::$MODULE_URI ?>"><?php echo lng( 'mail' ) ?></a><br />
-<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?php echo lng( 'contacts' ) ?></a>
+    <a href="<?= Vars::$MODULE_URI ?>"><?= lng('mail') ?></a><br/>
+    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>
 </p>

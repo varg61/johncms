@@ -1,21 +1,21 @@
-<p><a href="<?php echo Vars::$MODULE_URI ?>?act=add"><?php echo lng( 'write_message' ) ?></a></p>
-<div class="phdr"><strong><?php echo lng( 'mail' ) ?></strong></div>
-<div class="topmenu"><a href="<?php echo Vars::$HOME_URL ?>/contacts"><?php echo lng( 'contacts' ) ?></a></div>
+<p><a href="<?= Vars::$MODULE_URI ?>?act=add"><?= lng('write_message') ?></a></p>
+<div class="phdr"><strong><?= lng('mail') ?></strong></div>
+<div class="topmenu"><a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a></div>
 <div class="list1">
-<p>
-<?php echo Functions::getImage('mail-inbox.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=inmess"><?php echo lng( 'inmess' ) ?></a>&#160;(<?php echo $this->inmess ?>) <span class="red"><?php echo $this->newmess ?></span><br />
-<?php echo Functions::getImage('mail-outbox.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=outmess"><?php echo lng( 'outmess' ) ?></a>&#160;(<?php echo $this->outmess ?>)<br />
-</p>
+    <p>
+        <?= Functions::getImage('mail-inbox.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=inmess"><?= lng('inmess') ?></a>&#160;(<?= $this->inmess ?>) <span class="red"><?= $this->newmess ?></span><br/>
+        <?= Functions::getImage('mail-outbox.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=outmess"><?= lng('outmess') ?></a>&#160;(<?= $this->outmess ?>)<br/>
+    </p>
 </div>
-<div class="gmenu"><?php echo lng( 'can_write' ) ?>:&#160;<a href="<?php Vars::$MODULE_URI ?>?act=settings"><?php echo $this->receive_mail ?></a></div>
+<div class="gmenu"><?= lng('can_write') ?>:&#160;<a href="<?php Vars::$MODULE_URI ?>?act=settings"><?= $this->receive_mail ?></a></div>
 <div class="list2">
-<p>
-<?php echo Functions::getImage('mail-elected.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=elected"><?php echo lng( 'elected' ) ?></a>&#160;(<?php echo $this->elected ?>)<br />
-<?php echo Functions::getImage('mail-draft.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=draft"><?php echo lng( 'draft' ) ?></a>&#160;(<?php echo $this->draft ?>)<br />
-<?php echo Functions::getImage('mail-files.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=files"><?php echo lng( 'files' ) ?></a>&#160;(<?php echo $this->files ?>)<br />
-<?php echo Functions::getImage('mail-trash.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=basket"><?php echo lng( 'basket' ) ?></a>&#160;(<?php echo $this->delete ?>)<br />
-<?php if(Vars::$USER_RIGHTS == 9): ?>
-<?php echo Functions::getImage('mail-sending-out.png') ?>&#160;<a href="<?php echo Vars::$MODULE_URI ?>?act=sending_out"><?php echo lng( 'sending_out' ) ?></a><br />
-<?php endif ?>
-</p>
+    <p>
+        <?= Functions::getImage('mail-elected.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=elected"><?= lng('elected') ?></a>&#160;(<?= $this->elected ?>)<br/>
+        <?= Functions::getImage('mail-draft.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=draft"><?= lng('draft') ?></a>&#160;(<?= $this->draft ?>)<br/>
+        <?= Functions::getImage('mail-files.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=files"><?= lng('files') ?></a>&#160;(<?= $this->files ?>)<br/>
+        <?= Functions::getImage('mail-trash.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=basket"><?= lng('basket') ?></a>&#160;(<?= $this->delete ?>)<br/>
+        <?php if (Vars::$USER_RIGHTS == 9): ?>
+        <?= Functions::getImage('mail-sending-out.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=sending_out"><?= lng('sending_out') ?></a><br/>
+        <?php endif ?>
+    </p>
 </div>

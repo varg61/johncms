@@ -88,7 +88,7 @@
         <ul style="list-style: none; padding-left: 0">
             <li><?= Functions::getIcon('photo-album.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</li>
             <li><?= Functions::getIcon('comments.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><?= lng('guestbook') ?></a>&#160;(<?= $this->user['comm_count'] ?>)</li>
-            <li><?= Functions::getIcon('friend.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?id=<?php echo $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)</li>
+            <li><?= Functions::getIcon('friend.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends?id=<?= $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?= Functions::friendsCount($this->user['id']) ?>)</li>
         </ul>
     </div>
 </div>
@@ -102,7 +102,7 @@
             <li><?= Functions::getIcon('friend-cancel.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends?act=no&amp;id=<?= $this->user['id'] ?>"><?= lng('friends_demands_no') ?></a></li>
             <?php endif ?>
             <?php if (empty($this->banned) && $this->friend == 3): ?>
-            <li><?= Functions::getIcon('friend-cancel.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends?act=cancel&amp;id=<?php echo $this->user['id'] ?>"><?php echo lng('friends_demands_cancel') ?></a></li>
+            <li><?= Functions::getIcon('friend-cancel.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends?act=cancel&amp;id=<?= $this->user['id'] ?>"><?= lng('friends_demands_cancel') ?></a></li>
             <?php endif ?>
             <?php if (empty($this->banned) && $this->friend == 0): ?>
             <li><?= Functions::getIcon('friend-add.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends?act=add&amp;id=<?= $this->user['id'] ?>"><?= lng('friends_add') ?></a></li>

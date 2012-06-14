@@ -20,9 +20,9 @@
 <div class="menu">
     <div class="formblock">
         <ul style="list-style: none; padding-left: 0">
-            <li><?php echo Functions::getIcon('mail.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/mail"><?php echo lng('mail') ?></a>&#160;(<?php echo Functions::mailCount() ?>)</li>
-            <li><?= Functions::getIcon('cards-address.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>&#160;(<?php echo Functions::contactsCount() ?>)</li>
-            <li><?= Functions::getIcon('friend.png') ?>&#160;<a href="<?php echo Vars::$HOME_URL ?>/friends"><?= lng('friends') ?></a>&#160;(<?php echo Functions::friendsCount($this->user['id']) ?>)</li>
+            <li><?= Functions::getIcon('mail.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/mail"><?= lng('mail') ?></a>&#160;(<?= Functions::mailCount() ?>)</li>
+            <li><?= Functions::getIcon('cards-address.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>&#160;(<?= Functions::contactsCount() ?>)</li>
+            <li><?= Functions::getIcon('friend.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends"><?= lng('friends') ?></a>&#160;(<?= Functions::friendsCount($this->user['id']) ?>)</li>
         </ul>
     </div>
 </div>
