@@ -19,6 +19,7 @@
         <li><a href="<?= Vars::$HOME_URL ?>/forum/admin"><?= lng('forum') ?></a></li>
         <li><a href="<?= Vars::$HOME_URL ?>/download/admin"><?= lng('downloads') ?></a></li>
         <li><a href="<?= Vars::$HOME_URL ?>/news/admin"><?= lng('news') ?></a></li>
+        <br style="line-height: 8px"/>
         <li><a href="<?= Vars::$URI ?>/counters"><?= lng('counters') ?></a></li>
         <li><a href="<?= Vars::$URI ?>/sitemap"><?= lng('sitemap') ?></a></li>
         <li><a href="<?= Vars::$URI ?>/links"><?= lng('advertisement') ?></a></li>
