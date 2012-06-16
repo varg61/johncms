@@ -14,7 +14,9 @@ if (Vars::$USER_RIGHTS < 7) {
     echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
-echo'<div class="phdr"><a href="' . Vars::$HOME_URL . '/admin"><b>' . lng('admin_panel') . '</b></a> | ' . lng('news_on_frontpage') . '</div>';
+
+$tpl = Template::getInstance();
+$tpl->settings = unserialize(Vars::$SYSTEM_SET['news']);
 
 /*
 -----------------------------------------------------------------
@@ -23,22 +25,23 @@ echo'<div class="phdr"><a href="' . Vars::$HOME_URL . '/admin"><b>' . lng('admin
 */
 if (!isset(Vars::$SYSTEM_SET['news']) || isset($_GET['reset'])) {
     // Задаем настройки по умолчанию
-    $settings = array(
+    $tpl->settings = array(
         'view'     => '1',
         'size'     => '200',
         'quantity' => '3',
         'days'     => '7',
         'breaks'   => '1',
-        'smileys'  => '0',
+        'smileys'  => '1',
         'tags'     => '1',
         'kom'      => '1'
     );
-    @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'news'");
     mysql_query("INSERT INTO `cms_settings` SET
         `key` = 'news',
-        `val` = '" . mysql_real_escape_string(serialize($settings)) . "'
+        `val` = '" . mysql_real_escape_string(serialize($tpl->settings)) . "'
+        ON DUPLICATE KEY UPDATE
+        `val` = '" . mysql_real_escape_string(serialize($tpl->settings)) . "'
     ");
-    echo '<div class="rmenu"><p>' . lng('settings_default') . '</p></div>';
+    $tpl->default = 1;
 } elseif (isset($_POST['submit'])) {
     // Принимаем настройки из формы
     $settings['view'] = isset($_POST['view']) && $_POST['view'] >= 0 && $_POST['view'] < 4 ? intval($_POST['view']) : 1;
@@ -53,35 +56,11 @@ if (!isset(Vars::$SYSTEM_SET['news']) || isset($_GET['reset'])) {
         `val` = '" . mysql_real_escape_string(serialize($settings)) . "'
         WHERE `key` = 'news'
     ");
-    echo '<div class="gmenu"><p>' . lng('settings_saved') . '</p></div>';
+    $tpl->settings = $settings;
+    $tpl->saved = 1;
 } else {
     // Получаем сохраненные настройки
     $settings = unserialize(Vars::$SYSTEM_SET['news']);
 }
 
-/*
------------------------------------------------------------------
-Форма ввода настроек
------------------------------------------------------------------
-*/
-echo'<form action="' . Vars::$URI . '" method="post"><div class="menu"><p>' .
-    '<h3>' . lng('apperance') . '</h3>' .
-    '<input type="radio" value="1" name="view" ' . ($settings['view'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . lng('heading_and_text') . '<br />' .
-    '<input type="radio" value="2" name="view" ' . ($settings['view'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . lng('heading') . '<br />' .
-    '<input type="radio" value="3" name="view" ' . ($settings['view'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . lng('text') . '<br />' .
-    '<input type="radio" value="0" name="view" ' . (!$settings['view'] ? 'checked="checked"' : '') . '/>&#160;<b>' . lng('dont_display') . '</b></p>' .
-    '<p><input name="breaks" type="checkbox" value="1" ' . ($settings['breaks'] ? 'checked="checked"' : '') . ' />&#160;' . lng('line_foldings') . '<br />' .
-    '<input name="smileys" type="checkbox" value="1" ' . ($settings['smileys'] ? 'checked="checked"' : '') . ' />&#160;' . lng('smileys') . '<br />' .
-    '<input name="tags" type="checkbox" value="1" ' . ($settings['tags'] ? 'checked="checked"' : '') . ' />&#160;' . lng('bbcode') . '<br />' .
-    '<input name="kom" type="checkbox" value="1" ' . ($settings['kom'] ? 'checked="checked"' : '') . ' />&#160;' . lng('comments') . '</p>' .
-    '<p><h3>' . lng('text_size') . '</h3>&#160;' .
-    '<input type="text" size="3" maxlength="3" name="size" value="' . $settings['size'] . '" />&#160;(50 - 500)</p>' .
-    '<p><h3>' . lng('news_count') . '</h3>&#160;' .
-    '<input type="text" size="3" maxlength="2" name="quantity" value="' . $settings['quantity'] . '" />&#160;(1 - 15)</p>' .
-    '<p><h3>' . lng('news_howmanydays_display') . '</h3><input type="text" size="3" maxlength="2" name="days" value="' . $settings['days'] . '" />&#160;(0 - 15)<br />' .
-    '<small>0 - ' . lng('without_limit') . '</small></p>' .
-    '<p><input type="submit" value="' . lng('save') . '" name="submit" /></p></div>' .
-    '<div class="phdr"><a href="' . Vars::$URI . '?reset">' . lng('reset_settings') . '</a>' .
-    '</div></form>' .
-    '<p><a href="' . Vars::$HOME_URL . '/admin">' . lng('admin_panel') . '</a><br />' .
-    '<a href="' . Vars::$MODULE_URI . '">' . lng('to_news') . '</a></p>';
+$tpl->contents = $tpl->includeTpl('admin');
