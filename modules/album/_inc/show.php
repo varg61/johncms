@@ -97,12 +97,12 @@ if ($total) {
             */
             if ($user['id'] == Vars::$USER_ID && isset($_GET['profile'])) {
                 copy(
-                    '../files/users/album/' . $user['id'] . '/' . $res['tmb_name'],
-                    '../files/users/photo/' . Vars::$USER_ID . '_small.jpg'
+                    ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR . $res['tmb_name'],
+                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '_small.jpg'
                 );
                 copy(
-                    '../files/users/album/' . $user['id'] . '/' . $res['img_name'],
-                    '../files/users/photo/' . Vars::$USER_ID . '.jpg'
+                    ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR . $res['img_name'],
+                    ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '.jpg'
                 );
                 echo '<span class="green"><b>' . lng('photo_profile_ok') . '</b></span><br />';
             }

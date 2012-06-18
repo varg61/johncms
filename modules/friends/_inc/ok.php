@@ -24,9 +24,8 @@ if($fr != 2)
     if(isset($_POST['submit']) && isset($_POST['token']) && isset($_SESSION['token_status']) && $_POST['token'] == $_SESSION['token_status']) {
         $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'"), 0); 
         if($fr_out == 0) {
-            echo functions::display_error($lng_profile['not_offers_friendship']);
-			echo '<div class="bmenu"><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . $lng['back'] . '</a></div>';
-            require_once('../incfiles/end.php');
+            echo functions::displayError(lng('error_wrong_data'));
+			echo '<div class="bmenu"><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></div>';
             exit;
         }
 		

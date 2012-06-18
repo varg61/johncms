@@ -21,7 +21,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         exit;
     }
     if (isset($_POST['submit'])) {
-        $razd = isset($_POST['razd']) ? abs(intval($_POST['razd'])) : false;
+        $razd = isset($_POST['razd']) ? abs(intval($_POST['razd'])) : FALSE;
         if (!$razd) {
             echo Functions::displayError(lng('error_wrong_data'));
             exit;
@@ -49,25 +49,27 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         }
         $fr = mysql_query("select * from `forum` where id='" . $other . "';");
         $fr1 = mysql_fetch_assoc($fr);
-        echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_move') . '</div>' .
-             '<form action="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '" method="post">' .
-             '<div class="gmenu"><p>' .
-             '<h3>' . lng('category') . '</h3>' . $fr1['text'] . '</p>' .
-             '<p><h3>' . lng('section') . '</h3>' .
-             '<select name="razd">';
+        echo'<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_move') . '</div>' .
+            '<form action="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '" method="post">' .
+            '<div class="gmenu"><p>' .
+            '<h3>' . lng('category') . '</h3>' . $fr1['text'] . '</p>';
+
         $raz = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$other' AND `type` = 'r' AND `id` != '" . $ms['refid'] . "' ORDER BY `realid` ASC");
-        while ($raz1 = mysql_fetch_assoc($raz)) {
-            echo '<option value="' . $raz1['id'] . '">' . $raz1['text'] . '</option>';
+        if (mysql_num_rows($raz)) {
+            echo'<p><h3>' . lng('section') . '</h3>' .
+                '<select name="razd">';
+            while ($raz1 = mysql_fetch_assoc($raz)) {
+                echo '<option value="' . $raz1['id'] . '">' . $raz1['text'] . '</option>';
+            }
+            echo'</select></p>';
         }
-        echo '</select></p>' .
-             '<p><input type="submit" name="submit" value="' . lng('move') . '"/></p>' .
-             '</div></form>' .
-             '<div class="phdr">' . lng('other_categories') . '</div>';
+        echo'<p><input type="submit" name="submit" value="' . lng('move') . '"/></p>' .
+            '</div></form>' .
+            '<div class="phdr">' . lng('other_categories') . '</div>';
         $frm = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$other' ORDER BY `realid` ASC");
-        while ($frm1 = mysql_fetch_assoc($frm)) {
+        for ($i = 0; $frm1 = mysql_fetch_assoc($frm); ++$i) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             echo '<a href="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '&amp;other=' . $frm1['id'] . '">' . $frm1['text'] . '</a></div>';
-            ++$i;
         }
         echo '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('back') . '</a></div>';
     }

@@ -297,15 +297,15 @@ switch (Vars::$MOD) {
                             // Меняем категорию для прикрепленных файлов
                             mysql_query("UPDATE `cms_forum_files` SET `cat` = '$category' WHERE `cat` = '" . $res['refid'] . "'");
                         }
-                        header('Location: index.php?act=forum&mod=cat' . ($res['type'] == 'r' ? '&id=' . $res['refid'] : ''));
+                        header('Location: ' . Vars::$URI . '?mod=cat' . ($res['type'] == 'r' ? '&id=' . $res['refid'] : ''));
                     } else {
                         // Выводим сообщение об ошибках
                         echo Functions::displayError($error);
                     }
                 } else {
                     // Форма ввода
-                    echo '<div class="phdr"><b>' . ($res['type'] == 'r' ? lng('section_edit') : lng('category_edit')) . '</b></div>' .
-                        '<form action="index.php?act=forum&amp;mod=edit&amp;id=' . Vars::$ID . '" method="post">' .
+                    echo'<div class="phdr"><b>' . ($res['type'] == 'r' ? lng('section_edit') : lng('category_edit')) . '</b></div>' .
+                        '<form action="' . Vars::$URI . '?mod=edit&amp;id=' . Vars::$ID . '" method="post">' .
                         '<div class="gmenu">' .
                         '<p><h3>' . lng('title') . '</h3>' .
                         '<input type="text" name="name" value="' . $res['text'] . '"/>' .
@@ -321,15 +321,15 @@ switch (Vars::$MOD) {
                         }
                         echo '</select></p>';
                     }
-                    echo '<p><input type="submit" value="' . lng('save') . '" name="submit" />' .
+                    echo'<p><input type="submit" value="' . lng('save') . '" name="submit" />' .
                         '</p></div></form>' .
-                        '<div class="phdr"><a href="index.php?act=forum&amp;mod=cat' . ($res['type'] == 'r' ? '&amp;id=' . $res['refid'] : '') . '">' . lng('back') . '</a></div>';
+                        '<div class="phdr"><a href="' . Vars::$URI . '?mod=cat' . ($res['type'] == 'r' ? '&amp;id=' . $res['refid'] : '') . '">' . lng('back') . '</a></div>';
                 }
             } else {
-                header('Location: index.php?act=forum&mod=cat');
+                header('Location: ' . Vars::$URI . '?mod=cat');
             }
         } else {
-            header('Location: index.php?act=forum&mod=cat');
+            header('Location: ' . Vars::$URI . '?mod=cat');
         }
         break;
 

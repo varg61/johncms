@@ -27,13 +27,6 @@
             <input name="libcomm" type="checkbox" value="1" <?= (Vars::$SYSTEM_SET['mod_lib_comm'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('comments') ?>
         </div>
         <div class="formblock">
-            <label><?= lng('gallery') ?></label><br/>
-            <input type="radio" value="2" name="gal" <?= (Vars::$SYSTEM_SET['mod_gal'] == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('access_enabled') ?><br/>
-            <input type="radio" value="1" name="gal" <?= (Vars::$SYSTEM_SET['mod_gal'] == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('access_authorised') ?><br/>
-            <input type="radio" value="0" name="gal" <?= (!Vars::$SYSTEM_SET['mod_gal'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('access_disabled') ?><br/>
-            <input name="galcomm" type="checkbox" value="1" <?= (Vars::$SYSTEM_SET['mod_gal_comm'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('comments') ?>
-        </div>
-        <div class="formblock">
             <label><?= lng('downloads') ?></label><br/>
             <input type="radio" value="2" name="down" <?= (Vars::$SYSTEM_SET['mod_down'] == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('access_enabled') ?><br/>
             <input type="radio" value="1" name="down" <?= (Vars::$SYSTEM_SET['mod_down'] == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('access_authorised') ?><br/>

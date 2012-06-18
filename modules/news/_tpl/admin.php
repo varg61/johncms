@@ -27,7 +27,7 @@
             <input name="kom" type="checkbox" value="1" <?= ($this->settings['kom'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('comments') ?>
         </div>
         <div class="formblock">
-            <label for="size"><?= lng('text_size') ?></h3></label><br/>
+            <label for="size"><?= lng('text_size') ?></label><br/>
             <input id="size" type="text" size="3" maxlength="3" name="size" value="<?= $this->settings['size'] ?>"/>&#160;(50 - 500)
         </div>
         <div class="formblock">
