@@ -11,7 +11,7 @@
 </div>
 <div class="menu">
     <div class="formblock">
-        <label><?= lng('relationship') ?></label>
+        <label><?= lng('reputation') ?></label>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <td class="rel_a_font">
@@ -68,7 +68,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                    <small>&#160;<a href="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>"><?= lng('details') ?></a></small>
+                    <small>&#160;<a href="<?= Vars::$URI ?>?act=reputation&amp;user=<?= $this->user['id'] ?>"><?= lng('details') ?></a></small>
                 </td>
             </tr>
         </table>

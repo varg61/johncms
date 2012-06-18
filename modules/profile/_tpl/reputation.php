@@ -1,5 +1,5 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('user_profile') : lng('my_profile')) ?></b></a> | <?= lng('information') ?>
+    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('user_profile') : lng('my_profile')) ?></b></a> | <?= lng('reputation') ?>
 </div>
 <?php if (isset($this->save)): ?>
 <div class="gmenu"><p><?= lng('vote_adopted') ?></p></div>
@@ -9,14 +9,14 @@
 </div>
 <div class="menu" style="padding-bottom: 8px">
     <div class="formblock">
-        <label><?= ($this->user['id'] == Vars::$USER_ID ? lng('myself_relationship') : lng('relationship')) ?></label>
+        <label><?= ($this->user['id'] == Vars::$USER_ID ? lng('my_reputation') : lng('reputation')) ?></label>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <td class="rel_a_font">
                     <?= $this->rel['a'] ?>
                 </td>
                 <td width="90%">
-                    <small><?= lng('relationship_excellent') ?></small>
+                    <small><?= lng('reputation_excellent') ?></small>
                     <div class="bar">
                         <div class="bar_a" style="width: <?= $this->bar['a'] ?>%"></div>
                     </div>
@@ -27,7 +27,7 @@
                     <?= $this->rel['b'] ?>
                 </td>
                 <td>
-                    <small><?= lng('relationship_good') ?></small>
+                    <small><?= lng('reputation_good') ?></small>
                     <div class="bar">
                         <div class="bar_b" style="width: <?= $this->bar['b'] ?>%"></div>
                     </div>
@@ -38,7 +38,7 @@
                     <?= $this->rel['c'] ?>
                 </td>
                 <td>
-                    <small><?= lng('relationship_neutrally') ?></small>
+                    <small><?= lng('reputation_neutrally') ?></small>
                     <div class="bar">
                         <div class="bar_c" style="width: <?= $this->bar['c'] ?>%"></div>
                     </div>
@@ -49,7 +49,7 @@
                     <?= $this->rel['d'] ?>
                 </td>
                 <td>
-                    <small><?= lng('relationship_badly') ?></small>
+                    <small><?= lng('reputation_badly') ?></small>
                     <div class="bar">
                         <div class="bar_d" style="width: <?= $this->bar['d'] ?>%"></div>
                     </div>
@@ -60,7 +60,7 @@
                     <?= $this->rel['e'] ?>
                 </td>
                 <td>
-                    <small><?= lng('relationship_verybad') ?></small>
+                    <small><?= lng('reputation_verybad') ?></small>
                     <div class="bar">
                         <div class="bar_e" style="width: <?= $this->bar['e'] ?>%"></div>
                     </div>
@@ -70,15 +70,15 @@
     </div>
 </div>
 <?php if (Vars::$USER_ID && $this->user['id'] != Vars::$USER_ID): ?>
-<form action="<?= Vars::$URI ?>?act=relationship&amp;user=<?= $this->user['id'] ?>" method="post">
+<form action="<?= Vars::$URI ?>?act=reputation&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="list2">
         <div class="formblock">
-            <label><?= lng('my_relationship') ?></label><br/>
-            <input type="radio" value="2" name="vote" <?= ($this->my_rel == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_excellent') ?><br/>
-            <input type="radio" value="1" name="vote" <?= ($this->my_rel == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_good') ?><br/>
-            <input type="radio" value="0" name="vote" <?= ($this->my_rel == 0 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_neutrally') ?><br/>
-            <input type="radio" value="-1" name="vote" <?= ($this->my_rel == -1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_badly') ?><br/>
-            <input type="radio" value="-2" name="vote" <?= ($this->my_rel == -2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('relationship_verybad') ?>
+            <label><?= lng('vote') ?></label><br/>
+            <input type="radio" value="2" name="vote" <?= ($this->my_rel == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('reputation_excellent') ?><br/>
+            <input type="radio" value="1" name="vote" <?= ($this->my_rel == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('reputation_good') ?><br/>
+            <input type="radio" value="0" name="vote" <?= ($this->my_rel == 0 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('reputation_neutrally') ?><br/>
+            <input type="radio" value="-1" name="vote" <?= ($this->my_rel == -1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('reputation_badly') ?><br/>
+            <input type="radio" value="-2" name="vote" <?= ($this->my_rel == -2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('reputation_verybad') ?>
         </div>
         <div class="formblock">
             <input type="submit" name="submit" value="<?= lng('vote') ?>"/>

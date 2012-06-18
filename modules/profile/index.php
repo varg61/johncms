@@ -78,7 +78,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     }
 
     switch (Vars::$ACT) {
-        case 'relationship':
+        case 'reputation':
             /*
             -----------------------------------------------------------------
             Система Отношений
@@ -110,12 +110,12 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 $rel['e'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '-2'"), 0);
                 mysql_query("UPDATE `users` SET `relationship` = '" . mysql_real_escape_string(serialize($rel)) . "' WHERE `id` = " . $user['id']);
 
-                header('Location: ' . Vars::$HOME_URL . '/profile?act=relationship&user=' . $user['id']);
+                header('Location: ' . Vars::$HOME_URL . '/profile?act=reputation&user=' . $user['id']);
                 exit;
             } else {
                 $tpl->form_token = mt_rand(100, 10000);
                 $_SESSION['form_token'] = $tpl->form_token;
-                $tpl->contents = $tpl->includeTpl('relationship');
+                $tpl->contents = $tpl->includeTpl('reputation');
             }
             break;
 
