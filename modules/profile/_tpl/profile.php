@@ -115,11 +115,9 @@
     <div class="formblock">
         <label><?= lng('mail') ?></label>
         <ul style="list-style: none; padding-left: 0">
-            <li><?= Functions::getIcon('cards-address-block.png') ?>&#160;<a
-                href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?= $this->user['id'] ?>"><?= ($this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?></a></li>
+            <li><?= Functions::getIcon('cards-address-block.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?= $this->user['id'] ?>"><?= ($this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?></a></li>
             <?php if (empty($this->banned)): ?>
-            <li><?= Functions::getIcon('cards-address-del.png') ?>&#160;<a
-                href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?= $this->user['id'] ?>"><?= ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?></a></li>
+            <li><?= Functions::getIcon($this->num_cont ? 'cards-address-del.png' : 'cards-address-add.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?= $this->user['id'] ?>"><?= ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?></a></li>
             <?php endif ?>
             <?php if (empty($this->banned)): ?>
             <li><?= Functions::getIcon('mail-edit.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;id=<?= $this->user['id'] ?>"><?= lng('contact_write') ?></a></li>

@@ -54,7 +54,7 @@ $ads = Advt::getAds();
 </table>
 <div class="header">
     <?php if (Vars::$USER_ID): ?>
-    <?= Functions::getImage('usr_' . (Vars::$USER_DATA['sex'] == 'm' ? 'm' : 'w') . (Vars::$USER_DATA['join_date'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') ?>&#160;<a
+    <?= Functions::getIcon((Vars::$USER_DATA['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"') ?>&#160;<a
         href="<?= Vars::$HOME_URL ?>/notifications"><?= Vars::$USER_DATA['nickname'] ?></a>
     <?php else: ?>
     <?= lng('guest', 1) ?>
