@@ -103,7 +103,7 @@ $db_pass = isset($db_pass) ? $db_pass : '';
 $db_name = isset($db_name) ? $db_name : 'johncms';
 $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
 @mysql_select_db($db_name) or die('Error: specified database does not exist');
-@mysql_query("SET NAMES 'utf8'", $connect);
+@mysql_set_charset($connect, 'UTF8');
 
 new Session;
 new System;

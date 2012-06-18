@@ -104,6 +104,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     $tpl->new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
-    $tpl->count = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
+    $tpl->count_m = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` WHERE `users`.`sex` = 'm'"), 0);
+    $tpl->count_w = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` WHERE `users`.`sex` = 'w'"), 0);
+    $tpl->count_my = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
     $tpl->contents = $tpl->includeTpl('index');
 }
