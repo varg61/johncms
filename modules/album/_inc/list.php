@@ -21,19 +21,15 @@ if (isset($_SESSION['ap']))
 echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | ' . lng('personal_2') . '</div>';
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' " . ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6 ? "" : "AND `access` > 1") . " ORDER BY `sort` ASC");
 $total = mysql_num_rows($req);
-if ($user['id'] == Vars::$USER_ID && $total < $max_album || Vars::$USER_RIGHTS >= 7) {
-    echo '<div class="topmenu"><a href="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '">' . lng('album_create') . '</a></div>';
-}
-echo '<div class="user"><p>' . Functions::displayUser($user, array ('iphide' => 1,)) . '</p></div>';
+echo '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';
 if ($total) {
-    $i = 0;
-    while ($res = mysql_fetch_assoc($req)) {
+    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $res['id'] . "'"), 0);
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
             Functions::getIcon('album_' . $res['access'] . '.png', '', '', 'align="middle"') . '&#160;' .
             '<a href="' . Vars::$URI . '?act=show&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '"><b>' . Validate::filterString($res['name']) . '</b></a>&#160;(' . $count . ')';
         if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6 || !empty($res['description'])) {
-            $menu = array (
+            $menu = array(
                 '<a href="' . Vars::$URI . '?act=sort&amp;mod=up&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('up') . '</a>',
                 '<a href="' . Vars::$URI . '?act=sort&amp;mod=down&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('down') . '</a>',
                 '<a href="' . Vars::$URI . '?act=edit&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('edit') . '</a>',
@@ -45,7 +41,12 @@ if ($total) {
                 '</div>';
         }
         echo '</div>';
-        ++$i;
+    }
+    if ($user['id'] == Vars::$USER_ID && $total < $max_album || Vars::$USER_RIGHTS >= 7) {
+        echo'<div class="gmenu">' .
+            '<form action="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '" method="post">' .
+            '<p><input type="submit" value="' . lng('album_create') . '"/></p>' .
+            '</form></div>';
     }
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';

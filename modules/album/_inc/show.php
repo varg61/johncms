@@ -28,10 +28,8 @@ $view = isset($_GET['view']);
 Показываем выбранный альбом с фотографиями
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | <a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('personal_2') . '</a></div>';
-if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7)
-    echo '<div class="topmenu"><a href="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . lng('image_add') . '</a></div>';
-echo'<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
+echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | <a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('personal_2') . '</a></div>' .
+    '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
     '<div class="phdr">' . lng('album') . ': ';
 echo $view ? '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . Validate::filterString($album['name']) . '</b></a>' : '<b>' . Validate::filterString($album['name']) . '</b>';
 echo'</div>';
@@ -60,12 +58,12 @@ if ($album['access'] == 1 && $user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS
             echo Functions::displayError(lng('error_wrong_password'));
     }
     if (!isset($_SESSION['ap']) || $_SESSION['ap'] != $album['password']) {
-        echo '<form action="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post"><div class="menu"><p>';
-        echo lng('album_password') . '<br />';
-        echo '<input type="text" name="password"/></p>';
-        echo '<p><input type="submit" name="submit" value="' . lng('login') . '"/></p>';
-        echo '</div></form>';
-        echo '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('album_list') . '</a></div>';
+        echo'<form action="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post"><div class="menu"><p>' .
+            lng('album_password') . '<br />' .
+            '<input type="text" name="password"/></p>' .
+            '<p><input type="submit" name="submit" value="' . lng('login') . '"/></p>' .
+            '</div></form>' .
+            '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('album_list') . '</a></div>';
         exit;
     }
 }
@@ -141,6 +139,12 @@ if ($total) {
             '<a href="' . Vars::$URI . '?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
             '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>' .
             '</div></div>';
+    }
+    if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
+        echo'<div class="gmenu">' .
+            '<form action="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
+            '<p><input type="submit" value="' . lng('image_add') . '"/></p>' .
+            '</form></div>';
     }
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
