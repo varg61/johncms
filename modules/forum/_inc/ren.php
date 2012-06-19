@@ -17,7 +17,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     }
     $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
     $ms = mysql_fetch_assoc($typ);
-    if ($ms[type] != "t") {
+    if ($ms['type'] != "t") {
         echo Functions::displayError(lng('error_wrong_data'));
         exit;
     }
