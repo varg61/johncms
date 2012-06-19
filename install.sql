@@ -228,21 +228,21 @@ CREATE TABLE `cms_mail_contacts` (
 DROP TABLE IF EXISTS `cms_mail_messages`;
 CREATE TABLE `cms_mail_messages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `contact_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `contact_id` int(10) unsigned NOT NULL DEFAULT '0',
   `text` text NOT NULL,
-  `time` int(10) unsigned NOT NULL,
+  `time` int(10) unsigned NOT NULL DEFAULT '0',
   `delete` int(10) unsigned NOT NULL DEFAULT '0',
-  `delete_in` int(10) unsigned NOT NULL,
+  `delete_in` int(10) unsigned NOT NULL DEFAULT '0',
   `delete_out` int(10) unsigned NOT NULL DEFAULT '0',
   `elected_in` int(10) unsigned NOT NULL DEFAULT '0',
   `elected_out` int(10) unsigned NOT NULL DEFAULT '0',
   `read` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `sys` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `filename` varchar(100) NOT NULL,
+  `filename` varchar(100) NOT NULL DEFAULT '',
   `filesize` int(10) unsigned NOT NULL DEFAULT '0',
   `filecount` int(10) unsigned NOT NULL DEFAULT '0',
-  `theme` varchar(30) NOT NULL,
+  `theme` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `contact_id` (`contact_id`),
@@ -254,7 +254,7 @@ CREATE TABLE `cms_mail_messages` (
   KEY `elected_out` (`elected_out`),
   KEY `read` (`read`),
   KEY `sys` (`sys`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `cms_modules`;
