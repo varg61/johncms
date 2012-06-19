@@ -13,7 +13,7 @@ $vote = abs(intval($_GET['img']));
 if ($vote > 100)
     $vote = 100;
 header("Content-type: image/gif");
-$vote_img = imageCreateFromGIF("../images/system/vote_bar.gif");
+$vote_img = imageCreateFromGIF('vote_bar.gif');
 $color = imagecolorallocate($vote_img, 234, 237, 237);
 $color2 = imagecolorallocate($vote_img, 227, 222, 222);
 $color3 = imagecolorallocate($vote_img, 204, 200, 200);

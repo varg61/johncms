@@ -424,11 +424,11 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID . " ORDER BY `id` ASC");
                     if (!$type1['edit'] && !isset($_GET['vote_result']) && Vars::$USER_ID && $vote_user == 0) {
                         // Выводим форму с опросами
-                        echo '<form action="' . Vars::$URI . '?act=vote&amp;id=' . Vars::$ID . '" method="post">';
+                        echo'<form action="' . Vars::$URI . '?act=vote&amp;id=' . Vars::$ID . '" method="post">';
                         while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . Validate::filterString($vote['name'], 0, 1) . '<br />';
                         }
-                        echo '<p><input type="submit" name="submit" value="' . lng('vote') . '"/><br /><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
+                        echo'<p><input type="submit" name="submit" value="' . lng('vote') . '"/><br /><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
                             '">' . lng('results') . '</a></p></form></div>';
                     } else {
                         // Выводим результаты голосования
@@ -436,7 +436,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
                             $count_vote = $topic_vote['count'] ? round(100 / $topic_vote['count'] * $vote['count']) : 0;
                             echo Validate::filterString($vote['name'], 0, 1) . ' [' . $vote['count'] . ']<br />';
-                            echo '<img src="vote_img.php?img=' . $count_vote . '" alt="' . lng('rating') . ': ' . $count_vote . '%" /><br />';
+                            echo '<img src="' . Vars::$HOME_URL . '/assets/misc/vote_img.php?img=' . $count_vote . '" alt="' . lng('rating') . ': ' . $count_vote . '%" /><br />';
                         }
                         echo '</small></div><div class="bmenu">' . lng('total_votes') . ': ';
                         if (Vars::$USER_RIGHTS > 6) {

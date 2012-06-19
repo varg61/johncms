@@ -21,22 +21,20 @@ if ($topic_vote == 0) {
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `topic`=" . Vars::$ID), 0);
     $req = mysql_query("SELECT `cms_forum_vote_users`.*, `users`.`rights`, `users`.`last_visit`, `users`.`nickname`, `users`.`sex`, `users`.`status`, `users`.`join_date`, `users`.`id`
     FROM `cms_forum_vote_users` LEFT JOIN `users` ON `cms_forum_vote_users`.`user` = `users`.`id`
-    WHERE `cms_forum_vote_users`.`topic`=" . Vars::$ID . " ORDER BY `time` DESC " . Vars::db_pagination());
-    $i = 0;
-    while ($res = mysql_fetch_array($req)) {
+    WHERE `cms_forum_vote_users`.`topic`=" . Vars::$ID . " ORDER BY `cms_forum_vote_users`.`id` DESC " . Vars::db_pagination()) or die(mysql_error());
+    for($i = 0; $res = mysql_fetch_array($req); ++$i){
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo Functions::displayUser($res, array('iphide' => 1));
         echo '</div>';
-        ++$i;
     }
     if ($total == 0)
         echo '<div class="menu">' . lng('voting_users_empty') . '</div>';
     echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
-        echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
-             '<p><form action="' . Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '" method="post">' .
-             '<input type="text" name="page" size="2"/>' .
-             '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+        echo'<p>' . Functions::displayPagination(Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+            '<p><form action="' . Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '" method="post">' .
+            '<input type="text" name="page" size="2"/>' .
+            '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
     }
     echo '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('to_topic') . '</a></p>';
 }

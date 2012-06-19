@@ -170,13 +170,13 @@ CREATE TABLE `cms_forum_vote` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(2) NOT NULL DEFAULT '0',
   `time` int(11) NOT NULL DEFAULT '0',
-  `topic` int(11) NOT NULL,
-  `name` varchar(200) NOT NULL,
-  `count` int(11) NOT NULL,
+  `topic` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(200) NOT NULL DEFAULT '',
+  `count` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `type` (`type`),
   KEY `topic` (`topic`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `cms_forum_vote_users`;

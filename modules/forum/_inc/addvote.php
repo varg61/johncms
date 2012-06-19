@@ -28,7 +28,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                 `time`='" . time() . "',
                 `type` = '1',
                 `topic` = " . Vars::$ID
-            );
+            ) or die(mysql_error());
             mysql_query("UPDATE `forum` SET  `realid` = '1'  WHERE `id` = " . Vars::$ID);
             for ($vote = 0; $vote < $vote_count; $vote++) {
                 $text = mb_substr(trim($_POST[$vote]), 0, 30);
