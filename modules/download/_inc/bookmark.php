@@ -43,7 +43,7 @@ if ($total) {
         echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
     }
 } else {
-     echo '<div class="rmenu"><p>' . lng('list_empty') . '</p></div>';
+     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
 echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 /*

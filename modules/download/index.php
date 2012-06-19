@@ -291,16 +291,19 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             '<option value="recount">' . lng('download_recount') . '</option>' .
             '<input type="hidden" name="admin_id" value="' . Vars::$ID . '"/>' .
             '</select><input type="submit" value="' . lng('do') . '"/></form></div></p>';
-    }
-    else if (isset($res_down_cat['field']) && $res_down_cat['field'] && Vars::$USER_ID && Vars::$ID)
+    } else if (isset($res_down_cat['field']) && $res_down_cat['field'] && Vars::$USER_ID && Vars::$ID)
         echo '<p><div class="func"><a href="' . Vars::$URI . '?act=down_file&amp;id=' . Vars::$ID . '">' . lng('download_upload_file') . '</a></div></p>';
     /*
     -----------------------------------------------------------------
     Нижнее меню навигации
     -----------------------------------------------------------------
     */
-    echo '<p>';
-    echo (Vars::$ID ? '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>' :
-        (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7 ? '<a href="' . Vars::$URI . '?act=review_comments">' . lng('review_comments') . '</a><br />' : '') .
-            '<a href="' . Vars::$URI . '?act=bookmark">' . lng('download_bookmark') . '</a>') . '</p>';
+    echo'<p>';
+    if (Vars::$ID) {
+        echo'<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>';
+    } else {
+        echo (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7 ? '<a href="' . Vars::$URI . '?act=review_comments">' . lng('review_comments') . '</a><br />' : '') .
+            '<a href="' . Vars::$URI . '?act=bookmark">' . lng('download_bookmark') . '</a>';
+    }
+    echo'</p>';
 }
