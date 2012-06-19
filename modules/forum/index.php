@@ -378,8 +378,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     $sql = ' AND (';
                     $fsort_users = unserialize($_SESSION['fsort_users']);
                     foreach ($fsort_users as $val) {
-                        if ($sw)
+                        if ($sw) {
                             $sql .= ' OR ';
+                        }
                         $sortid = intval($val);
                         $sql .= "`forum`.`user_id` = '$sortid'";
                         $sw = 1;
@@ -397,16 +398,19 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'")), 0);
                 // Выводим название топика
                 echo '<div class="phdr"><a name="up" id="up"></a><a href="#down">' . Functions::getImage('down.png') . '</a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
-                if ($colmes > Vars::$USER_SET['page_size'])
+                if ($colmes > Vars::$USER_SET['page_size']) {
                     echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>';
+                }
                 // Метки удаления темы
-                if ($type1['close'])
+                if ($type1['close']) {
                     echo '<div class="rmenu">' . lng('topic_delete_who') . ': <b>' . $type1['close_who'] . '</b></div>';
-                elseif (!empty($type1['close_who']) && Vars::$USER_RIGHTS >= 7)
+                } elseif (!empty($type1['close_who']) && Vars::$USER_RIGHTS >= 7) {
                     echo '<div class="gmenu"><small>' . lng('topic_delete_whocancel') . ': <b>' . $type1['close_who'] . '</b></small></div>';
+                }
                 // Метки закрытия темы
-                if ($type1['edit'])
+                if ($type1['edit']) {
                     echo '<div class="rmenu">' . lng('topic_closed') . '</div>';
+                }
                 /*
                 -----------------------------------------------------------------
                 Блок голосований
@@ -435,13 +439,15 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                             echo '<img src="vote_img.php?img=' . $count_vote . '" alt="' . lng('rating') . ': ' . $count_vote . '%" /><br />';
                         }
                         echo '</small></div><div class="bmenu">' . lng('total_votes') . ': ';
-                        if (Vars::$USER_RIGHTS > 6)
+                        if (Vars::$USER_RIGHTS > 6) {
                             echo '<a href="' . Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '">' . $topic_vote['count'] . '</a>';
-                        else
+                        } else {
                             echo $topic_vote['count'];
+                        }
                         echo '</div>';
-                        if (Vars::$USER_ID && $vote_user == 0)
+                        if (Vars::$USER_ID && $vote_user == 0) {
                             echo '<div class="bmenu"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . $clip_forum . '">' . lng('vote') . '</a></div>';
+                        }
                     }
                 }
                 $curators = !empty($type1['curators']) ? unserialize($type1['curators']) : array();
@@ -482,17 +488,20 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         echo '<span class="red">' . lng('post_deleted') . '</span><br/>';
                     }
                     echo Validate::filterString(mb_substr($postres['text'], 0, 500), 0, 2);
-                    if (mb_strlen($postres['text']) > 500)
+                    if (mb_strlen($postres['text']) > 500) {
                         echo '...<a href="' . Vars::$URI . '?act=post&amp;id=' . $postres['id'] . '">' . lng('read_all') . '</a>';
+                    }
                     echo '</p></div>';
                 }
-                if ($filter)
+                if ($filter) {
                     echo '<div class="rmenu">' . lng('filter_on') . '</div>';
+                }
                 // Задаем правила сортировки (новые внизу / вверху)
-                if (Vars::$USER_ID)
+                if (Vars::$USER_ID) {
                     $order = $set_forum['upfp'] ? 'DESC' : 'ASC';
-                else
+                } else {
                     $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
+                }
                 // Запрос в базу
                 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
                 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
@@ -513,25 +522,31 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         echo '<p><input type="submit" name="submit" value="' . lng('write') . '"/></p></form></div>';
                     }
                 }
-                if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6)
+
+                if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                     echo '<form action="' . Vars::$URI . '?act=massdel" method="post">';
-                for($i = 1; $res = mysql_fetch_assoc($req); ++$i) {
-                    if ($res['close'])
+                }
+
+                for ($i = 1; $res = mysql_fetch_assoc($req); ++$i) {
+                    if ($res['close']) {
                         echo '<div class="rmenu">';
-                    else
+                    } else {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+                    }
                     if (Vars::$USER_SET['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
-                        if (file_exists((ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $res['user_id'] . '.gif')))
+                        if (file_exists((ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $res['user_id'] . '.gif'))) {
                             echo '<img src="' . Vars::$HOME_URL . '/files/users/avatar/' . $res['user_id'] . '.gif" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
-                        else
+                        } else {
                             echo Functions::getImage('empty.png', $res['from']) . '&#160;';
+                        }
                         echo '</td><td>';
                     }
-                    if ($res['sex'])
+                    if ($res['sex']) {
                         echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['join_date'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
-                    else
+                    } else {
                         echo Functions::getIcon('delete.png', '', '', 'align="middle"') . '&#160;';
+                    }
                     // Ник юзера и ссылка на его анкету
                     if (Vars::$USER_ID && Vars::$USER_ID != $res['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
@@ -556,10 +571,12 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     // Время поста
                     echo ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br />';
                     // Статус юзера
-                    if (!empty($res['status']))
-                        echo '<div class="status">' . Functions::getImage('label.png', '', 'align="middle"') . '&#160;' . $res['status'] . '</div>';
-                    if (Vars::$USER_SET['avatar'])
+                    if (!empty($res['status'])) {
+                        echo '<div class="status">' . Functions::getImage('label.png', '', 'align="middle"') . '&#160;' . Validate::filterString($res['status']) . '</div>';
+                    }
+                    if (Vars::$USER_SET['avatar']) {
                         echo '</td></tr></table>';
+                    }
                     /*
                     -----------------------------------------------------------------
                     Вывод текста поста
@@ -584,14 +601,16 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         $text = mb_substr($text, 0, $cut);
                         $text = Validate::filterString($text, 1, 1);
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                        if (Vars::$USER_SET['smileys'])
+                        if (Vars::$USER_SET['smileys']) {
                             $text = Functions::smileys($text, $res['rights'] ? 1 : 0);
+                        }
                         echo TextParser::noTags($text) . '...<br /><a href="' . Vars::$URI . '?act=post&amp;id=' . $res['id'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
                     } else {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = Validate::filterString($text, 1, 1);
-                        if (Vars::$USER_SET['smileys'])
+                        if (Vars::$USER_SET['smileys']) {
                             $text = Functions::smileys($text, $res['rights'] ? 1 : 0);
+                        }
                         echo $text;
                     }
                     if ($res['kedit']) {
@@ -660,13 +679,15 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     echo '<div class="gmenu"><form name="form2" action="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
                     if ($set_forum['farea']) {
                         echo '<p>';
-                        if (!Vars::$IS_MOBILE)
+                        if (!Vars::$IS_MOBILE) {
                             echo TextParser::autoBB('form2', 'msg');
+                        }
                         echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg"></textarea><br/></p>' .
                             '<p><input type="checkbox" name="addfiles" value="1" /> ' . lng('add_file');
-                        if (Vars::$USER_SET['translit'])
+                        if (Vars::$USER_SET['translit']) {
                             echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . lng('translit');
-                        echo '</p><p><input type="submit" name="submit" value="' . lng('write') . '" style="width: 107px; cursor: pointer;"/> ' .
+                        }
+                        echo'</p><p><input type="submit" name="submit" value="' . lng('write') . '" style="width: 107px; cursor: pointer;"/> ' .
                             ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                             '</p></form></div>';
                     } else {
@@ -691,39 +712,46 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 */
                 if ($curators) {
                     $array = array();
-                    foreach ($curators as $key => $value)
+                    foreach ($curators as $key => $value) {
                         $array[] = '<a href="../users/profile.php?user=' . $key . '">' . $value . '</a>';
+                    }
                     echo '<p><div class="func">' . lng('curators') . ': ' . implode(', ', $array) . '</div></p>';
                 }
                 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                     echo '<p><div class="func">';
-                    if (Vars::$USER_RIGHTS >= 7)
+                    if (Vars::$USER_RIGHTS >= 7) {
                         echo '<a href="' . Vars::$URI . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('curators_of_the_topic') . '</a><br />';
+                    }
                     echo isset($topic_vote) && $topic_vote > 0
                         ? '<a href="' . Vars::$URI . '?act=editvote&amp;id=' . Vars::$ID . '">' . lng('edit_vote') . '</a><br/><a href="' . Vars::$URI . '?act=delvote&amp;id=' . Vars::$ID . '">' . lng('delete_vote') . '</a><br/>'
                         : '<a href="' . Vars::$URI . '?act=addvote&amp;id=' . Vars::$ID . '">' . lng('add_vote') . '</a><br/>';
                     echo '<a href="' . Vars::$URI . '?act=ren&amp;id=' . Vars::$ID . '">' . lng('topic_rename') . '</a><br/>';
                     // Закрыть - открыть тему
-                    if ($type1['edit'] == 1)
+                    if ($type1['edit'] == 1) {
                         echo '<a href="' . Vars::$URI . '?act=close&amp;id=' . Vars::$ID . '">' . lng('topic_open') . '</a><br/>';
-                    else
+                    } else {
                         echo '<a href="' . Vars::$URI . '?act=close&amp;id=' . Vars::$ID . '&amp;closed">' . lng('topic_close') . '</a><br/>';
+                    }
                     // Удалить - восстановить тему
-                    if ($type1['close'] == 1)
+                    if ($type1['close'] == 1) {
                         echo '<a href="' . Vars::$URI . '?act=restore&amp;id=' . Vars::$ID . '">' . lng('topic_restore') . '</a><br/>';
+                    }
                     echo '<a href="' . Vars::$URI . '?act=deltema&amp;id=' . Vars::$ID . '">' . lng('topic_delete') . '</a><br/>';
-                    if ($type1['vip'] == 1)
+                    if ($type1['vip'] == 1) {
                         echo '<a href="' . Vars::$URI . '?act=vip&amp;id=' . Vars::$ID . '">' . lng('topic_unfix') . '</a>';
-                    else
+                    } else {
                         echo '<a href="' . Vars::$URI . '?act=vip&amp;id=' . Vars::$ID . '&amp;vip">' . lng('topic_fix') . '</a>';
+                    }
                     echo '<br/><a href="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '">' . lng('topic_move') . '</a></div></p>';
                 }
-                if ($wholink)
+                if ($wholink) {
                     echo '<div>' . $wholink . '</div>';
-                if ($filter)
+                }
+                if ($filter) {
                     echo '<div><a href="' . Vars::$URI . '?act=filter&amp;id=' . Vars::$ID . '&amp;do=unset">' . lng('filter_cancel') . '</a></div>';
-                else
+                } else {
                     echo '<div><a href="' . Vars::$URI . '?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('filter_on_author') . '</a></div>';
+                }
                 echo '<a href="' . Vars::$URI . '?act=tema&amp;id=' . Vars::$ID . '">' . lng('download_topic') . '</a>';
                 break;
 
@@ -752,8 +780,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
                 echo '<a href="' . Vars::$URI . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
-                if (!empty($res['soft']))
+                if (!empty($res['soft'])) {
                     echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
+                }
                 echo '</div>';
             }
         } else {
