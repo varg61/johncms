@@ -522,8 +522,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     if (Vars::$USER_SET['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
-                        if (file_exists(('../files/users/avatar/' . $res['user_id'] . '.png')))
-                            echo '<img src="../files/users/avatar/' . $res['user_id'] . '.png" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
+                        if (file_exists((ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $res['user_id'] . '.gif')))
+                            echo '<img src="' . Vars::$HOME_URL . '/files/users/avatar/' . $res['user_id'] . '.gif" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
                         else
                             echo Functions::getImage('empty.png', $res['from']) . '&#160;';
                         echo '</td><td>';
