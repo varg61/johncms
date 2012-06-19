@@ -64,7 +64,6 @@ spl_autoload_register(
             'counters'   => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
             'finfo'      => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
             'functions'  => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
-            'homepage'   => 'classes' . DIRECTORY_SEPARATOR . 'homepage.php',
             'login'      => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
             'network'    => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
             'pclzip'     => 'lib'     . DIRECTORY_SEPARATOR . 'pclzip.lib.php',

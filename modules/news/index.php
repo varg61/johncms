@@ -69,7 +69,7 @@ switch (Vars::$ACT) {
                         `name` = '" . mysql_real_escape_string($name) . "',
                         `text` = '" . mysql_real_escape_string($text) . "',
                         `kom` = '$rid'
-                    ");
+                    ") or die(mysql_error());
                     mysql_query("UPDATE `users` SET
                         `lastpost` = '" . time() . "'
                         WHERE `id` = " . Vars::$USER_ID
@@ -112,43 +112,47 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 6) {
-            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('news') . '</b></a> | ' . lng('edit') . '</div>';
-            if (!Vars::$ID) {
-                echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('to_news') . '</a>');
-                exit;
-            }
-            if (isset($_POST['submit'])) {
-                $error = array();
-                if (empty($_POST['name']))
-                    $error[] = lng('error_title');
-                if (empty($_POST['text']))
-                    $error[] = lng('error_text');
-                $name = Validate::filterString($_POST['name']);
-                $text = mysql_real_escape_string(trim($_POST['text']));
-                if (!$error) {
-                    mysql_query("UPDATE `news` SET
+            if (Vars::$ID && mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `id` = " . Vars::$ID), 0)) {
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('news') . '</b></a> | ' . lng('edit') . '</div>';
+                if (!Vars::$ID) {
+                    echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('to_news') . '</a>');
+                    exit;
+                }
+                if (isset($_POST['submit'])) {
+                    $error = array();
+                    if (empty($_POST['name']))
+                        $error[] = lng('error_title');
+                    if (empty($_POST['text']))
+                        $error[] = lng('error_text');
+                    $name = Validate::filterString($_POST['name']);
+                    $text = mysql_real_escape_string(trim($_POST['text']));
+                    if (!$error) {
+                        mysql_query("UPDATE `news` SET
                         `name` = '" . mysql_real_escape_string($name) . "',
                         `text` = '$text'
                         WHERE `id` = " . Vars::$ID
-                    );
+                        );
+                    } else {
+                        echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                    }
+                    echo '<p>' . lng('article_changed') . '<br /><a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>';
                 } else {
-                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                    $req = mysql_query("SELECT * FROM `news` WHERE `id` = " . Vars::$ID);
+                    $res = mysql_fetch_assoc($req);
+                    echo '<div class="menu"><form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
+                        '<p><h3>' . lng('article_title') . '</h3>' .
+                        '<input type="text" name="name" value="' . $res['name'] . '"/></p>' .
+                        '<p><h3>' . lng('text') . '</h3>' .
+                        '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="text">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p>' .
+                        '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
+                        '</form></div>' .
+                        '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></div>';
                 }
-                echo '<p>' . lng('article_changed') . '<br /><a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>';
             } else {
-                $req = mysql_query("SELECT * FROM `news` WHERE `id` = " . Vars::$ID);
-                $res = mysql_fetch_assoc($req);
-                echo '<div class="menu"><form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
-                    '<p><h3>' . lng('article_title') . '</h3>' .
-                    '<input type="text" name="name" value="' . $res['name'] . '"/></p>' .
-                    '<p><h3>' . lng('text') . '</h3>' .
-                    '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="text">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p>' .
-                    '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
-                    '</form></div>' .
-                    '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></div>';
+                echo Functions::displayError(lng('error_wrong_data'));
             }
         } else {
-            header('location: ' . Vars::$URI);
+            echo Functions::displayError(lng('access_forbidden'));
         }
         break;
 
@@ -262,7 +266,7 @@ switch (Vars::$ACT) {
                 '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
         }
 
-        if(Vars::$USER_RIGHTS >= 7){
+        if (Vars::$USER_RIGHTS >= 7) {
             echo'<p><a href="' . Vars::$URI . '/admin">' . lng('admin_panel') . '</a></p>';
         }
 }
