@@ -72,7 +72,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                         `description` = '" . mysql_real_escape_string($description) . "',
                         `time` = '" . time() . "',
                         `access` = '" . $res_a['access'] . "'
-                    ");
+                    ") or die(mysql_error());
                     echo '<div class="gmenu"><p>' . lng('photo_uploaded') . '<br />' .
                          '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>' .
                          '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . lng('profile') . '</a></div>';

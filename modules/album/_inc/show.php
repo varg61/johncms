@@ -140,14 +140,14 @@ if ($total) {
             '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>' .
             '</div></div>';
     }
-    if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
-        echo'<div class="gmenu">' .
-            '<form action="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
-            '<p><input type="submit" value="' . lng('image_add') . '"/></p>' .
-            '</form></div>';
-    }
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+}
+if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
+    echo'<div class="gmenu">' .
+        '<form action="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
+        '<p><input type="submit" value="' . lng('image_add') . '"/></p>' .
+        '</form></div>';
 }
 echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {

@@ -63,17 +63,17 @@ CREATE TABLE `cms_album_downloads` (
 DROP TABLE IF EXISTS `cms_album_files`;
 CREATE TABLE `cms_album_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `album_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `album_id` int(10) unsigned NOT NULL DEFAULT '0',
   `description` text NOT NULL,
-  `img_name` varchar(100) NOT NULL,
-  `tmb_name` varchar(100) NOT NULL,
+  `img_name` varchar(100) NOT NULL DEFAULT '',
+  `tmb_name` varchar(100) NOT NULL DEFAULT '',
   `time` int(11) NOT NULL DEFAULT '0',
   `comments` tinyint(1) NOT NULL DEFAULT '1',
   `comm_count` int(11) NOT NULL DEFAULT '0',
   `access` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `vote_plus` int(11) NOT NULL,
-  `vote_minus` int(11) NOT NULL,
+  `vote_plus` int(11) NOT NULL DEFAULT '0',
+  `vote_minus` int(11) NOT NULL DEFAULT '0',
   `views` int(10) unsigned NOT NULL DEFAULT '0',
   `downloads` int(10) unsigned NOT NULL DEFAULT '0',
   `unread_comments` tinyint(1) NOT NULL DEFAULT '0',
@@ -81,7 +81,7 @@ CREATE TABLE `cms_album_files` (
   KEY `user_id` (`user_id`),
   KEY `album_id` (`album_id`),
   KEY `access` (`access`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `cms_album_views`;

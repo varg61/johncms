@@ -42,13 +42,13 @@ if ($total) {
         }
         echo '</div>';
     }
-    if ($user['id'] == Vars::$USER_ID && $total < $max_album || Vars::$USER_RIGHTS >= 7) {
-        echo'<div class="gmenu">' .
-            '<form action="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '" method="post">' .
-            '<p><input type="submit" value="' . lng('album_create') . '"/></p>' .
-            '</form></div>';
-    }
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+}
+if ($user['id'] == Vars::$USER_ID && $total < $max_album || Vars::$USER_RIGHTS >= 7) {
+    echo'<div class="gmenu">' .
+        '<form action="' . Vars::$URI . '?act=edit&amp;user=' . $user['id'] . '" method="post">' .
+        '<p><input type="submit" value="' . lng('album_create') . '"/></p>' .
+        '</form></div>';
 }
 echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
