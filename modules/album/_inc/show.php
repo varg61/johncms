@@ -133,7 +133,7 @@ if ($total) {
             if ($user['id'] == Vars::$USER_ID && $view)
                 echo ' | <a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;view&amp;img=' . $res['id'] . '&amp;profile">' . lng('photo_profile') . '</a>';
         }
-        echo vote_photo($res) .
+        echo Album::vote($res) .
             '<div class="gray">' . lng('count_views') . ': ' . $res['views'] . ', ' . lng('count_downloads') . ': ' . $res['downloads'] . '</div>' .
             '<div class="gray">' . lng('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
             '<a href="' . Vars::$URI . '?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')<br />' .

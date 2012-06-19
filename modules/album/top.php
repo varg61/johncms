@@ -94,16 +94,15 @@ if ($total) {
     if ($total > Vars::$USER_SET['page_size'])
         echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . $link . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     $req = mysql_query("
-        SELECT `cms_album_files`.*, `users`.`name` AS `user_name`, `cms_album_cat`.`name` AS `album_name` $select
+        SELECT `cms_album_files`.*, `users`.`nickname` AS `user_name`, `cms_album_cat`.`name` AS `album_name` $select
         FROM `cms_album_files`
         INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
         INNER JOIN `cms_album_cat` ON `cms_album_files`.`album_id` = `cms_album_cat`.`id`
         $join
         WHERE $where
         ORDER BY $order
-        LIMIT " . Vars::db_pagination()
-    );
-    $i = 0;
+        " . Vars::db_pagination()
+    ) or die(mysql_error());
     for ($i = 0; ($res = mysql_fetch_assoc($req)) !== false; ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
@@ -121,10 +120,10 @@ if ($total) {
         echo '<div class="sub">' .
              '<a href="' . Vars::$URI . '?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="' . Vars::$URI . '?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::filterString($res['album_name']) . '</a>';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 6) {
-            echo vote_photo($res) .
+            echo Album::vote($res) .
                 '<div class="gray">' . lng('count_views') . ': ' . $res['views'] . ', ' . lng('count_downloads') . ': ' . $res['downloads'] . '</div>' .
                 '<div class="gray">' . lng('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
-                '<a href="' . Vars::$URI . '?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')' .
+                '<a href="' . Vars::$MODULE_URI . '?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')' .
                 '<br /><a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>';
         }
         echo '</div></div>';

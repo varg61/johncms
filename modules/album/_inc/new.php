@@ -173,7 +173,7 @@ if ($total) {
         echo '<div class="sub">' .
             '<a href="' . Vars::$URI . '?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="' . Vars::$URI . '?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::filterString($res['album_name']) . '</a>';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 6) {
-            echo vote_photo($res) .
+            echo Album::vote($res) .
                 '<div class="gray">' . lng('count_views') . ': ' . $res['views'] . ', ' . lng('count_downloads') . ': ' . $res['downloads'] . '</div>' .
                 '<div class="gray">' . lng('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
                 '<a href="' . Vars::$URI . '?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')' .

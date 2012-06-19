@@ -46,39 +46,6 @@ $tpl->al = $al;
 
 /*
 -----------------------------------------------------------------
-Функция голосований за фотографии
------------------------------------------------------------------
-*/
-function vote_photo($arg = NULL)
-{
-    global $datauser;
-    //TODO: Разобраться со счетчиками
-    if ($arg) {
-        $rating = $arg['vote_plus'] - $arg['vote_minus'];
-        if ($rating > 0)
-            $color = 'C0FFC0';
-        elseif ($rating < 0)
-            $color = 'F196A8';
-        else
-            $color = 'CCC';
-        $out = '<div class="gray">' . lng('rating') . ': <span style="color:#000;background-color:#' . $color . '">&#160;&#160;<big><b>' . $rating . '</b></big>&#160;&#160;</span> ' .
-            '(' . lng('vote_against') . ': ' . $arg['vote_minus'] . ', ' . lng('vote_for') . ': ' . $arg['vote_plus'] . ')';
-        if (Vars::$USER_ID != $arg['user_id'] && !Vars::$USER_BAN && $datauser['count_forum'] > 10 && $datauser['total_on_site'] > 1200) {
-            // Проверяем, имеет ли юзер право голоса
-            $req = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = " . Vars::$USER_ID . " AND `file_id` = '" . $arg['id'] . "' LIMIT 1");
-            if (!mysql_num_rows($req))
-                $out .= '<br />' . lng('vote') . ': <a href="' . Vars::$URI . '?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | ' .
-                    '<a href="' . Vars::$URI . '?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
-        }
-        $out .= '</div>';
-        return $out;
-    } else {
-        return FALSE;
-    }
-}
-
-/*
------------------------------------------------------------------
 Переключаем режимы работы
 -----------------------------------------------------------------
 */

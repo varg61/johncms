@@ -50,7 +50,7 @@ if (mysql_num_rows($req_obj)) {
         '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['nickname'] . '</b></a> | ' .
         '<a href="' . Vars::$URI . '?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . Validate::filterString($res_a['name']) . '</a>';
     if ($res_obj['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
-        $context_top .= vote_photo($res_obj) .
+        $context_top .= Album::vote($res_obj) .
             '<div class="gray">' . lng('count_views') . ': ' . $res_obj['views'] . ', ' . lng('count_downloads') . ': ' . $res_obj['downloads'] . '</div>' .
             '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res_obj['id'] . '">' . lng('download') . '</a>';
     }
