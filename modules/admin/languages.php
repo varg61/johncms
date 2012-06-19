@@ -151,7 +151,12 @@ switch (Vars::$ACT) {
         */
         $iso = isset($_POST['iso']) ? trim($_POST['iso']) : false;
         if ($iso && array_key_exists($iso, $lng_list)) {
-            mysql_query("UPDATE `cms_settings` SET `val` = '" . mysql_real_escape_string($iso) . "' WHERE `key` = 'lng'");
+            mysql_query("INSERT INTO `cms_settings` SET
+                `key` = 'lng',
+                `val` = '" . mysql_real_escape_string($iso) . "'
+                ON DUPLICATE KEY UPDATE
+                `val` = '" . mysql_real_escape_string($iso) . "'
+            ");
         }
         header('Location: ' . Vars::$URI);
         break;
@@ -650,7 +655,7 @@ switch (Vars::$ACT) {
                 (!empty($val['description']) ? '<span class="gray">' . lng('description') . ':</span> ' . $val['description'] : '')
             );
             echo'<tr>' .
-                '<td valign="top"><input type="radio" value="' . $key . '" name="iso" ' . ($key == Vars::$SYSTEM_SET['lng'] ? 'checked="checked"' : '') . '/></td>' .
+                '<td valign="top"><input type="radio" value="' . $key . '" name="iso" ' . (isset(Vars::$SYSTEM_SET['lng']) && $key == Vars::$SYSTEM_SET['lng'] ? 'checked="checked"' : '') . '/></td>' .
                 '<td style="padding-bottom:6px">' .
                 Functions::getImage('flag_' . $key . '.gif') .
                 '&#160;<a href="index.php?act=languages&amp;mod=module&amp;language=' . $key . '"><b>' . $val['name'] . '</b></a>&#160;<span class="green">[' . $key . ']</span>' .
