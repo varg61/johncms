@@ -6,7 +6,7 @@
         <label><?= lng('new') ?></label>
         <ul style="list-style: none; padding-left: 0">
             <li><?= Functions::getIcon('image-plus.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=new"><?= lng('photos') ?></a> (<?= $this->new ?>)</li>
-            <li><?= Functions::getIcon('comments-add.png') ?>&#160;<a href="<?= Vars::$URI ?>/new?act=last_comm"><?= lng('comments') ?></a></li>
+            <li><?= Functions::getIcon('comments-add.png') ?>&#160;<a href="<?= Vars::$URI ?>/top?act=last_comm"><?= lng('comments') ?></a></li>
         </ul>
     </div>
     <div class="formblock">
