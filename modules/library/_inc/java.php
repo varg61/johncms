@@ -81,7 +81,7 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar';
         fclose($files);
     }
     echo lng('download_java_help') . '<br /><br />' .
-         lng('title') . ': ' . $res['name'] . '<br />' .
+         lng('title') . ': ' . Validate::filterString($res['name']) . '<br />' .
          lng('download') . ': <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jad">JAD</a>' .
          '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('to_article') . '</a></p>';
 } else {

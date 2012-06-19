@@ -33,11 +33,11 @@ switch (Vars::$ACT) {
                     $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 }
                 $res = mysql_fetch_array($req);
-                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('counters') . '</b></a> | ' . lng('viewing') . '</div>';
-                echo '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . $res['name'] . '</b></div>';
-                echo ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . lng('counter_mod1') . '</h3>' . $res['link1'] . '</p>';
-                echo '<p><h3>' . lng('counter_mod2') . '</h3>' . $res['link2'] . '</p>';
-                echo '<p><h3>' . lng('display_mode') . '</h3>';
+                echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('counters') . '</b></a> | ' . lng('viewing') . '</div>' .
+                    '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Validate::filterString($res['name']) . '</b></div>' .
+                    ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . lng('counter_mod1') . '</h3>' . $res['link1'] . '</p>' .
+                    '<p><h3>' . lng('counter_mod2') . '</h3>' . $res['link2'] . '</p>' .
+                    '<p><h3>' . lng('display_mode') . '</h3>';
                 switch ($res['mode']) {
                     case 2:
                         echo lng('counter_help1');
@@ -129,7 +129,7 @@ switch (Vars::$ACT) {
                 echo '<form action="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
                 echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('counters') . '</b></a> | ' . lng('delete') . '</div>';
                 $res = mysql_fetch_array($req);
-                echo '<div class="rmenu"><p><h3>' . $res['name'] . '</h3>' . lng('delete_confirmation') . '</p><p><input type="submit" value="' . lng('delete') . '" name="submit" /></p></div>';
+                echo '<div class="rmenu"><p><h3>' . Validate::filterString($res['name']) . '</h3>' . lng('delete_confirmation') . '</p><p><input type="submit" value="' . lng('delete') . '" name="submit" /></p></div>';
                 echo '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></div></form>';
             }
         } else {
@@ -164,10 +164,11 @@ switch (Vars::$ACT) {
                 '<input type="hidden" value="' . htmlspecialchars($link1) . '" name="link1" />' .
                 '<input type="hidden" value="' . htmlspecialchars($link2) . '" name="link2" />' .
                 '<input type="hidden" value="' . $mode . '" name="mode" />';
-            if (Vars::$ID)
+            if (Vars::$ID) {
                 echo '<input type="hidden" value="' . Vars::$ID . '" name="id" />';
-            echo '<div class="bmenu"><input type="submit" value="' . lng('save') . '" name="submit" /></div>';
-            echo '</form>';
+            }
+            echo'<div class="bmenu"><input type="submit" value="' . lng('save') . '" name="submit" /></div>' .
+                '</form>';
         } else {
             $name = '';
             $link1 = '';
@@ -178,7 +179,7 @@ switch (Vars::$ACT) {
                 $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 if (mysql_num_rows($req) > 0) {
                     $res = mysql_fetch_array($req);
-                    $name = $res['name'];
+                    $name = Validate::filterString($res['name']);
                     $link1 = htmlspecialchars($res['link1']);
                     $link2 = htmlspecialchars($res['link2']);
                     $mode = $res['mode'];
@@ -188,7 +189,7 @@ switch (Vars::$ACT) {
                     exit;
                 }
             }
-            echo '<form action="' . Vars::$URI . '?act=edit" method="post">' .
+            echo'<form action="' . Vars::$URI . '?act=edit" method="post">' .
                 '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('counters') . '</b></a> | ' . lng('add') . '</div>' .
                 '<div class="menu"><p><h3>' . lng('title') . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
                 '<p><h3>' . lng('counter_mod1') . '</h3><textarea rows="3" name="link1">' . $link1 . '</textarea><br /><small>' . lng('counter_mod1_description') . '</small></p>' .
@@ -267,7 +268,7 @@ switch (Vars::$ACT) {
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                 echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                     Functions::getImage(($res['switch'] == 1 ? 'green' : 'red') . '.png', '', 'class="left"') . '&#160;' .
-                    '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res['id'] . '"><b>' . $res['name'] . '</b></a><br />' .
+                    '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::filterString($res['name']) . '</b></a><br />' .
                     '<div class="sub">' .
                     '<a href="' . Vars::$URI . '?act=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a> | ' .
                     '<a href="' . Vars::$URI . '?act=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a> | ' .
