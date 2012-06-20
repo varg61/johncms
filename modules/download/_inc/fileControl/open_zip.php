@@ -101,7 +101,7 @@ if (!isset($_GET['file'])) {
 			'<b>' . ($i + 1) . ')</b> ' . $dir . '/' . Validate::filterString(mb_convert_encoding($file_name, "UTF-8", "Windows-1251"));
             if ($file_size_two[$i] > 0) echo ' (' . Download::displayFileSize($file_size_two[$i]) . ')';
 			if ($format_file)
-				echo ' - <a href="' . Vars::$URI . '?act=open_zip&amp;id=' . Vars::$ID . '&amp;file=' . rawurlencode($path) . '&amp;page=' . Vars::$PAGE . $isset_more . '">' . (in_array($format_file, $array) ? lng('open_archive_code') : lng('download')) . '</a>';
+				echo ' - <a href="' . Vars::$URI . '?act=open_zip&amp;id=' . Vars::$ID . '&amp;file=' . rawurlencode(mb_convert_encoding($path, "UTF-8", "Windows-1251")) . '&amp;page=' . Vars::$PAGE . $isset_more . '">' . (in_array($format_file, $array) ? lng('open_archive_code') : lng('download')) . '</a>';
             echo '</div>';
         }
     } else {
@@ -130,19 +130,22 @@ if (!isset($_GET['file'])) {
 	-----------------------------------------------------------------
 	*/
     $FileName = rawurldecode(trim($_GET['file']));
-    $format = explode('.', $FileName);
+	$format = explode('.', $FileName);
     $format_file = strtolower($format[count($format) - 1]);
     if (strpos($FileName, '..') !== false or strpos($FileName, './') !== false) {
         echo functions::displayError(lng('not_found_file'), '<p><a href="' . Vars::$URI. '?act=open_zip&amp;id=' . Vars::$ID . $isset_more . '">' . lng('back') . '</a></p>');
         exit;
     }
     $FileName = htmlspecialchars(trim($FileName), ENT_QUOTES, 'UTF-8');
-    $FileName = strtr($FileName, array('&' => '', '$' => '', '>' => '', '<' => '', '~' => '', '`' => '', '#' => '', '*' => ''));
+	$FileName = strtr($FileName, array('&' => '', '$' => '', '>' => '', '<' => '', '~' => '', '`' => '', '#' => '', '*' => ''));
     $zip = new PclZip($file_open);
-    $content = $zip->extract(PCLZIP_OPT_BY_NAME, $FileName, PCLZIP_OPT_EXTRACT_AS_STRING);
-    $content = $content[0]['content'];
+    $content = $zip->extract(PCLZIP_OPT_BY_NAME, mb_convert_encoding($FileName, "Windows-1251", "UTF-8"), PCLZIP_OPT_EXTRACT_AS_STRING);
+    $content = isset($content[0]['content']) ? $content[0]['content'] : '';
 	$FileName = preg_replace("#.*[\\/]#si", "", $FileName);
-    if (in_array($format_file, $array)) {
+	if (in_array($format_file, $array)) {
+    	if(!$content) {    		echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+        	exit;
+    	}
     	/*
 		-----------------------------------------------------------------
 		Просмотр кода файла
@@ -150,7 +153,7 @@ if (!isset($_GET['file'])) {
 		*/
         $UTF = false;
         $content_two = explode("\r\n", $content);
-        echo '<div class="phdr"><b>' . htmlspecialchars(mb_convert_encoding($FileName, "UTF-8", "Windows-1251"), ENT_QUOTES, 'UTF-8') . '</b></div><div class="list1"><div class="phpcode">';
+        echo '<div class="phdr"><b>' . htmlspecialchars($FileName, ENT_QUOTES, 'UTF-8') . '</b></div><div class="list1"><div class="phpcode">';
         $rus_simvol = array('а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я');
         for ($i = 0; $i < 66; $i++) {
             if (strstr($content, $rus_simvol[$i]) !== false) $UTF = 1;
@@ -165,8 +168,8 @@ if (!isset($_GET['file'])) {
 		Скачка файла
 		-----------------------------------------------------------------
 		*/
-        $NewNameFile = strtr(Download::translateFileName(mb_convert_encoding($FileName, "UTF-8", "Windows-1251")), array(' ' => '_', '@' => '', '%' => ''));
-        if (file_exists(ROOTPATH . 'files/download/temp/open_zip/' . $NewNameFile)) {
+        $NewNameFile = strtr(Download::translateFileName(mb_strtolower($FileName)), array(' ' => '_', '@' => '', '%' => ''));
+		if (file_exists(ROOTPATH . 'files/download/temp/open_zip/' . $NewNameFile)) {
             header('Location: ' . Vars::$HOME_URL. '/files/download/temp/open_zip/' . $NewNameFile);
             exit;
         }
