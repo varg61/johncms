@@ -145,7 +145,7 @@ if ($edit) {
     '<div class="menu"><form action="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data">' .
     lng('select_file') . '<span class="red">*</span>::<br /><input type="file" name="fail"/><br />' .
     lng('or_link_to_it') . ':<br /><input type="post" name="link_file" value=""/><br />' .
-    lng('save_file') . ' (max. 30, без расширения):<br /><input type="text" name="new_file"/><br />' .
+    lng('save_name_file') . ':<br /><input type="text" name="new_file"/><br />' .
     lng('link_file') . ' (мах. 200)<span class="red">*</span>:<br />' .
     '<input type="text" name="name_link" value="' . lng('download_file_more') . '"/><br />' .
     '<input type="submit" name="submit" value="' . lng('upload') . '"/>' .

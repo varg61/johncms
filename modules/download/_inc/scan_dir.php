@@ -29,36 +29,40 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $query = mysql_query("SELECT `id`, `dir`, `name`, `type` FROM `cms_download_files`");
             while ($result = mysql_fetch_assoc($query)) {
                 if (!file_exists($result['dir'] . '/' . $result['name'])) {
-                    if ($result['type'] == 1) {
-                        $arrayClean = array();
-                        $req = mysql_query("SELECT `id` FROM `cms_download_files` WHERE `refid` = '" . $result['id'] . "'");
-                        while ($res = mysql_fetch_assoc($req)) {
-                            $arrayClean = $res['id'];
-                        }
-                        $idClean = implode(',', $arrayClean);
-                        mysql_query("DELETE FROM `cms_download_bookmark` WHERE `file_id` IN (" . $idClean . ")");
-                        mysql_query("DELETE FROM `cms_download_comments` WHERE `sub_id` IN (" . $idClean . ")");
-                        mysql_query("DELETE FROM `cms_download_more` WHERE `refid` IN (" . $idClean . ")");
-                        mysql_query("DELETE FROM `cms_download_files` WHERE `id` = '" . $result['id'] . "' OR  `refid` = '" . $result['id'] . "'");
-                    } else {
-                        $req = mysql_query("SELECT `id` FROM `cms_download_more` WHERE `refid` = '" . $result['id'] . "'");
-                        while ($res = mysql_fetch_assoc($req)) {
-                            @unlink($result['dir'] . '/' . $res['name']);
+                    $req = mysql_query("SELECT `id` FROM `cms_download_more` WHERE `refid` = '" . $result['id'] . "'");
+                    while ($res = mysql_fetch_assoc($req)) {
+                    	@unlink($result['dir'] . '/' . $res['name']);
+					}
+     				mysql_query("DELETE FROM `cms_download_bookmark` WHERE `file_id`='" . $result['id'] . "'");
+                    mysql_query("DELETE FROM `cms_download_more` WHERE `refid` = '" . $result['id'] . "'");
+                    mysql_query("DELETE FROM `cms_download_comments` WHERE `sub_id`='" . $result['id'] . "'");
+                    mysql_query("DELETE FROM `cms_download_files` WHERE `id` = '" . $result['id'] . "' LIMIT 1");
 
-                        }
-                        mysql_query("DELETE FROM `cms_download_bookmark` WHERE `file_id`='" . $result['id'] . "'");
-                        mysql_query("DELETE FROM `cms_download_more` WHERE `refid` = '" . $result['id'] . "'");
-                        mysql_query("DELETE FROM `cms_download_comments` WHERE `sub_id`='" . $result['id'] . "'");
-                        mysql_query("DELETE FROM `cms_download_files` WHERE `id` = '" . $result['id'] . "' LIMIT 1");
-                    }
                 }
             }
-            $req_down = mysql_query("SELECT `dir`, `name`, `id` FROM `cms_download_files` WHERE `type` = 1");
-            while ($res_down = mysql_fetch_assoc($req_down)) {
-                $dir_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2' AND `dir` LIKE '" . ($res_down['dir'] . '/' . $res_down['name']) . "%'"), 0);
-                mysql_query("UPDATE `cms_download_files` SET `total` = '$dir_files' WHERE `id` = '" . $res_down['id'] . "'");
+            $query = mysql_query("SELECT `id`, `dir`, `name` FROM `cms_download_category`");
+            while ($result = mysql_fetch_assoc($query)) {
+                if (!file_exists($result['dir'])) {
+                    $arrayClean = array();
+                    $req = mysql_query("SELECT `id` FROM `cms_download_files` WHERE `refid` = '" . $result['id'] . "'");
+                    while ($res = mysql_fetch_assoc($req)) {
+                    	$arrayClean = $res['id'];
+                    }
+                    $idClean = implode(',', $arrayClean);
+                    mysql_query("DELETE FROM `cms_download_bookmark` WHERE `file_id` IN (" . $idClean . ")");
+                    mysql_query("DELETE FROM `cms_download_comments` WHERE `sub_id` IN (" . $idClean . ")");
+                    mysql_query("DELETE FROM `cms_download_more` WHERE `refid` IN (" . $idClean . ")");
+                    mysql_query("DELETE FROM `cms_download_files` WHERE `refid` = '" . $result['id'] . "'");
+                    mysql_query("DELETE FROM `cms_download_category` WHERE `id` = '" . $result['id'] . "'");
+
+                }
             }
-            mysql_query("OPTIMIZE TABLE `cms_download_bookmark`");
+            $req_down = mysql_query("SELECT `dir`, `name`, `id` FROM `cms_download_category`");
+			while ($res_down = mysql_fetch_assoc($req_down)) {
+				$dir_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2' AND `dir` LIKE '" . ($res_down['dir']) . "%'"), 0);
+				mysql_query("UPDATE `cms_download_category` SET `total` = '$dir_files' WHERE `id` = '" . $res_down['id'] . "'");
+			}
+   			mysql_query("OPTIMIZE TABLE `cms_download_bookmark`");
             mysql_query("OPTIMIZE TABLE `cms_download_files`");
             mysql_query("OPTIMIZE TABLE `cms_download_comments`");
             mysql_query("OPTIMIZE TABLE `cms_download_more`");
@@ -74,9 +78,9 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                -----------------------------------------------------------------
                */
             if (Vars::$ID) {
-                $cat = mysql_query("SELECT `dir`, `name`, `rus_name` FROM `cms_download_files` WHERE `type` = 1 AND `id` = '" . Vars::$ID . "' LIMIT 1");
+                $cat = mysql_query("SELECT `dir`, `name`, `rus_name` FROM `cms_download_category` WHERE	`id` = '" . Vars::$ID . "' LIMIT 1");
                 $res_down_cat = mysql_fetch_assoc($cat);
-                $scan_dir = $res_down_cat['dir'] . '/' . $res_down_cat['name'];
+                $scan_dir = $res_down_cat['dir'];
                 if (mysql_num_rows($cat) == 0 || !is_dir($scan_dir)) {
                     echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
                     exit;
@@ -99,7 +103,12 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                     $array_dowm[] = $result['dir'] . '/' . $result['name'];
                     $array_id[$result['dir'] . '/' . $result['name']] = $result['id'];
                 }
-                $query_more = mysql_query("SELECT `name` FROM `cms_download_more`");
+				$queryCat = mysql_query("SELECT `dir`, `id` FROM `cms_download_category`");
+                while ($resultCat = mysql_fetch_assoc($queryCat)) {
+                    $array_dowm[] = $resultCat['dir'];
+                    $array_id[$resultCat['dir']] = $resultCat['id'];
+				}
+				$query_more = mysql_query("SELECT `name` FROM `cms_download_more`");
                 while ($result_more = mysql_fetch_assoc($query_more)) {
                     $array_more[] = $result_more['name'];
                 }
@@ -123,29 +132,29 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                     }
                     return $array_scan;
                 }
-
+                $i = 0;
+                $i_two = 0;
+                $i_three = 0;
                 $arr_scan_dir = scan_dir($scan_dir);
                 if ($arr_scan_dir) {
-                    $i_three = $i_two = $i = 0;
                     foreach ($arr_scan_dir as $val) {
                         if (!in_array($val, $array_dowm)) {
                             if (is_dir($val)) {
                                 $name = mysql_real_escape_string(basename($val));
                                 $dir = mysql_real_escape_string(dirname($val));
                                 $refid = isset($array_id[$dir]) ? (int)$array_id[$dir] : 0;
-                                mysql_query("INSERT INTO `cms_download_files` SET
+                            	$sort = isset($sort) ? ($sort+1) : time();
+                            	mysql_query("INSERT INTO `cms_download_category` SET
                                     `refid` = '$refid',
-                                    `dir` = '$dir',
-                                    `time` = '" . time() . "',
+                                    `dir` = '" . $dir . "/" . $name . "',
+                                    `sort` =  '$sort',
                                     `name` = '$name',
-                                    `type` = '1',
                                     `field` = '0',
                                     `rus_name` = '$name',
                                     `text` = '',
-                                    `about` = '',
                                     `desc` = ''
                                 ") or die('144: ' . mysql_error());
-                                $array_id[$val] = mysql_insert_id();
+                                $array_id[$dir . "/" . $name] = mysql_insert_id();
                                 ++$i;
                             } else {
                                 $name = basename($val);

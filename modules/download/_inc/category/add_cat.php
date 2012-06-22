@@ -13,13 +13,13 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (!Vars::$ID) $load_cat = $files_path;
     else {
-        $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND `type` = 1 LIMIT 1");
+        $req_down = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
         $res_down = mysql_fetch_assoc($req_down);
-        if (mysql_num_rows($req_down) == 0 || !is_dir($res_down['dir'] . '/' . $res_down['name'])) {
+        if (mysql_num_rows($req_down) == 0 || !is_dir($res_down['dir'])) {
             echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
             exit;
         }
-        $load_cat = $res_down['dir'] . '/' . $res_down['name'];
+        $load_cat = $res_down['dir'];
     }
     if (isset($_POST['submit'])) {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
@@ -47,22 +47,20 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         if (empty($rus_name))
             $rus_name = $name;
         $dir = FALSE;
-        if (!is_dir("$load_cat/$name"))
-            $dir = mkdir("$load_cat/$name", 0777);
+        $load_cat = $load_cat . '/' . $name;
+        if (!is_dir($load_cat))
+            $dir = mkdir($load_cat, 0777);
         if ($dir == TRUE) {
-            chmod("$load_cat/$name", 0777);
-            mysql_query("INSERT INTO `cms_download_files` SET
+            chmod($load_cat, 0777);
+            mysql_query("INSERT INTO `cms_download_category` SET
                 `refid` = '" . Vars::$ID . "',
-                `dir` = '$load_cat',
-                `time` = '" . time() . "',
+                `dir` = '" . mysql_real_escape_string($load_cat) . "',
                 `sort` = '" . time() . "',
                 `name` = '" . mysql_real_escape_string($name) . "',
                 `desc` = '" . mysql_real_escape_string($desc) . "',
-                `type` = '1',
                 `field` = '$user_down',
                 `text` = '" . mysql_real_escape_string($format) . "',
-                `rus_name` = '" . mysql_real_escape_string($rus_name) . "',
-                `about` = ''
+                `rus_name` = '" . mysql_real_escape_string($rus_name) . "'
             ") or die(mysql_error());
             $cat_id = mysql_insert_id();
             echo '<div class="phdr"><b>' . lng('add_cat_title') . '</b></div>' .

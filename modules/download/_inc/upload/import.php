@@ -11,15 +11,15 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 4  || Vars::$USER_RIGHTS  >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND `type` = 1 LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
     $res = mysql_fetch_assoc($req);
-    if (!mysql_num_rows($req) || !is_dir($res['dir'] . '/' . $res['name'])) {
+    if (!mysql_num_rows($req) || !is_dir($res['dir'])) {
         echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
         exit;
     }
     $al_ext = $res['field'] ? explode(', ', $res['text']) : $defaultExt;
     if (isset($_POST['submit'])) {
-        $load_cat = $res['dir'] . '/' . $res['name'];
+        $load_cat = $res['dir'];
         $error = array ();
         $link = isset($_POST['fail']) ? str_replace('./', '_', trim($_POST['fail'])) : null;
         if ($link) {
@@ -93,14 +93,14 @@ if (Vars::$USER_RIGHTS == 4  || Vars::$USER_RIGHTS  >= 6) {
                 $sql = '';
                 $i = 0;
                 while ($dirid != '0' && $dirid != "") {
-                    $res_down = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `cms_download_files` WHERE `type` = 1 AND `id` = '$dirid' LIMIT 1"));
+                    $res_down = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `cms_download_category` WHERE `id` = '$dirid' LIMIT 1"));
                     if ($i)
                         $sql .= ' OR ';
                     $sql .= '`id` = \'' . $dirid . '\'';
                     $dirid = $res_down['refid'];
                     ++$i;
                 }
-                mysql_query("UPDATE `cms_download_files` SET `total` = (`total`+1) WHERE $sql");
+                mysql_query("UPDATE `cms_download_category` SET `total` = (`total`+1) WHERE $sql");
                 mysql_query("OPTIMIZE TABLE `cms_download_files`");
                 echo '<div class="phdr"><a href="' . Vars::$URI. '?act=import&amp;id=' . Vars::$ID. '">' . lng('upload_file_more') . '</a> | <a href="' . Vars::$URI. '?id=' . Vars::$ID. '">' . lng('back') . '</a></div>';
             } else
@@ -109,7 +109,7 @@ if (Vars::$USER_RIGHTS == 4  || Vars::$USER_RIGHTS  >= 6) {
     } else {
         echo '<div class="phdr"><b>' . lng('download_import') . ': ' . Validate::filterString($res['rus_name']) . '</b></div>' .
         '<div class="list1"><form action="' . Vars::$URI. '?act=import&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
-        lng('Download::downloadLlink') . '<span class="red">*</span>:<br /><input type="post" name="fail" value="http://"/><br />' .
+        lng('download_link') . '<span class="red">*</span>:<br /><input type="post" name="fail" value="http://"/><br />' .
         lng('save_name_file') . ':<br /><input type="text" name="new_file"/><br />' .
         lng('screen_file') . ':<br /><input type="file" name="screen"/><br />' .
         lng('name_file') . ' (мах. 200):<br /><input type="text" name="text"/><br />' .

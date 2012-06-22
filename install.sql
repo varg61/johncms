@@ -412,13 +412,28 @@ CREATE TABLE `cms_download_comments` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-DROP TABLE IF EXISTS `cms_download_files`;
-CREATE TABLE `cms_download_files` (
+CREATE TABLE IF NOT EXISTS `cms_download_category` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `refid` int(11) unsigned NOT NULL DEFAULT '0',
+  `dir` text NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT '0',
+  `name` text NOT NULL,
+  `total` int(11) unsigned NOT NULL DEFAULT '0',
+  `rus_name` text NOT NULL,
+  `text` text NOT NULL,
+  `field` int(11) NOT NULL DEFAULT '0',
+  `desc` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `refid` (`refid`),
+  KEY `total` (`total`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
+
+CREATE TABLE IF NOT EXISTS `cms_download_files` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `refid` int(11) unsigned NOT NULL DEFAULT '0',
   `dir` text NOT NULL,
   `time` int(11) unsigned NOT NULL DEFAULT '0',
-  `sort` int(11) NOT NULL DEFAULT '0',
   `name` text NOT NULL,
   `type` int(2) NOT NULL DEFAULT '0',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -435,7 +450,7 @@ CREATE TABLE `cms_download_files` (
   KEY `type` (`type`),
   KEY `user_id` (`user_id`),
   KEY `time` (`time`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 
 DROP TABLE IF EXISTS `cms_download_more`;

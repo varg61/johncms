@@ -17,8 +17,8 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 1 AND `id` = '" . VARS::$ID . "' LIMIT 1");
-    $del_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = 1 AND`refid` = '" . VARS::$ID . "'"), 0);
+    $req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
+    $del_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_category` WHERE `refid` = '" . VARS::$ID . "'"), 0);
     if (!mysql_num_rows($req) || $del_cat) {
         echo Functions::displayError(($del_cat ? lng('sub_catalogs') : lng('not_found_dir')), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
         exit;
@@ -48,8 +48,9 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             mysql_query("DELETE FROM `cms_download_comments` WHERE `sub_id`='" . $res_down['id'] . "'");
             mysql_query("DELETE FROM `cms_download_bookmark` WHERE `file_id`='" . $res_down['id'] . "'");
         }
-        mysql_query("DELETE FROM `cms_download_files` WHERE `refid` = '" . VARS::$ID . "' OR `id` = '" . VARS::$ID . "'");
-        rmdir($res['dir'] . '/' . $res['name']);
+        mysql_query("DELETE FROM `cms_download_files` WHERE `refid` = '" . VARS::$ID . "'");
+        mysql_query("DELETE FROM `cms_download_category` WHERE `id` = '" . VARS::$ID . "'");
+        rmdir($res['dir']);
         header('location: ' . Vars::$URI . '?id=' . $res['refid']);
 	} else {
         echo '<div class="phdr"><b>' . lng('download_del_cat') . '</b></div>' .

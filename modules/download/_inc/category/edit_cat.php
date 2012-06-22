@@ -16,9 +16,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 1 AND `id` = '" . VARS::$ID . "' LIMIT 1");
+    $req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
     $res = mysql_fetch_assoc($req);
-    if (!mysql_num_rows($req) || !is_dir($res['dir'] . '/' . $res['name'])) {
+    if (!mysql_num_rows($req) || !is_dir($res['dir'])) {
         echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
         exit;
     }
@@ -35,11 +35,11 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $order = 'ASC';
             $val = '>';
         }
-        $req_two = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 1 AND `refid` = '" . $res['refid'] . "' AND `sort` $val '" . $res['sort'] . "' ORDER BY `sort` $order LIMIT 1");
+        $req_two = mysql_query("SELECT * FROM `cms_download_category` WHERE `refid` = '" . $res['refid'] . "' AND `sort` $val '" . $res['sort'] . "' ORDER BY `sort` $order LIMIT 1");
         if (mysql_num_rows($req_two)) {
             $res_two = mysql_fetch_assoc($req_two);
-            mysql_query("UPDATE `cms_download_files` SET `sort` = '" . $res_two['sort'] . "' WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
-            mysql_query("UPDATE `cms_download_files` SET `sort` = '" . $res['sort'] . "' WHERE `id` = '" . $res_two['id'] . "' LIMIT 1");
+            mysql_query("UPDATE `cms_download_category` SET `sort` = '" . $res_two['sort'] . "' WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
+            mysql_query("UPDATE `cms_download_category` SET `sort` = '" . $res['sort'] . "' WHERE `id` = '" . $res_two['id'] . "' LIMIT 1");
         }
         header('location: ' . VARS::$URI . '?id=' . $res['refid']);
         exit;
@@ -75,7 +75,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         }
         $rus_name = mysql_real_escape_string($rus_name);
         $desc = isset($_POST['desc']) ? mysql_real_escape_string($_POST['desc']) : '';
-        mysql_query("UPDATE `cms_download_files` SET `field`='$user_down', `text` = '$format_files', `desc`='$desc', `rus_name`='$rus_name' WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
+        mysql_query("UPDATE `cms_download_category` SET `field`='$user_down', `text` = '$format_files', `desc`='$desc', `rus_name`='$rus_name' WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
         header('location: ' . VARS::$URI . '?id=' . VARS::$ID);
     } else {
         $name = Validate::filterString($res['rus_name']);

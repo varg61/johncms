@@ -74,8 +74,7 @@ spl_autoload_register(
             'textparser' => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
             'upload'     => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
             'validate'   => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
-            'vars'       => 'classes' . DIRECTORY_SEPARATOR . 'vars.php',
-            'download'   => 'classes' . DIRECTORY_SEPARATOR . 'download.php'
+            'vars'       => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
         );
 
         if (isset($system[$name])) {

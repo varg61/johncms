@@ -334,4 +334,31 @@ class Download extends Vars
                          'я' => 'ya');
         return strtr($str, $replace);
     }
+
+    /*
+    -----------------------------------------------------------------
+    Навигация по папкам
+    -----------------------------------------------------------------
+    */
+    public static function navigation($array = array())
+    {
+    	$category = array('<a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a>');
+        if($array['refid']) {
+        	$sql = array();
+        	if(!isset($array['count'])) $array['count'] = 1;
+        	$explode = explode('/', $array['dir']);
+            for($i = 0; $i < (count($explode)-$array['count']); $i++) {
+				if($i) $explode[$i] = $explode[$i-1] . '/' . $explode[$i];
+               	if($i > 2) $sql[]  =  $explode[$i];
+			}
+            if($sql) {
+				$req_cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `dir` IN ('" . implode("','", $sql) . "') ORDER BY `id` ASC");
+				while ($res_cat = mysql_fetch_assoc($req_cat)) {
+                	$category[] = '<a href="' . Vars::$URI . '?id=' . $res_cat['id'] . '">' . Validate::filterString($res_cat['rus_name']) . '</a>';
+				}
+			}
+		}
+        if(isset($array['name'])) $category[] = Validate::filterString($array['name']);
+		return functions::displayMenu($category);
+	}
 }

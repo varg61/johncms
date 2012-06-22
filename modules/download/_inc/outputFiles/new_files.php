@@ -18,15 +18,15 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = lng('new_files');
 $sql_down = '';
 if (Vars::$ID) {
-    $cat = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 1 AND `id` = '" . Vars::$ID . "' LIMIT 1");
+    $cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
     $res_down_cat = mysql_fetch_assoc($cat);
-    if (mysql_num_rows($cat) == 0 || !is_dir($res_down_cat['dir'] . '/' . $res_down_cat['name'])) {
+    if (mysql_num_rows($cat) == 0 || !is_dir($res_down_cat['dir'])) {
         echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
         exit;
     }
     $title_pages = Validate::filterString(mb_substr($res_down_cat['rus_name'], 0, 30));
     $textl = lng('new_files') . ': ' . (mb_strlen($res_down_cat['rus_name']) > 30 ? $title_pages . '...' : $title_pages);
-    $sql_down = ' AND `dir` LIKE \'' . ($res_down_cat['dir'] . '/' . $res_down_cat['name']) . '%\' ';
+    $sql_down = ' AND `dir` LIKE \'' . ($res_down_cat['dir']) . '%\' ';
 }
 echo '<div class="phdr"><b>' . $textl . '</b></div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old $sql_down"), 0);

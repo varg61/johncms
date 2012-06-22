@@ -16,7 +16,7 @@ $do = isset($_GET['do']) ? trim($_GET['do']) : '';
 if (Vars::$USER_RIGHTS > 6 ) {
 	$catId = isset($_GET['catId']) ? abs(intval($_GET['catId'])) : 0;
 	if($catId) {
-		$queryDir = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '$catId' AND `type` = 1  LIMIT 1");
+		$queryDir = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '$catId' LIMIT 1");
 		if(!mysql_num_rows($queryDir)) $catId = 0;
 	}
 	echo '<div class="phdr"><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a> | <b>' . lng('transfer_file') . '</b></div>';
@@ -32,21 +32,21 @@ if (Vars::$USER_RIGHTS > 6 ) {
 					$req_file_more = mysql_query("SELECT * FROM `cms_download_more` WHERE `refid` = '" . VARS::$ID . "'");
                 	if (mysql_num_rows($req_file_more)) {
                 		while ($res_file_more = mysql_fetch_assoc($req_file_more)) {
-							copy($res_down['dir'] . '/' . $res_file_more['name'], $resDir['dir'] . '/' . $resDir['name'] . '/' . $res_file_more['name']);
+							copy($res_down['dir'] . '/' . $res_file_more['name'], $resDir['dir'] . '/' . $res_file_more['name']);
                        		unlink($res_down['dir'] . '/' . $res_file_more['name']);
 						}
                 	}
 
 					$name = $res_down['name'];
-					$newFile =  $resDir['dir'] . '/' . $resDir['name'] . '/' . $res_down['name'];
+					$newFile =  $resDir['dir'] . '/' . $res_down['name'];
                     if(is_file($newFile)) {
                     	$name = time() . '_' .$res_down['name'];
-                    	$newFile =  $resDir['dir'] . '/' . $resDir['name'] . '/' . $name;
+                    	$newFile =  $resDir['dir'] . '/' . $name;
 
                     }
 					copy($res_down['dir'] . '/' . $res_down['name'], $newFile);
                     unlink($res_down['dir'] . '/' . $res_down['name']);
-					mysql_query("UPDATE `cms_download_files` SET `name`='" . mysql_real_escape_string($name) . "', `dir`='" . mysql_real_escape_string($resDir['dir'] . "/" . $resDir['name']) . "', `refid`='$catId'  WHERE `id`='" . VARS::$ID . "'");
+					mysql_query("UPDATE `cms_download_files` SET `name`='" . mysql_real_escape_string($name) . "', `dir`='" . mysql_real_escape_string($resDir['dir']) . "', `refid`='$catId'  WHERE `id`='" . VARS::$ID . "'");
 					echo  '<div class="menu"><p>' . lng('transfer_file_ok') . '</p></div>' .
                 	'<div class="phdr"><a href="' . Vars::$URI . '?act=recount">' . lng('download_recount') . '</a></div>';
                	} else {
@@ -56,7 +56,7 @@ if (Vars::$USER_RIGHTS > 6 ) {
 			}
 			break;
 		default:
-			$queryCat = mysql_query("SELECT * FROM `cms_download_files` WHERE `refid` = '$catId' AND `type` = 1");
+			$queryCat = mysql_query("SELECT * FROM `cms_download_category` WHERE `refid` = '$catId'");
 			$totalCat = mysql_num_rows($queryCat);
 			$i = 0;
     		if($totalCat > 0) {

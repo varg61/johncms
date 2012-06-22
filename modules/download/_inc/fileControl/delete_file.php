@@ -50,13 +50,13 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         $sql = '';
         $i = 0;
         while ($dirid != '0' && $dirid != "") {
-            $res = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `cms_download_files` WHERE `type` = 1 AND `id` = '$dirid' LIMIT 1"));
+            $res = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `cms_download_category` WHERE `id` = '$dirid' LIMIT 1"));
             if ($i) $sql .= ' OR ';
             $sql .= '`id` = \'' . $dirid . '\'';
             $dirid = $res['refid'];
             ++$i;
         }
-        mysql_query("UPDATE `cms_download_files` SET `total` = (`total`-1) WHERE $sql");
+        mysql_query("UPDATE `cms_download_category` SET `total` = (`total`-1) WHERE $sql");
         mysql_query("DELETE FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
         mysql_query("OPTIMIZE TABLE `cms_download_files`");
         header('Location: ' . Vars::$URI . '?id=' . $res_down['refid']);

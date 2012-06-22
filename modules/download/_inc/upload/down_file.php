@@ -10,13 +10,13 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$req = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND `type` = 1 LIMIT 1");
+$req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
 $res = mysql_fetch_assoc($req);
-if (mysql_num_rows($req) && is_dir($res['dir'] . '/' . $res['name'])) {
+if (mysql_num_rows($req) && is_dir($res['dir'])) {
     if (($res['field'] && Vars::$USER_ID) || (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6)) {
         $al_ext = $res['field'] ? explode(', ', $res['text']) :  $defaultExt;
         if (isset($_POST['submit'])) {
-            $load_cat = $res['dir'] . '/' . $res['name'];
+            $load_cat = $res['dir'];
             $do_file = false;
             if ($_FILES['fail']['size'] > 0) {
                 $do_file = true;
@@ -107,14 +107,14 @@ if (mysql_num_rows($req) && is_dir($res['dir'] . '/' . $res['name'])) {
                             $sql = '';
                             $i = 0;
                             while ($dirid != '0' && $dirid != "") {
-                                $res_down = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `cms_download_files` WHERE `type` = 1 AND `id` = '$dirid' LIMIT 1"));
+                                $res_down = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `cms_download_category` WHERE `id` = '$dirid' LIMIT 1"));
                                 if ($i)
                                     $sql .= ' OR ';
                                 $sql .= '`id` = \'' . $dirid . '\'';
                                 $dirid = $res_down['refid'];
                                 ++$i;
                             }
-                            mysql_query("UPDATE `cms_download_files` SET `total` = (`total`+1) WHERE $sql");
+                            mysql_query("UPDATE `cms_download_category` SET `total` = (`total`+1) WHERE $sql");
                             mysql_query("OPTIMIZE TABLE `cms_download_files`");
                         }
                         echo '<div class="phdr"><a href="' . Vars::$URI. '?act=down_file&amp;id=' . Vars::$ID. '">' . lng('upload_file_more') . '</a> | <a href="' . Vars::$URI. '?id=' . Vars::$ID. '">' . lng('back') . '</a></div>';

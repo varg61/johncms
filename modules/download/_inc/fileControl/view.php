@@ -97,8 +97,9 @@ if (($format_file == 'mp4' || $format_file == 'flv') && !Vars::$IS_MOBILE) {
 */
 if ($format_file == 'jpg' || $format_file == 'jpeg' || $format_file == 'gif' || $format_file == 'png') {
     $info_file = getimagesize($res_down['dir'] . '/' . $res_down['name']);
-    echo '<div class="gmenu"><img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($res_down['dir'] . '/' . $res_down['name']) . '" alt="preview" /></div>';
-    $text_info = '<b>' . lng('resolution') . ': </b>' . $info_file[0] . 'x' . $info_file[1] . ' px<br />';
+    //echo '<div class="gmenu"><img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($res_down['dir'] . '/' . $res_down['name']) . '" alt="preview" /></div>';
+	$screen[] = $res_down['dir'] . '/' . $res_down['name'];
+	$text_info = '<b>' . lng('resolution') . ': </b>' . $info_file[0] . 'x' . $info_file[1] . ' px<br />';
 }
 else if (($format_file == '3gp' || $format_file == 'avi' || $format_file == 'mp4') && !$screen && $set_down['video_screen'])
     $screen[] = Download::screenAuto($res_down['dir'] . '/' . $res_down['name'], $res_down['id'], $format_file);
@@ -141,10 +142,10 @@ if ($screen) {
         if (Vars::$PAGE >= $total) Vars::$PAGE = $total;
         echo '<div class="topmenu"> ' . Functions::displayPagination(Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '&amp;', Vars::$PAGE - 1, $total, 1) . '</div>' .
             '<div class="gmenu"><b>' . lng('screen_file') . ' (' . Vars::$PAGE . '/' . $total . '):</b><br />' .
-            '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=3&amp;img=' . rawurlencode($screen[Vars::$PAGE - 1]) . '" alt="screen" /></div>';
+            '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($screen[Vars::$PAGE - 1]) . '" alt="screen" /></div>';
     } else {
         echo '<div class="gmenu"><b>' . lng('screen_file') . ':</b><br />' .
-            '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=3&amp;img=' . rawurlencode($screen[0]) . '" alt="screen" /></div>';
+            '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($screen[0]) . '" alt="screen" /></div>';
     }
 }
 /*
@@ -250,21 +251,7 @@ if (mysql_num_rows($req_file_more)) {
 Навигация
 -----------------------------------------------------------------
 */
-$tree = array();
-$dirid = $res_down['refid'];
-while ($dirid != '0' && $dirid != "") {
-    $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 1 AND `id` = '$dirid' LIMIT 1");
-    $res = mysql_fetch_assoc($req);
-    $tree[] = '<a href="' . Vars::$URI . '?id=' . $dirid . '">' . Validate::filterString($res['rus_name']) . '</a>';
-    $dirid = $res['refid'];
-}
-krsort($tree);
-$cdir = array_pop($tree);
-echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a> | ';
-foreach ($tree as $value) {
-    echo $value . ' &raquo; ';
-}
-echo '<a href="' . Vars::$URI . '?id=' . $res_down['refid'] . '">' . strip_tags($cdir) . '</a></div>';
+echo '<div class="phdr">' . Download::navigation(array('dir' => $res_down['dir'], 'refid' => 1, 'count' => 0)) . '</div>';
 
 /*
 -----------------------------------------------------------------
