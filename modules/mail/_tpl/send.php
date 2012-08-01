@@ -1,7 +1,7 @@
 <div class="phdr"><strong><?= lng('write_message') ?></strong></div>
 <?= $this->mail_error ?>
 <div>
-    <form name="form" action="<?= $this->url ?>" method="post" enctype="multipart/form-data">
+    <form name="form" action="<?= $this->url ?>" method="post">
         <div class="gmenu">
             <strong><?= lng('nick') ?>:</strong><br/>
             <input type="text" name="login" value="<?= $this->login ?>"/><br/>
@@ -14,19 +14,13 @@
                 <?php endforeach ?>
             </select><br/>
             <? endif ?>
-            <strong><?= lng('message') ?>:</strong><br/>
+			<strong><?= lng('message') ?>:</strong><br/>
             <?php if (!Vars::$IS_MOBILE): ?>
             <?= TextParser::autoBB('form', 'text') ?>
             <? endif ?>
-            <textarea rows="<?= Vars::$USER_SET['field_h'] ?>" name="text"><?= $this->text ?></textarea><br/>
-            <small><?= lng('text_size') ?></small>
-            <br/>
-            <strong><?= lng('file') ?>:</strong><br/>
-            <input type="file" name="0"/><br/>
-            <small><?= lng('max_file_size') ?> <?= $this->size ?> кб.</small>
-            <br/>
+            <textarea rows="<?= Vars::$USER_SET['field_h'] ?>" name="text"><?php echo $this->text ?></textarea><br/>
+            <small><?= lng('text_size') ?></small><br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
-            <input type="hidden" name="MAX_FILE_SIZE" value="<?= $this->maxsize ?>"/>
             <p><input type="submit" name="submit" value="<?= lng('sent') ?>"/></p>
         </div>
     </form>

@@ -20,7 +20,7 @@
             <div class="sub">
                 <input type="checkbox" name="delch[]" value="<?= $row['mid'] ?>"/>
                 <?php if (isset($row['read']) && $row['read'] == 0 && $row['user_id'] == Vars::$USER_ID): ?>
-                [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=edit&amp;id=<?= $row['mid'] ?>"><?= lng('edit') ?></a>]
+                [<a href="<?= Vars::$HOME_URL ?>/mail?act=edit&amp;id=<?= $row['mid'] ?>"><?= lng('edit') ?></a>]
                 <? endif ?>
                 <?php if ($row['selectBar']): ?>
                 <?= $row['selectBar'] ?>
@@ -28,7 +28,7 @@
                 <?php if (!$row['selectBar']): ?>
                 [<span class="red">х</span>&#160;<a href="<?= $row['urlDelete'] ?>"><?= lng('delete') ?></a>]
                 <?php if ($row['elected']): ?>
-                    [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=elected&amp;id=<?= $row['mid'] ?>"><?= lng('in_elected') ?></a>]
+                    [<a href="<?= Vars::$HOME_URL ?>/mail?act=elected&amp;id=<?= $row['mid'] ?>"><?= lng('in_elected') ?></a>]
                     <? endif ?>
                 <? endif ?>
             </div>

@@ -20,7 +20,7 @@ if ( !Vars::$USER_ID )
 }
 //Заголовок
 $tpl->title = lng( 'mail' ) . ' | ' . lng( 'write_message' );
-$id = isset( $_POST['contact_id'] ) ? trim( $_POST['contact_id'] ) : '';
+$id = isset( $_POST['contact_id'] ) ? intval( $_POST['contact_id'] ) : '';
 $add_message['login'] = isset( $_POST['login'] ) ? trim( $_POST['login'] ) : '';
 $add_message['text'] = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
 $addmail = new ValidMail($add_message, ($id ? $id: false));
@@ -43,7 +43,8 @@ if($tpl->count_contact) {
 	}
 	$tpl->query = $array;
 }
-$tpl->url = Vars::$MODULE_URI . '?act=send';
+
+$tpl->url = Vars::$MODULE_URI . '?act=add';
 $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
 $tpl->size = Vars::$SYSTEM_SET['flsz'];
 $tpl->token = mt_rand(100, 10000);

@@ -37,8 +37,8 @@ if(Vars::$ID) {
 			$tpl->users_id = $result['user_id'];
 			$tpl->read = $result['read'];
 			$tpl->text = $text;
-			$tpl->file = $result['filename'] ? Functions::getImage( UploadMail::fileicon( $result['filename'] ),
-			'', 'style="margin: 0 0 -4px 0;"' ) . '&#160;<a href="' . Vars::
+			$tpl->file = $result['filename'] ? Functions::getIcon( UploadMail::fileicon( $result['filename'] ),
+			'', '', 'style="margin: 0 0 -4px 0;"' ) . '&#160;<a href="' . Vars::
 			$MODULE_URI . '?act=load&amp;id=' . $result['id'] . '">' . $result['filename'] .
 			'</a> (' . UploadMail::formatsize( $result['filesize'] ) . ')(' . $result['filecount'] . ')' : '';
 			$tpl->time_message = Functions::displayDate( $result['time'] );

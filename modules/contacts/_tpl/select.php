@@ -3,7 +3,10 @@
     <form name="form" action="<?= $this->urlSelect ?>" method="post">
         <div>
             <strong><?= $this->select ?></strong><br/>
-            <input type="hidden" name="token" value="<?= $this->token ?>"/>
+            <?php if($this->friends === true): ?>
+				<input type="checkbox" name="friends" value="1"/> <?= lng('add_friends') ?><br/>
+			<?php endif ?>
+			<input type="hidden" name="token" value="<?= $this->token ?>"/>
             <input type="submit" name="submit" value="<?= $this->submit ?>"/>
         </div>
     </form>

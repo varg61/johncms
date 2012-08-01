@@ -20,5 +20,4 @@ really_canceled_demand        =   "Confirm that you want to reject the applicati
 really_deleted_friends        =   "Are you sure you want to delete the user from the friends"
 really_demand_cancelled       =   "Confirm your cancellation request to be friends"
 really_demand_confirm         =   "Confirm adding a user to friends"
-user_profile                  =   "Анкета пользователя"
 you_deleted_friends           =   "You have successfully removed a user from your friends"

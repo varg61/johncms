@@ -40,14 +40,14 @@ if($fr != 2)
 			//$text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=no&id=' . $id . ']' . $lng_profile['decline'] . '[/url]';
 			//mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
 			$tpl->contents = '<div class="rmenu"><p>' . lng('demands_cancelled') . '.</p>
-			<p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p></div>';
+			<p><a href="' . Vars::$HOME_URL . '/contacts">' . lng('back') . '</a></p></div>';
 		}
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=cancel&amp;id=' . Vars::$ID;
         $tpl->select = lng( 'really_demand_cancelled' );
         $tpl->submit = lng( 'confirm' );
         $tpl->phdr = lng( 'demand_cancelled' );
-        $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
+        $tpl->urlBack = Vars::$HOME_URL . '/contacts';
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля select.php

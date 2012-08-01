@@ -27,7 +27,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
     $tpl->contents = Functions::displayError($addmail->error_request, '<a href="' . Vars::
     $HOME_URL . '/contacts">' . lng('contacts') . '</a>');
 } else {
-    //Очистка сообщений
+	//Очистка сообщений
     if (Vars::$ID && isset($_POST['delete_mess']) && is_array($_POST['delch']) && ValidMail::checkCSRF() === TRUE) {
         $delch = array_map('intval', $_POST['delch']);
         $delch = implode(',', $delch);
@@ -144,7 +144,8 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                 $tpl->contents = lng('page_does_not_exist');
             }
         } else {
-            if ($addmail->validateForm() !== TRUE) {
+            
+			if ($addmail->validateForm() !== TRUE) {
                 $tpl->text = Validate::filterString($add_message['text']);
                 //Выводим на экран ошибку
                 $tpl->error_add = Functions::displayError($addmail->error_log);
@@ -184,20 +185,24 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                 $i = 1;
                 $mass_read = array();
                 while ($row = mysql_fetch_assoc($query)) {
-                    if ($row['read'] == 0 && $row['contact_id'] == Vars::$USER_ID)
+                    if ($row['read'] == 0 && $row['contact_id'] == Vars::$USER_ID) 
                         $mass_read[] = $row['mid'];
                     $text = Validate::filterString($row['text'], 1, 1);
                     if (Vars::$USER_SET['smileys'])
                         $text = Functions::smileys($text, $row['rights'] >= 1 ? 1 : 0);
-                    $array[] = array(
+					if($row['read'] == 0 && $row['user_id'] == Vars::$USER_ID)
+					$list = 'gmenu';
+					else
+					$list = $i % 2 ? 'list1' : 'list2';
+					
+					$array[] = array(
                         'id'        => $row['id'],
                         'mid'       => $row['mid'],
-                        'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' :
-                            'w') . '.png', '', 'align="middle"'),
-                        'list'      => (($i % 2) ? 'list1' : 'list2'),
+                        'icon'      => Functions::getIcon( 'user' . ( $row['sex'] == 'm' ? '' : '-female' ) . '.png', '', '', 'style="margin: 0 0 -3px 0;"' ),
+                        'list'      => $list,
                         'nickname'  => $row['nickname'],
-                        'file'      => $row['filename'] ? Functions::getImage(UploadMail::fileicon($row['filename']),
-                            '', 'style="margin: 0 0 -4px 0;"') . '&#160;<a href="' . Vars::
+                        'file'      => $row['filename'] ? Functions::getIcon(UploadMail::fileicon($row['filename']),
+                            '', '', 'style="margin: 0 0 -4px 0;"') . '&#160;<a href="' . Vars::
                         $MODULE_URI . '?act=load&amp;id=' . $row['mid'] . '">' . $row['filename'] .
                             '</a> (' . UploadMail::formatsize($row['filesize']) . ')(' . $row['filecount'] .
                             ')' : '',
@@ -238,5 +243,5 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
             }
             $tpl->contents = $tpl->includeTpl('messages');
         }
-    }
+	}
 }

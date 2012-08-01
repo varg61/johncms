@@ -46,7 +46,7 @@ if ($fr == 2) {
         $tpl->select = lng('really_deleted_friends');
         $tpl->submit = lng('confirm');
         $tpl->phdr = lng('deleted_friends');
-        $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
+        $tpl->urlBack = Vars::$HOME_URL . '/contacts';
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля select.php

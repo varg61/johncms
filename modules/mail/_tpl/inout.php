@@ -1,3 +1,4 @@
+<p><a href="<?= Vars::$MODULE_URI ?>?act=add"><?= lng('write_message') ?></a></p>
 <div class="phdr"><strong><?= $this->tit ?></strong></div>
 <?php if ($this->total): ?>
 <form action="<?= Vars::$MODULE_URI ?>?act=<?= $this->pages_type ?>" method="post">

@@ -86,11 +86,17 @@ if ( Vars::$ID )
 									}
 								}
 								mysql_query("UPDATE `cms_mail_contacts` SET 
-								`delete`='1'
+								`delete`='1',
+								`access`='0',
+								`friends`='0'
 								WHERE `user_id`='" . Vars::$USER_ID . "' 
 								AND `contact_id` IN (" . $id . ")");
+								mysql_query("UPDATE `cms_mail_contacts` SET 
+								`access`='0',
+								`friends`='0'
+								WHERE `user_id` IN (" . $id . ") 
+								AND `contact_id`='" . Vars::$USER_ID . "' ");
 							}
-							
                             Header( 'Location: ' . Vars::$HOME_URL . '/profile?user=' . Vars::
                                 $ID );
                             exit;
@@ -142,9 +148,9 @@ if ( Vars::$ID )
 										$out_str = implode( ',', $out );
 										if ( !empty( $out_str ) )
 										{
-											mysql_query( "UPDATE `cms_mail_messages` SET
+											mysql_query("UPDATE `cms_mail_messages` SET
 											`delete_out`='0'
-											WHERE `id` IN (" . $out_str . ")" );
+											WHERE `id` IN (" . $out_str . ")");
 										}
 										$in = array();
 										$query2 = mysql_query( "SELECT * 
@@ -172,19 +178,24 @@ if ( Vars::$ID )
 								}
                             } else
                             {
-                                mysql_query( "INSERT INTO `cms_mail_contacts` SET
+								if($_POST['friends']) {
+									$sql = ", `access` = '2'";
+								}
+								mysql_query( "INSERT INTO `cms_mail_contacts` SET
 								`user_id`='" . Vars::$USER_ID . "',
 								`contact_id`='" . Vars::$ID . "',
-								`time`='" . time() . "'" );
+								`time`='" . time() . "'" . $sql );
                             }
                             Header( 'Location: ' . Vars::$HOME_URL . '/profile?user=' . Vars::
                                 $ID );
                             exit;
                         }
+						
                         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                         $tpl->urlSelect = Vars::$MODULE_URI . '?act=select&amp;mod=contact&amp;id=' .
                             Vars::$ID;
                         $tpl->select = lng( 'confirm_add_contact' );
+						$tpl->friends = true;
                         $tpl->submit = lng( 'add' );
                         $tpl->phdr = lng( 'add_contact' );
 

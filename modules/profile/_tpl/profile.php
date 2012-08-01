@@ -88,7 +88,7 @@
         <ul style="list-style: none; padding-left: 0">
             <li><?= Functions::getIcon('photo-album.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><?= lng('photo_album') ?></a>&#160;(<?= $this->total_photo ?>)</li>
             <li><?= Functions::getIcon('comments.png') ?>&#160;<a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><?= lng('guestbook') ?></a>&#160;(<?= $this->user['comm_count'] ?>)</li>
-            <li><?= Functions::getIcon('friend.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends?id=<?= $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?= Functions::friendsCount($this->user['id']) ?>)</li>
+            <li><?= Functions::getIcon('friend.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends?user=<?= $this->user['id'] ?>"><?= lng('friends') ?></a>&#160;(<?= Functions::friendsCount($this->user['id']) ?>)</li>
         </ul>
     </div>
 </div>

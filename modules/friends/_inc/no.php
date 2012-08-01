@@ -42,7 +42,7 @@ if ($fr != 2) {
 			//$text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=no&id=' . $id . ']' . $lng_profile['decline'] . '[/url]';
 			//mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
 			$tpl->contents = '<div class="rmenu"><p>' . lng('canceled_demand_send') . '</p>
-			<p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p></div>';
+			<p><a href="' . Vars::$HOME_URL . '/contacts">' . lng('back') . '</a></p></div>';
 		}
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=no&amp;id=' . Vars::$ID;

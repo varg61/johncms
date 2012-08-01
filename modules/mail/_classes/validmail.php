@@ -111,7 +111,7 @@ Class ValidMail extends Vars
     */
     private function checkFriends()
     {
-        $friends = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contact` WHERE `access`='2' AND ((`contact_id`='" . $this->id . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $this->id . "'))"), 0);
+        $friends = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $this->id . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . $this->id . "'))"), 0);
         if ($friends == 2) {
             return TRUE;
         }
@@ -277,11 +277,11 @@ Class ValidMail extends Vars
     private function valSetting()
     {
         if ($this->access) {
-            if ($this->access['access'] > 0) {
+            if ($this->access['access'] > 0  && Vars::$USER_RIGHTS == 0) {
                 if ($this->access['access'] == 1 && $this->contact !== TRUE) {
                     $this->error_log[] = lng('access_contact');
                     return FALSE;
-                } else if ($this->access['access'] == 2 && $this->checkFriends() !== TRUE) {
+                } else if ($this->access['access'] == 2 && Functions::checkFriend($this->id, true) != 1  && Vars::$USER_RIGHTS == 0) {
                     $this->error_log[] = lng('access_friends');
                     return FALSE;
                 }
@@ -311,22 +311,26 @@ Class ValidMail extends Vars
     */
     function valFile()
     {
-        //Загружаем файл
-        $handle = new UploadMail($_FILES);
-        $handle->DIR = FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'pm';
-        $handle->MAX_FILE_SIZE = 1024 * Vars::$SYSTEM_SET['flsz'];
-        $handle->PREFIX_FILE = TRUE;
-        if ($handle->upload() == TRUE) {
-            $this->file_name = $handle->FILE_UPLOAD;
-            $this->file_size = $handle->INFO['size'];
-            return TRUE;
-        } else {
-            if ($errors = $handle->errors()) {
-                $this->error_log[] = $errors;
-                return FALSE;
-            } else
-                return TRUE;
-        }
+        if(empty($_FILES)) {
+			return TRUE;
+		} else {
+			//Загружаем файл
+			$handle = new UploadMail($_FILES);
+			$handle->DIR = FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'pm';
+			$handle->MAX_FILE_SIZE = 1024 * Vars::$SYSTEM_SET['flsz'];
+			$handle->PREFIX_FILE = TRUE;
+			if ($handle->upload() == TRUE) {
+				$this->file_name = $handle->FILE_UPLOAD;
+				$this->file_size = $handle->INFO['size'];
+				return TRUE;
+			} else {
+				if ($errors = $handle->errors()) {
+					$this->error_log[] = $errors;
+					return FALSE;
+				} else
+					return TRUE;
+			}
+		}
     }
 
     /*
@@ -346,7 +350,11 @@ Class ValidMail extends Vars
         return TRUE;
     }
 
-
+	/*
+    -----------------------------------------------------------------
+    Проверяем на предмет CSRF атаки
+    -----------------------------------------------------------------
+    */
     public static function checkCSRF()
     {
         if (isset($_POST['token']) && isset($_SESSION['token_status']) && $_POST['token'] == $_SESSION['token_status']) {

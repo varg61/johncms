@@ -8,6 +8,15 @@
         <div class="<?= $row['list'] ?>">
             <input type="checkbox" name="delch[]" value="<?= $row['id'] ?>"/> <?= $row['icon'] ?> <a href="<?= $row['url'] ?>"><?= $row['nickname'] ?></a> <?= $row['online'] ?> (<?= $row['count'] ?>) <span
             class="red"><?= $row['count_new'] ?></span>
+			<?php if ($row['access'] == 0): ?>
+				<div class="sub"><a href="<?= Vars::$HOME_URL ?>/friends?act=add&amp;id=<?= $row['id'] ?>">В друзья</a></div>
+			<?php elseif($row['access'] == 1): ?>
+				<div class="sub"><a href="<?= Vars::$HOME_URL ?>/friends?act=delete&amp;id=<?= $row['id'] ?>">Удалить из друзей</a></div>
+			<?php elseif($row['access'] == 2): ?>
+				<div class="sub"><a href="<?= Vars::$HOME_URL ?>/friends?act=cancel&amp;id=<?= $row['id'] ?>">Отменить заявку дружбы</a></div>
+			<?php elseif($row['access'] == 3): ?>
+				<div class="sub"><a href="<?= Vars::$HOME_URL ?>/friends?act=ok&amp;id=<?= $row['id'] ?>">Подвердить дружбу</a> | <a href="<?= Vars::$HOME_URL ?>/friends?act=no&amp;id=<?= $row['id'] ?>">Отказать</a></div>
+			<?php endif ?>
         </div>
         <?php endforeach ?>
         <div class="gmenu"><?= lng('noted_contacts') ?>:<br/>
@@ -26,7 +35,8 @@
 <div class="rmenu"><?= lng('no_contacts') ?></div>
 <?php endif ?>
 <div class="list2">
-    <?= Functions::getImage('mail-blocked.png') ?> <a href="<?= Vars::$MODULE_URI ?>?act=banned"><?= lng('banned') ?></a>&#160;(<?= $this->banned ?>)<br/>
+    <?= Functions::getIcon('friend.png') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/friends"><?= lng('friends') ?></a>&#160;(<?= Functions::friendsCount(Vars::$USER_ID) ?>)<br/>
+	<?= Functions::getImage('mail-blocked.png') ?> <a href="<?= Vars::$MODULE_URI ?>?act=banned"><?= lng('banned') ?></a>&#160;(<?= $this->banned ?>)<br/>
     <?= Functions::getImage('mail-archive.png') ?> <a href="<?= Vars::$MODULE_URI ?>?act=archive"><?= lng('archive') ?></a>&#160;(<?= $this->archive ?>)<br/>
     <?= Functions::getImage('mail-search.png') ?> <a href="<?= Vars::$MODULE_URI ?>?act=search"><?= lng('search_contact') ?></a>
 </div>

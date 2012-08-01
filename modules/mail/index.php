@@ -8,13 +8,18 @@
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  */
+//TODO: Доработать рассылку под систему оповещений
+//TODO: Доработать английский язык
+//TODO: Удалить файлы _inc/archive.php, _inc/banned.php, _inc/contacts.php, 
+//_inc/delete.php, _inc/search.php, _inc/systems.php, 
+//TODO: Добавить систему антифлуда
+//TODO: Добавить редактирование не прочитанного поста
 
 defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
 define ('_IN_JOHNCMS_MAIL', 1);
 
 //Закрываем доступ гостям
-if ( !Vars::$USER_ID )
-{
+if ( !Vars::$USER_ID ) {
 	Header( 'Location: ' . Vars::$HOME_URL . '/404' );
     exit;
 }
@@ -33,7 +38,7 @@ $connect = array(
 'add',
 'basket',
 'delete',
-'elected',
+'edit',
 'elected',
 'files',
 'inmess',
@@ -44,13 +49,12 @@ $connect = array(
 'read',
 'restore',
 'settings',
-'send' );
+'send',
+'sending_out' );
 if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && file_exists( MAILPATH .
-    '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php' ) )
-{
+    '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php' ) ) {
     require ( MAILPATH . '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php' );
-} else
-{
+} else {
     $new = Functions::mailCount('new');
 	//Заголовок
 	$tpl->title = lng( 'mail' );
