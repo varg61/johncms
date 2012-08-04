@@ -29,6 +29,7 @@ if (isset($_POST['submit'])) {
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['galcomm']) . "' WHERE `key`='mod_gal_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['downcomm']) . "' WHERE `key`='mod_down_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['active']) ? intval($_POST['active']) : 0) . "' WHERE `key`='active'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['stat']) ? intval($_POST['stat']) : 0) . "' WHERE `key`='stat'"); // Статистика
     $req = mysql_query("SELECT * FROM `cms_settings`");
     $set = array();
     while ($res = mysql_fetch_row($req)) Vars::$SYSTEM_SET[$res[0]] = $res[1];

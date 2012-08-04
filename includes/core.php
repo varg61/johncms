@@ -55,23 +55,25 @@ spl_autoload_register(
 
         // Список системных классов
         $system = array(
-            'advt'       => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
-            'captcha'    => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
-            'comments'   => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
-            'counters'   => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
-            'finfo'      => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
-            'functions'  => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
-            'login'      => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
-            'network'    => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
-            'pclzip'     => 'lib'     . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
-            'session'    => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
-            'sitemap'    => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
-            'system'     => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
-            'template'   => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
-            'textparser' => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
-            'upload'     => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
-            'validate'   => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
-            'vars'       => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
+            'advt'           => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
+            'captcha'        => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
+            'comments'       => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
+            'counters'       => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
+            'finfo'          => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'functions'      => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
+            'login'          => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
+            'network'        => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
+            'pclzip'         => 'lib'     . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
+            'session'        => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
+            'sitemap'        => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
+            'system'         => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
+            'template'       => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
+            'textparser'     => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
+            'upload'         => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'validate'       => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
+            'statistic'      => 'classes' . DIRECTORY_SEPARATOR . 'statistic.php',
+            'robotsdetect'   => 'classes' . DIRECTORY_SEPARATOR . 'robotsdetect.php',
+            'vars'           => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
         );
 
         if (isset($system[$name])) {
@@ -98,10 +100,14 @@ $db_pass = isset($db_pass) ? $db_pass : '';
 $db_name = isset($db_name) ? $db_name : 'johncms';
 $connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
 @mysql_select_db($db_name) or die('Error: specified database does not exist');
-@mysql_set_charset($connect, 'UTF8');
+mysql_set_charset('UTF8', $connect);
 
 new Session;
 new System;
+
+if(Vars::$SYSTEM_SET['stat'] > 0)
+new statistic;
+
 
 /*
 -----------------------------------------------------------------

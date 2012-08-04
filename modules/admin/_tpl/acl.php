@@ -34,6 +34,13 @@
             <input name="downcomm" type="checkbox" value="1" <?= (Vars::$SYSTEM_SET['mod_down_comm'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('comments') ?>
         </div>
         <div class="formblock">
+            <label><?= lng('statistic') ?></label><br/>
+            <input type="radio" value="3" name="stat" <?= (Vars::$SYSTEM_SET['stat'] == 3 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('stat_enable_for_all') ?><br/>
+            <input type="radio" value="2" name="stat" <?= (Vars::$SYSTEM_SET['stat'] == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('stat_enable_for_aut') ?><br/>
+            <input type="radio" value="1" name="stat" <?= (Vars::$SYSTEM_SET['stat'] == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('stat_enable_for_adm') ?><br/>
+            <input type="radio" value="0" name="stat" <?= (!Vars::$SYSTEM_SET['stat'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('stat_disable') ?>
+        </div>
+        <div class="formblock">
             <input type="submit" name="submit" id="button" value="<?= lng('save') ?>"/>
         </div>
     </div>

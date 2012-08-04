@@ -24,6 +24,7 @@ if (stristr(Vars::$USER_AGENT, "msie") && stristr(Vars::$USER_AGENT, "windows"))
 
 $ads = Advt::getAds();
 
+
 ?>
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
@@ -87,6 +88,11 @@ $ads = Advt::getAds();
     <?= Functions::getImage('menu_home.png', 'Home', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>"><?= lng('homepage', 1) ?></a><br/>
     <?php endif ?>
     <?= Functions::getImage('menu_online.png', 'Cabinet', 'align="middle"') ?>&#160;<?= Counters::usersOnline() ?>
+    
+    <?php if (Vars::$SYSTEM_SET['stat'] == 3 || (Vars::$SYSTEM_SET['stat'] == 2 && Vars::$USER_ID) ||(Vars::$SYSTEM_SET['stat'] == 1 && Vars::$USER_RIGHTS >= 7)) : ?>
+    <br /><?= Functions::getImage('statistic.png', 'Cabinet', 'align="middle"') ?>&#160;<a href="<?= Vars::$HOME_URL ?>/stats"><?= statistic::$hity ?> | <?= statistic::$hosty ?></a><br/>
+    <?php endif ?>
+    
 </div>
 <div style="text-align:center"><p><b><?= Vars::$SYSTEM_SET['copyright'] ?></b></p></div>
 <div style="text-align:center">
