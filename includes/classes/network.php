@@ -139,9 +139,13 @@ class Network extends Vars
      */
     private function _getUserAgent()
     {
-        return isset($_SERVER['HTTP_USER_AGENT']) && !empty($_SERVER['HTTP_USER_AGENT'])
-            ? htmlspecialchars((string)substr($_SERVER['HTTP_USER_AGENT'], 0, 150))
-            : 'Not Recognised';
+        if (isset($_SERVER["HTTP_X_OPERAMINI_PHONE_UA"]) && strlen(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])) > 5) {
+            return '<b>Opera Mini</b>: ' . htmlspecialchars(substr(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']), 0, 150));
+        }
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            return htmlspecialchars(substr(trim($_SERVER['HTTP_USER_AGENT']), 0, 150));
+        }
+        return 'Not Recognised';
     }
 
     /**

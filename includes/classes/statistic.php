@@ -16,7 +16,6 @@ class statistic
 {
     private $query_text = FALSE;
     private $http_referer = 'Not detect';
-    private $stat_user_agent = '';
     private $request_uri = '';
     private $http_site = 'Not detect';
     private $operator = 'Not detect';
@@ -68,14 +67,14 @@ class statistic
                 }
                 $count = $quer['count'] + 1;
                 mysql_query("UPDATE `stat_robots` SET `date` = '" . time() .
-                    "', `url` = '" . $this->http_referer . "', `ua` = '" . $this->stat_user_agent .
+                    "', `url` = '" . $this->http_referer . "', `ua` = '" . Vars::$USER_AGENT .
                     "', `ip` = '" . Vars::$IP . "', `count` = '" . $count . "', `today` = '" . $today .
                     "' WHERE `query` = '" . mysql_real_escape_string($this->query_text) . "' AND `engine` = '" . $this->
                     http_site . "'");
             } else {
                 mysql_query("INSERT INTO `stat_robots` SET `engine` = '" . $this->http_site .
                     "', `date` = '" . time() . "', `url` = '" . $this->http_referer .
-                    "', `query` = '" . mysql_real_escape_string($this->query_text) . "', `ua` = '" . $this->stat_user_agent .
+                    "', `query` = '" . mysql_real_escape_string($this->query_text) . "', `ua` = '" . Vars::$USER_AGENT .
                     "', `ip` = '" . Vars::$IP . "', `count` = '1', `today` = '1'");
             }
         }
@@ -90,7 +89,7 @@ class statistic
                 robot_type . '"';
 
         mysql_query("INSERT INTO `counter` SET `date` = '" . time() .
-            "', `browser` = '" . $this->stat_user_agent . "', `ip` = '" . long2ip(Vars::$IP) .
+            "', `browser` = '" . Vars::$USER_AGENT . "', `ip` = '" . long2ip(Vars::$IP) .
             "', `ref` = '" . $this->http_referer . "', `host` = '" . $this->new_host .
             "', `site` = '" . $this->http_site . "', `pop` = '" . $this->request_uri .
             "', `head` = '" . self::$page_title . "', `operator` = '" . $this->operator .
@@ -107,13 +106,6 @@ class statistic
     */
     private function get_data()
     {
-        $this->stat_user_agent = mysql_real_escape_string(htmlspecialchars((string)substr($_SERVER['HTTP_USER_AGENT'], 0,
-            200)));
-        if (strpos($this->stat_user_agent, "Opera Mini") !== false) {
-            $this->stat_user_agent = isset($_SERVER["HTTP_X_OPERAMINI_PHONE_UA"]) ?
-                'Opera Mini: ' . mysql_real_escape_string(htmlspecialchars((string)$_SERVER["HTTP_X_OPERAMINI_PHONE_UA"])) : $this->stat_user_agent;
-        }
-
         $request_uri = urldecode(htmlspecialchars((string)$_SERVER['REQUEST_URI']));
         $this->request_uri = mysql_real_escape_string(strtok($request_uri, '?'));
         $this->http_referer = isset($_SERVER['HTTP_REFERER']) ? mysql_real_escape_string(htmlspecialchars((string)$_SERVER['HTTP_REFERER'])) :
@@ -127,7 +119,7 @@ class statistic
 
         $this->current_data = mysql_fetch_assoc(mysql_query("SELECT MAX(`date`) AS date, MAX(`host`) AS host, MAX(hits) AS hity FROM `counter`"));
 
-        $rob_detect = new RobotsDetect($this->stat_user_agent);
+        $rob_detect = new RobotsDetect(Vars::$USER_AGENT);
         $this->robot = $rob_detect->getNameBot();
         $this->robot_type = $rob_detect->getTypeBot();
 
@@ -245,7 +237,7 @@ class statistic
                 0);
             if($ip_check == 0){
             $db_check = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `browser` = '" .
-                $this->stat_user_agent . "' AND `ip` = '" . long2ip(Vars::$IP) . "'" . $sql .
+                Vars::$USER_AGENT . "' AND `ip` = '" . long2ip(Vars::$IP) . "'" . $sql .
                 ";"), 0);
                 
             if ($db_check == 0 && !$this->robot)
