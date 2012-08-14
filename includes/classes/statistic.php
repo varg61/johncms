@@ -21,7 +21,6 @@ class statistic
     private $http_site = 'Not detect';
     private $operator = 'Not detect';
     private $country = 'Not detect';
-    private $stat_ip_via_proxy = false;
     private $current_data = array();
     public static $hosty = false;
     public static $hity = false;
@@ -82,8 +81,8 @@ class statistic
         }
         
         $sql = '';
-        if ($this->stat_ip_via_proxy)
-            $sql = ', `ip_via_proxy` = "' . long2ip($this->stat_ip_via_proxy) . '"';
+        if (Vars::$IP_VIA_PROXY)
+            $sql = ', `ip_via_proxy` = "' . long2ip(Vars::$IP_VIA_PROXY) . '"';
         if (Vars::$USER_ID)
             $sql = ', `user` = "' . Vars::$USER_ID . '"';
         if ($this->robot)
@@ -113,13 +112,6 @@ class statistic
         if (strpos($this->stat_user_agent, "Opera Mini") !== false) {
             $this->stat_user_agent = isset($_SERVER["HTTP_X_OPERAMINI_PHONE_UA"]) ?
                 'Opera Mini: ' . mysql_real_escape_string(htmlspecialchars((string)$_SERVER["HTTP_X_OPERAMINI_PHONE_UA"])) : $this->stat_user_agent;
-        }
-
-        if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-            $stat_ip_via_proxy = explode(",", $_SERVER["HTTP_X_FORWARDED_FOR"]);
-            $stat_ip_via_proxy = trim($stat_ip_via_proxy[0]);
-            $this->stat_ip_via_proxy = isset($stat_ip_via_proxy) && Validate::ip($stat_ip_via_proxy) &&
-                Vars::$IP !== ip2long($stat_ip_via_proxy) ? ip2long($stat_ip_via_proxy) : false;
         }
 
         $request_uri = urldecode(htmlspecialchars((string)$_SERVER['REQUEST_URI']));
@@ -181,7 +173,7 @@ class statistic
     */
     private function detect_oper_country()
     {
-        $ip_check = $this->stat_ip_via_proxy !== false ? $this->stat_ip_via_proxy : Vars::$IP;
+        $ip_check = Vars::$IP_VIA_PROXY !== false ? Vars::$IP_VIA_PROXY : Vars::$IP;
         $ip_base = mysql_query("SELECT `operator`, `country` FROM `counter_ip_base` WHERE '" .
             $ip_check . "' BETWEEN `start` AND `stop` LIMIT 1;");
         if (mysql_num_rows($ip_base) > 0) {
@@ -245,9 +237,8 @@ class statistic
         if (!isset($_COOKIE['hosty'])) {
             setcookie('hosty', '1', strtotime(date("d F y", time() + 86400)));
 
-            $sql = ($this->stat_ip_via_proxy) ? " AND `ip_via_proxy` = '" . long2ip($this->
-                stat_ip_via_proxy) . "'" : '';
-            $ip = ($this->stat_ip_via_proxy) ? long2ip($this->stat_ip_via_proxy) : long2ip(Vars::$IP);
+            $sql = (Vars::$IP_VIA_PROXY) ? " AND `ip_via_proxy` = '" . long2ip(Vars::$IP_VIA_PROXY) . "'" : '';
+            $ip = (Vars::$IP_VIA_PROXY) ? long2ip(Vars::$IP_VIA_PROXY) : long2ip(Vars::$IP);
             $ip_time = time() - 900; // Время в течении которого считать 1 ip одним юзером.
             $ip_check = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE (`ip` = '" .
                 $ip . "' OR `ip_via_proxy` = '" . $ip . "') AND `date` > '" . $ip_time . "';"),
