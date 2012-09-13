@@ -177,38 +177,37 @@ Class ValidMail extends Vars
     function validateForm()
     {
         if (isset($_POST['submit']) && $this->id !== FALSE && self::checkCSRF() === TRUE) {
-            if ($this->valIgnor() === FALSE)
-                return FALSE;
-            if ($this->valRequest() === FALSE)
-                return FALSE;
-            if ($this->valSetting() === FALSE)
-                return FALSE;
-            if ($this->valText($this->array['text']) === FALSE)
-                return FALSE;
-            if ($this->valFile() === FALSE)
-                return FALSE;
-            $this->addMessage();
-            return TRUE;
+            if($this->checkError() === FALSE)
+				return FALSE;
+			$this->addMessage();
+			return TRUE;
         } else if (isset($_POST['login']) && self::checkCSRF() === TRUE) {
             if ($this->checkLogin($this->array['login']) === FALSE)
                 return FALSE;
-            if ($this->valIgnor() === FALSE)
-                return FALSE;
-            if ($this->valRequest() === FALSE)
-                return FALSE;
-            if ($this->valSetting() === FALSE)
-                return FALSE;
-            if ($this->valText($this->array['text']) === FALSE)
-                return FALSE;
-            if ($this->valFile() === FALSE)
-                return FALSE;
-            $this->addMessage();
-            return TRUE;
+			if($this->checkError() === FALSE)
+				return FALSE;
+			$this->addMessage();
+			return TRUE;
         } else {
             return FALSE;
         }
     }
-
+	
+	function checkError() {
+		if ($this->valIgnor() === FALSE)
+			return FALSE;
+		if ($this->valRequest() === FALSE)
+			return FALSE;
+		if ($this->valSetting() === FALSE)
+			return FALSE;
+		if ($this->valText($this->array['text']) === FALSE)
+			return FALSE;
+		if ($this->valFile() === FALSE)
+			return FALSE;
+		if ($this->checkFlood() === FALSE)
+			return FALSE;
+		return TRUE;
+	}
     /*
     -----------------------------------------------------------------
     Добавляем сообщение
@@ -234,7 +233,17 @@ Class ValidMail extends Vars
         }
         return FALSE;
     }
-
+	/*
+    -----------------------------------------------------------------
+    Проверяем сообщение на флуд
+    -----------------------------------------------------------------
+    */
+	function checkFlood() {
+		if (($flood = Functions::antiFlood()) === FALSE)
+			return TRUE;
+		$this->error_log[] = lng('error_flood') . '&#160;' . $flood . '&#160;' . lng('seconds');
+		return FALSE;
+	}
     /*
     -----------------------------------------------------------------
     Проверяем пользователя на игнор

@@ -15,7 +15,7 @@
 <div class="func">
     <a href="<?= Vars::$MODULE_URI ?>?act=send&amp;id=<?= Vars::$ID ?>">Переслать</a><br/>
     <?php if ($this->read == 0 && $this->users_id == Vars::$USER_ID): ?>
-    <a href="<?= Vars::$MODULE_URI ?>?act=messages&amp;mod=edit&amp;id=<?= Vars::$ID ?>"><?= lng('edit') ?></a><br/>
+    <a href="<?= Vars::$MODULE_URI ?>?act=edit&amp;id=<?= Vars::$ID ?>"><?= lng('edit') ?></a><br/>
     <? endif ?>
     <a href="<?= Vars::$MODULE_URI ?>?act=messages&amp;mod=delete&amp;id=<?= Vars::$ID ?>"><?= lng('delete') ?></a><br/>
 </div>

@@ -10,10 +10,6 @@
  */
 //TODO: Доработать рассылку под систему оповещений
 //TODO: Доработать английский язык
-//TODO: Удалить файлы _inc/archive.php, _inc/banned.php, _inc/contacts.php, 
-//_inc/delete.php, _inc/search.php, _inc/systems.php, 
-//TODO: Добавить систему антифлуда
-//TODO: Добавить редактирование не прочитанного поста
 
 defined( '_IN_JOHNCMS' ) or die( 'Error: restricted access' );
 define ('_IN_JOHNCMS_MAIL', 1);
@@ -62,7 +58,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 	if(($settings = Vars::getUserData('settings_mail')) === false) 
 		$settings['access'] = 0;
 	
-	$arr = array(lng('all'), lng('contact_friends'), lng('only_friends'));
+	$arr = array(lng('all'), lng('contact_friends'), lng('only_friends')); //Массив с названиями настроек доступа
 	
 	$tpl->receive_mail = $arr[$settings['access']]; //Информер "От кого принимать почту"
     
@@ -72,7 +68,6 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 	$tpl->outmess = Mail::counter( 'outmess' );   //Счетчик исходящих
 	$tpl->newmess = $new ? '+' . $new : '';       //Счетчик новых
     $tpl->files   = Mail::counter( 'files' );     //Счетчик файлов
-    
 	//Подключаем шаблон модуля
     $tpl->contents = $tpl->includeTpl( '_index' );
 }
