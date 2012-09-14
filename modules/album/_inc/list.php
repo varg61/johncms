@@ -26,7 +26,7 @@ if ($total) {
     for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $res['id'] . "'"), 0);
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-            Functions::getIcon('album_' . $res['access'] . '.png', '', '', 'align="middle"') . '&#160;' .
+            Functions::loadModuleImage('album_' . $res['access'] . '.png') . '&#160;' .
             '<a href="' . Vars::$URI . '?act=show&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '"><b>' . Validate::filterString($res['name']) . '</b></a>&#160;(' . $count . ')';
         if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6 || !empty($res['description'])) {
             $menu = array(

@@ -12,7 +12,7 @@
 class Template extends Vars
 {
     public $vars = array();
-    public $template = true;
+    public $template = 'template';
     public $extract = false;
     private static $instance;
 
@@ -43,7 +43,7 @@ class Template extends Vars
 
     public function __get($name)
     {
-        if(!isset($this->vars[$name])){
+        if (!isset($this->vars[$name])) {
             return false;
         }
         return $this->vars[$name];
@@ -54,19 +54,21 @@ class Template extends Vars
         return isset($this->vars[$name]);
     }
 
-    public function includeTpl($tpl = null)
+    public function includeTpl($tpl = null, $root = false)
     {
         if ($this->extract) {
             extract($this->vars);
         }
 
         // Загружаем шаблоны
-        if($tpl === true){
-            $default_tpl = SYSPATH . 'template_default.php';
-            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'template_default.php';
+        if ($root) {
+            // Загружаем общие шаблоны
+            $default_tpl = TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $tpl . '.php';
         } else {
-            $default_tpl = MODPATH . parent::$MODULE . DIRECTORY_SEPARATOR . '_tpl' . DIRECTORY_SEPARATOR . $tpl . '.php';
-            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . parent::$MODULE . DIRECTORY_SEPARATOR . $tpl . '.php';
+            // Загружаем шаблоны модулей
+            $default_tpl = MODPATH . parent::$MODULE_PATH . DIRECTORY_SEPARATOR . '_tpl' . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . parent::$MODULE_PATH . DIRECTORY_SEPARATOR . $tpl . '.php';
         }
 
         ob_start();
@@ -75,7 +77,7 @@ class Template extends Vars
         } elseif (is_file($default_tpl)) {
             include_once($default_tpl);
         } else {
-            echo Functions::displayError('Template &laquo;<b>' . $tpl . '</b>&raquo; not found');
+            echo Functions::displayError('ERROR: template &laquo;' . $tpl . '&raquo; not found');
         }
         $contents = ob_get_contents();
         ob_end_clean();
@@ -84,7 +86,7 @@ class Template extends Vars
 
     public function loadTemplate()
     {
-        if($this->template === false){
+        if ($this->template === false) {
             return false;
         }
         if (!isset($this->vars['contents'])) {
@@ -99,7 +101,26 @@ class Template extends Vars
             ob_start('ob_gzhandler');
         }
 
-        // Подключаем файл шаблона оформления
-        return $this->includeTpl($this->template);
+        // Подключаем файл главного шаблона
+        if (is_file(TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php')) {
+            // Шаблон темы оформления
+            include(TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php');
+        } elseif (is_file(TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php')) {
+            // Шаблон по-умолчанию
+            include(TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php');
+        } else {
+            // Если шаблона нет, выводим сообщение об ошибке
+            echo'ERROR: root template &laquo;' . htmlspecialchars($this->template) . '&raquo; not found';
+            return false;
+        }
+        return true;
+    }
+
+    public function loadCSS()
+    {
+        //TODO: Доработать функцию
+        $out = '<meta name="Generator" content="JohnCMS, http://johncms.com"/>' . "\n";
+        $out .= '    <link href="' . Vars::$HOME_URL . '/assets/template/css/style.css" rel="stylesheet" media="screen, handheld" type="text/css"/>' . "\n";
+        return $out;
     }
 }

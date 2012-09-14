@@ -124,13 +124,20 @@ class UploadMail
             {
                 $this->prefixFile();
             }
-            if ( $this->rmkdir( $this->DIR, 0777 ) )
+            if ( $this->rmkdir( rtrim( $this->DIR, '/\\' ), 0777 ) )
             {
-                if ( move_uploaded_file( $this->INFO['tmp_name'], $this->DIR . DIRECTORY_SEPARATOR . $this->FILE_UPLOAD ) === true )
+                if ( move_uploaded_file( $this->INFO['tmp_name'], str_replace( array( '\\', '//' ), DIRECTORY_SEPARATOR,
+                    rtrim( $this->DIR, '/\\' ) ) . DIRECTORY_SEPARATOR . $this->FILE_UPLOAD ) == true )
                 {
-					//chmod( $this->DIR . DIRECTORY_SEPARATOR . $this->FILE_UPLOAD, 666 );
-					unlink( $this->INFO['tmp_name'] );
-					return true;
+                    if ( chmod( str_replace( array( '\\', '//' ), DIRECTORY_SEPARATOR, rtrim( $this->
+                        DIR, '/\\' ) ) . DIRECTORY_SEPARATOR . $this->FILE_UPLOAD, 666 ) )
+                    {
+                        unlink( $this->INFO['tmp_name'] );
+                        return true;
+                    } else
+                    {
+                        return true;
+                    }
                 } else
                 {
                     return false;

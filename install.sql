@@ -259,41 +259,39 @@ CREATE TABLE `cms_mail_messages` (
 
 DROP TABLE IF EXISTS `cms_modules`;
 CREATE TABLE `cms_modules` (
-  `module` varchar(15) NOT NULL DEFAULT '',
+  `module` varchar(32) NOT NULL DEFAULT '',
+  `path` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-INSERT INTO `cms_modules` (`module`) VALUES
-        ('admin'),
-        ('album'),
-        ('avatars'),
-        ('cabinet'),
-        ('contacts'),
-        ('download'),
-        ('exit'),
-        ('forum'),
-        ('friends'),
-        ('guestbook'),
-        ('help'),
-        ('language'),
-        ('library'),
-        ('login'),
-        ('mail'),
-        ('news'),
-        ('notifications'),
-        ('online'),
-        ('profile'),
-        ('redirect'),
-        ('registration'),
-        ('rss'),
-        ('smileys'),
-        ('users');
+INSERT INTO `cms_modules` (`module`, `path`) VALUES
+('404', '_404'),
+('admin', '_admin'),
+('users', '_users'),
+('album', 'album'),
+('avatars', 'avatars'),
+('contacts', 'contacts'),
+('download', 'download'),
+('forum', 'forum'),
+('friends', 'friends'),
+('guestbook', 'guestbook'),
+('help', 'help'),
+('language', 'language'),
+('library', 'library'),
+('mail', 'mail'),
+('news', 'news'),
+('notifications', 'notifications'),
+('online', 'online'),
+('profile', 'profile'),
+('redirect', 'redirect'),
+('rss', 'rss'),
+('smileys', 'smileys'),
+('stats', 'stats');
 
 
 DROP TABLE IF EXISTS `cms_sessions`;
 CREATE TABLE `cms_sessions` (
-  `session_id` char(32) NOT NULL DEFAULT '',
+  `session_id` varchar(64) NOT NULL DEFAULT '',
   `session_timestamp` int(10) unsigned NOT NULL DEFAULT '0',
   `session_data` text NOT NULL,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -936,5 +934,4 @@ CREATE TABLE `stat_robots` (
   `today` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cms_modules` (`module`) VALUES ('stats');
 INSERT INTO `cms_settings` (`key`, `val`) VALUES ('stat', '3');

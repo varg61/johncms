@@ -82,58 +82,84 @@ switch (Vars::$ACT) {
             $array = explode(' ', $search);
             $count = count($array);
             $query = mysql_real_escape_string($search);
-            $total = mysql_result(mysql_query("
-                SELECT COUNT(*) FROM `forum`
-                WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
-                AND `type` = '" . ($search_t ? 't' : 'm') . "'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'
-            ")), 0);
+			if ($search_t) {
+			    // Поиск в названиях тем
+                $total = mysql_result(mysql_query("
+                    SELECT COUNT(*) FROM `forum`
+                    WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                    AND `type` = 't'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'
+                ")), 0);
+			} else {
+			    // Поиск только в тексте
+                $total = mysql_result(mysql_query("
+                    SELECT COUNT(*) FROM `forum`, `forum` as `forum2`
+                    WHERE MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                    AND `forum`.`type` = 'm'
+					AND `forum2`.`id` = `forum`.`refid`
+					" . (Vars::$USER_RIGHTS >= 7 ? "" : "AND `forum2`.`close` != '1' AND `forum`.`close` != '1'
+				")), 0);
+			}
             echo '<div class="phdr">' . lng('search_results') . '</div>';
             if ($total > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             if ($total) {
                 $to_history = TRUE;
-                $req = mysql_query("
-                    SELECT *, MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
-                    FROM `forum`
-                    WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
-                    AND `type` = '" . ($search_t ? 't' : 'm') . "'
-                    ORDER BY `rel` DESC
-                    " . Vars::db_pagination()
-                );
+                if ($search_t) {
+                    // Поиск в названиях тем
+                    $req = mysql_query("
+                        SELECT *, MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
+                        FROM `forum`
+                        WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                        AND `type` = '" . ($search_t ? 't' : 'm') . "'
+						" . (Vars::$USER_RIGHTS >= 7 ? "" : "AND `close` != '1'") . "
+                        ORDER BY `rel` DESC
+                        " . Vars::db_pagination()
+                    );
+				} else {
+                    // Поиск только в тексте
+				    $req = mysql_query("
+                        SELECT `forum`.*, `forum2`.`id` as `id2`, `forum2`.`text` as `text2`,
+						MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
+                        FROM `forum`, `forum` as `forum2`
+                        WHERE MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                        AND `forum`.`type` = 'm'
+						AND `forum2`.`id` = `forum`.`refid`
+						" . (Vars::$USER_RIGHTS >= 7 ? "" : "AND `forum2`.`close` != '1' AND `forum`.`close` != '1'") . "
+                        ORDER BY `rel` DESC
+                        " . Vars::db_pagination()
+                    );
+				}
                 $i = 0;
                 while (($res = mysql_fetch_assoc($req)) !== FALSE) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    if (!$search_t) {
-                        // Поиск только в тексте
-                        $req_t = mysql_query("SELECT `id`,`text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
-                        $res_t = mysql_fetch_assoc($req_t);
-                        echo '<b>' . $res_t['text'] . '</b><br />';
-                    } else {
+					if ($search_t) {
                         // Поиск в названиях тем
-                        $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = '" . $res['id'] . "' ORDER BY `id` ASC LIMIT 1");
+                        $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = " . $res['id'] . 
+						    (Vars::$USER_RIGHTS >= 7 ? "" : "AND `close` != '1'") . " ORDER BY `id` ASC LIMIT 1");
                         $res_p = mysql_fetch_assoc($req_p);
+                        $res['text2'] = $res_p['text'];
+                    }
+                    $text = $search_t ? $res['text2'] : $res['text'];
+                    foreach ($array as $srch) if (($pos = mb_strpos(mb_strtolower($res['text']), mb_strtolower(str_replace('*', '', $srch)))) !== FALSE) break;
+                    if (!isset($pos) || $pos < 100) $pos = 100;
+                    $text = Validate::filterString(mb_substr($text, ($pos - 100), 400), 1);
+					$text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
+                    if ($search_t) {
                         foreach ($array as $val) {
                             $res['text'] = ReplaceKeywords($val, $res['text']);
                         }
-                        echo '<b>' . $res['text'] . '</b><br />';
-                    }
-                    echo'<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ' .
-                        ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br/>';
-                    $text = $search_t ? $res_p['text'] : $res['text'];
-                    foreach ($array as $srch) if (($pos = mb_strpos(strtolower($res['text']), strtolower(str_replace('*', '', $srch)))) !== FALSE) break;
-                    if (!isset($pos) || $pos < 100) $pos = 100;
-                    $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                    $text = Validate::filterString(mb_substr($text, ($pos - 100), 400), 1);
-                    if (!$search_t) {
+					} else {
                         foreach ($array as $val) {
                             $text = ReplaceKeywords($val, $text);
                         }
                     }
-                    echo $text;
+					echo '<b>' . ($search_t ? $res['text'] : $res['text2']) . '</b><br />' .
+					    '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ' .
+                        ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br/>' . $text;
                     if (mb_strlen($res['text']) > 500)
-                        echo'...<a href="index.php?act=post&amp;id=' . $res['id'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
-                    echo'<br /><a href="index.php?id=' . ($search_t ? $res['id'] : $res_t['id']) . '">' . lng('to_topic') . '</a>' . ($search_t ? ''
-                        : ' | <a href="index.php?act=post&amp;id=' . $res['id'] . '">' . lng('to_post') . '</a>');
+                        echo'...<a href="' . Vars::$MODULE_URI . '?act=post&amp;id=' . $res['id'] . '">' . lng('read_all') . ' &gt;&gt;</a>';
+                    echo'<br /><a href="' . Vars::$MODULE_URI . '?id=' . ($search_t ? $res['id'] : $res['id2']) . '">' . lng('to_topic') . '</a>' . ($search_t ? ''
+                        : ' | <a href="' . Vars::$MODULE_URI . '?act=post&amp;id=' . $res['id'] . '">' . lng('to_post') . '</a>');
                     echo '</div>';
                     ++$i;
                 }

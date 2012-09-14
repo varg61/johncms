@@ -22,6 +22,7 @@ define('CONTACTSDIR', 'contacts'); //Папка с модулем
 define('CONTACTSPATH', MODPATH . CONTACTSDIR . DIRECTORY_SEPARATOR); //Абсолютный путь до модуля
 //Подключаем шаблонизатор
 $tpl = Template::getInstance();
+//Проверяем и подключаем нужные файлы модуля
 
 function countNew( $id = null )
 {
@@ -44,7 +45,7 @@ function countNew( $id = null )
 	else
 		return false;
 }
-//Проверяем и подключаем нужные файлы модуля
+
 $connect = array(
 'archive',
 'banned',
@@ -103,40 +104,21 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 			exit;
 		}
 		//Формируем список контактов
-        $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`, `cms_mail_contacts`.`access`, `cms_mail_contacts`.`friends`, `contacts`.`access` as `acc`, `contacts`.`friends` as `fri`
+        $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`
 		FROM `cms_mail_contacts`
 		LEFT JOIN `users`
 		ON `cms_mail_contacts`.`contact_id`=`users`.`id`
-		LEFT JOIN `cms_mail_contacts` as `contacts`
-		ON `contacts`.`user_id`=`users`.`id`
 		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' 
 		AND `cms_mail_contacts`.`delete`='0' 
 		AND `cms_mail_contacts`.`banned`='0'
 		AND `cms_mail_contacts`.`archive`='0'
-		GROUP BY `cms_mail_contacts`.`contact_id`
 		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination() );
 		$i = 0;
 		while($row = mysql_fetch_assoc($query)) {
-			if($row['access'] == 2 && $row['friends'] == 1) {
-				$icon = Functions::getIcon( 'user' . ( $row['sex'] == 'm' ? '-friends' : '-friends-female' ) . '.png', '', '', 'style="margin: 0 0 -3px 0;"' );
-			} else {
-				$icon = Functions::getIcon( 'user' . ( $row['sex'] == 'm' ? '' : '-female' ) . '.png', '', '', 'style="margin: 0 0 -3px 0;"' );
-			}
-			
-			if($row['access'] == 2 && $row['friends'] == 1) {
-				$access = 1; //Друзья
-			} else if($row['access'] == 2 && $row['friends'] == 0) {
-				$access = 2; //Отменить заявку
-			} else if($row['acc'] == 2 && $row['fri'] == 0) {
-				$access = 3; //Подтвердить заявку
-			} else {
-				$access = 0;
-			}
-			
 			$array[] = array(
 			'id' => $row['id'],
-			'icon' => $icon,
-			'access' => $access,
+			'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' : 'w' ) . '.png',
+				'', 'style="margin: 0 0 -3px 0;"' ),
 			'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
 			'nickname' => $row['nickname'],
 			'count' => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ") OR (`contact_id`=" . Vars::$USER_ID . " AND `user_id`=" . $row['id'] . ")) AND `delete_in`!=" . Vars::$USER_ID . " AND `delete_out`!=" . Vars::$USER_ID . ""), 0),

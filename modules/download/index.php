@@ -185,7 +185,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         	$i = 0;
         	while ($res_down = mysql_fetch_assoc($req_down)) {
             	echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') .
-				Functions::getIcon('folder.png') . '&#160;' .
+				Functions::loadModuleImage('folder.png') . '&#160;' .
                 '<a href="' . Vars::$URI . '?id=' . $res_down['id'] . '">' . Validate::filterString($res_down['rus_name']) . '</a> (' . $res_down['total'] . ')';
                if ($res_down['field'])
                     echo '<div><small>' . lng('extensions') . ': <span class="green"><b>' . $res_down['text'] . '</b></span></small></div>';

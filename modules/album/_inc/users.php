@@ -49,7 +49,7 @@ if ($total) {
     $i = 0;
     for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        echo Functions::getIcon(($res['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"') . '&#160;' .
+        echo Functions::loadImage(($res['sex'] == 'm' ? 'user.png' : 'user-female.png')) . '&#160;' .
             '<a href="' . Vars::$URI . '?act=list&amp;user=' . $res['uid'] . '">' . $res['nickname'] . '</a> (' . $res['count'] . ')</div>';
     }
 } else {

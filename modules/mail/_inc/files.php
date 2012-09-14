@@ -39,7 +39,7 @@ if ( $total )
             'id' => $row['id'],
             'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
             'filename' => $row['filename'],
-            'icon' => Functions::getIcon( UploadMail::fileicon( $row['filename'] ), '', '', 'style="margin: 0 0 -3px 0;"' ),
+            'icon' => Functions::getImage( UploadMail::fileicon( $row['filename'] ), '', 'style="margin: 0 0 -3px 0;"' ),
             'filesize' => UploadMail::formatsize( $row['filesize'] ),
             'filecount' => $row['filecount'] );
         ++$i;

@@ -16,7 +16,7 @@ if($count > 0){
         ++$i;
         $count_hits = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `country` = '".$arr['country']."' AND `operator` = '".$arr['operator']."'") , 0);
         
-        echo Functions::getIcon('opsos.png') .' '. $arr['operator'].'
+        echo Functions::loadModuleImage('opsos.png') .' '. $arr['operator'].'
         <div class="sub">'.lng('country').': '.$arr['country'].' | '.lng('total_hits').': '.$count_hits.'</div>';
         
         echo '</div>';    

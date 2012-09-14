@@ -29,7 +29,7 @@ echo'<div class="phdr">'.lng('phones_browsers').'</div>';
         $phones[] = $result_array[0];
         }    
 
-  	echo'<div class="menu"><img src="../files/temp/stat_model.png" alt="loading..."/></div>';
+  	echo'<div class="menu"><img src="' . Vars::$HOME_URL . '/files/temp/stat_model.png" alt="loading..."/></div>';
     echo '<div class="gmenu"><h3>'.lng('details').'</h3>';
     
         $col = array();
@@ -115,5 +115,3 @@ echo'<div class="phdr">'.lng('phones_browsers').'</div>';
  	$Test->clearShadow();
 	$Test->drawPieLegend(150,6,$DataSet->GetData(),$DataSet->GetDataDescription(),250,250,250);
 	$Test->Render('files/temp/stat_model.png');
- 
-?>

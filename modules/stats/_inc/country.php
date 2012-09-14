@@ -15,7 +15,7 @@ if($count > 0){
         echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
         ++$i;
         $count_hits = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `country` = '".$arr['country']."'") , 0);
-        echo Functions::getIcon('country.png') .' '.$arr['country'].'
+        echo Functions::loadModuleImage('country.png') .' '.$arr['country'].'
         <div class="sub">'.lng('total_hits').': '.$count_hits.'</div>';
         echo '</div>';    
         }
@@ -28,4 +28,3 @@ if($count > 0){
 }else{
  echo '<div class="rmenu">'.lng('no_data').'!</div>';   
 }
-?>

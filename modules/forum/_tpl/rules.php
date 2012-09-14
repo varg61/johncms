@@ -1,9 +1,4 @@
-<div class="phdr">
-    <a href="<?= Vars::$MODULE_URI ?>"><b><?= lng('forum') ?></b></a> | <?= lng('forum_rules') ?>
-</div>
-<div class="menu">
-    <p><?= lng('forum_rules_text') ?></p>
-</div>
-<div class="phdr">
-    <a href="<?= htmlspecialchars($_SERVER['HTTP_REFERER']) ?>"><?= lng('back') ?></a>
-</div>
+<ul class="nav">
+    <li><h1><?= lng('forum_rules') ?></h1></li>
+    <li><div class="textblock"><?= lng('forum_rules_text') ?></div></li>
+</ul>

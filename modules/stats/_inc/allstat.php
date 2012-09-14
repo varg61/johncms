@@ -101,5 +101,3 @@ $Test->Render('files/temp/stat_we_se.png');
 ++$days;
 $tpl->days = $days;
 $tpl->contents = $tpl->includeTpl('allstats');
-
-?>

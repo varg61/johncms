@@ -30,6 +30,7 @@ abstract class Vars
     public static $MODULE_URI = '';              // URI модуля
     public static $URI = '';                     // URI активного скрипта
     public static $MODULE = 'mainmenu';          // Активный модуль
+    public static $MODULE_PATH = '';             // Папка с модулем
     public static $CORE_ERRORS = array();        // Ошибки ядра
     public static $NOTIFICATIONS = array();      // Уведомления
 

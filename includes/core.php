@@ -42,6 +42,7 @@ define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                /
 define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR);                  // Папка с пользовательскими файлами
 define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 // Папка с модулями
 define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
+define('TPLDEFAULT', ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR);
 
 /*
 -----------------------------------------------------------------
@@ -78,8 +79,8 @@ spl_autoload_register(
 
         if (isset($system[$name])) {
             require_once(SYSPATH . $system[$name]);
-        } elseif (is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
-            include_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
+        } elseif (is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
+            include_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
         } else {
             exit('ERROR: class <b><i>' . $name . '</i></b> not found');
         }
@@ -121,7 +122,7 @@ function lng($key, $force_system = FALSE)
     static $edited_lng = array();
 
     $system_file = SYSPATH . 'languages' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
-    $module_file = MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
+    $module_file = MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
 
     if (empty($module_lng) && is_file($module_file)) {
         $module_lng = parse_ini_file($module_file);
@@ -148,5 +149,5 @@ function lng($key, $force_system = FALSE)
 -----------------------------------------------------------------
 */
 ob_start();
-register_shutdown_function(function(){echo Template::getInstance()->loadTemplate();});
+register_shutdown_function(function(){Template::getInstance()->loadTemplate();});
 register_shutdown_function('session_write_close');

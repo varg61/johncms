@@ -34,6 +34,8 @@ foreach ($dir_list as $val) {
 }
 $cat = isset($_GET['cat']) && in_array(trim($_GET['cat']), $cat_list) ? trim($_GET['cat']) : $cat_list[0];
 
+$tpl = Template::getInstance();
+
 switch (Vars::$ACT) {
     case 'refresh':
         /*
@@ -222,15 +224,18 @@ switch (Vars::$ACT) {
             echo '<div class="topmenu"><a href="' . Vars::$URI . '?act=my_smileys">' . lng('my_smileys') . '</a> (' . $mycount . ' / ' . $user_smileys . ')</div>';
         }
 
-        $i = 0;
         asort($smileys_cat);
+        $i = 0;
+        $smileys_list = array();
         foreach ($smileys_cat as $key => $val) {
             $count = count(glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE));
-            echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                '<a href="' . Vars::$URI . '?act=list&amp;cat=' . urlencode($key) . '">' . htmlspecialchars($val) . '</a>' .
-                ' (' . $count . ')' .
-                '</div>';
+            $smileys_list[$i] = array(
+                'link' => Vars::$URI . '?act=list&amp;cat=' . urlencode($key),
+                'name' => htmlspecialchars($val),
+                'count' => count(glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smileys' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE))
+            );
             ++$i;
         }
-        echo '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . lng('back') . '</a></div>';
+        $tpl->list = $smileys_list;
+        $tpl->contents = $tpl->includeTpl('category_list');
 }

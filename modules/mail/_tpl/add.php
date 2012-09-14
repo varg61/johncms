@@ -25,6 +25,7 @@
             <input type="file" name="0"/><br/>
             <small><?= lng('max_file_size') ?> <?= $this->size ?> кб.</small>
             <br/>
+            <input type="checkbox" name="draft" value="1"/> <?= lng('save_draft') ?><br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <input type="hidden" name="MAX_FILE_SIZE" value="<?= $this->maxsize ?>"/>
             <p><input type="submit" name="submit" value="<?= lng('sent') ?>"/></p>

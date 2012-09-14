@@ -62,7 +62,7 @@ if (Vars::$USER_RIGHTS > 6 ) {
     		if($totalCat > 0) {
         		while ($resCat = mysql_fetch_assoc($queryCat)) {
                 	echo ($i++ % 2) ? '<div class="list2">' : '<div class="list1">';
-                	echo Functions::getIcon('folder.png') . '&#160;' .
+                	echo Functions::loadModuleImage('folder.png') . '&#160;' .
                 	'<a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '">' . Validate::filterString($resCat['rus_name']) . '</a>';
                 	if($resCat['id'] != $res_down['refid'])
                 		echo '<br /><small><a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '&amp;do=transfer">' . lng('move_this_folder') . '</a></small>';

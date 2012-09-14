@@ -62,28 +62,35 @@ class System extends Vars
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
                 parent::$MODULE = $res['module'];
+                parent::$MODULE_PATH = $res['path'];
                 parent::$MODULE_URI = parent::$HOME_URL . '/' . $res['module'];
                 parent::$URI = parent::$HOME_URL . '/' . $res['module'];
                 $place = $res['module'];
                 if(isset($route[1])
                     && !empty($route[1])
-                    && is_file(MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $route[1] . '.php')
+                    && is_file(MODPATH . $res['path'] . DIRECTORY_SEPARATOR . $route[1] . '.php')
                 ){
-                    parent::$MODULE_INCLUDE = MODPATH . $res['module'] . DIRECTORY_SEPARATOR . $route[1] . '.php';
+                    parent::$MODULE_INCLUDE = MODPATH . $res['path'] . DIRECTORY_SEPARATOR . $route[1] . '.php';
                     parent::$URI .= '/' . $route[1];
                     $place .= '/' . $route[1];
+                } elseif(is_file(MODPATH . $res['path'] . DIRECTORY_SEPARATOR . 'index.php')) {
+                    parent::$MODULE_INCLUDE = MODPATH . $res['path'] . DIRECTORY_SEPARATOR . 'index.php';
                 } else {
-                    parent::$MODULE_INCLUDE = MODPATH . $res['module'] . DIRECTORY_SEPARATOR . 'index.php';
+                    parent::$MODULE_INCLUDE = MODPATH . '_404' . DIRECTORY_SEPARATOR . 'index.php';
+                    parent::$MODULE = '404';
+                    parent::$MODULE_PATH = '_404';
                 }
             } else {
                 // Ошибка 404
-                parent::$MODULE_INCLUDE = MODPATH . '404' . DIRECTORY_SEPARATOR . 'index.php';
+                parent::$MODULE_INCLUDE = MODPATH . '_404' . DIRECTORY_SEPARATOR . 'index.php';
                 parent::$MODULE = '404';
+                parent::$MODULE_PATH = '_404';
             }
         } else {
             // Главная страница сайта
             parent::$MODULE_INCLUDE = MODPATH . 'homepage' . DIRECTORY_SEPARATOR . 'index.php';
             parent::$MODULE = 'homepage';
+            parent::$MODULE_PATH = 'homepage';
             parent::$MODULE_URI = parent::$HOME_URL;
             parent::$URI = parent::$HOME_URL;
         }

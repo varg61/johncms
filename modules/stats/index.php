@@ -14,34 +14,45 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $error = '';
 
 if (!Vars::$SYSTEM_SET['stat'] && Vars::$USER_RIGHTS < 7)
-$error = lng('module_is_disabled');
-elseif(Vars::$SYSTEM_SET['stat'] == 1 && Vars::$USER_RIGHTS < 7)
-$error = lng('access_denied');
-elseif(Vars::$SYSTEM_SET['stat'] == 2 && !Vars::$USER_ID)
-$error = lng('access_denied');
+    $error = lng('module_is_disabled');
+elseif (Vars::$SYSTEM_SET['stat'] == 1 && Vars::$USER_RIGHTS < 7)
+    $error = lng('access_denied');
+elseif (Vars::$SYSTEM_SET['stat'] == 2 && !Vars::$USER_ID)
+    $error = lng('access_denied');
 
-if($error){
+if ($error) {
     echo Functions::displayError(lng('module_is_disabled'));
     exit;
-  }
+}
 
 $model = isset($_GET['model']) ? htmlspecialchars((string )$_GET['model']) : '';
 
 $tpl = Template::getInstance();
 
 // Дополнительные страницы //
-
-$actions = array('robots' => 'robots.php', 'robot_types' => 'robot_types.php',
-    'hosts' => 'hosts.php', 'point_in' => 'point_in.php', 'opsos' => 'opsos.php',
-    'allstat' => 'allstat.php', 'country' => 'country.php', 'users' => 'users.php',
-    'referer' => 'referer.php', 'siteadr' => 'siteadr.php', 'pop' => 'pop.php',
-    'phones' => 'phones.php', 'phone' => 'phone.php', 'os' => 'os.php',
-    'stat_search' => 'stat_search.php', 'search_engine' => 'search_engine.php',
-    'ip_base' => 'ip_base.php', );
-
+$actions = array(
+    'robots'        => 'robots.php',
+    'robot_types'   => 'robot_types.php',
+    'hosts'         => 'hosts.php',
+    'point_in'      => 'point_in.php',
+    'opsos'         => 'opsos.php',
+    'allstat'       => 'allstat.php',
+    'country'       => 'country.php',
+    'users'         => 'users.php',
+    'referer'       => 'referer.php',
+    'siteadr'       => 'siteadr.php',
+    'pop'           => 'pop.php',
+    'phones'        => 'phones.php',
+    'phone'         => 'phone.php',
+    'os'            => 'os.php',
+    'stat_search'   => 'stat_search.php',
+    'search_engine' => 'search_engine.php',
+    'ip_base'       => 'ip_base.php'
+);
 
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE .
-    DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
+    DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])
+) {
 
     $back_links = '';
     include_once (MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' .

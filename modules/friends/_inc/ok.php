@@ -25,7 +25,7 @@ if($fr != 2)
         $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'"), 0); 
         if($fr_out == 0) {
             echo functions::displayError(lng('error_wrong_data'));
-			echo '<div class="bmenu"><a href="' . Vars::$HOME_URL . '/contacts">' . lng('back') . '</a></div>';
+			echo '<div class="bmenu"><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></div>';
             exit;
         }
 		
@@ -55,13 +55,13 @@ if($fr != 2)
 		//mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
 		
 		$tpl->contents = '<div class="rmenu"><p>' . lng('demands_confirm') . '</p>
-        <p><a href="' . Vars::$HOME_URL . '/contacts">' . lng('back') . '</a></p></div>';
+        <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p></div>';
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=ok&amp;id=' . Vars::$ID;
         $tpl->select = lng( 'really_demand_confirm' );
         $tpl->submit = lng( 'confirm' );
         $tpl->phdr = lng( 'demand_confirm' );
-        $tpl->urlBack = Vars::$HOME_URL . '/contacts';
+        $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля select.php

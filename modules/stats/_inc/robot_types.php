@@ -20,7 +20,7 @@ if($count > 0){
         echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
         ++$i;
         $count_view = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `robot` = '".$robot."' AND `robot_type` = '".$arr['robot_type']."'") , 0);
-        echo Functions::getIcon('robot.png') .' <b>'.$arr['robot_type'].'</b>
+        echo Functions::loadModuleImage('robot.png') .' <b>'.$arr['robot_type'].'</b>
         <div class="sub">'.lng('movies').': '.$count_view.'</div>';
         echo '</div>';    
         }

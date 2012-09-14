@@ -32,4 +32,3 @@ if($count > 0){
 }else{
  echo '<div class="rmenu">'.lng('no_data').'!</div>';   
 }
-?>

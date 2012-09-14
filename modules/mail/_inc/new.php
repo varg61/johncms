@@ -100,7 +100,7 @@ if ( $total )
     {
         $array[] = array(
             'id' => $row['id'],
-            'icon' => Functions::getIcon( 'user' . ( $row['sex'] == 'm' ? '' : '-female' ) . '.png', '', '', 'style="margin: 0 0 -3px 0;"' ),
+            'icon' => Functions::getImage( 'usr_' . ( $row['sex'] == 'm' ? 'm' : 'w' ) . '.png', '' ),
             'list' => ( ( $i % 2 ) ? 'list1' : 'list2' ),
             'nickname' => $row['nickname'],
             'count' => $row['count'], 

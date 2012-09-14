@@ -23,7 +23,7 @@ if($count > 0){
         echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
         ++$i;
         $count_hits = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `ref` = '".$arr['ref']."'") , 0);
-        echo Functions::getIcon('url.png') .' <a href="'.$arr['ref'].'">'.$arr['ref'].'</a>
+        echo Functions::loadModuleImage('url.png') .' <a href="'.$arr['ref'].'">'.$arr['ref'].'</a>
         <div class="sub">'.Functions::displayDate($arr['date']).' | '.lng('movies').': '.$count_hits.'</div>
         ';
         echo '</div>';   

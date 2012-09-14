@@ -239,14 +239,14 @@ class Functions extends Vars
                 if (file_exists(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
                     $out .= '<img src="' . parent::$HOME_URL . '/files/users/avatar/' . $user['id'] . '.gif" width="32" height="32" alt="' . htmlspecialchars($user['nickname']) . '" />&#160;';
                 } else {
-                    $out .= self::getImage('empty.png') . '&#160;';
+                    $out .= self::loadImage('empty.png') . '&#160;';
                 }
                 $out .= '</td><td>';
             }
             if ($user['sex']) {
-                $out .= self::getIcon(($user['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"');
+                $out .= self::loadImage(($user['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"');
             } else {
-                $out = self::getImage('del.png', '', 'align="middle"');
+                $out = self::loadImage('delete.png', '', 'align="middle"');
             }
             $out .= '&#160;';
             $out .= (!Vars::$USER_ID && !Vars::$USER_SYS['view_profiles']) || Vars::$USER_ID == $user['id']
@@ -269,7 +269,7 @@ class Functions extends Vars
                 $out .= ' ' . $arg['header'];
             }
             if (!isset($arg['stshide']) && !empty($user['status'])) {
-                $out .= '<div class="status">' . self::getImage('label.png', '', 'align="middle"') . '&#160;' . Validate::filterString($user['status']) . '</div>';
+                $out .= '<div class="status">' . self::loadImage('star.png', 16, 16) . '&#160;' . Validate::filterString($user['status']) . '</div>';
             }
             if (Vars::$USER_SET['avatar']) {
                 $out .= '</td></tr></table>';
@@ -381,21 +381,49 @@ class Functions extends Vars
 
     /*
     -----------------------------------------------------------------
-    Загружаем изображение
+    Загружаем изображение системы
     -----------------------------------------------------------------
     */
-    public static function getImage($img = '', $alt = '', $style = '')
+    public static function loadImage($img = '', $height = '', $width = '', $alt = '', $style = '')
     {
-        if (empty($img)) return false;
-        if (is_file(ROOTPATH . 'templates' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/images/' . $img;
-        } elseif (is_file(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/assets/images/' . $img;
+        if (empty($img)) {
+            return false;
+        }
+
+        if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/img/' . $img;
+        } elseif (is_file(TPLDEFAULT . 'img' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/assets/template/img/' . $img;
         } else {
             return false;
         }
-        $size = getimagesize($file);
-        return '<img src="' . $file . '" ' . $size[3] . ' alt="' . $alt . '" border="0" ' . $style . '/>';
+        return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '"' . $style . '/>';
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Загружаем изображение модуля
+    -----------------------------------------------------------------
+    */
+    public static function loadModuleImage($img = '', $height = '', $width = '', $alt = '', $style = '')
+    {
+        if (empty($img)) {
+            return false;
+        }
+
+        if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . Vars::$MODULE . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/' . Vars::$MODULE .  '/img/' . $img;
+        } elseif (is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/modules/' . Vars::$MODULE . '/img/' . $img;
+        } else {
+            return false;
+        }
+        return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '"' . $style . '/>';
+    }
+
+    public static function getImage($img = '', $alt = '', $style = '')
+    {
+            return '??';
     }
 
     /*
@@ -405,24 +433,7 @@ class Functions extends Vars
     */
     public static function getIcon($img = '', $height = 16, $width = 16, $style = '')
     {
-        if (empty($img)) return false;
-        if (is_file(ROOTPATH . 'templates' . DIRECTORY_SEPARATOR . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/icons/' . $img;
-        } elseif (is_file(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/assets/icons/' . $img;
-        } else {
-            return false;
-        }
-        return '<img src="' . $file . '" height="' . $height . '" width="' . $width . '"  alt="" border="0" ' . $style . '/>';
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Уведомления
-    -----------------------------------------------------------------
-    */
-    public static function notification(){
-
+        return '-??';
     }
 
     /*

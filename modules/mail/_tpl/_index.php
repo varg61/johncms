@@ -11,7 +11,8 @@
 <div class="list2">
     <p>
         <?= Functions::getImage('mail-elected.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=elected"><?= lng('elected') ?></a>&#160;(<?= $this->elected ?>)<br/>
-		<?= Functions::getImage('mail-files.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=files"><?= lng('files') ?></a>&#160;(<?= $this->files ?>)<br/>
+        <?= Functions::getImage('mail-draft.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=draft"><?= lng('draft') ?></a>&#160;(<?= $this->draft ?>)<br/>
+        <?= Functions::getImage('mail-files.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=files"><?= lng('files') ?></a>&#160;(<?= $this->files ?>)<br/>
         <?= Functions::getImage('mail-trash.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=basket"><?= lng('basket') ?></a>&#160;(<?= $this->delete ?>)<br/>
         <?php if (Vars::$USER_RIGHTS == 9): ?>
         <?= Functions::getImage('mail-sending-out.png') ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=sending_out"><?= lng('sending_out') ?></a><br/>

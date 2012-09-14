@@ -46,38 +46,3 @@
         </ul>
     </div>
 </div>
-<?php
-$num = array(50, 100, 500, 1000, 5000);
-$query = array(
-    'count_forum'    => lng('forum'),
-    'count_comments' => lng('comments')
-);
-?>
-<div class="menu">
-    <div class="formblock">
-        <label><?= lng('achievements') ?></label><br/>
-        <table border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <?php foreach ($num as $val) : ?>
-                <td width="28" align="center">
-                    <small><?= $val ?></small>
-                </td>
-                <?php endforeach; ?>
-                <td></td>
-            </tr>
-            <?php foreach ($query as $key => $val) : ?>
-            <tr>
-                <?php foreach ($num as $achieve) : ?>
-                <td align="center"><?= Functions::getImage(($this->user[$key] >= $achieve ? 'green' : 'red') . '.png') ?></td>
-                <?php endforeach; ?>
-                <td>
-                    <small><b><?= $val ?></b></small>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-</div>
-<div class="phdr">
-    <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
-</div>

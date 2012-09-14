@@ -129,7 +129,7 @@ class Download extends Vars
                 } elseif ($set_down['video_screen']) {
                     $preview = Download::screenAuto($res_down['dir'] . '/' . $res_down['name'], $res_down['id'], $format_file);
                 }
-                $preview = $preview ? $preview : 'images/system/easy.gif';
+                $preview = $preview ? $preview : Functions::loadModuleImage('easy.gif');
             }
         }
         if ($preview) {

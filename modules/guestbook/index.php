@@ -23,6 +23,8 @@ if (!Vars::$SYSTEM_SET['mod_guest'] && Vars::$USER_RIGHTS < 7) {
 // Определяем доступ к Админ-клубу
 $mod = Vars::$USER_RIGHTS && Vars::$MOD == 'adm' ? 1 : 0;
 
+$tpl = Template::getInstance();
+
 switch (Vars::$ACT) {
     case 'delpost':
         /*
@@ -361,4 +363,6 @@ switch (Vars::$ACT) {
                 '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
                 '</form></p>';
         }
+
+        $tpl->contents = $tpl->includeTpl('index');
 }

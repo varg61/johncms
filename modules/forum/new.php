@@ -129,7 +129,7 @@ if (Vars::$USER_ID) {
                         echo Functions::getIcon('forum_new.png');
                     }
                     if ($res['realid'] == 1)
-                        echo '&#160;' . Functions::getIcon('chart.png');
+                        echo '&#160;' . Functions::loadModuleImage('chart.png');
                     echo '&#160;<a href="' . Vars::$MODULE_URI . '?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
@@ -194,7 +194,7 @@ if (Vars::$USER_ID) {
                     $icons = array(
                         (isset($np) ? (!$res['vip'] ? Functions::getIcon('forum_normal.png') : '') : Functions::getIcon('forum_new.png')),
                         ($res['vip'] ? Functions::getIcon('forum_pin.png') : ''),
-                        ($res['realid'] ? Functions::getIcon('chart.png') : ''),
+                        ($res['realid'] ? Functions::loadModuleImage('chart.png') : ''),
                         ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
                     );
                     echo Functions::displayMenu($icons, '&#160;', '&#160;');
@@ -248,7 +248,7 @@ if (Vars::$USER_ID) {
                 //TODO: Разобраться с переменной!
                 ($np ? (!$res['vip'] ? Functions::getIcon('forum_normal.png') : '') : Functions::getIcon('forum_new.png')),
                 ($res['vip'] ? Functions::getIcon('forum_pin.png') : ''),
-                ($res['realid'] ? Functions::getIcon('chart.png') : ''),
+                ($res['realid'] ? Functions::loadModuleImage('chart.png') : ''),
                 ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
             );
             echo Functions::displayMenu($icons, '&#160;', '&#160;');

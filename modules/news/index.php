@@ -9,6 +9,8 @@
  * @author      http://johncms.com/about
  */
 
+$tpl = Template::getInstance();
+
 switch (Vars::$ACT) {
     case 'add':
         /*
@@ -17,7 +19,6 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 6) {
-            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('news') . '</b></a> | ' . lng('add') . '</div>';
             $old = 20;
             if (isset($_POST['submit'])) {
                 $error = array();
@@ -79,29 +80,24 @@ switch (Vars::$ACT) {
                     echo Functions::displayError($error, '<a href="' . Vars::$URI . '">' . lng('to_news') . '</a>');
                 }
             } else {
-                echo '<form action="' . Vars::$URI . '?act=add" method="post"><div class="menu">' .
-                    '<p><h3>' . lng('article_title') . '</h3>' .
-                    '<input type="text" name="name"/></p>' .
-                    '<p><h3>' . lng('text') . '</h3>' .
-                    '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="text"></textarea></p>' .
-                    '<p><h3>' . lng('discuss') . '</h3>';
+                $list = array();
                 $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
-                echo '<input type="radio" name="pf" value="0" checked="checked" />' . lng('discuss_off') . '<br />';
+                $list[] = '<label class="small"><input type="radio" name="pf" value="0" checked="checked" />&#160;' . lng('discuss_off') . '</label>';
                 while ($fr1 = mysql_fetch_array($fr)) {
-                    echo '<input type="radio" name="pf" value="' . $fr1['id'] . '"/>' . $fr1['text'] . '<select name="rz[]">';
+                    $list[] = '<label class="small"><input type="radio" name="pf" value="' . $fr1['id'] . '"/>&#160;' . $fr1['text'] . '</label><br/><label><select name="rz[]">';
                     $pr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $fr1['id'] . "'");
                     while ($pr1 = mysql_fetch_array($pr)) {
-                        echo '<option value="' . $pr1['id'] . '">' . $pr1['text'] . '</option>';
+                        $list[] = '<option value="' . $pr1['id'] . '">' . $pr1['text'] . '</option>';
                     }
-                    echo '</select><br/>';
+                    $list[] = '</select></label><br/>';
                 }
-                echo '</p></div><div class="bmenu">' .
-                    '<input type="submit" name="submit" value="' . lng('save') . '"/>' .
-                    '</div></form>' .
-                    '<p><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
+                $tpl->list = $list;
+                $tpl->contents = $tpl->includeTpl('news_add');
             }
         } else {
-            header("location: " . Vars::$URI);
+            $tpl->back = Vars::$URI;
+            $tpl->message = lng('access_forbidden');
+            $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;
 
@@ -230,18 +226,15 @@ switch (Vars::$ACT) {
         if (Vars::$USER_RIGHTS >= 6) {
             echo '<div class="topmenu"><a href="' . Vars::$URI . '?act=add">' . lng('add') . '</a> | <a href="' . Vars::$URI . '?act=clean">' . lng('clear') . '</a></div>';
         }
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `news`"), 0);
-        if ($total) {
+        $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `news`"), 0);
+        if ($tpl->total) {
+            $news = array();
             $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC " . Vars::db_pagination());
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
-                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                $text = Validate::filterString($res['text'], 1, 1);
+                $res['text'] = Validate::filterString($res['text'], 1, 1);
                 if (Vars::$USER_SET['smileys']) {
-                    $text = Functions::smileys($text, 1);
+                    $res['text'] = Functions::smileys($res['text'], 1);
                 }
-                echo'<h3>' . $res['name'] . '</h3>' .
-                    '<span class="gray"><small>' . lng('author') . ': ' . $res['avt'] . ' (' . Functions::displayDate($res['time']) . ')</small></span>' .
-                    '<br />' . $text . '<div class="sub">';
                 if ($res['kom'] != 0 && $res['kom'] != "") {
                     $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");
                     $komm = mysql_result($mes, 0) - 1;
@@ -249,24 +242,19 @@ switch (Vars::$ACT) {
                         echo '<a href="../forum/?id=' . $res['kom'] . '">' . lng('discuss_on_forum') . ' (' . $komm . ')</a><br/>';
                     }
                 }
-                if (Vars::$USER_RIGHTS >= 6) {
-                    echo'<a href="' . Vars::$URI . '?act=edit&amp;id=' . $res['id'] . '">' . lng('edit') . '</a> | ' .
-                        '<a href="' . Vars::$URI . '?act=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>';
-                }
-                echo '</div></div>';
+                $news[$i] = $res;
             }
-        } else {
-            echo'<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+            $tpl->news = $news;
+            unset($res, $news);
         }
-        echo '<div class="phdr">' . lng('total') . ':&#160;' . $total . '</div>';
-        if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . Vars::$URI . '" method="post">' .
+        if ($tpl->total > Vars::$USER_SET['page_size']) {
+            $tpl->pagination = Functions::displayPagination(Vars::$URI . '?', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
+            echo'<p><form action="' . Vars::$URI . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
         }
-
         if (Vars::$USER_RIGHTS >= 7) {
             echo'<p><a href="' . Vars::$URI . '/admin">' . lng('admin_panel') . '</a></p>';
         }
+        $tpl->contents = $tpl->includeTpl('index');
 }

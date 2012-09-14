@@ -48,7 +48,7 @@ if($fr != 2)
         		//`sys` = '1',
         		//`theme` = '" . lng('friendship') . "'");
         		$tpl->contents = '<div class="rmenu"><p>' . lng('demand_friends_sent') . '</p>
-                <p><a href="' . Vars::$HOME_URL . '/contacts">' . lng('back') . '</a></p>
+                <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p>
                 </div>';
             }
         }
@@ -57,7 +57,7 @@ if($fr != 2)
         $tpl->select = lng( 'confirm_offer_friendship' );
         $tpl->submit = lng( 'confirm' );
         $tpl->phdr = lng( 'offer_friendship' );
-        $tpl->urlBack = Vars::$HOME_URL . '/contacts';
+        $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля select.php

@@ -30,7 +30,7 @@ class Network extends Vars
     /**
      * @var int Set the maximum number of allowed requests per time period
      */
-    private $_floodLimit = 40;
+    private $_floodLimit = 60;
 
     /**
      * @var int The time period for calculating number of allowed requests [sec]
@@ -140,7 +140,7 @@ class Network extends Vars
     private function _getUserAgent()
     {
         if (isset($_SERVER["HTTP_X_OPERAMINI_PHONE_UA"]) && strlen(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])) > 5) {
-            return '<b>Opera Mini</b>: ' . htmlspecialchars(substr(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']), 0, 150));
+            return 'OPERA MINI: ' . htmlspecialchars(substr(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']), 0, 150));
         }
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             return htmlspecialchars(substr(trim($_SERVER['HTTP_USER_AGENT']), 0, 150));
