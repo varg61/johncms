@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1<?= $this->user['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= lng('personal') ?></h1></li>
+    <li><h1<?= $this->user['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= lng('settings') ?></h1></li>
 </ul>
 <div class="user-block"><?= Functions::displayUser($this->user) ?></div>
 <ul class="nav">
