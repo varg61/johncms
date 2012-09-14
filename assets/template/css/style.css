@@ -58,7 +58,7 @@ a:hover, a:active, a:focus {
 }
 
 /* Фон тулбаров и заголовков меню */
-ul.nav li h1, ul.nav li h2, .phdr {
+ul.nav li h1, ul.nav li h2 {
     background-image: url(../img/sprite-backgrounds.png);
     background-repeat: repeat-x;
 }
@@ -944,19 +944,10 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
 }
 
 .phdr {
-    /*background-color: #bfc6cf;*/
-    /*border: 2px solid;*/
-    /*border-color: #e1e4e8 #96a2af #96a2af #e1e4e8;*/
-    /*padding: 3px 4px 3px 4px;*/
-    color: #eeeeee;
-    font-weight: bold;
-    font-size: large;
-    text-align: center;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.55);
-    background-color: #8F99AB;
-    background-position: 0 0;
-    border-bottom: 1px solid #606B80;
-    padding: 10px 2px;
+    background-color: #bfc6cf;
+    border: 2px solid;
+    border-color: #e1e4e8 #96a2af #96a2af #e1e4e8;
+    padding: 3px 4px 3px 4px;
 }
 
 .phdr a {

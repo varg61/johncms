@@ -15,6 +15,12 @@
     <div class="align-center"><?= $this->pagination ?></div>
     <?php endif ?>
 <?php else: ?>
-<div class="menu"><p><?= lng('list_empty') ?></p></div>
+<div class="form-container">
+    <div class="form-block align-center">
+        <?= lng('list_empty') ?>
+    </div>
+</div>
 <?php endif ?>
-<div><a href="<?= Vars::$URI ?>?act=add">Добавить новость</a></div>
+<?php if(Vars::$USER_RIGHTS >= 7): ?>
+<div><a class="btn" href="<?= Vars::$URI ?>?act=add">Добавить новость</a></div>
+<?php endif ?>
