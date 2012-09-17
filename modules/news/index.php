@@ -222,10 +222,6 @@ switch (Vars::$ACT) {
         Вывод списка новостей
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . lng('site_news') . '</b></div>';
-        if (Vars::$USER_RIGHTS >= 6) {
-            echo '<div class="topmenu"><a href="' . Vars::$URI . '?act=add">' . lng('add') . '</a> | <a href="' . Vars::$URI . '?act=clean">' . lng('clear') . '</a></div>';
-        }
         $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `news`"), 0);
         if ($tpl->total) {
             $news = array();

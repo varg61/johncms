@@ -5,11 +5,17 @@
     <?php foreach ($this->news as $key => $val): ?>
     <div class="<?= $key % 2 ? 'block-odd' : 'block-even' ?>">
         <div class="block-hdr"><?= $val['name'] ?></div>
-        <div class="block-text"><?= $val['text'] ?></div>
-        <div class="list-tools">
-            <a class="btn btn-mini" href="<?= Vars::$URI ?>"><?= lng('edit') ?></a>
-            <a class="btn btn-mini" href="<?= Vars::$URI ?>"><?= lng('delete') ?></a>
+        <div class="block-info">
+            <?= Functions::displayDate($val['time']) ?><br/>
+            <?= lng('author') ?>: <a href=""><?= $val['avt'] ?></a>
         </div>
+        <div class="block-text"><?= $val['text'] ?></div>
+        <?php if(Vars::$USER_RIGHTS >= 7): ?>
+        <div class="block-tools">
+            <a class="btn btn-mini" href="<?= Vars::$URI ?>?act=edit&amp;id=<?= $val['id'] ?>"><?= lng('edit') ?></a>
+            <a class="btn btn-mini" href="<?= Vars::$URI ?>?act=del&amp;id=<?= $val['id'] ?>"><?= lng('delete') ?></a>
+        </div>
+        <?php endif ?>
     </div>
     <?php endforeach ?>
     <ul class="nav">
