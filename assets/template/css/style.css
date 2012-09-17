@@ -838,6 +838,22 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     color: #b94a48;
 }
 
+.btn-panel {
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.list-tools {
+    color: gray;
+    font-size: x-small;
+    margin-top: 4px;
+}
+
+.list-tools a, .list-tools a:visited {
+    /*color: #6770ba;*/
+}
+
 .info-message {
     padding-top: 12px;
     padding-bottom: 24px;
