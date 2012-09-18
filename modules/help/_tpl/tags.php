@@ -1,6 +1,6 @@
 <ul class="nav">
     <li><h1><?= lng('tags') ?></h1></li>
-    <li><div class="textblock">
+    <li><div class="block-even">
         <table class="table-list">
             <tr>
                 <td align="right">[php]...[/php]</td>
