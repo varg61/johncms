@@ -91,6 +91,10 @@ label {
     line-height: 18px;
 }
 
+label input[type="text"] {
+    font-weight: normal;
+}
+
 label.small {
     font-size: small;
 }
@@ -142,7 +146,7 @@ input[type="password"] {
 }
 
 input[type="checkbox"] {
-    margin-bottom: 12px;
+    /*margin-bottom: 12px;*/
     margin-right: 6px;
 }
 
