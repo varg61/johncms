@@ -2,6 +2,7 @@ about                         =   "Расскажите немного о себ
 access_forbidden              =   "Доступ запрещен"
 access_guest_forbidden        =   "Только для зарегистрированных посетителей"
 add                           =   "Добавить"
+added                         =   "Добавил"
 add_file                      =   "Добавить файл"
 add_smileys                   =   "Добавить смайлы"
 administration                =   "Администрация"

@@ -786,6 +786,10 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     .icn-exit { background-position: 0 -660px }
     .icn-upload { background-position: 0 -680px }
     .icn-trash { background-position: 0 -700px }
+
+    .btn i{
+        margin-right: 4px;
+    }
 }
 
 /*======================================================
@@ -826,7 +830,8 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
 }
 
 .block-tools {
-    padding: 4px 0;
+    /*padding: 4px 0;*/
+    line-height: 24px; /* Разобраться с поддержкой Opera Mini */
 }
 
 .table-list { }

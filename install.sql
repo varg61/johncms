@@ -289,6 +289,20 @@ INSERT INTO `cms_modules` (`module`, `path`) VALUES
 ('stats', 'stats');
 
 
+DROP TABLE IF EXISTS `news`;
+DROP TABLE IF EXISTS `cms_news`;
+CREATE TABLE `cms_news` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `time` int(11) NOT NULL DEFAULT '0',
+  `author` varchar(50) NOT NULL DEFAULT '',
+  `author_id` int(11) NOT NULL DEFAULT '0',
+  `name` text NOT NULL,
+  `text` text NOT NULL,
+  `comments` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
 DROP TABLE IF EXISTS `cms_sessions`;
 CREATE TABLE `cms_sessions` (
   `session_id` varchar(64) NOT NULL DEFAULT '',
@@ -539,18 +553,6 @@ CREATE TABLE `lib` (
   KEY `refid` (`refid`),
   FULLTEXT KEY `name` (`name`),
   FULLTEXT KEY `text` (`text`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `news`;
-CREATE TABLE `news` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `time` int(11) NOT NULL DEFAULT '0',
-  `avt` varchar(25) NOT NULL DEFAULT '',
-  `name` text NOT NULL,
-  `text` text NOT NULL,
-  `kom` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 

@@ -18,7 +18,7 @@ switch (Vars::$ACT) {
         Добавление новости
         -----------------------------------------------------------------
         */
-        if (Vars::$USER_RIGHTS >= 6) {
+        if (Vars::$USER_RIGHTS >= 7) {
             $old = 20;
             if (isset($_POST['submit'])) {
                 $error = array();
@@ -64,12 +64,13 @@ switch (Vars::$ACT) {
                             }
                         }
                     }
-                    mysql_query("INSERT INTO `news` SET
+                    mysql_query("INSERT INTO `cms_news` SET
                         `time` = '" . time() . "',
-                        `avt` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
+                        `author` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
+                        `author_id` = '" . Vars::$USER_ID . "',
                         `name` = '" . mysql_real_escape_string($name) . "',
                         `text` = '" . mysql_real_escape_string($text) . "',
-                        `kom` = '$rid'
+                        `comments` = '$rid'
                     ") or die(mysql_error());
                     mysql_query("UPDATE `users` SET
                         `lastpost` = '" . time() . "'
@@ -107,8 +108,8 @@ switch (Vars::$ACT) {
         Редактирование новости
         -----------------------------------------------------------------
         */
-        if (Vars::$USER_RIGHTS >= 6) {
-            if (Vars::$ID && mysql_result(mysql_query("SELECT COUNT(*) FROM `news` WHERE `id` = " . Vars::$ID), 0)) {
+        if (Vars::$USER_RIGHTS >= 7) {
+            if (Vars::$ID && mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_news` WHERE `id` = " . Vars::$ID), 0)) {
                 echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('news') . '</b></a> | ' . lng('edit') . '</div>';
                 if (!Vars::$ID) {
                     echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('to_news') . '</a>');
@@ -123,7 +124,7 @@ switch (Vars::$ACT) {
                     $name = Validate::filterString($_POST['name']);
                     $text = mysql_real_escape_string(trim($_POST['text']));
                     if (!$error) {
-                        mysql_query("UPDATE `news` SET
+                        mysql_query("UPDATE `cms_news` SET
                         `name` = '" . mysql_real_escape_string($name) . "',
                         `text` = '$text'
                         WHERE `id` = " . Vars::$ID
@@ -133,7 +134,7 @@ switch (Vars::$ACT) {
                     }
                     echo '<p>' . lng('article_changed') . '<br /><a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>';
                 } else {
-                    $req = mysql_query("SELECT * FROM `news` WHERE `id` = " . Vars::$ID);
+                    $req = mysql_query("SELECT * FROM `cms_news` WHERE `id` = " . Vars::$ID);
                     $res = mysql_fetch_assoc($req);
                     echo '<div class="menu"><form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
                         '<p><h3>' . lng('article_title') . '</h3>' .
@@ -148,7 +149,9 @@ switch (Vars::$ACT) {
                 echo Functions::displayError(lng('error_wrong_data'));
             }
         } else {
-            echo Functions::displayError(lng('access_forbidden'));
+            $tpl->back = Vars::$URI;
+            $tpl->message = lng('access_forbidden');
+            $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;
 
@@ -165,20 +168,20 @@ switch (Vars::$ACT) {
                 switch ($cl) {
                     case '1':
                         // Чистим новости, старше 1 недели
-                        mysql_query("DELETE FROM `news` WHERE `time`<='" . (time() - 604800) . "'");
-                        mysql_query("OPTIMIZE TABLE `news`");
+                        mysql_query("DELETE FROM `cms_news` WHERE `time`<='" . (time() - 604800) . "'");
+                        mysql_query("OPTIMIZE TABLE `cms_news`");
                         echo '<p>' . lng('clear_week_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
                         break;
 
                     case '2':
                         // Проводим полную очистку
-                        mysql_query("TRUNCATE TABLE `news`");
+                        mysql_query("TRUNCATE TABLE `cms_news`");
                         echo '<p>' . lng('clear_all_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
                         break;
                     default :
                         // Чистим сообщения, старше 1 месяца
-                        mysql_query("DELETE FROM `news` WHERE `time`<='" . (time() - 2592000) . "'");
-                        mysql_query("OPTIMIZE TABLE `news`;");
+                        mysql_query("DELETE FROM `cms_news` WHERE `time`<='" . (time() - 2592000) . "'");
+                        mysql_query("OPTIMIZE TABLE `cms_news`");
                         echo '<p>' . lng('clear_month_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
                 }
             } else {
@@ -192,7 +195,9 @@ switch (Vars::$ACT) {
                     '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></div>';
             }
         } else {
-            header("location: " . Vars::$URI);
+            $tpl->back = Vars::$URI;
+            $tpl->message = lng('access_forbidden');
+            $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;
 
@@ -202,17 +207,27 @@ switch (Vars::$ACT) {
         Удаление новости
         -----------------------------------------------------------------
         */
-        if (Vars::$USER_RIGHTS >= 6) {
+        if (Vars::$USER_RIGHTS >= 7) {
             echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('site_news') . '</b></a> | ' . lng('delete') . '</div>';
-            if (isset($_GET['yes'])) {
-                mysql_query("DELETE FROM `news` WHERE `id` = " . Vars::$ID);
-                echo '<p>' . lng('article_deleted') . '<br/><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
+            if (isset($_POST['submit'])
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
+            ) {
+                mysql_query("DELETE FROM `cms_news` WHERE `id` = " . Vars::$ID);
+                $tpl->continue = Vars::$URI;
+                $tpl->message = lng('article_deleted');
+                $tpl->contents = $tpl->includeTpl('message', 1);
             } else {
-                echo '<p>' . lng('delete_confirmation') . '<br/>' .
-                    '<a href="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '&amp;yes">' . lng('delete') . '</a> | <a href="' . Vars::$URI . '">' . lng('cancel') . '</a></p>';
+                $tpl->id = Vars::$ID;
+                $tpl->form_token = mt_rand(100, 10000);
+                $_SESSION['form_token'] = $tpl->form_token;
+                $tpl->contents = $tpl->includeTpl('news_delete');
             }
         } else {
-            header("location: " . Vars::$URI);
+            $tpl->back = Vars::$URI;
+            $tpl->message = lng('access_forbidden');
+            $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;
 
@@ -222,20 +237,21 @@ switch (Vars::$ACT) {
         Вывод списка новостей
         -----------------------------------------------------------------
         */
-        $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `news`"), 0);
+        $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_news`"), 0);
         if ($tpl->total) {
             $news = array();
-            $req = mysql_query("SELECT * FROM `news` ORDER BY `time` DESC " . Vars::db_pagination());
+            $req = mysql_query("SELECT * FROM `cms_news` ORDER BY `id` DESC " . Vars::db_pagination());
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                 $res['text'] = Validate::filterString($res['text'], 1, 1);
                 if (Vars::$USER_SET['smileys']) {
                     $res['text'] = Functions::smileys($res['text'], 1);
                 }
-                if ($res['kom'] != 0 && $res['kom'] != "") {
-                    $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");
-                    $komm = mysql_result($mes, 0) - 1;
-                    if ($komm >= 0) {
-                        echo '<a href="../forum/?id=' . $res['kom'] . '">' . lng('discuss_on_forum') . ' (' . $komm . ')</a><br/>';
+                if ($res['comments'] != 0 && $res['comments'] != "") {
+                    $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['comments'] . "'");
+                    $comm = mysql_result($mes, 0) - 1;
+                    if ($comm >= 0) {
+                        $tpl->comments = $comm;
+                        $tpl->comments_id = $res['comments'];
                     }
                 }
                 $news[$i] = $res;
@@ -248,9 +264,6 @@ switch (Vars::$ACT) {
             echo'<p><form action="' . Vars::$URI . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
-        }
-        if (Vars::$USER_RIGHTS >= 7) {
-            echo'<p><a href="' . Vars::$URI . '/admin">' . lng('admin_panel') . '</a></p>';
         }
         $tpl->contents = $tpl->includeTpl('index');
 }
