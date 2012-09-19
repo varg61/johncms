@@ -12,6 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $delf = opendir('../files/forum/topics');
+$tm = array();
 while ($tt = readdir($delf)) {
     if ($tt != "." && $tt != ".." && $tt != 'index.php' && $tt != '.svn') {
         $tm[] = $tt;
