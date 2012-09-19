@@ -1,17 +1,17 @@
-<div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=settings"><b><?= lng('settings') ?></b></a> | <?= lng('reset_settings') ?>
-</div>
-<div class="menu">
-    <form action="<?= Vars::$URI ?>?act=settings&amp;mod=reset" method="post">
-        <div class="formblock">
-            <?= lng('reset_settings_warning') ?>
+<ul class="nav">
+    <li><h1<?= $this->user['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= lng('system_settings') ?></h1></li>
+</ul>
+
+<div class="form-container">
+    <form action="<?= Vars::$URI ?>?act=settings&amp;mod=reset&amp;user=<?= $this->user['id'] ?>" method="post">
+        <div class="form-block align-center">
+            <div class="info-message"><?= lng('reset_settings_warning') ?></div>
+            <input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('save') ?>"/>
+            <a class="btn btn-large" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
+            <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
-        <div class="formblock">
-            <input type="submit" name="submit" value="<?= lng('save') ?>"/>
-        </div>
-        <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
     </form>
 </div>
 <div class="phdr">
-    <a href="<?= htmlspecialchars($_SERVER['HTTP_REFERER']) ?>"><?= lng('back') ?></a>
+    <a href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
 </div>
