@@ -65,6 +65,7 @@ switch (Vars::$MOD) {
             $tpl_list[] = basename($val);
         }
         sort($tpl_list);
+        array_unshift($tpl_list, '--default--');
         $tpl->tpl_list = $tpl_list;
 
         if (isset($_POST['submit'])

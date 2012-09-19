@@ -18,7 +18,7 @@ $user_smileys = 20;
 
 // Обрабатываем ссылку для возврата
 if (empty($_SESSION['ref'])) {
-    $_SESSION['ref'] = htmlspecialchars($_SERVER['HTTP_REFERER']);
+    $_SESSION['ref'] = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
 }
 
 // Обрабатываем глобальные переменные

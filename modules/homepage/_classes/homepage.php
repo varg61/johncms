@@ -30,7 +30,7 @@ class HomePage
         global $lng;
         if ($this->settings['view'] > 0) {
             $reqtime = $this->settings['days'] ? time() - ($this->settings['days'] * 86400) : 0;
-            $req = mysql_query("SELECT * FROM `news` WHERE `time` > '$reqtime' ORDER BY `time` DESC LIMIT " . $this->settings['quantity']);
+            $req = mysql_query("SELECT * FROM `cms_news` WHERE `time` > '$reqtime' ORDER BY `id` DESC LIMIT " . $this->settings['quantity']);
             if (mysql_num_rows($req) > 0) {
                 $i = 0;
                 $news = '';
@@ -71,11 +71,11 @@ class HomePage
                             $news .= '<b>' . $res['name'] . '</b><br />' . $text;
                     }
                     // Ссылка на каменты
-                    if (!empty($res['kom']) && $this->settings['view'] != 2 && $this->settings['kom'] == 1) {
-                        $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['kom'] . "'");
+                    if (!empty($res['comments']) && $this->settings['view'] != 2 && $this->settings['kom'] == 1) {
+                        $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['comments'] . "'");
                         $komm = mysql_result($mes, 0) - 1;
                         if ($komm >= 0)
-                            $news .= '<br /><a href="../forum/?id=' . $res['kom'] . '">' . $lng['discuss'] . '</a> (' . $komm . ')';
+                            $news .= '<br /><a href="../forum/?id=' . $res['comments'] . '">' . $lng['discuss'] . '</a> (' . $komm . ')';
                     }
                     $news .= '</div>';
                     ++$i;

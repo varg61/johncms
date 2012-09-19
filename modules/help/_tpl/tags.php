@@ -58,5 +58,5 @@
     </div></li>
 </ul>
 <div class="phdr">
-    <a href="<?= htmlspecialchars($_SERVER['HTTP_REFERER']) ?>"><?= lng('back') ?></a>
+    <a href="<?= (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL) ?>"><?= lng('back') ?></a>
 </div>
