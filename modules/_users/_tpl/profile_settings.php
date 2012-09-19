@@ -3,6 +3,13 @@
 </ul>
 
 <div class="form-container">
+    <?php if (isset($this->save)) : ?>
+    <div class="form-block"><?= lng('settings_saved') ?></div>
+    <?php endif ?>
+    <?php if (isset($this->reset)) : ?>
+    <div class="form-block"><?= lng('settings_default') ?></div>
+    <?php endif ?>
+
     <form action="<?= Vars::$URI ?>?act=settings" method="post">
         <div class="form-block">
             <label for="timeshift"><?= lng('settings_clock') ?></label><br/>
@@ -38,40 +45,23 @@
             <?php foreach (Vars::$LNG_LIST as $key => $val) : ?>
                 <div>
                     <label class="small"><input type="radio" value="<?= $key ?>" name="iso" <?= ($key == $user_lng ? 'checked="checked"' : '') ?>/>
-                    <?php if (file_exists(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'flags' . DIRECTORY_SEPARATOR . $key . '.gif')) : ?>
-                    <img src="<?= Vars::$HOME_URL ?>/images/flags/<?= $key ?>.gif" alt=""/>&#160;
-                    <?php endif ?>
-                    <?= $val ?>
-                    <?php if ($key == Vars::$SYSTEM_SET['lng']) : ?>
-                    <span class="attn">*</span>
-                    <?php endif ?>
-                        </label>
+                        <?php if (file_exists(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . 'flags' . DIRECTORY_SEPARATOR . $key . '.gif')) : ?>
+                            <img src="<?= Vars::$HOME_URL ?>/images/flags/<?= $key ?>.gif" alt=""/>&#160;
+                            <?php endif ?>
+                        <?= $val ?>
+                        <?php if ($key == Vars::$SYSTEM_SET['lng']) : ?>
+                            <span class="attn">*</span>
+                            <?php endif ?>
+                    </label>
                 </div>
                 <?php endforeach; ?>
             <?php endif ?>
 
             <br/>
             <input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('save') ?>"/>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/personal"><?= lng('cancel') ?></a>
+            <a class="btn btn-large" href="<?= Vars::$URI ?>?act=settings&amp;mod=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
+            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>
-</div>
-
-<?php if (isset($this->save)) : ?>
-<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
-    <?= lng('settings_saved') ?>
-</div>
-<?php endif; ?>
-<?php if (isset($this->reset)) : ?>
-<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px">
-    <?= lng('settings_default') ?>
-</div>
-<?php endif; ?>
-
-
-
-
-<div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=settings&amp;mod=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
 </div>

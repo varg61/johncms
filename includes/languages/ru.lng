@@ -115,6 +115,7 @@ error_email                   =   "E-mail адрес введен неверно
 error_email_empty             =   "Вы не ввели E-mail"
 error_email_login             =   "E-mail нельзя использовать в качестве Ника"
 error_email_occupied          =   "Данный адрес E-mail уже используется"
+error_empty_field             =   "Не заполнено поле"
 error_empty_fields            =   "Не заполнены обязательные поля"
 error_empty_message           =   "Вы не ввели сообщение"
 error_empty_name              =   "Вы не ввели имя"

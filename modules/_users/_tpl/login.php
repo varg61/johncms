@@ -2,12 +2,12 @@
     <li><h1><?= lng('login') ?></h1></li>
 </ul>
 <div class="form-container">
-    <div class="form-block" style="padding: 20px; text-align: center;">
+    <div class="form-block align-center" style="padding: 20px">
         <form action="<?= Vars::$URI ?>" method="post">
             <label for="login"><?= lng('login_caption') ?></label><br/>
             <?php if (isset($this->error['login'])) : ?>
             <span class="label label-red"><?= $this->error['login'] ?></span><br/>
-            <?php endif; ?>
+            <?php endif ?>
             <input id="login" type="text" name="login" value="<?= (isset($_POST['login']) ? htmlspecialchars(trim($_POST['login'])) : '') ?>" maxlength="20" <?= (isset($this->error['login']) ? 'class="error"' : '') ?>/><br/>
 
             <label for="password"><?= lng('password') ?></label><br/>

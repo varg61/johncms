@@ -2,6 +2,13 @@
     <li><h1 class="section-warning"><?= lng('users') ?> :: <?= lng('settings') ?></h1></li>
 </ul>
 <div class="form-container">
+    <?php if (isset($this->save)) : ?>
+    <div class="form-block"><?= lng('settings_saved') ?></div>
+    <?php endif ?>
+    <?php if (isset($this->reset)) : ?>
+    <div class="form-block"><?= lng('settings_default') ?></div>
+    <?php endif ?>
+
     <form action="<?= Vars::$URI ?>" method="post">
         <div class="form-block">
             <label><?= lng('registration') ?></label><br/>
@@ -47,14 +54,3 @@
         <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
     </form>
 </div>
-
-
-
-
-<?php if (isset($this->save)) : ?>
-<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px"><?= lng('settings_saved') ?></div>
-<?php endif ?>
-
-<?php if (isset($this->reset)) : ?>
-<div class="gmenu" style="padding-top: 8px; padding-bottom: 10px"><?= lng('settings_default') ?></div>
-<?php endif ?>
