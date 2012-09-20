@@ -90,7 +90,7 @@ class HomePage
     // Счетчик всех новостей
     private function _newsCount()
     {
-        $req = mysql_query("SELECT COUNT(*) FROM `news`");
+        $req = mysql_query("SELECT COUNT(*) FROM `cms_news`");
         $res = mysql_result($req, 0);
         return ($res > 0 ? $res : '0');
     }
@@ -98,7 +98,7 @@ class HomePage
     // Счетчик свежих новостей
     private function _lastNewsCount()
     {
-        $req = mysql_query("SELECT COUNT(*) FROM `news` WHERE `time` > '" . (time() - 259200) . "'");
+        $req = mysql_query("SELECT COUNT(*) FROM `cms_news` WHERE `time` > '" . (time() - 259200) . "'");
         $res = mysql_result($req, 0);
         return ($res > 0 ? '/<span class="red">+' . $res . '</span>' : false);
     }

@@ -5,10 +5,16 @@
     <form name="form" action="<?= Vars::$URI ?>?act=add" method="post">
         <div class="form-block">
             <label for="name"><?= lng('article_title') ?></label><br/>
-            <input id="name" type="text" name="name"/><br/>
+            <?php if (isset($this->error['title'])) : ?>
+            <span class="label label-red"><?= $this->error['title'] ?></span><br/>
+            <?php endif ?>
+            <input id="name" type="text" name="name" value="<?= (isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '') ?>" <?= (isset($this->error['title']) ? 'class="error"' : '') ?>/><br/>
             <label for="text"><?= lng('text') ?></label>
             <?= !Vars::$IS_MOBILE ? TextParser::autoBB('form', 'text') : '' ?>
-            <textarea id="text" rows="<?= Vars::$USER_SET['field_h'] ?>" name="text"></textarea>
+            <?php if (isset($this->error['text'])) : ?>
+            <span class="label label-red"><?= $this->error['text'] ?></span><br/>
+            <?php endif ?>
+            <textarea id="text" rows="<?= Vars::$USER_SET['field_h'] ?>" name="text" <?= (isset($this->error['text']) ? 'class="error"' : '') ?>><?= (isset($_POST['text']) ? htmlspecialchars(trim($_POST['text'])) : '') ?></textarea>
             <label><?= lng('discuss') ?></label><br/>
             <?php foreach ($this->list as $val): ?>
             <div><?= $val ?></div>

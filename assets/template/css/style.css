@@ -184,13 +184,15 @@ input.medium {
     width: 100px;
 }
 
-input.error {
+input.error,
+textarea.error {
     color: #b94a48;
     background-color: #ffeff1;
     border-color: #b94a48;
 }
 
-input.error:focus {
+input.error:focus,
+textarea.error:focus {
     border-color: #953b39;
     box-shadow: 0 0 6px #d59392;
 }

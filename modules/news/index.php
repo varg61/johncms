@@ -24,14 +24,18 @@ switch (Vars::$ACT) {
                 $error = array();
                 $name = isset($_POST['name']) ? Validate::filterString($_POST['name']) : FALSE;
                 $text = isset($_POST['text']) ? trim($_POST['text']) : FALSE;
-                if (!$name)
-                    $error[] = lng('error_title');
-                if (!$text)
-                    $error[] = lng('error_text');
+                if (empty($name)) {
+                    $error['title'] = lng('error_title');
+                }
+                if (empty($text)) {
+                    $error['text'] = lng('error_text');
+                }
                 $flood = Functions::antiFlood();
-                if ($flood)
+                if ($flood) {
                     $error[] = lng('error_flood') . ' ' . $flood . '&#160;' . lng('seconds');
-                if (!$error) {
+                }
+
+                if (empty($error)) {
                     $rid = 0;
                     if (!empty($_POST['pf']) && ($_POST['pf'] != '0')) {
                         $pf = intval($_POST['pf']);
@@ -77,24 +81,24 @@ switch (Vars::$ACT) {
                         WHERE `id` = " . Vars::$USER_ID
                     );
                     echo '<p>' . lng('article_added') . '<br /><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
+                    exit;
                 } else {
-                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '">' . lng('to_news') . '</a>');
+                    $tpl->error = $error;
                 }
-            } else {
-                $list = array();
-                $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
-                $list[] = '<label class="small"><input type="radio" name="pf" value="0" checked="checked" />&#160;' . lng('discuss_off') . '</label>';
-                while ($fr1 = mysql_fetch_array($fr)) {
-                    $list[] = '<label class="small"><input type="radio" name="pf" value="' . $fr1['id'] . '"/>&#160;' . $fr1['text'] . '</label><br/><label><select name="rz[]">';
-                    $pr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $fr1['id'] . "'");
-                    while ($pr1 = mysql_fetch_array($pr)) {
-                        $list[] = '<option value="' . $pr1['id'] . '">' . $pr1['text'] . '</option>';
-                    }
-                    $list[] = '</select></label><br/>';
-                }
-                $tpl->list = $list;
-                $tpl->contents = $tpl->includeTpl('news_add');
             }
+            $list = array();
+            $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
+            $list[] = '<label class="small"><input type="radio" name="pf" value="0" checked="checked" />&#160;' . lng('discuss_off') . '</label>';
+            while ($fr1 = mysql_fetch_array($fr)) {
+                $list[] = '<label class="small"><input type="radio" name="pf" value="' . $fr1['id'] . '"/>&#160;' . $fr1['text'] . '</label><br/><label><select name="rz[]">';
+                $pr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $fr1['id'] . "'");
+                while ($pr1 = mysql_fetch_array($pr)) {
+                    $list[] = '<option value="' . $pr1['id'] . '">' . $pr1['text'] . '</option>';
+                }
+                $list[] = '</select></label><br/>';
+            }
+            $tpl->list = $list;
+            $tpl->contents = $tpl->includeTpl('news_add');
         } else {
             $tpl->back = Vars::$URI;
             $tpl->message = lng('access_forbidden');
