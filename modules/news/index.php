@@ -124,12 +124,15 @@ switch (Vars::$ACT) {
         */
         if (Vars::$USER_RIGHTS >= 7) {
             if (Vars::$ID && mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_news` WHERE `id` = " . Vars::$ID), 0)) {
-                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('news') . '</b></a> | ' . lng('edit') . '</div>';
                 if (!Vars::$ID) {
                     echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('to_news') . '</a>');
                     exit;
                 }
-                if (isset($_POST['submit'])) {
+                if (isset($_POST['submit'])
+                    && isset($_POST['form_token'])
+                    && isset($_SESSION['form_token'])
+                    && $_POST['form_token'] == $_SESSION['form_token']
+                ) {
                     $error = array();
                     if (empty($_POST['name']))
                         $error[] = lng('error_title');
@@ -146,21 +149,16 @@ switch (Vars::$ACT) {
                     } else {
                         echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
                     }
-                    echo '<p>' . lng('article_changed') . '<br /><a href="' . Vars::$URI . '">' . lng('continue') . '</a></p>';
+                    $tpl->continue = Vars::$URI;
+                    $tpl->message = lng('article_changed');
+                    $tpl->contents = $tpl->includeTpl('message', 1);
+                    exit;
                 } else {
+                    // Выводим форму добавления новости
                     $req = mysql_query("SELECT * FROM `cms_news` WHERE `id` = " . Vars::$ID);
                     $res = mysql_fetch_assoc($req);
-                    echo '<div class="menu"><form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
-                        '<p><h3>' . lng('article_title') . '</h3>' .
-                        '<input type="text" name="name" value="' . $res['name'] . '"/></p>' .
-                        '<p><h3>' . lng('text') . '</h3>' .
-                        '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="text">' . htmlentities($res['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p>' .
-                        '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
-                        '</form></div>' .
-                        '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></div>';
-
-                    // Выводим форму добавления новости
-                    $tpl->list = $list;
+                    $tpl->title = Validate::filterString($res['name']);
+                    $tpl->text = Validate::filterString($res['text']);
                     $tpl->form_token = mt_rand(100, 10000);
                     $_SESSION['form_token'] = $tpl->form_token;
                     $tpl->contents = $tpl->includeTpl('news_edit');
