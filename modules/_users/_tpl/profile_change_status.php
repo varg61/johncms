@@ -16,7 +16,7 @@
             <br/><span class="input-help"><?= lng('status_lenght') ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" value="<?= lng('save') ?>" name="submit"/>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/personal"><?= lng('back') ?></a>
+            <a class="btn" href="<?= Vars::$MODULE_URI ?>/settings?user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

@@ -20,7 +20,7 @@
             <div><?= $val ?></div>
             <?php endforeach ?>
             <br/><input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('save') ?>"/>
-            <a class="btn btn-large" href="<?= Vars::$URI ?>"><?= lng('cancel') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>"><?= lng('cancel') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

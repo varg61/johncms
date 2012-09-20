@@ -48,9 +48,10 @@
 
             <input class="btn btn-primary btn-large" type="submit" name="submit" value=" <?= lng('save') ?> "/>
             <?php if (Vars::$USER_RIGHTS == 9): ?>
-            <a class="btn btn-large" href="<?= Vars::$URI ?>?reset"><?= lng('reset_settings') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>?reset"><?= lng('reset_settings') ?></a>
+            <a class="btn" href="<?= Vars::$MODULE_URI ?>"><?= lng('back') ?></a>
             <?php endif ?>
+            <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
-        <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
     </form>
 </div>

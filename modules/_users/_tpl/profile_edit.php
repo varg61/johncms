@@ -61,7 +61,7 @@
             <span class="input-help"><?= lng('description_icq') ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" value="<?= lng('save') ?>" name="submit"/>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
+            <a class="btn" href="<?= Vars::$MODULE_URI ?>/settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </form>
     </div>

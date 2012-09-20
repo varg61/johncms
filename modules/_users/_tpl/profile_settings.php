@@ -58,8 +58,8 @@
             <?php endif ?>
 
             <br/><input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('save') ?>"/>
-            <a class="btn btn-large" href="<?= Vars::$URI ?>?act=settings&amp;mod=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;mod=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
+            <a class="btn" href="<?= Vars::$MODULE_URI ?>/settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>
