@@ -40,6 +40,4 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
 
 $tpl = Template::getInstance();
 $tpl->user = $user;
-$tpl->count = new Counters();
-$tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
 $tpl->contents = $tpl->includeTpl('settings');

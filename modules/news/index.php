@@ -20,7 +20,11 @@ switch (Vars::$ACT) {
         */
         if (Vars::$USER_RIGHTS >= 7) {
             $old = 20;
-            if (isset($_POST['submit'])) {
+            if (isset($_POST['submit'])
+                && isset($_POST['form_token'])
+                && isset($_SESSION['form_token'])
+                && $_POST['form_token'] == $_SESSION['form_token']
+            ) {
                 $error = array();
                 $name = isset($_POST['name']) ? Validate::filterString($_POST['name']) : FALSE;
                 $text = isset($_POST['text']) ? trim($_POST['text']) : FALSE;
@@ -80,7 +84,9 @@ switch (Vars::$ACT) {
                         `lastpost` = '" . time() . "'
                         WHERE `id` = " . Vars::$USER_ID
                     );
-                    echo '<p>' . lng('article_added') . '<br /><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
+                    $tpl->continue = Vars::$URI;
+                    $tpl->message = lng('article_added');
+                    $tpl->contents = $tpl->includeTpl('message', 1);
                     exit;
                 } else {
                     $tpl->error = $error;
@@ -97,9 +103,13 @@ switch (Vars::$ACT) {
                 }
                 $list[] = '</select></label><br/>';
             }
+            // Выводим форму добавления новости
             $tpl->list = $list;
+            $tpl->form_token = mt_rand(100, 10000);
+            $_SESSION['form_token'] = $tpl->form_token;
             $tpl->contents = $tpl->includeTpl('news_add');
         } else {
+            // Если доступ закрыт, выводим сообщение
             $tpl->back = Vars::$URI;
             $tpl->message = lng('access_forbidden');
             $tpl->contents = $tpl->includeTpl('message', 1);
@@ -148,6 +158,12 @@ switch (Vars::$ACT) {
                         '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
                         '</form></div>' .
                         '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></div>';
+
+                    // Выводим форму добавления новости
+                    $tpl->list = $list;
+                    $tpl->form_token = mt_rand(100, 10000);
+                    $_SESSION['form_token'] = $tpl->form_token;
+                    $tpl->contents = $tpl->includeTpl('news_edit');
                 }
             } else {
                 echo Functions::displayError(lng('error_wrong_data'));
