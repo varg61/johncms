@@ -184,6 +184,17 @@ input.medium {
     width: 100px;
 }
 
+input.relative {
+    width: 100%;
+    max-width: none;
+}
+
+input.largetext {
+    font-size: large;
+    font-weight: bold;
+    padding: 8px;
+}
+
 input.error,
 textarea.error {
     color: #b94a48;
@@ -275,6 +286,20 @@ textarea.error:focus {
     line-height: 14px;
 }
 
+.btn-block {
+    display: block;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.btn-block + .btn-block {
+    margin-top: 5px;
+}
+
 a.btn-primary,
 .btn-primary,
 .btn-primary:hover,
@@ -284,18 +309,14 @@ a.btn-warning,
 .btn-danger,
 .btn-danger:hover,
 .btn-success,
-.btn-success:hover,
-.btn-info,
-.btn-info:hover {
+.btn-success:hover {
     color: #ffffff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .btn-primary.active,
 .btn-warning.active,
 .btn-danger.active,
-.btn-success.active,
-.btn-info.active,
-.btn-inverse.active {
+.btn-success.active {
     color: rgba(255, 255, 255, 0.75);
 }
 
@@ -401,12 +422,6 @@ a.btn-warning,
 
 a.btn {
     text-decoration: none;
-}
-
-.btn-login {
-    padding: 12px 0px 12px;
-    width: 100%;
-    max-width: 200px;
 }
 
 /*======================================================

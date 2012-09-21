@@ -29,8 +29,8 @@
             <span class="input-help">(0-15) 0 - <?= lng('without_limit') ?></span>
 
             <br/><br/><input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('save') ?>"/>
-            <a class="btn btn-large" href="<?= Vars::$URI ?>?reset"><?= lng('reset_settings') ?></a>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>"><?= lng('back') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>?reset"><?= lng('reset_settings') ?></a>
+            <a class="btn" href="<?= Vars::$MODULE_URI ?>"><?= lng('back') ?></a>
         </div>
     </form>
 </div>
