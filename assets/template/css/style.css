@@ -180,7 +180,6 @@ input.small {
 }
 
 input.medium {
-    text-align: center;
     width: 100px;
 }
 
@@ -720,6 +719,11 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
 .label-orange,
 .badge-orange {
     background-color: #f89406;
+}
+
+.label-green,
+.badge-green {
+    background-color: #6ea86f;
 }
 
 .badge-right {
