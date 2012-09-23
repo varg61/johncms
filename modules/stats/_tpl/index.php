@@ -33,7 +33,7 @@
     <li><a href="?act=os"><?= lng('operating_systems')?><i class="icn-arrow"></i></a></li>
     <li><a href="?act=point_in"><?= lng('entry_points')?><i class="icn-arrow"></i></a></li>
     <li><a href="?act=pop"><?= lng('popular_searches')?><i class="icn-arrow"></i></span></a></li>
-    <li><a href="?act=allstat"><i class="icn-graph"></i><?= lng('daily_statistics')?><i class="icn-arrow"></i></a></li>
+    <li><a href="?act=allstat"><i class="icn-piechart"></i><?= lng('daily_statistics')?><i class="icn-arrow"></i></a></li>
     <li><a href="http://www.cy-pr.com/analysis/<?= $this->my_url['host'] ?>">SEO <?= lng('site_analysis')?><i class="icn-arrow"></i></a></li>
 </ul>
 <?php if (Vars::$USER_RIGHTS >= 9): ?>

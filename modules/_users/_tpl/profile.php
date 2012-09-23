@@ -64,7 +64,7 @@
     </li>
     <li><h2><?= lng('information') ?></h2></li>
     <li><a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><i class="icn-info"></i><?= lng('personal_data') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><i class="icn-graph"></i><?= lng('activity') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><i class="icn-piechart"></i><?= lng('activity') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><i class="icn-violations"></i><?= lng('infringements') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->bancount ?></span></a></li>
 
     <li><h2><?= lng('personal') ?></h2></li>

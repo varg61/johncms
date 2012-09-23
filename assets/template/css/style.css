@@ -533,23 +533,29 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     padding-left: 12px;
 }
 
-#nav-top {
+#nav-top,
+#nav-bottom {
     padding: 0;
     border: 0;
     background-color: #5d687c;
-    /*background-color: #6c768b;*/
     width: 100%;
 }
 
-#nav-top td {
-    white-space: nowrap;
+#nav-top td,
+#nav-bottom td {
     vertical-align: middle;
     text-align: center;
     height: 44px;
     width: 33%;
 }
 
-#nav-top img, #top-bar img {
+#nav-top td {
+    white-space: nowrap;
+}
+
+#top-bar img,
+#nav-top img,
+#nav-bottom img {
     vertical-align: middle;
 }
 
@@ -563,13 +569,28 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
 
 #nav-top a:hover, #nav-top a:focus {
     background-color: #6c768b;
-    /*background-color: #5d687c;*/
 }
 
 #nav-top .select {
     background-color: #6c768b;
     border-left: 0;
     border-right: 0;
+}
+
+#nav-bottom {
+    color: #9DA6B5;
+    font-size: small;
+    border-bottom: 2px solid #464e5d;
+}
+
+#nav-bottom a {
+    color: #9DA6B5;
+    text-decoration: none;
+    /*font-weight: bold;*/
+}
+
+#nav-bottom a:hover {
+    text-decoration: underline;
 }
 
 .tagbar {
@@ -753,7 +774,7 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     .icn-user-add { background-position: 0 -80px }
     .icn-man-woman { background-position: 0 -100px }
     .icn-group { background-position: 0 -120px }
-    .icn-graph { background-position: 0 -140px }
+    .icn-piechart { background-position: 0 -140px }
     .icn-violations { background-position: 0 -160px }
     .icn-image { background-position: 0 -180px }
     .icn-comments { background-position: 0 -200px }
@@ -782,6 +803,9 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     .icn-exit { background-position: 0 -660px }
     .icn-upload { background-position: 0 -680px }
     .icn-trash { background-position: 0 -700px }
+    .icn-w-top { background-position: 0 -720px; margin-right: 6px }
+    .icn-w-man-woman { background-position: 0 -740px; margin-right: 6px }
+    .icn-w-piechart { background-position: 0 -760px; margin-right: 6px }
 
     .btn i{
         margin-right: 4px;
@@ -863,13 +887,6 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     border-bottom: 1px solid #bcc0c6;
     padding: 12px;
     display: block;
-}
-
-.footer {
-    color: #9DA6B5;
-    background-color: #5d687c;
-    border-bottom: 2px solid #464e5d;
-    padding: 12px;
 }
 
 /*======================================================
