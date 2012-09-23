@@ -92,16 +92,16 @@ class Functions extends Vars
     */
     public static function displayCounters()
     {
+        $out = '';
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
         if (mysql_num_rows($req) > 0) {
             while (($res = mysql_fetch_array($req)) !== false) {
                 $link1 = ($res['mode'] == 1 || $res['mode'] == 2) ? $res['link1'] : $res['link2'];
                 $link2 = $res['mode'] == 2 ? $res['link1'] : $res['link2'];
-                $count = (parent::$PLACE == 'index.php') ? $link1 : $link2;
-                if (!empty($count))
-                    echo $count;
+                $out .= (empty(parent::$PLACE)) ? $link1 : $link2;
             }
         }
+        return $out;
     }
 
     /*

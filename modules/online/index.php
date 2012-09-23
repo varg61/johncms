@@ -23,6 +23,8 @@ $link = '';
 $sql_total = '';
 $sql_list = '';
 
+$tpl = Template::getInstance();
+
 $menu[] = !Vars::$ACT ? '<b>' . lng('users') . '</b>' : '<a href="' . Vars::$URI . '">' . lng('users') . '</a>';
 if ((Vars::$USER_ID && Vars::$USER_DATA['level']) || Vars::$USER_SYS['viev_history']) {
     $menu[] = Vars::$ACT == 'history' ? '<b>' . lng('history') . '</b>' : '<a href="' . Vars::$URI . '?act=history">' . lng('history') . '</a> ';
@@ -247,19 +249,11 @@ switch (Vars::$ACT) {
 Показываем списки Онлайн
 -----------------------------------------------------------------
 */
-$total = mysql_result(mysql_query($sql_total), 0);
-if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-}
-if ($total) {
+$tpl->total = mysql_result(mysql_query($sql_total), 0);
+if ($tpl->total) {
+    $out = array();
     $req = mysql_query($sql_list);
-    $i = 0;
-    while ($res = mysql_fetch_assoc($req)) {
-        if ($res['id'] == Vars::$USER_ID) {
-            echo '<div class="gmenu">';
-        } else {
-            echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-        }
+    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         $arg['header'] = ' <span class="gray">(';
         if (Vars::$ACT == 'history') {
             $arg['header'] .= Functions::displayDate($res['last_visit']) . ')</span>';
@@ -267,22 +261,23 @@ if ($total) {
             $arg['header'] .= $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']);
             $arg['header'] .= ')</span><br />' . Functions::getIcon('info.png', '', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
         }
-        echo Functions::displayUser($res, $arg);
-        echo '</div>';
-        ++$i;
+        $out[$i] =  Functions::displayUser($res, $arg);
     }
+    $tpl->list = $out;
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
-if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+echo '<div class="phdr">' . lng('total') . ': ' . $tpl->total . '</div>';
+if ($tpl->total > Vars::$USER_SET['page_size']) {
+    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $tpl->total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="' . Vars::$URI . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 
-if (Vars::$USER_ID && $total) {
+if (Vars::$USER_ID && $tpl->total) {
     echo'<p><a href="' . Vars::$URI . '?act=' . $link . '">' . lng('download_list') . '</a></p>';
 }
+
+$tpl->contents = $tpl->includeTpl('index');

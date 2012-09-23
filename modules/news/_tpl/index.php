@@ -33,9 +33,7 @@
     <?php endif ?>
 <?php else: ?>
 <div class="form-container">
-    <div class="form-block align-center">
-        <?= lng('list_empty') ?>
-    </div>
+    <div class="form-block align-center"><?= lng('list_empty') ?></div>
 </div>
 <?php endif ?>
 <?php if (Vars::$USER_RIGHTS >= 7): ?>

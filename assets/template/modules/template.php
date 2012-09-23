@@ -26,5 +26,10 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     <?= $this->contents ?>
     <?= $this->includeTpl('toolbar-bottom', 1) ?>
 </div>
+<div id="basement" class="align-center">
+    <div class="site-copyright"><?= Vars::$SYSTEM_SET['copyright'] ?></div>
+    <div class="counters"><?= Functions::displayCounters() ?></div>
+    <div class="copyright"><a href="http://johncms.com">JohnCMS</a></div>
+</div>
 </body>
 </html>

@@ -46,10 +46,9 @@ a:hover, a:active, a:focus {
 
 /* Контейнер содержимого */
 #container {
-    width: 100%;
     max-width: 600px;
     min-width: 160px;
-    background-color: #798397;
+    background-color: #747e91;
     margin: 0 auto;
 }
 
@@ -580,7 +579,9 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
 #nav-bottom {
     color: #9DA6B5;
     font-size: small;
+    border-top: 1px solid #555f72;
     border-bottom: 2px solid #464e5d;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, .15), 0 1px 2px rgba(0, 0, 0, .05);
 }
 
 #nav-bottom a {
@@ -807,7 +808,7 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     .icn-w-man-woman { background-position: 0 -740px; margin-right: 6px }
     .icn-w-piechart { background-position: 0 -760px; margin-right: 6px }
 
-    .btn i{
+    .btn i {
         margin-right: 4px;
     }
 }
@@ -830,7 +831,7 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     background-color: #dce1e8;
 }
 
-.block-hdr{
+.block-hdr {
     font-weight: bold;
     text-shadow: 0 1px 1px #ffffff;
     padding: 4px 0;
@@ -844,7 +845,7 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     padding: 4px 0;
 }
 
-.block-text{
+.block-text {
     color: #5d5d5d;
     padding: 4px 0;
 }
@@ -882,11 +883,33 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
 }
 
 .user-block {
-    /*background-color: #dcdcdc;*/
     background-color: #CFD3DA;
     border-bottom: 1px solid #bcc0c6;
     padding: 12px;
     display: block;
+}
+
+#basement,
+#basement a {
+    color: #9195a8;
+    font-size: x-small;
+    text-decoration: none;
+    max-width: 600px;
+    min-width: 160px;
+    margin: 0 auto;
+}
+
+#basement .site-copyright {
+    font-size: small;
+    padding-top: 6px;
+}
+
+#basement .counters {
+    padding-top: 8px;
+}
+
+#basement .copyright {
+    padding-top: 6px;
 }
 
 /*======================================================

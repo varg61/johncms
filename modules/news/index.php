@@ -257,7 +257,7 @@ switch (Vars::$ACT) {
         */
         $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_news`"), 0);
         if ($tpl->total) {
-            $news = array();
+            $out = array();
             $req = mysql_query("SELECT * FROM `cms_news` ORDER BY `id` DESC " . Vars::db_pagination());
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                 $res['text'] = Validate::filterString($res['text'], 1, 1);
@@ -272,10 +272,10 @@ switch (Vars::$ACT) {
                         $tpl->comments_id = $res['comments'];
                     }
                 }
-                $news[$i] = $res;
+                $out[$i] = $res;
             }
-            $tpl->news = $news;
-            unset($res, $news);
+            $tpl->news = $out;
+            unset($res, $out);
         }
         if ($tpl->total > Vars::$USER_SET['page_size']) {
             $tpl->pagination = Functions::displayPagination(Vars::$URI . '?', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
