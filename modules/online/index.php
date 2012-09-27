@@ -25,18 +25,6 @@ $sql_list = '';
 
 $tpl = Template::getInstance();
 
-$menu[] = !Vars::$ACT ? '<b>' . lng('users') . '</b>' : '<a href="' . Vars::$URI . '">' . lng('users') . '</a>';
-if ((Vars::$USER_ID && Vars::$USER_DATA['level']) || Vars::$USER_SYS['viev_history']) {
-    $menu[] = Vars::$ACT == 'history' ? '<b>' . lng('history') . '</b>' : '<a href="' . Vars::$URI . '?act=history">' . lng('history') . '</a> ';
-}
-if (Vars::$USER_RIGHTS) {
-    $menu[] = Vars::$ACT == 'guest' ? '<b>' . lng('guests') . '</b>' : '<a href="' . Vars::$URI . '?act=guest">' . lng('guests') . '</a>';
-    $menu[] = Vars::$ACT == 'ip' ? '<b>' . lng('ip_activity') . '</b>' : '<a href="' . Vars::$URI . '?act=ip">' . lng('ip_activity') . '</a>';
-}
-
-echo'<div class="phdr"><b>' . lng('who_on_site') . '</b></div>' .
-    '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
-
 switch (Vars::$ACT) {
     case 'du':
         /*
@@ -174,15 +162,14 @@ switch (Vars::$ACT) {
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('online.php?act=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             }
+            $out = array();
             for ($i = Vars::$START; $i < $end; $i++) {
-                $out = each($ip_list[$i]);
-                $ip = long2ip($out[0]);
-                echo($out[0] == Vars::$IP ? '<div class="gmenu">' : ($i % 2 ? '<div class="list2">' : '<div class="list1">')) .
-                    '<div style="float:left">' . Functions::loadModuleImage('monitor-network.png') . '</div>' .
+                $currentip = each($ip_list[$i]);
+                $ip = long2ip($currentip[0]);
+                $out[$i] = '<div style="float:left">' . Functions::loadModuleImage('monitor-network.png') . '</div>' .
                     '<div style="float:left; margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
                     '<div style="float:left; margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/admin/whois&amp;ip=' . $ip . '">[?]</a></div>' .
-                    '<div style="margin-left:150px"><span class="red"><b>' . $out[1] . '</b></span></div>' .
-                    '</div>';
+                    '<div style="margin-left:150px"><span class="red"><b>' . $currentip[1] . '</b></span></div>';
             }
             echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
@@ -195,6 +182,8 @@ switch (Vars::$ACT) {
         } else {
             echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
         }
+        $tpl->list = $out;
+        $tpl->contents = $tpl->includeTpl('index');
         exit;
         break;
 
