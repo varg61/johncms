@@ -255,49 +255,19 @@ switch (Vars::$ACT) {
         Отображаем Гостевую, или Админ клуб
         -----------------------------------------------------------------
         */
-        if (!Vars::$SYSTEM_SET['mod_guest']) {
-            echo '<div class="alarm">' . lng('guestbook_closed') . '</div>';
-        }
-        echo '<div class="phdr"><b>' . (Vars::$MOD == 'adm' ? lng('admin_club') : lng('guestbook')) . '</b></div>';
-        if (Vars::$USER_RIGHTS > 0) {
-            $menu = array(
-                ($mod ? '<a href="' . Vars::$URI . '">' . lng('guestbook') . '</a>' : '<b>' . lng('guestbook') . '</b>'),
-                ($mod ? '<b>' . lng('admin_club') . '</b>' : '<a href="' . Vars::$URI . '?mod=adm">' . lng('admin_club') . '</a>'),
-                (Vars::$USER_RIGHTS >= 7 ? '<a href="' . Vars::$URI . '?act=clean' . ($mod ? '&amp;mod=adm' : '') . '">' . lng('clear') . '</a>' : '')
-            );
-            echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
-        }
         // Форма ввода нового сообщения
         if ((Vars::$USER_ID || Vars::$SYSTEM_SET['mod_guest'] == 2) && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['13'])) {
-            echo '<div class="' . ($mod ? 'r' : 'g') . 'menu"><form name="form" action="' . Vars::$URI . '?act=say' . ($mod ? '&amp;mod=adm' : '') . '" method="post">';
-            if (!Vars::$USER_ID) {
-                echo lng('name') . ' (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>';
-            }
-            echo '<b>' . lng('message') . '</b> <small>(max 5000)</small>:<br/>';
-            if (Vars::$USER_ID && !Vars::$IS_MOBILE) {
-                echo TextParser::autoBB('form', 'msg');
-            }
-            echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg"></textarea><br/>';
             if (Vars::$USER_SET['translit']) {
                 echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . lng('translit') . '<br/>';
             }
-            if (!Vars::$USER_ID) {
-                // CAPTCHA для гостей
-                echo Captcha::display(1) . '<br />';
-            }
-            $_SESSION['form_token'] = mt_rand(100, 10000);
             echo'<input type="submit" name="submit" value="' . lng('sent') . '"/>' .
                 '<input type="hidden" name="form_token" value="' . $_SESSION['form_token'] . '"/>' .
                 '</form></div>';
         } else {
             echo '<div class="rmenu">' . lng('access_guest_forbidden') . '</div>';
         }
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm` = '" . ($mod ? 1 : 0) . "'"), 0);
-        echo '<div class="phdr"><b>' . lng('comments') . '</b></div>';
-        if ($total > Vars::$USER_SET['page_size']) {
-            echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($mod ? 'mod=adm&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-        }
-        if ($total) {
+        $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm` = '" . ($mod ? 1 : 0) . "'"), 0);
+        if ($tpl->total) {
             if ($mod) {
                 // Запрос для Админ клуба
                 $req = mysql_query("SELECT `guest`.*, `guest`.`id` AS `gid`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`, `users`.`id`
@@ -309,9 +279,8 @@ switch (Vars::$ACT) {
                 FROM `guest` LEFT JOIN `users` ON `guest`.`user_id` = `users`.`id`
                 WHERE `guest`.`adm`='0' ORDER BY `time` DESC" . Vars::db_pagination());
             }
+            $out = array();
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
-                $text = '';
-                echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 // Время создания поста
                 $text = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
                 if ($res['user_id']) {
@@ -349,20 +318,13 @@ switch (Vars::$ACT) {
                     );
                     $arg['sub'] = Functions::displayMenu($menu);
                 }
-                echo Functions::displayUser($res, $arg);
-                echo '</div>';
+                $out[$i] = Functions::displayUser($res, $arg);
             }
-        } else {
-            echo '<div class="menu"><p>' . lng('guestbook_empty') . '</p></div>';
-        }
-        echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
-        if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($mod ? 'mod=adm&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '" method="post">' .
-                '<input type="text" name="page" size="2"/>' .
-                '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
-                '</form></p>';
+            $tpl->list = $out;
         }
 
+        $tpl->mod = $mod;
+        $tpl->form_token = mt_rand(100, 10000);
+        $_SESSION['form_token'] = $tpl->form_token;
         $tpl->contents = $tpl->includeTpl('index');
 }
