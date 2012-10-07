@@ -258,21 +258,23 @@ switch (Vars::$ACT) {
         $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_news`"), 0);
         if ($tpl->total) {
             $req = mysql_query("SELECT * FROM `cms_news` ORDER BY `id` DESC " . Vars::db_pagination());
-            for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
-                $res['text'] = Validate::filterString($res['text'], 1, 1);
+            for ($i = 0; $tpl->list[$i] = mysql_fetch_assoc($req); ++$i) {
+                $tpl->list[$i]['text'] = Validate::filterString($tpl->list[$i]['text'], 1, 1);
                 if (Vars::$USER_SET['smileys']) {
-                    $res['text'] = Functions::smileys($res['text'], 1);
+                    $tpl->list[$i]['text'] = Functions::smileys($tpl->list[$i]['text'], 1);
                 }
-                if ($res['comments'] != 0 && $res['comments'] != "") {
-                    $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['comments'] . "'");
-                    $comm = mysql_result($mes, 0) - 1;
-                    if ($comm >= 0) {
-                        $tpl->comments = $comm;
-                        $tpl->comments_id = $res['comments'];
-                    }
-                }
-                $tpl->list[$i] = $res;
+                //TODO: Исправить!!!
+//                if ($res['comments'] != 0 && $res['comments'] != "") {
+//                    $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['comments'] . "'");
+//                    $comm = mysql_result($mes, 0) - 1;
+//                    if ($comm >= 0) {
+//                        $tpl->comments = $comm;
+//                        $tpl->comments_id = $res['comments'];
+//                    }
+//                }
+                //$tpl->list[$i] = $res;
             }
+            unset($tpl->list[$i]);
         }
         if ($tpl->total > Vars::$USER_SET['page_size']) {
             $tpl->pagination = Functions::displayPagination(Vars::$URI . '?', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
