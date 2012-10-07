@@ -9,7 +9,7 @@
 
     <li><h2><?= lng('dialogue') ?></h2></li>
     <li><a href="<?= Vars::$HOME_URL ?>/contacts"><i class="icn-addressbook"></i><?= lng('contacts') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::contactsCount() ?></span></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/friends"><i class="icn-man-woman"></i><?= lng('friends') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::friendsCount($this->user['id']) ?></span></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>/friends"><i class="icn-man-woman"></i><?= lng('friends') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::friendsCount(Vars::$USER_ID) ?></span></a></li>
 
     <?php if (Vars::$USER_RIGHTS) : ?>
     <li><h2><?= lng('administration') ?></h2></li>

@@ -9,15 +9,14 @@
  * @author      http://johncms.com/about
  */
 
-class Template extends Vars
+class Template extends ArrayObject
 {
-    public $vars = array();
     public $template = 'template';
-    public $extract = false;
-    private static $instance;
+    private static $instance = null;
 
-    private function __construct()
+    public function __construct($array = array(), $flags = parent::ARRAY_AS_PROPS)
     {
+        parent::__construct($array, $flags);
     }
 
     private function __clone()
@@ -36,39 +35,38 @@ class Template extends Vars
         return self::$instance;
     }
 
-    public function __set($name, $value)
+    public function __set($index, $value)
     {
-        $this->vars[$name] = $value;
+        $instance = self::getInstance();
+        $instance->offsetSet($index, $value);
     }
 
-    public function __get($name)
+    public function __get($index)
     {
-        if (!isset($this->vars[$name])) {
+        $instance = self::getInstance();
+        if (!$instance->offsetExists($index)) {
             return false;
         }
-        return $this->vars[$name];
+        return $instance->offsetGet($index);
     }
 
-    public function __isset($name)
+    public function __isset($index)
     {
-        return isset($this->vars[$name]);
+        $instance = self::getInstance();
+        return $instance->offsetExists($index);
     }
 
     public function includeTpl($tpl = null, $root = false)
     {
-        if ($this->extract) {
-            extract($this->vars);
-        }
-
         // Загружаем шаблоны
         if ($root) {
             // Загружаем общие шаблоны
             $default_tpl = TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $tpl . '.php';
-            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $user_tpl = TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $tpl . '.php';
         } else {
             // Загружаем шаблоны модулей
-            $default_tpl = MODPATH . parent::$MODULE_PATH . DIRECTORY_SEPARATOR . '_tpl' . DIRECTORY_SEPARATOR . $tpl . '.php';
-            $user_tpl = TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . parent::$MODULE_PATH . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $default_tpl = MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_tpl' . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $user_tpl = TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . $tpl . '.php';
         }
 
         ob_start();
@@ -86,12 +84,13 @@ class Template extends Vars
 
     public function loadTemplate()
     {
-        if ($this->template === false) {
+        $instance = self::getInstance();
+        if ($instance->template === false) {
             return false;
         }
-        if (!isset($this->vars['contents'])) {
+        if (!$instance->offsetExists('contents')) {
             // Получаем содержимое вывода старых модулей
-            $this->vars['contents'] = ob_get_contents();
+            $instance->offsetSet('contents', ob_get_contents());
         }
         ob_end_clean();
 
@@ -102,15 +101,15 @@ class Template extends Vars
         }
 
         // Подключаем файл главного шаблона
-        if (is_file(TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php')) {
+        if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $instance->template . '.php')) {
             // Шаблон темы оформления
-            include(TPLPATH . parent::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php');
-        } elseif (is_file(TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php')) {
+            include(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $instance->template . '.php');
+        } elseif (is_file(TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $instance->template . '.php')) {
             // Шаблон по-умолчанию
-            include(TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $this->template . '.php');
+            include(TPLDEFAULT . 'modules' . DIRECTORY_SEPARATOR . $instance->template . '.php');
         } else {
             // Если шаблона нет, выводим сообщение об ошибке
-            echo'ERROR: root template &laquo;' . htmlspecialchars($this->template) . '&raquo; not found';
+            echo'ERROR: root template &laquo;' . htmlspecialchars($instance->template) . '&raquo; not found';
             return false;
         }
         return true;

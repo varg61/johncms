@@ -162,11 +162,10 @@ switch (Vars::$ACT) {
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination('online.php?act=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             }
-            $out = array();
             for ($i = Vars::$START; $i < $end; $i++) {
                 $currentip = each($ip_list[$i]);
                 $ip = long2ip($currentip[0]);
-                $out[$i] = '<div style="float:left">' . Functions::loadModuleImage('monitor-network.png') . '</div>' .
+                $tpl->list[$i] = '<div style="float:left">' . Functions::loadModuleImage('monitor-network.png') . '</div>' .
                     '<div style="float:left; margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
                     '<div style="float:left; margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/admin/whois&amp;ip=' . $ip . '">[?]</a></div>' .
                     '<div style="margin-left:150px"><span class="red"><b>' . $currentip[1] . '</b></span></div>';
@@ -182,7 +181,6 @@ switch (Vars::$ACT) {
         } else {
             echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
         }
-        $tpl->list = $out;
         $tpl->contents = $tpl->includeTpl('index');
         exit;
         break;
@@ -240,7 +238,6 @@ switch (Vars::$ACT) {
 */
 $tpl->total = mysql_result(mysql_query($sql_total), 0);
 if ($tpl->total) {
-    $out = array();
     $req = mysql_query($sql_list);
     for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         $arg['header'] = ' <span class="gray">(';
@@ -250,9 +247,8 @@ if ($tpl->total) {
             $arg['header'] .= $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']);
             $arg['header'] .= ')</span><br />' . Functions::getIcon('info.png', '', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
         }
-        $out[$i] =  Functions::displayUser($res, $arg);
+        $tpl->list[$i] =  Functions::displayUser($res, $arg);
     }
-    $tpl->list = $out;
 } else {
     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
 }

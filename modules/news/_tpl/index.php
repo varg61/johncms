@@ -1,8 +1,8 @@
 <ul class="nav">
     <li><h1><?= lng('site_news') ?></h1></li>
 </ul>
-<?php if (isset($this->news)): ?>
-<?php foreach ($this->news as $key => $val): ?>
+<?php if (isset($this->list)): ?>
+<?php foreach ($this->list as $key => $val): ?>
     <div class="<?= $key % 2 ? 'block-odd' : 'block-even' ?>">
         <div class="block-hdr"><?= $val['name'] ?></div>
         <div class="block-info">
