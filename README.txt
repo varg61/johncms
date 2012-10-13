@@ -1,19 +1,21 @@
 /**
- * @package     MobiCMS
- * @link        http://mobicms.net
- * @copyright   Copyright (C) MobiCMS Community
- * @license     LICENSE.txt (see attached file)
- * @version     VERSION.txt (see attached file)
- */
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
+*/
 
 *english version below*
 
 --------------------------------------------------------------------------------
 
-Данное описание действительно ТОЛЬКО для системы, скачанной с сайтов http://mobicms.net или http://mobicms.ru
-Для архивов, скачанных с других сайтов, работа не гарантируется и поддержка не оказывается.
+Данное описание действительно ТОЛЬКО для системы, скачанной
+с сайта http://johncms.com Для архивов, скачанных с других
+сайтов, работа не гарантируется и поддержка не оказывается.
 
-Система управления сайтом MobiCMS (Content Management System)
+Система управления сайтом JohnCMS (Content Management System)
 Предназначена для построения сайтов, которые будут просматриваться
 с мобильных телефонов. Полностью соответствует спецификации
 XHTML Mobile Profile и имеет небольшой размер генерируемых страниц.
@@ -40,10 +42,10 @@ XHTML Mobile Profile и имеет небольшой размер генери�
 
 --------------------------------------------------------------------------------
 
-The given description is valid for the system, that was download from the sites  http://mobicms.net or http://mobicms.ru
-For the archives download from the other sites the work is not guaranteed and there is no maintenance.
+The given description is valid for the system, that was download from the site  http://johncms.com
+ For the archives download from the other sites the work is not guaranteed and there is no maintenance. 
 
-MobiCMS Mobile Content Management System
+Content Management System JohnCMS
 is for the construction of the sites that will be looked through from mobiles. It 
 completely fits  the specification 
 XHTML Mobile Profile and has not a very big size of mechanized pages. 
