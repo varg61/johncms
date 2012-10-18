@@ -1,9 +1,10 @@
 <ul class="nav">
     <li><h1><?= lng('site_news') ?></h1></li>
 </ul>
+
 <?php if (isset($this->list)): ?>
-<?php foreach ($this->list as $key => $val): ?>
-    <div class="<?= $key % 2 ? 'block-odd' : 'block-even' ?>">
+    <?php foreach ($this->list as $key => $val): ?>
+    <div class="block-<?= $key % 2 ? 'odd' : 'even' ?>">
         <div class="block-hdr"><?= $val['name'] ?></div>
         <div class="block-info">
             <?= Functions::displayDate($val['time']) ?><br/>
@@ -25,17 +26,26 @@
         <?php endif ?>
     </div>
     <?php endforeach ?>
-<ul class="nav">
-    <li><h1><?= lng('total') ?>:&#160;<?= $this->total ?></h1></li>
-</ul>
-<?php if (isset($this->pagination)): ?>
-    <div class="align-center"><?= $this->pagination ?></div>
+
+    <ul class="nav">
+        <li><h1><?= lng('total') ?>:&#160;<?= $this->total ?></h1></li>
+    </ul>
+
+    <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
+    <div class="align-center">
+        <?= Functions::displayPagination(Vars::$URI . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
+        <form action="<?= Vars::$URI ?>" method="post">
+            <input class="mini" type="text" name="page" size="2"/>
+            <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;"/>
+        </form>
+    </div>
     <?php endif ?>
 <?php else: ?>
-<div class="form-container">
-    <div class="form-block align-center"><?= lng('list_empty') ?></div>
-</div>
+    <div class="form-container">
+        <div class="form-block align-center"><?= lng('list_empty') ?></div>
+    </div>
 <?php endif ?>
+
 <?php if (Vars::$USER_RIGHTS >= 7): ?>
 <div class="btn-panel">
     <a class="btn" href="<?= Vars::$URI ?>?act=add"><i class="icn-edit"></i><?= lng('add') ?></a>

@@ -260,27 +260,8 @@ switch (Vars::$ACT) {
             $req = mysql_query("SELECT * FROM `cms_news` ORDER BY `id` DESC " . Vars::db_pagination());
             for ($i = 0; $tpl->list[$i] = mysql_fetch_assoc($req); ++$i) {
                 $tpl->list[$i]['text'] = Validate::filterString($tpl->list[$i]['text'], 1, 1);
-                if (Vars::$USER_SET['smileys']) {
-                    $tpl->list[$i]['text'] = Functions::smileys($tpl->list[$i]['text'], 1);
-                }
-                //TODO: Исправить!!!
-//                if ($res['comments'] != 0 && $res['comments'] != "") {
-//                    $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['comments'] . "'");
-//                    $comm = mysql_result($mes, 0) - 1;
-//                    if ($comm >= 0) {
-//                        $tpl->comments = $comm;
-//                        $tpl->comments_id = $res['comments'];
-//                    }
-//                }
-                //$tpl->list[$i] = $res;
             }
             unset($tpl->list[$i]);
-        }
-        if ($tpl->total > Vars::$USER_SET['page_size']) {
-            $tpl->pagination = Functions::displayPagination(Vars::$URI . '?', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
-            echo'<p><form action="' . Vars::$URI . '" method="post">' .
-                '<input type="text" name="page" size="2"/>' .
-                '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
         }
         $tpl->contents = $tpl->includeTpl('index');
 }

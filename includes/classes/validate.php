@@ -24,7 +24,7 @@ class Validate
             $error = lng('error_empty_nickname');
         } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
             $error = lng('error_wrong_lenght');
-        } elseif (self::email($var) === true){
+        } elseif (self::email($var) === true) {
             $error = lng('error_email_login');
         } elseif (preg_match('/[^\da-zа-я\-\.\ \@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
             $error = lng('error_wrong_symbols');
@@ -128,64 +128,44 @@ class Validate
     }
 
     /*
-    -----------------------------------------------------------------
-    Фильтрация и обработка текстовых данных
-    -----------------------------------------------------------------
-    $br=1           обработка переносов строк
-    $br=2           подстановка пробела, вместо переноса
-    $tags=1         обработка тэгов
-    $tags=2         вырезание тэгов
-    -----------------------------------------------------------------
-    */
-    public static function filterString($str, $br = 0, $tags = 0)
+     * Фильтрация и обработка текстовых данных
+     *
+     * $br = 0          Обработка переносов выключена (по-умолчанию)
+     * $br = 1          Обработка переносов строк
+     * $br = 2          Подстановка пробела, вместо переноса
+     *
+     * $tags = 0        Обработка тэгов выключена (по-умолчанию)
+     * $tags = 1        Обработка BBcode тэгов
+     * $tags = 2        Вырезание BBcode тэгов
+     *
+     * $smileys = 0     Обработка смайлов выключена (по-умолчанию)
+     * $smileys = 1     Обработка пользовательских смайлов
+     * $smileys = 2     Обработка пользовательских и админских смайлов
+     */
+    public static function filterString($str, $br = 0, $tags = 0, $smileys = 0)
     {
         $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
+
+        // Обработка переносов строк
         if ($br == 1) {
             $str = nl2br($str);
         } elseif ($br == 2) {
             $str = str_replace("\r\n", ' ', $str);
         }
 
+        // обработка Bbcode тэгов
         if ($tags == 1) {
             $str = TextParser::tags($str);
         } elseif ($tags == 2) {
             $str = TextParser::noTags($str);
         }
 
-        $replace = array(
-            chr(0) => '',
-            chr(1) => '',
-            chr(2) => '',
-            chr(3) => '',
-            chr(4) => '',
-            chr(5) => '',
-            chr(6) => '',
-            chr(7) => '',
-            chr(8) => '',
-            chr(9) => '',
-            chr(11) => '',
-            chr(12) => '',
-            chr(13) => '',
-            chr(14) => '',
-            chr(15) => '',
-            chr(16) => '',
-            chr(17) => '',
-            chr(18) => '',
-            chr(19) => '',
-            chr(20) => '',
-            chr(21) => '',
-            chr(22) => '',
-            chr(23) => '',
-            chr(24) => '',
-            chr(25) => '',
-            chr(26) => '',
-            chr(27) => '',
-            chr(28) => '',
-            chr(29) => '',
-            chr(30) => '',
-            chr(31) => ''
-        );
-        return strtr($str, $replace);
+        // Обработка смайлов
+        if ($smileys) {
+            $str = Functions::smileys($str, ($smileys == 2 ? 1 : 0));
+        }
+
+        return $str;
     }
 
     /*
