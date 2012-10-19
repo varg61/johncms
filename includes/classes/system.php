@@ -131,7 +131,7 @@ class System extends Vars
             parent::$USER_SYS = unserialize($set['users']);
         }
         parent::$SYSTEM_SET = $set;
-        parent::$ACL = unserialize($set['acl']);
+        parent::$ACL = isset($set['acl']) ? unserialize($set['acl']) : array();
         $subpath = trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
         parent::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . (!empty($subpath) ? '/' . $subpath : '');
     }

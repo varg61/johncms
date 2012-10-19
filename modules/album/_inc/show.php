@@ -136,7 +136,7 @@ if ($total) {
         echo Album::vote($res) .
             '<div class="gray">' . lng('count_views') . ': ' . $res['views'] . ', ' . lng('count_downloads') . ': ' . $res['downloads'] . '</div>' .
             '<div class="gray">' . lng('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
-            '<a href="' . Vars::$URI . '?act=comments&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
+            '<a href="' . Vars::$URI . '?act=comments&amp;user=' . $user['id'] . '&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
             '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>' .
             '</div></div>';
     }

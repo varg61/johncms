@@ -259,7 +259,7 @@ switch (Vars::$ACT) {
         if ($tpl->total) {
             $req = mysql_query("SELECT * FROM `cms_news` ORDER BY `id` DESC " . Vars::db_pagination());
             for ($i = 0; $tpl->list[$i] = mysql_fetch_assoc($req); ++$i) {
-                $tpl->list[$i]['text'] = Validate::filterString($tpl->list[$i]['text'], 1, 1);
+                $tpl->list[$i]['text'] = Validate::filterString($tpl->list[$i]['text'], 1, 1, 1);
             }
             unset($tpl->list[$i]);
         }

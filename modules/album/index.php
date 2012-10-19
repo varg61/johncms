@@ -23,24 +23,22 @@ $user = isset($_GET['user']) ? abs(intval($_GET['user'])) : NULL;
 Закрываем от неавторизованных юзеров
 -----------------------------------------------------------------
 */
-if (!Vars::$USER_ID) {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+// Ограничиваем доступ к Библиотеке
+$error = '';
+if ((!isset(Vars::$ACL['album']) || !Vars::$ACL['album']) && Vars::$USER_RIGHTS < 7) {
+    $error = lng('section_closed');
+} elseif (isset(Vars::$ACL['album']) && Vars::$ACL['album'] == 1 && !Vars::$USER_ID) {
+    $error = lng('access_guest_forbidden');
+}
+if ($error) {
+    echo Functions::displayError($error);
     exit;
 }
 
-/*
------------------------------------------------------------------
-Получаем данные пользователя
------------------------------------------------------------------
-*/
-$user = Functions::getUser($user);
-if (!$user) {
-    echo Functions::displayError(lng('user_does_not_exist'));
-    exit;
-}
 
 $tpl = Template::getInstance();
 $tpl->img = $img;
+$user = Functions::getUser($user);
 $tpl->user = $user;
 $tpl->al = $al;
 
