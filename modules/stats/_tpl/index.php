@@ -1,4 +1,4 @@
-<?php if(!Vars::$SYSTEM_SET['stat']): ?>
+<?php if(!isset(Vars::$ACL['stat']) || !Vars::$ACL['stat']): ?>
 <div class="rmenu"><b><?=  lng('module_is_disabled') ?></b></div>
 <? endif ?>
 <ul class="nav">

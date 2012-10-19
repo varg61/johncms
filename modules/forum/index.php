@@ -94,10 +94,11 @@ $ext_other = array('wmf');
 -----------------------------------------------------------------
 */
 $error = '';
-if (!Vars::$SYSTEM_SET['mod_forum'] && Vars::$USER_RIGHTS < 7)
+if ((!isset(Vars::$ACL['forum']) || !Vars::$ACL['forum']) && Vars::$USER_RIGHTS < 7) {
     $error = lng('forum_closed');
-elseif (Vars::$SYSTEM_SET['mod_forum'] == 1 && !Vars::$USER_ID)
+} elseif (isset(Vars::$ACL['forum']) && Vars::$ACL['forum'] == 1 && !Vars::$USER_ID) {
     $error = lng('access_guest_forbidden');
+}
 if ($error) {
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
     exit;
@@ -164,9 +165,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     Если форум закрыт, то для Админов выводим напоминание
     -----------------------------------------------------------------
     */
-    if (!Vars::$SYSTEM_SET['mod_forum']) {
+    if (!isset(Vars::$ACL['forum']) || !Vars::$ACL['forum']) {
         echo '<div class="alarm">' . lng('forum_closed') . '</div>';
-    } elseif (Vars::$SYSTEM_SET['mod_forum'] == 3) {
+    } elseif (isset(Vars::$ACL['forum']) && Vars::$ACL['forum'] == 3) {
         echo '<div class="rmenu">' . lng('read_only') . '</div>';
     }
     if (!Vars::$USER_ID) {

@@ -13,12 +13,13 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $error = '';
 
-if (!Vars::$SYSTEM_SET['stat'] && Vars::$USER_RIGHTS < 7)
+if ((!isset(Vars::$ACL['stat']) || !Vars::$ACL['stat']) && Vars::$USER_RIGHTS < 7) {
     $error = lng('module_is_disabled');
-elseif (Vars::$SYSTEM_SET['stat'] == 1 && Vars::$USER_RIGHTS < 7)
+} elseif (isset(Vars::$ACL['stat']) && Vars::$ACL['stat'] == 1 && Vars::$USER_RIGHTS < 7) {
     $error = lng('access_denied');
-elseif (Vars::$SYSTEM_SET['stat'] == 2 && !Vars::$USER_ID)
+} elseif (isset(Vars::$ACL['stat']) && Vars::$ACL['stat'] == 2 && !Vars::$USER_ID) {
     $error = lng('access_denied');
+}
 
 if ($error) {
     echo Functions::displayError(lng('module_is_disabled'));
@@ -93,9 +94,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE .
         $tpl->maxhits = $maxhits;
         $tpl->max_host_time = date("d M Y", $maxhost['date']);
         $tpl->max_hits_time = date("d M Y", $maxhits['date']);
-        $tpl->max_host = true;
+        $tpl->max_host = TRUE;
     } else {
-        $tpl->max_host = false;
+        $tpl->max_host = FALSE;
     }
     $percent = statistic::$hosty / 100; // 1%
     $tpl->searchpercent = ($percent > 0) ? $count_stat[2] / $percent : '0'; // % поисковиков

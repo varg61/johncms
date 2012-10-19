@@ -15,7 +15,7 @@ if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);
 
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
-if (!Vars::$SYSTEM_SET['mod_guest'] && Vars::$USER_RIGHTS < 7) {
+if ((!isset(Vars::$ACL['guestbook']) || !Vars::$ACL['guestbook']) && Vars::$USER_RIGHTS < 7) {
     echo '<div class="rmenu"><p>' . lng('guestbook_closed') . '</p></div>';
     exit;
 }

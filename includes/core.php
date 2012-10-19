@@ -112,8 +112,9 @@ mysql_set_charset('UTF8', $connect);
 new Session;
 new System;
 
-if(Vars::$SYSTEM_SET['stat'] > 0)
-new statistic;
+if (isset(Vars::$ACL['stat']) && Vars::$ACL['stat']) {
+    new statistic;
+}
 
 
 /*

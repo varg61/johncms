@@ -13,10 +13,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Ограничиваем доступ к Библиотеке
 $error = '';
-if (!Vars::$SYSTEM_SET['mod_lib'] && Vars::$USER_RIGHTS < 7)
+if ((!isset(Vars::$ACL['library']) || !Vars::$ACL['library']) && Vars::$USER_RIGHTS < 7) {
     $error = lng('library_closed');
-elseif (Vars::$SYSTEM_SET['mod_lib'] == 1 && !Vars::$USER_ID)
+} elseif (isset(Vars::$ACL['library']) && Vars::$ACL['library'] == 1 && !Vars::$USER_ID) {
     $error = lng('access_guest_forbidden');
+}
 if ($error) {
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
     exit;
@@ -49,7 +50,7 @@ if (isset($actions[Vars::$ACT])
 ) {
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
-    if (!Vars::$SYSTEM_SET['mod_lib']) {
+    if (!isset(Vars::$ACL['library']) || !Vars::$ACL['library']) {
         echo '<p><font color="#FF0000"><b>' . lng('library_closed') . '</b></font></p>';
     }
     if (!Vars::$ID) {

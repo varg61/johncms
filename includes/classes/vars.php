@@ -35,6 +35,7 @@ abstract class Vars
     public static $NOTIFICATIONS = array();      // Уведомления
 
     public static $SYSTEM_SET;                   // Системные настройки
+    public static $ACL = array();                // Контроль доступа к модулям
 
     /*
     -----------------------------------------------------------------

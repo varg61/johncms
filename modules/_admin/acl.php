@@ -18,22 +18,33 @@ if (Vars::$USER_RIGHTS < 7) {
 $tpl = Template::getInstance();
 
 if (isset($_POST['submit'])) {
+    $acl = array();
+    $fields = array(
+        'forum',
+        'album',
+        'albumcomm',
+        'guestbook',
+        'library',
+        'libcomm',
+        'downloads',
+        'downcomm',
+        'stat'
+    );
+
+    foreach ($fields as $val) {
+        $acl[$val] = isset($_POST[$val]) ? intval($_POST[$val]) : 0;
+    }
+
     // Записываем настройки в базу
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['reg']) ? intval($_POST['reg']) : 0) . "' WHERE `key`='mod_reg'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['forum']) ? intval($_POST['forum']) : 0) . "' WHERE `key`='mod_forum'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['guest']) ? intval($_POST['guest']) : 0) . "' WHERE `key`='mod_guest'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['lib']) ? intval($_POST['lib']) : 0) . "' WHERE `key`='mod_lib'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['gal']) ? intval($_POST['gal']) : 0) . "' WHERE `key`='mod_gal'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['down']) ? intval($_POST['down']) : 0) . "' WHERE `key`='mod_down'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['libcomm']) . "' WHERE `key`='mod_lib_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['galcomm']) . "' WHERE `key`='mod_gal_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['downcomm']) . "' WHERE `key`='mod_down_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['active']) ? intval($_POST['active']) : 0) . "' WHERE `key`='active'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['stat']) ? intval($_POST['stat']) : 0) . "' WHERE `key`='stat'"); // Статистика
-    $req = mysql_query("SELECT * FROM `cms_settings`");
-    $set = array();
-    while ($res = mysql_fetch_row($req)) Vars::$SYSTEM_SET[$res[0]] = $res[1];
-    mysql_free_result($req);
+    mysql_query("INSERT INTO `cms_settings`
+        SET `key` = 'acl',
+        `val` = '" . mysql_real_escape_string(serialize($acl)) . "'
+        ON DUPLICATE KEY UPDATE
+        `val` = '" . mysql_real_escape_string(serialize($acl)) . "'
+    ");
+    $req = mysql_query("SELECT * FROM `cms_settings` WHERE `key` = 'acl'");
+    $res = mysql_fetch_assoc($req);
+    Vars::$ACL = unserialize($res['val']);
     $tpl->saved = 1;
 }
 

@@ -6,7 +6,7 @@
     <?php endif ?>
 </ul>
 
-<?php if (!Vars::$SYSTEM_SET['mod_guest']): ?>
+<?php if (!isset(Vars::$ACL['guestbook']) || !Vars::$ACL['guestbook']): ?>
 <div class="alarm"><?= lng('guestbook_closed') ?></div>
 <?php endif ?>
 
