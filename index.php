@@ -11,10 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-    die ('ERROR: PHP5.3 > Only');
-}
-
 require_once('includes/core.php');
 
 include(Vars::$MODULE_INCLUDE);

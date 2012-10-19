@@ -11,6 +11,12 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('CMS_VERSION', 'JohnCMS 5.0.0');
+define('START_TIME', microtime(true));
+define('START_MEMORY', memory_get_usage());
+
+if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+    die ('ERROR: PHP5.3 > Only');
+}
 
 /*
 -----------------------------------------------------------------
