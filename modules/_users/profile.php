@@ -13,7 +13,6 @@
 //TODO: Добавить информацию о подтверждении регистрации
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-define('_IN_PROFILE', 1);
 
 $tpl = Template::getInstance();
 $tpl->setUsers = Vars::$USER_SYS;
@@ -34,20 +33,52 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
     exit;
 }
 
-$actions = array(
+$public_actions = array(
     'activity'              => 'activity.php',
+    'guestbook'             => 'guestbook.php',
+);
+
+$personal_actions = array(
     'assets'                => 'profile_assets.php',
     'edit'                  => 'profile_edit.php',
     'edit_password'         => 'profile_edit_password.php',
     'edit_settings'         => 'profile_edit_settings.php',
     'edit_status'           => 'profile_edit_status.php',
-    'guestbook'             => 'guestbook.php',
     'ip'                    => 'ip.php',
     'settings'              => 'profile_settings.php',
+    'upload_avatar'         => 'profile_upload.avatar.php'
 );
 
-if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
-    require_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
+/*
+-----------------------------------------------------------------
+Проверка прав доступа
+-----------------------------------------------------------------
+*/
+$include = FALSE;
+if (Vars::$ACT
+    && isset($public_actions[Vars::$ACT])
+) {
+    // Доступ к публичным модклям
+    $include = $public_actions[Vars::$ACT];
+} elseif (Vars::$ACT
+    && isset($personal_actions[Vars::$ACT])
+    && ($tpl->user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7)
+) {
+    // Доступ к персональным модулям
+    if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS != 9 && $tpl->user['rights'] >= Vars::$USER_RIGHTS) {
+        exit(Functions::displayError(lng('error_rights')));
+    }
+    $include = $personal_actions[Vars::$ACT];
+    define('_IN_PROFILE', 1);
+}
+
+/*
+-----------------------------------------------------------------
+Подключаем модули
+-----------------------------------------------------------------
+*/
+if ($include && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include)) {
+    require_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include);
 } else {
     if (empty($tpl->user['relationship'])) {
         $tpl->rel_count = 0;

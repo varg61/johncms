@@ -13,8 +13,6 @@ defined('_IN_PROFILE') or die('Error: restricted access');
 
 global $tpl;
 
-//TODO: Установить права доступа!!!
-
 $tpl->count = new Counters();
 $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
 $tpl->contents = $tpl->includeTpl('profile_assets');

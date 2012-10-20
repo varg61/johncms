@@ -109,6 +109,10 @@ abstract class Vars
     */
     public static function getUser()
     {
+        if (!Vars::$USER_ID && !self::$USER) {
+            return FALSE;
+        }
+
         if (self::$USER && self::$USER != self::$USER_ID) {
             $req = mysql_query("SELECT * FROM `users` WHERE `id` = " . self::$USER);
             if (mysql_num_rows($req)) {
