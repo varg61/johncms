@@ -76,8 +76,12 @@ ul.nav li h1, ul.nav li h2 {
     display: block;
 }
 
+.form-block.confirm {
+    background-color: #d5ffcc;
+}
+
 .form-block.error {
-    background-color: #ffeff1;
+    background-color: #ffe1df;
 }
 
 label {

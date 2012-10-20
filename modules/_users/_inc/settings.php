@@ -7,17 +7,16 @@
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
- *
- * Главное меню сайта
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_PROFILE') or die('Error: restricted access');
 
 /*
 -----------------------------------------------------------------
 Проверяем права доступа
 -----------------------------------------------------------------
 */
+//TODO: Установить права доступа!!!
 if (!Vars::$USER_ID) {
     echo Functions::displayError(lng('access_forbidden'));
     exit;

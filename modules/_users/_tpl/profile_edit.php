@@ -2,11 +2,22 @@
     <li><h1<?= $this->user['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= lng('profile_edit') ?></h1></li>
 </ul>
 <div class="form-container">
+    <?php if (!empty($this->error)): ?>
+    <div class="form-block error">
+        <span class="input-help error"><b><?= lng('errors_occurred') ?></b></span>
+    </div>
+    <?php elseif(isset($this->save)): ?>
+    <div class="form-block confirm">
+        <?= lng('settings_saved') ?>
+    </div>
+    <?php endif ?>
+
     <div class="form-block">
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
+
     <div class="form-block">
-        <form name="form" action="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>" method="post">
+        <form name="form" action="<?= Vars::$URI ?>?act=profile_edit&amp;user=<?= $this->user['id'] ?>" method="post">
             <label for="imname"><?= lng('name') ?></label><br/>
             <input id="imname" type="text" value="<?= htmlspecialchars($this->user['imname']) ?>" name="imname"/><br/>
             <span class="input-help"><?= lng('description_name') ?></span><br/>
@@ -18,12 +29,12 @@
             <?php endif; ?>
 
             <label for="birth"><?= lng('birthday') ?></label><br/>
-            <?php if (isset($this->birth_error)) : ?>
-            <small class="red"><?= $this->birth_error ?></small><br/>
+            <?php if (isset($this->error['birth'])): ?>
+            <span class="label label-red"><?= $this->error['birth'] ?></span><br/>
             <?php endif ?>
-            <input class="mini" id="birth" type="text" value="<?= htmlspecialchars($this->day) ?>" size="2" maxlength="2" name="day" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
-            <input class="mini" type="text" value="<?= htmlspecialchars($this->month) ?>" size="2" maxlength="2" name="month" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/>
-            <input class="small" type="text" value="<?= htmlspecialchars($this->year) ?>" size="4" maxlength="4" name="year" <?= (isset($this->birth_error) ? 'class="error"' : '') ?>/><br/>
+            <input class="mini<?= (isset($this->error['birth']) ? ' error' : '') ?>" id="birth" type="text" value="<?= htmlspecialchars($this->day) ?>" size="2" maxlength="2" name="day"/>
+            <input class="mini<?= (isset($this->error['birth']) ? ' error' : '') ?>" type="text" value="<?= htmlspecialchars($this->month) ?>" size="2" maxlength="2" name="month"/>
+            <input class="small<?= (isset($this->error['birth']) ? ' error' : '') ?>" type="text" value="<?= htmlspecialchars($this->year) ?>" size="4" maxlength="4" name="year"/><br/>
             <span class="input-help"><?= lng('description_birth') ?></span><br/>
 
             <label for="live"><?= lng('live') ?></label><br/>
@@ -40,10 +51,10 @@
             <span class="input-help"><?= lng('description_phone_number') ?></span><br/>
 
             <label for="email">E-mail</label><br/>
-            <input id="email" type="text" value="<?= htmlspecialchars($this->user['email']) ?>" name="email" <?= (isset($this->email_error) ? 'class="error"' : '') ?>/>
-            <?php if (isset($this->email_error)) : ?>
-            <span class="input-help error"><?= implode(' ', $this->email_error) ?></span>
+            <?php if (isset($this->error['email'])): ?>
+            <span class="label label-red"><?= $this->error['email'] ?></span><br/>
             <?php endif ?>
+            <input id="email" type="text" value="<?= htmlspecialchars($this->user['email']) ?>" name="email" <?= (isset($this->error['email']) ? 'class="error"' : '') ?>/>
             <br/>
             <label class="small"><input name="mailvis" type="checkbox" value="1"<?= ($this->user['mailvis'] ? ' checked="checked"' : '') ?>/>&#160;<?= lng('show_in_profile') ?></label><br/>
             <span class="input-help"><?= lng('description_email') ?></span><br/>
@@ -61,7 +72,7 @@
             <span class="input-help"><?= lng('description_icq') ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" value="<?= lng('save') ?>" name="submit"/>
-            <a class="btn" href="<?= Vars::$MODULE_URI ?>/settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
+            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/profile?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </form>
     </div>

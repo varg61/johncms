@@ -6,11 +6,8 @@
     <?php if (isset($this->save)) : ?>
     <div class="form-block"><?= lng('settings_saved') ?></div>
     <?php endif ?>
-    <?php if (isset($this->reset)) : ?>
-    <div class="form-block"><?= lng('settings_default') ?></div>
-    <?php endif ?>
 
-    <form action="<?= Vars::$URI ?>?act=settings" method="post">
+    <form action="<?= Vars::$URI ?>?act=settings_edit" method="post">
         <div class="form-block">
             <label for="timeshift"><?= lng('settings_clock') ?></label><br/>
             <input class="small" id="timeshift" type="text" name="timeshift" size="2" maxlength="3" value="<?= Vars::$USER_SET['timeshift'] ?>"/>
@@ -58,8 +55,7 @@
             <?php endif ?>
 
             <br/><input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('save') ?>"/>
-            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;mod=reset&amp;user=<?= $this->user['id'] ?>"><?= lng('reset_settings') ?></a>
-            <a class="btn" href="<?= Vars::$MODULE_URI ?>/settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
+            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/profile?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

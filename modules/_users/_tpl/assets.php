@@ -18,6 +18,6 @@
     <?php endif ?>
 
     <li><h2><?= lng('settings') ?></h2></li>
-    <li><a href="<?= Vars::$MODULE_URI ?>/settings"><i class="icn-settings"></i><?= lng('settings') ?><i class="icn-arrow"></i></a></li>
+    <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=settings"><i class="icn-settings"></i><?= lng('settings') ?><i class="icn-arrow"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>/users/exit"><i class="icn-exit"></i><?= lng('exit') ?><i class="icn-arrow"></i></a></li>
 </ul>

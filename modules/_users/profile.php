@@ -31,15 +31,18 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
 }
 
 $tpl = Template::getInstance();
+$tpl->setUsers = Vars::$USER_SYS;
+$tpl->error = array();
 $tpl->user = $user;
 
 $actions = array(
     'activity'      => 'activity.php',
-    'edit'          => 'profile_edit.php',
+    'profile_edit'          => 'profile_edit.php',
+    'settings_edit' => 'settings_edit.php',
     'guestbook'     => 'guestbook.php',
     'ip'            => 'ip.php',
     'password'      => 'profile_password.php',
-    'settings'      => 'profile_settings.php',
+    'settings'      => 'settings.php',
 );
 
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {

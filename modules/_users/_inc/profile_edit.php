@@ -25,7 +25,6 @@ if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS != 9 && $user['rights'] 
     exit(Functions::displayError(lng('error_rights')));
 }
 
-$tpl->setUsers = Vars::$USER_SYS;
 $error = array();
 
 if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
@@ -369,15 +368,6 @@ switch (Vars::$MOD) {
         }
         break;
 
-    case'avatar':
-        /*
-        -----------------------------------------------------------------
-        Меню смены аватара
-        -----------------------------------------------------------------
-        */
-        $tpl->contents = $tpl->includeTpl('profile_change_avatar');
-        break;
-
     default:
         /*
         -----------------------------------------------------------------
@@ -400,8 +390,6 @@ switch (Vars::$MOD) {
             && isset($_SESSION['form_token'])
             && $_POST['form_token'] == $_SESSION['form_token']
         ) {
-            $error = array();
-
             // Принимаем данные о половой принадлежности
             if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) {
                 $user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'w' ? 'w' : 'm';
@@ -436,7 +424,7 @@ switch (Vars::$MOD) {
                         || $tpl->year > 2010
                     ) {
                         // Если дата рожденья указана неверно, показываем ошибку
-                        $tpl->birth_error = lng('error_birth');
+                        $tpl->error['birth'] = lng('error_birth');
                     }
                 }
             }
@@ -468,7 +456,7 @@ switch (Vars::$MOD) {
                 if ($email_valid) {
                     $user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
                 } else {
-                    $tpl->email_error = Validate::$error;
+                    $tpl->error['email'] = Validate::$error['email'];
                 }
             }
 
