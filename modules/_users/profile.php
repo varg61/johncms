@@ -36,6 +36,7 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
 
 $actions = array(
     'activity'              => 'activity.php',
+    'assets'                => 'profile_assets.php',
     'edit'                  => 'profile_edit.php',
     'edit_password'         => 'profile_edit_password.php',
     'edit_status'           => 'profile_edit_status.php',
