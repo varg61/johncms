@@ -15,13 +15,17 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('_IN_PROFILE', 1);
 
+$tpl = Template::getInstance();
+$tpl->setUsers = Vars::$USER_SYS;
+$tpl->error = array();
+
 /*
 -----------------------------------------------------------------
 Получаем данные пользователя
 -----------------------------------------------------------------
 */
 if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
-    if (($user = Vars::getUser()) === FALSE) {
+    if (($tpl->user = Vars::getUser()) === FALSE) {
         echo Functions::displayError(lng('user_does_not_exist'));
         exit;
     }
@@ -30,25 +34,20 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
     exit;
 }
 
-$tpl = Template::getInstance();
-$tpl->setUsers = Vars::$USER_SYS;
-$tpl->error = array();
-$tpl->user = $user;
-
 $actions = array(
-    'activity'      => 'activity.php',
+    'activity'              => 'activity.php',
     'profile_edit'          => 'profile_edit.php',
-    'settings_edit' => 'settings_edit.php',
-    'guestbook'     => 'guestbook.php',
-    'ip'            => 'ip.php',
-    'password'      => 'profile_password.php',
-    'settings'      => 'settings.php',
+    'settings_edit'         => 'settings_edit.php',
+    'guestbook'             => 'guestbook.php',
+    'ip'                    => 'ip.php',
+    'edit_password'         => 'profile_edit_password.php',
+    'settings'              => 'settings.php',
 );
 
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
     require_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
-    if (empty($user['relationship'])) {
+    if (empty($tpl->user['relationship'])) {
         $tpl->rel_count = 0;
         $tpl->rel = $tpl->bar = array(
             'a' => 0,
@@ -58,7 +57,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECT
             'e' => 0,
         );
     } else {
-        $tpl->rel = unserialize($user['relationship']);
+        $tpl->rel = unserialize($tpl->user['relationship']);
         $tpl->rel_count = array_sum($tpl->rel);
         $tpl->bar = array(
             'a' => round(100 / $tpl->rel_count * $tpl->rel['a']),
@@ -71,7 +70,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECT
 
     if (Vars::$USER_ID) {
         // Получаем данные своего голосования
-        $req = mysql_query("SELECT `value` FROM `cms_user_relationship` WHERE `from` = '" . Vars::$USER_ID . "' AND `to` = '" . $user['id'] . "'");
+        $req = mysql_query("SELECT `value` FROM `cms_user_relationship` WHERE `from` = '" . Vars::$USER_ID . "' AND `to` = '" . $tpl->user['id'] . "'");
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
             $tpl->my_rel = $res['value'];
@@ -106,14 +105,14 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECT
                 ");
 
                 // Обновляем статистику пользователя, за которого голосовали
-                $rel['a'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '2'"), 0);
-                $rel['b'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '1'"), 0);
-                $rel['c'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '0'"), 0);
-                $rel['d'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '-1'"), 0);
-                $rel['e'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $user['id'] . " AND `value` = '-2'"), 0);
-                mysql_query("UPDATE `users` SET `relationship` = '" . mysql_real_escape_string(serialize($rel)) . "' WHERE `id` = " . $user['id']);
+                $rel['a'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '2'"), 0);
+                $rel['b'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '1'"), 0);
+                $rel['c'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '0'"), 0);
+                $rel['d'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-1'"), 0);
+                $rel['e'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-2'"), 0);
+                mysql_query("UPDATE `users` SET `relationship` = '" . mysql_real_escape_string(serialize($rel)) . "' WHERE `id` = " . $tpl->user['id']);
 
-                header('Location: ' . Vars::$HOME_URL . '/profile?act=reputation&user=' . $user['id']);
+                header('Location: ' . Vars::$HOME_URL . '/profile?act=reputation&user=' . $tpl->user['id']);
                 exit;
             } else {
                 $tpl->form_token = mt_rand(100, 10000);
@@ -138,17 +137,17 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECT
             Анкета пользователя
             -----------------------------------------------------------------
             */
-            $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "'"), 0);
-            $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+            $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $tpl->user['id'] . "'"), 0);
+            $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $tpl->user['id'] . "'"), 0);
 
-            if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $user['rights'])) {
-                $menu[] = '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $user['id'] . '">' . lng('edit') . '</a>';
+            if ($tpl->user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $tpl->user['rights'])) {
+                $menu[] = '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $tpl->user['id'] . '">' . lng('edit') . '</a>';
             }
-            if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $user['rights']) {
-                $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $user['id'] . '">' . lng('delete') . '</a>';
+            if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $tpl->user['rights']) {
+                $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $tpl->user['id'] . '">' . lng('delete') . '</a>';
             }
-            if ($user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $user['rights']) {
-                $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $user['id'] . '">' . lng('ban_do') . '</a>';
+            if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $tpl->user['rights']) {
+                $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $tpl->user['id'] . '">' . lng('ban_do') . '</a>';
             }
             if (isset($menu)) {
                 $tpl->menu = Functions::displayMenu($menu);
@@ -157,18 +156,18 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECT
             $tpl->userarg = array(
                 'lastvisit' => 1,
                 'iphist'    => 1,
-                'header'    => '<b>ID:' . $user['id'] . '</b>',
-                'footer'    => ($user['id'] != Vars::$USER_ID
+                'header'    => '<b>ID:' . $tpl->user['id'] . '</b>',
+                'footer'    => ($tpl->user['id'] != Vars::$USER_ID
                     ? '<span class="gray">' . lng('where') . ':</span> '
                     : FALSE)
             );
 
-            if ($user['id'] != Vars::$USER_ID) {
+            if ($tpl->user['id'] != Vars::$USER_ID) {
                 //Управление друзьями
-                $tpl->friend = Functions::checkFriend($user['id']);
+                $tpl->friend = Functions::checkFriend($tpl->user['id']);
 
                 //Управление контактами
-                $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $user['id'] . "'");
+                $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $tpl->user['id'] . "'");
                 $tpl->num_cont = mysql_num_rows($contacts);
                 if ($tpl->num_cont) {
                     $rows = mysql_fetch_assoc($contacts);

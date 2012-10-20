@@ -11,14 +11,14 @@
 
 defined('_IN_PROFILE') or die('Error: restricted access');
 
-global $user, $tpl;
+global $tpl;
 
 /*
 -----------------------------------------------------------------
 Закрываем настройки от посторонних
 -----------------------------------------------------------------
 */
-if (!Vars::$USER_ID || $user['id'] != Vars::$USER_ID) {
+if (!Vars::$USER_ID || $tpl->user['id'] != Vars::$USER_ID) {
     echo Functions::displayError(lng('access_forbidden'));
     exit;
 }

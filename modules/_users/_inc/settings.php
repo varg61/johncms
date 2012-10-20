@@ -38,5 +38,4 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
 }
 
 $tpl = Template::getInstance();
-$tpl->user = $user;
 $tpl->contents = $tpl->includeTpl('settings');

@@ -11,15 +11,15 @@
 
 defined('_IN_PROFILE') or die('Error: restricted access');
 
-global $tpl, $user;
+global $tpl;
 
 /*
 -----------------------------------------------------------------
 Меняем пароль
 -----------------------------------------------------------------
 */
-if (Vars::$USER_ID == $user['id']
-    || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $user['rights'])
+if (Vars::$USER_ID == $tpl->user['id']
+    || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $tpl->user['rights'])
     || Vars::$USER_RIGHTS == 9
 ) {
     if (isset($_POST['submit'])
@@ -27,60 +27,57 @@ if (Vars::$USER_ID == $user['id']
         && isset($_SESSION['form_token'])
         && $_POST['form_token'] == $_SESSION['form_token']
     ) {
-        $error = array();
         $oldpass = isset($_POST['oldpass']) ? mb_substr(trim($_POST['oldpass']), 0, 50) : '';
         $newpass = isset($_POST['newpass']) ? mb_substr(trim($_POST['newpass']), 0, 50) : '';
         $newconf = isset($_POST['newconf']) ? mb_substr(trim($_POST['newconf']), 0, 50) : '';
 
         // Проверяем заполнение полей
         if (empty($oldpass)) {
-            $error['oldpass'] = lng('error_empty_field');
+            $tpl->error['oldpass'] = lng('error_empty_field');
         }
         if (empty($newpass)) {
-            $error['newpass'] = lng('error_empty_field');
+            $tpl->error['newpass'] = lng('error_empty_field');
         }
         if (empty($newconf)) {
-            $error['newconf'] = lng('error_empty_field');
+            $tpl->error['newconf'] = lng('error_empty_field');
         }
 
-        if (empty($error)) {
+        if (empty($tpl->error)) {
             // Проверяем исходный пароль
             if (crypt($oldpass, Vars::$USER_DATA['password']) !== Vars::$USER_DATA['password']) {
-                $error['oldpass'] = lng('error_wrong_password');
+                $tpl->error['oldpass'] = lng('error_wrong_password');
             }
 
             // Проверяем новый пароль
             if (Validate::password($newpass, TRUE) !== TRUE) {
-                $error['newpass'] = Validate::$error['password'];
+                $tpl->error['newpass'] = Validate::$error['password'];
             } elseif ($newpass !== $newconf) {
-                $error['newconf'] = lng('error_passwords_not_match');
+                $tpl->error['newconf'] = lng('error_passwords_not_match');
             }
 
-            if (empty($error)) {
+            if (empty($tpl->error)) {
                 $token = Functions::generateToken();
                 $password = crypt($newpass, '$2a$09$' . $token . '$');
                 mysql_query("UPDATE `users` SET
                     `password` = '" . mysql_real_escape_string($password) . "',
                     `token` = '" . mysql_real_escape_string($token) . "'
-                    WHERE `id` = " . $user['id']
+                    WHERE `id` = " . $tpl->user['id']
                 );
-                if (Vars::$USER_ID == $user['id']) {
+                if (Vars::$USER_ID == $tpl->user['id']) {
                     setcookie('token', $token, time() + 3600 * 24 * 31, '/');
                     $_SESSION['token'] = $token;
                 }
-                $tpl->continue = Vars::$MODULE_URI . '/settings&amp;user=' . $user['id'];
+                $tpl->continue = Vars::$MODULE_URI . '/profile?act=settings&amp;user=' . $tpl->user['id'];
                 $tpl->message = lng('password_changed');
                 $tpl->contents = $tpl->includeTpl('message', 1);
                 exit;
             }
         }
-        $tpl->error = $error;
     }
 
     $tpl->form_token = mt_rand(100, 10000);
     $_SESSION['form_token'] = $tpl->form_token;
-    $tpl->contents = $tpl->includeTpl('profile_change_password');
+    $tpl->contents = $tpl->includeTpl('profile_edit_password');
 } else {
     echo Functions::displayError(lng('error_rights'));
-    exit;
 }
