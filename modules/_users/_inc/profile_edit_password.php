@@ -67,6 +67,8 @@ if (Vars::$USER_ID == $tpl->user['id']
                     setcookie('token', $token, time() + 3600 * 24 * 31, '/');
                     $_SESSION['token'] = $token;
                 }
+
+                $tpl->hbar = lng('change_password');
                 $tpl->continue = Vars::$MODULE_URI . '/profile?act=settings&amp;user=' . $tpl->user['id'];
                 $tpl->message = lng('password_changed');
                 $tpl->contents = $tpl->includeTpl('message', 1);

@@ -39,11 +39,11 @@ $actions = array(
     'assets'                => 'profile_assets.php',
     'edit'                  => 'profile_edit.php',
     'edit_password'         => 'profile_edit_password.php',
+    'edit_settings'         => 'profile_edit_settings.php',
     'edit_status'           => 'profile_edit_status.php',
-    'settings_edit'         => 'settings_edit.php',
     'guestbook'             => 'guestbook.php',
     'ip'                    => 'ip.php',
-    'settings'              => 'settings.php',
+    'settings'              => 'profile_settings.php',
 );
 
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {

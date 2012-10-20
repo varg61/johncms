@@ -111,14 +111,6 @@ label.small {
     display: inline-block;
 }
 
-.input-help.error {
-    color: #b94a48;
-}
-
-.input-help.success {
-    color: #3b9030;
-}
-
 textarea {
     font-size: medium;
     font-weight: normal;

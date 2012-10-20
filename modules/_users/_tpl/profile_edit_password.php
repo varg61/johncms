@@ -2,9 +2,20 @@
     <li><h1<?= ($this->user['id'] == Vars::$USER_ID ? ' class="section-personal"' : '') ?>><?= lng('change_password') ?></h1></li>
 </ul>
 <div class="form-container">
+    <?php if (!empty($this->error)): ?>
+    <div class="form-block error">
+        <?= lng('errors_occurred') ?>
+    </div>
+    <?php elseif(isset($this->save)): ?>
+    <div class="form-block confirm">
+        <?= lng('settings_saved') ?>
+    </div>
+    <?php endif ?>
+
     <div class="form-block">
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
+
     <form action="<?= Vars::$URI ?>?act=edit_password&amp;user=<?= $this->user['id'] ?>" method="post">
         <div class="form-block">
             <label for="oldpass"><?= ($this->user['id'] == Vars::$USER_ID ? lng('old_password') : lng('your_password')) ?> <span class="attn">*</span></label><br/>

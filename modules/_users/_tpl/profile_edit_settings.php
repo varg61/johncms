@@ -3,11 +3,13 @@
 </ul>
 
 <div class="form-container">
-    <?php if (isset($this->save)) : ?>
-    <div class="form-block"><?= lng('settings_saved') ?></div>
+    <?php if(isset($this->save)): ?>
+    <div class="form-block confirm">
+        <?= lng('settings_saved') ?>
+    </div>
     <?php endif ?>
 
-    <form action="<?= Vars::$URI ?>?act=settings_edit" method="post">
+    <form action="<?= Vars::$URI ?>?act=edit_settings" method="post">
         <div class="form-block">
             <label for="timeshift"><?= lng('settings_clock') ?></label><br/>
             <input class="small" id="timeshift" type="text" name="timeshift" size="2" maxlength="3" value="<?= Vars::$USER_SET['timeshift'] ?>"/>

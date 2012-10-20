@@ -72,4 +72,4 @@ if (isset($_POST['submit'])
 
 $tpl->form_token = mt_rand(100, 10000);
 $_SESSION['form_token'] = $tpl->form_token;
-$tpl->contents = $tpl->includeTpl('settings_edit');
+$tpl->contents = $tpl->includeTpl('profile_edit_settings');
