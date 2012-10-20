@@ -80,7 +80,7 @@
         <li><a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?= $this->user['id'] ?>"><i class="icn-addressbook"></i><?= ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?><i
             class="icn-arrow right"></i></a></li>
         <?php endif ?>
-    <li><a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?= $this->user['id'] ?>"><i class="icn-block"></i><?= ($this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?><i
+    <li><a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?= $this->user['id'] ?>"><i class="icn-block"></i><?= (isset($this->banned) && $this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?><i
         class="icn-arrow right"></i></a></li>
     <?php endif ?>
 </ul>

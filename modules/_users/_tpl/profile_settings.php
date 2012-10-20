@@ -26,6 +26,9 @@
 
     <li><h2><?= lng('settings') ?></h2></li>
     <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=edit_settings&amp;user=<?= $this->user['id'] ?>"><i class="icn-settings"></i><?= lng('system_settings') ?><i class="icn-arrow"></i></a></li>
+    <?php if (Vars::$USER_RIGHTS >= 7): ?>
+    <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=edit_admin&amp;user=<?= $this->user['id'] ?>"><i class="icn-shield-red"></i><?= lng('rank') ?><i class="icn-arrow"></i></a></li>
+    <?php endif ?>
     <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=edit_password&amp;user=<?= $this->user['id'] ?>"><i class="icn-shield-red"></i><?= lng('change_password') ?><i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_SYS['change_nickname'] || Vars::$USER_RIGHTS >= 7): ?>
     <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=edit&amp;mod=nickname&amp;user=<?= $this->user['id'] ?>"><i class="icn-shield-red"></i><?= lng('change_nickname') ?><i class="icn-arrow"></i></a></li>

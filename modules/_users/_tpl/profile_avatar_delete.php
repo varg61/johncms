@@ -9,7 +9,7 @@
         <div class="form-block align-center">
             <div class="info-message"><?= lng('delete_avatar_warning') ?></div>
             <input class="btn btn-primary btn-large" type="submit" value=" <?= lng('delete') ?> " name="submit"/>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>?act=edit&amp;mod=avatar"><?= lng('cancel') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('cancel') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

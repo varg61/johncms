@@ -49,6 +49,7 @@ $personal_actions = array(
     'avatar_upload'           => 'profile_avatar_upload.php',
     'avatar_upload_animation' => 'profile_avatar_upload_animation.php',
     'edit'                    => 'profile_edit.php',
+    'edit_admin'              => 'profile_edit_admin.php',
     'edit_password'           => 'profile_edit_password.php',
     'edit_settings'           => 'profile_edit_settings.php',
     'edit_status'             => 'profile_edit_status.php',

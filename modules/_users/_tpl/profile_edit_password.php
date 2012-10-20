@@ -38,7 +38,7 @@
             <span class="input-help"><?= lng('password_change_help') ?></span>
             <br/><br/>
             <input class="btn btn-primary btn-large" type="submit" value="<?= lng('save') ?>" name="submit"/>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/profile?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

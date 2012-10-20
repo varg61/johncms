@@ -6,7 +6,7 @@
     <div class="form-block error">
         <?= lng('errors_occurred') ?>
     </div>
-    <?php elseif(isset($this->save)): ?>
+    <?php elseif (isset($this->save)): ?>
     <div class="form-block confirm">
         <?= lng('settings_saved') ?>
     </div>
@@ -16,8 +16,8 @@
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
 
-    <div class="form-block">
-        <form name="form" action="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>" method="post">
+    <form name="form" action="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>" method="post">
+        <div class="form-block">
             <label for="imname"><?= lng('name') ?></label><br/>
             <input id="imname" type="text" value="<?= htmlspecialchars($this->user['imname']) ?>" name="imname"/><br/>
             <span class="input-help"><?= lng('description_name') ?></span><br/>
@@ -72,8 +72,8 @@
             <span class="input-help"><?= lng('description_icq') ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" value="<?= lng('save') ?>" name="submit"/>
-            <a class="btn btn-large" href="<?= Vars::$MODULE_URI ?>/profile?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
