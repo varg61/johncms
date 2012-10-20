@@ -17,7 +17,7 @@
     </div>
 
     <div class="form-block">
-        <form name="form" action="<?= Vars::$URI ?>?act=profile_edit&amp;user=<?= $this->user['id'] ?>" method="post">
+        <form name="form" action="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>" method="post">
             <label for="imname"><?= lng('name') ?></label><br/>
             <input id="imname" type="text" value="<?= htmlspecialchars($this->user['imname']) ?>" name="imname"/><br/>
             <span class="input-help"><?= lng('description_name') ?></span><br/>

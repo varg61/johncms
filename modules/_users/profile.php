@@ -36,11 +36,12 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
 
 $actions = array(
     'activity'              => 'activity.php',
-    'profile_edit'          => 'profile_edit.php',
+    'edit'                  => 'profile_edit.php',
+    'edit_password'         => 'profile_edit_password.php',
+    'edit_status'           => 'profile_edit_status.php',
     'settings_edit'         => 'settings_edit.php',
     'guestbook'             => 'guestbook.php',
     'ip'                    => 'ip.php',
-    'edit_password'         => 'profile_edit_password.php',
     'settings'              => 'settings.php',
 );
 

@@ -333,38 +333,6 @@ switch (Vars::$MOD) {
         }
         break;
 
-    case 'status':
-        /*
-        -----------------------------------------------------------------
-        Смена статуса
-        -----------------------------------------------------------------
-        */
-        $tpl->status = Validate::filterString($tpl->user['status']);
-        if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
-            if (isset($_POST['submit'])
-                && isset($_POST['status'])
-                && isset($_POST['form_token'])
-                && isset($_SESSION['form_token'])
-                && $_POST['form_token'] == $_SESSION['form_token']
-                && $_POST['status'] != $tpl->user['status']
-            ) {
-                $status = trim($_POST['status']);
-                $tpl->status = Validate::filterString($status);
-                if (mb_strlen($status) < 51) {
-                    mysql_query("UPDATE `users` SET `status` = '" . mysql_real_escape_string($status) . "' WHERE `id` = " . $tpl->user['id']);
-                    $tpl->user['status'] = $status;
-                } else {
-                    $tpl->error = lng('error_status_lenght');
-                }
-            }
-            $tpl->form_token = mt_rand(100, 10000);
-            $_SESSION['form_token'] = $tpl->form_token;
-            $tpl->contents = $tpl->includeTpl('profile_change_status');
-        } else {
-            echo Functions::displayError(lng('access_forbidden'));
-        }
-        break;
-
     default:
         /*
         -----------------------------------------------------------------

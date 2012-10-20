@@ -4,10 +4,10 @@
 <div class="user-block"><?= Functions::displayUser($this->user) ?></div>
 <ul class="nav">
     <li><h2><?= lng('profile') ?></h2></li>
-    <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=profile_edit&amp;user=<?= $this->user['id'] ?>"><i class="icn-edit"></i><?= lng('profile_edit') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=edit&amp;user=<?= $this->user['id'] ?>"><i class="icn-edit"></i><?= lng('profile_edit') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="#"><i class="icn-edit"></i><?= lng('change_photo') ?><i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_SYS['change_status']): ?>
-    <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=edit&amp;mod=status&amp;user=<?= $this->user['id'] ?>"><i class="icn-edit"></i><?= lng('status') ?><i class="icn-arrow"></i></a></li>
+    <li><a href="<?= Vars::$MODULE_URI ?>/profile?act=edit_status&amp;user=<?= $this->user['id'] ?>"><i class="icn-edit"></i><?= lng('status') ?><i class="icn-arrow"></i></a></li>
     <?php endif ?>
 
     <li><h2><?= lng('avatar') ?></h2></li>
