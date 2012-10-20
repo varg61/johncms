@@ -13,37 +13,11 @@ defined('_IN_PROFILE') or die('Error: restricted access');
 
 global $tpl;
 
-if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif')) {
-    $tpl->avatar = TRUE;
-}
-
 if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '_small.jpg')) {
     $tpl->photo = TRUE;
 }
 
 switch (Vars::$MOD) {
-    case'delete_avatar':
-        /*
-        -----------------------------------------------------------------
-        Удаление аватара
-        -----------------------------------------------------------------
-        */
-        if (isset($_POST['submit'])
-            && isset($_POST['form_token'])
-            && isset($_SESSION['form_token'])
-            && $_POST['form_token'] == $_SESSION['form_token']
-        ) {
-            @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif');
-            $tpl->message = lng('avatar_deleted');
-            $tpl->continue = Vars::$URI . '?act=edit&amp;mod=avatar&amp;user=' . $tpl->user['id'];
-            $tpl->contents = $tpl->includeTpl('message', 1);
-        } else {
-            $tpl->form_token = mt_rand(100, 10000);
-            $_SESSION['form_token'] = $tpl->form_token;
-            $tpl->contents = $tpl->includeTpl('profile_delete_avatar');
-        }
-        break;
-
     case'delete_photo':
         /*
         -----------------------------------------------------------------
@@ -56,63 +30,6 @@ switch (Vars::$MOD) {
             header('Location: ' . Vars::$URI . '?act=edit&user=' . $tpl->user['id']);
         } else {
             $tpl->contents = $tpl->includeTpl('delete_photo');
-        }
-        break;
-
-    case 'upload_animation':
-        /*
-        -----------------------------------------------------------------
-        Выгрузка анимированного аватара
-        -----------------------------------------------------------------
-        */
-        if ($tpl->setUsers['upload_animation'] || Vars::$USER_RIGHTS >= 7) {
-            if (isset($_POST['submit'])
-                && isset($_POST['form_token'])
-                && isset($_SESSION['form_token'])
-                && $_POST['form_token'] == $_SESSION['form_token']
-            ) {
-                if ($_FILES['imagefile']['size'] > 0) {
-                    // Проверка на допустимый вес файла
-                    if ($_FILES['imagefile']['size'] > 10240) {
-                        $error[] = lng('error_avatar_filesize');
-                    }
-
-                    $param = getimagesize($_FILES['imagefile']['tmp_name']);
-
-                    // Проверка на допустимый тип файла
-                    if ($param == FALSE || $param['mime'] != 'image/gif') {
-                        $error[] = lng('error_avatar_filetype');
-                    }
-
-                    // Проверка на допустимый размер изображения
-                    if ($param != FALSE && ($param[0] != 32 || $param[1] != 32)) {
-                        $error[] = lng('error_avatar_size');
-                    }
-                } else {
-                    // Если не выбран файл
-                    $error[] = lng('error_file_not_selected');
-                }
-
-                if (empty($error)) {
-                    if ((move_uploaded_file($_FILES["imagefile"]["tmp_name"],
-                        FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif')) == TRUE
-                    ) {
-                        $tpl->message = lng('avatar_uploaded');
-                        $tpl->continue = Vars::$URI . '?act=edit&amp;mod=avatar';
-                        $tpl->contents = $tpl->includeTpl('message', 1);
-                    } else {
-                        $error[] = lng('error_avatar_upload');
-                    }
-                } else {
-                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit&amp;mod=upload_animation&amp;user=' . $tpl->user['id'] . '">' . lng('back') . '</a>');
-                }
-            } else {
-                $tpl->form_token = mt_rand(100, 10000);
-                $_SESSION['form_token'] = $tpl->form_token;
-                $tpl->contents = $tpl->includeTpl('profile_upload_animation');
-            }
-        } else {
-            echo Functions::displayError(lng('access_forbidden'));
         }
         break;
 

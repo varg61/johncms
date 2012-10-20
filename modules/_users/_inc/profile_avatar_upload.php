@@ -41,8 +41,9 @@ if ($tpl->setUsers['upload_avatars'] || Vars::$USER_RIGHTS >= 7) {
             $handle->image_convert = 'gif';
             $handle->process(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR);
             if ($handle->processed) {
+                $tpl->hbar = lng('upload_avatar');
                 $tpl->message = lng('avatar_uploaded');
-                $tpl->continue = Vars::$MODULE_URI . '?act=edit&amp;mod=avatar';
+                $tpl->continue = Vars::$URI . '?act=settings&amp;user=' . $tpl->user['id'];
                 $tpl->contents = $tpl->includeTpl('message', 1);
             } else {
                 echo Functions::displayError($handle->error);
@@ -52,7 +53,7 @@ if ($tpl->setUsers['upload_avatars'] || Vars::$USER_RIGHTS >= 7) {
     } else {
         $tpl->form_token = mt_rand(100, 10000);
         $_SESSION['form_token'] = $tpl->form_token;
-        $tpl->contents = $tpl->includeTpl('profile_upload_avatar');
+        $tpl->contents = $tpl->includeTpl('profile_avatar_upload');
     }
 } else {
     echo Functions::displayError(lng('access_forbidden'));

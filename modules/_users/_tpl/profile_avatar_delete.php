@@ -5,7 +5,7 @@
     <div class="form-block">
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
-    <form action="<?= Vars::$URI ?>?act=edit&amp;mod=delete_avatar&amp;user=<?= $this->user['id'] ?>" method="post">
+    <form action="<?= Vars::$URI ?>?act=avatar_delete&amp;user=<?= $this->user['id'] ?>" method="post">
         <div class="form-block align-center">
             <div class="info-message"><?= lng('delete_avatar_warning') ?></div>
             <input class="btn btn-primary btn-large" type="submit" value=" <?= lng('delete') ?> " name="submit"/>

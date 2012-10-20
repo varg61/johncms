@@ -11,20 +11,9 @@
 
 defined('_IN_PROFILE') or die('Error: restricted access');
 
-/*
------------------------------------------------------------------
-Получаем данные пользователя
------------------------------------------------------------------
-*/
-if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
-    if (($user = Vars::getUser()) === FALSE) {
-        echo Functions::displayError(lng('user_does_not_exist'));
-        exit;
-    }
-} else {
-    echo Functions::displayError(lng('access_guest_forbidden'));
-    exit;
-}
+global $tpl;
 
-$tpl = Template::getInstance();
+if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif')) {
+    $tpl->avatar = TRUE;
+}
 $tpl->contents = $tpl->includeTpl('profile_settings');

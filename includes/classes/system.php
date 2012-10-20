@@ -31,8 +31,8 @@ class System extends Vars
 
         // Принимаем суперглобальные переменные
         parent::$ID = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : 0;
-        parent::$ACT = isset($_REQUEST['act']) ? substr(trim($_REQUEST['act']), 0, 20) : '';
-        parent::$MOD = isset($_REQUEST['mod']) ? substr(trim($_REQUEST['mod']), 0, 20) : '';
+        parent::$ACT = isset($_REQUEST['act']) ? substr(trim($_REQUEST['act']), 0, 30) : '';
+        parent::$MOD = isset($_REQUEST['mod']) ? substr(trim($_REQUEST['mod']), 0, 30) : '';
         parent::$USER = isset($_REQUEST['user']) ? abs(intval($_REQUEST['user'])) : 0;
         if (isset($_REQUEST['page']) && $_REQUEST['page'] > 0) {
             parent::$PAGE = intval($_REQUEST['page']);

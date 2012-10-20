@@ -33,27 +33,29 @@ if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
     exit;
 }
 
+/*
+-----------------------------------------------------------------
+Разграничение прав доступа
+-----------------------------------------------------------------
+*/
 $public_actions = array(
-    'activity'              => 'activity.php',
-    'guestbook'             => 'guestbook.php',
+    'activity'                => 'activity.php',
+    'guestbook'               => 'guestbook.php',
 );
 
 $personal_actions = array(
-    'assets'                => 'profile_assets.php',
-    'edit'                  => 'profile_edit.php',
-    'edit_password'         => 'profile_edit_password.php',
-    'edit_settings'         => 'profile_edit_settings.php',
-    'edit_status'           => 'profile_edit_status.php',
-    'ip'                    => 'ip.php',
-    'settings'              => 'profile_settings.php',
-    'upload_avatar'         => 'profile_upload.avatar.php'
+    'assets'                  => 'profile_assets.php',
+    'avatar_delete'           => 'profile_avatar_delete.php',
+    'avatar_upload'           => 'profile_avatar_upload.php',
+    'avatar_upload_animation' => 'profile_avatar_upload_animation.php',
+    'edit'                    => 'profile_edit.php',
+    'edit_password'           => 'profile_edit_password.php',
+    'edit_settings'           => 'profile_edit_settings.php',
+    'edit_status'             => 'profile_edit_status.php',
+    'ip'                      => 'ip.php',
+    'settings'                => 'profile_settings.php',
 );
 
-/*
------------------------------------------------------------------
-Проверка прав доступа
------------------------------------------------------------------
-*/
 $include = FALSE;
 if (Vars::$ACT
     && isset($public_actions[Vars::$ACT])
