@@ -416,7 +416,7 @@ switch (Vars::$MOD) {
                     $tpl->month = trim($_POST['month']);
                     $tpl->year = trim($_POST['year']);
                     $tpl->user['birth'] = intval($tpl->year) . '-' . intval($tpl->month) . '-' . intval($tpl->day);
-                    if (!checkdate($tpl->month, $tpl->day, $tpl->year)
+                    if (!@checkdate($tpl->month, $tpl->day, $tpl->year)
                         || $tpl->year < 1940
                         || $tpl->year > 2010
                     ) {
@@ -467,7 +467,8 @@ switch (Vars::$MOD) {
                 $tpl->user['skype'] = mb_substr(trim($_POST['skype']), 0, 50);
             }
 
-            mysql_query("UPDATE `users` SET
+            if (empty($tpl->error)) {
+                mysql_query("UPDATE `users` SET
                 `sex` = '" . $tpl->user['sex'] . "',
                 `imname` = '" . mysql_real_escape_string($tpl->user['imname']) . "',
                 " . (isset($tpl->birth_error) ? '' : "`birth` = '" . $tpl->user['birth'] . "',") . "
@@ -480,8 +481,9 @@ switch (Vars::$MOD) {
                 `icq` = " . $tpl->user['icq'] . ",
                 `skype` = '" . mysql_real_escape_string($tpl->user['skype']) . "'
                 WHERE `id` = " . $tpl->user['id']
-            ) or exit(mysql_error());
-            $tpl->save = 1;
+                ) or exit('MYSQL: ' . mysql_error());
+                $tpl->save = 1;
+            }
         }
 
         $tpl->form_token = mt_rand(100, 10000);
