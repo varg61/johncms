@@ -61,7 +61,7 @@ $include = FALSE;
 if (Vars::$ACT
     && isset($public_actions[Vars::$ACT])
 ) {
-    // Доступ к публичным модклям
+    // Доступ к публичным модулям
     $include = $public_actions[Vars::$ACT];
 } elseif (Vars::$ACT
     && isset($personal_actions[Vars::$ACT])

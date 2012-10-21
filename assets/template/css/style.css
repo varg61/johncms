@@ -800,6 +800,8 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     .icn-w-top { background-position: 0 -720px; margin-right: 6px }
     .icn-w-man-woman { background-position: 0 -740px; margin-right: 6px }
     .icn-w-piechart { background-position: 0 -760px; margin-right: 6px }
+    .icn-ban-red { background-position: 0 -780px; }
+    .icn-settings-red { background-position: 0 -800px }
 
     .btn i {
         margin-right: 4px;
