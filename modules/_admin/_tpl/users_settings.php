@@ -26,7 +26,6 @@
             <label class="small"><input name="change_sex" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_sex'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('change_sex') ?></label><br/>
             <label class="small"><input name="change_status" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_status'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('change_status') ?></label><br/>
             <label class="small"><input name="upload_avatars" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_avatars'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('upload_avatars') ?></label><br/>
-            <label class="small"><input name="upload_animation" type="checkbox" value="1" <?= (Vars::$USER_SYS['upload_animation'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('upload_animation') ?></label><br/>
             <label class="small"><input name="change_nickname" type="checkbox" value="1" <?= (Vars::$USER_SYS['change_nickname'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('change_nickname_allow') ?></label><br/>
             <label class="small"><input class="mini" type="text" name="change_period" size="2" value="<?= Vars::$USER_SYS['change_period'] ?>" maxlength="2"/>&#160;&#160;<?= lng('how_many_days') ?></label><br/>
             <label class="small"><input name="digits_only" type="checkbox" value="1" <?= (Vars::$USER_SYS['digits_only'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('digits_only') ?></label>

@@ -7,9 +7,13 @@
     </div>
     <form enctype="multipart/form-data" method="post" action="<?= Vars::$URI ?>?act=avatar_upload&amp;user=<?= $this->user['id'] ?>">
         <div class="form-block">
-            <label for="file"><?= lng('select_image') ?></label><br/>
-            <input id="file" type="file" name="imagefile" value=""/>
-            <span class="input-help" style="padding-top: 8px"><?= lng('select_avatar_help')  ?></span><br/><br/>
+            <label for="image"><?= lng('select_image') ?></label><br/>
+            <input id="image" type="file" name="image" value=""/>
+            <span class="input-help" style="padding-top: 8px"><?= lng('select_avatar_help')  ?></span><br/>
+
+            <label for="animation"><?= lng('animation') ?></label><br/>
+            <input id="animation" type="file" name="animation" value=""/>
+            <span class="input-help" style="padding-top: 8px"><?= lng('select_animation_help')  ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('upload') ?>"/>
             <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>

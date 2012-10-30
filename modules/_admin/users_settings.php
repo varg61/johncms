@@ -45,7 +45,6 @@ if (Vars::$USER_RIGHTS >= 7) {
             Vars::$USER_SYS['change_status'] = isset($_POST['change_status']);
             Vars::$USER_SYS['digits_only'] = isset($_POST['digits_only']);
             Vars::$USER_SYS['upload_avatars'] = isset($_POST['upload_avatars']);
-            Vars::$USER_SYS['upload_animation'] = isset($_POST['upload_animation']);
             Vars::$USER_SYS['view_online'] = isset($_POST['view_online']);
             Vars::$USER_SYS['viev_history'] = isset($_POST['viev_history']);
             Vars::$USER_SYS['view_userlist'] = isset($_POST['view_userlist']);
