@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1><?= lng('elected') ?></h1></li>
+    <li><h1 class="section-personal"><?= lng('elected') ?></h1></li>
 </ul>
 <? if ($this->total): ?><form action="<?= Vars::$MODULE_URI ?>?act=elected" method="post"><div><? endif ?>
 <? if ($this->total): ?>

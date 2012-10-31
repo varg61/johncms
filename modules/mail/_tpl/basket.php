@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1><?= lng('basket') ?></h1></li>
+    <li><h1 class="section-personal"><?= lng('basket') ?></h1></li>
 </ul>
 <? if ($this->total): ?><form action="<?= Vars::$MODULE_URI ?>?act=basket" method="post"><div><? endif ?>
 <? if ($this->total): ?>

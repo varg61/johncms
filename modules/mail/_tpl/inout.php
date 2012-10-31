@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1><?= $this->tit ?></h1></li>
+    <li><h1 class="section-personal"><?= $this->tit ?></h1></li>
 </ul>
 <?php if ($this->total): ?>
 <form action="<?= Vars::$MODULE_URI ?>?act=<?= $this->pages_type ?>" method="post">

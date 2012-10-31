@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1><?= lng('mail') ?></h1></li>
+    <li><h1 class="section-personal"><?= lng('mail') ?></h1></li>
 </ul>
 <div class="toolbar-top">
     <a class="btn btn-primary btn-mini" href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>

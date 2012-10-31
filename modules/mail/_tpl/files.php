@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1><?= lng('files') ?></h1></li>
+    <li><h1 class="section-personal"><?= lng('files') ?></h1></li>
 </ul>
 <?php if ($this->total): ?>
 <?php foreach ($this->query as $row): ?>
