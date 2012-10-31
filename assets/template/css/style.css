@@ -802,6 +802,10 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     .icn-w-piechart { background-position: 0 -760px; margin-right: 6px }
     .icn-ban-red { background-position: 0 -780px; }
     .icn-settings-red { background-position: 0 -800px }
+    .icn-inbox { background-position: 0 -820px }
+    .icn-outbox { background-position: 0 -840px }
+    .icn-favmail { background-position: 0 -860px }
+    .icn-attach { background-position: 0 -880px }
 
     .btn i {
         margin-right: 4px;
