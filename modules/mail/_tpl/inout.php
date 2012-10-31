@@ -1,4 +1,6 @@
-<div class="phdr"><strong><?= $this->tit ?></strong></div>
+<ul class="nav">
+    <li><h1><?= $this->tit ?></h1></li>
+</ul>
 <?php if ($this->total): ?>
 <form action="<?= Vars::$MODULE_URI ?>?act=<?= $this->pages_type ?>" method="post">
     <div>
@@ -37,9 +39,10 @@
 </div>
 </p>
 <?php else: ?>
-<div class="rmenu"><?= $this->mess_err ?></div>
+<div class="form-container">
+	<div class="form-block align-center"><?= lng('list_empty') ?></div>
+</div>
 <?php endif ?>
-<p>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= lng('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>
-</p>
+<div class="btn-panel">
+    <a class="btn" href="<?= Vars::$MODULE_URI ?>?act=add"><i class="icn-edit"></i><?= lng('write_message') ?></a>
+</div>

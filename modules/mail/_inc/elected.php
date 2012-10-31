@@ -184,10 +184,6 @@ if ( Vars::$ID )
 		$_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля contacts.php
 		$tpl->contacts = $tpl->includeTpl( 'contacts' );
-    } else
-    {
-        //Выводим сообщение если нет избранных
-		$tpl->contacts = '<div class="rmenu">' . lng( 'no_elected' ) . '</div>';
     }
 	//Подключаем шаблон модуля elected.php
     $tpl->contents = $tpl->includeTpl( 'elected' );

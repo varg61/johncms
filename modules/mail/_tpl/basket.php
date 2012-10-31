@@ -1,7 +1,9 @@
-<div class="phdr"><strong><?= lng('basket') ?></strong></div>
+<ul class="nav">
+    <li><h1><?= lng('basket') ?></h1></li>
+</ul>
 <? if ($this->total): ?><form action="<?= Vars::$MODULE_URI ?>?act=basket" method="post"><div><? endif ?>
-<?= $this->contacts ?>
 <? if ($this->total): ?>
+	<?= $this->contacts ?>
     <div class="gmenu">
         <?= lng('noted_contacts') ?>:<br/>
         <input type="hidden" name="token" value="<?= $this->token ?>"/>
@@ -14,8 +16,8 @@
     <form action="" method="post"><p><input type="text" name="page" size="2" value="<?= Vars::$PAGE ?>"/>
         <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;"/></p></form>
     <? endif ?>
-<? endif ?>
-<p>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= lng('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>
-</p>
+<?php else: ?>
+<div class="form-container">
+	<div class="form-block align-center"><?= lng('list_empty') ?></div>
+</div>
+<?php endif ?>

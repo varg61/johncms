@@ -21,10 +21,10 @@ if ( !Vars::$USER_ID )
 //Заголовок
 $tpl->title = lng( 'mail' ) . ' | ' . lng( 'files' );
 //Считаем количество файлов
-$total = mysql_result( mysql_query( "SELECT COUNT(*) FROM `cms_mail_messages` WHERE `filename`!='' AND (`user_id`='" .
+$tpl->total = mysql_result( mysql_query( "SELECT COUNT(*) FROM `cms_mail_messages` WHERE `filename`!='' AND (`user_id`='" .
     Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `delete_in`!='" . Vars::$USER_ID .
     "' AND `delete_out`!='" . Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'" ), 0 );
-if ( $total )
+if ( $tpl->total )
 {
     //Формируем список файлов
 	$array = array();
@@ -46,9 +46,9 @@ if ( $total )
     }
 	//Навигация
     $tpl->display_pagination = Functions::displayPagination( Vars::$MODULE_URI . '?act=files&amp;', Vars::
-        $START, $total, Vars::$USER_SET['page_size'] );
+        $START, $tpl->total, Vars::$USER_SET['page_size'] );
     $tpl->query = $array;
-    $tpl->total = $total;
+	unset($array);
 }
 //Подключаем шаблон модуля files.php
 $tpl->contents = $tpl->includeTpl( 'files' );

@@ -43,7 +43,7 @@ if($tpl->count_contact) {
 	}
 	$tpl->query = $array;
 }
-$tpl->url = Vars::$MODULE_URI . '?act=send';
+$tpl->url = Vars::$MODULE_URI . '?act=add';
 $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
 $tpl->size = Vars::$SYSTEM_SET['flsz'];
 $tpl->token = mt_rand(100, 10000);

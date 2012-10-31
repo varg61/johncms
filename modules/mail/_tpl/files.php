@@ -1,9 +1,6 @@
-<div class="phdr"><strong><?= lng('files') ?></strong></div>
-<?php if ($this->total > Vars::$USER_SET['page_size']): ?>
-<div class="topmenu">
-    <?= $this->display_pagination ?>
-</div>
-<? endif ?>
+<ul class="nav">
+    <li><h1><?= lng('files') ?></h1></li>
+</ul>
 <?php if ($this->total): ?>
 <?php foreach ($this->query as $row): ?>
     <div class="<?= $row['list'] ?>">
@@ -19,9 +16,7 @@
         <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;"/></p></form>
     <? endif ?>
 <?php else: ?>
-<div class="rmenu"><?= lng('no_files') ?>!</div>
+<div class="form-container">
+	<div class="form-block align-center"><?= lng('list_empty') ?></div>
+</div>
 <? endif ?>
-<p>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= lng('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>
-</p>

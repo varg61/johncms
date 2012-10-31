@@ -280,13 +280,11 @@ if (Vars::$ID) {
         $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?act=basket&amp;',
             Vars::$START, $total, Vars::$USER_SET['page_size']);
         $tpl->query = $array;
+		unset($array);
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля contacts.php
         $tpl->contacts = $tpl->includeTpl('contacts');
-    } else {
-        //Выводим сообщение если корзина пустая
-        $tpl->contacts = '<div class="rmenu">' . lng('empty_basket') . '</div>';
     }
     //Подключаем шаблон модуля basket.php
     $tpl->contents = $tpl->includeTpl('basket');
