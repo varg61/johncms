@@ -311,7 +311,7 @@ CREATE TABLE `cms_sessions` (
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `ip` int(10) unsigned NOT NULL DEFAULT '0',
   `ip_via_proxy` int(10) unsigned NOT NULL DEFAULT '0',
-  `user_agent` varchar(200) NOT NULL DEFAULT '',
+  `user_agent` varchar(255) NOT NULL DEFAULT '',
   `place` varchar(200) NOT NULL DEFAULT '',
   `views` smallint(5) unsigned NOT NULL DEFAULT '0',
   `movings` smallint(5) unsigned NOT NULL DEFAULT '0',

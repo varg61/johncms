@@ -140,10 +140,10 @@ class Network extends Vars
     private function _getUserAgent()
     {
         if (isset($_SERVER["HTTP_X_OPERAMINI_PHONE_UA"]) && strlen(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])) > 5) {
-            return 'OPERA MINI: ' . htmlspecialchars(substr(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']), 0, 150));
+            return 'OPERA MINI: ' . htmlspecialchars(substr(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']), 0, 250));
         }
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            return htmlspecialchars(substr(trim($_SERVER['HTTP_USER_AGENT']), 0, 150));
+            return htmlspecialchars(substr(trim($_SERVER['HTTP_USER_AGENT']), 0, 250));
         }
         return 'Not Recognised';
     }
