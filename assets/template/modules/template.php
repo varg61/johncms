@@ -29,7 +29,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 <div id="basement" class="align-center">
     <div class="site-copyright"><?= Vars::$SYSTEM_SET['copyright'] ?></div>
     <div class="counters"><?= Functions::displayCounters() ?></div>
-    <div>Generation: <?= round((microtime(TRUE) - START_TIME), 4) ?> sec<br/>Memory: <?= ((memory_get_usage() - START_MEMORY) / 1000) ?> kb</div>
+    <div>Generation: <?= round((microtime(TRUE) - START_TIME), 4) ?> sec<br/>Memory: <?= round((memory_get_usage() - START_MEMORY) / 1024, 2) ?> kb</div>
     <div class="copyright"><a href="http://johncms.com">JohnCMS</a></div>
 </div>
 </body>
