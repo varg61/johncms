@@ -1,6 +1,5 @@
-RemoveType .php .phtml .php3 .php4 .php5 .php6 .phps .cgi .pl .asp .aspx .shtml .shtm .fcgi .fpl .jsp .py
 RemoveHandler .php .phtml .php3 .php4 .php5 .php6 .phps .cgi .pl .asp .aspx .shtml .shtm .fcgi .fpl .jsp .py
-php_flag engine 0
+AddType application/x-httpd-php-source .php .phtml .php3 .php4 .php5 .php6 .phps .cgi .pl .asp .aspx .shtml .shtm .fcgi .fpl .jsp .py
 
 Addtype application/zip .zip
 Addtype application/x-rar-compressed .rar
@@ -38,3 +37,5 @@ Addtype image/png .png
 Addtype image/bmp .bmp
 AddType video/mp4 .mp4
 Addtype video/3gpp .3gp
+
+php_flag engine 0

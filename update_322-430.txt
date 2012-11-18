@@ -1,0 +1,103 @@
+/**
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
+*/
+
+*english version below*
+
+################################################################################
+Обновление 3.2.2 - 4.3.0
+################################################################################
+
+ВНИМАНИЕ!!!
+Данный пакет предназначен для обновления JohnCMS с версии 3.2.2 до 4.3.0
+С другими версиями несовместим!
+
+Если у Вас стоят различные моды, то не спешите обновляться.
+  1) Составьте список ВСЕХ модов, что Вы ставили на сайт.
+  2) Согласуйте совместимость КАЖДОГО из модов поотдельности, с версией 4.3.0, заранее позаботьтесь о том, чтоб скачать свежие версии Ваших модов, совместимых с новой версией нашего двига.
+  3) ОБЯЗАТЕЛЬНО сделайте резервную копию всего сайта и базы данных.
+
+ПРОЦЕДУРА ОБНОВЛЕНИЯ
+  1) Полностью удаляем следующие папки:
+       /avatars
+       /cache
+       /chat
+       /files
+       /images
+       /library
+       /pages
+       /panel
+       /rss
+       /smileys
+       /str
+       /theme
+  2) Удаляем все файлы в корневом каталоге сайта /
+  3) Выборочно удаляем (будьте внимательны!):
+       /downloads    удаляем все .php файлы, но оставляем папки.
+       /forum        удаляем все файлы и папки, кроме /forum/files.
+       /gallery      удаляем все .php файлы, но оставляем папки.
+       /incfiles     удаляем все файлы и папки, кроме db.php (его нужно оставить!).
+  4) Если у Вас были установлены какие-либо моды, их нужно ВСЕ удалить.
+  5) Распаковываем архив JohnCMS 4.x.x и заливаем на сервер.
+  6) Перемещаем все файлы из папки /pratt в папку /files/users/pm
+  7) Удаляем папку /pratt
+  8) Перемещаем все файлы из папки /forum/files в папку /files/forum/attach
+  9) Удаляем папку /forum/files
+  10) Запускаем процедуру обновления, по адресу http://ваш_сайт/install
+      и далее, следуем ее указаниям.
+  11) После завершения процедуры обновления, ОБЯЗАТЕЛЬНО удаляем папку /install с сервера.
+   
+Далее, Вы можете приступать к постепенному восстановлению Ваших дополнительных модулей.
+Учтите, что ни один Хак, предназначенный для версии 3.2.2 не подходит для версии 4.3.0!
+Большинство дополнительных модулей (не хаков, а именно модулей) с новой версией совместимы.
+
+
+################################################################################
+Update 3.2.2 - 4.3.0
+################################################################################
+
+ATTENTION!!!
+This package is designed to update JohnCMS with version 3.2.2 to 4.3.0
+Not compatible with other versions!
+
+If you are a variety of Mods, there is no hurry to do update/
+  1) Make a list of ALL mods that you placed on the site.
+  2) Check the compatibility of each of the mods individually. So be careful about how to download the latest version.
+  3) Save a backup copy of the entire site and database.
+
+UPDATE PROCEDURE
+  1) Completely delete the following folders:
+       /avatars
+       /cache
+       /chat
+       /files
+       /images
+       /library
+       /pages
+       /panel
+       /rss
+       /smileys
+       /str
+       /theme
+  2) Delete all files in the Site root directory /
+  3) Selectively delete (be careful!):
+       /downloads   remove all .php files, but leave folders.
+       /forum       delete all files and folders, except /forum/files.
+       /gallery     delete all .php files, but leave folders.
+       /incfiles    delete all files and folders, except db.php (it must leave!).
+  4) If you have installed any Mods, they need to delete everything.
+  5) Unpack JohnCMS archive and upload it to the server.
+  6) Move all files from the folder /pratt to folder /files/users/pm
+  7) Delete folder /pratt
+  8) Move all files from the folder /forum/files to folder /files/forum/attach
+  9) Delete folder /forum/files
+  10) Run the upgrade procedure at http://ваш_сайт/install
+       and further, follow the setup instructions.
+  11) Once the upgrade is finished, BE SURE to delete the /install directory from the server.
+   
+Further, you can proceed in a gradual recovery of your additional modules.

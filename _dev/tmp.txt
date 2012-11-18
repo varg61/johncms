@@ -1,1 +1,0 @@
-or die(__FILE__ . ' ' . __LINE__ . mysql_error());
