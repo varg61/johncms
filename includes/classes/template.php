@@ -37,8 +37,7 @@ class Template extends ArrayObject
 
     public function __set($index, $value)
     {
-        $instance = self::getInstance();
-        $instance->offsetSet($index, $value);
+        self::getInstance()->offsetSet($index, $value);
     }
 
     public function __get($index)
@@ -52,8 +51,7 @@ class Template extends ArrayObject
 
     public function __isset($index)
     {
-        $instance = self::getInstance();
-        return $instance->offsetExists($index);
+        return self::getInstance()->offsetExists($index);
     }
 
     public function includeTpl($tpl = null, $root = false)
