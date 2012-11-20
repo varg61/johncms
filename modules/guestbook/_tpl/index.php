@@ -1,4 +1,4 @@
-<ul class="nav" xmlns="http://www.w3.org/1999/html">
+<ul class="nav">
     <?php if (Vars::$MOD == 'adm'): ?>
     <li><h1 class="section-warning"><?= lng('admin_club') ?></h1></li>
     <?php else: ?>
@@ -10,8 +10,7 @@
 <div class="alarm"><?= lng('guestbook_closed') ?></div>
 <?php endif ?>
 
-<div class="form-container">
-    <div class="form-block">
+<div class="user-block">
 <form name="form" action="<?= Vars::$URI ?>?act=say<?= ($this->mod ? '&amp;mod=adm' : '') ?>" method="post">
     <?php if(!Vars::$USER_ID): ?>
     <?= lng('name') ?> (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>
@@ -25,9 +24,9 @@
     <input class="btn btn-primary" type="submit" name="submit" value="<?= lng('sent') ?>"/>
     <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
-</div></div>
+</div>
 
-
+<ul class="nav"><li><h2><?= lng('comments') ?></h2></li></ul>
 <?php if (isset($this->list)): ?>
 <?php foreach ($this->list as $key => $val): ?>
     <div class="<?= $key % 2 ? 'block-odd' : 'block-even' ?>">
