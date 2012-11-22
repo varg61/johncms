@@ -19,17 +19,17 @@
             </label>
             <br/><br/>
             <label for="copyright"><?= lng('site_copyright') ?></label><br/>
-            <input id="copyright" type="text" name="copyright" value="<?= Validate::filterString(Vars::$SYSTEM_SET['copyright']) ?>"/><br/>
+            <input id="copyright" type="text" name="copyright" value="<?= Validate::checkout(Vars::$SYSTEM_SET['copyright']) ?>"/><br/>
             <label for="email"><?= lng('site_email') ?></label><br/>
-            <input id="email" type="text" name="email" value="<?= Validate::filterString(Vars::$SYSTEM_SET['email']) ?>"/><br/>
+            <input id="email" type="text" name="email" value="<?= Validate::checkout(Vars::$SYSTEM_SET['email']) ?>"/><br/>
             <label for="filesize"><?= lng('file_maxsize') ?></label><br/>
             <input id="filesize" class="small" type="text" name="filesize" value="<?= intval(Vars::$SYSTEM_SET['flsz']) ?>"/><span class="input-help">&#160;kB</span><br/>
             <label class="small"><input name="gzip" type="checkbox" value="1" <?= (Vars::$SYSTEM_SET['gzip'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('gzip_compress') ?></label>
             <br/><br/>
             <label for="keywords">META Keywords</label><br/>
-            <textarea id="keywords" rows="<?= Vars::$USER_SET['field_h'] ?>" name="keywords"><?= Validate::filterString(Vars::$SYSTEM_SET['meta_key']) ?></textarea><br/>
+            <textarea id="keywords" rows="<?= Vars::$USER_SET['field_h'] ?>" name="keywords"><?= Validate::checkout(Vars::$SYSTEM_SET['meta_key']) ?></textarea><br/>
             <label for="description">META Description</label><br/>
-            <textarea id="description" rows="<?= Vars::$USER_SET['field_h'] ?>" name="description"><?= Validate::filterString(Vars::$SYSTEM_SET['meta_desc']) ?></textarea>
+            <textarea id="description" rows="<?= Vars::$USER_SET['field_h'] ?>" name="description"><?= Validate::checkout(Vars::$SYSTEM_SET['meta_desc']) ?></textarea>
             <br/><br/>
             <input class="btn btn-primary btn-large" type="submit" name="submit" value=" <?= lng('save') ?> "/>
             <a class="btn" href="<?= Vars::$MODULE_URI ?>"><?= lng('back') ?></a>

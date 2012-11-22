@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
     mysql_query("UPDATE `cms_download_files` SET `about` = '$text' WHERE `id` = '" . Vars::$ID ."' LIMIT 1");
     header('Location: ' . Vars::$URI . '?act=view&id=' . Vars::$ID);
 } else {
-    echo '<div class="phdr"><b>' . lng('dir_desc') . ':</b> ' . Validate::filterString($res_down['rus_name']) . '</div>' .
+    echo '<div class="phdr"><b>' . lng('dir_desc') . ':</b> ' . Validate::checkout($res_down['rus_name']) . '</div>' .
     '<div class="list1"><form action="' . Vars::$URI . '?act=edit_about&amp;id=' . Vars::$ID . '" method="post">' .
     '<small>' . lng('desc_file_faq') . '</small><br />' .
     '<textarea name="opis">' . htmlentities($res_down['about'], ENT_QUOTES, 'UTF-8') . '</textarea><br />' .

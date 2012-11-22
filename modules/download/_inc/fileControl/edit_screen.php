@@ -67,7 +67,7 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
 	Форма выгрузки
 	-----------------------------------------------------------------
 	*/
-	echo '<div class="phdr"><b>' . lng('screen_file') . '</b>: ' . Validate::filterString($res_down['rus_name']) . '</div>' .
+	echo '<div class="phdr"><b>' . lng('screen_file') . '</b>: ' . Validate::checkout($res_down['rus_name']) . '</div>' .
  	'<div class="list1"><form action="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data"><input type="file" name="screen"/><br />' .
  	'<input type="submit" name="submit" value="' . lng('upload') . '"/></form></div>' .
  	'<div class="phdr"><small>' . lng('file_size_faq') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb' .

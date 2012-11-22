@@ -141,7 +141,7 @@ class Download extends Vars
             $icon_id = isset(self::$extensions[$format_file]) ? self::$extensions[$format_file] : 9;
 			$out .= Functions::getIcon('filetype-' . $icon_id . '.png') . '&nbsp;';
 		}
-        $out .= '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res_down['id'] . '">' . Validate::filterString($res_down['rus_name']) . '</a> (' . $res_down['field'] . ')';
+        $out .= '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['field'] . ')';
         if ($res_down['time'] > $old) {
             $out .= ' <span class="red">(NEW)</span>';
         }
@@ -155,7 +155,7 @@ class Download extends Vars
             if (mb_strlen($about) > 100) {
                 $about = mb_substr($about, 0, 90) . '...';
             }
-            $sub = '<div>' . Validate::filterString($about, 2) . '</div>';
+            $sub = '<div>' . Validate::checkout($about, 2) . '</div>';
         }
         if (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7) {
             $sub .= '<a href="' . Vars::$URI . '?act=comments&amp;id=' . $res_down['id'] . '">' . lng('comments') . '</a> (' . $res_down['total'] . ')';
@@ -254,7 +254,7 @@ class Download extends Vars
     */
     public static function mp3tagsOut($name, $value = FALSE)
     {
-        if (!$value) return Validate::filterString(iconv('windows-1251', 'UTF-8', $name));
+        if (!$value) return Validate::checkout(iconv('windows-1251', 'UTF-8', $name));
         else  return iconv('UTF-8', 'windows-1251', $name);
     }
 
@@ -354,11 +354,11 @@ class Download extends Vars
             if($sql) {
 				$req_cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `dir` IN ('" . implode("','", $sql) . "') ORDER BY `id` ASC");
 				while ($res_cat = mysql_fetch_assoc($req_cat)) {
-                	$category[] = '<a href="' . Vars::$URI . '?id=' . $res_cat['id'] . '">' . Validate::filterString($res_cat['rus_name']) . '</a>';
+                	$category[] = '<a href="' . Vars::$URI . '?id=' . $res_cat['id'] . '">' . Validate::checkout($res_cat['rus_name']) . '</a>';
 				}
 			}
 		}
-        if(isset($array['name'])) $category[] = Validate::filterString($array['name']);
+        if(isset($array['name'])) $category[] = Validate::checkout($array['name']);
 		return functions::displayMenu($category);
 	}
 }

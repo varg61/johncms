@@ -108,8 +108,8 @@ class Comments
                         } else {
                             $text = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>' .
                                 ' (' . Functions::displayDate($res['time']) . ')<br />' .
-                                Validate::filterString($res['text']);
-                            $reply = Validate::filterString($res['reply']);
+                                Validate::checkout($res['text']);
+                            $reply = Validate::checkout($res['reply']);
                             echo $this->_messageForm('&amp;mod=reply&amp;item=' . $this->item, $text, $reply) .
                                 '<div class="phdr"><a href="' . $this->url . '">' . lng('back') . '</a></div>';
                         }
@@ -156,7 +156,7 @@ class Comments
                         } else {
                             $author = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
                             $author .= ' (' . Functions::displayDate($res['time']) . ')<br />';
-                            $text = Validate::filterString($res['text']);
+                            $text = Validate::checkout($res['text']);
                             echo $this->_messageForm('&amp;mod=edit&amp;item=' . $this->item, $author, $text);
                         }
                     } else {
@@ -267,7 +267,7 @@ class Comments
                             $this->access_edit ? '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $res['subid'] . '">' . lng('edit') . '</a>' : '',
                             $this->access_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . lng('delete') . '</a>' : ''
                         );
-                        $text = Validate::filterString($res['text'], 1, 1);
+                        $text = Validate::checkout($res['text'], 1, 1);
                         if (Vars::$USER_SET['smileys'])
                             $text = Functions::smileys($text, $res['rights'] >= 1 ? 1 : 0);
                         if (isset($attributes['edit_count'])) {
@@ -276,7 +276,7 @@ class Comments
                                 '[' . $attributes['edit_count'] . ']</b></small></span>';
                         }
                         if (!empty($res['reply'])) {
-                            $reply = Validate::filterString($res['reply'], 1, 1);
+                            $reply = Validate::checkout($res['reply'], 1, 1);
                             if (Vars::$USER_SET['smileys'])
                                 $reply = Functions::smileys($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
                             $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><small>' .

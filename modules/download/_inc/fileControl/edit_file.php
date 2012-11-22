@@ -23,7 +23,7 @@ if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_dow
 }
 if (isset($_POST['submit'])) {
     $name = isset($_POST['text']) ? trim($_POST['text']) : null;
-    $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::filterString(mb_substr($_POST['name_link'], 0, 200))) : null;
+    $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::checkout(mb_substr($_POST['name_link'], 0, 200))) : null;
     if ($name_link && $name) {
         $name = mysql_real_escape_string($name);
         mysql_query("UPDATE `cms_download_files` SET `rus_name`='$name', `text` = '$name_link' WHERE `id` = '" . Vars::$ID ."' LIMIT 1");
@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
     } else
         echo functions::displayError(lng('error_empty_fields'), '<a href="' . Vars::$URI . '?act=edit_file&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
 } else {
-    $file_name = Validate::filterString($res_down['rus_name']);
+    $file_name = Validate::checkout($res_down['rus_name']);
     echo '<div class="phdr"><b>' . $file_name . '</b></div>' .
     '<div class="list1"><form action="' . Vars::$URI . '?act=edit_file&amp;id=' . Vars::$ID . '" method="post">' .
     lng('name_file') . '(мах. 200):<br /><input type="text" name="text" value="' . $file_name . '"/><br />' .

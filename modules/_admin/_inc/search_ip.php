@@ -24,7 +24,7 @@ $menu = array(
 echo '<div class="phdr"><a href="index.php"><b>' . lng('admin_panel') . '</b></a> | ' . lng('ip_search') . '</div>' .
      '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
      '<form action="index.php?act=search_ip" method="post"><div class="gmenu"><p>' .
-     '<input type="text" name="search" value="' . Validate::filterString($search) . '" />' .
+     '<input type="text" name="search" value="' . Validate::checkout($search) . '" />' .
      '<input type="submit" value="' . lng('search') . '" name="submit" /><br />' .
      '</p></div></form>';
 if ($search) {

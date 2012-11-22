@@ -119,7 +119,7 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/' . $tmp;
 -----------------------------------------------------------------
 */
 
-echo '<div class="phdr"><b>' . Validate::filterString($title_pages) . '</b></div>' .
-'<div class="menu">' . lng('download') . ': <a href="' . Validate::filterString($tmp) . '">JAR</a> | <a href="' . Validate::filterString($tmp_jad) . '">JAD</a></div>' .
+echo '<div class="phdr"><b>' . Validate::checkout($title_pages) . '</b></div>' .
+'<div class="menu">' . lng('download') . ': <a href="' . Validate::checkout($tmp) . '">JAR</a> | <a href="' . Validate::checkout($tmp_jad) . '">JAD</a></div>' .
 '<div class="phdr">' . lng('time_limit') . '</div>' .
 '<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></p>';

@@ -221,7 +221,7 @@ if (isset($actions[Vars::$ACT])
                 echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $count_pages, 1) . '</div>';
             }
             // Текст статьи
-            $text = Validate::filterString(mb_substr($req['text'], $int_start, $int_lenght), 1, 1);
+            $text = Validate::checkout(mb_substr($req['text'], $int_start, $int_lenght), 1, 1);
             if (Vars::$USER_SET['smileys'])
                 $text = Functions::smileys($text, Vars::$USER_RIGHTS ? 1 : 0);
             echo '<div class="list2">' . $text . '</div>';

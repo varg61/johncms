@@ -198,8 +198,8 @@ switch (Vars::$MOD) {
         }
         if (isset($_POST['submit'])) {
             // Принимаем данные
-            $name = isset($_POST['name']) ? Validate::filterString($_POST['name']) : '';
-            $desc = isset($_POST['desc']) ? Validate::filterString($_POST['desc']) : '';
+            $name = isset($_POST['name']) ? Validate::checkout($_POST['name']) : '';
+            $desc = isset($_POST['desc']) ? Validate::checkout($_POST['desc']) : '';
             // Проверяем на ошибки
             $error = array();
             if (!$name)
@@ -266,8 +266,8 @@ switch (Vars::$MOD) {
             if ($res['type'] == 'f' || $res['type'] == 'r') {
                 if (isset($_POST['submit'])) {
                     // Принимаем данные
-                    $name = isset($_POST['name']) ? Validate::filterString($_POST['name']) : '';
-                    $desc = isset($_POST['desc']) ? Validate::filterString($_POST['desc']) : '';
+                    $name = isset($_POST['name']) ? Validate::checkout($_POST['name']) : '';
+                    $desc = isset($_POST['desc']) ? Validate::checkout($_POST['desc']) : '';
                     $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
                     // проверяем на ошибки
                     $error = array();
@@ -573,7 +573,7 @@ switch (Vars::$MOD) {
                     $posttime = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
                     $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['fid'] . "'"), 0) / Vars::$USER_SET['page_size']);
                     $text = mb_substr($res['text'], 0, 500);
-                    $text = Validate::filterString($text, 1, 0);
+                    $text = Validate::checkout($text, 1, 0);
                     $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                     $theme = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
                     $text = '<b>' . $theme['text'] . '</b> <a href="../forum/index.php?id=' . $theme['id'] . '&amp;page=' . $page . '">&gt;&gt;</a><br />' . $text;
@@ -624,7 +624,7 @@ switch (Vars::$MOD) {
                     }
                 }
                 foreach ($_POST['moder'] as $v) {
-                    $v = Validate::filterString($v);
+                    $v = Validate::checkout($v);
                     $q2 = mysql_query("SELECT * FROM `forum` WHERE `type` = 'a' AND `from` = '" . mysql_real_escape_string($v) . "' AND `refid` = " . Vars::$ID);
                     $q3 = mysql_num_rows($q2);
                     if ($q3 == 0) {

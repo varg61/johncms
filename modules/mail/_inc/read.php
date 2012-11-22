@@ -29,7 +29,7 @@ if(Vars::$ID) {
 				mysql_query( "UPDATE `cms_mail_messages` SET `read`='1' WHERE `contact_id`='" .
 					Vars::$USER_ID . "' AND `id`='{$result['id']}'" );
 			$row = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id`='$id'"));
-			$text = Validate::filterString( $result['text'], 1, 1 );
+			$text = Validate::checkout( $result['text'], 1, 1 );
 			if ( Vars::$USER_SET['smileys'] )
 				$text = Functions::smileys( $text, $result['rights'] >= 1 ? 1 : 0 );
 			$tpl->contact_login = $row['nickname'];

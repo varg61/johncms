@@ -66,8 +66,8 @@ if (!file_exists($file)) {
 Ссылка на файл
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><b>' . Validate::filterString($title_pages) . '</b></div>' .
-'<div class="menu"><a href="' . Validate::filterString($file) . '">' . lng('download_in') . ' ZIP</a></div>' .
-'<div class="rmenu"><input type="text" value="' . Vars::$HOME_URL . '/' . Validate::filterString($file) . '"/><b></b></div>' .
+echo '<div class="phdr"><b>' . Validate::checkout($title_pages) . '</b></div>' .
+'<div class="menu"><a href="' . Validate::checkout($file) . '">' . lng('download_in') . ' ZIP</a></div>' .
+'<div class="rmenu"><input type="text" value="' . Vars::$HOME_URL . '/' . Validate::checkout($file) . '"/><b></b></div>' .
 '<div class="phdr">' . lng('time_limit') . '</div>' .
 '<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></p>';

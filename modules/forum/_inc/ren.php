@@ -22,7 +22,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         exit;
     }
     if (isset($_POST['submit'])) {
-        $nn = isset($_POST['nn']) ? Validate::filterString($_POST['nn']) : false;
+        $nn = isset($_POST['nn']) ? Validate::checkout($_POST['nn']) : false;
         if (!$nn) {
             echo Functions::displayError(lng('error_topic_name'), '<a href="' . Vars::$URI . '?act=ren&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
             exit;

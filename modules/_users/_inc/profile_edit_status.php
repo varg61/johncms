@@ -18,7 +18,7 @@ global $tpl;
 Смена статуса
 -----------------------------------------------------------------
 */
-$tpl->status = Validate::filterString($tpl->user['status']);
+$tpl->status = Validate::checkout($tpl->user['status']);
 if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
     if (isset($_POST['submit'])
         && isset($_POST['status'])
@@ -28,7 +28,7 @@ if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
         && $_POST['status'] != $tpl->user['status']
     ) {
         $status = trim($_POST['status']);
-        $tpl->status = Validate::filterString($status);
+        $tpl->status = Validate::checkout($status);
         if (empty($status)
             || (mb_strlen($status) > 2 && mb_strlen($status) < 51)
         ) {

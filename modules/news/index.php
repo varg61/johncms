@@ -26,7 +26,7 @@ switch (Vars::$ACT) {
                 && $_POST['form_token'] == $_SESSION['form_token']
             ) {
                 $error = array();
-                $name = isset($_POST['name']) ? Validate::filterString($_POST['name']) : FALSE;
+                $name = isset($_POST['name']) ? Validate::checkout($_POST['name']) : FALSE;
                 $text = isset($_POST['text']) ? trim($_POST['text']) : FALSE;
                 if (empty($name)) {
                     $error['title'] = lng('error_title');
@@ -138,7 +138,7 @@ switch (Vars::$ACT) {
                         $error[] = lng('error_title');
                     if (empty($_POST['text']))
                         $error[] = lng('error_text');
-                    $name = Validate::filterString($_POST['name']);
+                    $name = Validate::checkout($_POST['name']);
                     $text = mysql_real_escape_string(trim($_POST['text']));
                     if (!$error) {
                         mysql_query("UPDATE `cms_news` SET
@@ -157,8 +157,8 @@ switch (Vars::$ACT) {
                     // Выводим форму добавления новости
                     $req = mysql_query("SELECT * FROM `cms_news` WHERE `id` = " . Vars::$ID);
                     $res = mysql_fetch_assoc($req);
-                    $tpl->title = Validate::filterString($res['name']);
-                    $tpl->text = Validate::filterString($res['text']);
+                    $tpl->title = Validate::checkout($res['name']);
+                    $tpl->text = Validate::checkout($res['text']);
                     $tpl->form_token = mt_rand(100, 10000);
                     $_SESSION['form_token'] = $tpl->form_token;
                     $tpl->contents = $tpl->includeTpl('news_edit');
@@ -259,7 +259,7 @@ switch (Vars::$ACT) {
         if ($tpl->total) {
             $req = mysql_query("SELECT * FROM `cms_news` ORDER BY `id` DESC " . Vars::db_pagination());
             for ($i = 0; $tpl->list[$i] = mysql_fetch_assoc($req); ++$i) {
-                $tpl->list[$i]['text'] = Validate::filterString($tpl->list[$i]['text'], 1, 1, 1);
+                $tpl->list[$i]['text'] = Validate::checkout($tpl->list[$i]['text'], 1, 1, 1);
             }
             unset($tpl->list[$i]);
         }

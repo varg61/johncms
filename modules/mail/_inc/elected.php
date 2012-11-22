@@ -59,7 +59,7 @@ if ( Vars::$ID )
                 $i = 1;
                 while ( $row = mysql_fetch_assoc( $query ) )
                 {
-                    $text = Validate::filterString( $row['text'], 1, 1 );
+                    $text = Validate::checkout( $row['text'], 1, 1 );
                     if ( Vars::$USER_SET['smileys'] )
                         $text = Functions::smileys( $text, $row['rights'] >= 1 ? 1 : 0 );
                     $array[] = array(

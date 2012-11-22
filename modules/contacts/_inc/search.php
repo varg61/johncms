@@ -26,7 +26,7 @@ if ( $search && Validate::nickname( $search, 1 ) === true )
 {
     //Проверяем валидность введенных данных
 	$search_db = strtr( $search, array( '_' => '\\_', '%' => '\\%' ) );
-    $tpl->search = Validate::filterString( $search );
+    $tpl->search = Validate::checkout( $search );
     $search_db = '%' . $search_db . '%';
 	//Считаем количество найденных контактов
     $total = mysql_result( mysql_query( "SELECT COUNT(*) 

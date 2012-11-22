@@ -26,7 +26,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayError(lng('error_empty_title'), '<a href="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
             exit;
         }
-        $text = Validate::filterString($_POST['text']);
+        $text = Validate::checkout($_POST['text']);
         $user = isset($_POST['user']);
         $typs = intval($_POST['typs']);
         mysql_query("INSERT INTO `lib` SET

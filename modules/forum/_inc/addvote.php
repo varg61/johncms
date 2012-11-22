@@ -45,11 +45,11 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     } else {
         echo '<form action="' . Vars::$URI . '?act=addvote&amp;id=' . Vars::$ID . '" method="post">' .
              '<br />' . lng('voting') . ':<br/>' .
-             '<input type="text" size="20" maxlength="150" name="vote_name" value="' . Validate::filterString($vote_name) . '"/><br/>';
+             '<input type="text" size="20" maxlength="150" name="vote_name" value="' . Validate::checkout($vote_name) . '"/><br/>';
         if (isset($_POST['plus'])) ++$vote_count;
         elseif (isset($_POST['minus'])) --$vote_count;
         for ($i = 0; $i < $vote_count; $i++) {
-            $answer[$i] = isset($_POST[$i]) ? Validate::filterString($_POST[$i]) : '';
+            $answer[$i] = isset($_POST[$i]) ? Validate::checkout($_POST[$i]) : '';
             echo lng('answer') . ' ' . ($i + 1) . '(max. 50): <br/><input type="text" name="' . $i . '" value="' . $answer[$i] . '"/><br/>';
         }
         echo '<input type="hidden" name="vote_count" value="' . $vote_count . '"/>';

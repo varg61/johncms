@@ -134,7 +134,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
             exit;
         }
-        $title_pages = Validate::filterString(mb_substr($res_down_cat['rus_name'], 0, 30));
+        $title_pages = Validate::checkout(mb_substr($res_down_cat['rus_name'], 0, 30));
         $textl = mb_strlen($res_down_cat['rus_name']) > 30 ? $title_pages . '...' : $title_pages;
         $navigation = Download::navigation(array('dir' => $res_down_cat['dir'], 'refid' => $res_down_cat['refid'], 'name' => $res_down_cat['rus_name']));
         $total_new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old AND `dir` LIKE '" . ($res_down_cat['dir']) . "%'"), 0);
@@ -187,7 +187,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             while ($res_down = mysql_fetch_assoc($req_down)) {
                 echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') .
                     Functions::loadModuleImage('folder.png') . '&#160;' .
-                    '<a href="' . Vars::$URI . '?id=' . $res_down['id'] . '">' . Validate::filterString($res_down['rus_name']) . '</a> (' . $res_down['total'] . ')';
+                    '<a href="' . Vars::$URI . '?id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['total'] . ')';
                 if ($res_down['field'])
                     echo '<div><small>' . lng('extensions') . ': <span class="green"><b>' . $res_down['text'] . '</b></span></small></div>';
                 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6 || !empty($res_down['desc'])) {
@@ -198,7 +198,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         '<a href="' . Vars::$URI . '?act=delete_cat&amp;id=' . $res_down['id'] . '">' . lng('delete') . '</a>'
                     );
                     echo '<div class="sub">' .
-                        (!empty($res_down['desc']) ? '<div class="gray">' . Validate::filterString($res_down['desc'], 1, 1) . '</div>' : '') .
+                        (!empty($res_down['desc']) ? '<div class="gray">' . Validate::checkout($res_down['desc'], 1, 1) . '</div>' : '') .
                         (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6 ? Functions::displayMenu($menu) : '') .
                         '</div>';
                 }

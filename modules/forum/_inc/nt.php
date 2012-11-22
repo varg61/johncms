@@ -68,7 +68,7 @@ if (!mysql_num_rows($req_r)) {
     echo Functions::displayError(lng('error_wrong_data'));
     exit;
 }
-$th = isset($_POST['th']) ? Validate::filterString(mb_substr(trim($_POST['th']), 0, 100)) : '';
+$th = isset($_POST['th']) ? Validate::checkout(mb_substr(trim($_POST['th']), 0, 100)) : '';
 $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
 if (isset($_POST['msgtrans'])) {
     $th = Functions::translit($th);
@@ -161,7 +161,7 @@ if (isset($_POST['submit'])) {
             exit;
         }
     }
-    $msg_pre = Validate::filterString($msg, 1, 1);
+    $msg_pre = Validate::checkout($msg, 1, 1);
     if (Vars::$USER_SET['smileys'])
         $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
     $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
@@ -180,7 +180,7 @@ if (isset($_POST['submit'])) {
         '<p><h3>' . lng('post') . '</h3>';
     if (!Vars::$IS_MOBILE)
         echo '</p><p>' . TextParser::autoBB('form', 'msg');
-    echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? Validate::filterString($_POST['msg']) : '') . '</textarea></p>' .
+    echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? Validate::checkout($_POST['msg']) : '') . '</textarea></p>' .
         '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
     if (Vars::$USER_SET['translit'])
         echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . lng('translit');

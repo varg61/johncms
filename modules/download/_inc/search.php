@@ -25,7 +25,7 @@ $search = $search_post ? $search_post : $search_get;
 */
 echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a> | ' . lng('search') . '</div>' .
 '<form action="' . Vars::$URI . '?act=search" method="post"><div class="gmenu"><p>' .
-lng('name_file') . ':<br /><input type="text" name="search" value="' . Validate::filterString($search) . '" /><br />' .
+lng('name_file') . ':<br /><input type="text" name="search" value="' . Validate::checkout($search) . '" /><br />' .
 '<input name="id" type="checkbox" value="1" ' . (Vars::$ID ? 'checked="checked"' : '') . '/> ' . lng('search_for_desc') . '<br />' .
 '<input type="submit" value="Поиск" name="submit" /><br />' .
 '</p></div></form>';
@@ -60,7 +60,7 @@ if ($search && !$error) {
 	echo '<div class="phdr"><b>' . lng('search_result') . '</b></div>';
 	$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND $sql"), 0);
 	if ($total > Vars::$USER_SET['page_size']) {
-		$check_search = Validate::filterString(rawurlencode($search));
+		$check_search = Validate::checkout(rawurlencode($search));
 		echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=search&amp;search=' . $check_search . '&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
     if ($total) {

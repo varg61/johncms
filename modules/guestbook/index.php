@@ -154,10 +154,10 @@ switch (Vars::$ACT) {
                 $res = mysql_fetch_assoc($req);
                 echo'<div class="menu">' .
                     '<div class="quote"><b>' . $res['nickname'] . '</b>' .
-                    '<br />' . Validate::filterString($res['text']) . '</div>' .
+                    '<br />' . Validate::checkout($res['text']) . '</div>' .
                     '<form name="form" action="' . Vars::$URI . '?act=reply&amp;id=' . Vars::$ID . ($mod ? '&amp;mod=adm' : '') . '" method="post">' .
                     '<p><h3>' . lng('reply') . '</h3>' . TextParser::autoBB('form', 'otv') .
-                    '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="otv">' . Validate::filterString($res['otvet']) . '</textarea></p>' .
+                    '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="otv">' . Validate::checkout($res['otvet']) . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . lng('reply') . '"/></p>' .
                     '</form></div>' .
                     '<div class="phdr"><a href="faq.php?act=trans">' . lng('translit') . '</a> | <a href="faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
@@ -285,14 +285,14 @@ switch (Vars::$ACT) {
                 $text = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
                 if ($res['user_id']) {
                     // Для зарегистрированных показываем ссылки и смайлы
-                    $post = Validate::filterString($res['text'], 1, 1);
+                    $post = Validate::checkout($res['text'], 1, 1);
                     if (Vars::$USER_SET['smileys']) {
                         $post = Functions::smileys($post, $res['rights'] >= 1 ? 1 : 0);
                     }
                 } else {
                     // Для гостей обрабатываем имя и фильтруем ссылки
-                    $res['nickname'] = Validate::filterString($res['nickname']);
-                    $post = Functions::antiLink(Validate::filterString($res['text'], 0, 2));
+                    $res['nickname'] = Validate::checkout($res['nickname']);
+                    $post = Functions::antiLink(Validate::checkout($res['text'], 0, 2));
                 }
                 if ($res['edit_count']) {
                     // Если пост редактировался, показываем кем и когда
@@ -300,7 +300,7 @@ switch (Vars::$ACT) {
                 }
                 if (!empty($res['otvet'])) {
                     // Ответ Администрации
-                    $reply = Validate::filterString($res['otvet'], 1, 1);
+                    $reply = Validate::checkout($res['otvet'], 1, 1);
                     if (Vars::$USER_SET['smileys']) {
                         $reply = Functions::smileys($reply, 1);
                     }

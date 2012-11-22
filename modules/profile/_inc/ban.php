@@ -286,7 +286,7 @@ switch (Vars::$MOD) {
                 echo Functions::getImage(($remain > 0 ? 'red' : 'green') . '.png') . '&#160;' .
                      '<b>' . lng('ban_' . $res['ban_type']) . '</b>' .
                      ' <span class="gray">(' . date("d.m.Y / H:i", $res['ban_while']) . ')</span>' .
-                     '<br />' . Validate::filterString($res['ban_reason']) .
+                     '<br />' . Validate::checkout($res['ban_reason']) .
                      '<div class="sub">';
                 if (Vars::$USER_RIGHTS)
                     echo '<span class="gray">' . lng('ban_who') . ':</span> ' . $res['ban_who'] . '<br />';

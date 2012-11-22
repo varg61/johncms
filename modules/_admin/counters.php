@@ -34,7 +34,7 @@ switch (Vars::$ACT) {
                 }
                 $res = mysql_fetch_array($req);
                 echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('counters') . '</b></a> | ' . lng('viewing') . '</div>' .
-                    '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Validate::filterString($res['name']) . '</b></div>' .
+                    '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Validate::checkout($res['name']) . '</b></div>' .
                     ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . lng('counter_mod1') . '</h3>' . $res['link1'] . '</p>' .
                     '<p><h3>' . lng('counter_mod2') . '</h3>' . $res['link2'] . '</p>' .
                     '<p><h3>' . lng('display_mode') . '</h3>';
@@ -129,7 +129,7 @@ switch (Vars::$ACT) {
                 echo '<form action="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
                 echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('counters') . '</b></a> | ' . lng('delete') . '</div>';
                 $res = mysql_fetch_array($req);
-                echo '<div class="rmenu"><p><h3>' . Validate::filterString($res['name']) . '</h3>' . lng('delete_confirmation') . '</p><p><input type="submit" value="' . lng('delete') . '" name="submit" /></p></div>';
+                echo '<div class="rmenu"><p><h3>' . Validate::checkout($res['name']) . '</h3>' . lng('delete_confirmation') . '</p><p><input type="submit" value="' . lng('delete') . '" name="submit" /></p></div>';
                 echo '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></div></form>';
             }
         } else {
@@ -155,7 +155,7 @@ switch (Vars::$ACT) {
                 exit;
             }
             echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('counters') . '</b></a> | ' . lng('preview') . '</div>' .
-                '<div class="menu"><p><h3>' . lng('title') . '</h3><b>' . Validate::filterString($name) . '</b></p>' .
+                '<div class="menu"><p><h3>' . lng('title') . '</h3><b>' . Validate::checkout($name) . '</b></p>' .
                 '<p><h3>' . lng('counter_mod1') . '</h3>' . $link1 . '</p>' .
                 '<p><h3>' . lng('counter_mod2') . '</h3>' . $link2 . '</p></div>' .
                 '<div class="rmenu">' . lng('counter_preview_help') . '</div>' .
@@ -179,7 +179,7 @@ switch (Vars::$ACT) {
                 $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 if (mysql_num_rows($req) > 0) {
                     $res = mysql_fetch_array($req);
-                    $name = Validate::filterString($res['name']);
+                    $name = Validate::checkout($res['name']);
                     $link1 = htmlspecialchars($res['link1']);
                     $link2 = htmlspecialchars($res['link2']);
                     $mode = $res['mode'];
@@ -228,7 +228,7 @@ switch (Vars::$ACT) {
                 exit;
             }
             mysql_query("UPDATE `cms_counters` SET
-            `name` = '" . mysql_real_escape_string(Validate::filterString($name)) . "',
+            `name` = '" . mysql_real_escape_string(Validate::checkout($name)) . "',
             `link1` = '" . mysql_real_escape_string($link1) . "',
             `link2` = '" . mysql_real_escape_string($link2) . "',
             `mode` = '$mode'
@@ -244,7 +244,7 @@ switch (Vars::$ACT) {
             }
             // Режим добавления
             mysql_query("INSERT INTO `cms_counters` SET
-            `name` = '" . mysql_real_escape_string(Validate::filterString($name)) . "',
+            `name` = '" . mysql_real_escape_string(Validate::checkout($name)) . "',
             `sort` = '$sort',
             `link1` = '" . mysql_real_escape_string($link1) . "',
             `link2` = '" . mysql_real_escape_string($link2) . "',
@@ -268,7 +268,7 @@ switch (Vars::$ACT) {
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                 echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                     Functions::getImage(($res['switch'] == 1 ? 'green' : 'red') . '.png', '', 'class="left"') . '&#160;' .
-                    '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::filterString($res['name']) . '</b></a><br />' .
+                    '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a><br />' .
                     '<div class="sub">' .
                     '<a href="' . Vars::$URI . '?act=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a> | ' .
                     '<a href="' . Vars::$URI . '?act=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a> | ' .

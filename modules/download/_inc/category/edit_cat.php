@@ -62,7 +62,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                     $error_format .= 1;
             }
             $user_down = 1;
-            $format_files = Validate::filterString($format);
+            $format_files = Validate::checkout($format);
         } else {
             $user_down = 0;
             $format_files = '';
@@ -78,11 +78,11 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         mysql_query("UPDATE `cms_download_category` SET `field`='$user_down', `text` = '$format_files', `desc`='$desc', `rus_name`='$rus_name' WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
         header('location: ' . VARS::$URI . '?id=' . VARS::$ID);
     } else {
-        $name = Validate::filterString($res['rus_name']);
+        $name = Validate::checkout($res['rus_name']);
         echo '<div class="phdr"><b>' . lng('download_edit_cat') . ':</b> ' . $name . '</div>' .
         '<div class="menu"><form action="' . VARS::$URI . '?act=edit_cat&amp;id=' . VARS::$ID . '" method="post">' .
          lng('dir_name_view') . ':<br/><input type="text" name="rus_name" value="' . $name . '"/><br/>' .
-         lng('dir_desc') . ' (max. 500):<br/><textarea name="desc" rows="4">' . Validate::filterString($res['desc']) . '</textarea><br/>';
+         lng('dir_desc') . ' (max. 500):<br/><textarea name="desc" rows="4">' . Validate::checkout($res['desc']) . '</textarea><br/>';
        	if (Vars::$USER_RIGHTS == 9) {
             echo '<div class="sub"><input type="checkbox" name="user_down" value="1"' . ($res['field'] ? ' checked="checked"' : '') . '/> ' . lng('user_download') . '<br/>' .
             lng('extensions') . ':<br/><input type="text" name="format" value="' . $res['text'] . '"/></div>' .

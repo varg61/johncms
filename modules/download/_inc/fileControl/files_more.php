@@ -29,14 +29,14 @@ if ($edit) {
 	Изменяем файл
 	-----------------------------------------------------------------
 	*/
-    $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::filterString(mb_substr($_POST['name_link'], 0, 200))) : null;
+    $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::checkout(mb_substr($_POST['name_link'], 0, 200))) : null;
     $req_file_more = mysql_query("SELECT `rus_name` FROM `cms_download_more` WHERE `id` = '$edit' LIMIT 1");
     if ($name_link && mysql_num_rows($req_file_more) && isset($_POST['submit'])) {
         mysql_query("UPDATE `cms_download_more` SET `rus_name`='$name_link' WHERE `id` = '$edit' LIMIT 1");
         header('Location: ' . Vars::$URI . '?act=files_more&id=' . Vars::$ID);
     } else {
         $res_file_more = mysql_fetch_assoc($req_file_more);
-        echo '<div class="phdr"><b>' . Validate::filterString($res_down['rus_name']) . '</b></div>' .
+        echo '<div class="phdr"><b>' . Validate::checkout($res_down['rus_name']) . '</b></div>' .
         '<div class="gmenu"><b>' . lng('edit_file') . '</b></div>' .
         '<div class="list1"><form action="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '&amp;edit=' . $edit . '"  method="post">' .
          lng('link_file') . ' (мах. 200)<span class="red">*</span>:<br />' .
@@ -94,7 +94,7 @@ if ($edit) {
     }
     if ($do_file) {
         $new_file = isset($_POST['new_file']) ? trim($_POST['new_file']) : null;
-        $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::filterString(mb_substr($_POST['name_link'], 0, 200))) : null;
+        $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::checkout(mb_substr($_POST['name_link'], 0, 200))) : null;
 		$ext = explode(".", $fname);
         if (!empty($new_file)) {
             $fname = strtolower($new_file . '.' . $ext[1]);
@@ -141,7 +141,7 @@ if ($edit) {
 	Выводим форму
 	-----------------------------------------------------------------
 	*/
-	echo '<div class="phdr"><b>' . lng('files_more') . ':</b> ' . Validate::filterString($res_down['rus_name']) . '</div>' .
+	echo '<div class="phdr"><b>' . lng('files_more') . ':</b> ' . Validate::checkout($res_down['rus_name']) . '</div>' .
     '<div class="menu"><form action="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data">' .
     lng('select_file') . '<span class="red">*</span>::<br /><input type="file" name="fail"/><br />' .
     lng('or_link_to_it') . ':<br /><input type="post" name="link_file" value=""/><br />' .

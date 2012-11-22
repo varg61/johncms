@@ -411,7 +411,7 @@ switch (Vars::$ACT) {
         echo '<div class="phdr"><b>' . $lng_list[$language] . '</b>: <a href="index.php?act=languages&amp;mod=module&amp;language=' . $language . '"><b>' . lng('modules') . '</b></a> | ' . $name_module . ': ' . lng('search') . '</div>';
         echo '<div class="topmenu">' . Functions::displayMenu($array_menu) . '</div>';
         echo '<div class="gmenu"><form action="?act=languages&amp;mod=search&amp;language=' . $language . '&amp;module=' . $name_module . '" method="post">' .
-            '<p><input type="text" value="' . ($search ? Validate::filterString($search) : '') . '" name="search" />' .
+            '<p><input type="text" value="' . ($search ? Validate::checkout($search) : '') . '" name="search" />' .
             '<input type="submit" value="' . lng('search') . '" name="submit" />' .
             '</p></form></div>';
         $i = 0;

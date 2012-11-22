@@ -112,7 +112,7 @@ $i = 0;
 while ($arr = mysql_fetch_array($req)){
     echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
     ++$i;
-    echo '<a href="'.Validate::filterString($arr['url']).'">'.Validate::filterString($arr['query']).'</a> ['.Functions::displayDate($arr['date']).']<br/>
+    echo '<a href="'.Validate::checkout($arr['url']).'">'.Validate::checkout($arr['query']).'</a> ['.Functions::displayDate($arr['date']).']<br/>
     <small>IP: <a href="'.Vars::$HOME_URL.'/admin?act=search_ip&amp;ip='.long2ip($arr['ip']).'">'.long2ip($arr['ip']).'</a>';
     if($day !== 'seven' && $day !== 'two'){ echo' '.lng('movies').' '.lng('today').': '.$arr['today']; }
     echo' '.lng('total').': '.$arr['count'];

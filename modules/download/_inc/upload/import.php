@@ -32,7 +32,7 @@ if (Vars::$USER_RIGHTS == 4  || Vars::$USER_RIGHTS  >= 6) {
             $fname = basename($link);
             $new_file = isset($_POST['new_file']) ? trim($_POST['new_file']) : null;
             $name = isset($_POST['text']) ? trim($_POST['text']) : null;
-            $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::filterString(mb_substr($_POST['name_link'], 0, 200))) : null;
+            $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::checkout(mb_substr($_POST['name_link'], 0, 200))) : null;
             $text = isset($_POST['opis']) ? mysql_real_escape_string(trim($_POST['opis'])) : null;
             $ext = explode(".", $fname);
             if (!empty($new_file)) {
@@ -59,7 +59,7 @@ if (Vars::$USER_RIGHTS == 4  || Vars::$USER_RIGHTS  >= 6) {
             if (file_exists("$load_cat/$fname"))
                 $fname = time() . $fname;
 			if (copy('http://' . $link, "$load_cat/$fname")) {
-                echo '<div class="phdr"><b>' . lng('download_import') . ': ' . Validate::filterString($res['rus_name']) . '</b></div>';
+                echo '<div class="phdr"><b>' . lng('download_import') . ': ' . Validate::checkout($res['rus_name']) . '</b></div>';
                 echo '<div class="gmenu">' . lng('upload_file_ok') . '</div>';
               	$fname = mysql_real_escape_string($fname);
                 $name = mysql_real_escape_string(mb_substr($name, 0, 200));
@@ -107,7 +107,7 @@ if (Vars::$USER_RIGHTS == 4  || Vars::$USER_RIGHTS  >= 6) {
                 echo '<div class="rmenu">' . lng('upload_file_no') . '<br /><a href="' . Vars::$URI. '?act=import&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a></div>';
         }
     } else {
-        echo '<div class="phdr"><b>' . lng('download_import') . ': ' . Validate::filterString($res['rus_name']) . '</b></div>' .
+        echo '<div class="phdr"><b>' . lng('download_import') . ': ' . Validate::checkout($res['rus_name']) . '</b></div>' .
         '<div class="list1"><form action="' . Vars::$URI. '?act=import&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
         lng('download_link') . '<span class="red">*</span>:<br /><input type="post" name="fail" value="http://"/><br />' .
         lng('save_name_file') . ':<br /><input type="text" name="new_file"/><br />' .

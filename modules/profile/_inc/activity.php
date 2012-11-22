@@ -38,7 +38,7 @@ switch (Vars::$MOD) {
         if (mysql_num_rows($req)) {
             $i = 0;
             while ($res = mysql_fetch_assoc($req)) {
-                echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . Validate::filterString($res['text'], 2, 1) . '<div class="sub">' .
+                echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') . Validate::checkout($res['text'], 2, 1) . '<div class="sub">' .
                      '<span class="gray">(' . Functions::displayDate($res['time']) . ')</span>' .
                      '</div></div>';
                 ++$i;
@@ -65,7 +65,7 @@ switch (Vars::$MOD) {
                 $section = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
                 $category = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $section['refid'] . "'"));
                 $text = mb_substr($post['text'], 0, 300);
-                $text = Validate::filterString($text, 2, 1);
+                $text = Validate::checkout($text, 2, 1);
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                      '<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '">' . $res['text'] . '</a>' .
                      '<br />' . $text . '...<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '"> &gt;&gt;</a>' .
@@ -98,7 +98,7 @@ switch (Vars::$MOD) {
                 $section = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $topic['refid'] . "'"));
                 $category = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $section['refid'] . "'"));
                 $text = mb_substr($res['text'], 0, 300);
-                $text = Validate::filterString($text, 2, 1);
+                $text = Validate::checkout($text, 2, 1);
                 $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                 echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                      '<a href="' . Vars::$HOME_URL . '/forum?id=' . $topic['id'] . '">' . $topic['text'] . '</a>' .

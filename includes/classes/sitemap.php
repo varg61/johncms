@@ -98,7 +98,7 @@ class SiteMap
                 $res = mysql_fetch_assoc($req);
                 $req_a = mysql_query("SELECT * FROM `lib` WHERE `refid` = " . Vars::$ID . " AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` ASC LIMIT " . ($this->page * $this->links_count) . ", " . $this->links_count);
                 if (mysql_num_rows($req_a)) {
-                    while (($res_a = mysql_fetch_assoc($req_a)) !== false) $row[] = '<a href="' . Vars::$HOME_URL . '/library/index.php?id=' . $res_a['id'] . '">' . Validate::filterString($res_a['name']) . '</a>';
+                    while (($res_a = mysql_fetch_assoc($req_a)) !== false) $row[] = '<a href="' . Vars::$HOME_URL . '/library/index.php?id=' . $res_a['id'] . '">' . Validate::checkout($res_a['name']) . '</a>';
                     $out = '<div class="phdr"><b>' . Vars::$LNG['library'] . '</b> | ' . $res['text'] . '</div><div class="menu">' . implode('<br />' . "\r\n", $row) . '</div>';
                     return file_put_contents($file, $out) ? $out : 'Library Contents cache error';
                 }
@@ -129,10 +129,10 @@ class SiteMap
                         $pages = ceil($count / $this->links_count);
                         if ($pages > 1) {
                             for ($i = 0; $i < $pages; $i++) {
-                                $out[] = '<a href="' . Vars::$HOME_URL . '/forum/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . Validate::filterString($text) . ' (' . ($i + 1) . ')</a>';
+                                $out[] = '<a href="' . Vars::$HOME_URL . '/forum/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . Validate::checkout($text) . ' (' . ($i + 1) . ')</a>';
                             }
                         } else {
-                            $out[] = '<a href="' . Vars::$HOME_URL . '/forum/contents.php?id=' . $res['id'] . '">' . Validate::filterString($text) . '</a>';
+                            $out[] = '<a href="' . Vars::$HOME_URL . '/forum/contents.php?id=' . $res['id'] . '">' . Validate::checkout($text) . '</a>';
                         }
                     }
                 }
@@ -165,10 +165,10 @@ class SiteMap
                         $pages = ceil($count / $this->links_count);
                         if ($pages > 1) {
                             for ($i = 0; $i < $pages; $i++) {
-                                $out[] = '<a href="' . Vars::$HOME_URL . '/library/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . Validate::filterString($text) . ' (' . ($i + 1) . ')</a>';
+                                $out[] = '<a href="' . Vars::$HOME_URL . '/library/contents.php?id=' . $res['id'] . '&amp;p=' . $i . '">' . Validate::checkout($text) . ' (' . ($i + 1) . ')</a>';
                             }
                         } else {
-                            $out [] = '<a href="../library/contents.php?id=' . $res['id'] . '">' . Validate::filterString($text) . '</a>';
+                            $out [] = '<a href="../library/contents.php?id=' . $res['id'] . '">' . Validate::checkout($text) . '</a>';
                         }
                     }
                 }

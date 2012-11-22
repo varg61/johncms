@@ -25,7 +25,7 @@ if ($total) {
     for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<b><a href="?id=' . $res['id'] . '">' . htmlspecialchars($res['name']) . '</a></b>';
-        echo '<div class="sub">' . Validate::filterString($res['announce']) . '<br/>';
+        echo '<div class="sub">' . Validate::checkout($res['announce']) . '<br/>';
         echo '<span class="gray">' . lng('reads') . ': ' . $res['count'] . '</span>';
         echo'</div></div>';
     }

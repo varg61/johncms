@@ -31,10 +31,10 @@ $view = isset($_GET['view']);
 echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | <a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('personal_2') . '</a></div>' .
     '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
     '<div class="phdr">' . lng('album') . ': ';
-echo $view ? '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . Validate::filterString($album['name']) . '</b></a>' : '<b>' . Validate::filterString($album['name']) . '</b>';
+echo $view ? '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . Validate::checkout($album['name']) . '</b></a>' : '<b>' . Validate::checkout($album['name']) . '</b>';
 echo'</div>';
 if (!empty($album['description'])) {
-    echo '<div class="topmenu">' . Validate::filterString($album['description'], 1) . '</div>';
+    echo '<div class="topmenu">' . Validate::checkout($album['description'], 1) . '</div>';
 }
 
 /*
@@ -122,7 +122,7 @@ if ($total) {
             echo '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
         }
         if (!empty($res['description']))
-            echo '<div class="gray">' . Functions::smileys(Validate::filterString($res['description'], 1)) . '</div>';
+            echo '<div class="gray">' . Functions::smileys(Validate::checkout($res['description'], 1)) . '</div>';
         echo '<div class="sub">';
         if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayMenu(array(

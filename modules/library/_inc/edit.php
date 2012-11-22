@@ -33,7 +33,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                     exit;
                 }
                 $text = trim($_POST['text']);
-                $autor = isset($_POST['autor']) ? Validate::filterString($_POST['autor']) : '';
+                $autor = isset($_POST['autor']) ? Validate::checkout($_POST['autor']) : '';
                 $count = isset($_POST['count']) ? abs(intval($_POST['count'])) : '0';
                 if (!empty($_POST['anons'])) {
                     $anons = mb_substr(trim($_POST['anons']), 0, 100);
@@ -55,7 +55,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 ////////////////////////////////////////////////////////////
                 // Сохраняем отредактированную категорию                  //
                 ////////////////////////////////////////////////////////////
-                $text = Validate::filterString($_POST['text']);
+                $text = Validate::checkout($_POST['text']);
                 if (!empty($_POST['user'])) {
                     $user = intval($_POST['user']);
                 } else {
@@ -73,7 +73,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 ////////////////////////////////////////////////////////////
                 // Сохраняем отредактированный комментарий                //
                 ////////////////////////////////////////////////////////////
-                $text = Validate::filterString($_POST['text']);
+                $text = Validate::checkout($_POST['text']);
                 mysql_query("update `lib` set `text` = '" . mysql_real_escape_string($text) . "' where `id` = " . Vars::$ID);
                 header("location: " . Vars::$URI . "?id=$ms[refid]");
                 break;

@@ -128,7 +128,32 @@ class Validate
     }
 
     /*
-     * Фильтрация и обработка текстовых данных
+    * Фильтрация входящих строчных данных
+    */
+    public static function checkin($str){
+        if (function_exists('iconv')) {
+            $str = iconv("UTF-8", "UTF-8", $str);
+        }
+
+        // Удаляем лишние знаки препинания
+        $str = preg_replace('#(\.|\?|!|\(|\)){3,}#', '\1\1\1', $str);
+
+        // Фильтруем символы
+        $str = nl2br($str);
+        $str = preg_replace('!\p{C}!u', '', $str);
+        $str = str_replace('<br />', "\n", $str);
+
+        // Удаляем лишние пробелы
+        $str = preg_replace('# {2,}#', ' ', $str);
+
+        // Удаляем более 2-х переносов строк подряд
+        $str = preg_replace("/(\n)+(\n)/i", "\n\n", $str);
+
+        return trim($str);
+    }
+
+    /*
+     * Фильтрация и обработка текстовых данных перед выводом
      *
      * $br = 0          Обработка переносов выключена (по-умолчанию)
      * $br = 1          Обработка переносов строк
@@ -142,7 +167,7 @@ class Validate
      * $smileys = 1     Обработка пользовательских смайлов
      * $smileys = 2     Обработка пользовательских и админских смайлов
      */
-    public static function filterString($str, $br = 0, $tags = 0, $smileys = 0)
+    public static function checkout($str, $br = 0, $tags = 0, $smileys = 0)
     {
         $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
 

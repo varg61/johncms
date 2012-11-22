@@ -42,7 +42,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
                 '<a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
         } else {
             echo '<div class="rmenu"><form action="' . Vars::$URI . '?act=delete&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
-                '<p>' . lng('album') . ': <b>' . Validate::filterString($res_a['name']) . '</b></p>' .
+                '<p>' . lng('album') . ': <b>' . Validate::checkout($res_a['name']) . '</b></p>' .
                 '<p>' . lng('album_delete_warning') . '</p>' .
                 '<p><input type="submit" name="submit" value="' . lng('delete') . '"/></p>' .
                 '</form></div>' .

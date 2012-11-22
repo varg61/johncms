@@ -269,7 +269,7 @@ class Functions extends Vars
                 $out .= ' ' . $arg['header'];
             }
             if (!isset($arg['stshide']) && !empty($user['status'])) {
-                $out .= '<div class="status">' . self::loadImage('star.png', 16, 16) . '&#160;' . Validate::filterString($user['status']) . '</div>';
+                $out .= '<div class="status">' . self::loadImage('star.png', 16, 16) . '&#160;' . Validate::checkout($user['status']) . '</div>';
             }
             if (Vars::$USER_SET['avatar']) {
                 $out .= '</td></tr></table>';

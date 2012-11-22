@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
     -----------------------------------------------------------------
     */
     Vars::$SYSTEM_SET['gzip'] = isset($_POST['gzip']);
-    Vars::$SYSTEM_SET['email'] = isset($_POST['gzip']);
+    Vars::$SYSTEM_SET['email'] = isset($_POST['email']);
 //    mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(Validate::filterString($_POST['skindef'])) . "' WHERE `key` = 'skindef'");
 //    mysql_query("UPDATE `cms_settings` SET `val`='" . mysql_real_escape_string(htmlspecialchars($_POST['madm'])) . "' WHERE `key` = 'email'");
 //    mysql_query("UPDATE `cms_settings` SET `val`='" . intval($_POST['timeshift']) . "' WHERE `key` = 'timeshift'");

@@ -27,7 +27,7 @@ if ($total) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '" . $res['id'] . "'"), 0);
         echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
             Functions::loadModuleImage('album_' . $res['access'] . '.png') . '&#160;' .
-            '<a href="' . Vars::$URI . '?act=show&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '"><b>' . Validate::filterString($res['name']) . '</b></a>&#160;(' . $count . ')';
+            '<a href="' . Vars::$URI . '?act=show&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a>&#160;(' . $count . ')';
         if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6 || !empty($res['description'])) {
             $menu = array(
                 '<a href="' . Vars::$URI . '?act=sort&amp;mod=up&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('up') . '</a>',
@@ -36,7 +36,7 @@ if ($total) {
                 '<a href="' . Vars::$URI . '?act=delete&amp;al=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('delete') . '</a>'
             );
             echo '<div class="sub">' .
-                (!empty($res['description']) ? '<div class="gray">' . Validate::filterString($res['description'], 1, 1) . '</div>' : '') .
+                (!empty($res['description']) ? '<div class="gray">' . Validate::checkout($res['description'], 1, 1) . '</div>' : '') .
                 ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6 ? Functions::displayMenu($menu) : '') .
                 '</div>';
         }

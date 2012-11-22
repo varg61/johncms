@@ -60,7 +60,7 @@ switch (Vars::$ACT) {
         $to_history = FALSE;
         echo'<div class="gmenu">' .
             '<form action="' . Vars::$URI . '" method="post"><p>' .
-            '<input type="text" value="' . ($search ? Validate::filterString($search) : '') . '" name="search" />' .
+            '<input type="text" value="' . ($search ? Validate::checkout($search) : '') . '" name="search" />' .
             '<input type="submit" value="' . lng('search') . '" name="submit" /><br />' .
             '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . lng('search_topic_name') .
             '</p></form>' .
@@ -142,7 +142,7 @@ switch (Vars::$ACT) {
                     $text = $search_t ? $res['text2'] : $res['text'];
                     foreach ($array as $srch) if (($pos = mb_strpos(mb_strtolower($res['text']), mb_strtolower(str_replace('*', '', $srch)))) !== FALSE) break;
                     if (!isset($pos) || $pos < 100) $pos = 100;
-                    $text = Validate::filterString(mb_substr($text, ($pos - 100), 400), 1);
+                    $text = Validate::checkout(mb_substr($text, ($pos - 100), 400), 1);
 					$text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                     if ($search_t) {
                         foreach ($array as $val) {

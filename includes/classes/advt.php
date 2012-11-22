@@ -27,7 +27,7 @@ class Advt extends Vars
                 $font .= $res['italic'] ? ' font-style:italic;' : false;
                 $font .= $res['underline'] ? ' text-decoration:underline;' : false;
                 if ($font) $name = '<span style="' . $font . '">' . $name . '</span>';
-                @$ads[$res['type']] .= '<a href="' . ($res['show'] ? Validate::filterString($res['link']) : Vars::$HOME_URL . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
+                @$ads[$res['type']] .= '<a href="' . ($res['show'] ? Validate::checkout($res['link']) : Vars::$HOME_URL . '/go.php?id=' . $res['id']) . '">' . $name . '</a><br/>';
                 if (($res['day'] != 0 && time() >= ($res['time'] + $res['day'] * 3600 * 24)) || ($res['count_link'] != 0 && $res['count'] >= $res['count_link']))
                     mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $res['id'] . "'");
             }

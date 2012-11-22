@@ -24,7 +24,7 @@ if (Vars::$ID) {
         echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
         exit;
     }
-    $title_pages = Validate::filterString(mb_substr($res_down_cat['rus_name'], 0, 30));
+    $title_pages = Validate::checkout(mb_substr($res_down_cat['rus_name'], 0, 30));
     $textl = lng('new_files') . ': ' . (mb_strlen($res_down_cat['rus_name']) > 30 ? $title_pages . '...' : $title_pages);
     $sql_down = ' AND `dir` LIKE \'' . ($res_down_cat['dir']) . '%\' ';
 }

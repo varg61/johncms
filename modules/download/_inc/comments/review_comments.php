@@ -44,9 +44,9 @@ if ($total) {
         $text = '';
         echo ($i++ % 2) ? '<div class="list2">' : '<div class="list1">';
         $text = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
-        $post = Validate::filterString($res['text'], 1, 1);
+        $post = Validate::checkout($res['text'], 1, 1);
         if (Vars::$USER_SET['smileys']) $post = Functions::smileys($post, $res['rights'] >= 1 ? 1 : 0);
-        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Validate::filterString($res['rus_name']) . '</a> | <a href="' . Vars::$URI . '?act=comments&amp;id=' . $res['sub_id'] . '">' . lng('comments') . '</a>';
+        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Validate::checkout($res['rus_name']) . '</a> | <a href="' . Vars::$URI . '?act=comments&amp;id=' . $res['sub_id'] . '">' . lng('comments') . '</a>';
 		$attributes = unserialize($res['attributes']);
 		$res['nickname'] = $attributes['author_name'];
   		$res['ip'] = $attributes['author_ip'];
@@ -58,7 +58,7 @@ if ($total) {
           	'[' . $attributes['edit_count'] . ']</b></small></span>';
    		}
 		if (!empty($res['reply'])) {
-        	$reply = Validate::filterString($res['reply'], 1, 1);
+        	$reply = Validate::checkout($res['reply'], 1, 1);
          	if (Vars::$USER_SET['smileys']) $reply = functions::smileys($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
           	$post .= '<div class="reply"><small>' .
            	'<a href="' . Vars::$HOME_URL . '?profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .

@@ -21,7 +21,7 @@ if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_dow
     echo Functions::displayError('<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
     exit;
 }
-echo '<div class="phdr"><b>' . lng('edit_mp3tags') . ':</b> ' . Validate::filterString($res_down['rus_name']) . '</div>';
+echo '<div class="phdr"><b>' . lng('edit_mp3tags') . ':</b> ' . Validate::checkout($res_down['rus_name']) . '</div>';
 require (SYSPATH . 'lib/getid3/getid3.php');
 $getID3 = new getID3;
 $getID3->encoding = 'cp1251';

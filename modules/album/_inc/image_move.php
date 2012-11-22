@@ -42,7 +42,7 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
                      '<div class="menu"><p><h3>' . lng('album_select') . '</h3>' .
                      '<select name="al">';
                 while ($res = mysql_fetch_assoc($req)) {
-                    echo '<option value="' . $res['id'] . '">' . Validate::filterString($res['name']) . '</option>';
+                    echo '<option value="' . $res['id'] . '">' . Validate::checkout($res['name']) . '</option>';
                 }
                 echo '</select></p>' .
                      '<p><input type="submit" name="submit" value="' . lng('move') . '"/></p>' .

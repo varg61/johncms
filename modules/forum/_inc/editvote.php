@@ -93,7 +93,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             elseif ($_POST['count_vote'] > 20)
                 $_POST['count_vote'] = 20;
             for ($vote = $i; $vote < $_POST['count_vote']; $vote++) {
-                echo 'Ответ ' . ($vote + 1) . '(max. 50): <br/><input type="text" name="' . $vote . '" value="' . Validate::filterString($_POST[$vote]) . '"/><br/>';
+                echo 'Ответ ' . ($vote + 1) . '(max. 50): <br/><input type="text" name="' . $vote . '" value="' . Validate::checkout($_POST[$vote]) . '"/><br/>';
             }
             echo '<input type="hidden" name="count_vote" value="' . abs(intval($_POST['count_vote'])) . '"/>' . ($_POST['count_vote'] < 20 ? '<input type="submit" name="plus" value="' . lng('add') . '"/>' : '')
                  . ($_POST['count_vote'] - $countvote ? '<input type="submit" name="minus" value="' . lng('delete_last') . '"/>' : '');

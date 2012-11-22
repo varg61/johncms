@@ -88,7 +88,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             } else {
                 $scan_dir = $files_path;
             }
-            echo '<div class="phdr"><b>' . lng('download_scan_dir') . '</b>' . (Vars::$ID ? ': ' . Validate::filterString($res_down_cat['rus_name']) : '') . '</div>';
+            echo '<div class="phdr"><b>' . lng('download_scan_dir') . '</b>' . (Vars::$ID ? ': ' . Validate::checkout($res_down_cat['rus_name']) : '') . '</div>';
             if (isset($_GET['yes'])) {
                 /*
                     -----------------------------------------------------------------
@@ -161,7 +161,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                                 if (preg_match("/^file([0-9]+)_/", $name)) {
                                     if (!in_array($name, $array_more)) {
                                         $refid = (int)str_replace('file', '', $name);
-                                        $name_link = mysql_real_escape_string(Validate::filterString(mb_substr(str_replace('file' . $refid . '_', lng('download') . ' ', $name), 0, 200)));
+                                        $name_link = mysql_real_escape_string(Validate::checkout(mb_substr(str_replace('file' . $refid . '_', lng('download') . ' ', $name), 0, 200)));
                                         $name = mysql_real_escape_string($name);
                                         $size = filesize($val);
                                         mysql_query("INSERT INTO `cms_download_more` SET

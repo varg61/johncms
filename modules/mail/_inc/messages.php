@@ -145,7 +145,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
             }
         } else {
             if ($addmail->validateForm() !== TRUE) {
-                $tpl->text = Validate::filterString($add_message['text']);
+                $tpl->text = Validate::checkout($add_message['text']);
                 //Выводим на экран ошибку
                 $tpl->error_add = Functions::displayError($addmail->error_log);
             }
@@ -186,7 +186,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                 while ($row = mysql_fetch_assoc($query)) {
                     if ($row['read'] == 0 && $row['contact_id'] == Vars::$USER_ID)
                         $mass_read[] = $row['mid'];
-                    $text = Validate::filterString($row['text'], 1, 1);
+                    $text = Validate::checkout($row['text'], 1, 1);
                     if (Vars::$USER_SET['smileys'])
                         $text = Functions::smileys($text, $row['rights'] >= 1 ? 1 : 0);
                     $array[] = array(
