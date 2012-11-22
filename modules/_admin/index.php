@@ -17,7 +17,7 @@ if (Vars::$USER_RIGHTS >= 2) {
     $tpl = Template::getInstance();
 
     $sv_actions = array(
-        'activity' => 'activity.php',
+        'settings' => 'settings.php',
     );
 
     $admin_actions = array(
@@ -49,6 +49,9 @@ if (Vars::$USER_RIGHTS >= 2) {
         require_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include);
     } else {
         // Главное меню Админ панели
+        if (isset($_SESSION['form_token'])) {
+            unset($_SESSION['form_token']);
+        }
         $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
         $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = '0'"), 0);
         //$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);

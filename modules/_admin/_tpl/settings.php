@@ -3,13 +3,10 @@
 </ul>
 <div class="form-container">
     <?php if (isset($this->save)) : ?>
-    <div class="form-block"><?= lng('settings_saved') ?></div>
-    <?php endif ?>
-    <?php if (isset($this->reset)) : ?>
-    <div class="form-block"><?= lng('settings_default') ?></div>
+        <div class="form-block"><?= lng('settings_saved') ?></div>
     <?php endif ?>
 
-    <form action="<?= Vars::$URI ?>" method="post">
+    <form action="<?= Vars::$URI ?>?act=settings" method="post">
         <div class="form-block">
             <label for="timeshift"><?= lng('time_shift') ?></label><br/>
             <input id="timeshift" class="small" type="text" name="timeshift" size="2" maxlength="3" value="<?= Vars::$SYSTEM_SET['timeshift'] ?>"/><span class="input-help">&#160;+-12 <?= lng('hours') ?></span><br/>
@@ -32,7 +29,7 @@
             <textarea id="description" rows="<?= Vars::$USER_SET['field_h'] ?>" name="description"><?= Validate::checkout(Vars::$SYSTEM_SET['meta_desc']) ?></textarea>
             <br/><br/>
             <input class="btn btn-primary btn-large" type="submit" name="submit" value=" <?= lng('save') ?> "/>
-            <a class="btn" href="<?= Vars::$MODULE_URI ?>"><?= lng('back') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>"><?= lng('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

@@ -96,6 +96,8 @@ class Template extends ArrayObject
             // Буферизация вывода со сжатием
             @ini_set('zlib.output_compression_level', 3);
             ob_start('ob_gzhandler');
+        } else {
+            ob_start();
         }
 
         // Подключаем файл главного шаблона

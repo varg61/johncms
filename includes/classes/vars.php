@@ -34,8 +34,19 @@ abstract class Vars
     public static $CORE_ERRORS = array();        // Ошибки ядра
     public static $NOTIFICATIONS = array();      // Уведомления
 
-    public static $SYSTEM_SET;                   // Системные настройки
-    public static $ACL = array();                // Контроль доступа к модулям
+    // Системные настройки
+    public static $SYSTEM_SET = array(
+        'timeshift'        => 0,
+        'copyright'        => 'JohnCMS',
+        'email'            => '',
+        'filesize'         => 2000,
+        'gzip'             => 1,
+        'keywords'         => '',
+        'description'      => ''
+    );
+
+    // Контроль доступа к модулям
+    public static $ACL = array();
 
     /*
     -----------------------------------------------------------------

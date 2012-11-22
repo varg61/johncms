@@ -15,16 +15,18 @@
     <li><a href="<?= Vars::$URI ?>/sitemap"><i class="icn-map"></i><?= lng('sitemap') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= Vars::$URI ?>/links"><i class="icn-flower"></i><?= lng('advertisement') ?><i class="icn-arrow right"></i></a></li>
 
-    <li><h2><?= lng('system') ?></h2></li>
-    <li><a href="<?= Vars::$URI ?>/settings"><i class="icn-settings"></i><?= lng('system_settings') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$URI ?>/languages"><i class="icn-settings"></i><?= lng('language_settings') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><i class="icn-smile"></i><?= lng('smileys') ?><i class="icn-arrow right"></i></a></li>
+    <?php if (Vars::$USER_RIGHTS == 9) : ?>
+        <li><h2><?= lng('system') ?></h2></li>
+        <li><a href="<?= Vars::$URI ?>?act=settings"><i class="icn-settings"></i><?= lng('system_settings') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= Vars::$URI ?>/languages"><i class="icn-settings"></i><?= lng('language_settings') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><i class="icn-smile"></i><?= lng('smileys') ?><i class="icn-arrow right"></i></a></li>
+    <?php endif ?>
 
     <li><h2><?= lng('security') ?></h2></li>
     <li><a href="<?= Vars::$URI ?>/acl"><i class="icn-shield"></i><?= lng('acl') ?><i class="icn-arrow right"></i></a></li>
     <?php if (Vars::$USER_RIGHTS == 9) : ?>
         <li><a href="<?= Vars::$URI ?>/ip"><i class="icn-shield"></i><?= lng('ip_accesslist') ?><i class="icn-arrow right"></i></a></li>
-        <?php endif ?>
+    <?php endif ?>
     <li><a href="<?= Vars::$URI ?>/antispy"><i class="icn-shield"></i><?= lng('antispy') ?><i class="icn-arrow right"></i></a></li>
     <?php endif ?>
 </ul>

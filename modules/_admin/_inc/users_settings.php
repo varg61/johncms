@@ -13,11 +13,6 @@ defined('_IN_ADMIN') or die('Error: restricted access');
 
 global $tpl;
 
-/*
------------------------------------------------------------------
-Настройки для пользователей
------------------------------------------------------------------
-*/
 if (isset($_POST['submit'])
     && isset($_POST['form_token'])
     && isset($_SESSION['form_token'])
