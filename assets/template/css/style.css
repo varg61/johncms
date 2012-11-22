@@ -891,7 +891,6 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
 .user-block {
     background-color: #CFD3DA;
     border-bottom: 1px solid #bcc0c6;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, .3);
     padding: 12px;
     display: block;
 }
