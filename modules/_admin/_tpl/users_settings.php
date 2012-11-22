@@ -9,12 +9,13 @@
     <div class="form-block"><?= lng('settings_default') ?></div>
     <?php endif ?>
 
-    <form action="<?= Vars::$URI ?>" method="post">
+    <form action="<?= Vars::$URI ?>?act=users_settings" method="post">
         <div class="form-block">
             <label><?= lng('registration') ?></label><br/>
-            <label class="small"><input type="radio" value="1" name="reg_open" <?= (Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('registration_open') ?></label><br/>
-            <label class="small"><input type="radio" value="0" name="reg_open" <?= (!Vars::$USER_SYS['reg_open'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('registration_closed') ?></label><br/><br/>
-            <label class="small"><input name="reg_moderation" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_moderation'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('registration_moderation') ?></label><br/>
+            <label class="small"><input type="radio" value="2" name="registration" <?= (Vars::$USER_SYS['registration'] == 2 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('registration_open') ?></label><br/>
+            <label class="small"><input type="radio" value="1" name="registration" <?= (Vars::$USER_SYS['registration'] == 1 ? 'checked="checked"' : '') ?>/>&#160;<?= lng('registration_moderation') ?></label><br/>
+            <label class="small"><input type="radio" value="0" name="registration" <?= (!Vars::$USER_SYS['registration'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('registration_closed') ?></label><br/><br/>
+
             <label class="small"><input name="reg_welcome" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_welcome'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('welcome_message') ?></label><br/>
             <label class="small"><input name="reg_email" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_email'] ? 'checked="checked"' : '') ?>/>&#160;<?= lng('registration_email') ?></label><br/>
             <label class="small"><input name="reg_quarantine" type="checkbox" value="1" <?= (Vars::$USER_SYS['reg_quarantine'] ? 'checked="checked"' : '') ?>/>&#160;<a href="#"><?= lng('registration_quarantine') ?></a></label>
@@ -47,8 +48,8 @@
             <?php endif ?>
             <input class="btn btn-primary btn-large" type="submit" name="submit" value=" <?= lng('save') ?> "/>
             <?php if (Vars::$USER_RIGHTS == 9): ?>
-            <a class="btn" href="<?= Vars::$URI ?>?reset"><?= lng('reset_settings') ?></a>
-            <a class="btn" href="<?= Vars::$MODULE_URI ?>"><?= lng('back') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>?act=users_settings&amp;reset"><?= lng('reset_settings') ?></a>
+            <a class="btn" href="<?= Vars::$URI ?>"><?= lng('back') ?></a>
             <?php endif ?>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>

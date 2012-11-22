@@ -11,25 +11,50 @@
 
 @ini_set("max_execution_time", "600");
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+define('_IN_ADMIN', 1);
 
-//TODO: Распределить права доступа!!!
+if (Vars::$USER_RIGHTS >= 2) {
+    $tpl = Template::getInstance();
 
-// Проверяем права доступа
-if (Vars::$USER_RIGHTS < 1) {
+    $sv_actions = array(
+        'activity' => 'activity.php',
+    );
+
+    $admin_actions = array(
+        'users_settings' => 'users_settings.php',
+    );
+
+    $common_actions = array(
+        'assets' => 'profile_assets.php',
+    );
+
+    $include = FALSE;
+    if (Vars::$ACT
+        && Vars::$USER_RIGHTS == 9
+        && isset($sv_actions[Vars::$ACT])
+    ) {
+        $include = $sv_actions[Vars::$ACT];
+    } elseif (Vars::$ACT
+        && Vars::$USER_RIGHTS >= 7
+        && isset($admin_actions[Vars::$ACT])
+    ) {
+        $include = $admin_actions[Vars::$ACT];
+    } elseif (Vars::$ACT
+        && isset($common_actions[Vars::$ACT])
+    ) {
+        $include = $common_actions[Vars::$ACT];
+    }
+
+    if ($include && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include)) {
+        require_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include);
+    } else {
+        // Главное меню Админ панели
+        $tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
+        $tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = '0'"), 0);
+        //$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
+        $tpl->contents = $tpl->includeTpl('index');
+    }
+} else {
     echo Functions::displayError(lng('access_forbidden'));
     exit;
 }
-
-$tpl = Template::getInstance();
-
-/*
------------------------------------------------------------------
-Главное меню Админ панели
------------------------------------------------------------------
-*/
-unset($_SESSION['form_token']);
-$tpl->usrTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
-$tpl->regTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` = '0'"), 0);
-//$tpl->banTotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `ban_time` > '" . time() . "'"), 0);
-
-$tpl->contents = $tpl->includeTpl('index');

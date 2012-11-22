@@ -5,7 +5,7 @@
     <li><a href="<?= Vars::$HOME_URL ?>/users/search"><i class="icn-man-woman"></i><?= lng('users') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->usrTotal ?></span></a></li>
     <?php if (Vars::$USER_RIGHTS >= 7) : ?>
     <li><a href="<?= Vars::$MODULE_URI ?>"><i class="icn-user-add"></i><?= lng('users_reg') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->regTotal ?></span></a></li>
-    <li><a href="<?= Vars::$MODULE_URI ?>/users_settings"><i class="icn-settings"></i><?= lng('settings') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$URI ?>?act=users_settings"><i class="icn-settings"></i><?= lng('settings') ?><i class="icn-arrow right"></i></a></li>
 
     <li><h2><?= lng('modules') ?></h2></li>
     <li><a href="<?= Vars::$HOME_URL ?>/forum/admin"><i class="icn-comments"></i><?= lng('forum') ?><i class="icn-arrow right"></i></a></li>
