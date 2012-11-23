@@ -6,7 +6,7 @@
     <div class="form-block confirm"><?= lng('settings_saved') ?></div>
     <?php endif ?>
     <?php if (isset($this->reset)) : ?>
-    <div class="form-block"><?= lng('settings_default') ?></div>
+    <div class="form-block confirm"><?= lng('settings_default') ?></div>
     <?php endif ?>
 
     <form action="<?= Vars::$URI ?>?act=users_settings" method="post">

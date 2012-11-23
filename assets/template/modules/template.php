@@ -29,7 +29,12 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 <div id="basement" class="align-center">
     <div class="site-copyright"><?= Validate::checkout(Vars::$SYSTEM_SET['copyright'], 1, 1, 1) ?></div>
     <div class="counters"><?= Functions::displayCounters() ?></div>
-    <div>Generation: <?= round((microtime(TRUE) - START_TIME), 4) ?> sec<br/>Memory: <?= round((memory_get_usage() - START_MEMORY) / 1024, 2) ?> kb</div>
+    <?php if(Vars::$SYSTEM_SET['generation']): ?>
+        <div>Generation: <?= round((microtime(TRUE) - START_TIME), 4) ?> sec</div>
+    <?php endif ?>
+    <?php if(Vars::$SYSTEM_SET['memory']): ?>
+        <div>Memory: <?= round((memory_get_usage() - START_MEMORY) / 1024, 2) ?> kb</div>
+    <?php endif ?>
     <div class="copyright"><a href="http://johncms.com">JohnCMS</a></div>
 </div>
 </body>

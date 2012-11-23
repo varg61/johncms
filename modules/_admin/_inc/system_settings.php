@@ -39,6 +39,8 @@ if (isset($_POST['submit'])
     }
 
     Vars::$SYSTEM_SET['gzip'] = isset($_POST['gzip']);
+    Vars::$SYSTEM_SET['generation'] = isset($_POST['generation']);
+    Vars::$SYSTEM_SET['memory'] = isset($_POST['memory']);
 
     Vars::$SYSTEM_SET['keywords'] = isset($_POST['keywords']) ? Validate::checkin($_POST['keywords']) : '';
     if (mb_strlen(Vars::$SYSTEM_SET['keywords']) > 250) {
@@ -56,6 +58,8 @@ if (isset($_POST['submit'])
         mysql_query("REPLACE INTO `cms_settings` SET `key` = 'email', `val` = '" . mysql_real_escape_string(Vars::$SYSTEM_SET['email']) . "'");
         mysql_query("REPLACE INTO `cms_settings` SET `key` = 'filesize', `val` = '" . Vars::$SYSTEM_SET['filesize'] . "'");
         mysql_query("REPLACE INTO `cms_settings` SET `key` = 'gzip', `val` = '" . Vars::$SYSTEM_SET['gzip'] . "'");
+        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'generation', `val` = '" . Vars::$SYSTEM_SET['generation'] . "'");
+        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'memory', `val` = '" . Vars::$SYSTEM_SET['memory'] . "'");
         mysql_query("REPLACE INTO `cms_settings` SET `key` = 'keywords', `val` = '" . mysql_real_escape_string(Vars::$SYSTEM_SET['keywords']) . "'");
         mysql_query("REPLACE INTO `cms_settings` SET `key` = 'description', `val` = '" . mysql_real_escape_string(Vars::$SYSTEM_SET['description']) . "'");
         $tpl->save = 1;
@@ -64,4 +68,4 @@ if (isset($_POST['submit'])
 
 $tpl->form_token = mt_rand(100, 10000);
 $_SESSION['form_token'] = $tpl->form_token;
-$tpl->contents = $tpl->includeTpl('settings');
+$tpl->contents = $tpl->includeTpl('system_settings');

@@ -17,7 +17,7 @@
 
     <?php if (Vars::$USER_RIGHTS == 9) : ?>
         <li><h2><?= lng('system') ?></h2></li>
-        <li><a href="<?= Vars::$URI ?>?act=settings"><i class="icn-settings"></i><?= lng('system_settings') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= Vars::$URI ?>?act=system_settings"><i class="icn-settings"></i><?= lng('system_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= Vars::$URI ?>/languages"><i class="icn-settings"></i><?= lng('language_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><i class="icn-smile"></i><?= lng('smileys') ?><i class="icn-arrow right"></i></a></li>
     <?php endif ?>
