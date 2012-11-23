@@ -9,8 +9,8 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     <meta name="HandheldFriendly" content="true"/>
     <meta name="MobileOptimized" content="width"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <meta name="keywords" content="<?= Vars::$SYSTEM_SET['meta_key'] ?>"/>
-    <meta name="description" content="<?= Vars::$SYSTEM_SET['meta_desc'] ?>"/>
+    <meta name="keywords" content="<?= Validate::checkout(Vars::$SYSTEM_SET['keywords']) ?>"/>
+    <meta name="description" content="<?= Validate::checkout(Vars::$SYSTEM_SET['description']) ?>"/>
     <?= $this->loadCSS() ?>
     <link rel="shortcut icon" href="<?= Vars::$HOME_URL ?>/favicon.ico"/>
     <link rel="alternate" type="application/rss+xml" title="<?= lng('site_news', 1) ?>" href="http://localhost/johncms/rss"/>
@@ -27,7 +27,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     <?= $this->includeTpl('toolbar-bottom', 1) ?>
 </div>
 <div id="basement" class="align-center">
-    <div class="site-copyright"><?= Vars::$SYSTEM_SET['copyright'] ?></div>
+    <div class="site-copyright"><?= Validate::checkout(Vars::$SYSTEM_SET['copyright'], 1, 1, 1) ?></div>
     <div class="counters"><?= Functions::displayCounters() ?></div>
     <div>Generation: <?= round((microtime(TRUE) - START_TIME), 4) ?> sec<br/>Memory: <?= round((memory_get_usage() - START_MEMORY) / 1024, 2) ?> kb</div>
     <div class="copyright"><a href="http://johncms.com">JohnCMS</a></div>

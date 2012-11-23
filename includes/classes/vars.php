@@ -37,12 +37,12 @@ abstract class Vars
     // Системные настройки
     public static $SYSTEM_SET = array(
         'timeshift'        => 0,
-        'copyright'        => 'JohnCMS',
+        'copyright'        => 'Powered by JohnCMS',
         'email'            => '',
         'filesize'         => 2000,
         'gzip'             => 1,
-        'keywords'         => '',
-        'description'      => ''
+        'keywords'         => 'johncms',
+        'description'      => 'Powered by JohnCMS http://johncms.com'
     );
 
     // Контроль доступа к модулям

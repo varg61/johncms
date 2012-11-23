@@ -131,8 +131,10 @@ class Validate
     * Фильтрация входящих строчных данных
     */
     public static function checkin($str){
+        $str = trim($str);
+
         if (function_exists('iconv')) {
-            $str = iconv("UTF-8", "UTF-8", $str);
+            $str = iconv('UTF-8', 'UTF-8', $str);
         }
 
         // Удаляем лишние знаки препинания

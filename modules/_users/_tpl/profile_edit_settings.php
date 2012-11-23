@@ -4,9 +4,7 @@
 
 <div class="form-container">
     <?php if(isset($this->save)): ?>
-    <div class="form-block confirm">
-        <?= lng('settings_saved') ?>
-    </div>
+    <div class="form-block confirm"><?= lng('settings_saved') ?></div>
     <?php endif ?>
 
     <form action="<?= Vars::$URI ?>?act=edit_settings" method="post">

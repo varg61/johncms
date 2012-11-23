@@ -330,11 +330,6 @@ CREATE TABLE `cms_settings` (
 
 
 INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
-        ('email', 'user@test.com'),
-        ('timeshift', '0'),
-        ('copyright', 'Powered by JohnCMS'),
-        ('flsz', '2000'),
-        ('gzip', '1'),
         ('clean_time', ''),
         ('acl', 'a:9:{s:5:"forum";i:2;s:5:"album";i:2;s:9:"albumcomm";i:1;s:9:"guestbook";i:2;s:7:"library";i:2;s:7:"libcomm";i:1;s:9:"downloads";i:2;s:8:"downcomm";i:1;s:4:"stat";i:3;}'),
         ('meta_key', ''),

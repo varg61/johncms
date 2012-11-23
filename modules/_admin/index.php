@@ -15,6 +15,7 @@ define('_IN_ADMIN', 1);
 
 if (Vars::$USER_RIGHTS >= 2) {
     $tpl = Template::getInstance();
+    $tpl->error = array();
 
     $sv_actions = array(
         'settings' => 'settings.php',

@@ -75,7 +75,7 @@ if (Vars::$USER_RIGHTS == 4  || Vars::$USER_RIGHTS  >= 6) {
                         'image/gif',
                         'image/png'
                     );
-                    $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['flsz'];
+                    $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['filesize'];
                     $handle->file_overwrite = true;
                     if ($set_down['screen_resize']) {
                         $handle->image_resize = true;

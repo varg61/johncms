@@ -3,13 +3,9 @@
 </ul>
 <div class="form-container">
     <?php if (!empty($this->error)): ?>
-    <div class="form-block error">
-        <?= lng('errors_occurred') ?>
-    </div>
+        <div class="form-block error"><?= lng('errors_occurred') ?></div>
     <?php elseif (isset($this->save)): ?>
-    <div class="form-block confirm">
-        <?= lng('settings_saved') ?>
-    </div>
+        <div class="form-block confirm"><?= lng('settings_saved') ?></div>
     <?php endif ?>
 
     <div class="form-block">
@@ -30,7 +26,7 @@
 
             <label for="birth"><?= lng('birthday') ?></label><br/>
             <?php if (isset($this->error['birth'])): ?>
-            <span class="label label-red"><?= $this->error['birth'] ?></span><br/>
+                <span class="label label-red"><?= $this->error['birth'] ?></span><br/>
             <?php endif ?>
             <input class="mini<?= (isset($this->error['birth']) ? ' error' : '') ?>" id="birth" type="text" value="<?= htmlspecialchars($this->day) ?>" size="2" maxlength="2" name="day"/>
             <input class="mini<?= (isset($this->error['birth']) ? ' error' : '') ?>" type="text" value="<?= htmlspecialchars($this->month) ?>" size="2" maxlength="2" name="month"/>

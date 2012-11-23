@@ -38,8 +38,8 @@ if (mysql_num_rows($req) && is_dir($res['dir'])) {
                     $name = $fname;
                 if (empty($name_link))
                     $error[] = lng('error_empty_fields');
-                if ($fsize > 1024 * Vars::$SYSTEM_SET['flsz'])
-                    $error[] = lng('error_file_size') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.';
+                if ($fsize > 1024 * Vars::$SYSTEM_SET['filesize'])
+                    $error[] = lng('error_file_size') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.';
                 if (!in_array($ext[(count($ext)-1)], $al_ext))
                     $error[] = lng('error_file_ext') .  ': ' . implode(', ', $al_ext);
                 if (strlen($fname) > 100)
@@ -87,7 +87,7 @@ if (mysql_num_rows($req) && is_dir($res['dir'])) {
                                 'image/gif',
                                 'image/png'
                             );
-                            $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['flsz'];
+                            $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['filesize'];
                             $handle->file_overwrite = true;
                             if ($set_down['screen_resize']) {
                                 $handle->image_resize = true;
@@ -133,7 +133,7 @@ if (mysql_num_rows($req) && is_dir($res['dir'])) {
              lng('link_file') . ' (мах. 200)<span class="red">*</span>:<br /><input type="text" name="name_link" value="' . lng('download_file') . '"/><br />' .
              lng('dir_desc') . ' (max. 500)<br /><textarea name="opis"></textarea><br />' .
              '<input type="submit" name="submit" value="' . lng('upload') . '"/></form></div>' .
-             '<div class="phdr"><small>' . lng('file_size_faq') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb<br />' .
+             '<div class="phdr"><small>' . lng('file_size_faq') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb<br />' .
              lng('extensions') . ': ' . implode(', ', $al_ext) . ($set_down['screen_resize'] ? '<br />' . lng('add_screen_faq')  : '') . '</small></div>' .
              '<p><a href="' . Vars::$URI  . '?id=' . Vars::$ID  . '">' . lng('back') . '</a></p>';
         }

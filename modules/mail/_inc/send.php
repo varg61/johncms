@@ -54,8 +54,8 @@ if(Vars::$ID) {
 		}
 		
 		$tpl->url = Vars::$MODULE_URI . '?act=send&amp;id=' . Vars::$ID;
-		$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
-		$tpl->size = Vars::$SYSTEM_SET['flsz'];
+		$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['filesize'];
+		$tpl->size = Vars::$SYSTEM_SET['filesize'];
 		$tpl->token = mt_rand(100, 10000);
 		$_SESSION['token_status'] = $tpl->token;
 		$tpl->contents = $tpl->includeTpl( 'add' );

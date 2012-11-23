@@ -46,7 +46,7 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
             'image/gif',
             'image/png'
         );
-        $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['flsz'];
+        $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['filesize'];
         if ($set_down['screen_resize']) {
             $handle->image_resize = true;
             $handle->image_x = 240;
@@ -70,7 +70,7 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
 	echo '<div class="phdr"><b>' . lng('screen_file') . '</b>: ' . Validate::checkout($res_down['rus_name']) . '</div>' .
  	'<div class="list1"><form action="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data"><input type="file" name="screen"/><br />' .
  	'<input type="submit" name="submit" value="' . lng('upload') . '"/></form></div>' .
- 	'<div class="phdr"><small>' . lng('file_size_faq') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb' .
+ 	'<div class="phdr"><small>' . lng('file_size_faq') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb' .
  	($set_down['screen_resize'] ? '<br />' . lng('add_screen_faq')  : '') . '</small></div>';
 	/*
 	-----------------------------------------------------------------

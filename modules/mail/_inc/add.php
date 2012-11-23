@@ -44,8 +44,8 @@ if($tpl->count_contact) {
 	$tpl->query = $array;
 }
 $tpl->url = Vars::$MODULE_URI . '?act=add';
-$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
-$tpl->size = Vars::$SYSTEM_SET['flsz'];
+$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['filesize'];
+$tpl->size = Vars::$SYSTEM_SET['filesize'];
 $tpl->token = mt_rand(100, 10000);
 $_SESSION['token_status'] = $tpl->token;
 $tpl->contents = $tpl->includeTpl( 'add' );

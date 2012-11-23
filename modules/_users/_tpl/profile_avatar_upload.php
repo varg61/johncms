@@ -17,7 +17,7 @@
 
             <input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('upload') ?>"/>
             <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= lng('back') ?></a>
-            <input type="hidden" name="MAX_FILE_SIZE" value="<?= (1024 * Vars::$SYSTEM_SET['flsz']) ?>"/>
+            <input type="hidden" name="MAX_FILE_SIZE" value="<?= (1024 * Vars::$SYSTEM_SET['filesize']) ?>"/>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

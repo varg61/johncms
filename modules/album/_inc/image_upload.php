@@ -35,7 +35,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                 'image/gif',
                 'image/png'
             );
-            $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['flsz'];
+            $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['filesize'];
             $handle->image_resize = true;
             $handle->image_x = 640;
             $handle->image_y = 480;
@@ -91,10 +91,10 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
              '<p><h3>' . lng('description') . '</h3>' .
              '<textarea name="description" rows="' . Vars::$USER_SET['field_h'] . '"></textarea><br />' .
              '<small>' . lng('not_mandatory_field') . ', max. 500</small></p>' .
-             '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['flsz']) . '" />' .
+             '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['filesize']) . '" />' .
              '<p><input type="submit" name="submit" value="' . lng('upload') . '" /></p>' .
              '</div></form>' .
-             '<div class="phdr"><small>' . lng('select_image_help') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.<br />' . lng('select_image_help_5') . '</small></div>' .
+             '<div class="phdr"><small>' . lng('select_image_help') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.<br />' . lng('select_image_help_5') . '</small></div>' .
              '<p><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . lng('back') . '</a></p>';
     }
 }

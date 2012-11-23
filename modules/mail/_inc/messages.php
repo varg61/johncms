@@ -153,8 +153,8 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
             //Считаем количество сообщений
             $tpl->login = $addmail->nickname;
             $tpl->ignor = Functions::checkIgnor(Vars::$ID) === TRUE ? '<div class="rmenu">' . lng('user_banned') . '</div>' : '';
-            $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['flsz'];
-            $tpl->size = Vars::$SYSTEM_SET['flsz'];
+            $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['filesize'];
+            $tpl->size = Vars::$SYSTEM_SET['filesize'];
             $tpl->token = mt_rand(100, 10000);
             $_SESSION['token_status'] = $tpl->token;
 

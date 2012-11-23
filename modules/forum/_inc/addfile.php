@@ -58,8 +58,8 @@ switch ($res['type']) {
                 $ext = explode(".", $fname);
                 $error = array();
                 // Проверка на допустимый размер файла
-                if ($fsize > 1024 * Vars::$SYSTEM_SET['flsz'])
-                    $error[] = lng('error_file_size') . ' ' . Vars::$SYSTEM_SET['flsz'] . 'kb.';
+                if ($fsize > 1024 * Vars::$SYSTEM_SET['filesize'])
+                    $error[] = lng('error_file_size') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.';
                 // Проверка файла на наличие только одного расширения
                 if (count($ext) != 2)
                     $error[] = lng('error_file_name');
@@ -146,7 +146,7 @@ switch ($res['type']) {
             echo'</p><p>' .
                 '<input type="submit" name="submit" value="' . lng('upload') . '"/>' .
                 '</p><p><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('cancel') . '</a></p></form></div>' .
-                '<div class="phdr">' . lng('max_size') . ': ' . Vars::$SYSTEM_SET['flsz'] . 'kb.</div>';
+                '<div class="phdr">' . lng('max_size') . ': ' . Vars::$SYSTEM_SET['filesize'] . 'kb.</div>';
         }
         break;
 

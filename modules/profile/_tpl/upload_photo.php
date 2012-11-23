@@ -13,7 +13,7 @@
         <div class="formblock">
             <input type="submit" name="submit" value="<?= lng('upload') ?>"/>
         </div>
-        <input type="hidden" name="MAX_FILE_SIZE" value="<?= (1024 * Vars::$SYSTEM_SET['flsz']) ?>"/>
+        <input type="hidden" name="MAX_FILE_SIZE" value="<?= (1024 * Vars::$SYSTEM_SET['filesize']) ?>"/>
         <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
     </div>
 </form>

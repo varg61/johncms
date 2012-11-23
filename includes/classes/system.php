@@ -118,20 +118,18 @@ class System extends Vars
     */
     private function _sysSettings()
     {
-        $set = array();
         $req = mysql_query("SELECT * FROM `cms_settings`");
-        while (($res = mysql_fetch_row($req)) !== false) $set[$res[0]] = $res[1];
-        if (isset($set['lng']) && !empty($set['lng'])) {
-            parent::$LNG_ISO = $set['lng'];
+        while (($res = mysql_fetch_row($req)) !== false) parent::$SYSTEM_SET[$res[0]] = $res[1];
+        if (isset(parent::$SYSTEM_SET['lng']) && !empty(parent::$SYSTEM_SET['lng'])) {
+            parent::$LNG_ISO = parent::$SYSTEM_SET['lng'];
         }
-        if (isset($set['lng_list'])) {
-            parent::$LNG_LIST = unserialize($set['lng_list']);
+        if (isset(parent::$SYSTEM_SET['lng_list'])) {
+            parent::$LNG_LIST = unserialize(parent::$SYSTEM_SET['lng_list']);
         }
-        if (isset($set['users'])) {
-            parent::$USER_SYS = unserialize($set['users']);
+        if (isset(parent::$SYSTEM_SET['users'])) {
+            parent::$USER_SYS = unserialize(parent::$SYSTEM_SET['users']);
         }
-        parent::$SYSTEM_SET = $set;
-        parent::$ACL = isset($set['acl']) ? unserialize($set['acl']) : array();
+        parent::$ACL = isset(parent::$SYSTEM_SET['acl']) ? unserialize(parent::$SYSTEM_SET['acl']) : array();
         $subpath = trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
         parent::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . (!empty($subpath) ? '/' . $subpath : '');
     }

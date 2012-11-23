@@ -3,7 +3,7 @@
 </ul>
 <div class="form-container">
     <?php if (isset($this->save)) : ?>
-    <div class="form-block"><?= lng('settings_saved') ?></div>
+    <div class="form-block confirm"><?= lng('settings_saved') ?></div>
     <?php endif ?>
     <?php if (isset($this->reset)) : ?>
     <div class="form-block"><?= lng('settings_default') ?></div>
