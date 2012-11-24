@@ -11,18 +11,16 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('CMS_VERSION', 'JohnCMS 5.0.0');
-define('START_TIME', microtime(true));
+define('START_TIME', microtime(TRUE));
 define('START_MEMORY', memory_get_usage());
 
 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
     die ('ERROR: PHP5.3 > Only');
 }
 
-/*
------------------------------------------------------------------
-Задаем базовые параметры PHP
------------------------------------------------------------------
-*/
+/**
+ * Задаем базовые параметры PHP
+ */
 //Error_Reporting(E_ALL & ~E_NOTICE);
 Error_Reporting(E_ALL | E_STRICT);
 @ini_set('session.use_trans_sid', '0');
@@ -35,11 +33,9 @@ Error_Reporting(E_ALL | E_STRICT);
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 
-/*
------------------------------------------------------------------
-Задаем пути
------------------------------------------------------------------
-*/
+/**
+ * Задаем пути
+ */
 define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR);                    // Системная папка
 define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR);                    // Корневая папка
 define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
@@ -50,17 +46,13 @@ define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 /
 define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
 define('TPLDEFAULT', ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR);
 
-/*
------------------------------------------------------------------
-Автозагрузка Классов
------------------------------------------------------------------
-*/
+/**
+ * Автозагрузка Классов
+ */
 spl_autoload_register(
     function($name)
     {
         $name = strtolower($name);
-
-        // Список системных классов
         $system = array(
             'advt'           => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
             'captcha'        => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
@@ -68,6 +60,7 @@ spl_autoload_register(
             'counters'       => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
             'finfo'          => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
             'functions'      => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
+            'languages'      => 'classes' . DIRECTORY_SEPARATOR . 'languages.php',
             'login'          => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
             'network'        => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
             'pclzip'         => 'lib'     . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
@@ -93,11 +86,9 @@ spl_autoload_register(
     }
 );
 
-/*
------------------------------------------------------------------
-Инициализируем Ядро системы
------------------------------------------------------------------
-*/
+/**
+ * Инициализируем Ядро системы
+ */
 new Network;
 
 require_once(CONFIGPATH . 'config.php');
@@ -117,44 +108,24 @@ if (isset(Vars::$ACL['stat']) && Vars::$ACL['stat']) {
 }
 
 
-/*
------------------------------------------------------------------
-Загрузка языков
------------------------------------------------------------------
-*/
-function lng($key, $force_system = FALSE)
+/**
+ * Работа с языками
+ * @param $key               Ключ для фразы
+ * @param bool $system       Принудительно использовать системный язык
+ * @return string            Возвращенная по ключу фраза
+ */
+function lng($key, $system = FALSE)
 {
-    static $system_lng = array();
-    static $module_lng = array();
-    static $edited_lng = array();
-
-    $system_file = SYSPATH . 'languages' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
-    $module_file = MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
-
-    if (empty($module_lng) && is_file($module_file)) {
-        $module_lng = parse_ini_file($module_file);
+    if (!$system && ($out = Languages::getInstance()->getModulePhrase($key)) !== FALSE) {
+        return $out;
+    } else {
+        return Languages::getInstance()->getSystemPhrase($key);
     }
-
-    if (!$force_system && isset($module_lng[$key])) {
-        return $module_lng[$key];
-    }
-
-    if (empty($system_lng) && is_file($system_file)) {
-        $system_lng = parse_ini_file($system_file);
-    }
-
-    if (isset($system_lng[$key])) {
-        return $system_lng[$key];
-    }
-
-    return '# ' . $key . ' #';
 }
 
-/*
------------------------------------------------------------------
-Буферизация вывода, инициализация шаблонов, закрытие сессии
------------------------------------------------------------------
-*/
+/**
+ * Буфферизация вывода, инициализация шаблонов, закрытие сессии
+ */
 ob_start();
 register_shutdown_function(function(){Template::getInstance()->loadTemplate();});
 register_shutdown_function('session_write_close');

@@ -18,7 +18,8 @@ if (Vars::$USER_RIGHTS >= 2) {
     $tpl->error = array();
 
     $sv_actions = array(
-        'system_settings' => 'system_settings.php',
+        'system_settings'   => 'system_settings.php',
+        'language_settings' => 'language_settings.php',
     );
 
     $admin_actions = array(
@@ -36,7 +37,7 @@ if (Vars::$USER_RIGHTS >= 2) {
     ) {
         $include = $sv_actions[Vars::$ACT];
     } elseif (Vars::$ACT
-        && Vars::$USER_RIGHTS >= 7
+        && (Vars::$USER_RIGHTS == 7 || Vars::$USER_RIGHTS == 9)
         && isset($admin_actions[Vars::$ACT])
     ) {
         $include = $admin_actions[Vars::$ACT];
@@ -60,5 +61,4 @@ if (Vars::$USER_RIGHTS >= 2) {
     }
 } else {
     echo Functions::displayError(lng('access_forbidden'));
-    exit;
 }

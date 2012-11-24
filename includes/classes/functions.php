@@ -11,25 +11,18 @@
 
 class Functions extends Vars
 {
-    /*
-    -----------------------------------------------------------------
-    Антифлуд
-    -----------------------------------------------------------------
-    Режимы работы:
-    1 - Адаптивный
-    2 - День / Ночь
-    3 - День
-    4 - Ночь
-    -----------------------------------------------------------------
-    */
+    /**
+     * Антифлуд
+     * @return int|bool
+     */
     public static function antiFlood()
     {
         $default = array(
-            'mode' => 2,
-            'day' => 10,
-            'night' => 30,
+            'mode'    => 2,
+            'day'     => 10,
+            'night'   => 30,
             'dayfrom' => 10,
-            'dayto' => 22
+            'dayto'   => 22
         );
         $af = isset(Vars::$SYSTEM_SET['antiflood']) ? unserialize(Vars::$SYSTEM_SET['antiflood']) : $default;
         switch ($af['mode']) {
@@ -57,45 +50,44 @@ class Functions extends Vars
         if ($flood > 0)
             return $flood;
         else
-            return false;
+            return FALSE;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Маскировка ссылок в тексте
-    -----------------------------------------------------------------
-    */
+    /**
+     * Маскировка ссылок в тексте
+     * @param string $var    Исходный текст
+     * @return string        Обработанный текст
+     */
     public static function antiLink($var)
     {
         $var = preg_replace('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', '###', $var);
         $replace = array(
-            '.ru' => '***',
-            '.com' => '***',
-            '.biz' => '***',
-            '.cn' => '***',
-            '.in' => '***',
-            '.net' => '***',
-            '.org' => '***',
+            '.ru'   => '***',
+            '.com'  => '***',
+            '.biz'  => '***',
+            '.cn'   => '***',
+            '.in'   => '***',
+            '.net'  => '***',
+            '.org'  => '***',
             '.info' => '***',
             '.mobi' => '***',
-            '.wen' => '***',
-            '.kmx' => '***',
-            '.h2m' => '***'
+            '.wen'  => '***',
+            '.kmx'  => '***',
+            '.h2m'  => '***'
         );
         return strtr($var, $replace);
     }
 
-    /*
-    -----------------------------------------------------------------
-    Показ различных счетчиков внизу страницы
-    -----------------------------------------------------------------
-    */
+    /**
+     * Показ счетчиков внизу страницы
+     * @return string
+     */
     public static function displayCounters()
     {
         $out = '';
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
         if (mysql_num_rows($req) > 0) {
-            while (($res = mysql_fetch_array($req)) !== false) {
+            while (($res = mysql_fetch_array($req)) !== FALSE) {
                 $link1 = ($res['mode'] == 1 || $res['mode'] == 2) ? $res['link1'] : $res['link2'];
                 $link2 = $res['mode'] == 2 ? $res['link1'] : $res['link2'];
                 $out .= (empty(parent::$PLACE)) ? $link1 : $link2;
@@ -104,11 +96,11 @@ class Functions extends Vars
         return $out;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Показываем дату с учетом сдвига времени
-    -----------------------------------------------------------------
-    */
+    /**
+     * Показываем дату с учетом сдвига времени
+     * @param int $var       Время в Unix формате
+     * @return string
+     */
     public static function displayDate($var)
     {
         $shift = (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600;
@@ -121,73 +113,75 @@ class Functions extends Vars
         return date("d.m.Y / H:i", $var + $shift);
     }
 
-    /*
-    -----------------------------------------------------------------
-    Сообщения об ошибках
-    -----------------------------------------------------------------
-    */
-    public static function displayError($error = null, $link = null)
+    /**
+     * Сообщения об ошибках
+     * @param string|array $error
+     * @param string $link
+     * @return bool|string
+     */
+    public static function displayError($error = '', $link = '')
     {
         if (!empty($error)) {
             return '<div class="rmenu"><p><b>' . lng('error') . '!</b><br />' .
                 (is_array($error) ? implode('<br />', $error) : $error) . '</p>' .
                 (!empty($link) ? '<p>' . $link . '</p>' : '') . '</div>';
         } else {
-            return false;
+            return FALSE;
         }
     }
 
-    /*
-    -----------------------------------------------------------------
-    Отображение различных меню
-    -----------------------------------------------------------------
-    $delimiter - разделитель между пунктами
-    $end_space - выводится в конце
-    -----------------------------------------------------------------
-    */
+    /**
+     * Отображение различных меню
+     * @param array $val
+     * @param string $delimiter   Разделитель между пунктами
+     * @param string $end_space   Выводится в конце
+     * @return string
+     */
     public static function displayMenu($val = array(), $delimiter = ' | ', $end_space = '')
     {
         return implode($delimiter, array_diff($val, array(''))) . $end_space;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Постраничная навигация
-    -----------------------------------------------------------------
-    За основу взята доработанная функция от форума SMF 2.x.x
-    -----------------------------------------------------------------
-    */
-    public static function displayPagination($base_url, $start, $max_value, $num_per_page)
+    /**
+     * Постраничная навигация
+     * За основу взята доработанная функция от форума SMF 2.x.x
+     * @param string $url
+     * @param int $start
+     * @param int $total
+     * @param int $pagesize
+     * @return string
+     */
+    public static function displayPagination($url, $start, $total, $pagesize)
     {
         $neighbors = 2;
-        if ($start >= $max_value)
-            $start = max(0, (int)$max_value - (((int)$max_value % (int)$num_per_page) == 0 ? $num_per_page : ((int)$max_value % (int)$num_per_page)));
+        if ($start >= $total)
+            $start = max(0, (int)$total - (((int)$total % (int)$pagesize) == 0 ? $pagesize : ((int)$total % (int)$pagesize)));
         else
-            $start = max(0, (int)$start - ((int)$start % (int)$num_per_page));
-        $base_link = '<a class="pagenav" href="' . strtr($base_url, array('%' => '%%')) . 'page=%d' . '">%s</a>';
-        $out[] = $start == 0 ? '' : sprintf($base_link, $start / $num_per_page, '&lt;&lt;');
-        if ($start > $num_per_page * $neighbors)
+            $start = max(0, (int)$start - ((int)$start % (int)$pagesize));
+        $base_link = '<a class="pagenav" href="' . strtr($url, array('%' => '%%')) . 'page=%d' . '">%s</a>';
+        $out[] = $start == 0 ? '' : sprintf($base_link, $start / $pagesize, '&lt;&lt;');
+        if ($start > $pagesize * $neighbors)
             $out[] = sprintf($base_link, 1, '1');
-        if ($start > $num_per_page * ($neighbors + 1))
+        if ($start > $pagesize * ($neighbors + 1))
             $out[] = '<span style="font-weight: bold;">...</span>';
         for ($nCont = $neighbors; $nCont >= 1; $nCont--)
-            if ($start >= $num_per_page * $nCont) {
-                $tmpStart = $start - $num_per_page * $nCont;
-                $out[] = sprintf($base_link, $tmpStart / $num_per_page + 1, $tmpStart / $num_per_page + 1);
+            if ($start >= $pagesize * $nCont) {
+                $tmpStart = $start - $pagesize * $nCont;
+                $out[] = sprintf($base_link, $tmpStart / $pagesize + 1, $tmpStart / $pagesize + 1);
             }
-        $out[] = '<span class="currentpage"><b>' . ($start / $num_per_page + 1) . '</b></span>';
-        $tmpMaxPages = (int)(($max_value - 1) / $num_per_page) * $num_per_page;
+        $out[] = '<span class="currentpage"><b>' . ($start / $pagesize + 1) . '</b></span>';
+        $tmpMaxPages = (int)(($total - 1) / $pagesize) * $pagesize;
         for ($nCont = 1; $nCont <= $neighbors; $nCont++)
-            if ($start + $num_per_page * $nCont <= $tmpMaxPages) {
-                $tmpStart = $start + $num_per_page * $nCont;
-                $out[] = sprintf($base_link, $tmpStart / $num_per_page + 1, $tmpStart / $num_per_page + 1);
+            if ($start + $pagesize * $nCont <= $tmpMaxPages) {
+                $tmpStart = $start + $pagesize * $nCont;
+                $out[] = sprintf($base_link, $tmpStart / $pagesize + 1, $tmpStart / $pagesize + 1);
             }
-        if ($start + $num_per_page * ($neighbors + 1) < $tmpMaxPages)
+        if ($start + $pagesize * ($neighbors + 1) < $tmpMaxPages)
             $out[] = '<span style="font-weight: bold;">...</span>';
-        if ($start + $num_per_page * $neighbors < $tmpMaxPages)
-            $out[] = sprintf($base_link, $tmpMaxPages / $num_per_page + 1, $tmpMaxPages / $num_per_page + 1);
-        if ($start + $num_per_page < $max_value) {
-            $display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start / $num_per_page + 2);
+        if ($start + $pagesize * $neighbors < $tmpMaxPages)
+            $out[] = sprintf($base_link, $tmpMaxPages / $pagesize + 1, $tmpMaxPages / $pagesize + 1);
+        if ($start + $pagesize < $total) {
+            $display_page = ($start + $pagesize) > $total ? $total : ($start / $pagesize + 2);
             $out[] = sprintf($base_link, $display_page, '&gt;&gt;');
         }
         return implode(' ', $out);
@@ -221,9 +215,9 @@ class Functions extends Vars
        [footer]    (string)    Строка выводится внизу области "sub"
     -----------------------------------------------------------------
     */
-    public static function displayUser($user = false, $arg = false)
+    public static function displayUser($user = array(), $arg = array())
     {
-        $out = false;
+        $out = FALSE;
 
         if (!$user['id']) {
             $out = '<b>' . lng('guest') . '</b>';
@@ -278,7 +272,7 @@ class Functions extends Vars
         if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
         $ipinf = !isset($arg['iphide']) && (Vars::$USER_RIGHTS || ($user['id'] && $user['id'] == Vars::$USER_ID)) ? 1 : 0;
-        $lastvisit = time() > $user['last_visit'] + 300 && isset($arg['last_visit']) ? self::displayDate($user['last_visit']) : false;
+        $lastvisit = time() > $user['last_visit'] + 300 && isset($arg['last_visit']) ? self::displayDate($user['last_visit']) : FALSE;
         if ($ipinf || $lastvisit || isset($arg['sub']) && !empty($arg['sub']) || isset($arg['footer'])) {
             $out .= '<div class="sub">';
             if (isset($arg['sub'])) {
@@ -319,11 +313,12 @@ class Functions extends Vars
         return $out;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Скачка различных списков в виде файла
-    -----------------------------------------------------------------
-    */
+    /**
+     * Скачка текстовых данных в виде файла
+     * @param $str           Исходный текст
+     * @param $file          Имя файла
+     * @return bool
+     */
     public static function downloadFile($str, $file)
     {
         ob_end_clean();
@@ -338,27 +333,13 @@ class Functions extends Vars
         header('Pragma: public');
         header('Content-Length: ' . ob_get_length());
         flush();
-        return true;
+        return TRUE;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Форматирование имени файла
-    -----------------------------------------------------------------
-    */
-    public static function format($name)
-    {
-        $f1 = strrpos($name, ".");
-        $f2 = substr($name, $f1 + 1, 999);
-        $fname = strtolower($f2);
-        return $fname;
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Генерация соли
-    -----------------------------------------------------------------
-    */
+    /**
+     * Генерация соли для паролей
+     * @return string
+     */
     public static function generateSalt()
     {
         $salt = '';
@@ -369,25 +350,28 @@ class Functions extends Vars
         return $salt;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Генерация Токена
-    -----------------------------------------------------------------
-    */
+    /**
+     * Генерация Токена
+     * @return string
+     */
     public static function generateToken()
     {
-        return md5(self::generateSalt() . microtime(true));
+        return md5(self::generateSalt() . microtime(TRUE));
     }
 
-    /*
-    -----------------------------------------------------------------
-    Загружаем изображение системы
-    -----------------------------------------------------------------
-    */
+    /**
+     * Загружаем изображение системы
+     * @param string $img
+     * @param string $height
+     * @param string $width
+     * @param string $alt
+     * @param string $style
+     * @return bool|string
+     */
     public static function loadImage($img = '', $height = '', $width = '', $alt = '', $style = '')
     {
         if (empty($img)) {
-            return false;
+            return FALSE;
         }
 
         if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
@@ -395,58 +379,48 @@ class Functions extends Vars
         } elseif (is_file(TPLDEFAULT . 'img' . DIRECTORY_SEPARATOR . $img)) {
             $file = parent::$HOME_URL . '/assets/template/img/' . $img;
         } else {
-            return false;
+            return FALSE;
         }
         return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '"' . $style . '/>';
     }
 
-    /*
-    -----------------------------------------------------------------
-    Загружаем изображение модуля
-    -----------------------------------------------------------------
-    */
+    /**
+     * Загружаем изображение модуля
+     * @param string $img
+     * @param string $height
+     * @param string $width
+     * @param string $alt
+     * @param string $style
+     * @return bool|string
+     */
     public static function loadModuleImage($img = '', $height = '', $width = '', $alt = '', $style = '')
     {
         if (empty($img)) {
-            return false;
+            return FALSE;
         }
 
         if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . Vars::$MODULE . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/' . Vars::$MODULE .  '/img/' . $img;
+            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/' . Vars::$MODULE . '/img/' . $img;
         } elseif (is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
             $file = parent::$HOME_URL . '/modules/' . Vars::$MODULE . '/img/' . $img;
         } else {
-            return false;
+            return FALSE;
         }
         return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '"' . $style . '/>';
     }
 
-    public static function getImage($img = '', $alt = '', $style = '')
-    {
-            return '??';
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Загружаем иконки
-    -----------------------------------------------------------------
-    */
-    public static function getIcon($img = '', $height = 16, $width = 16, $style = '')
-    {
-        return '-??';
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Обработка смайлов
-    -----------------------------------------------------------------
-    */
-    public static function smileys($str, $adm = false)
+    /**
+     * Обработка Смайлов
+     * @param string $str    Исходный текст
+     * @param bool $adm      Обрабатывать Админские смайлы
+     * @return string        Обработанный текст
+     */
+    public static function smileys($str, $adm = FALSE)
     {
         static $pattern = array();
         if (empty($pattern)) {
             $file = CACHEPATH . 'smileys.dat';
-            if (file_exists($file) && ($smileys = file_get_contents($file)) !== false) {
+            if (file_exists($file) && ($smileys = file_get_contents($file)) !== FALSE) {
                 $pattern = unserialize($smileys);
             } else {
                 return $str;
@@ -460,11 +434,11 @@ class Functions extends Vars
         );
     }
 
-    /*
-    -----------------------------------------------------------------
-    Функция пересчета на дни, или часы
-    -----------------------------------------------------------------
-    */
+    /**
+     * Функция пересчета на дни, или часы
+     * @param int $var       Время в Unix формате
+     * @return string
+     */
     public static function timeCount($var)
     {
         if ($var < 0) $var = 0;
@@ -483,82 +457,82 @@ class Functions extends Vars
     public static function translit($str)
     {
         $replace = array(
-            'a' => 'а',
-            'b' => 'б',
-            'v' => 'в',
-            'g' => 'г',
-            'd' => 'д',
-            'e' => 'е',
+            'a'  => 'а',
+            'b'  => 'б',
+            'v'  => 'в',
+            'g'  => 'г',
+            'd'  => 'д',
+            'e'  => 'е',
             'yo' => 'ё',
             'zh' => 'ж',
-            'z' => 'з',
-            'i' => 'и',
-            'j' => 'й',
-            'k' => 'к',
-            'l' => 'л',
-            'm' => 'м',
-            'n' => 'н',
-            'o' => 'о',
-            'p' => 'п',
-            'r' => 'р',
-            's' => 'с',
-            't' => 'т',
-            'u' => 'у',
-            'f' => 'ф',
-            'h' => 'х',
-            'c' => 'ц',
+            'z'  => 'з',
+            'i'  => 'и',
+            'j'  => 'й',
+            'k'  => 'к',
+            'l'  => 'л',
+            'm'  => 'м',
+            'n'  => 'н',
+            'o'  => 'о',
+            'p'  => 'п',
+            'r'  => 'р',
+            's'  => 'с',
+            't'  => 'т',
+            'u'  => 'у',
+            'f'  => 'ф',
+            'h'  => 'х',
+            'c'  => 'ц',
             'ch' => 'ч',
-            'w' => 'ш',
+            'w'  => 'ш',
             'sh' => 'щ',
-            'q' => 'ъ',
-            'y' => 'ы',
-            'x' => 'э',
+            'q'  => 'ъ',
+            'y'  => 'ы',
+            'x'  => 'э',
             'yu' => 'ю',
             'ya' => 'я',
-            'A' => 'А',
-            'B' => 'Б',
-            'V' => 'В',
-            'G' => 'Г',
-            'D' => 'Д',
-            'E' => 'Е',
+            'A'  => 'А',
+            'B'  => 'Б',
+            'V'  => 'В',
+            'G'  => 'Г',
+            'D'  => 'Д',
+            'E'  => 'Е',
             'YO' => 'Ё',
             'ZH' => 'Ж',
-            'Z' => 'З',
-            'I' => 'И',
-            'J' => 'Й',
-            'K' => 'К',
-            'L' => 'Л',
-            'M' => 'М',
-            'N' => 'Н',
-            'O' => 'О',
-            'P' => 'П',
-            'R' => 'Р',
-            'S' => 'С',
-            'T' => 'Т',
-            'U' => 'У',
-            'F' => 'Ф',
-            'H' => 'Х',
-            'C' => 'Ц',
+            'Z'  => 'З',
+            'I'  => 'И',
+            'J'  => 'Й',
+            'K'  => 'К',
+            'L'  => 'Л',
+            'M'  => 'М',
+            'N'  => 'Н',
+            'O'  => 'О',
+            'P'  => 'П',
+            'R'  => 'Р',
+            'S'  => 'С',
+            'T'  => 'Т',
+            'U'  => 'У',
+            'F'  => 'Ф',
+            'H'  => 'Х',
+            'C'  => 'Ц',
             'CH' => 'Ч',
-            'W' => 'Ш',
+            'W'  => 'Ш',
             'SH' => 'Щ',
-            'Q' => 'Ъ',
-            'Y' => 'Ы',
-            'X' => 'Э',
+            'Q'  => 'Ъ',
+            'Y'  => 'Ы',
+            'X'  => 'Э',
             'YU' => 'Ю',
             'YA' => 'Я'
         );
         return strtr($str, $replace);
     }
-	
+
     /**
     -----------------------------------------------------------------
     Функция почты "Счетчики сообщений"
     -----------------------------------------------------------------
-    */
-    public static function mailCount($var = null)
+     */
+    public static function mailCount($var = NULL)
     {
-        if ($var == null) {
+        if ($var == NULL) {
             //Всего сообщений (входящих / исходящих) без учета удаленных
             return mysql_result(mysql_query("SELECT COUNT(*)
 			FROM `cms_mail_messages` 
@@ -583,56 +557,57 @@ class Functions extends Vars
 				AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "' 
 				AND `cms_mail_contacts`.`banned`!='1'"), 0);
             default;
-                return false;
+                return FALSE;
         }
     }
-	
+
     /**
     -----------------------------------------------------------------
     Функция подсчета контактов
     -----------------------------------------------------------------
-    */
-	 
-	public static function contactsCount()
+     */
+
+    public static function contactsCount()
     {
-		return mysql_result(mysql_query("SELECT COUNT(*)
+        return mysql_result(mysql_query("SELECT COUNT(*)
 		FROM `cms_mail_contacts`
 		WHERE `user_id`='" . parent::$USER_ID .
-		"' AND `delete`='0' AND `banned`='0' AND `archive`='0'"), 0);
+            "' AND `delete`='0' AND `banned`='0' AND `archive`='0'"), 0);
 
-	}
-	
+    }
+
     /**
     -----------------------------------------------------------------
     Функция определения друга
     -----------------------------------------------------------------
-    */
-    public static function checkFriend (
+     */
+    public static function checkFriend(
         $id, //ID пользователя для проверки
-        $param = false //если true, то выполняется просто проверка на дружбу
-        ) {
+        $param = FALSE //если true, то выполняется просто проверка на дружбу
+    )
+    {
         //Проверяем является ли пользователь другом 
-        $friend = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $id . "' AND `user_id`='" . parent::$USER_ID . "') OR (`contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'))"), 0); 
-        if($friend != 2) {
-            if($param === false) { //Если функция вызвана без дополнительного параметра, то проверяем заявки
+        $friend = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $id . "' AND `user_id`='" . parent::$USER_ID . "') OR (`contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'))"), 0);
+        if ($friend != 2) {
+            if ($param === FALSE) { //Если функция вызвана без дополнительного параметра, то проверяем заявки
                 //Проверяем есть ли заявка от выбранного пользователя
-                if(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'"), 0) == 1) return 2; //Подтверждаем дружбу
+                if (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'"), 0) == 1) return 2; //Подтверждаем дружбу
                 //Проверяем подавали ли мы заявку
-                elseif(mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . parent::$USER_ID . "' AND `contact_id`='" . $id . "'"), 0) == 1) return 3; //Отменяем заявку
+                elseif (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . parent::$USER_ID . "' AND `contact_id`='" . $id . "'"), 0) == 1) return 3; //Отменяем заявку
             }
             return 0; //Пользователь не является другом
         } else return 1; //Пользователь друг
     }
-    
+
     /**
     -----------------------------------------------------------------
     Функция друзей "Счетчик друзей"
     -----------------------------------------------------------------
-    */
-    public static function friendsCount($var = null)
+     */
+    public static function friendsCount($var = NULL)
     {
         //Количество друзей пользователя с вызванным ID
-        if($var == null)
+        if ($var == NULL)
             return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
 			LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
 			WHERE `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
@@ -643,33 +618,66 @@ class Functions extends Vars
 			WHERE `cms_mail_contacts`.`user_id`='" . $var . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
 			"), 0);
     }
-	
-	/*
+
+    /*
     -----------------------------------------------------------------
     Проверка пользователя на игнор
     -----------------------------------------------------------------
     */
-	public static function checkIgnor(
-		$var = null, //ID пользователя
-		$param = false)
+    public static function checkIgnor(
+        $var = NULL, //ID пользователя
+        $param = FALSE)
     {
-		if ( $var == null )
-            return false;
-		if($param === false) {
-			$query = mysql_query( "SELECT * FROM `cms_mail_contacts` 
+        if ($var == NULL)
+            return FALSE;
+        if ($param === FALSE) {
+            $query = mysql_query("SELECT * FROM `cms_mail_contacts`
 			WHERE `user_id`='" . parent::$USER_ID . "' 
 			AND `contact_id`='" . $var . "' 
-			AND `banned`='1' LIMIT 1" );
-			if ( mysql_num_rows( $query ) )
-				return true;
-		} else {
-			$query = mysql_query( "SELECT * FROM `cms_mail_contacts` 
+			AND `banned`='1' LIMIT 1");
+            if (mysql_num_rows($query))
+                return TRUE;
+        } else {
+            $query = mysql_query("SELECT * FROM `cms_mail_contacts`
 			WHERE `user_id`='" . $var . "' 
 			AND `contact_id`='" . parent::$USER_ID . "' 
-			AND `banned`='1' LIMIT 1" );
-			if ( mysql_num_rows( $query ) )
-				return true;
-		}
-		return false;
-	}
+			AND `banned`='1' LIMIT 1");
+            if (mysql_num_rows($query))
+                return TRUE;
+        }
+        return FALSE;
+    }
+
+    /*
+     * Старые функции, кандидаты нга выпиливание
+     * В новых разработках НЕ ПРИМЕНЯТЬ!
+     */
+
+    /*
+    -----------------------------------------------------------------
+    Форматирование имени файла
+    -----------------------------------------------------------------
+    */
+    public static function format($name)
+    {
+        $f1 = strrpos($name, ".");
+        $f2 = substr($name, $f1 + 1, 999);
+        $fname = strtolower($f2);
+        return $fname;
+    }
+
+    /*
+    -----------------------------------------------------------------
+    Старая функция загрузки иконок (на удаление)
+    -----------------------------------------------------------------
+    */
+    public static function getIcon($img = '', $height = 16, $width = 16, $style = '')
+    {
+        return '-??';
+    }
+
+    public static function getImage($img = '', $alt = '', $style = '')
+    {
+        return '??';
+    }
 }
