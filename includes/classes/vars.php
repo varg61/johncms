@@ -36,6 +36,7 @@ abstract class Vars
 
     // Системные настройки
     public static $SYSTEM_SET = array(
+        'lng'              => '#',
         'timeshift'        => 0,
         'copyright'        => 'Powered by JohnCMS',
         'email'            => '',

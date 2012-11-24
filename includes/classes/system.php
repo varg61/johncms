@@ -141,11 +141,7 @@ class System extends Vars
     */
     private function _lngDetect()
     {
-        $setlng = isset($_POST['setlng']) ? substr(trim($_POST['setlng']), 0, 2) : false;
-        if ($setlng && array_key_exists($setlng, parent::$LNG_LIST)) {
-            $_SESSION['lng'] = $setlng;
-        }
-        if (isset($_SESSION['lng']) && array_key_exists($_SESSION['lng'], parent::$LNG_LIST)) {
+        if (isset($_SESSION['lng'])) {
             parent::$LNG_ISO = $_SESSION['lng'];
         } elseif (parent::$USER_ID && isset(parent::$USER_SET['lng']) && array_key_exists(parent::$USER_SET['lng'], parent::$LNG_LIST)) {
             parent::$LNG_ISO = parent::$USER_SET['lng'];
@@ -153,7 +149,7 @@ class System extends Vars
             $accept = explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE'])));
             foreach ($accept as $var) {
                 $lng = substr($var, 0, 2);
-                if (array_key_exists($lng, parent::$LNG_LIST)) {
+                if (in_array($lng, Languages::getInstance()->getLngList())) {
                     parent::$LNG_ISO = $lng;
                     break;
                 }
