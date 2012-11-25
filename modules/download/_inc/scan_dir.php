@@ -66,9 +66,9 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             mysql_query("OPTIMIZE TABLE `cms_download_files`");
             mysql_query("OPTIMIZE TABLE `cms_download_comments`");
             mysql_query("OPTIMIZE TABLE `cms_download_more`");
-            echo '<div class="phdr"><b>' . lng('scan_dir_clean') . '</b></div>' .
-                '<div class="rmenu"><p>' . lng('scan_dir_clean_ok') . '</p></div>' .
-                '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+            echo '<div class="phdr"><b>' . __('scan_dir_clean') . '</b></div>' .
+                '<div class="rmenu"><p>' . __('scan_dir_clean_ok') . '</p></div>' .
+                '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
             break;
 
         default:
@@ -82,13 +82,13 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 $res_down_cat = mysql_fetch_assoc($cat);
                 $scan_dir = $res_down_cat['dir'];
                 if (mysql_num_rows($cat) == 0 || !is_dir($scan_dir)) {
-                    echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+                    echo Functions::displayError(__('not_found_dir'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
                     exit;
                 }
             } else {
                 $scan_dir = $files_path;
             }
-            echo '<div class="phdr"><b>' . lng('download_scan_dir') . '</b>' . (Vars::$ID ? ': ' . Validate::checkout($res_down_cat['rus_name']) : '') . '</div>';
+            echo '<div class="phdr"><b>' . __('download_scan_dir') . '</b>' . (Vars::$ID ? ': ' . Validate::checkout($res_down_cat['rus_name']) : '') . '</div>';
             if (isset($_GET['yes'])) {
                 /*
                     -----------------------------------------------------------------
@@ -161,7 +161,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                                 if (preg_match("/^file([0-9]+)_/", $name)) {
                                     if (!in_array($name, $array_more)) {
                                         $refid = (int)str_replace('file', '', $name);
-                                        $name_link = mysql_real_escape_string(Validate::checkout(mb_substr(str_replace('file' . $refid . '_', lng('download') . ' ', $name), 0, 200)));
+                                        $name_link = mysql_real_escape_string(Validate::checkout(mb_substr(str_replace('file' . $refid . '_', __('download') . ' ', $name), 0, 200)));
                                         $name = mysql_real_escape_string($name);
                                         $size = filesize($val);
                                         mysql_query("INSERT INTO `cms_download_more` SET
@@ -214,35 +214,35 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                         mysql_query("UPDATE `cms_download_files` SET `total` = '$dir_files' WHERE `id` = '" . $res_down['id'] . "'");
                     }
                 }
-                echo '<div class="menu"><b>' . lng('scan_dir_add') . ':</b><br />' .
-                    lng('scan_dir_add_cat') . ': ' . $i . '<br />' .
-                    lng('scan_dir_add_files') . ': ' . $i_three . '<br />' .
-                    lng('scan_dir_add_files_more') . ': ' . $i_two . '</div>';
-                if (Vars::$START) echo '<div class="gmenu"><a href="' . Vars::$URI . '?act=scan_about&amp;id=' . Vars::$ID . '">' . lng('download_scan_about') . '</div>';
+                echo '<div class="menu"><b>' . __('scan_dir_add') . ':</b><br />' .
+                    __('scan_dir_add_cat') . ': ' . $i . '<br />' .
+                    __('scan_dir_add_files') . ': ' . $i_three . '<br />' .
+                    __('scan_dir_add_files_more') . ': ' . $i_two . '</div>';
+                if (Vars::$START) echo '<div class="gmenu"><a href="' . Vars::$URI . '?act=scan_about&amp;id=' . Vars::$ID . '">' . __('download_scan_about') . '</div>';
                 echo '<div class="rmenu">' .
-                    '<a href="' . Vars::$URI . '?act=scan_dir&amp;do=clean&amp;id=' . Vars::$ID . '">' . lng('scan_dir_clean') . '</a><br />' .
-                    '<a href="' . Vars::$URI . '?act=recount&amp;do=clean&amp;id=' . Vars::$ID . '">' . lng('download_recount') . '</a></div>';
+                    '<a href="' . Vars::$URI . '?act=scan_dir&amp;do=clean&amp;id=' . Vars::$ID . '">' . __('scan_dir_clean') . '</a><br />' .
+                    '<a href="' . Vars::$URI . '?act=recount&amp;do=clean&amp;id=' . Vars::$ID . '">' . __('download_recount') . '</a></div>';
             } else {
                 /*
                     -----------------------------------------------------------------
                     Выбор режима обновление
                     -----------------------------------------------------------------
                     */
-                echo '<div class="menu"><b><a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '">' . (Vars::$ID ? lng('download_scan_dir2') : lng('download_scan_dir4')) . '</a></b>' .
-                    (Vars::$ID ? '<br /><a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '&amp;mod=1">' . lng('download_scan_dir3') . '</a>' : '') . '</div>';
+                echo '<div class="menu"><b><a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '">' . (Vars::$ID ? __('download_scan_dir2') : __('download_scan_dir4')) . '</a></b>' .
+                    (Vars::$ID ? '<br /><a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '&amp;mod=1">' . __('download_scan_dir3') . '</a>' : '') . '</div>';
                 if (Vars::$ID)
-                    echo '<div class="rmenu"><a href="' . Vars::$URI . '?act=scan_dir&amp;yes">' . lng('download_scan_dir4') . '</a></div>';
-                echo '<div class="phdr"><b>' . lng('scan_dir_v2') . '</b> beta</div>' .
-                    '<div class="topmenu">' . lng('scan_dir_about') . '</div><div class="menu">' .
-                    '<a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '&amp;start=1"><b>' . (Vars::$ID ? lng('download_scan_dir2') : lng('download_scan_dir4')) . '</b></a> ' .
-                    (Vars::$ID ? '<br /><a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '&amp;mod=1&amp;start=1">' . lng('download_scan_dir3') . '</a>' : '') .
-                    '<div class="sub"><small>' . lng('scan_dir_v2_faq') . '</small></div>' .
+                    echo '<div class="rmenu"><a href="' . Vars::$URI . '?act=scan_dir&amp;yes">' . __('download_scan_dir4') . '</a></div>';
+                echo '<div class="phdr"><b>' . __('scan_dir_v2') . '</b> beta</div>' .
+                    '<div class="topmenu">' . __('scan_dir_about') . '</div><div class="menu">' .
+                    '<a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '&amp;start=1"><b>' . (Vars::$ID ? __('download_scan_dir2') : __('download_scan_dir4')) . '</b></a> ' .
+                    (Vars::$ID ? '<br /><a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;id=' . Vars::$ID . '&amp;mod=1&amp;start=1">' . __('download_scan_dir3') . '</a>' : '') .
+                    '<div class="sub"><small>' . __('scan_dir_v2_faq') . '</small></div>' .
                     '</div><div class="rmenu">';
                 if (Vars::$ID)
-                    echo ' <a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;start=1">' . lng('download_scan_dir4') . '</a><br />';
-                echo '<a href="' . Vars::$URI . '?act=scan_dir&amp;do=clean&amp;id=' . Vars::$ID . '">' . lng('scan_dir_clean') . '</a></div>';
+                    echo ' <a href="' . Vars::$URI . '?act=scan_dir&amp;yes&amp;start=1">' . __('download_scan_dir4') . '</a><br />';
+                echo '<a href="' . Vars::$URI . '?act=scan_dir&amp;do=clean&amp;id=' . Vars::$ID . '">' . __('scan_dir_clean') . '</a></div>';
             }
-            echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+            echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
     }
 } else {
     header('Location: ' . Vars::$HOME_URL . '/404');

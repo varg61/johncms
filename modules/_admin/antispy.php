@@ -13,7 +13,7 @@ define('ROOT_DIR', '.');
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
@@ -200,19 +200,19 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $scaner->scan();
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_dist_scan') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('antispy') . '</b></a> | ' . __('antispy_dist_scan') . '</div>';
         if (count($scaner->bad_files)) {
-            echo '<div class="rmenu"><small>' . lng('antispy_dist_scan_bad') . '</small></div>';
+            echo '<div class="rmenu"><small>' . __('antispy_dist_scan_bad') . '</small></div>';
             echo '<div class="menu">';
             foreach ($scaner->bad_files as $idx => $data) {
                 echo $data['file_path'] . '<br />';
             }
             echo'</div>';
         } else {
-            echo '<div class="gmenu"><p>' . lng('antispy_dist_scan_good') . '</p></div>';
+            echo '<div class="gmenu"><p>' . __('antispy_dist_scan_good') . '</p></div>';
         }
-        echo'<div class="phdr">' . lng('total') . ': ' . count($scaner->bad_files) . '</div>' .
-            '<p><a href="' . Vars::$URI . '?act=scan">' . lng('antispy_rescan') . '</a></p>';
+        echo'<div class="phdr">' . __('total') . ': ' . count($scaner->bad_files) . '</div>' .
+            '<p><a href="' . Vars::$URI . '?act=scan">' . __('antispy_rescan') . '</a></p>';
         break;
 
     case 'snapscan':
@@ -222,21 +222,21 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $scaner->snapscan();
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_scan') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('antispy') . '</b></a> | ' . __('antispy_snapshot_scan') . '</div>';
         if (count($scaner->track_files) == 0) {
-            echo Functions::displayError(lng('antispy_no_snapshot'), '<a href="' . Vars::$URI . '?act=snap">' . lng('antispy_snapshot_create') . '</a>');
+            echo Functions::displayError(__('antispy_no_snapshot'), '<a href="' . Vars::$URI . '?act=snap">' . __('antispy_snapshot_create') . '</a>');
         } else {
             if (count($scaner->bad_files)) {
-                echo '<div class="rmenu">' . lng('antispy_snapshot_scan_bad') . '</div>';
+                echo '<div class="rmenu">' . __('antispy_snapshot_scan_bad') . '</div>';
                 echo '<div class="menu">';
                 foreach ($scaner->bad_files as $idx => $data) {
                     echo $data['file_path'] . '<br />';
                 }
                 echo '</div>';
             } else {
-                echo '<div class="gmenu"><p>' . lng('antispy_snapshot_scan_ok') . '</p></div>';
+                echo '<div class="gmenu"><p>' . __('antispy_snapshot_scan_ok') . '</p></div>';
             }
-            echo '<div class="phdr">' . lng('total') . ': ' . count($scaner->bad_files) . '</div>';
+            echo '<div class="phdr">' . __('total') . ': ' . count($scaner->bad_files) . '</div>';
         }
         break;
 
@@ -246,17 +246,17 @@ switch (Vars::$ACT) {
         Создаем снимок файлов
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('antispy') . '</b></a> | ' . lng('antispy_snapshot_create') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('antispy') . '</b></a> | ' . __('antispy_snapshot_create') . '</div>';
         if (isset($_POST['submit'])) {
             $scaner->snap();
-            echo'<div class="gmenu"><p>' . lng('antispy_snapshot_create_ok') . '</p></div>' .
-                '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('continue') . '</a></div>';
+            echo'<div class="gmenu"><p>' . __('antispy_snapshot_create_ok') . '</p></div>' .
+                '<div class="phdr"><a href="' . Vars::$URI . '">' . __('continue') . '</a></div>';
         } else {
             echo'<form action="' . Vars::$URI . '?act=snap" method="post">' .
-                '<div class="menu"><p>' . lng('antispy_snapshot_warning') . '</p>' .
-                '<p><input type="submit" name="submit" value="' . lng('antispy_snapshot_create') . '" /></p>' .
+                '<div class="menu"><p>' . __('antispy_snapshot_warning') . '</p>' .
+                '<p><input type="submit" name="submit" value="' . __('antispy_snapshot_create') . '" /></p>' .
                 '</div></form>' .
-                '<div class="phdr"><small>' . lng('antispy_snapshot_help') . '</small></div>';
+                '<div class="phdr"><small>' . __('antispy_snapshot_help') . '</small></div>';
         }
         break;
 

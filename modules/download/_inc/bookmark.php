@@ -15,9 +15,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Закладки
 -----------------------------------------------------------------
 */
-$textl = lng('download_bookmark');
+$textl = __('download_bookmark');
 if (!Vars::$USER_ID) {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+    echo Functions::displayError(__('access_guest_forbidden'));
     exit;
 }
 echo '<div class="phdr"><b>' . $textl . '</b></div>';
@@ -43,9 +43,9 @@ if ($total) {
         echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
     }
 } else {
-     echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+     echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 /*
 -----------------------------------------------------------------
 Навигация
@@ -55,6 +55,6 @@ if ($total > Vars::$USER_SET['page_size']) {
 	echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=bookmark&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
  	'<p><form action="' . Vars::$URI . '" method="get">' .
   	'<input type="hidden" value="bookmark" name="act" />' .
-    '<input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+    '<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
 }
-echo '<p><a href="' . Vars::$URI . '">' . lng('download_title') . '</a></p>';
+echo '<p><a href="' . Vars::$URI . '">' . __('download_title') . '</a></p>';

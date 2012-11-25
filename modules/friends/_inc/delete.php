@@ -38,14 +38,14 @@ if ($fr == 2) {
         //`time` = '" . time() . "',
         //`sys` = '1',
         //`them` = '{$lng_profile['friendship']}'");
-        $tpl->contents = '<div class="rmenu"><p>' . lng('you_deleted_friends') . '</p>
-		<p><a href="' . Vars::$MODULE_URI . '">' . lng('friends') . '</a></p>
+        $tpl->contents = '<div class="rmenu"><p>' . __('you_deleted_friends') . '</p>
+		<p><a href="' . Vars::$MODULE_URI . '">' . __('friends') . '</a></p>
 		</div>';
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=delete&amp;id=' . Vars::$ID;
-        $tpl->select = lng('really_deleted_friends');
-        $tpl->submit = lng('confirm');
-        $tpl->phdr = lng('deleted_friends');
+        $tpl->select = __('really_deleted_friends');
+        $tpl->submit = __('confirm');
+        $tpl->phdr = __('deleted_friends');
         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
@@ -53,5 +53,5 @@ if ($fr == 2) {
         $tpl->contents = $tpl->includeTpl('select');
     }
 } else {
-    $tpl->contents = Functions::displayError(lng('removing_not_possible'));
+    $tpl->contents = Functions::displayError(__('removing_not_possible'));
 }

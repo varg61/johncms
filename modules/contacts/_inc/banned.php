@@ -19,7 +19,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'banned' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'banned' );
 //Считаем количество контактов в игноре
 $total = mysql_result( mysql_query( "SELECT COUNT(*)
  FROM `cms_mail_contacts`
@@ -99,7 +99,7 @@ if ( $total )
     $tpl->contacts = $tpl->includeTpl( 'contacts' );
 } else
 {
-    $tpl->contacts = '<div class="rmenu">' . lng( 'no_banned' ) . '!</div>';
+    $tpl->contacts = '<div class="rmenu">' . __( 'no_banned' ) . '!</div>';
 }
 //Подключаем шаблон модуля banned.php
 $tpl->contents = $tpl->includeTpl( 'banned' );

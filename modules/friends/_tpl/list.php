@@ -1,12 +1,12 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? lng('user_profile') : lng('my_profile')) ?></b></a> | <?= lng('information') ?>
+    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) ?></b></a> | <?= __('information') ?>
 </div>
 <div class="user">
     <p><?= Functions::displayUser($this->user, array('iphide' => 1,)) ?></p>
 </div>
 <div class="phdr">
     <strong>
-        <?= lng('friends')?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $this->id ?>"><?= $this->nickname ?></a>
+        <?= __('friends')?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $this->id ?>"><?= $this->nickname ?></a>
     </strong>
 </div>
 <?php if ($this->total): ?>
@@ -20,10 +20,10 @@
     </div>
     <?php endforeach ?>
 <?php else: ?>
-<div class="menu"><p><?= lng('list_empty') ?></p></div>
+<div class="menu"><p><?= __('list_empty') ?></p></div>
 <?php endif ?>
 <div class="phdr">
-    <?= lng('total') ?>: <?= $this->total ?>
+    <?= __('total') ?>: <?= $this->total ?>
 </div>
 <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
 <div class="topmenu">
@@ -32,7 +32,7 @@
 <form action="" method="post">
     <p>
         <input type="text" name="page" size="2" value="<?= Vars::$PAGE ?>"/>
-        <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;"/>
+        <input type="submit" value="<?= __('to_page') ?> &gt;&gt;"/>
     </p>
 </form>
 <?php endif ?>

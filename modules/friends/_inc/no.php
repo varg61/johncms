@@ -26,7 +26,7 @@ if ($fr != 2) {
         $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'"),
             0);
         if ($fr_out == 0) {
-            $tpl->contents = functions::displayError(lng('not_demand_friendship'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a>');
+            $tpl->contents = functions::displayError(__('not_demand_friendship'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a>');
         } else {
 			mysql_query("UPDATE `cms_mail_contacts` SET
 			`access`='0' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'");
@@ -41,14 +41,14 @@ if ($fr != 2) {
 			//`theme` = '{$lng_profile['friendship']}'");
 			//$text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=no&id=' . $id . ']' . $lng_profile['decline'] . '[/url]';
 			//mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
-			$tpl->contents = '<div class="rmenu"><p>' . lng('canceled_demand_send') . '</p>
-			<p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p></div>';
+			$tpl->contents = '<div class="rmenu"><p>' . __('canceled_demand_send') . '</p>
+			<p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></p></div>';
 		}
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=no&amp;id=' . Vars::$ID;
-        $tpl->select = lng('really_canceled_demand');
-        $tpl->submit = lng('confirm');
-        $tpl->phdr = lng('canceled_demand');
+        $tpl->select = __('really_canceled_demand');
+        $tpl->submit = __('confirm');
+        $tpl->phdr = __('canceled_demand');
         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
@@ -56,5 +56,5 @@ if ($fr != 2) {
         $tpl->contents = $tpl->includeTpl('select');
     }
 } else {
-    $tpl->contents = Functions::displayError(lng('already_your_friend'));
+    $tpl->contents = Functions::displayError(__('already_your_friend'));
 }

@@ -14,9 +14,9 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 // Ограничиваем доступ к Библиотеке
 $error = '';
 if ((!isset(Vars::$ACL['library']) || !Vars::$ACL['library']) && Vars::$USER_RIGHTS < 7) {
-    $error = lng('library_closed');
+    $error = __('library_closed');
 } elseif (isset(Vars::$ACL['library']) && Vars::$ACL['library'] == 1 && !Vars::$USER_ID) {
-    $error = lng('access_guest_forbidden');
+    $error = __('access_guest_forbidden');
 }
 if ($error) {
     echo '<div class="rmenu"><p>' . $error . '</p></div>';
@@ -51,31 +51,31 @@ if (isset($actions[Vars::$ACT])
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     if (!isset(Vars::$ACL['library']) || !Vars::$ACL['library']) {
-        echo '<p><font color="#FF0000"><b>' . lng('library_closed') . '</b></font></p>';
+        echo '<p><font color="#FF0000"><b>' . __('library_closed') . '</b></font></p>';
     }
     if (!Vars::$ID) {
-        echo '<div class="phdr"><b>' . lng('library') . '</b></div>';
-        echo '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . lng('search') . '</a></div>';
+        echo '<div class="phdr"><b>' . __('library') . '</b></div>';
+        echo '<div class="topmenu"><a href="' . Vars::$URI . '/search">' . __('search') . '</a></div>';
         if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             // Считаем число статей, ожидающих модерацию
             $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'");
             $res = mysql_result($req, 0);
             if ($res > 0)
-                echo '<div class="rmenu">' . lng('on_moderation') . ': <a href="' . Vars::$URI . '?act=moder">' . $res . '</a></div>';
+                echo '<div class="rmenu">' . __('on_moderation') . ': <a href="' . Vars::$URI . '?act=moder">' . $res . '</a></div>';
         }
         // Считаем новое в библиотеке
         $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type`='bk' AND `moder`='1'");
         $res = mysql_result($req, 0);
         echo '<div class="gmenu"><p>';
         if ($res > 0)
-            echo '<a href="' . Vars::$URI . '?act=new">' . lng('new_articles') . '</a> (' . $res . ')<br/>';
-        echo '<a href="' . Vars::$URI . '?act=topread">' . lng('most_readed') . '</a></p></div>';
+            echo '<a href="' . Vars::$URI . '?act=new">' . __('new_articles') . '</a> (' . $res . ')<br/>';
+        echo '<a href="' . Vars::$URI . '?act=topread">' . __('most_readed') . '</a></p></div>';
         Vars::$ID = 0;
         $tip = "cat";
     } else {
         $tip = $zag['type'];
         if ($tip == "cat") {
-            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('library') . '</b></a> | ' . htmlentities($zag['text'], ENT_QUOTES, 'UTF-8') . '</div>';
+            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('library') . '</b></a> | ' . htmlentities($zag['text'], ENT_QUOTES, 'UTF-8') . '</div>';
         }
     }
 
@@ -106,7 +106,7 @@ if (isset($actions[Vars::$ACT])
                     echo '<a href="' . Vars::$URI . '?id=' . $cat1['id'] . '">' . $cat1['text'] . '</a>(' . $kol . ')</div>';
                     ++$i;
                 }
-                echo '<div class="phdr">' . lng('total') . ': ' . $totalcat . '</div>';
+                echo '<div class="phdr">' . __('total') . ': ' . $totalcat . '</div>';
             } elseif ($totalbk > 0) {
                 $total = $totalbk;
                 if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
@@ -116,11 +116,11 @@ if (isset($actions[Vars::$ACT])
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b><a href="' . Vars::$URI . '?id=' . $bk1['id'] . '">' . htmlentities($bk1['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
                     echo htmlentities($bk1['announce'], ENT_QUOTES, 'UTF-8');
-                    echo '<div class="sub"><span class="gray">' . lng('added') . ':</span> ' . $bk1['avtor'] . ' (' . Functions::displayDate($bk1['time']) . ')<br />';
-                    echo '<span class="gray">' . lng('reads') . ':</span> ' . $bk1['count'] . '</div></div>';
+                    echo '<div class="sub"><span class="gray">' . __('added') . ':</span> ' . $bk1['avtor'] . ' (' . Functions::displayDate($bk1['time']) . ')<br />';
+                    echo '<span class="gray">' . __('reads') . ':</span> ' . $bk1['count'] . '</div></div>';
                     ++$i;
                 }
-                echo '<div class="phdr">' . lng('total') . ': ' . $totalbk . '</div>';
+                echo '<div class="phdr">' . __('total') . ': ' . $totalbk . '</div>';
             } else {
                 $total = 0;
             }
@@ -129,7 +129,7 @@ if (isset($actions[Vars::$ACT])
                 echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                     '<p><form action="' . Vars::$URI . '?id=' . Vars::$ID . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
-                    '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+                    '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                     '</form></p>';
             }
             echo '<p>';
@@ -137,19 +137,19 @@ if (isset($actions[Vars::$ACT])
                 $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . Vars::$ID . "'");
                 $ct1 = mysql_num_rows($ct);
                 if ($ct1 == 0) {
-                    echo '<a href="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '">' . lng('delete_category') . '</a><br/>';
+                    echo '<a href="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete_category') . '</a><br/>';
                 }
-                echo '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('edit_category') . '</a><br/>';
+                echo '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('edit_category') . '</a><br/>';
             }
             if ((Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) && (isset($zag['ip']) && $zag['ip'] == 1 || Vars::$ID == 0)) {
-                echo '<a href="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '">' . lng('create_category') . '</a><br/>';
+                echo '<a href="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '">' . __('create_category') . '</a><br/>';
             }
             if (isset($zag['ip']) && $zag['ip'] == 0 && Vars::$ID != 0) {
                 if ((Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) || ($zag['soft'] == 1 && !empty($_SESSION['uid']))) {
-                    echo '<a href="' . Vars::$URI . '?act=write&amp;id=' . Vars::$ID . '">' . lng('write_article') . '</a><br/>';
+                    echo '<a href="' . Vars::$URI . '?act=write&amp;id=' . Vars::$ID . '">' . __('write_article') . '</a><br/>';
                 }
                 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
-                    echo '<a href="' . Vars::$URI . '?act=load&amp;id=' . Vars::$ID . '">' . lng('upload_article') . '</a><br/>';
+                    echo '<a href="' . Vars::$URI . '?act=load&amp;id=' . Vars::$ID . '">' . __('upload_article') . '</a><br/>';
                 }
             }
             if (Vars::$ID) {
@@ -170,7 +170,7 @@ if (isset($actions[Vars::$ACT])
                     $nadir = $dnamm1['refid'];
                     $catname = $dnamm3['text'];
                 }
-                echo '<a href="' . Vars::$URI . '">' . lng('to_library') . '</a><br/>';
+                echo '<a href="' . Vars::$URI . '">' . __('to_library') . '</a><br/>';
             }
             echo '</p>';
             break;
@@ -230,7 +230,7 @@ if (isset($actions[Vars::$ACT])
             if (Vars::$SYSTEM_SET['mod_lib_comm'] || Vars::$USER_RIGHTS >= 7) {
                 $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = " . Vars::$ID);
                 $km1 = mysql_num_rows($km);
-                $comm_link = '<a href="' . Vars::$URI . '?act=komm&amp;id=' . Vars::$ID . '">' . lng('comments') . '</a> (' . $km1 . ')';
+                $comm_link = '<a href="' . Vars::$URI . '?act=komm&amp;id=' . Vars::$ID . '">' . __('comments') . '</a> (' . $km1 . ')';
             } else {
                 $comm_link = '&#160;';
             }
@@ -241,14 +241,14 @@ if (isset($actions[Vars::$ACT])
                     '</div><div class="topmenu">' .
                     '<form action="' . Vars::$URI . '?id=' . Vars::$ID . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
-                    '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+                    '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                     '</form></div>';
             }
             if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
-                echo '<p><a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('edit') . '</a><br/>';
-                echo '<a href="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '">' . lng('delete') . '</a></p>';
+                echo '<p><a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('edit') . '</a><br/>';
+                echo '<a href="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete') . '</a></p>';
             }
-            echo '<a href="' . Vars::$URI . '?act=java&amp;id=' . Vars::$ID . '">' . lng('download_java') . '</a><br /><br />';
+            echo '<a href="' . Vars::$URI . '?act=java&amp;id=' . Vars::$ID . '">' . __('download_java') . '</a><br /><br />';
             $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $zag['refid'] . "'");
             $dnam1 = mysql_fetch_array($dnam);
             $catname = "$dnam1[text]";
@@ -263,7 +263,7 @@ if (isset($actions[Vars::$ACT])
                 $nadir = $dnamm1['refid'];
                 $catname = $dnamm3['text'];
             }
-            echo '<a href="' . Vars::$URI . '">' . lng('to_library') . '</a>';
+            echo '<a href="' . Vars::$URI . '">' . __('to_library') . '</a>';
             break;
 
         default :

@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 //TODO: Написать загрузку тем без создания файлов
 
 if (empty($_GET['n'])) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
 $n = trim($_GET['n']);
@@ -29,7 +29,7 @@ while ($f = readdir($o)) {
 }
 $tt = count($a);
 if (!in_array($n, $b)) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
 for ($i = 0; $i < $tt; $i++) {

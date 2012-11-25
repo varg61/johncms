@@ -20,11 +20,11 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
     $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
     if (!mysql_num_rows($req_a)) {
         // Если альбома не существует, завершаем скрипт
-        echo Functions::displayError(lng('error_wrong_data'));
+        echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
     $res_a = mysql_fetch_assoc($req_a);
-    echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . lng('photo_album') . '</b></a> | ' . lng('upload_photo') . '</div>';
+    echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('upload_photo') . '</div>';
     if (isset($_POST['submit'])) {
         $handle = new upload($_FILES['imagefile']);
         if ($handle->uploaded) {
@@ -36,10 +36,10 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                 'image/png'
             );
             $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['filesize'];
-            $handle->image_resize = true;
+            $handle->image_resize = TRUE;
             $handle->image_x = 640;
             $handle->image_y = 480;
-            $handle->image_ratio_no_zoom_in = true;
+            $handle->image_ratio_no_zoom_in = TRUE;
             $handle->image_convert = 'jpg';
             // Поставить в зависимость от настроек в Админке
             //$handle->image_text = Vars::$system_set['homeurl'];
@@ -54,10 +54,10 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             if ($handle->processed) {
                 // Обрабатываем превьюшку
                 $handle->file_new_name_body = 'tmb_' . time();
-                $handle->image_resize = true;
+                $handle->image_resize = TRUE;
                 $handle->image_x = 80;
                 $handle->image_y = 80;
-                $handle->image_ratio_no_zoom_in = true;
+                $handle->image_ratio_no_zoom_in = TRUE;
                 $handle->image_convert = 'jpg';
                 $handle->process(ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR);
                 $tmb_name = $handle->file_dst_name;
@@ -73,9 +73,9 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                         `time` = '" . time() . "',
                         `access` = '" . $res_a['access'] . "'
                     ") or die(mysql_error());
-                    echo '<div class="gmenu"><p>' . lng('photo_uploaded') . '<br />' .
-                         '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>' .
-                         '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . lng('profile') . '</a></div>';
+                    echo '<div class="gmenu"><p>' . __('photo_uploaded') . '<br />' .
+                         '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>' .
+                         '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . __('profile') . '</a></div>';
                 } else {
                     echo Functions::displayError($handle->error);
                 }
@@ -86,15 +86,15 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         }
     } else {
         echo '<form enctype="multipart/form-data" method="post" action="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' .
-             '<div class="menu"><p><h3>' . lng('select_image') . '</h3>' .
+             '<div class="menu"><p><h3>' . __('select_image') . '</h3>' .
              '<input type="file" name="imagefile" value="" /></p>' .
-             '<p><h3>' . lng('description') . '</h3>' .
+             '<p><h3>' . __('description') . '</h3>' .
              '<textarea name="description" rows="' . Vars::$USER_SET['field_h'] . '"></textarea><br />' .
-             '<small>' . lng('not_mandatory_field') . ', max. 500</small></p>' .
+             '<small>' . __('not_mandatory_field') . ', max. 500</small></p>' .
              '<input type="hidden" name="MAX_FILE_SIZE" value="' . (1024 * Vars::$SYSTEM_SET['filesize']) . '" />' .
-             '<p><input type="submit" name="submit" value="' . lng('upload') . '" /></p>' .
+             '<p><input type="submit" name="submit" value="' . __('upload') . '" /></p>' .
              '</div></form>' .
-             '<div class="phdr"><small>' . lng('select_image_help') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.<br />' . lng('select_image_help_5') . '</small></div>' .
-             '<p><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . lng('back') . '</a></p>';
+             '<div class="phdr"><small>' . __('select_image_help') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.<br />' . __('select_image_help_5') . '</small></div>' .
+             '<p><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('back') . '</a></p>';
     }
 }

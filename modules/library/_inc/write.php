@@ -20,7 +20,7 @@ if (!Vars::$ID) {
 // Проверка на спам
 $old = (Vars::$USER_RIGHTS > 0) ? 5 : 60;
 if (Vars::$USER_DATA['lastpost'] > (time() - $old)) {
-    echo '<p>' . lng('error_flood') . ' ' . $old . ' ' . lng('sec') . '<br/><br/><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+    echo '<p>' . __('error_flood') . ' ' . $old . ' ' . __('sec') . '<br/><br/><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
     exit;
 }
 
@@ -34,11 +34,11 @@ if ($ms['ip'] == 0) {
     if ((Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) || ($ms['soft'] == 1 && !empty($_SESSION['uid']))) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['name'])) {
-                echo lng('error_empty_title') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . lng('repeat') . "</a><br/>";
+                echo __('error_empty_title') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                 exit;
             }
             if (empty($_POST['text'])) {
-                echo lng('error_empty_text') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . lng('repeat') . "</a><br/>";
+                echo __('error_empty_text') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                 exit;
             }
             $text = trim($_POST['text']);
@@ -66,23 +66,23 @@ if ($ms['ip'] == 0) {
             ");
             $cid = mysql_insert_id();
             if ($md == 1) {
-                echo '<p>' . lng('article_added') . '</p>';
+                echo '<p>' . __('article_added') . '</p>';
             } else {
-                echo '<p>' . lng('article_added') . '<br/>' . lng('article_added_thanks') . '</p>';
+                echo '<p>' . __('article_added') . '<br/>' . __('article_added_thanks') . '</p>';
             }
             //TODO: Доработать!
             //mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$user_id);
-            echo '<p><a href="' . Vars::$URI . '?id=' . $cid . '">' . lng('to_article') . '</a></p>';
+            echo '<p><a href="' . Vars::$URI . '?id=' . $cid . '">' . __('to_article') . '</a></p>';
         } else {
-            echo '<h3>' . lng('write_article') . '</h3><form action="' . Vars::$URI . '?act=write&amp;id=' . Vars::$ID . '" method="post">';
-            echo '<p>' . lng('title') . ' (max. 100):<br/><input type="text" name="name"/></p>';
-            echo '<p>' . lng('announce') . ' (max. 100):<br/><input type="text" name="anons"/></p>';
-            echo '<p>' . lng('text') . ':<br/><textarea name="text" rows="' . Vars::$USER_SET['field_h'] . '"></textarea></p>';
-            echo '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>';
-            echo '</form><p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+            echo '<h3>' . __('write_article') . '</h3><form action="' . Vars::$URI . '?act=write&amp;id=' . Vars::$ID . '" method="post">';
+            echo '<p>' . __('title') . ' (max. 100):<br/><input type="text" name="name"/></p>';
+            echo '<p>' . __('announce') . ' (max. 100):<br/><input type="text" name="anons"/></p>';
+            echo '<p>' . __('text') . ':<br/><textarea name="text" rows="' . Vars::$USER_SET['field_h'] . '"></textarea></p>';
+            echo '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>';
+            echo '</form><p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
         }
     } else {
         header("location: " . Vars::$URI);
     }
 }
-echo "<a href='" . Vars::$URI . "'>" . lng('to_library') . "</a><br/>";
+echo "<a href='" . Vars::$URI . "'>" . __('to_library') . "</a><br/>";

@@ -28,11 +28,11 @@ if (Vars::$ID) {
 					$text = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
 					$error = array();
 					if(empty($text))
-						$error[] = lng('empty_message');
+						$error[] = __('empty_message');
 					elseif(mb_strlen($text) < 2) 
-						$error[] = lng('error_message');
+						$error[] = __('error_message');
 					if (($flood = Functions::antiFlood()) !== FALSE)
-						$error = lng('error_flood') . ' ' . $flood . '&#160;' . lng('seconds');
+						$error = __('error_flood') . ' ' . $flood . '&#160;' . __('seconds');
 					if(empty($error)) {
 						//Отправляем сообщение
 						mysql_query("UPDATE `cms_mail_messages` SET
@@ -51,15 +51,15 @@ if (Vars::$ID) {
 				$_SESSION['token_status'] = $tpl->token;
 				$tpl->contents = $tpl->includeTpl( 'edit' );
 			} else {
-				$tpl->contents = Functions::displayError(lng( 'message_ready_read' ), '<a href="' . Vars::$MODULE_URI . '">' . lng('mail') . '</a>');
+				$tpl->contents = Functions::displayError(__( 'message_ready_read' ), '<a href="' . Vars::$MODULE_URI . '">' . __('mail') . '</a>');
 			}
 		} else {
-			$tpl->contents = Functions::displayError(lng( 'page_does_not_exist' ), '<a href="' . Vars::$MODULE_URI . '">' . lng('mail') . '</a>');
+			$tpl->contents = Functions::displayError(__( 'page_does_not_exist' ), '<a href="' . Vars::$MODULE_URI . '">' . __('mail') . '</a>');
 		}
 	} else {
-		$tpl->contents = Functions::displayError(lng( 'page_does_not_exist' ), '<a href="' . Vars::$MODULE_URI . '">' . lng('mail') . '</a>');
+		$tpl->contents = Functions::displayError(__( 'page_does_not_exist' ), '<a href="' . Vars::$MODULE_URI . '">' . __('mail') . '</a>');
 	}
 } else {
-    $tpl->contents = Functions::displayError(lng('message_no_select'), '<a href="' . Vars::
-    $MODULE_URI . '">' . lng('mail') . '</a>');
+    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . Vars::
+    $MODULE_URI . '">' . __('mail') . '</a>');
 }

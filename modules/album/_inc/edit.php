@@ -22,18 +22,18 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
     if ($al) {
         $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
         if (mysql_num_rows($req)) {
-            echo '<div class="phdr"><b>' . lng('album_edit') . '</b></div>';
+            echo '<div class="phdr"><b>' . __('album_edit') . '</b></div>';
             $res = mysql_fetch_assoc($req);
             $name = htmlspecialchars($res['name']);
             $description = htmlspecialchars($res['description']);
             $password = htmlspecialchars($res['password']);
             $access = $res['access'];
         } else {
-            echo Functions::displayError(lng('error_wrong_data'));
+            echo Functions::displayError(__('error_wrong_data'));
             exit;
         }
     } else {
-        echo '<div class="phdr"><b>' . lng('album_create') . '</b></div>';
+        echo '<div class="phdr"><b>' . __('album_create') . '</b></div>';
         $name = '';
         $description = '';
         $password = '';
@@ -48,19 +48,19 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         $access = isset($_POST['access']) ? abs(intval($_POST['access'])) : NULL;
         // Проверяем на ошибки
         if (empty($name))
-            $error[] = lng('error_empty_title');
+            $error[] = __('error_empty_title');
         elseif (mb_strlen($name) < 2 || mb_strlen($name) > 50)
-            $error[] = lng('title') . ': ' . lng('error_wrong_lenght');
+            $error[] = __('title') . ': ' . __('error_wrong_lenght');
         $description = mb_substr($description, 0, 500);
         if ($access == 2 && empty($password))
-            $error[] = lng('error_empty_password');
+            $error[] = __('error_empty_password');
         elseif ($access == 2 && mb_strlen($password) < 3 || mb_strlen($password) > 15)
-            $error[] = lng('password') . ': ' . lng('error_wrong_lenght');
+            $error[] = __('password') . ': ' . __('error_wrong_lenght');
         if ($access < 1 || $access > 4)
-            $error[] = lng('error_wrong_data');
+            $error[] = __('error_wrong_data');
         // Проверяем, есть ли уже альбом с таким же именем?
         if (!$al && mysql_num_rows(mysql_query("SELECT * FROM `cms_album_cat` WHERE `name` = '" . mysql_real_escape_string($name) . "' AND `user_id` = '" . $user['id'] . "' LIMIT 1")))
-            $error[] = lng('error_album_exists');
+            $error[] = __('error_album_exists');
         if (!$error) {
             if ($al) {
                 // Изменяем данные в базе
@@ -91,8 +91,8 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                     `sort` = '$sort'
                 ");
             }
-            echo '<div class="gmenu"><p>' . ($al ? lng('album_changed') : lng('album_created')) . '<br />' .
-                '<a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
+            echo '<div class="gmenu"><p>' . ($al ? __('album_changed') : __('album_created')) . '<br />' .
+                '<a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>';
             exit;
         }
     }

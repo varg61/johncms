@@ -16,7 +16,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         $req_down = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
         $res_down = mysql_fetch_assoc($req_down);
         if (mysql_num_rows($req_down) == 0 || !is_dir($res_down['dir'])) {
-            echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+            echo Functions::displayError(__('not_found_dir'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
             exit;
         }
         $load_cat = $res_down['dir'];
@@ -29,19 +29,19 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         $format = $user_down && isset($_POST['format']) ? trim($_POST['format']) : FALSE;
         $error = array();
         if (empty($name))
-            $error[] = lng('error_empty_fields');
+            $error[] = __('error_empty_fields');
         if (preg_match("/[^0-9a-zA-Z]+/", $name))
-            $error[] = $error[] = lng('error_wrong_symbols');
+            $error[] = $error[] = __('error_wrong_symbols');
         if (Vars::$USER_RIGHTS == 9 && $user_down) {
             foreach (explode(',', $format) as $value) {
                 if (!in_array(trim($value), $defaultExt)) {
-                    $error[] = lng('extensions_ok') . ': ' . implode(', ', $defaultExt);
+                    $error[] = __('extensions_ok') . ': ' . implode(', ', $defaultExt);
                     break;
                 }
             }
         }
         if ($error) {
-            echo functions::displayError($error, '<a href="' . Vars::$URI . '?act=add_cat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+            echo functions::displayError($error, '<a href="' . Vars::$URI . '?act=add_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
         if (empty($rus_name))
@@ -63,30 +63,30 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 `rus_name` = '" . mysql_real_escape_string($rus_name) . "'
             ") or die(mysql_error());
             $cat_id = mysql_insert_id();
-            echo '<div class="phdr"><b>' . lng('add_cat_title') . '</b></div>' .
-                '<div class="list1">' . lng('add_cat_ok') . '</div>' .
-                '<div class="list2"><a href="' . Vars::$URI . '?id=' . $cat_id . '">' . lng('continue') . '</a></div>';
+            echo '<div class="phdr"><b>' . __('add_cat_title') . '</b></div>' .
+                '<div class="list1">' . __('add_cat_ok') . '</div>' .
+                '<div class="list2"><a href="' . Vars::$URI . '?id=' . $cat_id . '">' . __('continue') . '</a></div>';
         } else {
-            echo functions::displayError(lng('add_cat_error'), '<a href="' . Vars::$URI . 'act=add_cat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+            echo functions::displayError(__('add_cat_error'), '<a href="' . Vars::$URI . 'act=add_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
     } else {
-        echo '<div class="phdr"><b>' . lng('add_cat_title') . '</b></div><div class="menu">' .
+        echo '<div class="phdr"><b>' . __('add_cat_title') . '</b></div><div class="menu">' .
             '<form action="' . Vars::$URI . '?act=add_cat&amp;id=' . Vars::$ID . '" method="post">' .
-            lng('dir_name') . ' [A-Za-z0-9]:<br/><input type="text" name="name"/><br/>' .
-            lng('dir_name_view') . ':<br/><input type="text" name="rus_name"/><br/>' .
-            lng('dir_desc') . ' (max. 500):<br/><textarea name="desc" cols="24" rows="4"></textarea><br/>';
+            __('dir_name') . ' [A-Za-z0-9]:<br/><input type="text" name="name"/><br/>' .
+            __('dir_name_view') . ':<br/><input type="text" name="rus_name"/><br/>' .
+            __('dir_desc') . ' (max. 500):<br/><textarea name="desc" cols="24" rows="4"></textarea><br/>';
         if (Vars::$USER_RIGHTS == 9) {
-            echo '<div class="sub"><input type="checkbox" name="user_down" value="1" /> ' . lng('user_download') . '<br/>' .
-                lng('extensions') . ':<br/><input type="text" name="format"/></div>' .
-                '<div class="sub">' . lng('extensions_ok') . ':<br /> ' . implode(', ', $defaultExt) . '</div>';
+            echo '<div class="sub"><input type="checkbox" name="user_down" value="1" /> ' . __('user_download') . '<br/>' .
+                __('extensions') . ':<br/><input type="text" name="format"/></div>' .
+                '<div class="sub">' . __('extensions_ok') . ':<br /> ' . implode(', ', $defaultExt) . '</div>';
         }
-        echo ' <input type="submit" name="submit" value="' . lng('add_cat') . '"/><br/></form></div>';
+        echo ' <input type="submit" name="submit" value="' . __('add_cat') . '"/><br/></form></div>';
     }
     echo '<div class="phdr">';
     if (Vars::$ID)
-        echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a> | ';
-    echo '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a></div>';
+        echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a> | ';
+    echo '<a href="' . Vars::$URI . '">' . __('download_title') . '</a></div>';
 } else {
     header('Location: ' . Vars::$HOME_URL . '/404');
 }

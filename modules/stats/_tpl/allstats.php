@@ -1,12 +1,12 @@
 <div class="phdr">
-    <b><?= lng('daily_statistics') ?></b>
+    <b><?= __('daily_statistics') ?></b>
 </div>
 <?php if($this->count_stat > 0): ?>
 <div class="gmenu">
-<h3><?= lng('stats_for')?> <?= date("d.m.y", $this->start_time_stat)?></h3>
-<li><?= lng('hosts')?>: <?= $this->day_array['host']?></li>
-<li><?= lng('hits')?>: <?= $this->day_array['hits']?></li>
-<h3><?= lng('from_search_engines1')?>: <?= array_sum(array_slice($this->day_array, 3))?></h3>
+<h3><?= __('stats_for')?> <?= date("d.m.y", $this->start_time_stat)?></h3>
+<li><?= __('hosts')?>: <?= $this->day_array['host']?></li>
+<li><?= __('hits')?>: <?= $this->day_array['hits']?></li>
+<h3><?= __('from_search_engines1')?>: <?= array_sum(array_slice($this->day_array, 3))?></h3>
 
 <?php if($this->day_array['yandex'] > 0): ?>
     <?= Functions::loadModuleImage('yandex.png') ?> Yandex.ru (<?= $this->day_array['yandex']?>)<br/>
@@ -41,10 +41,10 @@
 </div>
 
 <div class="menu">
-<h3><?= lng('summary_statistics')?></h3>
-<li><?= lng('total_hosts')?>:<b> <?= $this->searchc[1]?></b></li>
-<li><?= lng('total_hits')?>: <b><?= $this->searchc[0]?></b></li>
-<h3><?= Functions::loadModuleImage('search_network.png')?> <?= lng('from_search_engines1')?>: <?= array_sum(array_slice($this->searchc, 2))?></h3>
+<h3><?= __('summary_statistics')?></h3>
+<li><?= __('total_hosts')?>:<b> <?= $this->searchc[1]?></b></li>
+<li><?= __('total_hits')?>: <b><?= $this->searchc[0]?></b></li>
+<h3><?= Functions::loadModuleImage('search_network.png')?> <?= __('from_search_engines1')?>: <?= array_sum(array_slice($this->searchc, 2))?></h3>
 <?= Functions::loadModuleImage('yandex.png') ?>&nbsp;Yandex.ru: <b><?= $this->searchc[2]?></b><br />
 <?= Functions::loadModuleImage('rambler.png') ?>&nbsp;Rambler.ru: <b><?= $this->searchc[3]?></b><br />
 <?= Functions::loadModuleImage('google.png') ?>&nbsp;Google.ru: <b><?= $this->searchc[4]?></b><br />
@@ -58,22 +58,22 @@
 </div>
 
 <?php if($this->grafics): ?>
-<div class="bmenu"><h3><?= lng('grafics')?></h3>
+<div class="bmenu"><h3><?= __('grafics')?></h3>
 <img src="<?= Vars::$HOME_URL ?>/files/temp/stat_we_host.png" alt="loading..."/><br/>
-<h4><?= lng('search_traffic')?></h4>
+<h4><?= __('search_traffic')?></h4>
 <img src="<?= Vars::$HOME_URL ?>/files/temp/stat_we_se.png" alt="loading..."/>
 </div>
     <? endif ?>
     
 <? else: ?>
 <div class="rmenu">
-<?= lng('no_data_for_this_day')?>
+<?= __('no_data_for_this_day')?>
 </div>
 <? endif ?>
 
 <div class="phdr">
-<a href="?act=allstat&amp;days=<?= $this->days ?>"><?= lng('view_of')?> <?= date("d.m.y", time() - $this->days * 24 * 3600)?></a>
+<a href="?act=allstat&amp;days=<?= $this->days ?>"><?= __('view_of')?> <?= date("d.m.y", time() - $this->days * 24 * 3600)?></a>
 </div>
 <div class="gmenu">
-<a href="<?= Vars::$URI ?>"><?= lng('to_statistics') ?></a>
+<a href="<?= Vars::$URI ?>"><?= __('to_statistics') ?></a>
 </div>

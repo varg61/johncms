@@ -25,11 +25,11 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 // Сохраняем отредактированную статью                     //
                 ////////////////////////////////////////////////////////////
                 if (empty($_POST['name'])) {
-                    echo Functions::displayError(lng('error_empty_title'), '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                    echo Functions::displayError(__('error_empty_title'), '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                     exit;
                 }
                 if (empty($_POST['text'])) {
-                    echo Functions::displayError(lng('error_empty_text'), '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                    echo Functions::displayError(__('error_empty_text'), '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                     exit;
                 }
                 $text = trim($_POST['text']);
@@ -84,32 +84,32 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 ////////////////////////////////////////////////////////////
                 // Форма редактирования статьи                            //
                 ////////////////////////////////////////////////////////////
-                echo '<div class="phdr"><b>' . lng('edit_article') . '</b></div>' .
+                echo '<div class="phdr"><b>' . __('edit_article') . '</b></div>' .
                      '<form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
-                     '<div class="menu"><p><h3>' . lng('title') . '</h3><input type="text" name="name" value="' . htmlentities($ms['name'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
-                     '<p><h3>' . lng('announce') . '</h3><small>' . lng('announce_help') . '</small><br/><input type="text" name="anons" value="' . htmlentities($ms['announce'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
-                     '<p><h3>' . lng('text') . '</h3><textarea rows="5" name="text">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p></div>' .
-                     '<div class="rmenu"><p><h3>' . lng('author') . '</h3><input type="text" name="autor" value="' . $ms['avtor'] . '"/></p>' .
-                     '<p><h3>' . lng('reads') . '</h3><input type="text" name="count" value="' . $ms['count'] . '" size="4"/></p></div>' .
-                     '<div class="bmenu"><input type="submit" name="submit" value="' . lng('save') . '"/></div></form>' .
-                     '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+                     '<div class="menu"><p><h3>' . __('title') . '</h3><input type="text" name="name" value="' . htmlentities($ms['name'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
+                     '<p><h3>' . __('announce') . '</h3><small>' . __('announce_help') . '</small><br/><input type="text" name="anons" value="' . htmlentities($ms['announce'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
+                     '<p><h3>' . __('text') . '</h3><textarea rows="5" name="text">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p></div>' .
+                     '<div class="rmenu"><p><h3>' . __('author') . '</h3><input type="text" name="autor" value="' . $ms['avtor'] . '"/></p>' .
+                     '<p><h3>' . __('reads') . '</h3><input type="text" name="count" value="' . $ms['count'] . '" size="4"/></p></div>' .
+                     '<div class="bmenu"><input type="submit" name="submit" value="' . __('save') . '"/></div></form>' .
+                     '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
                 break;
 
             case "cat":
-                echo lng('edit_category') . "<br/><form action='" . Vars::$URI . "?act=edit&amp;id=" . Vars::$ID . "' method='post'><input type='text' name='text' value='" . $ms['text'] .
-                     "'/><br/>" . lng('edit_category_help') . ":<br/><select name='mod'>";
+                echo __('edit_category') . "<br/><form action='" . Vars::$URI . "?act=edit&amp;id=" . Vars::$ID . "' method='post'><input type='text' name='text' value='" . $ms['text'] .
+                     "'/><br/>" . __('edit_category_help') . ":<br/><select name='mod'>";
                 if ($ms['ip'] == 1) {
-                    echo "<option value='1'>" . lng('categories') . "</option><option value='0'>" . lng('articles') . "</option>";
+                    echo "<option value='1'>" . __('categories') . "</option><option value='0'>" . __('articles') . "</option>";
                 } else {
-                    echo "<option value='0'>" . lng('articles') . "</option><option value='1'>" . lng('categories') . "</option>";
+                    echo "<option value='0'>" . __('articles') . "</option><option value='1'>" . __('categories') . "</option>";
                 }
                 echo "</select><br/>";
                 if ($ms['soft'] == 1) {
-                    echo lng('allow_to_add') . "<br/><input type='checkbox' name='user' value='1' checked='checked' /><br/>";
+                    echo __('allow_to_add') . "<br/><input type='checkbox' name='user' value='1' checked='checked' /><br/>";
                 } else {
-                    echo lng('allow_to_add') . "<br/><input type='checkbox' name='user' value='1'/><br/>";
+                    echo __('allow_to_add') . "<br/><input type='checkbox' name='user' value='1'/><br/>";
                 }
-                echo "<input type='submit' name='submit' value='" . lng('save') . "'/></form><br/><a href='" . Vars::$URI . "?id=" . $ms['refid'] . "'>" . lng('back') . "</a><br/>";
+                echo "<input type='submit' name='submit' value='" . __('save') . "'/></form><br/><a href='" . Vars::$URI . "?id=" . $ms['refid'] . "'>" . __('back') . "</a><br/>";
                 break;
         }
     }

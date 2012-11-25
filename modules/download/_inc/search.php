@@ -15,7 +15,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 Поиск файлов
 -----------------------------------------------------------------
 */
-$search_post = isset($_POST['search']) ? trim($_POST['search']) : false;
+$search_post = isset($_POST['search']) ? trim($_POST['search']) : FALSE;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : '';
 $search = $search_post ? $search_post : $search_get;
 /*
@@ -23,10 +23,10 @@ $search = $search_post ? $search_post : $search_get;
 Форма для поиска
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a> | ' . lng('search') . '</div>' .
+echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('download_title') . '</b></a> | ' . __('search') . '</div>' .
 '<form action="' . Vars::$URI . '?act=search" method="post"><div class="gmenu"><p>' .
-lng('name_file') . ':<br /><input type="text" name="search" value="' . Validate::checkout($search) . '" /><br />' .
-'<input name="id" type="checkbox" value="1" ' . (Vars::$ID ? 'checked="checked"' : '') . '/> ' . lng('search_for_desc') . '<br />' .
+__('name_file') . ':<br /><input type="text" name="search" value="' . Validate::checkout($search) . '" /><br />' .
+'<input name="id" type="checkbox" value="1" ' . (Vars::$ID ? 'checked="checked"' : '') . '/> ' . __('search_for_desc') . '<br />' .
 '<input type="submit" value="Поиск" name="submit" /><br />' .
 '</p></div></form>';
 /*
@@ -34,9 +34,9 @@ lng('name_file') . ':<br /><input type="text" name="search" value="' . Validate:
 Проверяем на коректность ввода
 -----------------------------------------------------------------
 */
-$error = false;
+$error = FALSE;
 if (!empty($search) && mb_strlen($search) < 2 || mb_strlen($search) > 64)
-    $error = lng('search_error');
+    $error = __('search_error');
 /*
 -----------------------------------------------------------------
 Выводим результаты поиска
@@ -57,7 +57,7 @@ if ($search && !$error) {
 	Результаты поиска
 	-----------------------------------------------------------------
 	*/
-	echo '<div class="phdr"><b>' . lng('search_result') . '</b></div>';
+	echo '<div class="phdr"><b>' . __('search_result') . '</b></div>';
 	$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND $sql"), 0);
 	if ($total > Vars::$USER_SET['page_size']) {
 		$check_search = Validate::checkout(rawurlencode($search));
@@ -70,9 +70,9 @@ if ($search && !$error) {
             echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
         }
     } else {
-        echo '<div class="rmenu"><p>' . lng('search_list_empty') . '</p></div>';
+        echo '<div class="rmenu"><p>' . __('search_list_empty') . '</p></div>';
     }
-    echo '<div class="phdr">' . lng('total') . ':  ' . $total . '</div>';
+    echo '<div class="phdr">' . __('total') . ':  ' . $total . '</div>';
 	/*
 	-----------------------------------------------------------------
 	Навигация
@@ -84,9 +84,9 @@ if ($search && !$error) {
   		'<input type="hidden" value="' . $check_search . '" name="search" />' .
   		'<input type="hidden" value="search" name="act" />' .
   		'<input type="hidden" value="' . Vars::$ID . '" name="id" />' .
-    	'<input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+    	'<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
 	}
-	echo '<p><a href="' . Vars::$URI . '?act=search">' . lng('search_new') . '</a></p>';
+	echo '<p><a href="' . Vars::$URI . '?act=search">' . __('search_new') . '</a></p>';
 } else {
 	/*
 	-----------------------------------------------------------------
@@ -94,6 +94,6 @@ if ($search && !$error) {
 	-----------------------------------------------------------------
 	*/
     if ($error) echo Functions::displayError($error);
-	 echo '<div class="phdr"><small>' . lng('search_faq') . '</small></div>';
+	 echo '<div class="phdr"><small>' . __('search_faq') . '</small></div>';
 }
-echo '<p><a href="' . Vars::$URI . '">' . lng('download_title') . '</a></p>';
+echo '<p><a href="' . Vars::$URI . '">' . __('download_title') . '</a></p>';

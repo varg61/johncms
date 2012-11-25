@@ -19,7 +19,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'settings' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'settings' );
 if(($settings = Vars::getUserData('settings_mail')) === false) 
 	$settings['access'] = 0;
 

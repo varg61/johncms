@@ -1,13 +1,13 @@
 <ul class="nav">
     <?php if (Vars::$USER_ID && $this->user['id'] == Vars::$USER_ID): ?>
-    <li><h1 class="section-personal"><?= lng('my_profile') ?></h1></li>
+    <li><h1 class="section-personal"><?= __('my_profile') ?></h1></li>
     <?php else: ?>
-    <li><h1><?= lng('user_profile') ?></h1></li>
+    <li><h1><?= __('user_profile') ?></h1></li>
     <?php endif ?>
 </ul>
 <div class="user-block"><?= Functions::displayUser($this->user) ?></div>
 <ul class="nav">
-    <li><h2><?= lng('reputation') ?></h2></li>
+    <li><h2><?= __('reputation') ?></h2></li>
     <li>
         <a href="#">
             <div id="rep-container">
@@ -62,30 +62,30 @@
             </div>
         </a>
     </li>
-    <li><h2><?= lng('information') ?></h2></li>
-    <li><a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><i class="icn-info"></i><?= lng('personal_data') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><i class="icn-piechart"></i><?= lng('activity') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><i class="icn-violations"></i><?= lng('infringements') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->bancount ?></span></a></li>
+    <li><h2><?= __('information') ?></h2></li>
+    <li><a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><i class="icn-info"></i><?= __('personal_data') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><i class="icn-piechart"></i><?= __('activity') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><i class="icn-violations"></i><?= __('infringements') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->bancount ?></span></a></li>
 
-    <li><h2><?= lng('personal') ?></h2></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><i class="icn-image"></i><?= lng('photo_album') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->total_photo ?></span></a></li>
-    <li><a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><i class="icn-dialogue"></i><?= lng('guestbook') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->user['comm_count'] ?></span></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/friends?id=<?= $this->user['id'] ?>"><i class="icn-man-woman"></i><?= lng('friends') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::friendsCount($this->user['id']) ?></span></a></li>
+    <li><h2><?= __('personal') ?></h2></li>
+    <li><a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><i class="icn-image"></i><?= __('photo_album') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->total_photo ?></span></a></li>
+    <li><a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><i class="icn-dialogue"></i><?= __('guestbook') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->user['comm_count'] ?></span></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>/friends?id=<?= $this->user['id'] ?>"><i class="icn-man-woman"></i><?= __('friends') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::friendsCount($this->user['id']) ?></span></a></li>
 
     <?php if (Vars::$USER_ID && Vars::$USER_ID != $this->user['id']): ?>
-    <li><h2><?= lng('mail') ?></h2></li>
+    <li><h2><?= __('mail') ?></h2></li>
         <?php if (empty($this->banned)): ?>
-        <li><a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;id=<?= $this->user['id'] ?>"><i class="icn-envelope"></i><?= lng('contact_write') ?><i class="icn-arrow right"></i></a></li>
-        <li><a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?= $this->user['id'] ?>"><i class="icn-addressbook"></i><?= ($this->num_cont ? lng('contact_delete') : lng('contact_add')) ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;id=<?= $this->user['id'] ?>"><i class="icn-envelope"></i><?= __('contact_write') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=contact&amp;id=<?= $this->user['id'] ?>"><i class="icn-addressbook"></i><?= ($this->num_cont ? __('contact_delete') : __('contact_add')) ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
-    <li><a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?= $this->user['id'] ?>"><i class="icn-block"></i><?= (isset($this->banned) && $this->banned == 1 ? lng('contact_delete_ignor') : lng('contact_add_ignor')) ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>/contacts?act=select&amp;mod=banned&amp;id=<?= $this->user['id'] ?>"><i class="icn-block"></i><?= (isset($this->banned) && $this->banned == 1 ? __('contact_delete_ignor') : __('contact_add_ignor')) ?><i class="icn-arrow right"></i></a></li>
     <?php endif ?>
 
     <?php if (Vars::$USER_RIGHTS >= 3 && $this->user['id'] != Vars::$USER_ID): ?>
-    <li><h2><?= lng('administration') ?></h2></li>
+    <li><h2><?= __('administration') ?></h2></li>
         <?php if (Vars::$USER_RIGHTS >= 7): ?>
-        <li><a href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><i class="icn-settings-red"></i><?= lng('settings') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><i class="icn-settings-red"></i><?= __('settings') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
-    <li><a href=""><i class="icn-ban-red"></i><?= lng('ban_do') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href=""><i class="icn-ban-red"></i><?= __('ban_do') ?><i class="icn-arrow right"></i></a></li>
     <?php endif ?>
 </ul>

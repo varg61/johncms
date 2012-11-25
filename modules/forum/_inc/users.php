@@ -13,11 +13,11 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1' AND `topic` = " . Vars::$ID), 0);
 if ($topic_vote == 0) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 } else {
     $topic_vote = mysql_fetch_array(mysql_query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type` = '1' AND `topic` = " . Vars::$ID . " LIMIT 1"));
-    echo '<div  class="phdr">' . lng('voting_users') . ' &laquo;<b>' . htmlentities($topic_vote['name'], ENT_QUOTES, 'UTF-8') . '</b>&raquo;</div>';
+    echo '<div  class="phdr">' . __('voting_users') . ' &laquo;<b>' . htmlentities($topic_vote['name'], ENT_QUOTES, 'UTF-8') . '</b>&raquo;</div>';
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `topic`=" . Vars::$ID), 0);
     $req = mysql_query("SELECT `cms_forum_vote_users`.*, `users`.`rights`, `users`.`last_visit`, `users`.`nickname`, `users`.`sex`, `users`.`status`, `users`.`join_date`, `users`.`id`
     FROM `cms_forum_vote_users` LEFT JOIN `users` ON `cms_forum_vote_users`.`user` = `users`.`id`
@@ -28,13 +28,13 @@ if ($topic_vote == 0) {
         echo '</div>';
     }
     if ($total == 0)
-        echo '<div class="menu">' . lng('voting_users_empty') . '</div>';
-    echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+        echo '<div class="menu">' . __('voting_users_empty') . '</div>';
+    echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
         echo'<p>' . Functions::displayPagination(Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
             '<p><form action="' . Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '" method="post">' .
             '<input type="text" name="page" size="2"/>' .
-            '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+            '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('to_topic') . '</a></p>';
+    echo '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('to_topic') . '</a></p>';
 }

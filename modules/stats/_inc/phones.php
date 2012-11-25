@@ -7,7 +7,7 @@
  
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-echo'<div class="phdr">'.lng('phones_browsers').'</div>';
+echo'<div class="phdr">'.__('phones_browsers').'</div>';
     $sql = "(SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE '%nokia%') UNION ALL
     (SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE 'SIE%' OR `browser` LIKE '%benq%') UNION ALL
     (SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE '%sony%' OR `browser` LIKE '%sonyeric%') UNION ALL
@@ -30,7 +30,7 @@ echo'<div class="phdr">'.lng('phones_browsers').'</div>';
         }    
 
   	echo'<div class="menu"><img src="' . Vars::$HOME_URL . '/files/temp/stat_model.png" alt="loading..."/></div>';
-    echo '<div class="gmenu"><h3>'.lng('details').'</h3>';
+    echo '<div class="gmenu"><h3>'.__('details').'</h3>';
     
         $col = array();
         $name = array();
@@ -88,8 +88,8 @@ echo'<div class="phdr">'.lng('phones_browsers').'</div>';
 			echo'<li> <a href="?act=phone&amp;model=Opera">Opera Mini</a> ('.$phones[12].')</li>'; }
 		if($phones[13] > 0){
 		  $col[] = $phones[13];
-		    $name[] = lng('computer');
-			echo'<li> <a href="?act=phone&amp;model=komp">'.lng('computer').'</a> ('.$phones[13].')</li>'; }
+		    $name[] = __('computer');
+			echo'<li> <a href="?act=phone&amp;model=komp">'.__('computer').'</a> ('.$phones[13].')</li>'; }
     
     echo '</div>';
     ////// График //////

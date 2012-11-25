@@ -11,7 +11,7 @@
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
@@ -24,14 +24,14 @@ switch (Vars::$ACT) {
         Добавляем / редактируем ссылку
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('advertisement') . '</b></a> | ' . (Vars::$ID ? lng('link_edit') : lng('link_add')) . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('advertisement') . '</b></a> | ' . (Vars::$ID ? __('link_edit') : __('link_add')) . '</div>';
         if (Vars::$ID) {
             // Если ссылка редактироется, запрашиваем ее данные в базе
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = " . Vars::$ID);
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
             } else {
-                echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('back') . '</a>');
+                echo Functions::displayError(__('error_wrong_data'), '<a href="' . Vars::$URI . '">' . __('back') . '</a>');
                 exit;
             }
         } else {
@@ -71,22 +71,22 @@ switch (Vars::$ACT) {
             $color = isset($_POST['color']) ? mb_substr(trim($_POST['color']), 0, 6) : '';
             $error = array();
             if (!$link || !$name)
-                $error[] = lng('error_empty_fields');
+                $error[] = __('error_empty_fields');
             if ($type > 3 || $type < 0)
                 $type = 0;
             if (!$mesto) {
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `mesto` = '" . $mesto . "' AND `type` = '" . $type . "'"), 0);
                 if ($total != 0)
-                    $error[] = lng('links_place_occupied');
+                    $error[] = __('links_place_occupied');
             }
             if ($color) {
                 if (preg_match("/[^\da-fA-F_]+/", $color))
-                    $error[] = lng('error_wrong_symbols');
+                    $error[] = __('error_wrong_symbols');
                 if (strlen($color) < 6)
-                    $error[] = lng('error_color');
+                    $error[] = __('error_color');
             }
             if ($error) {
-                echo Functions::displayError($error, '<a href="' . Vars::$URI . '?from=addlink">' . lng('back') . '</a>');
+                echo Functions::displayError($error, '<a href="' . Vars::$URI . '?from=addlink">' . __('back') . '</a>');
                 exit;
             }
             if (Vars::$ID) {
@@ -133,8 +133,8 @@ switch (Vars::$ACT) {
                 ") or die (mysql_error());
             }
             mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$USER_ID);
-            echo'<div class="menu"><p>' . (Vars::$ID ? lng('link_edit_ok') : lng('link_add_ok')) . '<br />' .
-                '<a href="' . Vars::$URI . '?sort=' . $type . '">' . lng('continue') . '</a></p></div>';
+            echo'<div class="menu"><p>' . (Vars::$ID ? __('link_edit_ok') : __('link_add_ok')) . '<br />' .
+                '<a href="' . Vars::$URI . '?sort=' . $type . '">' . __('continue') . '</a></p></div>';
         } else {
             $tpl->res = $res;
             $tpl->form_token = mt_rand(100, 10000);
@@ -202,13 +202,13 @@ switch (Vars::$ACT) {
                 mysql_query("DELETE FROM `cms_ads` WHERE `id` = " . Vars::$ID);
                 header('Location: ' . $_POST['ref']);
             } else {
-                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('advertisement') . '</b></a> | ' . lng('delete') . '</div>' .
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('advertisement') . '</b></a> | ' . __('delete') . '</div>' .
                     '<div class="rmenu"><form action="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '" method="post">' .
-                    '<p>' . lng('link_deletion_warning') . '</p>' .
-                    '<p><input type="submit" name="submit" value="' . lng('delete') . '" /></p>' .
+                    '<p>' . __('link_deletion_warning') . '</p>' .
+                    '<p><input type="submit" name="submit" value="' . __('delete') . '" /></p>' .
                     '<input type="hidden" name="ref" value="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '" />' .
                     '</form></div>' .
-                    '<div class="phdr"><a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '">' . lng('cancel') . '</a></div>';
+                    '<div class="phdr"><a href="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '">' . __('cancel') . '</a></div>';
             }
         }
         break;
@@ -224,12 +224,12 @@ switch (Vars::$ACT) {
             mysql_query("OPTIMIZE TABLE `cms_ads`");
             header('location: ' . Vars::$URI);
         } else {
-            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('advertisement') . '</b></a> | ' . lng('links_delete_hidden') . '</div>' .
+            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('advertisement') . '</b></a> | ' . __('links_delete_hidden') . '</div>' .
                 '<div class="menu"><form method="post" action="' . Vars::$URI . '?act=clear">' .
-                '<p>' . lng('link_clear_warning') . '</p>' .
-                '<p><input type="submit" name="submit" value="' . lng('delete') . '" />' .
+                '<p>' . __('link_clear_warning') . '</p>' .
+                '<p><input type="submit" name="submit" value="' . __('delete') . '" />' .
                 '</p></form></div>' .
-                '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></div>';
+                '<div class="phdr"><a href="' . Vars::$URI . '">' . __('cancel') . '</a></div>';
         }
         break;
 
@@ -255,23 +255,23 @@ switch (Vars::$ACT) {
         Главное меню модуля управления рекламой
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('admin_panel') . '</b></a> | ' . lng('advertisement') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('admin_panel') . '</b></a> | ' . __('advertisement') . '</div>';
         $array_placing = array(
-            lng('link_add_placing_all'),
-            lng('link_add_placing_front'),
-            lng('link_add_placing_child')
+            __('link_add_placing_all'),
+            __('link_add_placing_front'),
+            __('link_add_placing_child')
         );
         $array_show = array(
-            lng('to_all'),
-            lng('to_guest'),
-            lng('to_users')
+            __('to_all'),
+            __('to_guest'),
+            __('to_users')
         );
         $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
         $array_menu = array(
-            (!$type ? lng('endwise') : '<a href="' . Vars::$URI . '">' . lng('endwise') . '</a>'),
-            ($type == 1 ? lng('above_content') : '<a href="' . Vars::$URI . '?type=1">' . lng('above_content') . '</a>'),
-            ($type == 2 ? lng('below_content') : '<a href="' . Vars::$URI . '?type=2">' . lng('below_content') . '</a>'),
-            ($type == 3 ? lng('below') : '<a href="' . Vars::$URI . '?type=3">' . lng('below') . '</a>')
+            (!$type ? __('endwise') : '<a href="' . Vars::$URI . '">' . __('endwise') . '</a>'),
+            ($type == 1 ? __('above_content') : '<a href="' . Vars::$URI . '?type=1">' . __('above_content') . '</a>'),
+            ($type == 2 ? __('below_content') : '<a href="' . Vars::$URI . '?type=2">' . __('below_content') . '</a>'),
+            ($type == 3 ? __('below') : '<a href="' . Vars::$URI . '?type=3">' . __('below') . '</a>')
         );
         echo '<div class="topmenu">' . Functions::displayMenu($array_menu) . '</div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'"), 0);
@@ -297,25 +297,25 @@ switch (Vars::$ACT) {
                 echo '<p>' . Functions::getImage(($res['to'] ? 'red' : 'green') . '.png', '', 'class="left"') . '&#160;' .
                     '<a href="' . htmlspecialchars($res['link']) . '">' . htmlspecialchars($res['link']) . '</a>&nbsp;[' . $res['count'] . ']<br />' . $name . '</p>';
                 $menu = array(
-                    '<a href="' . Vars::$URI . '?act=up&amp;id=' . $res['id'] . '">' . lng('up') . '</a>',
-                    '<a href="' . Vars::$URI . '?act=down&amp;id=' . $res['id'] . '">' . lng('down') . '</a>',
-                    '<a href="' . Vars::$URI . '?act=edit&amp;id=' . $res['id'] . '">' . lng('edit') . '</a>',
-                    '<a href="' . Vars::$URI . '?act=del&amp;id=' . $res['id'] . '">' . lng('delete') . '</a>',
-                    '<a href="' . Vars::$URI . '?act=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? lng('to_show') : lng('hide')) . '</a>'
+                    '<a href="' . Vars::$URI . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a>',
+                    '<a href="' . Vars::$URI . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a>',
+                    '<a href="' . Vars::$URI . '?act=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a>',
+                    '<a href="' . Vars::$URI . '?act=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>',
+                    '<a href="' . Vars::$URI . '?act=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? __('to_show') : __('hide')) . '</a>'
                 );
                 echo '<div class="sub">' .
                     '<div>' . Functions::displayMenu($menu) . '</div>' .
-                    '<p><span class="gray">' . lng('installation_date') . ':</span> ' . Functions::displayDate($res['time']) . '<br />' .
-                    '<span class="gray">' . lng('placing') . ':</span>&nbsp;' . $array_placing[$res['layout']] . '<br />' .
-                    '<span class="gray">' . lng('to_show') . ':</span>&nbsp;' . $array_show[$res['view']];
+                    '<p><span class="gray">' . __('installation_date') . ':</span> ' . Functions::displayDate($res['time']) . '<br />' .
+                    '<span class="gray">' . __('placing') . ':</span>&nbsp;' . $array_placing[$res['layout']] . '<br />' .
+                    '<span class="gray">' . __('to_show') . ':</span>&nbsp;' . $array_show[$res['view']];
                 // Вычисляем условия договора на рекламу
                 $agreement = array();
                 $remains = array();
                 if (!empty($res['count_link'])) {
-                    $agreement[] = $res['count_link'] . ' ' . lng('transitions_n');
+                    $agreement[] = $res['count_link'] . ' ' . __('transitions_n');
                     $remains_count = $res['count_link'] - $res['count'];
                     if ($remains_count > 0)
-                        $remains[] = $remains_count . ' ' . lng('transitions_n');
+                        $remains[] = $remains_count . ' ' . __('transitions_n');
                 }
                 if (!empty($res['day'])) {
                     $agreement[] = Functions::timeCount($res['day'] * 86400);
@@ -325,24 +325,24 @@ switch (Vars::$ACT) {
                 }
                 // Если был договор, то выводим описание
                 if ($agreement) {
-                    echo '<br /><span class="gray">' . lng('agreement') . ':</span>&nbsp;' . implode($agreement, ', ');
+                    echo '<br /><span class="gray">' . __('agreement') . ':</span>&nbsp;' . implode($agreement, ', ');
                     if ($remains)
-                        echo '<br /><span class="gray">' . lng('remains') . ':</span> ' . implode($remains, ', ');
+                        echo '<br /><span class="gray">' . __('remains') . ':</span> ' . implode($remains, ', ');
                 }
-                echo ($res['show'] ? '<br /><span class="red"><b>' . lng('link_direct') . '</b></span>' : '') . '</p></div></div>';
+                echo ($res['show'] ? '<br /><span class="red"><b>' . __('link_direct') . '</b></span>' : '') . '</p></div></div>';
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+            echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
         }
-        echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+        echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
             echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?type=' . $type . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                 '<p><form action="' . Vars::$URI . '?type=' . $type . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
-                '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+                '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
         }
-        echo'<p><a href="' . Vars::$URI . '?act=edit">' . lng('link_add') . '</a><br />' .
-            '<a href="' . Vars::$URI . '?act=clear">' . lng('links_delete_hidden') . '</a><br />' .
-            '<a href="' . Vars::$MODULE_URI . '">' . lng('admin_panel') . '</a></p>';
+        echo'<p><a href="' . Vars::$URI . '?act=edit">' . __('link_add') . '</a><br />' .
+            '<a href="' . Vars::$URI . '?act=clear">' . __('links_delete_hidden') . '</a><br />' .
+            '<a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
 }

@@ -17,8 +17,8 @@ $tpl = Template::getInstance();
 
 if (!Vars::$USER_SYS['reg_open']) {
     // Если регистрация закрыта, выводим сообщение
-    $tpl->hbar = lng('registration');
-    $tpl->message = Vars::$USER_ID ? lng('already_registered') : lng('registration_closed');
+    $tpl->hbar = __('registration');
+    $tpl->message = Vars::$USER_ID ? __('already_registered') : __('registration_closed');
     $tpl->contents = $tpl->includeTpl('message', 1);
     exit;
 }
@@ -55,17 +55,17 @@ switch ($reg_step) {
             }
             if (Validate::password($reg_data['password'], TRUE) === TRUE) {
                 if ($reg_data['password'] != $reg_data['password_confirm']) {
-                    $error['password_confirm'] = lng('error_passwords_not_match');
+                    $error['password_confirm'] = __('error_passwords_not_match');
                 }
             }
             if (Vars::$USER_SYS['reg_email'] && Validate::email($reg_data['email'], TRUE) === TRUE) {
                 Validate::emailAvailability($reg_data['email'], TRUE);
             }
             if ($reg_data['sex'] < 1 || $reg_data['sex'] > 2) {
-                $error['sex'] = lng('error_sex_unknown');
+                $error['sex'] = __('error_sex_unknown');
             }
             if (mb_strlen($reg_data['captcha']) < 3 || $reg_data['captcha'] != $_SESSION['captcha']) {
-                $error['captcha'] = lng('error_wrong_captcha');
+                $error['captcha'] = __('error_wrong_captcha');
             }
             unset($_SESSION['captcha']);
 

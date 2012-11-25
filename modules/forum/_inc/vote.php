@@ -17,13 +17,13 @@ if (Vars::$USER_ID) {
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '2' AND `id` = '$vote' AND `topic` = " . Vars::$ID), 0);
     $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user` = " . Vars::$USER_ID . " AND `topic` = " . Vars::$ID), 0);
     if ($topic_vote == 0 || $vote_user > 0 || $topic == 0) {
-        echo Functions::displayError(lng('error_wrong_data'));
+        echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
     mysql_query("INSERT INTO `cms_forum_vote_users` SET `topic` = " . Vars::$ID . ", `user` = " . Vars::$USER_ID . ", `vote` = '$vote'");
     mysql_query("UPDATE `cms_forum_vote` SET `count` = count + 1 WHERE id = '$vote'");
     mysql_query("UPDATE `cms_forum_vote` SET `count` = count + 1 WHERE topic = " . Vars::$ID . " AND `type` = '1'");
-    echo lng('vote_accepted') . '<br /><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . lng('back') . '</a>';
+    echo __('vote_accepted') . '<br /><a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . __('back') . '</a>';
 } else {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+    echo Functions::displayError(__('access_guest_forbidden'));
 }

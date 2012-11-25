@@ -10,7 +10,7 @@
         <?= Functions::displayPagination(Vars::$URI . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
         <form action="<?= Vars::$URI ?>" method="post">
             <input class="mini" type="text" name="page" size="2"/>
-            <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;"/>
+            <input type="submit" value="<?= __('to_page') ?> &gt;&gt;"/>
         </form>
     </div>
     <?php endif ?>

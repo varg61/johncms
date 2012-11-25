@@ -75,7 +75,7 @@ class TextParser
                 $php = strtr($php, array('<br />' => '', '\\' => 'slash_MOBICMS'));
                 $php = html_entity_decode(trim($php), ENT_QUOTES, 'UTF-8');
                 $php = substr($php, 0, 2) != "<?" ? "<?php\n" . $php . "\n?>" : $php;
-                $php = highlight_string(stripslashes($php), true);
+                $php = highlight_string(stripslashes($php), TRUE);
                 $php = strtr($php, array('slash_MOBICMS' => '&#92;', ':' => '&#58;', '[' => '&#91;'));
                 return '<div class="phpcode">' . $php . '</div>';
             }
@@ -100,25 +100,25 @@ class TextParser
                 $relative_url = htmlspecialchars_decode($relative_url);
                 $text = '';
                 $chars = array('<', '>', '"');
-                $split = false;
+                $split = FALSE;
                 foreach ($chars as $char) {
                     $next_split = strpos($url, $char);
-                    if ($next_split !== false) {
-                        $split = ($split !== false) ? min($split, $next_split) : $next_split;
+                    if ($next_split !== FALSE) {
+                        $split = ($split !== FALSE) ? min($split, $next_split) : $next_split;
                     }
                 }
-                if ($split !== false) {
+                if ($split !== FALSE) {
                     $url = substr($url, 0, $split);
                     $relative_url = '';
                 } else if ($relative_url) {
-                    $split = false;
+                    $split = FALSE;
                     foreach ($chars as $char) {
                         $next_split = strpos($relative_url, $char);
-                        if ($next_split !== false) {
-                            $split = ($split !== false) ? min($split, $next_split) : $next_split;
+                        if ($next_split !== FALSE) {
+                            $split = ($split !== FALSE) ? min($split, $next_split) : $next_split;
                         }
                     }
-                    if ($split !== false) {
+                    if ($split !== FALSE) {
                         $relative_url = substr($relative_url, 0, $split);
                     }
                 }
@@ -243,7 +243,7 @@ class TextParser
             '<span class="quote" style="display:block">$2</span>',             // Цитата
             '<span class="bblist">$1</span>', // Список
             '<div><div class="hidetop" style="cursor:pointer;" onclick="var _n=this.parentNode.getElementsByTagName(\'div\')[1];if(_n.style.display==\'none\'){_n.style.display=\'\';}else{_n.style.display=\'none\';}">[+/-] ' .
-            lng('spoiler') . '</div><div class="hidemain" style="display:none">$1</div></div>' // Спойлер
+            __('spoiler') . '</div><div class="hidemain" style="display:none">$1</div></div>' // Спойлер
         );
         return preg_replace($search, $replace, $var);
     }
@@ -256,7 +256,7 @@ class TextParser
     public static function autoBB($form, $field)
     {
         if (Vars::$IS_MOBILE) {
-            return false;
+            return FALSE;
         }
         $colors = array(
             'ffffff', 'bcbcbc', '708090', '6c6c6c', '454545',
@@ -281,30 +281,30 @@ class TextParser
         }
         $font_color .= '</tr></table>';
         $bg_color .= '</tr></table>';
-        if (($smileys = Vars::getUserData('smileys')) === false) $smileys = array();
+        if (($smileys = Vars::getUserData('smileys')) === FALSE) $smileys = array();
         if (!empty($smileys)) {
             $res_sm = '';
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys?act=my_smileys">' . lng('edit_list') . '</a></small><br />';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys?act=my_smileys">' . __('edit_list') . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\');">:' . $value . ':</a> ';
             $bb_smileys .= Functions::smileys($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys">' . lng('add_smileys') . '</a></small>';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys">' . __('add_smileys') . '</a></small>';
         }
 
         $menu = array(
-            '<a href="javascript:tag(\'[b]\', \'[/b]\')">' . Functions::loadImage('edit-bold.gif', '', '', 'title="' . lng('tag_bold') . '"') . '</a>',
-            '<a href="javascript:tag(\'[i]\', \'[/i]\')">' . Functions::loadImage('edit-italic.gif', '', '', 'title="' . lng('tag_italic') . '"') . '</a>',
-            '<a href="javascript:tag(\'[u]\', \'[/u]\')">' . Functions::loadImage('edit-underline.gif', '', '', 'title="' . lng('tag_underline') . '"') . '</a>',
-            '<a href="javascript:tag(\'[s]\', \'[/s]\')">' . Functions::loadImage('edit-strike.gif', '', '', 'title="' . lng('tag_strike') . '"') . '</a>',
-            '<a href="javascript:tag(\'[*]\', \'[/*]\')">' . Functions::loadImage('edit-list.gif', '', '', 'title="' . lng('tag_list') . '"') . '</a>',
-            '<a href="javascript:tag(\'[spoiler]\', \'[/spoiler]\')">' . Functions::loadImage('edit-spoiler.png', '', '', 'title="' . lng('spoiler') . '"') . '</a>',
-            '<a href="javascript:tag(\'[q]\', \'[/q]\')">' . Functions::loadImage('edit-quotation.png', '', '', 'title="' . lng('tag_quote') . '"') . '</a>',
-            '<a href="javascript:tag(\'[php]\', \'[/php]\')">' . Functions::loadImage('edit-php.gif', '', '', 'title="' . lng('tag_code') . '"') . '</a>',
-            '<a href="javascript:tag(\'[url=]\', \'[/url]\')">' . Functions::loadImage('edit-url.gif', '', '', 'title="' . lng('tag_link') . '"') . '</a>',
-            '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('edit-color.gif', '', '', 'title="' . lng('color_text') . '"') . '<div class="bb_hide bb_color">' . $font_color . '</div></span>',
-            '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('edit-bgcolor.gif', '', '', 'title="' . lng('color_bg') . '"') . '<div class="bb_hide bb_color">' . $bg_color . '</div></span>',
-            (Vars::$USER_ID ? '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('smiley.png', '', '', 'title="' . lng('smileys') . '"') . '<div class="bb_hide">' . $bb_smileys . '</div></span>' : '')
+            '<a href="javascript:tag(\'[b]\', \'[/b]\')">' . Functions::loadImage('edit-bold.gif', '', '', 'title="' . __('tag_bold') . '"') . '</a>',
+            '<a href="javascript:tag(\'[i]\', \'[/i]\')">' . Functions::loadImage('edit-italic.gif', '', '', 'title="' . __('tag_italic') . '"') . '</a>',
+            '<a href="javascript:tag(\'[u]\', \'[/u]\')">' . Functions::loadImage('edit-underline.gif', '', '', 'title="' . __('tag_underline') . '"') . '</a>',
+            '<a href="javascript:tag(\'[s]\', \'[/s]\')">' . Functions::loadImage('edit-strike.gif', '', '', 'title="' . __('tag_strike') . '"') . '</a>',
+            '<a href="javascript:tag(\'[*]\', \'[/*]\')">' . Functions::loadImage('edit-list.gif', '', '', 'title="' . __('tag_list') . '"') . '</a>',
+            '<a href="javascript:tag(\'[spoiler]\', \'[/spoiler]\')">' . Functions::loadImage('edit-spoiler.png', '', '', 'title="' . __('spoiler') . '"') . '</a>',
+            '<a href="javascript:tag(\'[q]\', \'[/q]\')">' . Functions::loadImage('edit-quotation.png', '', '', 'title="' . __('tag_quote') . '"') . '</a>',
+            '<a href="javascript:tag(\'[php]\', \'[/php]\')">' . Functions::loadImage('edit-php.gif', '', '', 'title="' . __('tag_code') . '"') . '</a>',
+            '<a href="javascript:tag(\'[url=]\', \'[/url]\')">' . Functions::loadImage('edit-url.gif', '', '', 'title="' . __('tag_link') . '"') . '</a>',
+            '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('edit-color.gif', '', '', 'title="' . __('color_text') . '"') . '<div class="bb_hide bb_color">' . $font_color . '</div></span>',
+            '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('edit-bgcolor.gif', '', '', 'title="' . __('color_bg') . '"') . '<div class="bb_hide bb_color">' . $bg_color . '</div></span>',
+            (Vars::$USER_ID ? '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('smiley.png', '', '', 'title="' . __('smileys') . '"') . '<div class="bb_hide">' . $bb_smileys . '</div></span>' : '')
         );
 
         $out = '<style>' . "\n" .

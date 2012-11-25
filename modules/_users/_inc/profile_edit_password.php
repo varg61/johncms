@@ -33,26 +33,26 @@ if (Vars::$USER_ID == $tpl->user['id']
 
         // Проверяем заполнение полей
         if (empty($oldpass)) {
-            $tpl->error['oldpass'] = lng('error_empty_field');
+            $tpl->error['oldpass'] = __('error_empty_field');
         }
         if (empty($newpass)) {
-            $tpl->error['newpass'] = lng('error_empty_field');
+            $tpl->error['newpass'] = __('error_empty_field');
         }
         if (empty($newconf)) {
-            $tpl->error['newconf'] = lng('error_empty_field');
+            $tpl->error['newconf'] = __('error_empty_field');
         }
 
         if (empty($tpl->error)) {
             // Проверяем исходный пароль
             if (crypt($oldpass, Vars::$USER_DATA['password']) !== Vars::$USER_DATA['password']) {
-                $tpl->error['oldpass'] = lng('error_wrong_password');
+                $tpl->error['oldpass'] = __('error_wrong_password');
             }
 
             // Проверяем новый пароль
             if (Validate::password($newpass, TRUE) !== TRUE) {
                 $tpl->error['newpass'] = Validate::$error['password'];
             } elseif ($newpass !== $newconf) {
-                $tpl->error['newconf'] = lng('error_passwords_not_match');
+                $tpl->error['newconf'] = __('error_passwords_not_match');
             }
 
             if (empty($tpl->error)) {
@@ -68,9 +68,9 @@ if (Vars::$USER_ID == $tpl->user['id']
                     $_SESSION['token'] = $token;
                 }
 
-                $tpl->hbar = lng('change_password');
+                $tpl->hbar = __('change_password');
                 $tpl->continue = Vars::$MODULE_URI . '/profile?act=settings&amp;user=' . $tpl->user['id'];
-                $tpl->message = lng('password_changed');
+                $tpl->message = __('password_changed');
                 $tpl->contents = $tpl->includeTpl('message', 1);
                 exit;
             }
@@ -81,5 +81,5 @@ if (Vars::$USER_ID == $tpl->user['id']
     $_SESSION['form_token'] = $tpl->form_token;
     $tpl->contents = $tpl->includeTpl('profile_edit_password');
 } else {
-    echo Functions::displayError(lng('error_rights'));
+    echo Functions::displayError(__('error_rights'));
 }

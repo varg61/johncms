@@ -12,12 +12,12 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!$al) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
 $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al'");
 if (!mysql_num_rows($req)) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
 $album = mysql_fetch_assoc($req);
@@ -28,9 +28,9 @@ $view = isset($_GET['view']);
 Показываем выбранный альбом с фотографиями
 -----------------------------------------------------------------
 */
-echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | <a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('personal_2') . '</a></div>' .
+echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('photo_albums') . '</b></a> | <a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('personal_2') . '</a></div>' .
     '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
-    '<div class="phdr">' . lng('album') . ': ';
+    '<div class="phdr">' . __('album') . ': ';
 echo $view ? '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . Validate::checkout($album['name']) . '</b></a>' : '<b>' . Validate::checkout($album['name']) . '</b>';
 echo'</div>';
 if (!empty($album['description'])) {
@@ -46,8 +46,8 @@ if ($album['access'] != 2)
     unset($_SESSION['ap']);
 if ($album['access'] == 1 && $user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
     // Если доступ закрыт
-    echo Functions::displayError(lng('access_forbidden')) .
-        '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('album_list') . '</a></div>';
+    echo Functions::displayError(__('access_forbidden')) .
+        '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></div>';
     exit;
 } elseif ($album['access'] == 2 && $user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
     // Если доступ через пароль
@@ -55,15 +55,15 @@ if ($album['access'] == 1 && $user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS
         if ($album['password'] == trim($_POST['password']))
             $_SESSION['ap'] = $album['password'];
         else
-            echo Functions::displayError(lng('error_wrong_password'));
+            echo Functions::displayError(__('error_wrong_password'));
     }
     if (!isset($_SESSION['ap']) || $_SESSION['ap'] != $album['password']) {
         echo'<form action="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post"><div class="menu"><p>' .
-            lng('album_password') . '<br />' .
+            __('album_password') . '<br />' .
             '<input type="text" name="password"/></p>' .
-            '<p><input type="submit" name="submit" value="' . lng('login') . '"/></p>' .
+            '<p><input type="submit" name="submit" value="' . __('login') . '"/></p>' .
             '</div></form>' .
-            '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('album_list') . '</a></div>';
+            '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></div>';
         exit;
     }
 }
@@ -104,7 +104,7 @@ if ($total) {
                     ALBUMPATH . $user['id'] . DIRECTORY_SEPARATOR . $res['img_name'],
                     ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . Vars::$USER_ID . '.jpg'
                 );
-                echo '<span class="green"><b>' . lng('photo_profile_ok') . '</b></span><br />';
+                echo '<span class="green"><b>' . __('photo_profile_ok') . '</b></span><br />';
             }
             echo '<a href="' . $_SESSION['ref'] . '"><img src="' . Vars::$HOME_URL . '/assets/misc/album_image.php?u=' . $user['id'] . '&amp;f=' . $res['img_name'] . '" /></a>';
             // Счетчик просмотров
@@ -126,35 +126,35 @@ if ($total) {
         echo '<div class="sub">';
         if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayMenu(array(
-                '<a href="' . Vars::$URI . '?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('edit') . '</a>',
-                '<a href="' . Vars::$URI . '?act=image_move&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('move') . '</a>',
-                '<a href="' . Vars::$URI . '?act=image_delete&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . lng('delete') . '</a>'
+                '<a href="' . Vars::$URI . '?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('edit') . '</a>',
+                '<a href="' . Vars::$URI . '?act=image_move&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('move') . '</a>',
+                '<a href="' . Vars::$URI . '?act=image_delete&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('delete') . '</a>'
             ));
             if ($user['id'] == Vars::$USER_ID && $view)
-                echo ' | <a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;view&amp;img=' . $res['id'] . '&amp;profile">' . lng('photo_profile') . '</a>';
+                echo ' | <a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;view&amp;img=' . $res['id'] . '&amp;profile">' . __('photo_profile') . '</a>';
         }
         echo Album::vote($res) .
-            '<div class="gray">' . lng('count_views') . ': ' . $res['views'] . ', ' . lng('count_downloads') . ': ' . $res['downloads'] . '</div>' .
-            '<div class="gray">' . lng('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
-            '<a href="' . Vars::$URI . '?act=comments&amp;user=' . $user['id'] . '&amp;img=' . $res['id'] . '">' . lng('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
-            '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . lng('download') . '</a>' .
+            '<div class="gray">' . __('count_views') . ': ' . $res['views'] . ', ' . __('count_downloads') . ': ' . $res['downloads'] . '</div>' .
+            '<div class="gray">' . __('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
+            '<a href="' . Vars::$URI . '?act=comments&amp;user=' . $user['id'] . '&amp;img=' . $res['id'] . '">' . __('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
+            '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . __('download') . '</a>' .
             '</div></div>';
     }
 } else {
-    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+    echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
 }
 if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
     echo'<div class="gmenu">' .
         '<form action="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
-        '<p><input type="submit" value="' . lng('image_add') . '"/></p>' .
+        '<p><input type="submit" value="' . __('image_add') . '"/></p>' .
         '</form></div>';
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . ($view ? '&amp;view' : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . lng('album_list') . '</a></p>';
+echo '<p><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></p>';

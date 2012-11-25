@@ -46,6 +46,6 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
     require ( MAILPATH . '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php' );
 } else {
     $tpl->newmess = Functions::mailCount('new'); //Счетчик 
-	$tpl->title = lng( 'mail' );
+	$tpl->title = __( 'mail' );
     $tpl->contents = $tpl->includeTpl( '_index' );
 }

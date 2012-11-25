@@ -14,15 +14,15 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $error = '';
 
 if ((!isset(Vars::$ACL['stat']) || !Vars::$ACL['stat']) && Vars::$USER_RIGHTS < 7) {
-    $error = lng('module_is_disabled');
+    $error = __('module_is_disabled');
 } elseif (isset(Vars::$ACL['stat']) && Vars::$ACL['stat'] == 1 && Vars::$USER_RIGHTS < 7) {
-    $error = lng('access_denied');
+    $error = __('access_denied');
 } elseif (isset(Vars::$ACL['stat']) && Vars::$ACL['stat'] == 2 && !Vars::$USER_ID) {
-    $error = lng('access_denied');
+    $error = __('access_denied');
 }
 
 if ($error) {
-    echo Functions::displayError(lng('module_is_disabled'));
+    echo Functions::displayError(__('module_is_disabled'));
     exit;
 }
 
@@ -58,7 +58,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE .
     $back_links = '';
     include_once (MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' .
         DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
-    echo '<div class="gmenu">' . $back_links . '<a href="' . Vars::$URI . '">' . lng('to_statistics') .
+    echo '<div class="gmenu">' . $back_links . '<a href="' . Vars::$URI . '">' . __('to_statistics') .
         '</a></div>';
 
 } else {

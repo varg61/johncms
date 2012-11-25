@@ -18,11 +18,11 @@ if(Vars::$ID) {
 		if($result['delete_in'] != Vars::$USER_ID && $result['delete_out'] != Vars::$USER_ID) {
 			if($result['user_id'] == Vars::$USER_ID) {
 				$id = $result['contact_id'];
-				$tpl->pref = lng('pref_out');
+				$tpl->pref = __('pref_out');
 				$tpl->back = 'outmess';
 			} else {
 				$id = $result['user_id'];
-				$tpl->pref = lng('pref_in');
+				$tpl->pref = __('pref_in');
 				$tpl->back = 'inmess';
 			}
 			if ( $result['read'] == 0 && $result['contact_id'] == Vars::$USER_ID )
@@ -45,14 +45,14 @@ if(Vars::$ID) {
 			//Подключаем шаблон read.php
 			$tpl->contents = $tpl->includeTpl( 'read' );
 		} else {
-			$tpl->contents = Functions::displayError( lng( 'page_does_not_exist' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . lng( 'contacts' ) . '</a><br />
-			<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
+			$tpl->contents = Functions::displayError( __( 'page_does_not_exist' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . __( 'contacts' ) . '</a><br />
+			<a href="' . Vars::$MODULE_URI . '">' . __( 'mail' ) . '</a>' );
 		}
 	} else {
-		$tpl->contents = Functions::displayError( lng( 'page_does_not_exist' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . lng( 'contacts' ) . '</a><br />
-		<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
+		$tpl->contents = Functions::displayError( __( 'page_does_not_exist' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . __( 'contacts' ) . '</a><br />
+		<a href="' . Vars::$MODULE_URI . '">' . __( 'mail' ) . '</a>' );
 	}
 } else {
-	$tpl->contents = Functions::displayError( lng( 'message_no_select' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . lng( 'contacts' ) . '</a><br />
-	<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
+	$tpl->contents = Functions::displayError( __( 'message_no_select' ), '<a href="' . Vars::$HOME_URL . '/contacts">' . __( 'contacts' ) . '</a><br />
+	<a href="' . Vars::$MODULE_URI . '">' . __( 'mail' ) . '</a>' );
 }

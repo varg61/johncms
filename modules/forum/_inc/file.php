@@ -32,7 +32,7 @@ if (Vars::$ID) {
         $error = true;
     }
     if ($error) {
-        echo Functions::displayError(lng('error_file_not_exist'), '<a href="' . Vars::$URI . '">' . lng('to_forum') . '</a>');
+        echo Functions::displayError(__('error_file_not_exist'), '<a href="' . Vars::$URI . '">' . __('to_forum') . '</a>');
         exit;
     }
 } else {

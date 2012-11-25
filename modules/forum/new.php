@@ -68,7 +68,7 @@ if (Vars::$USER_ID) {
                     WHERE `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID
                 );
             }
-            echo '<div class="menu"><p>' . lng('unread_reset_done') . '<br /><a href="' . Vars::$MODULE_URI . '">' . lng('to_forum') . '</a></p></div>';
+            echo '<div class="menu"><p>' . __('unread_reset_done') . '<br /><a href="' . Vars::$MODULE_URI . '">' . __('to_forum') . '</a></p></div>';
             break;
 
         case 'select':
@@ -77,11 +77,11 @@ if (Vars::$USER_ID) {
             Форма выбора диапазона времени
             -----------------------------------------------------------------
             */
-            echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('forum') . '</b></a> | ' . lng('unread_show_for_period') . '</div>' .
-                '<div class="menu"><p><form action="' . Vars::$URI . '?act=period" method="post">' . lng('unread_period') . ':<br/>' .
+            echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('forum') . '</b></a> | ' . __('unread_show_for_period') . '</div>' .
+                '<div class="menu"><p><form action="' . Vars::$URI . '?act=period" method="post">' . __('unread_period') . ':<br/>' .
                 '<input type="text" maxlength="3" name="vr" value="24" size="3"/>' .
-                '<input type="submit" name="submit" value="' . lng('show') . '"/></form></p></div>' .
-                '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('back') . '</a></div>';
+                '<input type="submit" name="submit" value="' . __('show') . '"/></form></p></div>' .
+                '<div class="phdr"><a href="' . Vars::$URI . '">' . __('back') . '</a></div>';
             break;
 
         case 'period':
@@ -92,7 +92,7 @@ if (Vars::$USER_ID) {
             */
             $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : NULL;
             if (!$vr) {
-                echo lng('error_time_empty') . '<br/><a href="' . Vars::$URI . '?act=period">' . lng('repeat') . '</a><br/>';
+                echo __('error_time_empty') . '<br/><a href="' . Vars::$URI . '?act=period">' . __('repeat') . '</a><br/>';
                 exit;
             }
             $vr1 = time() - $vr * 3600;
@@ -102,7 +102,7 @@ if (Vars::$USER_ID) {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1' AND `close` != '1'");
             }
             $count = mysql_result($req, 0);
-            echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('forum') . '</b></a> | ' . lng('unread_all_for_period') . ' ' . $vr . ' ' . lng('hours') . '</div>';
+            echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('forum') . '</b></a> | ' . __('unread_all_for_period') . ' ' . $vr . ' ' . __('hours') . '</div>';
             if ($count > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;mod=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
             if ($count > 0) {
@@ -143,17 +143,17 @@ if (Vars::$USER_ID) {
                         '</div></div>';
                 }
             } else {
-                echo'<div class="menu"><p>' . lng('unread_period_empty') . '</p></div>';
+                echo'<div class="menu"><p>' . __('unread_period_empty') . '</p></div>';
             }
-            echo'<div class="phdr">' . lng('total') . ': ' . $count . '</div>';
+            echo'<div class="phdr">' . __('total') . ': ' . $count . '</div>';
             if ($count > Vars::$USER_SET['page_size']) {
                 echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>' .
                     '<p><form action="' . Vars::$URI . '?act=period&amp;vr=' . $vr . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
-                    '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+                    '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                     '</form></p>';
             }
-            echo '<p><a href="' . Vars::$URI . '">' . lng('back') . '</a></p>';
+            echo '<p><a href="' . Vars::$URI . '">' . __('back') . '</a></p>';
             break;
 
         default:
@@ -163,7 +163,7 @@ if (Vars::$USER_ID) {
             -----------------------------------------------------------------
             */
             $total = Counters::forumCountNew();
-            echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('forum') . '</b></a> | ' . lng('unread') . '</div>';
+            echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('forum') . '</b></a> | ' . __('unread') . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             }
@@ -208,21 +208,21 @@ if (Vars::$USER_ID) {
                         '</div></div>';
                 }
             } else {
-                echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+                echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
             }
-            echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+            echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                     '<p><form action="' . Vars::$URI . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
-                    '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+                    '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                     '</form></p>';
             }
             echo'<p>';
             if ($total) {
-                echo '<a href="' . Vars::$URI . '?act=reset">' . lng('unread_reset') . '</a><br/>';
+                echo '<a href="' . Vars::$URI . '?act=reset">' . __('unread_reset') . '</a><br/>';
             }
-            echo'<a href="' . Vars::$URI . '?act=select">' . lng('unread_show_for_period') . '</a></p>';
+            echo'<a href="' . Vars::$URI . '?act=select">' . __('unread_show_for_period') . '</a></p>';
     }
 } else {
     /*
@@ -230,7 +230,7 @@ if (Vars::$USER_ID) {
     Вывод 10 последних тем (для незарегистрированных)
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('forum') . '</b></a> | ' . lng('unread_last_10') . '</div>';
+    echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('forum') . '</b></a> | ' . __('unread_last_10') . '</div>';
     $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT 10");
     if (mysql_num_rows($req)) {
         for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
@@ -265,7 +265,7 @@ if (Vars::$USER_ID) {
             echo '</div></div>';
         }
     } else {
-        echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+        echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
     }
-    echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '">' . lng('to_forum') . '</a></div>';
+    echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '">' . __('to_forum') . '</a></div>';
 }

@@ -16,7 +16,7 @@ if (isset($_SESSION['ref']))
 
 // Если гостевая закрыта, выводим сообщение и закрываем доступ (кроме Админов)
 if ((!isset(Vars::$ACL['guestbook']) || !Vars::$ACL['guestbook']) && Vars::$USER_RIGHTS < 7) {
-    echo '<div class="rmenu"><p>' . lng('guestbook_closed') . '</p></div>';
+    echo '<div class="rmenu"><p>' . __('guestbook_closed') . '</p></div>';
     exit;
 }
 
@@ -37,10 +37,10 @@ switch (Vars::$ACT) {
                 mysql_query("DELETE FROM `guest` WHERE `id` = " . Vars::$ID);
                 header("Location: " . Vars::$URI . ($mod ? '?mod=adm' : ''));
             } else {
-                echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('delete_message') . '</div>' .
-                    '<div class="rmenu"><p>' . lng('delete_confirmation') . '?<br/>' .
-                    '<a href="' . Vars::$URI . '?act=delpost&amp;id=' . Vars::$ID . ($mod ? '&amp;mod=adm' : '') . '&amp;yes">' . lng('delete') . '</a> | ' .
-                    '<a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '">' . lng('cancel') . '</a></p></div>';
+                echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('guestbook') . '</b></a> | ' . __('delete_message') . '</div>' .
+                    '<div class="rmenu"><p>' . __('delete_confirmation') . '?<br/>' .
+                    '<a href="' . Vars::$URI . '?act=delpost&amp;id=' . Vars::$ID . ($mod ? '&amp;mod=adm' : '') . '&amp;yes">' . __('delete') . '</a> | ' .
+                    '<a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '">' . __('cancel') . '</a></p></div>';
             }
         }
         break;
@@ -71,10 +71,10 @@ switch (Vars::$ACT) {
             $error = array();
             $flood = FALSE;
             if (!Vars::$USER_ID && empty($_POST['name'])) {
-                $error[] = lng('error_empty_name');
+                $error[] = __('error_empty_name');
             }
             if (empty($msg)) {
-                $error[] = lng('error_empty_message');
+                $error[] = __('error_empty_message');
             }
             //TODO: Обработать Бан!
             //if (Vars::$USER_BAN['1'] || Vars::$USER_BAN['13'])
@@ -82,7 +82,7 @@ switch (Vars::$ACT) {
 
             // CAPTCHA для гостей
             if (!Vars::$USER_ID && !Captcha::check()) {
-                $error[] = lng('error_wrong_captcha');
+                $error[] = __('error_wrong_captcha');
             }
             unset($_SESSION['captcha']);
             if (Vars::$USER_ID) {
@@ -97,7 +97,7 @@ switch (Vars::$ACT) {
                 }
             }
             if ($flood) {
-                $error = lng('error_flood') . ' ' . $flood . '&#160;' . lng('seconds');
+                $error = __('error_flood') . ' ' . $flood . '&#160;' . __('seconds');
             }
             if (!$error) {
                 // Проверка на одинаковые сообщения
@@ -126,10 +126,10 @@ switch (Vars::$ACT) {
                 }
                 header('location: ' . Vars::$URI . ($mod ? '?mod=adm' : ''));
             } else {
-                echo Functions::displayError($error, '<a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '">' . lng('back') . '</a>');
+                echo Functions::displayError($error, '<a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '">' . __('back') . '</a>');
             }
         } else {
-            echo Functions::displayError(lng('error_wrong_data'));
+            echo Functions::displayError(__('error_wrong_data'));
         }
         break;
 
@@ -149,19 +149,19 @@ switch (Vars::$ACT) {
                 );
                 header("Location: " . Vars::$URI . ($mod ? '?mod=adm' : ''));
             } else {
-                echo '<div class="phdr"><a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('reply') . '</div>';
+                echo '<div class="phdr"><a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '"><b>' . __('guestbook') . '</b></a> | ' . __('reply') . '</div>';
                 $req = mysql_query("SELECT * FROM `guest` WHERE `id` = " . Vars::$ID);
                 $res = mysql_fetch_assoc($req);
                 echo'<div class="menu">' .
                     '<div class="quote"><b>' . $res['nickname'] . '</b>' .
                     '<br />' . Validate::checkout($res['text']) . '</div>' .
                     '<form name="form" action="' . Vars::$URI . '?act=reply&amp;id=' . Vars::$ID . ($mod ? '&amp;mod=adm' : '') . '" method="post">' .
-                    '<p><h3>' . lng('reply') . '</h3>' . TextParser::autoBB('form', 'otv') .
+                    '<p><h3>' . __('reply') . '</h3>' . TextParser::autoBB('form', 'otv') .
                     '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="otv">' . Validate::checkout($res['otvet']) . '</textarea></p>' .
-                    '<p><input type="submit" name="submit" value="' . lng('reply') . '"/></p>' .
+                    '<p><input type="submit" name="submit" value="' . __('reply') . '"/></p>' .
                     '</form></div>' .
-                    '<div class="phdr"><a href="faq.php?act=trans">' . lng('translit') . '</a> | <a href="faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-                    '<p><a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '">' . lng('back') . '</a></p>';
+                    '<div class="phdr"><a href="faq.php?act=trans">' . __('translit') . '</a> | <a href="faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+                    '<p><a href="' . Vars::$URI . ($mod ? '?mod=adm' : '') . '">' . __('back') . '</a></p>';
             }
         }
         break;
@@ -190,15 +190,15 @@ switch (Vars::$ACT) {
                 $req = mysql_query("SELECT * FROM `guest` WHERE `id` = " . Vars::$ID);
                 $res = mysql_fetch_assoc($req);
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
-                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('edit') . '</div>' .
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('guestbook') . '</b></a> | ' . __('edit') . '</div>' .
                     '<div class="rmenu">' .
                     '<form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . ($mod ? '&amp;mod=adm' : '') . '" method="post">' .
-                    '<p><b>' . lng('author') . ':</b> ' . $res['nickname'] . '</p>' .
+                    '<p><b>' . __('author') . ':</b> ' . $res['nickname'] . '</p>' .
                     '<p><textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
-                    '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
+                    '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>' .
                     '</form></div>' .
-                    '<div class="phdr"><a href="faq.php?act=trans">' . lng('translit') . '</a> | <a href="faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-                    '<p><a href="' . Vars::$URI . '">' . lng('back') . '</a></p>';
+                    '<div class="phdr"><a href="faq.php?act=trans">' . __('translit') . '</a> | <a href="faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+                    '<p><a href="' . Vars::$URI . '">' . __('back') . '</a></p>';
             }
         }
         break;
@@ -218,33 +218,33 @@ switch (Vars::$ACT) {
                     case '1':
                         // Чистим сообщения, старше 1 дня
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time` < '" . (time() - 86400) . "'");
-                        echo '<p>' . lng('clear_day_ok') . '</p>';
+                        echo '<p>' . __('clear_day_ok') . '</p>';
                         break;
 
                     case '2':
                         // Проводим полную очистку
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm'");
-                        echo '<p>' . lng('clear_full_ok') . '</p>';
+                        echo '<p>' . __('clear_full_ok') . '</p>';
                         break;
                     default :
                         // Чистим сообщения, старше 1 недели
                         mysql_query("DELETE FROM `guest` WHERE `adm`='$adm' AND `time`<='" . (time() - 604800) . "';");
-                        echo '<p>' . lng('clear_week_ok') . '</p>';
+                        echo '<p>' . __('clear_week_ok') . '</p>';
                 }
                 mysql_query("OPTIMIZE TABLE `guest`");
-                echo '<p><a href="' . Vars::$URI . '">' . lng('guestbook') . '</a></p>';
+                echo '<p><a href="' . Vars::$URI . '">' . __('guestbook') . '</a></p>';
             } else {
                 // Запрос параметров очистки
-                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('guestbook') . '</b></a> | ' . lng('clear') . '</div>' .
+                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('guestbook') . '</b></a> | ' . __('clear') . '</div>' .
                     '<div class="menu">' .
                     '<form id="clean" method="post" action="' . Vars::$URI . '?act=clean">' .
-                    '<p><h3>' . lng('clear_param') . '</h3>' .
-                    '<input type="radio" name="cl" value="0" checked="checked" />' . lng('clear_param_week') . '<br />' .
-                    '<input type="radio" name="cl" value="1" />' . lng('clear_param_day') . '<br />' .
-                    '<input type="radio" name="cl" value="2" />' . lng('clear_param_all') . '</p>' .
-                    '<p><input type="submit" name="submit" value="' . lng('clear') . '" /></p>' .
+                    '<p><h3>' . __('clear_param') . '</h3>' .
+                    '<input type="radio" name="cl" value="0" checked="checked" />' . __('clear_param_week') . '<br />' .
+                    '<input type="radio" name="cl" value="1" />' . __('clear_param_day') . '<br />' .
+                    '<input type="radio" name="cl" value="2" />' . __('clear_param_all') . '</p>' .
+                    '<p><input type="submit" name="submit" value="' . __('clear') . '" /></p>' .
                     '</form></div>' .
-                    '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></div>';
+                    '<div class="phdr"><a href="' . Vars::$URI . '">' . __('cancel') . '</a></div>';
             }
         }
         break;
@@ -258,13 +258,13 @@ switch (Vars::$ACT) {
         // Форма ввода нового сообщения
         if ((Vars::$USER_ID || Vars::$SYSTEM_SET['mod_guest'] == 2) && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['13'])) {
             if (Vars::$USER_SET['translit']) {
-                echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . lng('translit') . '<br/>';
+                echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . __('translit') . '<br/>';
             }
-            echo'<input type="submit" name="submit" value="' . lng('sent') . '"/>' .
+            echo'<input type="submit" name="submit" value="' . __('sent') . '"/>' .
                 '<input type="hidden" name="form_token" value="' . $_SESSION['form_token'] . '"/>' .
                 '</form></div>';
         } else {
-            echo '<div class="rmenu">' . lng('access_guest_forbidden') . '</div>';
+            echo '<div class="rmenu">' . __('access_guest_forbidden') . '</div>';
         }
         $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm` = '" . ($mod ? 1 : 0) . "'"), 0);
         if ($tpl->total) {
@@ -312,9 +312,9 @@ switch (Vars::$ACT) {
                 );
                 if (Vars::$USER_RIGHTS >= 6) {
                     $menu = array(
-                        '<a href="' . Vars::$URI . '?act=reply&amp;id=' . $res['gid'] . ($mod ? '&amp;mod=adm' : '') . '">' . lng('reply') . '</a>',
-                        (Vars::$USER_RIGHTS >= $res['rights'] ? '<a href="' . Vars::$URI . '?act=edit&amp;id=' . $res['gid'] . ($mod ? '&amp;mod=adm' : '') . '">' . lng('edit') . '</a>' : ''),
-                        (Vars::$USER_RIGHTS >= $res['rights'] ? '<a href="' . Vars::$URI . '?act=delpost&amp;id=' . $res['gid'] . ($mod ? '&amp;mod=adm' : '') . '">' . lng('delete') . '</a>' : '')
+                        '<a href="' . Vars::$URI . '?act=reply&amp;id=' . $res['gid'] . ($mod ? '&amp;mod=adm' : '') . '">' . __('reply') . '</a>',
+                        (Vars::$USER_RIGHTS >= $res['rights'] ? '<a href="' . Vars::$URI . '?act=edit&amp;id=' . $res['gid'] . ($mod ? '&amp;mod=adm' : '') . '">' . __('edit') . '</a>' : ''),
+                        (Vars::$USER_RIGHTS >= $res['rights'] ? '<a href="' . Vars::$URI . '?act=delpost&amp;id=' . $res['gid'] . ($mod ? '&amp;mod=adm' : '') . '">' . __('delete') . '</a>' : '')
                     );
                     $arg['sub'] = Functions::displayMenu($menu);
                 }

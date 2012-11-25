@@ -25,7 +25,7 @@ closedir($dir_clean);
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
-    echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
     exit;
 }
 if (isset($_GET['more'])) {
@@ -33,7 +33,7 @@ if (isset($_GET['more'])) {
     $req_more = mysql_query("SELECT * FROM `cms_download_more` WHERE `id` = '$more' AND `refid`= '" . Vars::$ID . "' LIMIT 1");
     $res_more = mysql_fetch_assoc($req_more);
     if (!mysql_num_rows($req_more) || !is_file($res_down['dir'] . '/' . $res_more['name'])) {
-        echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+        echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
         exit;
     }
     $file_open = $res_down['dir'] . '/' . $res_more['name'];
@@ -45,7 +45,7 @@ if (isset($_GET['more'])) {
     $isset_more = '';
 }
 $title_pages = Validate::checkout(mb_substr($title_pages, 0, 20));
-$textl = lng('open_archive') . ' &raquo; ' . (mb_strlen($res_down['rus_name']) > 20 ? $title_pages . '...' : $title_pages);
+$textl = __('open_archive') . ' &raquo; ' . (mb_strlen($res_down['rus_name']) > 20 ? $title_pages . '...' : $title_pages);
 require (SYSPATH . 'lib/pclzip.lib.php');
 $array = array('cgi', 'pl', 'asp', 'aspx', 'shtml', 'shtm', 'fcgi', 'fpl', 'jsp', 'py', 'htaccess', 'ini', 'php', 'php3', 'php4', 'php5', 'php6', 'phtml', 'phps');
 if (!isset($_GET['file'])) {
@@ -56,12 +56,12 @@ if (!isset($_GET['file'])) {
 	*/
     $zip = new PclZip($file_open);
     if (($list = $zip->listContent()) == 0) {
-        echo functions::displayError(lng('open_archive_error'), '<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></p>');
+        echo functions::displayError(__('open_archive_error'), '<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>');
 		exit;
     }
-    $list_size = false;
-    $list_content = false;
-    $save_list = false;
+    $list_size = FALSE;
+    $list_content = FALSE;
+    $save_list = FALSE;
     for ($i = 0; $i < sizeof($list); $i++) {
         for (reset($list[$i]); $key = key($list[$i]); next($list[$i])) {
             $file_size = str_replace("--size:", "", strstr($list_content, "--size"));
@@ -77,8 +77,8 @@ if (!isset($_GET['file'])) {
 	Выводим список файлов
 	-----------------------------------------------------------------
 	*/
-    echo '<div class="phdr"><b>' . lng('open_archive') . ':</b> ' . Validate::checkout($res_down['name']) . '</div>' .
-    '<div class="topmenu">' . lng('open_archive_faq') . '</div>';
+    echo '<div class="phdr"><b>' . __('open_archive') . ':</b> ' . Validate::checkout($res_down['name']) . '</div>' .
+    '<div class="topmenu">' . __('open_archive_faq') . '</div>';
 	$preview = explode('|', $save_list);
     $total = count($preview) - 1;
     /*
@@ -101,14 +101,14 @@ if (!isset($_GET['file'])) {
 			'<b>' . ($i + 1) . ')</b> ' . $dir . '/' . Validate::checkout(mb_convert_encoding($file_name, "UTF-8", "Windows-1251"));
             if ($file_size_two[$i] > 0) echo ' (' . Download::displayFileSize($file_size_two[$i]) . ')';
 			if ($format_file)
-				echo ' - <a href="' . Vars::$URI . '?act=open_zip&amp;id=' . Vars::$ID . '&amp;file=' . rawurlencode(mb_convert_encoding($path, "UTF-8", "Windows-1251")) . '&amp;page=' . Vars::$PAGE . $isset_more . '">' . (in_array($format_file, $array) ? lng('open_archive_code') : lng('download')) . '</a>';
+				echo ' - <a href="' . Vars::$URI . '?act=open_zip&amp;id=' . Vars::$ID . '&amp;file=' . rawurlencode(mb_convert_encoding($path, "UTF-8", "Windows-1251")) . '&amp;page=' . Vars::$PAGE . $isset_more . '">' . (in_array($format_file, $array) ? __('open_archive_code') : __('download')) . '</a>';
             echo '</div>';
         }
     } else {
-    	echo '<div class="rmenu"><p>' . lng('list_empty') . '</p></div>';
+    	echo '<div class="rmenu"><p>' . __('list_empty') . '</p></div>';
     }
-    echo '<div class="gmenu">' . lng('open_archive_size') . ': ' . Download::displayFileSize(array_sum($file_size_two)) . '</div>' .
-    '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+    echo '<div class="gmenu">' . __('open_archive_size') . ': ' . Download::displayFileSize(array_sum($file_size_two)) . '</div>' .
+    '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
     /*
 	-----------------------------------------------------------------
 	Навигация
@@ -120,7 +120,7 @@ if (!isset($_GET['file'])) {
   		'<input type="hidden" value="open_zip" name="act" />' .
   		'<input type="hidden" value="' . Vars::$ID . '" name="id" />' .
   		(isset($more) ? '<input type="hidden" value="' . $more . '" name="more" />' : '') .
-    	'<input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+    	'<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
 	}
 	echo '<p>';
 } else {
@@ -132,8 +132,8 @@ if (!isset($_GET['file'])) {
     $FileName = rawurldecode(trim($_GET['file']));
 	$format = explode('.', $FileName);
     $format_file = strtolower($format[count($format) - 1]);
-    if (strpos($FileName, '..') !== false or strpos($FileName, './') !== false) {
-        echo functions::displayError(lng('not_found_file'), '<p><a href="' . Vars::$URI. '?act=open_zip&amp;id=' . Vars::$ID . $isset_more . '">' . lng('back') . '</a></p>');
+    if (strpos($FileName, '..') !== FALSE or strpos($FileName, './') !== FALSE) {
+        echo functions::displayError(__('not_found_file'), '<p><a href="' . Vars::$URI. '?act=open_zip&amp;id=' . Vars::$ID . $isset_more . '">' . __('back') . '</a></p>');
         exit;
     }
     $FileName = htmlspecialchars(trim($FileName), ENT_QUOTES, 'UTF-8');
@@ -144,7 +144,7 @@ if (!isset($_GET['file'])) {
 	$FileName = preg_replace("#.*[\\/]#si", "", $FileName);
 	if (in_array($format_file, $array)) {
     	if(!$content) {
-    		echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+    		echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
         	exit;
     	}
     	/*
@@ -152,17 +152,17 @@ if (!isset($_GET['file'])) {
 		Просмотр кода файла
 		-----------------------------------------------------------------
 		*/
-        $UTF = false;
+        $UTF = FALSE;
         $content_two = explode("\r\n", $content);
         echo '<div class="phdr"><b>' . htmlspecialchars($FileName, ENT_QUOTES, 'UTF-8') . '</b></div><div class="list1"><div class="phpcode">';
         $rus_simvol = array('а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я');
         for ($i = 0; $i < 66; $i++) {
-            if (strstr($content, $rus_simvol[$i]) !== false) $UTF = 1;
+            if (strstr($content, $rus_simvol[$i]) !== FALSE) $UTF = 1;
         }
         $php_code = trim($content);
         $php_code = substr($php_code, 0, 2) != "<?" ? "<?php\n" . $php_code . "\n?>" : $php_code;
-        echo $UTF ? highlight_string($php_code, true) : highlight_string(iconv('windows-1251', 'utf-8', $php_code), true);
-        echo '</div></div><div class="phdr">' . lng('total') . ': ' . count($content_two) . '</div>';
+        echo $UTF ? highlight_string($php_code, TRUE) : highlight_string(iconv('windows-1251', 'utf-8', $php_code), TRUE);
+        echo '</div></div><div class="phdr">' . __('total') . ': ' . count($content_two) . '</div>';
 	} else {
     	/*
 		-----------------------------------------------------------------
@@ -184,8 +184,8 @@ if (!isset($_GET['file'])) {
             header('Location: ' . Vars::$HOME_URL. '/files/download/temp/open_zip/' . $NewNameFile);
             exit;
         }
-        else  echo functions::displayError(lng('error_file_save'));
+        else  echo functions::displayError(__('error_file_save'));
     }
-	echo '<p><a href="' . Vars::$URI. '?act=open_zip&amp;id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . $isset_more . '">' . lng('back') . '</a><br />';
+	echo '<p><a href="' . Vars::$URI. '?act=open_zip&amp;id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . $isset_more . '">' . __('back') . '</a><br />';
 }
-echo '<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . lng('download_title') . '</a></p>';
+echo '<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . __('download_title') . '</a></p>';

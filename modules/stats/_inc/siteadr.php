@@ -6,12 +6,12 @@
  */
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-echo '<div class="phdr">'.lng('referrers').'</div>';
+echo '<div class="phdr">'.__('referrers').'</div>';
 
 $site = isset($_GET['site']) ? htmlspecialchars((string)$_GET['site']) : FALSE;
 
 if(!$site){
-    echo Functions::displayError(lng('error_data'), '<a href="'.Vars::$URI.'">'.lng('statistics').'</a>');
+    echo Functions::displayError(__('error_data'), '<a href="'.Vars::$URI.'">'.__('statistics').'</a>');
     
 }else{
 
@@ -24,23 +24,23 @@ if($count > 0){
         ++$i;
         $count_hits = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `ref` = '".$arr['ref']."'") , 0);
         echo Functions::loadModuleImage('url.png') .' <a href="'.$arr['ref'].'">'.$arr['ref'].'</a>
-        <div class="sub">'.Functions::displayDate($arr['date']).' | '.lng('movies').': '.$count_hits.'</div>
+        <div class="sub">'.Functions::displayDate($arr['date']).' | '.__('movies').': '.$count_hits.'</div>
         ';
         echo '</div>';   
         }
     
-    echo '<div class="phdr">'.lng('total').': '.$count.'</div>';
+    echo '<div class="phdr">'.__('total').': '.$count.'</div>';
     if ($count > Vars::$USER_SET['page_size']){
     	echo '<div class="topmenu">';
     	echo Functions::displayPagination(Vars::$URI.'?act=siteadr&amp;site='.$site.'&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
-    	echo '<p><form action="'.Vars::$URI.'" method="get"><input type="hidden" name="act" value="siteadr"/><input type="hidden" name="site" value="'.$site.'"/><input type="text" name="page" size="2"/><input type="submit" value="'.lng('to_page').' &gt;&gt;"/></form></p>';}
+    	echo '<p><form action="'.Vars::$URI.'" method="get"><input type="hidden" name="act" value="siteadr"/><input type="hidden" name="site" value="'.$site.'"/><input type="text" name="page" size="2"/><input type="submit" value="'.__('to_page').' &gt;&gt;"/></form></p>';}
     
 }else{
- echo '<div class="rmenu">'.lng('no_data').'!</div>';   
+ echo '<div class="rmenu">'.__('no_data').'!</div>';
 }
 
 
-$back_links = '<a href="?act=referer">'.lng('back').'</a><br/>';
+$back_links = '<a href="?act=referer">'.__('back').'</a><br/>';
 
 }
 

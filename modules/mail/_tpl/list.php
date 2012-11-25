@@ -13,40 +13,40 @@
                 <?= $row['text'] ?>
                 <?php if ($row['file']): ?>
                 <div class="func">
-                    <?= lng('file') ?>: <?= $row['file'] ?>
+                    <?= __('file') ?>: <?= $row['file'] ?>
                 </div>
                 <? endif ?>
             </div>
             <div class="sub">
                 <input type="checkbox" name="delch[]" value="<?= $row['mid'] ?>"/>
                 <?php if (isset($row['read']) && $row['read'] == 0 && $row['user_id'] == Vars::$USER_ID): ?>
-                [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=edit&amp;id=<?= $row['mid'] ?>"><?= lng('edit') ?></a>]
+                [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=edit&amp;id=<?= $row['mid'] ?>"><?= __('edit') ?></a>]
                 <? endif ?>
                 <?php if ($row['selectBar']): ?>
                 <?= $row['selectBar'] ?>
                 <? endif ?>
                 <?php if (!$row['selectBar']): ?>
-                [<span class="red">х</span>&#160;<a href="<?= $row['urlDelete'] ?>"><?= lng('delete') ?></a>]
+                [<span class="red">х</span>&#160;<a href="<?= $row['urlDelete'] ?>"><?= __('delete') ?></a>]
                 <?php if ($row['elected']): ?>
-                    [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=elected&amp;id=<?= $row['mid'] ?>"><?= lng('in_elected') ?></a>]
+                    [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=elected&amp;id=<?= $row['mid'] ?>"><?= __('in_elected') ?></a>]
                     <? endif ?>
                 <? endif ?>
             </div>
         </div>
         <? endforeach ?>
         <div class="gmenu">
-            <?= lng('noted_mess') ?>:<br/>
+            <?= __('noted_mess') ?>:<br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
-            <input type="submit" name="delete_mess" value="<?= lng('delete') ?>"/><br/>
+            <input type="submit" name="delete_mess" value="<?= __('delete') ?>"/><br/>
         </div>
     </div>
 </form>
-<div class="phdr"><?= lng('total') ?>: <?= $this->total ?></div>
+<div class="phdr"><?= __('total') ?>: <?= $this->total ?></div>
 <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
 <div class="topmenu">
     <?= $this->display_pagination ?>
 </div>
 <form action="" method="post"><p><input type="text" name="page" size="2" value="<?= Vars::$PAGE ?>"/>
-    <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;"/></p></form>
+    <input type="submit" value="<?= __('to_page') ?> &gt;&gt;"/></p></form>
 <? endif ?>
 <?= $this->urlTest ?>

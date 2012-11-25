@@ -51,9 +51,9 @@ if (Vars::$ID) {
                 }
             }
             $tpl->urlSelect = Vars::$MODULE_URI . '?act=delete&amp;id=' . Vars::$ID;
-            $tpl->select = lng('confirm_removing');
-            $tpl->submit = lng('delete');
-            $tpl->phdr = lng('removing_message');
+            $tpl->select = __('confirm_removing');
+            $tpl->submit = __('delete');
+            $tpl->phdr = __('removing_message');
             $tpl->urlBack = Vars::$MODULE_URI . '?act=elected';
         } else {
             if (isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE) {
@@ -74,9 +74,9 @@ if (Vars::$ID) {
                 }
             }
             $tpl->urlSelect = Vars::$MODULE_URI . '?act=delete&amp;id=' . Vars::$ID;
-            $tpl->select = lng('confirm_removing');
-            $tpl->submit = lng('delete');
-            $tpl->phdr = lng('removing_message');
+            $tpl->select = __('confirm_removing');
+            $tpl->submit = __('delete');
+            $tpl->phdr = __('removing_message');
             $tpl->urlBack = Vars::$MODULE_URI . '?act=basket';
         }
         $tpl->token = mt_rand(100, 10000);
@@ -85,9 +85,9 @@ if (Vars::$ID) {
         $tpl->contents = $tpl->includeTpl('select');
     } else {
         //Сообщение об ошибке
-        $tpl->contents = '<div class="rmenu">' . lng('page_does_not_exist') . '</div>';
+        $tpl->contents = '<div class="rmenu">' . __('page_does_not_exist') . '</div>';
     }
 } else {
-    $tpl->contents = Functions::displayError(lng('message_no_select'), '<a href="' . Vars::
-    $MODULE_URI . '">' . lng('mail') . '</a>');
+    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . Vars::
+    $MODULE_URI . '">' . __('mail') . '</a>');
 }

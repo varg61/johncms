@@ -19,7 +19,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'files' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'files' );
 //Считаем количество файлов
 $tpl->total = mysql_result( mysql_query( "SELECT COUNT(*) FROM `cms_mail_messages` WHERE `filename`!='' AND (`user_id`='" .
     Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `delete_in`!='" . Vars::$USER_ID .

@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) || (!Vars::$USER_RIGHTS && Vars::$SYSTEM_SET['mod_forum'] == 3)) {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
@@ -61,7 +61,7 @@ function forum_link($m)
 // Проверка на флуд
 $flood = Functions::antiFlood();
 if ($flood) {
-    echo Functions::displayError(lng('error_flood') . ' ' . $flood . lng('sec'), '<a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a>');
+    echo Functions::displayError(__('error_flood') . ' ' . $flood . __('sec'), '<a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
     exit;
 }
 
@@ -77,7 +77,7 @@ switch ($type1['type']) {
         */
         if (($type1['edit'] == 1 || $type1['close'] == 1) && Vars::$USER_RIGHTS < 7) {
             // Проверка, закрыта ли тема
-            echo Functions::displayError(lng('error_topic_closed'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a>');
+            echo Functions::displayError(__('error_topic_closed'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
             exit;
         }
         $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
@@ -88,7 +88,7 @@ switch ($type1['type']) {
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
-                echo Functions::displayError(lng('error_message_short'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a>');
+                echo Functions::displayError(__('error_message_short'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
                 exit;
             }
             // Проверяем, не повторяется ли сообщение?
@@ -96,7 +96,7 @@ switch ($type1['type']) {
             if (mysql_num_rows($req) > 0) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
-                    echo Functions::displayError(lng('error_message_exists'), '<a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a>');
+                    echo Functions::displayError(__('error_message_exists'), '<a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
                     exit;
                 }
             }
@@ -137,9 +137,9 @@ switch ($type1['type']) {
         } else {
             if (!Vars::$USER_DATA['count_forum']) {
                 if (!isset($_GET['yes'])) {
-                    echo'<p>' . lng('forum_rules_text') . '</p>' .
-                        '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes">' . lng('agree') . '</a> | ' .
-                        '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('not_agree') . '</a></p>';
+                    echo'<p>' . __('forum_rules_text') . '</p>' .
+                        '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes">' . __('agree') . '</a> | ' .
+                        '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('not_agree') . '</a></p>';
                     exit;
                 }
             }
@@ -147,26 +147,26 @@ switch ($type1['type']) {
             if (Vars::$USER_SET['smileys'])
                 $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
             $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
-            echo '<div class="phdr"><b>' . lng('topic') . ':</b> ' . $type1['text'] . '</div>';
+            echo '<div class="phdr"><b>' . __('topic') . ':</b> ' . $type1['text'] . '</div>';
             if ($msg && !isset($_POST['submit']))
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                             'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
                                                                                             'body'   => $msg_pre)) . '</div>';
             echo '<form name="form" action="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><div class="gmenu">' .
-                '<p><h3>' . lng('post') . '</h3>';
+                '<p><h3>' . __('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
             echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Validate::checkout($msg)) . '</textarea></p>' .
-                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
+                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . __('add_file');
             if (Vars::$USER_SET['translit'])
-                echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . lng('translit');
-            echo '</p><p><input type="submit" name="submit" value="' . lng('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
-                ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');
+            echo '</p><p><input type="submit" name="submit" value="' . __('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
+                ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                 '</p></div></form>';
         }
-        echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . lng('translit') . '</a> | ' .
-            '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-            '<p><a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
+        echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | ' .
+            '<a href="../pages/faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+            '<p><a href="?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a></p>';
         break;
 
     case 'm':
@@ -179,11 +179,11 @@ switch ($type1['type']) {
         $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
         if (($th1['edit'] == 1 || $th1['close'] == 1) && Vars::$USER_RIGHTS < 7) {
-            echo Functions::displayError(lng('error_topic_closed'), '<a href="' . Vars::$URI . '?id=' . $th1['id'] . '">' . lng('back') . '</a>');
+            echo Functions::displayError(__('error_topic_closed'), '<a href="' . Vars::$URI . '?id=' . $th1['id'] . '">' . __('back') . '</a>');
             exit;
         }
         if ($type1['user_id'] == Vars::$USER_ID) {
-            echo Functions::displayError('Нельзя отвечать на свое же сообщение', '<a href="' . Vars::$URI . '?id=' . $th1['id'] . '">' . lng('back') . '</a>');
+            echo Functions::displayError('Нельзя отвечать на свое же сообщение', '<a href="' . Vars::$URI . '?id=' . $th1['id'] . '">' . __('back') . '</a>');
             exit;
         }
         $shift = (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600;
@@ -205,15 +205,15 @@ switch ($type1['type']) {
             // Если был ответ, обрабатываем реплику
             switch ($txt) {
                 case 2:
-                    $repl = $type1['from'] . ', ' . lng('reply_1') . ', ';
+                    $repl = $type1['from'] . ', ' . __('reply_1') . ', ';
                     break;
 
                 case 3:
-                    $repl = $type1['from'] . ', ' . lng('reply_2') . ' ([url=' . Vars::$HOME_URL . '/forum?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . lng('reply_3') . ', ';
+                    $repl = $type1['from'] . ', ' . __('reply_2') . ' ([url=' . Vars::$HOME_URL . '/forum?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . __('reply_3') . ', ';
                     break;
 
                 case 4:
-                    $repl = $type1['from'] . ', ' . lng('reply_4') . ' ';
+                    $repl = $type1['from'] . ', ' . __('reply_4') . ' ';
                     break;
 
                 default :
@@ -225,12 +225,12 @@ switch ($type1['type']) {
         $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
-                echo Functions::displayError(lng('error_empty_message'), '<a href="' . Vars::$URI . '?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . lng('repeat') . '</a>');
+                echo Functions::displayError(__('error_empty_message'), '<a href="' . Vars::$URI . '?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . __('repeat') . '</a>');
                 exit;
             }
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
-                echo Functions::displayError(lng('error_message_short'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a>');
+                echo Functions::displayError(__('error_message_short'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
                 exit;
             }
             // Проверяем, не повторяется ли сообщение?
@@ -238,7 +238,7 @@ switch ($type1['type']) {
             if (mysql_num_rows($req) > 0) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
-                    echo Functions::displayError(lng('error_message_exists'), '<a href="' . Vars::$URI . '?id=' . $th . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a>');
+                    echo Functions::displayError(__('error_message_exists'), '<a href="' . Vars::$URI . '?id=' . $th . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
                     exit;
                 }
             }
@@ -285,8 +285,8 @@ switch ($type1['type']) {
             $qt = " $type1[text]";
             if ((Vars::$USER_DATA['count_forum'] == "" || Vars::$USER_DATA['count_forum'] == 0)) {
                 if (!isset($_GET['yes'])) {
-                    echo '<p>' . lng('forum_rules_text') . '</p>';
-                    echo '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes&amp;cyt">' . lng('agree') . '</a> | <a href="' . Vars::$URI . '?id=' . $type1['refid'] . '">' . lng('not_agree') . '</a></p>';
+                    echo '<p>' . __('forum_rules_text') . '</p>';
+                    echo '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes&amp;cyt">' . __('agree') . '</a> | <a href="' . Vars::$URI . '?id=' . $type1['refid'] . '">' . __('not_agree') . '</a></p>';
                     exit;
                 }
             }
@@ -294,7 +294,7 @@ switch ($type1['type']) {
             if (Vars::$USER_SET['smileys'])
                 $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
             $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
-            echo '<div class="phdr"><b>' . lng('topic') . ':</b> ' . $th1['text'] . '</div>';
+            echo '<div class="phdr"><b>' . __('topic') . ':</b> ' . $th1['text'] . '</div>';
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
             $qt = Validate::checkout($qt, 0, 2);
@@ -306,34 +306,34 @@ switch ($type1['type']) {
             if (isset($_GET['cyt'])) {
                 // Форма с цитатой
                 echo '<p><b>' . $type1['from'] . '</b> <span class="gray">(' . date("d.m.Y/H:i", $type1['time']) . ')</span></p>' .
-                    '<p><h3>' . lng('cytate') . '</h3>' .
+                    '<p><h3>' . __('cytate') . '</h3>' .
                     '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="citata">' . (empty($_POST['citata']) ? $qt : Validate::checkout($_POST['citata'])) . '</textarea>' .
-                    '<br /><small>' . lng('cytate_help') . '</small></p>';
+                    '<br /><small>' . __('cytate_help') . '</small></p>';
             } else {
                 // Форма с репликой
-                echo '<p><h3>' . lng('reference') . '</h3>' .
+                echo '<p><h3>' . __('reference') . '</h3>' .
                     '<input type="radio" value="0" ' . (!$txt ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
-                    '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_1') . ',<br />' .
+                    '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . __('reply_1') . ',<br />' .
                     '<input type="radio" value="3" ' . ($txt == 3 ? 'checked="checked"'
-                    : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_2') . ' (<a href="' . Vars::$URI . '?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . lng('reply_3') . ',<br />' .
-                    '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . lng('reply_4') . '</p>';
+                    : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . __('reply_2') . ' (<a href="' . Vars::$URI . '?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . __('reply_3') . ',<br />' .
+                    '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . __('reply_4') . '</p>';
             }
-            echo '<p><h3>' . lng('post') . '</h3>';
+            echo '<p><h3>' . __('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
             echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Validate::checkout($_POST['msg'])) . '</textarea></p>' .
-                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . lng('add_file');
+                '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . __('add_file');
             if (Vars::$USER_SET['translit'])
-                echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . lng('translit');
-            echo '</p><p><input type="submit" name="submit" value="' . lng('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
-                ($set_forum['preview'] ? '<input type="submit" value="' . lng('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');
+            echo '</p><p><input type="submit" name="submit" value="' . __('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
+                ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                 '</p></div></form>';
         }
-        echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . lng('translit') . '</a> | ' .
-            '<a href="../pages/faq.php?act=smileys">' . lng('smileys') . '</a></div>' .
-            '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . Vars::$START . '">' . lng('back') . '</a></p>';
+        echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | ' .
+            '<a href="../pages/faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+            '<p><a href="?id=' . $type1['refid'] . '&amp;start=' . Vars::$START . '">' . __('back') . '</a></p>';
         break;
 
     default:
-        echo Functions::displayError(lng('error_topic_deleted'), '<a href="' . Vars::$URI . '">' . lng('to_forum') . '</a>');
+        echo Functions::displayError(__('error_topic_deleted'), '<a href="' . Vars::$URI . '">' . __('to_forum') . '</a>');
 }

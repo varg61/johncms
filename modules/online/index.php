@@ -15,7 +15,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 // Закрываем от неавторизованных юзеров
 if ((!Vars::$USER_ID || Vars::$USER_DATA['level'] < 1) && !Vars::$USER_SYS['view_online']) {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+    echo Functions::displayError(__('access_guest_forbidden'));
     exit;
 }
 
@@ -36,7 +36,7 @@ switch (Vars::$ACT) {
             exit;
         }
         $tpl = Template::getInstance();
-        $tpl->template = false;
+        $tpl->template = FALSE;
         $out = 'Users Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n===============================\r\n";
         $req = mysql_query("SELECT `cms_sessions`.`user_id` AS `id`, `cms_sessions`.`session_timestamp` AS `last_visit`, `cms_sessions`.`ip`, `cms_sessions`.`ip_via_proxy`, `cms_sessions`.`user_agent`, `cms_sessions`.`place`, `cms_sessions`.`views`, `cms_sessions`.`movings`, `cms_sessions`.`start_time`, `users`.`nickname`, `users`.`sex`, `users`.`rights`
@@ -68,7 +68,7 @@ switch (Vars::$ACT) {
             exit;
         }
         $tpl = Template::getInstance();
-        $tpl->template = false;
+        $tpl->template = FALSE;
         $out = 'Users Online history ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n=======================================\r\n";
         $req = mysql_query("SELECT * FROM `users` WHERE `last_visit` > " . (time() - 172800) . " AND `last_visit` < " . (time() - 310) . " ORDER BY `last_visit` DESC");
@@ -97,7 +97,7 @@ switch (Vars::$ACT) {
             exit;
         }
         $tpl = Template::getInstance();
-        $tpl->template = false;
+        $tpl->template = FALSE;
         $out = 'Guests Online ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n================================\r\n";
         $req = mysql_query("SELECT `user_id` AS `id`, `session_timestamp` AS `last_visit`, `ip`, `ip_via_proxy`, `user_agent`, `place`, `views`, `movings`, `start_time`
@@ -128,7 +128,7 @@ switch (Vars::$ACT) {
             exit;
         }
         $tpl = Template::getInstance();
-        $tpl->template = false;
+        $tpl->template = FALSE;
         arsort(Vars::$IP_REQUESTS_LIST);
         $out = 'IP Requests ' . date("d.m.Y / H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600);
         $out .= "\r\n==============================\r\n";
@@ -170,16 +170,16 @@ switch (Vars::$ACT) {
                     '<div style="float:left; margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/admin/whois&amp;ip=' . $ip . '">[?]</a></div>' .
                     '<div style="margin-left:150px"><span class="red"><b>' . $currentip[1] . '</b></span></div>';
             }
-            echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+            echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo'<div class="topmenu">' . Functions::displayPagination('online.php?act=ip&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
                     '<p><form action="online.php?act=ip" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
-                    '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+                    '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
             }
-            echo'<p><a href="' . Vars::$URI . '?act=di">' . lng('download_list') . '</a></p>';
+            echo'<p><a href="' . Vars::$URI . '?act=di">' . __('download_list') . '</a></p>';
         } else {
-            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+            echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
         }
         $tpl->contents = $tpl->includeTpl('index');
         exit;
@@ -209,7 +209,7 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if ((!Vars::$USER_ID || !Vars::$USER_DATA['level']) && !Vars::$USER_SYS['viev_history']) {
-            echo Functions::displayError(lng('access_guest_forbidden'));
+            echo Functions::displayError(__('access_guest_forbidden'));
             exit;
         }
         $sql_total = "SELECT COUNT(*) FROM `users` WHERE `last_visit` > " . (time() - 172800 . " AND `last_visit` < " . (time() - 310));
@@ -250,19 +250,19 @@ if ($tpl->total) {
         $tpl->list[$i] =  Functions::displayUser($res, $arg);
     }
 } else {
-    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+    echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $tpl->total . '</div>';
+echo '<div class="phdr">' . __('total') . ': ' . $tpl->total . '</div>';
 if ($tpl->total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $tpl->total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="' . Vars::$URI . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 
 if (Vars::$USER_ID && $tpl->total) {
-    echo'<p><a href="' . Vars::$URI . '?act=' . $link . '">' . lng('download_list') . '</a></p>';
+    echo'<p><a href="' . Vars::$URI . '?act=' . $link . '">' . __('download_list') . '</a></p>';
 }
 
 $tpl->contents = $tpl->includeTpl('index');

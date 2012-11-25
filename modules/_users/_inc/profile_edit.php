@@ -71,8 +71,8 @@ switch (Vars::$MOD) {
                     $handle->image_convert = 'jpg';
                     $handle->process(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
                     if ($handle->processed) {
-                        echo'<div class="gmenu"><p>' . lng('photo_uploaded') . '<br />' .
-                            '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $tpl->user['id'] . '">' . lng('continue') . '</a></p></div>';
+                        echo'<div class="gmenu"><p>' . __('photo_uploaded') . '<br />' .
+                            '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $tpl->user['id'] . '">' . __('continue') . '</a></p></div>';
                     } else {
                         echo Functions::displayError($handle->error);
                     }
@@ -118,12 +118,12 @@ switch (Vars::$MOD) {
                                     `change_time` = " . time() . "
                                     WHERE `id` = " . $tpl->user['id']
                             );
-                            $tpl->message = lng('change_nickname_confirm');
+                            $tpl->message = __('change_nickname_confirm');
                             $tpl->continue = Vars::$MODULE_URI . '/profile?act=settings&amp;user=' . $tpl->user['id'];
                             $tpl->contents = $tpl->includeTpl('message', 1);
                             exit;
                         } else {
-                            $error['password'] = lng('error_wrong_password');
+                            $error['password'] = __('error_wrong_password');
                         }
                     } else {
                         $tpl->available = 1;
@@ -139,7 +139,7 @@ switch (Vars::$MOD) {
                 $tpl->contents = $tpl->includeTpl('profile_change_nickname_wait');
             }
         } else {
-            echo Functions::displayError(lng('access_forbidden'));
+            echo Functions::displayError(__('access_forbidden'));
         }
         break;
 
@@ -199,7 +199,7 @@ switch (Vars::$MOD) {
                         || $tpl->year > 2010
                     ) {
                         // Если дата рожденья указана неверно, показываем ошибку
-                        $tpl->error['birth'] = lng('error_birth');
+                        $tpl->error['birth'] = __('error_birth');
                     }
                 }
             }

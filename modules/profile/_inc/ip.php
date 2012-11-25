@@ -15,7 +15,7 @@
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['id']) {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
@@ -24,7 +24,7 @@ if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['id']) {
 История IP адресов
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="' . Vars::$HOME_URL . '/profile?user=' . $user['id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('ip_history') . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$HOME_URL . '/profile?user=' . $user['id'] . '"><b>' . __('profile') . '</b></a> | ' . __('ip_history') . '</div>';
 echo '<div class="user"><p>';
 $arg = array(
     'lastvisit' => 1,
@@ -41,13 +41,13 @@ if ($total) {
         echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $res['timestamp']) . ')</span></div>';
     }
 } else {
-    echo'<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+    echo'<div class="menu"><p>' . __('list_empty') . '</p></div>';
 }
-echo'<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo'<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo'<p>' . Functions::displayPagination(Vars::$URI . '?act=ip&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
         '<p><form action="' . Vars::$URI . '?act=ip&amp;user=' . $user['id'] . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }

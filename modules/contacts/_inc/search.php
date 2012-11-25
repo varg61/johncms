@@ -17,7 +17,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'search' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'search' );
 //Получаем данные из формы поиска
 $search = isset( $_REQUEST['q'] ) ? rawurldecode( trim( $_REQUEST['q'] ) ) : '';
 

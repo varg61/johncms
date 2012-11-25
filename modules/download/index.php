@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$textl = lng('download_title');
+$textl = __('download_title');
 $down_path = 'files/download';
 $screens_path = 'files/download/screen';
 $files_path = 'files/download/files';
@@ -34,9 +34,9 @@ if ($set_down['video_screen'] && !extension_loaded('ffmpeg')) $set_down['video_s
 */
 $error = '';
 if ((!isset(Vars::$ACL['downloads']) || !Vars::$ACL['downloads']) && Vars::$USER_RIGHTS < 7) {
-    $error = lng('download_closed');
+    $error = __('download_closed');
 } elseif (isset(Vars::$ACL['downloads']) && Vars::$ACL['downloads'] == 1 && !Vars::$USER_ID) {
-    $error = lng('access_guest_forbidden');
+    $error = __('access_guest_forbidden');
 }
 if ($error) {
     echo Functions::displayError($error);
@@ -120,7 +120,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . $actions[Vars::$ACT] . DIRECTORY_SEPARATOR . Vars::$ACT . '.php');
 } else {
     if (!isset(Vars::$ACL['downloads']) || !Vars::$ACL['downloads'])
-        echo '<div class="rmenu"><b>' . lng('download_closed') . '</b></div>';
+        echo '<div class="rmenu"><b>' . __('download_closed') . '</b></div>';
     /*
     -----------------------------------------------------------------
     Получаем список файлов и папок
@@ -131,7 +131,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         $cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
         $res_down_cat = mysql_fetch_assoc($cat);
         if (mysql_num_rows($cat) == 0 || !is_dir($res_down_cat['dir'])) {
-            echo Functions::displayError(lng('not_found_dir'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+            echo Functions::displayError(__('not_found_dir'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
             exit;
         }
         $title_pages = Validate::checkout(mb_substr($res_down_cat['rus_name'], 0, 30));
@@ -139,20 +139,20 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         $navigation = Download::navigation(array('dir' => $res_down_cat['dir'], 'refid' => $res_down_cat['refid'], 'name' => $res_down_cat['rus_name']));
         $total_new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old AND `dir` LIKE '" . ($res_down_cat['dir']) . "%'"), 0);
         if ($total_new)
-            $notice = '<a href="' . Vars::$URI . '?act=new_files&amp;id=' . Vars::$ID . '">' . lng('new_files') . '</a> (' . $total_new . ')<br />';
+            $notice = '<a href="' . Vars::$URI . '?act=new_files&amp;id=' . Vars::$ID . '">' . __('new_files') . '</a> (' . $total_new . ')<br />';
     } else {
-        $navigation = '<b>' . lng('download_title') . '</b></div>' .
-            '<div class="topmenu"><a href="' . Vars::$URI . '?act=search">' . lng('search') . '</a> | ' .
-            '<a href="' . Vars::$URI . '?act=top_files&amp;id=0">' . lng('top_files') . '</a> | ' .
-            '<a href="' . Vars::$URI . '?act=top_users">' . lng('top_users') . '</a>';
+        $navigation = '<b>' . __('download_title') . '</b></div>' .
+            '<div class="topmenu"><a href="' . Vars::$URI . '?act=search">' . __('search') . '</a> | ' .
+            '<a href="' . Vars::$URI . '?act=top_files&amp;id=0">' . __('top_files') . '</a> | ' .
+            '<a href="' . Vars::$URI . '?act=top_users">' . __('top_users') . '</a>';
         $total_new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old"), 0);
         if ($total_new)
-            $notice = '<a href="' . Vars::$URI . '?act=new_files&amp;id=' . Vars::$ID . '">' . lng('new_files') . '</a> (' . $total_new . ')<br />';
+            $notice = '<a href="' . Vars::$URI . '?act=new_files&amp;id=' . Vars::$ID . '">' . __('new_files') . '</a> (' . $total_new . ')<br />';
     }
     if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         $mod_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '3'"), 0);
         if ($mod_files > 0)
-            $notice .= '<a href="' . Vars::$URI . '?act=mod_files">' . lng('mod_files') . '</a> ' . $mod_files;
+            $notice .= '<a href="' . Vars::$URI . '?act=mod_files">' . __('mod_files') . '</a> ' . $mod_files;
     }
     /*
     -----------------------------------------------------------------
@@ -181,7 +181,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
              Выводи папки
              -----------------------------------------------------------------
              */
-            if ($total_files) echo '<div class="phdr"><b>' . lng('list_category') . '</b></div>';
+            if ($total_files) echo '<div class="phdr"><b>' . __('list_category') . '</b></div>';
             $req_down = mysql_query("SELECT * FROM `cms_download_category` WHERE `refid` = '" . Vars::$ID . "' ORDER BY `sort` ASC ");
             $i = 0;
             while ($res_down = mysql_fetch_assoc($req_down)) {
@@ -189,13 +189,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                     Functions::loadModuleImage('folder.png') . '&#160;' .
                     '<a href="' . Vars::$URI . '?id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['total'] . ')';
                 if ($res_down['field'])
-                    echo '<div><small>' . lng('extensions') . ': <span class="green"><b>' . $res_down['text'] . '</b></span></small></div>';
+                    echo '<div><small>' . __('extensions') . ': <span class="green"><b>' . $res_down['text'] . '</b></span></small></div>';
                 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6 || !empty($res_down['desc'])) {
                     $menu = array(
-                        '<a href="' . Vars::$URI . '?act=edit_cat&amp;id=' . $res_down['id'] . '&amp;up">' . lng('up') . '</a>',
-                        '<a href="' . Vars::$URI . '?act=edit_cat&amp;id=' . $res_down['id'] . '&amp;down">' . lng('down') . '</a>',
-                        '<a href="' . Vars::$URI . '?act=edit_cat&amp;id=' . $res_down['id'] . '">' . lng('edit') . '</a>',
-                        '<a href="' . Vars::$URI . '?act=delete_cat&amp;id=' . $res_down['id'] . '">' . lng('delete') . '</a>'
+                        '<a href="' . Vars::$URI . '?act=edit_cat&amp;id=' . $res_down['id'] . '&amp;up">' . __('up') . '</a>',
+                        '<a href="' . Vars::$URI . '?act=edit_cat&amp;id=' . $res_down['id'] . '&amp;down">' . __('down') . '</a>',
+                        '<a href="' . Vars::$URI . '?act=edit_cat&amp;id=' . $res_down['id'] . '">' . __('edit') . '</a>',
+                        '<a href="' . Vars::$URI . '?act=delete_cat&amp;id=' . $res_down['id'] . '">' . __('delete') . '</a>'
                     );
                     echo '<div class="sub">' .
                         (!empty($res_down['desc']) ? '<div class="gray">' . Validate::checkout($res_down['desc'], 1, 1) . '</div>' : '') .
@@ -211,7 +211,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
              Выводи файлы
              -----------------------------------------------------------------
              */
-            if ($total_cat) echo '<div class="phdr"><b>' . lng('list_files') . '</b></div>';
+            if ($total_cat) echo '<div class="phdr"><b>' . __('list_files') . '</b></div>';
             if ($total_files > 1) {
                 /*
                -----------------------------------------------------------------
@@ -227,13 +227,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                 $sql_sort = isset($_SESSION['sort_down']) && $_SESSION['sort_down'] ? ', `name`' : ', `time`';
                 $sql_sort .= isset($_SESSION['sort_down2']) && $_SESSION['sort_down2'] ? ' ASC' : ' DESC';
                 echo '<form action="' . Vars::$URI . '?id=' . Vars::$ID . '" method="post"><div class="topmenu">' .
-                    '<b>' . lng('download_sort') . ': </b>' .
+                    '<b>' . __('download_sort') . ': </b>' .
                     '<select name="sort_down" style="font-size:x-small">' .
-                    '<option value="0"' . (!$_SESSION['sort_down'] ? ' selected="selected"' : '') . '>' . lng('download_sort1') . '</option>' .
-                    '<option value="1"' . ($_SESSION['sort_down'] ? ' selected="selected"' : '') . '>' . lng('download_sort2') . '</option></select> &amp; ' .
+                    '<option value="0"' . (!$_SESSION['sort_down'] ? ' selected="selected"' : '') . '>' . __('download_sort1') . '</option>' .
+                    '<option value="1"' . ($_SESSION['sort_down'] ? ' selected="selected"' : '') . '>' . __('download_sort2') . '</option></select> &amp; ' .
                     '<select name="sort_down2" style="font-size:x-small">' .
-                    '<option value="0"' . (!$_SESSION['sort_down2'] ? ' selected="selected"' : '') . '>' . lng('download_sort3') . '</option>' .
-                    '<option value="1"' . ($_SESSION['sort_down2'] ? ' selected="selected"' : '') . '>' . lng('download_sort4') . '</option></select>' .
+                    '<option value="0"' . (!$_SESSION['sort_down2'] ? ' selected="selected"' : '') . '>' . __('download_sort3') . '</option>' .
+                    '<option value="1"' . ($_SESSION['sort_down2'] ? ' selected="selected"' : '') . '>' . __('download_sort4') . '</option></select>' .
                     '<input type="submit" value="&gt;&gt;" style="font-size:x-small"/></div></form>';
             } else
                 $sql_sort = '';
@@ -256,12 +256,12 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
             }
         }
     } else {
-        echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+        echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
     }
     echo '<div class="phdr">';
-    if ($total_cat || !$total_files) echo  lng('total_dir') . ': ' . $total_cat;
+    if ($total_cat || !$total_files) echo  __('total_dir') . ': ' . $total_cat;
     if ($total_cat && $total_files) echo '&nbsp;|&nbsp;';
-    if ($total_files) echo lng('total_files') . ': ' . $total_files;
+    if ($total_files) echo __('total_files') . ': ' . $total_files;
     echo '</div>';
     /*
     -----------------------------------------------------------------
@@ -272,7 +272,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total_files, Vars::$USER_SET['page_size']) . '</div>' .
             '<p><form action="' . Vars::$URI . '" method="get">' .
             '<input type="hidden" name="id" value="' . Vars::$ID . '"/>' .
-            '<input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+            '<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
     }
     if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         /*
@@ -281,24 +281,24 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
         -----------------------------------------------------------------
         */
         echo '<p><div class="func"><form action="' . Vars::$URI . '?act=redirect" method="post"><select name="admin_act">' .
-            '<option value="add_cat">' . lng('download_add_cat') . '</option>';
+            '<option value="add_cat">' . __('download_add_cat') . '</option>';
         if (Vars::$ID) {
             $del_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_categoty` WHERE `refid` = '" . Vars::$ID . "'"), 0);
             if (!$del_cat) {
-                echo '<option value="delete_cat">' . lng('download_del_cat') . '</option>';
+                echo '<option value="delete_cat">' . __('download_del_cat') . '</option>';
             }
-            echo '<option value="edit_cat">' . lng('download_edit_cat') . '</option>' .
-                '<option value="import">' . lng('download_import') . '</option>' .
-                '<option value="down_file">' . lng('download_upload_file') . '</option>';
+            echo '<option value="edit_cat">' . __('download_edit_cat') . '</option>' .
+                '<option value="import">' . __('download_import') . '</option>' .
+                '<option value="down_file">' . __('download_upload_file') . '</option>';
         }
-        echo '<option value="scan_dir">' . lng('download_scan_dir') . '</option>' .
-            '<option value="clean">' . lng('download_clean') . '</option>' .
-            '<option value="scan_about">' . lng('download_scan_about') . '</option>' .
-            '<option value="recount">' . lng('download_recount') . '</option>' .
+        echo '<option value="scan_dir">' . __('download_scan_dir') . '</option>' .
+            '<option value="clean">' . __('download_clean') . '</option>' .
+            '<option value="scan_about">' . __('download_scan_about') . '</option>' .
+            '<option value="recount">' . __('download_recount') . '</option>' .
             '<input type="hidden" name="admin_id" value="' . Vars::$ID . '"/>' .
-            '</select><input type="submit" value="' . lng('do') . '"/></form></div></p>';
+            '</select><input type="submit" value="' . __('do') . '"/></form></div></p>';
     } else if (isset($res_down_cat['field']) && $res_down_cat['field'] && Vars::$USER_ID && Vars::$ID)
-        echo '<p><div class="func"><a href="' . Vars::$URI . '?act=down_file&amp;id=' . Vars::$ID . '">' . lng('download_upload_file') . '</a></div></p>';
+        echo '<p><div class="func"><a href="' . Vars::$URI . '?act=down_file&amp;id=' . Vars::$ID . '">' . __('download_upload_file') . '</a></div></p>';
     /*
     -----------------------------------------------------------------
     Нижнее меню навигации
@@ -306,10 +306,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
     */
     echo'<p>';
     if (Vars::$ID) {
-        echo'<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>';
+        echo'<a href="' . Vars::$URI . '">' . __('download_title') . '</a>';
     } else {
-        echo ((isset(Vars::$ACL['downcomm']) && Vars::$ACL['downcomm']) || Vars::$USER_RIGHTS >= 7 ? '<a href="' . Vars::$URI . '?act=review_comments">' . lng('review_comments') . '</a><br />' : '') .
-            '<a href="' . Vars::$URI . '?act=bookmark">' . lng('download_bookmark') . '</a>';
+        echo ((isset(Vars::$ACL['downcomm']) && Vars::$ACL['downcomm']) || Vars::$USER_RIGHTS >= 7 ? '<a href="' . Vars::$URI . '?act=review_comments">' . __('review_comments') . '</a><br />' : '') .
+            '<a href="' . Vars::$URI . '?act=bookmark">' . __('download_bookmark') . '</a>';
     }
     echo'</p>';
 }

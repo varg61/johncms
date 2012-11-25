@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-echo '<div class="phdr"><b>' . lng('new_articles') . '</b></div>';
+echo '<div class="phdr"><b>' . __('new_articles') . '</b></div>';
 $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'");
 $total = mysql_result($req, 0);
 if ($total > 0) {
@@ -21,7 +21,7 @@ if ($total > 0) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<b><a href="?id=' . $newf['id'] . '">' . htmlentities($newf['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
         echo htmlentities($newf['announce'], ENT_QUOTES, 'UTF-8') . '<br />';
-        echo lng('added') . ': ' . $newf['avtor'] . ' (' . Functions::displayDate($newf['time']) . ')<br/>';
+        echo __('added') . ': ' . $newf['avtor'] . ' (' . Functions::displayDate($newf['time']) . ')<br/>';
         $nadir = $newf['refid'];
         $dirlink = $nadir;
         $pat = "";
@@ -36,13 +36,13 @@ if ($total > 0) {
         echo '[<a href="' . Vars::$URI . '?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
         ++$i;
     }
-    echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+    echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
     // Навигация по страницам
     if ($total > Vars::$USER_SET['page_size']) {
         echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
-        echo '<p><form action="' . Vars::$URI . '" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+        echo '<p><form action="' . Vars::$URI . '" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
     }
 } else {
-    echo '<p>' . lng('list_empty') . '</p>';
+    echo '<p>' . __('list_empty') . '</p>';
 }
-echo '<p><a href="' . Vars::$MODULE_URI . '">' . lng('to_library') . '</a></p>';
+echo '<p><a href="' . Vars::$MODULE_URI . '">' . __('to_library') . '</a></p>';

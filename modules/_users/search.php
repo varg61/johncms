@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_ID && !Vars::$USER_SYS['view_userlist']) {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+    echo Functions::displayError(__('access_guest_forbidden'));
     exit;
 }
 
@@ -31,7 +31,7 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 } elseif (isset($_GET['search']) && !empty($_GET['search'])) {
     $search = rawurldecode(trim($_GET['search']));
 } else {
-    $search = false;
+    $search = FALSE;
 }
 
 /*
@@ -39,8 +39,8 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 Проверяем поисковый запрос на ошибки
 -----------------------------------------------------------------
 */
-$error = false;
-if ($search && Validate::nickname($search, 1) === false) {
+$error = FALSE;
+if ($search && Validate::nickname($search, 1) === FALSE) {
     $error = Validate::$error['login'];
 }
 
@@ -50,8 +50,8 @@ if ($search && Validate::nickname($search, 1) === false) {
 -----------------------------------------------------------------
 */
 $menu = array(
-    (Vars::$ACT != 'adm' ? lng('all_users') : '<a href="' . Vars::$URI . '">' . lng('all_users') . '</a>'),
-    (Vars::$ACT == 'adm' ? lng('administration') : '<a href="' . Vars::$URI . '?act=adm">' . lng('administration') . '</a>')
+    (Vars::$ACT != 'adm' ? __('all_users') : '<a href="' . Vars::$URI . '">' . __('all_users') . '</a>'),
+    (Vars::$ACT == 'adm' ? __('administration') : '<a href="' . Vars::$URI . '?act=adm">' . __('administration') . '</a>')
 );
 
 if ($search && $error) {
@@ -62,16 +62,16 @@ if ($search && $error) {
     $style = '';
 }
 
-echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('community') . '</b></a> | ' . ($search ? lng('search_user') : lng('users_list')) . '</div>' .
+echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('community') . '</b></a> | ' . ($search ? __('search_user') : __('users_list')) . '</div>' .
     '<div class="topmenu">' .
     ($error ? '<p class="red">' . $error . '</p>' : '') .
     '<p><form action="' . Vars::$MODULE_URI . '/search" method="post">' .
     '<input type="text" name="search" value="' . htmlspecialchars($search) . '"' . $style . '/> ' .
-    '<input type="submit" value="' . lng('search') . '" name="submit"/>' .
+    '<input type="submit" value="' . __('search') . '" name="submit"/>' .
     '</form>' .
     '</p></div>' .
     '<div class="topmenu">' .
-    ($search && !$error ? '<b>' . lng('search_results') . '</b>' : Functions::displayMenu($menu)) .
+    ($search && !$error ? '<b>' . __('search_results') . '</b>' : Functions::displayMenu($menu)) .
     '</div>';
 
 if ($search && !$error) {
@@ -103,28 +103,28 @@ if ($total) {
         if (Vars::$USER_RIGHTS == 9 || Vars::$USER_RIGHTS > $res['rights']) {
             //TODO: Добавить ссылки на Бан и удаление профиля
             $arg['sub'] = Functions::displayMenu(array(
-                '<a href="">' . lng('ban_do') . '</a>',
-                '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $res['id'] . '">' . lng('edit') . '</a>',
-                (Vars::$USER_RIGHTS >= 7 ? '<a href="">' . lng('delete') . '</a>' : ''),
+                '<a href="">' . __('ban_do') . '</a>',
+                '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $res['id'] . '">' . __('edit') . '</a>',
+                (Vars::$USER_RIGHTS >= 7 ? '<a href="">' . __('delete') . '</a>' : ''),
             ));
         }
         echo Functions::displayUser($res, $arg) .
             '</div>';
     }
 } else {
-    echo '<div class="menu"><p>' . lng('search_results_empty') . '</p></div>';
+    echo '<div class="menu"><p>' . __('search_results_empty') . '</p></div>';
 }
 
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="' . Vars::$URI . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 echo'<p>' .
-    ($search ? '<a href="' . Vars::$URI . '">' . lng('search_new') . '</a><br/>' : '') .
-    (Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin">' . lng('admin_panel') . '</a><br />' : '') .
-    '<a href="' . Vars::$MODULE_URI . '">' . lng('back') . '</a>' .
+    ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br/>' : '') .
+    (Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a><br />' : '') .
+    '<a href="' . Vars::$MODULE_URI . '">' . __('back') . '</a>' .
     '</p>';

@@ -26,13 +26,13 @@ if($fr != 2)
         $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "'"), 0); 
         if($fr_out) 
         {
-			$tpl->contents = Functions::displayError(lng('already_demand'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a>' );
+			$tpl->contents = Functions::displayError(__('already_demand'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a>' );
         } else 
         {
     		$fr_in = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'"), 0); 
     		if($fr_in) 
             {
-    			$tpl->contents = Functions::displayError(lng('offer_already'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a>' );
+    			$tpl->contents = Functions::displayError(__('offer_already'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a>' );
     		} else 
             {
                 mysql_query( "INSERT INTO `cms_mail_contacts` (`user_id`, `contact_id`, `access`, `time`)
@@ -47,16 +47,16 @@ if($fr != 2)
         		//`time` = '" . time() . "',
         		//`sys` = '1',
         		//`theme` = '" . lng('friendship') . "'");
-        		$tpl->contents = '<div class="rmenu"><p>' . lng('demand_friends_sent') . '</p>
-                <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p>
+        		$tpl->contents = '<div class="rmenu"><p>' . __('demand_friends_sent') . '</p>
+                <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></p>
                 </div>';
             }
         }
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=add&amp;id=' . Vars::$ID;
-        $tpl->select = lng( 'confirm_offer_friendship' );
-        $tpl->submit = lng( 'confirm' );
-        $tpl->phdr = lng( 'offer_friendship' );
+        $tpl->select = __( 'confirm_offer_friendship' );
+        $tpl->submit = __( 'confirm' );
+        $tpl->phdr = __( 'offer_friendship' );
         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
@@ -64,5 +64,5 @@ if($fr != 2)
         $tpl->contents = $tpl->includeTpl( 'select' );
     }
 } else {
-    $tpl->contents = Functions::displayError(lng('user_already_friend'));
+    $tpl->contents = Functions::displayError(__('user_already_friend'));
 }

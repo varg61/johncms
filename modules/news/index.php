@@ -29,14 +29,14 @@ switch (Vars::$ACT) {
                 $name = isset($_POST['name']) ? Validate::checkout($_POST['name']) : FALSE;
                 $text = isset($_POST['text']) ? trim($_POST['text']) : FALSE;
                 if (empty($name)) {
-                    $error['title'] = lng('error_title');
+                    $error['title'] = __('error_title');
                 }
                 if (empty($text)) {
-                    $error['text'] = lng('error_text');
+                    $error['text'] = __('error_text');
                 }
                 $flood = Functions::antiFlood();
                 if ($flood) {
-                    $error[] = lng('error_flood') . ' ' . $flood . '&#160;' . lng('seconds');
+                    $error[] = __('error_flood') . ' ' . $flood . '&#160;' . __('seconds');
                 }
 
                 if (empty($error)) {
@@ -85,7 +85,7 @@ switch (Vars::$ACT) {
                         WHERE `id` = " . Vars::$USER_ID
                     );
                     $tpl->continue = Vars::$URI;
-                    $tpl->message = lng('article_added');
+                    $tpl->message = __('article_added');
                     $tpl->contents = $tpl->includeTpl('message', 1);
                     exit;
                 } else {
@@ -94,7 +94,7 @@ switch (Vars::$ACT) {
             }
             $list = array();
             $fr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f'");
-            $list[] = '<label class="small"><input type="radio" name="pf" value="0" checked="checked" />&#160;' . lng('discuss_off') . '</label>';
+            $list[] = '<label class="small"><input type="radio" name="pf" value="0" checked="checked" />&#160;' . __('discuss_off') . '</label>';
             while ($fr1 = mysql_fetch_array($fr)) {
                 $list[] = '<label class="small"><input type="radio" name="pf" value="' . $fr1['id'] . '"/>&#160;' . $fr1['text'] . '</label><br/><label><select name="rz[]">';
                 $pr = mysql_query("SELECT * FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $fr1['id'] . "'");
@@ -111,7 +111,7 @@ switch (Vars::$ACT) {
         } else {
             // Если доступ закрыт, выводим сообщение
             $tpl->back = Vars::$URI;
-            $tpl->message = lng('access_forbidden');
+            $tpl->message = __('access_forbidden');
             $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;
@@ -125,7 +125,7 @@ switch (Vars::$ACT) {
         if (Vars::$USER_RIGHTS >= 7) {
             if (Vars::$ID && mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_news` WHERE `id` = " . Vars::$ID), 0)) {
                 if (!Vars::$ID) {
-                    echo Functions::displayError(lng('error_wrong_data'), '<a href="' . Vars::$URI . '">' . lng('to_news') . '</a>');
+                    echo Functions::displayError(__('error_wrong_data'), '<a href="' . Vars::$URI . '">' . __('to_news') . '</a>');
                     exit;
                 }
                 if (isset($_POST['submit'])
@@ -135,9 +135,9 @@ switch (Vars::$ACT) {
                 ) {
                     $error = array();
                     if (empty($_POST['name']))
-                        $error[] = lng('error_title');
+                        $error[] = __('error_title');
                     if (empty($_POST['text']))
-                        $error[] = lng('error_text');
+                        $error[] = __('error_text');
                     $name = Validate::checkout($_POST['name']);
                     $text = mysql_real_escape_string(trim($_POST['text']));
                     if (!$error) {
@@ -147,10 +147,10 @@ switch (Vars::$ACT) {
                         WHERE `id` = " . Vars::$ID
                         );
                     } else {
-                        echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                        echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                     }
                     $tpl->continue = Vars::$URI;
-                    $tpl->message = lng('article_changed');
+                    $tpl->message = __('article_changed');
                     $tpl->contents = $tpl->includeTpl('message', 1);
                     exit;
                 } else {
@@ -164,11 +164,11 @@ switch (Vars::$ACT) {
                     $tpl->contents = $tpl->includeTpl('news_edit');
                 }
             } else {
-                echo Functions::displayError(lng('error_wrong_data'));
+                echo Functions::displayError(__('error_wrong_data'));
             }
         } else {
             $tpl->back = Vars::$URI;
-            $tpl->message = lng('access_forbidden');
+            $tpl->message = __('access_forbidden');
             $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;
@@ -180,7 +180,7 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 7) {
-            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('site_news') . '</b></a> | ' . lng('clear') . '</div>';
+            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('site_news') . '</b></a> | ' . __('clear') . '</div>';
             if (isset($_POST['submit'])) {
                 $cl = isset($_POST['cl']) ? intval($_POST['cl']) : '';
                 switch ($cl) {
@@ -188,33 +188,33 @@ switch (Vars::$ACT) {
                         // Чистим новости, старше 1 недели
                         mysql_query("DELETE FROM `cms_news` WHERE `time`<='" . (time() - 604800) . "'");
                         mysql_query("OPTIMIZE TABLE `cms_news`");
-                        echo '<p>' . lng('clear_week_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
+                        echo '<p>' . __('clear_week_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . __('to_news') . '</a></p>';
                         break;
 
                     case '2':
                         // Проводим полную очистку
                         mysql_query("TRUNCATE TABLE `cms_news`");
-                        echo '<p>' . lng('clear_all_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
+                        echo '<p>' . __('clear_all_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . __('to_news') . '</a></p>';
                         break;
                     default :
                         // Чистим сообщения, старше 1 месяца
                         mysql_query("DELETE FROM `cms_news` WHERE `time`<='" . (time() - 2592000) . "'");
                         mysql_query("OPTIMIZE TABLE `cms_news`");
-                        echo '<p>' . lng('clear_month_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . lng('to_news') . '</a></p>';
+                        echo '<p>' . __('clear_month_confirmation') . '</p><p><a href="' . Vars::$URI . '">' . __('to_news') . '</a></p>';
                 }
             } else {
                 echo '<div class="menu"><form id="clean" method="post" action="' . Vars::$URI . '?act=clean">' .
-                    '<p><h3>' . lng('clear_param') . '</h3>' .
-                    '<input type="radio" name="cl" value="0" checked="checked" />' . lng('clear_month') . '<br />' .
-                    '<input type="radio" name="cl" value="1" />' . lng('clear_week') . '<br />' .
-                    '<input type="radio" name="cl" value="2" />' . lng('clear_all') . '</p>' .
-                    '<p><input type="submit" name="submit" value="' . lng('clear') . '" /></p>' .
+                    '<p><h3>' . __('clear_param') . '</h3>' .
+                    '<input type="radio" name="cl" value="0" checked="checked" />' . __('clear_month') . '<br />' .
+                    '<input type="radio" name="cl" value="1" />' . __('clear_week') . '<br />' .
+                    '<input type="radio" name="cl" value="2" />' . __('clear_all') . '</p>' .
+                    '<p><input type="submit" name="submit" value="' . __('clear') . '" /></p>' .
                     '</form></div>' .
-                    '<div class="phdr"><a href="' . Vars::$URI . '">' . lng('cancel') . '</a></div>';
+                    '<div class="phdr"><a href="' . Vars::$URI . '">' . __('cancel') . '</a></div>';
             }
         } else {
             $tpl->back = Vars::$URI;
-            $tpl->message = lng('access_forbidden');
+            $tpl->message = __('access_forbidden');
             $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;
@@ -226,7 +226,7 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$USER_RIGHTS >= 7) {
-            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('site_news') . '</b></a> | ' . lng('delete') . '</div>';
+            echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('site_news') . '</b></a> | ' . __('delete') . '</div>';
             if (isset($_POST['submit'])
                 && isset($_POST['form_token'])
                 && isset($_SESSION['form_token'])
@@ -234,7 +234,7 @@ switch (Vars::$ACT) {
             ) {
                 mysql_query("DELETE FROM `cms_news` WHERE `id` = " . Vars::$ID);
                 $tpl->continue = Vars::$URI;
-                $tpl->message = lng('article_deleted');
+                $tpl->message = __('article_deleted');
                 $tpl->contents = $tpl->includeTpl('message', 1);
             } else {
                 $tpl->id = Vars::$ID;
@@ -244,7 +244,7 @@ switch (Vars::$ACT) {
             }
         } else {
             $tpl->back = Vars::$URI;
-            $tpl->message = lng('access_forbidden');
+            $tpl->message = __('access_forbidden');
             $tpl->contents = $tpl->includeTpl('message', 1);
         }
         break;

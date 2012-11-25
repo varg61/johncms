@@ -1,3 +1,3 @@
 <div class="phdr">
-    <b><?= lng('notifications') ?></b>
+    <b><?= __('notifications') ?></b>
 </div>

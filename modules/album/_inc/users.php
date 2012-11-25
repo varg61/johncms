@@ -30,11 +30,11 @@ switch (Vars::$MOD) {
         $sql = "";
 }
 $menu = array(
-    (!Vars::$MOD ? '<b>' . lng('all') . '</b>' : '<a href="' . Vars::$URI . '?act=users">' . lng('all') . '</a>'),
-    (Vars::$MOD == 'boys' ? '<b>' . lng('mans') . '</b>' : '<a href="' . Vars::$URI . '?act=users&amp;mod=boys">' . lng('mans') . '</a>'),
-    (Vars::$MOD == 'girls' ? '<b>' . lng('womans') . '</b>' : '<a href="' . Vars::$URI . '?act=users&amp;mod=girls">' . lng('womans') . '</a>')
+    (!Vars::$MOD ? '<b>' . __('all') . '</b>' : '<a href="' . Vars::$URI . '?act=users">' . __('all') . '</a>'),
+    (Vars::$MOD == 'boys' ? '<b>' . __('mans') . '</b>' : '<a href="' . Vars::$URI . '?act=users&amp;mod=boys">' . __('mans') . '</a>'),
+    (Vars::$MOD == 'girls' ? '<b>' . __('womans') . '</b>' : '<a href="' . Vars::$URI . '?act=users&amp;mod=girls">' . __('womans') . '</a>')
 );
-echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . lng('photo_albums') . '</b></a> | ' . lng('list') . '</div>' .
+echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('photo_albums') . '</b></a> | ' . __('list') . '</div>' .
     '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`)
     FROM `cms_album_files`
@@ -53,13 +53,13 @@ if ($total) {
             '<a href="' . Vars::$URI . '?act=list&amp;user=' . $res['uid'] . '">' . $res['nickname'] . '</a> (' . $res['count'] . ')</div>';
     }
 } else {
-    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+    echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
         '<p><form action="' . Vars::$URI . '?act=users' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
-        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+        '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }

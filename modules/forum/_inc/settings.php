@@ -19,13 +19,13 @@ global $user, $tpl;
 -----------------------------------------------------------------
 */
 if ($user['id'] != Vars::$USER_ID) {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
 $tpl->menu = array(
-    (!Vars::$MOD ? '<b>' . lng('common_settings') . '</b>' : '<a href="profile.php?act=settings">' . lng('common_settings') . '</a>'),
-    (Vars::$MOD == 'forum' ? '<b>' . lng('forum') . '</b>' : '<a href="profile.php?act=settings&amp;mod=forum">' . lng('forum') . '</a>'),
+    (!Vars::$MOD ? '<b>' . __('common_settings') . '</b>' : '<a href="profile.php?act=settings">' . __('common_settings') . '</a>'),
+    (Vars::$MOD == 'forum' ? '<b>' . __('forum') . '</b>' : '<a href="profile.php?act=settings&amp;mod=forum">' . __('forum') . '</a>'),
 );
 
 /*
@@ -40,9 +40,9 @@ switch (Vars::$MOD) {
         Настройки Форума
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><b>' . lng('settings') . '</b> | ' . lng('forum') . '</div>' .
+        echo '<div class="phdr"><b>' . __('settings') . '</b> | ' . __('forum') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
-        if (($set_forum = Vars::getUserData('set_forum')) === false) {
+        if (($set_forum = Vars::getUserData('set_forum')) === FALSE) {
             $set_forum = array(
                 'farea' => 0,
                 'upfp' => 0,
@@ -62,7 +62,7 @@ switch (Vars::$MOD) {
             if ($set_forum['postcut'] < 0 || $set_forum['postcut'] > 3)
                 $set_forum['postcut'] = 1;
             Vars::setUserData('set_forum', $set_forum);
-            echo '<div class="gmenu">' . lng('settings_saved') . '</div>';
+            echo '<div class="gmenu">' . __('settings_saved') . '</div>';
         }
         if (isset($_GET['reset']) || empty($set_forum)) {
             Vars::setUserData('set_forum');
@@ -73,25 +73,25 @@ switch (Vars::$MOD) {
                 'postclip' => 1,
                 'postcut' => 2
             );
-            echo '<div class="rmenu">' . lng('settings_default') . '</div>';
+            echo '<div class="rmenu">' . __('settings_default') . '</div>';
         }
         echo'<form action="profile.php?act=settings&amp;mod=forum" method="post">' .
-            '<div class="menu"><p><h3>' . lng('main_settings') . '</h3>' .
-            '<input name="upfp" type="checkbox" value="1" ' . ($set_forum['upfp'] ? 'checked="checked"' : '') . ' />&#160;' . lng('sorting_return') . '<br/>' .
-            '<input name="farea" type="checkbox" value="1" ' . ($set_forum['farea'] ? 'checked="checked"' : '') . ' />&#160;' . lng('field_on') . '<br/>' .
-            '<input name="preview" type="checkbox" value="1" ' . ($set_forum['preview'] ? 'checked="checked"' : '') . ' />&#160;' . lng('preview') . '<br/>' .
-            '</p><p><h3>' . lng('clip_first_post') . '</h3>' .
-            '<input type="radio" value="2" name="postclip" ' . ($set_forum['postclip'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . lng('always') . '<br />' .
-            '<input type="radio" value="1" name="postclip" ' . ($set_forum['postclip'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . lng('in_not_read') . '<br />' .
-            '<input type="radio" value="0" name="postclip" ' . (!$set_forum['postclip'] ? 'checked="checked"' : '') . '/>&#160;' . lng('never') .
-            '</p><p><h3>' . lng('scrap_of_posts') . '</h3>' .
-            '<input type="radio" value="1" name="postcut" ' . ($set_forum['postcut'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . lng('500_symbols') . '<br />' .
-            '<input type="radio" value="2" name="postcut" ' . ($set_forum['postcut'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . lng('1000_symbols') . '<br />' .
-            '<input type="radio" value="3" name="postcut" ' . ($set_forum['postcut'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . lng('3000_symbols') . '<br />' .
-            '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&#160;' . lng('not_to_cut_off') . '<br />' .
-            '</p><p><input type="submit" name="submit" value="' . lng('save') . '"/></p></div></form>' .
-            '<div class="phdr"><a href="profile.php?act=settings&amp;mod=forum&amp;reset">' . lng('reset_settings') . '</a></div>' .
-            '<p><a href="' . Vars::$URI . '">' . lng('to_forum') . '</a></p>';
+            '<div class="menu"><p><h3>' . __('main_settings') . '</h3>' .
+            '<input name="upfp" type="checkbox" value="1" ' . ($set_forum['upfp'] ? 'checked="checked"' : '') . ' />&#160;' . __('sorting_return') . '<br/>' .
+            '<input name="farea" type="checkbox" value="1" ' . ($set_forum['farea'] ? 'checked="checked"' : '') . ' />&#160;' . __('field_on') . '<br/>' .
+            '<input name="preview" type="checkbox" value="1" ' . ($set_forum['preview'] ? 'checked="checked"' : '') . ' />&#160;' . __('preview') . '<br/>' .
+            '</p><p><h3>' . __('clip_first_post') . '</h3>' .
+            '<input type="radio" value="2" name="postclip" ' . ($set_forum['postclip'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . __('always') . '<br />' .
+            '<input type="radio" value="1" name="postclip" ' . ($set_forum['postclip'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . __('in_not_read') . '<br />' .
+            '<input type="radio" value="0" name="postclip" ' . (!$set_forum['postclip'] ? 'checked="checked"' : '') . '/>&#160;' . __('never') .
+            '</p><p><h3>' . __('scrap_of_posts') . '</h3>' .
+            '<input type="radio" value="1" name="postcut" ' . ($set_forum['postcut'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . __('500_symbols') . '<br />' .
+            '<input type="radio" value="2" name="postcut" ' . ($set_forum['postcut'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . __('1000_symbols') . '<br />' .
+            '<input type="radio" value="3" name="postcut" ' . ($set_forum['postcut'] == 3 ? 'checked="checked"' : '') . '/>&#160;' . __('3000_symbols') . '<br />' .
+            '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&#160;' . __('not_to_cut_off') . '<br />' .
+            '</p><p><input type="submit" name="submit" value="' . __('save') . '"/></p></div></form>' .
+            '<div class="phdr"><a href="profile.php?act=settings&amp;mod=forum&amp;reset">' . __('reset_settings') . '</a></div>' .
+            '<p><a href="' . Vars::$URI . '">' . __('to_forum') . '</a></p>';
         break;
 
     default:

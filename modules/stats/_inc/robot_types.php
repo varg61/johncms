@@ -8,10 +8,10 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 $robot = isset($_GET['robot']) ? htmlspecialchars((string)$_GET['robot']) : FALSE;
 
 if(!$robot){
-    echo Functions::displayError(lng('error'), '<a href="'.Vars::$URI.'">'.lng('statistics').'</a>');
+    echo Functions::displayError(__('error'), '<a href="'.Vars::$URI.'">'.__('statistics').'</a>');
 }else{
 
-echo '<div class="phdr">'.lng('statistics_on').' '.lng('robot').' '.$robot.'</div>';
+echo '<div class="phdr">'.__('statistics_on').' '.__('robot').' '.$robot.'</div>';
 $count = mysql_num_rows(mysql_query("select * from `counter` WHERE `robot` = '".$robot."' GROUP BY `robot_type`;"));
 if($count > 0){
     $req = mysql_query("SELECT * FROM `counter` WHERE `robot` = '".$robot."' GROUP BY `robot_type` ". Vars::db_pagination());
@@ -21,13 +21,13 @@ if($count > 0){
         ++$i;
         $count_view = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `robot` = '".$robot."' AND `robot_type` = '".$arr['robot_type']."'") , 0);
         echo Functions::loadModuleImage('robot.png') .' <b>'.$arr['robot_type'].'</b>
-        <div class="sub">'.lng('movies').': '.$count_view.'</div>';
+        <div class="sub">'.__('movies').': '.$count_view.'</div>';
         echo '</div>';    
         }
-    echo '<div class="phdr">'.lng('total').': '.$count.'</div>';
+    echo '<div class="phdr">'.__('total').': '.$count.'</div>';
 }else{
- echo '<div class="rmenu">'.lng('no_data').'!</div>';   
+ echo '<div class="rmenu">'.__('no_data').'!</div>';
 }
-$back_links = '<a href="?act=robots">'.lng('back').'</a><br/>';
+$back_links = '<a href="?act=robots">'.__('back').'</a><br/>';
 }
 ?>

@@ -12,20 +12,20 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!Vars::$ID || !Vars::$USER_ID) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
 // Проверяем, тот ли юзер заливает файл
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
 $res = mysql_fetch_assoc($req);
 if ($res['user_id'] != Vars::$USER_ID) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
 
 $req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = " . Vars::$ID);
 if (mysql_result($req1, 0) > 0) {
-    echo Functions::displayError(lng('error_file_uploaded'));
+    echo Functions::displayError(__('error_file_uploaded'));
     exit;
 }
 
@@ -59,19 +59,19 @@ switch ($res['type']) {
                 $error = array();
                 // Проверка на допустимый размер файла
                 if ($fsize > 1024 * Vars::$SYSTEM_SET['filesize'])
-                    $error[] = lng('error_file_size') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.';
+                    $error[] = __('error_file_size') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.';
                 // Проверка файла на наличие только одного расширения
                 if (count($ext) != 2)
-                    $error[] = lng('error_file_name');
+                    $error[] = __('error_file_name');
                 // Проверка допустимых расширений файлов
                 if (!in_array($ext[1], $al_ext))
-                    $error[] = lng('error_file_ext') . ':<br />' . implode(', ', $al_ext);
+                    $error[] = __('error_file_ext') . ':<br />' . implode(', ', $al_ext);
                 // Проверка на длину имени
                 if (strlen($fname) > 30)
-                    $error[] = lng('error_file_name_size');
+                    $error[] = __('error_file_name_size');
                 // Проверка на запрещенные символы
                 if (preg_match("/[^\da-z_\-.]+/", $fname))
-                    $error[] = lng('error_file_symbols');
+                    $error[] = __('error_file_symbols');
                 // Проверка наличия файла с таким же именем
                 if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) {
                     $fname = time() . $fname;
@@ -82,9 +82,9 @@ switch ($res['type']) {
                     if ((move_uploaded_file($_FILES["fail"]["tmp_name"], ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname)) == TRUE) {
                         @chmod("$fname", 0777);
                         @chmod(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fname, 0777);
-                        echo lng('file_uploaded') . '<br/>';
+                        echo __('file_uploaded') . '<br/>';
                     } else {
-                        $error[] = lng('error_upload_error');
+                        $error[] = __('error_upload_error');
                     }
                 }
                 if (!$error) {
@@ -124,32 +124,32 @@ switch ($res['type']) {
                         `filetype` = '$type'
                     ") or die(mysql_error());
                 } else {
-                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                 }
             } else {
-                echo lng('error_upload_error') . '<br />';
+                echo __('error_upload_error') . '<br />';
             }
-            echo '<br/><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('continue') . '</a><br/>';
+            echo '<br/><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('continue') . '</a><br/>';
         } else {
             /*
             -----------------------------------------------------------------
             Форма выбора файла для выгрузки
             -----------------------------------------------------------------
             */
-            echo'<div class="phdr"><b>' . lng('add_file') . '</b></div>' .
+            echo'<div class="phdr"><b>' . __('add_file') . '</b></div>' .
                 '<div class="gmenu"><form action="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
             if (stristr(Vars::$USER_AGENT, 'Opera/8.01')) {
-                echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . lng('select_file') . '</a>';
+                echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . __('select_file') . '</a>';
             } else {
                 echo '<input type="file" name="fail"/>';
             }
             echo'</p><p>' .
-                '<input type="submit" name="submit" value="' . lng('upload') . '"/>' .
-                '</p><p><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('cancel') . '</a></p></form></div>' .
-                '<div class="phdr">' . lng('max_size') . ': ' . Vars::$SYSTEM_SET['filesize'] . 'kb.</div>';
+                '<input type="submit" name="submit" value="' . __('upload') . '"/>' .
+                '</p><p><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('cancel') . '</a></p></form></div>' .
+                '<div class="phdr">' . __('max_size') . ': ' . Vars::$SYSTEM_SET['filesize'] . 'kb.</div>';
         }
         break;
 
     default:
-        echo Functions::displayError(lng('error_wrong_data'));
+        echo Functions::displayError(__('error_wrong_data'));
 }

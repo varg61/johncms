@@ -9,10 +9,10 @@
         <div class="info-message"><?= $this->message ?></div>
         <?php endif ?>
         <?php if (isset($this->continue)): ?>
-        <a class="btn btn-primary btn-large" href="<?= $this->continue ?>"><?= lng('continue') ?></a>
+        <a class="btn btn-primary btn-large" href="<?= $this->continue ?>"><?= __('continue') ?></a>
         <?php endif ?>
         <?php if (isset($this->back)): ?>
-        <a class="btn btn-large" href="<?= $this->back ?>"><?= lng('back') ?></a>
+        <a class="btn btn-large" href="<?= $this->back ?>"><?= __('back') ?></a>
         <?php endif ?>
     </div>
 </div>

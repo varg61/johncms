@@ -59,7 +59,7 @@ if ( Vars::$ACT && ( $key = array_search( Vars::$ACT, $connect ) ) !== false && 
 } else
 {
 	//Заголовок
-	$tpl->title = lng('contacts');
+	$tpl->title = __('contacts');
 	//Считаем количество контактов
 	$total = Functions::contactsCount();
 	$tpl->total = $total;

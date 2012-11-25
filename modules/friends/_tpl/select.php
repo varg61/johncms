@@ -9,5 +9,5 @@
     </form>
 </div>
 <div class="phdr">
-    <a href="<?= $this->urlBack ?>"><?= lng('back') ?></a>
+    <a href="<?= $this->urlBack ?>"><?= __('back') ?></a>
 </div>

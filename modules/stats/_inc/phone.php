@@ -8,7 +8,7 @@ defined('_IN_JOHNCMS') or die('Restricted access');
 
 $arr_model = array('Nokia', 'Siemens', 'SE', 'Samsung', 'LG', 'Motorola', 'NEC', 'Philips', 'Sagem', 'Fly', 'Panasonic', 'Opera', 'komp'); 
 if(!in_array($model, $arr_model)){
-    echo Functions::displayError(lng('error_data'), '<a href="'.Vars::$URI.'">'.lng('statistics').'</a>');
+    echo Functions::displayError(__('error_data'), '<a href="'.Vars::$URI.'">'.__('statistics').'</a>');
 }else{
 
 
@@ -41,11 +41,11 @@ if($model == "Nokia"){
     $model1 = 'Opera Mini';
     $sql = "WHERE `browser` LIKE '%opera mini%'";
 }elseif($model == "komp"){
-    $model1 = lng('computers');
+    $model1 = __('computers');
     $sql = "WHERE `browser` LIKE '%windows%' OR `browser` LIKE '%linux%'";
 }
 
-echo '<div class="phdr">'.lng('statistics_on').' '.$model1.'</div>';
+echo '<div class="phdr">'.__('statistics_on').' '.$model1.'</div>';
 $count = mysql_result(mysql_query("SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` ".$sql.";"), 0);
 if($count > 0){
     $req = mysql_query("SELECT * FROM `counter` ".$sql." GROUP BY `ip`, `browser` ORDER BY `counter`.`date` DESC ". Vars::db_pagination());
@@ -63,21 +63,21 @@ if($count > 0){
         if($arr['ip_via_proxy'])
         echo '| <a href="'.Vars::$HOME_URL.'/admin?act=search_ip&amp;ip='.$arr['ip_via_proxy'].'">'.$arr['ip_via_proxy'].'</a> <a href="'.Vars::$HOME_URL.'/admin/whois?ip='.$arr['ip_via_proxy'].'" title = "WhoIS ip">[?]</a> ';
         
-        echo '| '.$arr['operator'].' | '.$arr['country'].' | '.lng('movies').': '.$count_view.'</div>';
+        echo '| '.$arr['operator'].' | '.$arr['country'].' | '.__('movies').': '.$count_view.'</div>';
         
         echo '</div>';
         }
     
-    echo '<div class="phdr">'.lng('total').': '.$count.'</div>';
+    echo '<div class="phdr">'.__('total').': '.$count.'</div>';
     if ($count > Vars::$USER_SET['page_size']){
         echo '<div class="topmenu">';
     	echo Functions::displayPagination(Vars::$URI.'?act=phone&amp;model='.$model.'&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
-    	echo '<p><form action="'.Vars::$URI.'" method="get"><input type="hidden" name="act" value="phone"/><input type="hidden" name="model" value="'.$model.'"/><input type="text" name="page" size="2"/><input type="submit" value="'.lng('to_page').' &gt;&gt;"/></form></p>';}
+    	echo '<p><form action="'.Vars::$URI.'" method="get"><input type="hidden" name="act" value="phone"/><input type="hidden" name="model" value="'.$model.'"/><input type="text" name="page" size="2"/><input type="submit" value="'.__('to_page').' &gt;&gt;"/></form></p>';}
     
 }else{
- echo '<div class="rmenu">'.lng('no_data').'</div>';   
+ echo '<div class="rmenu">'.__('no_data').'</div>';
 }
-$back_links = '<a href="?act=phones">'.lng('back').'</a><br/>';
+$back_links = '<a href="?act=phones">'.__('back').'</a><br/>';
 
 }
 

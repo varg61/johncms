@@ -85,13 +85,13 @@ class Counters extends Vars
                 OR `forum`.`time` > `cms_forum_rdm`.`time`)");
             $total = mysql_result($req, 0);
             if ($mod) {
-                return '<a href="' . Vars::$HOME_URL . '/forum/new">' . lng('unread') . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
+                return '<a href="' . Vars::$HOME_URL . '/forum/new">' . __('unread') . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
             } else {
                 return $total;
             }
         } else {
             if ($mod) {
-                return '<a href="' . Vars::$HOME_URL . '/forum/new">' . lng('last_activity') . '</a>';
+                return '<a href="' . Vars::$HOME_URL . '/forum/new">' . __('last_activity') . '</a>';
             } else {
                 return FALSE;
             }

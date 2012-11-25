@@ -16,11 +16,11 @@ defined('_IN_PROFILE') or die('Error: restricted access');
 История активности
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="' . Vars::$URI . '?user=' . $user['id'] . '"><b>' . ($user['id'] != Vars::$USER_ID ? lng('user_profile') : lng('my_profile')) . '</b></a> | ' . lng('activity') . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$URI . '?user=' . $user['id'] . '"><b>' . ($user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) . '</b></a> | ' . __('activity') . '</div>';
 $menu = array(
-    (!Vars::$MOD ? '<b>' . lng('messages') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;user=' . $user['id'] . '">' . lng('messages') . '</a>'),
-    (Vars::$MOD == 'topic' ? '<b>' . lng('themes') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;mod=topic&amp;user=' . $user['id'] . '">' . lng('themes') . '</a>'),
-    (Vars::$MOD == 'comments' ? '<b>' . lng('comments') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;mod=comments&amp;user=' . $user['id'] . '">' . lng('comments') . '</a>'),
+    (!Vars::$MOD ? '<b>' . __('messages') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;user=' . $user['id'] . '">' . __('messages') . '</a>'),
+    (Vars::$MOD == 'topic' ? '<b>' . __('themes') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;mod=topic&amp;user=' . $user['id'] . '">' . __('themes') . '</a>'),
+    (Vars::$MOD == 'comments' ? '<b>' . __('comments') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;mod=comments&amp;user=' . $user['id'] . '">' . __('comments') . '</a>'),
 );
 echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
      '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';
@@ -32,7 +32,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `user_id` = '" . $user['id'] . "'" . (Vars::$USER_RIGHTS >= 1 ? '' : " AND `adm` = '0'")), 0);
-        echo '<div class="phdr"><b>' . lng('comments') . '</b></div>';
+        echo '<div class="phdr"><b>' . __('comments') . '</b></div>';
         if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity&amp;mod=comments&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         $req = mysql_query("SELECT * FROM `guest` WHERE `user_id` = '" . $user['id'] . "'" . (Vars::$USER_RIGHTS >= 1 ? '' : " AND `adm` = '0'") . " ORDER BY `id` DESC" . Vars::db_pagination());
         if (mysql_num_rows($req)) {
@@ -44,7 +44,7 @@ switch (Vars::$MOD) {
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+            echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
         }
         break;
 
@@ -55,7 +55,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 't'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'")), 0);
-        echo '<div class="phdr"><b>' . lng('forum') . '</b>: ' . lng('themes') . '</div>';
+        echo '<div class="phdr"><b>' . __('forum') . '</b>: ' . __('themes') . '</div>';
         if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity&amp;mod=topic&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 't'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " ORDER BY `id` DESC" . Vars::db_pagination());
         if (mysql_num_rows($req)) {
@@ -77,7 +77,7 @@ switch (Vars::$MOD) {
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+            echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
         }
         break;
 
@@ -88,7 +88,7 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'")), 0);
-        echo '<div class="phdr"><b>' . lng('forum') . '</b>: ' . lng('messages') . '</div>';
+        echo '<div class="phdr"><b>' . __('forum') . '</b>: ' . __('messages') . '</div>';
         if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = '" . $user['id'] . "' AND `type` = 'm' " . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " ORDER BY `id` DESC" . Vars::db_pagination());
         if (mysql_num_rows($req)) {
@@ -111,14 +111,14 @@ switch (Vars::$MOD) {
                 ++$i;
             }
         } else {
-            echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+            echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
         }
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
     echo '<div class="topmenu">' . Functions::displayPagination('profile.php?act=activity' . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
          '<p><form action="profile.php?act=activity&amp;user=' . $user['id'] . (Vars::$MOD ? '&amp;mod=' . Vars::$MOD : '') . '" method="post">' .
          '<input type="text" name="page" size="2"/>' .
-         '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
          '</form></p>';
 }

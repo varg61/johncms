@@ -48,10 +48,10 @@ Class ValidMail extends Vars
     {
         if ($this->id !== FALSE) {
             if ($this->checkRequest() === FALSE) {
-                $this->error_request = lng('contact_no_select');
+                $this->error_request = __('contact_no_select');
                 return FALSE;
             } else if ($this->checkId() === FALSE) {
-                $this->error_request = lng('user_does_not_exist');
+                $this->error_request = __('user_does_not_exist');
                 return FALSE;
             } else {
                 return TRUE;
@@ -146,7 +146,7 @@ Class ValidMail extends Vars
                         $this->contact = TRUE;
                 return TRUE;
             } else {
-                $this->error_log[] = lng('user_does_not_exist');
+                $this->error_log[] = __('user_does_not_exist');
                 return FALSE;
             }
         }
@@ -160,9 +160,9 @@ Class ValidMail extends Vars
     function valLogin($var)
     {
         if (empty($var)) {
-            $this->error_log[] = lng('empty_login');
+            $this->error_log[] = __('empty_login');
         } else if (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
-            $this->error_log[] = lng('error_login');
+            $this->error_log[] = __('error_login');
         } else {
             return TRUE;
         }
@@ -241,7 +241,7 @@ Class ValidMail extends Vars
 	function checkFlood() {
 		if (($flood = Functions::antiFlood()) === FALSE)
 			return TRUE;
-		$this->error_log[] = lng('error_flood') . '&#160;' . $flood . '&#160;' . lng('seconds');
+		$this->error_log[] = __('error_flood') . '&#160;' . $flood . '&#160;' . __('seconds');
 		return FALSE;
 	}
     /*
@@ -252,10 +252,10 @@ Class ValidMail extends Vars
     function valIgnor()
     {
         if (!Vars::$USER_RIGHTS && (Functions::checkIgnor($this->id, TRUE) === TRUE)) {
-            $this->error_log[] = lng('you_banned');
+            $this->error_log[] = __('you_banned');
             return FALSE;
         } elseif (Functions::checkIgnor($this->id) === TRUE) {
-            $this->error_log[] = lng('user_banned');
+            $this->error_log[] = __('user_banned');
             return FALSE;
         } else {
             return TRUE;
@@ -270,9 +270,9 @@ Class ValidMail extends Vars
     function valText($var)
     {
         if (empty($var))
-            $this->error_log[] = lng('empty_message');
+            $this->error_log[] = __('empty_message');
         else if (mb_strlen($var) < 2)
-            $this->error_log[] = lng('error_message');
+            $this->error_log[] = __('error_message');
         else
             return TRUE;
         return FALSE;
@@ -288,10 +288,10 @@ Class ValidMail extends Vars
         if ($this->access) {
             if ($this->access['access'] > 0  && Vars::$USER_RIGHTS == 0) {
                 if ($this->access['access'] == 1 && $this->contact !== TRUE) {
-                    $this->error_log[] = lng('access_contact');
+                    $this->error_log[] = __('access_contact');
                     return FALSE;
-                } else if ($this->access['access'] == 2 && Functions::checkFriend($this->id, true) != 1  && Vars::$USER_RIGHTS == 0) {
-                    $this->error_log[] = lng('access_friends');
+                } else if ($this->access['access'] == 2 && Functions::checkFriend($this->id, TRUE) != 1  && Vars::$USER_RIGHTS == 0) {
+                    $this->error_log[] = __('access_friends');
                     return FALSE;
                 }
             }
@@ -307,7 +307,7 @@ Class ValidMail extends Vars
     function valRequest()
     {
         if ($this->id == parent::$USER_ID) {
-            $this->error_log[] = lng('error_my_message');
+            $this->error_log[] = __('error_my_message');
             return FALSE;
         }
         return TRUE;

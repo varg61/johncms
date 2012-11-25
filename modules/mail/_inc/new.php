@@ -19,7 +19,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'new_messages' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'new_messages' );
 
 //Считаем новые сообщения
 $total = mysql_result( mysql_query( "SELECT COUNT(*) FROM (SELECT DISTINCT `user_id` FROM `cms_mail_messages` WHERE `contact_id`='" .

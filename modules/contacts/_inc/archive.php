@@ -19,7 +19,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'archive' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'archive' );
 //Считаем количество контактов в архиве
 $total = mysql_result(mysql_query("SELECT COUNT(*)
 FROM `cms_mail_contacts`
@@ -126,7 +126,7 @@ if ( $total )
 } else
 {
     //Выводим сообщение если контактов нет
-	$tpl->contacts = '<div class="rmenu">' . lng( 'no_archive' ) . '</div>';
+	$tpl->contacts = '<div class="rmenu">' . __( 'no_archive' ) . '</div>';
 }
 //Подключаем шаблон модуля archive.php
 $tpl->contents = $tpl->includeTpl( 'archive' );

@@ -28,8 +28,8 @@ if ( Vars::$ID )
 	if ( mysql_num_rows( $req ) == 0 )
     {
         //Выводим ошибку
-        $tpl->contents = Functions::displayError( lng( 'file_does_not_exist' ), '<a href="' . Vars::
-            $MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+        $tpl->contents = Functions::displayError( __( 'file_does_not_exist' ), '<a href="' . Vars::
+            $MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
     }
     $res = mysql_fetch_assoc( $req );
     //Проверяем существование файла на сервере
@@ -47,12 +47,12 @@ if ( Vars::$ID )
     } else
     {
         //Если файл не существует, показываем сообщение об ошибке
-		$tpl->contents = Functions::displayError( lng( 'file_does_not_exist' ), '<a href="' . Vars::
-            $MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+		$tpl->contents = Functions::displayError( __( 'file_does_not_exist' ), '<a href="' . Vars::
+            $MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
     }
 } else
 {
     //Если файл не выбран, показываем сообщение об ошибке
-	$tpl->contents = Functions::displayError( lng( 'file_does_not_exist' ), '<a href="' . Vars::
-        $MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+	$tpl->contents = Functions::displayError( __( 'file_does_not_exist' ), '<a href="' . Vars::
+        $MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
 }

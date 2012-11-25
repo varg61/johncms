@@ -17,7 +17,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if (!Vars::$USER_ID && (!isset(Vars::$SYSTEM_SET['active']) || !Vars::$SYSTEM_SET['active'])) {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+    echo Functions::displayError(__('access_guest_forbidden'));
     exit;
 }
 
@@ -37,7 +37,7 @@ function get_top($order = 'count_forum')
         }
         return $out;
     } else {
-        return '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+        return '<div class="menu"><p>' . __('list_empty') . '</p></div>';
     }
 }
 
@@ -47,8 +47,8 @@ function get_top($order = 'count_forum')
 -----------------------------------------------------------------
 */
 $menu = array(
-    (!Vars::$ACT ? '<b>' . lng('forum') . '</b>' : '<a href="' . Vars::$URI . '">' . lng('forum') . '</a>'),
-    (Vars::$ACT == 'comm' ? '<b>' . lng('comments') . '</b>' : '<a href="' . Vars::$URI . '?act=comm">' . lng('comments') . '</a>')
+    (!Vars::$ACT ? '<b>' . __('forum') . '</b>' : '<a href="' . Vars::$URI . '">' . __('forum') . '</a>'),
+    (Vars::$ACT == 'comm' ? '<b>' . __('comments') . '</b>' : '<a href="' . Vars::$URI . '?act=comm">' . __('comments') . '</a>')
 );
 
 //TODO: Добавить ТОП Кармы
@@ -60,10 +60,10 @@ switch (Vars::$ACT) {
         Топ комментариев
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('community') . '</b></a> | ' . lng('top_comm') . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('community') . '</b></a> | ' . __('top_comm') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
             get_top('count_comments') .
-            '<div class="phdr"><a href="' . Vars::$HOME_URL . '">' . lng('homepage') . '</a></div>';
+            '<div class="phdr"><a href="' . Vars::$HOME_URL . '">' . __('homepage') . '</a></div>';
         break;
 
     case 'karma':
@@ -73,7 +73,7 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if ($set_karma['on']) {
-            echo'<div class="phdr"><a href="index.php"><b>' . lng('community') . '</b></a> | ' . lng('top_karma') . '</div>' .
+            echo'<div class="phdr"><a href="index.php"><b>' . __('community') . '</b></a> | ' . __('top_karma') . '</div>' .
                 '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
             $req = mysql_query("SELECT *, (`karma_plus` - `karma_minus`) AS `karma` FROM `users` WHERE (`karma_plus` - `karma_minus`) > 0 ORDER BY `karma` DESC LIMIT 9");
             if (mysql_num_rows($req)) {
@@ -84,9 +84,9 @@ switch (Vars::$ACT) {
                     ++$i;
                 }
             } else {
-                echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+                echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
             }
-            echo '<div class="phdr"><a href="../index.php">' . lng('homepage') . '</a></div>';
+            echo '<div class="phdr"><a href="../index.php">' . __('homepage') . '</a></div>';
         }
         break;
 
@@ -96,9 +96,9 @@ switch (Vars::$ACT) {
         Топ Форума
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('community') . '</b></a> | ' . lng('top_forum') . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('community') . '</b></a> | ' . __('top_forum') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
             get_top('count_forum') .
-            '<div class="phdr"><a href="' . Vars::$HOME_URL . '/forum">' . lng('forum') . '</a></div>';
+            '<div class="phdr"><a href="' . Vars::$HOME_URL . '/forum">' . __('forum') . '</a></div>';
 }
-echo '<p><a href="' . Vars::$MODULE_URI . '">' . lng('back') . '</a></p>';
+echo '<p><a href="' . Vars::$MODULE_URI . '">' . __('back') . '</a></p>';

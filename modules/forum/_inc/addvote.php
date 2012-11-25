@@ -18,7 +18,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     $topic = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `id` = " . Vars::$ID . " AND `edit` != '1'"), 0);
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID), 0);
     if ($topic_vote != 0 || $topic == 0) {
-        echo Functions::displayError(lng('error_wrong_data'), '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . lng('back') . '</a>');
+        echo Functions::displayError(__('error_wrong_data'), '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . __('back') . '</a>');
         exit;
     }
     if (isset($_POST['submit'])) {
@@ -39,24 +39,24 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                     `topic` = " . Vars::$ID
                 );
             }
-            echo lng('voting_added') . '<br /><a href="?id=' . Vars::$ID . '">' . lng('continue') . '</a>';
+            echo __('voting_added') . '<br /><a href="?id=' . Vars::$ID . '">' . __('continue') . '</a>';
         } else
-            echo lng('error_empty_fields') . '<br /><a href="?act=addvote&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>';
+            echo __('error_empty_fields') . '<br /><a href="?act=addvote&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>';
     } else {
         echo '<form action="' . Vars::$URI . '?act=addvote&amp;id=' . Vars::$ID . '" method="post">' .
-             '<br />' . lng('voting') . ':<br/>' .
+             '<br />' . __('voting') . ':<br/>' .
              '<input type="text" size="20" maxlength="150" name="vote_name" value="' . Validate::checkout($vote_name) . '"/><br/>';
         if (isset($_POST['plus'])) ++$vote_count;
         elseif (isset($_POST['minus'])) --$vote_count;
         for ($i = 0; $i < $vote_count; $i++) {
             $answer[$i] = isset($_POST[$i]) ? Validate::checkout($_POST[$i]) : '';
-            echo lng('answer') . ' ' . ($i + 1) . '(max. 50): <br/><input type="text" name="' . $i . '" value="' . $answer[$i] . '"/><br/>';
+            echo __('answer') . ' ' . ($i + 1) . '(max. 50): <br/><input type="text" name="' . $i . '" value="' . $answer[$i] . '"/><br/>';
         }
         echo '<input type="hidden" name="vote_count" value="' . $vote_count . '"/>';
-        echo ($vote_count < 20) ? '<br/><input type="submit" name="plus" value="' . lng('add_answer') . '"/>' : '';
-        echo $vote_count > 2 ? '<input type="submit" name="minus" value="' . lng('delete_last') . '"/><br/>' : '<br/>';
-        echo '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p></form>';
-        echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a>';
+        echo ($vote_count < 20) ? '<br/><input type="submit" name="plus" value="' . __('add_answer') . '"/>' : '';
+        echo $vote_count > 2 ? '<input type="submit" name="minus" value="' . __('delete_last') . '"/><br/>' : '<br/>';
+        echo '<p><input type="submit" name="submit" value="' . __('save') . '"/></p></form>';
+        echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a>';
     }
 } else {
     header('location: ../404.php');

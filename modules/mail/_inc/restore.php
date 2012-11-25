@@ -27,7 +27,7 @@ if ( Vars::$ID )
     if ( mysql_num_rows( $q ) )
     {
         $data = mysql_fetch_assoc( $q );
-        if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === true )
+        if ( isset( $_POST['submit'] ) && ValidMail::checkCSRF() === TRUE )
         {
             if ( $data['user_id'] == Vars::$USER_ID )
             {
@@ -58,9 +58,9 @@ if ( Vars::$ID )
             }
         }
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=restore&amp;id=' . Vars::$ID;
-        $tpl->select = lng( 'confirm_restore' );
-        $tpl->submit = lng( 'restore' );
-        $tpl->phdr = lng( 'restore_message' );
+        $tpl->select = __( 'confirm_restore' );
+        $tpl->submit = __( 'restore' );
+        $tpl->phdr = __( 'restore_message' );
         $tpl->urlBack = Vars::$MODULE_URI . '?act=basket';
         $tpl->token = mt_rand(100, 10000);
 		$_SESSION['token_status'] = $tpl->token;
@@ -68,11 +68,11 @@ if ( Vars::$ID )
     } else
     {
         //Если собщение не существует, информируем об этом)
-		$tpl->contents = '<div class="rmenu">' . lng( 'page_does_not_exist' ) . '</div>';
+		$tpl->contents = '<div class="rmenu">' . __( 'page_does_not_exist' ) . '</div>';
     }
 } else
 {
     //Сообщяем об ошибке, если сообщение не выбрано.
-	$tpl->contents = Functions::displayError( lng( 'message_no_select' ), '<a href="' . Vars::
-        $MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
+	$tpl->contents = Functions::displayError( __( 'message_no_select' ), '<a href="' . Vars::
+        $MODULE_URI . '">' . __( 'mail' ) . '</a>' );
 }

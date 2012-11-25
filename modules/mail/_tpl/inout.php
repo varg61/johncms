@@ -16,33 +16,33 @@
         </div>
         <?php endforeach ?>
         <div class="gmenu">
-            <?= lng('noted_mess') ?>:<br/>
+            <?= __('noted_mess') ?>:<br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
-            <input type="submit" name="delete_mess" value="<?= lng('delete') ?>"/><br/>
+            <input type="submit" name="delete_mess" value="<?= __('delete') ?>"/><br/>
         </div>
     </div>
 </form>
-<div class="phdr"><?= lng('total') ?>: <?= $this->total ?></div>
+<div class="phdr"><?= __('total') ?>: <?= $this->total ?></div>
 <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
     <div class="topmenu"><?= $this->display_pagination ?></div>
     <form action="" method="post"><p><input type="text" name="page" size="2" value="<?= Vars::$PAGE ?>" style="font-size: x-small;"/>
-        <input type="submit" value="<?= lng('to_page') ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
+        <input type="submit" value="<?= __('to_page') ?> &gt;&gt;" style="font-size: x-small;"/></p></form>
     <?php endif ?>
 <p>
 <div class="func">
     <?php if ($this->pages_type == 'inmess'): ?>
-    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=delete_read"><?= lng('delete_read') ?></a><br/>
-    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=cleaning"><?= lng('cleaning') ?></a><br/>
+    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=delete_read"><?= __('delete_read') ?></a><br/>
+    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=cleaning"><?= __('cleaning') ?></a><br/>
     <?php else: ?>
-    <a href="<?= Vars::$MODULE_URI ?>?act=outmess&amp;mod=cleaning"><?= lng('cleaning') ?></a><br/>
+    <a href="<?= Vars::$MODULE_URI ?>?act=outmess&amp;mod=cleaning"><?= __('cleaning') ?></a><br/>
     <?php endif ?>
 </div>
 </p>
 <?php else: ?>
 <div class="form-container">
-	<div class="form-block align-center"><?= lng('list_empty') ?></div>
+	<div class="form-block align-center"><?= __('list_empty') ?></div>
 </div>
 <?php endif ?>
 <div class="btn-panel">
-    <a class="btn" href="<?= Vars::$MODULE_URI ?>?act=add"><i class="icn-edit"></i><?= lng('write_message') ?></a>
+    <a class="btn" href="<?= Vars::$MODULE_URI ?>?act=add"><i class="icn-edit"></i><?= __('write_message') ?></a>
 </div>

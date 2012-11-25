@@ -114,7 +114,7 @@ if (isset(Vars::$ACL['stat']) && Vars::$ACL['stat']) {
  * @param bool $system       Принудительно использовать системный язык
  * @return string            Возвращенная по ключу фраза
  */
-function lng($key, $system = FALSE)
+function __($key, $system = FALSE)
 {
     if (!$system && ($out = Languages::getInstance()->getModulePhrase($key)) !== FALSE) {
         return $out;

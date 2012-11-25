@@ -12,13 +12,13 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     if (!Vars::$ID) {
-        echo Functions::displayError(lng('error_wrong_data'));
+        echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
     // Проверяем, существует ли тема
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($req)) {
-        echo Functions::displayError(lng('error_topic_deleted'));
+        echo Functions::displayError(__('error_topic_deleted'));
         exit;
     }
     $res = mysql_fetch_assoc($req);
@@ -56,16 +56,16 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         Меню выбора режима удаления темы
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . lng('forum') . '</b></a> | ' . lng('topic_delete') . '</div>' .
+        echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('topic_delete') . '</div>' .
              '<div class="rmenu"><form method="post" action="' . Vars::$URI . '?act=deltema&amp;id=' . Vars::$ID . '">' .
-             '<p><h3>' . lng('delete_confirmation') . '</h3>' .
-             '<input type="radio" value="1" name="del" checked="checked"/>&#160;' . lng('hide') . '<br />' .
-             (Vars::$USER_RIGHTS == 9 ? '<input type="radio" value="2" name="del" />&#160;' . lng('delete') : '') .
-             '</p><p><input type="submit" name="submit" value="' . lng('do') . '" /></p>' .
-             '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('cancel') . '</a>' .
+             '<p><h3>' . __('delete_confirmation') . '</h3>' .
+             '<input type="radio" value="1" name="del" checked="checked"/>&#160;' . __('hide') . '<br />' .
+             (Vars::$USER_RIGHTS == 9 ? '<input type="radio" value="2" name="del" />&#160;' . __('delete') : '') .
+             '</p><p><input type="submit" name="submit" value="' . __('do') . '" /></p>' .
+             '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('cancel') . '</a>' .
              '</p></form></div>' .
              '<div class="phdr">&#160;</div>';
     }
 } else {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
 }

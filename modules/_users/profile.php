@@ -25,11 +25,11 @@ $tpl->error = array();
 */
 if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
     if (($tpl->user = Vars::getUser()) === FALSE) {
-        echo Functions::displayError(lng('user_does_not_exist'));
+        echo Functions::displayError(__('user_does_not_exist'));
         exit;
     }
 } else {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+    echo Functions::displayError(__('access_guest_forbidden'));
     exit;
 }
 
@@ -69,7 +69,7 @@ if (Vars::$ACT
 ) {
     // Доступ к персональным модулям
     if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS != 9 && $tpl->user['rights'] >= Vars::$USER_RIGHTS) {
-        exit(Functions::displayError(lng('error_rights')));
+        exit(Functions::displayError(__('error_rights')));
     }
     $include = $personal_actions[Vars::$ACT];
     define('_IN_PROFILE', 1);
@@ -177,13 +177,13 @@ if ($include && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_i
             $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $tpl->user['id'] . "'"), 0);
 
             if ($tpl->user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $tpl->user['rights'])) {
-                $menu[] = '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $tpl->user['id'] . '">' . lng('edit') . '</a>';
+                $menu[] = '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $tpl->user['id'] . '">' . __('edit') . '</a>';
             }
             if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $tpl->user['rights']) {
-                $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $tpl->user['id'] . '">' . lng('delete') . '</a>';
+                $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $tpl->user['id'] . '">' . __('delete') . '</a>';
             }
             if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $tpl->user['rights']) {
-                $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $tpl->user['id'] . '">' . lng('ban_do') . '</a>';
+                $menu[] = '<a href="profile.php?act=ban&amp;mod=do&amp;user=' . $tpl->user['id'] . '">' . __('ban_do') . '</a>';
             }
             if (isset($menu)) {
                 $tpl->menu = Functions::displayMenu($menu);
@@ -194,7 +194,7 @@ if ($include && is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_i
                 'iphist'    => 1,
                 'header'    => '<b>ID:' . $tpl->user['id'] . '</b>',
                 'footer'    => ($tpl->user['id'] != Vars::$USER_ID
-                    ? '<span class="gray">' . lng('where') . ':</span> '
+                    ? '<span class="gray">' . __('where') . ':</span> '
                     : FALSE)
             );
 

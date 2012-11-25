@@ -25,7 +25,7 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
         $tpl->album = $tpl->res['album_id'];
         $tpl->tmb_name = $tpl->res['tmb_name'];
         $tpl->description = $tpl->res['description'];
-        echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $tpl->album . '&amp;user=' . $user['id'] . '"><b>' . lng('photo_album') . '</b></a> | ' . lng('image_edit') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $tpl->album . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('image_edit') . '</div>';
         if (isset($_POST['submit'])) {
             $sql = '';
             $rotate = isset($_POST['rotate']) ? intval($_POST['rotate']) : 0;
@@ -129,11 +129,11 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
                 WHERE `id` = '$img'
             ");
             $tpl->save = 1;
-            echo'<div class="gmenu"><p>' . lng('image_edited') . '<br />' .
-                '<a href="' . Vars::$URI . '?act=show&amp;al=' . $tpl->album . '&amp;user=' . $user['id'] . '">' . lng('continue') . '</a></p></div>';
+            echo'<div class="gmenu"><p>' . __('image_edited') . '<br />' .
+                '<a href="' . Vars::$URI . '?act=show&amp;al=' . $tpl->album . '&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>';
         }
         $tpl->contents = $tpl->includeTpl('image_edit');
     } else {
-        echo Functions::displayError(lng('error_wrong_data'));
+        echo Functions::displayError(__('error_wrong_data'));
     }
 }

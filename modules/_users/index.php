@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (!Vars::$USER_ID && !Vars::$USER_SYS['view_userlist']) {
-    echo Functions::displayError(lng('access_guest_forbidden'));
+    echo Functions::displayError(__('access_guest_forbidden'));
     exit;
 }
 

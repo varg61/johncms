@@ -1,21 +1,21 @@
-<div class="phdr"><strong><?= lng('edit_message') ?></strong></div>
+<div class="phdr"><strong><?= __('edit_message') ?></strong></div>
 <?= $this->mail_error ?>
 <div>
     <form name="form" action="<?= $this->url ?>" method="post">
         <div class="gmenu">
-			<strong><?= lng('message') ?>:</strong><br/>
+			<strong><?= __('message') ?>:</strong><br/>
             <?php if (!Vars::$IS_MOBILE): ?>
             <?= TextParser::autoBB('form', 'text') ?>
             <? endif ?>
             <textarea rows="<?= Vars::$USER_SET['field_h'] ?>" name="text"><?php echo $this->text ?></textarea><br/>
-            <small><?= lng('text_size') ?></small><br/>
+            <small><?= __('text_size') ?></small><br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
-            <p><input type="submit" name="submit" value="<?= lng('sent') ?>"/></p>
+            <p><input type="submit" name="submit" value="<?= __('sent') ?>"/></p>
         </div>
     </form>
 </div>
-<div class="phdr"><a href="<?= Vars::$HOME_URL ?>/help?act=trans"><?= lng('translit') ?></a> | <a href="<?= Vars::$HOME_URL ?>/smileys"><?= lng('smileys') ?></a></div>
+<div class="phdr"><a href="<?= Vars::$HOME_URL ?>/help?act=trans"><?= __('translit') ?></a> | <a href="<?= Vars::$HOME_URL ?>/smileys"><?= __('smileys') ?></a></div>
 <p>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= lng('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>
+    <a href="<?= Vars::$MODULE_URI ?>"><?= __('mail') ?></a><br/>
+    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
 </p>

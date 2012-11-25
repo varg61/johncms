@@ -28,7 +28,7 @@ $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VA
 $res_down = mysql_fetch_assoc($req_down);
 $format_file = functions::format($res_down['name']);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || ($format_file != 'txt' && !isset($_GET['more'])) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
-    echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
     exit;
 }
 if (isset($_GET['more'])) {
@@ -37,7 +37,7 @@ if (isset($_GET['more'])) {
     $res_more = mysql_fetch_assoc($req_more);
     $format_file = functions::format($res_more['name']);
     if (!mysql_num_rows($req_more) || !is_file($res_down['dir'] . '/' . $res_more['name']) || $format_file != 'txt') {
-        echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+        echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
         exit;
     }
     $down_file = $res_down['dir'] . '/' . $res_more['name'];
@@ -89,7 +89,7 @@ TCBR-Platform: Generic version (all phones)';
     $archive = new PclZip($tmp);
     $list = $archive->create('files/download/temp/created_java/java', PCLZIP_OPT_REMOVE_PATH, 'files/download/temp/created_java/java');
     if (!file_exists($tmp)) {
-        echo functions::displayError(lng('error_jar_file'));
+        echo functions::displayError(__('error_jar_file'));
         exit;
     }
 }
@@ -120,6 +120,6 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/' . $tmp;
 */
 
 echo '<div class="phdr"><b>' . Validate::checkout($title_pages) . '</b></div>' .
-'<div class="menu">' . lng('download') . ': <a href="' . Validate::checkout($tmp) . '">JAR</a> | <a href="' . Validate::checkout($tmp_jad) . '">JAD</a></div>' .
-'<div class="phdr">' . lng('time_limit') . '</div>' .
-'<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+'<div class="menu">' . __('download') . ': <a href="' . Validate::checkout($tmp) . '">JAR</a> | <a href="' . Validate::checkout($tmp_jad) . '">JAD</a></div>' .
+'<div class="phdr">' . __('time_limit') . '</div>' .
+'<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';

@@ -19,13 +19,13 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'elected' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'elected' );
 if ( Vars::$ID )
 {
     if ( Vars::$ID == Vars::$USER_ID )
     {
-        $tpl->contents = Functions::displayError( lng( 'error_request' ), '<a href="' . Vars::
-            $MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+        $tpl->contents = Functions::displayError( __( 'error_request' ), '<a href="' . Vars::
+            $MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
     } else
     {
         $q = mysql_query( "SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1" );
@@ -79,15 +79,15 @@ if ( Vars::$ID )
                         'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
                             '<span class="green"> [ON]</span>' ),
                         'elected' => ( ( $row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
-                            Vars::$USER_ID ) ? true : false ),
+                            Vars::$USER_ID ) ? TRUE : FALSE ),
                         'selectBar' => '[<span class="red">х</span> <a href="' . Vars::$MODULE_URI .
-                            '?act=delete&amp;id=' . $row['mid'] . '">' . lng( 'delete' ) . '</a>]' );
+                            '?act=delete&amp;id=' . $row['mid'] . '">' . __( 'delete' ) . '</a>]' );
                     ++$i;
                 }
 
                 $tpl->query = $array;
-                $tpl->titleTest = '<div class="phdr"><strong>' . lng( 'elected' ) . '</strong></div>';
-                $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . lng( 'contacts' ) .
+                $tpl->titleTest = '<div class="phdr"><strong>' . __( 'elected' ) . '</strong></div>';
+                $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . __( 'contacts' ) .
                     '</a></p>';
                 $tpl->total = $total;
                 //Навигация
@@ -103,8 +103,8 @@ if ( Vars::$ID )
         } else
         {
             //Если пользователь не существует, показываем ошибку
-			$tpl->contents = Functions::displayError( lng( 'user_does_not_exist' ), '<a href="' .
-                Vars::$MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+			$tpl->contents = Functions::displayError( __( 'user_does_not_exist' ), '<a href="' .
+                Vars::$MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
         }
     }
 } else
@@ -129,7 +129,7 @@ if ( Vars::$ID )
     if ( $total )
     {
         //Удаляем сообщения
-		if ( isset( $_POST['delete'] ) && ValidMail::checkCSRF() === true )
+		if ( isset( $_POST['delete'] ) && ValidMail::checkCSRF() === TRUE )
         {
             if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
             {

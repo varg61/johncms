@@ -18,30 +18,30 @@ class Validate
     Проверка корректности ввода NickName
     -----------------------------------------------------------------
     */
-    public static function nickname($var = '', $error_log = false)
+    public static function nickname($var = '', $error_log = FALSE)
     {
         if (empty($var)) {
-            $error = lng('error_empty_nickname');
+            $error = __('error_empty_nickname');
         } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
-            $error = lng('error_wrong_lenght');
-        } elseif (self::email($var) === true) {
-            $error = lng('error_email_login');
+            $error = __('error_wrong_lenght');
+        } elseif (self::email($var) === TRUE) {
+            $error = __('error_email_login');
         } elseif (preg_match('/[^\da-zа-я\-\.\ \@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
-            $error = lng('error_wrong_symbols');
+            $error = __('error_wrong_symbols');
         } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $var)) {
-            $error = lng('error_double_charset');
-        } elseif (filter_var($var, FILTER_VALIDATE_INT) !== false && !Vars::$USER_SYS['digits_only']) {
-            $error = lng('error_digits_only');
+            $error = __('error_double_charset');
+        } elseif (filter_var($var, FILTER_VALIDATE_INT) !== FALSE && !Vars::$USER_SYS['digits_only']) {
+            $error = __('error_digits_only');
         } elseif (preg_match("/(.)\\1\\1\\1/", $var)) {
-            $error = lng('error_recurring_characters');
+            $error = __('error_recurring_characters');
         } else {
-            return true;
+            return TRUE;
         }
 
         if ($error_log) {
             self::$error['login'] = $error;
         }
-        return false;
+        return FALSE;
     }
 
     /*
@@ -49,16 +49,16 @@ class Validate
     Проверка занятости Ника
     -----------------------------------------------------------------
     */
-    public static function nicknameAvailability($var = '', $error_log = false)
+    public static function nicknameAvailability($var = '', $error_log = FALSE)
     {
-        $sql = self::email($var) === true ? " OR `email` = '" . mysql_real_escape_string($var) . "'" : "";
+        $sql = self::email($var) === TRUE ? " OR `email` = '" . mysql_real_escape_string($var) . "'" : "";
         $result = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `nickname` = '" . mysql_real_escape_string($var) . "'$sql"), 0);
-        if ($result == 0) return true;
+        if ($result == 0) return TRUE;
 
         if ($error_log) {
-            self::$error['login'] = lng('error_nick_occupied');
+            self::$error['login'] = __('error_nick_occupied');
         }
-        return false;
+        return FALSE;
     }
 
     /*
@@ -66,26 +66,26 @@ class Validate
     Проверка корректности ввода E-mail
     -----------------------------------------------------------------
     */
-    public static function email($var = '', $error_log = false, $allow_empty = false)
+    public static function email($var = '', $error_log = FALSE, $allow_empty = FALSE)
     {
         if ($allow_empty && empty($var)) {
-            return true;
+            return TRUE;
         }
 
         if (empty($var)) {
-            $error = lng('error_email_empty');
+            $error = __('error_email_empty');
         } elseif (mb_strlen($var) < 5 || mb_strlen($var) > 50) {
-            $error = lng('error_wrong_lenght');
-        } elseif (filter_var($var, FILTER_VALIDATE_EMAIL) == false) {
-            $error = lng('error_email');
+            $error = __('error_wrong_lenght');
+        } elseif (filter_var($var, FILTER_VALIDATE_EMAIL) == FALSE) {
+            $error = __('error_email');
         } else {
-            return true;
+            return TRUE;
         }
 
         if ($error_log) {
             self::$error['email'] = $error;
         }
-        return false;
+        return FALSE;
     }
 
     /*
@@ -93,17 +93,17 @@ class Validate
     Проверка занятости E-mail
     -----------------------------------------------------------------
     */
-    public static function emailAvailability($var = '', $error_log = false)
+    public static function emailAvailability($var = '', $error_log = FALSE)
     {
         $result = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `email` = '" . mysql_real_escape_string($var) . "'"), 0);
         if ($result == 0) {
-            return true;
+            return TRUE;
         }
 
         if ($error_log) {
-            self::$error['email'] = lng('error_email_occupied');
+            self::$error['email'] = __('error_email_occupied');
         }
-        return false;
+        return FALSE;
     }
 
     /*
@@ -111,20 +111,20 @@ class Validate
     Проверка корректности ввода Пароля
     -----------------------------------------------------------------
     */
-    public static function password($var = '', $error_log = false)
+    public static function password($var = '', $error_log = FALSE)
     {
         if (empty($var)) {
-            $error = lng('error_empty_password');
+            $error = __('error_empty_password');
         } elseif (mb_strlen($var) < 3) {
-            $error = lng('error_wrong_lenght');
+            $error = __('error_wrong_lenght');
         } else {
-            return true;
+            return TRUE;
         }
 
         if ($error_log) {
             self::$error['password'] = $error;
         }
-        return false;
+        return FALSE;
     }
 
     /*
@@ -203,8 +203,8 @@ class Validate
     public static function ip($ip)
     {
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
-            return true;
+            return TRUE;
         }
-        return false;
+        return FALSE;
     }
 }

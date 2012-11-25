@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 //    //TODO: Доработать!
 //}
 
-$context_top = '<div class="phdr"><a href="' . Vars::$URI . '?user=' . $user['id'] . '"><b>' . lng('profile') . '</b></a> | ' . lng('guestbook') . '</div>' .
+$context_top = '<div class="phdr"><a href="' . Vars::$URI . '?user=' . $user['id'] . '"><b>' . __('profile') . '</b></a> | ' . __('guestbook') . '</div>' .
     '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';
 
 /*
@@ -33,7 +33,7 @@ $arg = array(
     'owner'          => $user['id'],                       // Владелец объекта
     'owner_delete'   => TRUE,                              // Возможность владельцу удалять комментарий
     'owner_reply'    => TRUE,                              // Возможность владельцу отвечать на комментарий
-    'title'          => lng('comments'),                   // Название раздела
+    'title'          => __('comments'),                   // Название раздела
     'context_top'    => $context_top                       // Выводится вверху списка
 );
 

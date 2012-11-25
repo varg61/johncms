@@ -20,7 +20,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     $req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
     $del_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_category` WHERE `refid` = '" . VARS::$ID . "'"), 0);
     if (!mysql_num_rows($req) || $del_cat) {
-        echo Functions::displayError(($del_cat ? lng('sub_catalogs') : lng('not_found_dir')), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+        echo Functions::displayError(($del_cat ? __('sub_catalogs') : __('not_found_dir')), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
         exit;
     }
 	$res = mysql_fetch_assoc($req);
@@ -53,9 +53,9 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         rmdir($res['dir']);
         header('location: ' . Vars::$URI . '?id=' . $res['refid']);
 	} else {
-        echo '<div class="phdr"><b>' . lng('download_del_cat') . '</b></div>' .
-        '<div class="rmenu"><p><a href="' . Vars::$URI . '?act=delete_cat&amp;id=' . Vars::$ID . '&amp;yes"><b>' . lng('delete') . '</b></a></p></div>' .
-        '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+        echo '<div class="phdr"><b>' . __('download_del_cat') . '</b></div>' .
+        '<div class="rmenu"><p><a href="' . Vars::$URI . '?act=delete_cat&amp;id=' . Vars::$ID . '&amp;yes"><b>' . __('delete') . '</b></a></p></div>' .
+        '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 	}
 } else {
 	header('Location: ' . Vars::$HOME_URL . '/404');

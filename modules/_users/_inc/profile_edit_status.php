@@ -36,7 +36,7 @@ if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
             $tpl->user['status'] = $status;
             $tpl->save = 1;
         } else {
-            $tpl->error['status'] = lng('error_status_lenght');
+            $tpl->error['status'] = __('error_status_lenght');
         }
     }
 
@@ -44,5 +44,5 @@ if ($tpl->setUsers['change_status'] || Vars::$USER_RIGHTS >= 7) {
     $_SESSION['form_token'] = $tpl->form_token;
     $tpl->contents = $tpl->includeTpl('profile_edit_status');
 } else {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
 }

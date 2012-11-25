@@ -18,7 +18,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name'])) {
-    echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
     exit;
 }
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
@@ -61,9 +61,9 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         mysql_query("OPTIMIZE TABLE `cms_download_files`");
         header('Location: ' . Vars::$URI . '?id=' . $res_down['refid']);
     } else {
-        echo '<div class="phdr"><b>' . lng('delete_file') . '</b></div>' .
-        '<div class="rmenu"><p><a href="' . Vars::$URI . '?act=delete_file&amp;id=' . Vars::$ID . '&amp;yes"><b>' . lng('delete') . '</b></a></p></div>' .
-        '<div class="phdr"><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+        echo '<div class="phdr"><b>' . __('delete_file') . '</b></div>' .
+        '<div class="rmenu"><p><a href="' . Vars::$URI . '?act=delete_file&amp;id=' . Vars::$ID . '&amp;yes"><b>' . __('delete') . '</b></a></p></div>' .
+        '<div class="phdr"><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></div>';
     }
 } else {
     header('Location: ' . Vars::$HOME_URL . '/404');

@@ -23,15 +23,15 @@ if ($url) {
     if (isset($_POST['submit'])) {
         header('Location: ' . $url);
     } else {
-        echo '<div class="phdr"><b>' . lng('external_link') . '</b></div>' .
+        echo '<div class="phdr"><b>' . __('external_link') . '</b></div>' .
             '<div class="rmenu">' .
             '<form action="go.php?url=' . rawurlencode($url) . '" method="post">' .
-            '<p>' . lng('redirect_1') . ':<br /><span class="red">' . htmlspecialchars($url) . '</span></p>' .
-            '<p>' . lng('redirect_2') . '.<br />' .
-            lng('redirect_3') . ' <span class="green">' . Vars::$HOME_URL . '</span> ' . lng('redirect_4') . '.</p>' .
-            '<p><input type="submit" name="submit" value="' . lng('redirect_5') . '" /></p>' .
+            '<p>' . __('redirect_1') . ':<br /><span class="red">' . htmlspecialchars($url) . '</span></p>' .
+            '<p>' . __('redirect_2') . '.<br />' .
+            __('redirect_3') . ' <span class="green">' . Vars::$HOME_URL . '</span> ' . __('redirect_4') . '.</p>' .
+            '<p><input type="submit" name="submit" value="' . __('redirect_5') . '" /></p>' .
             '</form></div>' .
-            '<div class="phdr"><a href="' . $referer . '">' . lng('back') . '</a></div>';
+            '<div class="phdr"><a href="' . $referer . '">' . __('back') . '</a></div>';
     }
 } elseif (Vars::$ID) {
     /*

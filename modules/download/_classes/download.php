@@ -147,7 +147,7 @@ class Download extends Vars
         }
         if ($rate) {
             $file_rate = explode('|', $res_down['rate']);
-            $out .= '<br />' . lng('rating') . ': <span class="green">' . $file_rate[0] . '</span>/<span class="red">' . $file_rate[1] . '</span>';
+            $out .= '<br />' . __('rating') . ': <span class="green">' . $file_rate[0] . '</span>/<span class="red">' . $file_rate[1] . '</span>';
         }
         $sub = FALSE;
         if ($res_down['about']) {
@@ -158,7 +158,7 @@ class Download extends Vars
             $sub = '<div>' . Validate::checkout($about, 2) . '</div>';
         }
         if (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7) {
-            $sub .= '<a href="' . Vars::$URI . '?act=comments&amp;id=' . $res_down['id'] . '">' . lng('comments') . '</a> (' . $res_down['total'] . ')';
+            $sub .= '<a href="' . Vars::$URI . '?act=comments&amp;id=' . $res_down['id'] . '">' . __('comments') . '</a> (' . $res_down['total'] . ')';
         }
         if ($sub) {
             $out .= '<div class="sub">' . $sub . '</div>';
@@ -278,14 +278,14 @@ class Download extends Vars
         if ($array['res']['time'] > $old) {
             $out .= ' <span class="red">(NEW)</span>';
         }
-        $out .= '<div class="sub">' . lng('file_time') . ': ' . Functions::displayDate($array['res']['time']);
+        $out .= '<div class="sub">' . __('file_time') . ': ' . Functions::displayDate($array['res']['time']);
         if ($array['format'] == 'jar') {
             $out .= ', <a href="' . Vars::$URI . '?act=jad_file&amp;id=' . Vars::$ID . $link . '">JAD</a>';
         } elseif ($array['format'] == 'txt') {
             $out .= ', <a href="' . Vars::$URI . '?act=txt_in_zip&amp;id=' . Vars::$ID . $link . '">ZIP</a> / <a href="' . Vars::$URI . '?act=txt_in_jar&amp;id=' . Vars::$ID . $link . '">JAR</a>';
         } else {
             if ($array['format'] == 'zip') {
-                $out .= ', <a href="' . Vars::$URI . '?act=open_zip&amp;id=' . Vars::$ID . $link . '">' . lng('open_archive') . '</a>';
+                $out .= ', <a href="' . Vars::$URI . '?act=open_zip&amp;id=' . Vars::$ID . $link . '">' . __('open_archive') . '</a>';
             }
         }
         $out .= '</div></td></tr></table>';
@@ -342,7 +342,7 @@ class Download extends Vars
     */
     public static function navigation($array = array())
     {
-    	$category = array('<a href="' . Vars::$URI . '"><b>' . lng('download_title') . '</b></a>');
+    	$category = array('<a href="' . Vars::$URI . '"><b>' . __('download_title') . '</b></a>');
         if($array['refid']) {
         	$sql = array();
         	if(!isset($array['count'])) $array['count'] = 1;

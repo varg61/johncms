@@ -25,7 +25,7 @@ $addmail = new ValidMail($add_message, Vars::$ID);
 
 if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
     $tpl->contents = Functions::displayError($addmail->error_request, '<a href="' . Vars::
-    $HOME_URL . '/contacts">' . lng('contacts') . '</a>');
+    $HOME_URL . '/contacts">' . __('contacts') . '</a>');
 } else {
     //Очистка сообщений
     if (Vars::$ID && isset($_POST['delete_mess']) && is_array($_POST['delch']) && ValidMail::checkCSRF() === TRUE) {
@@ -65,8 +65,8 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
             exit;
         }
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=messages&amp;mod=cleaning&amp;id=' . Vars::$ID;
-        $tpl->submit = lng('clear');
-        $tpl->phdr = lng('cleaning');
+        $tpl->submit = __('clear');
+        $tpl->phdr = __('cleaning');
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
         $tpl->contents = $tpl->includeTpl('time');
@@ -104,15 +104,15 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
 
                 $tpl->urlSelect = Vars::$MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . Vars::
                 $ID;
-                $tpl->select = lng('confirm_removing');
-                $tpl->submit = lng('delete');
-                $tpl->phdr = lng('removing_message');
+                $tpl->select = __('confirm_removing');
+                $tpl->submit = __('delete');
+                $tpl->phdr = __('removing_message');
                 $tpl->token = mt_rand(100, 10000);
                 $_SESSION['token_status'] = $tpl->token;
                 $tpl->contents = $tpl->includeTpl('select');
             }
         } else {
-            $tpl->contents = lng('page_does_not_exist');
+            $tpl->contents = __('page_does_not_exist');
         }
     } else {
         //Добавляем сообщение в избранные
@@ -141,7 +141,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                     exit;
                 }
             } else {
-                $tpl->contents = lng('page_does_not_exist');
+                $tpl->contents = __('page_does_not_exist');
             }
         } else {
             if ($addmail->validateForm() !== TRUE) {
@@ -152,7 +152,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
             //$tpl->error = $addmail->error_test;
             //Считаем количество сообщений
             $tpl->login = $addmail->nickname;
-            $tpl->ignor = Functions::checkIgnor(Vars::$ID) === TRUE ? '<div class="rmenu">' . lng('user_banned') . '</div>' : '';
+            $tpl->ignor = Functions::checkIgnor(Vars::$ID) === TRUE ? '<div class="rmenu">' . __('user_banned') . '</div>' : '';
             $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['filesize'];
             $tpl->size = Vars::$SYSTEM_SET['filesize'];
             $tpl->token = mt_rand(100, 10000);
@@ -212,10 +212,10 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                             Vars::$USER_ID) ? TRUE : FALSE),
                         'selectBar' => ('[<span class="red">х</span>&#160;<a href="' . Vars::
                         $MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'] .
-                            '">' . lng('delete') . '</a>] ' . (($row['elected_in'] !=
+                            '">' . __('delete') . '</a>] ' . (($row['elected_in'] !=
                             Vars::$USER_ID && $row['elected_out'] != Vars::$USER_ID) ? '[<a href="' .
                             Vars::$MODULE_URI . '?act=messages&amp;mod=elected&amp;id=' . $row['mid'] .
-                            '">' . lng('in_elected') . '</a>]' : '')));
+                            '">' . __('in_elected') . '</a>]' : '')));
                     ++$i;
                 }
                 //Ставим метку о прочтении
@@ -234,7 +234,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                 //Подключаем шаблон list.php
                 $tpl->list = $tpl->includeTpl('list');
             } else {
-                $tpl->list = '<div class="rmenu">' . lng('no_messages') . '</div>';
+                $tpl->list = '<div class="rmenu">' . __('no_messages') . '</div>';
             }
             $tpl->contents = $tpl->includeTpl('messages');
         }

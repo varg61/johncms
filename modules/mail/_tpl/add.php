@@ -1,11 +1,11 @@
 <ul class="nav">
-    <li><h1 class="section-personal"><?= lng('write_message') ?></h1></li>
+    <li><h1 class="section-personal"><?= __('write_message') ?></h1></li>
 </ul>
 <?= $this->mail_error ?>
 <div class="form-container">
     <form name="form" action="<?= $this->url ?>" method="post" enctype="multipart/form-data">
         <div class="form-block">
-			<label for="name"><?= lng('nick') ?></label><br/>
+			<label for="name"><?= __('nick') ?></label><br/>
             <input id="name" type="text" name="login" value="<?= $this->login ?>"/><br/>
             <?php if ($this->count_contact): ?>
 			<label for="contact_id">Или выберите из списка:</label><br/>
@@ -16,21 +16,21 @@
                 <?php endforeach ?>
             </select><br/>
             <? endif ?>
-			<label for="text"><?= lng('message') ?></label><br/>
+			<label for="text"><?= __('message') ?></label><br/>
             <?php if (!Vars::$IS_MOBILE): ?>
             <?= TextParser::autoBB('form', 'text') ?>
             <? endif ?>
             <textarea id="text" rows="<?= Vars::$USER_SET['field_h'] ?>" name="text"><?= $this->text ?></textarea><br/>
-            <span class="input-help"><?= lng('text_size') ?></span>
+            <span class="input-help"><?= __('text_size') ?></span>
             <br/>
-			<label for="file"><?= lng('file') ?></label><br/>
+			<label for="file"><?= __('file') ?></label><br/>
             <input id="file" type="file" name="0"/><br/>
-            <span class="input-help"><?= lng('max_file_size') ?> <?= $this->size ?> кб.</span>
+            <span class="input-help"><?= __('max_file_size') ?> <?= $this->size ?> кб.</span>
             <br/><br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <input type="hidden" name="MAX_FILE_SIZE" value="<?= $this->maxsize ?>"/>
-			<input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= lng('sent') ?>"/>
-			<a class="btn" href="<?= Vars::$URI ?>"><?= lng('cancel') ?></a>
+			<input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('sent') ?>"/>
+			<a class="btn" href="<?= Vars::$URI ?>"><?= __('cancel') ?></a>
         </div>
     </form>
 </div>

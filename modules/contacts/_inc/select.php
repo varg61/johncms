@@ -29,8 +29,8 @@ if ( Vars::$ID )
 			case 'contact':
                 if ( Functions::checkIgnor( Vars::$ID ) )
                 {
-                    $tpl->contents = Functions::displayError( lng( 'ignor_no_select' ), '<a href="' .
-                        Vars::$MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+                    $tpl->contents = Functions::displayError( __( 'ignor_no_select' ), '<a href="' .
+                        Vars::$MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
                 } else
                 {
                     $cont = mysql_query( "SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID .
@@ -98,11 +98,11 @@ if ( Vars::$ID )
                         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                         $tpl->urlSelect = Vars::$MODULE_URI . '?act=select&amp;mod=contact&amp;id=' .
                             Vars::$ID;
-                        $tpl->select = lng( 'confirm_delete_contact' );
-                        $tpl->submit = lng( 'delete' );
+                        $tpl->select = __( 'confirm_delete_contact' );
+                        $tpl->submit = __( 'delete' );
 						$tpl->token = mt_rand(100, 10000);
 						$_SESSION['token_status'] = $tpl->token;
-                        $tpl->phdr = lng( 'delete_contact' );
+                        $tpl->phdr = __( 'delete_contact' );
 
                     } else
                     {
@@ -184,9 +184,9 @@ if ( Vars::$ID )
                         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                         $tpl->urlSelect = Vars::$MODULE_URI . '?act=select&amp;mod=contact&amp;id=' .
                             Vars::$ID;
-                        $tpl->select = lng( 'confirm_add_contact' );
-                        $tpl->submit = lng( 'add' );
-                        $tpl->phdr = lng( 'add_contact' );
+                        $tpl->select = __( 'confirm_add_contact' );
+                        $tpl->submit = __( 'add' );
+                        $tpl->phdr = __( 'add_contact' );
 
                     }
 					$tpl->token = mt_rand(100, 10000);
@@ -214,9 +214,9 @@ if ( Vars::$ID )
                     $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                     $tpl->urlSelect = Vars::$MODULE_URI . '?act=select&amp;mod=banned&amp;id=' . Vars::
                         $ID;
-                    $tpl->select = lng( 'confirm_unban_contact' );
-                    $tpl->submit = lng( 'unban' );
-                    $tpl->phdr = lng( 'unban_contact' );
+                    $tpl->select = __( 'confirm_unban_contact' );
+                    $tpl->submit = __( 'unban' );
+                    $tpl->phdr = __( 'unban_contact' );
 					$tpl->token = mt_rand(100, 10000);
 					$_SESSION['token_status'] = $tpl->token;
                     $tpl->contents = $tpl->includeTpl( 'select' );
@@ -226,8 +226,8 @@ if ( Vars::$ID )
                     //Администрацию нельзя добавлять в игнор
 					if ( $user['rights'] )
                     {
-                        $tpl->contents = Functions::displayError( lng( 'admin_user' ), '<a href="' .
-                            Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
+                        $tpl->contents = Functions::displayError( __( 'admin_user' ), '<a href="' .
+                            Vars::$MODULE_URI . '">' . __( 'mail' ) . '</a>' );
                     } else
                     {
                         if ( isset( $_POST['submit'] ) && isset($_POST['token']) && isset($_SESSION['token_status']) &&
@@ -254,9 +254,9 @@ if ( Vars::$ID )
                         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                         $tpl->urlSelect = Vars::$MODULE_URI . '?act=select&amp;mod=banned&amp;id=' .
                             Vars::$ID;
-                        $tpl->select = lng( 'confirm_ban_contact' );
-                        $tpl->submit = lng( 'ban' );
-                        $tpl->phdr = lng( 'ban_contact' );
+                        $tpl->select = __( 'confirm_ban_contact' );
+                        $tpl->submit = __( 'ban' );
+                        $tpl->phdr = __( 'ban_contact' );
 						$tpl->token = mt_rand(100, 10000);
 						$_SESSION['token_status'] = $tpl->token;
                         $tpl->contents = $tpl->includeTpl( 'select' );
@@ -267,18 +267,18 @@ if ( Vars::$ID )
 
             default:
                 //Ошибка запроса
-				$tpl->contents = Functions::displayError( lng( 'error_request' ), '<a href="' .
-                    Vars::$MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+				$tpl->contents = Functions::displayError( __( 'error_request' ), '<a href="' .
+                    Vars::$MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
         }
     } else
     {
         //Пользователя не существует
-		$tpl->contents = Functions::displayError( lng( 'user_does_not_exist' ), '<a href="' .
-            Vars::$MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+		$tpl->contents = Functions::displayError( __( 'user_does_not_exist' ), '<a href="' .
+            Vars::$MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
     }
 } else
 {
     //Контакт не выбран
-	$tpl->contents = Functions::displayError( lng( 'contact_no_select' ), '<a href="' . Vars::
-        $MODULE_URI . '">' . lng( 'contacts' ) . '</a>' );
+	$tpl->contents = Functions::displayError( __( 'contact_no_select' ), '<a href="' . Vars::
+        $MODULE_URI . '">' . __( 'contacts' ) . '</a>' );
 }

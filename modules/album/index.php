@@ -26,9 +26,9 @@ $user = isset($_GET['user']) ? abs(intval($_GET['user'])) : NULL;
 // Ограничиваем доступ к Библиотеке
 $error = '';
 if ((!isset(Vars::$ACL['album']) || !Vars::$ACL['album']) && Vars::$USER_RIGHTS < 7) {
-    $error = lng('section_closed');
+    $error = __('section_closed');
 } elseif (isset(Vars::$ACL['album']) && Vars::$ACL['album'] == 1 && !Vars::$USER_ID) {
-    $error = lng('access_guest_forbidden');
+    $error = __('access_guest_forbidden');
 }
 if ($error) {
     echo Functions::displayError($error);

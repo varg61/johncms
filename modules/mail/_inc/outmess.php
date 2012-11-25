@@ -20,9 +20,9 @@ if ( !Vars::$USER_ID )
     Header( 'Location: ' . Vars::$HOME_URL . '/404' );
     exit;
 }
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'outmess' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'outmess' );
 if(Vars::$MOD == 'cleaning') {
-	if(isset($_POST['submit']) && ValidMail::checkCSRF() === true ) {
+	if(isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE ) {
 		$cl = isset($_POST['cl']) ? (int)$_POST['cl'] : '';
 		switch($cl) {
 			case 1:
@@ -43,8 +43,8 @@ if(Vars::$MOD == 'cleaning') {
 		exit;
 	}
 	$tpl->urlSelect = Vars::$MODULE_URI . '?act=outmess&amp;mod=cleaning';
-    $tpl->submit = lng( 'clear' );
-    $tpl->phdr = lng( 'cleaning' );
+    $tpl->submit = __( 'clear' );
+    $tpl->phdr = __( 'cleaning' );
 	$tpl->token = mt_rand(100, 10000);
 	$_SESSION['token_status'] = $tpl->token;
 	$tpl->contents = $tpl->includeTpl( 'time' );
@@ -56,7 +56,7 @@ if(Vars::$MOD == 'cleaning') {
 	if ( $total )
 	{
 		//Перемещаем контакты в корзину
-		if ( isset( $_POST['delete_mess'] ) && ValidMail::checkCSRF() === true )
+		if ( isset( $_POST['delete_mess'] ) && ValidMail::checkCSRF() === TRUE )
 		{
 			if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
 			{
@@ -100,7 +100,7 @@ if(Vars::$MOD == 'cleaning') {
 			'time' => Functions::displayDate( $row['time'] ), 
 			'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
 			'<span class="green"> [ON]</span>' ),
-			'file' => $row['filename'] ? true : ''
+			'file' => $row['filename'] ? TRUE : ''
 			);
 			++$i;
 		}
@@ -113,12 +113,12 @@ if(Vars::$MOD == 'cleaning') {
 	}
 
 	//Подключаем шаблон inout.php
-	$tpl->pref_in = lng( 'pref_out' );
-	$tpl->tit = lng( 'outmess' );
+	$tpl->pref_in = __( 'pref_out' );
+	$tpl->tit = __( 'outmess' );
 	$tpl->pages_type = 'outmess';
 	$tpl->token = mt_rand(100, 10000);
 	$_SESSION['token_status'] = $tpl->token;
-	$tpl->mess_err = lng( 'outmess_not' );
+	$tpl->mess_err = __( 'outmess_not' );
 
 	$tpl->contents = $tpl->includeTpl( 'inout' );
 }

@@ -30,14 +30,14 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         }
     }
     mysql_query("OPTIMIZE TABLE `cms_download_files`");
-    echo '<div class="phdr"><b>' . lng('download_scan_about') . '</b></div>';
+    echo '<div class="phdr"><b>' . __('download_scan_about') . '</b></div>';
     if (isset($_GET['clean'])) {
-        echo '<div class="rmenu"><p>' . lng('scan_about_clean_ok') . '</p></div>';
+        echo '<div class="rmenu"><p>' . __('scan_about_clean_ok') . '</p></div>';
     } else {
-        echo '<div class="gmenu"><p>' . lng('scan_about_ok') . '</p></div>' .
-        '<div class="rmenu"><a href="' . Vars::$URI . '?act=scan_about&amp;clean&amp;id=' . Vars::$ID . '">' . lng('scan_about_clean') . '</a></div>';
+        echo '<div class="gmenu"><p>' . __('scan_about_ok') . '</p></div>' .
+        '<div class="rmenu"><a href="' . Vars::$URI . '?act=scan_about&amp;clean&amp;id=' . Vars::$ID . '">' . __('scan_about_clean') . '</a></div>';
     }
-	echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+	echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 } else {
     header('Location: ' . Vars::$HOME_URL . '/404');
 }

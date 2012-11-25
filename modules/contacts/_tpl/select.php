@@ -9,6 +9,6 @@
     </form>
 </div>
 <p>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= lng('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= lng('contacts') ?></a>
+    <a href="<?= Vars::$MODULE_URI ?>"><?= __('mail') ?></a><br/>
+    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
 </p>

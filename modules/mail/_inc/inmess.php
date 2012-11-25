@@ -20,9 +20,9 @@ if ( !Vars::$USER_ID )
     Header( 'Location: ' . Vars::$HOME_URL . '/404' );
     exit;
 }
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'inmess' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'inmess' );
 if(Vars::$MOD == 'cleaning') {
-	if(isset($_POST['submit']) && ValidMail::checkCSRF() === true ) {
+	if(isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE ) {
 		$cl = isset($_POST['cl']) ? (int)$_POST['cl'] : '';
 		switch($cl) {
 			case 1:
@@ -43,22 +43,22 @@ if(Vars::$MOD == 'cleaning') {
 		exit;
 	}
 	$tpl->urlSelect = Vars::$MODULE_URI . '?act=inmess&amp;mod=cleaning';
-    $tpl->submit = lng( 'clear' );
-    $tpl->phdr = lng( 'cleaning' );
+    $tpl->submit = __( 'clear' );
+    $tpl->phdr = __( 'cleaning' );
 	$tpl->token = mt_rand(100, 10000);
 	$_SESSION['token_status'] = $tpl->token;
 	$tpl->contents = $tpl->includeTpl( 'time' );
 } else if(Vars::$MOD == 'delete_read') {
-	if(isset($_POST['submit']) && ValidMail::checkCSRF() === true ) {
+	if(isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE ) {
 		mysql_query( "UPDATE `cms_mail_messages` SET
 		`delete_in`='" . Vars::$USER_ID . "' WHERE `contact_id`='" . Vars::$USER_ID . "' AND `read`='1'" );
 		Header('Location: ' . Vars::$MODULE_URI . '?act=inmess');
 		exit;
 	}
 	$tpl->urlSelect = Vars::$MODULE_URI . '?act=inmess&amp;mod=delete_read';
-    $tpl->select = lng( 'confirm_delete_read' );
-    $tpl->submit = lng( 'delete' );
-    $tpl->phdr = lng( 'delete_read' );
+    $tpl->select = __( 'confirm_delete_read' );
+    $tpl->submit = __( 'delete' );
+    $tpl->phdr = __( 'delete_read' );
 	$tpl->token = mt_rand(100, 10000);
 	$_SESSION['token_status'] = $tpl->token;
 	$tpl->contents = $tpl->includeTpl( 'select' );
@@ -70,7 +70,7 @@ if(Vars::$MOD == 'cleaning') {
 	if ( $total )
 	{
 		//Перемещаем контакты в корзину
-		if ( isset( $_POST['delete_mess'] ) && ValidMail::checkCSRF() === true )
+		if ( isset( $_POST['delete_mess'] ) && ValidMail::checkCSRF() === TRUE )
 		{
 			if ( !empty( $_POST['delch'] ) && is_array( $_POST['delch'] ) )
 			{
@@ -117,7 +117,7 @@ if(Vars::$MOD == 'cleaning') {
 			'time' => Functions::displayDate( $row['time'] ), 
 			'online' => ( time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
 			'<span class="green"> [ON]</span>' ),
-			'file' => $row['filename'] ? true : ''
+			'file' => $row['filename'] ? TRUE : ''
 			);
 			++$i;
 		}
@@ -130,11 +130,11 @@ if(Vars::$MOD == 'cleaning') {
 	}
 
 	//Подключаем шаблон inout.php
-	$tpl->pref_in = lng( 'pref_in' );
-	$tpl->tit = lng( 'inmess' );
+	$tpl->pref_in = __( 'pref_in' );
+	$tpl->tit = __( 'inmess' );
 	$tpl->pages_type = 'inmess';
 	$tpl->token = mt_rand(100, 10000);
 	$_SESSION['token_status'] = $tpl->token;
-	$tpl->mess_err = lng( 'inmess_not' );
+	$tpl->mess_err = __( 'inmess_not' );
 	$tpl->contents = $tpl->includeTpl( 'inout' );
 }

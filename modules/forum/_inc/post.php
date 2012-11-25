@@ -12,10 +12,10 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (empty($_GET['id'])) {
-    echo Functions::displayError(lng('error_wrong_data'));
+    echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
-$s = isset($_GET['s']) ? intval($_GET['s']) : false;
+$s = isset($_GET['s']) ? intval($_GET['s']) : FALSE;
 // Запрос сообщения
 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
@@ -24,7 +24,7 @@ $res = mysql_fetch_array($req);
 
 // Запрос темы
 $them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
-echo '<div class="phdr"><b>' . lng('topic') . ':</b> ' . $them['text'] . '</div><div class="menu">';
+echo '<div class="phdr"><b>' . __('topic') . ':</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
     echo Functions::getImage('usr_' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['join_date'] > time() - 86400 ? '_new' : '') . '.png', '', 'align="middle"') . '&#160;';
@@ -70,5 +70,5 @@ if (Vars::$USER_SET['smileys'])
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID), 0) / Vars::$USER_SET['page_size']);
-echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . lng('back_to_topic') . '</a></div>';
-echo '<p><a href="' . Vars::$URI . '">' . lng('to_forum') . '</a></p>';
+echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('back_to_topic') . '</a></div>';
+echo '<p><a href="' . Vars::$URI . '">' . __('to_forum') . '</a></p>';

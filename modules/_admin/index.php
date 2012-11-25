@@ -60,5 +60,5 @@ if (Vars::$USER_RIGHTS >= 2) {
         $tpl->contents = $tpl->includeTpl('index');
     }
 } else {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
 }

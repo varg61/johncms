@@ -82,13 +82,13 @@ class Comments
                 -----------------------------------------------------------------
                 */
                 if ($this->item && $this->access_reply && !$this->ban) {
-                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . lng('reply') . '</div>';
+                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . __('reply') . '</div>';
                     $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
                     if (mysql_num_rows($req)) {
                         $res = mysql_fetch_assoc($req);
                         $attributes = unserialize($res['attributes']);
                         if (!empty($res['reply']) && $attributes['reply_rights'] > $this->rights) {
-                            echo Functions::displayError(lng('error_reply_rights'), '<a href="' . $this->url . '">' . lng('back') . '</a>');
+                            echo Functions::displayError(__('error_reply_rights'), '<a href="' . $this->url . '">' . __('back') . '</a>');
                         } elseif (isset($_POST['submit'])) {
                             $message = $this->_messageCheck();
                             if (empty($message['error'])) {
@@ -103,7 +103,7 @@ class Comments
                                 ");
                                 header('Location: ' . str_replace('&amp;', '&', $this->url));
                             } else {
-                                echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $this->item . '">' . lng('back') . '</a>');
+                                echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $this->item . '">' . __('back') . '</a>');
                             }
                         } else {
                             $text = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>' .
@@ -111,10 +111,10 @@ class Comments
                                 Validate::checkout($res['text']);
                             $reply = Validate::checkout($res['reply']);
                             echo $this->_messageForm('&amp;mod=reply&amp;item=' . $this->item, $text, $reply) .
-                                '<div class="phdr"><a href="' . $this->url . '">' . lng('back') . '</a></div>';
+                                '<div class="phdr"><a href="' . $this->url . '">' . __('back') . '</a></div>';
                         }
                     } else {
-                        echo Functions::displayError(lng('error_wrong_data'), '<a href="' . $this->url . '">' . lng('back') . '</a>');
+                        echo Functions::displayError(__('error_wrong_data'), '<a href="' . $this->url . '">' . __('back') . '</a>');
                     }
                 }
                 break;
@@ -126,14 +126,14 @@ class Comments
                 -----------------------------------------------------------------
                 */
                 if ($this->item && $this->access_edit && !$this->ban) {
-                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . lng('edit') . '</div>';
+                    echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . __('edit') . '</div>';
                     $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `id` = '" . $this->item . "' AND `sub_id` = '" . $this->sub_id . "' LIMIT 1");
                     if (mysql_num_rows($req)) {
                         $res = mysql_fetch_assoc($req);
                         $attributes = unserialize($res['attributes']);
                         $user = Functions::getUser($res['user_id']);
                         if ($user['rights'] > Vars::$USER_RIGHTS) {
-                            echo Functions::displayError(lng('error_edit_rights'), '<a href="' . $this->url . '">' . lng('back') . '</a>');
+                            echo Functions::displayError(__('error_edit_rights'), '<a href="' . $this->url . '">' . __('back') . '</a>');
                         } elseif (isset($_POST['submit'])) {
                             $message = $this->_messageCheck();
                             if (empty($message['error'])) {
@@ -151,7 +151,7 @@ class Comments
                                 ");
                                 header('Location: ' . str_replace('&amp;', '&', $this->url));
                             } else {
-                                echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $this->item . '">' . lng('back') . '</a>');
+                                echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $this->item . '">' . __('back') . '</a>');
                             }
                         } else {
                             $author = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
@@ -160,9 +160,9 @@ class Comments
                             echo $this->_messageForm('&amp;mod=edit&amp;item=' . $this->item, $author, $text);
                         }
                     } else {
-                        echo Functions::displayError(lng('error_wrong_data'), '<a href="' . $this->url . '">' . lng('back') . '</a>');
+                        echo Functions::displayError(__('error_wrong_data'), '<a href="' . $this->url . '">' . __('back') . '</a>');
                     }
-                    echo '<div class="phdr"><a href="' . $this->url . '">' . lng('back') . '</a></div>';
+                    echo '<div class="phdr"><a href="' . $this->url . '">' . __('back') . '</a></div>';
                 }
                 break;
 
@@ -199,14 +199,14 @@ class Comments
                         }
                         header('Location: ' . str_replace('&amp;', '&', $this->url));
                     } else {
-                        echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . lng('delete') . '</div>' .
-                            '<div class="rmenu"><p>' . lng('delete_confirmation') . '<br />' .
-                            '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes">' . lng('delete') . '</a> | ' .
-                            '<a href="' . $this->url . '">' . lng('cancel') . '</a><br />' .
-                            '<div class="sub">' . lng('clear_user_msg') . '<br />' .
-                            '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes&amp;all">' . lng('clear') . '</a></span>' .
+                        echo '<div class="phdr"><a href="' . $this->url . '"><b>' . $arg['title'] . '</b></a> | ' . __('delete') . '</div>' .
+                            '<div class="rmenu"><p>' . __('delete_confirmation') . '<br />' .
+                            '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes">' . __('delete') . '</a> | ' .
+                            '<a href="' . $this->url . '">' . __('cancel') . '</a><br />' .
+                            '<div class="sub">' . __('clear_user_msg') . '<br />' .
+                            '<span class="red"><a href="' . $this->url . '&amp;mod=del&amp;item=' . $this->item . '&amp;yes&amp;all">' . __('clear') . '</a></span>' .
                             '</div></p></div>' .
-                            '<div class="phdr"><a href="' . $this->url . '">' . lng('back') . '</a></div>';
+                            '<div class="phdr"><a href="' . $this->url . '">' . __('back') . '</a></div>';
                     }
                 }
                 break;
@@ -263,15 +263,15 @@ class Comments
                         $res['browser'] = $attributes['author_browser'];
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $menu = array(
-                            $this->access_reply ? '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $res['subid'] . '">' . lng('reply') . '</a>' : '',
-                            $this->access_edit ? '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $res['subid'] . '">' . lng('edit') . '</a>' : '',
-                            $this->access_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . lng('delete') . '</a>' : ''
+                            $this->access_reply ? '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $res['subid'] . '">' . __('reply') . '</a>' : '',
+                            $this->access_edit ? '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $res['subid'] . '">' . __('edit') . '</a>' : '',
+                            $this->access_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . __('delete') . '</a>' : ''
                         );
                         $text = Validate::checkout($res['text'], 1, 1);
                         if (Vars::$USER_SET['smileys'])
                             $text = Functions::smileys($text, $res['rights'] >= 1 ? 1 : 0);
                         if (isset($attributes['edit_count'])) {
-                            $text .= '<br /><span class="gray"><small>' . lng('edited') . ': <b>' . $attributes['edit_name'] . '</b>' .
+                            $text .= '<br /><span class="gray"><small>' . __('edited') . ': <b>' . $attributes['edit_name'] . '</b>' .
                                 ' (' . Functions::displayDate($attributes['edit_time']) . ') <b>' .
                                 '[' . $attributes['edit_count'] . ']</b></small></span>';
                         }
@@ -293,14 +293,14 @@ class Comments
                         echo '</div>';
                     }
                 } else {
-                    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+                    echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
                 }
-                echo '<div class="phdr">' . lng('total') . ': ' . $this->total . '</div>';
+                echo '<div class="phdr">' . __('total') . ': ' . $this->total . '</div>';
                 if ($this->total > Vars::$USER_SET['page_size']) {
                     echo '<div class="topmenu">' . Functions::displayPagination($this->url . '&amp;', Vars::$START, $this->total, Vars::$USER_SET['page_size']) . '</div>' .
                         '<p><form action="' . $this->url . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
-                        '<input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/>' .
+                        '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                         '</form></p>';
                 }
                 if (!empty($arg['context_bottom']))
@@ -345,11 +345,11 @@ class Comments
     {
         return '<div class="gmenu"><form name="form" action="' . $this->url . $submit_link . '" method="post"><p>' .
             (!empty($text) ? '<div class="quote">' . $text . '</div></p><p>' : '') .
-            '<b>' . lng('message') . '</b>: <small>(Max. ' . $this->max_lenght . ')</small><br />' .
+            '<b>' . __('message') . '</b>: <small>(Max. ' . $this->max_lenght . ')</small><br />' .
             (!Vars::$IS_MOBILE ? '</p><p>' . TextParser::autoBB('form', 'message') : '') .
             '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="message">' . $reply . '</textarea><br/>' .
-            (Vars::$USER_SET['translit'] ? '<input type="checkbox" name="translit" value="1" />&nbsp;' . lng('translit') . '<br/>' : '') .
-            '<input type="hidden" name="code" value="' . mt_rand(1000, 9999) . '" /><input type="submit" name="submit" value="' . lng('sent') . '"/></p></form></div>';
+            (Vars::$USER_SET['translit'] ? '<input type="checkbox" name="translit" value="1" />&nbsp;' . __('translit') . '<br/>' : '') .
+            '<input type="hidden" name="code" value="' . mt_rand(1000, 9999) . '" /><input type="submit" name="submit" value="' . __('sent') . '"/></p></form></div>';
     }
 
     /*
@@ -370,19 +370,19 @@ class Comments
         if ($code == $code_chk) return FALSE;
         // Проверяем на минимально допустимую длину
         if (mb_strlen($message) < $this->min_lenght) {
-            $error[] = lng('error_message_short');
+            $error[] = __('error_message_short');
         } else {
             // Проверка на флуд
             $flood = Functions::antiFlood();
             if ($flood)
-                $error[] = lng('error_flood') . ' ' . $flood . '&#160;' . lng('seconds');
+                $error[] = __('error_flood') . ' ' . $flood . '&#160;' . __('seconds');
         }
         // Проверка на повтор сообщений
         if (!$error && $rpt_check) {
             $req = mysql_query("SELECT * FROM `" . $this->comments_table . "` WHERE `user_id` = '" . $this->user_id . "' ORDER BY `id` DESC LIMIT 1");
             $res = mysql_fetch_assoc($req);
             if (mb_strtolower($message) == mb_strtolower($res['text']))
-                $error[] = lng('error_message_exists');
+                $error[] = __('error_message_exists');
         }
         // Транслит сообщения
         if (!$error && $translit)

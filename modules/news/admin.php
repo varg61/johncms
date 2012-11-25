@@ -11,7 +11,7 @@
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 

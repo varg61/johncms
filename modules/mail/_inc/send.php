@@ -19,7 +19,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'write_message' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'write_message' );
 if(Vars::$ID) {
 	$q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "'");
 	if($num = mysql_num_rows($q)) {
@@ -28,10 +28,10 @@ if(Vars::$ID) {
 		$id = isset( $_POST['contact_id'] ) ? trim( $_POST['contact_id'] ) : '';
 		$add_message['login'] = isset( $_POST['login'] ) ? trim( $_POST['login'] ) : '';
 		$add_message['text'] = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
-		$addmail = new ValidMail($add_message, ($id ? $id: false));
+		$addmail = new ValidMail($add_message, ($id ? $id: FALSE));
 		
 		$tpl->text = Validate::checkout($result['text']);
-		if($addmail->validateForm() === false) {
+		if($addmail->validateForm() === FALSE) {
 			if($error = $addmail->error_log) {
 				//Передаем переменные в шаблон
 				$tpl->login = Validate::checkout($add_message['login']);
@@ -60,8 +60,8 @@ if(Vars::$ID) {
 		$_SESSION['token_status'] = $tpl->token;
 		$tpl->contents = $tpl->includeTpl( 'add' );
 	} else {
-		$tpl->contacts = Functions::displayError( lng('page_does_not_exist'), '<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
+		$tpl->contacts = Functions::displayError( __('page_does_not_exist'), '<a href="' . Vars::$MODULE_URI . '">' . __( 'mail' ) . '</a>' );
 	}
 } else {
-	$tpl->contacts = Functions::displayError( lng('message_no_select'), '<a href="' . Vars::$MODULE_URI . '">' . lng( 'mail' ) . '</a>' );
+	$tpl->contacts = Functions::displayError( __('message_no_select'), '<a href="' . Vars::$MODULE_URI . '">' . __( 'mail' ) . '</a>' );
 }

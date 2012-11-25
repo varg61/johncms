@@ -18,7 +18,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
-    echo Functions::displayError('<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+    echo Functions::displayError('<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
     exit;
 }
 $screen = array ();
@@ -48,30 +48,30 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
         );
         $handle->file_max_size = 1024 * Vars::$SYSTEM_SET['filesize'];
         if ($set_down['screen_resize']) {
-            $handle->image_resize = true;
+            $handle->image_resize = TRUE;
             $handle->image_x = 240;
-            $handle->image_ratio_y = true;
+            $handle->image_ratio_y = TRUE;
         }
         $handle->process($screens_path . '/' . Vars::$ID . '/');
         if ($handle->processed) {
-            echo '<div class="gmenu"><b>' . lng('upload_screen_ok') . '</b>';
+            echo '<div class="gmenu"><b>' . __('upload_screen_ok') . '</b>';
         } else
-            echo '<div class="rmenu"><b>' . lng('upload_screen_no') . ': ' . $handle->error . '</b>';
+            echo '<div class="rmenu"><b>' . __('upload_screen_no') . ': ' . $handle->error . '</b>';
     } else
-        echo '<div class="rmenu"><b>' . lng('upload_screen_no') . '</b>';
-	echo '<br /><a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '">' . lng('upload_file_more') . '</a>' .
-    '<br /><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+        echo '<div class="rmenu"><b>' . __('upload_screen_no') . '</b>';
+	echo '<br /><a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '">' . __('upload_file_more') . '</a>' .
+    '<br /><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 } else {
 	/*
 	-----------------------------------------------------------------
 	Форма выгрузки
 	-----------------------------------------------------------------
 	*/
-	echo '<div class="phdr"><b>' . lng('screen_file') . '</b>: ' . Validate::checkout($res_down['rus_name']) . '</div>' .
+	echo '<div class="phdr"><b>' . __('screen_file') . '</b>: ' . Validate::checkout($res_down['rus_name']) . '</div>' .
  	'<div class="list1"><form action="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data"><input type="file" name="screen"/><br />' .
- 	'<input type="submit" name="submit" value="' . lng('upload') . '"/></form></div>' .
- 	'<div class="phdr"><small>' . lng('file_size_faq') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb' .
- 	($set_down['screen_resize'] ? '<br />' . lng('add_screen_faq')  : '') . '</small></div>';
+ 	'<input type="submit" name="submit" value="' . __('upload') . '"/></form></div>' .
+ 	'<div class="phdr"><small>' . __('file_size_faq') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb' .
+ 	($set_down['screen_resize'] ? '<br />' . __('add_screen_faq')  : '') . '</small></div>';
 	/*
 	-----------------------------------------------------------------
 	Выводим скриншоты
@@ -87,7 +87,7 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
         }
         closedir($dir);
     } else {
-        if (mkdir($screens_path . '/' . Vars::$ID, 0777) == true)
+        if (mkdir($screens_path . '/' . Vars::$ID, 0777) == TRUE)
             @chmod($screens_path . '/' . Vars::$ID, 0777);
     }
     if ($screen) {
@@ -98,8 +98,8 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
             echo (($i % 2) ? '<div class="list2">' : '<div class="list1">') .
             '<table  width="100%"><tr><td width="40" valign="top">' .
             '<a href="' . $screen_name . '"><img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=1&amp;img=' . rawurlencode($screen_name) . '" alt="screen_' . $i . '" /></a></td><td>' . $file .
-            '<div class="sub"><a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '&amp;do=' . $file . '">' . lng('delete') . '</a></div></td></tr></table></div>';
+            '<div class="sub"><a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '&amp;do=' . $file . '">' . __('delete') . '</a></div></td></tr></table></div>';
         }
     }
-    echo '<div class="phdr"><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+    echo '<div class="phdr"><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 }

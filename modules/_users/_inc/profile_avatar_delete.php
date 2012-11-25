@@ -24,8 +24,8 @@ if (isset($_POST['submit'])
     && $_POST['form_token'] == $_SESSION['form_token']
 ) {
     @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif');
-    $tpl->hbar = lng('delete_avatar');
-    $tpl->message = lng('avatar_deleted');
+    $tpl->hbar = __('delete_avatar');
+    $tpl->message = __('avatar_deleted');
     $tpl->continue = Vars::$URI . '?act=settings&amp;user=' . $tpl->user['id'];
     $tpl->contents = $tpl->includeTpl('message', 1);
 } else {

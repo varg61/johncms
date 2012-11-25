@@ -45,7 +45,7 @@ if (Vars::$USER_RIGHTS >= 7) {
                 exit;
             }
         } else {
-            $tpl->error['password'] = lng('error_wrong_password');
+            $tpl->error['password'] = __('error_wrong_password');
         }
     }
 
@@ -53,5 +53,5 @@ if (Vars::$USER_RIGHTS >= 7) {
     $_SESSION['form_token'] = $tpl->form_token;
     $tpl->contents = $tpl->includeTpl('profile_edit_admin');
 } else {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
 }

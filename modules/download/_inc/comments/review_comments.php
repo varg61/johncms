@@ -16,13 +16,13 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 if(!Vars::$SYSTEM_SET['mod_down_comm'] && Vars::$USER_RIGHTS < 7) {
-	echo Functions::displayError(lng('comments_cloded'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+	echo Functions::displayError(__('comments_cloded'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
 	exit;
 }
-$textl = lng('review_comments');
+$textl = __('review_comments');
 if(!Vars::$SYSTEM_SET['mod_down_comm'])
-	echo '<div class="rmenu">' . lng('comments_cloded') . '</div>';
-echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . lng('downloads') . '</b></a> | ' . $textl . '</div>';
+	echo '<div class="rmenu">' . __('comments_cloded') . '</div>';
+echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_comments`"), 0);
 if ($total) {
     $req = mysql_query("SELECT `cms_download_comments`.*, `cms_download_comments`.`id` AS `cid`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`, `users`.`id`, `cms_download_files`.`rus_name`
@@ -46,7 +46,7 @@ if ($total) {
         $text = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
         $post = Validate::checkout($res['text'], 1, 1);
         if (Vars::$USER_SET['smileys']) $post = Functions::smileys($post, $res['rights'] >= 1 ? 1 : 0);
-        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Validate::checkout($res['rus_name']) . '</a> | <a href="' . Vars::$URI . '?act=comments&amp;id=' . $res['sub_id'] . '">' . lng('comments') . '</a>';
+        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Validate::checkout($res['rus_name']) . '</a> | <a href="' . Vars::$URI . '?act=comments&amp;id=' . $res['sub_id'] . '">' . __('comments') . '</a>';
 		$attributes = unserialize($res['attributes']);
 		$res['nickname'] = $attributes['author_name'];
   		$res['ip'] = $attributes['author_ip'];
@@ -72,9 +72,9 @@ if ($total) {
         echo functions::displayUser($res, $arg) . '</div>';
     }
 } else {
-    echo '<div class="menu"><p>' . lng('list_empty') . '</p></div>';
+    echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
 }
-echo '<div class="phdr">' . lng('total') . ': ' . $total . '</div>';
+echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 /*
 -----------------------------------------------------------------
 Навигация
@@ -84,6 +84,6 @@ if ($total > Vars::$USER_SET['page_size']) {
 	echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=review_comments&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
  	'<p><form action="' . Vars::$URI . '" method="get">' .
   	'<input type="hidden" value="review_comments" name="act" />' .
-    '<input type="text" name="page" size="2"/><input type="submit" value="' . lng('to_page') . ' &gt;&gt;"/></form></p>';
+    '<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
 }
-echo '<p><a href="' . Vars::$URI . '">' . lng('download_title') . '</a></p>';
+echo '<p><a href="' . Vars::$URI . '">' . __('download_title') . '</a></p>';

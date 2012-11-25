@@ -27,7 +27,7 @@ closedir($dir_clean);
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || (functions::format($res_down['name']) != 'txt' && !isset($_GET['more'])) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
-    echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
     exit;
 }
 if (isset($_GET['more'])) {
@@ -35,7 +35,7 @@ if (isset($_GET['more'])) {
     $req_more = mysql_query("SELECT * FROM `cms_download_more` WHERE `id` = '$more' LIMIT 1");
     $res_more = mysql_fetch_assoc($req_more);
     if (!mysql_num_rows($req_more) || !is_file($res_down['dir'] . '/' . $res_more['name']) || functions::format($res_more['name']) != 'txt') {
-        echo Functions::displayError(lng('not_found_file'), '<a href="' . Vars::$URI . '">' . lng('download_title') . '</a>');
+        echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
         exit;
     }
     $down_file = $res_down['dir'] . '/' . $res_more['name'];
@@ -67,7 +67,7 @@ if (!file_exists($file)) {
 -----------------------------------------------------------------
 */
 echo '<div class="phdr"><b>' . Validate::checkout($title_pages) . '</b></div>' .
-'<div class="menu"><a href="' . Validate::checkout($file) . '">' . lng('download_in') . ' ZIP</a></div>' .
+'<div class="menu"><a href="' . Validate::checkout($file) . '">' . __('download_in') . ' ZIP</a></div>' .
 '<div class="rmenu"><input type="text" value="' . Vars::$HOME_URL . '/' . Validate::checkout($file) . '"/><b></b></div>' .
-'<div class="phdr">' . lng('time_limit') . '</div>' .
-'<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+'<div class="phdr">' . __('time_limit') . '</div>' .
+'<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';

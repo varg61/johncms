@@ -6,7 +6,7 @@
  */
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-echo '<div class="phdr">'.lng('operators').' ('.lng('hits').')</div>';
+echo '<div class="phdr">'.__('operators').' ('.__('hits').')</div>';
 $count = mysql_result(mysql_query("SELECT COUNT(DISTINCT `operator`, `country`) FROM `counter`;"), 0);
 if($count > 0){
     $req = mysql_query("SELECT * FROM `counter` GROUP BY `operator`, `country`". Vars::db_pagination());
@@ -17,18 +17,18 @@ if($count > 0){
         $count_hits = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `country` = '".$arr['country']."' AND `operator` = '".$arr['operator']."'") , 0);
         
         echo Functions::loadModuleImage('opsos.png') .' '. $arr['operator'].'
-        <div class="sub">'.lng('country').': '.$arr['country'].' | '.lng('total_hits').': '.$count_hits.'</div>';
+        <div class="sub">'.__('country').': '.$arr['country'].' | '.__('total_hits').': '.$count_hits.'</div>';
         
         echo '</div>';    
         }
     
-    echo '<div class="phdr">'.lng('total').': '.$count.'</div>';
+    echo '<div class="phdr">'.__('total').': '.$count.'</div>';
     if ($count > Vars::$USER_SET['page_size']){
         echo '<div class="topmenu">';
     	echo Functions::displayPagination(Vars::$URI.'?act=opsos&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
-    	echo '<p><form action="'.Vars::$URI.'" method="get"><input type="hidden" name="act" value="opsos"/><input type="text" name="page" size="2"/><input type="submit" value="'.lng('to_page').' &gt;&gt;"/></form></p>';}
+    	echo '<p><form action="'.Vars::$URI.'" method="get"><input type="hidden" name="act" value="opsos"/><input type="text" name="page" size="2"/><input type="submit" value="'.__('to_page').' &gt;&gt;"/></form></p>';}
     
 }else{
- echo '<div class="rmenu">'.lng('no_data').'!</div>';   
+ echo '<div class="rmenu">'.__('no_data').'!</div>';
 }
 ?>

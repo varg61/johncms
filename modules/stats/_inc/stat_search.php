@@ -25,7 +25,7 @@ while($result_array = mysql_fetch_array($query)) {
         $count_query[] = $result_array[0];
         }
 ////// Выводим ссылки и количество переходов ///
-echo'<div class="phdr">'.lng('from_search_engines1').'</div>';
+echo'<div class="phdr">'.__('from_search_engines1').'</div>';
 echo'<div class="menu">'.Functions::loadModuleImage('yandex.png') .' <a href="?act=search_engine&amp;sengine=yandex">Yandex.ru</a> ('.$count_query[0].')<br/>';
 echo Functions::loadModuleImage('mailru.png') .' <a href="?act=search_engine&amp;sengine=mail">Mail.ru</a> ('.$count_query[1].')<br/>';
 echo Functions::loadModuleImage('rambler.png') .' <a href="?act=search_engine&amp;sengine=rambler">Rambler.ru</a> ('.$count_query[2].')<br/>';
@@ -36,4 +36,4 @@ echo Functions::loadModuleImage('bing.png') .' <a href="?act=search_engine&amp;s
 echo Functions::loadModuleImage('nigma.png') .' <a href="?act=search_engine&amp;sengine=nigma">Nigma.ru</a> ('.$count_query[7].')<br/>';
 echo Functions::loadModuleImage('qip.png') .' <a href="?act=search_engine&amp;sengine=qip">Search.QIP.ru</a> ('.$count_query[8].')<br/>';
 echo Functions::loadModuleImage('aport.png') .' <a href="?act=search_engine&amp;sengine=aport">Aport.ru</a> ('.$count_query[9].')</div>';
-echo '<div class="bmenu">' . Functions::loadImage('all1.png') .' <a href="?act=search_engine&amp;sengine=all">'.lng('total').'</a> ('.$count_query[10].')</div>';
+echo '<div class="bmenu">' . Functions::loadImage('all1.png') .' <a href="?act=search_engine&amp;sengine=all">'.__('total').'</a> ('.$count_query[10].')</div>';

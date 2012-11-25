@@ -13,7 +13,7 @@
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 1) {
-    echo Functions::displayError(lng('access_forbidden'));
+    echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
@@ -51,7 +51,7 @@ if (Vars::$USER_RIGHTS
     }
     $ipwhois = trim(TextParser::highlightUrl(htmlspecialchars($ipwhois)));
 } else {
-    $ipwhois = lng('error_wrong_data');
+    $ipwhois = __('error_wrong_data');
 }
 $tpl->ipWhois = nl2br($ipwhois);
 $tpl->contents = $tpl->includeTpl('whois');

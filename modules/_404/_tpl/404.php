@@ -1,1 +1,1 @@
-<?= Functions::displayError(lng('error_404')) ?>
+<?= Functions::displayError(__('error_404')) ?>

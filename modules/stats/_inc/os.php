@@ -7,7 +7,7 @@
  
 defined('_IN_JOHNCMS') or die('Restricted access');
 
-echo'<div class="phdr">'.lng('phones_browsers').' </div>';
+echo'<div class="phdr">'.__('phones_browsers').' </div>';
     $sql = "(SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE '%Windows NT 5.1%') UNION ALL
     (SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE '%Windows NT 6.0%') UNION ALL
     (SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE '%Windows NT 6.1%') UNION ALL
@@ -50,7 +50,7 @@ echo'<div class="phdr">'.lng('phones_browsers').' </div>';
 
   	echo'<div class="menu"><img src="' . Vars::$HOME_URL . '/files/temp/stat_os.png" alt="loading..."/></div>';
     
-    echo '<div class="gmenu"><h3>'.lng('details').'</h3>';
+    echo '<div class="gmenu"><h3>'.__('details').'</h3>';
     
     if($os[0] > 0){
         echo'<li> Windows XP ('.$os[0].')</li>'; }
@@ -73,14 +73,14 @@ echo'<div class="phdr">'.lng('phones_browsers').' </div>';
     if($os[8] > 0){
         echo'<li> Symbian OS ^3 ('.$os[8].')</li>'; }
     if($os[9] > 0){
-        echo'<li> '.lng('other').' Symbian ('.$os[9].')</li>'; }
+        echo'<li> '.__('other').' Symbian ('.$os[9].')</li>'; }
     if($os[11] > 0){
         echo'<li> Android OS ('.$os[11].')</li>'; }
         
     echo '</div>';
     
     }else{
-        echo '<div class="rmenu">'.lng('no_data').'!</div>';
+        echo '<div class="rmenu">'.__('no_data').'!</div>';
     }
     
 ?>

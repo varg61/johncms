@@ -62,7 +62,7 @@ if ($sql && empty(Validate::$error)) {
                 if (Captcha::check() === TRUE) {
                     $captcha = FALSE;
                 } else {
-                    $error['captcha'] = lng('error_wrong_captcha');
+                    $error['captcha'] = __('error_wrong_captcha');
                 }
             }
 
@@ -118,7 +118,7 @@ if ($sql && empty(Validate::$error)) {
             /**
              * Если пароль, или токен не совпадает
              */
-            $error['password'] = lng('error_wrong_password');
+            $error['password'] = __('error_wrong_password');
             if ($res['login_try'] < 3) {
                 // Накручиваем счетчик неудачных Логинов
                 mysql_query("UPDATE `users` SET `login_try` = " . ++$res['login_try'] . " WHERE `id` = " . $res['id']);
@@ -128,7 +128,7 @@ if ($sql && empty(Validate::$error)) {
         /**
          * Если пользователь не найден
          */
-        $error['login'] = lng('error_user_not_exist');
+        $error['login'] = __('error_user_not_exist');
     }
 }
 

@@ -19,7 +19,7 @@ if ( !Vars::$USER_ID )
     exit;
 }
 //Заголовок
-$tpl->title = lng( 'mail' ) . ' | ' . lng( 'write_message' );
+$tpl->title = __( 'mail' ) . ' | ' . __( 'write_message' );
 $id = isset( $_POST['contact_id'] ) ? trim( $_POST['contact_id'] ) : '';
 $add_message['login'] = isset( $_POST['login'] ) ? trim( $_POST['login'] ) : '';
 $add_message['text'] = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';

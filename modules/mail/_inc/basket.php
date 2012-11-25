@@ -18,7 +18,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 //Заголовок
-$tpl->title = lng('mail') . ' | ' . lng('basket');
+$tpl->title = __('mail') . ' | ' . __('basket');
 if (Vars::$ID) {
     if (isset($_POST['delete_mess']) && is_array($_POST['delch']) && ValidMail::checkCSRF() === TRUE) {
         $delch = array_map('intval', $_POST['delch']);
@@ -54,8 +54,8 @@ if (Vars::$ID) {
         exit;
     } else {
         if (Vars::$ID == Vars::$USER_ID) {
-            $tpl->contents = Functions::displayError(lng('error_request'), '<a href="' . Vars::
-            $MODULE_URI . '">' . lng('contacts') . '</a>');
+            $tpl->contents = Functions::displayError(__('error_request'), '<a href="' . Vars::
+            $MODULE_URI . '">' . __('contacts') . '</a>');
         } else {
             $q = mysql_query("SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
             if (mysql_num_rows($q)) {
@@ -107,15 +107,15 @@ if (Vars::$ID) {
                             'elected'   => (($row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
                                 Vars::$USER_ID) ? TRUE : FALSE),
                             'selectBar' => '[<span class="green">&laquo;</span> <a href="' . Vars::$MODULE_URI .
-                                '?act=restore&amp;id=' . $row['mid'] . '">' . lng('rest') . '</a>] [<span class="red">х</span> <a href="' .
-                                Vars::$MODULE_URI . '?act=delete&amp;id=' . $row['mid'] . '">' . lng('delete') .
+                                '?act=restore&amp;id=' . $row['mid'] . '">' . __('rest') . '</a>] [<span class="red">х</span> <a href="' .
+                                Vars::$MODULE_URI . '?act=delete&amp;id=' . $row['mid'] . '">' . __('delete') .
                                 '</a>]');
                         ++$i;
                     }
 
                     $tpl->query = $array;
-                    $tpl->titleTest = '<div class="phdr">' . lng('deleted_message') . '</div>';
-                    $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . lng('mail') .
+                    $tpl->titleTest = '<div class="phdr">' . __('deleted_message') . '</div>';
+                    $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . __('mail') .
                         '</a></p>';
                     $tpl->total = $total;
                     //Навигация
@@ -132,8 +132,8 @@ if (Vars::$ID) {
                 }
             } else {
                 //Если пользователь не существует, показываем ошибку
-                $tpl->contents = Functions::displayError(lng('user_does_not_exist'), '<a href="' .
-                    Vars::$MODULE_URI . '">' . lng('mail') . '</a>');
+                $tpl->contents = Functions::displayError(__('user_does_not_exist'), '<a href="' .
+                    Vars::$MODULE_URI . '">' . __('mail') . '</a>');
             }
         }
     }

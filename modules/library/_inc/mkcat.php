@@ -23,7 +23,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     }
     if (isset($_POST['submit'])) {
         if (empty($_POST['text'])) {
-            echo Functions::displayError(lng('error_empty_title'), '<a href="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '">' . lng('repeat') . '</a>');
+            echo Functions::displayError(__('error_empty_title'), '<a href="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
         $text = Validate::checkout($_POST['text']);
@@ -38,21 +38,21 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             `soft` = '$user'
         ");
         $cid = mysql_insert_id();
-        echo lng('category_created') . "<br/><a href='" . Vars::$URI . "?id=" . $cid . "'>" . lng('to_category') . "</a><br/>";
+        echo __('category_created') . "<br/><a href='" . Vars::$URI . "?id=" . $cid . "'>" . __('to_category') . "</a><br/>";
     } else {
-        echo lng('create_category') . '<br/>' .
+        echo __('create_category') . '<br/>' .
              '<form action="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
-             lng('title') . ':<br/>' .
+             __('title') . ':<br/>' .
              '<input type="text" name="text"/>' .
-             '<p>' . lng('category_type') . '<br/>' .
+             '<p>' . __('category_type') . '<br/>' .
              '<select name="typs">' .
-             '<option value="1">' . lng('categories') . '</option>' .
-             '<option value="0">' . lng('articles') . '</option>' .
+             '<option value="1">' . __('categories') . '</option>' .
+             '<option value="0">' . __('articles') . '</option>' .
              '</select></p>' .
-             '<p><input type="checkbox" name="user" value="1"/>' . lng('if_articles') . '</p>' .
-             '<p><input type="submit" name="submit" value="' . lng('save') . '"/></p>' .
+             '<p><input type="checkbox" name="user" value="1"/>' . __('if_articles') . '</p>' .
+             '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>' .
              '</form>' .
-             '<p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . lng('back') . '</a></p>';
+             '<p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
     }
 } else {
     header("location: " . Vars::$URI);

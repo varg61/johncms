@@ -24,8 +24,8 @@ if($fr != 2)
     if(isset($_POST['submit']) && isset($_POST['token']) && isset($_SESSION['token_status']) && $_POST['token'] == $_SESSION['token_status']) {
         $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'"), 0); 
         if($fr_out == 0) {
-            echo functions::displayError(lng('error_wrong_data'));
-			echo '<div class="bmenu"><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></div>';
+            echo functions::displayError(__('error_wrong_data'));
+			echo '<div class="bmenu"><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></div>';
             exit;
         }
 		
@@ -54,13 +54,13 @@ if($fr != 2)
         //$text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=no&id=' . $id . ']' . $lng_profile['decline'] . '[/url]';
 		//mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
 		
-		$tpl->contents = '<div class="rmenu"><p>' . lng('demands_confirm') . '</p>
-        <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . lng('back') . '</a></p></div>';
+		$tpl->contents = '<div class="rmenu"><p>' . __('demands_confirm') . '</p>
+        <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></p></div>';
     } else {
         $tpl->urlSelect = Vars::$MODULE_URI . '?act=ok&amp;id=' . Vars::$ID;
-        $tpl->select = lng( 'really_demand_confirm' );
-        $tpl->submit = lng( 'confirm' );
-        $tpl->phdr = lng( 'demand_confirm' );
+        $tpl->select = __( 'really_demand_confirm' );
+        $tpl->submit = __( 'confirm' );
+        $tpl->phdr = __( 'demand_confirm' );
         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
@@ -68,5 +68,5 @@ if($fr != 2)
         $tpl->contents = $tpl->includeTpl( 'select' );
     }
 } else {
-    $tpl->contents = Functions::displayError(lng('user_already_friend'));
+    $tpl->contents = Functions::displayError(__('user_already_friend'));
 }

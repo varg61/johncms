@@ -65,7 +65,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
             }
             $tpl->contents = $tpl->includeTpl('list');
         } else {
-            $tpl->contents = Functions::displayError(lng('user_does_not_exist'));
+            $tpl->contents = Functions::displayError(__('user_does_not_exist'));
         }
     } else {
         $tpl->offers = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `contact_id`='" . Vars::$USER_ID . "' AND `access`='2' AND `friends`='0' AND `banned`='0'"), 0);
