@@ -13,11 +13,13 @@ class Validate
 {
     public static $error = array();
 
-    /*
-    -----------------------------------------------------------------
-    Проверка корректности ввода NickName
-    -----------------------------------------------------------------
-    */
+    /**
+     * Проверка корректности ввода NickName
+     *
+     * @param string $var
+     * @param bool $error_log
+     * @return bool
+     */
     public static function nickname($var = '', $error_log = FALSE)
     {
         if (empty($var)) {
@@ -44,11 +46,13 @@ class Validate
         return FALSE;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Проверка занятости Ника
-    -----------------------------------------------------------------
-    */
+    /**
+     * Проверка занятости Ника
+     *
+     * @param string $var
+     * @param bool $error_log
+     * @return bool
+     */
     public static function nicknameAvailability($var = '', $error_log = FALSE)
     {
         $sql = self::email($var) === TRUE ? " OR `email` = '" . mysql_real_escape_string($var) . "'" : "";
@@ -61,11 +65,14 @@ class Validate
         return FALSE;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Проверка корректности ввода E-mail
-    -----------------------------------------------------------------
-    */
+    /**
+     * Проверка корректности ввода E-mail
+     *
+     * @param string $var
+     * @param bool $error_log
+     * @param bool $allow_empty
+     * @return bool
+     */
     public static function email($var = '', $error_log = FALSE, $allow_empty = FALSE)
     {
         if ($allow_empty && empty($var)) {
@@ -88,12 +95,14 @@ class Validate
         return FALSE;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Проверка занятости E-mail
-    -----------------------------------------------------------------
-    */
-    public static function emailAvailability($var = '', $error_log = FALSE)
+    /**
+     * Проверка занятости E-mail
+     *
+     * @param $var
+     * @param bool $error_log
+     * @return bool
+     */
+    public static function emailAvailability($var, $error_log = FALSE)
     {
         $result = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `email` = '" . mysql_real_escape_string($var) . "'"), 0);
         if ($result == 0) {
@@ -106,12 +115,14 @@ class Validate
         return FALSE;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Проверка корректности ввода Пароля
-    -----------------------------------------------------------------
-    */
-    public static function password($var = '', $error_log = FALSE)
+    /**
+     * Проверка пароля на допустимую длину
+     *
+     * @param $var                     Пароль
+     * @param bool $error_log          Включить журнал ошибок
+     * @return bool                    TRUE, если проверка прошла успешно
+     */
+    public static function password($var, $error_log = FALSE)
     {
         if (empty($var)) {
             $error = __('error_empty_password');
@@ -127,9 +138,12 @@ class Validate
         return FALSE;
     }
 
-    /*
-    * Фильтрация входящих строчных данных
-    */
+    /**
+     * Фильтрация входящих строчных данных
+     *
+     * @param $str
+     * @return string
+     */
     public static function checkin($str){
         $str = trim($str);
 
@@ -154,20 +168,17 @@ class Validate
         return trim($str);
     }
 
-    /*
-     * Фильтрация и обработка текстовых данных перед выводом
+    /**
+     * Фильтрация и обработка строк
      *
-     * $br = 0          Обработка переносов выключена (по-умолчанию)
-     * $br = 1          Обработка переносов строк
-     * $br = 2          Подстановка пробела, вместо переноса
+     * Используется для обработки строк перед выводом в браузер.
+     * Преобразует символы в HTML сущности, обрабатывает BBcode и смайлы.
      *
-     * $tags = 0        Обработка тэгов выключена (по-умолчанию)
-     * $tags = 1        Обработка BBcode тэгов
-     * $tags = 2        Вырезание BBcode тэгов
-     *
-     * $smileys = 0     Обработка смайлов выключена (по-умолчанию)
-     * $smileys = 1     Обработка пользовательских смайлов
-     * $smileys = 2     Обработка пользовательских и админских смайлов
+     * @param $str                     Необработанная строка
+     * @param int $br                  Переносы 0 - не обрабатывать, 1 - обрабатывать, 2 - подставлять пробел
+     * @param int $tags                BBcode 0 - не обрабатывать, 1 - обрабатывать, 2 - удалять тэги
+     * @param int $smileys             Смайлы 0 - не обрабатывать, 1 - обычные, 2 - обычные и админские
+     * @return string                  Обработанная строка
      */
     public static function checkout($str, $br = 0, $tags = 0, $smileys = 0)
     {
@@ -195,11 +206,12 @@ class Validate
         return $str;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Валидация IP адреса
-    -----------------------------------------------------------------
-    */
+    /**
+     * Проверка корректности IP адреса
+     *
+     * @param string $ip               Строка с IP адресом
+     * @return bool                    TRUE, если проверка прошла успешно
+     */
     public static function ip($ip)
     {
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {

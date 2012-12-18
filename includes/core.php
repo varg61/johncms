@@ -59,6 +59,7 @@ spl_autoload_register(
             'comments'       => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
             'counters'       => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
             'finfo'          => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'form'           => 'classes' . DIRECTORY_SEPARATOR . 'form.php',
             'functions'      => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
             'languages'      => 'classes' . DIRECTORY_SEPARATOR . 'languages.php',
             'login'          => 'classes' . DIRECTORY_SEPARATOR . 'login.php',

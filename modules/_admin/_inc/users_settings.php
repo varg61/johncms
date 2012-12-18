@@ -13,11 +13,121 @@ defined('_IN_ADMIN') or die('Error: restricted access');
 
 global $tpl;
 
-if (isset($_POST['submit'])
-    && isset($_POST['form_token'])
-    && isset($_SESSION['form_token'])
-    && $_POST['form_token'] == $_SESSION['form_token']
-) {
+$form = new Form(Vars::$URI . '?act=users_settings');
+$form
+    ->addField('radio', 'registration', array(
+    'label'   => __('registration'),
+    'checked' => Vars::$USER_SYS['registration'],
+    'items'   => array(
+        '2' => __('registration_open'),
+        '1' => __('registration_moderation'),
+        '0' => __('registration_closed')
+    )))
+
+    ->addField('checkbox', 'reg_welcome', array(
+    'label_inline' => __('welcome_message'),
+    'checked'      => Vars::$USER_SYS['reg_welcome']))
+
+    ->addField('checkbox', 'reg_email', array(
+    'label_inline' => __('registration_email'),
+    'checked'      => Vars::$USER_SYS['reg_email']))
+
+    ->addField('checkbox', 'reg_quarantine', array(
+    'label_inline' => __('registration_quarantine'),
+    'checked'      => Vars::$USER_SYS['reg_quarantine']));
+
+if (Vars::$USER_RIGHTS == 9) {
+    $form
+        ->addHtml('<br/>')
+
+        ->addLabel(__('for_users'))
+
+        ->addField('checkbox', 'autologin', array(
+        'label_inline' => __('autologin'),
+        'checked'      => Vars::$USER_SYS['autologin']))
+
+        ->addField('checkbox', 'change_sex', array(
+        'label_inline' => __('change_sex'),
+        'checked'      => Vars::$USER_SYS['change_sex']))
+
+        ->addField('checkbox', 'change_status', array(
+        'label_inline' => __('change_status'),
+        'checked'      => Vars::$USER_SYS['change_status']))
+
+        ->addField('checkbox', 'upload_avatars', array(
+        'label_inline' => __('upload_avatars'),
+        'checked'      => Vars::$USER_SYS['upload_avatars']))
+
+        ->addField('checkbox', 'digits_only', array(
+        'label_inline' => __('digits_only'),
+        'checked'      => Vars::$USER_SYS['digits_only']))
+
+        ->addField('checkbox', 'change_nickname', array(
+        'label_inline' => __('change_nickname_allow'),
+        'checked'      => Vars::$USER_SYS['change_nickname']))
+
+        ->addField('text', 'change_period', array(
+        'label_inline' => __('how_many_days'),
+        'value'        => Vars::$USER_SYS['change_period'],
+        'class'        => 'mini'))
+
+        ->addHtml('<br/>')
+
+        ->addLabel(__('for_guests'))
+
+        ->addField('checkbox', 'view_online', array(
+        'label_inline' => __('view_online'),
+        'checked'      => Vars::$USER_SYS['view_online']))
+
+        ->addField('checkbox', 'viev_history', array(
+        'label_inline' => __('viev_history'),
+        'checked'      => Vars::$USER_SYS['viev_history']))
+
+        ->addField('checkbox', 'view_userlist', array(
+        'label_inline' => __('view_userlist'),
+        'checked'      => Vars::$USER_SYS['view_userlist']))
+
+        ->addField('checkbox', 'view_profiles', array(
+        'label_inline' => __('view_profiles'),
+        'checked'      => Vars::$USER_SYS['view_profiles']))
+
+        ->addHtml('<br/>')
+
+        ->addLabel(__('antiflood'))
+
+        ->addField('radio', 'flood_mode', array(
+        'checked' => Vars::$USER_SYS['flood_mode'],
+        'items'   => array(
+            '3' => __('day'),
+            '4' => __('night'),
+            '2' => __('autoswitch'),
+            '1' => __('adaptive')
+        )))
+
+        ->addField('text', 'flood_day', array(
+        'value'        => Vars::$USER_SYS['flood_day'],
+        'class'        => 'small',
+        'label_inline' => __('sec') . ', ' . __('day')))
+
+        ->addField('text', 'flood_night', array(
+        'value'        => Vars::$USER_SYS['flood_night'],
+        'class'        => 'small',
+        'label_inline' => __('sec') . ', ' . __('night')))
+
+        ->addHtml('<br/>')
+
+        ->addField('submit', 'submit', array(
+        'value' => __('save'),
+        'class' => 'btn btn-primary btn-large'))
+
+        ->addHtml(' <a class="btn" href="' . Vars::$URI . '?act=users_settings&amp;reset">' . __('reset_settings') . '</a>')
+
+        ->addHtml(' <a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
+}
+
+$tpl->form = $form->display();
+
+if ($form->submit) {
     Vars::$USER_SYS['registration'] = isset($_POST['registration']) && $_POST['registration'] >= 0 && $_POST['registration'] <= 2 ? intval($_POST['registration']) : 0;
     Vars::$USER_SYS['reg_welcome'] = isset($_POST['reg_welcome']);
     Vars::$USER_SYS['reg_email'] = isset($_POST['reg_email']);
@@ -82,6 +192,5 @@ if (isset($_POST['submit'])
 if (isset($_GET['default'])) {
     $tpl->reset = 1;
 }
-$tpl->form_token = mt_rand(100, 10000);
-$_SESSION['form_token'] = $tpl->form_token;
+
 $tpl->contents = $tpl->includeTpl('users_settings');

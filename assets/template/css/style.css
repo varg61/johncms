@@ -88,7 +88,7 @@ label {
     color: #4E5869;
     font-weight: bold;
     text-shadow: 0 1px 1px #ffffff;
-    display: inline-block;
+    display: block;
     padding-left: 2px;
     margin-top: 12px;
     margin-bottom: 4px;
@@ -97,8 +97,14 @@ label {
 
 label input[type="text"] {
     font-weight: normal;
+    margin-right: 6px;
 }
 
+label.inline {
+    font-size: small;
+}
+
+/* Убрать */
 label.small {
     font-size: small;
 }
@@ -141,8 +147,8 @@ input[type="password"] {
     box-sizing: border-box;
 }
 
-input[type="checkbox"] {
-    /*margin-bottom: 12px;*/
+input[type="checkbox"],
+input[type="radio"] {
     margin-right: 6px;
 }
 
@@ -308,6 +314,7 @@ a.btn-warning,
     color: #ffffff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
+
 .btn-primary.active,
 .btn-warning.active,
 .btn-danger.active,
@@ -762,50 +769,187 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
         width: 20px;
     }
 
-    .icn-arrow { background-position: 0 -20px; float: right; margin-left: 12px; margin-right: 0; }
-    .icn-man { background-position: 0 -40px }
-    .icn-woman { background-position: 0 -60px }
-    .icn-user-add { background-position: 0 -80px }
-    .icn-man-woman { background-position: 0 -100px }
-    .icn-group { background-position: 0 -120px }
-    .icn-piechart { background-position: 0 -140px }
-    .icn-violations { background-position: 0 -160px }
-    .icn-image { background-position: 0 -180px }
-    .icn-comments { background-position: 0 -200px }
-    .icn-envelope { background-position: 0 -220px }
-    .icn-addressbook { background-position: 0 -240px }
-    .icn-block { background-position: 0 -260px }
-    .icn-info { background-position: 0 -280px }
-    .icn-news { background-position: 0 -300px }
-    .icn-book { background-position: 0 -320px }
-    .icn-download { background-position: 0 -340px }
-    .icn-dialogue { background-position: 0 -360px }
-    .icn-dialogue-red { background-position: 0 -380px }
-    .icn-chart { background-position: 0 -400px }
-    .icn-camera { background-position: 0 -420px }
-    .icn-shield { background-position: 0 -440px }
-    .icn-shield-red { background-position: 0 -460px }
-    .icn-settings { background-position: 0 -480px }
-    .icn-edit { background-position: 0 -500px }
-    .icn-keys { background-position: 0 -520px }
-    .icn-smile { background-position: 0 -540px }
-    .icn-flower { background-position: 0 -560px }
-    .icn-meter { background-position: 0 -580px }
-    .icn-block { background-position: 0 -600px }
-    .icn-warning { background-position: 0 -620px }
-    .icn-map { background-position: 0 -640px }
-    .icn-exit { background-position: 0 -660px }
-    .icn-upload { background-position: 0 -680px }
-    .icn-trash { background-position: 0 -700px }
-    .icn-w-top { background-position: 0 -720px; margin-right: 6px }
-    .icn-w-man-woman { background-position: 0 -740px; margin-right: 6px }
-    .icn-w-piechart { background-position: 0 -760px; margin-right: 6px }
-    .icn-ban-red { background-position: 0 -780px; }
-    .icn-settings-red { background-position: 0 -800px }
-    .icn-inbox { background-position: 0 -820px }
-    .icn-outbox { background-position: 0 -840px }
-    .icn-favmail { background-position: 0 -860px }
-    .icn-attach { background-position: 0 -880px }
+    .icn-arrow {
+        background-position: 0 -20px;
+        float: right;
+        margin-left: 12px;
+        margin-right: 0;
+    }
+
+    .icn-man {
+        background-position: 0 -40px
+    }
+
+    .icn-woman {
+        background-position: 0 -60px
+    }
+
+    .icn-user-add {
+        background-position: 0 -80px
+    }
+
+    .icn-man-woman {
+        background-position: 0 -100px
+    }
+
+    .icn-group {
+        background-position: 0 -120px
+    }
+
+    .icn-piechart {
+        background-position: 0 -140px
+    }
+
+    .icn-violations {
+        background-position: 0 -160px
+    }
+
+    .icn-image {
+        background-position: 0 -180px
+    }
+
+    .icn-comments {
+        background-position: 0 -200px
+    }
+
+    .icn-envelope {
+        background-position: 0 -220px
+    }
+
+    .icn-addressbook {
+        background-position: 0 -240px
+    }
+
+    .icn-block {
+        background-position: 0 -260px
+    }
+
+    .icn-info {
+        background-position: 0 -280px
+    }
+
+    .icn-news {
+        background-position: 0 -300px
+    }
+
+    .icn-book {
+        background-position: 0 -320px
+    }
+
+    .icn-download {
+        background-position: 0 -340px
+    }
+
+    .icn-dialogue {
+        background-position: 0 -360px
+    }
+
+    .icn-dialogue-red {
+        background-position: 0 -380px
+    }
+
+    .icn-chart {
+        background-position: 0 -400px
+    }
+
+    .icn-camera {
+        background-position: 0 -420px
+    }
+
+    .icn-shield {
+        background-position: 0 -440px
+    }
+
+    .icn-shield-red {
+        background-position: 0 -460px
+    }
+
+    .icn-settings {
+        background-position: 0 -480px
+    }
+
+    .icn-edit {
+        background-position: 0 -500px
+    }
+
+    .icn-keys {
+        background-position: 0 -520px
+    }
+
+    .icn-smile {
+        background-position: 0 -540px
+    }
+
+    .icn-flower {
+        background-position: 0 -560px
+    }
+
+    .icn-meter {
+        background-position: 0 -580px
+    }
+
+    .icn-block {
+        background-position: 0 -600px
+    }
+
+    .icn-warning {
+        background-position: 0 -620px
+    }
+
+    .icn-map {
+        background-position: 0 -640px
+    }
+
+    .icn-exit {
+        background-position: 0 -660px
+    }
+
+    .icn-upload {
+        background-position: 0 -680px
+    }
+
+    .icn-trash {
+        background-position: 0 -700px
+    }
+
+    .icn-w-top {
+        background-position: 0 -720px;
+        margin-right: 6px
+    }
+
+    .icn-w-man-woman {
+        background-position: 0 -740px;
+        margin-right: 6px
+    }
+
+    .icn-w-piechart {
+        background-position: 0 -760px;
+        margin-right: 6px
+    }
+
+    .icn-ban-red {
+        background-position: 0 -780px;
+    }
+
+    .icn-settings-red {
+        background-position: 0 -800px
+    }
+
+    .icn-inbox {
+        background-position: 0 -820px
+    }
+
+    .icn-outbox {
+        background-position: 0 -840px
+    }
+
+    .icn-favmail {
+        background-position: 0 -860px
+    }
+
+    .icn-attach {
+        background-position: 0 -880px
+    }
 
     .btn i {
         margin-right: 4px;
@@ -861,7 +1005,9 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     line-height: 24px; /* Разобраться с поддержкой Opera Mini */
 }
 
-.table-list { }
+.table-list {
+}
+
 .table-list td {
     padding: 4px;
 }
@@ -1068,22 +1214,48 @@ a.pagenav:hover {
 ======================================================*/
 @media all and (max-width:229px) {
     /* Заголовки разделов */
-    ul.nav li h1 { font-size: small; height: 30px; }
+    ul.nav li h1 {
+        font-size: small;
+        height: 30px;
+    }
 
     /* Заголовки меню */
-    ul.nav li h2 { height: 22px; font-size: x-small; }
+    ul.nav li h2 {
+        height: 22px;
+        font-size: x-small;
+    }
 
     /* Touch ссылки меню */
-    ul.nav li a, ul.nav li a:visited { font-size: x-small; height: 30px; }
+    ul.nav li a, ul.nav li a:visited {
+        font-size: x-small;
+        height: 30px;
+    }
 
     /* Метки форм */
-    label { font-size: small; }
+    label {
+        font-size: small;
+    }
 
     /* График репутации */
-    #rep-row { height: 48px; }
-    #rep-arrow { padding-left: 0; }
-    .progress { height: 4px; }
-    .rel_a_font, .rel_b_font, .rel_c_font, .rel_d_font, .rel_e_font { padding-right: 12px; font-size: medium; }
+    #rep-row {
+        height: 48px;
+    }
 
-    .block-even, .block-odd { padding: 4px; font-size: small; }
+    #rep-arrow {
+        padding-left: 0;
+    }
+
+    .progress {
+        height: 4px;
+    }
+
+    .rel_a_font, .rel_b_font, .rel_c_font, .rel_d_font, .rel_e_font {
+        padding-right: 12px;
+        font-size: medium;
+    }
+
+    .block-even, .block-odd {
+        padding: 4px;
+        font-size: small;
+    }
 }
