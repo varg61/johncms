@@ -144,9 +144,9 @@ class Form
             ++$i;
         }
         return '<form action="' . $this->_form['action'] . '" method="' . $this->_form['method'] . '" name="' . $this->_form['name'] . '">' .
-            "\n" . implode($out) . "\n" .
+            "\n" . implode("\n", $out) . "\n" .
             $this->_buildToken() . "\n" .
-            '</form>';
+            '</form>' . "\n";
     }
 
     /**
@@ -190,9 +190,9 @@ class Form
         if ($this->submit && isset($this->_input[$option['id']])) {
             $option['checked'] = trim($this->_input[$option['id']]);
         }
-        $out = '';
+        $out = array();
         foreach ($option['items'] as $radio_key => $radio_val) {
-            $out .= "\n" . (!empty($radio_val) ? '<label class="' . (isset($option['label_class']) ? $option['label_class'] : 'inline') . '">' : '') .
+            $out[] = (!empty($radio_val) ? '<label class="' . (isset($option['label_class']) ? $option['label_class'] : 'inline') . '">' : '') .
                 '<input type="radio" name="' . $option['id'] . '" value="' . $radio_key . '" ' .
                 (isset($option['checked']) && $option['checked'] == $radio_key ? ' checked="checked"' : '') .
                 (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') .
@@ -200,7 +200,7 @@ class Form
                 (!empty($radio_val) ? $radio_val . '</label>' : '');
         }
 
-        return $out;
+        return implode("\n", $out);
     }
 
     /**
@@ -287,9 +287,9 @@ class Form
                 $_SESSION['form_token'] = Functions::generateToken();
             }
             return '<input type="hidden" name="form_token" value="' . $_SESSION['form_token'] . '"/>';
+        } else {
+            return '';
         }
-
-        return '';
     }
 
     /**
@@ -298,9 +298,9 @@ class Form
     private function _isSubmit()
     {
         if (count(array_intersect($this->_submitButton, array_keys($this->_input)))
-            && isset($this->_input['form_token'])
-            && isset($_SESSION['form_token'])
-            && $this->_input['form_token'] == $_SESSION['form_token']
+            && (!$this->_token || isset($this->_input['form_token']))
+            && (!$this->_token || isset($_SESSION['form_token']))
+            && (!$this->_token || $this->_input['form_token'] == $_SESSION['form_token'])
         ) {
             $this->submit = 1;
         }
