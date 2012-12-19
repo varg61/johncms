@@ -143,7 +143,7 @@ class Form
 
             ++$i;
         }
-        return '<form action="' . $this->_form['action'] . '" method="' . $this->_form['method'] . '" name="' . $this->_form['name'] . '">' .
+        return "\n" . '<form action="' . $this->_form['action'] . '" method="' . $this->_form['method'] . '" name="' . $this->_form['name'] . '">' .
             "\n" . implode("\n", $out) . "\n" .
             $this->_buildToken() . "\n" .
             '</form>' . "\n";
@@ -161,6 +161,7 @@ class Form
         return '<input id="' . $option['id'] . '" name="' . $option['name'] . '" type="' . $option['type'] . '"' .
             (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') .
             $this->_setValue($option, 1) .
+            ($option['type'] == 'text' && isset($option['maxlength']) ? ' maxlength="' . $option['maxlength'] . '"' : '') .
             '/>';
     }
 
@@ -243,7 +244,7 @@ class Form
                 (isset($option['label_class']) ? ' class="' . $option['label_class'] . '"' : '') .
                 '>' .
                 $option['label'] .
-                '</label>' . $field;
+                '</label>' . "\n" . $field;
         }
 
         return $field;
