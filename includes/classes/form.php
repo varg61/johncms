@@ -5,9 +5,10 @@ class Form
     private $_form = array(); // Параметры формы
     private $_fields = array(); // Параметры всех полей формы
     private $_submitButton = array(); // Имена submit кнопок
-    private $_input; // Данные, полученные от $_POST, или $_GET
     private $_token; // Использовать токен для валидации форм
 
+    public $input; // Данные, полученные от $_POST, или $_GET
+    public $validInput;
     public $submit = FALSE; // Был ли Submit формы?
 
     /**
@@ -25,9 +26,9 @@ class Form
 
         // Передаем по ссылке значения суперглобальных переменных
         if ($this->_form['method'] == 'get') {
-            $this->_input =& $_GET;
+            $this->input =& $_GET;
         } else {
-            $this->_input =& $_POST;
+            $this->input =& $_POST;
         }
     }
 
@@ -60,26 +61,6 @@ class Form
     }
 
     /**
-     * @param $label
-     * @param null $for
-     * @param null $class
-     * @return Form
-     */
-    public function addLabel($label, $for = null, $class = null)
-    {
-        $option['type'] = 'label';
-        $option['label'] = $label;
-        if ($for) {
-            $option['id'] = $for;
-        }
-        if ($class) {
-            $option['label_class'] = $class;
-        }
-        $this->_fields[] = $option;
-        return $this;
-    }
-
-    /**
      * @param $str
      * @return Form
      */
@@ -98,7 +79,14 @@ class Form
      */
     public function display()
     {
-        $this->_isSubmit();
+        // Проверка формы на Submit
+        if (count(array_intersect($this->_submitButton, array_keys($this->input)))
+            && (!$this->_token || isset($this->input['form_token']))
+            && (!$this->_token || isset($_SESSION['form_token']))
+            && (!$this->_token || $this->input['form_token'] == $_SESSION['form_token'])
+        ) {
+            $this->submit = TRUE;
+        }
 
         $i = 1;
         $out = array();
@@ -126,10 +114,6 @@ class Form
                     $out[$i] = $this->_buildCheckbox($val);
                     break;
 
-                case'label':
-                    $out[$i] = '';
-                    break;
-
                 case'html':
                     $out[$i] = $val['value'];
                     break;
@@ -143,9 +127,20 @@ class Form
 
             ++$i;
         }
+
+        // Создаем токен для валидации формы
+        if ($this->_token) {
+            if (!isset($_SESSION['form_token'])) {
+                $_SESSION['form_token'] = Functions::generateToken();
+            }
+            $token = '<input type="hidden" name="form_token" value="' . $_SESSION['form_token'] . '"/>';
+        } else {
+            $token = '';
+        }
+
         return "\n" . '<form action="' . $this->_form['action'] . '" method="' . $this->_form['method'] . '" name="' . $this->_form['name'] . '">' .
             "\n" . implode("\n", $out) . "\n" .
-            $this->_buildToken() . "\n" .
+            $token . "\n" .
             '</form>' . "\n";
     }
 
@@ -158,9 +153,10 @@ class Form
      */
     private function _buildInput(array $option)
     {
+        $this->_setValue($option);
         return '<input id="' . $option['id'] . '" name="' . $option['name'] . '" type="' . $option['type'] . '"' .
             (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') .
-            $this->_setValue($option, 1) .
+            (isset($option['value']) ? ' value="' . Validate::checkout($option['value']) . '"' : '') .
             ($option['type'] == 'text' && isset($option['maxlength']) ? ' maxlength="' . $option['maxlength'] . '"' : '') .
             '/>';
     }
@@ -174,9 +170,10 @@ class Form
      */
     private function _buildTextarea(array $option)
     {
+        $this->_setValue($option);
         return '<textarea id="' . $option['id'] . '" name="' . $option['name'] . '"' .
             (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') . '>' .
-            $this->_setValue($option) .
+            (isset($option['value']) ? Validate::checkout($option['value']) : '') .
             '</textarea>';
     }
 
@@ -188,9 +185,7 @@ class Form
      */
     private function _buildRadio(array $option)
     {
-        if ($this->submit && isset($this->_input[$option['id']])) {
-            $option['checked'] = trim($this->_input[$option['id']]);
-        }
+        $this->_setValue($option);
         $out = array();
         foreach ($option['items'] as $radio_key => $radio_val) {
             $out[] = (!empty($radio_val) ? '<label class="' . (isset($option['label_class']) ? $option['label_class'] : 'inline') . '">' : '') .
@@ -212,9 +207,7 @@ class Form
      */
     private function _buildCheckbox(array $option)
     {
-        if ($this->submit) {
-            $option['checked'] = isset($this->_input[$option['id']]);
-        }
+        $this->_setValue($option);
         return '<input type="checkbox" id="' . $option['id'] . '" name="' . $option['name'] . '" value="1"' .
             (isset($option['checked']) && $option['checked'] ? ' checked="checked"' : '') .
             '/>';
@@ -250,60 +243,36 @@ class Form
         return $field;
     }
 
-    /**
-     * Присвоение значения value
-     *
-     * IF submit фориы, то используются суперглобальные значения (если есть)
-     * ELSE используются переданные в конструктор форм значения (если были)
-     *
-     * @param $option                  Массив с параметрами
-     * @param bool $valueTag           Добавлять ли параметр value=""
-     * @return string                  Значение value
-     */
-    private function _setValue($option, $valueTag = FALSE)
+    private function _setValue(&$option)
     {
-        if ($this->submit && isset($this->_input[$option['id']])) {
-            $value = $this->_input[$option['id']];
-        } elseif (isset($option['value'])) {
-            $value = $option['value'];
-        } else {
-            $value = '';
-        }
+        //TODO: Добавить валидатор
 
-        if ($valueTag && !empty($value)) {
-            return ' value="' . Validate::checkout($value) . '"';
-        }
-        return $value;
-    }
-
-    /**
-     * Создание скрытого поля с токеном для валидации формы
-     *
-     * @return string
-     */
-    private function _buildToken()
-    {
-        if ($this->_token) {
-            if (!isset($_SESSION['form_token'])) {
-                $_SESSION['form_token'] = Functions::generateToken();
+        if ($this->submit && $option['type'] == 'checkbox') {
+            // Задаем значения для полей checkbox
+            $option['checked'] = isset($this->input[$option['id']]) ? 1 : 0;
+            $this->validInput[$option['name']] = $option['checked'];
+            unset($this->input[$option['name']]);
+        } elseif ($this->submit && $option['type'] == 'radio') {
+            // Задаем значения для полей radio
+            $value = isset($this->input[$option['name']]) ? trim($this->input[$option['name']]) : FALSE;
+            if ($value !== FALSE && array_key_exists($this->input[$option['name']], $option['items'])) {
+                $option['checked'] = $value;
+                $this->validInput[$option['name']] = $value;
+            } else {
+                $this->validInput[$option['name']] = isset($option['checked']) ? $option['checked'] : '';
             }
-            return '<input type="hidden" name="form_token" value="' . $_SESSION['form_token'] . '"/>';
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * Проверка формы на Submit
-     */
-    private function _isSubmit()
-    {
-        if (count(array_intersect($this->_submitButton, array_keys($this->_input)))
-            && (!$this->_token || isset($this->_input['form_token']))
-            && (!$this->_token || isset($_SESSION['form_token']))
-            && (!$this->_token || $this->_input['form_token'] == $_SESSION['form_token'])
-        ) {
-            $this->submit = 1;
+            unset($this->input[$option['name']]);
+        } elseif ($this->submit && $option['type'] != 'submit') {
+            // Задаем значения для текстиовых полей
+            if (isset($this->input[$option['name']])) {
+                $option['value'] = trim($this->input[$option['name']]);
+                $this->validInput[$option['name']] = $option['value'];
+                unset($this->input[$option['name']]);
+            } elseif (isset($option['value'])) {
+                $this->validInput[$option['name']] = $option['value'];
+            } else {
+                $this->validInput[$option['name']] = '';
+            }
         }
     }
 }
