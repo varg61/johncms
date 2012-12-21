@@ -24,7 +24,7 @@
             <span class="label label-red"><?= $this->error['status'] ?></span><br/>
             <?php endif ?>
             <input <?= (isset($this->error['status']) ? 'class="error"' : '') ?> id="status" type="text" value="<?= $this->status ?>" name="status"/>
-            <br/><span class="input-help"><?= __('status_lenght') ?></span><br/><br/>
+            <br/><span class="description"><?= __('status_lenght') ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" value="<?= __('save') ?>" name="submit"/>
             <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>

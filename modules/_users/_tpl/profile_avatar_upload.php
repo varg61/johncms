@@ -9,11 +9,11 @@
         <div class="form-block">
             <label for="image"><?= __('select_image') ?></label><br/>
             <input id="image" type="file" name="image" value=""/>
-            <span class="input-help" style="padding-top: 8px"><?= __('select_avatar_help')  ?></span><br/>
+            <span class="description" style="padding-top: 8px"><?= __('select_avatar_help')  ?></span><br/>
 
             <label for="animation"><?= __('animation') ?></label><br/>
             <input id="animation" type="file" name="animation" value=""/>
-            <span class="input-help" style="padding-top: 8px"><?= __('select_animation_help')  ?></span><br/><br/>
+            <span class="description" style="padding-top: 8px"><?= __('select_animation_help')  ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('upload') ?>"/>
             <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>

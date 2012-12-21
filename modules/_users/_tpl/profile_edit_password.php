@@ -35,7 +35,7 @@
             <span class="label label-red"><?= $this->error['newconf'] ?></span><br/>
             <?php endif ?>
             <input id="newconf" name="newconf" type="password" <?= (isset($this->error['newconf']) ? 'class="error"' : '') ?>/><br/>
-            <span class="input-help"><?= __('password_change_help') ?></span>
+            <span class="description"><?= __('password_change_help') ?></span>
             <br/><br/>
             <input class="btn btn-primary btn-large" type="submit" value="<?= __('save') ?>" name="submit"/>
             <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>

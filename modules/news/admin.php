@@ -30,6 +30,7 @@ $settings = isset(Vars::$SYSTEM_SET['news'])
     );
 
 $form = new Form(Vars::$URI);
+
 $form
     ->addField('radio', 'view', array(
     'label'   => __('apperance'),

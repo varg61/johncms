@@ -8,7 +8,7 @@
     <div class="form-block">
         <span class="info-message"><?= __('thanks_for_registration') ?>!</span>
         <?php if (Vars::$USER_SYS['reg_moderation']): ?>
-        <br/><br/><span class="input-help"><?= __('moderation_warning') ?></span>
+        <br/><br/><span class="description"><?= __('moderation_warning') ?></span>
         <?php endif ?>
         <br/><br/>
         <table>

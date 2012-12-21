@@ -22,7 +22,7 @@
             <?php endif; ?>
             <input id="nickname" type="text" name="nickname" maxlength="20" value="<?= htmlspecialchars($this->nickname) ?>" <?= (isset($this->error['login']) ? 'class="error"' : '') ?>/>
             <input type="submit" name="check_login" value="?"/>
-            <span class="input-help"><?= __('login_help') ?></span>
+            <span class="description"><?= __('login_help') ?></span>
         </form>
     </div>
 </div>

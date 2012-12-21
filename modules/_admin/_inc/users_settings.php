@@ -14,6 +14,7 @@ defined('_IN_ADMIN') or die('Error: restricted access');
 global $tpl;
 
 $form = new Form(Vars::$URI . '?act=users_settings');
+
 $form
     ->addField('radio', 'registration', array(
     'label'   => __('registration'),
@@ -123,7 +124,7 @@ if (Vars::$USER_RIGHTS == 9) {
 
         ->addHtml(' <a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
 }
-
+//TODO: BUG! Добавить кнопку Submit для всех!
 $tpl->form = $form->display();
 
 if ($form->submit && isset($form->input['submit'])) {

@@ -12,15 +12,15 @@
             <label for="timeshift"><?= __('settings_clock') ?></label><br/>
             <input class="small" id="timeshift" type="text" name="timeshift" size="2" maxlength="3" value="<?= Vars::$USER_SET['timeshift'] ?>"/>
             <span class="badge badge-large"><?= date("H:i", time() + (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600) ?></span>
-            <span class="input-help"><?= __('settings_clock_shift') ?> (+ - 12)</span><br/>
+            <span class="description"><?= __('settings_clock_shift') ?> (+ - 12)</span><br/>
 
             <label for="page_size"><?= __('list_size') ?></label><br/>
             <input class="mini" id="page_size" type="text" name="page_size" size="2" maxlength="2" value="<?= Vars::$USER_SET['page_size'] ?>"/>
-            <span class="input-help"><?= __('list_size_help') ?> (5-99)</span><br/>
+            <span class="description"><?= __('list_size_help') ?> (5-99)</span><br/>
 
             <label for="field_h"><?= __('field_height') ?></label><br/>
             <input class="mini" id="field_h" type="text" name="field_h" size="2" maxlength="1" value="<?= Vars::$USER_SET['field_h'] ?>"/>
-            <span class="input-help"><?= __('field_height_help') ?> (2-9)</span><br/>
+            <span class="description"><?= __('field_height_help') ?> (2-9)</span><br/>
 
             <label class="small" style="margin-top: 18px"><input name="direct_url" type="checkbox" value="1" <?= (Vars::$USER_SET['direct_url'] ? 'checked="checked"' : '') ?>/>&#160;<?= __('direct_url') ?></label><br/>
             <?php if (Vars::$LNG_ISO == 'ru' || Vars::$LNG_ISO == 'uk') : ?>

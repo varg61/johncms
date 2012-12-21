@@ -4,7 +4,7 @@
 <div class="form-container">
     <?php if (isset($_POST['submit']) && !empty($this->error)) : ?>
     <div class="form-block error">
-        <span class="input-help error"><b><?= __('errors_occurred') ?></b></span>
+        <span class="description error"><b><?= __('errors_occurred') ?></b></span>
     </div>
     <?php endif ?>
     <form action="<?= Vars::$URI ?>" method="post">
@@ -18,7 +18,7 @@
             <?php endif ?>
             <input id="reg_login" type="text" name="reg_login" maxlength="20" value="<?= htmlspecialchars($this->reg_data['login']) ?>" <?= (isset($this->error['login']) ? 'class="error"' : '') ?>/>
             <input class="btn" type="submit" name="check_login" value="?" style="margin-bottom: 3px;"/>
-            <span class="input-help"><?= __('login_help') ?></span><br/>
+            <span class="description"><?= __('login_help') ?></span><br/>
 
             <label for="reg_password"><?= __('password') ?></label><br/>
             <?php if (isset($this->error['password'])) : ?>
@@ -31,7 +31,7 @@
             <?php endif ?>
             <input id="password_confirm" type="password" name="password_confirm" maxlength="20" value="<?= htmlspecialchars($this->reg_data['password_confirm']) ?>" <?= (isset($this->error['password_confirm']) ? 'class="error"' : '') ?>/>
             <br/>
-            <span class="input-help"><?= __('password_help') ?></span><br/>
+            <span class="description"><?= __('password_help') ?></span><br/>
 
             <label for="sex"><?= __('sex') ?></label><br/>
             <?php if (isset($this->error['sex'])) : ?>
@@ -50,7 +50,7 @@
         </div>
         <div class="form-block">
             <?php if (Vars::$USER_SYS['reg_moderation']): ?>
-            <span class="input-help error"><?= __('moderation_warning') ?></span>
+            <span class="description error"><?= __('moderation_warning') ?></span>
             <?php endif ?>
             <label for="captcha"><?= __('captcha') ?></label><br/>
             <?= Captcha::display() ?><br/>

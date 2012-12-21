@@ -149,30 +149,93 @@ switch (Vars::$MOD) {
         Редактирование анкеты
         -----------------------------------------------------------------
         */
-        $birth = strtotime($tpl->user['birth']);
-        if ($birth) {
-            $tpl->day = date('d', $birth);
-            $tpl->month = date('m', $birth);
-            $tpl->year = date('Y', $birth);
-        } else {
-            $tpl->day = '';
-            $tpl->month = '';
-            $tpl->year = '';
+        $form = new Form(Vars::$URI . '?act=edit&amp;user=' . $tpl->user['id']);
+
+        $form
+            ->addField('text', 'imname', array(
+            'label'       => __('name'),
+            'value'       => $tpl->user['imname'],
+            'description' => __('description_name')));
+
+        if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) {
+            $form
+                ->addField('radio', 'sex', array(
+                'label'   => __('sex'),
+                'checked' => $tpl->user['sex'],
+                'items'   => array(
+                    'm' => __('sex_m'),
+                    'w' => __('sex_w')
+                )));
         }
 
-        if (isset($_POST['submit'])
-            && isset($_POST['form_token'])
-            && isset($_SESSION['form_token'])
-            && $_POST['form_token'] == $_SESSION['form_token']
-        ) {
-            // Принимаем данные о половой принадлежности
-            if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) {
-                $tpl->user['sex'] = isset($_POST['sex']) && $_POST['sex'] == 'w' ? 'w' : 'm';
-            }
+        $form
+            ->addField('text', 'day', array(
+            'label' => __('birthday'),
+            'value' => date("d", strtotime($tpl->user['birth'])),
+            'class' => 'mini'))
 
-            // Принимаем и обрабатываем Имя
-            if (isset($_POST['imname'])) {
-                $tpl->user['imname'] = mb_substr(trim($_POST['imname']), 0, 50);
+            ->addField('text', 'month', array(
+            'value' => date("m", strtotime($tpl->user['birth'])),
+            'class' => 'mini'))
+
+            ->addField('text', 'year', array(
+            'value'       => date("Y", strtotime($tpl->user['birth'])),
+            'class'       => 'small',
+            'description' => __('description_birth')))
+
+            ->addField('text', 'live', array(
+            'label'       => __('live'),
+            'value'       => $tpl->user['live'],
+            'description' => __('description_live')))
+
+            ->addField('textarea', 'about', array(
+            'label'       => __('about'),
+            'value'       => $tpl->user['about'],
+            'buttons'     => (Vars::$IS_MOBILE ? FALSE : TRUE),
+            'description' => __('description_about')))
+
+            ->addField('text', 'tel', array(
+            'label'       => __('phone_number'),
+            'value'       => $tpl->user['tel'],
+            'description' => __('description_phone_number')))
+
+            ->addField('text', 'email', array(
+            'label' => 'E-mail',
+            'value' => $tpl->user['email']))
+
+            ->addField('checkbox', 'mailvis', array(
+            'label_inline' => __('show_in_profile'),
+            'checked'      => $tpl->user['mailvis'],
+            'description'  => __('description_email')))
+
+            ->addField('text', 'siteurl', array(
+            'label'       => __('site'),
+            'value'       => $tpl->user['siteurl'],
+            'description' => __('description_siteurl')))
+
+            ->addField('text', 'skype', array(
+            'label'       => 'Skype',
+            'value'       => $tpl->user['skype'],
+            'description' => __('description_skype')))
+
+            ->addField('text', 'icq', array(
+            'label'       => 'ICQ',
+            'value'       => $tpl->user['icq'],
+            'description' => __('description_icq')))
+
+            ->addHtml('<br/>')
+
+            ->addField('submit', 'submit', array(
+            'value' => __('save'),
+            'class' => 'btn btn-primary btn-large'))
+
+            ->addHtml('<a class="btn" href="' . Vars::$URI . '?act=settings&amp;user=' . $tpl->user['id'] . '">' . __('back') . '</a>');
+
+        $tpl->form = $form->display();
+
+        if ($form->submit) {
+            foreach ($form->validInput as $key => $val) {
+                $tpl->user[$key] = $val;
             }
 
             // Принимаем и обрабатываем дату рожденья
@@ -204,47 +267,6 @@ switch (Vars::$MOD) {
                 }
             }
 
-            // Принимаем и обрабатываем данные о месте проживания
-            if (isset($_POST['live'])) {
-                $tpl->user['live'] = mb_substr(trim($_POST['live']), 0, 100);
-            }
-
-            // Принимаем и обрабатываем дополнительную информацию "о себе"
-            if (isset($_POST['about'])) {
-                $tpl->user['about'] = mb_substr(trim($_POST['about']), 0, 5000);
-            }
-
-            // Принимаем и обрабатываем номер телефона
-            if (isset($_POST['tel'])) {
-                $tpl->user['tel'] = mb_substr(trim($_POST['tel']), 0, 100);
-            }
-
-            // Принимаем и обрабатываем URL сайта
-            if (isset($_POST['siteurl'])) {
-                $tpl->user['siteurl'] = mb_substr(trim($_POST['siteurl']), 0, 100);
-            }
-
-            // Принимаем и обрабатываем e-mail
-            if (isset($_POST['email'])) {
-                $tpl->user['email'] = mb_substr(trim($_POST['email']), 0, 50);
-                $email_valid = Validate::email($tpl->user['email'], 1, 1);
-                if ($email_valid) {
-                    $tpl->user['mailvis'] = isset($_POST['mailvis']) ? 1 : 0;
-                } else {
-                    $tpl->error['email'] = Validate::$error['email'];
-                }
-            }
-
-            // Принимаем и обрабатываем ICQ
-            if (isset($_POST['icq']) && (empty($_POST['icq']) || intval($_POST['icq']) > 10000)) {
-                $tpl->user['icq'] = intval($_POST['icq']);
-            }
-
-            // Принимаем и обрабатываем Skype
-            if (isset($_POST['skype'])) {
-                $tpl->user['skype'] = mb_substr(trim($_POST['skype']), 0, 50);
-            }
-
             if (empty($tpl->error)) {
                 mysql_query("UPDATE `users` SET
                 `sex` = '" . $tpl->user['sex'] . "',
@@ -264,7 +286,5 @@ switch (Vars::$MOD) {
             }
         }
 
-        $tpl->form_token = mt_rand(100, 10000);
-        $_SESSION['form_token'] = $tpl->form_token;
         $tpl->contents = $tpl->includeTpl('profile_edit');
 }

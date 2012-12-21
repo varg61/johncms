@@ -10,8 +10,8 @@
 
     <form action="<?= Vars::$URI ?>?act=language_settings" method="post">
         <div class="form-block">
-            <label><?= __('language_default') ?></label><br/>
-            <span class="input-help"><?= __('select_language_help') ?></span><br/>
+            <label><?= __('language_default') ?></label>
+            <span class="description"><?= __('select_language_help') ?></span>
             <label class="small">
                 <input type="radio" value="#" name="iso" <?= (Vars::$SYSTEM_SET['lng'] == '#' ? 'checked="checked"' : '') ?>/>
                 <?= __('select_automatically') ?>

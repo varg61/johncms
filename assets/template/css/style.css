@@ -104,17 +104,12 @@ label.inline {
     font-size: small;
 }
 
-/* Убрать */
-label.small {
-    font-size: small;
-}
-
-.input-help {
+form .description{
     color: #818ba0;
     font-size: small;
     padding-left: 2px;
     margin-bottom: 4px;
-    display: inline-block;
+    display: block;
 }
 
 textarea {

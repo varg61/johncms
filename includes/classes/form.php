@@ -125,6 +125,11 @@ class Form
             // Добавляем метку label
             $out[$i] = $this->_buildLabel($out[$i], $val);
 
+            // Добавляем описание
+            if (isset($val['description'])) {
+                $out[$i] .= '<span class="description">' . $val['description'] . '</span>';
+            }
+
             ++$i;
         }
 
@@ -171,7 +176,9 @@ class Form
     private function _buildTextarea(array $option)
     {
         $this->_setValue($option);
-        return '<textarea id="' . $option['id'] . '" name="' . $option['name'] . '"' .
+        return (isset($option['buttons']) && $option['buttons'] ? TextParser::autoBB($this->_form['name'], $option['name']) : '') .
+            '<textarea id="' . $option['id'] . '" name="' . $option['name'] . '"' .
+            ' rows="' . Vars::$USER_SET['field_h'] . '"' .
             (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') . '>' .
             (isset($option['value']) ? Validate::checkout($option['value']) : '') .
             '</textarea>';
@@ -263,7 +270,7 @@ class Form
             }
             unset($this->input[$option['name']]);
         } elseif ($this->submit && $option['type'] != 'submit') {
-            // Задаем значения для текстиовых полей
+            // Задаем значения для текстовых полей
             if (isset($this->input[$option['name']])) {
                 $option['value'] = trim($this->input[$option['name']]);
                 $this->validInput[$option['name']] = $option['value'];

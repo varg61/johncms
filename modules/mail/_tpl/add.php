@@ -21,11 +21,11 @@
             <?= TextParser::autoBB('form', 'text') ?>
             <? endif ?>
             <textarea id="text" rows="<?= Vars::$USER_SET['field_h'] ?>" name="text"><?= $this->text ?></textarea><br/>
-            <span class="input-help"><?= __('text_size') ?></span>
+            <span class="description"><?= __('text_size') ?></span>
             <br/>
 			<label for="file"><?= __('file') ?></label><br/>
             <input id="file" type="file" name="0"/><br/>
-            <span class="input-help"><?= __('max_file_size') ?> <?= $this->size ?> кб.</span>
+            <span class="description"><?= __('max_file_size') ?> <?= $this->size ?> кб.</span>
             <br/><br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <input type="hidden" name="MAX_FILE_SIZE" value="<?= $this->maxsize ?>"/>
