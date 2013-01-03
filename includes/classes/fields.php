@@ -165,9 +165,11 @@ class Fields
     private function _build($type, array $option)
     {
         $placeholders = array();
-        $option['value'] = isset($option['value']) ? htmlspecialchars($option['value'], ENT_QUOTES, 'UTF-8') : '';
+        if(isset($option['value']) && !is_numeric($option['value'])){
+            $option['value'] = htmlspecialchars($option['value'], ENT_QUOTES, 'UTF-8');
+        }
         foreach (explode(',', $this->elements[$type][1]) as $val) {
-            if (isset($option[$val]) && !empty($option[$val]) && isset($this->attributes[$val])) {
+            if (isset($option[$val]) && (!empty($option[$val]) || $option[$val] == 0) && isset($this->attributes[$val])) {
                 $placeholders[] = sprintf($this->attributes[$val], $option[$val]);
             } else {
                 $placeholders[] = '';
