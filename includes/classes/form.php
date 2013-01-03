@@ -131,7 +131,7 @@ class Form
             $this->_form['method'],
             $this->_form['name'],
             (isset($this->_form['enctype']) ? ' enctype="multipart/form-data"' : ''),
-            implode("\n", $out)
+            "\n" . implode("\n", $out) . "\n"
         );
     }
 

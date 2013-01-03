@@ -41,7 +41,7 @@ $form
 
 if (Vars::$USER_RIGHTS == 9) {
     $form
-        ->addHtml('</div><div class="form-block">')
+        ->addHtml('<br/>')
 
         ->add('checkbox', 'autologin', array(
         'label'        => __('for_users'),
@@ -69,7 +69,7 @@ if (Vars::$USER_RIGHTS == 9) {
         'checked'      => Vars::$USER_SYS['change_nickname']))
 
         ->add('text', 'change_period', array(
-        'label_inline' => __('how_many_days'),
+        'label_inline' => __('how_many_days') . ' <span class="note">(0-30)</span>',
         'value'        => Vars::$USER_SYS['change_period'],
         'class'        => 'mini',
         'filter'       => array(
@@ -112,7 +112,7 @@ if (Vars::$USER_RIGHTS == 9) {
         ->add('text', 'flood_day', array(
         'value'        => Vars::$USER_SYS['flood_day'],
         'class'        => 'small',
-        'label_inline' => __('sec') . ', ' . __('day'),
+        'label_inline' => __('sec') . ', ' . __('day') . ' <span class="note">(3-300)</span>',
         'filter'       => array(
             'type' => 'int',
             'min'  => 3,
@@ -122,7 +122,7 @@ if (Vars::$USER_RIGHTS == 9) {
         ->add('text', 'flood_night', array(
         'value'        => Vars::$USER_SYS['flood_night'],
         'class'        => 'small',
-        'label_inline' => __('sec') . ', ' . __('night'),
+        'label_inline' => __('sec') . ', ' . __('night') . ' <span class="note">(3-300)</span>',
         'filter'       => array(
             'type' => 'int',
             'min'  => 3,

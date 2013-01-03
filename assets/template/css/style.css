@@ -5,9 +5,9 @@ html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, em, img, small, strong, u, 
     padding: 0;
     font: inherit;
     font-size: 100%;
-    /*-webkit-text-size-adjust: 100%;*/
-    /*-moz-text-size-adjust: 100%;*/
-    /*-ms-text-size-adjust: 100%;*/
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
 }
 
@@ -104,7 +104,7 @@ label.inline {
     font-size: small;
 }
 
-form .description{
+form .description {
     color: #818ba0;
     font-size: small;
     padding-left: 2px;
@@ -771,184 +771,50 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
         margin-right: 0;
     }
 
-    .icn-man {
-        background-position: 0 -40px
-    }
-
-    .icn-woman {
-        background-position: 0 -60px
-    }
-
-    .icn-user-add {
-        background-position: 0 -80px
-    }
-
-    .icn-man-woman {
-        background-position: 0 -100px
-    }
-
-    .icn-group {
-        background-position: 0 -120px
-    }
-
-    .icn-piechart {
-        background-position: 0 -140px
-    }
-
-    .icn-violations {
-        background-position: 0 -160px
-    }
-
-    .icn-image {
-        background-position: 0 -180px
-    }
-
-    .icn-comments {
-        background-position: 0 -200px
-    }
-
-    .icn-envelope {
-        background-position: 0 -220px
-    }
-
-    .icn-addressbook {
-        background-position: 0 -240px
-    }
-
-    .icn-block {
-        background-position: 0 -260px
-    }
-
-    .icn-info {
-        background-position: 0 -280px
-    }
-
-    .icn-news {
-        background-position: 0 -300px
-    }
-
-    .icn-book {
-        background-position: 0 -320px
-    }
-
-    .icn-download {
-        background-position: 0 -340px
-    }
-
-    .icn-dialogue {
-        background-position: 0 -360px
-    }
-
-    .icn-dialogue-red {
-        background-position: 0 -380px
-    }
-
-    .icn-chart {
-        background-position: 0 -400px
-    }
-
-    .icn-camera {
-        background-position: 0 -420px
-    }
-
-    .icn-shield {
-        background-position: 0 -440px
-    }
-
-    .icn-shield-red {
-        background-position: 0 -460px
-    }
-
-    .icn-settings {
-        background-position: 0 -480px
-    }
-
-    .icn-edit {
-        background-position: 0 -500px
-    }
-
-    .icn-keys {
-        background-position: 0 -520px
-    }
-
-    .icn-smile {
-        background-position: 0 -540px
-    }
-
-    .icn-flower {
-        background-position: 0 -560px
-    }
-
-    .icn-meter {
-        background-position: 0 -580px
-    }
-
-    .icn-block {
-        background-position: 0 -600px
-    }
-
-    .icn-warning {
-        background-position: 0 -620px
-    }
-
-    .icn-map {
-        background-position: 0 -640px
-    }
-
-    .icn-exit {
-        background-position: 0 -660px
-    }
-
-    .icn-upload {
-        background-position: 0 -680px
-    }
-
-    .icn-trash {
-        background-position: 0 -700px
-    }
-
-    .icn-w-top {
-        background-position: 0 -720px;
-        margin-right: 6px
-    }
-
-    .icn-w-man-woman {
-        background-position: 0 -740px;
-        margin-right: 6px
-    }
-
-    .icn-w-piechart {
-        background-position: 0 -760px;
-        margin-right: 6px
-    }
-
-    .icn-ban-red {
-        background-position: 0 -780px;
-    }
-
-    .icn-settings-red {
-        background-position: 0 -800px
-    }
-
-    .icn-inbox {
-        background-position: 0 -820px
-    }
-
-    .icn-outbox {
-        background-position: 0 -840px
-    }
-
-    .icn-favmail {
-        background-position: 0 -860px
-    }
-
-    .icn-attach {
-        background-position: 0 -880px
-    }
-
-    .btn i {
-        margin-right: 4px;
-    }
+    .icn-man { background-position: 0 -40px }
+    .icn-woman { background-position: 0 -60px }
+    .icn-user-add { background-position: 0 -80px }
+    .icn-man-woman { background-position: 0 -100px }
+    .icn-group { background-position: 0 -120px }
+    .icn-piechart { background-position: 0 -140px }
+    .icn-violations { background-position: 0 -160px }
+    .icn-image { background-position: 0 -180px }
+    .icn-comments { background-position: 0 -200px }
+    .icn-envelope { background-position: 0 -220px }
+    .icn-addressbook { background-position: 0 -240px }
+    .icn-block { background-position: 0 -260px }
+    .icn-info { background-position: 0 -280px }
+    .icn-news { background-position: 0 -300px }
+    .icn-book { background-position: 0 -320px }
+    .icn-download { background-position: 0 -340px }
+    .icn-dialogue { background-position: 0 -360px }
+    .icn-dialogue-red { background-position: 0 -380px }
+    .icn-chart { background-position: 0 -400px }
+    .icn-camera { background-position: 0 -420px }
+    .icn-shield { background-position: 0 -440px }
+    .icn-shield-red { background-position: 0 -460px }
+    .icn-settings { background-position: 0 -480px }
+    .icn-edit { background-position: 0 -500px }
+    .icn-keys { background-position: 0 -520px }
+    .icn-smile { background-position: 0 -540px }
+    .icn-flower { background-position: 0 -560px }
+    .icn-meter { background-position: 0 -580px }
+    .icn-block { background-position: 0 -600px }
+    .icn-warning { background-position: 0 -620px }
+    .icn-map { background-position: 0 -640px }
+    .icn-exit { background-position: 0 -660px }
+    .icn-upload { background-position: 0 -680px }
+    .icn-trash { background-position: 0 -700px }
+    .icn-w-top { background-position: 0 -720px; margin-right: 6px }
+    .icn-w-man-woman { background-position: 0 -740px; margin-right: 6px }
+    .icn-w-piechart { background-position: 0 -760px; margin-right: 6px }
+    .icn-ban-red { background-position: 0 -780px; }
+    .icn-settings-red { background-position: 0 -800px }
+    .icn-inbox { background-position: 0 -820px }
+    .icn-outbox { background-position: 0 -840px }
+    .icn-favmail { background-position: 0 -860px }
+    .icn-attach { background-position: 0 -880px }
+    .btn i { margin-right: 4px; }
 }
 
 /*======================================================
@@ -1022,6 +888,11 @@ ul.nav .red, ul.nav .red a:link, ul.nav .red a:visited {
     text-align: center;
     margin-top: 12px;
     margin-bottom: 12px;
+}
+
+.note {
+    color: gray;
+    font-weight: normal;
 }
 
 .info-message {
