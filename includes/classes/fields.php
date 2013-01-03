@@ -12,38 +12,39 @@
 class Fields
 {
     private $elements = array(
-        'checkbox' => array('<input%s%s type="checkbox" value="1"%s%s/>', 'id,name,class,checked'),
-        'description' => array('<span%s>%s</span>', 'class,description'),
-        'file' => array('<input%s%s%s type="file"/>', 'id,name,class'),
-        'hidden' => array('<input%s type="hidden" value="%s"/>', 'name,value'),
-        'label' => array('<label%s%s>%s</label>', 'for,label_class,label'),
+        'checkbox'     => array('<input%s%s type="checkbox" value="1"%s%s/>', 'id,name,class,checked'),
+        'description'  => array('<span%s>%s</span>', 'description_class,description'),
+        'file'         => array('<input%s%s%s type="file"/>', 'id,name,class'),
+        'hidden'       => array('<input%s type="hidden" value="%s"/>', 'name,value'),
+        'label'        => array('<label%s%s>%s</label>', 'for,label_class,label'),
         'label_inline' => array('<label%s>%s%s</label>', 'label_inline_class,content,label_inline'),
-        'option' => array('<option value="%s"%s>%s</option>', 'value,selected,label'),
-        'password' => array('<input%s%s type="password" value="%s"%s/>', 'id,name,value,class'),
-        'radio' => array('<input%s type="radio" value="%s"%s%s/>', 'name,value,class,checked'),
-        'select' => array('<select%s%s%s>%s</select>', 'name,class,multiple,content'),
-        'submit' => array('<input%s%s type="submit" value="%s"%s/>', 'id,name,value,class'),
-        'text' => array('<input%s%s type="text" value="%s"%s%s/>', 'id,name,value,class,maxlength'),
-        'textarea' => array('<textarea%s%s%s>%s</textarea>', 'id,name,class,value'),
+        'option'       => array('<option value="%s"%s>%s</option>', 'value,selected,label'),
+        'password'     => array('<input%s%s type="password" value="%s"%s/>', 'id,name,value,class'),
+        'radio'        => array('<input%s type="radio" value="%s"%s%s/>', 'name,value,class,checked'),
+        'select'       => array('<select%s%s%s>%s</select>', 'name,class,multiple,content'),
+        'submit'       => array('<input%s%s type="submit" value="%s"%s/>', 'id,name,value,class'),
+        'text'         => array('<input%s%s type="text" value="%s"%s%s/>', 'id,name,value,class,maxlength'),
+        'textarea'     => array('<textarea%s%s%s>%s</textarea>', 'id,name,class,value'),
     );
 
     private $attributes = array(
-        'checked' => ' checked="checked"',
-        'class' => ' class="%s"',
-        'content' => '%s',
-        'description' => '%s',
-        'disabled' => ' disabled="disabled"',
-        'for' => ' for="%s"',
-        'id' => ' id="%s"',
-        'label' => '%s',
-        'label_class' => ' class="%s"',
-        'label_inline' => '%s',
+        'checked'            => ' checked="checked"',
+        'class'              => ' class="%s"',
+        'content'            => '%s',
+        'description'        => '%s',
+        'description_class'  => ' class="%s"',
+        'disabled'           => ' disabled="disabled"',
+        'for'                => ' for="%s"',
+        'id'                 => ' id="%s"',
+        'label'              => '%s',
+        'label_class'        => ' class="%s"',
+        'label_inline'       => '%s',
         'label_inline_class' => ' class="%s"',
-        'maxlength' => ' maxlength="%u"',
-        'multiple' => ' multiple="multiple"',
-        'name' => ' name="%s"',
-        'selected' => ' selected="selected"',
-        'value' => '%s',
+        'maxlength'          => ' maxlength="%u"',
+        'multiple'           => ' multiple="multiple"',
+        'name'               => ' name="%s"',
+        'selected'           => ' selected="selected"',
+        'value'              => '%s',
     );
 
     private $type;
@@ -141,6 +142,14 @@ class Fields
             } else {
                 $out[] = $this->_build($this->type, $this->option);
             }
+        }
+
+        // Добавляем описание DESCRIPTION
+        if (isset($this->option['description'])) {
+            if(!isset($this->option['description_class'])){
+                $this->option['description_class'] = 'description';
+            }
+            $out[] = $this->_build('description', $this->option);
         }
 
         return implode("\n", $out);

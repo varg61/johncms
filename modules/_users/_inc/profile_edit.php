@@ -152,14 +152,14 @@ switch (Vars::$MOD) {
         $form = new Form(Vars::$URI . '?act=edit&amp;user=' . $tpl->user['id']);
 
         $form
-            ->addField('text', 'imname', array(
+            ->add('text', 'imname', array(
             'label'       => __('name'),
             'value'       => $tpl->user['imname'],
             'description' => __('description_name')));
 
         if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) {
             $form
-                ->addField('radio', 'sex', array(
+                ->add('radio', 'sex', array(
                 'label'   => __('sex'),
                 'checked' => $tpl->user['sex'],
                 'items'   => array(
@@ -169,63 +169,63 @@ switch (Vars::$MOD) {
         }
 
         $form
-            ->addField('text', 'day', array(
+            ->add('text', 'day', array(
             'label' => __('birthday'),
             'value' => date("d", strtotime($tpl->user['birth'])),
             'class' => 'mini'))
 
-            ->addField('text', 'month', array(
+            ->add('text', 'month', array(
             'value' => date("m", strtotime($tpl->user['birth'])),
             'class' => 'mini'))
 
-            ->addField('text', 'year', array(
+            ->add('text', 'year', array(
             'value'       => date("Y", strtotime($tpl->user['birth'])),
             'class'       => 'small',
             'description' => __('description_birth')))
 
-            ->addField('text', 'live', array(
+            ->add('text', 'live', array(
             'label'       => __('live'),
             'value'       => $tpl->user['live'],
             'description' => __('description_live')))
 
-            ->addField('textarea', 'about', array(
+            ->add('textarea', 'about', array(
             'label'       => __('about'),
             'value'       => $tpl->user['about'],
             'buttons'     => (Vars::$IS_MOBILE ? FALSE : TRUE),
             'description' => __('description_about')))
 
-            ->addField('text', 'tel', array(
+            ->add('text', 'tel', array(
             'label'       => __('phone_number'),
             'value'       => $tpl->user['tel'],
             'description' => __('description_phone_number')))
 
-            ->addField('text', 'email', array(
+            ->add('text', 'email', array(
             'label' => 'E-mail',
             'value' => $tpl->user['email']))
 
-            ->addField('checkbox', 'mailvis', array(
+            ->add('checkbox', 'mailvis', array(
             'label_inline' => __('show_in_profile'),
             'checked'      => $tpl->user['mailvis'],
             'description'  => __('description_email')))
 
-            ->addField('text', 'siteurl', array(
+            ->add('text', 'siteurl', array(
             'label'       => __('site'),
             'value'       => $tpl->user['siteurl'],
             'description' => __('description_siteurl')))
 
-            ->addField('text', 'skype', array(
+            ->add('text', 'skype', array(
             'label'       => 'Skype',
             'value'       => $tpl->user['skype'],
             'description' => __('description_skype')))
 
-            ->addField('text', 'icq', array(
+            ->add('text', 'icq', array(
             'label'       => 'ICQ',
             'value'       => $tpl->user['icq'],
             'description' => __('description_icq')))
 
             ->addHtml('<br/>')
 
-            ->addField('submit', 'submit', array(
+            ->add('submit', 'submit', array(
             'value' => __('save'),
             'class' => 'btn btn-primary btn-large'))
 
@@ -233,8 +233,8 @@ switch (Vars::$MOD) {
 
         $tpl->form = $form->display();
 
-        if ($form->submit) {
-            foreach ($form->validInput as $key => $val) {
+        if ($form->isSubmitted) {
+            foreach ($form->validOutput as $key => $val) {
                 $tpl->user[$key] = $val;
             }
 
