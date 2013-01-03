@@ -1,28 +1,38 @@
 <?php
 
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
+
+//TODO: Добавить валидаторы
+//TODO: Добавить управляемое разделение элементов формы с помощью <div>
+//TODO: Добавить обработку CAPTCHA
+
 class Form
 {
-    private $_form = array(); // Параметры формы
-    private $_fields = array(); // Параметры всех полей формы
-    private $_submitButton = array(); // Имена submit кнопок
-    private $_token; // Использовать токен для валидации форм
+    private $_form;
+    private $_fields = array();
+    private $_submits = array();
 
-    public $input; // Данные, полученные от $_POST, или $_GET
-    public $validInput;
-    public $submit = FALSE; // Был ли Submit формы?
+    public $input;
+    public $errors = array();
+    public $validationToken = TRUE;
+    public $isSubmitted = FALSE;
+    public $validOutput = array();
 
-    /**
-     * @param $action
-     * @param string $method
-     * @param string $name
-     * @param bool $token
-     */
-    public function __construct($action, $method = '', $name = 'form', $token = TRUE)
+    public function __construct($action, $method = '', $name = 'form')
     {
-        $this->_form['name'] = $name;
-        $this->_form['action'] = $action;
-        $this->_form['method'] = $method == 'get' ? 'get' : 'post';
-        $this->_token = $token ? TRUE : FALSE;
+        $this->_form = array(
+            'type'   => 'form',
+            'name'   => $name,
+            'action' => $action,
+            'method' => ($method == 'get' ? 'get' : 'post')
+        );
 
         // Передаем по ссылке значения суперглобальных переменных
         if ($this->_form['method'] == 'get') {
@@ -33,253 +43,198 @@ class Form
     }
 
     /**
-     * @param $type
-     * @param $id
-     * @param array $option
+     * Добавляем элементы формы
+     *
+     * @param string $type             Тип добавляемого элемента
+     * @param string $name             Имя элемента
+     * @param array $option            Дополнительные параметры
      * @return Form
      */
-    public function addField($type, $id, array $option = array())
+    public function add($type, $name, array $option = array())
     {
-        $option['type'] = $type;
-        $option['id'] = $id;
-
-        if (empty($id)) {
-            $option['type'] = 'html';
-            $option['value'] = 'ERROR: empty ID';
-        }
-
-        if (!isset($option['name']) || empty($option['name'])) {
-            $option['name'] = $id;
-        }
-
         if ($type == 'submit') {
-            $this->_submitButton[] = $option['name'];
+            $this->_submits[] = $name;
+        } elseif ($type == 'file') {
+            $this->_form['enctype'] = TRUE;
         }
 
+        $option['type'] = $type;
+        $option['name'] = $name;
         $this->_fields[] = $option;
+
+        unset($option);
         return $this;
     }
 
     /**
+     * Добавляем HTML код
+     *
+     * Строка ни как не обрабатывается и передается в форму как есть.
+     *
      * @param $str
      * @return Form
      */
     public function addHtml($str)
     {
         $option['type'] = 'html';
-        $option['value'] = $str;
+        $option['content'] = $str;
         $this->_fields[] = $option;
+        unset($option);
         return $this;
     }
 
     /**
-     * Посторение формы
+     * Сборка готовой формы
      *
      * @return string                  Готовая форма
      */
     public function display()
     {
-        // Проверка формы на Submit
-        if (count(array_intersect($this->_submitButton, array_keys($this->input)))
-            && (!$this->_token || isset($this->input['form_token']))
-            && (!$this->_token || isset($_SESSION['form_token']))
-            && (!$this->_token || $this->input['form_token'] == $_SESSION['form_token'])
+        // Проверка формы на корректный Submit
+        if (count(array_intersect($this->_submits, array_keys($this->input)))
+            && (!$this->validationToken || isset($this->input['form_token']))
+            && (!$this->validationToken || isset($_SESSION['form_token']))
+            && (!$this->validationToken || $this->input['form_token'] == $_SESSION['form_token'])
         ) {
-            $this->submit = TRUE;
+            $this->isSubmitted = TRUE;
         }
 
-        $i = 1;
         $out = array();
-        foreach ($this->_fields as $val) {
-            switch ($val['type']) {
-                case'file':
-                    $this->_form['enctype'] = 'multipart/form-data';
-                case'hidden':
-                case'password':
-                case'reset':
-                case'submit':
-                case'text':
-                    $out[$i] = $this->_buildInput($val);
-                    break;
-
-                case'textarea':
-                    $out[$i] = $this->_buildTextarea($val);
-                    break;
-
-                case'radio':
-                    $out[$i] = $this->_buildRadio($val);
-                    break;
-
-                case'checkbox':
-                    $out[$i] = $this->_buildCheckbox($val);
-                    break;
-
-                case'html':
-                    $out[$i] = $val['value'];
-                    break;
-
-                default:
-                    $out[$i] = 'ERROR: unknown type: ' . $val['type'];
+        foreach ($this->_fields as &$element) {
+            // Передаем HTML
+            if ($element['type'] == 'html') {
+                $out[] = $element['content'];
+                continue;
             }
 
-            // Добавляем метку label
-            $out[$i] = $this->_buildLabel($out[$i], $val);
-
-            // Добавляем описание
-            if (isset($val['description'])) {
-                $out[$i] .= '<span class="description">' . $val['description'] . '</span>';
+            // Если был SUBMIT, то присваиваем VALUE значения из суперглобальных массивов
+            if ($this->isSubmitted === TRUE) {
+                $this->_setValues($element);
             }
 
-            ++$i;
+            // Создаем элемент формы
+            $out[] = new Fields($element['type'], $element['name'], $element);
         }
 
-        // Создаем токен для валидации формы
-        if ($this->_token) {
+        unset($this->_fields);
+
+        // Добавляем токен валидации
+        if ($this->validationToken) {
             if (!isset($_SESSION['form_token'])) {
-                $_SESSION['form_token'] = Functions::generateToken();
+                $_SESSION['form_token'] = md5(mt_rand(1000, 100000) . microtime(TRUE));
             }
-            $token = '<input type="hidden" name="form_token" value="' . $_SESSION['form_token'] . '"/>';
-        } else {
-            $token = '';
+            $out[] = new Fields('hidden', 'form_token', array('value' => $_SESSION['form_token']));
         }
 
-        return "\n" . '<form action="' . $this->_form['action'] . '" method="' . $this->_form['method'] . '" name="' . $this->_form['name'] . '">' .
-            "\n" . implode("\n", $out) . "\n" .
-            $token . "\n" .
-            '</form>' . "\n";
+        return sprintf("\n" . '<form action="%s" method="%s" name="%s"%s>%s</form>' . "\n",
+            $this->_form['action'],
+            $this->_form['method'],
+            $this->_form['name'],
+            (isset($this->_form['enctype']) ? ' enctype="multipart/form-data"' : ''),
+            implode("\n", $out)
+        );
     }
 
     /**
-     * Создаем элемент формы input
-     *
-     * @param array $option            Массив с параметрами
-     * @return string                  Готовый элемент формы
-     * @uses Validate::checkout        Очистка строки и преобразование в HTML сущности
+     * @param array $option
      */
-    private function _buildInput(array $option)
+    private function _setValues(array &$option)
     {
-        $this->_setValue($option);
-        return '<input id="' . $option['id'] . '" name="' . $option['name'] . '" type="' . $option['type'] . '"' .
-            (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') .
-            (isset($option['value']) ? ' value="' . Validate::checkout($option['value']) . '"' : '') .
-            ($option['type'] == 'text' && isset($option['maxlength']) ? ' maxlength="' . $option['maxlength'] . '"' : '') .
-            '/>';
-    }
+        switch ($option['type']) {
+            case'text':
+            case'password':
+            case'hidden':
+            case'textarea':
+                if (isset($this->input[$option['name']])) {
+                    $option['value'] = trim($this->input[$option['name']]);
+                    unset($this->input[$option['name']]);
+                    if (isset($option['filter'])) {
+                        $this->_filter($option);
+                    }
+                    $this->validOutput[$option['name']] = $option['value'];
+                }
+                break;
 
-    /**
-     * Создаем элемент формы textarea
-     *
-     * @param array $option            Массив с параметрами
-     * @return string                  Готовый элемент формы
-     * @uses Validate::checkout        Очистка строки и преобразование в HTML сущности
-     */
-    private function _buildTextarea(array $option)
-    {
-        $this->_setValue($option);
-        return (isset($option['buttons']) && $option['buttons'] ? TextParser::autoBB($this->_form['name'], $option['name']) : '') .
-            '<textarea id="' . $option['id'] . '" name="' . $option['name'] . '"' .
-            ' rows="' . Vars::$USER_SET['field_h'] . '"' .
-            (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') . '>' .
-            (isset($option['value']) ? Validate::checkout($option['value']) : '') .
-            '</textarea>';
-    }
+            case'radio':
+                if (isset($this->input[$option['name']]) && isset($option['items'])) {
+                    if (array_key_exists($this->input[$option['name']], $option['items'])) {
+                        $option['checked'] = trim($this->input[$option['name']]);
+                        $this->validOutput[$option['name']] = $option['checked'];
+                        unset($this->input[$option['name']]);
+                    }
+                }
+                break;
 
-    /**
-     * Создаем группу элементов формы radio
-     *
-     * @param array $option            Массив с параметрами
-     * @return string                  Готовый элемент формы
-     */
-    private function _buildRadio(array $option)
-    {
-        $this->_setValue($option);
-        $out = array();
-        foreach ($option['items'] as $radio_key => $radio_val) {
-            $out[] = (!empty($radio_val) ? '<label class="' . (isset($option['label_class']) ? $option['label_class'] : 'inline') . '">' : '') .
-                '<input type="radio" name="' . $option['id'] . '" value="' . $radio_key . '" ' .
-                (isset($option['checked']) && $option['checked'] == $radio_key ? ' checked="checked"' : '') .
-                (isset($option['class']) ? ' class="' . $option['class'] . '"' : '') .
-                '/>' .
-                (!empty($radio_val) ? $radio_val . '</label>' : '');
+            case'select':
+                if (isset($this->input[$option['name']]) && isset($option['items'])) {
+                    $allow = TRUE;
+                    if (isset($option['multiple']) && $option['multiple']) {
+                        foreach ($this->input[$option['name']] as $val) {
+                            if (!array_key_exists($val, $option['items'])) {
+                                $allow = FALSE;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (!array_key_exists($this->input[$option['name']], $option['items'])) {
+                            $allow = FALSE;
+                        }
+                    }
+
+                    if ($allow) {
+                        $option['selected'] = $this->input[$option['name']];
+                        $this->validOutput[$option['name']] = $option['selected'];
+                        unset($this->input[$option['name']]);
+                    }
+                }
+                break;
+
+            case'checkbox':
+                if (isset($this->input[$option['name']])) {
+                    unset($this->input[$option['name']]);
+                    $option['checked'] = 1;
+                    $this->validOutput[$option['name']] = 1;
+                } else {
+                    unset($option['checked']);
+                    $this->validOutput[$option['name']] = 0;
+                }
+                break;
         }
-
-        return implode("\n", $out);
     }
 
     /**
-     * Создаем элемент формы checkbox
-     *
-     * @param array $option            Массив с параметрами
-     * @return string                  Готовый элемент формы
+     * @param $option
      */
-    private function _buildCheckbox(array $option)
+    private function _filter(&$option)
     {
-        $this->_setValue($option);
-        return '<input type="checkbox" id="' . $option['id'] . '" name="' . $option['name'] . '" value="1"' .
-            (isset($option['checked']) && $option['checked'] ? ' checked="checked"' : '') .
-            '/>';
-    }
+        $min = isset($option['filter']['min']) ? intval($option['filter']['min']) : FALSE;
+        $max = isset($option['filter']['max']) ? intval($option['filter']['max']) : FALSE;
 
-    /**
-     * Создаем метку label
-     *
-     * @param $field                   Элемент формы без меток
-     * @param array $option            Массив с параметрами
-     * @return string                  Готовый элемент формы с метками label
-     */
-    private function _buildLabel($field, array $option)
-    {
-        if (isset($option['label_inline'])) {
-            $field = '<label class="' .
-                (isset($option['label_inline_class']) ? $option['label_inline_class'] : 'inline') .
-                '">' .
-                $field .
-                $option['label_inline'] .
-                '</label>';
-        }
+        switch ($option['filter']['type']) {
+            case'str':
+            case'string':
+                if (isset($option['filter']['regexp_search'])) {
+                    $replace = isset($option['filter']['regexp_replace']) ? $option['filter']['regexp_replace'] : '';
+                    $option['value'] = preg_replace($option['filter']['regexp_search'], $replace, $option['value']);
+                }
+                if ($max && mb_strlen($option['value']) > $max) {
+                    $option['value'] = mb_substr($option['value'], 0, $max);
+                }
+                break;
 
-        if (isset($option['label'])) {
-            $field = '<label' .
-                (isset($option['id']) ? ' for="' . $option['id'] . '"' : '') .
-                (isset($option['label_class']) ? ' class="' . $option['label_class'] . '"' : '') .
-                '>' .
-                $option['label'] .
-                '</label>' . "\n" . $field;
-        }
+            case'int':
+            case'integer':
+                $option['value'] = intval($option['value']);
+                if ($min !== FALSE && $option['value'] < $min) {
+                    $option['value'] = $min;
+                }
+                if ($max !== FALSE && $option['value'] > $max) {
+                    $option['value'] = $max;
+                }
+                break;
 
-        return $field;
-    }
-
-    private function _setValue(&$option)
-    {
-        //TODO: Добавить валидатор
-
-        if ($this->submit && $option['type'] == 'checkbox') {
-            // Задаем значения для полей checkbox
-            $option['checked'] = isset($this->input[$option['id']]) ? 1 : 0;
-            $this->validInput[$option['name']] = $option['checked'];
-            unset($this->input[$option['name']]);
-        } elseif ($this->submit && $option['type'] == 'radio') {
-            // Задаем значения для полей radio
-            $value = isset($this->input[$option['name']]) ? trim($this->input[$option['name']]) : FALSE;
-            if ($value !== FALSE && array_key_exists($this->input[$option['name']], $option['items'])) {
-                $option['checked'] = $value;
-                $this->validInput[$option['name']] = $value;
-            } else {
-                $this->validInput[$option['name']] = isset($option['checked']) ? $option['checked'] : '';
-            }
-            unset($this->input[$option['name']]);
-        } elseif ($this->submit && $option['type'] != 'submit') {
-            // Задаем значения для текстовых полей
-            if (isset($this->input[$option['name']])) {
-                $option['value'] = trim($this->input[$option['name']]);
-                $this->validInput[$option['name']] = $option['value'];
-                unset($this->input[$option['name']]);
-            } elseif (isset($option['value'])) {
-                $this->validInput[$option['name']] = $option['value'];
-            } else {
-                $this->validInput[$option['name']] = '';
-            }
+            default:
+                $this->errors[] = 'Unknown filter: ' . $option['filter']['type'];
         }
     }
 }

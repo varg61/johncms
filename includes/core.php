@@ -58,6 +58,7 @@ spl_autoload_register(
             'captcha'        => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
             'comments'       => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
             'counters'       => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
+            'fields'         => 'classes' . DIRECTORY_SEPARATOR . 'fields.php',
             'finfo'          => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
             'form'           => 'classes' . DIRECTORY_SEPARATOR . 'form.php',
             'functions'      => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
