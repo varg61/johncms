@@ -32,7 +32,7 @@ $settings = isset(Vars::$SYSTEM_SET['news'])
 $form = new Form(Vars::$URI);
 
 $form
-    ->addField('radio', 'view', array(
+    ->add('radio', 'view', array(
     'label'   => __('apperance'),
     'checked' => $settings['view'],
     'items'   => array(
@@ -44,49 +44,64 @@ $form
 
     ->addHtml('<br/>')
 
-    ->addField('checkbox', 'breaks', array(
+    ->add('checkbox', 'breaks', array(
     'label_inline' => __('line_foldings'),
     'checked'      => $settings['breaks']))
 
-    ->addField('checkbox', 'smileys', array(
+    ->add('checkbox', 'smileys', array(
     'label_inline' => __('smileys'),
     'checked'      => $settings['smileys']))
 
-    ->addField('checkbox', 'tags', array(
+    ->add('checkbox', 'tags', array(
     'label_inline' => __('bbcode'),
     'checked'      => $settings['tags']))
 
-    ->addField('checkbox', 'comments', array(
+    ->add('checkbox', 'comments', array(
     'label_inline' => __('comments'),
     'checked'      => $settings['comments']))
 
     ->addHtml('<br/>')
 
-    ->addField('text', 'size', array(
-    'label_inline' => __('text_size') . ' (100 - 5000)',
+    ->add('text', 'size', array(
+    'label_inline' => __('text_size') . ' <span class="note">(100 - 5000)</span>',
     'value'        => $settings['size'],
     'maxlength'    => '4',
-    'class'        => 'small'))
+    'class'        => 'small',
+    'filter'       => array(
+        'type' => 'int',
+        'min'  => 100,
+        'max'  => 5000
+    )))
 
-    ->addField('text', 'quantity', array(
-    'label_inline' => __('news_count') . ' (1 - 15)',
+    ->add('text', 'quantity', array(
+    'label_inline' => __('news_count') . ' <span class="note">(1 - 15)</span>',
     'value'        => $settings['quantity'],
     'maxlength'    => '2',
-    'class'        => 'mini'))
+    'class'        => 'small',
+    'filter'       => array(
+        'type' => 'int',
+        'min'  => 1,
+        'max'  => 15
+    )))
 
-    ->addField('text', 'days', array(
-    'label_inline' => __('news_howmanydays_display') . ' (1 - 30)',
+    ->add('text', 'days', array(
+    'label_inline' => __('news_howmanydays_display') . ' <span class="note">(1 - 30)</span>',
     'value'        => $settings['days'],
     'maxlength'    => '2',
-    'class'        => 'mini'))
+    'class'        => 'small',
+    'filter'       => array(
+        'type' => 'int',
+        'min'  => 1,
+        'max'  => 30
+    )))
 
     ->addHtml('<br/>')
 
-    ->addField('submit', 'submit', array(
+    ->add('submit', 'submit', array(
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addField('submit', 'reset', array(
+    ->add('submit', 'reset', array(
     'value' => __('reset_settings'),
     'class' => 'btn'))
 
@@ -94,28 +109,9 @@ $form
 
 $tpl->form = $form->display();
 
-if ($form->submit && isset($form->input['submit'])) {
-    foreach ($form->validInput as $key => $val) {
+if ($form->isSubmitted && isset($form->input['submit'])) {
+    foreach ($form->validOutput as $key => $val) {
         $settings[$key] = $val;
-    }
-
-    // Проверяем принятые данные
-    if ($settings['size'] < 100) {
-        $settings['size'] = 100;
-    } elseif ($settings['size'] > 5000) {
-        $settings['size'] = 5000;
-    }
-
-    if ($settings['quantity'] < 1) {
-        $settings['quantity'] = 1;
-    } elseif ($settings['quantity'] > 15) {
-        $settings['quantity'] = 15;
-    }
-
-    if ($settings['days'] < 1) {
-        $settings['days'] = 1;
-    } elseif ($settings['days'] > 30) {
-        $settings['days'] = 30;
     }
 
     mysql_query("REPLACE INTO `cms_settings` SET
@@ -123,8 +119,8 @@ if ($form->submit && isset($form->input['submit'])) {
         `val` = '" . mysql_real_escape_string(serialize($settings)) . "'
     ");
 
-    $tpl->save = true;
-} elseif ($form->submit && isset($form->input['reset'])) {
+    $tpl->save = TRUE;
+} elseif ($form->isSubmitted && isset($form->input['reset'])) {
     @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'news'");
     header('Location: ' . Vars::$URI . '?default');
     exit;
