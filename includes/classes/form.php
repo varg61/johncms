@@ -157,6 +157,9 @@ class Form
 
             case'radio':
                 if (isset($this->input[$option['name']]) && isset($option['items'])) {
+                    if(empty($this->input[$option['name']])){
+                        $this->input[$option['name']] = 0;
+                    }
                     if (array_key_exists($this->input[$option['name']], $option['items'])) {
                         $option['checked'] = trim($this->input[$option['name']]);
                         $this->validOutput[$option['name']] = $option['checked'];

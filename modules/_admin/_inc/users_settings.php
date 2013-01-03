@@ -148,7 +148,6 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
         `key` = 'users',
         `val` = '" . mysql_real_escape_string(serialize(Vars::$USER_SYS)) . "'
     ");
-
     $tpl->save = TRUE;
 } elseif ($form->isSubmitted && isset($form->input['reset']) && Vars::$USER_RIGHTS == 9) {
     // Сбрасываем настройки на значения по-умолчанию

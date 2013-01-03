@@ -23,7 +23,7 @@
     <?php endif ?>
 
     <li><h2><?= __('security') ?></h2></li>
-    <li><a href="<?= Vars::$URI ?>/acl"><i class="icn-shield"></i><?= __('acl') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$URI ?>?act=acl"><i class="icn-shield"></i><?= __('acl') ?><i class="icn-arrow right"></i></a></li>
     <?php if (Vars::$USER_RIGHTS == 9) : ?>
         <li><a href="<?= Vars::$URI ?>/ip"><i class="icn-shield"></i><?= __('ip_accesslist') ?><i class="icn-arrow right"></i></a></li>
     <?php endif ?>
