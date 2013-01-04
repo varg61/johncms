@@ -93,9 +93,8 @@ $tpl->form = $form->display();
 
 if ($form->isSubmitted) {
     foreach ($form->validOutput as $key => $val) {
-        Vars::$SYSTEM_SET[$key] = $val;
         mysql_query("REPLACE INTO `cms_settings` SET `key` = '$key', `val` = '" . mysql_real_escape_string($val) . "'");
-        $tpl->save = 1;
+        header('Location: ' . Vars::$URI . '?act=system_settings&save');
     }
 }
 
