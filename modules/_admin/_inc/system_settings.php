@@ -13,59 +13,90 @@ defined('_IN_ADMIN') or die('Error: restricted access');
 
 global $tpl;
 
-if (isset($_POST['submit'])
-    && isset($_POST['form_token'])
-    && isset($_SESSION['form_token'])
-    && $_POST['form_token'] == $_SESSION['form_token']
-) {
-    Vars::$SYSTEM_SET['timeshift'] = isset($_POST['timeshift']) ? intval($_POST['timeshift']) : 0;
-    if (Vars::$SYSTEM_SET['timeshift'] < -12 || Vars::$SYSTEM_SET['timeshift'] > 12) {
-        $tpl->error['timeshift'] = __('error_timeshift');
-    }
+$form = new Form(Vars::$URI . '?act=system_settings');
 
-    Vars::$SYSTEM_SET['copyright'] = isset($_POST['copyright']) ? Validate::checkin($_POST['copyright']) : '';
-    if (mb_strlen(Vars::$SYSTEM_SET['copyright']) > 5000) {
-        $tpl->error['copyright'] = __('error_toolong');
-    }
+$form
+    ->add('text', 'timeshift', array(
+    'value'        => Vars::$SYSTEM_SET['timeshift'],
+    'class'        => 'small',
+    'label'        => __('system_time'),
+    'label_inline' => '<span class="badge badge-green">' . date("H:i", time() + Vars::$SYSTEM_SET['timeshift'] * 3600) . '</span> ' . __('time_shift') . ' <span class="note">(+ - 12)</span>',
+    'filter'       => array(
+        'type' => 'int',
+        'min'  => -12,
+        'max'  => 13
+    )))
 
-    Vars::$SYSTEM_SET['email'] = isset($_POST['email']) ? Validate::checkin($_POST['email']) : '';
-    if (!Validate::email(Vars::$SYSTEM_SET['email'], 1, 1)) {
-        $tpl->error['email'] = Validate::$error['email'];
-    }
+    ->add('text', 'email', array(
+    'value' => Vars::$SYSTEM_SET['email'],
+    'label' => __('site_email')))
 
-    Vars::$SYSTEM_SET['filesize'] = isset($_POST['filesize']) ? abs(intval($_POST['filesize'])) : 1000;
-    if (Vars::$SYSTEM_SET['filesize'] < 100 || Vars::$SYSTEM_SET['filesize'] > 50000) {
-        $tpl->error['filesize'] = __('error_wrong_data');
-    }
+    ->add('textarea', 'copyright', array(
+    'value' => Vars::$SYSTEM_SET['copyright'],
+    'label' => __('site_copyright')))
 
-    Vars::$SYSTEM_SET['gzip'] = isset($_POST['gzip']);
-    Vars::$SYSTEM_SET['generation'] = isset($_POST['generation']);
-    Vars::$SYSTEM_SET['memory'] = isset($_POST['memory']);
+    ->add('text', 'filesize', array(
+    'value'        => Vars::$SYSTEM_SET['filesize'],
+    'label_inline' => __('file_maxsize') . ' kB <span class="note">(100-50000)</span>',
+    'description'  => __('filesize_note'),
+    'class'        => 'small',
+    'filter'       => array(
+        'type' => 'int',
+        'min'  => 100,
+        'max'  => 50000
+    )))
 
-    Vars::$SYSTEM_SET['keywords'] = isset($_POST['keywords']) ? Validate::checkin($_POST['keywords']) : '';
-    if (mb_strlen(Vars::$SYSTEM_SET['keywords']) > 250) {
-        $tpl->error['keywords'] = __('error_toolong');
-    }
+    ->add('checkbox', 'gzip', array(
+    'checked'      => Vars::$SYSTEM_SET['gzip'],
+    'label_inline' => __('gzip_compress')))
 
-    Vars::$SYSTEM_SET['description'] = isset($_POST['description']) ? Validate::checkin($_POST['description']) : '';
-    if (mb_strlen(Vars::$SYSTEM_SET['description']) > 250) {
-        $tpl->error['description'] = __('error_toolong');
-    }
+    ->addHtml('<br/>')
 
-    if (empty($tpl->error)) {
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'timeshift', `val` = '" . Vars::$SYSTEM_SET['timeshift'] . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'copyright', `val` = '" . mysql_real_escape_string(Vars::$SYSTEM_SET['copyright']) . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'email', `val` = '" . mysql_real_escape_string(Vars::$SYSTEM_SET['email']) . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'filesize', `val` = '" . Vars::$SYSTEM_SET['filesize'] . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'gzip', `val` = '" . Vars::$SYSTEM_SET['gzip'] . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'generation', `val` = '" . Vars::$SYSTEM_SET['generation'] . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'memory', `val` = '" . Vars::$SYSTEM_SET['memory'] . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'keywords', `val` = '" . mysql_real_escape_string(Vars::$SYSTEM_SET['keywords']) . "'");
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'description', `val` = '" . mysql_real_escape_string(Vars::$SYSTEM_SET['description']) . "'");
+    ->add('checkbox', 'generation', array(
+    'checked'      => Vars::$SYSTEM_SET['generation'],
+    'label'        => __('profiling'),
+    'label_inline' => __('profiling_generation')))
+
+    ->add('checkbox', 'memory', array(
+    'checked'      => Vars::$SYSTEM_SET['memory'],
+    'label_inline' => __('profiling_memory')))
+
+    ->addHtml('<br/>')
+
+    ->add('textarea', 'meta_key', array(
+    'value'       => Vars::$SYSTEM_SET['meta_key'],
+    'label'       => 'META Keywords',
+    'description' => __('keywords_note'),
+    'filter'      => array(
+        'type' => 'str',
+        'max'  => 250
+    )))
+
+    ->add('textarea', 'meta_desc', array(
+    'value'       => Vars::$SYSTEM_SET['meta_desc'],
+    'label'       => 'META Description',
+    'description' => __('description_note'),
+    'filter'      => array(
+        'type' => 'str',
+        'max'  => 250
+    )))
+
+    ->addHtml('<br/>')
+
+    ->add('submit', 'submit', array(
+    'value' => __('save'),
+    'class' => 'btn btn-primary btn-large'))
+
+    ->addHtml('<a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
+
+$tpl->form = $form->display();
+
+if ($form->isSubmitted) {
+    foreach ($form->validOutput as $key => $val) {
+        Vars::$SYSTEM_SET[$key] = $val;
+        mysql_query("REPLACE INTO `cms_settings` SET `key` = '$key', `val` = '" . mysql_real_escape_string($val) . "'");
         $tpl->save = 1;
     }
 }
 
-$tpl->form_token = mt_rand(100, 10000);
-$_SESSION['form_token'] = $tpl->form_token;
 $tpl->contents = $tpl->includeTpl('system_settings');

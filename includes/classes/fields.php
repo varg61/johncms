@@ -54,6 +54,9 @@ class Fields
     {
         $this->type = $type;
         $option['name'] = $name;
+        if (isset($option['value']) && !is_numeric($option['value'])) {
+            $option['value'] = htmlspecialchars($option['value'], ENT_QUOTES, 'UTF-8');
+        }
         $this->option = $option;
     }
 
@@ -146,7 +149,7 @@ class Fields
 
         // Добавляем описание DESCRIPTION
         if (isset($this->option['description'])) {
-            if(!isset($this->option['description_class'])){
+            if (!isset($this->option['description_class'])) {
                 $this->option['description_class'] = 'description';
             }
             $out[] = $this->_build('description', $this->option);
@@ -165,11 +168,8 @@ class Fields
     private function _build($type, array $option)
     {
         $placeholders = array();
-        if(isset($option['value']) && !is_numeric($option['value'])){
-            $option['value'] = htmlspecialchars($option['value'], ENT_QUOTES, 'UTF-8');
-        }
         foreach (explode(',', $this->elements[$type][1]) as $val) {
-            if (isset($option[$val]) && (!empty($option[$val]) || $option[$val] == 0) && isset($this->attributes[$val])) {
+            if (isset($option[$val]) && (!empty($option[$val]) || ($option[$val] == 0 && $val != 'checked')) && isset($this->attributes[$val])) {
                 $placeholders[] = sprintf($this->attributes[$val], $option[$val]);
             } else {
                 $placeholders[] = '';

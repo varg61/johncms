@@ -119,7 +119,9 @@ class System extends Vars
     private function _sysSettings()
     {
         $req = mysql_query("SELECT * FROM `cms_settings`");
-        while (($res = mysql_fetch_row($req)) !== false) parent::$SYSTEM_SET[$res[0]] = $res[1];
+        while ($res = mysql_fetch_row($req)) {
+            parent::$SYSTEM_SET[$res[0]] = $res[1];
+        }
         if (isset(parent::$SYSTEM_SET['lng']) && !empty(parent::$SYSTEM_SET['lng'])) {
             parent::$LNG_ISO = parent::$SYSTEM_SET['lng'];
         }

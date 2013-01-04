@@ -44,8 +44,8 @@ abstract class Vars
         'gzip'             => 1,
         'generation'       => 1,
         'memory'           => 0,
-        'keywords'         => 'johncms',
-        'description'      => 'Powered by JohnCMS http://johncms.com'
+        'meta_key'         => 'johncms',
+        'meta_desc'        => 'Powered by JohnCMS http://johncms.com'
     );
 
     // Контроль доступа к модулям
