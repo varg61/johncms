@@ -16,8 +16,9 @@ global $tpl;
 $form = new Form(Vars::$URI . '?act=users_settings');
 
 $form
+    ->fieldsetStart(__('registration'))
+
     ->add('radio', 'registration', array(
-    'label'   => __('registration'),
     'checked' => Vars::$USER_SYS['registration'],
     'items'   => array(
         '2' => __('registration_open'),
@@ -41,10 +42,9 @@ $form
 
 if (Vars::$USER_RIGHTS == 9) {
     $form
-        ->addHtml('<br/>')
+        ->fieldsetStart(__('for_users'))
 
         ->add('checkbox', 'autologin', array(
-        'label'        => __('for_users'),
         'label_inline' => __('autologin'),
         'checked'      => Vars::$USER_SYS['autologin']))
 
@@ -78,10 +78,9 @@ if (Vars::$USER_RIGHTS == 9) {
             'max'  => 30
         )))
 
-        ->addHtml('<br/>')
+        ->fieldsetStart(__('for_guests'))
 
         ->add('checkbox', 'view_online', array(
-        'label'        => __('for_guests'),
         'label_inline' => __('view_online'),
         'checked'      => Vars::$USER_SYS['view_online']))
 
@@ -97,10 +96,9 @@ if (Vars::$USER_RIGHTS == 9) {
         'label_inline' => __('view_profiles'),
         'checked'      => Vars::$USER_SYS['view_profiles']))
 
-        ->addHtml('<br/>')
+        ->fieldsetStart(__('antiflood'))
 
         ->add('radio', 'flood_mode', array(
-        'label'   => __('antiflood'),
         'checked' => Vars::$USER_SYS['flood_mode'],
         'items'   => array(
             '3' => __('day'),
@@ -131,7 +129,7 @@ if (Vars::$USER_RIGHTS == 9) {
 }
 
 $form
-    ->addHtml('<br/>')
+    ->fieldsetStart()
     ->add('submit', 'submit', array('value' => __('save'), 'class' => 'btn btn-primary btn-large'));
 if (Vars::$USER_RIGHTS == 9) {
     $form->add('submit', 'reset', array('value' => __('reset_settings'), 'class' => 'btn'));

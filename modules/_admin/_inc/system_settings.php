@@ -16,10 +16,11 @@ global $tpl;
 $form = new Form(Vars::$URI . '?act=system_settings');
 
 $form
+    ->fieldsetStart(__('system_time'))
+
     ->add('text', 'timeshift', array(
     'value'        => Vars::$SYSTEM_SET['timeshift'],
     'class'        => 'small',
-    'label'        => __('system_time'),
     'label_inline' => '<span class="badge badge-green">' . date("H:i", time() + Vars::$SYSTEM_SET['timeshift'] * 3600) . '</span> ' . __('time_shift') . ' <span class="note">(+ - 12)</span>',
     'filter'       => array(
         'type' => 'int',
@@ -27,13 +28,7 @@ $form
         'max'  => 13
     )))
 
-    ->add('text', 'email', array(
-    'value' => Vars::$SYSTEM_SET['email'],
-    'label' => __('site_email')))
-
-    ->add('textarea', 'copyright', array(
-    'value' => Vars::$SYSTEM_SET['copyright'],
-    'label' => __('site_copyright')))
+    ->fieldsetStart(__('file_upload'))
 
     ->add('text', 'filesize', array(
     'value'        => Vars::$SYSTEM_SET['filesize'],
@@ -46,22 +41,27 @@ $form
         'max'  => 50000
     )))
 
-    ->add('checkbox', 'gzip', array(
-    'checked'      => Vars::$SYSTEM_SET['gzip'],
-    'label_inline' => __('gzip_compress')))
-
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('profiling'))
 
     ->add('checkbox', 'generation', array(
     'checked'      => Vars::$SYSTEM_SET['generation'],
-    'label'        => __('profiling'),
     'label_inline' => __('profiling_generation')))
 
     ->add('checkbox', 'memory', array(
     'checked'      => Vars::$SYSTEM_SET['memory'],
     'label_inline' => __('profiling_memory')))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('site_details'))
+
+    ->add('text', 'email', array(
+    'value' => Vars::$SYSTEM_SET['email'],
+    'label' => __('site_email')))
+
+    ->add('textarea', 'copyright', array(
+    'value' => Vars::$SYSTEM_SET['copyright'],
+    'label' => __('site_copyright')))
+
+    ->fieldsetStart(__('seo_attributes'))
 
     ->add('textarea', 'meta_key', array(
     'value'       => Vars::$SYSTEM_SET['meta_key'],
@@ -81,7 +81,7 @@ $form
         'max'  => 250
     )))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

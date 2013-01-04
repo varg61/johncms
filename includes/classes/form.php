@@ -18,6 +18,7 @@ class Form
     private $_form;
     private $_fields = array();
     private $_submits = array();
+    private $_fieldset = FALSE;
 
     public $input;
     public $errors = array();
@@ -83,6 +84,25 @@ class Form
         return $this;
     }
 
+    public function fieldsetStart($legend = null)
+    {
+        $option['type'] = 'fs_start';
+        if (!is_null($legend)) {
+            $option['legend'] .= $legend;
+        }
+        $this->_fields[] = $option;
+        unset($option);
+        return $this;
+    }
+
+    public function fieldsetEnd()
+    {
+        $option['type'] = 'fs_end';
+        $this->_fields[] = $option;
+        unset($option);
+        return $this;
+    }
+
     /**
      * Сборка готовой формы
      *
@@ -101,19 +121,37 @@ class Form
 
         $out = array();
         foreach ($this->_fields as &$element) {
-            // Передаем HTML
-            if ($element['type'] == 'html') {
-                $out[] = $element['content'];
-                continue;
-            }
+            switch ($element['type']) {
+                case'html':
+                    $out[] = $element['content'];
+                    break;
 
-            // Если был SUBMIT, то присваиваем VALUE значения из суперглобальных массивов
-            if ($this->isSubmitted === TRUE) {
-                $this->_setValues($element);
-            }
+                case'fs_start':
+                    if($this->_fieldset){
+                        $out[] = '</fieldset>';
+                    }
+                    $out[] = '<fieldset>' . (isset($element['legend']) ? '<legend>' . $element['legend'] . '</legend>' : '');
+                    $this->_fieldset = TRUE;
+                    break;
 
-            // Создаем элемент формы
-            $out[] = new Fields($element['type'], $element['name'], $element);
+                case'fs_end':
+                    $out[] = '</fieldset>';
+                    $this->_fieldset = FALSE;
+                    break;
+
+                default:
+                    // Если был SUBMIT, то присваиваем VALUE значения из суперглобальных массивов
+                    if ($this->isSubmitted === TRUE) {
+                        $this->_setValues($element);
+                    }
+
+                    // Создаем элемент формы
+                    $out[] = new Fields($element['type'], $element['name'], $element);
+            }
+        }
+
+        if ($this->_fieldset) {
+            $out[] = '</fieldset>';
         }
 
         unset($this->_fields);
@@ -157,7 +195,7 @@ class Form
 
             case'radio':
                 if (isset($this->input[$option['name']]) && isset($option['items'])) {
-                    if(empty($this->input[$option['name']])){
+                    if (empty($this->input[$option['name']])) {
                         $this->input[$option['name']] = 0;
                     }
                     if (array_key_exists($this->input[$option['name']], $option['items'])) {

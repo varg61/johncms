@@ -16,8 +16,9 @@ global $tpl;
 $form = new Form(Vars::$URI . '?act=acl');
 
 $form
+    ->fieldsetStart(__('forum'))
+
     ->add('radio', 'forum', array(
-    'label'   => __('forum'),
     'checked' => Vars::$ACL['forum'],
     'items'   => array(
         '2' => __('access_enabled'),
@@ -26,10 +27,9 @@ $form
         '0' => __('access_disabled')
     )))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('photo_albums'))
 
     ->add('radio', 'album', array(
-    'label'   => __('photo_albums'),
     'checked' => Vars::$ACL['album'],
     'items'   => array(
         '2' => __('access_enabled'),
@@ -41,10 +41,9 @@ $form
     'label_inline' => __('comments'),
     'checked'      => Vars::$ACL['albumcomm']))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('guestbook'))
 
     ->add('radio', 'guestbook', array(
-    'label'   => __('guestbook'),
     'checked' => Vars::$ACL['guestbook'],
     'items'   => array(
         '2' => __('access_enabled_for_guests'),
@@ -52,10 +51,9 @@ $form
         '0' => __('access_disabled')
     )))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('library'))
 
     ->add('radio', 'library', array(
-    'label'   => __('library'),
     'checked' => Vars::$ACL['library'],
     'items'   => array(
         '2' => __('access_enabled'),
@@ -67,10 +65,9 @@ $form
     'label_inline' => __('comments'),
     'checked'      => Vars::$ACL['libcomm']))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('downloads'))
 
     ->add('radio', 'downloads', array(
-    'label'   => __('downloads'),
     'checked' => Vars::$ACL['downloads'],
     'items'   => array(
         '2' => __('access_enabled'),
@@ -82,10 +79,9 @@ $form
     'label_inline' => __('comments'),
     'checked'      => Vars::$ACL['downcomm']))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('statistic'))
 
     ->add('radio', 'stat', array(
-    'label'   => __('statistic'),
     'checked' => Vars::$ACL['stat'],
     'items'   => array(
         '3' => __('stat_enable_for_all'),
@@ -94,7 +90,7 @@ $form
         '0' => __('stat_disable')
     )))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

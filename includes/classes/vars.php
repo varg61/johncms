@@ -41,7 +41,6 @@ abstract class Vars
         'copyright'        => 'Powered by JohnCMS',
         'email'            => '',
         'filesize'         => 2000,
-        'gzip'             => 1,
         'generation'       => 1,
         'memory'           => 0,
         'meta_key'         => 'johncms',

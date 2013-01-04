@@ -32,8 +32,9 @@ $settings = isset(Vars::$SYSTEM_SET['news'])
 $form = new Form(Vars::$URI);
 
 $form
+    ->fieldsetStart(__('apperance'))
+
     ->add('radio', 'view', array(
-    'label'   => __('apperance'),
     'checked' => $settings['view'],
     'items'   => array(
         '1' => __('heading_and_text'),
@@ -42,7 +43,7 @@ $form
         '0' => __('dont_display')
     )))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart(__('text_processing'))
 
     ->add('checkbox', 'breaks', array(
     'label_inline' => __('line_foldings'),
@@ -60,18 +61,7 @@ $form
     'label_inline' => __('comments'),
     'checked'      => $settings['comments']))
 
-    ->addHtml('<br/>')
-
-    ->add('text', 'size', array(
-    'label_inline' => __('text_size') . ' <span class="note">(100 - 5000)</span>',
-    'value'        => $settings['size'],
-    'maxlength'    => '4',
-    'class'        => 'small',
-    'filter'       => array(
-        'type' => 'int',
-        'min'  => 100,
-        'max'  => 5000
-    )))
+    ->fieldsetStart(__('output'))
 
     ->add('text', 'quantity', array(
     'label_inline' => __('news_count') . ' <span class="note">(1 - 15)</span>',
@@ -95,7 +85,18 @@ $form
         'max'  => 30
     )))
 
-    ->addHtml('<br/>')
+    ->add('text', 'size', array(
+    'label_inline' => __('text_size') . ' <span class="note">(100 - 5000)</span>',
+    'value'        => $settings['size'],
+    'maxlength'    => '4',
+    'class'        => 'small',
+    'filter'       => array(
+        'type' => 'int',
+        'min'  => 100,
+        'max'  => 5000
+    )))
+
+    ->fieldsetStart()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

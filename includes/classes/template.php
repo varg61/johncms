@@ -92,9 +92,8 @@ class Template extends ArrayObject
         }
         ob_end_clean();
 
-        if (Vars::$SYSTEM_SET['gzip'] && @extension_loaded('zlib')) {
+        if (@extension_loaded('zlib')) {
             // Буферизация вывода со сжатием
-            @ini_set('zlib.output_compression_level', 3);
             ob_start('ob_gzhandler');
         } else {
             ob_start();
