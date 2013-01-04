@@ -11,18 +11,40 @@
 
 defined('_IN_ADMIN') or die('Error: restricted access');
 
-if (isset($_POST['submit'])
-    && isset($_SESSION['form_token'])
-    && $_POST['form_token'] == $_SESSION['form_token']
-) {
-    $iso = isset($_POST['iso']) ? Validate::checkin($_POST['iso']) : FALSE;
-    if ($iso && (in_array($iso, Languages::getInstance()->getLngList()) || $iso = '#')) {
-        Vars::$SYSTEM_SET['lng'] = $iso;
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'lng', `val` = '" . mysql_real_escape_string($iso) . "'");
-        Template::getInstance()->save = 1;
+$tpl = Template::getInstance();
+
+// Подготавливаем список имеющихся языков
+$items['#'] = __('select_automatically');
+foreach (Languages::getInstance()->getLngDescription() as $key => $val) {
+    $items[$key] = Functions::loadImage('flag_' . $key . '.gif') . '&#160; ' . $val;
+}
+
+$form = new Form(Vars::$URI . '?act=language_settings');
+
+$form
+    ->fieldsetStart(__('language_default'))
+
+    ->add('radio', 'iso', array(
+    'checked'     => Vars::$SYSTEM_SET['lng'],
+    'description' => '<br/>' . __('select_language_help'),
+    'items'       => $items))
+
+    ->fieldsetStart()
+
+    ->add('submit', 'submit', array(
+    'value' => __('save'),
+    'class' => 'btn btn-primary btn-large'))
+
+    ->addHtml('<a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
+
+$tpl->form = $form->display();
+
+if ($form->isSubmitted && isset($form->validOutput['iso'])) {
+    if (in_array($form->validOutput['iso'], Languages::getInstance()->getLngList()) || $form->validOutput['iso'] == '#') {
+        Vars::$SYSTEM_SET['lng'] = $form->validOutput['iso'];
+        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'lng', `val` = '" . mysql_real_escape_string($form->validOutput['iso']) . "'");
+        $tpl->save = 1;
     }
 }
 
-Template::getInstance()->form_token = mt_rand(100, 10000);
-$_SESSION['form_token'] = Template::getInstance()->form_token;
-Template::getInstance()->contents = Template::getInstance()->includeTpl('language_settings');
+$tpl->contents = $tpl->includeTpl('language_settings');

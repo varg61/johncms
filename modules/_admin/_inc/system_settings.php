@@ -11,7 +11,7 @@
 
 defined('_IN_ADMIN') or die('Error: restricted access');
 
-global $tpl;
+$tpl = Template::getInstance();
 
 $form = new Form(Vars::$URI . '?act=system_settings');
 
