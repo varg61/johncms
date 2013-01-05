@@ -6,7 +6,7 @@
     <div class="form-block confirm">
         <?= $this->ok ?>
     </div>
-    <?php elseif(isset($this->bad)): ?>
+    <?php elseif (isset($this->bad)): ?>
     <div class="form-block error">
         <?= $this->bad ?>
     </div>

@@ -13,6 +13,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+//TODO: Перевести кнопки навигации
+
 // Закрываем от неавторизованных юзеров
 if ((!Vars::$USER_ID || Vars::$USER_DATA['level'] < 1) && !Vars::$USER_SYS['view_online']) {
     echo Functions::displayError(__('access_guest_forbidden'));
@@ -247,7 +249,7 @@ if ($tpl->total) {
             $arg['header'] .= $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']);
             $arg['header'] .= ')</span><br />' . Functions::getIcon('info.png', '', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
         }
-        $tpl->list[$i] =  Functions::displayUser($res, $arg);
+        $tpl->list[$i] = Functions::displayUser($res, $arg);
     }
 } else {
     echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';

@@ -22,8 +22,8 @@ $ip = trim($_GET['ip']);
 $tpl = Template::getInstance();
 
 if (Vars::$USER_RIGHTS
-&& isset($_GET['ip'])
-&& ip2long($_GET['ip']) !== FALSE
+    && isset($_GET['ip'])
+    && ip2long($_GET['ip']) !== FALSE
 ) {
     if (($fsk = @fsockopen('whois.arin.net.', 43))) {
         fputs($fsk, "$ip\r\n");

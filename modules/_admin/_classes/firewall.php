@@ -9,46 +9,37 @@
  * @author      http://johncms.com/about
  */
 
-// Проверяем права доступа
-if (Vars::$USER_RIGHTS != 9) {
-    echo Functions::displayError(__('access_forbidden'));
-    exit;
-}
-
-$mod = Vars::$MOD == 'white' ? 'white' : 'black';
-$color = Vars::$MOD == 'white' ? 'green' : 'red';
-$ref = htmlspecialchars($_SERVER['HTTP_REFERER']);
-
-function update_cache()
+class Firewall
 {
-    $file = CACHEPATH . 'ip_list.dat';
-    $req = mysql_query("SELECT * FROM `cms_ip_bwlist`");
-    if (mysql_num_rows($req)) {
-        $in = fopen($file, "w+");
-        flock($in, LOCK_EX);
-        ftruncate($in, 0);
-        while ($res = mysql_fetch_assoc($req)) {
-            $mode = $res['mode'] == 'white' ? 2 : 1;
-            fwrite($in, pack('ddS', $res['ip'], $res['ip_upto'], $mode));
-        }
-        fclose($in);
-    } else {
-        unlink($file);
-    }
-}
+    public $cacheFile = 'ip_list.dat';
 
-switch (Vars::$ACT) {
-    case 'add':
-        /*
-        -----------------------------------------------------------------
-        Добавление IP в список
-        -----------------------------------------------------------------
-        */
-        echo'<div class="phdr"><a href="' . Vars::$URI . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('add_ip') . '</div>' .
-            ($mod == 'black'
-                ? '<div class="rmenu"><p><h3>' . __('black_list') . '</h3></p></div>'
-                : '<div class="gmenu"><p><h3>' . __('white_list') . '</h3></p></div>'
-            );
+    public function __construct()
+    {
+        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ip_bwlist`"), 0);
+        if ($count && !file_exists(CACHEPATH . $this->cacheFile)) {
+            $this->updateCache();
+        } elseif (!$count && file_exists(CACHEPATH . $this->cacheFile)) {
+            unlink(CACHEPATH . $this->cacheFile);
+        }
+    }
+
+    public function updateCache()
+    {
+        $req = mysql_query("SELECT * FROM `cms_ip_bwlist`");
+        if (mysql_num_rows($req)) {
+            $in = fopen(CACHEPATH . $this->cacheFile, "w+");
+            flock($in, LOCK_EX);
+            ftruncate($in, 0);
+            while ($res = mysql_fetch_assoc($req)) {
+                $mode = $res['mode'] == 'white' ? 2 : 1;
+                fwrite($in, pack('ddS', $res['ip'], $res['ip_upto'], $mode));
+            }
+            fclose($in);
+        }
+    }
+
+    public function add($ip)
+    {
         if (isset($_POST['submit']) || isset($_POST['confirm'])) {
             $error = array();
             $ip1 = 0;
@@ -179,49 +170,10 @@ switch (Vars::$ACT) {
                 '<p><input type="submit" name="submit" value="' . __('add') . '"/></p></div>' .
                 '</form>';
         }
-        // Нижний блок с подсказками
-        echo'<div class="phdr"><a href="' . Vars::$URI . (Vars::$MOD == 'black' ? '' : '?mod=white') . '">' . __('back') . '</a></div>' .
-            '<div class="topmenu"><p>' .
-            (Vars::$MOD == 'black'
-                ? '<strong>' . mb_strtoupper(__('black_list')) . ':</strong> ' . __('black_list_help')
-                : '<strong>' . mb_strtoupper(__('white_list')) . ':</strong> ' . __('white_list_help')
-            ) .
-            '</p>' . (isset($_POST['submit']) ? '' : '<p>' . __('add_ip_help') . '</p>') .
-            '</div>' .
-            '<p><a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
-        break;
+    }
 
-    case 'clear':
-        /*
-        -----------------------------------------------------------------
-        Очищаем все адреса выбранного списка
-        -----------------------------------------------------------------
-        */
-        echo'<div class="phdr"><a href="' . Vars::$URI . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('clear_list') . '</div>' .
-            ($mod == 'black'
-                ? '<div class="rmenu"><p><h3>' . __('black_list') . '</h3></p></div>'
-                : '<div class="gmenu"><p><h3>' . __('white_list') . '</h3></p></div>'
-            );
-        if (isset($_POST['submit'])) {
-            mysql_query("DELETE FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'");
-            mysql_query("OPTIMIZE TABLE `cms_ip_bwlist`");
-            update_cache();
-            header('Location: ' . Vars::$URI . '?mod=' . $mod);
-        } else {
-            echo'<form action="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '" method="post">' .
-                '<div class="rmenu"><p>' . __('clear_list_warning') . '</p>' .
-                '<p><input type="submit" name="submit" value="' . __('clear') . ' "/></p>' .
-                '</div></form>';
-        }
-        echo '<div class="phdr"><a href="' . $ref . '">' . __('back') . '</a></div>';
-        break;
-
-    case 'del':
-        /*
-        -----------------------------------------------------------------
-        Удаляем выбранные адреса IP
-        -----------------------------------------------------------------
-        */
+    public function delete()
+    {
         $del = isset($_POST['del']) && is_array($_POST['del']) ? $_POST['del'] : array();
         echo'<div class="phdr"><a href="' . Vars::$URI . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('delete_ip') . '</div>' .
             ($mod == 'black'
@@ -251,79 +203,26 @@ switch (Vars::$ACT) {
             echo Functions::displayError(__('error_not_selected'));
         }
         echo '<div class="phdr"><a href="' . $ref . '">' . __('back') . '</a></div>';
-        break;
+    }
 
-    default:
-        /*
-        -----------------------------------------------------------------
-        Главное меню модуля
-        -----------------------------------------------------------------
-        */
-        $menu = array(
-            ($mod != 'white' ? '<strong>' . __('black_list') . '</strong>' : '<a href="' . Vars::$URI . '">' . __('black_list') . '</a>'),
-            ($mod == 'white' ? '<strong>' . __('white_list') . '</strong>' : '<a href="' . Vars::$URI . '?mod=white">' . __('white_list') . '</a>')
-        );
-        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('admin_panel') . '</b></a> | ' . __('ip_accesslist') . '</div>' .
-            '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
-
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'"), 0);
-        Vars::fixPage($total);
-
-        if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-        }
-
-        // Обновляем кэш IP адресов
-        if(isset($_GET['update_cache'])){
-            update_cache();
-            echo'<div class="gmenu">' . __('cache_updated') . '</div>';
-        }
-
-        // Выводим список IP
-        echo'<form action="' . Vars::$URI . '?act=add&amp;mod=' . $mod . '" method="post">' .
-            '<div class="' . ($mod == 'white' ? 'gmenu' : 'rmenu') . '"><input type="submit" name="delete" value="' . __('add') . '"/></div></form>';
-        if ($total) {
-            echo '<form action="' . Vars::$URI . '?act=del&amp;mod=' . $mod . '" method="post">';
-            $req = mysql_query("SELECT `cms_ip_bwlist`.*, `users`.`nickname`
-                FROM `cms_ip_bwlist` LEFT JOIN `users` ON `cms_ip_bwlist`.`user_id` = `users`.`id`
-                WHERE `cms_ip_bwlist`.`mode` = '" . $mod . "'
-                ORDER BY `cms_ip_bwlist`.`timestamp` DESC
-                " . Vars::db_pagination()
+    public function clear()
+    {
+        echo'<div class="phdr"><a href="' . Vars::$URI . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('clear_list') . '</div>' .
+            ($mod == 'black'
+                ? '<div class="rmenu"><p><h3>' . __('black_list') . '</h3></p></div>'
+                : '<div class="gmenu"><p><h3>' . __('white_list') . '</h3></p></div>'
             );
-            for ($i = 0; ($res = mysql_fetch_assoc($req)) !== FALSE; ++$i) {
-                echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
-                    '<input type="checkbox" name="del[]" value="' . $res['ip'] . '"/>&#160;' .
-                    '<strong>IP: <span class="' . $color . '">' . long2ip($res['ip']) . ($res['ip'] != $res['ip_upto'] ? ' - ' . long2ip($res['ip_upto']) : '') . '</span></strong>' .
-                    (empty($res['description']) ? '' : '<div class="sub">' . Validate::checkout($res['description'], 1) . '</div>') .
-                    '<div class="sub"><span class="gray">' .
-                    __('date') . ':&#160;' . Functions::displayDate($res['timestamp']) .
-                    '<br />' . __('who_added') . ':&#160;' . $res['nickname'] .
-                    '</span></div></div>';
-            }
-            echo '<div class="rmenu"><input type="submit" name="delete" value="' . __('delete') . ' "/></div></form>';
+        if (isset($_POST['submit'])) {
+            mysql_query("DELETE FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'");
+            mysql_query("OPTIMIZE TABLE `cms_ip_bwlist`");
+            update_cache();
+            header('Location: ' . Vars::$URI . '?mod=' . $mod);
         } else {
-            echo'<div class="menu"><p>' . __('list_empty') . '</p></div>';
+            echo'<form action="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '" method="post">' .
+                '<div class="rmenu"><p>' . __('clear_list_warning') . '</p>' .
+                '<p><input type="submit" name="submit" value="' . __('clear') . ' "/></p>' .
+                '</div></form>';
         }
-
-        // Нижний блок с подсказками
-        echo'<div class="phdr">' . __('total') . ': ' . $total . '</div>' .
-            '<div class="topmenu"><small><p>' .
-            ($mod == 'white'
-                ? '<strong>' . mb_strtoupper(__('white_list')) . ':</strong> ' . __('white_list_help')
-                : '<strong>' . mb_strtoupper(__('black_list')) . ':</strong> ' . __('black_list_help')
-            ) . '</p></small></div>';
-
-        // Постраничная навигация
-        if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . Vars::$URI . '" method="post">' .
-                '<input type="text" name="page" size="2"/>' .
-                '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
-                '</form></p>';
-        }
-
-        // Ссылки внизу
-        echo'<p>' . ($total ? '<a href="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '">' . __('clear_list') . '</a><br />' : '') .
-            '<a href="' . Vars::$URI . '?mod=' . $mod . '&amp;update_cache">' . __('update_cache') . '</a><br/>' .
-            '<a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
+        echo '<div class="phdr"><a href="' . $ref . '">' . __('back') . '</a></div>';
+    }
 }

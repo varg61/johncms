@@ -11,10 +11,10 @@
     <li><a href="<?= Vars::$HOME_URL ?>/forum/admin"><i class="icn-comments"></i><?= __('forum') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>/download/admin"><i class="icn-download"></i><?= __('downloads') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>/news/admin"><i class="icn-news"></i><?= __('news') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$URI ?>/counters"><i class="icn-meter"></i><?= __('counters') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$URI ?>/sitemap"><i class="icn-map"></i><?= __('sitemap') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= Vars::$URI ?>/links"><i class="icn-flower"></i><?= __('advertisement') ?><i class="icn-arrow right"></i></a></li>
-        <?php if (Vars::$USER_RIGHTS == 9) : ?>
+    <?php if (Vars::$USER_RIGHTS == 9): ?>
+        <li><a href="<?= Vars::$URI ?>/counters"><i class="icn-meter"></i><?= __('counters') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= Vars::$URI ?>?act=sitemap"><i class="icn-map"></i><?= __('sitemap') ?><i class="icn-arrow right"></i></a></li>
         <li><h2><?= __('system') ?></h2></li>
         <li><a href="<?= Vars::$URI ?>?act=system_settings"><i class="icn-settings"></i><?= __('system_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= Vars::$URI ?>?act=language"><i class="icn-settings"></i><?= __('language_settings') ?><i class="icn-arrow right"></i></a></li>
@@ -22,8 +22,8 @@
         <?php endif ?>
     <li><h2><?= __('security') ?></h2></li>
     <li><a href="<?= Vars::$URI ?>?act=acl"><i class="icn-shield"></i><?= __('acl') ?><i class="icn-arrow right"></i></a></li>
-        <?php if (Vars::$USER_RIGHTS == 9) : ?>
-        <li><a href="<?= Vars::$URI ?>/ip"><i class="icn-shield"></i><?= __('ip_accesslist') ?><i class="icn-arrow right"></i></a></li>
+    <?php if (Vars::$USER_RIGHTS == 9) : ?>
+        <li><a href="<?= Vars::$URI ?>?act=firewall"><i class="icn-shield"></i><?= __('firewall') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= Vars::$URI ?>?act=scanner"><i class="icn-shield"></i><?= __('antispy') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
     <?php endif ?>

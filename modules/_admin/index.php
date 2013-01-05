@@ -18,8 +18,10 @@ if (Vars::$USER_RIGHTS >= 2) {
     $tpl->error = array();
 
     $sv_actions = array(
+        'firewall'        => 'firewall.php',
         'language'        => 'language_settings.php',
         'scanner'         => 'spy_scanner.php',
+        'sitemap'         => 'sitemap.php',
         'system_settings' => 'system_settings.php',
     );
 
