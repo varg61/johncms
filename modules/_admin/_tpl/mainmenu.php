@@ -20,6 +20,7 @@
         <li><a href="<?= Vars::$URI ?>?act=language"><i class="icn-settings"></i><?= __('language_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><i class="icn-smile"></i><?= __('smileys') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
+    <li><a href="<?= Vars::$URI ?>?act=whois"><i class="icn-info"></i>WHOIS<i class="icn-arrow right"></i></a></li>
     <li><h2><?= __('security') ?></h2></li>
     <li><a href="<?= Vars::$URI ?>?act=acl"><i class="icn-shield"></i><?= __('acl') ?><i class="icn-arrow right"></i></a></li>
     <?php if (Vars::$USER_RIGHTS == 9) : ?>

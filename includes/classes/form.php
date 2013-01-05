@@ -10,7 +10,6 @@
  */
 
 //TODO: Добавить валидаторы
-//TODO: Добавить управляемое разделение элементов формы с помощью <div>
 //TODO: Добавить обработку CAPTCHA
 
 class Form
@@ -127,7 +126,7 @@ class Form
                     break;
 
                 case'fs_start':
-                    if($this->_fieldset){
+                    if ($this->_fieldset) {
                         $out[] = '</fieldset>';
                     }
                     $out[] = '<fieldset>' . (isset($element['legend']) ? '<legend>' . $element['legend'] . '</legend>' : '');
@@ -190,18 +189,19 @@ class Form
                         $this->_filter($option);
                     }
                     $this->validOutput[$option['name']] = $option['value'];
+                } else {
+                    $this->isSubmitted = FALSE;
                 }
                 break;
 
             case'radio':
                 if (isset($this->input[$option['name']]) && isset($option['items'])) {
-                    if (empty($this->input[$option['name']])) {
-                        $this->input[$option['name']] = 0;
-                    }
                     if (array_key_exists($this->input[$option['name']], $option['items'])) {
                         $option['checked'] = trim($this->input[$option['name']]);
                         $this->validOutput[$option['name']] = $option['checked'];
                         unset($this->input[$option['name']]);
+                    } else {
+                        $this->isSubmitted = FALSE;
                     }
                 }
                 break;
@@ -226,6 +226,8 @@ class Form
                         $option['selected'] = $this->input[$option['name']];
                         $this->validOutput[$option['name']] = $option['selected'];
                         unset($this->input[$option['name']]);
+                    } else {
+                        $this->isSubmitted = FALSE;
                     }
                 }
                 break;

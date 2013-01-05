@@ -32,6 +32,7 @@ if (Vars::$USER_RIGHTS >= 2) {
 
     $common_actions = array(
         'assets' => 'profile_assets.php',
+        'whois'  => 'whois.php',
     );
 
     $include = FALSE;

@@ -1,9 +1,18 @@
-<div class="phdr">
-    <a href="<?= Vars::$MODULE_URI ?>"><b><?= __('admin_panel') ?></b></a> | IP WHOIS
-</div>
-<div class="menu">
-    <small><?= $this->ipWhois ?></small>
-</div>
-<div class="phdr">
-    <a href="<?= htmlspecialchars($_SERVER['HTTP_REFERER']) ?>"><?= __('back') ?></a>
+<ul class="nav">
+    <li><h1 class="section-warning">IP WHOIS</h1></li>
+</ul>
+<div class="form-container">
+    <?php if (isset($this->errormsg)): ?>
+    <div class="form-block error">
+        <?= $this->errormsg ?>
+    </div>
+    <?php endif ?>
+    <div class="form-block">
+        <?= $this->form ?>
+    </div>
+    <?php if (isset($this->whois)): ?>
+    <div class="form-block" style="font-size: small; font-family: monospace">
+        <?= $this->whois ?>
+    </div>
+    <?php endif ?>
 </div>
