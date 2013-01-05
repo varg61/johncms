@@ -20,7 +20,7 @@ if (Vars::$USER_RIGHTS >= 2) {
     $sv_actions = array(
         'firewall'        => 'firewall.php',
         'language'        => 'language_settings.php',
-        'scanner'         => 'spy_scanner.php',
+        'scanner'         => 'scanner.php',
         'sitemap'         => 'sitemap.php',
         'system_settings' => 'system_settings.php',
     );

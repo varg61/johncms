@@ -93,7 +93,7 @@ spl_autoload_register(
  */
 new Network;
 
-require_once(CONFIGPATH . 'config.php');
+require_once(CONFIGPATH . 'db.php');
 $db_host = isset($db_host) ? $db_host : 'localhost';
 $db_user = isset($db_user) ? $db_user : 'root';
 $db_pass = isset($db_pass) ? $db_pass : '';
