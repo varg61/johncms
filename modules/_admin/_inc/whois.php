@@ -28,7 +28,9 @@ $form
 
     ->add('submit', 'submit', array(
     'value' => __('search'),
-    'class' => 'btn btn-primary'));
+    'class' => 'btn btn-primary'))
+
+    ->addHtml('<a class="btn" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$URI) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
