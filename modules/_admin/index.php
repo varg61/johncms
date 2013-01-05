@@ -18,8 +18,9 @@ if (Vars::$USER_RIGHTS >= 2) {
     $tpl->error = array();
 
     $sv_actions = array(
-        'system_settings'   => 'system_settings.php',
-        'language_settings' => 'language_settings.php',
+        'language'        => 'language_settings.php',
+        'scanner'         => 'spy_scanner.php',
+        'system_settings' => 'system_settings.php',
     );
 
     $admin_actions = array(

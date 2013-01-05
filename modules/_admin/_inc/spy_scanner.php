@@ -9,13 +9,10 @@
  * @author      http://johncms.com/about
  */
 
+defined('_IN_ADMIN') or die('Error: restricted access');
 define('ROOT_DIR', '.');
 
-// Проверяем права доступа
-if (Vars::$USER_RIGHTS < 7) {
-    echo Functions::displayError(__('access_forbidden'));
-    exit;
-}
+$tpl = Template::getInstance();
 
 class scaner
 {
@@ -26,61 +23,59 @@ class scaner
     */
     public $scan_folders = array(
         '',
-        '/files',
+        '/assets',
+//      '/files',
         '/images',
         '/includes',
         '/install',
-        '/modules',
-        '/templates',
+//      '/modules',
+//      '/templates',
     );
+
     public $good_files = array(
         './.htaccess',
         './index.php',
 
-        './files/.htaccess',
-        './files/forum/index.php',
-        './files/library/index.php',
-        './files/users/album/index.php',
-        './files/users/avatar/index.php',
-        './files/users/index.php',
-        './files/users/photo/index.php',
-        './files/users/pm/index.php',
-
-        './images/avatars/index.php',
-        './images/captcha/.htaccess',
-        './images/index.php',
-        './images/smileys/index.php',
-
         './includes/.htaccess',
+        './includes/core.php',
+        './includes/config/config.php',
         './includes/classes/advt.php',
         './includes/classes/captcha.php',
         './includes/classes/comments.php',
         './includes/classes/counters.php',
+        './includes/classes/fields.php',
+        './includes/classes/form.php',
         './includes/classes/functions.php',
-        './includes/classes/homepage.php',
+        './includes/classes/languages.php',
         './includes/classes/network.php',
+        './includes/classes/robotsdetect.php',
         './includes/classes/session.php',
         './includes/classes/sitemap.php',
+        './includes/classes/statistic.php',
         './includes/classes/system.php',
         './includes/classes/template.php',
         './includes/classes/textparser.php',
         './includes/classes/validate.php',
         './includes/classes/vars.php',
-        './includes/config/config.php',
-        './includes/core.php',
         './includes/lib/class.upload.php',
+        './includes/lib/getid3/getid3.lib.php',
+        './includes/lib/getid3/getid3.php',
+        './includes/lib/getid3/module.audio.mp3.php',
+        './includes/lib/getid3/module.tag.id3v1.php',
+        './includes/lib/getid3/module.tag.id3v2.php',
+        './includes/lib/getid3/write.id3v1.php',
+        './includes/lib/getid3/write.id3v2.php',
+        './includes/lib/getid3/write.php',
         './includes/lib/mp3.php',
         './includes/lib/pclerror.lib.php',
         './includes/lib/pcltar.lib.php',
         './includes/lib/pcltrace.lib.php',
         './includes/lib/pclzip.lib.php',
         './includes/lib/pear.php',
-        './includes/old_vars.php',
-        './includes/template_default.php',
-
-        './modules/.htaccess',
+        './includes/lib/Tar.php',
         '',
     );
+
     public $snap_base = 'scan_snapshot.dat';
     public $snap_files = array();
     public $bad_files = array();
@@ -190,81 +185,64 @@ class scaner
 }
 
 $scaner = new scaner();
-$tpl = Template::getInstance();
 
-switch (Vars::$ACT) {
-    case 'scan':
-        /*
-        -----------------------------------------------------------------
-        Сканируем на соответствие дистрибутиву
-        -----------------------------------------------------------------
-        */
-        $scaner->scan();
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('antispy') . '</b></a> | ' . __('antispy_dist_scan') . '</div>';
-        if (count($scaner->bad_files)) {
-            echo '<div class="rmenu"><small>' . __('antispy_dist_scan_bad') . '</small></div>';
-            echo '<div class="menu">';
-            foreach ($scaner->bad_files as $idx => $data) {
-                echo $data['file_path'] . '<br />';
-            }
-            echo'</div>';
-        } else {
-            echo '<div class="gmenu"><p>' . __('antispy_dist_scan_good') . '</p></div>';
-        }
-        echo'<div class="phdr">' . __('total') . ': ' . count($scaner->bad_files) . '</div>' .
-            '<p><a href="' . Vars::$URI . '?act=scan">' . __('antispy_rescan') . '</a></p>';
-        break;
+$form = new Form(Vars::$URI . '?act=scanner');
 
-    case 'snapscan':
-        /*
-        -----------------------------------------------------------------
-        Сканируем на соответствие ранее созданному снимку
-        -----------------------------------------------------------------
-        */
-        $scaner->snapscan();
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('antispy') . '</b></a> | ' . __('antispy_snapshot_scan') . '</div>';
-        if (count($scaner->track_files) == 0) {
-            echo Functions::displayError(__('antispy_no_snapshot'), '<a href="' . Vars::$URI . '?act=snap">' . __('antispy_snapshot_create') . '</a>');
-        } else {
+$form
+    ->fieldsetStart(__('select_action'))
+
+    ->add('radio', 'mode', array(
+    'checked' => 1,
+    'items'   => array(
+        '1' => __('antispy_dist_scan'),
+        '2' => __('antispy_snapshot_scan'),
+        '3' => __('antispy_snapshot_create')
+    )))
+
+    ->fieldsetStart()
+
+    ->add('submit', 'submit', array(
+    'value' => __('do'),
+    'class' => 'btn btn-primary btn-large'))
+
+    ->addHtml('<a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
+
+$tpl->form = $form->display();
+
+if ($form->isSubmitted) {
+    switch ($form->validOutput['mode']) {
+        case 1:
+            // Сканируем на соответствие дистрибутиву
+            $scaner->scan();
             if (count($scaner->bad_files)) {
-                echo '<div class="rmenu">' . __('antispy_snapshot_scan_bad') . '</div>';
-                echo '<div class="menu">';
-                foreach ($scaner->bad_files as $idx => $data) {
-                    echo $data['file_path'] . '<br />';
-                }
-                echo '</div>';
+                $tpl->files = $scaner->bad_files;
+                $tpl->bad = __('antispy_dist_inconsistency');
             } else {
-                echo '<div class="gmenu"><p>' . __('antispy_snapshot_scan_ok') . '</p></div>';
+                $tpl->ok = __('antispy_dist_scan_good');
             }
-            echo '<div class="phdr">' . __('total') . ': ' . count($scaner->bad_files) . '</div>';
-        }
-        break;
+            break;
 
-    case 'snap':
-        /*
-        -----------------------------------------------------------------
-        Создаем снимок файлов
-        -----------------------------------------------------------------
-        */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('antispy') . '</b></a> | ' . __('antispy_snapshot_create') . '</div>';
-        if (isset($_POST['submit'])) {
+        case 2:
+            // Сканируем на соответствие ранее созданному снимку
+            $scaner->snapscan();
+            if (count($scaner->track_files) == 0) {
+                $tpl->bad = __('antispy_no_snapshot');
+            } else {
+                if (count($scaner->bad_files)) {
+                    $tpl->files = $scaner->bad_files;
+                    $tpl->bad = __('antispy_snp_inconsistency');
+                } else {
+                    $tpl->ok = __('antispy_snapshot_scan_ok');
+                }
+            }
+            break;
+
+        case 3:
+            // Создаем снимок файлов
             $scaner->snap();
-            echo'<div class="gmenu"><p>' . __('antispy_snapshot_create_ok') . '</p></div>' .
-                '<div class="phdr"><a href="' . Vars::$URI . '">' . __('continue') . '</a></div>';
-        } else {
-            echo'<form action="' . Vars::$URI . '?act=snap" method="post">' .
-                '<div class="menu"><p>' . __('antispy_snapshot_warning') . '</p>' .
-                '<p><input type="submit" name="submit" value="' . __('antispy_snapshot_create') . '" /></p>' .
-                '</div></form>' .
-                '<div class="phdr"><small>' . __('antispy_snapshot_help') . '</small></div>';
-        }
-        break;
-
-    default:
-        /*
-        -----------------------------------------------------------------
-        Главное меню Сканера
-        -----------------------------------------------------------------
-        */
-        $tpl->contents = $tpl->includeTpl('antispy_menu');
+            $tpl->ok = __('antispy_snapshot_create_ok');
+            break;
+    }
 }
+
+$tpl->contents = $tpl->includeTpl('spy_scanner');
