@@ -21,14 +21,15 @@ $ip = isset($_GET['ip']) ? trim($_GET['ip']) : FALSE;
 $form
     ->fieldsetStart(__('ip_information'))
 
-    ->addHtml('<br/>')
-
     ->add('text', 'ip', array(
-    'value' => ($ip ? $ip : '')))
+    'value'        => ($ip ? $ip : ''),
+    'label_inline' => __('ip_address')))
+
+    ->addHtml('<br style="line-height: 5px"/>')
 
     ->add('submit', 'submit', array(
-    'value' => __('search'),
-    'class' => 'btn btn-primary'))
+    'value' => __('sent'),
+    'class' => 'btn btn-primary btn-large'))
 
     ->addHtml('<a class="btn" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$URI) . '">' . __('back') . '</a>');
 
