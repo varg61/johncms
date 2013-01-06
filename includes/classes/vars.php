@@ -25,14 +25,14 @@ abstract class Vars
     public static $IP_REQUESTS_LIST = array();   // Счетчик обращений с IP адреса
     public static $USER_AGENT;                   // User Agent
     public static $IS_MOBILE = FALSE;            // Мобильный браузер
-    public static $PLACE = '';                   // Местоположение на сайте
-    public static $MODULE_INCLUDE = '';          // Подключаемый файл Роутера
-    public static $MODULE_URI = '';              // URI модуля
-    public static $URI = '';                     // URI активного скрипта
-    public static $MODULE = 'mainmenu';          // Активный модуль
-    public static $MODULE_PATH = '';             // Папка с модулем
-    //TODO: Написать вывод системных ошибок
-    public static $SYSTEM_ERRORS = array();      // Системные ошибки
+    public static $MODULE_URI = '';              //TODO: Удалить
+    public static $URI = 'mail.ru';              //TODO: Удалить
+    public static $MODULE = 'mainmenu';          //TODO: Удалить
+    public static $MODULE_PATH = '';             //TODO: Удалить
+    public static $PLACE = '';                   // Текущее местоположение на сайте
+    public static $SYSTEM_ERRORS = array();      //TODO: Написать вывод системных ошибок
+
+    public static $ROUTE_FIRST = FALSE; //TODO: Удалить
 
     // Системные настройки
     public static $SYSTEM_SET = array(

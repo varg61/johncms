@@ -11,8 +11,8 @@
         <?= $this->form ?>
     </div>
     <?php if (isset($this->whois)): ?>
-    <div class="form-block" style="font-size: small; font-family: monospace">
-        <?= $this->whois ?>
+    <div class="form-block" style="font-size: small; word-wrap: break-word">
+        <pre><?= $this->whois ?></pre>
     </div>
     <?php endif ?>
 </div>

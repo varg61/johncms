@@ -12,8 +12,7 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-
-$form = new Form(Vars::$URI . '?act=system_settings');
+$form = new Form(Router::getUrl(3));
 
 $form
     ->fieldsetStart(__('system_time'))
@@ -87,14 +86,14 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
 if ($form->isSubmitted) {
     foreach ($form->validOutput as $key => $val) {
         mysql_query("REPLACE INTO `cms_settings` SET `key` = '$key', `val` = '" . mysql_real_escape_string($val) . "'");
-        header('Location: ' . Vars::$URI . '?act=system_settings&save');
+        header('Location: ' . Router::getUrl(3) . '?save');
     }
 }
 

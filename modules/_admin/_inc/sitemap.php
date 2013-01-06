@@ -12,12 +12,11 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
+$form = new Form(Router::getUrl(3));
 
 $settings = isset(Vars::$SYSTEM_SET['sitemap'])
     ? unserialize(Vars::$SYSTEM_SET['sitemap'])
     : array('forum' => 0, 'lib' => 0, 'browsers' => 1, 'users' => 0);
-
-$form = new Form(Vars::$URI . '?act=sitemap');
 
 $form
     ->fieldsetStart(__('lng_on'))
@@ -54,7 +53,7 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 

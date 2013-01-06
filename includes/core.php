@@ -66,6 +66,7 @@ spl_autoload_register(
             'login'          => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
             'network'        => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
             'pclzip'         => 'lib'     . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
+            'router'         => 'classes' . DIRECTORY_SEPARATOR . 'router.php',
             'session'        => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
             'sitemap'        => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
             'system'         => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
@@ -83,7 +84,7 @@ spl_autoload_register(
         } elseif (is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
             include_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
         } else {
-            exit('ERROR: class <b><i>' . $name . '</i></b> not found');
+            exit('ERROR: class "' . $name . '" not found');
         }
     }
 );

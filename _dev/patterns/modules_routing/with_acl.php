@@ -1,17 +1,9 @@
 <?php
 
-/**
- * @package     JohnCMS
- * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2012 JohnCMS Community
- * @license     LICENSE.txt (see attached file)
- * @version     VERSION.txt (see attached file)
- * @author      http://johncms.com/about
+/*
+ * Пример роутинга с разделением прав доступа
+ * Все подключаемые файлы должны находиться в каталоге _inc модуля
  */
-
-@ini_set("max_execution_time", "600");
-defined('_IN_JOHNCMS') or die('Error: restricted access');
-define('_IN_ADMIN', 1);
 
 if (Vars::$USER_RIGHTS >= 2) {
     $sv_actions = array(

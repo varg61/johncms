@@ -11,8 +11,9 @@
 
 defined('_IN_PROFILE') or die('Error: restricted access');
 
-global $tpl;
+$tpl = Template::getInstance();
 
+$tpl->url = Router::getUrl(2);
 if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif')) {
     $tpl->avatar = TRUE;
 }

@@ -144,7 +144,7 @@ class Session extends Vars
 
         if ($this->session_data['place'] != parent::$PLACE) {
             $sql[] = "`place` = '" . mysql_real_escape_string(parent::$PLACE) . "'";
-            $movings = true;
+            $movings = TRUE;
         }
 
         if ($this->session_data['session_timestamp'] > (time() - 300)) {

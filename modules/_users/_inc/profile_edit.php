@@ -11,7 +11,7 @@
 
 defined('_IN_PROFILE') or die('Error: restricted access');
 
-global $tpl;
+$tpl = Template::getInstance();
 
 if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '_small.jpg')) {
     $tpl->photo = TRUE;

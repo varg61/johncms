@@ -11,7 +11,7 @@
 
 defined('_IN_PROFILE') or die('Error: restricted access');
 
-global $tpl;
+$tpl = Template::getInstance();
 
 /*
 -----------------------------------------------------------------

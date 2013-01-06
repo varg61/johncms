@@ -12,8 +12,7 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-
-$form = new Form(Vars::$URI . '?act=users_settings');
+$form = new Form(Router::getUrl(3));
 
 $form
     ->fieldsetStart(__('registration'))
@@ -134,7 +133,7 @@ $form
 if (Vars::$USER_RIGHTS == 9) {
     $form->add('submit', 'reset', array('value' => __('reset_settings'), 'class' => 'btn'));
 }
-$form->addHtml(' <a class="btn" href="' . Vars::$URI . '">' . __('back') . '</a>');
+$form->addHtml(' <a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
 $tpl->form = $form->display();
 
 if ($form->isSubmitted && isset($form->input['submit'])) {
@@ -150,7 +149,7 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
 } elseif ($form->isSubmitted && isset($form->input['reset']) && Vars::$USER_RIGHTS == 9) {
     // Сбрасываем настройки на значения по-умолчанию
     @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'users'");
-    header('Location: ' . Vars::$URI . '?act=users_settings&default');
+    header('Location: ' . Router::getUrl(3) . '?default');
     exit;
 }
 
