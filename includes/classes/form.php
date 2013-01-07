@@ -87,7 +87,7 @@ class Form
     {
         $option['type'] = 'fs_start';
         if (!is_null($legend)) {
-            $option['legend'] .= $legend;
+            $option['legend'] = $legend;
         }
         $this->_fields[] = $option;
         unset($option);

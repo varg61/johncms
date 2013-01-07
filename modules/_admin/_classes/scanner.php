@@ -19,9 +19,6 @@ class Scanner
     public $snap = FALSE;
     public $track_files = array();
 
-    private $checked_folders = array();
-    private $cache_files = array();
-
     /**
      * Сканирование на соответствие дистрибутиву
      */
@@ -77,22 +74,19 @@ class Scanner
      */
     function scan_files($dir, $snap = FALSE)
     {
-        if (!isset($file))
-            $file = FALSE;
-        $this->checked_folders[] = $dir . '/' . $file;
-
         if ($dh = @opendir($dir)) {
             while (FALSE !== ($file = readdir($dh))) {
-                if ($file == '.' or $file == '..' or $file == '.svn' or $file == '.DS_store') {
+                if ($file == '.' || $file == '..' || $file == '.svn') {
                     continue;
                 }
                 if (is_dir($dir . '/' . $file)) {
-                    if ($dir != ROOT_DIR)
+                    if ($dir != ROOT_DIR) {
                         $this->scan_files($dir . '/' . $file, $snap);
+                    }
                 } else {
-                    if ($this->snap or $snap)
+                    if ($this->snap or $snap) {
                         $templates = "|tpl";
-                    else
+                    } else
                         $templates = "";
                     if (preg_match("#.*\.(php|cgi|pl|perl|php3|php4|php5|php6|phtml|py|htaccess" . $templates . ")$#i", $file)) {
                         $folder = str_replace("../..", ".", $dir);
@@ -106,7 +100,7 @@ class Scanner
                             );
                         } else {
                             if ($this->snap) {
-                                if ($this->track_files[$folder . '/' . $file] != $file_crc and !in_array($folder . '/' . $file, $this->cache_files))
+                                if ($this->track_files[$folder . '/' . $file] != $file_crc)
                                     $this->bad_files[] = array(
                                         'file_path' => $folder . '/' . $file,
                                         'file_name' => $file,
