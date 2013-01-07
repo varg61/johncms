@@ -162,9 +162,9 @@ class Languages
      */
     private function _parseModuleLng()
     {
-        $file = MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
-        $fileEN = MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . 'en.lng';
-        $fileRU = MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . 'ru.lng';
+        $file = MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
+        $fileEN = MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . 'en.lng';
+        $fileRU = MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . 'ru.lng';
         if (is_file($file)) {
             return parse_ini_file($file);
         } elseif (is_file($fileEN)) {

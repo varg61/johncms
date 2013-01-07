@@ -28,7 +28,6 @@ class Router extends Vars
             $this->_getModule('homepage');
         }
 
-        parent::$MODULE_PATH = $this->module['path'];
         parent::$URI = parent::$HOME_URL . '/' . $this->module['module'] . $this->uri; //TODO: Удалить
         parent::$PLACE = $this->_setPlace();
         $this->_include();

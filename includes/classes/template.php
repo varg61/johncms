@@ -63,8 +63,8 @@ class Template extends ArrayObject
             $user_tpl = TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $tpl . '.php';
         } else {
             // Загружаем шаблоны модулей
-            $default_tpl = MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_tpl' . DIRECTORY_SEPARATOR . $tpl . '.php';
-            $user_tpl = TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $default_tpl = MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_tpl' . DIRECTORY_SEPARATOR . $tpl . '.php';
+            $user_tpl = TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . Router::$PATH . DIRECTORY_SEPARATOR . $tpl . '.php';
         }
 
         ob_start();

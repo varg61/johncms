@@ -81,8 +81,8 @@ spl_autoload_register(
 
         if (isset($system[$name])) {
             require_once(SYSPATH . $system[$name]);
-        } elseif (is_file(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
-            include_once(MODPATH . Vars::$MODULE_PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
+        } elseif (is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php')) {
+            include_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_classes' . DIRECTORY_SEPARATOR . $name . '.php');
         } else {
             exit('ERROR: class "' . $name . '" not found');
         }
