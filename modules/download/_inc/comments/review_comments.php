@@ -22,7 +22,7 @@ if(!Vars::$SYSTEM_SET['mod_down_comm'] && Vars::$USER_RIGHTS < 7) {
 $textl = __('review_comments');
 if(!Vars::$SYSTEM_SET['mod_down_comm'])
 	echo '<div class="rmenu">' . __('comments_cloded') . '</div>';
-echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
+echo '<div class="phdr"><a href="' . Router::getUrl(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_comments`"), 0);
 if ($total) {
     $req = mysql_query("SELECT `cms_download_comments`.*, `cms_download_comments`.`id` AS `cid`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`, `users`.`id`, `cms_download_files`.`rus_name`

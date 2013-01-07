@@ -2,7 +2,7 @@
 <?= $this->error_add ?>
 <?php if (!$this->ignor): ?>
 <div>
-    <form name="form" action="<?= Vars::$MODULE_URI ?>?act=messages&amp;id=<?= Vars::$ID ?>" method="post" enctype="multipart/form-data">
+    <form name="form" action="<?= $this->link ?>?act=messages&amp;id=<?= Vars::$ID ?>" method="post" enctype="multipart/form-data">
         <div class="gmenu">
             <strong><?= __('message') ?>:</strong><br/>
             <?php if (!Vars::$IS_MOBILE): ?>
@@ -27,10 +27,10 @@
 <?= $this->list ?>
 <p>
 <div class="func">
-    <a href="<?= Vars::$MODULE_URI ?>?act=messages&amp;mod=cleaning&amp;id=<?= Vars::$ID ?>"><?= __('cleaning') ?></a>
+    <a href="<?= $this->link ?>?act=messages&amp;mod=cleaning&amp;id=<?= Vars::$ID ?>"><?= __('cleaning') ?></a>
 </div>
 </p>
 <p>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= __('mail') ?></a><br/>
+    <a href="<?= $this->link ?>"><?= __('mail') ?></a><br/>
     <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
 </p>

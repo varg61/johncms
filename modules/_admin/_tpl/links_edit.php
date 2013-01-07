@@ -70,5 +70,5 @@
 </form>
 <p>
     <a href="<?= Vars::$URI ?>"><?= __('advertisement') ?></a><br/>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= __('admin_panel') ?></a>
+    <a href="<?= Router::getUrl(2) ?>"><?= __('admin_panel') ?></a>
 </p>

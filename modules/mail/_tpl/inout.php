@@ -2,11 +2,11 @@
     <li><h1 class="section-personal"><?= $this->tit ?></h1></li>
 </ul>
 <?php if ($this->total): ?>
-<form action="<?= Vars::$MODULE_URI ?>?act=<?= $this->pages_type ?>" method="post">
+<form action="<?= $this->link ?>?act=<?= $this->pages_type ?>" method="post">
     <div>
         <?php foreach ($this->query as $row): ?>
         <div class="<?= $row['list'] ?>">
-            <input type="checkbox" name="delch[]" value="<?= $row['id'] ?>"/> <a href="<?= Vars::$MODULE_URI ?>?act=read&amp;id=<?= $row['id'] ?>"><?= $this->pref_in ?>: <?= $row['nickname'] ?></a> <?= $row['online'] ?> (<?= $row['time'] ?>
+            <input type="checkbox" name="delch[]" value="<?= $row['id'] ?>"/> <a href="<?= $this->link ?>?act=read&amp;id=<?= $row['id'] ?>"><?= $this->pref_in ?>: <?= $row['nickname'] ?></a> <?= $row['online'] ?> (<?= $row['time'] ?>
             )
             <?php if ($row['file']): ?>
             <div class="func">
@@ -31,10 +31,10 @@
 <p>
 <div class="func">
     <?php if ($this->pages_type == 'inmess'): ?>
-    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=delete_read"><?= __('delete_read') ?></a><br/>
-    <a href="<?= Vars::$MODULE_URI ?>?act=inmess&amp;mod=cleaning"><?= __('cleaning') ?></a><br/>
+    <a href="<?= $this->link ?>?act=inmess&amp;mod=delete_read"><?= __('delete_read') ?></a><br/>
+    <a href="<?= $this->link ?>?act=inmess&amp;mod=cleaning"><?= __('cleaning') ?></a><br/>
     <?php else: ?>
-    <a href="<?= Vars::$MODULE_URI ?>?act=outmess&amp;mod=cleaning"><?= __('cleaning') ?></a><br/>
+    <a href="<?= $this->link ?>?act=outmess&amp;mod=cleaning"><?= __('cleaning') ?></a><br/>
     <?php endif ?>
 </div>
 </p>
@@ -44,5 +44,5 @@
 </div>
 <?php endif ?>
 <div class="btn-panel">
-    <a class="btn" href="<?= Vars::$MODULE_URI ?>?act=add"><i class="icn-edit"></i><?= __('write_message') ?></a>
+    <a class="btn" href="<?= $this->link ?>?act=add"><i class="icn-edit"></i><?= __('write_message') ?></a>
 </div>

@@ -228,7 +228,7 @@ Class ValidMail extends Vars
 				`filesize`='" . $this->file_size . "'") or die(mysql_error());
                 mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . parent::$USER_ID);
             }
-            Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $this->id);
+            Header('Location: ' . Router::getUrl(2) . '?act=messages&id=' . $this->id);
             return TRUE;
         }
         return FALSE;

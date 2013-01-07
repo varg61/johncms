@@ -13,9 +13,8 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 //Закрываем прямой доступ к файлу
 defined('_IN_JOHNCMS_FRIENDS') or die('Error: restricted access');
 //Закрываем доступ гостям
-if ( !Vars::$USER_ID )
-{
-	Header( 'Location: ' . Vars::$HOME_URL . '/404' );
+if (!Vars::$USER_ID) {
+    Header('Location: ' . Vars::$HOME_URL . '/404');
     exit;
 }
 $fr = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" .
@@ -39,10 +38,10 @@ if ($fr == 2) {
         //`sys` = '1',
         //`them` = '{$lng_profile['friendship']}'");
         $tpl->contents = '<div class="rmenu"><p>' . __('you_deleted_friends') . '</p>
-		<p><a href="' . Vars::$MODULE_URI . '">' . __('friends') . '</a></p>
+		<p><a href="' . Router::getUrl(2) . '">' . __('friends') . '</a></p>
 		</div>';
     } else {
-        $tpl->urlSelect = Vars::$MODULE_URI . '?act=delete&amp;id=' . Vars::$ID;
+        $tpl->urlSelect = Router::getUrl(2) . '?act=delete&amp;id=' . Vars::$ID;
         $tpl->select = __('really_deleted_friends');
         $tpl->submit = __('confirm');
         $tpl->phdr = __('deleted_friends');

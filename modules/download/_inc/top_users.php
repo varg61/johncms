@@ -16,7 +16,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 -----------------------------------------------------------------
 */
 $textl = __('top_users');
-echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
+echo '<div class="phdr"><a href="' . Router::getUrl(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
 $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `user_id` > 0 GROUP BY `user_id` ORDER BY COUNT(`user_id`)");
 $total = mysql_num_rows($req);
 /*

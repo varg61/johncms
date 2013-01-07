@@ -1,6 +1,6 @@
 <div class="phdr"><strong><?= __('new_messages') ?></strong></div>
 <? if ($this->total): ?>
-<form action="<?= Vars::$MODULE_URI ?>?act=new" method="post">
+<form action="<?= Router::getUrl(2) ?>?act=new" method="post">
     <div>
         <?= $this->contacts ?>
         <div class="gmenu">
@@ -21,6 +21,6 @@
 <div class="rmenu"><?= __('no_messages') ?>!</div>
 <? endif ?>
 <p>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= __('mail') ?></a><br/>
+    <a href="<?= Router::getUrl(2) ?>"><?= __('mail') ?></a><br/>
     <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
 </p>

@@ -119,7 +119,7 @@ switch (Vars::$MOD) {
                                     WHERE `id` = " . $tpl->user['id']
                             );
                             $tpl->message = __('change_nickname_confirm');
-                            $tpl->continue = Vars::$MODULE_URI . '/profile?act=settings&amp;user=' . $tpl->user['id'];
+                            $tpl->continue = Router::getUrl(2) . '/profile?act=settings&amp;user=' . $tpl->user['id'];
                             $tpl->contents = $tpl->includeTpl('message', 1);
                             exit;
                         } else {

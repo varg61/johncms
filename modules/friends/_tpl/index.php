@@ -3,16 +3,16 @@
 </div>
 <div class="topmenu">
     <strong><?= __('friends_list') ?></strong> |
-    <a href="<?= Vars::$MODULE_URI ?>?act=demands"><?= __('my_demand') ?></a><?= ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?> |
-    <a href="<?= Vars::$MODULE_URI ?>?act=offers"><?= __('my_offers') ?></a>
-    <?= ($this->offers ? '(<span class="red">' . $this->offers . '</span>)' : '') ?><?= ($this->total ? ' | <a href="' . Vars::$MODULE_URI . '?act=online">' . __('online') . '</a>' : '')?>
+    <a href="<?= Router::getUrl(2) ?>?act=demands"><?= __('my_demand') ?></a><?= ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?> |
+    <a href="<?= Router::getUrl(2) ?>?act=offers"><?= __('my_offers') ?></a>
+    <?= ($this->offers ? '(<span class="red">' . $this->offers . '</span>)' : '') ?><?= ($this->total ? ' | <a href="' . Router::getUrl(2) . '?act=online">' . __('online') . '</a>' : '')?>
 </div>
 <?php if ($this->total): ?>
 <?php foreach ($this->query as $row): ?>
     <div class="<?= $row['list'] ?>">
         <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] ?></a><?= $row['online'] ?>
         <div class="sub">
-            <a href="<?= Vars::$MODULE_URI ?>?act=delete&amp;id=<?= $row['id']?>"><?= __('delete') ?></a>
+            <a href="<?= Router::getUrl(2) ?>?act=delete&amp;id=<?= $row['id']?>"><?= __('delete') ?></a>
         </div>
     </div>
     <?php endforeach ?>

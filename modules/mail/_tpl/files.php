@@ -4,7 +4,7 @@
 <?php if ($this->total): ?>
 <?php foreach ($this->query as $row): ?>
     <div class="<?= $row['list'] ?>">
-        <?= $row['icon'] ?>&#160;<a href="<?= Vars::$MODULE_URI ?>?act=load&amp;id=<?= $row['id'] ?>"><?= $row['filename'] ?></a> (<?= $row['filesize'] ?>)(<?= $row['filecount'] ?>)
+        <?= $row['icon'] ?>&#160;<a href="<?= Router::getUrl(2) ?>?act=load&amp;id=<?= $row['id'] ?>"><?= $row['filename'] ?></a> (<?= $row['filesize'] ?>)(<?= $row['filecount'] ?>)
     </div>
     <? endforeach ?>
 <div class="phdr"><?= __('total') ?>: <?= $this->total ?></div>

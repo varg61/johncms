@@ -1,7 +1,7 @@
 <ul class="nav">
     <li><h1 class="section-personal"><?= __('elected') ?></h1></li>
 </ul>
-<? if ($this->total): ?><form action="<?= Vars::$MODULE_URI ?>?act=elected" method="post"><div><? endif ?>
+<? if ($this->total): ?><form action="<?= Router::getUrl(2) ?>?act=elected" method="post"><div><? endif ?>
 <? if ($this->total): ?>
 <?= $this->contacts ?>
     <div class="gmenu">

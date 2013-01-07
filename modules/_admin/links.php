@@ -15,6 +15,7 @@ if (Vars::$USER_RIGHTS < 7) {
     exit;
 }
 
+$backLink = Router::getUrl(2);
 $tpl = Template::getInstance();
 
 switch (Vars::$ACT) {
@@ -255,7 +256,7 @@ switch (Vars::$ACT) {
         Главное меню модуля управления рекламой
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('admin_panel') . '</b></a> | ' . __('advertisement') . '</div>';
+        echo '<div class="phdr"><a href="' . $backLink . '"><b>' . __('admin_panel') . '</b></a> | ' . __('advertisement') . '</div>';
         $array_placing = array(
             __('link_add_placing_all'),
             __('link_add_placing_front'),
@@ -344,5 +345,5 @@ switch (Vars::$ACT) {
         }
         echo'<p><a href="' . Vars::$URI . '?act=edit">' . __('link_add') . '</a><br />' .
             '<a href="' . Vars::$URI . '?act=clear">' . __('links_delete_hidden') . '</a><br />' .
-            '<a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
+            '<a href="' . $backLink . '">' . __('admin_panel') . '</a></p>';
 }

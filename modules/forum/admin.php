@@ -706,6 +706,6 @@ switch (Vars::$MOD) {
             '<li><a href="' . Vars::$URI . '?mod=htopics">' . __('hidden_topics') . '</a> (' . $total_thm_del . ')</li>' .
             '<li><a href="' . Vars::$URI . '?mod=moders">' . __('moders') . '</a></li>' .
             '</ul></p></div>' .
-            '<div class="phdr"><a href="' . Vars::$MODULE_URI . '">' . __('to_forum') . '</a></div>';
+            '<div class="phdr"><a href="' . Router::getUrl(2) . '">' . __('to_forum') . '</a></div>';
 }
 echo '<p><a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a></p>';

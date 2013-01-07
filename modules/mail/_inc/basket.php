@@ -17,6 +17,9 @@ if (!Vars::$USER_ID) {
     Header('Location: ' . Vars::$HOME_URL . '/404');
     exit;
 }
+
+$backLink = Router::getUrl(2);
+
 //Заголовок
 $tpl->title = __('mail') . ' | ' . __('basket');
 if (Vars::$ID) {
@@ -50,12 +53,11 @@ if (Vars::$ID) {
         }
         unset($delete, $update);
 
-        Header('Location: ' . Vars::$MODULE_URI . '?act=basket&id=' . Vars::$ID);
+        Header('Location: ' . $backLink . '?act=basket&id=' . Vars::$ID);
         exit;
     } else {
         if (Vars::$ID == Vars::$USER_ID) {
-            $tpl->contents = Functions::displayError(__('error_request'), '<a href="' . Vars::
-            $MODULE_URI . '">' . __('contacts') . '</a>');
+            $tpl->contents = Functions::displayError(__('error_request'), '<a href="' . $backLink . '">' . __('contacts') . '</a>');
         } else {
             $q = mysql_query("SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
             if (mysql_num_rows($q)) {
@@ -95,20 +97,20 @@ if (Vars::$ID) {
                                 '.png', '', 'align="middle"'),
                             'list'      => (($i % 2) ? 'list1' : 'list2'),
                             'nickname'  => $row['nickname'],
-                            'file'      => $row['filename'] ? '<a href="' . Vars::$MODULE_URI . '?act=load&amp;id=' .
+                            'file'      => $row['filename'] ? '<a href="' . $backLink . '?act=load&amp;id=' .
                                 $row['mid'] . '">' . $row['filename'] . '</a> (' . UploadMail::formatsize($row['filesize']) .
                                 ')(' . $row['filecount'] . ')' : '',
                             'time'      => Functions::displayDate($row['time']),
                             'text'      => $text,
-                            'urlDelete' => Vars::$MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'],
-                            'url'       => (Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id']),
+                            'urlDelete' => $backLink . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'],
+                            'url'       => ($backLink . '?act=messages&amp;id=' . $row['id']),
                             'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
                                 '<span class="green"> [ON]</span>'),
                             'elected'   => (($row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
                                 Vars::$USER_ID) ? TRUE : FALSE),
-                            'selectBar' => '[<span class="green">&laquo;</span> <a href="' . Vars::$MODULE_URI .
+                            'selectBar' => '[<span class="green">&laquo;</span> <a href="' . $backLink .
                                 '?act=restore&amp;id=' . $row['mid'] . '">' . __('rest') . '</a>] [<span class="red">х</span> <a href="' .
-                                Vars::$MODULE_URI . '?act=delete&amp;id=' . $row['mid'] . '">' . __('delete') .
+                                $backLink . '?act=delete&amp;id=' . $row['mid'] . '">' . __('delete') .
                                 '</a>]');
                         ++$i;
                     }
@@ -119,21 +121,21 @@ if (Vars::$ID) {
                         '</a></p>';
                     $tpl->total = $total;
                     //Навигация
-                    $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?act=basket&amp;id=' .
+                    $tpl->display_pagination = Functions::displayPagination($backLink . '?act=basket&amp;id=' .
                         Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']);
                     $tpl->token = mt_rand(100, 10000);
                     $_SESSION['token_status'] = $tpl->token;
-                    $tpl->url_type = Vars::$MODULE_URI . '?act=basket&amp;id=' . Vars::$ID;
+                    $tpl->url_type = $backLink . '?act=basket&amp;id=' . Vars::$ID;
                     //Подключаем шаблон модуля list.php
                     $tpl->contents = $tpl->includeTpl('list');
                 } else {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
+                    Header('Location: ' . $backLink . '?act=basket');
                     exit;
                 }
             } else {
                 //Если пользователь не существует, показываем ошибку
                 $tpl->contents = Functions::displayError(__('user_does_not_exist'), '<a href="' .
-                    Vars::$MODULE_URI . '">' . __('mail') . '</a>');
+                    $backLink . '">' . __('mail') . '</a>');
             }
         }
     }
@@ -159,7 +161,7 @@ if (Vars::$ID) {
 					AND `contact_id` IN (" . $id . ")");
                 }
             }
-            Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
+            Header('Location: ' . $backLink . '?act=basket');
             exit;
         }
         //Удаляем сообщения
@@ -201,7 +203,7 @@ if (Vars::$ID) {
                     unset($delete, $update);
                 }
             }
-            Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
+            Header('Location: ' . $backLink . '?act=basket');
             exit;
         }
         //Очищаем корзину
@@ -237,7 +239,7 @@ if (Vars::$ID) {
                 mysql_query("UPDATE `cms_mail_messages` SET `delete`='" . Vars::$USER_ID . "'
 				WHERE `id` IN (" . $id . ")");
             }
-            Header('Location: ' . Vars::$MODULE_URI . '?act=basket');
+            Header('Location: ' . $backLink . '?act=basket');
             exit;
         }
         //Формируем список удаленных сообщений по контактам
@@ -271,16 +273,16 @@ if (Vars::$ID) {
                 'nickname'  => $row['nickname'],
                 'count'     => $row['count'],
                 'count_new' => '',
-                'url'       => (Vars::$MODULE_URI . '?act=basket&amp;id=' . $row['id']),
+                'url'       => ($backLink . '?act=basket&amp;id=' . $row['id']),
                 'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
                     '<span class="green"> [ON]</span>'));
             ++$i;
         }
         //Навигация
-        $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI . '?act=basket&amp;',
+        $tpl->display_pagination = Functions::displayPagination($backLink . '?act=basket&amp;',
             Vars::$START, $total, Vars::$USER_SET['page_size']);
         $tpl->query = $array;
-		unset($array);
+        unset($array);
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
         //Подключаем шаблон модуля contacts.php

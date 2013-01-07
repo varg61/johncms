@@ -17,6 +17,9 @@ if (!Vars::$USER_ID) {
     Header('Location: ' . Vars::$HOME_URL . '/404');
     exit;
 }
+
+$backLink = Router::getUrl(2);
+
 if (Vars::$ID) {
 	$result = mysql_query("SELECT * FROM `cms_mail_messages` WHERE `id` = " . Vars::$ID . " AND `user_id` = " . Vars::$USER_ID);
 	if(mysql_num_rows($result)) {
@@ -39,27 +42,26 @@ if (Vars::$ID) {
 						`text`='" . mysql_real_escape_string($text) . "'
 						WHERE `id` = " . Vars::$ID . " AND `user_id` = " . Vars::$USER_ID) or die(mysql_error());
 						mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$USER_ID);
-						Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $req['contact_id']);
+						Header('Location: ' . $backLink . '?act=messages&id=' . $req['contact_id']);
 						exit;
 					} else {
 						$tpl->mail_error = Functions::displayError( $error );
 						$tpl->text = htmlentities($text, ENT_QUOTES, 'UTF-8');
 					}
 				}
-				$tpl->url = Vars::$MODULE_URI . '?act=edit&amp;id=' . Vars::$ID;
+				$tpl->url = $backLink . '?act=edit&amp;id=' . Vars::$ID;
 				$tpl->token = mt_rand(100, 10000);
 				$_SESSION['token_status'] = $tpl->token;
 				$tpl->contents = $tpl->includeTpl( 'edit' );
 			} else {
-				$tpl->contents = Functions::displayError(__( 'message_ready_read' ), '<a href="' . Vars::$MODULE_URI . '">' . __('mail') . '</a>');
+				$tpl->contents = Functions::displayError(__( 'message_ready_read' ), '<a href="' . $backLink . '">' . __('mail') . '</a>');
 			}
 		} else {
-			$tpl->contents = Functions::displayError(__( 'page_does_not_exist' ), '<a href="' . Vars::$MODULE_URI . '">' . __('mail') . '</a>');
+			$tpl->contents = Functions::displayError(__( 'page_does_not_exist' ), '<a href="' . $backLink . '">' . __('mail') . '</a>');
 		}
 	} else {
-		$tpl->contents = Functions::displayError(__( 'page_does_not_exist' ), '<a href="' . Vars::$MODULE_URI . '">' . __('mail') . '</a>');
+		$tpl->contents = Functions::displayError(__( 'page_does_not_exist' ), '<a href="' . $backLink . '">' . __('mail') . '</a>');
 	}
 } else {
-    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . Vars::
-    $MODULE_URI . '">' . __('mail') . '</a>');
+    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . $backLink . '">' . __('mail') . '</a>');
 }

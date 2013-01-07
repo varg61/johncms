@@ -20,6 +20,8 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
+$backLink = Router::getUrl(2);
+
 $add_message['text'] = isset($_POST['text']) ? trim($_POST['text']) : '';
 $addmail = new ValidMail($add_message, Vars::$ID);
 
@@ -35,7 +37,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
 		`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `id` IN (" . $delch . ")");
         mysql_query("UPDATE `cms_mail_messages` SET
 		`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `id` IN (" . $delch . ")");
-        Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . Vars::$ID);
+        Header('Location: ' . $backLink . '?act=messages&id=' . Vars::$ID);
         exit;
     } else if (Vars::$ID && Vars::$MOD == 'cleaning') {
         if (isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE) {
@@ -61,10 +63,10 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                     mysql_query("UPDATE `cms_mail_messages` SET
 					`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `time`<='" . (time() - 2592000) . "'");
             }
-            Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . Vars::$ID);
+            Header('Location: ' . $backLink . '?act=messages&id=' . Vars::$ID);
             exit;
         }
-        $tpl->urlSelect = Vars::$MODULE_URI . '?act=messages&amp;mod=cleaning&amp;id=' . Vars::$ID;
+        $tpl->urlSelect = $backLink . '?act=messages&amp;mod=cleaning&amp;id=' . Vars::$ID;
         $tpl->submit = __('clear');
         $tpl->phdr = __('cleaning');
         $tpl->token = mt_rand(100, 10000);
@@ -90,19 +92,19 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                     }
                 }
                 if ($data['user_id'] == Vars::$USER_ID) {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $data['contact_id']);
+                    Header('Location: ' . $backLink . '?act=messages&id=' . $data['contact_id']);
                     exit;
                 } else {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $data['user_id']);
+                    Header('Location: ' . $backLink . '?act=messages&id=' . $data['user_id']);
                     exit;
                 }
             } else {
                 if ($data['user_id'] == Vars::$USER_ID)
-                    $tpl->urlBack = Vars::$MODULE_URI . '?act=messages&id=' . $data['contact_id'];
+                    $tpl->urlBack = $backLink . '?act=messages&id=' . $data['contact_id'];
                 else
-                    $tpl->urlBack = Vars::$MODULE_URI . '?act=messages&id=' . $data['user_id'];
+                    $tpl->urlBack = $backLink . '?act=messages&id=' . $data['user_id'];
 
-                $tpl->urlSelect = Vars::$MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . Vars::
+                $tpl->urlSelect = $backLink . '?act=messages&amp;mod=delete&amp;id=' . Vars::
                 $ID;
                 $tpl->select = __('confirm_removing');
                 $tpl->submit = __('delete');
@@ -134,10 +136,10 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                     }
                 }
                 if ($data['user_id'] == Vars::$USER_ID) {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $data['contact_id']);
+                    Header('Location: ' . $backLink . '?act=messages&id=' . $data['contact_id']);
                     exit;
                 } else {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=messages&id=' . $data['user_id']);
+                    Header('Location: ' . $backLink . '?act=messages&id=' . $data['user_id']);
                     exit;
                 }
             } else {
@@ -197,24 +199,22 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                         'list'      => (($i % 2) ? 'list1' : 'list2'),
                         'nickname'  => $row['nickname'],
                         'file'      => $row['filename'] ? Functions::getImage(UploadMail::fileicon($row['filename']),
-                            '', 'style="margin: 0 0 -4px 0;"') . '&#160;<a href="' . Vars::
-                        $MODULE_URI . '?act=load&amp;id=' . $row['mid'] . '">' . $row['filename'] .
+                            '', 'style="margin: 0 0 -4px 0;"') . '&#160;<a href="' . $backLink . '?act=load&amp;id=' . $row['mid'] . '">' . $row['filename'] .
                             '</a> (' . UploadMail::formatsize($row['filesize']) . ')(' . $row['filecount'] .
                             ')' : '',
                         'time'      => Functions::displayDate($row['time']),
                         'text'      => $text,
                         'read'      => $row['read'],
                         'user_id'   => $row['user_id'],
-                        'url'       => (Vars::$MODULE_URI . '?act=messages&amp;id=' . $row['id']),
+                        'url'       => ($backLink . '?act=messages&amp;id=' . $row['id']),
                         'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
                             '<span class="green"> [ON]</span>'),
                         'elected'   => (($row['elected_in'] != Vars::$USER_ID && $row['elected_out'] !=
                             Vars::$USER_ID) ? TRUE : FALSE),
-                        'selectBar' => ('[<span class="red">х</span>&#160;<a href="' . Vars::
-                        $MODULE_URI . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'] .
+                        'selectBar' => ('[<span class="red">х</span>&#160;<a href="' . $backLink . '?act=messages&amp;mod=delete&amp;id=' . $row['mid'] .
                             '">' . __('delete') . '</a>] ' . (($row['elected_in'] !=
                             Vars::$USER_ID && $row['elected_out'] != Vars::$USER_ID) ? '[<a href="' .
-                            Vars::$MODULE_URI . '?act=messages&amp;mod=elected&amp;id=' . $row['mid'] .
+                            $backLink . '?act=messages&amp;mod=elected&amp;id=' . $row['mid'] .
                             '">' . __('in_elected') . '</a>]' : '')));
                     ++$i;
                 }
@@ -227,15 +227,17 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                 $tpl->query = $array;
                 $tpl->total = $total;
                 //Навигация
-                $tpl->display_pagination = Functions::displayPagination(Vars::$MODULE_URI .
+                $tpl->display_pagination = Functions::displayPagination($backLink .
                     '?act=messages&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::
                 $USER_SET['page_size']);
-                $tpl->url_type = Vars::$MODULE_URI . '?act=messages&amp;id=' . Vars::$ID;
+                $tpl->url_type = $backLink . '?act=messages&amp;id=' . Vars::$ID;
                 //Подключаем шаблон list.php
                 $tpl->list = $tpl->includeTpl('list');
             } else {
                 $tpl->list = '<div class="rmenu">' . __('no_messages') . '</div>';
             }
+
+            $tpl->link = $backLink;
             $tpl->contents = $tpl->includeTpl('messages');
         }
     }

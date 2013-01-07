@@ -21,6 +21,8 @@ if (!Vars::$USER_ID && (!isset(Vars::$SYSTEM_SET['active']) || !Vars::$SYSTEM_SE
     exit;
 }
 
+$backLink = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Функция отображения списков
@@ -60,7 +62,7 @@ switch (Vars::$ACT) {
         Топ комментариев
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('community') . '</b></a> | ' . __('top_comm') . '</div>' .
+        echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('community') . '</b></a> | ' . __('top_comm') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
             get_top('count_comments') .
             '<div class="phdr"><a href="' . Vars::$HOME_URL . '">' . __('homepage') . '</a></div>';
@@ -96,9 +98,9 @@ switch (Vars::$ACT) {
         Топ Форума
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('community') . '</b></a> | ' . __('top_forum') . '</div>' .
+        echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('community') . '</b></a> | ' . __('top_forum') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
             get_top('count_forum') .
             '<div class="phdr"><a href="' . Vars::$HOME_URL . '/forum">' . __('forum') . '</a></div>';
 }
-echo '<p><a href="' . Vars::$MODULE_URI . '">' . __('back') . '</a></p>';
+echo '<p><a href="' . $backLink . '">' . __('back') . '</a></p>';

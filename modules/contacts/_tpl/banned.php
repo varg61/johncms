@@ -1,5 +1,5 @@
 <div class="phdr"><strong><?= __('banned_contacts') ?></strong></div>
-<? if ($this->total): ?><form action="<?= Vars::$MODULE_URI ?>?act=banned" method="post"><div><? endif ?>
+<? if ($this->total): ?><form action="<?= Router::getUrl(2) ?>?act=banned" method="post"><div><? endif ?>
 <?= $this->contacts ?>
 <? if ($this->total): ?>
     <div class="gmenu">
@@ -17,5 +17,5 @@
 <? endif ?>
 <p>
     <a href="<?= Vars::$HOME_URL ?>/mail"><?= __('mail') ?></a><br/>
-    <a href="<?= Vars::$MODULE_URI ?>"><?= __('contacts') ?></a>
+    <a href="<?= Router::getUrl(2) ?>"><?= __('contacts') ?></a>
 </p>

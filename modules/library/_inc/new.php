@@ -45,4 +45,4 @@ if ($total > 0) {
 } else {
     echo '<p>' . __('list_empty') . '</p>';
 }
-echo '<p><a href="' . Vars::$MODULE_URI . '">' . __('to_library') . '</a></p>';
+echo '<p><a href="' . Router::getUrl(2) . '">' . __('to_library') . '</a></p>';

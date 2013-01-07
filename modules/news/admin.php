@@ -106,7 +106,7 @@ $form
     'value' => __('reset_settings'),
     'class' => 'btn'))
 
-    ->addHtml('<a class="btn" href="' . Vars::$MODULE_URI . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 

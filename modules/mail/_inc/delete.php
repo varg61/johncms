@@ -18,6 +18,8 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
+$backLink = Router::getUrl(2);
+
 if (Vars::$ID) {
     //Проверяем выбранное сообщение
     $q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
@@ -43,18 +45,18 @@ if (Vars::$ID) {
                     }
                 }
                 if ($data['user_id'] == Vars::$USER_ID) {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=elected&id=' . $data['contact_id']);
+                    Header('Location: ' . $backLink . '?act=elected&id=' . $data['contact_id']);
                     exit;
                 } else {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=elected&id=' . $data['user_id']);
+                    Header('Location: ' . $backLink . '?act=elected&id=' . $data['user_id']);
                     exit;
                 }
             }
-            $tpl->urlSelect = Vars::$MODULE_URI . '?act=delete&amp;id=' . Vars::$ID;
+            $tpl->urlSelect = $backLink . '?act=delete&amp;id=' . Vars::$ID;
             $tpl->select = __('confirm_removing');
             $tpl->submit = __('delete');
             $tpl->phdr = __('removing_message');
-            $tpl->urlBack = Vars::$MODULE_URI . '?act=elected';
+            $tpl->urlBack = $backLink . '?act=elected';
         } else {
             if (isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE) {
                 if ($data['delete']) {
@@ -66,18 +68,18 @@ if (Vars::$ID) {
 					`delete`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'");
                 }
                 if ($data['user_id'] == Vars::$USER_ID) {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=basket&id=' . $data['contact_id']);
+                    Header('Location: ' . $backLink . '?act=basket&id=' . $data['contact_id']);
                     exit;
                 } else {
-                    Header('Location: ' . Vars::$MODULE_URI . '?act=basket&id=' . $data['user_id']);
+                    Header('Location: ' . $backLink . '?act=basket&id=' . $data['user_id']);
                     exit;
                 }
             }
-            $tpl->urlSelect = Vars::$MODULE_URI . '?act=delete&amp;id=' . Vars::$ID;
+            $tpl->urlSelect = $backLink . '?act=delete&amp;id=' . Vars::$ID;
             $tpl->select = __('confirm_removing');
             $tpl->submit = __('delete');
             $tpl->phdr = __('removing_message');
-            $tpl->urlBack = Vars::$MODULE_URI . '?act=basket';
+            $tpl->urlBack = $backLink . '?act=basket';
         }
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;
@@ -88,6 +90,5 @@ if (Vars::$ID) {
         $tpl->contents = '<div class="rmenu">' . __('page_does_not_exist') . '</div>';
     }
 } else {
-    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . Vars::
-    $MODULE_URI . '">' . __('mail') . '</a>');
+    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . $backLink . '">' . __('mail') . '</a>');
 }

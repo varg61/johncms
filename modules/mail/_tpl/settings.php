@@ -3,7 +3,7 @@
 </ul>
 <?= $this->save ?>
 <div class="form-container">
-    <form name="form" action="<?= Vars::$MODULE_URI ?>?act=settings" method="post">
+    <form name="form" action="<?= Router::getUrl(2) ?>?act=settings" method="post">
         <div class="form-block">
             <label><?= __('can_write') ?></label><br/>
             <input type="radio" name="access" value="0" <?= ($this->access == 0 ? 'checked="checked"' : '') ?> id="all"/> <label for="all"><?= __('all') ?></label><br/>

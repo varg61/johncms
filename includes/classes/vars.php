@@ -25,7 +25,6 @@ abstract class Vars
     public static $IP_REQUESTS_LIST = array();   // Счетчик обращений с IP адреса
     public static $USER_AGENT;                   // User Agent
     public static $IS_MOBILE = FALSE;            // Мобильный браузер
-    public static $MODULE_URI = '';              //TODO: Удалить
     public static $URI = 'mail.ru';              //TODO: Удалить
     public static $MODULE = 'mainmenu';          //TODO: Удалить
     public static $MODULE_PATH = '';             //TODO: Удалить

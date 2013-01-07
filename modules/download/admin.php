@@ -64,4 +64,4 @@ echo'<form action="' . Vars::$URI . '?act=download" method="post">' .
     '<div class="phdr"><a href="' . Vars::$URI . '?reset">' . __('reset_settings') . '</a>' .
     '</div></form>' .
     '<p><a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a><br />' .
-    '<a href="' . Vars::$MODULE_URI . '">' . __('downloads') . '</a></p>';
+    '<a href="' . Router::getUrl(2) . '">' . __('downloads') . '</a></p>';

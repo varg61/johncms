@@ -59,7 +59,7 @@
             <?php endif ?>
             <input class="medium" id="captcha" type="text" size="5" maxlength="5" name="captcha" <?= (isset($this->error['captcha']) ? 'class="error"' : '') ?>/>
             <br/><br/><input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('registration') ?>"/>
-            <a class="btn" href="<?= Vars::$MODULE_URI ?>/login"><?= __('cancel') ?></a>
+            <a class="btn" href="<?= Router::getUrl(2) ?>/login"><?= __('cancel') ?></a>
         </div>
     </form>
 </div>

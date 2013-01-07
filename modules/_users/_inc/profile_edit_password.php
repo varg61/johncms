@@ -69,7 +69,7 @@ if (Vars::$USER_ID == $tpl->user['id']
                 }
 
                 $tpl->hbar = __('change_password');
-                $tpl->continue = Vars::$MODULE_URI . '/profile?act=settings&amp;user=' . $tpl->user['id'];
+                $tpl->continue = Router::getUrl(2) . '/profile?act=settings&amp;user=' . $tpl->user['id'];
                 $tpl->message = __('password_changed');
                 $tpl->contents = $tpl->includeTpl('message', 1);
                 exit;

@@ -112,7 +112,7 @@ class Firewall
                             '</div>';
                     }
                     echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
-                    echo '<p><a href="' . Vars::$URI . '">' . __('back') . '</a><br /><a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
+                    echo '<p><a href="' . Vars::$URI . '">' . __('back') . '</a><br /><a href="' . Router::getUrl(2) . '">' . __('admin_panel') . '</a></p>';
                     exit;
                 }
 

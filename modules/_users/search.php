@@ -21,6 +21,8 @@ if (!Vars::$USER_ID && !Vars::$USER_SYS['view_userlist']) {
     exit;
 }
 
+$backLink = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Принимаем данные запросов на поиск
@@ -62,10 +64,10 @@ if ($search && $error) {
     $style = '';
 }
 
-echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('community') . '</b></a> | ' . ($search ? __('search_user') : __('users_list')) . '</div>' .
+echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('community') . '</b></a> | ' . ($search ? __('search_user') : __('users_list')) . '</div>' .
     '<div class="topmenu">' .
     ($error ? '<p class="red">' . $error . '</p>' : '') .
-    '<p><form action="' . Vars::$MODULE_URI . '/search" method="post">' .
+    '<p><form action="' . $backLink . '/search" method="post">' .
     '<input type="text" name="search" value="' . htmlspecialchars($search) . '"' . $style . '/> ' .
     '<input type="submit" value="' . __('search') . '" name="submit"/>' .
     '</form>' .
@@ -126,5 +128,5 @@ if ($total > Vars::$USER_SET['page_size']) {
 echo'<p>' .
     ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br/>' : '') .
     (Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a><br />' : '') .
-    '<a href="' . Vars::$MODULE_URI . '">' . __('back') . '</a>' .
+    '<a href="' . $backLink . '">' . __('back') . '</a>' .
     '</p>';

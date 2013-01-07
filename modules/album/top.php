@@ -11,6 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+$backLink = Router::getUrl(2);
+
 switch (Vars::$ACT) {
     case 'last_comm':
         /*
@@ -103,7 +105,7 @@ switch (Vars::$ACT) {
 -----------------------------------------------------------------
 */
 unset($_SESSION['ref']);
-echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('photo_albums') . '</b></a> | ' . $title . '</div>';
+echo '<div class="phdr"><a href="' . $backLink . '"><b>' . __('photo_albums') . '</b></a> | ' . $title . '</div>';
 
 if (!isset($total)) {
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where"), 0);
@@ -126,7 +128,7 @@ if ($total) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
             // Если доступ открыт всем, или смотрит Администратор
-            echo '<a href="' . Vars::$MODULE_URI . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '&amp;view"><img src="../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
+            echo '<a href="' . $backLink . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '&amp;view"><img src="../files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description'])) {
                 echo '<div class="gray">' . Functions::smilies(Validate::checkout($res['description'], 1)) . '</div>';
             }
@@ -135,17 +137,17 @@ if ($total) {
             echo 'Только для друзей';
         } elseif ($res['access'] == 2) {
             // Если доступ по паролю
-            echo '<a href="' . Vars::$MODULE_URI . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '">' . Functions::getImage('password.gif') . '</a>';
+            echo '<a href="' . $backLink . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '">' . Functions::getImage('password.gif') . '</a>';
         }
         echo'<div class="sub">' .
-            '<a href="' . Vars::$MODULE_URI . '?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | ' .
-            '<a href="' . Vars::$MODULE_URI . '?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::checkout($res['album_name']) . '</a>';
+            '<a href="' . $backLink . '?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | ' .
+            '<a href="' . $backLink . '?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::checkout($res['album_name']) . '</a>';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 6) {
             echo Album::vote($res) .
                 '<div class="gray">' . __('count_views') . ': ' . $res['views'] . ', ' . __('count_downloads') . ': ' . $res['downloads'] . '</div>' .
                 '<div class="gray">' . __('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
-                '<a href="' . Vars::$MODULE_URI . '?act=comments&amp;img=' . $res['id'] . '">' . __('comments') . '</a> (' . $res['comm_count'] . ')' .
-                '<br /><a href="' . Vars::$MODULE_URI . '?act=image_download&amp;img=' . $res['id'] . '">' . __('download') . '</a>';
+                '<a href="' . $backLink . '?act=comments&amp;img=' . $res['id'] . '">' . __('comments') . '</a> (' . $res['comm_count'] . ')' .
+                '<br /><a href="' . $backLink . '?act=image_download&amp;img=' . $res['id'] . '">' . __('download') . '</a>';
         }
         echo '</div></div>';
     }
@@ -160,4 +162,4 @@ if ($total > Vars::$USER_SET['page_size']) {
         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="' . Vars::$MODULE_URI . '">' . __('photo_albums') . '</a></p>';
+echo '<p><a href="' . $backLink . '">' . __('photo_albums') . '</a></p>';

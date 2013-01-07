@@ -11,6 +11,7 @@
 
 defined('_IN_ADMIN') or die('Error: restricted access');
 
+$backLink = Router::getUrl(2);
 $tpl = Template::getInstance();
 $firewall = new Firewall();
 
@@ -28,7 +29,7 @@ switch (Vars::$ACT) {
             ) .
             '</p>' . (isset($_POST['submit']) ? '' : '<p>' . __('add_ip_help') . '</p>') .
             '</div>' .
-            '<p><a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
+            '<p><a href="' . $backLink . '">' . __('admin_panel') . '</a></p>';
         break;
 
     case 'clear':
@@ -59,7 +60,7 @@ switch (Vars::$ACT) {
             ($mod != 'white' ? '<strong>' . __('black_list') . '</strong>' : '<a href="' . Vars::$URI . '?act=firewall">' . __('black_list') . '</a>'),
             ($mod == 'white' ? '<strong>' . __('white_list') . '</strong>' : '<a href="' . Vars::$URI . '?act=firewall&amp;mod=white">' . __('white_list') . '</a>')
         );
-        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('admin_panel') . '</b></a> | ' . __('ip_accesslist') . '</div>' .
+        echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('admin_panel') . '</b></a> | ' . __('ip_accesslist') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'"), 0);
@@ -114,7 +115,7 @@ switch (Vars::$ACT) {
 
         // Ссылки внизу
         echo'<p>' . ($total ? '<a href="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '">' . __('clear_list') . '</a><br />' : '') .
-            '<a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
+            '<a href="' . $backLink . '">' . __('admin_panel') . '</a></p>';
 }
 
 //$tpl->contents = $tpl->includeTpl('firewall');

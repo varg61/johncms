@@ -17,7 +17,7 @@
                 <input class="relative largetext<?= (isset($this->error['password']) ? ' error' : '') ?>" id="password" type="password" name="password" maxlength="20"/><br/>
                 <label class="small"><input type="checkbox" name="remember" value="1" checked="checked"/>&#160;<?= __('remember') ?></label><br/>
                 <input class="btn btn-primary btn-large btn-block" type="submit" value=" <?= __('login') ?> "/><br/>
-                <a class="btn btn-large btn-block" href="<?= Vars::$MODULE_URI ?>/registration"><?= __('registration') ?></a><br/>
+                <a class="btn btn-large btn-block" href="<?= Router::getUrl(2) ?>/registration"><?= __('registration') ?></a><br/>
                 <a class="btn" href="#"><?= __('forgotten_password') ?></a>
             </div>
         </form>

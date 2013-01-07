@@ -9,8 +9,10 @@
  * @author      http://johncms.com/about
  */
 
+$backLink = Router::getUrl(2);
+
 echo'<p>' . Counters::forumCountNew(1) . '</p>' .
-    '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('forum') . '</b></a> | ' . __('search') . '</div>';
+    '<div class="phdr"><a href="' . $backLink . '"><b>' . __('forum') . '</b></a> | ' . __('search') . '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -82,15 +84,15 @@ switch (Vars::$ACT) {
             $array = explode(' ', $search);
             $count = count($array);
             $query = mysql_real_escape_string($search);
-			if ($search_t) {
-			    // Поиск в названиях тем
+            if ($search_t) {
+                // Поиск в названиях тем
                 $total = mysql_result(mysql_query("
                     SELECT COUNT(*) FROM `forum`
                     WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
                     AND `type` = 't'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'
                 ")), 0);
-			} else {
-			    // Поиск только в тексте
+            } else {
+                // Поиск только в тексте
                 $total = mysql_result(mysql_query("
                     SELECT COUNT(*) FROM `forum`, `forum` as `forum2`
                     WHERE MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE)
@@ -98,7 +100,7 @@ switch (Vars::$ACT) {
 					AND `forum2`.`id` = `forum`.`refid`
 					" . (Vars::$USER_RIGHTS >= 7 ? "" : "AND `forum2`.`close` != '1' AND `forum`.`close` != '1'
 				")), 0);
-			}
+            }
             echo '<div class="phdr">' . __('search_results') . '</div>';
             if ($total > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
@@ -115,9 +117,9 @@ switch (Vars::$ACT) {
                         ORDER BY `rel` DESC
                         " . Vars::db_pagination()
                     );
-				} else {
+                } else {
                     // Поиск только в тексте
-				    $req = mysql_query("
+                    $req = mysql_query("
                         SELECT `forum`.*, `forum2`.`id` as `id2`, `forum2`.`text` as `text2`,
 						MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
                         FROM `forum`, `forum` as `forum2`
@@ -128,14 +130,14 @@ switch (Vars::$ACT) {
                         ORDER BY `rel` DESC
                         " . Vars::db_pagination()
                     );
-				}
+                }
                 $i = 0;
                 while (($res = mysql_fetch_assoc($req)) !== FALSE) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-					if ($search_t) {
+                    if ($search_t) {
                         // Поиск в названиях тем
-                        $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = " . $res['id'] . 
-						    (Vars::$USER_RIGHTS >= 7 ? "" : "AND `close` != '1'") . " ORDER BY `id` ASC LIMIT 1");
+                        $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = " . $res['id'] .
+                            (Vars::$USER_RIGHTS >= 7 ? "" : "AND `close` != '1'") . " ORDER BY `id` ASC LIMIT 1");
                         $res_p = mysql_fetch_assoc($req_p);
                         $res['text2'] = $res_p['text'];
                     }
@@ -143,23 +145,23 @@ switch (Vars::$ACT) {
                     foreach ($array as $srch) if (($pos = mb_strpos(mb_strtolower($res['text']), mb_strtolower(str_replace('*', '', $srch)))) !== FALSE) break;
                     if (!isset($pos) || $pos < 100) $pos = 100;
                     $text = Validate::checkout(mb_substr($text, ($pos - 100), 400), 1);
-					$text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
+                    $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                     if ($search_t) {
                         foreach ($array as $val) {
                             $res['text'] = ReplaceKeywords($val, $res['text']);
                         }
-					} else {
+                    } else {
                         foreach ($array as $val) {
                             $text = ReplaceKeywords($val, $text);
                         }
                     }
-					echo '<b>' . ($search_t ? $res['text'] : $res['text2']) . '</b><br />' .
-					    '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ' .
+                    echo '<b>' . ($search_t ? $res['text'] : $res['text2']) . '</b><br />' .
+                        '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ' .
                         ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br/>' . $text;
                     if (mb_strlen($res['text']) > 500)
-                        echo'...<a href="' . Vars::$MODULE_URI . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
-                    echo'<br /><a href="' . Vars::$MODULE_URI . '?id=' . ($search_t ? $res['id'] : $res['id2']) . '">' . __('to_topic') . '</a>' . ($search_t ? ''
-                        : ' | <a href="' . Vars::$MODULE_URI . '?act=post&amp;id=' . $res['id'] . '">' . __('to_post') . '</a>');
+                        echo'...<a href="' . $backLink . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
+                    echo'<br /><a href="' . $backLink . '?id=' . ($search_t ? $res['id'] : $res['id2']) . '">' . __('to_topic') . '</a>' . ($search_t ? ''
+                        : ' | <a href="' . $backLink . '?act=post&amp;id=' . $res['id'] . '">' . __('to_post') . '</a>');
                     echo '</div>';
                     ++$i;
                 }
@@ -213,5 +215,5 @@ switch (Vars::$ACT) {
                 '</form></p>';
         }
 
-        echo '<p>' . ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br />' : '') . '<a href="' . Vars::$MODULE_URI . '">' . __('forum') . '</a></p>';
+        echo '<p>' . ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br />' : '') . '<a href="' . $backLink . '">' . __('forum') . '</a></p>';
 }

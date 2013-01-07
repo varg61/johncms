@@ -3,7 +3,7 @@
 </ul>
 <div class="form-container">
     <div class="form-block" style="padding: 20px; text-align: center;">
-        <form action="<?= Vars::$MODULE_URI ?>/exit" method="post">
+        <form action="<?= Router::getUrl(2) ?>/exit" method="post">
             <label><?= __('exit_warning') ?></label>
             <br/><br/>
             <label class="small"><input type="checkbox" name="clear" value="1"/>&#160;<?= __('clear_authorisation') ?></label>

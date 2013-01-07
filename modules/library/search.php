@@ -29,7 +29,7 @@ $search_post = isset($_POST['search']) ? trim($_POST['search']) : FALSE;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : FALSE;
 $search = $search_post ? $search_post : $search_get;
 $search_t = isset($_REQUEST['t']);
-echo '<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('library') . '</b></a> | ' . __('search') . '</div>' .
+echo '<div class="phdr"><a href="' . Router::getUrl(2) . '"><b>' . __('library') . '</b></a> | ' . __('search') . '</div>' .
      '<div class="gmenu"><form action="' . Vars::$URI . '" method="post"><p>' .
      '<input type="text" value="' . ($search ? Validate::checkout($search) : '') . '" name="search" />' .
      '<input type="submit" value="' . __('search') . '" name="submit" /><br />' .
@@ -79,7 +79,7 @@ if ($search && !$error) {
             $text = Validate::checkout(mb_substr($res['text'], ($pos - 100), 400), 1);
             if ($search_t) foreach ($array as $val) $name = ReplaceKeywords($val, $name);
             else foreach ($array as $val) $text = ReplaceKeywords($val, $text);
-            echo '<b><a href="' . Vars::$MODULE_URI . '?id=' . $res['id'] . '">' . $name . '</a></b><br />' . $text .
+            echo '<b><a href="' . Router::getUrl(2) . '?id=' . $res['id'] . '">' . $name . '</a></b><br />' . $text .
                  ' <div class="sub"><span class="gray">' . __('added') . ':</span> ' . $res['avtor'] .
                  ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br />' .
                  '<span class="gray">' . __('reads') . ':</span> ' . $res['count'] .
@@ -102,4 +102,4 @@ if ($search && !$error) {
     echo '<div class="phdr"><small>' . __('search_help') . '</small></div>';
 }
 echo '<p>' . ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br />' : '') .
-     '<a href="' . Vars::$MODULE_URI . '">' . __('library') . '</a></p>';
+     '<a href="' . Router::getUrl(2) . '">' . __('library') . '</a></p>';

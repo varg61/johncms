@@ -15,6 +15,8 @@ if (Vars::$USER_RIGHTS != 9) {
     exit;
 }
 
+$backLink = Router::getUrl(2);
+
 switch (Vars::$ACT) {
     case 'view':
         /*
@@ -261,7 +263,7 @@ switch (Vars::$ACT) {
         Вывод списка счетчиков
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="' . Vars::$MODULE_URI . '"><b>' . __('admin_panel') . '</b></a> | ' . __('counters') . '</div>' .
+        echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('admin_panel') . '</b></a> | ' . __('counters') . '</div>' .
             '<div class="gmenu"><form action="' . Vars::$URI . '?act=edit" method="post"><input type="submit" name="delete" value="' . __('add') . '"/></form></div>';
         $req = mysql_query("SELECT * FROM `cms_counters` ORDER BY `sort` ASC");
         if ($total = mysql_num_rows($req)) {
@@ -283,4 +285,4 @@ switch (Vars::$ACT) {
         echo'<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 }
 echo'<p>' . (Vars::$MOD ? '<a href="' . Vars::$URI . '">' . __('counters') . '</a><br />' : '') .
-    '<a href="' . Vars::$MODULE_URI . '">' . __('admin_panel') . '</a></p>';
+    '<a href="' . $backLink . '">' . __('admin_panel') . '</a></p>';

@@ -8,7 +8,7 @@
     <div class="<?= $row['list'] ?>">
         <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] ?></a>
         <div class="sub">
-            <a href="<?= Vars::$MODULE_URI ?>?act=delete&amp;id=<?= $row['id']?>"><?= __('delete') ?></a>
+            <a href="<?= Router::getUrl(2) ?>?act=delete&amp;id=<?= $row['id']?>"><?= __('delete') ?></a>
         </div>
     </div>
     <?php endforeach ?>
@@ -29,4 +29,4 @@
 <?php else: ?>
 <div class="rmenu"><?= __('friends_not_online') ?></div>
 <?php endif ?>
-<p><a href="<?= Vars::$MODULE_URI ?>"><?= __('friends') ?></a></p>
+<p><a href="<?= Router::getUrl(2) ?>"><?= __('friends') ?></a></p>
