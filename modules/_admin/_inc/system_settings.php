@@ -62,6 +62,12 @@ $form
 
     ->fieldsetStart(__('seo_attributes'))
 
+    ->add('text', 'hometitle', array(
+    'value'       => Vars::$SYSTEM_SET['hometitle'],
+    'style'       => 'max-width: none',
+    'label'       => __('homepage_title'),
+    'description' => __('homepage_title_help')))
+
     ->add('textarea', 'meta_key', array(
     'value'       => Vars::$SYSTEM_SET['meta_key'],
     'label'       => 'META Keywords',

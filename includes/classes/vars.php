@@ -43,6 +43,7 @@ abstract class Vars
         'filesize'         => 2000,
         'generation'       => 1,
         'memory'           => 0,
+        'hometitle'        => 'Welcome!',
         'meta_key'         => 'johncms',
         'meta_desc'        => 'Powered by JohnCMS http://johncms.com'
     );

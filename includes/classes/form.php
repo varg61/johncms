@@ -56,6 +56,8 @@ class Form
             $this->_submits[] = $name;
         } elseif ($type == 'file') {
             $this->_form['enctype'] = TRUE;
+        } elseif($type == 'textarea' && !isset($option['rows'])){
+            $option['rows'] = Vars::$USER_SET['field_h'];
         }
 
         $option['type'] = $type;

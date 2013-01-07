@@ -14,7 +14,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     <?= $this->loadCSS() ?>
     <link rel="shortcut icon" href="<?= Vars::$HOME_URL ?>/favicon.ico"/>
     <link rel="alternate" type="application/rss+xml" title="<?= __('site_news', 1) ?>" href="http://localhost/johncms/rss"/>
-    <title><?= isset($this->title) ? $this->title : Vars::$SYSTEM_SET['copyright'] ?></title>
+    <title><?= isset($this->title) ? $this->title : Vars::$SYSTEM_SET['hometitle'] ?></title>
     <?php if (!Vars::$IS_MOBILE): ?>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <?php endif ?>
