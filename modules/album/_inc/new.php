@@ -162,7 +162,7 @@ if ($total) {
             echo'<a href="' . Vars::$URI . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '&amp;view">' .
                 '<img src="' . Vars::$HOME_URL . '/files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
-                echo '<div class="gray">' . Functions::smileys(Validate::checkout($res['description'], 1)) . '</div>';
+                echo '<div class="gray">' . Functions::smilies(Validate::checkout($res['description'], 1)) . '</div>';
         } elseif ($res['access'] == 3) {
             // Если доступ открыт друзьям
             echo 'Только для друзей';

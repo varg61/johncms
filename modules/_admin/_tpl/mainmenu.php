@@ -18,7 +18,7 @@
         <li><h2><?= __('system') ?></h2></li>
         <li><a href="<?= $this->url ?>/system_settings"><i class="icn-settings"></i><?= __('system_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->url ?>/language"><i class="icn-settings"></i><?= __('language_settings') ?><i class="icn-arrow right"></i></a></li>
-        <li><a href="<?= Vars::$HOME_URL ?>/smileys?act=refresh"><i class="icn-smile"></i><?= __('smileys') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= $this->url ?>/smilies"><i class="icn-smile"></i><?= __('smileys') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
     <li><a href="<?= $this->url ?>/whois"><i class="icn-info"></i>WHOIS<i class="icn-arrow right"></i></a></li>
     <li><h2><?= __('security') ?></h2></li>

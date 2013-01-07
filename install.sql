@@ -280,12 +280,11 @@ INSERT INTO `cms_modules` (`module`, `path`) VALUES
 ('library', 'library'),
 ('mail', 'mail'),
 ('news', 'news'),
-('notifications', 'notifications'),
 ('online', 'online'),
 ('profile', 'profile'),
 ('redirect', 'redirect'),
 ('rss', 'rss'),
-('smileys', 'smileys'),
+('smilies', 'smilies'),
 ('stats', 'stats');
 
 

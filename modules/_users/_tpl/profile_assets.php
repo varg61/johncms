@@ -13,7 +13,7 @@
 
     <?php if (Vars::$USER_RIGHTS) : ?>
     <li><h2><?= __('administration') ?></h2></li>
-    <li class="red"><a href="<?= $this->url ?>/guestbook?mod=adm"><i class="icn-dialogue-red"></i><?= __('admin_club') ?><i class="icn-arrow"></i><span class="badge badge-red badge-right"><?= $this->count->adminclub ?></span></a></li>
+    <li class="red"><a href="<?= Vars::$HOME_URL ?>/guestbook?mod=adm"><i class="icn-dialogue-red"></i><?= __('admin_club') ?><i class="icn-arrow"></i><span class="badge badge-red badge-right"><?= $this->count->adminclub ?></span></a></li>
     <li class="red"><a href="<?= Vars::$HOME_URL ?>/admin"><i class="icn-shield-red"></i><?= __('admin_panel') ?><i class="icn-arrow"></i></a></li>
     <?php endif ?>
 

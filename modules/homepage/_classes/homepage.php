@@ -55,7 +55,7 @@ class HomePage
                     }
                     // Обрабатываем смайлы
                     if ($this->settings['smileys']) {
-                        $text = Functions::smileys($text);
+                        $text = Functions::smilies($text);
                     }
                     // Определяем режим просмотра заголовка - текста
                     $news .= '<div class="news">';

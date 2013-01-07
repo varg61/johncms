@@ -163,7 +163,7 @@ if (isset($_POST['submit'])) {
     }
     $msg_pre = Validate::checkout($msg, 1, 1);
     if (Vars::$USER_SET['smileys'])
-        $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
+        $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
     $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
     echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('new_topic') . '</div>';
     if ($msg && $th && !isset($_POST['submit']))

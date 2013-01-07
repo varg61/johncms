@@ -145,7 +145,7 @@ switch ($type1['type']) {
             }
             $msg_pre = Validate::checkout($msg, 1, 1);
             if (Vars::$USER_SET['smileys'])
-                $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
+                $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
             $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
             echo '<div class="phdr"><b>' . __('topic') . ':</b> ' . $type1['text'] . '</div>';
             if ($msg && !isset($_POST['submit']))
@@ -292,7 +292,7 @@ switch ($type1['type']) {
             }
             $msg_pre = Validate::checkout($msg, 1, 1);
             if (Vars::$USER_SET['smileys'])
-                $msg_pre = Functions::smileys($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
+                $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
             $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
             echo '<div class="phdr"><b>' . __('topic') . ':</b> ' . $th1['text'] . '</div>';
             $qt = str_replace("<br/>", "\r\n", $qt);

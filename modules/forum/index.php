@@ -603,14 +603,14 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_S
                         $text = Validate::checkout($text, 1, 1);
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         if (Vars::$USER_SET['smileys']) {
-                            $text = Functions::smileys($text, $res['rights'] ? 1 : 0);
+                            $text = Functions::smilies($text, $res['rights'] ? 1 : 0);
                         }
                         echo TextParser::noTags($text) . '...<br /><a href="' . Vars::$URI . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
                     } else {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = Validate::checkout($text, 1, 1);
                         if (Vars::$USER_SET['smileys']) {
-                            $text = Functions::smileys($text, $res['rights'] ? 1 : 0);
+                            $text = Functions::smilies($text, $res['rights'] ? 1 : 0);
                         }
                         echo $text;
                     }

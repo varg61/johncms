@@ -61,7 +61,7 @@ if ( Vars::$ID )
                 {
                     $text = Validate::checkout( $row['text'], 1, 1 );
                     if ( Vars::$USER_SET['smileys'] )
-                        $text = Functions::smileys( $text, $row['rights'] >= 1 ? 1 : 0 );
+                        $text = Functions::smilies( $text, $row['rights'] >= 1 ? 1 : 0 );
                     $array[] = array(
                         'id' => $row['id'],
                         'mid' => $row['mid'],

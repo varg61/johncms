@@ -66,7 +66,7 @@ $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
 $text = nl2br($text);
 $text = TextParser::tags($text);
 if (Vars::$USER_SET['smileys'])
-    $text = Functions::smileys($text, ($res['rights'] >= 1) ? 1 : 0);
+    $text = Functions::smilies($text, ($res['rights'] >= 1) ? 1 : 0);
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
 $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID), 0) / Vars::$USER_SET['page_size']);

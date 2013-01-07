@@ -200,7 +200,7 @@ class Validate
 
         // Обработка смайлов
         if ($smileys) {
-            $str = Functions::smileys($str, ($smileys == 2 ? 1 : 0));
+            $str = Functions::smilies($str, ($smileys == 2 ? 1 : 0));
         }
 
         return $str;

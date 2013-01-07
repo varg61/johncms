@@ -415,11 +415,11 @@ class Functions extends Vars
      * @param bool $adm      Обрабатывать Админские смайлы
      * @return string        Обработанный текст
      */
-    public static function smileys($str, $adm = FALSE)
+    public static function smilies($str, $adm = FALSE)
     {
         static $pattern = array();
         if (empty($pattern)) {
-            $file = CACHEPATH . 'smileys.dat';
+            $file = CACHEPATH . 'smilies.dat';
             if (file_exists($file) && ($smileys = file_get_contents($file)) !== FALSE) {
                 $pattern = unserialize($smileys);
             } else {

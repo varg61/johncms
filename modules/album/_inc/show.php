@@ -122,7 +122,7 @@ if ($total) {
             echo '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
         }
         if (!empty($res['description']))
-            echo '<div class="gray">' . Functions::smileys(Validate::checkout($res['description'], 1)) . '</div>';
+            echo '<div class="gray">' . Functions::smilies(Validate::checkout($res['description'], 1)) . '</div>';
         echo '<div class="sub">';
         if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayMenu(array(

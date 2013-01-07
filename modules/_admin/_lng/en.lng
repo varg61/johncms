@@ -69,6 +69,7 @@ delete_ip_warning             =   "You really want to delete the selected IP add
 description_note              =   "This tag is used to create a short description of the page, use the search engines to index, as well as to create annotations the extradition request. In the absence of a tag search system gives the first line in the summary of the document or a passage containing the keywords. Displayed after the link in the search pages in search engine. Different search engines charge different rates for the length of the tag. Try to write a small description of 150 characters.<br/>Max. 250 characters."
 digits_only                   =   "Allow Nicknames, consisting of digits"
 endwise                       =   "Endwise"
+error_cache_update            =   "Error cache update"
 error_ip                      =   "IP address is not valid"
 firewall                      =   "Firewall"
 homepage_title                =   "Homepage title"

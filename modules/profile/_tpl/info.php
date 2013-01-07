@@ -21,7 +21,7 @@
             <li><span class="gray"><?= __('name') ?>:</span> <?= (empty($this->user['imname']) ? '' : Validate::checkout($this->user['imname'])) ?></li>
             <li><span class="gray"><?= __('birthday') ?>:</span></li>
             <li><span class="gray"><?= __('live') ?>:</span> <?= (empty($this->user['live']) ? '' : Validate::checkout($this->user['live'])) ?></li>
-            <li><span class="gray"><?= __('about') ?>:</span> <?= (empty($this->user['about']) ? '' : '<br />' . Functions::smileys(Validate::checkout($this->user['about'], 1, 1))) ?></li>
+            <li><span class="gray"><?= __('about') ?>:</span> <?= (empty($this->user['about']) ? '' : '<br />' . Functions::smilies(Validate::checkout($this->user['about'], 1, 1))) ?></li>
         </ul>
     </div>
     <div class="formblock">

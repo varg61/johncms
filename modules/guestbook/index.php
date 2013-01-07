@@ -287,7 +287,7 @@ switch (Vars::$ACT) {
                     // Для зарегистрированных показываем ссылки и смайлы
                     $post = Validate::checkout($res['text'], 1, 1);
                     if (Vars::$USER_SET['smileys']) {
-                        $post = Functions::smileys($post, $res['rights'] >= 1 ? 1 : 0);
+                        $post = Functions::smilies($post, $res['rights'] >= 1 ? 1 : 0);
                     }
                 } else {
                     // Для гостей обрабатываем имя и фильтруем ссылки
@@ -302,7 +302,7 @@ switch (Vars::$ACT) {
                     // Ответ Администрации
                     $reply = Validate::checkout($res['otvet'], 1, 1);
                     if (Vars::$USER_SET['smileys']) {
-                        $reply = Functions::smileys($reply, 1);
+                        $reply = Functions::smilies($reply, 1);
                     }
                     $post .= '<div class="reply"><b>' . $res['admin'] . '</b>: (' . Functions::displayDate($res['otime']) . ')<br/>' . $reply . '</div>';
                 }

@@ -287,7 +287,7 @@ class TextParser
             $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys?act=my_smileys">' . __('edit_list') . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\');">:' . $value . ':</a> ';
-            $bb_smileys .= Functions::smileys($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
+            $bb_smileys .= Functions::smilies($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
         } else {
             $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys">' . __('add_smileys') . '</a></small>';
         }

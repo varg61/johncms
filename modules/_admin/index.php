@@ -19,6 +19,7 @@ if (Vars::$USER_RIGHTS >= 2) {
         'language'        => 'language_settings.php',
         'scanner'         => 'scanner.php',
         'sitemap'         => 'sitemap.php',
+        'smilies'         => 'smilies.php',
         'system_settings' => 'system_settings.php',
     );
 
