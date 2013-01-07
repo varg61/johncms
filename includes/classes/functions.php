@@ -289,13 +289,13 @@ class Functions extends Vars
                 $ip = long2ip($user['ip']);
                 if (Vars::$USER_RIGHTS && isset($user['ip_via_proxy']) && $user['ip_via_proxy']) {
                     $out .= '<b class="red"><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . $hist . '">' . $ip . '</a></b>';
-                    $out .= '&#160;[<a href="' . Vars::$HOME_URL . '/admin/whois?ip=' . $ip . '">?</a>]';
+                    $out .= '&#160;[<a href="' . Vars::$HOME_URL . '/admin/whois/' . $ip . '">?</a>]';
                     $out .= ' / ';
                     $out .= '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($user['ip_via_proxy']) . $hist . '">' . long2ip($user['ip_via_proxy']) . '</a>';
-                    $out .= '&#160;[<a href="' . Vars::$HOME_URL . '/admin/whois?ip=' . long2ip($user['ip_via_proxy']) . '">?</a>]';
+                    $out .= '&#160;[<a href="' . Vars::$HOME_URL . '/admin/whois/' . long2ip($user['ip_via_proxy']) . '">?</a>]';
                 } elseif (Vars::$USER_RIGHTS) {
                     $out .= '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . $hist . '">' . $ip . '</a>';
-                    $out .= '&#160;[<a href="' . Vars::$HOME_URL . '/admin/whois?ip=' . $ip . '">?</a>]';
+                    $out .= '&#160;[<a href="' . Vars::$HOME_URL . '/admin/whois/' . $ip . '">?</a>]';
                 } else {
                     $out .= $ip . $iphist;
                 }

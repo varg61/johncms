@@ -76,13 +76,16 @@ class Router extends Vars
         if (isset($_GET['route'])
             && strlen($_GET['route']) > 2
             && strlen($_GET['route']) < 30
-            && !preg_match('/[^\da-z\/\_]+/i', $_GET['route'])
         ) {
-            $route = explode('/', trim($_GET['route']));
-            foreach ($route as $key => $val) {
-                self::$ROUTE[$key] = trim($val);
+            if(preg_match('/[^\da-z\/\_\.]+/i', $_GET['route'])){
+                self::$ROUTE[0] = '404';
+            } else {
+                $route = explode('/', trim($_GET['route']));
+                foreach ($route as $key => $val) {
+                    self::$ROUTE[$key] = trim($val);
+                }
+                unset($route);
             }
-            unset($route);
         }
     }
 

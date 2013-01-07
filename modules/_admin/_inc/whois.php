@@ -16,7 +16,7 @@ defined('_IN_ADMIN') or die('Error: restricted access');
 $tpl = Template::getInstance();
 $form = new Form(Router::getUrl(3));
 
-$ip = isset($_GET['ip']) ? trim($_GET['ip']) : FALSE;
+$ip = isset(Router::$ROUTE[2]) ? Router::$ROUTE[2] : FALSE;
 
 $form
     ->fieldsetStart(__('ip_information'))
