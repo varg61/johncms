@@ -12,7 +12,8 @@
 class Router extends Vars
 {
     public static $ROUTE;
-    private $module;
+    public static $PATH;
+    private $module;  //TODO: Удалить
     private $uri = ''; //TODO: Удалить
 
     /**
@@ -27,7 +28,6 @@ class Router extends Vars
             $this->_getModule('homepage');
         }
 
-        parent::$MODULE = $this->module['module'];
         parent::$MODULE_PATH = $this->module['path'];
         parent::$URI = parent::$HOME_URL . '/' . $this->module['module'] . $this->uri; //TODO: Удалить
         parent::$PLACE = $this->_setPlace();
@@ -58,10 +58,10 @@ class Router extends Vars
      */
     private function _include()
     {
-        if (isset(self::$ROUTE[1]) && is_file(MODPATH . $this->module['path'] . DIRECTORY_SEPARATOR . self::$ROUTE[1] . '.php')) {
-            include(MODPATH . $this->module['path'] . DIRECTORY_SEPARATOR . self::$ROUTE[1] . '.php');
-        } elseif (is_file(MODPATH . $this->module['path'] . DIRECTORY_SEPARATOR . 'index.php')) {
-            include(MODPATH . $this->module['path'] . DIRECTORY_SEPARATOR . 'index.php');
+        if (isset(self::$ROUTE[1]) && is_file(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . self::$ROUTE[1] . '.php')) {
+            include(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . self::$ROUTE[1] . '.php');
+        } elseif (is_file(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . 'index.php')) {
+            include(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . 'index.php');
         } else {
             echo'File "index.php" not found';
         }
@@ -135,7 +135,9 @@ class Router extends Vars
         $req = mysql_query("SELECT * FROM `cms_modules`
         WHERE `module` = '" . mysql_real_escape_string($arg) . "'");
         if (mysql_num_rows($req)) {
-            $this->module = mysql_fetch_assoc($req);
+            $res = mysql_fetch_assoc($req);
+            self::$PATH = $res['path'];
+            $this->module = $res; //TODO: Убрать
             return TRUE;
         }
 

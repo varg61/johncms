@@ -36,7 +36,7 @@ echo'<div class="phdr">'.__('phones_browsers').' </div>';
 
  	// Initialise the graph
  	$Test = new pChart(237,172);
- 	$Test->setFontProperties(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',6);
+ 	$Test->setFontProperties(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',6);
  	$Test->drawFilledRoundedRectangle(7,7,237,193,5,240,240,240);
  	$Test->drawRoundedRectangle(5,5,236,171,5,20,230,230);
 

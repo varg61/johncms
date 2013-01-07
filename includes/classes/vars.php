@@ -26,7 +26,6 @@ abstract class Vars
     public static $USER_AGENT;                   // User Agent
     public static $IS_MOBILE = FALSE;            // Мобильный браузер
     public static $URI = 'mail.ru';              //TODO: Удалить
-    public static $MODULE = 'mainmenu';          //TODO: Удалить
     public static $MODULE_PATH = '';             //TODO: Удалить
     public static $PLACE = '';                   // Текущее местоположение на сайте
     public static $SYSTEM_ERRORS = array();      //TODO: Написать вывод системных ошибок

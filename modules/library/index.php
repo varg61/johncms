@@ -46,9 +46,9 @@ $actions = array(
 );
 
 if (isset($actions[Vars::$ACT])
-    && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])
+    && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])
 ) {
-    require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
+    require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
     if (!isset(Vars::$ACL['library']) || !Vars::$ACL['library']) {
         echo '<p><font color="#FF0000"><b>' . __('library_closed') . '</b></font></p>';

@@ -23,7 +23,7 @@ if (Vars::$USER_ID) {
         $midlet_name = mb_substr($res['name'], 0, 10);
         $midlet_name = iconv('UTF-8', 'windows-1251', $midlet_name);
         // Записываем текст статьи
-        $files = fopen(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_java' . DIRECTORY_SEPARATOR . 'textfile.txt', 'w+') or exit('ERROR: textfile.txt');
+        $files = fopen(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_java' . DIRECTORY_SEPARATOR . 'textfile.txt', 'w+') or exit('ERROR: textfile.txt');
         flock($files, LOCK_EX);
         $book_name = iconv('UTF-8', 'windows-1251', $res['name']);
         $book_text = iconv('UTF-8', 'windows-1251', $res['text']);
@@ -43,7 +43,7 @@ MIDletX-LG-Contents: true
 MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)';
-        $files = fopen(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_java' . DIRECTORY_SEPARATOR . 'META-INF' . DIRECTORY_SEPARATOR . 'MANIFEST.MF', 'w+') or exit('ERROR: MANIFEST.MF');
+        $files = fopen(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_java' . DIRECTORY_SEPARATOR . 'META-INF' . DIRECTORY_SEPARATOR . 'MANIFEST.MF', 'w+') or exit('ERROR: MANIFEST.MF');
         flock($files, LOCK_EX);
         fputs($files, $manifest_text);
         flock($files, LOCK_UN);
@@ -51,7 +51,7 @@ TCBR-Platform: Generic version (all phones)';
 
         // Создаем архив
         $archive = new PclZip(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar');
-        $list = $archive->create(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_java', PCLZIP_OPT_REMOVE_PATH, MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_java');
+        $list = $archive->create(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_java', PCLZIP_OPT_REMOVE_PATH, MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_java');
         if (!file_exists(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
             echo '<p>Error creating JAR file</p>';
             exit;

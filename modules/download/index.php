@@ -116,8 +116,8 @@ $actions = array(
     'redirect'        => '_inc'
 );
 
-if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . $actions[Vars::$ACT] . DIRECTORY_SEPARATOR . Vars::$ACT . '.php')) {
-    require_once(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . $actions[Vars::$ACT] . DIRECTORY_SEPARATOR . Vars::$ACT . '.php');
+if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . $actions[Vars::$ACT] . DIRECTORY_SEPARATOR . Vars::$ACT . '.php')) {
+    require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . $actions[Vars::$ACT] . DIRECTORY_SEPARATOR . Vars::$ACT . '.php');
 } else {
     if (!isset(Vars::$ACL['downloads']) || !Vars::$ACL['downloads'])
         echo '<div class="rmenu"><b>' . __('download_closed') . '</b></div>';

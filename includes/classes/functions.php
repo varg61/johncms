@@ -399,10 +399,10 @@ class Functions extends Vars
             return FALSE;
         }
 
-        if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . Vars::$MODULE . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/' . Vars::$MODULE . '/img/' . $img;
-        } elseif (is_file(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/modules/' . Vars::$MODULE . '/img/' . $img;
+        if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . Router::$PATH . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/' . Router::$ROUTE[0] . '/img/' . $img;
+        } elseif (is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
+            $file = parent::$HOME_URL . '/modules/' . Router::$ROUTE[0] . '/img/' . $img;
         } else {
             return FALSE;
         }

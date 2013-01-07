@@ -51,12 +51,12 @@ $actions = array(
     'ip_base'       => 'ip_base.php'
 );
 
-if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Vars::$MODULE .
+if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH .
     DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])
 ) {
 
     $back_links = '';
-    include_once (MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . '_inc' .
+    include_once (MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' .
         DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
     echo '<div class="gmenu">' . $back_links . '<a href="' . Vars::$URI . '">' . __('to_statistics') .
         '</a></div>';

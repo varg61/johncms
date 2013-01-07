@@ -52,7 +52,7 @@ $DataSet->SetSerieName("Хосты","Serie2");
 $DataSet->SetXAxisFormat("date"); // Как обрабатывать массив с датами (в виде даты)
 
 $Test = new pChart(170,140); // Размер графика
-$Test->setFontProperties(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',5); // Шрифт боковых надписей
+$Test->setFontProperties(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',5); // Шрифт боковых надписей
 $Test->setGraphArea(30,10,164,110); // Положение самого графика
 $Test->drawFilledRoundedRectangle(3,3,167,136,5,240,240,240); // Обводка
 $Test->drawRoundedRectangle(1,1,169,138,5,138,230,230);  // Обводка
@@ -63,7 +63,7 @@ $Test->drawGrid(4,TRUE,230,230,230,50);
 $Test->drawLineGraph($DataSet->GetData(),$DataSet->GetDataDescription());
 $Test->drawPlotGraph($DataSet->GetData(),$DataSet->GetDataDescription(),3,2,255,255,255);
 
-$Test->setFontProperties(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',8); // Шрифт заголовка
+$Test->setFontProperties(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',8); // Шрифт заголовка
 $Test->drawLegend(31,10,$DataSet->GetDataDescription(),230,255,255, -1,-1,-1, TRUE); // Подложка с пояснениями к линиям
 $Test->drawTitle(1,9,"За неделю",50,50,50,195); // Заголовок графика
 $Test->Render('files/temp/stat_we_host.png'); //Место хранения картинки
@@ -84,7 +84,7 @@ $DataSet->AddAllSeries();
 $DataSet->SetAbsciseLabelSerie("Serie2");
 // Initialise the graph
 $Test = new pChart(235,161);
-$Test->setFontProperties(MODPATH . Vars::$MODULE . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',7);
+$Test->setFontProperties(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . 'Fonts/tahoma.ttf',7);
 $Test->drawFilledRoundedRectangle(7,7,235,193,5,240,240,240);
 $Test->drawRoundedRectangle(5,5,234,160,5,20,230,230);
 // Draw the pie chart
