@@ -12,6 +12,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 //TODO: Перевести кнопки навигации
 
@@ -26,6 +27,7 @@ $sql_total = '';
 $sql_list = '';
 
 $tpl = Template::getInstance();
+$tpl->url = $url;
 
 switch (Vars::$ACT) {
     case 'du':
@@ -179,7 +181,7 @@ switch (Vars::$ACT) {
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
             }
-            echo'<p><a href="' . Vars::$URI . '?act=di">' . __('download_list') . '</a></p>';
+            echo'<p><a href="' . $url . '?act=di">' . __('download_list') . '</a></p>';
         } else {
             echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
         }
@@ -256,15 +258,15 @@ if ($tpl->total) {
 }
 echo '<div class="phdr">' . __('total') . ': ' . $tpl->total . '</div>';
 if ($tpl->total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $tpl->total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="' . Vars::$URI . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
+    echo '<div class="topmenu">' . Functions::displayPagination($url . '?' . (Vars::$ACT ? 'act=' . Vars::$ACT . '&amp;' : ''), Vars::$START, $tpl->total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . $url . (Vars::$ACT ? '?act=' . Vars::$ACT : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 
 if (Vars::$USER_ID && $tpl->total) {
-    echo'<p><a href="' . Vars::$URI . '?act=' . $link . '">' . __('download_list') . '</a></p>';
+    echo'<p><a href="' . $url . '?act=' . $link . '">' . __('download_list') . '</a></p>';
 }
 
 $tpl->contents = $tpl->includeTpl('index');

@@ -1,5 +1,5 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) ?></b></a> | <?= __('reputation') ?>
+    <a href="<?= $this->url ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) ?></b></a> | <?= __('reputation') ?>
 </div>
 <?php if (isset($this->save)): ?>
 <div class="gmenu"><p><?= __('vote_adopted') ?></p></div>
@@ -70,7 +70,7 @@
     </div>
 </div>
 <?php if (Vars::$USER_ID && $this->user['id'] != Vars::$USER_ID): ?>
-<form action="<?= Vars::$URI ?>?act=reputation&amp;user=<?= $this->user['id'] ?>" method="post">
+<form action="<?= $this->url ?>?act=reputation&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="list2">
         <div class="formblock">
             <label><?= __('vote') ?></label><br/>
@@ -88,5 +88,5 @@
 </form>
 <?php endif ?>
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
+    <a href="<?= $this->url ?>?user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
 </div>

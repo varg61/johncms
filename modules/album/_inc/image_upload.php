@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 /*
 -----------------------------------------------------------------
@@ -24,7 +25,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
         exit;
     }
     $res_a = mysql_fetch_assoc($req_a);
-    echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('upload_photo') . '</div>';
+    echo '<div class="phdr"><a href="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('upload_photo') . '</div>';
     if (isset($_POST['submit'])) {
         $handle = new upload($_FILES['imagefile']);
         if ($handle->uploaded) {
@@ -74,7 +75,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                         `access` = '" . $res_a['access'] . "'
                     ") or die(mysql_error());
                     echo '<div class="gmenu"><p>' . __('photo_uploaded') . '<br />' .
-                         '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>' .
+                         '<a href="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>' .
                          '<div class="phdr"><a href="profile.php?user=' . $user['id'] . '">' . __('profile') . '</a></div>';
                 } else {
                     echo Functions::displayError($handle->error);
@@ -85,7 +86,7 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
             $handle->clean();
         }
     } else {
-        echo '<form enctype="multipart/form-data" method="post" action="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' .
+        echo '<form enctype="multipart/form-data" method="post" action="' . $url . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' .
              '<div class="menu"><p><h3>' . __('select_image') . '</h3>' .
              '<input type="file" name="imagefile" value="" /></p>' .
              '<p><h3>' . __('description') . '</h3>' .
@@ -95,6 +96,6 @@ if ($al && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
              '<p><input type="submit" name="submit" value="' . __('upload') . '" /></p>' .
              '</div></form>' .
              '<div class="phdr"><small>' . __('select_image_help') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb.<br />' . __('select_image_help_5') . '</small></div>' .
-             '<p><a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('back') . '</a></p>';
+             '<p><a href="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('back') . '</a></p>';
     }
 }

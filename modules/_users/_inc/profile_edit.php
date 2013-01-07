@@ -10,8 +10,10 @@
  */
 
 defined('_IN_PROFILE') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 $tpl = Template::getInstance();
+$tpl->url = $url;
 
 if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '_small.jpg')) {
     $tpl->photo = TRUE;
@@ -27,7 +29,7 @@ switch (Vars::$MOD) {
         if (isset($_POST['submit'])) {
             @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.jpg');
             @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '_small.jpg');
-            header('Location: ' . Vars::$URI . '?act=edit&user=' . $tpl->user['id']);
+            header('Location: ' . Router::getUrl(3) . '?act=edit&user=' . $tpl->user['id']);
         } else {
             $tpl->contents = $tpl->includeTpl('delete_photo');
         }
@@ -72,7 +74,7 @@ switch (Vars::$MOD) {
                     $handle->process(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR);
                     if ($handle->processed) {
                         echo'<div class="gmenu"><p>' . __('photo_uploaded') . '<br />' .
-                            '<a href="' . Vars::$URI . '?act=edit&amp;user=' . $tpl->user['id'] . '">' . __('continue') . '</a></p></div>';
+                            '<a href="' . $url . '?act=edit&amp;user=' . $tpl->user['id'] . '">' . __('continue') . '</a></p></div>';
                     } else {
                         echo Functions::displayError($handle->error);
                     }
@@ -119,7 +121,7 @@ switch (Vars::$MOD) {
                                     WHERE `id` = " . $tpl->user['id']
                             );
                             $tpl->message = __('change_nickname_confirm');
-                            $tpl->continue = Router::getUrl(2) . '/profile?act=settings&amp;user=' . $tpl->user['id'];
+                            $tpl->continue = $url . '/profile?act=settings&amp;user=' . $tpl->user['id'];
                             $tpl->contents = $tpl->includeTpl('message', 1);
                             exit;
                         } else {
@@ -149,7 +151,7 @@ switch (Vars::$MOD) {
         Редактирование анкеты
         -----------------------------------------------------------------
         */
-        $form = new Form(Vars::$URI . '?act=edit&amp;user=' . $tpl->user['id']);
+        $form = new Form($url . '?act=edit&amp;user=' . $tpl->user['id']);
 
         $form
             ->add('text', 'imname', array(
@@ -229,7 +231,7 @@ switch (Vars::$MOD) {
             'value' => __('save'),
             'class' => 'btn btn-primary btn-large'))
 
-            ->addHtml('<a class="btn" href="' . Vars::$URI . '?act=settings&amp;user=' . $tpl->user['id'] . '">' . __('back') . '</a>');
+            ->addHtml('<a class="btn" href="' . Router::getUrl(3) . '?act=settings&amp;user=' . $tpl->user['id'] . '">' . __('back') . '</a>');
 
         $tpl->form = $form->display();
 

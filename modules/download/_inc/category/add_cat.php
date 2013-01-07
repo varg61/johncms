@@ -10,13 +10,15 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (!Vars::$ID) $load_cat = $files_path;
     else {
         $req_down = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
         $res_down = mysql_fetch_assoc($req_down);
         if (mysql_num_rows($req_down) == 0 || !is_dir($res_down['dir'])) {
-            echo Functions::displayError(__('not_found_dir'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+            echo Functions::displayError(__('not_found_dir'), '<a href="' . $url . '">' . __('download_title') . '</a>');
             exit;
         }
         $load_cat = $res_down['dir'];
@@ -41,7 +43,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             }
         }
         if ($error) {
-            echo functions::displayError($error, '<a href="' . Vars::$URI . '?act=add_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+            echo functions::displayError($error, '<a href="' . $url . '?act=add_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
         if (empty($rus_name))
@@ -65,14 +67,14 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $cat_id = mysql_insert_id();
             echo '<div class="phdr"><b>' . __('add_cat_title') . '</b></div>' .
                 '<div class="list1">' . __('add_cat_ok') . '</div>' .
-                '<div class="list2"><a href="' . Vars::$URI . '?id=' . $cat_id . '">' . __('continue') . '</a></div>';
+                '<div class="list2"><a href="' . $url . '?id=' . $cat_id . '">' . __('continue') . '</a></div>';
         } else {
-            echo functions::displayError(__('add_cat_error'), '<a href="' . Vars::$URI . 'act=add_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+            echo functions::displayError(__('add_cat_error'), '<a href="' . $url . 'act=add_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
     } else {
         echo '<div class="phdr"><b>' . __('add_cat_title') . '</b></div><div class="menu">' .
-            '<form action="' . Vars::$URI . '?act=add_cat&amp;id=' . Vars::$ID . '" method="post">' .
+            '<form action="' . $url . '?act=add_cat&amp;id=' . Vars::$ID . '" method="post">' .
             __('dir_name') . ' [A-Za-z0-9]:<br/><input type="text" name="name"/><br/>' .
             __('dir_name_view') . ':<br/><input type="text" name="rus_name"/><br/>' .
             __('dir_desc') . ' (max. 500):<br/><textarea name="desc" cols="24" rows="4"></textarea><br/>';
@@ -85,8 +87,8 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     }
     echo '<div class="phdr">';
     if (Vars::$ID)
-        echo '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a> | ';
-    echo '<a href="' . Vars::$URI . '">' . __('download_title') . '</a></div>';
+        echo '<a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a> | ';
+    echo '<a href="' . $url . '">' . __('download_title') . '</a></div>';
 } else {
     header('Location: ' . Vars::$HOME_URL . '/404');
 }

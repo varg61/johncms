@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 if (!$al) {
     echo Functions::displayError(__('error_wrong_data'));
@@ -20,6 +21,7 @@ if (!mysql_num_rows($req)) {
     echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
+
 $album = mysql_fetch_assoc($req);
 $view = isset($_GET['view']);
 
@@ -28,10 +30,10 @@ $view = isset($_GET['view']);
 Показываем выбранный альбом с фотографиями
 -----------------------------------------------------------------
 */
-echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('photo_albums') . '</b></a> | <a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('personal_2') . '</a></div>' .
+echo'<div class="phdr"><a href="' . $url . '"><b>' . __('photo_albums') . '</b></a> | <a href="' . $url . '?act=list&amp;user=' . $user['id'] . '">' . __('personal_2') . '</a></div>' .
     '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>' .
     '<div class="phdr">' . __('album') . ': ';
-echo $view ? '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . Validate::checkout($album['name']) . '</b></a>' : '<b>' . Validate::checkout($album['name']) . '</b>';
+echo $view ? '<a href="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . Validate::checkout($album['name']) . '</b></a>' : '<b>' . Validate::checkout($album['name']) . '</b>';
 echo'</div>';
 if (!empty($album['description'])) {
     echo '<div class="topmenu">' . Validate::checkout($album['description'], 1) . '</div>';
@@ -47,7 +49,7 @@ if ($album['access'] != 2)
 if ($album['access'] == 1 && $user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
     // Если доступ закрыт
     echo Functions::displayError(__('access_forbidden')) .
-        '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></div>';
+        '<div class="phdr"><a href="' . $url . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></div>';
     exit;
 } elseif ($album['access'] == 2 && $user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS < 6) {
     // Если доступ через пароль
@@ -58,12 +60,12 @@ if ($album['access'] == 1 && $user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS
             echo Functions::displayError(__('error_wrong_password'));
     }
     if (!isset($_SESSION['ap']) || $_SESSION['ap'] != $album['password']) {
-        echo'<form action="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post"><div class="menu"><p>' .
+        echo'<form action="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post"><div class="menu"><p>' .
             __('album_password') . '<br />' .
             '<input type="text" name="password"/></p>' .
             '<p><input type="submit" name="submit" value="' . __('login') . '"/></p>' .
             '</div></form>' .
-            '<div class="phdr"><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></div>';
+            '<div class="phdr"><a href="' . $url . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></div>';
         exit;
     }
 }
@@ -84,7 +86,7 @@ if ($view) {
 }
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `album_id` = '$al'"), 0);
 if ($total > Vars::$USER_SET['page_size'])
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+    echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 if ($total) {
     $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `user_id` = '" . $user['id'] . "' AND `album_id` = '$al' ORDER BY `id` DESC " . Vars::db_pagination());
     for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
@@ -119,25 +121,25 @@ if ($total) {
             Предпросмотр изображения в списке
             -----------------------------------------------------------------
             */
-            echo '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
+            echo '<a href="' . $url . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
         }
         if (!empty($res['description']))
             echo '<div class="gray">' . Functions::smilies(Validate::checkout($res['description'], 1)) . '</div>';
         echo '<div class="sub">';
         if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayMenu(array(
-                '<a href="' . Vars::$URI . '?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('edit') . '</a>',
-                '<a href="' . Vars::$URI . '?act=image_move&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('move') . '</a>',
-                '<a href="' . Vars::$URI . '?act=image_delete&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('delete') . '</a>'
+                '<a href="' . $url . '?act=image_edit&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('edit') . '</a>',
+                '<a href="' . $url . '?act=image_move&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('move') . '</a>',
+                '<a href="' . $url . '?act=image_delete&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '">' . __('delete') . '</a>'
             ));
             if ($user['id'] == Vars::$USER_ID && $view)
-                echo ' | <a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;view&amp;img=' . $res['id'] . '&amp;profile">' . __('photo_profile') . '</a>';
+                echo ' | <a href="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;view&amp;img=' . $res['id'] . '&amp;profile">' . __('photo_profile') . '</a>';
         }
         echo Album::vote($res) .
             '<div class="gray">' . __('count_views') . ': ' . $res['views'] . ', ' . __('count_downloads') . ': ' . $res['downloads'] . '</div>' .
             '<div class="gray">' . __('date') . ': ' . Functions::displayDate($res['time']) . '</div>' .
-            '<a href="' . Vars::$URI . '?act=comments&amp;user=' . $user['id'] . '&amp;img=' . $res['id'] . '">' . __('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
-            '<a href="' . Vars::$URI . '?act=image_download&amp;img=' . $res['id'] . '">' . __('download') . '</a>' .
+            '<a href="' . $url . '?act=comments&amp;user=' . $user['id'] . '&amp;img=' . $res['id'] . '">' . __('comments') . '</a> (' . $res['comm_count'] . ')<br />' .
+            '<a href="' . $url . '?act=image_download&amp;img=' . $res['id'] . '">' . __('download') . '</a>' .
             '</div></div>';
     }
 } else {
@@ -145,16 +147,16 @@ if ($total) {
 }
 if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
     echo'<div class="gmenu">' .
-        '<form action="' . Vars::$URI . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
+        '<form action="' . $url . '?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '" method="post">' .
         '<p><input type="submit" value="' . __('image_add') . '"/></p>' .
         '</form></div>';
 }
 echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . ($view ? '&amp;view' : '') . '" method="post">' .
+    echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '&amp;' . ($view ? 'view&amp;' : ''), Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . ($view ? '&amp;view' : '') . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
-echo '<p><a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></p>';
+echo '<p><a href="' . $url . '?act=list&amp;user=' . $user['id'] . '">' . __('album_list') . '</a></p>';

@@ -41,7 +41,7 @@ if (Vars::$USER_RIGHTS >= 7) {
             $tpl->user['rights'] = $rights;
             $tpl->save = 1;
             if ($tpl->user['id'] == Vars::$USER_ID) {
-                header('Location: ' . Vars::$URI . '?act=settings');
+                header('Location: ' . Router::getUrl(3) . '?act=settings');
                 exit;
             }
         } else {

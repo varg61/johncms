@@ -37,7 +37,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         }
         $_SESSION['dc'] = $dc;
         $_SESSION['prd'] = htmlspecialchars(getenv("HTTP_REFERER"));
-        echo '<p>' . __('delete_confirmation') . '<br/><a href="' . Vars::$URI . '?act=massdel&amp;yes">' . __('delete') . '</a> | ' .
+        echo '<p>' . __('delete_confirmation') . '<br/><a href="' . Router::getUrl(2) . '?act=massdel&amp;yes">' . __('delete') . '</a> | ' .
              '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . __('cancel') . '</a></p>';
     }
 }

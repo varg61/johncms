@@ -108,7 +108,7 @@ switch ($reg_step) {
                 // Пересылка на заполнение анкеты
                 $_SESSION['reg'] = 2;
                 $_SESSION['password'] = $reg_data['password'];
-                header('Location: ' . Vars::$URI);
+                header('Location: ' . Router::getUrl(3));
                 exit;
             }
         }

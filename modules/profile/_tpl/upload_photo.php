@@ -1,7 +1,7 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('profile') : __('my_profile')) ?></b></a> | <?= __('upload_photo') ?>
+    <a href="<?= $this->url ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('profile') : __('my_profile')) ?></b></a> | <?= __('upload_photo') ?>
 </div>
-<form enctype="multipart/form-data" method="post" action="<?= Vars::$URI ?>?act=edit&amp;mod=upload_photo&amp;user=<?= $this->user['id'] ?>">
+<form enctype="multipart/form-data" method="post" action="<?= $this->url ?>?act=edit&amp;mod=upload_photo&amp;user=<?= $this->user['id'] ?>">
     <div class="menu">
         <div class="formblock">
             <label for="file"><?= __('select_image') ?></label><br/>
@@ -17,4 +17,4 @@
         <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
     </div>
 </form>
-<div class="phdr"><a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a></div>
+<div class="phdr"><a href="<?= $this->url ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a></div>

@@ -13,8 +13,10 @@
 //TODO: Добавить информацию о подтверждении регистрации
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 $tpl = Template::getInstance();
+$tpl->url = $url;
 $tpl->setUsers = Vars::$USER_SYS;
 $tpl->error = array();
 
@@ -211,6 +213,7 @@ if ($include && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' .
                     if ($rows['delete'] == 1) $tpl->num_cont = 0;
                 }
             }
+
             //Подключаем шаблон profile
             $tpl->contents = $tpl->includeTpl('profile');
     }

@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "" || $_GET['id'] == "0") {
@@ -25,11 +26,11 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 // Сохраняем отредактированную статью                     //
                 ////////////////////////////////////////////////////////////
                 if (empty($_POST['name'])) {
-                    echo Functions::displayError(__('error_empty_title'), '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+                    echo Functions::displayError(__('error_empty_title'), '<a href="' . $url . '?act=edit&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                     exit;
                 }
                 if (empty($_POST['text'])) {
-                    echo Functions::displayError(__('error_empty_text'), '<a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+                    echo Functions::displayError(__('error_empty_text'), '<a href="' . $url . '?act=edit&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                     exit;
                 }
                 $text = trim($_POST['text']);
@@ -48,7 +49,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                     `count` = '$count'
                     WHERE `id` = " . Vars::$ID
                 );
-                header('location: ' . Vars::$URI . '?id=' . Vars::$ID);
+                header('location: ' . $url . '?id=' . Vars::$ID);
                 break;
 
             case "cat":
@@ -67,7 +68,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 `ip` = '" . $mod . "',
                 `soft` = '" . $user . "'
                 WHERE `id` = " . Vars::$ID);
-                header('location: ' . Vars::$URI . '?id=' . Vars::$ID);
+                header('location: ' . $url . '?id=' . Vars::$ID);
                 break;
             default :
                 ////////////////////////////////////////////////////////////
@@ -75,7 +76,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 ////////////////////////////////////////////////////////////
                 $text = Validate::checkout($_POST['text']);
                 mysql_query("update `lib` set `text` = '" . mysql_real_escape_string($text) . "' where `id` = " . Vars::$ID);
-                header("location: " . Vars::$URI . "?id=$ms[refid]");
+                header("location: " . $url . "?id=$ms[refid]");
                 break;
         }
     } else {
@@ -85,18 +86,18 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 // Форма редактирования статьи                            //
                 ////////////////////////////////////////////////////////////
                 echo '<div class="phdr"><b>' . __('edit_article') . '</b></div>' .
-                     '<form action="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
+                     '<form action="' . $url . '?act=edit&amp;id=' . Vars::$ID . '" method="post">' .
                      '<div class="menu"><p><h3>' . __('title') . '</h3><input type="text" name="name" value="' . htmlentities($ms['name'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
                      '<p><h3>' . __('announce') . '</h3><small>' . __('announce_help') . '</small><br/><input type="text" name="anons" value="' . htmlentities($ms['announce'], ENT_QUOTES, 'UTF-8') . '"/></p>' .
                      '<p><h3>' . __('text') . '</h3><textarea rows="5" name="text">' . htmlentities($ms['text'], ENT_QUOTES, 'UTF-8') . '</textarea></p></div>' .
                      '<div class="rmenu"><p><h3>' . __('author') . '</h3><input type="text" name="autor" value="' . $ms['avtor'] . '"/></p>' .
                      '<p><h3>' . __('reads') . '</h3><input type="text" name="count" value="' . $ms['count'] . '" size="4"/></p></div>' .
                      '<div class="bmenu"><input type="submit" name="submit" value="' . __('save') . '"/></div></form>' .
-                     '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+                     '<p><a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
                 break;
 
             case "cat":
-                echo __('edit_category') . "<br/><form action='" . Vars::$URI . "?act=edit&amp;id=" . Vars::$ID . "' method='post'><input type='text' name='text' value='" . $ms['text'] .
+                echo __('edit_category') . "<br/><form action='" . $url . "?act=edit&amp;id=" . Vars::$ID . "' method='post'><input type='text' name='text' value='" . $ms['text'] .
                      "'/><br/>" . __('edit_category_help') . ":<br/><select name='mod'>";
                 if ($ms['ip'] == 1) {
                     echo "<option value='1'>" . __('categories') . "</option><option value='0'>" . __('articles') . "</option>";
@@ -109,10 +110,10 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                 } else {
                     echo __('allow_to_add') . "<br/><input type='checkbox' name='user' value='1'/><br/>";
                 }
-                echo "<input type='submit' name='submit' value='" . __('save') . "'/></form><br/><a href='" . Vars::$URI . "?id=" . $ms['refid'] . "'>" . __('back') . "</a><br/>";
+                echo "<input type='submit' name='submit' value='" . __('save') . "'/></form><br/><a href='" . $url . "?id=" . $ms['refid'] . "'>" . __('back') . "</a><br/>";
                 break;
         }
     }
 } else {
-    header("location: " . Vars::$URI);
+    header("location: " . $url);
 }

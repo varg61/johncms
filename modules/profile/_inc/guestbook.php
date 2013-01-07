@@ -10,13 +10,14 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 //if (Vars::$USER_ID && $user['id'] == Vars::$USER_ID) {
 //    $datauser['comm_old'] = $datauser['comm_count'];
 //    //TODO: Доработать!
 //}
 
-$context_top = '<div class="phdr"><a href="' . Vars::$URI . '?user=' . $user['id'] . '"><b>' . __('profile') . '</b></a> | ' . __('guestbook') . '</div>' .
+$context_top = '<div class="phdr"><a href="' . $url . '?user=' . $user['id'] . '"><b>' . __('profile') . '</b></a> | ' . __('guestbook') . '</div>' .
     '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';
 
 /*
@@ -27,7 +28,7 @@ $context_top = '<div class="phdr"><a href="' . Vars::$URI . '?user=' . $user['id
 $arg = array(
     'comments_table' => 'cms_user_guestbook',              // Таблица Гостевой
     'object_table'   => 'users',                           // Таблица комментируемых объектов
-    'script'         => Vars::$URI . '?act=guestbook',     // Имя скрипта (с параметрами вызова)
+    'script'         => $url . '?act=guestbook',     // Имя скрипта (с параметрами вызова)
     'sub_id_name'    => 'user',                            // Имя (для URL) идентификатора комментируемого объекта
     'sub_id'         => $user['id'],                       // Идентификатор комментируемого объекта
     'owner'          => $user['id'],                       // Владелец объекта

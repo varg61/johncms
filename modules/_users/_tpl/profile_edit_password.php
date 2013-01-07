@@ -16,7 +16,7 @@
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
 
-    <form action="<?= Vars::$URI ?>?act=edit_password&amp;user=<?= $this->user['id'] ?>" method="post">
+    <form action="<?= Router::getUrl(3) ?>?act=edit_password&amp;user=<?= $this->user['id'] ?>" method="post">
         <div class="form-block">
             <label for="oldpass"><?= ($this->user['id'] == Vars::$USER_ID ? __('old_password') : __('your_password')) ?> <span class="attn">*</span></label><br/>
             <?php if (isset($this->error['oldpass'])) : ?>
@@ -38,7 +38,7 @@
             <span class="description"><?= __('password_change_help') ?></span>
             <br/><br/>
             <input class="btn btn-primary btn-large" type="submit" value="<?= __('save') ?>" name="submit"/>
-            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
+            <a class="btn" href="<?= Router::getUrl(3) ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

@@ -11,7 +11,7 @@
 
 class Router extends Vars
 {
-    public static $ROUTE;
+    public static $ROUTE = array();
     public static $PATH;
     private $module;  //TODO: Удалить
     private $uri = ''; //TODO: Удалить
@@ -28,7 +28,6 @@ class Router extends Vars
             $this->_getModule('homepage');
         }
 
-        parent::$URI = parent::$HOME_URL . '/' . $this->module['module'] . $this->uri; //TODO: Удалить
         parent::$PLACE = $this->_setPlace();
         $this->_include();
     }

@@ -1,12 +1,12 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=show&amp;al=<?= $this->album ?>&amp;user=<?= $this->user['id'] ?>"><b><?= __('photo_album') ?></b></a> | <?= __('image_edit') ?>
+    <a href="<?= $this->link ?>?act=show&amp;al=<?= $this->album ?>&amp;user=<?= $this->user['id'] ?>"><b><?= __('photo_album') ?></b></a> | <?= __('image_edit') ?>
 </div>
 <?php if (isset($this->save)) : ?>
     <div class="gmenu">
         <p><?= __('data_saved') ?></p>
     </div>
 <?php endif ?>
-<form action="<?= Vars::$URI ?>?act=image_edit&amp;img=<?= $this->img ?>&amp;user=<?= $this->user['id'] ?>" method="post">
+<form action="<?= $this->link ?>?act=image_edit&amp;img=<?= $this->img ?>&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="menu">
         <div class="formblock">
             <label><?= __('image') ?></label><br/>
@@ -72,5 +72,5 @@
     </div>
 </form>
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=show&amp;al=<?= $this->album ?>&amp;user=<?= $this->user['id'] ?>"><?= __('cancel') ?></a>
+    <a href="<?= $this->link ?>?act=show&amp;al=<?= $this->album ?>&amp;user=<?= $this->user['id'] ?>"><?= __('cancel') ?></a>
 </div>

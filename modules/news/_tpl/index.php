@@ -15,8 +15,8 @@
         <div class="block-tools">
             <?php if (Vars::$USER_RIGHTS >= 7): ?>
             <div style="display: inline-block">
-                <a class="btn btn-mini" href="<?= Vars::$URI ?>?act=edit&amp;id=<?= $val['id'] ?>"><?= __('edit') ?></a>
-                <a class="btn btn-mini" href="<?= Vars::$URI ?>?act=del&amp;id=<?= $val['id'] ?>"><?= __('delete') ?></a>
+                <a class="btn btn-mini" href="<?= $this->url ?>?act=edit&amp;id=<?= $val['id'] ?>"><?= __('edit') ?></a>
+                <a class="btn btn-mini" href="<?= $this->url ?>?act=del&amp;id=<?= $val['id'] ?>"><?= __('delete') ?></a>
             </div>
             <?php endif ?>
             <?php if (isset($this->comments)): ?>
@@ -33,8 +33,8 @@
 
     <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
     <div class="align-center">
-        <?= Functions::displayPagination(Vars::$URI . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
-        <form action="<?= Vars::$URI ?>" method="post">
+        <?= Functions::displayPagination($this->url . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
+        <form action="<?= $this->url ?>" method="post">
             <input class="mini" type="text" name="page" size="2"/>
             <input type="submit" value="<?= __('to_page') ?> &gt;&gt;"/>
         </form>
@@ -48,7 +48,7 @@
 
 <?php if (Vars::$USER_RIGHTS >= 7): ?>
 <div class="btn-panel">
-    <a class="btn" href="<?= Vars::$URI ?>?act=add"><i class="icn-edit"></i><?= __('add') ?></a>
-    <a class="btn" href="<?= Vars::$URI ?>/admin"><i class="icn-settings"></i><?= __('settings') ?></a>
+    <a class="btn" href="<?= $this->url ?>?act=add"><i class="icn-edit"></i><?= __('add') ?></a>
+    <a class="btn" href="<?= $this->url ?>/admin"><i class="icn-settings"></i><?= __('settings') ?></a>
 </div>
 <?php endif ?>

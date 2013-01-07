@@ -15,6 +15,9 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
+
+    $url = Router::getUrl(2);
+
     // Проверяем, существует ли тема
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($req)) {
@@ -49,20 +52,20 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
             mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `topic` = " . Vars::$ID);
         }
-        header('Location: ' . Vars::$URI . '?id=' . $res['refid']);
+        header('Location: ' . $url . '?id=' . $res['refid']);
     } else {
         /*
         -----------------------------------------------------------------
         Меню выбора режима удаления темы
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('topic_delete') . '</div>' .
-             '<div class="rmenu"><form method="post" action="' . Vars::$URI . '?act=deltema&amp;id=' . Vars::$ID . '">' .
+        echo '<div class="phdr"><a href="' . $url . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('topic_delete') . '</div>' .
+             '<div class="rmenu"><form method="post" action="' . $url . '?act=deltema&amp;id=' . Vars::$ID . '">' .
              '<p><h3>' . __('delete_confirmation') . '</h3>' .
              '<input type="radio" value="1" name="del" checked="checked"/>&#160;' . __('hide') . '<br />' .
              (Vars::$USER_RIGHTS == 9 ? '<input type="radio" value="2" name="del" />&#160;' . __('delete') : '') .
              '</p><p><input type="submit" name="submit" value="' . __('do') . '" /></p>' .
-             '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('cancel') . '</a>' .
+             '<p><a href="' . $url . '?id=' . Vars::$ID . '">' . __('cancel') . '</a>' .
              '</p></form></div>' .
              '<div class="phdr">&#160;</div>';
     }

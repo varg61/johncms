@@ -11,6 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+$url = Router::getUrl(2);
+
 $types = array(
     1 => __('files_type_win'),
     2 => __('files_type_java'),
@@ -65,7 +67,7 @@ if ($c || $s || $t) {
         $res = mysql_fetch_array($req);
         $caption .= $res['text'];
     } else {
-        echo Functions::displayError(__('error_wrong_data'), '<a href="' . Vars::$URI . '">' . __('to_forum') . '</a>');
+        echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('to_forum') . '</a>');
         exit;
     }
 }
@@ -98,9 +100,9 @@ if ($do || isset($_GET['new'])) {
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
             $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp']
                                                           ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / Vars::$USER_SET['page_size']);
-            $text = '<b><a href="' . Vars::$URI . '?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text;
+            $text = '<b><a href="' . $url . '?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text;
             if (mb_strlen($res['text']) > 500)
-                $text .= '<br /><a href="' . Vars::$URI . '?act=post&amp;id=' . $res['post'] . '">' . __('read_all') . ' &gt;&gt;</a>';
+                $text .= '<br /><a href="' . $url . '?act=post&amp;id=' . $res['post'] . '">' . __('read_all') . ' &gt;&gt;</a>';
             // Формируем ссылку на файл
             $fls = @filesize(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res['filename']);
             $fls = round($fls / 1024, 0);
@@ -113,13 +115,13 @@ if ($do || isset($_GET['new'])) {
             );
             if (in_array($att_ext, $pic_ext)) {
                 // Если картинка, то выводим предпросмотр
-                $file = '<div><a href="' . Vars::$URI . '?act=file&amp;id=' . $res['id'] . '">';
+                $file = '<div><a href="' . $url . '?act=file&amp;id=' . $res['id'] . '">';
                 $file .= '<img src="' . Vars::$HOME_URL . '/assets/misc/forum_thumbinal.php?file=' . (urlencode($res['filename'])) . '" alt="' . __('click_to_view') . '" /></a></div>';
             } else {
                 // Если обычный файл, выводим значок и ссылку
                 $file = Functions::getIcon(($res['del'] ? 'delete.png' : 'filetype-' . $res['filetype'] . '.png'), '', '', 'align="middle"') . '&#160;';
             }
-            $file .= '<a href="' . Vars::$URI . '?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
+            $file .= '<a href="' . $url . '?act=file&amp;id=' . $res['id'] . '">' . htmlspecialchars($res['filename']) . '</a><br />';
             $file .= '<small><span class="gray">' . __('size') . ': ' . $fls . ' kb.<br />' . __('downloaded') . ': ' . $res['dlcount'] . ' ' . __('time') . '</span></small>';
             $arg = array(
                 'iphide' => 1,
@@ -133,8 +135,8 @@ if ($do || isset($_GET['new'])) {
         echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
             // Постраничная навигация
-            echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
-                 '<p><form action="' . Vars::$URI . '" method="get">' .
+            echo '<p>' . Functions::displayPagination($url . '?act=files&amp;' . (isset($_GET['new']) ? 'new' : 'do=' . $do) . $lnk . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+                 '<p><form action="' . $url . '" method="get">' .
                  '<input type="hidden" name="act" value="files"/>' .
                  '<input type="hidden" name="do" value="' . $do . '"/>' . $input . '<input type="text" name="page" size="2"/>' .
                  '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
@@ -149,7 +151,7 @@ if ($do || isset($_GET['new'])) {
     -----------------------------------------------------------------
     */
     $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
-    echo '<p>' . ($countnew > 0 ? '<a href="' . Vars::$URI . '?act=files&amp;new' . $lnk . '">' . __('new_files') . ' (' . $countnew . ')</a>' : __('new_files_empty')) . '</p>';
+    echo '<p>' . ($countnew > 0 ? '<a href="' . $url . '?act=files&amp;new' . $lnk . '">' . __('new_files') . ' (' . $countnew . ')</a>' : __('new_files_empty')) . '</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array();
     $total = 0;
@@ -157,7 +159,7 @@ if ($do || isset($_GET['new'])) {
         $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . (Vars::$USER_RIGHTS >= 7
                                                   ? '' : " AND `del` != '1'") . $sql), 0);
         if ($count > 0) {
-            $link[] = Functions::getIcon('filetype-' . $i . '.png') . '&#160;<a href="' . Vars::$URI . '?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
+            $link[] = Functions::getIcon('filetype-' . $i . '.png') . '&#160;<a href="' . $url . '?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
             $total = $total + $count;
         }
     }
@@ -168,5 +170,5 @@ if ($do || isset($_GET['new'])) {
     echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 }
 echo '<p>' . (($do || isset($_GET['new']))
-        ? '<a href="' . Vars::$URI . '?act=files' . $lnk . '">' . __('section_list') . '</a><br />'
-        : '') . '<a href="' . Vars::$URI . ($id ? '?id=' . $id : '') . '">' . __('forum') . '</a></p>';
+        ? '<a href="' . $url . '?act=files' . $lnk . '">' . __('section_list') . '</a><br />'
+        : '') . '<a href="' . $url . ($id ? '?id=' . $id : '') . '">' . __('forum') . '</a></p>';

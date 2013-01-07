@@ -29,7 +29,7 @@ $settings = isset(Vars::$SYSTEM_SET['news'])
         'days'     => 7
     );
 
-$form = new Form(Vars::$URI);
+$form = new Form(Router::getUrl(3));
 
 $form
     ->fieldsetStart(__('apperance'))
@@ -123,7 +123,7 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
     $tpl->save = TRUE;
 } elseif ($form->isSubmitted && isset($form->input['reset'])) {
     @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'news'");
-    header('Location: ' . Vars::$URI . '?default');
+    header('Location: ' . Router::getUrl(3) . '?default');
     exit;
 }
 

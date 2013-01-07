@@ -15,7 +15,8 @@ if (Vars::$USER_RIGHTS != 9) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$url = Router::getUrl(3);
+$backurl = Router::getUrl(2);
 
 switch (Vars::$ACT) {
     case 'view':
@@ -35,7 +36,7 @@ switch (Vars::$ACT) {
                     $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 }
                 $res = mysql_fetch_array($req);
-                echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('counters') . '</b></a> | ' . __('viewing') . '</div>' .
+                echo'<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('viewing') . '</div>' .
                     '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Validate::checkout($res['name']) . '</b></div>' .
                     ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . __('counter_mod1') . '</h3>' . $res['link1'] . '</p>' .
                     '<p><h3>' . __('counter_mod2') . '</h3>' . $res['link2'] . '</p>' .
@@ -54,9 +55,9 @@ switch (Vars::$ACT) {
                 }
                 echo '</p></div>';
                 echo '<div class="phdr">'
-                    . ($res['switch'] == 1 ? '<a href="' . Vars::$URI . '?act=view&amp;go=off&amp;id=' . Vars::$ID . '">' . __('lng_off') . '</a>'
-                        : '<a href="' . Vars::$URI . '?act=view&amp;go=on&amp;id=' . Vars::$ID . '">' . __('lng_on') . '</a>')
-                    . ' | <a href="' . Vars::$URI . '?act=edit&amp;id=' . Vars::$ID . '">' . __('edit') . '</a> | <a href="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete') . '</a></div>';
+                    . ($res['switch'] == 1 ? '<a href="' . $url . '?act=view&amp;go=off&amp;id=' . Vars::$ID . '">' . __('lng_off') . '</a>'
+                        : '<a href="' . $url . '?act=view&amp;go=on&amp;id=' . Vars::$ID . '">' . __('lng_on') . '</a>')
+                    . ' | <a href="' . $url . '?act=edit&amp;id=' . Vars::$ID . '">' . __('edit') . '</a> | <a href="' . $url . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete') . '</a></div>';
             } else {
                 echo Functions::displayError(__('error_wrong_data'));
             }
@@ -84,7 +85,7 @@ switch (Vars::$ACT) {
                 }
             }
         }
-        header('Location: ' . Vars::$URI);
+        header('Location: ' . $url);
         break;
 
     case 'down':
@@ -108,7 +109,7 @@ switch (Vars::$ACT) {
                 }
             }
         }
-        header('Location: ' . Vars::$URI);
+        header('Location: ' . $url);
         break;
 
     case 'del':
@@ -118,24 +119,24 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (!Vars::$ID) {
-            echo Functions::displayError(__('error_wrong_data'), '<a href="' . Vars::$URI . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('back') . '</a>');
             exit;
         }
         $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
         if (mysql_num_rows($req)) {
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-                echo '<p>' . __('counter_deleted') . '<br/><a href="' . Vars::$URI . '">' . __('continue') . '</a></p>';
+                echo '<p>' . __('counter_deleted') . '<br/><a href="' . $url . '">' . __('continue') . '</a></p>';
                 exit;
             } else {
-                echo '<form action="' . Vars::$URI . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
-                echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('counters') . '</b></a> | ' . __('delete') . '</div>';
+                echo '<form action="' . $url . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
+                echo '<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('delete') . '</div>';
                 $res = mysql_fetch_array($req);
                 echo '<div class="rmenu"><p><h3>' . Validate::checkout($res['name']) . '</h3>' . __('delete_confirmation') . '</p><p><input type="submit" value="' . __('delete') . '" name="submit" /></p></div>';
-                echo '<div class="phdr"><a href="' . Vars::$URI . '">' . __('cancel') . '</a></div></form>';
+                echo '<div class="phdr"><a href="' . $url . '">' . __('cancel') . '</a></div></form>';
             }
         } else {
-            echo Functions::displayError(__('error_wrong_data'), '<a href="' . Vars::$URI . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('back') . '</a>');
             exit;
         }
         break;
@@ -153,15 +154,15 @@ switch (Vars::$ACT) {
             $link2 = isset($_POST['link2']) ? trim($_POST['link2']) : '';
             $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
             if (empty($name) || empty($link1)) {
-                echo Functions::displayError(__('error_empty_fields'), '<a href="' . Vars::$URI . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
+                echo Functions::displayError(__('error_empty_fields'), '<a href="' . $url . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
                 exit;
             }
-            echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('counters') . '</b></a> | ' . __('preview') . '</div>' .
+            echo'<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('preview') . '</div>' .
                 '<div class="menu"><p><h3>' . __('title') . '</h3><b>' . Validate::checkout($name) . '</b></p>' .
                 '<p><h3>' . __('counter_mod1') . '</h3>' . $link1 . '</p>' .
                 '<p><h3>' . __('counter_mod2') . '</h3>' . $link2 . '</p></div>' .
                 '<div class="rmenu">' . __('counter_preview_help') . '</div>' .
-                '<form action="' . Vars::$URI . '?act=add" method="post">' .
+                '<form action="' . $url . '?act=add" method="post">' .
                 '<input type="hidden" value="' . $name . '" name="name" />' .
                 '<input type="hidden" value="' . htmlspecialchars($link1) . '" name="link1" />' .
                 '<input type="hidden" value="' . htmlspecialchars($link2) . '" name="link2" />' .
@@ -187,12 +188,12 @@ switch (Vars::$ACT) {
                     $mode = $res['mode'];
                     $switch = 1;
                 } else {
-                    echo Functions::displayError(__('error_wrong_data'), '<a href="' . Vars::$URI . '">' . __('back') . '</a>');
+                    echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('back') . '</a>');
                     exit;
                 }
             }
-            echo'<form action="' . Vars::$URI . '?act=edit" method="post">' .
-                '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('counters') . '</b></a> | ' . __('add') . '</div>' .
+            echo'<form action="' . $url . '?act=edit" method="post">' .
+                '<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('add') . '</div>' .
                 '<div class="menu"><p><h3>' . __('title') . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
                 '<p><h3>' . __('counter_mod1') . '</h3><textarea rows="3" name="link1">' . $link1 . '</textarea><br /><small>' . __('counter_mod1_description') . '</small></p>' .
                 '<p><h3>' . __('counter_mod2') . '</h3><textarea rows="3" name="link2">' . $link2 . '</textarea><br /><small>' . __('counter_mod2_description') . '</small></p>' .
@@ -219,7 +220,7 @@ switch (Vars::$ACT) {
         $link2 = isset($_POST['link2']) ? $_POST['link2'] : '';
         $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
         if (empty($name) || empty($link1)) {
-            echo Functions::displayError(__('error_empty_fields'), '<a href="' . Vars::$URI . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_empty_fields'), '<a href="' . $url . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
             exit;
         }
         if (Vars::$ID) {
@@ -253,7 +254,7 @@ switch (Vars::$ACT) {
             `mode` = '$mode'");
         }
         echo'<div class="gmenu"><p>' . (Vars::$ID ? __('counter_edit_conf') : __('counter_add_conf')) . '<br/>' .
-            '<a href="' . Vars::$URI . '">' . __('continue') . '</a>' .
+            '<a href="' . $url . '">' . __('continue') . '</a>' .
             '</p></div>';
         break;
 
@@ -263,19 +264,19 @@ switch (Vars::$ACT) {
         Вывод списка счетчиков
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('admin_panel') . '</b></a> | ' . __('counters') . '</div>' .
-            '<div class="gmenu"><form action="' . Vars::$URI . '?act=edit" method="post"><input type="submit" name="delete" value="' . __('add') . '"/></form></div>';
+        echo'<div class="phdr"><a href="' . $backurl . '"><b>' . __('admin_panel') . '</b></a> | ' . __('counters') . '</div>' .
+            '<div class="gmenu"><form action="' . $url . '?act=edit" method="post"><input type="submit" name="delete" value="' . __('add') . '"/></form></div>';
         $req = mysql_query("SELECT * FROM `cms_counters` ORDER BY `sort` ASC");
         if ($total = mysql_num_rows($req)) {
             for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                 echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                     Functions::getImage(($res['switch'] == 1 ? 'green' : 'red') . '.png', '', 'class="left"') . '&#160;' .
-                    '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a><br />' .
+                    '<a href="' . $url . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a><br />' .
                     '<div class="sub">' .
-                    '<a href="' . Vars::$URI . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a> | ' .
-                    '<a href="' . Vars::$URI . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a> | ' .
-                    '<a href="' . Vars::$URI . '?act=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
-                    '<a href="' . Vars::$URI . '?act=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>' .
+                    '<a href="' . $url . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a> | ' .
+                    '<a href="' . $url . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a> | ' .
+                    '<a href="' . $url . '?act=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
+                    '<a href="' . $url . '?act=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>' .
                     '</div>' .
                     '</div>';
             }
@@ -284,5 +285,5 @@ switch (Vars::$ACT) {
         }
         echo'<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 }
-echo'<p>' . (Vars::$MOD ? '<a href="' . Vars::$URI . '">' . __('counters') . '</a><br />' : '') .
-    '<a href="' . $backLink . '">' . __('admin_panel') . '</a></p>';
+echo'<p>' . (Vars::$MOD ? '<a href="' . $url . '">' . __('counters') . '</a><br />' : '') .
+    '<a href="' . $backurl . '">' . __('admin_panel') . '</a></p>';

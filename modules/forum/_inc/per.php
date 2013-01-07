@@ -15,6 +15,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
+    $url = Router::getUrl(2);
     $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($typ)) {
         echo Functions::displayError(__('error_wrong_data'));
@@ -32,7 +33,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             exit;
         }
         mysql_query("UPDATE `forum` SET `refid` = '$razd' WHERE `id` = " . Vars::$ID);
-        header("Location: " . Vars::$URI . "?id=" . Vars::$ID);
+        header("Location: " . $url . "?id=" . Vars::$ID);
     } else {
         /*
         -----------------------------------------------------------------
@@ -49,8 +50,8 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         }
         $fr = mysql_query("select * from `forum` where id='" . $other . "';");
         $fr1 = mysql_fetch_assoc($fr);
-        echo'<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('topic_move') . '</div>' .
-            '<form action="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '" method="post">' .
+        echo'<div class="phdr"><a href="' . $url . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('topic_move') . '</div>' .
+            '<form action="' . $url . '?act=per&amp;id=' . Vars::$ID . '" method="post">' .
             '<div class="gmenu"><p>' .
             '<h3>' . __('category') . '</h3>' . $fr1['text'] . '</p>';
 
@@ -69,8 +70,8 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         $frm = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$other' ORDER BY `realid` ASC");
         for ($i = 0; $frm1 = mysql_fetch_assoc($frm); ++$i) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-            echo '<a href="' . Vars::$URI . '?act=per&amp;id=' . Vars::$ID . '&amp;other=' . $frm1['id'] . '">' . $frm1['text'] . '</a></div>';
+            echo '<a href="' . $url . '?act=per&amp;id=' . Vars::$ID . '&amp;other=' . $frm1['id'] . '">' . $frm1['text'] . '</a></div>';
         }
-        echo '<div class="phdr"><a href="' . Vars::$URI . '">' . __('back') . '</a></div>';
+        echo '<div class="phdr"><a href="' . $url . '">' . __('back') . '</a></div>';
     }
 }

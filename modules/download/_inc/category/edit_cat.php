@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Редактирование категорий
@@ -19,7 +21,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     $req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
     $res = mysql_fetch_assoc($req);
     if (!mysql_num_rows($req) || !is_dir($res['dir'])) {
-        echo Functions::displayError(__('not_found_dir'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+        echo Functions::displayError(__('not_found_dir'), '<a href="' . $url . '">' . __('download_title') . '</a>');
         exit;
     }
 	/*
@@ -41,7 +43,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             mysql_query("UPDATE `cms_download_category` SET `sort` = '" . $res_two['sort'] . "' WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
             mysql_query("UPDATE `cms_download_category` SET `sort` = '" . $res['sort'] . "' WHERE `id` = '" . $res_two['id'] . "' LIMIT 1");
         }
-        header('location: ' . VARS::$URI . '?id=' . $res['refid']);
+        header('location: ' . $url . '?id=' . $res['refid']);
         exit;
     }
 	/*
@@ -70,17 +72,17 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
          if ($error_format)
             $error[] = __('extensions_ok') . ': ' . implode(', ', $defaultExt);
 		if ($error) {
-            echo functions::displayError($error, '<a href="' . Vars::$URI . '?act=edit_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+            echo functions::displayError($error, '<a href="' . $url . '?act=edit_cat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
         $rus_name = mysql_real_escape_string($rus_name);
         $desc = isset($_POST['desc']) ? mysql_real_escape_string($_POST['desc']) : '';
         mysql_query("UPDATE `cms_download_category` SET `field`='$user_down', `text` = '$format_files', `desc`='$desc', `rus_name`='$rus_name' WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
-        header('location: ' . VARS::$URI . '?id=' . VARS::$ID);
+        header('location: ' . $url . '?id=' . VARS::$ID);
     } else {
         $name = Validate::checkout($res['rus_name']);
         echo '<div class="phdr"><b>' . __('download_edit_cat') . ':</b> ' . $name . '</div>' .
-        '<div class="menu"><form action="' . VARS::$URI . '?act=edit_cat&amp;id=' . VARS::$ID . '" method="post">' .
+        '<div class="menu"><form action="' . $url . '?act=edit_cat&amp;id=' . VARS::$ID . '" method="post">' .
          __('dir_name_view') . ':<br/><input type="text" name="rus_name" value="' . $name . '"/><br/>' .
          __('dir_desc') . ' (max. 500):<br/><textarea name="desc" rows="4">' . Validate::checkout($res['desc']) . '</textarea><br/>';
        	if (Vars::$USER_RIGHTS == 9) {
@@ -91,8 +93,8 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
 		echo ' <input type="submit" name="submit" value="' . __('sent') . '"/><br/></form></div>';
     }
     echo '<div class="phdr">' .
-    '<a href="' . VARS::$URI . '?id=' . VARS::$ID . '">' . __('back') . '</a> | ' .
-    '<a href="' . VARS::$URI . '">' . __('download_title') . '</a></div>';
+    '<a href="' . $url . '?id=' . VARS::$ID . '">' . __('back') . '</a> | ' .
+    '<a href="' . $url . '">' . __('download_title') . '</a></div>';
 } else {
     header('Location: ' . Vars::$HOME_URL . '/404');
 }

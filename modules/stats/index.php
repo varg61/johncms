@@ -3,13 +3,14 @@
 /**
  * @package     JohnCMS
  * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
  * @license     LICENSE.txt (see attached file)
  * @version     VERSION.txt (see attached file)
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_ADMIN') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 $error = '';
 
@@ -58,7 +59,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH .
     $back_links = '';
     include_once (MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' .
         DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
-    echo '<div class="gmenu">' . $back_links . '<a href="' . Vars::$URI . '">' . __('to_statistics') .
+    echo '<div class="gmenu">' . $back_links . '<a href="' . $url . '">' . __('to_statistics') .
         '</a></div>';
 
 } else {

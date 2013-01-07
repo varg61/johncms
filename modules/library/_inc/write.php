@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 if (!Vars::$ID) {
     echo "";
@@ -20,7 +21,7 @@ if (!Vars::$ID) {
 // Проверка на спам
 $old = (Vars::$USER_RIGHTS > 0) ? 5 : 60;
 if (Vars::$USER_DATA['lastpost'] > (time() - $old)) {
-    echo '<p>' . __('error_flood') . ' ' . $old . ' ' . __('sec') . '<br/><br/><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+    echo '<p>' . __('error_flood') . ' ' . $old . ' ' . __('sec') . '<br/><br/><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
     exit;
 }
 
@@ -34,11 +35,11 @@ if ($ms['ip'] == 0) {
     if ((Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) || ($ms['soft'] == 1 && !empty($_SESSION['uid']))) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['name'])) {
-                echo __('error_empty_title') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
+                echo __('error_empty_title') . "<br/><a href='" . $url . "?act=write&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                 exit;
             }
             if (empty($_POST['text'])) {
-                echo __('error_empty_text') . "<br/><a href='" . Vars::$URI . "?act=write&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
+                echo __('error_empty_text') . "<br/><a href='" . $url . "?act=write&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                 exit;
             }
             $text = trim($_POST['text']);
@@ -72,17 +73,17 @@ if ($ms['ip'] == 0) {
             }
             //TODO: Доработать!
             //mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$user_id);
-            echo '<p><a href="' . Vars::$URI . '?id=' . $cid . '">' . __('to_article') . '</a></p>';
+            echo '<p><a href="' . $url . '?id=' . $cid . '">' . __('to_article') . '</a></p>';
         } else {
-            echo '<h3>' . __('write_article') . '</h3><form action="' . Vars::$URI . '?act=write&amp;id=' . Vars::$ID . '" method="post">';
+            echo '<h3>' . __('write_article') . '</h3><form action="' . $url . '?act=write&amp;id=' . Vars::$ID . '" method="post">';
             echo '<p>' . __('title') . ' (max. 100):<br/><input type="text" name="name"/></p>';
             echo '<p>' . __('announce') . ' (max. 100):<br/><input type="text" name="anons"/></p>';
             echo '<p>' . __('text') . ':<br/><textarea name="text" rows="' . Vars::$USER_SET['field_h'] . '"></textarea></p>';
             echo '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>';
-            echo '</form><p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+            echo '</form><p><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
         }
     } else {
-        header("location: " . Vars::$URI);
+        header("location: " . $url);
     }
 }
-echo "<a href='" . Vars::$URI . "'>" . __('to_library') . "</a><br/>";
+echo "<a href='" . $url . "'>" . __('to_library') . "</a><br/>";

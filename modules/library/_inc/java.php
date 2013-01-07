@@ -83,8 +83,8 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar';
     echo __('download_java_help') . '<br /><br />' .
          __('title') . ': ' . Validate::checkout($res['name']) . '<br />' .
          __('download') . ': <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jad">JAD</a>' .
-         '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('to_article') . '</a></p>';
+         '<p><a href="' . Router::getUrl(2) . '?id=' . Vars::$ID . '">' . __('to_article') . '</a></p>';
 } else {
     echo '<p>' . __('access_guest_forbidden') . '</p>' .
-         '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+         '<p><a href="' . Router::getUrl(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
 }

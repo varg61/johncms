@@ -1,11 +1,16 @@
 <?php
 
 /**
- * @author simba
- * @copyright 2011
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
  */
- 
-defined('_IN_JOHNCMS') or die('Restricted access');
+
+defined('_IN_ADMIN') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 echo'<div class="phdr">'.__('phones_browsers').'</div>';
     $sql = "(SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE '%nokia%') UNION ALL

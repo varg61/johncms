@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     echo '<div class="phdr">' . __('articles_moderation') . '</div>';
@@ -33,7 +34,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
         while ($res = mysql_fetch_array($req)) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             $tx = $res['soft'];
-            echo "<a href='" . Vars::$URI . "?id=" . $res['id'] . "'>$res[name]</a><br/>" . __('added') . ": $res[avtor] (" . Functions::displayDate($res['time']) . ")<br/>$tx <br/>";
+            echo "<a href='" . $url . "?id=" . $res['id'] . "'>$res[name]</a><br/>" . __('added') . ": $res[avtor] (" . Functions::displayDate($res['time']) . ")<br/>$tx <br/>";
             $nadir = $res['refid'];
             $pat = "";
             while ($nadir != "0") {
@@ -44,15 +45,15 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             }
             $l = mb_strlen($pat);
             $pat1 = mb_substr($pat, 0, $l - 1);
-            echo "[$pat1]<br/><a href='" . Vars::$URI . "?act=moder&amp;id=" . $res['id'] . "&amp;yes'> " . __('approve') . "</a></div>";
+            echo "[$pat1]<br/><a href='" . $url . "?act=moder&amp;id=" . $res['id'] . "&amp;yes'> " . __('approve') . "</a></div>";
             ++$i;
         }
         echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
-            echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=moder&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
-            echo '<p><form action="' . Vars::$URI . '" method="get"><input type="hidden" value="moder" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
+            echo '<p>' . Functions::displayPagination($url . '?act=moder&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
+            echo '<p><form action="' . $url . '" method="get"><input type="hidden" value="moder" name="act" /><input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
         }
-        echo '<p><a href="' . Vars::$URI . '?act=moder&amp;all">' . __('approve_all') . '</a><br />';
+        echo '<p><a href="' . $url . '?act=moder&amp;all">' . __('approve_all') . '</a><br />';
     } else {
         echo '<p>';
     }

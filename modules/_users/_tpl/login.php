@@ -3,7 +3,7 @@
 </ul>
 <div class="form-container">
     <div class="form-block align-center" style="padding: 20px">
-        <form action="<?= Vars::$URI ?>" method="post">
+        <form action="<?= Router::getUrl(3) ?>" method="post">
             <div style="max-width: 240px; margin: 0 auto">
                 <label for="login"><?= __('login_caption') ?></label>
                 <?php if (isset($this->error['login'])) : ?>

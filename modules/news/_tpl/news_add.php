@@ -2,7 +2,7 @@
     <li><h1><?= __('news') ?> :: <?= __('add') ?></h1></li>
 </ul>
 <div class="form-container">
-    <form name="form" action="<?= Vars::$URI ?>?act=add" method="post">
+    <form name="form" action="<?= $this->url ?>?act=add" method="post">
         <div class="form-block">
             <label for="name"><?= __('article_title') ?></label><br/>
             <?php if (isset($this->error) && isset($this->error['title'])) : ?>
@@ -20,7 +20,7 @@
             <div><?= $val ?></div>
             <?php endforeach ?>
             <br/><input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('save') ?>"/>
-            <a class="btn" href="<?= Vars::$URI ?>"><?= __('cancel') ?></a>
+            <a class="btn" href="<?= $this->url ?>"><?= __('cancel') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

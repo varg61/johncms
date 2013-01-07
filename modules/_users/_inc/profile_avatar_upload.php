@@ -44,7 +44,7 @@ if ($tpl->setUsers['upload_avatars'] || Vars::$USER_RIGHTS >= 7) {
                 if ($handle->processed) {
                     $tpl->hbar = __('upload_avatar');
                     $tpl->message = __('avatar_uploaded');
-                    $tpl->continue = Vars::$URI . '?act=settings&amp;user=' . $tpl->user['id'];
+                    $tpl->continue = Router::getUrl(3) . '?act=settings&amp;user=' . $tpl->user['id'];
                     $tpl->contents = $tpl->includeTpl('message', 1);
                 } else {
                     echo Functions::displayError($handle->error);
@@ -75,13 +75,13 @@ if ($tpl->setUsers['upload_avatars'] || Vars::$USER_RIGHTS >= 7) {
                 ) {
                     $tpl->hbar = __('upload_animation');
                     $tpl->message = __('avatar_uploaded');
-                    $tpl->continue = Vars::$URI . '?act=settings&amp;user=' . $tpl->user['id'];
+                    $tpl->continue = Router::getUrl(3) . '?act=settings&amp;user=' . $tpl->user['id'];
                     $tpl->contents = $tpl->includeTpl('message', 1);
                 } else {
                     $error[] = __('error_avatar_upload');
                 }
             } else {
-                echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=avatar_upload&amp;user=' . $tpl->user['id'] . '">' . __('back') . '</a>');
+                echo Functions::displayError($error, '<a href="' . Router::getUrl(3) . '?act=avatar_upload&amp;user=' . $tpl->user['id'] . '">' . __('back') . '</a>');
             }
         } else {
             // Если не выбран файл

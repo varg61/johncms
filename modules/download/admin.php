@@ -52,7 +52,7 @@ if (!isset(Vars::$SYSTEM_SET['download']) || isset($_GET['reset'])) {
 Форма ввода настроек
 -----------------------------------------------------------------
 */
-echo'<form action="' . Vars::$URI . '?act=download" method="post">' .
+echo'<form action="' . Router::getUrl(3) . '?act=download" method="post">' .
     '<div class="menu"><p><h3>' . __('functions_download') . '</h3></p>' .
     '<p>&nbsp;<input name="mod" type="checkbox" value="1" ' . ($settings['mod'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_files_mod') . '<br />' .
     '&nbsp;<input name="theme_screen" type="checkbox" value="1" ' . ($settings['theme_screen'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_auto_screen') . '<br />' .
@@ -61,7 +61,7 @@ echo'<form action="' . Vars::$URI . '?act=download" method="post">' .
     '&nbsp;<input name="screen_resize" type="checkbox" value="1" ' . ($settings['screen_resize'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_screen_resize') . '</p>' .
     '<p><h3>' . __('set_top_files') . '</h3>&nbsp;<input type="text" size="3" maxlength="3" name="top" value="' . $settings['top'] . '" />&nbsp;(25 - 100)</p>' .
     '<p><input type="submit" value="' . __('save') . '" name="submit" /></p></div>' .
-    '<div class="phdr"><a href="' . Vars::$URI . '?reset">' . __('reset_settings') . '</a>' .
+    '<div class="phdr"><a href="' . Router::getUrl(3) . '?reset">' . __('reset_settings') . '</a>' .
     '</div></form>' .
     '<p><a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a><br />' .
     '<a href="' . Router::getUrl(2) . '">' . __('downloads') . '</a></p>';

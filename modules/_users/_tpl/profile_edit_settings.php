@@ -7,7 +7,7 @@
     <div class="form-block confirm"><?= __('settings_saved') ?></div>
     <?php endif ?>
 
-    <form action="<?= Vars::$URI ?>?act=edit_settings" method="post">
+    <form action="<?= Router::getUrl(3) ?>?act=edit_settings" method="post">
         <div class="form-block">
             <label for="timeshift"><?= __('settings_clock') ?></label><br/>
             <input class="small" id="timeshift" type="text" name="timeshift" size="2" maxlength="3" value="<?= Vars::$USER_SET['timeshift'] ?>"/>
@@ -55,7 +55,7 @@
             <?php endif ?>
 
             <br/><input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('save') ?>"/>
-            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
+            <a class="btn" href="<?= Router::getUrl(3) ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

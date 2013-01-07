@@ -1,7 +1,7 @@
 <div class="phdr">
     <b><?= __('login') ?></b>
 </div>
-<form action="<?= Vars::$URI . (isset($this->data['id']) && isset($this->data['token']) ? '?id=' . $this->data['id'] . '&amp;token=' . htmlspecialchars($this->data['token']) : '') ?>" method="post">
+<form action="<?= Router::getUrl(3) . (isset($this->data['id']) && isset($this->data['token']) ? '?id=' . $this->data['id'] . '&amp;token=' . htmlspecialchars($this->data['token']) : '') ?>" method="post">
     <div class="menu">
         <div class="formblock">
             <label for="captcha"><?= __('captcha') ?></label><br/>

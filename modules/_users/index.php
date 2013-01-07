@@ -18,4 +18,5 @@ if (!Vars::$USER_ID && !Vars::$USER_SYS['view_userlist']) {
 
 $tpl = Template::getInstance();
 $tpl->count = new Counters();
+$tpl->link = Router::getUrl(3);
 $tpl->contents = $tpl->includeTpl('index');

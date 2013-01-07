@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Управление скриншотами
@@ -18,30 +20,30 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
-    echo Functions::displayError('<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+    echo Functions::displayError('<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
-$screen = array ();
+$screen = array();
 $do = isset($_GET['do']) ? trim($_GET['do']) : '';
 if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
-	/*
-	-----------------------------------------------------------------
-	Удаление скриншота
-	-----------------------------------------------------------------
-	*/
+    /*
+    -----------------------------------------------------------------
+    Удаление скриншота
+    -----------------------------------------------------------------
+    */
     unlink($screens_path . '/' . Vars::$ID . '/' . $do);
-    header('Location: ' . Vars::$URI . '?act=edit_screen&id=' . Vars::$ID);
+    header('Location: ' . $url . '?act=edit_screen&id=' . Vars::$ID);
     exit;
 } else if (isset($_POST['submit'])) {
-	/*
-	-----------------------------------------------------------------
-	Загрузка скриншота
-	-----------------------------------------------------------------
-	*/
+    /*
+    -----------------------------------------------------------------
+    Загрузка скриншота
+    -----------------------------------------------------------------
+    */
     $handle = new upload($_FILES['screen']);
     if ($handle->uploaded) {
         $handle->file_new_name_body = Vars::$ID;
-        $handle->allowed = array (
+        $handle->allowed = array(
             'image/jpeg',
             'image/gif',
             'image/png'
@@ -59,25 +61,25 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
             echo '<div class="rmenu"><b>' . __('upload_screen_no') . ': ' . $handle->error . '</b>';
     } else
         echo '<div class="rmenu"><b>' . __('upload_screen_no') . '</b>';
-	echo '<br /><a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '">' . __('upload_file_more') . '</a>' .
-    '<br /><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></div>';
+    echo '<br /><a href="' . $url . '?act=edit_screen&amp;id=' . Vars::$ID . '">' . __('upload_file_more') . '</a>' .
+        '<br /><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 } else {
-	/*
-	-----------------------------------------------------------------
-	Форма выгрузки
-	-----------------------------------------------------------------
-	*/
-	echo '<div class="phdr"><b>' . __('screen_file') . '</b>: ' . Validate::checkout($res_down['rus_name']) . '</div>' .
- 	'<div class="list1"><form action="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data"><input type="file" name="screen"/><br />' .
- 	'<input type="submit" name="submit" value="' . __('upload') . '"/></form></div>' .
- 	'<div class="phdr"><small>' . __('file_size_faq') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb' .
- 	($set_down['screen_resize'] ? '<br />' . __('add_screen_faq')  : '') . '</small></div>';
-	/*
-	-----------------------------------------------------------------
-	Выводим скриншоты
-	-----------------------------------------------------------------
-	*/
-	$screen = array ();
+    /*
+    -----------------------------------------------------------------
+    Форма выгрузки
+    -----------------------------------------------------------------
+    */
+    echo '<div class="phdr"><b>' . __('screen_file') . '</b>: ' . Validate::checkout($res_down['rus_name']) . '</div>' .
+        '<div class="list1"><form action="' . $url . '?act=edit_screen&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data"><input type="file" name="screen"/><br />' .
+        '<input type="submit" name="submit" value="' . __('upload') . '"/></form></div>' .
+        '<div class="phdr"><small>' . __('file_size_faq') . ' ' . Vars::$SYSTEM_SET['filesize'] . 'kb' .
+        ($set_down['screen_resize'] ? '<br />' . __('add_screen_faq') : '') . '</small></div>';
+    /*
+    -----------------------------------------------------------------
+    Выводим скриншоты
+    -----------------------------------------------------------------
+    */
+    $screen = array();
     if (is_dir($screens_path . '/' . Vars::$ID)) {
         $dir = opendir($screens_path . '/' . Vars::$ID);
         while ($file = readdir($dir)) {
@@ -96,10 +98,10 @@ if ($do && is_file($screens_path . '/' . Vars::$ID . '/' . $do)) {
             $screen_name = htmlentities($screen[$i], ENT_QUOTES, 'utf-8');
             $file = preg_replace('#^' . $screens_path . '/' . Vars::$ID . '/(.*?)$#isU', '$1', $screen_name, 1);
             echo (($i % 2) ? '<div class="list2">' : '<div class="list1">') .
-            '<table  width="100%"><tr><td width="40" valign="top">' .
-            '<a href="' . $screen_name . '"><img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=1&amp;img=' . rawurlencode($screen_name) . '" alt="screen_' . $i . '" /></a></td><td>' . $file .
-            '<div class="sub"><a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '&amp;do=' . $file . '">' . __('delete') . '</a></div></td></tr></table></div>';
+                '<table  width="100%"><tr><td width="40" valign="top">' .
+                '<a href="' . $screen_name . '"><img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=1&amp;img=' . rawurlencode($screen_name) . '" alt="screen_' . $i . '" /></a></td><td>' . $file .
+                '<div class="sub"><a href="' . $url . '?act=edit_screen&amp;id=' . Vars::$ID . '&amp;do=' . $file . '">' . __('delete') . '</a></div></td></tr></table></div>';
         }
     }
-    echo '<div class="phdr"><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></div>';
+    echo '<div class="phdr"><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 }

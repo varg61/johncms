@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Топ юзеров
@@ -19,13 +21,14 @@ $textl = __('top_users');
 echo '<div class="phdr"><a href="' . Router::getUrl(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
 $req = mysql_query("SELECT * FROM `cms_download_files` WHERE `user_id` > 0 GROUP BY `user_id` ORDER BY COUNT(`user_id`)");
 $total = mysql_num_rows($req);
+
 /*
 -----------------------------------------------------------------
 Навигация
 -----------------------------------------------------------------
 */
 if ($total > Vars::$USER_SET['page_size'])
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=top_users&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+    echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=top_users&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 /*
 -----------------------------------------------------------------
 Список файлов
@@ -37,7 +40,7 @@ if ($total) {
     while ($res_down = mysql_fetch_assoc($req_down)) {
         $user = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id`=" . $res_down['user_id']));
         echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') .
-            functions::displayUser($user, array('iphide' => 0, 'sub' => '<a href="' . Vars::$URI . '?act=user_files&amp;id=' . $user['id'] . '">' . __('user_files') . ':</a> ' . $res_down['count'])) . '</div>';
+            functions::displayUser($user, array('iphide' => 0, 'sub' => '<a href="' . $url . '?act=user_files&amp;id=' . $user['id'] . '">' . __('user_files') . ':</a> ' . $res_down['count'])) . '</div>';
     }
 } else {
     echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
@@ -49,9 +52,9 @@ echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 -----------------------------------------------------------------
 */
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=top_users&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="' . Vars::$URI . '" method="get">' .
+    echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=top_users&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . $url . '" method="get">' .
         '<input type="hidden" value="top_users" name="act" />' .
         '<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
 }
-echo '<p><a href="' . Vars::$URI . '">' . __('download_title') . '</a></p>';
+echo '<p><a href="' . $url . '">' . __('download_title') . '</a></p>';

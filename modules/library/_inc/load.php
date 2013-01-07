@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "") {
         echo "";
@@ -24,7 +26,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($ms['ip'] == 0) {
         if (isset($_POST['submit'])) {
             if (empty($_POST['name'])) {
-                echo Functions::displayError(__('error_empty_title'), '<a href="' . Vars::$URI . '?act=load&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+                echo Functions::displayError(__('error_empty_title'), '<a href="' . $url . '?act=load&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                 exit;
             }
             $name = mb_substr($_POST['name'], 0, 50);
@@ -33,15 +35,15 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             $ftip = strtolower($ftip);
             if ($fname != "") {
                 if (eregi("[^a-z0-9.()+_-]", $fname)) {
-                    echo "Invalid file name<br /><a href='" . Vars::$URI . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
+                    echo "Invalid file name<br /><a href='" . $url . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                     exit;
                 }
                 if ((preg_match("/.php/i", $fname)) or (preg_match("/.pl/i", $fname)) or ($fname == ".htaccess")) {
-                    echo "Invalid file format<br/><a href='" . Vars::$URI . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
+                    echo "Invalid file format<br/><a href='" . $url . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                     exit;
                 }
                 if ($ftip != "txt") {
-                    echo "This is not a text file<br/><a href='" . Vars::$URI . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
+                    echo "This is not a text file<br/><a href='" . $url . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                     exit;
                 }
                 if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "temp/$fname")) == TRUE) {
@@ -55,7 +57,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                     } elseif (mb_check_encoding($txt, 'KOI8-R')) {
                         $txt = iconv("KOI8-R", "UTF-8", $txt);
                     } else {
-                        echo "File in an unknown encoding<br /><a href='" . Vars::$URI . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
+                        echo "File in an unknown encoding<br /><a href='" . $url . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                         exit;
                     }
                     $anons = !empty($_POST['anons']) ? mb_substr($_POST['anons'], 0, 100) : mb_substr($txt, 0, 100);
@@ -73,23 +75,23 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                     ");
                     unlink("temp/$ch");
                     $cid = mysql_insert_id();
-                    echo __('article_added') . "<br/><a href='" . Vars::$URI . "?id=" . $cid . "'>" . __('to_article') . "</a><br/>";
+                    echo __('article_added') . "<br/><a href='" . $url . "?id=" . $cid . "'>" . __('to_article') . "</a><br/>";
                 } else {
-                    echo __('error_uploading') . "<br/><a href='" . Vars::$URI . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
+                    echo __('error_uploading') . "<br/><a href='" . $url . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
                     exit;
                 }
             }
         } else {
             echo '<h3>' . __('upload_article') . '</h3>' . __('supported_encoding') . ' Win-1251, KOI8-R, UTF-8<br/><br/>' .
-                 '<form action="' . Vars::$URI . '?act=load&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
+                 '<form action="' . $url . '?act=load&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
                  __('title') . ' (max. 50)<br/>' . '<input type="text" name="name"/><br/>' .
                  __('announce') . ' (max. 100)<br/><input type="text" name="anons"/><br/>' .
                  __('select_text_file') . ' ( .txt):<br/><input type="file" name="fail"/>' .
                  '<p><input type="submit" name="submit" value="' . __('sent') . '"/></p>' .
                  '</form>' .
-                 '<p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+                 '<p><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
         }
     }
 } else {
-    header("location: " . Vars::$URI);
+    header("location: " . $url);
 }

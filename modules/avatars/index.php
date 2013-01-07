@@ -12,6 +12,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 // Обрабатываем ссылку для возврата
 if (empty($_SESSION['ref'])) {
@@ -48,14 +49,14 @@ switch (Vars::$ACT) {
                     echo Functions::displayError(__('error_avatar_select'), '<a href="' . $_SESSION['ref'] . '">' . __('back') . '</a>');
                 }
             } else {
-                echo'<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('avatars') . '</b></a> | ' . __('set_to_profile') . '</div>' .
+                echo'<div class="phdr"><a href="' . $url . '"><b>' . __('avatars') . '</b></a> | ' . __('set_to_profile') . '</div>' .
                     '<div class="rmenu"><p>' . __('avatar_change_warning') . '</p>' .
                     '<p><img src="' . Vars::$HOME_URL . '/assets/avatars/' . $cat . '/' . $select . '" alt="" /></p>' .
-                    '<p><form action="' . Vars::$URI . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode($select) . '" method="post">' .
+                    '<p><form action="' . $url . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode($select) . '" method="post">' .
                     '<input type="submit" name="submit" value="' . __('save') . '"/>' .
                     '</form></p>' .
                     '</div>' .
-                    '<div class="phdr"><a href="' . Vars::$URI . '?act=avlist&amp;cat=' . $cat . '">' . __('cancel') . '</a></div>';
+                    '<div class="phdr"><a href="' . $url . '?act=avlist&amp;cat=' . $cat . '">' . __('cancel') . '</a></div>';
             }
         } else {
             echo Functions::displayError(__('error_wrong_data'));
@@ -79,7 +80,7 @@ switch (Vars::$ACT) {
             for ($i = Vars::$START; $i < $end; $i++) {
                 $list_avatars[$i] = array(
                     'image' => Vars::$HOME_URL . '/assets/avatars/' . $cat . '/' . basename($avatars[$i]),
-                    'link'  => (Vars::$USER_ID ? Vars::$URI . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode(basename($avatars[$i])) : '#')
+                    'link'  => (Vars::$USER_ID ? $url . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode(basename($avatars[$i])) : '#')
                 );
             }
         } else {
@@ -87,8 +88,8 @@ switch (Vars::$ACT) {
         }
         echo'<div class="phdr">' . __('total') . ': ' . $tpl->total . '</div>';
         if ($tpl->total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=list&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . Vars::$URI . '?act=list&amp;cat=' . urlencode($cat) . '" method="post">' .
+            echo'<div class="topmenu">' . Functions::displayPagination($url . '?act=list&amp;cat=' . urlencode($cat) . '&amp;', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']) . '</div>' .
+                '<p><form action="' . $url . '?act=list&amp;cat=' . urlencode($cat) . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
         }
@@ -111,7 +112,7 @@ switch (Vars::$ACT) {
         foreach ($avatar_cat as $key => $val) {
             $count = count(glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE));
             $list_categories[$i] = array(
-                'link'  => Vars::$URI . '?act=list&amp;cat=' . urlencode($key),
+                'link'  => $url . '?act=list&amp;cat=' . urlencode($key),
                 'name'  => htmlspecialchars($val),
                 'count' => count(glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE))
             );

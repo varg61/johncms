@@ -11,6 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+$url = Router::getUrl(2);
 $delf = opendir('../files/forum/topics');
 $tm = array();
 while ($tt = readdir($delf)) {
@@ -65,7 +66,7 @@ if (isset($_POST['submit'])) {
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.txt", 0777);
-            echo '<a href="' . Vars::$URI . '?act=loadtem&amp;n=' . $num . '">' . __('download') . '</a><br/>' . __('download_topic_help') . '<br/><a href="' . Vars::$URI . '">' . __('to_forum') . '</a><br/>';
+            echo '<a href="' . $url . '?act=loadtem&amp;n=' . $num . '">' . __('download') . '</a><br/>' . __('download_topic_help') . '<br/><a href="' . $url . '">' . __('to_forum') . '</a><br/>';
             break;
 
         case 2:
@@ -114,12 +115,12 @@ div { margin: 1px 0px 1px 0px; padding: 5px 5px 5px 5px;}
             fclose($fp);
             @chmod("$fp", 0777);
             @chmod("../files/forum/topics/$num.htm", 0777);
-            echo '<a href="' . Vars::$URI . '?act=loadtem&amp;n=' . $num . '">' . __('download') . '</a><br/>' . __('download_topic_help') . '<br/><a href="' . Vars::$URI . '">' . __('to_forum') . '</a><br/>';
+            echo '<a href="' . $url . '?act=loadtem&amp;n=' . $num . '">' . __('download') . '</a><br/>' . __('download_topic_help') . '<br/><a href="' . $url . '">' . __('to_forum') . '</a><br/>';
             break;
     }
 } else {
     echo '<p>' . __('download_topic_format') . '<br/>' .
-         '<form action="' . Vars::$URI . '?act=tema&amp;id=' . Vars::$ID . '" method="post">' .
+         '<form action="' . $url . '?act=tema&amp;id=' . Vars::$ID . '" method="post">' .
          '<select name="mod"><option value="1">.txt</option>' .
          '<option value="2">.htm</option></select>' .
          '<input type="submit" name="submit" value="' . __('download') . '"/>' .

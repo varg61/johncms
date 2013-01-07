@@ -10,19 +10,21 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Комментарии
 -----------------------------------------------------------------
 */
 if(!Vars::$SYSTEM_SET['mod_down_comm'] && Vars::$USER_RIGHTS < 7) {
-	echo Functions::displayError(__('comments_cloded'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+	echo Functions::displayError(__('comments_cloded'), '<a href="' . $url . '">' . __('download_title') . '</a>');
 	exit;
 }
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
-    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
 if(!Vars::$SYSTEM_SET['mod_down_comm'])
@@ -38,7 +40,7 @@ $arg = array (
 	'object_comm_count' => 'total',                                                             // Поле с числом комментариев
 	'comments_table' => 'cms_download_comments',                              					// Таблица с комментариями
 	'object_table' => 'cms_download_files',                                   					// Таблица комментируемых объектов
-	'script' => Vars::$URI . '?act=comments',                                					// Имя скрипта (с параметрами вызова)
+	'script' => $url . '?act=comments',                                					// Имя скрипта (с параметрами вызова)
 	'sub_id_name' => 'id',                                            							// Имя идентификатора комментируемого объекта
 	'sub_id' => Vars::$ID,                                                  					// Идентификатор комментируемого объекта
 	'owner' => FALSE,                                                 							// Владелец объекта
@@ -47,7 +49,7 @@ $arg = array (
 	'owner_edit' => FALSE,                                            							// Возможность владельцу редактировать комментарий
 	'title' => __('comments'),                                         						// Название раздела
 	'context_top' => '<div class="phdr"><b>' . $textl . '</b></div>', 							// Выводится вверху списка
-	'context_bottom' => '<p><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>'	// Выводится внизу списка
+	'context_bottom' => '<p><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>'	// Выводится внизу списка
 );
 /*
 -----------------------------------------------------------------

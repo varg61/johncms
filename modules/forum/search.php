@@ -9,10 +9,11 @@
  * @author      http://johncms.com/about
  */
 
-$backLink = Router::getUrl(2);
+defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 echo'<p>' . Counters::forumCountNew(1) . '</p>' .
-    '<div class="phdr"><a href="' . $backLink . '"><b>' . __('forum') . '</b></a> | ' . __('search') . '</div>';
+    '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('search') . '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -35,13 +36,13 @@ switch (Vars::$ACT) {
         if (Vars::$USER_ID) {
             if (isset($_POST['submit'])) {
                 Vars::setUserData('forum_search');
-                header('Location: ' . Vars::$URI);
+                header('Location: ' . $url);
             } else {
-                echo'<form action="' . Vars::$URI . '?act=reset" method="post">' .
+                echo'<form action="' . $url . '?act=reset" method="post">' .
                     '<div class="rmenu">' .
                     '<p>' . __('search_history_reset') . '</p>' .
                     '<p><input type="submit" name="submit" value="' . __('clear') . '" /></p>' .
-                    '<p><a href="' . Vars::$URI . '">' . __('cancel') . '</a></p>' .
+                    '<p><a href="' . $url . '">' . __('cancel') . '</a></p>' .
                     '</div>' .
                     '</form>';
             }
@@ -61,7 +62,7 @@ switch (Vars::$ACT) {
         $search_t = isset($_REQUEST['t']);
         $to_history = FALSE;
         echo'<div class="gmenu">' .
-            '<form action="' . Vars::$URI . '" method="post"><p>' .
+            '<form action="' . $url . '" method="post"><p>' .
             '<input type="text" value="' . ($search ? Validate::checkout($search) : '') . '" name="search" />' .
             '<input type="submit" value="' . __('search') . '" name="submit" /><br />' .
             '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . __('search_topic_name') .
@@ -103,7 +104,7 @@ switch (Vars::$ACT) {
             }
             echo '<div class="phdr">' . __('search_results') . '</div>';
             if ($total > Vars::$USER_SET['page_size'])
-                echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+                echo '<div class="topmenu">' . Functions::displayPagination($url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             if ($total) {
                 $to_history = TRUE;
                 if ($search_t) {
@@ -159,9 +160,9 @@ switch (Vars::$ACT) {
                         '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> ' .
                         ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br/>' . $text;
                     if (mb_strlen($res['text']) > 500)
-                        echo'...<a href="' . $backLink . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
-                    echo'<br /><a href="' . $backLink . '?id=' . ($search_t ? $res['id'] : $res['id2']) . '">' . __('to_topic') . '</a>' . ($search_t ? ''
-                        : ' | <a href="' . $backLink . '?act=post&amp;id=' . $res['id'] . '">' . __('to_post') . '</a>');
+                        echo'...<a href="' . $url . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
+                    echo'<br /><a href="' . $url . '?id=' . ($search_t ? $res['id'] : $res['id2']) . '">' . __('to_topic') . '</a>' . ($search_t ? ''
+                        : ' | <a href="' . $url . '?act=post&amp;id=' . $res['id'] . '">' . __('to_post') . '</a>');
                     echo '</div>';
                     ++$i;
                 }
@@ -197,10 +198,10 @@ switch (Vars::$ACT) {
                 sort($history);
                 $history_list = array();
                 foreach ($history as $val) {
-                    $history_list[] = '<a href="' . Vars::$URI . '?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
+                    $history_list[] = '<a href="' . $url . '?search=' . urlencode($val) . '">' . htmlspecialchars($val) . '</a>';
                 }
                 echo'<div class="topmenu">' .
-                    '<b>' . __('search_history') . '</b> <span class="red"><a href="' . Vars::$URI . '?act=reset">[x]</a></span><br />' .
+                    '<b>' . __('search_history') . '</b> <span class="red"><a href="' . $url . '?act=reset">[x]</a></span><br />' .
                     Functions::displayMenu($history_list) .
                     '</div>';
             }
@@ -208,12 +209,12 @@ switch (Vars::$ACT) {
 
         // Постраничная навигация
         if (isset($total) && $total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
+            echo'<div class="topmenu">' . Functions::displayPagination($url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                '<p><form action="' . $url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                 '</form></p>';
         }
 
-        echo '<p>' . ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br />' : '') . '<a href="' . $backLink . '">' . __('forum') . '</a></p>';
+        echo '<p>' . ($search ? '<a href="' . $url . '">' . __('search_new') . '</a><br />' : '') . '<a href="' . $url . '">' . __('forum') . '</a></p>';
 }

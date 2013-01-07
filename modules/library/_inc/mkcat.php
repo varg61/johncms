@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "") {
         echo "";
@@ -23,7 +25,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     }
     if (isset($_POST['submit'])) {
         if (empty($_POST['text'])) {
-            echo Functions::displayError(__('error_empty_title'), '<a href="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+            echo Functions::displayError(__('error_empty_title'), '<a href="' . $url . '?act=mkcat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
         $text = Validate::checkout($_POST['text']);
@@ -38,10 +40,10 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             `soft` = '$user'
         ");
         $cid = mysql_insert_id();
-        echo __('category_created') . "<br/><a href='" . Vars::$URI . "?id=" . $cid . "'>" . __('to_category') . "</a><br/>";
+        echo __('category_created') . "<br/><a href='" . $url . "?id=" . $cid . "'>" . __('to_category') . "</a><br/>";
     } else {
         echo __('create_category') . '<br/>' .
-             '<form action="' . Vars::$URI . '?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
+             '<form action="' . $url . '?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
              __('title') . ':<br/>' .
              '<input type="text" name="text"/>' .
              '<p>' . __('category_type') . '<br/>' .
@@ -52,8 +54,8 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
              '<p><input type="checkbox" name="user" value="1"/>' . __('if_articles') . '</p>' .
              '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>' .
              '</form>' .
-             '<p><a href ="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+             '<p><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
     }
 } else {
-    header("location: " . Vars::$URI);
+    header("location: " . $url);
 }

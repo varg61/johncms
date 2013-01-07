@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 if (!Vars::$ID || !Vars::$USER_ID) {
     echo Functions::displayError(__('error_wrong_data'));
@@ -124,12 +125,12 @@ switch ($res['type']) {
                         `filetype` = '$type'
                     ") or die(mysql_error());
                 } else {
-                    echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+                    echo Functions::displayError($error, '<a href="' . $url . '?act=addfile&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                 }
             } else {
                 echo __('error_upload_error') . '<br />';
             }
-            echo '<br/><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('continue') . '</a><br/>';
+            echo '<br/><a href="' . $url . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('continue') . '</a><br/>';
         } else {
             /*
             -----------------------------------------------------------------
@@ -137,7 +138,7 @@ switch ($res['type']) {
             -----------------------------------------------------------------
             */
             echo'<div class="phdr"><b>' . __('add_file') . '</b></div>' .
-                '<div class="gmenu"><form action="' . Vars::$URI . '?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
+                '<div class="gmenu"><form action="' . $url . '?act=addfile&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data"><p>';
             if (stristr(Vars::$USER_AGENT, 'Opera/8.01')) {
                 echo '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . __('select_file') . '</a>';
             } else {
@@ -145,7 +146,7 @@ switch ($res['type']) {
             }
             echo'</p><p>' .
                 '<input type="submit" name="submit" value="' . __('upload') . '"/>' .
-                '</p><p><a href="' . Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('cancel') . '</a></p></form></div>' .
+                '</p><p><a href="' . $url . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('cancel') . '</a></p></form></div>' .
                 '<div class="phdr">' . __('max_size') . ': ' . Vars::$SYSTEM_SET['filesize'] . 'kb.</div>';
         }
         break;

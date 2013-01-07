@@ -7,8 +7,8 @@
 
     <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
     <div class="align-center">
-        <?= Functions::displayPagination(Vars::$URI . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
-        <form action="<?= Vars::$URI ?>" method="post">
+        <?= Functions::displayPagination(Router::getUrl(3) . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
+        <form action="<?= Router::getUrl(3) ?>" method="post">
             <input class="mini" type="text" name="page" size="2"/>
             <input type="submit" value="<?= __('to_page') ?> &gt;&gt;"/>
         </form>

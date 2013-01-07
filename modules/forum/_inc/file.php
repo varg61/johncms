@@ -18,6 +18,7 @@ if (Vars::$ID) {
     Скачивание прикрепленного файла Форума
     -----------------------------------------------------------------
     */
+    $url = Router::getUrl(2);
     $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = " . Vars::$ID);
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_array($req);
@@ -32,9 +33,9 @@ if (Vars::$ID) {
         $error = true;
     }
     if ($error) {
-        echo Functions::displayError(__('error_file_not_exist'), '<a href="' . Vars::$URI . '">' . __('to_forum') . '</a>');
+        echo Functions::displayError(__('error_file_not_exist'), '<a href="' . $url . '">' . __('to_forum') . '</a>');
         exit;
     }
 } else {
-    header('location: ' . Vars::$URI);
+    header('location: ' . $url);
 }

@@ -25,7 +25,7 @@ $proportion = isset($_GET['proportion']) ? abs(intval($_GET['proportion'])) : 0;
 $val = isset($_GET['val']) ? abs(intval($_GET['val'])) : 100;
 if ($val < 50 || $val > 100) $val = 100;
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || !in_array($format_file, $pic_ext) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4) || empty($array[$size_img])) {
-    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . Router::getUrl(2) . '">' . __('download_title') . '</a>');
     exit;
 }
 $sizs = GetImageSize($res_down['dir'] . '/' . $res_down['name']);

@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 echo '<div class="phdr"><b>' . __('new_articles') . '</b></div>';
 $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'");
@@ -33,14 +34,14 @@ if ($total > 0) {
         }
         $l = mb_strlen($pat);
         $pat1 = mb_substr($pat, 0, $l - 1);
-        echo '[<a href="' . Vars::$URI . '?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
+        echo '[<a href="' . $url . '?id=' . $dirlink . '">' . $pat1 . '</a>]</div>';
         ++$i;
     }
     echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
     // Навигация по страницам
     if ($total > Vars::$USER_SET['page_size']) {
-        echo '<p>' . Functions::displayPagination(Vars::$URI . '?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
-        echo '<p><form action="' . Vars::$URI . '" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
+        echo '<p>' . Functions::displayPagination($url . '?act=new&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>';
+        echo '<p><form action="' . $url . '" method="get"><input type="hidden" name="act" value="new"/><input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
     }
 } else {
     echo '<p>' . __('list_empty') . '</p>';

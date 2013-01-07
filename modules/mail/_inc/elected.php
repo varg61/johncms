@@ -82,7 +82,7 @@ if (Vars::$ID) {
 
                 $tpl->query = $array;
                 $tpl->titleTest = '<div class="phdr"><strong>' . __('elected') . '</strong></div>';
-                $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . __('contacts') .
+                $tpl->urlTest = '<p><a href="' . Router::getUrl(2) . '">' . __('contacts') .
                     '</a></p>';
                 $tpl->total = $total;
                 //Навигация

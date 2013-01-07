@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Выводим файл
@@ -18,7 +20,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name'])) {
-    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
 $title_pages = Validate::checkout(mb_substr($res_down['rus_name'], 0, 30));
@@ -50,9 +52,9 @@ if (Vars::$USER_ID) {
     }
     echo '<div class="topmenu">';
     if (!$bookmark) {
-        echo '<a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '&amp;addBookmark">' . __('add_favorite') . '</a>';
+        echo '<a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '&amp;addBookmark">' . __('add_favorite') . '</a>';
     } else {
-        echo '<a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '&amp;delBookmark">' . __('delete_favorite') . '</a>';
+        echo '<a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '&amp;delBookmark">' . __('delete_favorite') . '</a>';
     }
     echo '</div>';
 }
@@ -140,7 +142,7 @@ if ($screen) {
     $total = count($screen);
     if ($total > 1) {
         if (Vars::$PAGE >= $total) Vars::$PAGE = $total;
-        echo '<div class="topmenu"> ' . Functions::displayPagination(Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '&amp;', Vars::$PAGE - 1, $total, 1) . '</div>' .
+        echo '<div class="topmenu"> ' . Functions::displayPagination($url . '?act=view&amp;id=' . Vars::$ID . '&amp;', Vars::$PAGE - 1, $total, 1) . '</div>' .
             '<div class="gmenu"><b>' . __('screen_file') . ' (' . Vars::$PAGE . '/' . $total . '):</b><br />' .
             '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($screen[Vars::$PAGE - 1]) . '" alt="screen" /></div>';
     } else {
@@ -178,7 +180,7 @@ if ((isset($_GET['plus']) || isset($_GET['minus'])) && !isset($_SESSION['rate_fi
 $sum = ($file_rate[1] + $file_rate[0]) ? round(100 / ($file_rate[1] + $file_rate[0]) * $file_rate[0]) : 50;
 echo '<b>' . __('rating') . ' </b>';
 if (!isset($_SESSION['rate_file_' . Vars::$ID]) && Vars::$USER_ID)
-    echo '(<a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '&amp;plus">+</a>/<a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '&amp;minus">-</a>)';
+    echo '(<a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '&amp;plus">+</a>/<a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '&amp;minus">-</a>)';
 else echo '(+/-)';
 echo ': <b><span class="green">' . $file_rate[0] . '</span>/<span class="red">' . $file_rate[1] . '</span></b><br />' .
     '<img src="' . Vars::$HOME_URL . '/assets/misc/rating.php?img=' . $sum . '" alt="' . __('rating') . '" />';
@@ -190,7 +192,7 @@ echo ': <b><span class="green">' . $file_rate[0] . '</span>/<span class="red">' 
 if ($format_file == 'jpg' || $format_file == 'jpeg' || $format_file == 'gif' || $format_file == 'png') {
     $array = array('101x80', '128x128', '128x160', '176x176', '176x208', '176x220', '208x208', '208x320', '240x266', '240x320', '240x432', '352x416', '480x800');
     echo'<div class="sub"></div>' .
-        '<form action="' . Vars::$URI . '" method="get">' .
+        '<form action="' . $url . '" method="get">' .
         '<input name="id" type="hidden" value="' . Vars::$ID . '" />' .
         '<input name="act" type="hidden" value="custom_size" />' .
         __('custom_size') . ': ' . '<select name="img_size">';
@@ -212,7 +214,7 @@ if ($format_file == 'jpg' || $format_file == 'jpeg' || $format_file == 'gif' || 
         '<input type="submit" value="' . __('download') . '" /></form>';
 }
 if (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7)
-    echo '<div class="sub"></div><a href="' . Vars::$URI . '?act=comments&amp;id=' . $res_down['id'] . '">' . __('comments') . '</a> (' . $res_down['total'] . ')';
+    echo '<div class="sub"></div><a href="' . $url . '?act=comments&amp;id=' . $res_down['id'] . '">' . __('comments') . '</a> (' . $res_down['total'] . ')';
 echo '</div>';
 /*
 -----------------------------------------------------------------
@@ -260,15 +262,15 @@ echo '<div class="phdr">' . Download::navigation(array('dir' => $res_down['dir']
 */
 if (Vars::$USER_RIGHTS > 6 || Vars::$USER_RIGHTS == 4) {
     echo '<p><div class="func">' .
-        '<a href="' . Vars::$URI . '?act=edit_file&amp;id=' . Vars::$ID . '">' . __('edit_file') . '</a><br />' .
-        '<a href="' . Vars::$URI . '?act=edit_about&amp;id=' . Vars::$ID . '">' . __('edit_about') . '</a><br />' .
-        '<a href="' . Vars::$URI . '?act=edit_screen&amp;id=' . Vars::$ID . '">' . __('edit_screen') . '</a><br />' .
-        '<a href="' . Vars::$URI . '?act=files_more&amp;id=' . Vars::$ID . '">' . __('files_more') . '</a><br />' .
-        '<a href="' . Vars::$URI . '?act=delete_file&amp;id=' . Vars::$ID . '">' . __('delete_file') . '</a>';
+        '<a href="' . $url . '?act=edit_file&amp;id=' . Vars::$ID . '">' . __('edit_file') . '</a><br />' .
+        '<a href="' . $url . '?act=edit_about&amp;id=' . Vars::$ID . '">' . __('edit_about') . '</a><br />' .
+        '<a href="' . $url . '?act=edit_screen&amp;id=' . Vars::$ID . '">' . __('edit_screen') . '</a><br />' .
+        '<a href="' . $url . '?act=files_more&amp;id=' . Vars::$ID . '">' . __('files_more') . '</a><br />' .
+        '<a href="' . $url . '?act=delete_file&amp;id=' . Vars::$ID . '">' . __('delete_file') . '</a>';
     if (Vars::$USER_RIGHTS > 6) {
-        echo '<br /><a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . Vars::$ID . '">' . __('transfer_file') . '</a>';
+        echo '<br /><a href="' . $url . '?act=transfer_file&amp;id=' . Vars::$ID . '">' . __('transfer_file') . '</a>';
         if ($format_file == 'mp3')
-            echo '<br /><a href="' . Vars::$URI . '?act=mp3tags&amp;id=' . Vars::$ID . '">' . __('edit_mp3tags') . '</a>';
+            echo '<br /><a href="' . $url . '?act=mp3tags&amp;id=' . Vars::$ID . '">' . __('edit_mp3tags') . '</a>';
     }
     echo '</div></p>';
 }

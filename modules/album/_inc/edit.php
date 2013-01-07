@@ -92,7 +92,7 @@ if ($user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 7) {
                 ");
             }
             echo '<div class="gmenu"><p>' . ($al ? __('album_changed') : __('album_created')) . '<br />' .
-                '<a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>';
+                '<a href="' . Router::getUrl(3) . '?act=list&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>';
             exit;
         }
     }

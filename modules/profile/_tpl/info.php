@@ -1,5 +1,5 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) ?></b></a> | <?= __('information') ?>
+    <a href="<?= $this->url ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) ?></b></a> | <?= __('information') ?>
 </div>
 <div class="user">
     <p><?= Functions::displayUser($this->user, array('iphide' => 1,)) ?></p>
@@ -41,8 +41,8 @@
     <div class="formblock">
         <label><?= __('activity') ?></label><br/>
         <ul>
-            <li><span class="gray"><?= __('forum') ?>:</span> <a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_forum'] ?></a></li>
-            <li><span class="gray"><?= __('comments') ?>:</span> <a href="<?= Vars::$URI ?>?act=activity&amp;mod=comments&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_comments'] ?></a></li>
+            <li><span class="gray"><?= __('forum') ?>:</span> <a href="<?= $this->url ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_forum'] ?></a></li>
+            <li><span class="gray"><?= __('comments') ?>:</span> <a href="<?= $this->url ?>?act=activity&amp;mod=comments&amp;user=<?= $this->user['id'] ?>"><?= $this->user['count_comments'] ?></a></li>
         </ul>
     </div>
 </div>

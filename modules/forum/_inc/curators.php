@@ -12,6 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (Vars::$USER_RIGHTS >= 7) {
+    $url = Router::getUrl(2);
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($req) || Vars::$USER_RIGHTS < 7) {
         echo Functions::displayError(__('error_topic_deleted'));
@@ -23,7 +24,7 @@ if (Vars::$USER_RIGHTS >= 7) {
         WHERE `forum`.`refid` = " . Vars::$ID . " AND `users`.`rights` < 6 AND `users`.`rights` != 3 GROUP BY `forum`.`from` ORDER BY `forum`.`from`");
     $total = mysql_num_rows($req);
     $res = mysql_fetch_assoc($req);
-    echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '"><b>' . __('forum') . '</b></a> | ' . __('curators') . '</div>' .
+    echo '<div class="phdr"><a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '"><b>' . __('forum') . '</b></a> | ' . __('curators') . '</div>' .
          '<div class="bmenu">' . $res['text'] . '</div>';
     $curators = array();
     $users = !empty($topic['curators']) ? unserialize($topic['curators']) : array();
@@ -32,7 +33,7 @@ if (Vars::$USER_RIGHTS >= 7) {
         if (!is_array($users)) $users = array();
     }
     if ($total > 0) {
-        echo '<form action="' . Vars::$URI . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post">';
+        echo '<form action="' . $url . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post">';
         $i = 0;
         while ($res = mysql_fetch_array($req)) {
             $checked = array_key_exists($res['user_id'], $users) ? TRUE : FALSE;
@@ -47,5 +48,5 @@ if (Vars::$USER_RIGHTS >= 7) {
     } else
         echo Functions::displayError(__('list_empty'));
     echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>' .
-         '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a></p>';
+         '<p><a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a></p>';
 }

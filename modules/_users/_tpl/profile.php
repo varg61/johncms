@@ -63,13 +63,13 @@
         </a>
     </li>
     <li><h2><?= __('information') ?></h2></li>
-    <li><a href="<?= Vars::$URI ?>?act=info&amp;user=<?= $this->user['id'] ?>"><i class="icn-info"></i><?= __('personal_data') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$URI ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><i class="icn-piechart"></i><?= __('activity') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= $this->link ?>?act=info&amp;user=<?= $this->user['id'] ?>"><i class="icn-info"></i><?= __('personal_data') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= $this->link ?>?act=activity&amp;user=<?= $this->user['id'] ?>"><i class="icn-piechart"></i><?= __('activity') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><i class="icn-violations"></i><?= __('infringements') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->bancount ?></span></a></li>
 
     <li><h2><?= __('personal') ?></h2></li>
     <li><a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><i class="icn-image"></i><?= __('photo_album') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->total_photo ?></span></a></li>
-    <li><a href="<?= Vars::$URI ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><i class="icn-dialogue"></i><?= __('guestbook') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->user['comm_count'] ?></span></a></li>
+    <li><a href="<?= $this->link ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><i class="icn-dialogue"></i><?= __('guestbook') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->user['comm_count'] ?></span></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>/friends?id=<?= $this->user['id'] ?>"><i class="icn-man-woman"></i><?= __('friends') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::friendsCount($this->user['id']) ?></span></a></li>
 
     <?php if (Vars::$USER_ID && Vars::$USER_ID != $this->user['id']): ?>
@@ -84,7 +84,7 @@
     <?php if (Vars::$USER_RIGHTS >= 3 && $this->user['id'] != Vars::$USER_ID): ?>
     <li><h2><?= __('administration') ?></h2></li>
         <?php if (Vars::$USER_RIGHTS >= 7): ?>
-        <li><a href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><i class="icn-settings-red"></i><?= __('settings') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= $this->link ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><i class="icn-settings-red"></i><?= __('settings') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
     <li><a href=""><i class="icn-ban-red"></i><?= __('ban_do') ?><i class="icn-arrow right"></i></a></li>
     <?php endif ?>

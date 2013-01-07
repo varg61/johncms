@@ -15,6 +15,7 @@ if (!Vars::$USER_ID || !Vars::$ID) {
     echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
+$url = Router::getUrl(2);
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'm' " . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'"));
 if (mysql_num_rows($req)) {
     /*
@@ -30,7 +31,7 @@ if (mysql_num_rows($req)) {
     }
     $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID . (Vars::$USER_RIGHTS < 7 ? " AND `close` != '1'" : '')), 0) / Vars::$USER_SET['page_size']);
     $posts = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `close` != '1'"), 0);
-    $link = Vars::$URI . '?id=' . $res['refid'] . '&amp;page=' . $page;
+    $link = $url . '?id=' . $res['refid'] . '&amp;page=' . $page;
     $error = FALSE;
     if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         // Проверка для Администрации
@@ -56,7 +57,7 @@ if (mysql_num_rows($req)) {
         }
     }
 } else {
-    $error = __('error_post_deleted') . '<br /><a href="' . Vars::$URI . '">' . __('forum') . '</a>';
+    $error = __('error_post_deleted') . '<br /><a href="' . $url . '">' . __('forum') . '</a>';
 }
 if (!$error) {
     switch (Vars::$MOD) {
@@ -109,9 +110,9 @@ if (!$error) {
                 mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                 if ($posts < 2) {
                     // Пересылка на удаление всей темы
-                    header('Location: ' . Vars::$URI . '?act=deltema&id=' . $res['refid']);
+                    header('Location: ' . $url . '?act=deltema&id=' . $res['refid']);
                 } else {
-                    header('Location: ' . Vars::$URI . '?id=' . $res['refid'] . '&page=' . $page);
+                    header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
                 }
             } else {
                 // Скрытие поста
@@ -124,10 +125,10 @@ if (!$error) {
                     // Если это был последний пост темы, то скрываем саму тему
                     $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
                     mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't'");
-                    header('Location: ' . Vars::$URI . '?id=' . $res_l['refid']);
+                    header('Location: ' . $url . '?id=' . $res_l['refid']);
                 } else {
                     mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
-                    header('Location: ' . Vars::$URI . '?id=' . $res['refid'] . '&page=' . $page);
+                    header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
                 }
             }
             break;
@@ -143,9 +144,9 @@ if (!$error) {
             if ($posts == 1)
                 echo __('delete_last_post_warning') . '<br />';
             echo __('delete_confirmation') . '</p>' .
-                 '<p><a href="' . $link . '">' . __('cancel') . '</a> | <a href="' . Vars::$URI . '?act=editpost&amp;mod=delete&amp;id=' . Vars::$ID . '">' . __('delete') . '</a>';
+                 '<p><a href="' . $link . '">' . __('cancel') . '</a> | <a href="' . $url . '?act=editpost&amp;mod=delete&amp;id=' . Vars::$ID . '">' . __('delete') . '</a>';
             if (Vars::$USER_RIGHTS == 9)
-                echo ' | <a href="' . Vars::$URI . '?act=editpost&amp;mod=delete&amp;hide&amp;id=' . Vars::$ID . '">' . __('hide') . '</a>';
+                echo ' | <a href="' . $url . '?act=editpost&amp;mod=delete&amp;hide&amp;id=' . Vars::$ID . '">' . __('hide') . '</a>';
             echo '</p></div>';
             echo '<div class="phdr"><small>' . __('delete_post_help') . '</small></div>';
             break;
@@ -161,7 +162,7 @@ if (!$error) {
                 $msg = Functions::translit($msg);
             if (isset($_POST['submit'])) {
                 if (empty($_POST['msg'])) {
-                    echo Functions::displayError(__('error_empty_message'), '<a href="' . Vars::$URI . '?act=editpost&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+                    echo Functions::displayError(__('error_empty_message'), '<a href="' . $url . '?act=editpost&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                     exit;
                 }
                 mysql_query("UPDATE `forum` SET
@@ -170,7 +171,7 @@ if (!$error) {
                     `kedit` = '" . ($res['kedit'] + 1) . "',
                     `text` = '" . mysql_real_escape_string($msg) . "'
                     WHERE `id` = " . Vars::$ID);
-                header('Location: ' . Vars::$URI . '?id=' . $res['refid'] . '&page=' . $page);
+                header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
             } else {
                 $msg_pre = Validate::checkout($msg, 1, 1);
                 if (Vars::$USER_SET['smileys'])

@@ -1,5 +1,5 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('profile') : __('my_profile')) ?></b></a> | <?= __('change_nickname') ?>
+    <a href="<?= Router::getUrl(3) ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('profile') : __('my_profile')) ?></b></a> | <?= __('change_nickname') ?>
 </div>
 <div class="menu">
     <div class="formblock">
@@ -11,5 +11,5 @@
     </div>
 </div>
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
+    <a href="<?= Router::getUrl(3) ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
 </div>

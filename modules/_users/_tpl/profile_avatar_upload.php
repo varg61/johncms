@@ -5,7 +5,7 @@
     <div class="form-block">
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
-    <form enctype="multipart/form-data" method="post" action="<?= Vars::$URI ?>?act=avatar_upload&amp;user=<?= $this->user['id'] ?>">
+    <form enctype="multipart/form-data" method="post" action="<?= Router::getUrl(3) ?>?act=avatar_upload&amp;user=<?= $this->user['id'] ?>">
         <div class="form-block">
             <label for="image"><?= __('select_image') ?></label><br/>
             <input id="image" type="file" name="image" value=""/>
@@ -16,7 +16,7 @@
             <span class="description" style="padding-top: 8px"><?= __('select_animation_help')  ?></span><br/><br/>
 
             <input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('upload') ?>"/>
-            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
+            <a class="btn" href="<?= Router::getUrl(3) ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
             <input type="hidden" name="MAX_FILE_SIZE" value="<?= (1024 * Vars::$SYSTEM_SET['filesize']) ?>"/>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>

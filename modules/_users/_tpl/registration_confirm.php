@@ -18,7 +18,7 @@
                     <?php if (isset($_GET['pass'])): ?>
                     <strong><?= htmlspecialchars($_SESSION['password']) ?></strong>
                     <?php else: ?>
-                    <a href="<?= Vars::$URI ?>?pass<?= (isset($_GET['auto']) ? '&amp;auto' : '') ?>"><?= __('show') ?></a>
+                    <a href="<?= Router::getUrl(3) ?>?pass<?= (isset($_GET['auto']) ? '&amp;auto' : '') ?>"><?= __('show') ?></a>
                     <?php endif ?>
                 </td>
             </tr>
@@ -28,7 +28,7 @@
                     <?php if (isset($_GET['auto'])): ?>
                     <input type="text" value="<?= Vars::$HOME_URL . '/login?id=' . $_SESSION['uid'] . '&amp;token=' . htmlspecialchars($_SESSION['token']) ?>"/>
                     <?php else: ?>
-                    <a href="<?= Vars::$URI ?>?auto<?= (isset($_GET['pass']) ? '&amp;pass' : '') ?>"><?= __('show') ?></a>
+                    <a href="<?= Router::getUrl(3) ?>?auto<?= (isset($_GET['pass']) ? '&amp;pass' : '') ?>"><?= __('show') ?></a>
                     <?php endif ?>
                 </td>
             </tr>

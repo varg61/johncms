@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 /*
 -----------------------------------------------------------------
@@ -20,7 +21,7 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
     $req = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img' AND `user_id` = '" . $user['id'] . "'");
     if (mysql_num_rows($req)) {
         $image = mysql_fetch_assoc($req);
-        echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('image_move') . '</div>';
+        echo '<div class="phdr"><a href="' . $url . '?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('image_move') . '</div>';
         if (isset($_POST['submit'])) {
             $req_a = mysql_query("SELECT * FROM `cms_album_cat` WHERE `id` = '$al' AND `user_id` = '" . $user['id'] . "'");
             if (mysql_num_rows($req_a)) {
@@ -31,14 +32,14 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
                     WHERE `id` = '$img'
                 ");
                 echo '<div class="gmenu"><p>' . __('image_moved') . '<br />' .
-                     '<a href="' . Vars::$URI . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>';
+                     '<a href="' . $url . '?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . __('continue') . '</a></p></div>';
             } else {
                 echo Functions::displayError(__('error_wrong_data'));
             }
         } else {
             $req = mysql_query("SELECT * FROM `cms_album_cat` WHERE `user_id` = '" . $user['id'] . "' AND `id` != '" . $image['album_id'] . "' ORDER BY `sort` ASC");
             if (mysql_num_rows($req)) {
-                echo '<form action="' . Vars::$URI . '?act=image_move&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
+                echo '<form action="' . $url . '?act=image_move&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
                      '<div class="menu"><p><h3>' . __('album_select') . '</h3>' .
                      '<select name="al">';
                 while ($res = mysql_fetch_assoc($req)) {
@@ -47,9 +48,9 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
                 echo '</select></p>' .
                      '<p><input type="submit" name="submit" value="' . __('move') . '"/></p>' .
                      '</div></form>' .
-                     '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '">' . __('cancel') . '</a></div>';
+                     '<div class="phdr"><a href="' . $url . '?act=show&amp;al=' . $image['album_id'] . '&amp;user=' . $user['id'] . '">' . __('cancel') . '</a></div>';
             } else {
-                echo Functions::displayError(__('image_move_error'), '<a href="' . Vars::$URI . '?act=list&amp;user=' . $user['id'] . '">' . __('continue') . '</a>');
+                echo Functions::displayError(__('image_move_error'), '<a href="' . $url . '?act=list&amp;user=' . $user['id'] . '">' . __('continue') . '</a>');
             }
         }
     } else {

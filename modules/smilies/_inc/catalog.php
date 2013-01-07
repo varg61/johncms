@@ -9,10 +9,9 @@
  * @author      http://johncms.com/about
  */
 
+$url = Router::getUrl(2);
+
 $tpl = Template::getInstance();
-
-
-$link = Router::getUrl(2);
 
 if(!isset($catalog)){
     $catalog = array();
@@ -21,7 +20,7 @@ asort($catalog);
 
 foreach ($catalog as $key => $val) {
     $tpl->list[] = array(
-        'link' => $link . '/' . urlencode($key),
+        'link' => $url . '/' . urlencode($key),
         'name' => htmlspecialchars($val),
         'count' => count(glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smilies' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE))
     );

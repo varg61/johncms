@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 unset($_SESSION['fsort_id']);
 unset($_SESSION['fsort_users']);
@@ -21,8 +22,6 @@ if (empty($_SESSION['uid'])) {
         $_SESSION['uppost'] = 0;
     }
 }
-
-$backLink = Router::getUrl(2);
 
 /*
 -----------------------------------------------------------------
@@ -70,7 +69,7 @@ if (Vars::$USER_ID) {
                     WHERE `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID
                 );
             }
-            echo '<div class="menu"><p>' . __('unread_reset_done') . '<br /><a href="' . $backLink . '">' . __('to_forum') . '</a></p></div>';
+            echo '<div class="menu"><p>' . __('unread_reset_done') . '<br /><a href="' . $url . '">' . __('to_forum') . '</a></p></div>';
             break;
 
         case 'select':
@@ -79,11 +78,11 @@ if (Vars::$USER_ID) {
             Форма выбора диапазона времени
             -----------------------------------------------------------------
             */
-            echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('forum') . '</b></a> | ' . __('unread_show_for_period') . '</div>' .
-                '<div class="menu"><p><form action="' . Vars::$URI . '?act=period" method="post">' . __('unread_period') . ':<br/>' .
+            echo'<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('unread_show_for_period') . '</div>' .
+                '<div class="menu"><p><form action="' . $url . '?act=period" method="post">' . __('unread_period') . ':<br/>' .
                 '<input type="text" maxlength="3" name="vr" value="24" size="3"/>' .
                 '<input type="submit" name="submit" value="' . __('show') . '"/></form></p></div>' .
-                '<div class="phdr"><a href="' . Vars::$URI . '">' . __('back') . '</a></div>';
+                '<div class="phdr"><a href="' . $url . '">' . __('back') . '</a></div>';
             break;
 
         case 'period':
@@ -94,7 +93,7 @@ if (Vars::$USER_ID) {
             */
             $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : NULL;
             if (!$vr) {
-                echo __('error_time_empty') . '<br/><a href="' . Vars::$URI . '?act=period">' . __('repeat') . '</a><br/>';
+                echo __('error_time_empty') . '<br/><a href="' . $url . '?act=period">' . __('repeat') . '</a><br/>';
                 exit;
             }
             $vr1 = time() - $vr * 3600;
@@ -104,7 +103,7 @@ if (Vars::$USER_ID) {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1' AND `close` != '1'");
             }
             $count = mysql_result($req, 0);
-            echo '<div class="phdr"><a href="' . $backLink . '"><b>' . __('forum') . '</b></a> | ' . __('unread_all_for_period') . ' ' . $vr . ' ' . __('hours') . '</div>';
+            echo '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('unread_all_for_period') . ' ' . $vr . ' ' . __('hours') . '</div>';
             if ($count > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;mod=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
             if ($count > 0) {
@@ -132,11 +131,11 @@ if (Vars::$USER_ID) {
                     }
                     if ($res['realid'] == 1)
                         echo '&#160;' . Functions::loadModuleImage('chart.png');
-                    echo '&#160;<a href="' . $backLink . '?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
+                    echo '&#160;<a href="' . $url . '?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
-                        echo '<a href="' . $backLink . '?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&#160;&gt;&gt;</a>';
-                    echo '<br /><div class="sub"><a href="' . $backLink . '?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
+                        echo '<a href="' . $url . '?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&#160;&gt;&gt;</a>';
+                    echo '<br /><div class="sub"><a href="' . $url . '?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
                     echo $res['from'];
                     if ($colmes1 > 1) {
                         echo '&#160;/&#160;' . $nick['from'];
@@ -149,13 +148,13 @@ if (Vars::$USER_ID) {
             }
             echo'<div class="phdr">' . __('total') . ': ' . $count . '</div>';
             if ($count > Vars::$USER_SET['page_size']) {
-                echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>' .
-                    '<p><form action="' . Vars::$URI . '?act=period&amp;vr=' . $vr . '" method="post">' .
+                echo'<div class="topmenu">' . Functions::displayPagination($url . '?act=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>' .
+                    '<p><form action="' . $url . '?act=period&amp;vr=' . $vr . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                     '</form></p>';
             }
-            echo '<p><a href="' . Vars::$URI . '">' . __('back') . '</a></p>';
+            echo '<p><a href="' . $url . '">' . __('back') . '</a></p>';
             break;
 
         default:
@@ -165,9 +164,9 @@ if (Vars::$USER_ID) {
             -----------------------------------------------------------------
             */
             $total = Counters::forumCountNew();
-            echo '<div class="phdr"><a href="' . $backLink . '"><b>' . __('forum') . '</b></a> | ' . __('unread') . '</div>';
+            echo '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('unread') . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
-                echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+                echo '<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             }
             if ($total > 0) {
                 $req = mysql_query("SELECT * FROM `forum`
@@ -200,13 +199,13 @@ if (Vars::$USER_ID) {
                         ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
                     );
                     echo Functions::displayMenu($icons, '&#160;', '&#160;');
-                    echo '<a href="' . $backLink . '?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
+                    echo '<a href="' . $url . '?id=' . $res['id'] . ($cpg > 1 && $set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] && $cpg > 1 ? '&amp;page=' . $cpg : '') . '">' . $res['text'] .
                         '</a>&#160;[' . $colmes1 . ']';
                     if ($cpg > 1)
-                        echo'&#160;<a href="' . $backLink . '?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&gt;&gt;</a>';
+                        echo'&#160;<a href="' . $url . '?id=' . $res['id'] . (!$set_forum['upfp'] && $set_forum['postclip'] ? '&amp;clip' : '') . ($set_forum['upfp'] ? '' : '&amp;page=' . $cpg) . '">&gt;&gt;</a>';
                     echo'<div class="sub">' . $res['from'] . ($colmes1 > 1 ? '&#160;/&#160;' . $nick['from'] : '') .
                         ' <span class="gray">(' . Functions::displayDate($nick['time']) . ')</span><br />' .
-                        '<a href="' . $backLink . '?id=' . $frm['id'] . '">' . $frm['text'] . '</a>&#160;/&#160;<a href="' . $backLink . '?id=' . $razd['id'] . '">' . $razd['text'] . '</a>' .
+                        '<a href="' . $url . '?id=' . $frm['id'] . '">' . $frm['text'] . '</a>&#160;/&#160;<a href="' . $url . '?id=' . $razd['id'] . '">' . $razd['text'] . '</a>' .
                         '</div></div>';
                 }
             } else {
@@ -214,17 +213,17 @@ if (Vars::$USER_ID) {
             }
             echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
-                echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                    '<p><form action="' . Vars::$URI . '" method="post">' .
+                echo'<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                    '<p><form action="' . $url . '" method="post">' .
                     '<input type="text" name="page" size="2"/>' .
                     '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                     '</form></p>';
             }
             echo'<p>';
             if ($total) {
-                echo '<a href="' . Vars::$URI . '?act=reset">' . __('unread_reset') . '</a><br/>';
+                echo '<a href="' . $url . '?act=reset">' . __('unread_reset') . '</a><br/>';
             }
-            echo'<a href="' . Vars::$URI . '?act=select">' . __('unread_show_for_period') . '</a></p>';
+            echo'<a href="' . $url . '?act=select">' . __('unread_show_for_period') . '</a></p>';
     }
 } else {
     /*
@@ -232,7 +231,7 @@ if (Vars::$USER_ID) {
     Вывод 10 последних тем (для незарегистрированных)
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr"><a href="' . $backLink . '"><b>' . __('forum') . '</b></a> | ' . __('unread_last_10') . '</div>';
+    echo '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('unread_last_10') . '</div>';
     $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT 10");
     if (mysql_num_rows($req)) {
         for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
@@ -254,11 +253,11 @@ if (Vars::$USER_ID) {
                 ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
             );
             echo Functions::displayMenu($icons, '&#160;', '&#160;');
-            echo '<a href="' . $backLink . '?id=' . $res['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&#160;[' . $colmes1 . ']';
+            echo '<a href="' . $url . '?id=' . $res['id'] . ($cpg > 1 && $_SESSION['uppost'] ? '&amp;clip&amp;page=' . $cpg : '') . '">' . $res['text'] . '</a>&#160;[' . $colmes1 . ']';
             if ($cpg > 1) {
-                echo '&#160;<a href="' . $backLink . '?id=' . $res['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
+                echo '&#160;<a href="' . $url . '?id=' . $res['id'] . ($_SESSION['uppost'] ? '' : '&amp;clip&amp;page=' . $cpg) . '">&gt;&gt;</a>';
             }
-            echo '<br/><div class="sub"><a href="' . $backLink . '?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
+            echo '<br/><div class="sub"><a href="' . $url . '?id=' . $razd['id'] . '">' . $frm['text'] . '&#160;/&#160;' . $razd['text'] . '</a><br />';
             echo $res['from'];
             if (!empty($nam['from'])) {
                 echo '&#160;/&#160;' . $nam['from'];
@@ -269,5 +268,5 @@ if (Vars::$USER_ID) {
     } else {
         echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
     }
-    echo '<div class="phdr"><a href="' . $backLink . '">' . __('to_forum') . '</a></div>';
+    echo '<div class="phdr"><a href="' . $url . '">' . __('to_forum') . '</a></div>';
 }

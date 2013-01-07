@@ -11,7 +11,7 @@
 <?php endif ?>
 
 <div class="user-block">
-<form name="form" action="<?= Vars::$URI ?>?act=say<?= ($this->mod ? '&amp;mod=adm' : '') ?>" method="post">
+<form name="form" action="<?= $this->url ?>?act=say<?= ($this->mod ? '&amp;mod=adm' : '') ?>" method="post">
     <?php if(!Vars::$USER_ID): ?>
     <?= __('name') ?> (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>
     <?php endif ?>
@@ -34,7 +34,7 @@
     <?php endforeach ?>
     <ul class="nav"><li><h2><?= __('total') . ': ' . $this->total ?></h2></li></ul>
     <?php if (Vars::$USER_RIGHTS >= 7): ?>
-    <a href="<?= Vars::$URI . '?act=clean' . ($this->mod ? '&amp;mod=adm' : '') ?>"><?= __('clear') ?></a>
+    <a href="<?= $this->url . '?act=clean' . ($this->mod ? '&amp;mod=adm' : '') ?>"><?= __('clear') ?></a>
     <?php endif ?>
 <?php else: ?>
     <div class="block-even align-center"><br/><?= __('guestbook_empty') ?><br/><br/></div>

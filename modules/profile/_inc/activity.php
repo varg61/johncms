@@ -10,17 +10,18 @@
  */
 
 defined('_IN_PROFILE') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 /*
 -----------------------------------------------------------------
 История активности
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><a href="' . Vars::$URI . '?user=' . $user['id'] . '"><b>' . ($user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) . '</b></a> | ' . __('activity') . '</div>';
+echo '<div class="phdr"><a href="' . $url . '?user=' . $user['id'] . '"><b>' . ($user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) . '</b></a> | ' . __('activity') . '</div>';
 $menu = array(
-    (!Vars::$MOD ? '<b>' . __('messages') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;user=' . $user['id'] . '">' . __('messages') . '</a>'),
-    (Vars::$MOD == 'topic' ? '<b>' . __('themes') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;mod=topic&amp;user=' . $user['id'] . '">' . __('themes') . '</a>'),
-    (Vars::$MOD == 'comments' ? '<b>' . __('comments') . '</b>' : '<a href="' . Vars::$URI . '?act=activity&amp;mod=comments&amp;user=' . $user['id'] . '">' . __('comments') . '</a>'),
+    (!Vars::$MOD ? '<b>' . __('messages') . '</b>' : '<a href="' . $url . '?act=activity&amp;user=' . $user['id'] . '">' . __('messages') . '</a>'),
+    (Vars::$MOD == 'topic' ? '<b>' . __('themes') . '</b>' : '<a href="' . $url . '?act=activity&amp;mod=topic&amp;user=' . $user['id'] . '">' . __('themes') . '</a>'),
+    (Vars::$MOD == 'comments' ? '<b>' . __('comments') . '</b>' : '<a href="' . $url . '?act=activity&amp;mod=comments&amp;user=' . $user['id'] . '">' . __('comments') . '</a>'),
 );
 echo '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>' .
      '<div class="user"><p>' . Functions::displayUser($user, array('iphide' => 1,)) . '</p></div>';

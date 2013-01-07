@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Скачка TXT файла в JAR
@@ -28,7 +30,7 @@ $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VA
 $res_down = mysql_fetch_assoc($req_down);
 $format_file = functions::format($res_down['name']);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || ($format_file != 'txt' && !isset($_GET['more'])) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
-    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
 if (isset($_GET['more'])) {
@@ -37,7 +39,7 @@ if (isset($_GET['more'])) {
     $res_more = mysql_fetch_assoc($req_more);
     $format_file = functions::format($res_more['name']);
     if (!mysql_num_rows($req_more) || !is_file($res_down['dir'] . '/' . $res_more['name']) || $format_file != 'txt') {
-        echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+        echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
         exit;
     }
     $down_file = $res_down['dir'] . '/' . $res_more['name'];
@@ -49,7 +51,7 @@ if (isset($_GET['more'])) {
     $txt_file = $res_down['name'];
 }
 if (!isset($_SESSION['down_' . VARS::$ID])) {
-	mysql_query("UPDATE `cms_download_files` SET `field`=`field`+1 WHERE `id`=" . VARS::$ID);
+    mysql_query("UPDATE `cms_download_files` SET `field`=`field`+1 WHERE `id`=" . VARS::$ID);
     $_SESSION['down_' . VARS::$ID] = 1;
 }
 $file = str_replace('.' . $format_file, '', $txt_file);
@@ -107,7 +109,7 @@ MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
 MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/' . $tmp;
-	$files = fopen($tmp_jad, 'w+');
+    $files = fopen($tmp_jad, 'w+');
     flock($files, LOCK_EX);
     fputs($files, $jad_text);
     flock($files, LOCK_UN);
@@ -120,6 +122,6 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/' . $tmp;
 */
 
 echo '<div class="phdr"><b>' . Validate::checkout($title_pages) . '</b></div>' .
-'<div class="menu">' . __('download') . ': <a href="' . Validate::checkout($tmp) . '">JAR</a> | <a href="' . Validate::checkout($tmp_jad) . '">JAD</a></div>' .
-'<div class="phdr">' . __('time_limit') . '</div>' .
-'<p><a href="' . Vars::$URI. '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+    '<div class="menu">' . __('download') . ': <a href="' . Validate::checkout($tmp) . '">JAR</a> | <a href="' . Validate::checkout($tmp_jad) . '">JAD</a></div>' .
+    '<div class="phdr">' . __('time_limit') . '</div>' .
+    '<p><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';

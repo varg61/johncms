@@ -1,6 +1,17 @@
 <?php
 
+/**
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
+
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Перенос файла
@@ -9,7 +20,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
 $res_down = mysql_fetch_assoc($req_down);
 if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name'])) {
-    echo Functions::displayError(__('not_found_file'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+    echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
 $do = isset($_GET['do']) ? trim($_GET['do']) : '';
@@ -19,12 +30,12 @@ if (Vars::$USER_RIGHTS > 6 ) {
 		$queryDir = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '$catId' LIMIT 1");
 		if(!mysql_num_rows($queryDir)) $catId = 0;
 	}
-	echo '<div class="phdr"><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a> | <b>' . __('transfer_file') . '</b></div>';
+	echo '<div class="phdr"><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a> | <b>' . __('transfer_file') . '</b></div>';
 	switch($do) {
     	case 'transfer':
         	if($catId) {
         		if($catId == $res_down['refid']) {
-        			echo Functions::displayError('<a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . Vars::$ID . '&amp;catId=' . $catId . '">' . __('back') . '</a>');
+        			echo Functions::displayError('<a href="' . $url . '?act=transfer_file&amp;id=' . Vars::$ID . '&amp;catId=' . $catId . '">' . __('back') . '</a>');
         			exit;
         		}
 				if(isset($_GET['yes'])) {
@@ -48,9 +59,9 @@ if (Vars::$USER_RIGHTS > 6 ) {
                     unlink($res_down['dir'] . '/' . $res_down['name']);
 					mysql_query("UPDATE `cms_download_files` SET `name`='" . mysql_real_escape_string($name) . "', `dir`='" . mysql_real_escape_string($resDir['dir']) . "', `refid`='$catId'  WHERE `id`='" . VARS::$ID . "'");
 					echo  '<div class="menu"><p>' . __('transfer_file_ok') . '</p></div>' .
-                	'<div class="phdr"><a href="' . Vars::$URI . '?act=recount">' . __('download_recount') . '</a></div>';
+                	'<div class="phdr"><a href="' . $url . '?act=recount">' . __('download_recount') . '</a></div>';
                	} else {
-                	echo  '<div class="menu"><p><a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . Vars::$ID . '&amp;catId=' . $catId . '&amp;do=transfer&amp;yes"><b>' . __('transfer_file') . '</b></a></p></div>' .
+                	echo  '<div class="menu"><p><a href="' . $url . '?act=transfer_file&amp;id=' . Vars::$ID . '&amp;catId=' . $catId . '&amp;do=transfer&amp;yes"><b>' . __('transfer_file') . '</b></a></p></div>' .
                 	'<div class="phdr"><br /></div>';
 				}
 			}
@@ -63,18 +74,18 @@ if (Vars::$USER_RIGHTS > 6 ) {
         		while ($resCat = mysql_fetch_assoc($queryCat)) {
                 	echo ($i++ % 2) ? '<div class="list2">' : '<div class="list1">';
                 	echo Functions::loadModuleImage('folder.png') . '&#160;' .
-                	'<a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '">' . Validate::checkout($resCat['rus_name']) . '</a>';
+                	'<a href="' . $url . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '">' . Validate::checkout($resCat['rus_name']) . '</a>';
                 	if($resCat['id'] != $res_down['refid'])
-                		echo '<br /><small><a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '&amp;do=transfer">' . __('move_this_folder') . '</a></small>';
+                		echo '<br /><small><a href="' . $url . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '&amp;do=transfer">' . __('move_this_folder') . '</a></small>';
                 	echo '</div>';
 				}
 			} else
 				echo '<div class="rmenu"><p>' . __('list_empty') . '</p></div>';
 			echo '<div class="phdr">' . __('total') . ': ' . $totalCat .'</div>';
             if($catId && $catId != $res_down['refid'])
-            	echo '<p><div class="func"><a href="' . Vars::$URI . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $catId . '&amp;do=transfer">' . __('move_this_folder') . '</a></div></p>';
+            	echo '<p><div class="func"><a href="' . $url . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $catId . '&amp;do=transfer">' . __('move_this_folder') . '</a></div></p>';
 	}
-	echo '<p><a href="' . Vars::$URI . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+	echo '<p><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';
 } else {
     header('Location: ' . Vars::$HOME_URL . '/404');
 }

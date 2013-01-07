@@ -21,6 +21,8 @@ if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::
     exit;
 }
 
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Вспомогательная Функция обработки ссылок форума
@@ -60,7 +62,7 @@ function forum_link($m)
 // Проверка на флуд
 $flood = Functions::antiFlood();
 if ($flood) {
-    echo Functions::displayError(__('error_flood') . ' ' . $flood . __('sec') . ', <a href="' . Vars::$URI . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
+    echo Functions::displayError(__('error_flood') . ' ' . $flood . __('sec') . ', <a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
     exit;
 }
 $req_r = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'r' LIMIT 1");
@@ -141,13 +143,13 @@ if (isset($_POST['submit'])) {
             `time`='" . time() . "'
         ");
         if (isset($_POST['addfiles'])) {
-            header('Location: ' . Vars::$URI . '?id=' . $postid . '&act=addfile');
+            header('Location: ' . $url . '?id=' . $postid . '&act=addfile');
         } else {
-            header('Location: ' . Vars::$URI . '?id=' . $rid);
+            header('Location: ' . $url . '?id=' . $rid);
         }
     } else {
         // Выводим сообщение об ошибке
-        echo Functions::displayError($error, '<a href="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
+        echo Functions::displayError($error, '<a href="' . $url . '?act=nt&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
         exit;
     }
 } else {
@@ -157,7 +159,7 @@ if (isset($_POST['submit'])) {
     if (!Vars::$USER_DATA['count_forum']) {
         if (!isset($_GET['yes'])) {
             echo '<p>' . __('forum_rules_text') . '</p>';
-            echo '<p><a href="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '&amp;yes">' . __('agree') . '</a> | <a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('not_agree') . '</a></p>';
+            echo '<p><a href="' . $url . '?act=nt&amp;id=' . Vars::$ID . '&amp;yes">' . __('agree') . '</a> | <a href="' . $url . '?id=' . Vars::$ID . '">' . __('not_agree') . '</a></p>';
             exit;
         }
     }
@@ -165,16 +167,16 @@ if (isset($_POST['submit'])) {
     if (Vars::$USER_SET['smileys'])
         $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
     $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
-    echo '<div class="phdr"><a href="' . Vars::$URI . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('new_topic') . '</div>';
+    echo '<div class="phdr"><a href="' . $url . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('new_topic') . '</div>';
     if ($msg && $th && !isset($_POST['submit']))
         echo '<div class="list1">' . Functions::getIcon('forum_normal.png') . '&#160;<span style="font-weight: bold">' . $th . '</span></div>' .
             '<div class="list2">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                    'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
                                                                                    'body'   => $msg_pre)) . '</div>';
-    echo'<form name="form" action="' . Vars::$URI . '?act=nt&amp;id=' . Vars::$ID . '" method="post">' .
+    echo'<form name="form" action="' . $url . '?act=nt&amp;id=' . Vars::$ID . '" method="post">' .
         '<div class="gmenu">' .
         '<p><h3>' . __('section') . '</h3>' .
-        '<a href="' . Vars::$URI . '?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="' . Vars::$URI . '?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
+        '<a href="' . $url . '?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="' . $url . '?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
         '<p><h3>' . __('new_topic_name') . '</h3>' .
         '<input type="text" size="20" maxlength="100" name="th" value="' . $th . '"/></p>' .
         '<p><h3>' . __('post') . '</h3>';
@@ -189,5 +191,5 @@ if (isset($_POST['submit'])) {
         '</p></div></form>' .
         '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | ' .
         '<a href="../pages/faq.php?act=smileys">' . __('smileys') . '</a></div>' .
-        '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+        '<p><a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
 }

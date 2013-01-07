@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 /*
 -----------------------------------------------------------------
@@ -21,7 +22,7 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_assoc($req);
         $album = $res['album_id'];
-        echo '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $album . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('image_delete') . '</div>';
+        echo '<div class="phdr"><a href="' . $url . '?act=show&amp;al=' . $album . '&amp;user=' . $user['id'] . '"><b>' . __('photo_album') . '</b></a> | ' . __('image_delete') . '</div>';
         //TODO: Сделать проверку, чтоб администрация не могла удалять фотки старших по должности
         if (isset($_POST['submit'])) {
             // Удаляем файлы картинок
@@ -32,13 +33,13 @@ if ($img && $user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS >= 6) {
             mysql_query("DELETE FROM `cms_album_votes` WHERE `file_id` = '$img'");
             mysql_query("DELETE FROM `cms_album_comments` WHERE `sub_id` = '$img'");
             mysql_query("OPTIMIZE TABLE `cms_album_comments`, `cms_album_votes`");
-            header('Location: ' . Vars::$URI . '?act=show&al=' . $album . '&user=' . $user['id']);
+            header('Location: ' . $url . '?act=show&al=' . $album . '&user=' . $user['id']);
         } else {
-            echo'<div class="rmenu"><form action="' . Vars::$URI . '?act=image_delete&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
+            echo'<div class="rmenu"><form action="' . $url . '?act=image_delete&amp;img=' . $img . '&amp;user=' . $user['id'] . '" method="post">' .
                 '<p>' . __('image_delete_warning') . '</p>' .
                 '<p><input type="submit" name="submit" value="' . __('delete') . '"/></p>' .
                 '</form></div>' .
-                '<div class="phdr"><a href="' . Vars::$URI . '?act=show&amp;al=' . $album . 'user=' . $user['id'] . '">' . __('cancel') . '</a></div>';
+                '<div class="phdr"><a href="' . $url . '?act=show&amp;al=' . $album . 'user=' . $user['id'] . '">' . __('cancel') . '</a></div>';
         }
     } else {
         echo Functions::displayError(__('error_wrong_data'));

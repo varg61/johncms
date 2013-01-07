@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 /*
 -----------------------------------------------------------------
@@ -20,8 +21,6 @@ if (!Vars::$USER_ID && !Vars::$USER_SYS['view_userlist']) {
     echo Functions::displayError(__('access_guest_forbidden'));
     exit;
 }
-
-$backLink = Router::getUrl(2);
 
 /*
 -----------------------------------------------------------------
@@ -52,8 +51,8 @@ if ($search && Validate::nickname($search, 1) === FALSE) {
 -----------------------------------------------------------------
 */
 $menu = array(
-    (Vars::$ACT != 'adm' ? __('all_users') : '<a href="' . Vars::$URI . '">' . __('all_users') . '</a>'),
-    (Vars::$ACT == 'adm' ? __('administration') : '<a href="' . Vars::$URI . '?act=adm">' . __('administration') . '</a>')
+    (Vars::$ACT != 'adm' ? __('all_users') : '<a href="' . $url . '">' . __('all_users') . '</a>'),
+    (Vars::$ACT == 'adm' ? __('administration') : '<a href="' . $url . '?act=adm">' . __('administration') . '</a>')
 );
 
 if ($search && $error) {
@@ -64,10 +63,10 @@ if ($search && $error) {
     $style = '';
 }
 
-echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('community') . '</b></a> | ' . ($search ? __('search_user') : __('users_list')) . '</div>' .
+echo'<div class="phdr"><a href="' . $url . '"><b>' . __('community') . '</b></a> | ' . ($search ? __('search_user') : __('users_list')) . '</div>' .
     '<div class="topmenu">' .
     ($error ? '<p class="red">' . $error . '</p>' : '') .
-    '<p><form action="' . $backLink . '/search" method="post">' .
+    '<p><form action="' . $url . '/search" method="post">' .
     '<input type="text" name="search" value="' . htmlspecialchars($search) . '"' . $style . '/> ' .
     '<input type="submit" value="' . __('search') . '" name="submit"/>' .
     '</form>' .
@@ -91,7 +90,7 @@ if ($search && !$error) {
 Vars::fixPage($total);
 
 if ($total > Vars::$USER_SET['page_size']) {
-    echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+    echo '<div class="topmenu">' . Functions::displayPagination($url . '?search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 }
 
 if ($total) {
@@ -119,14 +118,14 @@ if ($total) {
 
 echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="' . Vars::$URI . '" method="post">' .
+    echo'<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . $url . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 echo'<p>' .
-    ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br/>' : '') .
+    ($search ? '<a href="' . $url . '">' . __('search_new') . '</a><br/>' : '') .
     (Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a><br />' : '') .
-    '<a href="' . $backLink . '">' . __('back') . '</a>' .
+    '<a href="' . $url . '">' . __('back') . '</a>' .
     '</p>';

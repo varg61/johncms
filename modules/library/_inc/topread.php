@@ -10,9 +10,10 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 // Рейтинг самых читаемых статей
-echo '<div class="phdr"><a href="' . Vars::$URI . '"><b>' . __('library') . '</b></a> | ' . __('top_read') . '</div>';
+echo '<div class="phdr"><a href="' . $url . '"><b>' . __('library') . '</b></a> | ' . __('top_read') . '</div>';
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1' AND `count`>'0'"), 0);
 if ($total > 100) {
     $total = 100;
@@ -20,7 +21,7 @@ if ($total > 100) {
 $req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC " . Vars::db_pagination());
 if ($total) {
     if ($total > Vars::$USER_SET['page_size']) {
-        echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=topread&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+        echo'<div class="topmenu">' . Functions::displayPagination($url . '?act=topread&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
     for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
@@ -36,11 +37,11 @@ if ($total) {
 echo'<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 
 if ($total > Vars::$USER_SET['page_size']) {
-    echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=topread&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-        '<p><form action="' . Vars::$URI . '?act=topread" method="post">' .
+    echo'<div class="topmenu">' . Functions::displayPagination($url . '?act=topread&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+        '<p><form action="' . $url . '?act=topread" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';
 }
 
-echo '<a href="' . Vars::$URI . '">' . __('to_library') . '</a></p>';
+echo '<a href="' . $url . '">' . __('to_library') . '</a></p>';

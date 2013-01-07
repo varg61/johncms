@@ -9,6 +9,8 @@
  * @author      http://johncms.com/about
  */
 
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Проверяем права доступа
@@ -45,8 +47,8 @@ if ($total) {
 }
 echo'<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 if ($total > Vars::$USER_SET['page_size']) {
-    echo'<p>' . Functions::displayPagination(Vars::$URI . '?act=ip&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
-        '<p><form action="' . Vars::$URI . '?act=ip&amp;user=' . $user['id'] . '" method="post">' .
+    echo'<p>' . Functions::displayPagination($url . '?act=ip&amp;user=' . $user['id'] . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+        '<p><form action="' . $url . '?act=ip&amp;user=' . $user['id'] . '" method="post">' .
         '<input type="text" name="page" size="2"/>' .
         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
         '</form></p>';

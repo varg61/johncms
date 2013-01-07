@@ -16,7 +16,7 @@
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
 
-    <form action="<?= Vars::$URI ?>?act=edit_admin&amp;user=<?= $this->user['id'] ?>" method="post">
+    <form action="<?= Router::getUrl(3) ?>?act=edit_admin&amp;user=<?= $this->user['id'] ?>" method="post">
         <div class="form-block">
             <label class="small"><input type="radio" value="0" name="rights" <?= (!$this->user['rights'] ? 'checked="checked"' : '') ?>/>&#160;<?= __('rank_0') ?></label><br/><br/>
             <label class="small"><input type="radio" value="3" name="rights" <?= ($this->user['rights'] == 3 ? 'checked="checked"' : '') ?>/>&#160;<?= __('rank_3') ?></label><br/>
@@ -36,7 +36,7 @@
             <input id="password" type="password" name="password" <?= (isset($this->error['password']) ? 'class="error"' : '') ?>/>
             <br/><br/>
             <input class="btn btn-primary btn-large" type="submit" value="<?= __('save') ?>" name="submit"/>
-            <a class="btn" href="<?= Vars::$URI ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
+            <a class="btn" href="<?= Router::getUrl(3) ?>?act=settings&amp;user=<?= $this->user['id'] ?>"><?= __('back') ?></a>
             <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
         </div>
     </form>

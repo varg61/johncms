@@ -6,7 +6,7 @@
         <?= Functions::displayUser($this->user, array('iphide' => 1,)) ?>
     </div>
     <div class="form-block">
-        <form action="<?= Vars::$URI ?>?act=edit&amp;mod=nickname&amp;user=<?= $this->user['id'] ?>" method="post">
+        <form action="<?= Router::getUrl(3) ?>?act=edit&amp;mod=nickname&amp;user=<?= $this->user['id'] ?>" method="post">
             <label><?= __('attention') ?></label><br/>
             <ul>
                 <li><?= __('change_nickname_help_1') ?></li>

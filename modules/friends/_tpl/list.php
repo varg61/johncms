@@ -1,5 +1,5 @@
 <div class="phdr">
-    <a href="<?= Vars::$URI ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) ?></b></a> | <?= __('information') ?>
+    <a href="<?= Router::getUrl(2) ?>?user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('user_profile') : __('my_profile')) ?></b></a> | <?= __('information') ?>
 </div>
 <div class="user">
     <p><?= Functions::displayUser($this->user, array('iphide' => 1,)) ?></p>

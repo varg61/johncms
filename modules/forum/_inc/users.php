@@ -11,6 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+$url = Router::getUrl(2);
+
 $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1' AND `topic` = " . Vars::$ID), 0);
 if ($topic_vote == 0) {
     echo Functions::displayError(__('error_wrong_data'));
@@ -31,10 +33,10 @@ if ($topic_vote == 0) {
         echo '<div class="menu">' . __('voting_users_empty') . '</div>';
     echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
-        echo'<p>' . Functions::displayPagination(Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
-            '<p><form action="' . Vars::$URI . '?act=users&amp;id=' . Vars::$ID . '" method="post">' .
+        echo'<p>' . Functions::displayPagination($url . '?act=users&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</p>' .
+            '<p><form action="' . $url . '?act=users&amp;id=' . Vars::$ID . '" method="post">' .
             '<input type="text" name="page" size="2"/>' .
             '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
     }
-    echo '<p><a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('to_topic') . '</a></p>';
+    echo '<p><a href="' . $url . '?id=' . Vars::$ID . '">' . __('to_topic') . '</a></p>';
 }

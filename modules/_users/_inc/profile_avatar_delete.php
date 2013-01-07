@@ -26,7 +26,7 @@ if (isset($_POST['submit'])
     @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif');
     $tpl->hbar = __('delete_avatar');
     $tpl->message = __('avatar_deleted');
-    $tpl->continue = Vars::$URI . '?act=settings&amp;user=' . $tpl->user['id'];
+    $tpl->continue = Router::getUrl(3) . '?act=settings&amp;user=' . $tpl->user['id'];
     $tpl->contents = $tpl->includeTpl('message', 1);
 } else {
     $tpl->form_token = mt_rand(100, 10000);

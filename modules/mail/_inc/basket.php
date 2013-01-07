@@ -117,7 +117,7 @@ if (Vars::$ID) {
 
                     $tpl->query = $array;
                     $tpl->titleTest = '<div class="phdr">' . __('deleted_message') . '</div>';
-                    $tpl->urlTest = '<p><a href="' . Vars::$URI . '">' . __('mail') .
+                    $tpl->urlTest = '<p><a href="' . Router::getUrl(2) . '">' . __('mail') .
                         '</a></p>';
                     $tpl->total = $total;
                     //Навигация

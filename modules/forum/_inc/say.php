@@ -21,6 +21,8 @@ if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::
     exit;
 }
 
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Вспомогательная Функция обработки ссылок форума
@@ -77,7 +79,7 @@ switch ($type1['type']) {
         */
         if (($type1['edit'] == 1 || $type1['close'] == 1) && Vars::$USER_RIGHTS < 7) {
             // Проверка, закрыта ли тема
-            echo Functions::displayError(__('error_topic_closed'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_topic_closed'), '<a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
             exit;
         }
         $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
@@ -88,7 +90,7 @@ switch ($type1['type']) {
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
-                echo Functions::displayError(__('error_message_short'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
+                echo Functions::displayError(__('error_message_short'), '<a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
                 exit;
             }
             // Проверяем, не повторяется ли сообщение?
@@ -131,15 +133,15 @@ switch ($type1['type']) {
             // Вычисляем, на какую страницу попадает добавляемый пост
             $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'")), 0) / Vars::$USER_SET['page_size']);
             if (isset($_POST['addfiles']))
-                header("Location: " . Vars::$URI . "?id=$fadd&act=addfile");
+                header("Location: " . $url . "?id=$fadd&act=addfile");
             else
-                header("Location: " . Vars::$URI . "?id=" . Vars::$ID . "&page=$page");
+                header("Location: " . $url . "?id=" . Vars::$ID . "&page=$page");
         } else {
             if (!Vars::$USER_DATA['count_forum']) {
                 if (!isset($_GET['yes'])) {
                     echo'<p>' . __('forum_rules_text') . '</p>' .
-                        '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes">' . __('agree') . '</a> | ' .
-                        '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('not_agree') . '</a></p>';
+                        '<p><a href="' . $url . '?act=say&amp;id=' . Vars::$ID . '&amp;yes">' . __('agree') . '</a> | ' .
+                        '<a href="' . $url . '?id=' . Vars::$ID . '">' . __('not_agree') . '</a></p>';
                     exit;
                 }
             }
@@ -152,7 +154,7 @@ switch ($type1['type']) {
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                             'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
                                                                                             'body'   => $msg_pre)) . '</div>';
-            echo '<form name="form" action="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><div class="gmenu">' .
+            echo '<form name="form" action="' . $url . '?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><div class="gmenu">' .
                 '<p><h3>' . __('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
@@ -179,11 +181,11 @@ switch ($type1['type']) {
         $th2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$th'");
         $th1 = mysql_fetch_array($th2);
         if (($th1['edit'] == 1 || $th1['close'] == 1) && Vars::$USER_RIGHTS < 7) {
-            echo Functions::displayError(__('error_topic_closed'), '<a href="' . Vars::$URI . '?id=' . $th1['id'] . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_topic_closed'), '<a href="' . $url . '?id=' . $th1['id'] . '">' . __('back') . '</a>');
             exit;
         }
         if ($type1['user_id'] == Vars::$USER_ID) {
-            echo Functions::displayError('Нельзя отвечать на свое же сообщение', '<a href="' . Vars::$URI . '?id=' . $th1['id'] . '">' . __('back') . '</a>');
+            echo Functions::displayError('Нельзя отвечать на свое же сообщение', '<a href="' . $url . '?id=' . $th1['id'] . '">' . __('back') . '</a>');
             exit;
         }
         $shift = (Vars::$SYSTEM_SET['timeshift'] + Vars::$USER_SET['timeshift']) * 3600;
@@ -225,12 +227,12 @@ switch ($type1['type']) {
         $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
         if (isset($_POST['submit'])) {
             if (empty($_POST['msg'])) {
-                echo Functions::displayError(__('error_empty_message'), '<a href="' . Vars::$URI . '?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . __('repeat') . '</a>');
+                echo Functions::displayError(__('error_empty_message'), '<a href="' . $url . '?act=say&amp;id=' . $th . (isset($_GET['cyt']) ? '&amp;cyt' : '') . '">' . __('repeat') . '</a>');
                 exit;
             }
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
-                echo Functions::displayError(__('error_message_short'), '<a href="' . Vars::$URI . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
+                echo Functions::displayError(__('error_message_short'), '<a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
                 exit;
             }
             // Проверяем, не повторяется ли сообщение?
@@ -238,7 +240,7 @@ switch ($type1['type']) {
             if (mysql_num_rows($req) > 0) {
                 $res = mysql_fetch_array($req);
                 if ($msg == $res['text']) {
-                    echo Functions::displayError(__('error_message_exists'), '<a href="' . Vars::$URI . '?id=' . $th . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
+                    echo Functions::displayError(__('error_message_exists'), '<a href="' . $url . '?id=' . $th . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
                     exit;
                 }
             }
@@ -277,16 +279,16 @@ switch ($type1['type']) {
             $page = $set_forum['upfp'] ? 1 : ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'")), 0) / Vars::$USER_SET['page_size']);
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1) {
-                header("Location: " . Vars::$URI . "?id=$fadd&act=addfile");
+                header("Location: " . $url . "?id=$fadd&act=addfile");
             } else {
-                header("Location: " . Vars::$URI . "?id=$th&page=$page");
+                header("Location: " . $url . "?id=$th&page=$page");
             }
         } else {
             $qt = " $type1[text]";
             if ((Vars::$USER_DATA['count_forum'] == "" || Vars::$USER_DATA['count_forum'] == 0)) {
                 if (!isset($_GET['yes'])) {
                     echo '<p>' . __('forum_rules_text') . '</p>';
-                    echo '<p><a href="' . Vars::$URI . '?act=say&amp;id=' . Vars::$ID . '&amp;yes&amp;cyt">' . __('agree') . '</a> | <a href="' . Vars::$URI . '?id=' . $type1['refid'] . '">' . __('not_agree') . '</a></p>';
+                    echo '<p><a href="' . $url . '?act=say&amp;id=' . Vars::$ID . '&amp;yes&amp;cyt">' . __('agree') . '</a> | <a href="' . $url . '?id=' . $type1['refid'] . '">' . __('not_agree') . '</a></p>';
                     exit;
                 }
             }
@@ -315,7 +317,7 @@ switch ($type1['type']) {
                     '<input type="radio" value="0" ' . (!$txt ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>,<br />' .
                     '<input type="radio" value="2" ' . ($txt == 2 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . __('reply_1') . ',<br />' .
                     '<input type="radio" value="3" ' . ($txt == 3 ? 'checked="checked"'
-                    : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . __('reply_2') . ' (<a href="' . Vars::$URI . '?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . __('reply_3') . ',<br />' .
+                    : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . __('reply_2') . ' (<a href="' . $url . '?act=post&amp;id=' . $type1['id'] . '">' . $vr . '</a>) ' . __('reply_3') . ',<br />' .
                     '<input type="radio" value="4" ' . ($txt == 4 ? 'checked="checked"' : '') . ' name="txt" />&#160;<b>' . $type1['from'] . '</b>, ' . __('reply_4') . '</p>';
             }
             echo '<p><h3>' . __('post') . '</h3>';
@@ -335,5 +337,5 @@ switch ($type1['type']) {
         break;
 
     default:
-        echo Functions::displayError(__('error_topic_deleted'), '<a href="' . Vars::$URI . '">' . __('to_forum') . '</a>');
+        echo Functions::displayError(__('error_topic_deleted'), '<a href="' . $url . '">' . __('to_forum') . '</a>');
 }

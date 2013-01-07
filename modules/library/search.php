@@ -25,12 +25,13 @@ function ReplaceKeywords($search, $text)
 Принимаем данные, выводим форму поиска
 -----------------------------------------------------------------
 */
+$url = Router::getUrl(2);
 $search_post = isset($_POST['search']) ? trim($_POST['search']) : FALSE;
 $search_get = isset($_GET['search']) ? rawurldecode(trim($_GET['search'])) : FALSE;
 $search = $search_post ? $search_post : $search_get;
 $search_t = isset($_REQUEST['t']);
 echo '<div class="phdr"><a href="' . Router::getUrl(2) . '"><b>' . __('library') . '</b></a> | ' . __('search') . '</div>' .
-     '<div class="gmenu"><form action="' . Vars::$URI . '" method="post"><p>' .
+     '<div class="gmenu"><form action="' . $url . '" method="post"><p>' .
      '<input type="text" value="' . ($search ? Validate::checkout($search) : '') . '" name="search" />' .
      '<input type="submit" value="' . __('search') . '" name="submit" /><br />' .
      '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . __('search_name') .
@@ -60,7 +61,7 @@ if ($search && !$error) {
         AND `type` = 'bk'"), 0);
     echo '<div class="phdr">' . __('search_results') . '</div>';
     if ($total > Vars::$USER_SET['page_size'])
-        echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+        echo '<div class="topmenu">' . Functions::displayPagination($url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     if ($total) {
         $req = mysql_query("
             SELECT *, MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
@@ -91,8 +92,8 @@ if ($search && !$error) {
     }
     echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
     if ($total > Vars::$USER_SET['page_size']) {
-        echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-             '<p><form action="' . Vars::$URI . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
+        echo '<div class="topmenu">' . Functions::displayPagination($url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+             '<p><form action="' . $url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '" method="post">' .
              '<input type="text" name="page" size="2"/>' .
              '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
              '</form></p>';
@@ -101,5 +102,5 @@ if ($search && !$error) {
     if ($error) echo Functions::displayError($error);
     echo '<div class="phdr"><small>' . __('search_help') . '</small></div>';
 }
-echo '<p>' . ($search ? '<a href="' . Vars::$URI . '">' . __('search_new') . '</a><br />' : '') .
+echo '<p>' . ($search ? '<a href="' . $url . '">' . __('search_new') . '</a><br />' : '') .
      '<a href="' . Router::getUrl(2) . '">' . __('library') . '</a></p>';

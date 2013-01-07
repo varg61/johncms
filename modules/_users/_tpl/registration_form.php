@@ -7,7 +7,7 @@
         <span class="description error"><b><?= __('errors_occurred') ?></b></span>
     </div>
     <?php endif ?>
-    <form action="<?= Vars::$URI ?>" method="post">
+    <form action="<?= Router::getUrl(3) ?>" method="post">
         <div class="form-block">
             <label for="reg_login"><?= __('nickname') ?></label><br/>
             <?php if (isset($this->error['login'])): ?>

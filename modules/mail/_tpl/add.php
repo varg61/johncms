@@ -30,7 +30,7 @@
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <input type="hidden" name="MAX_FILE_SIZE" value="<?= $this->maxsize ?>"/>
 			<input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('sent') ?>"/>
-			<a class="btn" href="<?= Vars::$URI ?>"><?= __('cancel') ?></a>
+			<a class="btn" href="<?= Router::getUrl(2) ?>"><?= __('cancel') ?></a>
         </div>
     </form>
 </div>

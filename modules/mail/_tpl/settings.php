@@ -10,7 +10,7 @@
             <input type="radio" name="access" value="1" <?= ($this->access == 1 ? 'checked="checked"' : '') ?> id="contact_friends"/> <label for="contact_friends"><?= __('contact_friends') ?></label><br/>
             <input type="radio" name="access" value="2" <?= ($this->access == 2 ? 'checked="checked"' : '') ?> id="only_friends"/> <label for="only_friends"><?= __('only_friends') ?></label><br/><br/>
 			<input class="btn btn-primary btn-large" type="submit" name="submit" value="<?= __('save') ?>"/>
-			<a class="btn" href="<?= Vars::$URI ?>"><?= __('cancel') ?></a>
+			<a class="btn" href="<?= Router::getUrl(2) ?>"><?= __('cancel') ?></a>
         </div>
     </form>
 </div>

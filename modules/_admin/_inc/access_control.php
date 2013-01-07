@@ -10,9 +10,10 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
+$url = Router::getUrl(3);
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUrl(3));
+$form = new Form($url);
 
 $form
     ->fieldsetStart(__('forum'))

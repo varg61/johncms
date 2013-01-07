@@ -49,8 +49,8 @@ function get_top($order = 'count_forum')
 -----------------------------------------------------------------
 */
 $menu = array(
-    (!Vars::$ACT ? '<b>' . __('forum') . '</b>' : '<a href="' . Vars::$URI . '">' . __('forum') . '</a>'),
-    (Vars::$ACT == 'comm' ? '<b>' . __('comments') . '</b>' : '<a href="' . Vars::$URI . '?act=comm">' . __('comments') . '</a>')
+    (!Vars::$ACT ? '<b>' . __('forum') . '</b>' : '<a href="' . Router::getUrl(3) . '">' . __('forum') . '</a>'),
+    (Vars::$ACT == 'comm' ? '<b>' . __('comments') . '</b>' : '<a href="' . Router::getUrl(3) . '?act=comm">' . __('comments') . '</a>')
 );
 
 //TODO: Добавить ТОП Кармы

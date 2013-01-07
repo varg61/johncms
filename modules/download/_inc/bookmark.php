@@ -10,6 +10,8 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Закладки
@@ -28,7 +30,7 @@ $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_bookmark` 
 -----------------------------------------------------------------
 */
 if ($total > Vars::$USER_SET['page_size'])
-	echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=bookmark&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+	echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=bookmark&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 /*
 -----------------------------------------------------------------
 Список закладок
@@ -52,9 +54,9 @@ echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 -----------------------------------------------------------------
 */
 if ($total > Vars::$USER_SET['page_size']) {
-	echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=bookmark&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
- 	'<p><form action="' . Vars::$URI . '" method="get">' .
+	echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=bookmark&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+ 	'<p><form action="' . $url . '" method="get">' .
   	'<input type="hidden" value="bookmark" name="act" />' .
     '<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
 }
-echo '<p><a href="' . Vars::$URI . '">' . __('download_title') . '</a></p>';
+echo '<p><a href="' . $url . '">' . __('download_title') . '</a></p>';

@@ -19,7 +19,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (mysql_result($req, 0) > 0) {
         mysql_query("UPDATE `forum` SET  `vip` = '" . (isset($_GET['vip']) ? '1' : '0') . "' WHERE `id` = " . Vars::$ID);
-        header('Location: ' . Vars::$URI . '?id=' . Vars::$ID);
+        header('Location: ' . Router::getUrl(2) . '?id=' . Vars::$ID);
     } else {
         echo Functions::displayError(__('error_wrong_data'));
         exit;

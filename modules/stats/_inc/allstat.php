@@ -1,10 +1,16 @@
 <?php
 
 /**
- * @author simba
- * @copyright 2011
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2012 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
  */
-defined('_IN_JOHNCMS') or die('Restricted access');
+
+defined('_IN_ADMIN') or die('Error: restricted access');
+$url = Router::getUrl(2);
 
 // Если нужны графики за неделю и по поисковикам, присваиваем переменной $tpl->grafics - TRUE вместо FALSE.
 

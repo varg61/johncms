@@ -141,7 +141,7 @@ class Download extends Vars
             $icon_id = isset(self::$extensions[$format_file]) ? self::$extensions[$format_file] : 9;
 			$out .= Functions::getIcon('filetype-' . $icon_id . '.png') . '&nbsp;';
 		}
-        $out .= '<a href="' . Vars::$URI . '?act=view&amp;id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['field'] . ')';
+        $out .= '<a href="' . Router::getUrl(2) . '?act=view&amp;id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['field'] . ')';
         if ($res_down['time'] > $old) {
             $out .= ' <span class="red">(NEW)</span>';
         }
@@ -158,7 +158,7 @@ class Download extends Vars
             $sub = '<div>' . Validate::checkout($about, 2) . '</div>';
         }
         if (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7) {
-            $sub .= '<a href="' . Vars::$URI . '?act=comments&amp;id=' . $res_down['id'] . '">' . __('comments') . '</a> (' . $res_down['total'] . ')';
+            $sub .= '<a href="' . Router::getUrl(2) . '?act=comments&amp;id=' . $res_down['id'] . '">' . __('comments') . '</a> (' . $res_down['total'] . ')';
         }
         if ($sub) {
             $out .= '<div class="sub">' . $sub . '</div>';
@@ -266,7 +266,8 @@ class Download extends Vars
     public static function downloadLlink($array = array())
     {
         global $set_down, $old;
-        $link = isset($array['more']) ? '&amp;more=' . $array['more'] : '';
+        $url = Router::getUrl(2);
+        $morelink = isset($array['more']) ? '&amp;more=' . $array['more'] : '';
         $out = '<table  width="100%"><tr><td width="16" valign="top">';
         if ($array['format'] == 'jar' && $set_down['icon_java']) {
             $out .= Download::javaIcon($array['res']['dir'] . '/' . $array['res']['name'], (isset($array['more']) ? $array['res']['refid'] . '_' . $array['res']['id'] : $array['res']['id']));
@@ -274,18 +275,18 @@ class Download extends Vars
             $icon_id = isset(self::$extensions[ $array['format']]) ? self::$extensions[ $array['format']] : 9;
 			$out .= Functions::getIcon('filetype-' . $icon_id . '.png') . '&nbsp;';
 		}
-        $out .= '</td><td><a href="' . Vars::$URI . '?act=load_file&amp;id=' . Vars::$ID . $link . '">' . $array['res']['text'] . '</a> (' . Download::displayFileSize((isset($array['res']['size']) ? $array['res']['size'] : filesize($array['res']['dir'] . '/' . $array['res']['name']))) . ')';
+        $out .= '</td><td><a href="' . $url . '?act=load_file&amp;id=' . Vars::$ID . $morelink . '">' . $array['res']['text'] . '</a> (' . Download::displayFileSize((isset($array['res']['size']) ? $array['res']['size'] : filesize($array['res']['dir'] . '/' . $array['res']['name']))) . ')';
         if ($array['res']['time'] > $old) {
             $out .= ' <span class="red">(NEW)</span>';
         }
         $out .= '<div class="sub">' . __('file_time') . ': ' . Functions::displayDate($array['res']['time']);
         if ($array['format'] == 'jar') {
-            $out .= ', <a href="' . Vars::$URI . '?act=jad_file&amp;id=' . Vars::$ID . $link . '">JAD</a>';
+            $out .= ', <a href="' . $url . '?act=jad_file&amp;id=' . Vars::$ID . $morelink . '">JAD</a>';
         } elseif ($array['format'] == 'txt') {
-            $out .= ', <a href="' . Vars::$URI . '?act=txt_in_zip&amp;id=' . Vars::$ID . $link . '">ZIP</a> / <a href="' . Vars::$URI . '?act=txt_in_jar&amp;id=' . Vars::$ID . $link . '">JAR</a>';
+            $out .= ', <a href="' . $url . '?act=txt_in_zip&amp;id=' . Vars::$ID . $morelink . '">ZIP</a> / <a href="' . $url . '?act=txt_in_jar&amp;id=' . Vars::$ID . $morelink . '">JAR</a>';
         } else {
             if ($array['format'] == 'zip') {
-                $out .= ', <a href="' . Vars::$URI . '?act=open_zip&amp;id=' . Vars::$ID . $link . '">' . __('open_archive') . '</a>';
+                $out .= ', <a href="' . $url . '?act=open_zip&amp;id=' . Vars::$ID . $morelink . '">' . __('open_archive') . '</a>';
             }
         }
         $out .= '</div></td></tr></table>';
@@ -342,7 +343,8 @@ class Download extends Vars
     */
     public static function navigation($array = array())
     {
-    	$category = array('<a href="' . Vars::$URI . '"><b>' . __('download_title') . '</b></a>');
+        $url = Router::getUrl(2);
+        $category = array('<a href="' . $url . '"><b>' . __('download_title') . '</b></a>');
         if($array['refid']) {
         	$sql = array();
         	if(!isset($array['count'])) $array['count'] = 1;
@@ -354,7 +356,7 @@ class Download extends Vars
             if($sql) {
 				$req_cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `dir` IN ('" . implode("','", $sql) . "') ORDER BY `id` ASC");
 				while ($res_cat = mysql_fetch_assoc($req_cat)) {
-                	$category[] = '<a href="' . Vars::$URI . '?id=' . $res_cat['id'] . '">' . Validate::checkout($res_cat['rus_name']) . '</a>';
+                	$category[] = '<a href="' . $url . '?id=' . $res_cat['id'] . '">' . Validate::checkout($res_cat['rus_name']) . '</a>';
 				}
 			}
 		}

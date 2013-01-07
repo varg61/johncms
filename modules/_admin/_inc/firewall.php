@@ -10,8 +10,9 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
+$url = Router::getUrl(3);
+$backurl = Router::getUrl(2);
 
-$backLink = Router::getUrl(2);
 $tpl = Template::getInstance();
 $firewall = new Firewall();
 
@@ -21,7 +22,7 @@ $color = Vars::$MOD == 'white' ? 'green' : 'red';
 switch (Vars::$ACT) {
     case 'add':
         // Нижний блок с подсказками
-        echo'<div class="phdr"><a href="' . Vars::$URI . (Vars::$MOD == 'black' ? '' : '?mod=white') . '">' . __('back') . '</a></div>' .
+        echo'<div class="phdr"><a href="' . $url . (Vars::$MOD == 'black' ? '' : '?mod=white') . '">' . __('back') . '</a></div>' .
             '<div class="topmenu"><p>' .
             (Vars::$MOD == 'black'
                 ? '<strong>' . mb_strtoupper(__('black_list')) . ':</strong> ' . __('black_list_help')
@@ -29,7 +30,7 @@ switch (Vars::$ACT) {
             ) .
             '</p>' . (isset($_POST['submit']) ? '' : '<p>' . __('add_ip_help') . '</p>') .
             '</div>' .
-            '<p><a href="' . $backLink . '">' . __('admin_panel') . '</a></p>';
+            '<p><a href="' . $backurl . '">' . __('admin_panel') . '</a></p>';
         break;
 
     case 'clear':
@@ -57,24 +58,24 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $menu = array(
-            ($mod != 'white' ? '<strong>' . __('black_list') . '</strong>' : '<a href="' . Vars::$URI . '?act=firewall">' . __('black_list') . '</a>'),
-            ($mod == 'white' ? '<strong>' . __('white_list') . '</strong>' : '<a href="' . Vars::$URI . '?act=firewall&amp;mod=white">' . __('white_list') . '</a>')
+            ($mod != 'white' ? '<strong>' . __('black_list') . '</strong>' : '<a href="' . $url . '?act=firewall">' . __('black_list') . '</a>'),
+            ($mod == 'white' ? '<strong>' . __('white_list') . '</strong>' : '<a href="' . $url . '?act=firewall&amp;mod=white">' . __('white_list') . '</a>')
         );
-        echo'<div class="phdr"><a href="' . $backLink . '"><b>' . __('admin_panel') . '</b></a> | ' . __('ip_accesslist') . '</div>' .
+        echo'<div class="phdr"><a href="' . $backurl . '"><b>' . __('admin_panel') . '</b></a> | ' . __('ip_accesslist') . '</div>' .
             '<div class="topmenu">' . Functions::displayMenu($menu) . '</div>';
 
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'"), 0);
         Vars::fixPage($total);
 
         if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            echo'<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         }
 
         // Выводим список IP
-        echo'<form action="' . Vars::$URI . '?act=add&amp;mod=' . $mod . '" method="post">' .
+        echo'<form action="' . $url . '?act=add&amp;mod=' . $mod . '" method="post">' .
             '<div class="' . ($mod == 'white' ? 'gmenu' : 'rmenu') . '"><input type="submit" name="delete" value="' . __('add') . '"/></div></form>';
         if ($total) {
-            echo '<form action="' . Vars::$URI . '?act=del&amp;mod=' . $mod . '" method="post">';
+            echo '<form action="' . $url . '?act=del&amp;mod=' . $mod . '" method="post">';
             $req = mysql_query("SELECT `cms_ip_bwlist`.*, `users`.`nickname`
                 FROM `cms_ip_bwlist` LEFT JOIN `users` ON `cms_ip_bwlist`.`user_id` = `users`.`id`
                 WHERE `cms_ip_bwlist`.`mode` = '" . $mod . "'
@@ -106,16 +107,16 @@ switch (Vars::$ACT) {
 
         // Постраничная навигация
         if ($total > Vars::$USER_SET['page_size']) {
-            echo'<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . Vars::$URI . '" method="post">' .
+            echo'<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                '<p><form action="' . $url . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                 '</form></p>';
         }
 
         // Ссылки внизу
-        echo'<p>' . ($total ? '<a href="' . Vars::$URI . '?act=clear&amp;mod=' . $mod . '">' . __('clear_list') . '</a><br />' : '') .
-            '<a href="' . $backLink . '">' . __('admin_panel') . '</a></p>';
+        echo'<p>' . ($total ? '<a href="' . $url . '?act=clear&amp;mod=' . $mod . '">' . __('clear_list') . '</a><br />' : '') .
+            '<a href="' . $backurl . '">' . __('admin_panel') . '</a></p>';
 }
 
 //$tpl->contents = $tpl->includeTpl('firewall');

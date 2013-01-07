@@ -10,13 +10,15 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUrl(2);
+
 /*
 -----------------------------------------------------------------
 Обзор комментариев
 -----------------------------------------------------------------
 */
 if(!Vars::$SYSTEM_SET['mod_down_comm'] && Vars::$USER_RIGHTS < 7) {
-	echo Functions::displayError(__('comments_cloded'), '<a href="' . Vars::$URI . '">' . __('download_title') . '</a>');
+	echo Functions::displayError(__('comments_cloded'), '<a href="' . $url . '">' . __('download_title') . '</a>');
 	exit;
 }
 $textl = __('review_comments');
@@ -34,7 +36,7 @@ if ($total) {
 	-----------------------------------------------------------------
 	*/
 	if ($total > Vars::$USER_SET['page_size'])
-		echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=review_comments&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+		echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=review_comments&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
 	/*
 	-----------------------------------------------------------------
 	Выводим список
@@ -46,7 +48,7 @@ if ($total) {
         $text = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
         $post = Validate::checkout($res['text'], 1, 1);
         if (Vars::$USER_SET['smileys']) $post = Functions::smilies($post, $res['rights'] >= 1 ? 1 : 0);
-        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Validate::checkout($res['rus_name']) . '</a> | <a href="' . Vars::$URI . '?act=comments&amp;id=' . $res['sub_id'] . '">' . __('comments') . '</a>';
+        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Validate::checkout($res['rus_name']) . '</a> | <a href="' . $url . '?act=comments&amp;id=' . $res['sub_id'] . '">' . __('comments') . '</a>';
 		$attributes = unserialize($res['attributes']);
 		$res['nickname'] = $attributes['author_name'];
   		$res['ip'] = $attributes['author_ip'];
@@ -81,9 +83,9 @@ echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 -----------------------------------------------------------------
 */
 if ($total > Vars::$USER_SET['page_size']) {
-	echo '<div class="topmenu">' . Functions::displayPagination(Vars::$URI . '?act=review_comments&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
- 	'<p><form action="' . Vars::$URI . '" method="get">' .
+	echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=review_comments&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+ 	'<p><form action="' . $url . '" method="get">' .
   	'<input type="hidden" value="review_comments" name="act" />' .
     '<input type="text" name="page" size="2"/><input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
 }
-echo '<p><a href="' . Vars::$URI . '">' . __('download_title') . '</a></p>';
+echo '<p><a href="' . $url . '">' . __('download_title') . '</a></p>';
