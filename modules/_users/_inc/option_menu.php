@@ -22,4 +22,4 @@ if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPAR
     $tpl->photo = TRUE;
 }
 
-$tpl->contents = $tpl->includeTpl('settings');
+$tpl->contents = $tpl->includeTpl('option_menu');

@@ -16,4 +16,4 @@ $tpl = Template::getInstance();
 $tpl->url = Router::getUrl(3);
 $tpl->count = new Counters();
 $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
-$tpl->contents = $tpl->includeTpl('assets');
+$tpl->contents = $tpl->includeTpl('user_menu');

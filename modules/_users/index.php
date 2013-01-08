@@ -17,9 +17,9 @@ $admin_actions = array(
 );
 
 $personal_actions = array(
-    'assets'   => 'assets.php',
-    'edit'     => 'edit_profile.php',
-    'settings' => 'settings.php',
+    'menu'   => 'user_menu.php',
+    'edit'   => 'edit_profile.php',
+    'option' => 'option_menu.php',
 );
 
 $common_actions = array(

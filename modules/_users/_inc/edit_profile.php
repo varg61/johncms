@@ -93,7 +93,7 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(3) . 'settings/">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUrl(3) . 'option/">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
