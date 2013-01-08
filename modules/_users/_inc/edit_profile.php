@@ -16,6 +16,8 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
+    ->fieldsetStart(__('profile_edit'))
+
     ->add('text', 'imname', array(
     'label'       => __('name'),
     'value'       => Users::$data['imname'],
@@ -87,7 +89,7 @@ $form
     'value'       => Users::$data['icq'],
     'description' => __('description_icq')))
 
-    ->addHtml('<br/>')
+    ->fieldsetStart()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

@@ -9,7 +9,7 @@
     <li><a href="<?= $this->uri ?>edit/"><i class="icn-edit"></i><?= __('profile_edit') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="#"><i class="icn-edit"></i><?= __('change_photo') ?><i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_SYS['change_status']): ?>
-    <li><a href="<?= $this->url ?>/profile?act=edit_status&amp;user=<?= $this->user['id'] ?>"><i class="icn-edit"></i><?= __('status') ?><i class="icn-arrow"></i></a></li>
+    <li><a href="<?= $this->uri ?>status/"><i class="icn-edit"></i><?= __('status') ?><i class="icn-arrow"></i></a></li>
     <?php endif ?>
 
     <li><h2><?= __('avatar') ?></h2></li>

@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1<?= Users::$data['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= __('settings') ?></h1></li>
+    <li><h1<?= (Users::$data['id'] == Vars::$USER_ID ? ' class="section-personal"' : '') ?>><?= __('settings') ?></h1></li>
 </ul>
 <div class="form-container">
     <?php if (isset($this->save)): ?>

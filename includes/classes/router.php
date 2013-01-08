@@ -77,6 +77,9 @@ class Router extends Vars
             } else {
                 $route = explode('/', trim($_GET['route']));
                 foreach ($route as $key => $val) {
+                    if(empty($val)){
+                        break;
+                    }
                     self::$ROUTE[$key] = trim($val);
                 }
                 unset($route);

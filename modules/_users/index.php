@@ -12,19 +12,16 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('_IN_USERS', 1);
 
-$admin_actions = array(
-    'firewall' => 'firewall.php',
-);
+$admin_actions = array();
 
 $personal_actions = array(
     'menu'   => 'user_menu.php',
     'edit'   => 'edit_profile.php',
     'option' => 'option_menu.php',
+    'status' => 'edit_status.php',
 );
 
-$common_actions = array(
-    'top' => 'top_rating.php',
-);
+$common_actions = array();
 
 if (isset(Router::$ROUTE[1])) {
     if (ctype_digit(Router::$ROUTE[1]) && Router::$ROUTE[1] > 0) {
@@ -58,6 +55,6 @@ if (isset(Router::$ROUTE[1])) {
 if ($include && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include)) {
     require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include);
 } else {
-    echo 'error: ' . $include . ' - ' . Router::$ROUTE[1];
+    echo 'error: ' . $include . ' - ' . Router::$ROUTE[1]; //TODO: Убрать!
     //header('Location: ' . Vars::$HOME_URL . '/404');
 }
