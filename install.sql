@@ -276,6 +276,7 @@ INSERT INTO `cms_modules` (`module`, `path`) VALUES
 ('friends', 'friends'),
 ('guestbook', 'guestbook'),
 ('help', 'help'),
+('homepage', 'homepage'),
 ('language', 'language'),
 ('library', 'library'),
 ('mail', 'mail'),

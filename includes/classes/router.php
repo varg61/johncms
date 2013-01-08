@@ -13,8 +13,6 @@ class Router extends Vars
 {
     public static $ROUTE = array();
     public static $PATH;
-    private $module;  //TODO: Удалить
-    private $uri = ''; //TODO: Удалить
 
     /**
      * Обрабатываем основную последовательность маршрутизации
@@ -135,7 +133,6 @@ class Router extends Vars
         if (mysql_num_rows($req)) {
             $res = mysql_fetch_assoc($req);
             self::$PATH = $res['path'];
-            $this->module = $res; //TODO: Убрать
             return TRUE;
         }
 
