@@ -32,7 +32,7 @@ $whiteList = array(
     './assets/misc/rating.php',
     './assets/misc/thumbinal.php',
     './assets/misc/vote_img.php',
-    './assets/smileys/index.php',
+    './assets/smilies/index.php',
     './assets/template/modules/message.php',
     './assets/template/modules/template.php',
     './assets/template/modules/toolbar-bottom.php',

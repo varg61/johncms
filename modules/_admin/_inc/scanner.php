@@ -70,7 +70,7 @@ if ($form->isSubmitted) {
             // Сканируем на соответствие ранее созданному снимку
             $scanner->snapscan();
             if (count($scanner->track_files) == 0) {
-                $tpl->bad = __('antispy_no_snapshot');
+                $tpl->errormsg = __('antispy_no_snapshot');
             } else {
                 if (count($scanner->bad_files)) {
                     $tpl->files = $scanner->bad_files;
