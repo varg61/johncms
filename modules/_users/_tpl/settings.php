@@ -1,10 +1,12 @@
 <ul class="nav">
-    <li><h1<?= $this->user['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= __('settings') ?></h1></li>
+    <li><h1<?= Users::$data['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= __('settings') ?></h1></li>
 </ul>
-<div class="user-block"><?= Functions::displayUser($this->user) ?></div>
+<div class="user-block">
+    <?= Functions::displayUser(Users::$data) ?>
+</div>
 <ul class="nav">
     <li><h2><?= __('profile') ?></h2></li>
-    <li><a href="<?= $this->url ?>/profile?act=edit&amp;user=<?= $this->user['id'] ?>"><i class="icn-edit"></i><?= __('profile_edit') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= $this->uri ?>edit/"><i class="icn-edit"></i><?= __('profile_edit') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="#"><i class="icn-edit"></i><?= __('change_photo') ?><i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_SYS['change_status']): ?>
     <li><a href="<?= $this->url ?>/profile?act=edit_status&amp;user=<?= $this->user['id'] ?>"><i class="icn-edit"></i><?= __('status') ?><i class="icn-arrow"></i></a></li>

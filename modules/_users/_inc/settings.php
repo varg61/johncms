@@ -9,12 +9,17 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_PROFILE') or die('Error: restricted access');
+defined('_IN_USERS') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
+$tpl->uri = Router::getUrl(3);
 
-$tpl->url = Router::getUrl(2);
 if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '.gif')) {
     $tpl->avatar = TRUE;
 }
-$tpl->contents = $tpl->includeTpl('profile_settings');
+
+if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'photo' . DIRECTORY_SEPARATOR . $tpl->user['id'] . '_small.jpg')) {
+    $tpl->photo = TRUE;
+}
+
+$tpl->contents = $tpl->includeTpl('settings');

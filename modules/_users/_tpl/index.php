@@ -7,5 +7,4 @@
     <li><h2><?= __('rating') ?></h2></li>
     <li><a href="<?= $this->link ?>/top"><i class="icn-chart"></i><?= __('forum') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= $this->link ?>/top?act=comm"><i class="icn-chart"></i><?= __('comments') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= $this->link ?>/top?act=karma"><i class="icn-chart"></i><?= __('karma') ?><i class="icn-arrow right"></i></a></li>
 </ul>

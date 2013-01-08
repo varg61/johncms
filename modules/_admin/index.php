@@ -44,7 +44,7 @@ if (Vars::$USER_RIGHTS >= 2) {
             $include = FALSE;
         }
     } else {
-        $include = 'mainmenu.php';
+        $include = 'index.php';
     }
 
     if ($include && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include)) {

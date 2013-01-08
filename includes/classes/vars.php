@@ -115,7 +115,7 @@ abstract class Vars
     Получаем данные пользователя
     -----------------------------------------------------------------
     */
-    public static function getUser()
+    public static function getUser($id)
     {
         if (!Vars::$USER_ID && !self::$USER) {
             return FALSE;

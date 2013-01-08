@@ -3,7 +3,7 @@
 </ul>
 <div class="user-block"><?= Functions::displayUser(Vars::$USER_DATA) ?></div>
 <ul class="nav">
-    <li><a href="<?= $this->url ?>/profile"><i class="icn-man"></i><?= __('my_profile') ?><i class="icn-arrow"></i></a></li>
+    <li><a href="<?= $this->url ?>"><i class="icn-man"></i><?= __('my_profile') ?><i class="icn-arrow"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>/album?act=list"><i class="icn-image"></i><?= __('photo_album') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->total_photo ?></span></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>/profile?act=guestbook"><i class="icn-dialogue"></i><?= __('guestbook') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Vars::$USER_DATA['comm_count'] ?></span></a></li>
 
@@ -18,6 +18,6 @@
     <?php endif ?>
 
     <li><h2><?= __('settings') ?></h2></li>
-    <li><a href="<?= $this->url ?>/profile?act=settings"><i class="icn-settings"></i><?= __('settings') ?><i class="icn-arrow"></i></a></li>
+    <li><a href="<?= $this->url ?>settings/"><i class="icn-settings"></i><?= __('settings') ?><i class="icn-arrow"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>/users/exit"><i class="icn-exit"></i><?= __('exit') ?><i class="icn-arrow"></i></a></li>
 </ul>
