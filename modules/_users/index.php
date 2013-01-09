@@ -19,6 +19,7 @@ $personal_actions = array(
     'edit'   => 'edit_profile.php',
     'option' => 'option_menu.php',
     'status' => 'edit_status.php',
+    'avatar' => 'upload_avatar.php',
 );
 
 $common_actions = array();
@@ -56,5 +57,5 @@ if ($include && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' .
     require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include);
 } else {
     echo 'error: ' . $include . ' - ' . Router::$ROUTE[1]; //TODO: Убрать!
-    //header('Location: ' . Vars::$HOME_URL . '/404');
+    //header('Location: ' . Vars::$HOME_URL . '404');
 }

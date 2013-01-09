@@ -25,7 +25,7 @@ if (Vars::$ID) {
         if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res['filename'])) {
             $dlcount = $res['dlcount'] + 1;
             mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '$dlcount' WHERE `id` = " . Vars::$ID);
-            header('location: ' . Vars::$HOME_URL . '/files/forum/' . $res['filename']);
+            header('location: ' . Vars::$HOME_URL . 'files/forum/' . $res['filename']);
         } else {
             $error = true;
         }

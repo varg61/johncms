@@ -16,6 +16,6 @@
     <? endif ?>
 <? endif ?>
 <p>
-    <a href="<?= Vars::$HOME_URL ?>/mail"><?= __('mail') ?></a><br/>
+    <a href="<?= Vars::$HOME_URL ?>mail/"><?= __('mail') ?></a><br/>
     <a href="<?= Router::getUrl(2) ?>"><?= __('contacts') ?></a>
 </p>

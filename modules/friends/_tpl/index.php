@@ -10,6 +10,7 @@
 <?php if ($this->total): ?>
 <?php foreach ($this->query as $row): ?>
     <div class="<?= $row['list'] ?>">
+<!--   //TODO: Переделать ссылку     -->
         <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] ?></a><?= $row['online'] ?>
         <div class="sub">
             <a href="<?= Router::getUrl(2) ?>?act=delete&amp;id=<?= $row['id']?>"><?= __('delete') ?></a>

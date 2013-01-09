@@ -55,7 +55,7 @@ class Captcha
         // Показываем картинку CAPTCHA
         $_SESSION['captcha'] = $code;
         $input = $input_field ? '<br /><input type="text" id="captcha" class="small" size="' . self::$lenght_max . '" maxlength="' . self::$lenght_max . '"  name="captcha"/>&#160;' . __('captcha') : '';
-        return '<img width="' . self::$width . '" height="' . self::$height . '" alt="' . __('captcha_help') . '" src="' . Vars::$HOME_URL . '/files/temp/' . $img_file . '" border="1"/>' . $input;
+        return '<img width="' . self::$width . '" height="' . self::$height . '" alt="' . __('captcha_help') . '" src="' . Vars::$HOME_URL . 'files/temp/' . $img_file . '" border="1"/>' . $input;
     }
 
     /*

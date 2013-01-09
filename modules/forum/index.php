@@ -441,7 +441,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
                             $count_vote = $topic_vote['count'] ? round(100 / $topic_vote['count'] * $vote['count']) : 0;
                             echo Validate::checkout($vote['name'], 0, 1) . ' [' . $vote['count'] . ']<br />';
-                            echo '<img src="' . Vars::$HOME_URL . '/assets/misc/vote_img.php?img=' . $count_vote . '" alt="' . __('rating') . ': ' . $count_vote . '%" /><br />';
+                            echo '<img src="' . Vars::$HOME_URL . 'assets/misc/vote_img.php?img=' . $count_vote . '" alt="' . __('rating') . ': ' . $count_vote . '%" /><br />';
                         }
                         echo '</small></div><div class="bmenu">' . __('total_votes') . ': ';
                         if (Vars::$USER_RIGHTS > 6) {
@@ -541,7 +541,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     if (Vars::$USER_SET['avatar']) {
                         echo '<table cellpadding="0" cellspacing="0"><tr><td>';
                         if (file_exists((ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $res['user_id'] . '.gif'))) {
-                            echo '<img src="' . Vars::$HOME_URL . '/files/users/avatar/' . $res['user_id'] . '.gif" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
+                            echo '<img src="' . Vars::$HOME_URL . 'files/users/avatar/' . $res['user_id'] . '.gif" width="32" height="32" alt="' . $res['from'] . '" />&#160;';
                         } else {
                             echo Functions::getImage('empty.png', $res['from']) . '&#160;';
                         }
@@ -638,7 +638,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         );
                         if (in_array($att_ext, $pic_ext)) {
                             echo '<div><a href="' . $url . '?act=file&amp;id=' . $fres['id'] . '">';
-                            echo '<img src="' . Vars::$HOME_URL . '/assets/misc/forum_thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . __('click_to_view') . '" /></a></div>';
+                            echo '<img src="' . Vars::$HOME_URL . 'assets/misc/forum_thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . __('click_to_view') . '" /></a></div>';
                         } else {
                             echo '<br /><a href="' . $url . '?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
                         }
@@ -664,10 +664,12 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         }
                         if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                             if ($res['ip_via_proxy']) {
+                                //TODO: Переделать ссылку
                                 echo '<div class="gray"><b class="red"><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a></b> - ' .
                                     '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($res['ip_via_proxy']) . '">' . long2ip($res['ip_via_proxy']) . '</a>' .
                                     ' - ' . $res['soft'] . '</div>';
                             } else {
+                                //TODO: Переделать ссылку
                                 echo '<div class="gray"><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a> - ' . $res['soft'] . '</div>';
                             }
                         }

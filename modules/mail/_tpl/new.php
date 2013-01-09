@@ -22,5 +22,5 @@
 <? endif ?>
 <p>
     <a href="<?= Router::getUrl(2) ?>"><?= __('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
+    <a href="<?= Vars::$HOME_URL ?>contacts/"><?= __('contacts') ?></a>
 </p>

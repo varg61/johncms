@@ -1,6 +1,7 @@
 <p>
     <a href="<?= $this->link ?>?act=messages&amp;id=<?= $this->user_id ?>"><?= __('answer') ?></a>
 </p>
+<!-- //TODO: Переделать ссылку -->
 <div class="phdr"><?= $this->pref ?>: <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $this->user_id ?>"><?= $this->contact_login ?></a> (<?= $this->time_message ?>)</div>
 <div class="list1">
     <?= $this->text ?>
@@ -21,6 +22,6 @@
 </div>
 </p>
 <p>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a><br/>
+    <a href="<?= Vars::$HOME_URL ?>contacts/"><?= __('contacts') ?></a><br/>
     <a href="<?= $this->link ?>"><?= __('mail') ?></a>
 </p>

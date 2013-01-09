@@ -174,7 +174,7 @@ if (!isset($_GET['file'])) {
         */
         $NewNameFile = strtr(Download::translateFileName(mb_strtolower($FileName)), array(' ' => '_', '@' => '', '%' => ''));
         if (file_exists(ROOTPATH . 'files/download/temp/open_zip/' . $NewNameFile)) {
-            header('Location: ' . Vars::$HOME_URL . '/files/download/temp/open_zip/' . $NewNameFile);
+            header('Location: ' . Vars::$HOME_URL . 'files/download/temp/open_zip/' . $NewNameFile);
             exit;
         }
         $dir = @fopen(ROOTPATH . 'files/download/temp/open_zip/' . $NewNameFile, "wb");
@@ -184,7 +184,7 @@ if (!isset($_GET['file'])) {
                 flock($dir, LOCK_UN);
             }
             fclose($dir);
-            header('Location: ' . Vars::$HOME_URL . '/files/download/temp/open_zip/' . $NewNameFile);
+            header('Location: ' . Vars::$HOME_URL . 'files/download/temp/open_zip/' . $NewNameFile);
             exit;
         } else  echo functions::displayError(__('error_file_save'));
     }

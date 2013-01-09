@@ -9,7 +9,7 @@
         <label><?= __('personal_data') ?></label>
         <ul>
             <?php if (file_exists('../files/users/photo/' . $this->user['id'] . '_small.jpg')) : ?>
-            <a href="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>.jpg"><img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="<?= $this->user['nickname'] ?>" border="0"/></a>
+            <a href="<?= Vars::$HOME_URL ?>files/users/photo/<?= $this->user['id'] ?>.jpg"><img src="<?= Vars::$HOME_URL ?>files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="<?= $this->user['nickname'] ?>" border="0"/></a>
             <?php endif; ?>
             <?php if (Vars::$USER_RIGHTS && !$this->user['level']) : ?>
             <li><?= __('awaiting_registration') ?></li>

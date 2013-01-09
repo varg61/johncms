@@ -15,7 +15,7 @@ define ('_IN_JOHNCMS_MAIL', 1);
 
 //Закрываем доступ гостям
 if (!Vars::$USER_ID) {
-    Header('Location: ' . Vars::$HOME_URL . '/404');
+    Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
 define('MAILDIR', 'mail'); //Папка с модулем

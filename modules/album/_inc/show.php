@@ -108,7 +108,7 @@ if ($total) {
                 );
                 echo '<span class="green"><b>' . __('photo_profile_ok') . '</b></span><br />';
             }
-            echo '<a href="' . $_SESSION['ref'] . '"><img src="' . Vars::$HOME_URL . '/assets/misc/album_image.php?u=' . $user['id'] . '&amp;f=' . $res['img_name'] . '" /></a>';
+            echo '<a href="' . $_SESSION['ref'] . '"><img src="' . Vars::$HOME_URL . 'assets/misc/album_image.php?u=' . $user['id'] . '&amp;f=' . $res['img_name'] . '" /></a>';
             // Счетчик просмотров
             if (!mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_views` WHERE `user_id` = '" . Vars::$USER_ID . "' AND `file_id` = '" . $res['id'] . "'"), 0)) {
                 mysql_query("INSERT INTO `cms_album_views` SET `user_id` = '" . Vars::$USER_ID . "', `file_id` = '" . $res['id'] . "', `time` = '" . time() . "'");
@@ -121,7 +121,7 @@ if ($total) {
             Предпросмотр изображения в списке
             -----------------------------------------------------------------
             */
-            echo '<a href="' . $url . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
+            echo '<a href="' . $url . '?act=show&amp;al=' . $al . '&amp;img=' . $res['id'] . '&amp;user=' . $user['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . 'files/users/album/' . $user['id'] . '/' . $res['tmb_name'] . '" /></a>';
         }
         if (!empty($res['description']))
             echo '<div class="gray">' . Functions::smilies(Validate::checkout($res['description'], 1)) . '</div>';

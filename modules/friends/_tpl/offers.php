@@ -9,6 +9,7 @@
 <?php if ($this->total): ?>
 <?php foreach ($this->query as $row): ?>
     <div class="<?= $row['list'] ?>">
+<!--   //TODO: Переделать ссылку     -->
         <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] ?></a>
         <div class="sub">
             <a href="<?= Router::getUrl(2) ?>?act=ok&amp;id=<?= $row['id']?>"><?= __('confirm') ?></a> | <a href="<?= Router::getUrl(2) ?>?act=no&amp;id=<?= $row['id']?>"><?= __('decline') ?></a>

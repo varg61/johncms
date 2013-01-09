@@ -87,5 +87,5 @@ if (Vars::$USER_RIGHTS > 6 ) {
 	}
 	echo '<p><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';
 } else {
-    header('Location: ' . Vars::$HOME_URL . '/404');
+    header('Location: ' . Vars::$HOME_URL . '404');
 }

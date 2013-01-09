@@ -44,7 +44,7 @@ if (mysql_num_rows($req_obj)) {
     }
     $context_top = '<div class="phdr"><a href="' . $url . '"><b>' . __('photo_albums') . '</b></a> | ' .
         '<a href="' . $url . '?act=list&amp;user=' . $owner['id'] . '">' . __('personal_2') . '</a></div>' .
-        '<div class="menu"><a href="' . $url . '?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . '/files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
+        '<div class="menu"><a href="' . $url . '?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . 'files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
     if (!empty($res_obj['description']))
         $context_top .= '<div class="gray">' . Functions::smilies(Validate::checkout($res_obj['description'], 1)) . '</div>';
     $context_top .= '<div class="sub">' .

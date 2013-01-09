@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 defined('_IN_JOHNCMS_CONTACTS') or die('Error: restricted access');
 //Закрываем доступ гостям
 if (!Vars::$USER_ID) {
-    Header('Location: ' . Vars::$HOME_URL . '/404');
+    Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
 
@@ -86,10 +86,12 @@ if (Vars::$ID) {
 								AND `contact_id` IN (" . $id . ")");
                             }
 
+                            //TODO: Переделать ссылку
                             Header('Location: ' . Vars::$HOME_URL . '/profile?user=' . Vars::
                             $ID);
                             exit;
                         }
+                        //TODO: Переделать ссылку
                         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                         $tpl->urlSelect = $backLink . '?act=select&amp;mod=contact&amp;id=' .
                             Vars::$ID;
@@ -163,10 +165,12 @@ if (Vars::$ID) {
 								`contact_id`='" . Vars::$ID . "',
 								`time`='" . time() . "'");
                             }
+                            //TODO: Переделать ссылку
                             Header('Location: ' . Vars::$HOME_URL . '/profile?user=' . Vars::
                             $ID);
                             exit;
                         }
+                        //TODO: Переделать ссылку
                         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                         $tpl->urlSelect = $backLink . '?act=select&amp;mod=contact&amp;id=' .
                             Vars::$ID;
@@ -193,9 +197,11 @@ if (Vars::$ID) {
 						`banned`='0' 
 						WHERE `user_id`='" . Vars::$USER_ID . "' 
 						AND `contact_id`=" . Vars::$ID);
+                        //TODO: Переделать ссылку
                         Header('Location: ' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID);
                         exit;
                     }
+                    //TODO: Переделать ссылку
                     $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                     $tpl->urlSelect = $backLink . '?act=select&amp;mod=banned&amp;id=' . Vars::
                     $ID;
@@ -227,9 +233,11 @@ if (Vars::$ID) {
 								`banned`='1'");
 
                             }
+                            //TODO: Переделать ссылку
                             Header('Location: ' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID);
                             exit;
                         }
+                        //TODO: Переделать ссылку
                         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
                         $tpl->urlSelect = $backLink . '?act=select&amp;mod=banned&amp;id=' . Vars::$ID;
                         $tpl->select = __('confirm_ban_contact');

@@ -59,9 +59,9 @@
 
 <?php if($this->grafics): ?>
 <div class="bmenu"><h3><?= __('grafics')?></h3>
-<img src="<?= Vars::$HOME_URL ?>/files/temp/stat_we_host.png" alt="loading..."/><br/>
+<img src="<?= Vars::$HOME_URL ?>files/temp/stat_we_host.png" alt="loading..."/><br/>
 <h4><?= __('search_traffic')?></h4>
-<img src="<?= Vars::$HOME_URL ?>/files/temp/stat_we_se.png" alt="loading..."/>
+<img src="<?= Vars::$HOME_URL ?>files/temp/stat_we_se.png" alt="loading..."/>
 </div>
     <? endif ?>
     

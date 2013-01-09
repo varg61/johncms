@@ -32,7 +32,7 @@ if (isset(Router::$ROUTE[1])) {
     } elseif (isset($catalog[Router::$ROUTE[1]])) {
         $include = 'list.php';
     } else {
-        header('Location: ' . Vars::$HOME_URL . '/404');
+        header('Location: ' . Vars::$HOME_URL . '404');
     }
 } else {
     $include = 'catalog.php';
@@ -41,5 +41,5 @@ if (isset(Router::$ROUTE[1])) {
 if ($include && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include)) {
     require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include);
 } else {
-    header('Location: ' . Vars::$HOME_URL . '/404');
+    header('Location: ' . Vars::$HOME_URL . '404');
 }

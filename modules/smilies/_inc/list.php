@@ -38,7 +38,7 @@ if ($total) {
         if (Vars::$USER_ID && !Vars::$IS_MOBILE) {
             echo (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
         }
-        echo '<img src="' . Vars::$HOME_URL . '/assets/smilies/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . __('lng_or') . ' :' . Functions::translit($smile) . ':' .
+        echo '<img src="' . Vars::$HOME_URL . 'assets/smilies/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . __('lng_or') . ' :' . Functions::translit($smile) . ':' .
             '</div>';
     }
     if (Vars::$USER_ID && !Vars::$IS_MOBILE) {

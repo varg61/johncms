@@ -2,15 +2,15 @@
     <li><h1 class="section-warning"><?= __('admin_panel') ?></h1></li>
 
     <li><h2><?= __('community') ?></h2></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/users/search/"><i class="icn-man-woman"></i><?= __('users') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->usrTotal ?></span></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>users/search/"><i class="icn-man-woman"></i><?= __('users') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->usrTotal ?></span></a></li>
 
     <?php if (Vars::$USER_RIGHTS >= 7) : ?>
     <li><a href="<?= $this->uri ?>"><i class="icn-user-add"></i><?= __('users_reg') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->regTotal ?></span></a></li>
     <li><a href="<?= $this->uri ?>users_settings/"><i class="icn-settings"></i><?= __('settings') ?><i class="icn-arrow right"></i></a></li>
     <li><h2><?= __('modules') ?></h2></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/forum/admin/"><i class="icn-comments"></i><?= __('forum') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/download/admin/"><i class="icn-download"></i><?= __('downloads') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/news/admin/"><i class="icn-news"></i><?= __('news') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>forum/admin/"><i class="icn-comments"></i><?= __('forum') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>download/admin/"><i class="icn-download"></i><?= __('downloads') ?><i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>news/admin/"><i class="icn-news"></i><?= __('news') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= $this->uri ?>links/"><i class="icn-flower"></i><?= __('advertisement') ?><i class="icn-arrow right"></i></a></li>
         <?php if (Vars::$USER_RIGHTS == 9): ?>
         <li><a href="<?= $this->uri ?>counters/"><i class="icn-meter"></i><?= __('counters') ?><i class="icn-arrow right"></i></a></li>

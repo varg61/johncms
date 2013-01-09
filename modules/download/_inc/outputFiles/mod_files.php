@@ -61,5 +61,5 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     }
     echo '<p><a href="' . $url . '">' . __('download_title') . '</a></p>';
 } else {
-    header('Location: ' . Vars::$HOME_URL . '/404');
+    header('Location: ' . Vars::$HOME_URL . '404');
 }

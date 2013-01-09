@@ -49,14 +49,14 @@ if (Vars::$ID) {
             $tpl->link = $backLink;
             $tpl->contents = $tpl->includeTpl('read');
         } else {
-            $tpl->contents = Functions::displayError(__('page_does_not_exist'), '<a href="' . Vars::$HOME_URL . '/contacts">' . __('contacts') . '</a><br />
+            $tpl->contents = Functions::displayError(__('page_does_not_exist'), '<a href="' . Vars::$HOME_URL . 'contacts/">' . __('contacts') . '</a><br />
 			<a href="' . $backLink . '">' . __('mail') . '</a>');
         }
     } else {
-        $tpl->contents = Functions::displayError(__('page_does_not_exist'), '<a href="' . Vars::$HOME_URL . '/contacts">' . __('contacts') . '</a><br />
+        $tpl->contents = Functions::displayError(__('page_does_not_exist'), '<a href="' . Vars::$HOME_URL . 'contacts/">' . __('contacts') . '</a><br />
 		<a href="' . $backLink . '">' . __('mail') . '</a>');
     }
 } else {
-    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . Vars::$HOME_URL . '/contacts">' . __('contacts') . '</a><br />
+    $tpl->contents = Functions::displayError(__('message_no_select'), '<a href="' . Vars::$HOME_URL . 'contacts/">' . __('contacts') . '</a><br />
 	<a href="' . $backLink . '">' . __('mail') . '</a>');
 }

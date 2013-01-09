@@ -51,7 +51,7 @@ switch (Vars::$ACT) {
             } else {
                 echo'<div class="phdr"><a href="' . $url . '"><b>' . __('avatars') . '</b></a> | ' . __('set_to_profile') . '</div>' .
                     '<div class="rmenu"><p>' . __('avatar_change_warning') . '</p>' .
-                    '<p><img src="' . Vars::$HOME_URL . '/assets/avatars/' . $cat . '/' . $select . '" alt="" /></p>' .
+                    '<p><img src="' . Vars::$HOME_URL . 'assets/avatars/' . $cat . '/' . $select . '" alt="" /></p>' .
                     '<p><form action="' . $url . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode($select) . '" method="post">' .
                     '<input type="submit" name="submit" value="' . __('save') . '"/>' .
                     '</form></p>' .
@@ -79,7 +79,7 @@ switch (Vars::$ACT) {
         if ($tpl->total) {
             for ($i = Vars::$START; $i < $end; $i++) {
                 $list_avatars[$i] = array(
-                    'image' => Vars::$HOME_URL . '/assets/avatars/' . $cat . '/' . basename($avatars[$i]),
+                    'image' => Vars::$HOME_URL . 'assets/avatars/' . $cat . '/' . basename($avatars[$i]),
                     'link'  => (Vars::$USER_ID ? $url . '?act=avset&amp;cat=' . urlencode($cat) . '&amp;select=' . urlencode(basename($avatars[$i])) : '#')
                 );
             }
@@ -105,7 +105,7 @@ switch (Vars::$ACT) {
         Выводим каталог Аватаров
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . Vars::$HOME_URL . '/help"><b>F.A.Q.</b></a> | ' . __('avatars') . '</div>';
+        echo '<div class="phdr"><a href="' . Vars::$HOME_URL . 'help/"><b>F.A.Q.</b></a> | ' . __('avatars') . '</div>';
         asort($avatar_cat);
         $i = 0;
         $list_categories = array();

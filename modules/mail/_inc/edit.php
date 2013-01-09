@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 defined('_IN_JOHNCMS_MAIL') or die('Error: restricted access');
 //Закрываем доступ гостям
 if (!Vars::$USER_ID) {
-    Header('Location: ' . Vars::$HOME_URL . '/404');
+    Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
 

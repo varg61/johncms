@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 defined('_IN_JOHNCMS_FRIENDS') or die('Error: restricted access');
 //Закрываем доступ гостям
 if (!Vars::$USER_ID) {
-    Header('Location: ' . Vars::$HOME_URL . '/404');
+    Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
 $fr = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . Vars::$ID . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'))"), 0);
@@ -23,6 +23,7 @@ if ($fr != 2) {
         $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'"), 0);
         if ($fr_out == 0) {
             echo functions::displayError(__('error_wrong_data'));
+            //TODO: Переделать ссылку
             echo '<div class="bmenu"><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></div>';
             exit;
         }
@@ -51,7 +52,7 @@ if ($fr != 2) {
         //`them` = '" . lng('friendship') . "'");
         //$text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=no&id=' . $id . ']' . $lng_profile['decline'] . '[/url]';
         //mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
-
+        //TODO: Переделать ссылку
         $tpl->contents = '<div class="rmenu"><p>' . __('demands_confirm') . '</p>
         <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></p></div>';
     } else {
@@ -59,6 +60,7 @@ if ($fr != 2) {
         $tpl->select = __('really_demand_confirm');
         $tpl->submit = __('confirm');
         $tpl->phdr = __('demand_confirm');
+        //TODO: Переделать ссылку
         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;

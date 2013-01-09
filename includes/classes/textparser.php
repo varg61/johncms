@@ -154,7 +154,7 @@ class TextParser
                     case 2:
                         $text = $short_url;
                         if (!isset(Vars::$USER_SET['direct_url']) || !Vars::$USER_SET['direct_url']) {
-                            $url = Vars::$HOME_URL . '/redirect?url=' . rawurlencode($url);
+                            $url = Vars::$HOME_URL . 'redirect?url=' . rawurlencode($url);
                         }
                         break;
 
@@ -162,7 +162,7 @@ class TextParser
                         $url = 'http://' . $url;
                         $text = $short_url;
                         if (!isset(Vars::$USER_SET['direct_url']) || !Vars::$USER_SET['direct_url']) {
-                            $url = Vars::$HOME_URL . '/redirect?url=' . rawurlencode($url);
+                            $url = Vars::$HOME_URL . 'redirect?url=' . rawurlencode($url);
                         }
                         break;
 
@@ -185,6 +185,7 @@ class TextParser
             $url_match = $url_replace = array();
 
             // Обработка внутренние ссылки
+            //TODO: Разобраться со слэшами ссылок
             $url_match[] = '#(^|[\n\t (>.])(' . preg_quote(Vars::$HOME_URL, '#') . ')/((?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})*(?:/(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@|]+|%[\dA-F]{2})*)*(?:\?(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?(?:\#(?:[a-zа-яё0-9\-._~!$&\'(*+,;=:@/?|]+|%[\dA-F]{2})*)?)#ieu';
             $url_replace[] = "url_callback(1, '\$1', '\$2', '\$3')";
 
@@ -284,12 +285,12 @@ class TextParser
         if (($smileys = Vars::getUserData('smileys')) === FALSE) $smileys = array();
         if (!empty($smileys)) {
             $res_sm = '';
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys?act=my_smileys">' . __('edit_list') . '</a></small><br />';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . 'smilies/mysmilies/">' . __('edit_list') . '</a></small><br />';
             foreach ($smileys as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\');">:' . $value . ':</a> ';
             $bb_smileys .= Functions::smilies($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . '/smileys">' . __('add_smileys') . '</a></small>';
+            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . 'smilies/">' . __('add_smileys') . '</a></small>';
         }
 
         $menu = array(

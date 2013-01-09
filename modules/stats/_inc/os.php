@@ -53,7 +53,7 @@ if (array_sum($os)) {
     $Test->drawPieLegend(150, 8, $DataSet->GetData(), $DataSet->GetDataDescription(), 250, 250, 250);
     $Test->Render('files/temp/stat_os.png');
 
-    echo'<div class="menu"><img src="' . Vars::$HOME_URL . '/files/temp/stat_os.png" alt="loading..."/></div>';
+    echo'<div class="menu"><img src="' . Vars::$HOME_URL . 'files/temp/stat_os.png" alt="loading..."/></div>';
 
     echo '<div class="gmenu"><h3>' . __('details') . '</h3>';
 

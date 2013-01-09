@@ -73,7 +73,7 @@ MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
-MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar';
+MIDlet-Jar-URL: ' . Vars::$HOME_URL . 'files/library/' . Vars::$ID . '.jar';
         $files = fopen(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jad', 'w+');
         flock($files, LOCK_EX);
         fputs($files, $jad_text);
@@ -82,7 +82,7 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar';
     }
     echo __('download_java_help') . '<br /><br />' .
          __('title') . ': ' . Validate::checkout($res['name']) . '<br />' .
-         __('download') . ': <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="' . Vars::$HOME_URL . '/files/library/' . Vars::$ID . '.jad">JAD</a>' .
+         __('download') . ': <a href="' . Vars::$HOME_URL . 'files/library/' . Vars::$ID . '.jar">JAR</a> | <a href="' . Vars::$HOME_URL . 'files/library/' . Vars::$ID . '.jad">JAD</a>' .
          '<p><a href="' . Router::getUrl(2) . '?id=' . Vars::$ID . '">' . __('to_article') . '</a></p>';
 } else {
     echo '<p>' . __('access_guest_forbidden') . '</p>' .

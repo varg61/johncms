@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 /*
 -----------------------------------------------------------------
-Скачка файла
+пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 -----------------------------------------------------------------
 */
 $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
@@ -33,7 +33,7 @@ if ($more) {
     }
 }
 if ($error) {
-    header('Location: ' . Vars::$HOME_URL . '/404');
+    header('Location: ' . Vars::$HOME_URL . '404');
 } else {
     if (!isset($_SESSION['down_' . VARS::$ID])) {
         mysql_query("UPDATE `cms_download_files` SET `field`=`field`+1 WHERE `id`=" . VARS::$ID);

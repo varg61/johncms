@@ -34,7 +34,7 @@ echo'<div class="phdr">'.__('phones_browsers').'</div>';
         $phones[] = $result_array[0];
         }    
 
-  	echo'<div class="menu"><img src="' . Vars::$HOME_URL . '/files/temp/stat_model.png" alt="loading..."/></div>';
+  	echo'<div class="menu"><img src="' . Vars::$HOME_URL . 'files/temp/stat_model.png" alt="loading..."/></div>';
     echo '<div class="gmenu"><h3>'.__('details').'</h3>';
     
         $col = array();

@@ -22,10 +22,12 @@ if ($count > 0) {
         ++$i;
         $count_view = mysql_result(mysql_query("SELECT COUNT(*) FROM `counter` WHERE `browser` = '" . $arr['browser'] . "' AND `ip` = '" . $arr['ip'] . "'"), 0);
         $time = date("H:i", $arr['date']);
+        //TODO: Переделать ссылку
         echo '<b>' . $time . '</b> - ' . $arr['browser'] . '
-        <div class="sub">Ip: <a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $arr['ip'] . '">' . $arr['ip'] . '</a> <a href="' . Vars::$HOME_URL . '/admin/whois?ip=' . $arr['ip'] . '" title = "WhoIS ip">[?]</a> ';
+        <div class="sub">Ip: <a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $arr['ip'] . '">' . $arr['ip'] . '</a> <a href="' . Vars::$HOME_URL . 'admin/whois/' . $arr['ip'] . '" title = "WhoIS ip">[?]</a> ';
         if ($arr['ip_via_proxy'])
-            echo '| <a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $arr['ip_via_proxy'] . '">' . $arr['ip_via_proxy'] . '</a> <a href="' . Vars::$HOME_URL . '/admin/whois?ip=' . $arr['ip_via_proxy'] . '" title = "WhoIS ip">[?]</a> ';
+            //TODO: Переделать ссылку
+            echo '| <a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $arr['ip_via_proxy'] . '">' . $arr['ip_via_proxy'] . '</a> <a href="' . Vars::$HOME_URL . 'admin/whois/' . $arr['ip_via_proxy'] . '" title = "WhoIS ip">[?]</a> ';
         echo '| ' . $arr['operator'] . ' | ' . $arr['country'] . ' | ' . __('movies') . ': ' . $count_view . '</div>';
         echo '</div>';
     }

@@ -1,6 +1,6 @@
-<p><a href="<?= Vars::$HOME_URL ?>/mail?act=add"><?= __('write_message') ?></a></p>
+<p><a href="<?= Vars::$HOME_URL ?>mail/?act=add"><?= __('write_message') ?></a></p>
 <div class="phdr"><strong><?= __('contacts') ?></strong></div>
-<div class="topmenu"><a href="<?= Vars::$HOME_URL ?>/mail"><?= __('mail') ?></a></div>
+<div class="topmenu"><a href="<?= Vars::$HOME_URL ?>mail/"><?= __('mail') ?></a></div>
 <?php if ($this->total): ?>
 <div>
     <form action="<?= Router::getUrl(2) ?>/" method="post">

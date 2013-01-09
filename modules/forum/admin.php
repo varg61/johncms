@@ -399,7 +399,7 @@ switch (Vars::$MOD) {
                 for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b>' . $res['text'] . '</b>' .
-                        '&#160;<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '">&gt;&gt;</a>';
+                        '&#160;<a href="' . Vars::$HOME_URL . 'forum/?id=' . $res['id'] . '">&gt;&gt;</a>';
                     if (!empty($res['soft']))
                         echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                     echo'<div class="sub">' .
@@ -421,7 +421,7 @@ switch (Vars::$MOD) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<a href="' . $url . '?mod=cat&amp;id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a> ' .
                     '(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $res['id'] . "'"), 0) . ')' .
-                    '&#160;<a href="' . Vars::$HOME_URL . '/forum?id=' . $res['id'] . '">&gt;&gt;</a>';
+                    '&#160;<a href="' . Vars::$HOME_URL . 'forum/?id=' . $res['id'] . '">&gt;&gt;</a>';
                 if (!empty($res['soft']))
                     echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                 echo '<div class="sub">' .
@@ -692,7 +692,7 @@ switch (Vars::$MOD) {
         $total_msg_del = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'"), 0);
         $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`"), 0);
         $total_votes = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'"), 0);
-        echo'<div class="phdr"><a href="' . Vars::$HOME_URL . '/admin"><b>' . __('admin_panel') . '</b></a> | ' . __('forum_management') . '</div>' .
+        echo'<div class="phdr"><a href="' . Vars::$HOME_URL . 'admin/"><b>' . __('admin_panel') . '</b></a> | ' . __('forum_management') . '</div>' .
             '<div class="gmenu"><p><h3>' . __('statistics') . '</h3><ul>' .
             '<li>' . __('categories') . ':&#160;' . $total_cat . '</li>' .
             '<li>' . __('sections') . ':&#160;' . $total_sub . '</li>' .
@@ -709,4 +709,4 @@ switch (Vars::$MOD) {
             '</ul></p></div>' .
             '<div class="phdr"><a href="' . Router::getUrl(2) . '">' . __('to_forum') . '</a></div>';
 }
-echo '<p><a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a></p>';
+echo '<p><a href="' . Vars::$HOME_URL . 'admin/">' . __('admin_panel') . '</a></p>';

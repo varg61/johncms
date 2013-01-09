@@ -10,7 +10,7 @@
     <div class="menu">
         <div class="formblock">
             <label><?= __('image') ?></label><br/>
-            <img src="<?= Vars::$HOME_URL ?>/files/users/album/<?= $this->user['id'] ?>/<?= $this->tmb_name ?>"/>
+            <img src="<?= Vars::$HOME_URL ?>files/users/album/<?= $this->user['id'] ?>/<?= $this->tmb_name ?>"/>
         </div>
         <div class="formblock">
             <label><?= __('description') ?></label><br/>

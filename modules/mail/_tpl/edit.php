@@ -14,8 +14,8 @@
         </div>
     </form>
 </div>
-<div class="phdr"><a href="<?= Vars::$HOME_URL ?>/help?act=trans"><?= __('translit') ?></a> | <a href="<?= Vars::$HOME_URL ?>/smileys"><?= __('smileys') ?></a></div>
+<div class="phdr"><a href="<?= Vars::$HOME_URL ?>help/?act=trans"><?= __('translit') ?></a> | <a href="<?= Vars::$HOME_URL ?>smilies/"><?= __('smileys') ?></a></div>
 <p>
     <a href="<?= Router::getUrl(2) ?>"><?= __('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
+    <a href="<?= Vars::$HOME_URL ?>contacts/"><?= __('contacts') ?></a>
 </p>

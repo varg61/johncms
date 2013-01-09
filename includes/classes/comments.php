@@ -106,6 +106,7 @@ class Comments
                                 echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=reply&amp;item=' . $this->item . '">' . __('back') . '</a>');
                             }
                         } else {
+                            //TODO: Переделать ссылку
                             $text = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>' .
                                 ' (' . Functions::displayDate($res['time']) . ')<br />' .
                                 Validate::checkout($res['text']);
@@ -154,6 +155,7 @@ class Comments
                                 echo Functions::displayError($message['error'], '<a href="' . $this->url . '&amp;mod=edit&amp;item=' . $this->item . '">' . __('back') . '</a>');
                             }
                         } else {
+                            //TODO: Переделать ссылку
                             $author = '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $res['user_id'] . '"><b>' . $attributes['author_name'] . '</b></a>';
                             $author .= ' (' . Functions::displayDate($res['time']) . ')<br />';
                             $text = Validate::checkout($res['text']);
@@ -280,6 +282,7 @@ class Comments
                             if (Vars::$USER_SET['smileys'])
                                 $reply = Functions::smilies($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
                             $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><small>' .
+                                //TODO: Переделать ссылку
                                 '<a href="' . Vars::$HOME_URL . '/users/profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
                                 ' (' . Functions::displayDate($attributes['reply_time']) . ')</small><br/>' . $reply . '</div>';
                         }

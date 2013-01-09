@@ -44,9 +44,9 @@ class Router extends Vars
             if (!isset(self::$ROUTE[$i])) {
                 break;
             }
-            $uri .= '/' . self::$ROUTE[$i];
+            $uri .= self::$ROUTE[$i] . '/';
         }
-        return htmlspecialchars(Vars::$HOME_URL . $uri) . '/';
+        return htmlspecialchars(Vars::$HOME_URL . $uri);
     }
 
     /**

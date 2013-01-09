@@ -13,7 +13,7 @@ define('_IN_JOHNCMS_CONTACTS', 1);
 
 //Закрываем доступ гостям
 if (!Vars::$USER_ID) {
-    Header('Location: ' . Vars::$HOME_URL . '/404');
+    Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
 
@@ -125,7 +125,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
                 'nickname'  => $row['nickname'],
                 'count'     => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ") OR (`contact_id`=" . Vars::$USER_ID . " AND `user_id`=" . $row['id'] . ")) AND `delete_in`!=" . Vars::$USER_ID . " AND `delete_out`!=" . Vars::$USER_ID . ""), 0),
                 'count_new' => countNew($row['id']),
-                'url'       => (Vars::$HOME_URL . '/mail?act=messages&amp;id=' . $row['id']),
+                'url'       => (Vars::$HOME_URL . 'mail/?act=messages&amp;id=' . $row['id']),
                 'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
                     '<span class="green"> [ON]</span>'));
             ++$i;

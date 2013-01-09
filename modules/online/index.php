@@ -170,8 +170,9 @@ switch (Vars::$ACT) {
                 $currentip = each($ip_list[$i]);
                 $ip = long2ip($currentip[0]);
                 $tpl->list[$i] = '<div style="float:left">' . Functions::loadModuleImage('monitor-network.png') . '</div>' .
+                    //TODO: Переделать ссылку
                     '<div style="float:left; margin-left:6px"><b><a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . $ip . '">' . $ip . '</a></b></div>' .
-                    '<div style="float:left; margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . '/admin?act=whois&amp;ip=' . $ip . '">[?]</a></div>' .
+                    '<div style="float:left; margin-left:6px;font-size:x-small"><a href="' . Vars::$HOME_URL . 'admin/whois/' . $ip . '">[?]</a></div>' .
                     '<div style="margin-left:150px"><span class="red"><b>' . $currentip[1] . '</b></span></div>';
             }
             echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';

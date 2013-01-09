@@ -6,6 +6,7 @@
 </div>
 <div class="phdr">
     <strong>
+<!--   //TODO: Переделать ссылку     -->
         <?= __('friends')?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $this->id ?>"><?= $this->nickname ?></a>
     </strong>
 </div>
@@ -13,6 +14,7 @@
 <?php foreach ($this->query as $row): ?>
     <div class="<?= $row['list'] ?>">
         <?php if ($row['id'] != Vars::$USER_ID): ?>
+<!--   //TODO: Переделать ссылку     -->
         <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] . $row['online'] ?></a>
         <?php else: ?>
         <?= $row['icon'] ?> <strong><?= $row['nickname'] ?></strong><?= $row['online'] ?>

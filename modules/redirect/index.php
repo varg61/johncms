@@ -57,27 +57,23 @@ if ($url) {
     $adres = trim($_POST['adres']);
     switch ($adres) {
         case 'forum':
-            header('location: ' . Vars::$HOME_URL . '/forum/index.php');
+            header('location: ' . Vars::$HOME_URL . 'forum/');
             break;
 
         case 'lib':
-            header('location: ' . Vars::$HOME_URL . '/library/index.php');
+            header('location: ' . Vars::$HOME_URL . 'library/');
             break;
 
         case 'down':
-            header('location: ' . Vars::$HOME_URL . '/download/index.php');
-            break;
-
-        case 'gallery':
-            header('location: ' . Vars::$HOME_URL . '/gallery/index.php');
+            header('location: ' . Vars::$HOME_URL . 'download/');
             break;
 
         case 'news':
-            header('location: ' . Vars::$HOME_URL . '/news/index.php');
+            header('location: ' . Vars::$HOME_URL . 'news/');
             break;
 
         case 'guest':
-            header('location: ' . Vars::$HOME_URL . '/guestbook/index.php');
+            header('location: ' . Vars::$HOME_URL . 'guestbook/');
             break;
 
         default :

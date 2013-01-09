@@ -14,7 +14,7 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 defined('_IN_JOHNCMS_FRIENDS') or die('Error: restricted access');
 //Закрываем доступ гостям
 if (!Vars::$USER_ID) {
-    Header('Location: ' . Vars::$HOME_URL . '/404');
+    Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
 $fr = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" .
@@ -45,6 +45,7 @@ if ($fr == 2) {
         $tpl->select = __('really_deleted_friends');
         $tpl->submit = __('confirm');
         $tpl->phdr = __('deleted_friends');
+        //TODO: Переделать ссылку
         $tpl->urlBack = Vars::$HOME_URL . '/profile?user=' . Vars::$ID;
         $tpl->token = mt_rand(100, 10000);
         $_SESSION['token_status'] = $tpl->token;

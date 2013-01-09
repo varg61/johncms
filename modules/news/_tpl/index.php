@@ -8,6 +8,7 @@
         <div class="block-hdr"><?= $val['name'] ?></div>
         <div class="block-info">
             <?= Functions::displayDate($val['time']) ?><br/>
+<!--     //TODO: Переделать ссылку       -->
             <?= __('added') ?>: <a href="<?= Vars::$HOME_URL ?>/users/profile?user=<?= $val['author_id'] ?>"><?= $val['author'] ?></a>
         </div>
         <div class="block-text"><?= $val['text'] ?></div>
@@ -20,7 +21,7 @@
             </div>
             <?php endif ?>
             <?php if (isset($this->comments)): ?>
-            <a class="btn btn-mini" href="<?= Vars::$HOME_URL ?>/forum?id=<?= $this->comments_id ?>"><?= __('discuss_on_forum') ?>: <?= $this->comments ?></a>
+            <a class="btn btn-mini" href="<?= Vars::$HOME_URL ?>forum/?id=<?= $this->comments_id ?>"><?= __('discuss_on_forum') ?>: <?= $this->comments ?></a>
             <?php endif ?>
         </div>
         <?php endif ?>

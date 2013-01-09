@@ -108,7 +108,7 @@ MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-1.0
 TCBR-Platform: Generic version (all phones)
 MIDlet-Jar-Size: ' . $filesize . '
-MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/' . $tmp;
+MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/' . $tmp; //TODO: Переделать ссылку
     $files = fopen($tmp_jad, 'w+');
     flock($files, LOCK_EX);
     fputs($files, $jad_text);

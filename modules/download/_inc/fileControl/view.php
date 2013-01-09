@@ -83,12 +83,12 @@ if (is_dir($screens_path . '/' . Vars::$ID)) {
 if (($format_file == 'mp4' || $format_file == 'flv') && !Vars::$IS_MOBILE) {
     echo'<div class="menu"><b>' . __('view') . '</b><br />
 	<div id="mediaplayer">JW Player goes here</div>
-    <script type="text/javascript" src="' . Vars::$HOME_URL . '/files/download/system/players/mediaplayer-5.7-viral/jwplayer.js"></script>
+    <script type="text/javascript" src="' . Vars::$HOME_URL . 'files/download/system/players/mediaplayer-5.7-viral/jwplayer.js"></script>
     <script type="text/javascript">
         jwplayer("mediaplayer").setup({
-            flashplayer: "' . Vars::$HOME_URL . '/files/download/system/players/mediaplayer-5.7-viral/player.swf",
-            file: "' . Vars::$HOME_URL . '/' . $res_down['dir'] . '/' . $res_down['name'] . '",
-            image: "' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=3&amp;img=' . rawurlencode($screen[0]) . '"
+            flashplayer: "' . Vars::$HOME_URL . 'files/download/system/players/mediaplayer-5.7-viral/player.swf",
+            file: "' . Vars::$HOME_URL . $res_down['dir'] . '/' . $res_down['name'] . '",
+            image: "' . Vars::$HOME_URL . 'assets/misc/thumbinal.php?type=3&amp;img=' . rawurlencode($screen[0]) . '"
         });
     </script></div>';
 }
@@ -99,7 +99,7 @@ if (($format_file == 'mp4' || $format_file == 'flv') && !Vars::$IS_MOBILE) {
 */
 if ($format_file == 'jpg' || $format_file == 'jpeg' || $format_file == 'gif' || $format_file == 'png') {
     $info_file = getimagesize($res_down['dir'] . '/' . $res_down['name']);
-    //echo '<div class="gmenu"><img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($res_down['dir'] . '/' . $res_down['name']) . '" alt="preview" /></div>';
+    //echo '<div class="gmenu"><img src="' . Vars::$HOME_URL . 'assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($res_down['dir'] . '/' . $res_down['name']) . '" alt="preview" /></div>';
 	$screen[] = $res_down['dir'] . '/' . $res_down['name'];
 	$text_info = '<b>' . __('resolution') . ': </b>' . $info_file[0] . 'x' . $info_file[1] . ' px<br />';
 }
@@ -109,9 +109,9 @@ elseif (($format_file == 'thm' || $format_file == 'nth') && !$screen && $set_dow
     $screen[] = Download::screenAuto($res_down['dir'] . '/' . $res_down['name'], $res_down['id'], $format_file);
 elseif ($format_file == 'mp3') {
     if (!Vars::$IS_MOBILE) {
-        $text_info = '<object type="application/x-shockwave-flash" data="' . Vars::$HOME_URL . '/files/download/system/players/player.swf" width="240" height="20" id="dewplayer" name="dewplayer">' .
-            '<param name="wmode" value="transparent" /><param name="movie" value="' . Vars::$HOME_URL . '/files/download/system/download/players/player.swf" />' .
-            '<param name="flashVars" value="mp3=' . Vars::$HOME_URL . '/' . str_replace('../', '', $res_down['dir']) . '/' . $res_down['name'] . '" /> </object><br />';
+        $text_info = '<object type="application/x-shockwave-flash" data="' . Vars::$HOME_URL . 'files/download/system/players/player.swf" width="240" height="20" id="dewplayer" name="dewplayer">' .
+            '<param name="wmode" value="transparent" /><param name="movie" value="' . Vars::$HOME_URL . 'files/download/system/download/players/player.swf" />' .
+            '<param name="flashVars" value="mp3=' . Vars::$HOME_URL . str_replace('../', '', $res_down['dir']) . '/' . $res_down['name'] . '" /> </object><br />';
     }
     require (SYSPATH . 'lib/getid3/getid3.php');
     $getID3 = new getID3;
@@ -144,10 +144,10 @@ if ($screen) {
         if (Vars::$PAGE >= $total) Vars::$PAGE = $total;
         echo '<div class="topmenu"> ' . Functions::displayPagination($url . '?act=view&amp;id=' . Vars::$ID . '&amp;', Vars::$PAGE - 1, $total, 1) . '</div>' .
             '<div class="gmenu"><b>' . __('screen_file') . ' (' . Vars::$PAGE . '/' . $total . '):</b><br />' .
-            '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($screen[Vars::$PAGE - 1]) . '" alt="screen" /></div>';
+            '<img src="' . Vars::$HOME_URL . 'assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($screen[Vars::$PAGE - 1]) . '" alt="screen" /></div>';
     } else {
         echo '<div class="gmenu"><b>' . __('screen_file') . ':</b><br />' .
-            '<img src="' . Vars::$HOME_URL . '/assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($screen[0]) . '" alt="screen" /></div>';
+            '<img src="' . Vars::$HOME_URL . 'assets/misc/thumbinal.php?type=2&amp;img=' . rawurlencode($screen[0]) . '" alt="screen" /></div>';
     }
 }
 /*
@@ -183,7 +183,7 @@ if (!isset($_SESSION['rate_file_' . Vars::$ID]) && Vars::$USER_ID)
     echo '(<a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '&amp;plus">+</a>/<a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '&amp;minus">-</a>)';
 else echo '(+/-)';
 echo ': <b><span class="green">' . $file_rate[0] . '</span>/<span class="red">' . $file_rate[1] . '</span></b><br />' .
-    '<img src="' . Vars::$HOME_URL . '/assets/misc/rating.php?img=' . $sum . '" alt="' . __('rating') . '" />';
+    '<img src="' . Vars::$HOME_URL . 'assets/misc/rating.php?img=' . $sum . '" alt="' . __('rating') . '" />';
 /*
 -----------------------------------------------------------------
 Скачка изображения в особом размере

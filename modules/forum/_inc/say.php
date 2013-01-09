@@ -35,7 +35,7 @@ function forum_link($m)
         return '[url=' . $m[1] . ']' . $m[2] . '[/url]';
     } else {
         $p = parse_url($m[3]);
-        if ('http://' . $p['host'] . $p['path'] . '?id=' == Vars::$HOME_URL . '/forum?id=') {
+        if ('http://' . $p['host'] . $p['path'] . '?id=' == Vars::$HOME_URL . 'forum/?id=') {
             $thid = abs(intval(preg_replace('/(.*?)id=/si', '', $m[3])));
             $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
             if (mysql_num_rows($req) > 0) {
@@ -211,7 +211,7 @@ switch ($type1['type']) {
                     break;
 
                 case 3:
-                    $repl = $type1['from'] . ', ' . __('reply_2') . ' ([url=' . Vars::$HOME_URL . '/forum?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . __('reply_3') . ', ';
+                    $repl = $type1['from'] . ', ' . __('reply_2') . ' ([url=' . Vars::$HOME_URL . 'forum/?act=post&id=' . $type1['id'] . ']' . $vr . '[/url]) ' . __('reply_3') . ', ';
                     break;
 
                 case 4:

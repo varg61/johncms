@@ -8,6 +8,7 @@
     <div>
         <?php foreach ($this->query as $row): ?>
         <div class="<?= $row['list'] ?>">
+<!--      //TODO: Переделать ссылку      -->
             <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] ?></a> <?= $row['online'] ?> (<?= $row['time'] ?>)
             <div class="">
                 <?= $row['text'] ?>
@@ -20,7 +21,7 @@
             <div class="sub">
                 <input type="checkbox" name="delch[]" value="<?= $row['mid'] ?>"/>
                 <?php if (isset($row['read']) && $row['read'] == 0 && $row['user_id'] == Vars::$USER_ID): ?>
-                [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=edit&amp;id=<?= $row['mid'] ?>"><?= __('edit') ?></a>]
+                [<a href="<?= Vars::$HOME_URL ?>mail/?act=messages&amp;mod=edit&amp;id=<?= $row['mid'] ?>"><?= __('edit') ?></a>]
                 <? endif ?>
                 <?php if ($row['selectBar']): ?>
                 <?= $row['selectBar'] ?>
@@ -28,7 +29,7 @@
                 <?php if (!$row['selectBar']): ?>
                 [<span class="red">х</span>&#160;<a href="<?= $row['urlDelete'] ?>"><?= __('delete') ?></a>]
                 <?php if ($row['elected']): ?>
-                    [<a href="<?= Vars::$HOME_URL ?>/mail?act=messages&amp;mod=elected&amp;id=<?= $row['mid'] ?>"><?= __('in_elected') ?></a>]
+                    [<a href="<?= Vars::$HOME_URL ?>mail/?act=messages&amp;mod=elected&amp;id=<?= $row['mid'] ?>"><?= __('in_elected') ?></a>]
                     <? endif ?>
                 <? endif ?>
             </div>

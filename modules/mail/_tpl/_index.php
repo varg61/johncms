@@ -2,7 +2,7 @@
     <li><h1 class="section-personal"><?= __('mail') ?></h1></li>
 </ul>
 <div class="toolbar-top">
-    <a class="btn btn-primary btn-mini" href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
+    <a class="btn btn-primary btn-mini" href="<?= Vars::$HOME_URL ?>contacts/"><?= __('contacts') ?></a>
 </div>
 <ul class="nav">
     <li><a href="<?= $this->link ?>?act=inmess"><i class="icn-inbox"></i><?= __('inmess') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Mail::counter('inmess') ?><?= $this->newmess ? '+' . $this->newmess : '' ?></span></a></li>

@@ -123,5 +123,5 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             '<p><a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
     }
 } else {
-    header('Location: ' . Vars::$HOME_URL . '/404');
+    header('Location: ' . Vars::$HOME_URL . '404');
 }

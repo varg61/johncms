@@ -4,7 +4,7 @@
 </div>
 <form action="<?= $this->url ?>?act=edit&amp;mod=delete_photo&amp;user=<?= $this->user['id'] ?>" method="post">
     <div class="rmenu">
-        <p><img src="<?= Vars::$HOME_URL ?>/files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/></p>
+        <p><img src="<?= Vars::$HOME_URL ?>files/users/photo/<?= $this->user['id'] ?>_small.jpg" alt="" border="0"/></p>
         <p><?= __('delete_photo_warning') ?></p>
         <p style="margin-top: 10px"><input type="submit" value="<?= __('delete') ?>" name="submit"/></p>
     </div>

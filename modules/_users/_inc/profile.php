@@ -99,7 +99,7 @@ switch (Vars::$ACT) {
             $rel['d'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-1'"), 0);
             $rel['e'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-2'"), 0);
             mysql_query("UPDATE `users` SET `relationship` = '" . mysql_real_escape_string(serialize($rel)) . "' WHERE `id` = " . $tpl->user['id']);
-
+            //TODO: Переделать ссылку
             header('Location: ' . Vars::$HOME_URL . '/profile?act=reputation&user=' . $tpl->user['id']);
             exit;
         } else {
@@ -129,9 +129,11 @@ switch (Vars::$ACT) {
         $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $tpl->user['id'] . "'"), 0);
 
         if ($tpl->user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $tpl->user['rights'])) {
+            //TODO: Переделать ссылку
             $menu[] = '<a href="' . Vars::$HOME_URL . '/profile?act=edit&amp;user=' . $tpl->user['id'] . '">' . __('edit') . '</a>';
         }
         if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS >= 7 && Vars::$USER_RIGHTS > $tpl->user['rights']) {
+            //TODO: Переделать ссылку
             $menu[] = '<a href="' . Vars::$HOME_URL . '/admin?act=usr_del&amp;id=' . $tpl->user['id'] . '">' . __('delete') . '</a>';
         }
         if ($tpl->user['id'] != Vars::$USER_ID && Vars::$USER_RIGHTS > $tpl->user['rights']) {

@@ -34,7 +34,7 @@ if ($form->isSubmitted) {
         $file = basename($val);
         $name = explode(".", $file);
         $parent = basename(dirname($val));
-        $image = '<img src="' . Vars::$HOME_URL . '/assets/smilies/' . $parent . '/' . $file . '" alt="" />';
+        $image = '<img src="' . Vars::$HOME_URL . 'assets/smilies/' . $parent . '/' . $file . '" alt="" />';
         if ($parent == '_admin') {
             $cache['adm_s'][] = '/:' . preg_quote($name[0]) . ':/';
             $cache['adm_r'][] = $image;

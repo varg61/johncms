@@ -68,9 +68,9 @@
     <li><a href="profile.php?act=ban&amp;user=<?= $this->user['id'] ?>"><i class="icn-violations"></i><?= __('infringements') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->bancount ?></span></a></li>
 
     <li><h2><?= __('personal') ?></h2></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/album?act=list&amp;user=<?= $this->user['id'] ?>"><i class="icn-image"></i><?= __('photo_album') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->total_photo ?></span></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>album/?act=list&amp;user=<?= $this->user['id'] ?>"><i class="icn-image"></i><?= __('photo_album') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->total_photo ?></span></a></li>
     <li><a href="<?= $this->link ?>?act=guestbook&amp;user=<?= $this->user['id'] ?>"><i class="icn-dialogue"></i><?= __('guestbook') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->user['comm_count'] ?></span></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>/friends?id=<?= $this->user['id'] ?>"><i class="icn-man-woman"></i><?= __('friends') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::friendsCount($this->user['id']) ?></span></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>friends/?id=<?= $this->user['id'] ?>"><i class="icn-man-woman"></i><?= __('friends') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= Functions::friendsCount($this->user['id']) ?></span></a></li>
 
     <?php if (Vars::$USER_ID && Vars::$USER_ID != $this->user['id']): ?>
     <li><h2><?= __('mail') ?></h2></li>

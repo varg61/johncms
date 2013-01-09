@@ -114,6 +114,7 @@ if ($total > 0) {
     while ($arr = mysql_fetch_array($req)) {
         echo ($i % 2) ? '<div class="list1">' : '<div class="list2">';
         ++$i;
+        //TODO: Переделать ссылку
         echo '<a href="' . Validate::checkout($arr['url']) . '">' . Validate::checkout($arr['query']) . '</a> [' . Functions::displayDate($arr['date']) . ']<br/>
     <small>IP: <a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;ip=' . long2ip($arr['ip']) . '">' . long2ip($arr['ip']) . '</a>';
         if ($day !== 'seven' && $day !== 'two') {

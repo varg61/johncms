@@ -161,7 +161,7 @@ if ($total) {
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
             // Если доступ открыт всем, или смотрит Администратор
             echo'<a href="' . $url . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '&amp;view">' .
-                '<img src="' . Vars::$HOME_URL . '/files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
+                '<img src="' . Vars::$HOME_URL . 'files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
                 echo '<div class="gray">' . Functions::smilies(Validate::checkout($res['description'], 1)) . '</div>';
         } elseif ($res['access'] == 3) {

@@ -14,7 +14,7 @@ if (Vars::$USER_RIGHTS < 7) {
     echo Functions::displayError(__('access_forbidden'));
     exit;
 }
-echo'<div class="phdr"><a href="' . Vars::$HOME_URL . '/admin"><b>' . __('admin_panel') . '</b></a> | ' . __('downloads') . '</div>';
+echo'<div class="phdr"><a href="' . Vars::$HOME_URL . 'admin/"><b>' . __('admin_panel') . '</b></a> | ' . __('downloads') . '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -63,5 +63,5 @@ echo'<form action="' . Router::getUrl(3) . '?act=download" method="post">' .
     '<p><input type="submit" value="' . __('save') . '" name="submit" /></p></div>' .
     '<div class="phdr"><a href="' . Router::getUrl(3) . '?reset">' . __('reset_settings') . '</a>' .
     '</div></form>' .
-    '<p><a href="' . Vars::$HOME_URL . '/admin">' . __('admin_panel') . '</a><br />' .
+    '<p><a href="' . Vars::$HOME_URL . 'admin/">' . __('admin_panel') . '</a><br />' .
     '<a href="' . Router::getUrl(2) . '">' . __('downloads') . '</a></p>';

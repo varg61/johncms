@@ -39,5 +39,5 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     }
 	echo '<div class="phdr"><a href="' . Router::getUrl(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 } else {
-    header('Location: ' . Vars::$HOME_URL . '/404');
+    header('Location: ' . Vars::$HOME_URL . '404');
 }

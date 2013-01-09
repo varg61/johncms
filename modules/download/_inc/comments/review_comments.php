@@ -63,7 +63,8 @@ if ($total) {
         	$reply = Validate::checkout($res['reply'], 1, 1);
          	if (Vars::$USER_SET['smileys']) $reply = functions::smilies($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
           	$post .= '<div class="reply"><small>' .
-           	'<a href="' . Vars::$HOME_URL . '?profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
+                  //TODO: Переделать ссылку
+                  '<a href="' . Vars::$HOME_URL . '?profile.php?user=' . $attributes['reply_id'] . '"><b>' . $attributes['reply_name'] . '</b></a>' .
            	' (' . functions::displayDate($attributes['reply_time']) . ')</small><br/>' . $reply . '</div>';
   		}
 		$arg = array (

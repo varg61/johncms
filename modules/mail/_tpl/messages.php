@@ -1,3 +1,4 @@
+<!-- //TODO: Переделать ссылку -->
 <div class="phdr"><strong><?= __('сorrespondence') ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= Vars::$ID ?>"><?= $this->login ?></a></strong></div>
 <?= $this->error_add ?>
 <?php if (!$this->ignor): ?>
@@ -21,7 +22,7 @@
         </div>
     </form>
 </div>
-<div class="phdr"><a href="<?= Vars::$HOME_URL ?>/help?act=trans"><?= __('translit') ?></a> | <a href="<?= Vars::$HOME_URL ?>/smileys"><?= __('smileys') ?></a></div>
+<div class="phdr"><a href="<?= Vars::$HOME_URL ?>help/?act=trans"><?= __('translit') ?></a> | <a href="<?= Vars::$HOME_URL ?>smilies/"><?= __('smileys') ?></a></div>
 <?php endif ?>
 <?= $this->ignor ?>
 <?= $this->list ?>
@@ -32,5 +33,5 @@
 </p>
 <p>
     <a href="<?= $this->link ?>"><?= __('mail') ?></a><br/>
-    <a href="<?= Vars::$HOME_URL ?>/contacts"><?= __('contacts') ?></a>
+    <a href="<?= Vars::$HOME_URL ?>contacts/"><?= __('contacts') ?></a>
 </p>

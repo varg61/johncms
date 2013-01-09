@@ -26,6 +26,7 @@ if (!Vars::$USER_RIGHTS && Vars::$USER_ID != $user['id']) {
 История IP адресов
 -----------------------------------------------------------------
 */
+//TODO: Переделать ссылку
 echo '<div class="phdr"><a href="' . Vars::$HOME_URL . '/profile?user=' . $user['id'] . '"><b>' . __('profile') . '</b></a> | ' . __('ip_history') . '</div>';
 echo '<div class="user"><p>';
 $arg = array(
@@ -39,6 +40,7 @@ if ($total) {
     $req = mysql_query("SELECT * FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "' ORDER BY `timestamp` DESC " . Vars::db_pagination());
     for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
+        //TODO: Переделать ссылку
         $link = Vars::$USER_RIGHTS ? '<a href="' . Vars::$HOME_URL . '/admin?act=search_ip&amp;mod=history&amp;ip=' . long2ip($res['ip']) . '">' . long2ip($res['ip']) . '</a>' : long2ip($res['ip']);
         echo $link . ' <span class="gray">(' . date("d.m.Y / H:i", $res['timestamp']) . ')</span></div>';
     }

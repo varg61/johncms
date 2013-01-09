@@ -29,7 +29,7 @@ if (mysql_num_rows($req) > 0) {
     while ($res = mysql_fetch_assoc($req)) {
         echo '<item>' .
              '<title>News: ' . $res['name'] . '</title>' .
-             '<link>' . Vars::$HOME_URL . '/news/index.php</link>' .
+             '<link>' . Vars::$HOME_URL . 'news/</link>' .
              '<author>' . $res['avt'] . '</author>' .
              '<description>' . $res['text'] . '</description>' .
              '<pubDate>' . date('r', $res['time']) .
@@ -44,7 +44,7 @@ if (mysql_num_rows($req) > 0) {
     while ($res = mysql_fetch_array($req)) {
         echo '<item>' .
              '<title>Library: ' . $res['name'] . '</title>' .
-             '<link>' . Vars::$HOME_URL . '/library/index.php?id=' . $res['id'] . '</link>' .
+             '<link>' . Vars::$HOME_URL . 'library/?id=' . $res['id'] . '</link>' .
              '<author>' . $res['avtor'] . '</author>' .
              '<description>' . $res['announce'] .
              '</description>' .

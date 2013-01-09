@@ -11,7 +11,7 @@
 
 defined('_IN_USERS') or die('Error: restricted access');
 $uri = Router::getUrl(4);
-
+//TODO: Добавить проверку на разрешение смены статуса
 $tpl = Template::getInstance();
 $form = new Form($uri);
 

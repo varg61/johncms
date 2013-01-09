@@ -118,7 +118,7 @@ class Template extends ArrayObject
     {
         //TODO: Доработать функцию
         $out = '<meta name="Generator" content="JohnCMS, http://johncms.com"/>' . "\n";
-        $out .= '    <link href="' . Vars::$HOME_URL . '/assets/template/css/style.css" rel="stylesheet" media="screen, handheld" type="text/css"/>' . "\n";
+        $out .= '    <link href="' . Vars::$HOME_URL . 'assets/template/css/style.css" rel="stylesheet" media="screen, handheld" type="text/css"/>' . "\n";
         return $out;
     }
 }
