@@ -11,30 +11,37 @@
 
 class HomePage
 {
-    public $news;                                                              // Текст новостей
-    public $newscount;                                                         // Общее к-во новостей
-    public $lastnewsdate;                                                      // Дата последней новости
+    public $news; // Текст новостей
+    public $newscount; // Общее к-во новостей
+    public $lastnewsdate; // Дата последней новости
     private $settings = array();
 
     function __construct()
     {
-        global $set;
         $this->settings = unserialize(Vars::$SYSTEM_SET['news']);
         $this->newscount = $this->_newsCount() . $this->_lastNewsCount();
         $this->news = $this->news();
     }
 
-    // Запрос свежих новостей на Главную
+    /**
+     * Запрос свежих новостей на Главную
+     *
+     * @return bool|string
+     */
     private function news()
     {
         global $lng;
         if ($this->settings['view'] > 0) {
             $reqtime = $this->settings['days'] ? time() - ($this->settings['days'] * 86400) : 0;
-            $req = mysql_query("SELECT * FROM `cms_news` WHERE `time` > '$reqtime' ORDER BY `id` DESC LIMIT " . $this->settings['quantity']);
-            if (mysql_num_rows($req) > 0) {
-                $i = 0;
+            $STH = DB::PDO()->query('
+                SELECT * FROM `cms_news`
+                WHERE `time` > ' . $reqtime . '
+                ORDER BY `id` DESC
+                LIMIT ' . $this->settings['quantity']
+            );
+            if ($STH->rowCount()) {
                 $news = '';
-                while (($res = mysql_fetch_array($req)) !== false) {
+                for ($i = 0; $res = $STH->fetch(); ++$i) {
                     $text = $res['text'];
                     // Если текст больше заданного предела, обрезаем
                     if (mb_strlen($text) > $this->settings['size']) {
@@ -72,34 +79,41 @@ class HomePage
                     }
                     // Ссылка на каменты
                     if (!empty($res['comments']) && $this->settings['view'] != 2 && $this->settings['kom'] == 1) {
-                        $mes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['comments'] . "'");
-                        $komm = mysql_result($mes, 0) - 1;
-                        if ($komm >= 0)
-                            $news .= '<br /><a href="../forum/?id=' . $res['comments'] . '">' . $lng['discuss'] . '</a> (' . $komm . ')';
+                        $komm = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['comments'] . "'")->fetchColumn();
+                        if ($komm >= 1)
+                            $news .= '<br /><a href="../forum/?id=' . $res['comments'] . '">' . $lng['discuss'] . '</a> (' . ($komm - 1) . ')';
                     }
                     $news .= '</div>';
-                    ++$i;
                 }
+
                 return $news;
             } else {
-                return false;
+                return FALSE;
             }
         }
+
+        return FALSE;
     }
 
-    // Счетчик всех новостей
+    /**
+     * Счетчик всех новостей
+     *
+     * @return integer
+     */
     private function _newsCount()
     {
-        $req = mysql_query("SELECT COUNT(*) FROM `cms_news`");
-        $res = mysql_result($req, 0);
-        return ($res > 0 ? $res : '0');
+        return DB::PDO()->query('SELECT COUNT(*) FROM `cms_news`')->fetchColumn();
     }
 
-    // Счетчик свежих новостей
+    /**
+     * Счетчик свежих новостей
+     *
+     * @return bool|string
+     */
     private function _lastNewsCount()
     {
-        $req = mysql_query("SELECT COUNT(*) FROM `cms_news` WHERE `time` > '" . (time() - 259200) . "'");
-        $res = mysql_result($req, 0);
-        return ($res > 0 ? '/<span class="red">+' . $res . '</span>' : false);
+        $req = DB::PDO()->query('SELECT COUNT(*) FROM `cms_news` WHERE `time` > ' . (time() - 259200))->fetchColumn();
+
+        return ($req ? '/<span class="red">+' . $req . '</span>' : FALSE);
     }
 }
