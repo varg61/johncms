@@ -9,6 +9,7 @@
  * @author      http://johncms.com/about
  */
 
+//TODO: Доработать под PDO
 class Comments
 {
     // Служебные данные

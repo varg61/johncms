@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-class Languages
+class Languages extends Vars
 {
     private static $_instance = NULL;
 
@@ -22,18 +22,21 @@ class Languages
 
     /**
      * Инициализация объекта класса Languages
+     *
      * @return Languages|null
      */
     public static function getInstance()
     {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new Languages;
+        if (is_null(static::$_instance)) {
+            static::$_instance = new Languages;
         }
-        return self::$_instance;
+
+        return static::$_instance;
     }
 
     /**
      * Переключатель языков
+     * 
      * @return bool
      */
     public function lngSwitch()
@@ -41,6 +44,7 @@ class Languages
         $setLng = isset($_POST['setlng']) ? substr(Validate::checkin($_POST['setlng']), 0, 2) : FALSE;
         if ($setLng && in_array($setLng, $this->_lngList)) {
             $_SESSION['lng'] = $setLng;
+
             return TRUE;
         }
 
@@ -51,15 +55,15 @@ class Languages
     {
         //TODO: Доработать
         if (isset($_SESSION['lng'])) {
-            parent::$LNG_ISO = $_SESSION['lng'];
-        } elseif (parent::$USER_ID && isset(parent::$USER_SET['lng']) && array_key_exists(parent::$USER_SET['lng'], parent::$LNG_LIST)) {
-            parent::$LNG_ISO = parent::$USER_SET['lng'];
+            static::$LNG_ISO = $_SESSION['lng'];
+        } elseif (static::$USER_ID && isset(static::$USER_SET['lng']) && array_key_exists(static::$USER_SET['lng'], static::$LNG_LIST)) {
+            static::$LNG_ISO = static::$USER_SET['lng'];
         } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             $accept = explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE'])));
             foreach ($accept as $var) {
                 $lng = substr($var, 0, 2);
                 if (in_array($lng, Languages::getInstance()->getLngList())) {
-                    parent::$LNG_ISO = $lng;
+                    static::$LNG_ISO = $lng;
                     break;
                 }
             }
@@ -68,6 +72,7 @@ class Languages
 
     /**
      * Получаем список ISO кодов имеющихся в системе языков
+     *
      * @return array Список ISO кодов языков
      */
     public function getLngList()
@@ -83,6 +88,7 @@ class Languages
 
     /**
      * Получаем список языков вместе с названиями
+     * 
      * @return array ISO код => название
      */
     public function getLngDescription()
@@ -101,7 +107,9 @@ class Languages
 
     /**
      * Выдача фразы системного языка
+     * 
      * @param string $key Ключ для фразы
+     *
      * @return string Фраза по ключу
      */
     public function getSystemPhrase($key)
@@ -121,7 +129,9 @@ class Languages
 
     /**
      * Выдача фразы модульного языка
+     * 
      * @param string $key Ключ для фразы
+     *
      * @return string|bool Фраза по ключу
      */
     public function getModulePhrase($key)
@@ -141,6 +151,7 @@ class Languages
 
     /**
      * Парсинг системного языка
+     * 
      * @return array|bool Массив с фразами
      */
     private function _parseSystemLng()
@@ -158,6 +169,7 @@ class Languages
 
     /**
      * Парсинг языка модуля
+     * 
      * @return array Массив с фразами
      */
     private function _parseModuleLng()

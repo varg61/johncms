@@ -13,6 +13,7 @@ class Functions extends Vars
 {
     /**
      * Антифлуд
+     *
      * @return int|bool
      */
     public static function antiFlood()
@@ -55,8 +56,10 @@ class Functions extends Vars
 
     /**
      * Маскировка ссылок в тексте
-     * @param string $var    Исходный текст
-     * @return string        Обработанный текст
+     *
+     * @param string $var
+     *
+     * @return string
      */
     public static function antiLink($var)
     {
@@ -75,30 +78,34 @@ class Functions extends Vars
             '.kmx'  => '***',
             '.h2m'  => '***'
         );
+
         return strtr($var, $replace);
     }
 
     /**
      * Показ счетчиков внизу страницы
+     *
      * @return string
      */
     public static function displayCounters()
     {
         $out = '';
-        $req = mysql_query("SELECT * FROM `cms_counters` WHERE `switch` = '1' ORDER BY `sort` ASC");
-        if (mysql_num_rows($req) > 0) {
-            while (($res = mysql_fetch_array($req)) !== FALSE) {
+        $STH = DB::PDO()->query('SELECT * FROM `cms_counters` WHERE `switch` = 1 ORDER BY `sort` ASC');
+        if ($STH->rowCount()) {
+            while ($res = $STH->fetch()) {
                 $link1 = ($res['mode'] == 1 || $res['mode'] == 2) ? $res['link1'] : $res['link2'];
                 $link2 = $res['mode'] == 2 ? $res['link1'] : $res['link2'];
-                $out .= (empty(parent::$PLACE)) ? $link1 : $link2;
+                $out .= (empty(static::$PLACE)) ? $link1 : $link2;
             }
         }
+
         return $out;
     }
 
     /**
      * Показываем дату с учетом сдвига времени
      * @param int $var       Время в Unix формате
+     *
      * @return string
      */
     public static function displayDate($var)
@@ -110,13 +117,15 @@ class Functions extends Vars
             if (date('z', $var + $shift) == date('z', time() + $shift) - 1)
                 return __('yesterday') . ', ' . date("H:i", $var + $shift);
         }
+
         return date("d.m.Y / H:i", $var + $shift);
     }
 
     /**
      * Сообщения об ошибках
      * @param string|array $error
-     * @param string $link
+     * @param string       $link
+     *
      * @return bool|string
      */
     public static function displayError($error = '', $link = '')
@@ -132,9 +141,10 @@ class Functions extends Vars
 
     /**
      * Отображение различных меню
-     * @param array $val
+     * @param array  $val
      * @param string $delimiter   Разделитель между пунктами
      * @param string $end_space   Выводится в конце
+     *
      * @return string
      */
     public static function displayMenu($val = array(), $delimiter = ' | ', $end_space = '')
@@ -145,10 +155,12 @@ class Functions extends Vars
     /**
      * Постраничная навигация
      * За основу взята доработанная функция от форума SMF 2.x.x
+     *
      * @param string $url
-     * @param int $start
-     * @param int $total
-     * @param int $pagesize
+     * @param int    $start
+     * @param int    $total
+     * @param int    $pagesize
+     *
      * @return string
      */
     public static function displayPagination($url, $start, $total, $pagesize)
@@ -184,18 +196,19 @@ class Functions extends Vars
             $display_page = ($start + $pagesize) > $total ? $total : ($start / $pagesize + 2);
             $out[] = sprintf($base_link, $display_page, '&gt;&gt;');
         }
+
         return implode(' ', $out);
     }
 
-    /*
-    -----------------------------------------------------------------
-    Показываем местоположение пользователя
-    -----------------------------------------------------------------
-    */
-    //TODO: Доработать!
-    public static function displayPlace($user_id = '', $place = '')
+    /**
+     * Вычисляем местоположение пользователей
+     *
+     * @param integer $user_id
+     * @param string  $place
+     */
+    public static function displayPlace($user_id = null, $place = '')
     {
-
+        //TODO: Доработать!
     }
 
     /*
@@ -228,24 +241,24 @@ class Functions extends Vars
                 $out .= ' ' . $arg['header'];
             }
         } else {
-            if (parent::$USER_SET['avatar']) {
+            if (static::$USER_SET['avatar']) {
                 $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
                 if (file_exists(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $user['id'] . '.gif')) {
-                    $out .= '<img src="' . parent::$HOME_URL . '/files/users/avatar/' . $user['id'] . '.gif" width="32" height="32" alt="' . htmlspecialchars($user['nickname']) . '" />&#160;';
+                    $out .= '<img src="' . static::$HOME_URL . '/files/users/avatar/' . $user['id'] . '.gif" width="32" height="32" alt="' . htmlspecialchars($user['nickname']) . '" />&#160;';
                 } else {
-                    $out .= self::loadImage('empty.png') . '&#160;';
+                    $out .= static::loadImage('empty.png') . '&#160;';
                 }
                 $out .= '</td><td>';
             }
             if ($user['sex']) {
-                $out .= self::loadImage(($user['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"');
+                $out .= static::loadImage(($user['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"');
             } else {
-                $out = self::loadImage('delete.png', '', 'align="middle"');
+                $out = static::loadImage('delete.png', '', 'align="middle"');
             }
             $out .= '&#160;';
             $out .= (!Vars::$USER_ID && !Vars::$USER_SYS['view_profiles']) || Vars::$USER_ID == $user['id']
                 ? '<b>' . $user['nickname'] . '</b>'
-                : '<a href="' . parent::$HOME_URL . '/users/profile?user=' . $user['id'] . '"><b>' . $user['nickname'] . '</b></a>';
+                : '<a href="' . static::$HOME_URL . '/users/profile?user=' . $user['id'] . '"><b>' . $user['nickname'] . '</b></a>';
             $rank = array(
                 0 => '',
                 1 => '(GMod)',
@@ -263,7 +276,7 @@ class Functions extends Vars
                 $out .= ' ' . $arg['header'];
             }
             if (!isset($arg['stshide']) && !empty($user['status'])) {
-                $out .= '<div class="status">' . self::loadImage('star.png', 16, 16) . '&#160;' . Validate::checkout($user['status']) . '</div>';
+                $out .= '<div class="status">' . static::loadImage('star.png', 16, 16) . '&#160;' . Validate::checkout($user['status']) . '</div>';
             }
             if (Vars::$USER_SET['avatar']) {
                 $out .= '</td></tr></table>';
@@ -272,7 +285,7 @@ class Functions extends Vars
         if (isset($arg['body']))
             $out .= '<div>' . $arg['body'] . '</div>';
         $ipinf = !isset($arg['iphide']) && (Vars::$USER_RIGHTS || ($user['id'] && $user['id'] == Vars::$USER_ID)) ? 1 : 0;
-        $lastvisit = time() > $user['last_visit'] + 300 && isset($arg['last_visit']) ? self::displayDate($user['last_visit']) : FALSE;
+        $lastvisit = time() > $user['last_visit'] + 300 && isset($arg['last_visit']) ? static::displayDate($user['last_visit']) : FALSE;
         if ($ipinf || $lastvisit || isset($arg['sub']) && !empty($arg['sub']) || isset($arg['footer'])) {
             $out .= '<div class="sub">';
             if (isset($arg['sub'])) {
@@ -314,6 +327,7 @@ class Functions extends Vars
             }
             $out .= '</div>';
         }
+
         return $out;
     }
 
@@ -321,6 +335,7 @@ class Functions extends Vars
      * Скачка текстовых данных в виде файла
      * @param $str           Исходный текст
      * @param $file          Имя файла
+     *
      * @return bool
      */
     public static function downloadFile($str, $file)
@@ -337,6 +352,7 @@ class Functions extends Vars
         header('Pragma: public');
         header('Content-Length: ' . ob_get_length());
         flush();
+
         return TRUE;
     }
 
@@ -351,6 +367,7 @@ class Functions extends Vars
         for ($i = 0; $i < $length; $i++) {
             $salt .= chr(rand(33, 126));
         }
+
         return $salt;
     }
 
@@ -360,16 +377,18 @@ class Functions extends Vars
      */
     public static function generateToken()
     {
-        return md5(self::generateSalt() . microtime(TRUE));
+        return md5(static::generateSalt() . microtime(TRUE));
     }
 
     /**
      * Загружаем изображение системы
+     *
      * @param string $img
      * @param string $height
      * @param string $width
      * @param string $alt
      * @param string $style
+     *
      * @return bool|string
      */
     public static function loadImage($img = '', $height = '', $width = '', $alt = '', $style = '')
@@ -379,22 +398,25 @@ class Functions extends Vars
         }
 
         if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/img/' . $img;
+            $file = static::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/img/' . $img;
         } elseif (is_file(TPLDEFAULT . 'img' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/assets/template/img/' . $img;
+            $file = static::$HOME_URL . '/assets/template/img/' . $img;
         } else {
             return FALSE;
         }
+
         return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '"' . $style . '/>';
     }
 
     /**
      * Загружаем изображение модуля
+     *
      * @param string $img
      * @param string $height
      * @param string $width
      * @param string $alt
      * @param string $style
+     *
      * @return bool|string
      */
     public static function loadModuleImage($img = '', $height = '', $width = '', $alt = '', $style = '')
@@ -404,19 +426,21 @@ class Functions extends Vars
         }
 
         if (is_file(TPLPATH . Vars::$USER_SET['skin'] . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . Router::$PATH . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/' . Router::$ROUTE[0] . '/img/' . $img;
+            $file = static::$HOME_URL . '/templates/' . Vars::$USER_SET['skin'] . '/' . Router::$ROUTE[0] . '/img/' . $img;
         } elseif (is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $img)) {
-            $file = parent::$HOME_URL . '/modules/' . Router::$ROUTE[0] . '/img/' . $img;
+            $file = static::$HOME_URL . '/modules/' . Router::$ROUTE[0] . '/img/' . $img;
         } else {
             return FALSE;
         }
+
         return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '"' . $style . '/>';
     }
 
     /**
      * Обработка Смайлов
-     * @param string $str    Исходный текст
-     * @param bool $adm      Обрабатывать Админские смайлы
+     * @param string $str      Исходный текст
+     * @param bool   $adm      Обрабатывать Админские смайлы
+     *
      * @return string        Обработанный текст
      */
     public static function smilies($str, $adm = FALSE)
@@ -441,6 +465,7 @@ class Functions extends Vars
     /**
      * Функция пересчета на дни, или часы
      * @param int $var       Время в Unix формате
+     *
      * @return string
      */
     public static function timeCount($var)
@@ -450,14 +475,17 @@ class Functions extends Vars
         if ($var > 345600) return $day . ' ' . __('timecount_days');
         if ($var >= 172800) return $day . ' ' . __('timecount_days_r');
         if ($var >= 86400) return '1 ' . __('timecount_day');
+
         return date("G:i:s", mktime(0, 0, $var));
     }
 
-    /*
-    -----------------------------------------------------------------
-    Транслитерация текста
-    -----------------------------------------------------------------
-    */
+    /**
+     * Транслитерация текста
+     *
+     * @param $str
+     *
+     * @return string
+     */
     public static function translit($str)
     {
         $replace = array(
@@ -526,134 +554,145 @@ class Functions extends Vars
             'YU' => 'Ю',
             'YA' => 'Я'
         );
+
         return strtr($str, $replace);
     }
 
     /**
-    -----------------------------------------------------------------
-    Функция почты "Счетчики сообщений"
-    -----------------------------------------------------------------
+     * Функция почты "Счетчики сообщений"
+     *
+     * @param null $var
+     *
+     * @return bool|string
      */
     public static function mailCount($var = NULL)
     {
         if ($var == NULL) {
             //Всего сообщений (входящих / исходящих) без учета удаленных
-            return mysql_result(mysql_query("SELECT COUNT(*)
+            return DB::PDO()->query("SELECT COUNT(*)
 			FROM `cms_mail_messages` 
-			WHERE (`user_id` = '" . parent::$USER_ID . "' 
-			OR `contact_id` = '" . parent::$USER_ID . "') 
-			AND (`delete_out`!='" . parent::$USER_ID . "' 
-			AND `delete_in`!='" . parent::$USER_ID . "') 
-			AND `delete`!='" . parent::$USER_ID . "'"), 0);
+			WHERE (`user_id` = '" . static::$USER_ID . "' 
+			OR `contact_id` = '" . static::$USER_ID . "') 
+			AND (`delete_out`!='" . static::$USER_ID . "' 
+			AND `delete_in`!='" . static::$USER_ID . "') 
+			AND `delete`!='" . static::$USER_ID . "'")->fetchColumn();
         }
         switch ($var) {
             //Новые сообщения
             case 'new':
-                return mysql_result(mysql_query("SELECT COUNT(*)
+                return DB::PDO()->query("SELECT COUNT(*)
 				FROM `cms_mail_messages` 
 				LEFT JOIN `cms_mail_contacts` 
 				ON `cms_mail_messages`.`user_id`=`cms_mail_contacts`.`contact_id` 
-				AND `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "' 
-				WHERE `cms_mail_messages`.`contact_id`='" . parent::$USER_ID . "' 
+				AND `cms_mail_contacts`.`user_id`='" . static::$USER_ID . "' 
+				WHERE `cms_mail_messages`.`contact_id`='" . static::$USER_ID . "' 
 				AND `cms_mail_messages`.`read`='0' 
-				AND (`cms_mail_messages`.`delete_in`!='" . parent::$USER_ID . "' 
-				AND `cms_mail_messages`.`delete_out`!='" . parent::$USER_ID . "')
-				AND `cms_mail_messages`.`delete`!='" . parent::$USER_ID . "' 
-				AND `cms_mail_contacts`.`banned`!='1'"), 0);
+				AND (`cms_mail_messages`.`delete_in`!='" . static::$USER_ID . "' 
+				AND `cms_mail_messages`.`delete_out`!='" . static::$USER_ID . "')
+				AND `cms_mail_messages`.`delete`!='" . static::$USER_ID . "' 
+				AND `cms_mail_contacts`.`banned`!='1'")->fetchColumn();
             default;
                 return FALSE;
         }
     }
 
     /**
-    -----------------------------------------------------------------
-    Функция подсчета контактов
-    -----------------------------------------------------------------
+     * Функция подсчета контактов
+     *
+     * @return integer
      */
-
     public static function contactsCount()
     {
-        return mysql_result(mysql_query("SELECT COUNT(*)
+        return DB::PDO()->query("SELECT COUNT(*)
 		FROM `cms_mail_contacts`
-		WHERE `user_id`='" . parent::$USER_ID .
-            "' AND `delete`='0' AND `banned`='0' AND `archive`='0'"), 0);
+		WHERE `user_id`='" . static::$USER_ID .
+            "' AND `delete`='0' AND `banned`='0' AND `archive`='0'")->fetchColumn();
 
     }
 
     /**
-    -----------------------------------------------------------------
-    Функция определения друга
-    -----------------------------------------------------------------
+     * Функция определения друга
+     *
+     * @param      $user_id
+     * @param bool $param  если true, то выполняется просто проверка на дружбу
+     *
+     * @return integer
      */
-    public static function checkFriend(
-        $id, //ID пользователя для проверки
-        $param = FALSE //если true, то выполняется просто проверка на дружбу
-    )
+    public static function checkFriend($user_id, $param = FALSE)
     {
         //Проверяем является ли пользователь другом 
-        $friend = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $id . "' AND `user_id`='" . parent::$USER_ID . "') OR (`contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'))"), 0);
+        $friend = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . $user_id . "' AND `user_id`='" . static::$USER_ID . "') OR (`contact_id`='" . static::$USER_ID . "' AND `user_id`='" . $user_id . "'))")->fetchColumn();
         if ($friend != 2) {
             if ($param === FALSE) { //Если функция вызвана без дополнительного параметра, то проверяем заявки
                 //Проверяем есть ли заявка от выбранного пользователя
-                if (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . parent::$USER_ID . "' AND `user_id`='" . $id . "'"), 0) == 1) return 2; //Подтверждаем дружбу
+                if (DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `contact_id`='" . static::$USER_ID . "' AND `user_id`='" . $user_id . "'")->fetchColumn() == 1) return 2; //Подтверждаем дружбу
                 //Проверяем подавали ли мы заявку
-                elseif (mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . parent::$USER_ID . "' AND `contact_id`='" . $id . "'"), 0) == 1) return 3; //Отменяем заявку
+                elseif (DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . static::$USER_ID . "' AND `contact_id`='" . $user_id . "'")->fetchColumn() == 1) return 3; //Отменяем заявку
             }
+
             return 0; //Пользователь не является другом
         } else return 1; //Пользователь друг
     }
 
     /**
-    -----------------------------------------------------------------
-    Функция друзей "Счетчик друзей"
-    -----------------------------------------------------------------
+     * Функция друзей "Счетчик друзей"
+     *
+     * @param null $var
+     *
+     * @return integer
      */
     public static function friendsCount($var = NULL)
     {
         //Количество друзей пользователя с вызванным ID
         if ($var == NULL)
-            return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
+            return DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts`
 			LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
-			WHERE `cms_mail_contacts`.`user_id`='" . parent::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
-			"), 0);
+			WHERE `cms_mail_contacts`.`user_id`='" . static::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
+			")->fetchColumn();
+
         //Количество своих друзей
-        return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
+        return DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts`
 			LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
 			WHERE `cms_mail_contacts`.`user_id`='" . $var . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
-			"), 0);
+			")->fetchColumn();
     }
 
-    /*
-    -----------------------------------------------------------------
-    Проверка пользователя на игнор
-    -----------------------------------------------------------------
-    */
-    public static function checkIgnor(
-        $var = NULL, //ID пользователя
-        $param = FALSE)
+    /**
+     * Проверка пользователя на игнор
+     *
+     * @param null $user_id
+     * @param bool $param
+     *
+     * @return bool
+     */
+    public static function checkIgnor($user_id = NULL, $param = FALSE)
     {
-        if ($var == NULL)
+        if ($user_id == NULL) {
             return FALSE;
-        if ($param === FALSE) {
-            $query = mysql_query("SELECT * FROM `cms_mail_contacts`
-			WHERE `user_id`='" . parent::$USER_ID . "' 
-			AND `contact_id`='" . $var . "' 
-			AND `banned`='1' LIMIT 1");
-            if (mysql_num_rows($query))
-                return TRUE;
-        } else {
-            $query = mysql_query("SELECT * FROM `cms_mail_contacts`
-			WHERE `user_id`='" . $var . "' 
-			AND `contact_id`='" . parent::$USER_ID . "' 
-			AND `banned`='1' LIMIT 1");
-            if (mysql_num_rows($query))
-                return TRUE;
         }
+        if ($param === FALSE) {
+            $query = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts`
+			WHERE `user_id`='" . static::$USER_ID . "' 
+			AND `contact_id`='" . $user_id . "'
+			AND `banned`='1' LIMIT 1")->fetchColumn();
+            if ($query) {
+                return TRUE;
+            }
+        } else {
+            $query = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts`
+			WHERE `user_id`='" . $user_id . "'
+			AND `contact_id`='" . static::$USER_ID . "' 
+			AND `banned`='1' LIMIT 1")->fetchColumn();
+            if ($query) {
+                return TRUE;
+            }
+        }
+
         return FALSE;
     }
 
     /*
-     * Старые функции, кандидаты нга выпиливание
+     * Старые функции, кандидаты на выпиливание
      * В новых разработках НЕ ПРИМЕНЯТЬ!
      */
 
@@ -667,6 +706,7 @@ class Functions extends Vars
         $f1 = strrpos($name, ".");
         $f2 = substr($name, $f1 + 1, 999);
         $fname = strtolower($f2);
+
         return $fname;
     }
 
