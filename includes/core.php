@@ -36,47 +36,47 @@ mb_internal_encoding('UTF-8');
 /**
  * Задаем пути
  */
-define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR);                    // Системная папка
-define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR);                    // Корневая папка
-define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR);                  // Папка для кэша
-define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR);                // Папка с конфигурационными файлами
+define('SYSPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR); // Системная папка
+define('ROOTPATH', dirname(SYSPATH) . DIRECTORY_SEPARATOR); // Корневая папка
+define('CACHEPATH', SYSPATH . 'cache' . DIRECTORY_SEPARATOR); // Папка для кэша
+define('CONFIGPATH', SYSPATH . 'config' . DIRECTORY_SEPARATOR); // Папка с конфигурационными файлами
 
-define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR);                  // Папка с пользовательскими файлами
-define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR);                 // Папка с модулями
-define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR);               // Папка с шаблонами
+define('FILEPATH', ROOTPATH . 'files' . DIRECTORY_SEPARATOR); // Папка с пользовательскими файлами
+define('MODPATH', ROOTPATH . 'modules' . DIRECTORY_SEPARATOR); // Папка с модулями
+define('TPLPATH', ROOTPATH . 'templates' . DIRECTORY_SEPARATOR); // Папка с шаблонами
 define('TPLDEFAULT', ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR);
 
 /**
  * Автозагрузка Классов
  */
 spl_autoload_register(
-    function($name)
-    {
+    function ($name) {
         $name = strtolower($name);
         $system = array(
-            'advt'           => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
-            'captcha'        => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
-            'comments'       => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
-            'counters'       => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
-            'fields'         => 'classes' . DIRECTORY_SEPARATOR . 'fields.php',
-            'finfo'          => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
-            'form'           => 'classes' . DIRECTORY_SEPARATOR . 'form.php',
-            'functions'      => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
-            'languages'      => 'classes' . DIRECTORY_SEPARATOR . 'languages.php',
-            'login'          => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
-            'network'        => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
-            'pclzip'         => 'lib'     . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
-            'router'         => 'classes' . DIRECTORY_SEPARATOR . 'router.php',
-            'session'        => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
-            'sitemap'        => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
-            'system'         => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
-            'template'       => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
-            'textparser'     => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
-            'upload'         => 'lib'     . DIRECTORY_SEPARATOR . 'class.upload.php',
-            'validate'       => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
-            'statistic'      => 'classes' . DIRECTORY_SEPARATOR . 'statistic.php',
-            'robotsdetect'   => 'classes' . DIRECTORY_SEPARATOR . 'robotsdetect.php',
-            'vars'           => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
+            'advt'         => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
+            'captcha'      => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
+            'comments'     => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
+            'counters'     => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
+            'db'           => 'classes' . DIRECTORY_SEPARATOR . 'db.php',
+            'fields'       => 'classes' . DIRECTORY_SEPARATOR . 'fields.php',
+            'finfo'        => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'form'         => 'classes' . DIRECTORY_SEPARATOR . 'form.php',
+            'functions'    => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
+            'languages'    => 'classes' . DIRECTORY_SEPARATOR . 'languages.php',
+            'login'        => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
+            'network'      => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
+            'pclzip'       => 'lib' . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
+            'router'       => 'classes' . DIRECTORY_SEPARATOR . 'router.php',
+            'session'      => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
+            'sitemap'      => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
+            'system'       => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
+            'template'     => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
+            'textparser'   => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
+            'upload'       => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'validate'     => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
+            'statistic'    => 'classes' . DIRECTORY_SEPARATOR . 'statistic.php',
+            'robotsdetect' => 'classes' . DIRECTORY_SEPARATOR . 'robotsdetect.php',
+            'vars'         => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
         );
 
         if (isset($system[$name])) {
@@ -94,7 +94,8 @@ spl_autoload_register(
  */
 new Network;
 
-require_once(CONFIGPATH . 'db.php');
+//TODO: Удалить после переделки модулей
+require(CONFIGPATH . 'db.php');
 $db_host = isset($db_host) ? $db_host : 'localhost';
 $db_user = isset($db_user) ? $db_user : 'root';
 $db_pass = isset($db_pass) ? $db_pass : '';
@@ -113,9 +114,11 @@ if (isset(Vars::$ACL['stat']) && Vars::$ACL['stat']) {
 
 /**
  * Работа с языками
- * @param $key               Ключ для фразы
- * @param bool $system       Принудительно использовать системный язык
- * @return string            Возвращенная по ключу фраза
+ *
+ * @param string $key    Ключ
+ * @param bool   $system Принудительно использовать системный язык
+ *
+ * @return string        Фраза, соответствующая переданному ключу
  */
 function __($key, $system = FALSE)
 {
@@ -130,5 +133,7 @@ function __($key, $system = FALSE)
  * Буфферизация вывода, инициализация шаблонов, закрытие сессии
  */
 ob_start();
-register_shutdown_function(function(){Template::getInstance()->loadTemplate();});
+register_shutdown_function(function () {
+    Template::getInstance()->loadTemplate();
+});
 register_shutdown_function('session_write_close');

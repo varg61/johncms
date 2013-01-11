@@ -16,33 +16,17 @@
 
 /**
  * Session handler
- *
- * @version 1.0.0
- * @since 5.0.0
  */
 class Session extends Vars
 {
-    /**
-     * @var string Session name
-     */
-    private $sessionName = 'SID';
-
-    /**
-     * @var int Session lifetime [in seconds]
-     */
     private $sessionLifeTime = 86400;
+    private $data;
 
-    private $session_id;
-    private $session_data;
-
-    /**
-     * Session handler
-     */
     function __construct()
     {
         @ini_set('session.use_trans_sid', '0');
-        @ini_set('session.use_cookies', true);
-        @ini_set('session.use_only_cookies', true);
+        @ini_set('session.use_cookies', TRUE);
+        @ini_set('session.use_only_cookies', TRUE);
         @ini_set('session.gc_maxlifetime', $this->sessionLifeTime);
         @ini_set('session.gc_probability', '1');
         @ini_set('session.gc_divisor', '100');
@@ -56,7 +40,7 @@ class Session extends Vars
             array($this, 'sessionGc')
         );
 
-        session_name($this->sessionName);
+        session_name('SID');
         session_set_cookie_params($this->sessionLifeTime, '/');
         session_start();
         setcookie(session_name(), session_id(), (time() + $this->sessionLifeTime), '/');
@@ -67,11 +51,12 @@ class Session extends Vars
      *
      * @param $path
      * @param $name
+     *
      * @return bool
      */
     public function sessionOpen($path, $name)
     {
-        return true;
+        return TRUE;
     }
 
     /**
@@ -81,34 +66,42 @@ class Session extends Vars
      */
     public function sessionClose()
     {
-        return true;
+        return TRUE;
     }
 
     /**
      * Read session data
      *
-     * @param string $sid Session ID
-     * @return mixed Session data
-     * @uses $userId
+     * @param string $sid
+     *
+     * @return string
      */
     public function sessionRead($sid)
     {
-        $this->session_id = $sid;
-        $req = mysql_query("SELECT *
+        $STH = DB::PDO()->prepare('
+            SELECT *
             FROM `cms_sessions`
-            WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
+            WHERE `session_id` = :sid
             FOR UPDATE
-        ") or exit ($this->_error(mysql_error()));
-        if (mysql_num_rows($req)) {
-            $res = mysql_fetch_assoc($req);
-            $this->session_data = $res;
-            return $res['session_data'];
+        ');
+        $STH->bindParam(':sid', $sid, PDO::PARAM_STR);
+        $STH->execute();
+        if ($STH->rowCount()) {
+            $this->data = $STH->fetch();
+
+            return $this->data['session_data'];
         } else {
-            mysql_query("INSERT INTO `cms_sessions` SET
-                `session_id` = '" . mysql_real_escape_string($sid) . "',
-                `session_timestamp` = " . time() . ",
-                `session_data` = ''
-            ") or exit ($this->_error(mysql_error()));
+            $STH = DB::PDO()->prepare('
+                INSERT INTO `cms_sessions` SET
+                `session_id`        = :sid,
+                `session_timestamp` = :time,
+                `session_data`      = :data
+            ');
+            $STH->bindParam(':sid', $sid, PDO::PARAM_STR);
+            $STH->bindValue(':time', time(), PDO::PARAM_INT);
+            $STH->bindValue(':data', '', PDO::PARAM_STR);
+            $STH->execute();
+
             return '';
         }
     }
@@ -116,87 +109,96 @@ class Session extends Vars
     /**
      * Write session data
      *
-     * @param $sid string $sid Session ID
-     * @param $data mixed Session data
-     * @return bool true
+     * @param string $sid
+     * @param string $data
+     *
+     * @return bool
      */
     public function sessionWrite($sid, $data)
     {
-        $movings = false;
-        $sql[] = "`session_timestamp` = " . time();
-        $sql[] = "`session_data` = '" . mysql_real_escape_string($data) . "'";
-
-        if ($this->session_data['user_id'] != parent::$USER_ID) {
-            $sql[] = "`user_id` = " . parent::$USER_ID;
-        }
-
-        if ($this->session_data['ip'] != parent::$IP) {
-            $sql[] = "`ip` = " . parent::$IP;
-        }
-
-        if ($this->session_data['ip_via_proxy'] != parent::$IP_VIA_PROXY) {
-            $sql[] = "`ip_via_proxy` = " . parent::$IP_VIA_PROXY;
-        }
-
-        if ($this->session_data['user_agent'] != parent::$USER_AGENT) {
-            $sql[] = "`user_agent` = '" . mysql_real_escape_string(parent::$USER_AGENT) . "'";
-        }
-
-        if ($this->session_data['place'] != parent::$PLACE) {
-            $sql[] = "`place` = '" . mysql_real_escape_string(parent::$PLACE) . "'";
-            $movings = TRUE;
-        }
-
-        if ($this->session_data['session_timestamp'] > (time() - 300)) {
-            $sql[] = "`views` = " . ++$this->session_data['views'];
-            if ($movings) {
-                $sql[] = "`movings` = " . ++$this->session_data['movings'];
-            }
+        if ($this->data['session_timestamp'] > (time() - 300)) {
+            $views = ++$this->data['views'];
+            $movings = $this->data['place'] == parent::$PLACE
+                ? $this->data['movings']
+                : ++$this->data['movings'];
         } else {
-            $sql[] = "`views` = 1";
-            $sql[] = "`movings` = 1";
-            $sql[] = "`start_time` = " . time();
+            $views = 1;
+            $movings = 1;
         }
 
-        mysql_query("UPDATE `cms_sessions` SET " . implode(', ', $sql) . "
-            WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
-        ") or exit ($this->_error(mysql_error()));
-        return true;
+        $STH = DB::PDO()->prepare('
+            UPDATE `cms_sessions` SET
+            `session_timestamp` = :time,
+            `session_data`      = :data,
+            `user_id`           = :uid,
+            `ip`                = :ip,
+            `ip_via_proxy`      = :ipvia,
+            `user_agent`        = :ua,
+            `place`             = :place,
+            `views`             = :views,
+            `movings`           = :movings
+            WHERE `session_id`  = :sid
+        ');
+
+        $STH->bindParam(':sid', $sid, PDO::PARAM_STR);
+        $STH->bindValue(':time', time(), PDO::PARAM_INT);
+        $STH->bindParam(':data', $data, PDO::PARAM_STR);
+        $STH->bindValue(':uid', static::$USER_ID, PDO::PARAM_INT);
+        $STH->bindValue(':ip', static::$IP, PDO::PARAM_INT);
+        $STH->bindValue(':ipvia', static::$IP_VIA_PROXY, PDO::PARAM_INT);
+        $STH->bindValue(':ua', static::$USER_AGENT, PDO::PARAM_STR);
+        $STH->bindValue(':place', static::$PLACE, PDO::PARAM_STR);
+        $STH->bindParam(':views', $views, PDO::PARAM_INT);
+        $STH->bindParam(':movings', $movings, PDO::PARAM_INT);
+        $STH->execute();
+
+        return TRUE;
     }
 
     /**
      * Destroy Session
      *
-     * @param $sid
-     * @return bool true
+     * @param string $sid
+     *
+     * @return bool
      */
     public function sessionDestroy($sid)
     {
-        mysql_query("DELETE FROM `cms_sessions`
-            WHERE `session_id` = '" . mysql_real_escape_string($sid) . "'
-        ") or exit ($this->_error(mysql_error()));
-        return true;
+        $STH = DB::PDO()->prepare('
+            DELETE FROM `cms_sessions`
+            WHERE `session_id` = :sid
+        ');
+
+        $STH->bindParam(':sid', $sid, PDO::PARAM_STR);
+        $STH->execute();
+
+        return TRUE;
     }
 
     /**
      * Garbage collection
      *
-     * @return bool true
+     * @return bool
      */
     public function sessionGc()
     {
-        $time = time() - $this->sessionLifeTime;
-        mysql_query("DELETE FROM `cms_sessions`
-            WHERE `session_timestamp` < $time
-        ") or exit ($this->_error(mysql_error()));
-        return true;
+        $STH = DB::PDO()->prepare('
+            DELETE FROM `cms_sessions`
+            WHERE `session_timestamp` < :time
+        ');
+
+        $STH->bindValue(':time', (time() - $this->sessionLifeTime), PDO::PARAM_INT);
+        $STH->execute();
+
+        return TRUE;
     }
 
     /**
      * Error message
      *
-     * @param string $error error message
-     * @return string formatted error message
+     * @param string $error
+     *
+     * @return string
      */
     private function _error($error)
     {
