@@ -9,8 +9,8 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     <meta name="HandheldFriendly" content="true"/>
     <meta name="MobileOptimized" content="width"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <meta name="keywords" content="<?= Validate::checkout(Vars::$SYSTEM_SET['keywords']) ?>"/>
-    <meta name="description" content="<?= Validate::checkout(Vars::$SYSTEM_SET['description']) ?>"/>
+    <meta name="keywords" content="<?= Validate::checkout(Vars::$SYSTEM_SET['meta_key']) ?>"/>
+    <meta name="description" content="<?= Validate::checkout(Vars::$SYSTEM_SET['meta_desc']) ?>"/>
     <?= $this->loadCSS() ?>
     <link rel="shortcut icon" href="<?= Vars::$HOME_URL ?>favicon.ico"/>
     <link rel="alternate" type="application/rss+xml" title="<?= __('site_news', 1) ?>" href="http://localhost/johncms/rss"/>
