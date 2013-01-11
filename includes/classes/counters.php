@@ -11,21 +11,80 @@
 
 class Counters extends Vars
 {
-    public $users;                     // Зарегистрированные пользователи
-    public $users_new;                 // Новые зарегистрированные пользователи
-    public $album;                     // Пользовательские альбомы
-    public $album_photo;               // Пользовательские фотографии
-    public $album_photo_new;           // Новые пользовательские фотографии
-    public $downloads;                 // Счетчик файлов в Загруз-центре
-    public $downloads_mod;             // Счетчик файлов в Загруз-центре
-    public $downloads_new;             // Счетчик новых файлов в Загруз-центре
-    public $forum_topics;              // Счетчик топиков Форума
-    public $forum_messages;            // Счетчик постов Форума
-    public $library;                   // Счетчик статей Библиотеки
-    public $library_new;               // Счетчик новых статей Библиотеки
-    public $library_mod;               // Счетчик статей Библиотеки, находящихся на модерации
-    public $guestbook;                 // Счетчик постов в Гостевой за последние сутки
-    public $adminclub;                 // Счетчик постов в Админ-клубе за последние сутки
+    /**
+     * @var int Зарегистрированные пользователи
+     */
+    public $users;
+
+    /**
+     * @var int Новые зарегистрированные пользователи
+     */
+    public $users_new;
+
+    /**
+     * @var int Пользовательские альбомы
+     */
+    public $album;
+
+    /**
+     * @var int Пользовательские фотографии
+     */
+    public $album_photo;
+
+    /**
+     * @var int Новые пользовательские фотографии
+     */
+    public $album_photo_new;
+
+    /**
+     * @var int Счетчик файлов в Загруз-центре
+     */
+    public $downloads;
+
+    /**
+     * @var int Счетчик файлов в Загруз-центре
+     */
+    public $downloads_mod;
+
+    /**
+     * @var int Счетчик новых файлов в Загруз-центре
+     */
+    public $downloads_new;
+
+    /**
+     * @var int Счетчик топиков Форума
+     */
+    public $forum_topics;
+
+    /**
+     * @var int Счетчик постов Форума
+     */
+    public $forum_messages;
+
+    /**
+     * @var int Счетчик статей Библиотеки
+     */
+    public $library;
+
+    /**
+     * @var int Счетчик новых статей Библиотеки
+     */
+    public $library_new;
+
+    /**
+     * @var int Счетчик статей Библиотеки, находящихся на модерации
+     */
+    public $library_mod;
+
+    /**
+     * @var int Счетчик постов в Гостевой за последние сутки
+     */
+    public $guestbook;
+
+    /**
+     * @var int Счетчик постов в Админ-клубе за последние сутки
+     */
+    public $adminclub;
 
     private $cache_file = 'cache_counters.dat';
     private $update_cache = FALSE;
@@ -70,59 +129,31 @@ class Counters extends Vars
         }
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик не прочитанных тем Форума
-    -----------------------------------------------------------------
-    */
-    public static function forumCountNew($mod = 0)
-    {
-        if (Vars::$USER_ID) {
-            $req = mysql_query("SELECT COUNT(*) FROM `forum`
-                LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . Vars::$USER_ID . "'
-                WHERE `forum`.`type`='t'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "
-                AND (`cms_forum_rdm`.`topic_id` Is Null
-                OR `forum`.`time` > `cms_forum_rdm`.`time`)");
-            $total = mysql_result($req, 0);
-            if ($mod) {
-                return '<a href="' . Vars::$HOME_URL . 'forum/new/">' . __('unread') . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
-            } else {
-                return $total;
-            }
-        } else {
-            if ($mod) {
-                return '<a href="' . Vars::$HOME_URL . 'forum/new/">' . __('last_activity') . '</a>';
-            } else {
-                return FALSE;
-            }
-        }
-    }
-
-    /*
-    -----------------------------------------------------------------
-    Счетчик посетителей Онлайн
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик посетителей Онлайн
+     *
+     * @return integer
+     */
     public static function usersOnline()
     {
-        return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 AND `session_timestamp` > " . (time() - 300)), 0);
+        return DB::PDO()->query('SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 AND `session_timestamp` > ' . (time() - 300))->fetchColumn();
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик гостей Онлайн
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик гостей Онлайн
+     *
+     * @return integer
+     */
     public static function guestaOnline()
     {
-        return mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 AND `session_timestamp` > " . (time() - 300)), 0);
+        return DB::PDO()->query('SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` = 0 AND `session_timestamp` > ' . (time() - 300))->fetchColumn();
     }
 
-    /*
-    -----------------------------------------------------------------
-    Считываем данные из Кэша
-    -----------------------------------------------------------------
-    */
+    /**
+     * Считываем данные из Кэша
+     *
+     * @return array|bool
+     */
     private function _cacheRead()
     {
         $out = array();
@@ -135,17 +166,19 @@ class Counters extends Vars
                                           'time'  => $tmp['time']);
             }
             fclose($in);
+
             return $out;
         }
+
         return FALSE;
     }
 
-    /*
-    -----------------------------------------------------------------
-    Записываем данные в Кэш
-    -----------------------------------------------------------------
-    */
-    private function _cacheWrite($data = array())
+    /**
+     * Записываем данные в Кэш
+     *
+     * @param array $data
+     */
+    private function _cacheWrite(array $data = array())
     {
         $file = CACHEPATH . $this->cache_file;
         $in = fopen($file, "w+");
@@ -157,243 +190,291 @@ class Counters extends Vars
         fclose($in);
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик зарегистрированных пользователей сайта
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик зарегистрированных пользователей сайта
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _users(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `level` > 0"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `users` WHERE `level` > 0')->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик новых зарегистрированных пользователей сайта (за 1 день)
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик новых зарегистрированных пользователей сайта (за 1 день)
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _usersNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `join_date` > '" . (time() - 86400) . "'"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `users` WHERE `join_date` > ' . (time() - 86400))->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик Фотоальбомов
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик Фотоальбомов
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _album(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files`')->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик картинок
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик картинок
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _albumPhoto(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files`"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `cms_album_files`')->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик новых картинок
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик новых картинок
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _albumPhotoNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > ' . (time() - 259200) . ' AND `access` > 1')->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик файлов в загруз-центре
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик файлов в загруз-центре
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _downloads(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = 2')->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик новых файлов в загруз-центре
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик новых файлов в загруз-центре
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _downloadsNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2' AND `time` > '" . (time() - 259200) . "'"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = 2 AND `time` > ' . (time() - 259200))->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
-    /*
-    -----------------------------------------------------------------
-    Счетчик файлов на модерации в загруз-центре
-    -----------------------------------------------------------------
-    */
+
+    /**
+     * Счетчик файлов на модерации в загруз-центре
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _downloadsMod(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '3'"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = 3')->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
-	/*
-    -----------------------------------------------------------------
-    Счетчик топиков Форума
-    -----------------------------------------------------------------
-    */
+
+    /**
+     * Счетчик топиков Форума
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _forumTopics(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` != '1'"), 0);
+            $var['count'] = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` != '1'")->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик постов Форума
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик постов Форума
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _forumMessages(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1'"), 0);
+            $var['count'] = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` != '1'")->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик непрочитанных топиков Форума
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик непрочитанных топиков Форума
+     *
+     * @return bool|integer
+     */
     public static function forumMessagesNew()
     {
         if (!Vars::$USER_ID) {
             return FALSE;
         }
-        return mysql_result(mysql_query("SELECT COUNT(*) FROM `forum`
+
+        return DB::PDO()->query("SELECT COUNT(*) FROM `forum`
                 LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '" . Vars::$USER_ID . "'
                 WHERE `forum`.`type`='t'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                 AND (`cms_forum_rdm`.`topic_id` Is Null
-                OR `forum`.`time` > `cms_forum_rdm`.`time`)"), 0);
+                OR `forum`.`time` > `cms_forum_rdm`.`time`)")->fetchColumn();
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик статей в Библиотеке
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик статей в Библиотеке
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _library(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'"), 0);
+            $var['count'] = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1'")->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик новых статей в Библиотеке (за 2 дня)
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик новых статей в Библиотеке (за 2 дня)
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _libraryNew(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 3600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'"), 0);
+            $var['count'] = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'")->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик статей на модерации в Библиотеке
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик статей на модерации в Библиотеке
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _libraryMod(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 600) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'"), 0);
+            $var['count'] = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'")->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик новых постов в гостевой
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик новых постов в гостевой
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _guestBook(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 60) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='0' AND `time` > '" . (time() - 86400) . "'"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `guest` WHERE `adm` = 0 AND `time` > ' . (time() - 86400))->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 
-    /*
-    -----------------------------------------------------------------
-    Счетчик новых постов в Админ-клубе
-    -----------------------------------------------------------------
-    */
+    /**
+     * Счетчик новых постов в Админ-клубе
+     *
+     * @param integer $var
+     *
+     * @return integer
+     */
     private function _adminClub(&$var)
     {
         if (!isset($var) || $var['time'] < time() - 60) {
             $this->update_cache = TRUE;
-            $var['count'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `guest` WHERE `adm`='1' AND `time` > '" . (time() - 86400) . "'"), 0);
+            $var['count'] = DB::PDO()->query('SELECT COUNT(*) FROM `guest` WHERE `adm` = 1 AND `time` > ' . (time() - 86400))->fetchColumn();
             $var['time'] = time();
         }
+
         return $var['count'];
     }
 }
