@@ -95,20 +95,21 @@ spl_autoload_register(
 new Network;
 
 //TODO: Удалить после переделки модулей
-require(CONFIGPATH . 'db.php');
-$db_host = isset($db_host) ? $db_host : 'localhost';
-$db_user = isset($db_user) ? $db_user : 'root';
-$db_pass = isset($db_pass) ? $db_pass : '';
-$db_name = isset($db_name) ? $db_name : 'johncms';
-$connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
-@mysql_select_db($db_name) or die('Error: specified database does not exist');
-mysql_set_charset('UTF8', $connect);
+//require(CONFIGPATH . 'db.php');
+//$db_host = isset($db_host) ? $db_host : 'localhost';
+//$db_user = isset($db_user) ? $db_user : 'root';
+//$db_pass = isset($db_pass) ? $db_pass : '';
+//$db_name = isset($db_name) ? $db_name : 'johncms';
+//$connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
+//@mysql_select_db($db_name) or die('Error: specified database does not exist');
+//mysql_set_charset('UTF8', $connect);
 
 new Session;
 new System;
 
 if (isset(Vars::$ACL['stat']) && Vars::$ACL['stat']) {
-    new statistic;
+    //TODO: После доработки модуля статистики удалить коментарий
+    //new statistic;
 }
 
 
