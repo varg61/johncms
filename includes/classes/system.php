@@ -290,8 +290,8 @@ class System extends Vars
     private function _autoClean()
     {
         if (static::$SYSTEM_SET['clean_time'] < time() - 86400) {
-            DB::PDO()->exec("DELETE FROM `cms_sessions` WHERE `last_visit` < '" . (time() - 86400) . "'");
-            DB::PDO()->exec("DELETE FROM `cms_users_iphistory` WHERE `time` < '" . (time() - 2592000) . "'");
+            DB::PDO()->exec("DELETE FROM `cms_sessions` WHERE `session_timestamp` < '" . (time() - 86400) . "'");
+            DB::PDO()->exec("DELETE FROM `cms_user_ip` WHERE `timestamp` < '" . (time() - 2592000) . "'");
             DB::PDO()->exec("UPDATE `cms_settings` SET  `val` = '" . time() . "' WHERE `key` = 'clean_time' LIMIT 1");
             DB::PDO()->exec("OPTIMIZE TABLE `cms_sessions` , `cms_users_iphistory`, `cms_users_settings`");
         }

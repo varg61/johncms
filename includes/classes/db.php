@@ -34,7 +34,6 @@ class DB
             try {
                 self::$instance = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_name, $db_user, $db_pass,
                     array(
-                        PDO::ATTR_PERSISTENT         => TRUE,
                         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
