@@ -20,13 +20,13 @@ class Router extends Vars
     public function __construct()
     {
         $this->_getRoute();
-        if (isset(self::$ROUTE[0]) && !empty(self::$ROUTE[0])) {
-            $this->_getModule(self::$ROUTE[0]);
+        if (isset(static::$ROUTE[0]) && !empty(static::$ROUTE[0])) {
+            $this->_getModule(static::$ROUTE[0]);
         } else {
             $this->_getModule('homepage');
         }
 
-        parent::$PLACE = $this->_setPlace();
+        static::$PLACE = $this->_setPlace();
         $this->_include();
     }
 
@@ -41,10 +41,10 @@ class Router extends Vars
         $uri = '';
         $level = $level > 0 ? $level - 2 : -1;
         for ($i = 0; $i <= $level; $i++) {
-            if (!isset(self::$ROUTE[$i])) {
+            if (!isset(static::$ROUTE[$i])) {
                 break;
             }
-            $uri .= self::$ROUTE[$i] . '/';
+            $uri .= static::$ROUTE[$i] . '/';
         }
         return htmlspecialchars(Vars::$HOME_URL . $uri);
     }
@@ -54,10 +54,10 @@ class Router extends Vars
      */
     private function _include()
     {
-        if (isset(self::$ROUTE[1]) && is_file(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . self::$ROUTE[1] . '.php')) {
-            include(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . self::$ROUTE[1] . '.php');
-        } elseif (is_file(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . 'index.php')) {
-            include(MODPATH . self::$PATH . DIRECTORY_SEPARATOR . 'index.php');
+        if (isset(static::$ROUTE[1]) && is_file(MODPATH . static::$PATH . DIRECTORY_SEPARATOR . static::$ROUTE[1] . '.php')) {
+            include(MODPATH . static::$PATH . DIRECTORY_SEPARATOR . static::$ROUTE[1] . '.php');
+        } elseif (is_file(MODPATH . static::$PATH . DIRECTORY_SEPARATOR . 'index.php')) {
+            include(MODPATH . static::$PATH . DIRECTORY_SEPARATOR . 'index.php');
         } else {
             echo'File "index.php" not found';
         }
@@ -72,15 +72,15 @@ class Router extends Vars
             && strlen($_GET['route']) > 2
             && strlen($_GET['route']) < 30
         ) {
-            if(preg_match('/[^\da-z\/\_\.]+/i', $_GET['route'])){
-                self::$ROUTE[0] = '404';
+            if (preg_match('/[^\da-z\/\_\.]+/i', $_GET['route'])) {
+                static::$ROUTE[0] = '404';
             } else {
                 $route = explode('/', trim($_GET['route']));
                 foreach ($route as $key => $val) {
-                    if(empty($val)){
+                    if (empty($val)) {
                         break;
                     }
-                    self::$ROUTE[$key] = trim($val);
+                    static::$ROUTE[$key] = trim($val);
                 }
                 unset($route);
             }
@@ -111,16 +111,16 @@ class Router extends Vars
     private function _setPlace()
     {
         $param = array();
-        if (!empty(parent::$ACT)) {
-            $param[] = 'act=' . parent::$ACT;
+        if (!empty(static::$ACT)) {
+            $param[] = 'act=' . static::$ACT;
         }
-        if (!empty(parent::$MOD)) {
-            $param[] = 'mod=' . parent::$MOD;
+        if (!empty(static::$MOD)) {
+            $param[] = 'mod=' . static::$MOD;
         }
-        if (parent::$ID) {
-            $param[] = 'id=' . parent::$ID;
+        if (static::$ID) {
+            $param[] = 'id=' . static::$ID;
         }
-        return implode('/', self::$ROUTE) . (!empty($param) ? '?' . implode('&', $param) : '');
+        return implode('/', static::$ROUTE) . (!empty($param) ? '?' . implode('&', $param) : '');
     }
 
     /**
@@ -131,11 +131,17 @@ class Router extends Vars
      */
     private function _query($arg)
     {
-        $req = mysql_query("SELECT * FROM `cms_modules`
-        WHERE `module` = '" . mysql_real_escape_string($arg) . "'");
-        if (mysql_num_rows($req)) {
-            $res = mysql_fetch_assoc($req);
-            self::$PATH = $res['path'];
+        $STH = DB::PDO()->prepare('
+            SELECT * FROM `cms_modules`
+            WHERE `module` = :mod
+        ');
+
+        $STH->bindParam(':mod', $arg, PDO::PARAM_STR);
+        $STH->execute();
+
+        if ($STH->rowCount()) {
+            $result = $STH->fetch();
+            static::$PATH = $result['path'];
             return TRUE;
         }
 
