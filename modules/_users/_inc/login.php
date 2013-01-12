@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_USERS') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
 

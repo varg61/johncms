@@ -23,6 +23,7 @@ $personal_actions = array(
 );
 
 $common_actions = array(
+    'exit'  => 'exit.php',
     'login' => 'login.php'
 );
 

@@ -119,7 +119,7 @@ abstract class Vars
      */
     public static function getUserData($key = '')
     {
-        if (self::$USER_ID && !empty($key)) {
+        if (static::$USER_ID && !empty($key)) {
             $STH = DB::PDO()->prepare('
                 SELECT `value` FROM `cms_user_settings`
                 WHERE `user_id` = :uid
@@ -152,7 +152,7 @@ abstract class Vars
      */
     public static function setUserData($key = '', $val = array())
     {
-        if (!self::$USER_ID || empty($key) || (!empty($val) && !is_array($val))) {
+        if (!static::$USER_ID || empty($key) || (!empty($val) && !is_array($val))) {
             return FALSE;
         }
 
@@ -192,12 +192,12 @@ abstract class Vars
      */
     public static function userUnset($clear_token = FALSE)
     {
-        if (self::$USER_ID && $clear_token) {
-            DB::PDO()->exec("UPDATE `users` SET `token` = '' WHERE `id` = " . self::$USER_ID);
+        if (static::$USER_ID && $clear_token) {
+            DB::PDO()->exec("UPDATE `users` SET `token` = '' WHERE `id` = " . static::$USER_ID);
         }
-        self::$USER_ID = FALSE;
-        self::$USER_RIGHTS = 0;
-        self::$USER_DATA = array();
+        static::$USER_ID = FALSE;
+        static::$USER_RIGHTS = 0;
+        static::$USER_DATA = array();
         setcookie('uid', '', time() - 3600, '/');
         setcookie('token', '', time() - 3600, '/');
         session_destroy();
@@ -210,9 +210,9 @@ abstract class Vars
      */
     public static function fixPage($total)
     {
-        if ($total < self::$START) {
-            $page = ceil($total / self::$USER_SET['page_size']);
-            self::$START = $page * self::$USER_SET['page_size'] - self::$USER_SET['page_size'];
+        if ($total < static::$START) {
+            $page = ceil($total / static::$USER_SET['page_size']);
+            static::$START = $page * static::$USER_SET['page_size'] - static::$USER_SET['page_size'];
         }
     }
 
@@ -221,6 +221,6 @@ abstract class Vars
      */
     public static function db_pagination()
     {
-        return ' LIMIT ' . self::$START . ',' . self::$USER_SET['page_size'];
+        return ' LIMIT ' . static::$START . ',' . static::$USER_SET['page_size'];
     }
 }
