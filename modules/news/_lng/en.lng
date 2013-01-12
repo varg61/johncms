@@ -1,3 +1,4 @@
+add_article                   =   "Add Article"
 article_added                 =   "News added"
 article_changed               =   "News changed"
 article_deleted               =   "News deleted"

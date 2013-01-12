@@ -9,13 +9,9 @@
  * @author      http://johncms.com/about
  */
 
-// Проверяем права доступа
-if (Vars::$USER_RIGHTS < 7) {
-    echo Functions::displayError(__('access_forbidden'));
-    exit;
-}
+defined('_IN_NEWS') or die('Error: restricted access');
+$uri = Router::getUri(3);
 
-$tpl = Template::getInstance();
 $settings = isset(Vars::$SYSTEM_SET['news'])
     ? unserialize(Vars::$SYSTEM_SET['news'])
     : array(
@@ -29,7 +25,8 @@ $settings = isset(Vars::$SYSTEM_SET['news'])
         'days'     => 7
     );
 
-$form = new Form(Router::getUri(3));
+$tpl = Template::getInstance();
+$form = new Form($uri);
 
 $form
     ->fieldsetStart(__('apperance'))
@@ -115,15 +112,22 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
         $settings[$key] = $val;
     }
 
-    mysql_query("REPLACE INTO `cms_settings` SET
-        `key` = 'news',
-        `val` = '" . mysql_real_escape_string(serialize($settings)) . "'
-    ");
+    // Записываем настройки в базу
+    $STH = DB::PDO()->prepare('
+        REPLACE INTO `cms_settings` SET
+        `key` = :key,
+        `val` = :val
+    ');
+
+    $STH->bindValue(':key', 'news');
+    $STH->bindValue(':val', serialize($settings));
+    $STH->execute();
+    $STH = NULL;
 
     $tpl->save = TRUE;
 } elseif ($form->isSubmitted && isset($form->input['reset'])) {
-    @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'news'");
-    header('Location: ' . Router::getUri(3) . '?default');
+    DB::PDO()->query("DELETE FROM `cms_settings` WHERE `key` = 'news'");
+    header('Location: ' . $uri . '?default');
     exit;
 }
 

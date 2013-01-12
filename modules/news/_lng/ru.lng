@@ -1,3 +1,4 @@
+add_article                   =   "Добавить новость"
 article_added                 =   "Новость добавлена"
 article_changed               =   "Новость изменена"
 article_deleted               =   "Новость удалена"
