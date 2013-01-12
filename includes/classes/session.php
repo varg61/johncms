@@ -84,8 +84,10 @@ class Session extends Vars
             WHERE `session_id` = :sid
             FOR UPDATE
         ');
+
         $STH->bindParam(':sid', $sid, PDO::PARAM_STR);
         $STH->execute();
+
         if ($STH->rowCount()) {
             $this->data = $STH->fetch();
 
@@ -97,6 +99,7 @@ class Session extends Vars
                 `session_timestamp` = :time,
                 `session_data`      = :data
             ');
+
             $STH->bindParam(':sid', $sid, PDO::PARAM_STR);
             $STH->bindValue(':time', time(), PDO::PARAM_INT);
             $STH->bindValue(':data', '', PDO::PARAM_STR);
