@@ -9,7 +9,7 @@
  * @author      http://johncms.com/about
  */
 
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 $tpl = Template::getInstance();
 $tpl->url = $url;
 

@@ -14,7 +14,7 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 $ip = isset(Router::$ROUTE[2]) ? Router::$ROUTE[2] : FALSE;
 
@@ -31,7 +31,7 @@ $form
     'value' => __('sent'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Router::getUrl(2)) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Router::getUri(2)) . '">' . __('back') . '</a>');
 //TODO: Доработать ссылку "Назад"
 $tpl->form = $form->display();
 

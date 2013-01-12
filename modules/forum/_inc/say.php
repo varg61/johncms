@@ -21,7 +21,7 @@ if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::
     exit;
 }
 
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 /*
 -----------------------------------------------------------------

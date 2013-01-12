@@ -20,7 +20,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 $add_message['text'] = isset($_POST['text']) ? trim($_POST['text']) : '';
 $addmail = new ValidMail($add_message, Vars::$ID);

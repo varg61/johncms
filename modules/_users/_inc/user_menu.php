@@ -13,7 +13,7 @@ defined('_IN_USERS') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
 
-$tpl->url = Router::getUrl(3);
+$tpl->url = Router::getUri(3);
 $tpl->count = new Counters();
-$tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
+$tpl->total_photo = DB::PDO()->query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID)->fetchColumn();
 $tpl->contents = $tpl->includeTpl('user_menu');

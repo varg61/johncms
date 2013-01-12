@@ -91,7 +91,7 @@ switch (Vars::$MOD) {
             '<input type="radio" value="0" name="postcut" ' . (!$set_forum['postcut'] ? 'checked="checked"' : '') . '/>&#160;' . __('not_to_cut_off') . '<br />' .
             '</p><p><input type="submit" name="submit" value="' . __('save') . '"/></p></div></form>' .
             '<div class="phdr"><a href="profile.php?act=settings&amp;mod=forum&amp;reset">' . __('reset_settings') . '</a></div>' .
-            '<p><a href="' . Router::getUrl(2) . '">' . __('to_forum') . '</a></p>';
+            '<p><a href="' . Router::getUri(2) . '">' . __('to_forum') . '</a></p>';
         break;
 
     default:

@@ -6,7 +6,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 $robot = isset($_GET['robot']) ? htmlspecialchars((string)$_GET['robot']) : FALSE;
 

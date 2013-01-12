@@ -141,7 +141,7 @@ class Download extends Vars
             $icon_id = isset(self::$extensions[$format_file]) ? self::$extensions[$format_file] : 9;
 			$out .= Functions::getIcon('filetype-' . $icon_id . '.png') . '&nbsp;';
 		}
-        $out .= '<a href="' . Router::getUrl(2) . '?act=view&amp;id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['field'] . ')';
+        $out .= '<a href="' . Router::getUri(2) . '?act=view&amp;id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['field'] . ')';
         if ($res_down['time'] > $old) {
             $out .= ' <span class="red">(NEW)</span>';
         }
@@ -158,7 +158,7 @@ class Download extends Vars
             $sub = '<div>' . Validate::checkout($about, 2) . '</div>';
         }
         if (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7) {
-            $sub .= '<a href="' . Router::getUrl(2) . '?act=comments&amp;id=' . $res_down['id'] . '">' . __('comments') . '</a> (' . $res_down['total'] . ')';
+            $sub .= '<a href="' . Router::getUri(2) . '?act=comments&amp;id=' . $res_down['id'] . '">' . __('comments') . '</a> (' . $res_down['total'] . ')';
         }
         if ($sub) {
             $out .= '<div class="sub">' . $sub . '</div>';
@@ -266,7 +266,7 @@ class Download extends Vars
     public static function downloadLlink($array = array())
     {
         global $set_down, $old;
-        $url = Router::getUrl(2);
+        $url = Router::getUri(2);
         $morelink = isset($array['more']) ? '&amp;more=' . $array['more'] : '';
         $out = '<table  width="100%"><tr><td width="16" valign="top">';
         if ($array['format'] == 'jar' && $set_down['icon_java']) {
@@ -343,7 +343,7 @@ class Download extends Vars
     */
     public static function navigation($array = array())
     {
-        $url = Router::getUrl(2);
+        $url = Router::getUri(2);
         $category = array('<a href="' . $url . '"><b>' . __('download_title') . '</b></a>');
         if($array['refid']) {
         	$sql = array();

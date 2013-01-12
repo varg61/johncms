@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 // Рейтинг самых читаемых статей
 echo '<div class="phdr"><a href="' . $url . '"><b>' . __('library') . '</b></a> | ' . __('top_read') . '</div>';

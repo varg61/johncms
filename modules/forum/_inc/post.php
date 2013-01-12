@@ -16,7 +16,7 @@ if (empty($_GET['id'])) {
     exit;
 }
 
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 $s = isset($_GET['s']) ? intval($_GET['s']) : FALSE;
 // Запрос сообщения

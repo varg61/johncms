@@ -9,7 +9,7 @@
 <!--   //TODO: Переделать ссылку     -->
         <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] ?></a>
         <div class="sub">
-            <a href="<?= Router::getUrl(2) ?>?act=delete&amp;id=<?= $row['id']?>"><?= __('delete') ?></a>
+            <a href="<?= Router::getUri(2) ?>?act=delete&amp;id=<?= $row['id']?>"><?= __('delete') ?></a>
         </div>
     </div>
     <?php endforeach ?>
@@ -30,4 +30,4 @@
 <?php else: ?>
 <div class="rmenu"><?= __('friends_not_online') ?></div>
 <?php endif ?>
-<p><a href="<?= Router::getUrl(2) ?>"><?= __('friends') ?></a></p>
+<p><a href="<?= Router::getUri(2) ?>"><?= __('friends') ?></a></p>

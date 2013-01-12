@@ -3,7 +3,7 @@
 <div class="topmenu"><a href="<?= Vars::$HOME_URL ?>mail/"><?= __('mail') ?></a></div>
 <?php if ($this->total): ?>
 <div>
-    <form action="<?= Router::getUrl(2) ?>/" method="post">
+    <form action="<?= Router::getUri(2) ?>/" method="post">
         <?php foreach ($this->query as $row): ?>
         <div class="<?= $row['list'] ?>">
             <input type="checkbox" name="delch[]" value="<?= $row['id'] ?>"/> <?= $row['icon'] ?> <a href="<?= $row['url'] ?>"><?= $row['nickname'] ?></a> <?= $row['online'] ?> (<?= $row['count'] ?>) <span
@@ -26,7 +26,7 @@
 <div class="rmenu"><?= __('no_contacts') ?></div>
 <?php endif ?>
 <div class="list2">
-    <?= Functions::getImage('mail-blocked.png') ?> <a href="<?= Router::getUrl(2) ?>?act=banned"><?= __('banned') ?></a>&#160;(<?= $this->banned ?>)<br/>
-    <?= Functions::getImage('mail-archive.png') ?> <a href="<?= Router::getUrl(2) ?>?act=archive"><?= __('archive') ?></a>&#160;(<?= $this->archive ?>)<br/>
-    <?= Functions::getImage('mail-search.png') ?> <a href="<?= Router::getUrl(2) ?>?act=search"><?= __('search_contact') ?></a>
+    <?= Functions::getImage('mail-blocked.png') ?> <a href="<?= Router::getUri(2) ?>?act=banned"><?= __('banned') ?></a>&#160;(<?= $this->banned ?>)<br/>
+    <?= Functions::getImage('mail-archive.png') ?> <a href="<?= Router::getUri(2) ?>?act=archive"><?= __('archive') ?></a>&#160;(<?= $this->archive ?>)<br/>
+    <?= Functions::getImage('mail-search.png') ?> <a href="<?= Router::getUri(2) ?>?act=search"><?= __('search_contact') ?></a>
 </div>

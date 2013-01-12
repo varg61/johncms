@@ -10,7 +10,7 @@
  */
 
 defined('_IN_USERS') or die('Error: restricted access');
-$uri = Router::getUrl(3);
+$uri = Router::getUri(3);
 
 $tpl = Template::getInstance();
 

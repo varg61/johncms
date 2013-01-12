@@ -9,6 +9,6 @@
         </a></li>
         <?php endforeach ?>
     <?php else: ?>
-    <li><a href="<?= Router::getUrl(3) ?>"><i class="icn-info"></i><?= __('list_empty') ?><i class="icn-arrow"></i></a></li>
+    <li><a href="<?= Router::getUri(3) ?>"><i class="icn-info"></i><?= __('list_empty') ?><i class="icn-arrow"></i></a></li>
     <?php endif ?>
 </ul>

@@ -1,6 +1,6 @@
 <div class="phdr"><strong><?= __('search') ?></strong></div>
 <div class="gmenu">
-    <form action="<?= Router::getUrl(2) ?>?act=search" method="post">
+    <form action="<?= Router::getUri(2) ?>?act=search" method="post">
         <div><?= __('search_contact') ?>:<br/>
             <input type="hidden" name="token" value="<?= $this->token ?>"/>
             <input type="text" name="q" value="<?= $this->search ?>"/>&#160;<input type="submit" name="search" value="<?= __('search') ?>"/>
@@ -22,5 +22,5 @@
 <? endif ?>
 <p>
     <a href="<?= Vars::$HOME_URL ?>mail/"><?= __('mail') ?></a><br/>
-    <a href="<?= Router::getUrl(2) ?>"><?= __('contacts') ?></a>
+    <a href="<?= Router::getUri(2) ?>"><?= __('contacts') ?></a>
 </p>

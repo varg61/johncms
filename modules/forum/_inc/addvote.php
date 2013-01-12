@@ -43,7 +43,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         } else
             echo __('error_empty_fields') . '<br /><a href="?act=addvote&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>';
     } else {
-        echo '<form action="' . Router::getUrl(2) . '?act=addvote&amp;id=' . Vars::$ID . '" method="post">' .
+        echo '<form action="' . Router::getUri(2) . '?act=addvote&amp;id=' . Vars::$ID . '" method="post">' .
              '<br />' . __('voting') . ':<br/>' .
              '<input type="text" size="20" maxlength="150" name="vote_name" value="' . Validate::checkout($vote_name) . '"/><br/>';
         if (isset($_POST['plus'])) ++$vote_count;
@@ -56,7 +56,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         echo ($vote_count < 20) ? '<br/><input type="submit" name="plus" value="' . __('add_answer') . '"/>' : '';
         echo $vote_count > 2 ? '<input type="submit" name="minus" value="' . __('delete_last') . '"/><br/>' : '<br/>';
         echo '<p><input type="submit" name="submit" value="' . __('save') . '"/></p></form>';
-        echo '<a href="' . Router::getUrl(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a>';
+        echo '<a href="' . Router::getUri(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a>';
     }
 } else {
     header('location: ../404.php');

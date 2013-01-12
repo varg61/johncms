@@ -53,7 +53,7 @@ if ($total) {
                 }
             }
         }
-        Header('Location: ' . Router::getUrl(2) . '?act=banned');
+        Header('Location: ' . Router::getUri(2) . '?act=banned');
         exit;
     }
 
@@ -84,7 +84,7 @@ if ($total) {
         ++$i;
     }
     //Навигация
-    $tpl->display_pagination = Functions::displayPagination(Router::getUrl(2) . '?act=banned&amp;',
+    $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?act=banned&amp;',
         Vars::$START, $total, Vars::$USER_SET['page_size']);
     $tpl->query = $array;
     $tpl->token = mt_rand(100, 10000);

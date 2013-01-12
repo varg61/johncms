@@ -20,7 +20,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 $tpl->title = __('mail') . ' | ' . __('outmess');
 if (Vars::$MOD == 'cleaning') {

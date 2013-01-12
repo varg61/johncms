@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (Vars::$USER_RIGHTS >= 7) {
-    $url = Router::getUrl(2);
+    $url = Router::getUri(2);
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($req) || Vars::$USER_RIGHTS < 7) {
         echo Functions::displayError(__('error_topic_deleted'));

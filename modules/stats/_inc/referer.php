@@ -6,7 +6,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 echo '<div class="phdr">' . __('whence_come') . '</div>';
 

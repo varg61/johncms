@@ -72,7 +72,7 @@ if ($search && Validate::nickname($search, 1) === TRUE) {
                     $row['nickname']),
                 'count'     => $row['count'],
                 'count_new' => Mail::countNew($row['id']),
-                'url'       => (Router::getUrl(2) . '?act=messages&amp;id=' . $row['id']),
+                'url'       => (Router::getUri(2) . '?act=messages&amp;id=' . $row['id']),
                 'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
                     '<span class="green"> [ON]</span>'));
             ++$i;
@@ -83,7 +83,7 @@ if ($search && Validate::nickname($search, 1) === TRUE) {
     }
     $tpl->total = $total;
     //Навигация
-    $tpl->display_pagination = Functions::displayPagination(Router::getUrl(2) . '?act=search&amp;q=' .
+    $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?act=search&amp;q=' .
         rawurlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']);
 } else {
     $tpl->total = 0;

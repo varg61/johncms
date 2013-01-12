@@ -10,7 +10,7 @@
  */
 
 defined('_IN_PROFILE') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 /*
 -----------------------------------------------------------------

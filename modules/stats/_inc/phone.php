@@ -10,7 +10,7 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 $arr_model = array('Nokia', 'Siemens', 'SE', 'Samsung', 'LG', 'Motorola', 'NEC', 'Philips', 'Sagem', 'Fly', 'Panasonic', 'Opera', 'komp');
 if (!in_array($model, $arr_model)) {

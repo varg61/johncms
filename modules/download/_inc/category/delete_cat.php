@@ -11,7 +11,7 @@
 
 //TODO: Добавить проверку, пустой ли каталог, перед удалением
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 /*
 -----------------------------------------------------------------

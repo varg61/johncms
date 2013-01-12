@@ -29,7 +29,7 @@ $settings = isset(Vars::$SYSTEM_SET['news'])
         'days'     => 7
     );
 
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 $form
     ->fieldsetStart(__('apperance'))
@@ -106,7 +106,7 @@ $form
     'value' => __('reset_settings'),
     'class' => 'btn'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
@@ -123,7 +123,7 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
     $tpl->save = TRUE;
 } elseif ($form->isSubmitted && isset($form->input['reset'])) {
     @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'news'");
-    header('Location: ' . Router::getUrl(3) . '?default');
+    header('Location: ' . Router::getUri(3) . '?default');
     exit;
 }
 

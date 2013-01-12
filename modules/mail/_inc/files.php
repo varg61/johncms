@@ -42,7 +42,7 @@ if ($tpl->total) {
         ++$i;
     }
     //Навигация
-    $tpl->display_pagination = Functions::displayPagination(Router::getUrl(2) . '?act=files&amp;', Vars::
+    $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?act=files&amp;', Vars::
     $START, $tpl->total, Vars::$USER_SET['page_size']);
     $tpl->query = $array;
     unset($array);

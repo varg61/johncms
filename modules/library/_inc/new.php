@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 echo '<div class="phdr"><b>' . __('new_articles') . '</b></div>';
 $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type` = 'bk' AND `moder` = '1'");
@@ -46,4 +46,4 @@ if ($total > 0) {
 } else {
     echo '<p>' . __('list_empty') . '</p>';
 }
-echo '<p><a href="' . Router::getUrl(2) . '">' . __('to_library') . '</a></p>';
+echo '<p><a href="' . Router::getUri(2) . '">' . __('to_library') . '</a></p>';

@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 defined('_IN_JOHNCMS_MAIL') or die('Error: restricted access');
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 if (Vars::$ID) {
     $result = mysql_fetch_assoc(mysql_query("SELECT * FROM `cms_mail_messages` WHERE `id`='" . Vars::$ID . "'"));

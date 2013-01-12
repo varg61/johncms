@@ -40,6 +40,6 @@ if ($tpl->total) {
         ++$i;
     }
     $tpl->query = $array;
-    $tpl->display_pagination = Functions::displayPagination(Router::getUrl(2) . '?', Vars::$START, $total, Vars::$USER_SET['page_size']);
+    $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?', Vars::$START, $total, Vars::$USER_SET['page_size']);
 }
 $tpl->contents = $tpl->includeTpl('online');

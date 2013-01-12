@@ -12,7 +12,7 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 $form
     ->fieldsetStart(__('update_cache'))
@@ -23,7 +23,7 @@ $form
     'value' => __('do'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 

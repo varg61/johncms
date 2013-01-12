@@ -10,8 +10,8 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
-$url = Router::getUrl(3);
-$backurl = Router::getUrl(2);
+$url = Router::getUri(3);
+$backurl = Router::getUri(2);
 
 $tpl = Template::getInstance();
 $firewall = new Firewall();

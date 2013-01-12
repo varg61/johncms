@@ -1,5 +1,5 @@
 <div class="phdr">
-    <a href="<?= Router::getUrl(2) ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('profile') : __('my_profile')) ?></b></a> |
+    <a href="<?= Router::getUri(2) ?>?act=edit&amp;user=<?= $this->user['id'] ?>"><b><?= ($this->user['id'] != Vars::$USER_ID ? __('profile') : __('my_profile')) ?></b></a> |
     <?= __('delete_photo') ?>
 </div>
 <form action="<?= $this->url ?>?act=edit&amp;mod=delete_photo&amp;user=<?= $this->user['id'] ?>" method="post">

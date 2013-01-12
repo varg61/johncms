@@ -16,7 +16,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         exit;
     }
 
-    $url = Router::getUrl(2);
+    $url = Router::getUri(2);
 
     // Проверяем, существует ли тема
     $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");

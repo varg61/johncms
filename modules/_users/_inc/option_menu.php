@@ -12,7 +12,7 @@
 defined('_IN_USERS') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-$tpl->uri = Router::getUrl(3);
+$tpl->uri = Router::getUri(3);
 
 if (is_file(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . Users::$data['id'] . '.gif')) {
     $tpl->avatar = TRUE;

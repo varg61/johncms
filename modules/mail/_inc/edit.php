@@ -18,7 +18,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 if (Vars::$ID) {
 	$result = mysql_query("SELECT * FROM `cms_mail_messages` WHERE `id` = " . Vars::$ID . " AND `user_id` = " . Vars::$USER_ID);

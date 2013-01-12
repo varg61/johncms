@@ -61,7 +61,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
                     ++$i;
                 }
                 $tpl->query = $array;
-                $tpl->display_pagination = Functions::displayPagination(Router::getUrl(2) . '?id=' . Vars::$ID . '&amp;', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
+                $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?id=' . Vars::$ID . '&amp;', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
             }
             $tpl->contents = $tpl->includeTpl('list');
         } else {
@@ -94,7 +94,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
                 ++$i;
             }
             $tpl->query = $array;
-            $tpl->display_pagination = Functions::displayPagination(Router::getUrl(2) . '?', Vars::$START, $total, Vars::$USER_SET['page_size']);
+            $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?', Vars::$START, $total, Vars::$USER_SET['page_size']);
         }
         $tpl->contents = $tpl->includeTpl('index');
     }

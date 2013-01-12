@@ -49,7 +49,7 @@ if ($fr != 2) {
             }
         }
     } else {
-        $tpl->urlSelect = Router::getUrl(2) . '?act=add&amp;id=' . Vars::$ID;
+        $tpl->urlSelect = Router::getUri(2) . '?act=add&amp;id=' . Vars::$ID;
         $tpl->select = __('confirm_offer_friendship');
         $tpl->submit = __('confirm');
         $tpl->phdr = __('offer_friendship');

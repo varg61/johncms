@@ -56,7 +56,7 @@ if ($fr != 2) {
         $tpl->contents = '<div class="rmenu"><p>' . __('demands_confirm') . '</p>
         <p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></p></div>';
     } else {
-        $tpl->urlSelect = Router::getUrl(2) . '?act=ok&amp;id=' . Vars::$ID;
+        $tpl->urlSelect = Router::getUri(2) . '?act=ok&amp;id=' . Vars::$ID;
         $tpl->select = __('really_demand_confirm');
         $tpl->submit = __('confirm');
         $tpl->phdr = __('demand_confirm');

@@ -48,6 +48,6 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
 } else {
     $tpl->newmess = Functions::mailCount('new'); //Счетчик 
     $tpl->title = __('mail');
-    $tpl->link = Router::getUrl(2);
+    $tpl->link = Router::getUri(2);
     $tpl->contents = $tpl->includeTpl('_index');
 }

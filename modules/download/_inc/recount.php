@@ -22,4 +22,4 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
 		mysql_query("UPDATE `cms_download_category` SET `total` = '$dir_files' WHERE `id` = '" . $res_down['id'] . "'");
 	}
 }
-header('Location: ' . Router::getUrl(2) . '?id=' . Vars::$ID);
+header('Location: ' . Router::getUri(2) . '?id=' . Vars::$ID);

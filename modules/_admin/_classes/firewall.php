@@ -112,7 +112,7 @@ class Firewall
                             '</div>';
                     }
                     echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
-                    echo '<p><a href="' . Router::getUrl(3) . '">' . __('back') . '</a><br /><a href="' . Router::getUrl(2) . '">' . __('admin_panel') . '</a></p>';
+                    echo '<p><a href="' . Router::getUri(3) . '">' . __('back') . '</a><br /><a href="' . Router::getUri(2) . '">' . __('admin_panel') . '</a></p>';
                     exit;
                 }
 
@@ -134,11 +134,11 @@ class Firewall
                         `description` = '" . mysql_real_escape_string(base64_decode($description)) . "'
                     ") or exit(mysql_error());
                     update_cache();
-                    header('Location: ' . Router::getUrl(3) . '?mod=' . $mod);
+                    header('Location: ' . Router::getUri(3) . '?mod=' . $mod);
                     exit;
                 } else {
                     // Выводим окно подтверждения
-                    echo'<form action="' . Router::getUrl(3) . '?act=add" method="post"><div class="menu">' .
+                    echo'<form action="' . Router::getUri(3) . '?act=add" method="post"><div class="menu">' .
                         '<input type="hidden" value="' . $mod . '" name="mod" />' .
                         '<input type="hidden" value="' . long2ip($ip1) . ($ip1 == $ip2 ? '' : '-' . long2ip($ip2)) . '" name="ip" />' .
                         '<input type="hidden" value="' . base64_encode($description) . '" name="description" />' .
@@ -152,7 +152,7 @@ class Firewall
 
             // Показываем ошибки, если есть
             if (!empty($error)) {
-                echo Functions::displayError($error, '<a href="' . Router::getUrl(3) . '?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . __('back') . '</a>');
+                echo Functions::displayError($error, '<a href="' . Router::getUri(3) . '?act=add' . (Vars::$MOD == 'black' ? '&amp;mod=black' : '') . '">' . __('back') . '</a>');
             }
         } else {
             /*
@@ -160,7 +160,7 @@ class Firewall
             Форма ввода IP адреса для Бана
             -----------------------------------------------------------------
             */
-            echo'<form action="' . Router::getUrl(3) . '?act=add" method="post">' .
+            echo'<form action="' . Router::getUri(3) . '?act=add" method="post">' .
                 '<div class="menu"><p><h3>' . __('ip_address') . ':</h3>' .
                 '<input type="hidden" value="' . htmlspecialchars(Vars::$MOD) . '" name="mod" />' .
                 '<input type="text" name="ip"/></p>' .
@@ -175,7 +175,7 @@ class Firewall
     public function delete()
     {
         $del = isset($_POST['del']) && is_array($_POST['del']) ? $_POST['del'] : array();
-        echo'<div class="phdr"><a href="' . Router::getUrl(3) . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('delete_ip') . '</div>' .
+        echo'<div class="phdr"><a href="' . Router::getUri(3) . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('delete_ip') . '</div>' .
             ($mod == 'black'
                 ? '<div class="rmenu"><p><h3>' . __('black_list') . '</h3></p></div>'
                 : '<div class="gmenu"><p><h3>' . __('white_list') . '</h3></p></div>'
@@ -189,9 +189,9 @@ class Firewall
                 }
                 mysql_query("OPTIMIZE TABLE `cms_ip_bwlist`");
                 update_cache();
-                header('Location: ' . Router::getUrl(3) . '?mod=' . $mod);
+                header('Location: ' . Router::getUri(3) . '?mod=' . $mod);
             } else {
-                echo'<form action="' . Router::getUrl(3) . '?act=del&amp;mod=' . $mod . '" method="post">';
+                echo'<form action="' . Router::getUri(3) . '?act=del&amp;mod=' . $mod . '" method="post">';
                 foreach ($del as $val) {
                     echo'<input type="hidden" value="' . $val . '" name="del[]" />';
                 }
@@ -207,7 +207,7 @@ class Firewall
 
     public function clear()
     {
-        echo'<div class="phdr"><a href="' . Router::getUrl(3) . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('clear_list') . '</div>' .
+        echo'<div class="phdr"><a href="' . Router::getUri(3) . '?mod=' . $mod . '"><b>' . __('ip_accesslist') . '</b></a> | ' . __('clear_list') . '</div>' .
             ($mod == 'black'
                 ? '<div class="rmenu"><p><h3>' . __('black_list') . '</h3></p></div>'
                 : '<div class="gmenu"><p><h3>' . __('white_list') . '</h3></p></div>'
@@ -216,9 +216,9 @@ class Firewall
             mysql_query("DELETE FROM `cms_ip_bwlist` WHERE `mode` = '" . $mod . "'");
             mysql_query("OPTIMIZE TABLE `cms_ip_bwlist`");
             update_cache();
-            header('Location: ' . Router::getUrl(3) . '?mod=' . $mod);
+            header('Location: ' . Router::getUri(3) . '?mod=' . $mod);
         } else {
-            echo'<form action="' . Router::getUrl(3) . '?act=clear&amp;mod=' . $mod . '" method="post">' .
+            echo'<form action="' . Router::getUri(3) . '?act=clear&amp;mod=' . $mod . '" method="post">' .
                 '<div class="rmenu"><p>' . __('clear_list_warning') . '</p>' .
                 '<p><input type="submit" name="submit" value="' . __('clear') . ' "/></p>' .
                 '</div></form>';

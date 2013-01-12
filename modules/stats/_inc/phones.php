@@ -10,7 +10,7 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 echo'<div class="phdr">'.__('phones_browsers').'</div>';
     $sql = "(SELECT COUNT(DISTINCT `ip`, `browser`) FROM `counter` WHERE `browser` LIKE '%nokia%') UNION ALL

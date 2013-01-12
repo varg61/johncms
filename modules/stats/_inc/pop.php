@@ -6,7 +6,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 echo '<div class="phdr">' . __('popular_searches') . '</div>';
 $count = mysql_result(mysql_query("SELECT COUNT(DISTINCT `pop`) FROM `counter` WHERE `robot` = '';"), 0);

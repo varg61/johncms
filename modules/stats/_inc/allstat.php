@@ -10,7 +10,7 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 // Если нужны графики за неделю и по поисковикам, присваиваем переменной $tpl->grafics - TRUE вместо FALSE.
 

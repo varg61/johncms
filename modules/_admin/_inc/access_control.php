@@ -10,10 +10,10 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
-$url = Router::getUrl(3);
+$uri = Router::getUri(3);
 
 $tpl = Template::getInstance();
-$form = new Form($url);
+$form = new Form($uri);
 
 $form
     ->fieldsetStart(__('forum'))
@@ -96,7 +96,7 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
@@ -106,11 +106,17 @@ if ($form->isSubmitted) {
     }
 
     // Записываем настройки в базу
-    mysql_query("REPLACE INTO `cms_settings`
-        SET `key` = 'acl',
-        `val` = '" . mysql_real_escape_string(serialize(Vars::$ACL)) . "'
-    ");
-    $tpl->save = true;
+    $STH = DB::PDO()->prepare('
+        REPLACE INTO `cms_settings` SET
+        `key` = :key,
+        `val` = :val
+    ');
+
+    $STH->bindValue(':key', 'acl');
+    $STH->bindValue(':val', serialize(Vars::$ACL));
+    $STH->execute();
+
+    $tpl->save = TRUE;
 }
 
 $tpl->contents = $tpl->includeTpl('access_control');

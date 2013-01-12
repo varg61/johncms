@@ -53,15 +53,15 @@ if(Vars::$ID) {
 			$tpl->query = $array;
 		}
 		
-		$tpl->url = Router::getUrl(2) . '?act=send&amp;id=' . Vars::$ID;
+		$tpl->url = Router::getUri(2) . '?act=send&amp;id=' . Vars::$ID;
 		$tpl->maxsize = 1024 * Vars::$SYSTEM_SET['filesize'];
 		$tpl->size = Vars::$SYSTEM_SET['filesize'];
 		$tpl->token = mt_rand(100, 10000);
 		$_SESSION['token_status'] = $tpl->token;
 		$tpl->contents = $tpl->includeTpl( 'add' );
 	} else {
-		$tpl->contacts = Functions::displayError( __('page_does_not_exist'), '<a href="' . Router::getUrl(2) . '">' . __( 'mail' ) . '</a>' );
+		$tpl->contacts = Functions::displayError( __('page_does_not_exist'), '<a href="' . Router::getUri(2) . '">' . __( 'mail' ) . '</a>' );
 	}
 } else {
-	$tpl->contacts = Functions::displayError( __('message_no_select'), '<a href="' . Router::getUrl(2) . '">' . __( 'mail' ) . '</a>' );
+	$tpl->contacts = Functions::displayError( __('message_no_select'), '<a href="' . Router::getUri(2) . '">' . __( 'mail' ) . '</a>' );
 }

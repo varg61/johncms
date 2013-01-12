@@ -59,4 +59,4 @@ switch (Vars::$MOD) {
         break;
 }
 
-header('Location: ' . Router::getUrl(3) . '?act=list&user=' . $user['id']);
+header('Location: ' . Router::getUri(3) . '?act=list&user=' . $user['id']);

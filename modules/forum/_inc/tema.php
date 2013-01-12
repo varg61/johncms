@@ -11,7 +11,7 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 $delf = opendir('../files/forum/topics');
 $tm = array();
 while ($tt = readdir($delf)) {

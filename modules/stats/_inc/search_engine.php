@@ -5,7 +5,7 @@
  * @copyright 2012
  */
 
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 if (isset($_GET['sday']))
     $_SESSION['sday'] = $_GET['sday'];

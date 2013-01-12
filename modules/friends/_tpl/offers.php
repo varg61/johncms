@@ -4,7 +4,7 @@
     </strong>
 </div>
 <div class="topmenu">
-    <a href="<?= Router::getUrl(2) ?>?act=demands"><?= __('my_demand') ?></a> <?= ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?>
+    <a href="<?= Router::getUri(2) ?>?act=demands"><?= __('my_demand') ?></a> <?= ($this->demands ? '(<span class="red">' . $this->demands . '</span>)' : '') ?>
 </div>
 <?php if ($this->total): ?>
 <?php foreach ($this->query as $row): ?>
@@ -12,7 +12,7 @@
 <!--   //TODO: Переделать ссылку     -->
         <?= $row['icon'] ?> <a href="<?= Vars::$HOME_URL ?>/profile?user=<?= $row['id'] ?>"><?= $row['nickname'] ?></a>
         <div class="sub">
-            <a href="<?= Router::getUrl(2) ?>?act=ok&amp;id=<?= $row['id']?>"><?= __('confirm') ?></a> | <a href="<?= Router::getUrl(2) ?>?act=no&amp;id=<?= $row['id']?>"><?= __('decline') ?></a>
+            <a href="<?= Router::getUri(2) ?>?act=ok&amp;id=<?= $row['id']?>"><?= __('confirm') ?></a> | <a href="<?= Router::getUri(2) ?>?act=no&amp;id=<?= $row['id']?>"><?= __('decline') ?></a>
         </div>
     </div>
     <?php endforeach ?>

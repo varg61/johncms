@@ -18,7 +18,7 @@ foreach (Languages::getInstance()->getLngDescription() as $key => $val) {
 }
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 $form
     ->fieldsetStart(__('language_default'))
@@ -34,15 +34,26 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
 if ($form->isSubmitted && isset($form->validOutput['iso'])) {
     if (in_array($form->validOutput['iso'], Languages::getInstance()->getLngList()) || $form->validOutput['iso'] == '#') {
         Vars::$SYSTEM_SET['lng'] = $form->validOutput['iso'];
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = 'lng', `val` = '" . mysql_real_escape_string($form->validOutput['iso']) . "'");
-        $tpl->save = 1;
+
+        // Записываем настройки в базу
+        $STH = DB::PDO()->prepare('
+            REPLACE INTO `cms_settings` SET
+            `key` = :key,
+            `val` = :val
+        ');
+
+        $STH->bindValue(':key', 'lng');
+        $STH->bindValue(':val', $form->validOutput['iso']);
+        $STH->execute();
+
+        $tpl->save = TRUE;
     }
 }
 

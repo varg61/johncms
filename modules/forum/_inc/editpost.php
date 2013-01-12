@@ -15,7 +15,7 @@ if (!Vars::$USER_ID || !Vars::$ID) {
     echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'm' " . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'"));
 if (mysql_num_rows($req)) {
     /*

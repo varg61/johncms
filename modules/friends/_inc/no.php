@@ -47,7 +47,7 @@ if ($fr != 2) {
 			<p><a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . __('back') . '</a></p></div>';
         }
     } else {
-        $tpl->urlSelect = Router::getUrl(2) . '?act=no&amp;id=' . Vars::$ID;
+        $tpl->urlSelect = Router::getUri(2) . '?act=no&amp;id=' . Vars::$ID;
         $tpl->select = __('really_canceled_demand');
         $tpl->submit = __('confirm');
         $tpl->phdr = __('canceled_demand');

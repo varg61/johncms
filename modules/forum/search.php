@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 echo'<p>' . Counters::forumCountNew(1) . '</p>' .
     '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('search') . '</div>';

@@ -12,7 +12,7 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 $form
     ->fieldsetStart(__('registration'))
@@ -133,7 +133,7 @@ $form
 if (Vars::$USER_RIGHTS == 9) {
     $form->add('submit', 'reset', array('value' => __('reset_settings'), 'class' => 'btn'));
 }
-$form->addHtml(' <a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+$form->addHtml(' <a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 $tpl->form = $form->display();
 
 if ($form->isSubmitted && isset($form->input['submit'])) {
@@ -141,15 +141,23 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
     foreach ($form->validOutput as $key => $val) {
         Vars::$USER_SYS[$key] = $val;
     }
-    mysql_query("REPLACE INTO `cms_settings` SET
-        `key` = 'users',
-        `val` = '" . mysql_real_escape_string(serialize(Vars::$USER_SYS)) . "'
-    ");
+
+    // Записываем настройки в базу
+    $STH = DB::PDO()->prepare('
+        REPLACE INTO `cms_settings` SET
+        `key` = :key,
+        `val` = :val
+    ');
+
+    $STH->bindValue(':key', 'users');
+    $STH->bindValue(':val', serialize(Vars::$USER_SYS));
+    $STH->execute();
+
     $tpl->save = TRUE;
 } elseif ($form->isSubmitted && isset($form->input['reset']) && Vars::$USER_RIGHTS == 9) {
     // Сбрасываем настройки на значения по-умолчанию
-    @mysql_query("DELETE FROM `cms_settings` WHERE `key` = 'users'");
-    header('Location: ' . Router::getUrl(3) . '?default');
+    DB::PDO()->exec("DELETE FROM `cms_settings` WHERE `key` = 'users'");
+    header('Location: ' . Router::getUri(3) . '?default');
     exit;
 }
 

@@ -18,7 +18,7 @@ if (Vars::$ID) {
     Скачивание прикрепленного файла Форума
     -----------------------------------------------------------------
     */
-    $url = Router::getUrl(2);
+    $url = Router::getUri(2);
     $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = " . Vars::$ID);
     if (mysql_num_rows($req)) {
         $res = mysql_fetch_array($req);

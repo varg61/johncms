@@ -12,7 +12,7 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 $form
     ->fieldsetStart(__('system_time'))
@@ -92,15 +92,25 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
 if ($form->isSubmitted) {
+    // Записываем настройки в базу
+    $STH = DB::PDO()->prepare('
+        REPLACE INTO `cms_settings` SET
+        `key` = :key,
+        `val` = :val
+    ');
+
     foreach ($form->validOutput as $key => $val) {
-        mysql_query("REPLACE INTO `cms_settings` SET `key` = '$key', `val` = '" . mysql_real_escape_string($val) . "'");
-        header('Location: ' . Router::getUrl(3) . '?save');
+        $STH->bindValue(':key', $key);
+        $STH->bindValue(':val', $val);
+        $STH->execute();
     }
+
+    header('Location: ' . Router::getUri(3) . '?save');
 }
 
 $tpl->contents = $tpl->includeTpl('system_settings');

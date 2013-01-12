@@ -15,7 +15,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
-    $url = Router::getUrl(2);
+    $url = Router::getUri(2);
     $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
     if (!mysql_num_rows($typ)) {
         echo Functions::displayError(__('error_wrong_data'));

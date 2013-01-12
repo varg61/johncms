@@ -8,8 +8,8 @@
  */
 
 $cat = Router::$ROUTE[1];
-$backLink = Router::getUrl(2);
-$url = Router::getUrl(3);
+$backLink = Router::getUri(2);
+$url = Router::getUri(3);
 
 $smileys = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smilies' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
 $total = count($smileys);

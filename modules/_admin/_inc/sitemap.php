@@ -12,7 +12,7 @@
 defined('_IN_ADMIN') or die('Error: restricted access');
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 $settings = isset(Vars::$SYSTEM_SET['sitemap'])
     ? unserialize(Vars::$SYSTEM_SET['sitemap'])
@@ -53,7 +53,7 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 
@@ -63,11 +63,17 @@ if ($form->isSubmitted) {
     }
 
     // Записываем настройки в базу
-    mysql_query("REPLACE INTO `cms_settings`
-        SET `key` = 'sitemap',
-        `val` = '" . mysql_real_escape_string(serialize($settings)) . "'
-    ");
-    $tpl->save = true;
+    $STH = DB::PDO()->prepare('
+        REPLACE INTO `cms_settings` SET
+        `key` = :key,
+        `val` = :val
+    ');
+
+    $STH->bindValue(':key', 'sitemap');
+    $STH->bindValue(':val', serialize($settings));
+    $STH->execute();
+
+    $tpl->save = TRUE;
 }
 
 $tpl->contents = $tpl->includeTpl('sitemap');

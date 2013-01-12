@@ -15,8 +15,8 @@ if (Vars::$USER_RIGHTS < 7) {
     exit;
 }
 
-$url = Router::getUrl(3);
-$backurl = Router::getUrl(2);
+$url = Router::getUri(3);
+$backurl = Router::getUri(2);
 $tpl = Template::getInstance();
 
 switch (Vars::$ACT) {

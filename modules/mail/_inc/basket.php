@@ -18,7 +18,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 //Заголовок
 $tpl->title = __('mail') . ' | ' . __('basket');
@@ -117,7 +117,7 @@ if (Vars::$ID) {
 
                     $tpl->query = $array;
                     $tpl->titleTest = '<div class="phdr">' . __('deleted_message') . '</div>';
-                    $tpl->urlTest = '<p><a href="' . Router::getUrl(2) . '">' . __('mail') .
+                    $tpl->urlTest = '<p><a href="' . Router::getUri(2) . '">' . __('mail') .
                         '</a></p>';
                     $tpl->total = $total;
                     //Навигация

@@ -43,7 +43,7 @@ if($tpl->count_contact) {
 	}
 	$tpl->query = $array;
 }
-$tpl->url = Router::getUrl(2) . '?act=add';
+$tpl->url = Router::getUri(2) . '?act=add';
 $tpl->maxsize = 1024 * Vars::$SYSTEM_SET['filesize'];
 $tpl->size = Vars::$SYSTEM_SET['filesize'];
 $tpl->token = mt_rand(100, 10000);

@@ -74,6 +74,6 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
     $tpl->count_w = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` WHERE `users`.`sex` = 'w'"), 0);
     $tpl->count_my = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
 
-    $tpl->link = Router::getUrl(3);
+    $tpl->link = Router::getUri(3);
     $tpl->contents = $tpl->includeTpl('index');
 }

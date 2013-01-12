@@ -36,7 +36,7 @@ class Router extends Vars
      * @param int $level
      * @return string
      */
-    public static function getUrl($level = 1)
+    public static function getUri($level = 1)
     {
         $uri = '';
         $level = $level > 0 ? $level - 2 : -1;

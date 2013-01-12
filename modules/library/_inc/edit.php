@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
     if ($_GET['id'] == "" || $_GET['id'] == "0") {

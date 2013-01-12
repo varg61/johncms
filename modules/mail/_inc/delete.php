@@ -18,7 +18,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 if (Vars::$ID) {
     //Проверяем выбранное сообщение

@@ -35,9 +35,9 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         echo '<div class="rmenu"><p>' . __('scan_about_clean_ok') . '</p></div>';
     } else {
         echo '<div class="gmenu"><p>' . __('scan_about_ok') . '</p></div>' .
-        '<div class="rmenu"><a href="' . Router::getUrl(2) . '?act=scan_about&amp;clean&amp;id=' . Vars::$ID . '">' . __('scan_about_clean') . '</a></div>';
+        '<div class="rmenu"><a href="' . Router::getUri(2) . '?act=scan_about&amp;clean&amp;id=' . Vars::$ID . '">' . __('scan_about_clean') . '</a></div>';
     }
-	echo '<div class="phdr"><a href="' . Router::getUrl(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
+	echo '<div class="phdr"><a href="' . Router::getUri(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 } else {
     header('Location: ' . Vars::$HOME_URL . '404');
 }

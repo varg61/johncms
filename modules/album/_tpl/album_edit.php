@@ -2,7 +2,7 @@
 <?= $this->error ?>
 <?php endif ?>
 <div class="menu">
-    <form action="<?= Router::getUrl(3) ?>?act=edit&amp;user=<?= $this->user['id'] . '&amp;al=' . $this->al ?>" method="post">
+    <form action="<?= Router::getUri(3) ?>?act=edit&amp;user=<?= $this->user['id'] . '&amp;al=' . $this->al ?>" method="post">
         <div class="formblock">
             <label for="name"><?= __('title') ?></label><br/>
             <input type="text" id="name" name="name" value="<?= Validate::checkout($this->name) ?>" maxlength="30"/><br/>
@@ -29,5 +29,5 @@
     </form>
 </div>
 <div class="phdr">
-    <a href="<?= Router::getUrl(3) ?>?act=list&amp;user=<?= $this->user['id'] ?>"><?= __('cancel') ?></a>
+    <a href="<?= Router::getUri(3) ?>?act=list&amp;user=<?= $this->user['id'] ?>"><?= __('cancel') ?></a>
 </div>

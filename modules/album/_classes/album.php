@@ -39,8 +39,8 @@ class Album
             //TODO: Доработать ссылки
             $req = mysql_query("SELECT * FROM `cms_album_votes` WHERE `user_id` = " . Vars::$USER_ID . " AND `file_id` = '" . $arg['id'] . "' LIMIT 1");
             if (!mysql_num_rows($req)) {
-                $out .= '<br />' . __('vote') . ': <a href="' . Router::getUrl(3) . '?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | ';
-                $out .= '<a href="' . Router::getUrl(3) . '?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
+                $out .= '<br />' . __('vote') . ': <a href="' . Router::getUri(3) . '?act=vote&amp;mod=minus&amp;img=' . $arg['id'] . '">&lt;&lt; -1</a> | ';
+                $out .= '<a href="' . Router::getUri(3) . '?act=vote&amp;mod=plus&amp;img=' . $arg['id'] . '">+1 &gt;&gt;</a>';
             }
         }
 

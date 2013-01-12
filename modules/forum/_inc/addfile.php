@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 if (!Vars::$ID || !Vars::$USER_ID) {
     echo Functions::displayError(__('error_wrong_data'));

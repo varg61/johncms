@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 // Проверяем наличие комментируемого объекта
 $req_obj = mysql_query("SELECT * FROM `cms_album_files` WHERE `id` = '$img'");

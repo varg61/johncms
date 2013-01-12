@@ -14,7 +14,7 @@ define('ROOT_DIR', '.');
 
 $tpl = Template::getInstance();
 $scanner = new Scanner();
-$form = new Form(Router::getUrl(3));
+$form = new Form(Router::getUri(3));
 
 if (file_exists(CONFIGPATH . 'scanner.php')) {
     include(CONFIGPATH . 'scanner.php');
@@ -49,7 +49,7 @@ $form
     'value' => __('do'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(2) . '">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 

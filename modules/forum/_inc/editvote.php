@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
-    $url = Router::getUrl(2);
+    $url = Router::getUri(2);
     $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic`=" . Vars::$ID), 0);
     if ($topic_vote == 0) {
         echo Functions::displayError(__('error_wrong_data'));

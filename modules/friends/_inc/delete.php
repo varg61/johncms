@@ -38,10 +38,10 @@ if ($fr == 2) {
         //`sys` = '1',
         //`them` = '{$lng_profile['friendship']}'");
         $tpl->contents = '<div class="rmenu"><p>' . __('you_deleted_friends') . '</p>
-		<p><a href="' . Router::getUrl(2) . '">' . __('friends') . '</a></p>
+		<p><a href="' . Router::getUri(2) . '">' . __('friends') . '</a></p>
 		</div>';
     } else {
-        $tpl->urlSelect = Router::getUrl(2) . '?act=delete&amp;id=' . Vars::$ID;
+        $tpl->urlSelect = Router::getUri(2) . '?act=delete&amp;id=' . Vars::$ID;
         $tpl->select = __('really_deleted_friends');
         $tpl->submit = __('confirm');
         $tpl->phdr = __('deleted_friends');

@@ -6,7 +6,7 @@
         <?php if (Vars::$USER_ID): ?>
         <?= $this->form ?>
         <?php else: ?>
-        <form action="<?= Router::getUrl(3) ?>" method="post">
+        <form action="<?= Router::getUri(3) ?>" method="post">
             <div style="max-width: 240px; margin: 0 auto">
                 <label for="login"><?= __('login_caption') ?></label>
                 <?php if (isset($this->error['login'])) : ?>
@@ -20,7 +20,7 @@
                 <input class="relative largetext<?= (isset($this->error['password']) ? ' error' : '') ?>" id="password" type="password" name="password" maxlength="20"/><br/>
                 <label class="small"><input type="checkbox" name="remember" value="1" checked="checked"/>&#160;<?= __('remember') ?></label><br/>
                 <input class="btn btn-primary btn-large btn-block" type="submit" value=" <?= __('login') ?> "/><br/>
-                <a class="btn btn-large btn-block" href="<?= Router::getUrl(2) ?>/registration"><?= __('registration') ?></a><br/>
+                <a class="btn btn-large btn-block" href="<?= Router::getUri(2) ?>/registration"><?= __('registration') ?></a><br/>
                 <a class="btn" href="#"><?= __('forgotten_password') ?></a>
             </div>
         </form>

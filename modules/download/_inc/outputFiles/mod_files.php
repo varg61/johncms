@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 /*
 -----------------------------------------------------------------
@@ -19,7 +19,7 @@ $url = Router::getUrl(2);
 */
 $textl = __('mod_files');
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
-    echo '<div class="phdr"><a href="' . Router::getUrl(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
+    echo '<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
     if (Vars::$ID) {
         mysql_query("UPDATE `cms_download_files` SET `type` = 2 WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
         echo '<div class="gmenu">' . __('file_accepted_ok') . '</div>';

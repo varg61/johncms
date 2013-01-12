@@ -13,7 +13,7 @@
 //TODO: Добавить информацию о подтверждении регистрации
 
 defined('_IN_USERS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 $tpl = Template::getInstance();
 $tpl->url = $url;

@@ -15,8 +15,8 @@ if (Vars::$USER_RIGHTS != 9) {
     exit;
 }
 
-$url = Router::getUrl(3);
-$backurl = Router::getUrl(2);
+$url = Router::getUri(3);
+$backurl = Router::getUri(2);
 
 switch (Vars::$ACT) {
     case 'view':

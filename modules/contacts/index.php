@@ -17,7 +17,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 define('CONTACTSDIR', 'contacts'); //Папка с модулем
 define('CONTACTSPATH', MODPATH . CONTACTSDIR . DIRECTORY_SEPARATOR); //Абсолютный путь до модуля

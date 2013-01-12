@@ -10,7 +10,7 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 echo '<div class="phdr">' . __('countries') . ' (' . __('hits') . ')</div>';
 $count = mysql_result(mysql_query("SELECT COUNT(DISTINCT `country`) FROM `counter`;"), 0);

@@ -9,8 +9,8 @@
 
 global $catalog;
 $cat = isset($_GET['cat']) && array_key_exists(trim($_GET['cat']), $catalog) ? trim($_GET['cat']) : $catalog[0];
-$backLink = Router::getUrl(2);
-$url = Router::getUrl(3);
+$backLink = Router::getUri(2);
+$url = Router::getUri(3);
 
 $act = isset(Router::$ROUTE[2]) ? Router::$ROUTE[2] : FALSE;
 switch ($act) {

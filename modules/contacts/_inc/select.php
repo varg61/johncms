@@ -18,7 +18,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-$backLink = Router::getUrl(2);
+$backLink = Router::getUri(2);
 
 if (Vars::$ID) {
     $q = mysql_query("SELECT * FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");

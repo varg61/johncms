@@ -10,7 +10,7 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 $act = isset($_GET['action']) ? $_GET['action'] : '';
 if (Vars::$USER_RIGHTS >= 9) {

@@ -75,5 +75,5 @@
 <a href="?act=allstat&amp;days=<?= $this->days ?>"><?= __('view_of')?> <?= date("d.m.y", time() - $this->days * 24 * 3600)?></a>
 </div>
 <div class="gmenu">
-<a href="<?= Router::getUrl(2) ?>"><?= __('to_statistics') ?></a>
+<a href="<?= Router::getUri(2) ?>"><?= __('to_statistics') ?></a>
 </div>

@@ -10,7 +10,7 @@
  */
 
 defined('_IN_USERS') or die('Error: restricted access');
-$uri = Router::getUrl(4);
+$uri = Router::getUri(4);
 
 $tpl = Template::getInstance();
 $form = new Form($uri);
@@ -95,7 +95,7 @@ $form
     'value' => __('save'),
     'class' => 'btn btn-primary btn-large'))
 
-    ->addHtml('<a class="btn" href="' . Router::getUrl(3) . 'option/">' . __('back') . '</a>');
+    ->addHtml('<a class="btn" href="' . Router::getUri(3) . 'option/">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
 

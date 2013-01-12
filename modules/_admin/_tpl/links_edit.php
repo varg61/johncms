@@ -1,4 +1,4 @@
-<form action="<?= Router::getUrl(3) ?>?act=edit<?= (Vars::$ID ? '&amp;id=' . Vars::$ID : '') ?>" method="post">
+<form action="<?= Router::getUri(3) ?>?act=edit<?= (Vars::$ID ? '&amp;id=' . Vars::$ID : '') ?>" method="post">
     <div class="menu">
         <div class="formblock">
             <label><?= __('link') ?></label><br/>
@@ -69,6 +69,6 @@
     <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
 </form>
 <p>
-    <a href="<?= Router::getUrl(3) ?>"><?= __('advertisement') ?></a><br/>
-    <a href="<?= Router::getUrl(2) ?>"><?= __('admin_panel') ?></a>
+    <a href="<?= Router::getUri(3) ?>"><?= __('advertisement') ?></a><br/>
+    <a href="<?= Router::getUri(2) ?>"><?= __('admin_panel') ?></a>
 </p>

@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUrl(2);
+$url = Router::getUri(2);
 
 /*
 -----------------------------------------------------------------
@@ -26,7 +26,7 @@ if (Vars::$ID == 2) {
 }
 
 $linkTopComments = Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7 ? '<br /><a href="' . $url . '?act=top_files&amp;id=2">' . __('top_files_comments') . '</a>' : '';
-echo '<div class="phdr"><a href="' . Router::getUrl(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . ' (' . $set_down['top'] . ')</div>';
+echo '<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . ' (' . $set_down['top'] . ')</div>';
 if (Vars::$ID == 2 && (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS >= 7)) {
     echo '<div class="gmenu"><a href="' . $url . '?act=top_files&amp;id=0">' . __('top_files_popular') . '</a><br />' .
         '<a href="' . $url . '?act=top_files&amp;id=1">' . __('top_files_download') . '</a></div>';
