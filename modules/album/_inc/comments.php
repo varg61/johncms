@@ -22,6 +22,7 @@ if (mysql_num_rows($req_obj)) {
     Получаем данные владельца Альбома
     -----------------------------------------------------------------
     */
+    //TODO: Переделать на класс Users
     $owner = Functions::getUser($res_obj['user_id']);
     if (!$owner) {
         echo Functions::displayError(__('user_does_not_exist'));

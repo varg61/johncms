@@ -22,7 +22,9 @@ $personal_actions = array(
     'avatar' => 'upload_avatar.php',
 );
 
-$common_actions = array();
+$common_actions = array(
+    'login' => 'login.php'
+);
 
 if (isset(Router::$ROUTE[1])) {
     if (ctype_digit(Router::$ROUTE[1]) && Router::$ROUTE[1] > 0) {

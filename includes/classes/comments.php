@@ -133,6 +133,7 @@ class Comments
                     if (mysql_num_rows($req)) {
                         $res = mysql_fetch_assoc($req);
                         $attributes = unserialize($res['attributes']);
+                        //TODO: Переделать на класс Users
                         $user = Functions::getUser($res['user_id']);
                         if ($user['rights'] > Vars::$USER_RIGHTS) {
                             echo Functions::displayError(__('error_edit_rights'), '<a href="' . $this->url . '">' . __('back') . '</a>');

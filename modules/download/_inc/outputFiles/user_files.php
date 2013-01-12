@@ -18,6 +18,7 @@ $url = Router::getUrl(2);
 -----------------------------------------------------------------
 */
 $textl = __('user_files');
+//TODO: Переделать на класс Users
 if (($user = Vars::getUser()) === FALSE || (!Vars::$USER && !Vars::$USER_ID)) {
     echo Functions::displayError(__('user_does_not_exist'));
     exit;

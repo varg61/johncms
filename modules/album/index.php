@@ -38,6 +38,7 @@ if ($error) {
 
 $tpl = Template::getInstance();
 $tpl->img = $img;
+//TODO: Переделать на класс Users
 $user = Functions::getUser($user);
 $tpl->user = $user;
 $tpl->al = $al;

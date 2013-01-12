@@ -157,6 +157,7 @@ if ($screen) {
 */
 Vars::$USER = $res_down['user_id'];
 Vars::$USER_SET['avatar'] = 0;
+//TODO: Переделать на класс Users
 $user = Vars::getUser();
 echo '<div class="list1"><b>' . __('name_for_server') . ':</b> ' . $res_down['name'] . '<br />' .
     '<b>' . __('user_upload') . ':</b> ' . Functions::displayUser($user, array('iphide' => 1)) . '<br />' . $text_info .

@@ -20,21 +20,6 @@ $tpl->url = $url;
 $tpl->setUsers = Vars::$USER_SYS;
 $tpl->error = array();
 
-/*
------------------------------------------------------------------
-Получаем данные пользователя
------------------------------------------------------------------
-*/
-if (Vars::$USER_ID || Vars::$USER_SYS['view_profiles']) {
-    if (($tpl->user = Vars::getUser()) === FALSE) {
-        echo Functions::displayError(__('user_does_not_exist'));
-        exit;
-    }
-} else {
-    echo Functions::displayError(__('access_guest_forbidden'));
-    exit;
-}
-
 if (empty($tpl->user['relationship'])) {
     $tpl->rel_count = 0;
     $tpl->rel = $tpl->bar = array(
