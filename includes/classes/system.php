@@ -53,6 +53,7 @@ class System extends Vars
                 static::$SYSTEM_SET[$result['key']] = $result['val'];
             }
         }
+        $STH = NULL;
 
         if (isset(static::$SYSTEM_SET['lng']) && !empty(static::$SYSTEM_SET['lng'])) {
             static::$LNG_ISO = static::$SYSTEM_SET['lng'];
@@ -101,7 +102,7 @@ class System extends Vars
 
         if (isset($_SESSION['uid']) && isset($_SESSION['token'])) {
             // Авторизация по сессии
-            $id = intval($_SESSION['uid']);
+            $id = $_SESSION['uid'];
             $token = $_SESSION['token'];
         } elseif (isset($_COOKIE['uid'])
             && is_numeric($_COOKIE['uid'])
@@ -126,6 +127,7 @@ class System extends Vars
 
             if ($STH->rowCount()) {
                 $result = $STH->fetch();
+                $STH = NULL;
 
                 // Допуск на авторизацию с COOKIE
                 if ($cookie && $result['login_try'] > 2 && ($result['ip'] != static::$IP || $result['ip_via_proxy'] != static::$IP_VIA_PROXY || $result['useragent'] != static::$USER_AGENT)) {
@@ -175,6 +177,7 @@ class System extends Vars
                     $STHF->bindValue(':ua', static::$USER_AGENT, PDO::PARAM_STR);
                     $STHF->bindParam(':uid', $id, PDO::PARAM_INT);
                     $STHF->execute();
+                    $STHF = NULL;
 
                     // Проверка на бан
                     if ($result['ban']) {
@@ -182,15 +185,16 @@ class System extends Vars
                     }
                 } else {
                     // Если авторизация не прошла
-                    $STHF = DB::PDO()->prepare('
+                    $STHT = DB::PDO()->prepare('
                         UPDATE `users` SET
                         `login_try` = :try
                         WHERE `id`  = :uid
                     ');
 
-                    $STHF->bindValue(':try', ++$result['login_try'], PDO::PARAM_INT);
-                    $STHF->bindValue(':uid', $result['id'], PDO::PARAM_INT);
-                    $STHF->execute();
+                    $STHT->bindValue(':try', ++$result['login_try'], PDO::PARAM_INT);
+                    $STHT->bindValue(':uid', $result['id'], PDO::PARAM_INT);
+                    $STHT->execute();
+                    $STHT = NULL;
 
                     static::userUnset();
                 }
@@ -224,6 +228,7 @@ class System extends Vars
                 static::$USER_BAN[$result['ban_type']] = 1;
             }
         }
+        $STH = NULL;
     }
 
     /**
@@ -251,6 +256,7 @@ class System extends Vars
             if ($STH->rowCount()) {
                 // Обновляем имеющуюся запись
                 $result = $STH->fetch();
+                $STH = NULL;
 
                 $STHU = DB::PDO()->prepare('
                     UPDATE `cms_user_ip` SET
@@ -263,6 +269,7 @@ class System extends Vars
                 $STHU->bindValue(':time', time(), PDO::PARAM_INT);
                 $STHU->bindValue(':id', $result['id'], PDO::PARAM_INT);
                 $STHU->execute();
+                $STHU = NULL;
             } else {
                 // Вставляем новую запись
                 $STHI = DB::PDO()->prepare('
@@ -280,6 +287,7 @@ class System extends Vars
                 $STHI->bindValue(':ua', static::$USER_AGENT, PDO::PARAM_STR);
                 $STHI->bindValue(':time', time(), PDO::PARAM_INT);
                 $STHI->execute();
+                $STHI = NULL;
             }
         }
     }
@@ -293,7 +301,7 @@ class System extends Vars
             DB::PDO()->exec("DELETE FROM `cms_sessions` WHERE `session_timestamp` < '" . (time() - 86400) . "'");
             DB::PDO()->exec("DELETE FROM `cms_user_ip` WHERE `timestamp` < '" . (time() - 2592000) . "'");
             DB::PDO()->exec("UPDATE `cms_settings` SET  `val` = '" . time() . "' WHERE `key` = 'clean_time' LIMIT 1");
-            DB::PDO()->exec("OPTIMIZE TABLE `cms_sessions` , `cms_users_iphistory`, `cms_users_settings`");
+            DB::PDO()->query("OPTIMIZE TABLE `cms_sessions` , `cms_user_ip`, `cms_user_settings`");
         }
     }
 
