@@ -3,6 +3,9 @@
 </ul>
 <div class="form-container">
     <div class="form-block align-center" style="padding: 20px">
+        <?php if (Vars::$USER_ID): ?>
+        <?= $this->form ?>
+        <?php else: ?>
         <form action="<?= Router::getUrl(3) ?>" method="post">
             <div style="max-width: 240px; margin: 0 auto">
                 <label for="login"><?= __('login_caption') ?></label>
@@ -21,5 +24,6 @@
                 <a class="btn" href="#"><?= __('forgotten_password') ?></a>
             </div>
         </form>
+        <?php endif ?>
     </div>
 </div>

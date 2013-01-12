@@ -19,5 +19,5 @@
 
     <li><h2><?= __('settings') ?></h2></li>
     <li><a href="<?= $this->url ?>option/"><i class="icn-settings"></i><?= __('settings') ?><i class="icn-arrow"></i></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>users/exit/"><i class="icn-exit"></i><?= __('exit') ?><i class="icn-arrow"></i></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>users/login/"><i class="icn-exit"></i><?= __('exit') ?><i class="icn-arrow"></i></a></li>
 </ul>
