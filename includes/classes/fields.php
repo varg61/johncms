@@ -51,8 +51,9 @@ class Fields
 
     private $type;
     private $option;
+    private $formname;
 
-    public function __construct($type, $name, array $option = array())
+    public function __construct($type, $name, array $option = array(), $formname = NULL)
     {
         $this->type = $type;
         $option['name'] = $name;
@@ -60,6 +61,7 @@ class Fields
             $option['value'] = htmlspecialchars($option['value'], ENT_QUOTES, 'UTF-8');
         }
         $this->option = $option;
+        $this->formname = is_null($formname) ? 'form' : $formname;
     }
 
     /**
@@ -80,73 +82,85 @@ class Fields
             $out[] = $this->_build('label', $this->option);
         }
 
-        if ($this->type == 'radio') {
-            // Добавляем элемент RADIO
-            if (!isset($this->option['items']) || !is_array($this->option['items'])) {
-                return 'ERROR: missing radio element items';
-            }
-
-            foreach ($this->option['items'] as $value => $label) {
-                $radio['name'] = $this->option['name'];
-                $radio['value'] = $value;
-
-                if (isset($this->option['checked']) && $this->option['checked'] == $value) {
-                    $radio['checked'] = TRUE;
+        switch ($this->type) {
+            case'radio':
+                // Добавляем элемент RADIO
+                if (!isset($this->option['items']) || !is_array($this->option['items'])) {
+                    return 'ERROR: missing radio element items';
                 }
 
-                if (empty($label)) {
-                    $out[] = $this->_build('radio', $radio);
-                } else {
-                    $radio['label_inline'] = $label;
-                    $radio['label_inline_class'] = isset($this->option['label_inline_class']) ? $this->option['label_inline_class'] : 'inline';
-                    $radio['content'] = $this->_build('radio', $radio);
-                    $out[] = $this->_build('label_inline', $radio);
-                }
-                unset($radio, $value, $label);
-            }
-        } elseif ($this->type == 'select') {
-            // Добавляем элемент SELECT
-            $multiple = isset($this->option['multiple']) && $this->option['multiple'] ? TRUE : FALSE;
-            if (isset($this->option['items']) && is_array($this->option['items'])) {
-                $list = array();
                 foreach ($this->option['items'] as $value => $label) {
-                    if (empty($label)) {
-                        $listElement['label'] = $value;
+                    $radio['name'] = $this->option['name'];
+                    $radio['value'] = $value;
+
+                    if (isset($this->option['checked']) && $this->option['checked'] == $value) {
+                        $radio['checked'] = TRUE;
                     }
 
-                    if (isset($this->option['selected'])) {
-                        if ($multiple && is_array($this->option['selected'])) {
-                            if (in_array($value, $this->option['selected'])) {
-                                $listElement['selected'] = TRUE;
-                            }
-                        } else {
-                            if ($this->option['selected'] == $value) {
-                                $listElement['selected'] = TRUE;
+                    if (empty($label)) {
+                        $out[] = $this->_build('radio', $radio);
+                    } else {
+                        $radio['label_inline'] = $label;
+                        $radio['label_inline_class'] = isset($this->option['label_inline_class']) ? $this->option['label_inline_class'] : 'inline';
+                        $radio['content'] = $this->_build('radio', $radio);
+                        $out[] = $this->_build('label_inline', $radio);
+                    }
+                    unset($radio, $value, $label);
+                }
+                break;
+
+            case'select':
+                // Добавляем элемент SELECT
+                $multiple = isset($this->option['multiple']) && $this->option['multiple'] ? TRUE : FALSE;
+                if (isset($this->option['items']) && is_array($this->option['items'])) {
+                    $list = array();
+                    foreach ($this->option['items'] as $value => $label) {
+                        if (empty($label)) {
+                            $listElement['label'] = $value;
+                        }
+
+                        if (isset($this->option['selected'])) {
+                            if ($multiple && is_array($this->option['selected'])) {
+                                if (in_array($value, $this->option['selected'])) {
+                                    $listElement['selected'] = TRUE;
+                                }
+                            } else {
+                                if ($this->option['selected'] == $value) {
+                                    $listElement['selected'] = TRUE;
+                                }
                             }
                         }
-                    }
 
-                    $listElement['value'] = $value;
-                    $list[] = $this->_build('option', $listElement);
-                    unset($listElement, $value, $label);
+                        $listElement['value'] = $value;
+                        $list[] = $this->_build('option', $listElement);
+                        unset($listElement, $value, $label);
+                    }
+                    $this->option['content'] = "\n" . implode("\n", $list) . "\n";
                 }
-                $this->option['content'] = "\n" . implode("\n", $list) . "\n";
-            }
-            if ($multiple) {
-                $this->option['name'] = $this->option['name'] . '[]';
-            }
-            $out[] = $this->_build('select', $this->option);
-        } else {
-            // Добавляем простой элемент
-            if (isset($this->option['label_inline'])) {
-                if (!isset($this->option['label_inline_class'])) {
-                    $this->option['label_inline_class'] = 'inline';
+                if ($multiple) {
+                    $this->option['name'] = $this->option['name'] . '[]';
                 }
-                $this->option['content'] = $this->_build($this->option['type'], $this->option);
-                $out[] = $this->_build('label_inline', $this->option);
-            } else {
+                $out[] = $this->_build('select', $this->option);
+                break;
+
+            case'textarea':
+                if (isset($this->option['toolbar']) && class_exists('TextParser') && $this->option['toolbar']) {
+                    $out[] = TextParser::autoBB($this->formname, $this->option['name']);
+                }
                 $out[] = $this->_build($this->type, $this->option);
-            }
+                break;
+
+            default:
+                // Добавляем простой элемент
+                if (isset($this->option['label_inline'])) {
+                    if (!isset($this->option['label_inline_class'])) {
+                        $this->option['label_inline_class'] = 'inline';
+                    }
+                    $this->option['content'] = $this->_build($this->option['type'], $this->option);
+                    $out[] = $this->_build('label_inline', $this->option);
+                } else {
+                    $out[] = $this->_build($this->type, $this->option);
+                }
         }
 
         // Добавляем описание DESCRIPTION
@@ -164,7 +178,8 @@ class Fields
      * Создание элемента
      *
      * @param string $type
-     * @param array $option
+     * @param array  $option
+     *
      * @return string
      */
     private function _build($type, array $option)

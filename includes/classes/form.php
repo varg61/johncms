@@ -147,7 +147,7 @@ class Form
                     }
 
                     // Создаем элемент формы
-                    $out[] = new Fields($element['type'], $element['name'], $element);
+                    $out[] = new Fields($element['type'], $element['name'], $element, $this->_form['name']);
             }
         }
 
