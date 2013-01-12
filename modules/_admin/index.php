@@ -15,6 +15,7 @@ define('_IN_ADMIN', 1);
 
 if (Vars::$USER_RIGHTS >= 2) {
     $sv_actions = array(
+        'counters'        => 'counters.php',
         'firewall'        => 'firewall.php',
         'language'        => 'language_settings.php',
         'scanner'         => 'scanner.php',

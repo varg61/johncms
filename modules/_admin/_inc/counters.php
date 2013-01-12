@@ -9,14 +9,8 @@
  * @author      http://johncms.com/about
  */
 
-// Проверяем права доступа
-if (Vars::$USER_RIGHTS != 9) {
-    echo Functions::displayError(__('access_forbidden'));
-    exit;
-}
-
-$url = Router::getUri(3);
-$backurl = Router::getUri(2);
+defined('_IN_ADMIN') or die('Error: restricted access');
+$uri = Router::getUri(3);
 
 switch (Vars::$ACT) {
     case 'view':
@@ -26,17 +20,17 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req)) {
+            $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if (mysql_num_rows($STH)) {
                 if (isset($_GET['go']) && $_GET['go'] == 'on') {
                     mysql_query("UPDATE `cms_counters` SET `switch` = '1' WHERE `id` = " . Vars::$ID);
-                    $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+                    $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 } elseif (isset($_GET['go']) && $_GET['go'] == 'off') {
                     mysql_query("UPDATE `cms_counters` SET `switch` = '0' WHERE `id` = " . Vars::$ID);
-                    $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+                    $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 }
-                $res = mysql_fetch_array($req);
-                echo'<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('viewing') . '</div>' .
+                $res = mysql_fetch_array($STH);
+                echo'<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('viewing') . '</div>' .
                     '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Validate::checkout($res['name']) . '</b></div>' .
                     ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . __('counter_mod1') . '</h3>' . $res['link1'] . '</p>' .
                     '<p><h3>' . __('counter_mod2') . '</h3>' . $res['link2'] . '</p>' .
@@ -55,9 +49,9 @@ switch (Vars::$ACT) {
                 }
                 echo '</p></div>';
                 echo '<div class="phdr">'
-                    . ($res['switch'] == 1 ? '<a href="' . $url . '?act=view&amp;go=off&amp;id=' . Vars::$ID . '">' . __('lng_off') . '</a>'
-                        : '<a href="' . $url . '?act=view&amp;go=on&amp;id=' . Vars::$ID . '">' . __('lng_on') . '</a>')
-                    . ' | <a href="' . $url . '?act=edit&amp;id=' . Vars::$ID . '">' . __('edit') . '</a> | <a href="' . $url . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete') . '</a></div>';
+                    . ($res['switch'] == 1 ? '<a href="' . $uri . '?act=view&amp;go=off&amp;id=' . Vars::$ID . '">' . __('lng_off') . '</a>'
+                        : '<a href="' . $uri . '?act=view&amp;go=on&amp;id=' . Vars::$ID . '">' . __('lng_on') . '</a>')
+                    . ' | <a href="' . $uri . '?act=edit&amp;id=' . Vars::$ID . '">' . __('edit') . '</a> | <a href="' . $uri . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete') . '</a></div>';
             } else {
                 echo Functions::displayError(__('error_wrong_data'));
             }
@@ -71,13 +65,13 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
+            $STH = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if (mysql_num_rows($STH)) {
+                $res = mysql_fetch_assoc($STH);
                 $sort = $res['sort'];
-                $req = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
-                if (mysql_num_rows($req)) {
-                    $res = mysql_fetch_assoc($req);
+                $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
+                if (mysql_num_rows($STH)) {
+                    $res = mysql_fetch_assoc($STH);
                     $id2 = $res['id'];
                     $sort2 = $res['sort'];
                     mysql_query("UPDATE `cms_counters` SET `sort` = '$sort2' WHERE `id` = " . Vars::$ID);
@@ -85,7 +79,7 @@ switch (Vars::$ACT) {
                 }
             }
         }
-        header('Location: ' . $url);
+        header('Location: ' . $uri);
         break;
 
     case 'down':
@@ -95,13 +89,13 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
+            $STH = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if (mysql_num_rows($STH)) {
+                $res = mysql_fetch_assoc($STH);
                 $sort = $res['sort'];
-                $req = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
-                if (mysql_num_rows($req)) {
-                    $res = mysql_fetch_assoc($req);
+                $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
+                if (mysql_num_rows($STH)) {
+                    $res = mysql_fetch_assoc($STH);
                     $id2 = $res['id'];
                     $sort2 = $res['sort'];
                     mysql_query("UPDATE `cms_counters` SET `sort` = '$sort2' WHERE `id` = " . Vars::$ID);
@@ -109,7 +103,7 @@ switch (Vars::$ACT) {
                 }
             }
         }
-        header('Location: ' . $url);
+        header('Location: ' . $uri);
         break;
 
     case 'del':
@@ -119,24 +113,24 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (!Vars::$ID) {
-            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $uri . '">' . __('back') . '</a>');
             exit;
         }
-        $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-        if (mysql_num_rows($req)) {
+        $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+        if (mysql_num_rows($STH)) {
             if (isset($_POST['submit'])) {
                 mysql_query("DELETE FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-                echo '<p>' . __('counter_deleted') . '<br/><a href="' . $url . '">' . __('continue') . '</a></p>';
+                echo '<p>' . __('counter_deleted') . '<br/><a href="' . $uri . '">' . __('continue') . '</a></p>';
                 exit;
             } else {
-                echo '<form action="' . $url . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
-                echo '<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('delete') . '</div>';
-                $res = mysql_fetch_array($req);
+                echo '<form action="' . $uri . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
+                echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('delete') . '</div>';
+                $res = mysql_fetch_array($STH);
                 echo '<div class="rmenu"><p><h3>' . Validate::checkout($res['name']) . '</h3>' . __('delete_confirmation') . '</p><p><input type="submit" value="' . __('delete') . '" name="submit" /></p></div>';
-                echo '<div class="phdr"><a href="' . $url . '">' . __('cancel') . '</a></div></form>';
+                echo '<div class="phdr"><a href="' . $uri . '">' . __('cancel') . '</a></div></form>';
             }
         } else {
-            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $uri . '">' . __('back') . '</a>');
             exit;
         }
         break;
@@ -154,15 +148,15 @@ switch (Vars::$ACT) {
             $link2 = isset($_POST['link2']) ? trim($_POST['link2']) : '';
             $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
             if (empty($name) || empty($link1)) {
-                echo Functions::displayError(__('error_empty_fields'), '<a href="' . $url . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
+                echo Functions::displayError(__('error_empty_fields'), '<a href="' . $uri . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
                 exit;
             }
-            echo'<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('preview') . '</div>' .
+            echo'<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('preview') . '</div>' .
                 '<div class="menu"><p><h3>' . __('title') . '</h3><b>' . Validate::checkout($name) . '</b></p>' .
                 '<p><h3>' . __('counter_mod1') . '</h3>' . $link1 . '</p>' .
                 '<p><h3>' . __('counter_mod2') . '</h3>' . $link2 . '</p></div>' .
                 '<div class="rmenu">' . __('counter_preview_help') . '</div>' .
-                '<form action="' . $url . '?act=add" method="post">' .
+                '<form action="' . $uri . '?act=add" method="post">' .
                 '<input type="hidden" value="' . $name . '" name="name" />' .
                 '<input type="hidden" value="' . htmlspecialchars($link1) . '" name="link1" />' .
                 '<input type="hidden" value="' . htmlspecialchars($link2) . '" name="link2" />' .
@@ -179,21 +173,21 @@ switch (Vars::$ACT) {
             $mode = 0;
             if (Vars::$ID) {
                 // запрос к базе, если счетчик редактируется
-                $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-                if (mysql_num_rows($req) > 0) {
-                    $res = mysql_fetch_array($req);
+                $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+                if (mysql_num_rows($STH) > 0) {
+                    $res = mysql_fetch_array($STH);
                     $name = Validate::checkout($res['name']);
                     $link1 = htmlspecialchars($res['link1']);
                     $link2 = htmlspecialchars($res['link2']);
                     $mode = $res['mode'];
                     $switch = 1;
                 } else {
-                    echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('back') . '</a>');
+                    echo Functions::displayError(__('error_wrong_data'), '<a href="' . $uri . '">' . __('back') . '</a>');
                     exit;
                 }
             }
-            echo'<form action="' . $url . '?act=edit" method="post">' .
-                '<div class="phdr"><a href="' . $url . '"><b>' . __('counters') . '</b></a> | ' . __('add') . '</div>' .
+            echo'<form action="' . $uri . '?act=edit" method="post">' .
+                '<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('add') . '</div>' .
                 '<div class="menu"><p><h3>' . __('title') . '</h3><input type="text" name="name" value="' . $name . '" /></p>' .
                 '<p><h3>' . __('counter_mod1') . '</h3><textarea rows="3" name="link1">' . $link1 . '</textarea><br /><small>' . __('counter_mod1_description') . '</small></p>' .
                 '<p><h3>' . __('counter_mod2') . '</h3><textarea rows="3" name="link2">' . $link2 . '</textarea><br /><small>' . __('counter_mod2_description') . '</small></p>' .
@@ -220,13 +214,13 @@ switch (Vars::$ACT) {
         $link2 = isset($_POST['link2']) ? $_POST['link2'] : '';
         $mode = isset($_POST['mode']) ? intval($_POST['mode']) : 1;
         if (empty($name) || empty($link1)) {
-            echo Functions::displayError(__('error_empty_fields'), '<a href="' . $url . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
+            echo Functions::displayError(__('error_empty_fields'), '<a href="' . $uri . '?act=edit' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a>');
             exit;
         }
         if (Vars::$ID) {
             // Режим редактирования
-            $req = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req) != 1) {
+            $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if (mysql_num_rows($STH) != 1) {
                 echo Functions::displayError(__('error_wrong_data'));
                 exit;
             }
@@ -238,9 +232,9 @@ switch (Vars::$ACT) {
             WHERE `id` = " . Vars::$ID);
         } else {
             // Получаем значение сортировки
-            $req = mysql_query("SELECT `sort` FROM `cms_counters` ORDER BY `sort` DESC LIMIT 1");
-            if (mysql_num_rows($req) > 0) {
-                $res = mysql_fetch_array($req);
+            $STH = mysql_query("SELECT `sort` FROM `cms_counters` ORDER BY `sort` DESC LIMIT 1");
+            if (mysql_num_rows($STH) > 0) {
+                $res = mysql_fetch_array($STH);
                 $sort = $res['sort'] + 1;
             } else {
                 $sort = 1;
@@ -254,7 +248,7 @@ switch (Vars::$ACT) {
             `mode` = '$mode'");
         }
         echo'<div class="gmenu"><p>' . (Vars::$ID ? __('counter_edit_conf') : __('counter_add_conf')) . '<br/>' .
-            '<a href="' . $url . '">' . __('continue') . '</a>' .
+            '<a href="' . $uri . '">' . __('continue') . '</a>' .
             '</p></div>';
         break;
 
@@ -264,19 +258,20 @@ switch (Vars::$ACT) {
         Вывод списка счетчиков
         -----------------------------------------------------------------
         */
-        echo'<div class="phdr"><a href="' . $backurl . '"><b>' . __('admin_panel') . '</b></a> | ' . __('counters') . '</div>' .
-            '<div class="gmenu"><form action="' . $url . '?act=edit" method="post"><input type="submit" name="delete" value="' . __('add') . '"/></form></div>';
-        $req = mysql_query("SELECT * FROM `cms_counters` ORDER BY `sort` ASC");
-        if ($total = mysql_num_rows($req)) {
-            for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+        echo'<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('admin_panel') . '</b></a> | ' . __('counters') . '</div>' .
+            '<div class="gmenu"><form action="' . $uri . '?act=edit" method="post"><input type="submit" name="delete" value="' . __('add') . '"/></form></div>';
+        $STH = DB::PDO()->query('SELECT * FROM `cms_counters` ORDER BY `sort` ASC');
+        $total = $STH->rowCount();
+        if ($total) {
+            for ($i = 0; $res = $STH->fetch(); ++$i) {
                 echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                     Functions::getImage(($res['switch'] == 1 ? 'green' : 'red') . '.png', '', 'class="left"') . '&#160;' .
-                    '<a href="' . $url . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a><br />' .
+                    '<a href="' . $uri . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a><br />' .
                     '<div class="sub">' .
-                    '<a href="' . $url . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a> | ' .
-                    '<a href="' . $url . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a> | ' .
-                    '<a href="' . $url . '?act=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
-                    '<a href="' . $url . '?act=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>' .
+                    '<a href="' . $uri . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a> | ' .
+                    '<a href="' . $uri . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a> | ' .
+                    '<a href="' . $uri . '?act=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
+                    '<a href="' . $uri . '?act=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>' .
                     '</div>' .
                     '</div>';
             }
@@ -285,5 +280,5 @@ switch (Vars::$ACT) {
         }
         echo'<div class="phdr">' . __('total') . ': ' . $total . '</div>';
 }
-echo'<p>' . (Vars::$MOD ? '<a href="' . $url . '">' . __('counters') . '</a><br />' : '') .
-    '<a href="' . $backurl . '">' . __('admin_panel') . '</a></p>';
+echo'<p>' . (Vars::$MOD ? '<a href="' . $uri . '">' . __('counters') . '</a><br />' : '') .
+    '<a href="' . Router::getUri(2) . '">' . __('admin_panel') . '</a></p>';

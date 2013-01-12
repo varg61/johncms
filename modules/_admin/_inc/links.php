@@ -9,14 +9,9 @@
  * @author      http://johncms.com/about
  */
 
-// Проверяем права доступа
-if (Vars::$USER_RIGHTS < 7) {
-    echo Functions::displayError(__('access_forbidden'));
-    exit;
-}
+defined('_IN_ADMIN') or die('Error: restricted access');
+$uri = Router::getUri(3);
 
-$url = Router::getUri(3);
-$backurl = Router::getUri(2);
 $tpl = Template::getInstance();
 
 switch (Vars::$ACT) {
@@ -26,14 +21,14 @@ switch (Vars::$ACT) {
         Добавляем / редактируем ссылку
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . $url . '"><b>' . __('advertisement') . '</b></a> | ' . (Vars::$ID ? __('link_edit') : __('link_add')) . '</div>';
+        echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('advertisement') . '</b></a> | ' . (Vars::$ID ? __('link_edit') : __('link_add')) . '</div>';
         if (Vars::$ID) {
             // Если ссылка редактироется, запрашиваем ее данные в базе
             $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = " . Vars::$ID);
             if (mysql_num_rows($req)) {
                 $res = mysql_fetch_assoc($req);
             } else {
-                echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('back') . '</a>');
+                echo Functions::displayError(__('error_wrong_data'), '<a href="' . $uri . '">' . __('back') . '</a>');
                 exit;
             }
         } else {
@@ -57,7 +52,7 @@ switch (Vars::$ACT) {
             && isset($_SESSION['form_token'])
             && $_POST['form_token'] == $_SESSION['form_token']
         ) {
-            $url = isset($_POST['link']) ? mysql_real_escape_string(trim($_POST['link'])) : '';
+            $uri = isset($_POST['link']) ? mysql_real_escape_string(trim($_POST['link'])) : '';
             $name = isset($_POST['name']) ? mysql_real_escape_string(trim($_POST['name'])) : '';
             $bold = isset($_POST['bold']);
             $italic = isset($_POST['italic']);
@@ -72,7 +67,7 @@ switch (Vars::$ACT) {
             $mesto = isset($_POST['mesto']) ? abs(intval($_POST['mesto'])) : 0;
             $color = isset($_POST['color']) ? mb_substr(trim($_POST['color']), 0, 6) : '';
             $error = array();
-            if (!$url || !$name)
+            if (!$uri || !$name)
                 $error[] = __('error_empty_fields');
             if ($type > 3 || $type < 0)
                 $type = 0;
@@ -88,7 +83,7 @@ switch (Vars::$ACT) {
                     $error[] = __('error_color');
             }
             if ($error) {
-                echo Functions::displayError($error, '<a href="' . $url . '?from=addlink">' . __('back') . '</a>');
+                echo Functions::displayError($error, '<a href="' . $uri . '?from=addlink">' . __('back') . '</a>');
                 exit;
             }
             if (Vars::$ID) {
@@ -96,7 +91,7 @@ switch (Vars::$ACT) {
                 mysql_query("UPDATE `cms_ads` SET
                     `type` = '$type',
                     `view` = '$view',
-                    `link` = '$url',
+                    `link` = '$uri',
                     `name` = '$name',
                     `color` = '$color',
                     `count_link` = '$count',
@@ -120,7 +115,7 @@ switch (Vars::$ACT) {
                     `type` = '$type',
                     `view` = '$view',
                     `mesto` = '$mesto',
-                    `link` = '$url',
+                    `link` = '$uri',
                     `name` = '$name',
                     `color` = '$color',
                     `count_link` = '$count',
@@ -136,7 +131,7 @@ switch (Vars::$ACT) {
             }
             mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$USER_ID);
             echo'<div class="menu"><p>' . (Vars::$ID ? __('link_edit_ok') : __('link_add_ok')) . '<br />' .
-                '<a href="' . $url . '?sort=' . $type . '">' . __('continue') . '</a></p></div>';
+                '<a href="' . $uri . '?sort=' . $type . '">' . __('continue') . '</a></p></div>';
         } else {
             $tpl->res = $res;
             $tpl->form_token = mt_rand(100, 10000);
@@ -204,8 +199,8 @@ switch (Vars::$ACT) {
                 mysql_query("DELETE FROM `cms_ads` WHERE `id` = " . Vars::$ID);
                 header('Location: ' . $_POST['ref']);
             } else {
-                echo '<div class="phdr"><a href="' . $url . '"><b>' . __('advertisement') . '</b></a> | ' . __('delete') . '</div>' .
-                    '<div class="rmenu"><form action="' . $url . '?act=del&amp;id=' . Vars::$ID . '" method="post">' .
+                echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('advertisement') . '</b></a> | ' . __('delete') . '</div>' .
+                    '<div class="rmenu"><form action="' . $uri . '?act=del&amp;id=' . Vars::$ID . '" method="post">' .
                     '<p>' . __('link_deletion_warning') . '</p>' .
                     '<p><input type="submit" name="submit" value="' . __('delete') . '" /></p>' .
                     '<input type="hidden" name="ref" value="' . htmlspecialchars($_SERVER['HTTP_REFERER']) . '" />' .
@@ -224,14 +219,14 @@ switch (Vars::$ACT) {
         if (isset($_POST['submit'])) {
             mysql_query("DELETE FROM `cms_ads` WHERE `to` = '1'");
             mysql_query("OPTIMIZE TABLE `cms_ads`");
-            header('location: ' . $url);
+            header('location: ' . $uri);
         } else {
-            echo '<div class="phdr"><a href="' . $url . '"><b>' . __('advertisement') . '</b></a> | ' . __('links_delete_hidden') . '</div>' .
-                '<div class="menu"><form method="post" action="' . $url . '?act=clear">' .
+            echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('advertisement') . '</b></a> | ' . __('links_delete_hidden') . '</div>' .
+                '<div class="menu"><form method="post" action="' . $uri . '?act=clear">' .
                 '<p>' . __('link_clear_warning') . '</p>' .
                 '<p><input type="submit" name="submit" value="' . __('delete') . '" />' .
                 '</p></form></div>' .
-                '<div class="phdr"><a href="' . $url . '">' . __('cancel') . '</a></div>';
+                '<div class="phdr"><a href="' . $uri . '">' . __('cancel') . '</a></div>';
         }
         break;
 
@@ -257,7 +252,7 @@ switch (Vars::$ACT) {
         Главное меню модуля управления рекламой
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . $backurl . '"><b>' . __('admin_panel') . '</b></a> | ' . __('advertisement') . '</div>';
+        echo '<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('admin_panel') . '</b></a> | ' . __('advertisement') . '</div>';
         $array_placing = array(
             __('link_add_placing_all'),
             __('link_add_placing_front'),
@@ -270,10 +265,10 @@ switch (Vars::$ACT) {
         );
         $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
         $array_menu = array(
-            (!$type ? __('endwise') : '<a href="' . $url . '">' . __('endwise') . '</a>'),
-            ($type == 1 ? __('above_content') : '<a href="' . $url . '?type=1">' . __('above_content') . '</a>'),
-            ($type == 2 ? __('below_content') : '<a href="' . $url . '?type=2">' . __('below_content') . '</a>'),
-            ($type == 3 ? __('below') : '<a href="' . $url . '?type=3">' . __('below') . '</a>')
+            (!$type ? __('endwise') : '<a href="' . $uri . '">' . __('endwise') . '</a>'),
+            ($type == 1 ? __('above_content') : '<a href="' . $uri . '?type=1">' . __('above_content') . '</a>'),
+            ($type == 2 ? __('below_content') : '<a href="' . $uri . '?type=2">' . __('below_content') . '</a>'),
+            ($type == 3 ? __('below') : '<a href="' . $uri . '?type=3">' . __('below') . '</a>')
         );
         echo '<div class="topmenu">' . Functions::displayMenu($array_menu) . '</div>';
         $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'"), 0);
@@ -299,11 +294,11 @@ switch (Vars::$ACT) {
                 echo '<p>' . Functions::getImage(($res['to'] ? 'red' : 'green') . '.png', '', 'class="left"') . '&#160;' .
                     '<a href="' . htmlspecialchars($res['link']) . '">' . htmlspecialchars($res['link']) . '</a>&nbsp;[' . $res['count'] . ']<br />' . $name . '</p>';
                 $menu = array(
-                    '<a href="' . $url . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a>',
-                    '<a href="' . $url . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a>',
-                    '<a href="' . $url . '?act=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a>',
-                    '<a href="' . $url . '?act=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>',
-                    '<a href="' . $url . '?act=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? __('to_show') : __('hide')) . '</a>'
+                    '<a href="' . $uri . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a>',
+                    '<a href="' . $uri . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a>',
+                    '<a href="' . $uri . '?act=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a>',
+                    '<a href="' . $uri . '?act=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>',
+                    '<a href="' . $uri . '?act=show&amp;id=' . $res['id'] . '">' . ($res['to'] ? __('to_show') : __('hide')) . '</a>'
                 );
                 echo '<div class="sub">' .
                     '<div>' . Functions::displayMenu($menu) . '</div>' .
@@ -339,12 +334,12 @@ switch (Vars::$ACT) {
         }
         echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
         if ($total > Vars::$USER_SET['page_size']) {
-            echo '<div class="topmenu">' . Functions::displayPagination($url . '?type=' . $type . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                '<p><form action="' . $url . '?type=' . $type . '" method="post">' .
+            echo '<div class="topmenu">' . Functions::displayPagination($uri . '?type=' . $type . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                '<p><form action="' . $uri . '?type=' . $type . '" method="post">' .
                 '<input type="text" name="page" size="2"/>' .
                 '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/></form></p>';
         }
-        echo'<p><a href="' . $url . '?act=edit">' . __('link_add') . '</a><br />' .
-            '<a href="' . $url . '?act=clear">' . __('links_delete_hidden') . '</a><br />' .
-            '<a href="' . $backurl . '">' . __('admin_panel') . '</a></p>';
+        echo'<p><a href="' . $uri . '?act=edit">' . __('link_add') . '</a><br />' .
+            '<a href="' . $uri . '?act=clear">' . __('links_delete_hidden') . '</a><br />' .
+            '<a href="' . Router::getUri(2) . '">' . __('admin_panel') . '</a></p>';
 }
