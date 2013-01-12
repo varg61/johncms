@@ -17,7 +17,8 @@ class Validate
      * Проверка корректности ввода NickName
      *
      * @param string $var
-     * @param bool $error_log
+     * @param bool   $error_log
+     *
      * @return bool
      */
     public static function nickname($var = '', $error_log = FALSE)
@@ -26,7 +27,7 @@ class Validate
             $error = __('error_empty_nickname');
         } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
             $error = __('error_wrong_lenght');
-        } elseif (self::email($var) === TRUE) {
+        } elseif (static::email($var) === TRUE) {
             $error = __('error_email_login');
         } elseif (preg_match('/[^\da-zа-я\-\.\ \@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
             $error = __('error_wrong_symbols');
@@ -41,8 +42,9 @@ class Validate
         }
 
         if ($error_log) {
-            self::$error['login'] = $error;
+            static::$error['login'] = $error;
         }
+
         return FALSE;
     }
 
@@ -50,18 +52,32 @@ class Validate
      * Проверка занятости Ника
      *
      * @param string $var
-     * @param bool $error_log
+     * @param bool   $error_log
+     *
      * @return bool
      */
     public static function nicknameAvailability($var = '', $error_log = FALSE)
     {
-        $sql = self::email($var) === TRUE ? " OR `email` = '" . mysql_real_escape_string($var) . "'" : "";
-        $result = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `nickname` = '" . mysql_real_escape_string($var) . "'$sql"), 0);
-        if ($result == 0) return TRUE;
+        if (!static::email($var)
+            || (static::email($var) && static::emailAvailability($var))
+        ) {
+            $STH = DB::PDO()->prepare('
+                SELECT COUNT(*) FROM `users`
+                WHERE `nickname` = :nickname
+            ');
+
+            $STH->bindValue(':nickname', $var, PDO::PARAM_STR);
+            $STH->execute();
+
+            if (!$STH->fetchColumn()) {
+                return TRUE;
+            }
+        }
 
         if ($error_log) {
-            self::$error['login'] = __('error_nick_occupied');
+            static::$error['login'] = __('error_nick_occupied');
         }
+
         return FALSE;
     }
 
@@ -69,8 +85,9 @@ class Validate
      * Проверка корректности ввода E-mail
      *
      * @param string $var
-     * @param bool $error_log
-     * @param bool $allow_empty
+     * @param bool   $error_log
+     * @param bool   $allow_empty
+     *
      * @return bool
      */
     public static function email($var = '', $error_log = FALSE, $allow_empty = FALSE)
@@ -90,36 +107,47 @@ class Validate
         }
 
         if ($error_log) {
-            self::$error['email'] = $error;
+            static::$error['email'] = $error;
         }
+
         return FALSE;
     }
 
     /**
      * Проверка занятости E-mail
      *
-     * @param $var
+     * @param      $var
      * @param bool $error_log
+     *
      * @return bool
      */
     public static function emailAvailability($var, $error_log = FALSE)
     {
-        $result = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `email` = '" . mysql_real_escape_string($var) . "'"), 0);
-        if ($result == 0) {
-            return TRUE;
+        $STH = DB::PDO()->prepare('
+            SELECT COUNT(*) FROM `users`
+            WHERE `email` = :email
+        ');
+
+        $STH->bindParam(':email', $var, PDO::PARAM_STR);
+        $STH->execute();
+
+        if ($STH->fetchColumn()) {
+            if ($error_log) {
+                static::$error['email'] = __('error_email_occupied');
+            }
+
+            return FALSE;
         }
 
-        if ($error_log) {
-            self::$error['email'] = __('error_email_occupied');
-        }
-        return FALSE;
+        return TRUE;
     }
 
     /**
      * Проверка пароля на допустимую длину
      *
-     * @param $var                     Пароль
-     * @param bool $error_log          Включить журнал ошибок
+     * @param      $var                     Пароль
+     * @param bool $error_log               Включить журнал ошибок
+     *
      * @return bool                    TRUE, если проверка прошла успешно
      */
     public static function password($var, $error_log = FALSE)
@@ -133,8 +161,9 @@ class Validate
         }
 
         if ($error_log) {
-            self::$error['password'] = $error;
+            static::$error['password'] = $error;
         }
+
         return FALSE;
     }
 
@@ -142,9 +171,11 @@ class Validate
      * Фильтрация входящих строчных данных
      *
      * @param $str
+     *
      * @return string
      */
-    public static function checkin($str){
+    public static function checkin($str)
+    {
         $str = trim($str);
 
         if (function_exists('iconv')) {
@@ -174,11 +205,12 @@ class Validate
      * Используется для обработки строк перед выводом в браузер.
      * Преобразует символы в HTML сущности, обрабатывает BBcode и смайлы.
      *
-     * @param $str                     Необработанная строка
-     * @param int $br                  Переносы 0 - не обрабатывать, 1 - обрабатывать, 2 - подставлять пробел
-     * @param int $tags                BBcode 0 - не обрабатывать, 1 - обрабатывать, 2 - удалять тэги
-     * @param int $smileys             Смайлы 0 - не обрабатывать, 1 - обычные, 2 - обычные и админские
-     * @return string                  Обработанная строка
+     * @param     $str      Необработанная строка
+     * @param int $br       Переносы 0 - не обрабатывать, 1 - обрабатывать, 2 - подставлять пробел
+     * @param int $tags     BBcode 0 - не обрабатывать, 1 - обрабатывать, 2 - удалять тэги
+     * @param int $smileys  Смайлы 0 - не обрабатывать, 1 - обычные, 2 - обычные и админские
+     *
+     * @return string       Обработанная строка
      */
     public static function checkout($str, $br = 0, $tags = 0, $smileys = 0)
     {
@@ -209,14 +241,16 @@ class Validate
     /**
      * Проверка корректности IP адреса
      *
-     * @param string $ip               Строка с IP адресом
-     * @return bool                    TRUE, если проверка прошла успешно
+     * @param string $ip  Строка с IP адресом
+     *
+     * @return bool       TRUE, если проверка прошла успешно
      */
     public static function ip($ip)
     {
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             return TRUE;
         }
+
         return FALSE;
     }
 }
