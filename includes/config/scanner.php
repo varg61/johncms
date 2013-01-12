@@ -62,6 +62,7 @@ $whiteList = array(
     './includes/classes/captcha.php',
     './includes/classes/comments.php',
     './includes/classes/counters.php',
+    './includes/classes/db.php',
     './includes/classes/fields.php',
     './includes/classes/form.php',
     './includes/classes/functions.php',

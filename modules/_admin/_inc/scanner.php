@@ -43,6 +43,10 @@ $form
         '3' => __('antispy_snapshot_create')
     )))
 
+    ->add('password', 'password', array(
+    'label'       => __('your_password'),
+    'description' => __('snapshot_help')))
+
     ->fieldsetStart()
 
     ->add('submit', 'submit', array(
@@ -83,8 +87,12 @@ if ($form->isSubmitted) {
 
         case 3:
             // Создаем снимок файлов
-            $scanner->snap();
-            $tpl->ok = __('antispy_snapshot_create_ok');
+            if(crypt($form->validOutput['password'], Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']){
+                $scanner->snap();
+                $tpl->ok = __('antispy_snapshot_create_ok');
+            } else {
+                $tpl->errormsg = __('error_wrong_password');
+            }
             break;
     }
 }
