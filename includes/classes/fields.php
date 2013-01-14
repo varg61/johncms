@@ -22,7 +22,7 @@ class Fields
         'password'     => array('<input%s%s type="password" value="%s"%s/>', 'id,name,value,class'),
         'radio'        => array('<input%s type="radio" value="%s"%s%s/>', 'name,value,class,checked'),
         'select'       => array('<select%s%s%s>%s</select>', 'name,class,multiple,content'),
-        'submit'       => array('<input%s%s type="submit" value="%s"%s/>', 'id,name,value,class'),
+        'submit'       => array('<button%s%s type="submit"%s>%s</button>', 'id,name,class,value'),
         'text'         => array('<input%s%s type="text" value="%s"%s%s%s/>', 'id,name,value,class,style,maxlength'),
         'textarea'     => array('<textarea%s%s%s%s%s>%s</textarea>', 'id,name,rows,class,style,value'),
     );
