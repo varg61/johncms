@@ -14,10 +14,6 @@ define('CMS_VERSION', 'JohnCMS 5.0.0');
 define('START_TIME', microtime(TRUE));
 define('START_MEMORY', memory_get_usage());
 
-if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-    die ('ERROR: PHP5.3 > Only');
-}
-
 /**
  * Задаем базовые параметры PHP
  */
@@ -93,17 +89,6 @@ spl_autoload_register(
  * Инициализируем Ядро системы
  */
 new Network;
-
-//TODO: Удалить после переделки модулей
-//require(CONFIGPATH . 'db.php');
-//$db_host = isset($db_host) ? $db_host : 'localhost';
-//$db_user = isset($db_user) ? $db_user : 'root';
-//$db_pass = isset($db_pass) ? $db_pass : '';
-//$db_name = isset($db_name) ? $db_name : 'johncms';
-//$connect = @mysql_connect($db_host, $db_user, $db_pass) or die('Error: cannot connect to database server');
-//@mysql_select_db($db_name) or die('Error: specified database does not exist');
-//mysql_set_charset('UTF8', $connect);
-
 new Session;
 new System;
 
