@@ -67,7 +67,7 @@ class System extends Vars
         static::$ACL = isset(static::$SYSTEM_SET['acl']) ? unserialize(static::$SYSTEM_SET['acl']) : array();
 
         $subpath = trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
-        static::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . (!empty($subpath) ? '/' . $subpath . '/' : '');
+        static::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . '/' . (!empty($subpath) ? $subpath . '/' : '');
     }
 
     /**
