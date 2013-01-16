@@ -10,20 +10,23 @@
 <div class="alarm"><?= __('guestbook_closed') ?></div>
 <?php endif ?>
 
+<?php if(isset($this->form)): ?>
 <div class="user-block">
-<form name="form" action="<?= $this->url ?>?act=say<?= ($this->mod ? '&amp;mod=adm' : '') ?>" method="post">
-    <?php if(!Vars::$USER_ID): ?>
-    <?= __('name') ?> (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>
-    <?php endif ?>
-    <?= (Vars::$USER_ID && !Vars::$IS_MOBILE ? TextParser::autoBB('form', 'msg') : '') ?>
-    <textarea rows="<?= Vars::$USER_SET['field_h'] ?>" name="msg"></textarea><br/>
-    <?php if (!Vars::$USER_ID): ?>
-    <?= Captcha::display(1) ?><br/>
-    <?php endif ?>
-    <input class="btn btn-primary" type="submit" name="submit" value="<?= __('write') ?>"/>
-    <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
-</form>
+    <?= $this->form ?>
+    <form name="form" action="<?= $this->url ?>?act=say<?= ($this->mod ? '&amp;mod=adm' : '') ?>" method="post">
+        <?php if(Vars::$USER_ID): ?>
+        <?= __('name') ?> (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>
+        <?php endif ?>
+        <?= (Vars::$USER_ID && !Vars::$IS_MOBILE ? TextParser::autoBB('form', 'msg') : '') ?>
+        <textarea rows="<?= Vars::$USER_SET['field_h'] ?>" name="msg"></textarea><br/>
+        <?php if (!Vars::$USER_ID): ?>
+        <?= Captcha::display(1) ?><br/>
+        <?php endif ?>
+        <input class="btn btn-primary" type="submit" name="submit" value="<?= __('write') ?>"/>
+        <input type="hidden" name="form_token" value="<?= $this->form_token ?>"/>
+    </form>
 </div>
+<?php endif ?>
 
 <ul class="nav"><li><h2><?= __('comments') ?></h2></li></ul>
 <?php if (isset($this->list)): ?>
