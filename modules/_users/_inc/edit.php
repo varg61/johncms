@@ -152,4 +152,4 @@ if ($form->isSubmitted) {
     $tpl->save = 1;
 }
 
-$tpl->contents = $tpl->includeTpl('edit_profile');
+$tpl->contents = $tpl->includeTpl('edit');

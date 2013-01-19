@@ -16,9 +16,9 @@ $admin_actions = array();
 
 $personal_actions = array(
     'menu'   => 'user_menu.php',
-    'edit'   => 'edit_profile.php',
-    'option' => 'option_menu.php',
-    'status' => 'edit_status.php',
+    'edit'   => 'edit.php',
+    'option' => 'option.php',
+    'status' => 'status.php',
     'avatar' => 'upload_avatar.php',
 );
 

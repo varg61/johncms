@@ -262,7 +262,7 @@ class Form
                     $replace = isset($option['filter']['regexp_replace']) ? $option['filter']['regexp_replace'] : '';
                     $option['value'] = preg_replace($option['filter']['regexp_search'], $replace, $option['value']);
                 }
-                if ($max && mb_strlen($option['value']) > $max) {
+                if ($max) {
                     $option['value'] = mb_substr($option['value'], 0, $max);
                 }
                 break;

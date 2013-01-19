@@ -11,7 +11,12 @@
 
 defined('_IN_USERS') or die('Error: restricted access');
 $uri = Router::getUri(4);
-//TODO: Добавить проверку на разрешение смены статуса
+
+if (!Vars::$USER_SYS['change_status']){
+    header('Location: ' . Vars::$HOME_URL . '404');
+    exit;
+}
+
 $tpl = Template::getInstance();
 $form = new Form($uri);
 
@@ -23,7 +28,11 @@ $form
     ->add('text', 'status', array(
     'style'       => 'max-width: none',
     'value'       => Users::$data['status'],
-    'description' => __('status_lenght')))
+    'description' => __('status_lenght'),
+    'filter'      => array(
+        'type' => 'str',
+        'max'  => 50
+    )))
 
     ->fieldsetStart()
 
@@ -34,14 +43,22 @@ $form
     ->addHtml('<a class="btn" href="' . Router::getUri(3) . 'option/">' . __('back') . '</a>');
 
 $tpl->form = $form->display();
-//TODO: Добавить валидацию длины статуса
 
 if ($form->isSubmitted) {
     Users::$data['status'] = $form->validOutput['status'];
-    mysql_query("UPDATE `users` SET
-    `status` = '" . mysql_real_escape_string(Users::$data['status']) . "'
-    WHERE `id` = " . Users::$data['id']);
+
+    $STH = DB::PDO()->prepare('
+      UPDATE `users` SET
+      `status`   = :status
+      WHERE `id` = :id
+    ');
+
+    $STH->bindValue(':status', Users::$data['status']);
+    $STH->bindValue(':id', Users::$data['id']);
+    $STH->execute();
+    $STH = null;
+
     $tpl->save = 1;
 }
 
-$tpl->contents = $tpl->includeTpl('edit_status');
+$tpl->contents = $tpl->includeTpl('status');
