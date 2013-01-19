@@ -44,6 +44,20 @@ $form
         'max'  => 13
     )))
 
+    ->add('checkbox', 'direct_url', array(
+    'checked'      => Vars::$USER_SET['direct_url'],
+    'label_inline' => __('direct_url')))
+
+    ->add('checkbox', 'avatar', array(
+    'checked'      => Vars::$USER_SET['avatar'],
+    'label_inline' => __('avatars')))
+
+    ->add('checkbox', 'smilies', array(
+    'checked'      => Vars::$USER_SET['smilies'],
+    'label_inline' => __('smilies')))
+
+    ->fieldsetStart(__('apperance'))
+
     ->add('text', 'page_size', array(
     'value'        => Vars::$USER_SET['page_size'],
     'label_inline' => __('list_size'),
@@ -68,33 +82,16 @@ $form
         'max'  => 9
     )))
 
-    ->fieldsetStart()
-
-    ->add('checkbox', 'direct_url', array(
-    'checked'      => Vars::$USER_SET['direct_url'],
-    'label_inline' => __('direct_url')))
-
-    ->add('checkbox', 'avatar', array(
-    'checked'      => Vars::$USER_SET['avatar'],
-    'label_inline' => __('avatars')))
-
-    ->add('checkbox', 'smilies', array(
-    'checked'      => Vars::$USER_SET['smilies'],
-    'label_inline' => __('smilies')))
-
-    ->fieldsetStart()
-
     ->add('select', 'skin', array(
     'selected' => Vars::$USER_SET['skin'],
     'label'    => __('design_template'),
     'items'    => $tpl_list))
 
-    ->fieldsetStart()
+    ->fieldsetStart(__('language'))
 
     //TODO: Добавить проверку на удаленный язык
     ->add('radio', 'iso', array(
     'checked' => Vars::$USER_SET['lng'],
-    'label'   => __('language'),
     'items'   => $items))
 
     ->fieldsetStart()
