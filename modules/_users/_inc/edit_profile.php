@@ -112,29 +112,44 @@ if ($form->isSubmitted) {
         // Удаляем дату рожденья
         Users::$data['birth'] = '00-00-0000';
     } else {
-        Users::$data['birth'] = intval($tpl->year) . '-' . intval($tpl->month) . '-' . intval($tpl->day);
+        Users::$data['birth'] = intval($form->validOutput['year']) . '-' . intval($form->validOutput['month']) . '-' . intval($form->validOutput['day']);
     }
 
     //TODO: Добавить валидацию даты
     //TODO: Добавить валидацию E-mail
 
-    if (empty($tpl->error)) {
-        mysql_query("UPDATE `users` SET
-                `sex` = '" . Users::$data['sex'] . "',
-                `imname` = '" . mysql_real_escape_string(Users::$data['imname']) . "',
-                `birth` = '" . Users::$data['birth'] . "',
-                `live` = '" . mysql_real_escape_string(Users::$data['live']) . "',
-                `about` = '" . mysql_real_escape_string(Users::$data['about']) . "',
-                `tel` = '" . mysql_real_escape_string(Users::$data['tel']) . "',
-                `siteurl` = '" . mysql_real_escape_string(Users::$data['siteurl']) . "',
-                `email` = '" . mysql_real_escape_string(Users::$data['email']) . "',
-                `mailvis` = " . Users::$data['mailvis'] . ",
-                `icq` = " . Users::$data['icq'] . ",
-                `skype` = '" . mysql_real_escape_string(Users::$data['skype']) . "'
-                WHERE `id` = " . Users::$data['id']
-        ) or exit('MYSQL: ' . mysql_error());
-        $tpl->save = 1;
-    }
+    $STH = DB::PDO()->prepare('
+      UPDATE `users` SET
+      `sex`      = :sex,
+      `imname`   = :imname,
+      `birth`    = :birth,
+      `live`     = :live,
+      `about`    = :about,
+      `tel`      = :tel,
+      `siteurl`  = :siteurl,
+      `email`    = :email,
+      `mailvis`  = :mailvis,
+      `icq`      = :icq,
+      `skype`    = :skype
+      WHERE `id` = :id
+    ');
+
+    $STH->bindValue(':sex', Users::$data['sex']);
+    $STH->bindValue(':imname', Users::$data['imname']);
+    $STH->bindValue(':birth', Users::$data['birth']);
+    $STH->bindValue(':live', Users::$data['live']);
+    $STH->bindValue(':about', Users::$data['about']);
+    $STH->bindValue(':tel', Users::$data['tel']);
+    $STH->bindValue(':siteurl', Users::$data['siteurl']);
+    $STH->bindValue(':email', Users::$data['email']);
+    $STH->bindValue(':mailvis', Users::$data['mailvis']);
+    $STH->bindValue(':icq', Users::$data['icq']);
+    $STH->bindValue(':skype', Users::$data['skype']);
+    $STH->bindValue(':id', Users::$data['id']);
+    $STH->execute();
+    $STH = null;
+
+    $tpl->save = 1;
 }
 
 $tpl->contents = $tpl->includeTpl('edit_profile');

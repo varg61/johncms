@@ -58,6 +58,5 @@ if (isset(Router::$ROUTE[1])) {
 if ($include && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include)) {
     require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $include);
 } else {
-    echo 'error: ' . $include . ' - ' . Router::$ROUTE[1]; //TODO: Убрать!
-    //header('Location: ' . Vars::$HOME_URL . '404');
+    header('Location: ' . Vars::$HOME_URL . '404');
 }
