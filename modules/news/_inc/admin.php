@@ -17,7 +17,7 @@ $settings = isset(Vars::$SYSTEM_SET['news'])
     : array(
         'view'     => 1,
         'breaks'   => 1,
-        'smileys'  => 1,
+        'smilies'  => 1,
         'tags'     => 1,
         'comments' => 1,
         'size'     => 500,
@@ -46,9 +46,9 @@ $form
     'label_inline' => __('line_foldings'),
     'checked'      => $settings['breaks']))
 
-    ->add('checkbox', 'smileys', array(
-    'label_inline' => __('smileys'),
-    'checked'      => $settings['smileys']))
+    ->add('checkbox', 'smilies', array(
+    'label_inline' => __('smilies'),
+    'checked'      => $settings['smilies']))
 
     ->add('checkbox', 'tags', array(
     'label_inline' => __('bbcode'),

@@ -61,7 +61,7 @@ class HomePage
                         $text = TextParser::noTags($text);
                     }
                     // Обрабатываем смайлы
-                    if ($this->settings['smileys']) {
+                    if ($this->settings['smilies']) {
                         $text = Functions::smilies($text);
                     }
                     // Определяем режим просмотра заголовка - текста

@@ -448,8 +448,8 @@ class Functions extends Vars
         static $pattern = array();
         if (empty($pattern)) {
             $file = CACHEPATH . 'smilies.dat';
-            if (file_exists($file) && ($smileys = file_get_contents($file)) !== FALSE) {
-                $pattern = unserialize($smileys);
+            if (file_exists($file) && ($smilies = file_get_contents($file)) !== FALSE) {
+                $pattern = unserialize($smilies);
             } else {
                 return $str;
             }

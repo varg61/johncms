@@ -25,7 +25,7 @@ if (Vars::$USER_RIGHTS >= 6 && Vars::$ID) {
             '<p><textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
             '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>' .
             '</form></div>' .
-            '<div class="phdr"><a href="faq.php?act=trans">' . __('translit') . '</a> | <a href="faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+            '<div class="phdr"><a href="faq.php?act=trans">' . __('translit') . '</a> | <a href="faq.php?act=smilies">' . __('smilies') . '</a></div>' .
             '<p><a href="' . $url . '">' . __('back') . '</a></p>';
     }
 }

@@ -22,7 +22,7 @@
     <li><a href="<?= $this->uri ?>delete_avatar"><i class="icn-trash"></i><?= __('delete') ?><i class="icn-arrow"></i></a></li>
     <?php endif ?>
     <li><h2><?= __('settings') ?></h2></li>
-    <li><a href="<?= $this->uri ?>settings/"><i class="icn-settings"></i><?= __('system_settings') ?> //планируется<i class="icn-arrow"></i></a></li>
+    <li><a href="<?= $this->uri ?>settings/"><i class="icn-settings"></i><?= __('system_settings') ?><i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_RIGHTS >= 7): ?>
     <li><a href="<?= $this->uri ?>rights/"><i class="icn-shield-red"></i><?= __('rank') ?> //планируется<i class="icn-arrow"></i></a></li>
     <?php endif ?>

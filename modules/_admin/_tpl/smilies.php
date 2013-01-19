@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li><h1 class="section-warning"><?= __('smileys') ?></h1></li>
+    <li><h1 class="section-warning"><?= __('smilies') ?></h1></li>
 </ul>
 <div class="form-container">
     <?php if (isset($this->error)): ?>

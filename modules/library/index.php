@@ -223,7 +223,7 @@ if (isset($actions[Vars::$ACT])
             }
             // Текст статьи
             $text = Validate::checkout(mb_substr($req['text'], $int_start, $int_lenght), 1, 1);
-            if (Vars::$USER_SET['smileys'])
+            if (Vars::$USER_SET['smilies'])
                 $text = Functions::smilies($text, Vars::$USER_RIGHTS ? 1 : 0);
             echo '<div class="list2">' . $text . '</div>';
 

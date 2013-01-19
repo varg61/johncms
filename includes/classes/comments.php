@@ -272,7 +272,7 @@ class Comments
                             $this->access_delete ? '<a href="' . $this->url . '&amp;mod=del&amp;item=' . $res['subid'] . '">' . __('delete') . '</a>' : ''
                         );
                         $text = Validate::checkout($res['text'], 1, 1);
-                        if (Vars::$USER_SET['smileys'])
+                        if (Vars::$USER_SET['smilies'])
                             $text = Functions::smilies($text, $res['rights'] >= 1 ? 1 : 0);
                         if (isset($attributes['edit_count'])) {
                             $text .= '<br /><span class="gray"><small>' . __('edited') . ': <b>' . $attributes['edit_name'] . '</b>' .
@@ -281,7 +281,7 @@ class Comments
                         }
                         if (!empty($res['reply'])) {
                             $reply = Validate::checkout($res['reply'], 1, 1);
-                            if (Vars::$USER_SET['smileys'])
+                            if (Vars::$USER_SET['smilies'])
                                 $reply = Functions::smilies($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
                             $text .= '<div class="' . ($attributes['reply_rights'] ? '' : 'g') . 'reply"><small>' .
                                 //TODO: Переделать ссылку

@@ -164,7 +164,7 @@ if (isset($_POST['submit'])) {
         }
     }
     $msg_pre = Validate::checkout($msg, 1, 1);
-    if (Vars::$USER_SET['smileys'])
+    if (Vars::$USER_SET['smilies'])
         $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
     $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
     echo '<div class="phdr"><a href="' . $url . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('new_topic') . '</div>';
@@ -190,6 +190,6 @@ if (isset($_POST['submit'])) {
         ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
         '</p></div></form>' .
         '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | ' .
-        '<a href="../pages/faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+        '<a href="../pages/faq.php?act=smilies">' . __('smilies') . '</a></div>' .
         '<p><a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
 }

@@ -174,7 +174,7 @@ if (!$error) {
                 header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
             } else {
                 $msg_pre = Validate::checkout($msg, 1, 1);
-                if (Vars::$USER_SET['smileys'])
+                if (Vars::$USER_SET['smilies'])
                     $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
                 $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
                 echo '<div class="phdr"><a href="' . $link . '"><b>' . __('forum') . '</b></a> | ' . __('edit_message') . '</div>';
@@ -191,8 +191,9 @@ if (!$error) {
                 echo '</p><p><input type="submit" name="submit" value="' . __('save') . '" style="width: 107px; cursor: pointer;"/> ' .
                      ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                      '</p></form></div>' .
-                     '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | <a href="../pages/faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+                     '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | <a href="../pages/faq.php?act=smilies">' . __('smilies') . '</a></div>' .
                      '<p><a href="' . $link . '">' . __('back') . '</a></p>';
+                //TODO: Исправить ссылку на каталог смайлов
             }
     }
 } else {

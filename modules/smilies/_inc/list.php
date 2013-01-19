@@ -11,21 +11,21 @@ $cat = Router::$ROUTE[1];
 $backLink = Router::getUri(2);
 $url = Router::getUri(3);
 
-$smileys = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smilies' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
-$total = count($smileys);
+$smilies = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smilies' . DIRECTORY_SEPARATOR . $cat . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
+$total = count($smilies);
 
 $end = Vars::$START + Vars::$USER_SET['page_size'];
 if ($end > $total) {
     $end = $total;
 }
-echo'<div class="phdr"><a href="' . $url . '"><b>' . __('smileys') . '</b></a> | ' . __($cat) . '</div>';
+echo'<div class="phdr"><a href="' . $url . '"><b>' . __('smilies') . '</b></a> | ' . __($cat) . '</div>';
 if ($total) {
     if (Vars::$USER_ID && !Vars::$IS_MOBILE) {
-        if (($user_sm = Vars::getUserData('smileys')) === FALSE) {
+        if (($user_sm = Vars::getUserData('smilies')) === FALSE) {
             $user_sm = array();
         }
         echo'<div class="topmenu">' .
-            '<a href="' . $backLink . '/mysmilies">' . __('my_smileys') . '</a>  (' . count($user_sm) . ' / ' . $user_smileys . ')' .
+            '<a href="' . $backLink . '/mysmilies">' . __('my_smilies') . '</a>  (' . count($user_sm) . ' / ' . $user_smilies . ')' .
             '</div>' .
             '<form action="' . $backLink . '/mysmilies/set?cat=' . $cat . '&amp;start=' . Vars::$START . '" method="post">';
     }
@@ -33,12 +33,12 @@ if ($total) {
         echo'<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
     for ($i = Vars::$START; $i < $end; $i++) {
-        $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', basename($smileys[$i], 1));
+        $smile = preg_replace('#^(.*?).(gif|jpg|png)$#isU', '$1', basename($smilies[$i], 1));
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         if (Vars::$USER_ID && !Vars::$IS_MOBILE) {
             echo (in_array($smile, $user_sm) ? '' : '<input type="checkbox" name="add_sm[]" value="' . $smile . '" />&#160;');
         }
-        echo '<img src="' . Vars::$HOME_URL . 'assets/smilies/' . $cat . '/' . basename($smileys[$i]) . '" alt="" />&#160;:' . $smile . ': ' . __('lng_or') . ' :' . Functions::translit($smile) . ':' .
+        echo '<img src="' . Vars::$HOME_URL . 'assets/smilies/' . $cat . '/' . basename($smilies[$i]) . '" alt="" />&#160;:' . $smile . ': ' . __('lng_or') . ' :' . Functions::translit($smile) . ':' .
             '</div>';
     }
     if (Vars::$USER_ID && !Vars::$IS_MOBILE) {

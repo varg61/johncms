@@ -606,14 +606,14 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         $text = mb_substr($text, 0, $cut);
                         $text = Validate::checkout($text, 1, 1);
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                        if (Vars::$USER_SET['smileys']) {
+                        if (Vars::$USER_SET['smilies']) {
                             $text = Functions::smilies($text, $res['rights'] ? 1 : 0);
                         }
                         echo TextParser::noTags($text) . '...<br /><a href="' . $url . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
                     } else {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = Validate::checkout($text, 1, 1);
-                        if (Vars::$USER_SET['smileys']) {
+                        if (Vars::$USER_SET['smilies']) {
                             $text = Functions::smilies($text, $res['rights'] ? 1 : 0);
                         }
                         echo $text;

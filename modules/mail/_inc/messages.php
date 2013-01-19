@@ -189,7 +189,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                     if ($row['read'] == 0 && $row['contact_id'] == Vars::$USER_ID)
                         $mass_read[] = $row['mid'];
                     $text = Validate::checkout($row['text'], 1, 1);
-                    if (Vars::$USER_SET['smileys'])
+                    if (Vars::$USER_SET['smilies'])
                         $text = Functions::smilies($text, $row['rights'] >= 1 ? 1 : 0);
                     $array[] = array(
                         'id'        => $row['id'],

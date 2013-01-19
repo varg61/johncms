@@ -208,11 +208,11 @@ class Validate
      * @param     $str      Необработанная строка
      * @param int $br       Переносы 0 - не обрабатывать, 1 - обрабатывать, 2 - подставлять пробел
      * @param int $tags     BBcode 0 - не обрабатывать, 1 - обрабатывать, 2 - удалять тэги
-     * @param int $smileys  Смайлы 0 - не обрабатывать, 1 - обычные, 2 - обычные и админские
+     * @param int $smilies  Смайлы 0 - не обрабатывать, 1 - обычные, 2 - обычные и админские
      *
      * @return string       Обработанная строка
      */
-    public static function checkout($str, $br = 0, $tags = 0, $smileys = 0)
+    public static function checkout($str, $br = 0, $tags = 0, $smilies = 0)
     {
         $str = htmlentities(trim($str), ENT_QUOTES, 'UTF-8');
 
@@ -231,8 +231,8 @@ class Validate
         }
 
         // Обработка смайлов
-        if ($smileys) {
-            $str = Functions::smilies($str, ($smileys == 2 ? 1 : 0));
+        if ($smilies) {
+            $str = Functions::smilies($str, ($smilies == 2 ? 1 : 0));
         }
 
         return $str;

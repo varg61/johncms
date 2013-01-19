@@ -132,6 +132,7 @@ class Fields
                         }
 
                         $listElement['value'] = $value;
+                        $listElement['label'] = $label;
                         $list[] = $this->_build('option', $listElement);
                         unset($listElement, $value, $label);
                     }

@@ -18,7 +18,7 @@
         <li><h2><?= __('system') ?></h2></li>
         <li><a href="<?= $this->uri ?>system_settings/"><i class="icn-settings"></i><?= __('system_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->uri ?>language/"><i class="icn-settings"></i><?= __('language_settings') ?><i class="icn-arrow right"></i></a></li>
-        <li><a href="<?= $this->uri ?>smilies/"><i class="icn-smile"></i><?= __('smileys') ?><i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= $this->uri ?>smilies/"><i class="icn-smile"></i><?= __('smilies') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
     <li><a href="<?= $this->uri ?>whois/"><i class="icn-info"></i>WHOIS<i class="icn-arrow right"></i></a></li>
     <li><h2><?= __('security') ?></h2></li>

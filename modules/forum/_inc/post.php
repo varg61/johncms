@@ -68,7 +68,7 @@ if (!empty($res['status']))
 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
 $text = nl2br($text);
 $text = TextParser::tags($text);
-if (Vars::$USER_SET['smileys'])
+if (Vars::$USER_SET['smilies'])
     $text = Functions::smilies($text, ($res['rights'] >= 1) ? 1 : 0);
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?

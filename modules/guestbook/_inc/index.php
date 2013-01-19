@@ -160,7 +160,7 @@ if ($tpl->total) {
         if ($result['user_id']) {
             // Для зарегистрированных показываем ссылки и смайлы
             $post = Validate::checkout($result['text'], 1, 1);
-            if (Vars::$USER_SET['smileys']) {
+            if (Vars::$USER_SET['smilies']) {
                 $post = Functions::smilies($post, $result['rights'] >= 1 ? 1 : 0);
             }
         } else {
@@ -175,7 +175,7 @@ if ($tpl->total) {
         if (!empty($result['otvet'])) {
             // Ответ Администрации
             $reply = Validate::checkout($result['otvet'], 1, 1);
-            if (Vars::$USER_SET['smileys']) {
+            if (Vars::$USER_SET['smilies']) {
                 $reply = Functions::smilies($reply, 1);
             }
             $post .= '<div class="reply"><b>' . $result['admin'] . '</b>: (' . Functions::displayDate($result['otime']) . ')<br/>' . $reply . '</div>';

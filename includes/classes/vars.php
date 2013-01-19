@@ -69,11 +69,11 @@ abstract class Vars
         'avatar'     => 1, // Показывать аватары
         'direct_url' => 0, // Внешние ссылки
         'field_h'    => 3, // Высота текстового поля ввода
+        'lng'        => '#', // Язык
         'page_size'  => 10, // Число сообщений на страницу в списках
-        'timeshift'  => 0, // Временной сдвиг
         'skin'       => 'default', // Тема оформления
-        'smileys'    => 1, // Включить(1) выключить(0) смайлы
-        'translit'   => 0, // Транслит
+        'smilies'    => 1, // Включить(1) выключить(0) смайлы
+        'timeshift'  => 0, // Временной сдвиг
     );
 
     // Системные настройки для пользователей по-умолчанию
@@ -160,27 +160,28 @@ abstract class Vars
             // Удаляем пользовательские данные
             $STH = DB::PDO()->prepare('
                 DELETE FROM `cms_user_settings`
-                WHERE `user_id` = :uid
+                WHERE `user_id` = :id
                 AND `key`       = :key
                 LIMIT 1
             ');
 
-            $STH->bindValue(':uid', static::$USER_ID, PDO::PARAM_INT);
+            $STH->bindValue(':id', static::$USER_ID, PDO::PARAM_INT);
             $STH->bindParam(':key', $key);
             $STH->execute();
         } else {
             $STH = DB::PDO()->prepare('
-            INSERT INTO `cms_user_settings` SET
-            `user_id` = :uid,
+            REPLACE INTO `cms_user_settings` SET
+            `user_id` = :id,
             `key`     = :key,
             `value`   = :value
             ');
 
-            $STH->bindValue(':uid', static::$USER_ID, PDO::PARAM_INT);
+            $STH->bindValue(':id', static::$USER_ID, PDO::PARAM_INT);
             $STH->bindParam(':key', $key);
             $STH->bindValue(':value', serialize($val), PDO::PARAM_STR);
             $STH->execute();
         }
+        $STH = NULL;
 
         return TRUE;
     }

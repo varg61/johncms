@@ -334,7 +334,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
         ('meta_key', ''),
         ('meta_desc', 'Powered by JohnCMS http://johncms.com'),
         ('skindef', 'default'),
-        ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smileys";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}');
+        ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smilies";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}');
 
 
 DROP TABLE IF EXISTS `cms_user_guestbook`;

@@ -15,11 +15,12 @@ define('_IN_USERS', 1);
 $admin_actions = array();
 
 $personal_actions = array(
-    'menu'   => 'user_menu.php',
-    'edit'   => 'edit.php',
-    'option' => 'option.php',
-    'status' => 'status.php',
-    'avatar' => 'upload_avatar.php',
+    'avatar'   => 'avatar.php',
+    'edit'     => 'edit.php',
+    'menu'     => 'menu.php',
+    'option'   => 'option.php',
+    'settings' => 'settings.php',
+    'status'   => 'status.php',
 );
 
 $common_actions = array(

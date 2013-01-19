@@ -18,25 +18,25 @@ switch ($act) {
         $add = isset($_POST['add']);
         $delete = isset($_POST['delete']);
         if (Vars::$IS_MOBILE || ($delete && !$_POST['delete_sm']) || ($add && !$_POST['add_sm'])) {
-            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('smileys') . '</a>');
+            echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('smilies') . '</a>');
             exit;
         }
-        if (($smileys = Vars::getUserData('smileys')) === FALSE) $smileys = array();
-        if (!is_array($smileys))
-            $smileys = array();
+        if (($smilies = Vars::getUserData('smilies')) === FALSE) $smilies = array();
+        if (!is_array($smilies))
+            $smilies = array();
         if ($delete)
-            $smileys = array_diff($smileys, $_POST['delete_sm']);
+            $smilies = array_diff($smilies, $_POST['delete_sm']);
         if ($add) {
             $add_sm = $_POST['add_sm'];
-            $smileys = array_unique(array_merge($smileys, $add_sm));
+            $smilies = array_unique(array_merge($smilies, $add_sm));
         }
         if (isset($_GET['clean']))
-            $smileys = array();
-        if (count($smileys) > $user_smileys) {
-            $smileys = array_chunk($smileys, $user_smileys, TRUE);
-            $smileys = $smileys[0];
+            $smilies = array();
+        if (count($smilies) > $user_smilies) {
+            $smilies = array_chunk($smilies, $user_smilies, TRUE);
+            $smilies = $smilies[0];
         }
-        Vars::setUserData('smileys', $smileys);
+        Vars::setUserData('smilies', $smilies);
         if ($delete || isset($_GET['clean'])) {
             header('Location: ' . $url . '?start=' . Vars::$START . '');
         } else {
@@ -45,25 +45,25 @@ switch ($act) {
         break;
 
     default:
-        echo '<div class="phdr"><a href="' . $url . '"><b>' . __('smileys') . '</b></a> | ' . __('my_smileys') . '</div>';
-        if (($smileys = Vars::getUserData('smileys')) === FALSE) $smileys = array();
-        $total = count($smileys);
+        echo '<div class="phdr"><a href="' . $url . '"><b>' . __('smilies') . '</b></a> | ' . __('my_smilies') . '</div>';
+        if (($smilies = Vars::getUserData('smilies')) === FALSE) $smilies = array();
+        $total = count($smilies);
         if ($total)
             echo '<form action="' . $url . '/set?start=' . Vars::$START . '" method="post">';
         if ($total > Vars::$USER_SET['page_size']) {
-            $smileys = array_chunk($smileys, Vars::$USER_SET['page_size'], TRUE);
+            $smilies = array_chunk($smilies, Vars::$USER_SET['page_size'], TRUE);
             if (Vars::$START) {
                 $key = (Vars::$START - Vars::$START % Vars::$USER_SET['page_size']) / Vars::$USER_SET['page_size'];
-                $smileys_view = $smileys[$key];
-                if (!count($smileys_view))
-                    $smileys_view = $smileys[0];
-                $smileys = $smileys_view;
+                $smilies_view = $smilies[$key];
+                if (!count($smilies_view))
+                    $smilies_view = $smilies[0];
+                $smilies = $smilies_view;
             } else {
-                $smileys = $smileys[0];
+                $smilies = $smilies[0];
             }
         }
         $i = 0;
-        foreach ($smileys as $value) {
+        foreach ($smilies as $value) {
             $smile = ':' . $value . ':';
             echo ($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                 '<input type="checkbox" name="delete_sm[]" value="' . $value . '" />&#160;' .
@@ -73,9 +73,9 @@ switch ($act) {
         if ($total) {
             echo '<div class="rmenu"><input type="submit" name="delete" value=" ' . __('delete') . ' "/></div></form>';
         } else {
-            echo '<div class="menu"><p>' . __('list_empty') . '<br /><a href="' . $url . '">' . __('add_smileys') . '</a></p></div>';
+            echo '<div class="menu"><p>' . __('list_empty') . '<br /><a href="' . $url . '">' . __('add_smilies') . '</a></p></div>';
         }
-        echo '<div class="phdr">' . __('total') . ': ' . $total . ' / ' . $user_smileys . '</div>';
+        echo '<div class="phdr">' . __('total') . ': ' . $total . ' / ' . $user_smilies . '</div>';
         if ($total > Vars::$USER_SET['page_size'])
             echo '<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
         echo '<p>' . ($total ? '<a href="' . $url . '?act=set&amp;clean">' . __('clear') . '</a><br />'

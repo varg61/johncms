@@ -16,4 +16,4 @@ $tpl = Template::getInstance();
 $tpl->url = Router::getUri(3);
 $tpl->count = new Counters();
 $tpl->total_photo = DB::PDO()->query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID)->fetchColumn();
-$tpl->contents = $tpl->includeTpl('user_menu');
+$tpl->contents = $tpl->includeTpl('menu');

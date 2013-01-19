@@ -282,15 +282,15 @@ class TextParser
         }
         $font_color .= '</tr></table>';
         $bg_color .= '</tr></table>';
-        if (($smileys = Vars::getUserData('smileys')) === FALSE) $smileys = array();
-        if (!empty($smileys)) {
+        if (($smilies = Vars::getUserData('smilies')) === FALSE) $smilies = array();
+        if (!empty($smilies)) {
             $res_sm = '';
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . 'smilies/mysmilies/">' . __('edit_list') . '</a></small><br />';
-            foreach ($smileys as $value)
+            $bb_smilies = '<small><a href="' . Vars::$HOME_URL . 'smilies/mysmilies/">' . __('edit_list') . '</a></small><br />';
+            foreach ($smilies as $value)
                 $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \'\');">:' . $value . ':</a> ';
-            $bb_smileys .= Functions::smilies($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
+            $bb_smilies .= Functions::smilies($res_sm, Vars::$USER_DATA['rights'] >= 1 ? 1 : 0);
         } else {
-            $bb_smileys = '<small><a href="' . Vars::$HOME_URL . 'smilies/">' . __('add_smileys') . '</a></small>';
+            $bb_smilies = '<small><a href="' . Vars::$HOME_URL . 'smilies/">' . __('add_smilies') . '</a></small>';
         }
 
         $menu = array(
@@ -305,7 +305,7 @@ class TextParser
             '<a href="javascript:tag(\'[url=]\', \'[/url]\')">' . Functions::loadImage('edit-url.gif', '', '', 'title="' . __('tag_link') . '"') . '</a>',
             '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('edit-color.gif', '', '', 'title="' . __('color_text') . '"') . '<div class="bb_hide bb_color">' . $font_color . '</div></span>',
             '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('edit-bgcolor.gif', '', '', 'title="' . __('color_bg') . '"') . '<div class="bb_hide bb_color">' . $bg_color . '</div></span>',
-            (Vars::$USER_ID ? '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('smiley.png', '', '', 'title="' . __('smileys') . '"') . '<div class="bb_hide">' . $bb_smileys . '</div></span>' : '')
+            (Vars::$USER_ID ? '<span class="bb_opt" style="display: inline-block; cursor:pointer">' . Functions::loadImage('smiley.png', '', '', 'title="' . __('smilies') . '"') . '<div class="bb_hide">' . $bb_smilies . '</div></span>' : '')
         );
 
         $out = '<style>' . "\n" .

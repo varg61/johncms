@@ -21,7 +21,7 @@ if (Vars::$USER_RIGHTS >= 6 && Vars::$ID) {
             '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="otv">' . Validate::checkout($result['otvet']) . '</textarea></p>' .
             '<p><input type="submit" name="submit" value="' . __('reply') . '"/></p>' .
             '</form></div>' .
-            '<div class="phdr"><a href="faq.php?act=trans">' . __('translit') . '</a> | <a href="faq.php?act=smileys">' . __('smileys') . '</a></div>' .
+            '<div class="phdr"><a href="faq.php?act=trans">' . __('translit') . '</a> | <a href="faq.php?act=smilies">' . __('smilies') . '</a></div>' .
             '<p><a href="' . $url . ($mod ? '?mod=adm' : '') . '">' . __('back') . '</a></p>';
     }
 }

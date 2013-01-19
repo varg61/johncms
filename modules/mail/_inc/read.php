@@ -32,7 +32,7 @@ if (Vars::$ID) {
                     Vars::$USER_ID . "' AND `id`='{$result['id']}'");
             $row = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id`='$id'"));
             $text = Validate::checkout($result['text'], 1, 1);
-            if (Vars::$USER_SET['smileys'])
+            if (Vars::$USER_SET['smilies'])
                 $text = Functions::smilies($text, $result['rights'] >= 1 ? 1 : 0);
             $tpl->contact_login = $row['nickname'];
             $tpl->user_id = $id;

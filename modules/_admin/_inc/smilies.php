@@ -29,8 +29,8 @@ $tpl->form = $form->display();
 
 if ($form->isSubmitted) {
     $cache = array();
-    $smileys = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smilies' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
-    foreach ($smileys as $val) {
+    $smilies = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smilies' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
+    foreach ($smilies as $val) {
         $file = basename($val);
         $name = explode(".", $file);
         $parent = basename(dirname($val));
