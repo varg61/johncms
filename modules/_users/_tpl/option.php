@@ -24,7 +24,7 @@
     <li><h2><?= __('settings') ?></h2></li>
     <li><a href="<?= $this->uri ?>settings/"><i class="icn-settings"></i><?= __('system_settings') ?><i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_RIGHTS >= 7): ?>
-    <li><a href="<?= $this->uri ?>rights/"><i class="icn-shield-red"></i><?= __('rank') ?> //планируется<i class="icn-arrow"></i></a></li>
+    <li><a href="<?= $this->uri ?>rank/"><i class="icn-shield-red"></i><?= __('rank') ?> //планируется<i class="icn-arrow"></i></a></li>
     <?php endif ?>
     <li><a href="<?= $this->uri ?>password/"><i class="icn-shield"></i><?= __('change_password') ?> //планируется<i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_SYS['change_nickname'] || Vars::$USER_RIGHTS >= 7): ?>

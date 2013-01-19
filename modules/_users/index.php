@@ -12,7 +12,9 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('_IN_USERS', 1);
 
-$admin_actions = array();
+$admin_actions = array(
+    'rank' => 'rank.php'
+);
 
 $personal_actions = array(
     'avatar'   => 'avatar.php',
@@ -36,11 +38,16 @@ if (isset(Router::$ROUTE[1])) {
         }
 
         // Работа с профилями
-        if (isset(Router::$ROUTE[2])
-            && isset($personal_actions[Router::$ROUTE[2]])
-        ) {
-            //TODO: Добавить разделение прав
-            $include = $personal_actions[Router::$ROUTE[2]];
+        if (isset(Router::$ROUTE[2])) {
+            if (isset($admin_actions[Router::$ROUTE[2]])
+                && Vars::$USER_RIGHTS >= 7
+            ) {
+                $include = $admin_actions[Router::$ROUTE[2]];
+            } elseif (isset($personal_actions[Router::$ROUTE[2]])) {
+                $include = $personal_actions[Router::$ROUTE[2]];
+            } else {
+                $include = FALSE;
+            }
         } else {
             $include = 'profile.php';
         }
