@@ -60,6 +60,8 @@ $form
     'buttons'     => (Vars::$IS_MOBILE ? FALSE : TRUE),
     'description' => __('description_about')))
 
+    ->fieldsetStart(__('communication'))
+
     ->add('text', 'tel', array(
     'label'       => __('phone_number'),
     'value'       => Users::$data['tel'],

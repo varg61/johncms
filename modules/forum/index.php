@@ -116,8 +116,8 @@ if ($error) {
 if (!Vars::$ID) {
     $textl = '' . __('forum') . '';
 } else {
-    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= " . Vars::$ID);
-    $res = mysql_fetch_assoc($req);
+    $req = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `id`= " . Vars::$ID);
+    $res = $req->fetch();
     $hdr = strtr($res['text'], array(
         '&quot;' => '',
         '&amp;'  => '',
@@ -188,13 +188,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         Определяем тип запроса (каталог, или тема)
         -----------------------------------------------------------------
         */
-        $type = mysql_query("SELECT * FROM `forum` WHERE `id`= " . Vars::$ID);
-        if (!mysql_num_rows($type)) {
+        $type = DB::PDO()->query("SELECT * FROM `forum` WHERE `id`= " . Vars::$ID);
+        if (!$type->rowCount()) {
             // Если темы не существует, показываем ошибку
             echo Functions::displayError(__('error_topic_deleted'), '<a href="' . $url . '">' . __('to_forum') . '</a>');
             exit;
         }
-        $type1 = mysql_fetch_assoc($type);
+        $type1 = $type->fetch();
 
         /*
         -----------------------------------------------------------------
@@ -202,13 +202,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         -----------------------------------------------------------------
         */
         if (Vars::$USER_ID && $type1['type'] == 't') {
-            $req_r = mysql_query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = " . Vars::$ID . " AND `user_id` = " . Vars::$USER_ID . " LIMIT 1");
-            if (mysql_num_rows($req_r)) {
-                $res_r = mysql_fetch_assoc($req_r);
+            $req_r = DB::PDO()->query("SELECT * FROM `cms_forum_rdm` WHERE `topic_id` = " . Vars::$ID . " AND `user_id` = " . Vars::$USER_ID . " LIMIT 1");
+            if ($req_r->rowCount()) {
+                $res_r = $req_r->fetch();
                 if ($type1['time'] > $res_r['time'])
-                    mysql_query("UPDATE `cms_forum_rdm` SET `time` = '" . time() . "' WHERE `topic_id` = " . Vars::$ID . " AND `user_id` = " . Vars::$USER_ID . " LIMIT 1");
+                    DB::PDO()->exec("UPDATE `cms_forum_rdm` SET `time` = '" . time() . "' WHERE `topic_id` = " . Vars::$ID . " AND `user_id` = " . Vars::$USER_ID . " LIMIT 1");
             } else {
-                mysql_query("INSERT INTO `cms_forum_rdm` SET `topic_id` = " . Vars::$ID . ", `user_id` = " . Vars::$USER_ID . ", `time` = '" . time() . "'");
+                DB::PDO()->exec("INSERT INTO `cms_forum_rdm` SET `topic_id` = " . Vars::$ID . ", `user_id` = " . Vars::$USER_ID . ", `time` = '" . time() . "'");
             }
         }
 
@@ -220,8 +220,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         $res = TRUE;
         $parent = $type1['refid'];
         while ($parent != '0' && $res != FALSE) {
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
-            $res = mysql_fetch_assoc($req);
+            $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
+            $res = $req->fetch();
             if ($res['type'] == 'f' || $res['type'] == 'r')
                 $tree[] = '<a href="' . $url . '?id=' . $parent . '">' . $res['text'] . '</a>';
             $parent = $res['refid'];
@@ -238,17 +238,19 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         */
         $sql = (Vars::$USER_RIGHTS == 9) ? "" : " AND `del` != '1'";
         if ($type1['type'] == 'f') {
-            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = " . Vars::$ID . $sql), 0);
+            $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = " . Vars::$ID . $sql)->fetchColumn();
             if ($count > 0)
                 $filelink = '<a href="' . $url . '?act=files&amp;c=' . Vars::$ID . '">' . __('files_category') . '</a>';
         } elseif ($type1['type'] == 'r') {
-            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID . $sql), 0);
+            $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID . $sql)->fetchColumn();
             if ($count > 0)
                 $filelink = '<a href="' . $url . '?act=files&amp;s=' . Vars::$ID . '">' . __('files_section') . '</a>';
         } elseif ($type1['type'] == 't') {
-            $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID . $sql), 0);
+            $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID . $sql)->fetchColumn();
             if ($count > 0)
                 $filelink = '<a href="' . $url . '?act=files&amp;t=' . Vars::$ID . '">' . __('files_topic') . '</a>';
+        } else {
+            $count = 0;
         }
         $filelink = isset($filelink) ? $filelink . '&#160;<span class="red">(' . $count . ')</span>' : FALSE;
 
@@ -270,7 +272,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         Выводим верхнюю панель навигации
         -----------------------------------------------------------------
         */
-        echo '<p>' . Counters::forumCountNew(1) . '</p>' .
+        echo '<p>' . Counters::forumMessagesNew(1) . '</p>' .
             '<div class="phdr">' . Functions::displayMenu($tree) . '</div>' .
             '<div class="topmenu"><a href="' . $url . '/search?id=' . Vars::$ID . '">' . __('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
@@ -286,13 +288,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 Список разделов форума
                 -----------------------------------------------------------------
                 */
-                $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid` = " . Vars::$ID . " ORDER BY `realid`");
-                $total = mysql_num_rows($req);
+                $req = DB::PDO()->query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='r' AND `refid` = " . Vars::$ID . " ORDER BY `realid`");
+                $total = $req->rowCount();
                 if ($total) {
                     $i = 0;
-                    while (($res = mysql_fetch_assoc($req)) !== FALSE) {
+                    while ($res = $req->fetch()) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                        $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
+                        $coltem = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'")->fetchColumn();
                         echo '<a href="?id=' . $res['id'] . '">' . $res['text'] . '</a>';
                         if ($coltem)
                             echo " [$coltem]";
@@ -315,25 +317,24 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 Список топиков
                 -----------------------------------------------------------------
                 */
-                $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'")), 0);
+                $total = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'"))->fetchColumn();
                 if ((Vars::$USER_ID && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['11']) && Vars::$SYSTEM_SET['mod_forum'] != 3) || Vars::$USER_RIGHTS) {
                     // Кнопка создания новой темы
                     echo '<div class="gmenu"><form action="' . $url . '?act=nt&amp;id=' . Vars::$ID . '" method="post"><input type="submit" value="' . __('new_topic') . '" /></form></div>';
                 }
                 if ($total) {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " AND `refid` = " . Vars::$ID . " ORDER BY `vip` DESC, `time` DESC " . Vars::db_pagination());
+                    $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `type`='t'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " AND `refid` = " . Vars::$ID . " ORDER BY `vip` DESC, `time` DESC " . Vars::db_pagination());
                     $i = 0;
-                    while (($res = mysql_fetch_assoc($req)) !== FALSE) {
+                    while ($res = $req->fetch()) {
                         if ($res['close'])
                             echo '<div class="rmenu">';
                         else
                             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                        $nikuser = mysql_query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "' ORDER BY `time` DESC LIMIT 1");
-                        $nam = mysql_fetch_assoc($nikuser);
-                        $colmes = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $res['id'] . "'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'"));
-                        $colmes1 = mysql_result($colmes, 0);
+                        $nikuser = DB::PDO()->query("SELECT `from` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "' ORDER BY `time` DESC LIMIT 1");
+                        $nam = $nikuser->fetch();
+                        $colmes1 = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='m' AND `refid`='" . $res['id'] . "'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'"))->fetchColumn();
                         $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
-                        $np = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` >= '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID), 0);
+                        $np = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_rdm` WHERE `time` >= '" . $res['time'] . "' AND `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID)->fetchColumn();
                         // Значки
                         $icons = array(
                             ($np ? (!$res['vip'] ? Functions::getIcon('forum_normal.png') : '') : Functions::getIcon('forum_new.png')),
@@ -400,7 +401,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     exit;
                 }
                 // Счетчик постов темы
-                $colmes = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'")), 0);
+                $colmes = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='m'$sql AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'"))->fetchColumn();
                 // Выводим название топика
                 echo '<div class="phdr"><a name="up" id="up"></a><a href="#down">' . Functions::getImage('down.png') . '</a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
                 if ($colmes > Vars::$USER_SET['page_size']) {
@@ -423,14 +424,14 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 */
                 if ($type1['realid']) {
                     $clip_forum = isset($_GET['clip']) ? '&amp;clip' : '';
-                    $vote_user = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user` = " . Vars::$USER_ID . " AND `topic` = " . Vars::$ID), 0);
-                    $topic_vote = mysql_fetch_assoc(mysql_query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID . " LIMIT 1"));
+                    $vote_user = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user` = " . Vars::$USER_ID . " AND `topic` = " . Vars::$ID)->fetchColumn();
+                    $topic_vote = DB::PDO()->query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID . " LIMIT 1")->fetch();
                     echo '<div  class="gmenu"><b>' . Validate::checkout($topic_vote['name']) . '</b><br />';
-                    $vote_result = mysql_query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID . " ORDER BY `id` ASC");
+                    $vote_result = DB::PDO()->query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID . " ORDER BY `id` ASC");
                     if (!$type1['edit'] && !isset($_GET['vote_result']) && Vars::$USER_ID && $vote_user == 0) {
                         // Выводим форму с опросами
                         echo'<form action="' . $url . '?act=vote&amp;id=' . Vars::$ID . '" method="post">';
-                        while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
+                        while ($vote = $vote_result->fetch()) {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . Validate::checkout($vote['name'], 0, 1) . '<br />';
                         }
                         echo'<p><input type="submit" name="submit" value="' . __('vote') . '"/><br /><a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
@@ -438,7 +439,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     } else {
                         // Выводим результаты голосования
                         echo '<small>';
-                        while (($vote = mysql_fetch_assoc($vote_result)) !== FALSE) {
+                        while ($vote = $vote_result->fetch()) {
                             $count_vote = $topic_vote['count'] ? round(100 / $topic_vote['count'] * $vote['count']) : 0;
                             echo Validate::checkout($vote['name'], 0, 1) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="' . Vars::$HOME_URL . 'assets/misc/vote_img.php?img=' . $count_vote . '" alt="' . __('rating') . ': ' . $count_vote . '%" /><br />';
@@ -466,11 +467,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 -----------------------------------------------------------------
                 */
                 if (($set_forum['postclip'] == 2 && ($set_forum['upfp'] ? Vars::$START < (ceil($colmes - Vars::$USER_SET['page_size'])) : Vars::$START > 0)) || isset($_GET['clip'])) {
-                    $postreq = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`datereg`
+                    $postres = DB::PDO()->query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
                     WHERE `forum`.`type` = 'm' AND `forum`.`refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "
-                    ORDER BY `forum`.`id` LIMIT 1");
-                    $postres = mysql_fetch_assoc($postreq);
+                    ORDER BY `forum`.`id` LIMIT 1")->fetch();
                     echo '<div class="topmenu"><p>';
                     if (Vars::$USER_ID && Vars::$USER_ID != $postres['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
@@ -508,7 +508,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 }
                 // Запрос в базу
-                $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
+                $req = DB::PDO()->query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
                 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
                 WHERE `forum`.`type` = 'm' AND `forum`.`refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order " . Vars::db_pagination());
                 // Верхнее поле "Написать"
@@ -532,7 +532,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     echo '<form action="' . $url . '?act=massdel" method="post">';
                 }
 
-                for ($i = 1; $res = mysql_fetch_assoc($req); ++$i) {
+                for ($i = 1; $res = $req->fetch(); ++$i) {
                     if ($res['close']) {
                         echo '<div class="rmenu">';
                     } else {
@@ -623,9 +623,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         echo '<br /><span class="gray"><small>' . __('edited') . ' <b>' . $res['edit'] . '</b> (' . Functions::displayDate($res['tedit']) . ') <b>[' . $res['kedit'] . ']</b></small></span>';
                     }
                     // Если есть прикрепленный файл, выводим его описание
-                    $freq = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "'");
-                    if (mysql_num_rows($freq) > 0) {
-                        $fres = mysql_fetch_assoc($freq);
+                    $freq = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "'");
+                    if ($freq->rowCount() > 0) {
+                        $fres = $freq->fetch();
                         $fls = round(@filesize(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $fres['filename']) / 1024, 2);
                         echo '<br /><span class="gray">' . __('attached_file') . ':';
                         // Предпросмотр изображений
@@ -777,15 +777,15 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         Список Категорий форума
         -----------------------------------------------------------------
         */
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files`" . (Vars::$USER_RIGHTS >= 7 ? '' : " WHERE `del` != '1'")), 0);
-        echo'<p>' . Counters::forumCountNew(1) . '</p>' .
+        $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files`" . (Vars::$USER_RIGHTS >= 7 ? '' : " WHERE `del` != '1'"))->fetchColumn();
+        echo'<p>' . Counters::forumMessagesNew(1) . '</p>' .
             '<div class="phdr"><b>' . __('forum') . '</b></div>' .
             '<div class="topmenu"><a href="' . $url . '/search">' . __('search') . '</a> | <a href="' . $url . '?act=files">' . __('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
-        $req = mysql_query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
-        if (mysql_num_rows($req)) {
-            for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+        $req = DB::PDO()->query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
+        if ($req->rowCount()) {
+            for ($i = 0; $res = $req->fetch(); ++$i) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'"), 0);
+                $count = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'")->fetchColumn();
                 echo '<a href="' . $url . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
                 if (!empty($res['soft'])) {
                     echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
@@ -796,8 +796,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
             echo'<div class="menu"><p>' . __('list_empty') . '</p></div>';
         }
         //TODO: Доработать счетчики
-        $online_u = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `session_timestamp` > " . (time() - 300) . " AND `place` LIKE 'forum%'"), 0);
-        $online_g = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_sessions` WHERE `session_timestamp` > " . (time() - 300) . " AND `place` LIKE 'forum%'"), 0);
+        $online_u = DB::PDO()->query("SELECT COUNT(*) FROM `cms_sessions` WHERE `session_timestamp` > " . (time() - 300) . " AND `place` LIKE 'forum%'")->fetchColumn();
+        $online_g = DB::PDO()->query("SELECT COUNT(*) FROM `cms_sessions` WHERE `session_timestamp` > " . (time() - 300) . " AND `place` LIKE 'forum%'")->fetchColumn();
         echo '<div class="phdr">' . (Vars::$USER_ID ? '<a href="' . $url . '?act=who">' . __('who_in_forum') . '</a>' : __('who_in_forum')) . '&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</div>';
         unset($_SESSION['fsort_id']);
         unset($_SESSION['fsort_users']);
