@@ -57,13 +57,12 @@ switch ($do) {
         Показываем список авторов темы, с возможностью выбора
         -----------------------------------------------------------------
         */
-        $req = mysql_query("SELECT *, COUNT(`from`) AS `count` FROM `forum` WHERE `refid` = " . Vars::$ID . " GROUP BY `from` ORDER BY `from`");
-        $req = mysql_query("SELECT *, COUNT(`from`) AS `count` FROM `forum` WHERE `refid` = " . Vars::$ID . " GROUP BY `from` ORDER BY `from`");
-        $total = mysql_num_rows($req);
+        $req = DB::PDO()->query("SELECT *, COUNT(`from`) AS `count` FROM `forum` WHERE `refid` = " . Vars::$ID . " GROUP BY `from` ORDER BY `from`");
+        $total = $req->rowCount();
         if ($total > 0) {
             echo '<div class="phdr"><a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '"><b>' . __('forum') . '</b></a> | ' . __('filter_on_author') . '</div>' .
                  '<form action="' . $url . '?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;do=set" method="post">';
-            while ($res = mysql_fetch_array($req)) {
+            while ($res = $req->fetch()) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 echo '<input type="checkbox" name="users[]" value="' . $res['user_id'] . '"/>&#160;' .
                      '<a href="../users/profile.php?user=' . $res['user_id'] . '">' . $res['from'] . '</a> [' . $res['count'] . ']</div>';

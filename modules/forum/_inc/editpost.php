@@ -16,29 +16,33 @@ if (!Vars::$USER_ID || !Vars::$ID) {
     exit;
 }
 $url = Router::getUri(2);
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'm' " . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'"));
-if (mysql_num_rows($req)) {
+
+$nick = DB::PDO()->quote(Vars::$USER_NICKNAME);
+$req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'm' " . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'"));
+if ($req->rowCount()) {
     /*
     -----------------------------------------------------------------
     Предварительные проверки
     -----------------------------------------------------------------
     */
-    $res = mysql_fetch_assoc($req);
+    $res = $req->fetch();
     if (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 3 && Vars::$USER_ID) {
-        $topic = mysql_fetch_assoc(mysql_query("SELECT `curators` FROM `forum` WHERE `id` = " . $res['refid']));
+        $topic = DB::PDO()->query("SELECT `curators` FROM `forum` WHERE `id` = " . $res['refid'])->fetch();
         $curators = !empty($topic['curators']) ? unserialize($topic['curators']) : array();
-        if (array_key_exists(Vars::$USER_ID, $curators)) Vars::$USER_RIGHTS = 3;
+        if (array_key_exists(Vars::$USER_ID, $curators)) {
+            Vars::$USER_RIGHTS = 3;
+        }
     }
-    $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID . (Vars::$USER_RIGHTS < 7 ? " AND `close` != '1'" : '')), 0) / Vars::$USER_SET['page_size']);
-    $posts = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `close` != '1'"), 0);
+    $page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID . (Vars::$USER_RIGHTS < 7 ? " AND `close` != '1'" : ''))->fetchColumn() / Vars::$USER_SET['page_size']);
+    $posts = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `close` != '1'")->fetchColumn();
     $link = $url . '?id=' . $res['refid'] . '&amp;page=' . $page;
     $error = FALSE;
     if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         // Проверка для Администрации
         if ($res['user_id'] != Vars::$USER_ID) {
-            $req_u = mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
-            if (mysql_num_rows($req_u)) {
-                $res_u = mysql_fetch_assoc($req_u);
+            $req_u = DB::PDO()->query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+            if ($req_u->rowCount()) {
+                $res_u = $req_u->fetch();
                 if ($res_u['rights'] > Vars::$USER_RIGHTS)
                     $error = __('error_edit_rights') . '<br /><a href="' . $link . '">' . __('back') . '</a>';
             }
@@ -48,8 +52,8 @@ if (mysql_num_rows($req)) {
         if ($res['user_id'] != Vars::$USER_ID)
             $error = __('error_edit_another') . '<br /><a href="' . $link . '">' . __('back') . '</a>';
         if (!$error) {
-            $req_m = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['refid'] . "' ORDER BY `id` DESC LIMIT 1");
-            $res_m = mysql_fetch_assoc($req_m);
+            $req_m = DB::PDO()->query("SELECT * FROM `forum` WHERE `refid` = '" . $res['refid'] . "' ORDER BY `id` DESC LIMIT 1");
+            $res_m = $req_m->fetch();
             if ($res_m['user_id'] != Vars::$USER_ID)
                 $error = __('error_edit_last') . '<br /><a href="' . $link . '">' . __('back') . '</a>';
             elseif ($res['time'] < time() - 300)
@@ -67,16 +71,16 @@ if (!$error) {
             Восстановление удаленного поста
             -----------------------------------------------------------------
             */
-            $req_u = mysql_query("SELECT `count_forum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
-            if (mysql_num_rows($req_u)) {
+            $req_u = DB::PDO()->query("SELECT `count_forum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+            if ($req_u->rowCount()) {
                 // Добавляем один балл к счетчику постов юзера
-                $res_u = mysql_fetch_assoc($req_u);
-                mysql_query("UPDATE `users` SET `count_forum` = '" . ($res_u['count_forum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "'");
+                $res_u = $req_u->fetch();
+                DB::PDO()->exec("UPDATE `users` SET `count_forum` = '" . ($res_u['count_forum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "'");
             }
-            mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
-            $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
-            if (mysql_num_rows($req_f)) {
-                mysql_query("UPDATE `cms_forum_files` SET `del` = '0' WHERE `post` = " . Vars::$ID . " LIMIT 1");
+            DB::PDO()->exec("UPDATE `forum` SET `close` = '0', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
+            $req_f = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
+            if ($req_f->rowCount()) {
+                DB::PDO()->exec("UPDATE `cms_forum_files` SET `del` = '0' WHERE `post` = " . Vars::$ID . " LIMIT 1");
             }
             header('Location: ' . $link);
             break;
@@ -88,26 +92,26 @@ if (!$error) {
             -----------------------------------------------------------------
             */
             if ($res['close'] != 1) {
-                $req_u = mysql_query("SELECT `count_forum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
-                if (mysql_num_rows($req_u)) {
+                $req_u = DB::PDO()->query("SELECT `count_forum` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+                if ($req_u->rowCount()) {
                     // Вычитаем один балл из счетчика постов юзера
-                    $res_u = mysql_fetch_assoc($req_u);
+                    $res_u = $req_u->fetch();
                     $postforum = $res_u['count_forum'] > 0 ? $res_u['count_forum'] - 1 : 0;
-                    mysql_query("UPDATE `users` SET `count_forum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "'");
+                    DB::PDO()->exec("UPDATE `users` SET `count_forum` = '" . $postforum . "' WHERE `id` = '" . $res['user_id'] . "'");
                 }
             }
             if (Vars::$USER_RIGHTS == 9 && !isset($_GET['hide'])) {
                 // Удаление поста (для Супервизоров)
-                $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
-                if (mysql_num_rows($req_f)) {
+                $req_f = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
+                if ($req_f->rowCount()) {
                     // Если есть прикрепленный файл, удаляем его
-                    $res_f = mysql_fetch_assoc($req_f);
+                    $res_f = $req_f->fetch();
                     unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
-                    mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
+                    DB::PDO()->exec("DELETE FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
                 }
                 // Формируем ссылку на нужную страницу темы
-                $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? "> " : "< ") . Vars::$ID), 0) / Vars::$USER_SET['page_size']);
-                mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
+                $page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? "> " : "< ") . Vars::$ID)->fetchColumn() / Vars::$USER_SET['page_size']);
+                DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                 if ($posts < 2) {
                     // Пересылка на удаление всей темы
                     header('Location: ' . $url . '?act=deltema&id=' . $res['refid']);
@@ -116,18 +120,18 @@ if (!$error) {
                 }
             } else {
                 // Скрытие поста
-                $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
-                if (mysql_num_rows($req_f)) {
+                $req_f = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
+                if ($req_f->rowCount()) {
                     // Если есть прикрепленный файл, скрываем его
-                    mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = " . Vars::$ID . " LIMIT 1");
+                    DB::PDO()->exec("UPDATE `cms_forum_files` SET `del` = '1' WHERE `post` = " . Vars::$ID . " LIMIT 1");
                 }
                 if ($posts == 1) {
                     // Если это был последний пост темы, то скрываем саму тему
-                    $res_l = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
-                    mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't'");
+                    $res_l = DB::PDO()->query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'")->fetch();
+                    DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = '" . $nick . "' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't'");
                     header('Location: ' . $url . '?id=' . $res_l['refid']);
                 } else {
-                    mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
                     header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
                 }
             }
@@ -140,11 +144,11 @@ if (!$error) {
             -----------------------------------------------------------------
             */
             echo '<div class="phdr"><a href="' . $link . '"><b>' . __('forum') . '</b></a> | ' . __('delete_post') . '</div>' .
-                 '<div class="rmenu"><p>';
+                '<div class="rmenu"><p>';
             if ($posts == 1)
                 echo __('delete_last_post_warning') . '<br />';
             echo __('delete_confirmation') . '</p>' .
-                 '<p><a href="' . $link . '">' . __('cancel') . '</a> | <a href="' . $url . '?act=editpost&amp;mod=delete&amp;id=' . Vars::$ID . '">' . __('delete') . '</a>';
+                '<p><a href="' . $link . '">' . __('cancel') . '</a> | <a href="' . $url . '?act=editpost&amp;mod=delete&amp;id=' . Vars::$ID . '">' . __('delete') . '</a>';
             if (Vars::$USER_RIGHTS == 9)
                 echo ' | <a href="' . $url . '?act=editpost&amp;mod=delete&amp;hide&amp;id=' . Vars::$ID . '">' . __('hide') . '</a>';
             echo '</p></div>';
@@ -165,12 +169,22 @@ if (!$error) {
                     echo Functions::displayError(__('error_empty_message'), '<a href="' . $url . '?act=editpost&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                     exit;
                 }
-                mysql_query("UPDATE `forum` SET
-                    `tedit` = '" . time() . "',
-                    `edit` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
-                    `kedit` = '" . ($res['kedit'] + 1) . "',
-                    `text` = '" . mysql_real_escape_string($msg) . "'
-                    WHERE `id` = " . Vars::$ID);
+
+                $STH = DB::PDO()->prepare('
+                    UPDATE `forum`
+                    (tedit, edit, kedit, text)
+                    VALUES (?, ?, ?, ?)
+                    WHERE `id` = ' . Vars::$ID
+                );
+
+                $STH->execute(array(
+                    time(),
+                    Vars::$USER_NICKNAME,
+                    ++$res['kedit'],
+                    $msg
+                ));
+                $STH = null;
+
                 header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
             } else {
                 $msg_pre = Validate::checkout($msg, 1, 1);
@@ -179,7 +193,7 @@ if (!$error) {
                 $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
                 echo '<div class="phdr"><a href="' . $link . '"><b>' . __('forum') . '</b></a> | ' . __('edit_message') . '</div>';
                 if ($msg && !isset($_POST['submit'])) {
-                    $user = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1"));
+                    $user = DB::PDO()->query("SELECT * FROM `users` WHERE `id` = '" . $res['user_id'] . "' LIMIT 1")->fetch();
                     echo '<div class="list1">' . Functions::displayUser($user, array('iphide' => 1, 'header' => '<span class="gray">(' . Functions::displayDate($res['time']) . ')</span>', 'body' => $msg_pre)) . '</div>';
                 }
                 echo '<div class="rmenu"><form name="form" action="?act=editpost&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><p>';
@@ -189,10 +203,10 @@ if (!$error) {
                 if (Vars::$USER_SET['translit'])
                     echo '<input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');
                 echo '</p><p><input type="submit" name="submit" value="' . __('save') . '" style="width: 107px; cursor: pointer;"/> ' .
-                     ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
-                     '</p></form></div>' .
-                     '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | <a href="../pages/faq.php?act=smilies">' . __('smilies') . '</a></div>' .
-                     '<p><a href="' . $link . '">' . __('back') . '</a></p>';
+                    ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                    '</p></form></div>' .
+                    '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | <a href="../pages/faq.php?act=smilies">' . __('smilies') . '</a></div>' .
+                    '<p><a href="' . $link . '">' . __('back') . '</a></p>';
                 //TODO: Исправить ссылку на каталог смайлов
             }
     }

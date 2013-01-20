@@ -19,12 +19,12 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     $url = Router::getUri(2);
 
     // Проверяем, существует ли тема
-    $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
-    if (!mysql_num_rows($req)) {
+    $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
+    if (!$req->rowCount()) {
         echo Functions::displayError(__('error_topic_deleted'));
         exit;
     }
-    $res = mysql_fetch_assoc($req);
+    $res = $req->fetch();
     if (isset($_POST['submit'])) {
         $del = isset($_POST['del']) ? intval($_POST['del']) : NULL;
         if ($del == 2 && Vars::$USER_RIGHTS == 9) {
@@ -33,24 +33,25 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             Удаляем топик
             -----------------------------------------------------------------
             */
-            $req1 = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID);
-            if (mysql_num_rows($req1)) {
-                while ($res1 = mysql_fetch_assoc($req1)) {
+            $req1 = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID);
+            if ($req1->rowCount()) {
+                while ($res1 = $req1->fetch()) {
                     unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res1['filename']);
                 }
-                mysql_query("DELETE FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID);
-                mysql_query("OPTIMIZE TABLE `cms_forum_files`");
+                DB::PDO()->exec("DELETE FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID);
+                DB::PDO()->exec("OPTIMIZE TABLE `cms_forum_files`");
             }
-            mysql_query("DELETE FROM `forum` WHERE `refid` = " . Vars::$ID);
-            mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
+            DB::PDO()->exec("DELETE FROM `forum` WHERE `refid` = " . Vars::$ID);
+            DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
         } elseif ($del = 1) {
             /*
             -----------------------------------------------------------------
             Скрываем топик
             -----------------------------------------------------------------
             */
-            mysql_query("UPDATE `forum` SET `close` = '1', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
-            mysql_query("UPDATE `cms_forum_files` SET `del` = '1' WHERE `topic` = " . Vars::$ID);
+            $nick = DB::PDO()->quote(Vars::$USER_NICKNAME);
+            DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
+            DB::PDO()->exec("UPDATE `cms_forum_files` SET `del` = '1' WHERE `topic` = " . Vars::$ID);
         }
         header('Location: ' . $url . '?id=' . $res['refid']);
     } else {

@@ -62,9 +62,9 @@ if ($c) {
 }
 if ($c || $s || $t) {
     // Получаем имя нужной категории форума
-    $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = '$id'");
-    if (mysql_num_rows($req) > 0) {
-        $res = mysql_fetch_array($req);
+    $req = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `id` = '$id'");
+    if ($req->rowCount()) {
+        $res = $req->fetch();
         $caption .= $res['text'];
     } else {
         echo Functions::displayError(__('error_wrong_data'), '<a href="' . $url . '">' . __('to_forum') . '</a>');
@@ -77,12 +77,12 @@ if ($do || isset($_GET['new'])) {
     Выводим список файлов нужного раздела
     -----------------------------------------------------------------
     */
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE " . (isset($_GET['new'])
-                                              ? " `time` > '$new'" : " `filetype` = '$do'") . $sql), 0);
+    $total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE " . (isset($_GET['new'])
+                                              ? " `time` > '$new'" : " `filetype` = '$do'") . $sql)->fetchColumn();
     if ($total > 0) {
         // Заголовок раздела
         echo '<div class="phdr">' . $caption . (isset($_GET['new']) ? '<br />' . __('new_files') : '') . '</div>' . ($do ? '<div class="bmenu">' . $types[$do] . '</div>' : '');
-        $req = mysql_query("SELECT `cms_forum_files`.*, `forum`.`user_id`, `forum`.`text`, `topicname`.`text` AS `topicname`
+        $req = DB::PDO()->query("SELECT `cms_forum_files`.*, `forum`.`user_id`, `forum`.`text`, `topicname`.`text` AS `topicname`
             FROM `cms_forum_files`
             LEFT JOIN `forum` ON `cms_forum_files`.`post` = `forum`.`id`
             LEFT JOIN `forum` AS `topicname` ON `cms_forum_files`.`topic` = `topicname`.`id`
@@ -90,16 +90,16 @@ if ($do || isset($_GET['new'])) {
             "ORDER BY `time` DESC " . Vars::db_pagination()
         );
         $i = 0;
-        while ($res = mysql_fetch_assoc($req)) {
-            $req_u = mysql_query("SELECT `id`, `nickname`, `sex`, `rights`, `last_visit`, `status`, `join_date`, `ip`, `user_agent` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
-            $res_u = mysql_fetch_assoc($req_u);
+        while ($res = $req->fetch()) {
+            $req_u = DB::PDO()->query("SELECT `id`, `nickname`, `sex`, `rights`, `last_visit`, `status`, `join_date`, `ip`, `user_agent` FROM `users` WHERE `id` = '" . $res['user_id'] . "'");
+            $res_u = $req_u->fetch();
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Выводим текст поста
             $text = mb_substr($res['text'], 0, 500);
             $text = Validate::checkout($text, 1, 1);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
-            $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp']
-                                                          ? ">=" : "<=") . " '" . $res['post'] . "'"), 0) / Vars::$USER_SET['page_size']);
+            $page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp']
+                                                          ? ">=" : "<=") . " '" . $res['post'] . "'")->fetchColumn() / Vars::$USER_SET['page_size']);
             $text = '<b><a href="' . $url . '?id=' . $res['topic'] . '&amp;page=' . $page . '">' . $res['topicname'] . '</a></b><br />' . $text;
             if (mb_strlen($res['text']) > 500)
                 $text .= '<br /><a href="' . $url . '?act=post&amp;id=' . $res['post'] . '">' . __('read_all') . ' &gt;&gt;</a>';
@@ -150,14 +150,14 @@ if ($do || isset($_GET['new'])) {
     Выводим список разделов, в которых есть файлы
     -----------------------------------------------------------------
     */
-    $countnew = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `del` != '1'") . $sql), 0);
+    $countnew = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `time` > '$new'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `del` != '1'") . $sql)->fetchColumn();
     echo '<p>' . ($countnew > 0 ? '<a href="' . $url . '?act=files&amp;new' . $lnk . '">' . __('new_files') . ' (' . $countnew . ')</a>' : __('new_files_empty')) . '</p>';
     echo '<div class="phdr">' . $caption . '</div>';
     $link = array();
     $total = 0;
     for ($i = 1; $i < 10; $i++) {
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . (Vars::$USER_RIGHTS >= 7
-                                                  ? '' : " AND `del` != '1'") . $sql), 0);
+        $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `filetype` = '$i'" . (Vars::$USER_RIGHTS >= 7
+                                                  ? '' : " AND `del` != '1'") . $sql)->fetchColumn();
         if ($count > 0) {
             $link[] = Functions::getIcon('filetype-' . $i . '.png') . '&#160;<a href="' . $url . '?act=files&amp;do=' . $i . $lnk . '">' . $types[$i] . '</a>&#160;(' . $count . ')';
             $total = $total + $count;

@@ -19,10 +19,11 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     if (isset($_GET['yes'])) {
         $dc = $_SESSION['dc'];
         $prd = $_SESSION['prd'];
+        $nick = DB::PDO()->quote(Vars::$USER_NICKNAME);
         foreach ($dc as $delid) {
-            mysql_query("UPDATE `forum` SET
+            DB::PDO()->exec("UPDATE `forum` SET
                 `close` = '1',
-                `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "'
+                `close_who` = '" . $nick . "'
                 WHERE `id` = '" . intval($delid) . "'
             ");
         }
@@ -38,6 +39,6 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         $_SESSION['dc'] = $dc;
         $_SESSION['prd'] = htmlspecialchars(getenv("HTTP_REFERER"));
         echo '<p>' . __('delete_confirmation') . '<br/><a href="' . Router::getUri(2) . '?act=massdel&amp;yes">' . __('delete') . '</a> | ' .
-             '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . __('cancel') . '</a></p>';
+            '<a href="' . htmlspecialchars(getenv("HTTP_REFERER")) . '">' . __('cancel') . '</a></p>';
     }
 }

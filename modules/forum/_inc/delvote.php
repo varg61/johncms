@@ -11,15 +11,15 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
-    $topic_vote = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID), 0);
+    $topic_vote = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID)->fetchColumn();
     if ($topic_vote == 0) {
         echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
     if (isset($_GET['yes'])) {
-        mysql_query("DELETE FROM `cms_forum_vote` WHERE `topic` = " . Vars::$ID);
-        mysql_query("DELETE FROM `cms_forum_vote_users` WHERE `topic` = " . Vars::$ID);
-        mysql_query("UPDATE `forum` SET  `realid` = '0'  WHERE `id` = " . Vars::$ID);
+        DB::PDO()->exec("DELETE FROM `cms_forum_vote` WHERE `topic` = " . Vars::$ID);
+        DB::PDO()->exec("DELETE FROM `cms_forum_vote_users` WHERE `topic` = " . Vars::$ID);
+        DB::PDO()->exec("UPDATE `forum` SET  `realid` = '0'  WHERE `id` = " . Vars::$ID);
         echo __('voting_deleted') . '<br /><a href="' . $_SESSION['prd'] . '">' . __('continue') . '</a>';
     } else {
         echo '<p>' . __('voting_delete_warning') . '</p>';

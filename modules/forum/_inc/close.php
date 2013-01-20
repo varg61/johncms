@@ -15,11 +15,12 @@ if ((Vars::$USER_RIGHTS != 3 && Vars::$USER_RIGHTS < 6) || !Vars::$ID) {
     header('Location: ' . Router::getUri(2));
     exit;
 }
-if (mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'"), 0)) {
-    if (isset($_GET['closed']))
-        mysql_query("UPDATE `forum` SET `edit` = '1' WHERE `id` = " . Vars::$ID);
-    else
-        mysql_query("UPDATE `forum` SET `edit` = '0' WHERE `id` = " . Vars::$ID);
+if (DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'")->fetchColumn()) {
+    if (isset($_GET['closed'])) {
+        DB::PDO()->exec("UPDATE `forum` SET `edit` = '1' WHERE `id` = " . Vars::$ID);
+    } else {
+        DB::PDO()->exec("UPDATE `forum` SET `edit` = '0' WHERE `id` = " . Vars::$ID);
+    }
 }
 
 header("Location: " . Router::getUri(2) . "?id=" . Vars::$ID);

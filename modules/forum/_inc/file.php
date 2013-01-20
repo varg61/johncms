@@ -10,6 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+$url = Router::getUri(2);
 
 $error = false;
 if (Vars::$ID) {
@@ -18,10 +19,9 @@ if (Vars::$ID) {
     Скачивание прикрепленного файла Форума
     -----------------------------------------------------------------
     */
-    $url = Router::getUri(2);
-    $req = mysql_query("SELECT * FROM `cms_forum_files` WHERE `id` = " . Vars::$ID);
-    if (mysql_num_rows($req)) {
-        $res = mysql_fetch_array($req);
+    $req = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `id` = " . Vars::$ID);
+    if ($req->rowCount()) {
+        $res = $req->fetch();
         if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res['filename'])) {
             $dlcount = $res['dlcount'] + 1;
             mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '$dlcount' WHERE `id` = " . Vars::$ID);
