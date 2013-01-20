@@ -12,7 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $url = Router::getUri(2);
 
-echo'<p>' . Counters::forumCountNew(1) . '</p>' .
+echo'<p>' . Counters::forumMessagesNew(1) . '</p>' .
     '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('search') . '</div>';
 
 /*
@@ -23,6 +23,7 @@ echo'<p>' . Counters::forumCountNew(1) . '</p>' .
 function ReplaceKeywords($search, $text)
 {
     $search = str_replace('*', '', $search);
+
     return mb_strlen($search) < 3 ? $text : preg_replace('|(' . preg_quote($search, '/') . ')|siu', '<span style="background-color: #FFFF33">$1</span>', $text);
 }
 
@@ -84,23 +85,30 @@ switch (Vars::$ACT) {
             */
             $array = explode(' ', $search);
             $count = count($array);
-            $query = mysql_real_escape_string($search);
             if ($search_t) {
                 // Поиск в названиях тем
-                $total = mysql_result(mysql_query("
+                $STH = DB::PDO()->prepare("
                     SELECT COUNT(*) FROM `forum`
-                    WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                    WHERE MATCH (`text`) AGAINST (? IN BOOLEAN MODE)
                     AND `type` = 't'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `close` != '1'
-                ")), 0);
+                "));
+
+                $STH->execute(array($search));
+                $total = $STH->fetchColumn();
+                $STH = NULL;
             } else {
                 // Поиск только в тексте
-                $total = mysql_result(mysql_query("
+                $STH = DB::PDO()->prepare("
                     SELECT COUNT(*) FROM `forum`, `forum` as `forum2`
-                    WHERE MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                    WHERE MATCH (`forum`.`text`) AGAINST (? IN BOOLEAN MODE)
                     AND `forum`.`type` = 'm'
 					AND `forum2`.`id` = `forum`.`refid`
 					" . (Vars::$USER_RIGHTS >= 7 ? "" : "AND `forum2`.`close` != '1' AND `forum`.`close` != '1'
-				")), 0);
+				"));
+
+                $STH->execute(array($search));
+                $total = $STH->fetchColumn();
+                $STH = NULL;
             }
             echo '<div class="phdr">' . __('search_results') . '</div>';
             if ($total > Vars::$USER_SET['page_size'])
@@ -109,37 +117,43 @@ switch (Vars::$ACT) {
                 $to_history = TRUE;
                 if ($search_t) {
                     // Поиск в названиях тем
-                    $req = mysql_query("
-                        SELECT *, MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
+                    $STH = DB::PDO()->prepare("
+                        SELECT *, MATCH (`text`) AGAINST (:query IN BOOLEAN MODE) as `rel`
                         FROM `forum`
-                        WHERE MATCH (`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                        WHERE MATCH (`text`) AGAINST (:query IN BOOLEAN MODE)
                         AND `type` = '" . ($search_t ? 't' : 'm') . "'
 						" . (Vars::$USER_RIGHTS >= 7 ? "" : "AND `close` != '1'") . "
                         ORDER BY `rel` DESC
                         " . Vars::db_pagination()
                     );
+
+                    $STH->bindParam(':query', $search);
+                    $STH->execute();
                 } else {
                     // Поиск только в тексте
-                    $req = mysql_query("
+                    $STH = DB::PDO()->prepare("
                         SELECT `forum`.*, `forum2`.`id` as `id2`, `forum2`.`text` as `text2`,
-						MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
+						MATCH (`forum`.`text`) AGAINST (:query IN BOOLEAN MODE) as `rel`
                         FROM `forum`, `forum` as `forum2`
-                        WHERE MATCH (`forum`.`text`) AGAINST ('$query' IN BOOLEAN MODE)
+                        WHERE MATCH (`forum`.`text`) AGAINST (:query IN BOOLEAN MODE)
                         AND `forum`.`type` = 'm'
 						AND `forum2`.`id` = `forum`.`refid`
 						" . (Vars::$USER_RIGHTS >= 7 ? "" : "AND `forum2`.`close` != '1' AND `forum`.`close` != '1'") . "
                         ORDER BY `rel` DESC
                         " . Vars::db_pagination()
                     );
+
+                    $STH->bindParam(':query', $search);
+                    $STH->execute();
                 }
                 $i = 0;
-                while (($res = mysql_fetch_assoc($req)) !== FALSE) {
+                while ($res = $STH->fetch()) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     if ($search_t) {
                         // Поиск в названиях тем
-                        $req_p = mysql_query("SELECT `text` FROM `forum` WHERE `refid` = " . $res['id'] .
+                        $req_p = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `refid` = " . $res['id'] .
                             (Vars::$USER_RIGHTS >= 7 ? "" : "AND `close` != '1'") . " ORDER BY `id` ASC LIMIT 1");
-                        $res_p = mysql_fetch_assoc($req_p);
+                        $res_p = $req_p->fetch();
                         $res['text2'] = $res_p['text'];
                     }
                     $text = $search_t ? $res['text2'] : $res['text'];
@@ -166,6 +180,7 @@ switch (Vars::$ACT) {
                     echo '</div>';
                     ++$i;
                 }
+                $STH = NULL;
             } else {
                 echo'<div class="rmenu"><p>' . __('search_results_empty') . '</p></div>';
             }

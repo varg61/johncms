@@ -17,21 +17,21 @@ if (!Vars::$ID || !Vars::$USER_ID) {
     exit;
 }
 // Проверяем, тот ли юзер заливает файл
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
-$res = mysql_fetch_assoc($req);
+$req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
+$res = $req->fetch();
 if ($res['user_id'] != Vars::$USER_ID) {
     echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
 
-$req1 = mysql_query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = " . Vars::$ID);
-if (mysql_result($req1, 0) > 0) {
+$req1 = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `post` = " . Vars::$ID);
+if ($req1->fetchColumn() > 0) {
     echo Functions::displayError(__('error_file_uploaded'));
     exit;
 }
 
 // Вычисляем страницу для перехода
-$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['id'] . "'"), 0) / Vars::$USER_SET['page_size']);
+$page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['id'] . "'")->fetchColumn() / Vars::$USER_SET['page_size']);
 
 switch ($res['type']) {
     case 'm':
@@ -91,39 +91,49 @@ switch ($res['type']) {
                 if (!$error) {
                     // Определяем тип файла
                     $ext = strtolower($ext[1]);
-                    if (in_array($ext, $ext_win))
+                    if (in_array($ext, $ext_win)) {
                         $type = 1;
-                    elseif (in_array($ext, $ext_java))
+                    } elseif (in_array($ext, $ext_java)) {
                         $type = 2;
-                    elseif (in_array($ext, $ext_sis))
+                    } elseif (in_array($ext, $ext_sis)) {
                         $type = 3;
-                    elseif (in_array($ext, $ext_doc))
+                    } elseif (in_array($ext, $ext_doc)) {
                         $type = 4;
-                    elseif (in_array($ext, $ext_pic))
+                    } elseif (in_array($ext, $ext_pic)) {
                         $type = 5;
-                    elseif (in_array($ext, $ext_arch))
+                    } elseif (in_array($ext, $ext_arch)) {
                         $type = 6;
-                    elseif (in_array($ext, $ext_video))
+                    } elseif (in_array($ext, $ext_video)) {
                         $type = 7;
-                    elseif (in_array($ext, $ext_audio))
+                    } elseif (in_array($ext, $ext_audio)) {
                         $type = 8;
-                    else
+                    } else {
                         $type = 9;
+                    }
+
                     // Определяем ID субкатегории и категории
-                    $req2 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
-                    $res2 = mysql_fetch_array($req2);
-                    $req3 = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res2['refid'] . "'");
-                    $res3 = mysql_fetch_array($req3);
+                    $req2 = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'");
+                    $res2 = $req2->fetch();
+                    $req3 = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '" . $res2['refid'] . "'");
+                    $res3 = $req3->fetch();
+
                     // Заносим данные в базу
-                    mysql_query("INSERT INTO `cms_forum_files` SET
-                        `cat` = '" . $res3['refid'] . "',
-                        `subcat` = '" . $res2['refid'] . "',
-                        `topic` = '" . $res['refid'] . "',
-                        `post` = " . Vars::$ID . ",
-                        `time` = '" . $res['time'] . "',
-                        `filename` = '" . mysql_real_escape_string($fname) . "',
-                        `filetype` = '$type'
-                    ") or die(mysql_error());
+                    $STH = DB::PDO()->prepare('
+                        INSERT INTO `cms_forum_files`
+                        (cat, subcat, topic, post, time, filename, filetype)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                    ');
+
+                    $STH->execute(array(
+                        $res3['refid'],
+                        $res2['refid'],
+                        $res['refid'],
+                        Vars::$ID,
+                        $res['time'],
+                        $fname,
+                        $type
+                    ));
+                    $STH = NULL;
                 } else {
                     echo Functions::displayError($error, '<a href="' . $url . '?act=addfile&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
                 }

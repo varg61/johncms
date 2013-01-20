@@ -46,29 +46,37 @@ if (Vars::$USER_ID) {
             Отмечаем все темы как прочитанные
             -----------------------------------------------------------------
             */
-            $req = mysql_query("SELECT `forum`.`id`
+            $req = DB::PDO()->query("SELECT `forum`.`id`
                 FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = " . Vars::$USER_ID . "
                 WHERE `forum`.`type`='t'
                 AND `cms_forum_rdm`.`topic_id` Is Null"
             );
-            while ($res = mysql_fetch_assoc($req)) {
-                mysql_query("INSERT INTO `cms_forum_rdm` SET
-                    `topic_id` = '" . $res['id'] . "',
-                    `user_id` = " . Vars::$USER_ID . ",
-                    `time` = '" . time() . "'
-                ");
+            $STH = DB::PDO()->prepare('
+                INSERT INTO `cms_forum_rdm`
+                (topic_id, user_id, time)
+                VALUES (?, ' . Vars::$USER_ID . ', ' . time() . ')
+            ');
+            while ($res = $req->fetch()) {
+                $STH->execute(array($res['id']));
             }
-            $req = mysql_query("SELECT `forum`.`id` AS `id`
+            $STH = NULL;
+
+            $req = DB::PDO()->query("SELECT `forum`.`id` AS `id`
                 FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = " . Vars::$USER_ID . "
                 WHERE `forum`.`type`='t'
                 AND `forum`.`time` > `cms_forum_rdm`.`time`"
             );
-            while ($res = mysql_fetch_array($req)) {
-                mysql_query("UPDATE `cms_forum_rdm` SET
-                    `time` = '" . time() . "'
-                    WHERE `topic_id` = '" . $res['id'] . "' AND `user_id` = " . Vars::$USER_ID
-                );
+            $STH = DB::PDO()->prepare('
+                UPDATE `cms_forum_rdm` SET
+                `time` = ' . time() . '
+                WHERE `topic_id` = ?
+                AND `user_id` = ' . Vars::$USER_ID
+            );
+            while ($res = $req->fetch()) {
+                $STH->execute(array($res['id']));
             }
+            $STH = NULL;
+
             echo '<div class="menu"><p>' . __('unread_reset_done') . '<br /><a href="' . $url . '">' . __('to_forum') . '</a></p></div>';
             break;
 
@@ -98,30 +106,30 @@ if (Vars::$USER_ID) {
             }
             $vr1 = time() - $vr * 3600;
             if (Vars::$USER_RIGHTS == 9) {
-                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1'");
+                $req = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1'");
             } else {
-                $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1' AND `close` != '1'");
+                $req = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1' AND `close` != '1'");
             }
-            $count = mysql_result($req, 0);
+            $count = $req->fetchColumn();
             echo '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('unread_all_for_period') . ' ' . $vr . ' ' . __('hours') . '</div>';
             if ($count > Vars::$USER_SET['page_size'])
                 echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=new&amp;mod=period&amp;vr=' . $vr . '&amp;', Vars::$START, $count, Vars::$USER_SET['page_size']) . '</div>';
             if ($count > 0) {
                 if (Vars::$USER_RIGHTS == 9) {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC " . Vars::db_pagination());
+                    $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC " . Vars::db_pagination());
                 } else {
-                    $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC " . Vars::db_pagination());
+                    $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' AND `close` != '1' ORDER BY `time` DESC " . Vars::db_pagination());
                 }
-                for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+                for ($i = 0; $res = $req->fetch(); ++$i) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                    $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "'");
-                    $razd = mysql_fetch_array($q3);
-                    $q4 = mysql_query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
-                    $frm = mysql_fetch_array($q4);
-                    $colmes = mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
-                    $colmes1 = mysql_num_rows($colmes);
+                    $q3 = DB::PDO()->query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type`='r' AND `id`='" . $res['refid'] . "'");
+                    $razd = $q3->fetch();
+                    $q4 = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `type`='f' AND `id`='" . $razd['refid'] . "'");
+                    $frm = $q4->fetch();
+                    $colmes = DB::PDO()->query("SELECT * FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes1 = $colmes->rowCount();
                     $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
-                    $nick = mysql_fetch_array($colmes);
+                    $nick = $colmes->fetch();
                     if ($res['edit']) {
                         echo Functions::getIcon('forum_closed.png');
                     } elseif ($res['close']) {
@@ -163,13 +171,13 @@ if (Vars::$USER_ID) {
             Вывод непрочитанных тем (для зарегистрированных)
             -----------------------------------------------------------------
             */
-            $total = Counters::forumCountNew();
+            $total = Counters::forumMessagesNew();
             echo '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('unread') . '</div>';
             if ($total > Vars::$USER_SET['page_size']) {
                 echo '<div class="topmenu">' . Functions::displayPagination($url . '?', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
             }
             if ($total > 0) {
-                $req = mysql_query("SELECT * FROM `forum`
+                $req = DB::PDO()->query("SELECT * FROM `forum`
                     LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = " . Vars::$USER_ID . "
                     WHERE `forum`.`type`='t'" . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "
                     AND (`cms_forum_rdm`.`topic_id` Is Null
@@ -177,20 +185,20 @@ if (Vars::$USER_ID) {
                     ORDER BY `forum`.`time` DESC
                     " . Vars::db_pagination()
                 );
-                for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+                for ($i = 0; $res = $req->fetch(); ++$i) {
                     if ($res['close']) {
                         echo '<div class="rmenu">';
                     } else {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     }
-                    $q3 = mysql_query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type` = 'r' AND `id` = '" . $res['refid'] . "' LIMIT 1");
-                    $razd = mysql_fetch_assoc($q3);
-                    $q4 = mysql_query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' AND `id` = '" . $razd['refid'] . "' LIMIT 1");
-                    $frm = mysql_fetch_assoc($q4);
-                    $colmes = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
-                    $colmes1 = mysql_num_rows($colmes);
+                    $q3 = DB::PDO()->query("SELECT `id`, `refid`, `text` FROM `forum` WHERE `type` = 'r' AND `id` = '" . $res['refid'] . "' LIMIT 1");
+                    $razd = $q3->fetch();
+                    $q4 = DB::PDO()->query("SELECT `id`, `text` FROM `forum` WHERE `type`='f' AND `id` = '" . $razd['refid'] . "' LIMIT 1");
+                    $frm = $q4->fetch();
+                    $colmes = DB::PDO()->query("SELECT `from`, `time` FROM `forum` WHERE `refid` = '" . $res['id'] . "' AND `type` = 'm'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'") . " ORDER BY `time` DESC");
+                    $colmes1 = $colmes->rowCount();
                     $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
-                    $nick = mysql_fetch_assoc($colmes);
+                    $nick = $colmes->fetch();
                     // Значки
                     $icons = array(
                         (isset($np) ? (!$res['vip'] ? Functions::getIcon('forum_normal.png') : '') : Functions::getIcon('forum_new.png')),
@@ -232,17 +240,17 @@ if (Vars::$USER_ID) {
     -----------------------------------------------------------------
     */
     echo '<div class="phdr"><a href="' . $url . '"><b>' . __('forum') . '</b></a> | ' . __('unread_last_10') . '</div>';
-    $req = mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT 10");
-    if (mysql_num_rows($req)) {
-        for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
-            $q3 = mysql_query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $res['refid'] . "' LIMIT 1");
-            $razd = mysql_fetch_assoc($q3);
-            $q4 = mysql_query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "' LIMIT 1");
-            $frm = mysql_fetch_assoc($q4);
-            $nikuser = mysql_query("SELECT `from`, `time` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "'ORDER BY `time` DESC");
-            $colmes1 = mysql_num_rows($nikuser);
+    $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = 't' AND `close` != '1' ORDER BY `time` DESC LIMIT 10");
+    if ($req->rowCount()) {
+        for ($i = 0; $res = $req->fetch(); ++$i) {
+            $q3 = DB::PDO()->query("select `id`, `refid`, `text` from `forum` where type='r' and id='" . $res['refid'] . "' LIMIT 1");
+            $razd = $q3->fetch();
+            $q4 = DB::PDO()->query("select `id`, `refid`, `text` from `forum` where type='f' and id='" . $razd['refid'] . "' LIMIT 1");
+            $frm = $q4->fetch();
+            $nikuser = DB::PDO()->query("SELECT `from`, `time` FROM `forum` WHERE `type` = 'm' AND `close` != '1' AND `refid` = '" . $res['id'] . "'ORDER BY `time` DESC");
+            $colmes1 = $nikuser->rowCount();
             $cpg = ceil($colmes1 / Vars::$USER_SET['page_size']);
-            $nam = mysql_fetch_assoc($nikuser);
+            $nam = $nikuser->fetch();
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Значки
             $icons = array(
