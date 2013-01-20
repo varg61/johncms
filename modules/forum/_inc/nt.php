@@ -36,9 +36,9 @@ function forum_link($m)
         $p = parse_url($m[3]);
         if ('http://' . $p['host'] . $p['path'] . '?id=' == Vars::$HOME_URL . 'forum/?id=') {
             $thid = abs(intval(preg_replace('/(.*?)id=/si', '', $m[3])));
-            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
-            if (mysql_num_rows($req) > 0) {
-                $res = mysql_fetch_array($req);
+            $req = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 $name = strtr($res['text'], array(
                     '&quot;' => '',
                     '&amp;'  => '',
@@ -50,6 +50,7 @@ function forum_link($m)
                 ));
                 if (mb_strlen($name) > 40)
                     $name = mb_substr($name, 0, 40) . '...';
+
                 return '[url=' . $m[3] . ']' . $name . '[/url]';
             } else {
                 return $m[3];
@@ -65,8 +66,8 @@ if ($flood) {
     echo Functions::displayError(__('error_flood') . ' ' . $flood . __('sec') . ', <a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
     exit;
 }
-$req_r = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'r' LIMIT 1");
-if (!mysql_num_rows($req_r)) {
+$req_r = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'r' LIMIT 1");
+if (!$req_r->rowCount()) {
     echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
@@ -89,59 +90,80 @@ if (isset($_POST['submit'])) {
         $error[] = __('error_message_short');
     if (!$error) {
         $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
+
         // Прверяем, есть ли уже такая тема в текущем разделе?
-        if (mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = " . Vars::$ID . " AND `text` = '" . mysql_real_escape_string($th) . "'"), 0) > 0)
+        $STH = DB::PDO()->prepare('
+            SELECT COUNT(*) FROM `forum`
+            WHERE `type` = ?
+            AND `refid` = ?
+            AND `text` = ?
+        ');
+
+        $STH->execute(array('t', Vars::$ID, $th));
+        if ($STH->fetchColumn()) {
             $error[] = __('error_topic_exists');
+        }
+        $STH = NULL;
+
         // Проверяем, не повторяется ли сообщение?
-        $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = " . Vars::$USER_ID . " AND `type` = 'm' ORDER BY `time` DESC");
-        if (mysql_num_rows($req) > 0) {
-            $res = mysql_fetch_array($req);
+        $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `user_id` = " . Vars::$USER_ID . " AND `type` = 'm' ORDER BY `time` DESC");
+        if ($req->rowCount()) {
+            $res = $req->fetch();
             if ($msg == $res['text'])
                 $error[] = __('error_message_exists');
         }
     }
     if (!$error) {
         // Добавляем тему
-        mysql_query("INSERT INTO `forum` SET
-            `refid` = " . Vars::$ID . ",
-            `type` = 't',
-            `time` = '" . time() . "',
-            `user_id` = " . Vars::$USER_ID . ",
-            `from` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
-            `text` = '" . mysql_real_escape_string($th) . "',
-            `soft` = '',
-            `edit` = '',
-            `curators` = ''
-        ") or die(mysql_error());
-        $rid = mysql_insert_id();
+        $STH = DB::PDO()->prepare('
+            INSERT INTO `forum`
+            (refid, type, time, user_id, from, text, soft, edit, curators)
+            VALUES (?, "t", ?, ?, ?, ?, "", "", "")
+        ');
+
+        $STH->execute(array(
+            Vars::$ID,
+            time(),
+            Vars::$USER_ID,
+            Vars::$USER_NICKNAME,
+            $th
+        ));
+        $rid = DB::PDO()->lastInsertId();
+        $STH = NULL;
+
         // Добавляем текст поста
-        mysql_query("INSERT INTO `forum` SET
-            `refid` = '$rid',
-            `type` = 'm',
-            `time` = '" . time() . "',
-            `user_id` = " . Vars::$USER_ID . ",
-            `from` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
-            `ip` = '" . Vars::$IP . "',
-            `ip_via_proxy` = '" . Vars::$IP_VIA_PROXY . "',
-            `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
-            `text` = '" . mysql_real_escape_string($msg) . "',
-            `edit` = '',
-            `curators` = ''
-        ") or die(mysql_error());
-        $postid = mysql_insert_id();
+        $STH = DB::PDO()->prepare('
+            INSERT INTO `forum`
+            (refid, type, time, user_id, from, ip, ip_via_proxy, soft, text, edit, curators)
+            VALUES (?, "m", ?, ?, ?, ?, ?, ?, ?, "", "")
+        ');
+
+        $STH->execute(array(
+            $rid,
+            time(),
+            Vars::$USER_ID,
+            Vars::$USER_NICKNAME,
+            Vars::$IP,
+            Vars::$IP_VIA_PROXY,
+            Vars::$USER_AGENT,
+            $msg
+        ));
+        $postid = DB::PDO()->lastInsertId();
+
         // Записываем счетчик постов юзера
-        //TODO: Разобраться со счетчиком!
-        mysql_query("UPDATE `users` SET
+        DB::PDO()->exec("UPDATE `users` SET
             `count_forum` = '" . ++Vars::$USER_DATA['count_forum'] . "',
             `lastpost` = '" . time() . "'
             WHERE `id` = " . Vars::$USER_ID . "
         ");
+
         // Ставим метку о прочтении
-        mysql_query("INSERT INTO `cms_forum_rdm` SET
-            `topic_id`='$rid',
-            `user_id`=" . Vars::$USER_ID . ",
-            `time`='" . time() . "'
+        DB::PDO()->exec("INSERT INTO `cms_forum_rdm` SET
+            `topic_id` = '$rid',
+            `user_id` = " . Vars::$USER_ID . ",
+            `time` = '" . time() . "'
         ");
+
         if (isset($_POST['addfiles'])) {
             header('Location: ' . $url . '?id=' . $postid . '&act=addfile');
         } else {
@@ -153,9 +175,8 @@ if (isset($_POST['submit'])) {
         exit;
     }
 } else {
-    $res_r = mysql_fetch_assoc($req_r);
-    $req_c = mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res_r['refid'] . "'");
-    $res_c = mysql_fetch_assoc($req_c);
+    $res_r = $req_r->fetch();
+    $res_c = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '" . $res_r['refid'] . "'")->fetch();
     if (!Vars::$USER_DATA['count_forum']) {
         if (!isset($_GET['yes'])) {
             echo '<p>' . __('forum_rules_text') . '</p>';
