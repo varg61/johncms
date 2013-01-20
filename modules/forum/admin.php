@@ -10,7 +10,7 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$url = Router::getUri(3);
+$uri = Router::getUri(3);
 
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
@@ -28,7 +28,10 @@ if (($set_forum = Vars::getUserData('set_forum')) === FALSE) {
         'postcut'  => 2
     );
 }
-switch (Vars::$MOD) {
+
+$mod = isset(Router::$ROUTE[2]) ? Router::$ROUTE[2] : FALSE;
+
+switch ($mod) {
     case 'del':
         /*
         -----------------------------------------------------------------
@@ -186,11 +189,12 @@ switch (Vars::$MOD) {
         Добавление категории
         -----------------------------------------------------------------
         */
+        $cat_name = '';
         if (Vars::$ID) {
             // Проверяем наличие категории
-            $req = mysql_query("SELECT `text` FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'f'");
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_array($req);
+            $req = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'f'");
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 $cat_name = $res['text'];
             } else {
                 echo Functions::displayError(__('error_wrong_data'), '<a href="index.php?act=forum">' . __('forum_management') . '</a>');
@@ -211,23 +215,34 @@ switch (Vars::$MOD) {
                 $error[] = __('error_description_lenght');
             if (!$error) {
                 // Добавляем в базу категорию
-                $req = mysql_query("SELECT `realid` FROM `forum` WHERE " . (Vars::$ID ? "`refid` = " . Vars::$ID . " AND `type` = 'r'" : "`type` = 'f'") . " ORDER BY `realid` DESC LIMIT 1");
-                if (mysql_num_rows($req)) {
-                    $res = mysql_fetch_assoc($req);
+                $req = DB::PDO()->query("SELECT `realid` FROM `forum` WHERE " . (Vars::$ID ? "`refid` = " . Vars::$ID . " AND `type` = 'r'" : "`type` = 'f'") . " ORDER BY `realid` DESC LIMIT 1");
+                if ($req->rowCount()) {
+                    $res = $req->fetch();
                     $sort = $res['realid'] + 1;
                 } else {
                     $sort = 1;
                 }
-                mysql_query("INSERT INTO `forum` SET
-                    `refid` = '" . (Vars::$ID ? Vars::$ID : 0) . "',
-                    `type` = '" . (Vars::$ID ? 'r' : 'f') . "',
-                    `text` = '" . mysql_real_escape_string($name) . "',
-                    `soft` = '" . mysql_real_escape_string($desc) . "',
-                    `realid` = '$sort',
-                    `edit` = '',
-                    `curators` = ''
-                ") or die(mysql_error());
-                header('Location: ' . $url . '?mod=cat' . (Vars::$ID ? '&id=' . Vars::$ID : ''));
+
+                $STH = DB::PDO()->prepare('
+                    INSERT INTO `forum` SET
+                    `refid` = :refid,
+                    `type` = :type,
+                    `text` = :text,
+                    `soft` = :soft,
+                    `realid` = :realid,
+                    `edit` = "",
+                    `curators` = ""
+                ');
+
+                $STH->bindValue(':refid', (Vars::$ID ? Vars::$ID : 0));
+                $STH->bindValue(':type', (Vars::$ID ? 'r' : 'f'));
+                $STH->bindParam(':text', $name);
+                $STH->bindParam(':soft', $desc);
+                $STH->bindParam(':realid', $sort);
+                $STH->execute();
+                $STH = NULL;
+
+                header('Location: ' . $uri . 'cat/' . (Vars::$ID ? '?id=' . Vars::$ID : ''));
             } else {
                 // Выводим сообщение об ошибках
                 echo Functions::displayError($error);
@@ -237,7 +252,7 @@ switch (Vars::$MOD) {
             echo '<div class="phdr"><b>' . (Vars::$ID ? __('add_section') : __('add_category')) . '</b></div>';
             if (Vars::$ID)
                 echo '<div class="bmenu"><b>' . __('to_category') . ':</b> ' . $cat_name . '</div>';
-            echo '<form action="' . $url . '?mod=add' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '" method="post">' .
+            echo '<form action="' . $uri . 'add/' . (Vars::$ID ? '?id=' . Vars::$ID : '') . '" method="post">' .
                 '<div class="gmenu">' .
                 '<p><h3>' . __('title') . '</h3>' .
                 '<input type="text" name="name" />' .
@@ -247,7 +262,7 @@ switch (Vars::$MOD) {
                 '<br /><small>' . __('not_mandatory_field') . '<br />' . __('minmax_2_500') . '</small></p>' .
                 '<p><input type="submit" value="' . __('add') . '" name="submit" />' .
                 '</p></div></form>' .
-                '<div class="phdr"><a href="' . $url . '?mod=cat' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '">' . __('back') . '</a></div>';
+                '<div class="phdr"><a href="' . $uri . 'cat/' . (Vars::$ID ? '?id=' . Vars::$ID : '') . '">' . __('back') . '</a></div>';
         }
         break;
 
@@ -261,9 +276,9 @@ switch (Vars::$MOD) {
             echo Functions::displayError(__('error_wrong_data'), '<a href="index.php?act=forum">' . __('forum_management') . '</a>');
             exit;
         }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
-        if (mysql_num_rows($req)) {
-            $res = mysql_fetch_assoc($req);
+        $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
+        if ($req->rowCount()) {
+            $res = $req->fetch();
             if ($res['type'] == 'f' || $res['type'] == 'r') {
                 if (isset($_POST['submit'])) {
                     // Принимаем данные
@@ -274,7 +289,7 @@ switch (Vars::$MOD) {
                     $error = array();
                     if ($res['type'] == 'r' && !$category)
                         $error[] = __('error_category_select');
-                    elseif ($res['type'] == 'r' && !mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'"), 0))
+                    elseif ($res['type'] == 'r' && !DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'")->fetchColumn())
                         $error[] = __('error_category_select');
                     if (!$name)
                         $error[] = __('error_empty_title');
@@ -284,21 +299,29 @@ switch (Vars::$MOD) {
                         $error[] = __('error_description_lenght');
                     if (!$error) {
                         // Записываем в базу
-                        mysql_query("UPDATE `forum` SET
-                            `text` = '" . mysql_real_escape_string($name) . "',
-                            `soft` = '" . mysql_real_escape_string($desc) . "'
-                            WHERE `id` = " . Vars::$ID);
+                        $STH = DB::PDO()->prepare('
+                            UPDATE `forum` SET
+                            `text`     = :text,
+                            `soft`     = :soft
+                            WHERE `id` = :id
+                        ');
+
+                        $STH->bindParam(':text', $name);
+                        $STH->bindParam(':soft', $desc);
+                        $STH->bindValue(':id', Vars::$ID);
+                        $STH->execute();
+                        $STH = NULL;
+
                         if ($res['type'] == 'r' && $category != $res['refid']) {
                             // Вычисляем сортировку
-                            $req_s = mysql_query("SELECT `realid` FROM `forum` WHERE `refid` = '$category' AND `type` = 'r' ORDER BY `realid` DESC LIMIT 1");
-                            $res_s = mysql_fetch_assoc($req_s);
+                            $res_s = DB::PDO()->query("SELECT `realid` FROM `forum` WHERE `refid` = '$category' AND `type` = 'r' ORDER BY `realid` DESC LIMIT 1")->fetch();
                             $sort = $res_s['realid'] + 1;
                             // Меняем категорию
-                            mysql_query("UPDATE `forum` SET `refid` = '$category', `realid` = '$sort' WHERE `id` = " . Vars::$ID);
+                            DB::PDO()->exec("UPDATE `forum` SET `refid` = '$category', `realid` = '$sort' WHERE `id` = " . Vars::$ID);
                             // Меняем категорию для прикрепленных файлов
-                            mysql_query("UPDATE `cms_forum_files` SET `cat` = '$category' WHERE `cat` = '" . $res['refid'] . "'");
+                            DB::PDO()->exec("UPDATE `cms_forum_files` SET `cat` = '$category' WHERE `cat` = '" . $res['refid'] . "'");
                         }
-                        header('Location: ' . $url . '?mod=cat' . ($res['type'] == 'r' ? '&id=' . $res['refid'] : ''));
+                        header('Location: ' . $uri . 'cat/' . ($res['type'] == 'r' ? '?id=' . $res['refid'] : ''));
                     } else {
                         // Выводим сообщение об ошибках
                         echo Functions::displayError($error);
@@ -306,7 +329,7 @@ switch (Vars::$MOD) {
                 } else {
                     // Форма ввода
                     echo'<div class="phdr"><b>' . ($res['type'] == 'r' ? __('section_edit') : __('category_edit')) . '</b></div>' .
-                        '<form action="' . $url . '?mod=edit&amp;id=' . Vars::$ID . '" method="post">' .
+                        '<form action="' . $uri . 'edit/?id=' . Vars::$ID . '" method="post">' .
                         '<div class="gmenu">' .
                         '<p><h3>' . __('title') . '</h3>' .
                         '<input type="text" name="name" value="' . $res['text'] . '"/>' .
@@ -316,21 +339,21 @@ switch (Vars::$MOD) {
                         '<br /><small>' . __('not_mandatory_field') . '<br />' . __('minmax_2_500') . '</small></p>';
                     if ($res['type'] == 'r') {
                         echo '<p><h3>' . __('category') . '</h3><select name="category" size="1">';
-                        $req_c = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid` ASC");
-                        while ($res_c = mysql_fetch_assoc($req_c)) {
+                        $req_c = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid` ASC");
+                        while ($res_c = $req_c->fetch()) {
                             echo '<option value="' . $res_c['id'] . '"' . ($res_c['id'] == $res['refid'] ? ' selected="selected"' : '') . '>' . $res_c['text'] . '</option>';
                         }
                         echo '</select></p>';
                     }
                     echo'<p><input type="submit" value="' . __('save') . '" name="submit" />' .
                         '</p></div></form>' .
-                        '<div class="phdr"><a href="' . $url . '?mod=cat' . ($res['type'] == 'r' ? '&amp;id=' . $res['refid'] : '') . '">' . __('back') . '</a></div>';
+                        '<div class="phdr"><a href="' . $uri . 'cat/' . ($res['type'] == 'r' ? '?id=' . $res['refid'] : '') . '">' . __('back') . '</a></div>';
                 }
             } else {
-                header('Location: ' . $url . '?mod=cat');
+                header('Location: ' . $uri . 'cat/');
             }
         } else {
-            header('Location: ' . $url . '?mod=cat');
+            header('Location: ' . $uri . 'cat/');
         }
         break;
 
@@ -341,21 +364,21 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req)) {
-                $res1 = mysql_fetch_assoc($req);
+            $req1 = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
+            if ($req1->rowCount()) {
+                $res1 = $req1->fetch();
                 $sort = $res1['realid'];
-                $req = mysql_query("SELECT * FROM `forum` WHERE `type` = '" . ($res1['type'] == 'f' ? 'f' : 'r') . "' AND `realid` < '$sort' ORDER BY `realid` DESC LIMIT 1");
-                if (mysql_num_rows($req)) {
-                    $res = mysql_fetch_assoc($req);
-                    $id2 = $res['id'];
-                    $sort2 = $res['realid'];
-                    mysql_query("UPDATE `forum` SET `realid` = '$sort2' WHERE `id` = " . Vars::$ID);
-                    mysql_query("UPDATE `forum` SET `realid` = '$sort' WHERE `id` = '$id2'");
+                $req2 = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = '" . ($res1['type'] == 'f' ? 'f' : 'r') . "' AND `realid` < '$sort' ORDER BY `realid` DESC LIMIT 1");
+                if ($req2->rowCount()) {
+                    $res2 = $req2->fetch();
+                    $id2 = $res2['id'];
+                    $sort2 = $res2['realid'];
+                    DB::PDO()->exec("UPDATE `forum` SET `realid` = '$sort2' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `forum` SET `realid` = '$sort' WHERE `id` = '$id2'");
                 }
             }
         }
-        header('Location: ' . $url . '?mod=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
+        header('Location: ' . $uri . 'cat/' . (isset($res1['type']) && $res1['type'] == 'r' ? '?id=' . $res1['refid'] : ''));
         break;
 
     case 'down':
@@ -365,21 +388,21 @@ switch (Vars::$MOD) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req)) {
-                $res1 = mysql_fetch_assoc($req);
+            $req1 = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID);
+            if ($req1->rowCount()) {
+                $res1 = $req1->fetch();
                 $sort = $res1['realid'];
-                $req = mysql_query("SELECT * FROM `forum` WHERE `type` = '" . ($res1['type'] == 'f' ? 'f' : 'r') . "' AND `realid` > '$sort' ORDER BY `realid` ASC LIMIT 1");
-                if (mysql_num_rows($req)) {
-                    $res = mysql_fetch_assoc($req);
-                    $id2 = $res['id'];
-                    $sort2 = $res['realid'];
-                    mysql_query("UPDATE `forum` SET `realid` = '$sort2' WHERE `id` = " . Vars::$ID);
-                    mysql_query("UPDATE `forum` SET `realid` = '$sort' WHERE `id` = '$id2'");
+                $req2 = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = '" . ($res1['type'] == 'f' ? 'f' : 'r') . "' AND `realid` > '$sort' ORDER BY `realid` ASC LIMIT 1");
+                if ($req2->rowCount()) {
+                    $res2 = $req2->fetch();
+                    $id2 = $res2['id'];
+                    $sort2 = $res2['realid'];
+                    DB::PDO()->exec("UPDATE `forum` SET `realid` = '$sort2' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `forum` SET `realid` = '$sort' WHERE `id` = '$id2'");
                 }
             }
         }
-        header('Location: ' . $url . '?mod=cat' . ($res1['type'] == 'r' ? '&id=' . $res1['refid'] : ''));
+        header('Location: ' . $uri . 'cat/' . (isset($res1['type']) && $res1['type'] == 'r' ? '?id=' . $res1['refid'] : ''));
         break;
 
     case 'cat':
@@ -388,11 +411,11 @@ switch (Vars::$MOD) {
         Управление категориями и разделами
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="' . $url . '"><b>' . __('forum_management') . '</b></a> | ' . __('forum_structure') . '</div>';
+        echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('forum_management') . '</b></a> | ' . __('forum_structure') . '</div>';
         if (Vars::$ID) {
             // Управление разделами
             $cat = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 'f'")->fetch();
-            echo '<div class="bmenu"><a href="' . $url . '?mod=cat"><b>' . $cat['text'] . '</b></a> | ' . __('section_list') . '</div>';
+            echo '<div class="bmenu"><a href="' . $uri . 'cat/"><b>' . $cat['text'] . '</b></a> | ' . __('section_list') . '</div>';
             $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `refid` = " . Vars::$ID . " AND `type` = 'r' ORDER BY `realid` ASC");
             if ($req->rowCount()) {
                 for ($i = 0; $res = $req->fetch(); ++$i) {
@@ -402,10 +425,10 @@ switch (Vars::$MOD) {
                     if (!empty($res['soft']))
                         echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                     echo'<div class="sub">' .
-                        '<a href="' . $url . '?mod=up&amp;id=' . $res['id'] . '">' . __('up') . '</a> | ' .
-                        '<a href="' . $url . '?mod=down&amp;id=' . $res['id'] . '">' . __('down') . '</a> | ' .
-                        '<a href="' . $url . '?mod=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
-                        '<a href="' . $url . '?mod=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>' .
+                        '<a href="' . $uri . 'up/?id=' . $res['id'] . '">' . __('up') . '</a> | ' .
+                        '<a href="' . $uri . 'down/?id=' . $res['id'] . '">' . __('down') . '</a> | ' .
+                        '<a href="' . $uri . 'edit/?id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
+                        '<a href="' . $uri . 'del/?id=' . $res['id'] . '">' . __('delete') . '</a>' .
                         '</div></div>';
                 }
             } else {
@@ -417,24 +440,24 @@ switch (Vars::$MOD) {
             $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid` ASC");
             for ($i = 0; $res = $req->fetch(); ++$i) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<a href="' . $url . '?mod=cat&amp;id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a> ' .
-                    '(' . mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $res['id'] . "'"), 0) . ')' .
+                echo '<a href="' . $uri . 'cat/?id=' . $res['id'] . '"><b>' . $res['text'] . '</b></a> ' .
+                    '(' . DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r' AND `refid` = '" . $res['id'] . "'")->fetchColumn() . ')' .
                     '&#160;<a href="' . Vars::$HOME_URL . 'forum/?id=' . $res['id'] . '">&gt;&gt;</a>';
                 if (!empty($res['soft']))
                     echo '<br /><span class="gray"><small>' . $res['soft'] . '</small></span><br />';
                 echo '<div class="sub">' .
-                    '<a href="' . $url . '?mod=up&amp;id=' . $res['id'] . '">' . __('up') . '</a> | ' .
-                    '<a href="' . $url . '?mod=down&amp;id=' . $res['id'] . '">' . __('down') . '</a> | ' .
-                    '<a href="' . $url . '?mod=edit&amp;id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
-                    '<a href="' . $url . '?mod=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>' .
+                    '<a href="' . $uri . 'up/?id=' . $res['id'] . '">' . __('up') . '</a> | ' .
+                    '<a href="' . $uri . 'down/?id=' . $res['id'] . '">' . __('down') . '</a> | ' .
+                    '<a href="' . $uri . 'edit/?id=' . $res['id'] . '">' . __('edit') . '</a> | ' .
+                    '<a href="' . $uri . 'del/?id=' . $res['id'] . '">' . __('delete') . '</a>' .
                     '</div></div>';
             }
         }
         echo'<div class="gmenu">' .
-            '<form action="' . $url . '?mod=add' . (Vars::$ID ? '&amp;id=' . Vars::$ID : '') . '" method="post">' .
+            '<form action="' . $uri . 'add/' . (Vars::$ID ? '?id=' . Vars::$ID : '') . '" method="post">' .
             '<input type="submit" value="' . __('add') . '" />' .
             '</form></div>' .
-            '<div class="phdr">' . (Vars::$MOD == 'cat' && Vars::$ID ? '<a href="' . $url . '?mod=cat">' . __('category_list') . '</a>' : '<a href="' . $url . '">' . __('forum_management') . '</a>') . '</div>';
+            '<div class="phdr">' . (Vars::$MOD == 'cat' && Vars::$ID ? '<a href="' . $uri . '?mod=cat">' . __('category_list') . '</a>' : '<a href="' . $uri . '">' . __('forum_management') . '</a>') . '</div>';
         break;
 
     case 'htopics':
@@ -443,17 +466,16 @@ switch (Vars::$MOD) {
         Управление скрытыми темами форума
         -----------------------------------------------------------------
         */
-        echo '<div class="phdr"><a href="index.php?act=forum"><b>' . __('forum_management') . '</b></a> | ' . __('hidden_topics') . '</div>';
+        echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('forum_management') . '</b></a> | ' . __('hidden_topics') . '</div>';
         $sort = '';
-        $url = '';
         if (isset($_GET['usort'])) {
             $sort = " AND `forum`.`user_id` = '" . abs(intval($_GET['usort'])) . "'";
-            $url = '&amp;usort=' . abs(intval($_GET['usort']));
+            $uri .= '&amp;usort=' . abs(intval($_GET['usort']));
             echo '<div class="bmenu">' . __('filter_on_author') . ' <a href="index.php?act=forum&amp;mod=htopics">[x]</a></div>';
         }
         if (isset($_GET['rsort'])) {
             $sort = " AND `forum`.`refid` = '" . abs(intval($_GET['rsort'])) . "'";
-            $url = '&amp;rsort=' . abs(intval($_GET['rsort']));
+            $uri .= '&amp;rsort=' . abs(intval($_GET['rsort']));
             echo '<div class="bmenu">' . __('filter_on_section') . ' <a href="index.php?act=forum&amp;mod=htopics">[x]</a></div>';
         }
         if (isset($_POST['deltopic'])) {
@@ -461,22 +483,22 @@ switch (Vars::$MOD) {
                 echo Functions::displayError(__('access_forbidden'));
                 exit;
             }
-            $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort);
-            while ($res = mysql_fetch_assoc($req)) {
-                $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `topic` = '" . $res['id'] . "'");
-                if (mysql_num_rows($req_f)) {
+            $req = DB::PDO()->query("SELECT `id` FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort);
+            while ($res = $req->fetch()) {
+                $req_f = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `topic` = '" . $res['id'] . "'");
+                if ($req_f->rowCount()) {
                     // Удаляем файлы
-                    while ($res_f = mysql_fetch_assoc($req_f)) {
+                    while ($res_f = $req_f->fetch()) {
                         unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
                     }
-                    mysql_query("DELETE FROM `cms_forum_files` WHERE `topic` = '" . $res['id'] . "'");
+                    DB::PDO()->exec("DELETE FROM `cms_forum_files` WHERE `topic` = '" . $res['id'] . "'");
                 }
                 // Удаляем посты
-                mysql_query("DELETE FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['id'] . "'");
+                DB::PDO()->exec("DELETE FROM `forum` WHERE `type` = 'm' AND `refid` = '" . $res['id'] . "'");
             }
             // Удаляем темы
-            $req = mysql_query("DELETE FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort);
-            header('Location: index.php?act=forum&mod=htopics');
+            DB::PDO()->exec("DELETE FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort);
+            header('Location: ' . $uri . 'htopics/');
         } else {
             $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort), 0);
             if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=htopics&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
@@ -504,7 +526,7 @@ switch (Vars::$MOD) {
                     ++$i;
                 }
                 if (Vars::$USER_RIGHTS == 9)
-                    echo '<form action="index.php?act=forum&amp;mod=htopics' . $url . '" method="POST">' .
+                    echo '<form action="index.php?act=forum&amp;mod=htopics' . $uri . '" method="POST">' .
                         '<div class="rmenu">' .
                         '<input type="submit" name="deltopic" value="' . __('delete_all') . '" />' .
                         '</div></form>';
@@ -530,14 +552,14 @@ switch (Vars::$MOD) {
         */
         echo '<div class="phdr"><a href="index.php?act=forum"><b>' . __('forum_management') . '</b></a> | ' . __('hidden_posts') . '</div>';
         $sort = '';
-        $url = '';
+        $uri = '';
         if (isset($_GET['tsort'])) {
             $sort = " AND `forum`.`refid` = '" . abs(intval($_GET['tsort'])) . "'";
-            $url = '&amp;tsort=' . abs(intval($_GET['tsort']));
+            $uri = '&amp;tsort=' . abs(intval($_GET['tsort']));
             echo '<div class="bmenu">' . __('filter_on_theme') . ' <a href="index.php?act=forum&amp;mod=hposts">[x]</a></div>';
         } elseif (isset($_GET['usort'])) {
             $sort = " AND `forum`.`user_id` = '" . abs(intval($_GET['usort'])) . "'";
-            $url = '&amp;usort=' . abs(intval($_GET['usort']));
+            $uri = '&amp;usort=' . abs(intval($_GET['usort']));
             echo '<div class="bmenu">' . __('filter_on_author') . ' <a href="index.php?act=forum&amp;mod=hposts">[x]</a></div>';
         }
         if (isset($_POST['delpost'])) {
@@ -588,7 +610,7 @@ switch (Vars::$MOD) {
                     ++$i;
                 }
                 if (Vars::$USER_RIGHTS == 9)
-                    echo '<form action="index.php?act=forum&amp;mod=hposts' . $url . '" method="POST"><div class="rmenu"><input type="submit" name="delpost" value="' . __('delete_all') . '" /></div></form>';
+                    echo '<form action="index.php?act=forum&amp;mod=hposts' . $uri . '" method="POST"><div class="rmenu"><input type="submit" name="delpost" value="' . __('delete_all') . '" /></div></form>';
             } else {
                 echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
             }
@@ -627,9 +649,9 @@ switch (Vars::$MOD) {
             '<li>' . __('votes') . ':&#160;' . $total_votes . '</li>' .
             '</ul></p></div>' .
             '<div class="menu"><p><h3>' . __('settings') . '</h3><ul>' .
-            '<li><a href="' . $url . '?mod=cat"><b>' . __('forum_structure') . '</b></a></li>' .
-            '<li><a href="' . $url . '?mod=hposts">' . __('hidden_posts') . '</a> (' . $total_msg_del . ')</li>' .
-            '<li><a href="' . $url . '?mod=htopics">' . __('hidden_topics') . '</a> (' . $total_thm_del . ')</li>' .
+            '<li><a href="' . $uri . 'cat/"><b>' . __('forum_structure') . '</b></a></li>' .
+            '<li><a href="' . $uri . 'hposts/">' . __('hidden_posts') . '</a> (' . $total_msg_del . ')</li>' .
+            '<li><a href="' . $uri . 'htopics/">' . __('hidden_topics') . '</a> (' . $total_thm_del . ')</li>' .
             '</ul></p></div>' .
             '<div class="phdr"><a href="' . Router::getUri(2) . '">' . __('to_forum') . '</a></div>';
 }

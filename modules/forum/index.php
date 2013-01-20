@@ -318,7 +318,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 -----------------------------------------------------------------
                 */
                 $total = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'"))->fetchColumn();
-                if ((Vars::$USER_ID && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['11']) && Vars::$SYSTEM_SET['mod_forum'] != 3) || Vars::$USER_RIGHTS) {
+                if ((Vars::$USER_ID && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['11']) && Vars::$ACL['forum'] != 3) || Vars::$USER_RIGHTS) {
                     // Кнопка создания новой темы
                     echo '<div class="gmenu"><form action="' . $url . '?act=nt&amp;id=' . Vars::$ID . '" method="post"><input type="submit" value="' . __('new_topic') . '" /></form></div>';
                 }
