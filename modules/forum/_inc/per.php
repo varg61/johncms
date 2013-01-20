@@ -16,8 +16,8 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         exit;
     }
     $url = Router::getUri(2);
-    $typ = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
-    if (!mysql_num_rows($typ)) {
+    $typ = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND `type` = 't'");
+    if (!$typ->rowCount()) {
         echo Functions::displayError(__('error_wrong_data'));
         exit;
     }
@@ -27,12 +27,13 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayError(__('error_wrong_data'));
             exit;
         }
-        $typ1 = mysql_query("SELECT * FROM `forum` WHERE `id` = '$razd' AND `type` = 'r'");
-        if (!mysql_num_rows($typ1)) {
+        $typ1 = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '$razd' AND `type` = 'r'");
+        if (!$typ1->rowCount()) {
             echo Functions::displayError(__('error_wrong_data'));
             exit;
         }
-        mysql_query("UPDATE `forum` SET `refid` = '$razd' WHERE `id` = " . Vars::$ID);
+
+        DB::PDO()->exec("UPDATE `forum` SET `refid` = '$razd' WHERE `id` = " . Vars::$ID);
         header("Location: " . $url . "?id=" . Vars::$ID);
     } else {
         /*
@@ -40,26 +41,26 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         Перенос темы
         -----------------------------------------------------------------
         */
-        $ms = mysql_fetch_assoc($typ);
+        $ms = $typ->fetch();
         if (empty($_GET['other'])) {
-            $rz = mysql_query("select * from `forum` where id='" . $ms['refid'] . "';");
-            $rz1 = mysql_fetch_assoc($rz);
+            $rz = DB::PDO()->query("select * from `forum` where id='" . $ms['refid'] . "'");
+            $rz1 = $rz->fetch();
             $other = $rz1['refid'];
         } else {
-            $other = intval($_GET['other']);
+            $other = abs(intval($_GET['other']));
         }
-        $fr = mysql_query("select * from `forum` where id='" . $other . "';");
-        $fr1 = mysql_fetch_assoc($fr);
+        $fr = DB::PDO()->query("select * from `forum` where id='" . $other . "'");
+        $fr1 = $fr->fetch();
         echo'<div class="phdr"><a href="' . $url . '?id=' . Vars::$ID . '"><b>' . __('forum') . '</b></a> | ' . __('topic_move') . '</div>' .
             '<form action="' . $url . '?act=per&amp;id=' . Vars::$ID . '" method="post">' .
             '<div class="gmenu"><p>' .
             '<h3>' . __('category') . '</h3>' . $fr1['text'] . '</p>';
 
-        $raz = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$other' AND `type` = 'r' AND `id` != '" . $ms['refid'] . "' ORDER BY `realid` ASC");
-        if (mysql_num_rows($raz)) {
+        $raz = DB::PDO()->query("SELECT * FROM `forum` WHERE `refid` = '$other' AND `type` = 'r' AND `id` != '" . $ms['refid'] . "' ORDER BY `realid` ASC");
+        if ($raz->rowCount()) {
             echo'<p><h3>' . __('section') . '</h3>' .
                 '<select name="razd">';
-            while ($raz1 = mysql_fetch_assoc($raz)) {
+            while ($raz1 = $raz->fetch()) {
                 echo '<option value="' . $raz1['id'] . '">' . $raz1['text'] . '</option>';
             }
             echo'</select></p>';
@@ -67,8 +68,8 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         echo'<p><input type="submit" name="submit" value="' . __('move') . '"/></p>' .
             '</div></form>' .
             '<div class="phdr">' . __('other_categories') . '</div>';
-        $frm = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$other' ORDER BY `realid` ASC");
-        for ($i = 0; $frm1 = mysql_fetch_assoc($frm); ++$i) {
+        $frm = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$other' ORDER BY `realid` ASC");
+        for ($i = 0; $frm1 = $frm->fetch(); ++$i) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             echo '<a href="' . $url . '?act=per&amp;id=' . Vars::$ID . '&amp;other=' . $frm1['id'] . '">' . $frm1['text'] . '</a></div>';
         }

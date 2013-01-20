@@ -15,14 +15,15 @@ if ((Vars::$USER_RIGHTS != 3 && Vars::$USER_RIGHTS < 6) || !Vars::$ID) {
     header('Location: http://mobicms.net/404.php');
     exit;
 }
-$req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND (`type` = 't' OR `type` = 'm')");
-if (mysql_num_rows($req)) {
-    $res = mysql_fetch_assoc($req);
-    mysql_query("UPDATE `forum` SET `close` = '0', `close_who` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "' WHERE `id` = " . Vars::$ID);
+$req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND (`type` = 't' OR `type` = 'm')");
+if ($req->rowCount()) {
+    $res = $req->fetch();
+    $nick = DB::PDO()->quote(Vars::$USER_NICKNAME);
+    DB::PDO()->exec("UPDATE `forum` SET `close` = '0', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
     if ($res['type'] == 't') {
         header('Location: ' . Router::getUri(2) . '?id=' . Vars::$ID);
     } else {
-        $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID), 0) / Vars::$USER_SET['page_size']);
+        $page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID)->fetchColumn() / Vars::$USER_SET['page_size']);
         header('Location: ' . Router::getUri(2) . '?id=' . $res['refid'] . '&page=' . $page);
     }
 } else {

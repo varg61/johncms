@@ -19,14 +19,18 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     if (isset($_GET['yes'])) {
         $dc = $_SESSION['dc'];
         $prd = $_SESSION['prd'];
-        $nick = DB::PDO()->quote(Vars::$USER_NICKNAME);
+
+        $STH = $STH = DB::PDO()->prepare('
+            UPDATE `forum` SET
+            `close` = 1,
+            `close_who` = ?
+            WHERE `id` = ?
+        ');
         foreach ($dc as $delid) {
-            DB::PDO()->exec("UPDATE `forum` SET
-                `close` = '1',
-                `close_who` = '" . $nick . "'
-                WHERE `id` = '" . intval($delid) . "'
-            ");
+            $STH->execute(array(Vars::$USER_NICKNAME, intval($delid)));
         }
+        $STH = NULL;
+
         echo __('mass_delete_confirm') . '<br/><a href="' . $prd . '">' . __('back') . '</a><br/>';
     } else {
         if (empty($_POST['delch'])) {

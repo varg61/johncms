@@ -19,14 +19,15 @@ if (empty($_GET['id'])) {
 $url = Router::getUri(2);
 
 $s = isset($_GET['s']) ? intval($_GET['s']) : FALSE;
+
 // Запрос сообщения
-$req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
+$req = DB::PDO()->query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`join_date`
 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
 WHERE `forum`.`type` = 'm' AND `forum`.`id` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . " LIMIT 1");
-$res = mysql_fetch_array($req);
+$res = $req->fetch();
 
 // Запрос темы
-$them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
+$them = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'")->fetch();
 echo '<div class="phdr"><b>' . __('topic') . ':</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
@@ -72,6 +73,6 @@ if (Vars::$USER_SET['smilies'])
     $text = Functions::smilies($text, ($res['rights'] >= 1) ? 1 : 0);
 echo $text . '</div>';
 // Вычисляем, на какой странице сообщение?
-$page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID), 0) / Vars::$USER_SET['page_size']);
+$page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">= " : "<= ") . Vars::$ID)->fetchColumn() / Vars::$USER_SET['page_size']);
 echo '<div class="phdr"><a href="' . $url . '?id=' . $res['refid'] . '&amp;page=' . $page . '">' . __('back_to_topic') . '</a></div>';
 echo '<p><a href="' . $url . '">' . __('to_forum') . '</a></p>';
