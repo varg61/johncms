@@ -42,12 +42,12 @@ switch ($mod) {
             echo Functions::displayError(__('error_wrong_data'), '<a href="index.php?act=forum">' . __('forum_management') . '</a>');
             exit;
         }
-        $req = mysql_query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r')");
-        if (mysql_num_rows($req)) {
-            $res = mysql_fetch_assoc($req);
+        $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r')");
+        if ($req->rowCount()) {
+            $res = $req->fetch();
             echo '<div class="phdr"><b>' . ($res['type'] == 'r' ? __('delete_section') : __('delete_catrgory')) . ':</b> ' . $res['text'] . '</div>';
             // Проверяем, есть ли подчиненная информация
-            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r' OR `type` = 't')"), 0);
+            $total = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r' OR `type` = 't')")->fetchColumn();
             if ($total) {
                 if ($res['type'] == 'f') {
                     ////////////////////////////////////////////////////////////
@@ -59,29 +59,31 @@ switch ($mod) {
                             echo Functions::displayError(__('error_wrong_data'));
                             exit;
                         }
-                        $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'"), 0);
+                        $check = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$category' AND `type` = 'f'")->fetchColumn();
                         if (!$check) {
                             echo Functions::displayError(__('error_wrong_data'));
                             exit;
                         }
                         // Вычисляем правила сортировки и перемещаем разделы
-                        $sort = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `refid` = '$category' AND `type` ='r' ORDER BY `realid` DESC"));
+                        $sort = DB::PDO()->query("SELECT * FROM `forum` WHERE `refid` = '$category' AND `type` ='r' ORDER BY `realid` DESC")->fetch();
                         $sortnum = !empty($sort['realid']) && $sort['realid'] > 0 ? $sort['realid'] + 1 : 1;
-                        $req_c = mysql_query("SELECT * FROM `forum` WHERE `refid` = " . Vars::$ID . " AND `type` = 'r'");
-                        while ($res_c = mysql_fetch_assoc($req_c)) {
-                            mysql_query("UPDATE `forum` SET `refid` = '" . $category . "', `realid` = '$sortnum' WHERE `id` = '" . $res_c['id'] . "'");
+                        $req_c = DB::PDO()->query("SELECT * FROM `forum` WHERE `refid` = " . Vars::$ID . " AND `type` = 'r'");
+                        while ($res_c = $req_c->fetch()) {
+                            DB::PDO()->exec("UPDATE `forum` SET `refid` = '" . $category . "', `realid` = '$sortnum' WHERE `id` = '" . $res_c['id'] . "'");
                             ++$sortnum;
                         }
                         // Перемещаем файлы в выбранную категорию
-                        mysql_query("UPDATE `cms_forum_files` SET `cat` = '" . $category . "' WHERE `cat` = '" . $res['refid'] . "'");
-                        mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
+                        DB::PDO()->exec("UPDATE `cms_forum_files` SET `cat` = '" . $category . "' WHERE `cat` = '" . $res['refid'] . "'");
+                        DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                         echo '<div class="rmenu"><p><h3>' . __('category_deleted') . '</h3>' . __('contents_moved_to') . ' <a href="../forum/index.php?id=' . $category . '">' . __('selected_category') . '</a></p></div>';
                     } else {
                         echo '<form action="index.php?act=forum&amp;mod=del&amp;id=' . Vars::$ID . '" method="POST">' .
                             '<div class="rmenu"><p>' . __('contents_move_warning') . '</p>' .
                             '<p><h3>' . __('select_category') . '</h3><select name="category" size="1">';
-                        $req_c = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != " . Vars::$ID . " ORDER BY `realid` ASC");
-                        while ($res_c = mysql_fetch_assoc($req_c)) echo '<option value="' . $res_c['id'] . '">' . $res_c['text'] . '</option>';
+                        $req_c = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != " . Vars::$ID . " ORDER BY `realid` ASC");
+                        while ($res_c = $req_c->fetch()) {
+                            echo '<option value="' . $res_c['id'] . '">' . $res_c['text'] . '</option>';
+                        }
                         echo '</select><br /><small>' . __('contents_move_description') . '</small></p>' .
                             '<p><input type="submit" name="submit" value="' . __('move') . '" /></p></div>';
                         if (Vars::$USER_RIGHTS == 9) {
@@ -102,14 +104,14 @@ switch ($mod) {
                             echo Functions::displayError(__('error_wrong_data'), '<a href="index.php?act=forum">' . __('forum_management') . '</a>');
                             exit;
                         }
-                        $check = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$subcat' AND `type` = 'r'"), 0);
+                        $check = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `id` = '$subcat' AND `type` = 'r'")->fetchColumn();
                         if (!$check) {
                             echo Functions::displayError(__('error_wrong_data'), '<a href="index.php?act=forum">' . __('forum_management') . '</a>');
                             exit;
                         }
-                        mysql_query("UPDATE `forum` SET `refid` = '$subcat' WHERE `refid` = " . Vars::$ID);
-                        mysql_query("UPDATE `cms_forum_files` SET `subcat` = '$subcat' WHERE `subcat` = " . Vars::$ID);
-                        mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
+                        DB::PDO()->exec("UPDATE `forum` SET `refid` = '$subcat' WHERE `refid` = " . Vars::$ID);
+                        DB::PDO()->exec("UPDATE `cms_forum_files` SET `subcat` = '$subcat' WHERE `subcat` = " . Vars::$ID);
+                        DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                         echo '<div class="rmenu"><p><h3>' . __('section_deleted') . '</h3>' . __('themes_moved_to') . ' <a href="../forum/index.php?id=' . $subcat . '">' . __('selected_section') . '</a>.' .
                             '</p></div>';
                     } elseif (isset($_POST['delete'])) {
@@ -118,25 +120,25 @@ switch ($mod) {
                             exit;
                         }
                         // Удаляем файлы
-                        $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID);
-                        while ($res_f = mysql_fetch_assoc($req_f)) {
+                        $req_f = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID);
+                        while ($res_f = $req_f->fetch()) {
                             unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
                         }
-                        mysql_query("DELETE FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID);
+                        DB::PDO()->exec("DELETE FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID);
                         // Удаляем посты, голосования и метки прочтений
-                        $req_t = mysql_query("SELECT `id` FROM `forum` WHERE `refid` = " . Vars::$ID . " AND `type` = 't'");
-                        while ($res_t = mysql_fetch_assoc($req_t)) {
-                            mysql_query("DELETE FROM `forum` WHERE `refid` = '" . $res_t['id'] . "'");
-                            mysql_query("DELETE FROM `cms_forum_vote` WHERE `topic` = '" . $res_t['id'] . "'");
-                            mysql_query("DELETE FROM `cms_forum_vote_users` WHERE `topic` = '" . $res_t['id'] . "'");
-                            mysql_query("DELETE FROM `cms_forum_rdm` WHERE `topic_id` = '" . $res_t['id'] . "'");
+                        $req_t = DB::PDO()->query("SELECT `id` FROM `forum` WHERE `refid` = " . Vars::$ID . " AND `type` = 't'");
+                        while ($res_t = $req_t->fetch()) {
+                            DB::PDO()->exec("DELETE FROM `forum` WHERE `refid` = '" . $res_t['id'] . "'");
+                            DB::PDO()->exec("DELETE FROM `cms_forum_vote` WHERE `topic` = '" . $res_t['id'] . "'");
+                            DB::PDO()->exec("DELETE FROM `cms_forum_vote_users` WHERE `topic` = '" . $res_t['id'] . "'");
+                            DB::PDO()->exec("DELETE FROM `cms_forum_rdm` WHERE `topic_id` = '" . $res_t['id'] . "'");
                         }
                         // Удаляем темы
-                        mysql_query("DELETE FROM `forum` WHERE `refid` = " . Vars::$ID);
+                        DB::PDO()->exec("DELETE FROM `forum` WHERE `refid` = " . Vars::$ID);
                         // Удаляем раздел
-                        mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
+                        DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                         // Оптимизируем таблицы
-                        mysql_query("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `cms_forum_vote` , `cms_forum_vote_users`");
+                        DB::PDO()->exec("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `cms_forum_vote` , `cms_forum_vote_users`");
                         echo'<div class="rmenu"><p>' . __('section_themes_deleted') . '<br />' .
                             '<a href="index.php?act=forum&amp;mod=cat&amp;id=' . $res['refid'] . '">' . __('to_category') . '</a></p></div>';
                     } else {
@@ -144,13 +146,13 @@ switch ($mod) {
                             '<p>' . __('section_move_warning') . '</p>' . '<p><h3>' . __('select_section') . '</h3>';
                         $cat = isset($_GET['cat']) ? abs(intval($_GET['cat'])) : 0;
                         $ref = $cat ? $cat : $res['refid'];
-                        $req_r = mysql_query("SELECT * FROM `forum` WHERE `refid` = '$ref' AND `id` != " . Vars::$ID . " AND `type` = 'r' ORDER BY `realid` ASC");
-                        while ($res_r = mysql_fetch_assoc($req_r)) {
+                        $req_r = DB::PDO()->query("SELECT * FROM `forum` WHERE `refid` = '$ref' AND `id` != " . Vars::$ID . " AND `type` = 'r' ORDER BY `realid` ASC");
+                        while ($res_r = $req_r->fetch()) {
                             echo '<input type="radio" name="subcat" value="' . $res_r['id'] . '" />&#160;' . $res_r['text'] . '<br />';
                         }
                         echo '</p><p><h3>' . __('another_category') . '</h3><ul>';
-                        $req_c = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$ref' ORDER BY `realid` ASC");
-                        while ($res_c = mysql_fetch_assoc($req_c)) {
+                        $req_c = DB::PDO()->query("SELECT * FROM `forum` WHERE `type` = 'f' AND `id` != '$ref' ORDER BY `realid` ASC");
+                        while ($res_c = $req_c->fetch()) {
                             echo '<li><a href="index.php?act=forum&amp;mod=del&amp;id=' . Vars::$ID . '&amp;cat=' . $res_c['id'] . '">' . $res_c['text'] . '</a></li>';
                         }
                         echo '</ul><small>' . __('section_move_description') . '</small></p>' .
@@ -168,7 +170,7 @@ switch ($mod) {
                 // Удаление пустого раздела, или категории                //
                 ////////////////////////////////////////////////////////////
                 if (isset($_POST['submit'])) {
-                    mysql_query("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                     echo '<div class="rmenu"><p>' . ($res['type'] == 'r' ? __('section_deleted') : __('category_deleted')) . '</p></div>';
                 } else {
                     echo '<div class="rmenu"><p>' . __('delete_confirmation') . '</p>' .
@@ -500,16 +502,20 @@ switch ($mod) {
             DB::PDO()->exec("DELETE FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort);
             header('Location: ' . $uri . 'htopics/');
         } else {
-            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort), 0);
-            if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=htopics&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-            $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
+            $total = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1' " . $sort)->fetch();
+            if ($total > Vars::$USER_SET['page_size']) {
+                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=htopics&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            }
+            $req = DB::PDO()->query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
             FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-            WHERE `forum`.`type` = 't' AND `forum`.`close` = '1' $sort ORDER BY `forum`.`id` DESC " . Vars::db_pagination());
-            if (mysql_num_rows($req)) {
+            WHERE `forum`.`type` = 't'
+            AND `forum`.`close` = '1' $sort
+            ORDER BY `forum`.`id` DESC " . Vars::db_pagination());
+            if ($req->rowCount()) {
                 $i = 0;
-                while ($res = mysql_fetch_assoc($req)) {
-                    $subcat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
-                    $cat = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = '" . $subcat['refid'] . "'"));
+                while ($res = $req->fetch()) {
+                    $subcat = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '" . $res['refid'] . "'")->fetch();
+                    $cat = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '" . $subcat['refid'] . "'")->fetch();
                     $ttime = '<span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
                     $text = '<a href="../forum/index.php?id=' . $res['fid'] . '"><b>' . $res['text'] . '</b></a>';
                     $text .= '<br /><small><a href="../forum/index.php?id=' . $cat['id'] . '">' . $cat['text'] . '</a> / <a href="../forum/index.php?id=' . $subcat['id'] . '">' . $subcat['text'] . '</a></small>';
@@ -567,35 +573,39 @@ switch ($mod) {
                 echo Functions::displayError(__('access_forbidden'));
                 exit;
             }
-            $req = mysql_query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort);
-            while ($res = mysql_fetch_assoc($req)) {
-                $req_f = mysql_query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "' LIMIT 1");
-                if (mysql_num_rows($req_f)) {
-                    $res_f = mysql_fetch_assoc($req_f);
+            $req = DB::PDO()->query("SELECT `id` FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort);
+            while ($res = $req->fetch()) {
+                $req_f = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "' LIMIT 1");
+                if ($req_f->rowCount()) {
+                    $res_f = $req_f->fetch();
                     // Удаляем файлы
                     unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res_f['filename']);
-                    mysql_query("DELETE FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "' LIMIT 1");
+                    DB::PDO()->exec("DELETE FROM `cms_forum_files` WHERE `post` = '" . $res['id'] . "' LIMIT 1");
                 }
             }
             // Удаляем посты
-            mysql_query("DELETE FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort);
-            header('Location: index.php?act=forum&mod=hposts');
+            DB::PDO()->exec("DELETE FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort);
+            header('Location: ' . $uri . 'hposts/');
         } else {
-            $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort), 0);
-            if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=hposts&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-            $req = mysql_query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
+            $total = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1' " . $sort)->fetchColumn();
+            if ($total > Vars::$USER_SET['page_size']) {
+                echo '<div class="topmenu">' . Functions::displayPagination('index.php?act=forum&amp;mod=hposts&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+            }
+            $req = DB::PDO()->query("SELECT `forum`.*, `forum`.`id` AS `fid`, `forum`.`user_id` AS `id`, `forum`.`from` AS `name`, `forum`.`soft` AS `browser`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`
             FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
-            WHERE `forum`.`type` = 'm' AND `forum`.`close` = '1' $sort ORDER BY `forum`.`id` DESC " . Vars::db_pagination());
-            if (mysql_num_rows($req)) {
+            WHERE `forum`.`type` = 'm'
+            AND `forum`.`close` = '1' $sort
+            ORDER BY `forum`.`id` DESC " . Vars::db_pagination());
+            if ($req->rowCount()) {
                 $i = 0;
-                while ($res = mysql_fetch_assoc($req)) {
+                while ($res = $req->fetch()) {
                     $res['ip'] = ip2long($res['ip']);
                     $posttime = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
-                    $page = ceil(mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['fid'] . "'"), 0) / Vars::$USER_SET['page_size']);
+                    $page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['fid'] . "'")->fetchColumn() / Vars::$USER_SET['page_size']);
                     $text = mb_substr($res['text'], 0, 500);
                     $text = Validate::checkout($text, 1, 0);
                     $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
-                    $theme = mysql_fetch_assoc(mysql_query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'"));
+                    $theme = DB::PDO()->query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'")->fetch();
                     $text = '<b>' . $theme['text'] . '</b> <a href="../forum/index.php?id=' . $theme['id'] . '&amp;page=' . $page . '">&gt;&gt;</a><br />' . $text;
                     $subtext = '<span class="gray">' . __('filter_to') . ':</span> ';
                     $subtext .= '<a href="index.php?act=forum&amp;mod=hposts&amp;tsort=' . $theme['id'] . '">' . __('by_theme') . '</a> | ';
