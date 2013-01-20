@@ -17,7 +17,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 
-//TODO: Переделать с $do на $mod
+//TODO: Переделать на новую систему ONLINE
 
 if (Vars::$ID) {
     /*

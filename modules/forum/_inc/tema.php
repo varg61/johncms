@@ -11,6 +11,8 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
+//TODO: Переделать на скачку темы без создания временного файла
+
 $url = Router::getUri(2);
 $delf = opendir('../files/forum/topics');
 $tm = array();
