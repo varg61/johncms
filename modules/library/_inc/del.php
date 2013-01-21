@@ -17,60 +17,38 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
         echo "";
         exit;
     }
-    $typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
-    $ms = mysql_fetch_array($typ);
+    $ms = DB::PDO()->query("select * from `lib` where `id` = " . Vars::$ID)->fetch();
     $rid = $ms['refid'];
     if (isset($_GET['yes'])) {
         switch ($ms['type']) {
-            case "komm":
-                mysql_query("delete from `lib` where `id` = " . Vars::$ID);
-                header("location: " . $url . "?act=komm&id=$rid");
-                break;
-
-            case "bk":
-                $km = mysql_query("select `id` from `lib` where `type` = 'komm' and `refid` = " . Vars::$ID);
-                while ($km1 = mysql_fetch_array($km)) {
-                    mysql_query("delete from `lib` where `id`='" . $km1['id'] . "';");
-                }
-                mysql_query("delete from `lib` where `id` = " . Vars::$ID);
+            case 'bk':
+                DB::PDO()->exec("delete from `lib` where `id` = " . Vars::$ID);
                 header("location: " . $url . "?id=$rid");
                 break;
 
-            case "cat":
-                $ct = mysql_query("select `id` from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID);
-                $ct1 = mysql_num_rows($ct);
-                if ($ct1 != 0) {
+            case 'cat':
+                if (DB::PDO()->query("select COUNT(*) from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID)->fetchColumn()) {
                     echo __('first_delete_category') . "<br/><a href='" . $url . "?id=" . Vars::$ID . "'>" . __('back') . "</a><br/>";
                     exit;
                 }
-                $st = mysql_query("select `id` from `lib` where `type` = 'bk' and `refid` = " . Vars::$ID);
-                while ($st1 = mysql_fetch_array($st)) {
-                    $km = mysql_query("select `id` from `lib` where type='komm' and refid='" . $st1['id'] . "';");
-                    while ($km1 = mysql_fetch_array($km)) {
-                        mysql_query("delete from `lib` where `id`='" . $km1['id'] . "';");
-                    }
-
-                    mysql_query("delete from `lib` where `id`='" . $st1['id'] . "';");
-                }
-                mysql_query("delete from `lib` where `id`='" . Vars::$ID . "';");
+                DB::PDO()->exec("DELETE FROM `lib` WHERE `type` = 'bk' AND `refid` = " . Vars::$ID);
+                DB::PDO()->exec("delete from `lib` where `id` = " . Vars::$ID);
                 header("location: " . $url . "?id=$rid");
                 break;
         }
     } else {
         switch ($ms['type']) {
-            case "komm":
+            case 'komm':
                 header("location: " . $url . "?act=del&id=" . Vars::$ID . "&yes");
                 break;
 
-            case "bk":
+            case 'bk':
                 echo __('delete_confirmation') . "<br/><a href='" . $url . "?act=del&amp;id=" . Vars::$ID . "&amp;yes'>" . __('delete') .
                     "</a> | <a href='" . $url . "?id=" . Vars::$ID . "'>" . __('cancel') . "</a><br/><a href='" . $url . "'>" . __('to_library') . "</a><br/>";
                 break;
 
-            case "cat":
-                $ct = mysql_query("select `id` from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID);
-                $ct1 = mysql_num_rows($ct);
-                if ($ct1 != 0) {
+            case 'cat':
+                if (DB::PDO()->query("select COUNT(*) from `lib` where `type` = 'cat' and `refid` = " . Vars::$ID)->fetchColumn()) {
                     echo __('first_delete_category') . "<br/><a href='" . $url . "?id=" . Vars::$ID . "'>" . __('back') . "</a><br/>";
                     exit;
                 }

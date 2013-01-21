@@ -10,6 +10,6 @@
     <li><a href="<?= Vars::$HOME_URL ?>download/"><i class="icn-download"></i><?= __('downloads') ?> //планируется<i class="icn-arrow"></i><span class="badge badge-right">0</span></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>library/"><i class="icn-book"></i><?= __('library') ?><i class="icn-arrow"></i><span class="badge badge-right">0</span></a></li>
     <li><h2><?= __('community') ?></h2></li>
-    <li><a href="<?= Vars::$HOME_URL ?>users/"><i class="icn-man-woman"></i><?= __('users') ?> //планируется<i class="icn-arrow"></i><span class="badge badge-right">0</span></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>users/"><i class="icn-man-woman"></i><?= __('users') ?> //планируется<i class="icn-arrow"></i><span class="badge badge-right"><?= $this->count->users ?></span></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>album/"><i class="icn-image"></i><?= __('photo_albums') ?> //планируется<i class="icn-arrow"></i><span class="badge badge-right">0</span></a></li>
 </ul>
