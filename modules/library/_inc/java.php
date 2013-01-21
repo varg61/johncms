@@ -12,12 +12,12 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
 if (Vars::$USER_ID) {
-    $req = mysql_query("select `name`, `text` from `lib` where `id` = " . Vars::$ID . " and `type` = 'bk' and `moder`='1' LIMIT 1;");
-    if (mysql_num_rows($req) == 0) {
+    $req = DB::PDO()->query("select `name`, `text` from `lib` where `id` = " . Vars::$ID . " and `type` = 'bk' and `moder`='1' LIMIT 1");
+    if (!$req->rowCount()) {
         echo '<p>ERROR</p>';
         exit;
     }
-    $res = mysql_fetch_array($req);
+    $res = $req->fetch();
     // Создаем JAR файл
     if (!file_exists(FILEPATH . 'library' . DIRECTORY_SEPARATOR . Vars::$ID . '.jar')) {
         $midlet_name = mb_substr($res['name'], 0, 10);

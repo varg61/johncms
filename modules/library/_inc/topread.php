@@ -14,16 +14,16 @@ $url = Router::getUri(2);
 
 // Рейтинг самых читаемых статей
 echo '<div class="phdr"><a href="' . $url . '"><b>' . __('library') . '</b></a> | ' . __('top_read') . '</div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1' AND `count`>'0'"), 0);
+$total = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '1' AND `count`>'0'")->fetchColumn();
 if ($total > 100) {
     $total = 100;
 }
-$req = mysql_query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC " . Vars::db_pagination());
+$req = DB::PDO()->query("select * from `lib` where `type` = 'bk' and `moder`='1' and `count`>'0' ORDER BY `count` DESC " . Vars::db_pagination());
 if ($total) {
     if ($total > Vars::$USER_SET['page_size']) {
         echo'<div class="topmenu">' . Functions::displayPagination($url . '?act=topread&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
-    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+    for ($i = 0; $res = $req->fetch(); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<b><a href="?id=' . $res['id'] . '">' . htmlspecialchars($res['name']) . '</a></b>';
         echo '<div class="sub">' . Validate::checkout($res['announce']) . '<br/>';

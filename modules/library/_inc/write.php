@@ -25,8 +25,7 @@ if (Vars::$USER_DATA['lastpost'] > (time() - $old)) {
     exit;
 }
 
-$typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
-$ms = mysql_fetch_array($typ);
+$ms = DB::PDO()->query("select * from `lib` where `id` = " . Vars::$ID)->fetch();
 if (Vars::$ID != 0 && $ms['type'] != "cat") {
     echo "";
     exit;
@@ -53,26 +52,40 @@ if ($ms['ip'] == 0) {
             } else {
                 $md = 0;
             }
-            mysql_query("INSERT INTO `lib` SET
-                `refid` = " . Vars::$ID . ",
-                `time` = " . time() . ",
-                `type` = 'bk',
-                `name` = '" . mysql_real_escape_string(mb_substr(trim($_POST['name']), 0, 100)) . "',
-                `announce` = '" . mysql_real_escape_string($anons) . "',
-                `text` = '" . mysql_real_escape_string($text) . "',
-                `avtor` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
-                `ip` = " . Vars::$IP . ",
-                `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
-                `moder` = '$md'
-            ");
-            $cid = mysql_insert_id();
+
+            $STH = $STH = DB::PDO()->prepare('
+                INSERT INTO `lib` SET
+                `refid`    = :refid,
+                `time`     = :time,
+                `type`     = "bk",
+                `name`     = :name,
+                `announce` = :announce,
+                `text`     = :text,
+                `avtor`    = :avtor,
+                `ip`       = :ip,
+                `soft`     = :soft,
+                `moder`    = :moder
+            ');
+
+            $STH->bindValue(':refid', Vars::$ID);
+            $STH->bindValue(':time', time());
+            $STH->bindValue(':name', mb_substr(trim($_POST['name']), 0, 100));
+            $STH->bindValue(':announce', $anons);
+            $STH->bindValue(':text', $text);
+            $STH->bindValue(':avtor', Vars::$USER_NICKNAME);
+            $STH->bindValue(':ip', Vars::$IP);
+            $STH->bindValue(':soft', Vars::$USER_AGENT);
+            $STH->bindValue(':moder', $md);
+            $STH->execute();
+            $cid = DB::PDO()->lastInsertId();
+            $STH = NULL;
+
             if ($md == 1) {
                 echo '<p>' . __('article_added') . '</p>';
             } else {
                 echo '<p>' . __('article_added') . '<br/>' . __('article_added_thanks') . '</p>';
             }
-            //TODO: Доработать!
-            //mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$user_id);
+            DB::PDO()->exec("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$USER_ID);
             echo '<p><a href="' . $url . '?id=' . $cid . '">' . __('to_article') . '</a></p>';
         } else {
             echo '<h3>' . __('write_article') . '</h3><form action="' . $url . '?act=write&amp;id=' . Vars::$ID . '" method="post">';

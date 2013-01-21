@@ -17,8 +17,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
         echo "";
         exit;
     }
-    $typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
-    $ms = mysql_fetch_array($typ);
+    $ms = DB::PDO()->query("select * from `lib` where `id` = " . Vars::$ID)->fetch();
     if (Vars::$ID != 0 && ($ms['type'] == "bk" || $ms['type'] == "komm")) {
         echo "";
         exit;
@@ -31,30 +30,41 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
         $text = Validate::checkout($_POST['text']);
         $user = isset($_POST['user']);
         $typs = intval($_POST['typs']);
-        mysql_query("INSERT INTO `lib` SET
-            `refid` = " . Vars::$ID . ",
-            `time` = " . time() . ",
-            `type` = 'cat',
-            `text` = '" . mysql_real_escape_string($text) . "',
-            `ip` = '$typs',
-            `soft` = '$user'
-        ");
-        $cid = mysql_insert_id();
+
+        $STH = $STH = DB::PDO()->prepare('
+            INSERT INTO `lib` SET
+            `refid` = :refid,
+            `time` = :time,
+            `type` = "cat",
+            `text` = :text,
+            `ip` = :ip,
+            `soft` = :soft
+        ');
+
+        $STH->bindValue(':refid', Vars::$ID);
+        $STH->bindValue(':time', time());
+        $STH->bindValue(':text', $text);
+        $STH->bindValue(':ip', $typs);
+        $STH->bindValue(':soft', $user);
+        $STH->execute();
+        $cid = DB::PDO()->lastInsertId();
+        $STH = NULL;
+
         echo __('category_created') . "<br/><a href='" . $url . "?id=" . $cid . "'>" . __('to_category') . "</a><br/>";
     } else {
         echo __('create_category') . '<br/>' .
-             '<form action="' . $url . '?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
-             __('title') . ':<br/>' .
-             '<input type="text" name="text"/>' .
-             '<p>' . __('category_type') . '<br/>' .
-             '<select name="typs">' .
-             '<option value="1">' . __('categories') . '</option>' .
-             '<option value="0">' . __('articles') . '</option>' .
-             '</select></p>' .
-             '<p><input type="checkbox" name="user" value="1"/>' . __('if_articles') . '</p>' .
-             '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>' .
-             '</form>' .
-             '<p><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+            '<form action="' . $url . '?act=mkcat&amp;id=' . Vars::$ID . '" method="post">' .
+            __('title') . ':<br/>' .
+            '<input type="text" name="text"/>' .
+            '<p>' . __('category_type') . '<br/>' .
+            '<select name="typs">' .
+            '<option value="1">' . __('categories') . '</option>' .
+            '<option value="0">' . __('articles') . '</option>' .
+            '</select></p>' .
+            '<p><input type="checkbox" name="user" value="1"/>' . __('if_articles') . '</p>' .
+            '<p><input type="submit" name="submit" value="' . __('save') . '"/></p>' .
+            '</form>' .
+            '<p><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
     }
 } else {
     header("location: " . $url);

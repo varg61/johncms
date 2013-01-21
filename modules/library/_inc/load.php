@@ -17,8 +17,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
         echo "";
         exit;
     }
-    $typ = mysql_query("select * from `lib` where `id` = " . Vars::$ID);
-    $ms = mysql_fetch_array($typ);
+    $ms = DB::PDO()->query("select * from `lib` where `id` = " . Vars::$ID)->fetch();
     if (Vars::$ID != 0 && $ms['type'] != "cat") {
         echo "";
         exit;
@@ -61,20 +60,34 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
                         exit;
                     }
                     $anons = !empty($_POST['anons']) ? mb_substr($_POST['anons'], 0, 100) : mb_substr($txt, 0, 100);
-                    mysql_query("insert into `lib` set
-                        `refid` = " . Vars::$ID . ",
-                        `time` = " . time() . ",
-                        `type` = 'bk',
-                        `name` = '" . mysql_real_escape_string($name) . "',
-                        `announce` = '" . mysql_real_escape_string($anons) . "',
-                        `avtor` = '" . mysql_real_escape_string(Vars::$USER_NICKNAME) . "',
-                        `text` = '" . mysql_real_escape_string($txt) . "',
-                        `ip` = '" . Vars::$IP . "',
-                        `soft` = '" . mysql_real_escape_string(Vars::$USER_AGENT) . "',
-                        `moder` = '1'
-                    ");
+
+                    $STH = $STH = DB::PDO()->prepare('
+                    INSERT INTO `lib` SET
+                        `refid` = :refid,
+                        `time` = :time,
+                        `type` = "bk",
+                        `name` = :name,
+                        `announce` = :announce,
+                        `avtor` = :avtor,
+                        `text` = :text,
+                        `ip` = :ip,
+                        `soft` = :soft,
+                        `moder` = 1
+                    ');
+
+                    $STH->bindValue(':refid', Vars::$ID);
+                    $STH->bindValue(':time', time());
+                    $STH->bindValue(':name', $name);
+                    $STH->bindValue(':announce', $anons);
+                    $STH->bindValue(':avtor', Vars::$USER_NICKNAME);
+                    $STH->bindValue(':text', $txt);
+                    $STH->bindValue(':ip', Vars::$IP);
+                    $STH->bindValue(':soft', Vars::$USER_AGENT);
+                    $STH->execute();
+                    $cid = DB::PDO()->lastInsertId();
+                    $STH = NULL;
+
                     unlink("temp/$ch");
-                    $cid = mysql_insert_id();
                     echo __('article_added') . "<br/><a href='" . $url . "?id=" . $cid . "'>" . __('to_article') . "</a><br/>";
                 } else {
                     echo __('error_uploading') . "<br/><a href='" . $url . "?act=load&amp;id=" . Vars::$ID . "'>" . __('repeat') . "</a><br/>";
@@ -83,13 +96,13 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             }
         } else {
             echo '<h3>' . __('upload_article') . '</h3>' . __('supported_encoding') . ' Win-1251, KOI8-R, UTF-8<br/><br/>' .
-                 '<form action="' . $url . '?act=load&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
-                 __('title') . ' (max. 50)<br/>' . '<input type="text" name="name"/><br/>' .
-                 __('announce') . ' (max. 100)<br/><input type="text" name="anons"/><br/>' .
-                 __('select_text_file') . ' ( .txt):<br/><input type="file" name="fail"/>' .
-                 '<p><input type="submit" name="submit" value="' . __('sent') . '"/></p>' .
-                 '</form>' .
-                 '<p><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
+                '<form action="' . $url . '?act=load&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
+                __('title') . ' (max. 50)<br/>' . '<input type="text" name="name"/><br/>' .
+                __('announce') . ' (max. 100)<br/><input type="text" name="anons"/><br/>' .
+                __('select_text_file') . ' ( .txt):<br/><input type="file" name="fail"/>' .
+                '<p><input type="submit" name="submit" value="' . __('sent') . '"/></p>' .
+                '</form>' .
+                '<p><a href ="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></p>';
         }
     }
 } else {
