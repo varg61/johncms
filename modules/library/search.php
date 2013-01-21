@@ -54,16 +54,16 @@ if ($search && !$error) {
     */
     $array = explode(' ', $search);
     $count = count($array);
-    $query = mysql_real_escape_string($search);
-    $total = mysql_result(mysql_query("
+    $query = DB::PDO()->quote($search);
+    $total = DB::PDO()->query("
         SELECT COUNT(*) FROM `lib`
         WHERE MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE)
-        AND `type` = 'bk'"), 0);
+        AND `type` = 'bk'")->fetchColumn();
     echo '<div class="phdr">' . __('search_results') . '</div>';
     if ($total > Vars::$USER_SET['page_size'])
         echo '<div class="topmenu">' . Functions::displayPagination($url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     if ($total) {
-        $req = mysql_query("
+        $req = DB::PDO()->query("
             SELECT *, MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
             FROM `lib`
             WHERE MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE)
@@ -72,7 +72,7 @@ if ($search && !$error) {
             " . Vars::db_pagination()
         );
         $i = 0;
-        while (($res = mysql_fetch_assoc($req)) !== FALSE) {
+        while ($res = $req->fetch()) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             foreach ($array as $srch) if (($pos = mb_strpos(strtolower($res['text']), strtolower(str_replace('*', '', $srch)))) !== FALSE) break;
             if (!isset($pos) || $pos < 100) $pos = 100;

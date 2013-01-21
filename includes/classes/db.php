@@ -25,14 +25,14 @@ class DB
      */
     public static function PDO()
     {
-        if (is_null(self::$instance)) {
+        if (is_null(static::$instance)) {
             require(CONFIGPATH . 'db.php');
             $db_host = isset($db_host) ? $db_host : 'localhost';
             $db_user = isset($db_user) ? $db_user : 'root';
             $db_pass = isset($db_pass) ? $db_pass : '';
             $db_name = isset($db_name) ? $db_name : 'johncms';
             try {
-                self::$instance = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_name, $db_user, $db_pass,
+                static::$instance = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_name, $db_user, $db_pass,
                     array(
                         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -44,6 +44,6 @@ class DB
             }
         }
 
-        return self::$instance;
+        return static::$instance;
     }
 }

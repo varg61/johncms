@@ -26,8 +26,8 @@ if ($error) {
 
 // Заголовки библиотеки
 if (Vars::$ID) {
-    $req = mysql_query("SELECT * FROM `lib` WHERE `id`= " . Vars::$ID);
-    $zag = mysql_fetch_array($req);
+    $req = DB::PDO()->query("SELECT * FROM `lib` WHERE `id`= " . Vars::$ID);
+    $zag = $req->fetch();
     $hdr = $zag['type'] == 'bk' ? $zag['name'] : $zag['text'];
     $hdr = htmlentities(mb_substr($hdr, 0, 30), ENT_QUOTES, 'UTF-8');
     $textl = mb_strlen($zag['text']) > 30 ? $hdr . '...' : $hdr;
@@ -59,17 +59,17 @@ if (isset($actions[Vars::$ACT])
         echo '<div class="topmenu"><a href="' . $url . '/search">' . __('search') . '</a></div>';
         if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             // Считаем число статей, ожидающих модерацию
-            $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'");
-            $res = mysql_result($req, 0);
-            if ($res > 0)
-                echo '<div class="rmenu">' . __('on_moderation') . ': <a href="' . $url . '?act=moder">' . $res . '</a></div>';
+            $moder = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `moder` = '0'")->fetchColumn();
+            if ($moder) {
+                echo '<div class="rmenu">' . __('on_moderation') . ': <a href="' . $url . '?act=moder">' . $moder . '</a></div>';
+            }
         }
         // Считаем новое в библиотеке
-        $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type`='bk' AND `moder`='1'");
-        $res = mysql_result($req, 0);
+        $new = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `time` > '" . (time() - 259200) . "' AND `type`='bk' AND `moder`='1'")->fetchColumn();
         echo '<div class="gmenu"><p>';
-        if ($res > 0)
-            echo '<a href="' . $url . '?act=new">' . __('new_articles') . '</a> (' . $res . ')<br/>';
+        if ($new) {
+            echo '<a href="' . $url . '?act=new">' . __('new_articles') . '</a> (' . $new . ')<br/>';
+        }
         echo '<a href="' . $url . '?act=topread">' . __('most_readed') . '</a></p></div>';
         Vars::$ID = 0;
         $tip = "cat";
@@ -82,20 +82,18 @@ if (isset($actions[Vars::$ACT])
 
     switch ($tip) {
         case 'cat':
-            $req = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'cat' AND `refid` = " . Vars::$ID);
-            $totalcat = mysql_result($req, 0);
-            $bkz = mysql_query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `refid` = " . Vars::$ID . " AND `moder`='1'");
-            $totalbk = mysql_result($bkz, 0);
-            if ($totalcat > 0) {
+            $totalcat = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'cat' AND `refid` = " . Vars::$ID)->fetchColumn();
+            $totalbk = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `refid` = " . Vars::$ID . " AND `moder`='1'")->fetchColumn();
+            if ($totalcat) {
                 $total = $totalcat;
-                if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination($url . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-                $req = mysql_query("SELECT `id`, `text`  FROM `lib` WHERE `type` = 'cat' AND `refid` = " . Vars::$ID . " " . Vars::db_pagination());
+                if ($total > Vars::$USER_SET['page_size']) {
+                    echo '<div class="topmenu">' . Functions::displayPagination($url . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
+                }
+                $req = DB::PDO()->query("SELECT `id`, `text`  FROM `lib` WHERE `type` = 'cat' AND `refid` = " . Vars::$ID . " " . Vars::db_pagination());
                 $i = 0;
-                while ($cat1 = mysql_fetch_array($req)) {
-                    $cat2 = mysql_query("select `id` from `lib` where type = 'cat' and refid = '" . $cat1['id'] . "'");
-                    $totalcat2 = mysql_num_rows($cat2);
-                    $bk2 = mysql_query("select `id` from `lib` where type = 'bk' and refid = '" . $cat1['id'] . "' and moder='1'");
-                    $totalbk2 = mysql_num_rows($bk2);
+                while ($cat1 = $req->fetch()) {
+                    $totalcat2 = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'cat' AND `refid` = " . $cat1['id'])->fetchColumn();
+                    $totalbk2 = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'bk' AND `refid` = '" . $cat1['id'] . "' AND `moder` = '1'")->fetchColumn();
                     if ($totalcat2 != 0) {
                         $kol = "$totalcat2 кат.";
                     } elseif ($totalbk2 != 0) {
@@ -111,12 +109,12 @@ if (isset($actions[Vars::$ACT])
             } elseif ($totalbk > 0) {
                 $total = $totalbk;
                 if ($total > Vars::$USER_SET['page_size']) echo '<div class="topmenu">' . Functions::displayPagination($url . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-                $bk = mysql_query("select * from `lib` where type = 'bk' and refid = '" . Vars::$ID . "' and moder='1' order by `time` desc " . Vars::db_pagination());
+                $bk = DB::PDO()->query("SELECT * FROM `lib` WHERE `type` = 'bk' AND `refid` = '" . Vars::$ID . "' AND `moder` = '1' ORDER BY `id` DESC " . Vars::db_pagination());
                 $i = 0;
-                while ($bk1 = mysql_fetch_array($bk)) {
+                while ($bk1 = $bk->fetch()) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b><a href="' . $url . '?id=' . $bk1['id'] . '">' . htmlentities($bk1['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
-                    echo htmlentities($bk1['announce'], ENT_QUOTES, 'UTF-8');
+                    echo Validate::checkout($bk1['announce']);
                     echo '<div class="sub"><span class="gray">' . __('added') . ':</span> ' . $bk1['avtor'] . ' (' . Functions::displayDate($bk1['time']) . ')<br />';
                     echo '<span class="gray">' . __('reads') . ':</span> ' . $bk1['count'] . '</div></div>';
                     ++$i;
@@ -135,9 +133,8 @@ if (isset($actions[Vars::$ACT])
             }
             echo '<p>';
             if ((Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) && Vars::$ID != 0) {
-                $ct = mysql_query("select `id` from `lib` where type='cat' and refid='" . Vars::$ID . "'");
-                $ct1 = mysql_num_rows($ct);
-                if ($ct1 == 0) {
+                $ct1 = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'cat' AND `refid` = " . Vars::$ID)->fetchColumn();
+                if (!$ct1) {
                     echo '<a href="' . $url . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete_category') . '</a><br/>';
                 }
                 echo '<a href="' . $url . '?act=edit&amp;id=' . Vars::$ID . '">' . __('edit_category') . '</a><br/>';
@@ -154,20 +151,16 @@ if (isset($actions[Vars::$ACT])
                 }
             }
             if (Vars::$ID) {
-                $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . Vars::$ID . "'");
-                $dnam1 = mysql_fetch_array($dnam);
-                $dnam2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnam1['refid'] . "'");
-                $dnam3 = mysql_fetch_array($dnam2);
-                $catname = "$dnam3[text]";
-                $dirid = "$dnam1[id]";
+                $dnam1 = DB::PDO()->query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . Vars::$ID . "'")->fetch();
+                $dnam3 = DB::PDO()->query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnam1['refid'] . "'")->fetch();
+                $catname = $dnam3['text'];
+                $dirid = $dnam1['id'];
 
                 $nadir = $dnam1['refid'];
                 while ($nadir != "0") {
                     echo '&#187;<a href="' . $url . '?id=' . $nadir . '">' . $catname . '</a><br/>';
-                    $dnamm = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "'");
-                    $dnamm1 = mysql_fetch_array($dnamm);
-                    $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "'");
-                    $dnamm3 = mysql_fetch_array($dnamm2);
+                    $dnamm1 = DB::PDO()->query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "'")->fetch();
+                    $dnamm3 = DB::PDO()->query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "'")->fetch();
                     $nadir = $dnamm1['refid'];
                     $catname = $dnamm3['text'];
                 }
@@ -195,10 +188,10 @@ if (isset($actions[Vars::$ACT])
             }
             // Запрашиваем выбранную статью из базы
             $symbols = Vars::$IS_MOBILE ? 3000 : 7000;
-            $req = mysql_fetch_assoc(mysql_query("SELECT CHAR_LENGTH(`text`) / $symbols AS `count_pages` FROM `lib` WHERE `id`= " . Vars::$ID));
+            $req = DB::PDO()->query("SELECT CHAR_LENGTH(`text`) / $symbols AS `count_pages` FROM `lib` WHERE `id`= " . Vars::$ID)->fetch();
             $count_pages = ceil($req['count_pages']);
             $start_pos = Vars::$PAGE == 1 ? 1 : Vars::$PAGE * $symbols - $symbols;
-            $req = mysql_fetch_assoc(mysql_query("SELECT SUBSTRING(`text`, $start_pos, " . ($symbols + 100) . ") AS `text` FROM `lib` WHERE `id` = " . Vars::$ID));
+            $req = DB::PDO()->query("SELECT SUBSTRING(`text`, $start_pos, " . ($symbols + 100) . ") AS `text` FROM `lib` WHERE `id` = " . Vars::$ID)->fetch();
             if (Vars::$PAGE == 1) {
                 $int_start = 0;
             } else {
@@ -229,8 +222,7 @@ if (isset($actions[Vars::$ACT])
 
             // Ссылка на комментарии
             if (Vars::$SYSTEM_SET['mod_lib_comm'] || Vars::$USER_RIGHTS >= 7) {
-                $km = mysql_query("select `id` from `lib` where type = 'komm' and refid = " . Vars::$ID);
-                $km1 = mysql_num_rows($km);
+                $km1 = DB::PDO()->query("SELECT COUNT(*) FROM `lib` WHERE `type` = 'komm' AND `refid` = " . Vars::$ID)->fetchColumn();
                 $comm_link = '<a href="' . $url . '?act=komm&amp;id=' . Vars::$ID . '">' . __('comments') . '</a> (' . $km1 . ')';
             } else {
                 $comm_link = '&#160;';
@@ -250,17 +242,14 @@ if (isset($actions[Vars::$ACT])
                 echo '<a href="' . $url . '?act=del&amp;id=' . Vars::$ID . '">' . __('delete') . '</a></p>';
             }
             echo '<a href="' . $url . '?act=java&amp;id=' . Vars::$ID . '">' . __('download_java') . '</a><br /><br />';
-            $dnam = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $zag['refid'] . "'");
-            $dnam1 = mysql_fetch_array($dnam);
-            $catname = "$dnam1[text]";
-            $dirid = "$dnam1[id]";
+            $dnam1 = DB::PDO()->query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $zag['refid'] . "'")->fetch();
+            $catname = $dnam1['text'];
+            $dirid = $dnam1['id'];
             $nadir = $zag['refid'];
             while ($nadir != "0") {
                 echo '&#187;<a href="' . $url . '?id=' . $nadir . '">' . $catname . '</a><br/>';
-                $dnamm = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "'");
-                $dnamm1 = mysql_fetch_array($dnamm);
-                $dnamm2 = mysql_query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "'");
-                $dnamm3 = mysql_fetch_array($dnamm2);
+                $dnamm1 = DB::PDO()->query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $nadir . "'")->fetch();
+                $dnamm3 = DB::PDO()->query("select `id`, `refid`, `text` from `lib` where type = 'cat' and id = '" . $dnamm1['refid'] . "'")->fetch();
                 $nadir = $dnamm1['refid'];
                 $catname = $dnamm3['text'];
             }
