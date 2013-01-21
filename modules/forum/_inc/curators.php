@@ -35,7 +35,7 @@ if (Vars::$USER_RIGHTS >= 7) {
     if ($total > 0) {
         echo '<form action="' . $url . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post">';
         $i = 0;
-        while ($res = mysql_fetch_array($req)) {
+        while ($res = $req->fetch()) {
             $checked = array_key_exists($res['user_id'], $users) ? TRUE : FALSE;
             if ($checked) $curators[$res['user_id']] = $res['from'];
             echo ($i++ % 2 ? '<div class="list2">' : '<div class="list1">') .

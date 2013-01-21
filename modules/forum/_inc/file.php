@@ -23,8 +23,7 @@ if (Vars::$ID) {
     if ($req->rowCount()) {
         $res = $req->fetch();
         if (file_exists(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res['filename'])) {
-            $dlcount = $res['dlcount'] + 1;
-            mysql_query("UPDATE `cms_forum_files` SET  `dlcount` = '$dlcount' WHERE `id` = " . Vars::$ID);
+            DB::PDO()->exec("UPDATE `cms_forum_files` SET  `dlcount` = '" . ++$res['dlcount'] . "' WHERE `id` = " . Vars::$ID);
             header('location: ' . Vars::$HOME_URL . 'files/forum/' . $res['filename']);
         } else {
             $error = true;

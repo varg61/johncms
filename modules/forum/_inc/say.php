@@ -242,9 +242,9 @@ switch ($type['type']) {
                 exit;
             }
             // Проверяем, не повторяется ли сообщение?
-            $req = mysql_query("SELECT * FROM `forum` WHERE `user_id` = " . Vars::$USER_ID . " AND `type` = 'm' ORDER BY `time` DESC LIMIT 1");
-            if (mysql_num_rows($req) > 0) {
-                $res = mysql_fetch_array($req);
+            $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `user_id` = " . Vars::$USER_ID . " AND `type` = 'm' ORDER BY `time` DESC LIMIT 1");
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 if ($msg == $res['text']) {
                     echo Functions::displayError(__('error_message_exists'), '<a href="' . $url . '?id=' . $th . '&amp;start=' . Vars::$START . '">' . __('back') . '</a>');
                     exit;
