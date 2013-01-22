@@ -20,10 +20,12 @@ if (!Vars::$USER_ID) {
 //Заголовок
 $tpl->title = __('mail') . ' | ' . __('archive');
 //Считаем количество контактов в архиве
-$total = mysql_result(mysql_query("SELECT COUNT(*)
+$total = DB::PDO()->query("SELECT COUNT(*)
 FROM `cms_mail_contacts`
-WHERE `user_id`='" . Vars::$USER_ID .
-    "' AND `delete`='0' AND `banned`='0' AND `archive`='1'"), 0);
+WHERE `user_id`='" . Vars::$USER_ID . "'
+AND `delete`='0'
+AND `banned`='0'
+AND `archive`='1'")->fetchColumn();
 
 $tpl->total = $total;
 
@@ -39,11 +41,11 @@ if ($total) {
             if (!empty($id)) {
                 $mass = array();
                 $mass_contact = array();
-                $query = mysql_query("SELECT *
+                $query = DB::PDO()->query("SELECT *
 					FROM `cms_mail_contacts` 
 					WHERE `user_id`='" . Vars::$USER_ID . "' 
 					AND `contact_id` IN (" . $id . ")");
-                while ($rows = mysql_fetch_assoc($query)) {
+                while ($rows = $query->fetch()) {
                     $mass[] = $rows['id'];
                     $mass_contact[] = $rows['contact_id'];
                 }
@@ -51,35 +53,35 @@ if ($total) {
                     $exp = implode(',', $mass);
                     $sms = implode(',', $mass_contact);
                     $out = array();
-                    $query1 = mysql_query("SELECT *
+                    $query1 = DB::PDO()->query("SELECT *
 						FROM `cms_mail_messages` 
 						WHERE `user_id`='" . Vars::$USER_ID . "'
 						AND `contact_id` IN (" . $sms . ")");
-                    while ($rows1 = mysql_fetch_assoc($query1)) {
+                    while ($rows1 = $query1->fetch()) {
                         $out[] = $rows1['id'];
                     }
                     $out_str = implode(',', $out);
                     if (!empty($out_str)) {
-                        mysql_query("UPDATE `cms_mail_messages`
+                        DB::PDO()->exec("UPDATE `cms_mail_messages`
 							 SET `delete_out`='" . Vars::$USER_ID . "' 
 							 WHERE `id` IN (" . $out_str . ")");
                     }
                     $in = array();
-                    $query2 = mysql_query("SELECT *
+                    $query2 = DB::PDO()->query("SELECT *
 						FROM `cms_mail_messages` 
 						WHERE `contact_id`='" . Vars::$USER_ID . "' 
 						AND `user_id` IN (" . $sms . ")");
-                    while ($rows2 = mysql_fetch_assoc($query2)) {
+                    while ($rows2 = $query2->fetch()) {
                         $in[] = $rows2['id'];
                     }
                     $in_str = implode(',', $in);
                     if (!empty($in_str)) {
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 							`delete_in`='" . Vars::$USER_ID . "' 
 							WHERE `id` IN (" . $in_str . ")");
                     }
                 }
-                mysql_query("UPDATE `cms_mail_contacts` SET
+                DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 					`delete`='1'
 					WHERE `user_id`='" . Vars::$USER_ID . "' 
 					AND `contact_id` IN (" . $id . ")");
@@ -90,7 +92,7 @@ if ($total) {
     }
 
     //Формируем список контактов
-    $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`
+    $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`
 	FROM `cms_mail_contacts`
 	LEFT JOIN `users`
 	ON `cms_mail_contacts`.`contact_id`=`users`.`id`
@@ -100,14 +102,14 @@ if ($total) {
 	AND `cms_mail_contacts`.`archive`='1'
 	ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination());
     $i = 0;
-    while ($row = mysql_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
         $array[] = array(
             'id'        => $row['id'],
             'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') . '.png',
                 '', 'style="margin: 0 0 -3px 0;"'),
             'list'      => (($i % 2) ? 'list1' : 'list2'),
             'nickname'  => $row['nickname'],
-            'count'     => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ") OR (`contact_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ")) AND `delete_in`!=" . Vars::$USER_ID . " AND `delete_out`!=" . Vars::$USER_ID . ""), 0),
+            'count'     => DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ") OR (`contact_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ")) AND `delete_in`!=" . Vars::$USER_ID . " AND `delete_out`!=" . Vars::$USER_ID . "")->fetchColumn(),
             'count_new' => countNew($row['id']),
             'url'       => (Vars::$HOME_URL . 'mail/?act=messages&amp;id=' . $row['id']),
             'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :

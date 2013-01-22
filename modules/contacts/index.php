@@ -29,7 +29,7 @@ function countNew($id = null)
 {
     if ($id == null)
         return FALSE;
-    $new = mysql_result(mysql_query("SELECT COUNT(*)
+    $new = DB::PDO()->query("SELECT COUNT(*)
 		FROM `cms_mail_messages` 
 		LEFT JOIN `cms_mail_contacts` 
 		ON `cms_mail_messages`.`user_id`=`cms_mail_contacts`.`contact_id` 
@@ -40,7 +40,7 @@ function countNew($id = null)
 		AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "' 
 		AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "'
 		AND `cms_mail_messages`.`delete`!='" . Vars::$USER_ID . "' 
-		AND `cms_mail_contacts`.`banned`!='1'"), 0);
+		AND `cms_mail_contacts`.`banned`!='1'")->fetchColumn();
     if ($new)
         return '+' . $new;
     else
@@ -72,13 +72,15 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
                 $id = array_map('intval', $_POST['delch']);
                 $id = implode(',', $id);
                 if (!empty($id)) {
-                    mysql_query("UPDATE `cms_mail_messages` SET
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_in`='" . Vars::$USER_ID . "'
 					WHERE `user_id` IN (" . $id . ") AND `contact_id`='" . Vars::$USER_ID . "'");
-                    mysql_query("UPDATE `cms_mail_messages` SET
+
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_out`='" . Vars::$USER_ID . "'
 					WHERE `contact_id` IN (" . $id . ") AND `user_id`='" . Vars::$USER_ID . "'");
-                    mysql_query("UPDATE `cms_mail_contacts` SET
+
+                    DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 					`delete`='1', 
 					`archive`='0'
 					WHERE `user_id`='" . Vars::$USER_ID . "' 
@@ -96,7 +98,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
                 $id = array_map('intval', $_POST['delch']);
                 $id = implode(',', $id);
                 if (!empty($id)) {
-                    mysql_query("UPDATE `cms_mail_contacts`
+                    DB::PDO()->exec("UPDATE `cms_mail_contacts`
 					SET	`archive`='1' 
 					WHERE `user_id`='" . Vars::$USER_ID . "' 
 					AND `contact_id` IN (" . $id . ") AND `archive`='0'");
@@ -106,7 +108,7 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
             exit;
         }
         //Формируем список контактов
-        $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`
+        $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`
 		FROM `cms_mail_contacts`
 		LEFT JOIN `users`
 		ON `cms_mail_contacts`.`contact_id`=`users`.`id`
@@ -116,14 +118,14 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
 		AND `cms_mail_contacts`.`archive`='0'
 		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination());
         $i = 0;
-        while ($row = mysql_fetch_assoc($query)) {
+        while ($row = $query->fetch()) {
             $array[] = array(
                 'id'        => $row['id'],
                 'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') . '.png',
                     '', 'style="margin: 0 0 -3px 0;"'),
                 'list'      => (($i % 2) ? 'list1' : 'list2'),
                 'nickname'  => $row['nickname'],
-                'count'     => mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ") OR (`contact_id`=" . Vars::$USER_ID . " AND `user_id`=" . $row['id'] . ")) AND `delete_in`!=" . Vars::$USER_ID . " AND `delete_out`!=" . Vars::$USER_ID . ""), 0),
+                'count'     => DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE ((`user_id`=" . Vars::$USER_ID . " AND `contact_id`=" . $row['id'] . ") OR (`contact_id`=" . Vars::$USER_ID . " AND `user_id`=" . $row['id'] . ")) AND `delete_in`!=" . Vars::$USER_ID . " AND `delete_out`!=" . Vars::$USER_ID . "")->fetchColumn(),
                 'count_new' => countNew($row['id']),
                 'url'       => (Vars::$HOME_URL . 'mail/?act=messages&amp;id=' . $row['id']),
                 'online'    => (time() > $row['last_visit'] + 300 ? '<span class="red"> [Off]</span>' :
@@ -138,16 +140,16 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
     $tpl->token = mt_rand(100, 10000);
     $_SESSION['token_status'] = $tpl->token;
 
-    $tpl->archive = mysql_result(mysql_query("SELECT COUNT(*)
+    $tpl->archive = DB::PDO()->query("SELECT COUNT(*)
 	FROM `cms_mail_contacts`
 	WHERE `user_id`='" . Vars::$USER_ID .
-        "' AND `delete`='0' AND `banned`='0' AND `archive`='1'"), 0); //Счетчик архива
+        "' AND `delete`='0' AND `banned`='0' AND `archive`='1'")->fetchColumn(); //Счетчик архива
 
-    $tpl->banned = mysql_result(mysql_query("SELECT COUNT(*)
+    $tpl->banned = DB::PDO()->query("SELECT COUNT(*)
 	FROM `cms_mail_contacts` 
 	WHERE `banned`='1' 
 	AND `user_id`='" . Vars::$USER_ID . "' 
-	AND `cms_mail_contacts`.`delete`='0'"), 0); //Счетчик заблокированных
+	AND `cms_mail_contacts`.`delete`='0'")->fetchColumn(); //Счетчик заблокированных
     //Подключаем шаблон модуля archive.php
     $tpl->contents = $tpl->includeTpl('index');
 }

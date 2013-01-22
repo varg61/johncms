@@ -21,17 +21,17 @@ if (!Vars::$USER_ID) {
 $backLink = Router::getUri(2);
 
 if (Vars::$ID) {
-    $q = mysql_query("SELECT * FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
-    if (mysql_num_rows($q)) {
+    $q = DB::PDO()->query("SELECT * FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
+    if ($q->rowCount()) {
         switch (Vars::$MOD) {
             //Добаляем или удаляем пользователя в контакт
             case 'contact':
                 if (Functions::checkIgnor(Vars::$ID)) {
                     $tpl->contents = Functions::displayError(__('ignor_no_select'), '<a href="' . $backLink . '">' . __('contacts') . '</a>');
                 } else {
-                    $cont = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID .
+                    $cont = DB::PDO()->query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID .
                         "' AND `contact_id`='" . Vars::$ID . "' LIMIT 1");
-                    $result = mysql_fetch_assoc($cont);
+                    $result = $cont->fetch();
                     if ($result && $result['delete'] == 0) {
                         if (isset($_POST['submit']) && isset($_POST['token']) && isset($_SESSION['token_status']) &&
                             $_POST['token'] == $_SESSION['token_status']
@@ -40,11 +40,11 @@ if (Vars::$ID) {
                             if (!empty($id)) {
                                 $mass = array();
                                 $mass_contact = array();
-                                $query = mysql_query("SELECT *
+                                $query = DB::PDO()->query("SELECT *
 								FROM `cms_mail_contacts` 
 								WHERE `user_id`='" . Vars::$USER_ID . "' 
 								AND `contact_id` IN (" . $id . ")");
-                                while ($rows = mysql_fetch_assoc($query)) {
+                                while ($rows = $query->fetch()) {
                                     $mass[] = $rows['id'];
                                     $mass_contact[] = $rows['contact_id'];
                                 }
@@ -52,35 +52,35 @@ if (Vars::$ID) {
                                     $exp = implode(',', $mass);
                                     $sms = implode(',', $mass_contact);
                                     $out = array();
-                                    $query1 = mysql_query("SELECT *
+                                    $query1 = DB::PDO()->query("SELECT *
 									FROM `cms_mail_messages` 
 									WHERE `user_id`='" . Vars::$USER_ID . "'
 									AND `contact_id` IN (" . $sms . ")");
-                                    while ($rows1 = mysql_fetch_assoc($query1)) {
+                                    while ($rows1 = $query1->fetch()) {
                                         $out[] = $rows1['id'];
                                     }
                                     $out_str = implode(',', $out);
                                     if (!empty($out_str)) {
-                                        mysql_query("UPDATE `cms_mail_messages`
+                                        DB::PDO()->exec("UPDATE `cms_mail_messages`
 										 SET `delete_out`='" . Vars::$USER_ID . "' 
 										 WHERE `id` IN (" . $out_str . ")");
                                     }
                                     $in = array();
-                                    $query2 = mysql_query("SELECT *
+                                    $query2 = DB::PDO()->query("SELECT *
 									FROM `cms_mail_messages` 
 									WHERE `contact_id`='" . Vars::$USER_ID . "' 
 									AND `user_id` IN (" . $sms . ")");
-                                    while ($rows2 = mysql_fetch_assoc($query2)) {
+                                    while ($rows2 = $query2->fetch()) {
                                         $in[] = $rows2['id'];
                                     }
                                     $in_str = implode(',', $in);
                                     if (!empty($in_str)) {
-                                        mysql_query("UPDATE `cms_mail_messages` SET
+                                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 										`delete_in`='" . Vars::$USER_ID . "' 
 										WHERE `id` IN (" . $in_str . ")");
                                     }
                                 }
-                                mysql_query("UPDATE `cms_mail_contacts` SET
+                                DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 								`delete`='1'
 								WHERE `user_id`='" . Vars::$USER_ID . "' 
 								AND `contact_id` IN (" . $id . ")");
@@ -102,7 +102,6 @@ if (Vars::$ID) {
                         $tpl->phdr = __('delete_contact');
 
                     } else {
-
                         if (isset($_POST['submit']) && isset($_POST['token']) && isset($_SESSION['token_status']) &&
                             $_POST['token'] == $_SESSION['token_status']
                         ) {
@@ -111,56 +110,56 @@ if (Vars::$ID) {
                                 if (!empty($id)) {
                                     $mass = array();
                                     $mass_contact = array();
-                                    $query = mysql_query("SELECT *
+                                    $query = DB::PDO()->query("SELECT *
 									FROM `cms_mail_contacts` 
 									WHERE `user_id`='" . Vars::$USER_ID . "' 
 									AND `contact_id` IN (" . $id . ")");
-                                    while ($rows = mysql_fetch_assoc($query)) {
+                                    while ($rows = $query->fetch()) {
                                         $mass[] = $rows['id'];
                                         $mass_contact[] = $rows['contact_id'];
                                     }
                                     if (!empty($mass)) {
                                         $sms = implode(',', $mass_contact);
                                         $out = array();
-                                        $query1 = mysql_query("SELECT *
+                                        $query1 = DB::PDO()->query("SELECT *
 										FROM `cms_mail_messages` 
 										WHERE `user_id`='" . Vars::$USER_ID . "' 
 										AND `contact_id` IN (" . $sms . ") 
 										AND `delete_out`='" . Vars::$USER_ID . "' 
 										AND `delete`!='" . Vars::$USER_ID . "'");
-                                        while ($rows1 = mysql_fetch_assoc($query1)) {
+                                        while ($rows1 = $query1->fetch()) {
                                             $out[] = $rows1['id'];
                                         }
                                         $out_str = implode(',', $out);
                                         if (!empty($out_str)) {
-                                            mysql_query("UPDATE `cms_mail_messages` SET
+                                            DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 											`delete_out`='0'
 											WHERE `id` IN (" . $out_str . ")");
                                         }
                                         $in = array();
-                                        $query2 = mysql_query("SELECT *
+                                        $query2 = DB::PDO()->query("SELECT *
 										FROM `cms_mail_messages` 
 										WHERE `contact_id`='" . Vars::$USER_ID . "' 
 										AND `user_id` IN (" . $sms . ") 
 										AND `delete_in`='" . Vars::$USER_ID . "' 
 										AND `delete`!='" . Vars::$USER_ID . "'");
-                                        while ($rows2 = mysql_fetch_assoc($query2)) {
+                                        while ($rows2 = $query2->fetch()) {
                                             $in[] = $rows2['id'];
                                         }
                                         $in_str = implode(',', $in);
                                         if (!empty($in_str)) {
-                                            mysql_query("UPDATE `cms_mail_messages` SET
+                                            DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 											`delete_in`='0' 
 											WHERE `id` IN (" . $in_str . ")");
                                         }
-                                        mysql_query("UPDATE `cms_mail_contacts` SET
+                                        DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 										`delete`='0'
 										WHERE `user_id`='" . Vars::$USER_ID . "' 
 										AND `contact_id` IN (" . $id . ")");
                                     }
                                 }
                             } else {
-                                mysql_query("INSERT INTO `cms_mail_contacts` SET
+                                DB::PDO()->exec("INSERT INTO `cms_mail_contacts` SET
 								`user_id`='" . Vars::$USER_ID . "',
 								`contact_id`='" . Vars::$ID . "',
 								`time`='" . time() . "'");
@@ -184,16 +183,17 @@ if (Vars::$ID) {
                     $tpl->contents = $tpl->includeTpl('select');
                 }
                 break;
+
             //Добавляем или удаляем пользователя из контактов
             case 'banned':
-                $ban = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID .
+                $ban = DB::PDO()->query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID .
                     "' AND `contact_id`='" . Vars::$ID . "' LIMIT 1");
-                $result = mysql_fetch_assoc($ban);
+                $result = $ban->fetch();
                 if ($result && $result['banned'] == 1) {
                     if (isset($_POST['submit']) && isset($_POST['token']) && isset($_SESSION['token_status']) &&
                         $_POST['token'] == $_SESSION['token_status']
                     ) {
-                        mysql_query("UPDATE `cms_mail_contacts` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 						`banned`='0' 
 						WHERE `user_id`='" . Vars::$USER_ID . "' 
 						AND `contact_id`=" . Vars::$ID);
@@ -212,7 +212,7 @@ if (Vars::$ID) {
                     $_SESSION['token_status'] = $tpl->token;
                     $tpl->contents = $tpl->includeTpl('select');
                 } else {
-                    $user = mysql_fetch_assoc($q);
+                    $user = $q->fetch();
                     //Администрацию нельзя добавлять в игнор
                     if ($user['rights']) {
                         $tpl->contents = Functions::displayError(__('admin_user'), '<a href="' . $backLink . '">' . __('mail') . '</a>');
@@ -221,12 +221,12 @@ if (Vars::$ID) {
                             $_POST['token'] == $_SESSION['token_status']
                         ) {
                             if ($result) {
-                                mysql_query("UPDATE `cms_mail_contacts` SET
+                                DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 								`banned`='1' 
 								WHERE `user_id`='" . Vars::$USER_ID . "' 
 								AND `contact_id`=" . Vars::$ID);
                             } else {
-                                mysql_query("INSERT INTO `cms_mail_contacts` SET
+                                DB::PDO()->exec("INSERT INTO `cms_mail_contacts` SET
 								`user_id`='" . Vars::$USER_ID . "',
 								`contact_id`='" . Vars::$ID . "',
 								`time`='" . time() . "',

@@ -26,18 +26,20 @@ if ($search && Validate::nickname($search, 1) === TRUE) {
     $search_db = strtr($search, array('_' => '\\_', '%' => '\\%'));
     $tpl->search = Validate::checkout($search);
     $search_db = '%' . $search_db . '%';
+    $search_db = DB::PDO()->quote($search_db);
+
     //Считаем количество найденных контактов
-    $total = mysql_result(mysql_query("SELECT COUNT(*)
+    $total = DB::PDO()->query("SELECT COUNT(*)
 	FROM `cms_mail_contacts`
 	LEFT JOIN `users` 
 	ON `cms_mail_contacts`.`contact_id`=`users`.`id`
 	WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
 	AND `cms_mail_contacts`.`delete`='0'
 	AND `users`.`nickname`
-	LIKE '" . $search_db . "'"), 0);
+	LIKE '" . $search_db . "'")->fetchColumn();
     if ($total) {
         //Формируем список контактов
-        $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`,
+        $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`,
 		`cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`user_id`, COUNT(*) as `count`
 		FROM `cms_mail_contacts`
 		LEFT JOIN `cms_mail_messages`
@@ -63,7 +65,7 @@ if ($search && Validate::nickname($search, 1) === TRUE) {
         $array = array();
         $i = 1;
 
-        while ($row = mysql_fetch_assoc($query)) {
+        while ($row = $query->fetch()) {
             $array[] = array(
                 'id'        => $row['id'],
                 'icon'      => '',
