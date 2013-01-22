@@ -15,9 +15,9 @@ $url = Router::getUri(2);
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     if (!Vars::$ID) $load_cat = $files_path;
     else {
-        $req_down = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
-        $res_down = mysql_fetch_assoc($req_down);
-        if (mysql_num_rows($req_down) == 0 || !is_dir($res_down['dir'])) {
+        $req_down = DB::PDO()->query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
+        $res_down = $req_down->fetch();
+        if (!$req_down->rowCount() || !is_dir($res_down['dir'])) {
             echo Functions::displayError(__('not_found_dir'), '<a href="' . $url . '">' . __('download_title') . '</a>');
             exit;
         }
@@ -54,17 +54,26 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $dir = mkdir($load_cat, 0777);
         if ($dir == TRUE) {
             chmod($load_cat, 0777);
-            mysql_query("INSERT INTO `cms_download_category` SET
-                `refid` = '" . Vars::$ID . "',
-                `dir` = '" . mysql_real_escape_string($load_cat) . "',
-                `sort` = '" . time() . "',
-                `name` = '" . mysql_real_escape_string($name) . "',
-                `desc` = '" . mysql_real_escape_string($desc) . "',
-                `field` = '$user_down',
-                `text` = '" . mysql_real_escape_string($format) . "',
-                `rus_name` = '" . mysql_real_escape_string($rus_name) . "'
-            ") or die(mysql_error());
-            $cat_id = mysql_insert_id();
+
+            $STH = DB::PDO()->prepare('
+                INSERT INTO `cms_download_category`
+                (refid, dir, sort, name, desc, field, text, rus_name)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ');
+
+            $STH->execute(array(
+                Vars::$ID,
+                $load_cat,
+                time(),
+                $name,
+                $desc,
+                $user_down,
+                $format,
+                $rus_name
+            ));
+            $cat_id = DB::PDO()->lastInsertId();
+            $STH = NULL;
+
             echo '<div class="phdr"><b>' . __('add_cat_title') . '</b></div>' .
                 '<div class="list1">' . __('add_cat_ok') . '</div>' .
                 '<div class="list2"><a href="' . $url . '?id=' . $cat_id . '">' . __('continue') . '</a></div>';

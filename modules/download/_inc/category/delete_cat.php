@@ -19,16 +19,16 @@ $url = Router::getUri(2);
 -----------------------------------------------------------------
 */
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
-    $req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . VARS::$ID . "' LIMIT 1");
-    $del_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_category` WHERE `refid` = '" . VARS::$ID . "'"), 0);
-    if (!mysql_num_rows($req) || $del_cat) {
+    $del_cat = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_category` WHERE `refid` = " . VARS::$ID)->fetchColumn();
+    $req = DB::PDO()->query("SELECT * FROM `cms_download_category` WHERE `id` = " . VARS::$ID);
+    if (!$req->rowCount() || $del_cat) {
         echo Functions::displayError(($del_cat ? __('sub_catalogs') : __('not_found_dir')), '<a href="' . $url . '">' . __('download_title') . '</a>');
         exit;
     }
-	$res = mysql_fetch_assoc($req);
+	$res = $req->fetch();
     if (isset($_GET['yes'])) {
-        $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `refid` = '" . VARS::$ID . "'");
-        while ($res_down = mysql_fetch_assoc($req_down)) {
+        $req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `refid` = " . VARS::$ID);
+        while ($res_down = $req_down->fetch()) {
             if (is_dir($screens_path . '/' . $res_down['id'])) {
                 $dir_clean = opendir($screens_path . '/' . $res_down['id']);
                 while ($file = readdir($dir_clean)) {
@@ -40,18 +40,21 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 rmdir($screens_path . '/' . $res_down['id']);
             }
             @unlink(ROOTPATH . 'files/download/java_icons/' . $res_down['id'] . '.png');
-            $req_file_more = mysql_query("SELECT * FROM `cms_download_more` WHERE `refid` = '" . $res_down['id'] . "'");
-            while ($res_file_more = mysql_fetch_assoc($req_file_more)) {
+            $req_file_more = DB::PDO()->query("SELECT * FROM `cms_download_more` WHERE `refid` = " . $res_down['id']);
+            while ($res_file_more = $req_file_more->fetch()) {
                 @unlink($res_down['dir'] . '/' . $res_file_more['name']);
                 @unlink(ROOTPATH . 'files/download/java_icons/' . $res_file_more['id'] . '.png');
             }
             @unlink($res_down['dir'] . '/' . $res_down['name']);
-            mysql_query("DELETE FROM `cms_download_more` WHERE `refid`='" . $res_down['id'] . "'");
-            mysql_query("DELETE FROM `cms_download_comments` WHERE `sub_id`='" . $res_down['id'] . "'");
-            mysql_query("DELETE FROM `cms_download_bookmark` WHERE `file_id`='" . $res_down['id'] . "'");
+            DB::PDO()->exec("DELETE FROM `cms_download_more` WHERE `refid` = " . $res_down['id']);
+            DB::PDO()->exec("DELETE FROM `cms_download_comments` WHERE `sub_id` = " . $res_down['id']);
+            DB::PDO()->exec("DELETE FROM `cms_download_bookmark` WHERE `file_id` = " . $res_down['id']);
         }
-        mysql_query("DELETE FROM `cms_download_files` WHERE `refid` = '" . VARS::$ID . "'");
-        mysql_query("DELETE FROM `cms_download_category` WHERE `id` = '" . VARS::$ID . "'");
+        DB::PDO()->exec("DELETE FROM `cms_download_files` WHERE `refid` = " . VARS::$ID);
+        DB::PDO()->exec("DELETE FROM `cms_download_category` WHERE `id` = " . VARS::$ID);
+
+        DB::PDO()->exec("OPTIMIZE TABLE `cms_download_bookmark`, `cms_download_files`, `cms_download_comments`, `cms_download_more`, `cms_download_category`");
+
         rmdir($res['dir']);
         header('location: ' . $url . '?id=' . $res['refid']);
 	} else {
