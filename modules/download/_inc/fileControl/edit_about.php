@@ -17,15 +17,27 @@ $url = Router::getUri(2);
 Редактирование описания файла
 -----------------------------------------------------------------
 */
-$req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
-$res_down = mysql_fetch_assoc($req_down);
-if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
+$req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
+$res_down = $req_down->fetch();
+if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name']) || (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
     echo Functions::displayError('<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
 if (isset($_POST['submit'])) {
-    $text = isset($_POST['opis']) ? mysql_real_escape_string(trim($_POST['opis'])) : '';
-    mysql_query("UPDATE `cms_download_files` SET `about` = '$text' WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
+    $text = isset($_POST['opis']) ? trim($_POST['opis']) : '';
+
+    $STH = DB::PDO()->prepare('
+        UPDATE `cms_download_files` SET
+        `about`    = ?
+        WHERE `id` = ?
+    ');
+
+    $STH->execute(array(
+        $text,
+        Vars::$ID
+    ));
+    $STH = NULL;
+
     header('Location: ' . $url . '?act=view&id=' . Vars::$ID);
 } else {
     echo '<div class="phdr"><b>' . __('dir_desc') . ':</b> ' . Validate::checkout($res_down['rus_name']) . '</div>' .

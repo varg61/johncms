@@ -17,18 +17,30 @@ $url = Router::getUri(2);
 Редактирование файла
 -----------------------------------------------------------------
 */
-$req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
-$res_down = mysql_fetch_assoc($req_down);
-if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
+$req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
+$res_down = $req_down->fetch();
+if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name']) || (Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
     echo Functions::displayError('<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
 if (isset($_POST['submit'])) {
     $name = isset($_POST['text']) ? trim($_POST['text']) : NULL;
-    $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::checkout(mb_substr($_POST['name_link'], 0, 200))) : NULL;
+    $name_link = isset($_POST['name_link']) ? Validate::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
     if ($name_link && $name) {
-        $name = mysql_real_escape_string($name);
-        mysql_query("UPDATE `cms_download_files` SET `rus_name`='$name', `text` = '$name_link' WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
+        $STH = DB::PDO()->prepare('
+            UPDATE `cms_download_files` SET
+            `rus_name` = ?,
+            `text`     = ?
+            WHERE `id` = ?
+        ');
+
+        $STH->execute(array(
+            $name,
+            $name_link,
+            Vars::$ID
+        ));
+        $STH = NULL;
+
         header('Location: ' . $url . '?act=view&id=' . Vars::$ID);
     } else
         echo functions::displayError(__('error_empty_fields'), '<a href="' . $url . '?act=edit_file&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');

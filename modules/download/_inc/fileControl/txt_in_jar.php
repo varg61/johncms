@@ -26,19 +26,19 @@ while ($file = readdir($dir_clean)) {
     }
 }
 closedir($dir_clean);
-$req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
-$res_down = mysql_fetch_assoc($req_down);
+$req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
+$res_down = $req_down->fetch();
 $format_file = functions::format($res_down['name']);
-if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || ($format_file != 'txt' && !isset($_GET['more'])) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
+if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name']) || ($format_file != 'txt' && !isset($_GET['more'])) || ($res_down['type'] == 3 && Vars::$USER_RIGHTS < 6 && Vars::$USER_RIGHTS != 4)) {
     echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
 if (isset($_GET['more'])) {
     $more = abs(intval($_GET['more']));
-    $req_more = mysql_query("SELECT * FROM `cms_download_more` WHERE `id` = '$more' LIMIT 1");
-    $res_more = mysql_fetch_assoc($req_more);
+    $req_more = DB::PDO()->query("SELECT * FROM `cms_download_more` WHERE `id` = '$more' LIMIT 1");
+    $res_more = $req_more->fetch();
     $format_file = functions::format($res_more['name']);
-    if (!mysql_num_rows($req_more) || !is_file($res_down['dir'] . '/' . $res_more['name']) || $format_file != 'txt') {
+    if (!$req_more->rowCount() || !is_file($res_down['dir'] . '/' . $res_more['name']) || $format_file != 'txt') {
         echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
         exit;
     }
@@ -51,7 +51,7 @@ if (isset($_GET['more'])) {
     $txt_file = $res_down['name'];
 }
 if (!isset($_SESSION['down_' . VARS::$ID])) {
-    mysql_query("UPDATE `cms_download_files` SET `field`=`field`+1 WHERE `id`=" . VARS::$ID);
+    DB::PDO()->exec("UPDATE `cms_download_files` SET `field`=`field`+1 WHERE `id`=" . VARS::$ID);
     $_SESSION['down_' . VARS::$ID] = 1;
 }
 $file = str_replace('.' . $format_file, '', $txt_file);

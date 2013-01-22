@@ -17,9 +17,9 @@ $url = Router::getUri(2);
 Выводим файл
 -----------------------------------------------------------------
 */
-$req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
-$res_down = mysql_fetch_assoc($req_down);
-if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name'])) {
+$req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `id` = '" . Vars::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
+$res_down = $req_down->fetch();
+if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name'])) {
     echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
@@ -42,12 +42,12 @@ $format_file = Functions::format($res_down['name']);
 -----------------------------------------------------------------
 */
 if (Vars::$USER_ID) {
-    $bookmark = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_bookmark` WHERE `file_id` = " . Vars::$ID . "  AND `user_id` = " . Vars::$USER_ID), 0);
+    $bookmark = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_bookmark` WHERE `file_id` = " . Vars::$ID . "  AND `user_id` = " . Vars::$USER_ID)->fetchColumn();
     if (isset($_GET['addBookmark']) && !$bookmark) {
-        mysql_query("INSERT INTO `cms_download_bookmark` SET `file_id`='" . Vars::$ID . "', `user_id`=" . Vars::$USER_ID);
+        DB::PDO()->exec("INSERT INTO `cms_download_bookmark` SET `file_id`='" . Vars::$ID . "', `user_id`=" . Vars::$USER_ID);
         $bookmark = 1;
     } elseif (isset($_GET['delBookmark']) && $bookmark) {
-        mysql_query("DELETE FROM `cms_download_bookmark` WHERE `file_id`='" . Vars::$ID . "' AND `user_id`=" . Vars::$USER_ID);
+        DB::PDO()->exec("DELETE FROM `cms_download_bookmark` WHERE `file_id`='" . Vars::$ID . "' AND `user_id`=" . Vars::$USER_ID);
         $bookmark = 0;
     }
     echo '<div class="topmenu">';
@@ -222,8 +222,8 @@ echo '</div>';
 Запрашиваем дополнительные файлы
 -----------------------------------------------------------------
 */
-$req_file_more = mysql_query("SELECT * FROM `cms_download_more` WHERE `refid` = " . Vars::$ID . " ORDER BY `time` ASC");
-$total_files_more = mysql_num_rows($req_file_more);
+$req_file_more = DB::PDO()->query("SELECT * FROM `cms_download_more` WHERE `refid` = " . Vars::$ID . " ORDER BY `time` ASC");
+$total_files_more = $req_file_more->rowCount();
 /*
 -----------------------------------------------------------------
 Скачка файла
@@ -238,8 +238,8 @@ echo '<div class="phdr"><b>' . ($total_files_more ? __('download_files') : __('d
 -----------------------------------------------------------------
 */
 $i = 0;
-if (mysql_num_rows($req_file_more)) {
-    while ($res_file_more = mysql_fetch_assoc($req_file_more)) {
+if ($total_files_more) {
+    while ($res_file_more = $req_file_more->fetch()) {
         $res_file_more['dir'] = $res_down['dir'];
         $res_file_more['text'] = $res_file_more['rus_name'];
         echo (($i++ % 2) ? '<div class="list1">' : '<div class="list2">') .

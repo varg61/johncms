@@ -25,9 +25,9 @@ $textl = __('review_comments');
 if(!Vars::$SYSTEM_SET['mod_down_comm'])
 	echo '<div class="rmenu">' . __('comments_cloded') . '</div>';
 echo '<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_comments`"), 0);
+$total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_comments`")->fetchColumn();
 if ($total) {
-    $req = mysql_query("SELECT `cms_download_comments`.*, `cms_download_comments`.`id` AS `cid`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`, `users`.`id`, `cms_download_files`.`rus_name`
+    $req = DB::PDO()->query("SELECT `cms_download_comments`.*, `cms_download_comments`.`id` AS `cid`, `users`.`rights`, `users`.`last_visit`, `users`.`sex`, `users`.`status`, `users`.`join_date`, `users`.`id`, `cms_download_files`.`rus_name`
 	FROM `cms_download_comments` LEFT JOIN `users` ON `cms_download_comments`.`user_id` = `users`.`id` LEFT JOIN `cms_download_files` ON `cms_download_comments`.`sub_id` = `cms_download_files`.`id` ORDER BY `cms_download_comments`.`time` DESC " . Vars::db_pagination());
     $i = 0;
 	/*
@@ -42,7 +42,7 @@ if ($total) {
 	Выводим список
 	-----------------------------------------------------------------
 	*/
-	while ($res = mysql_fetch_assoc($req)) {
+	while ($res = $req->fetch()) {
         $text = '';
         echo ($i++ % 2) ? '<div class="list2">' : '<div class="list1">';
         $text = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';

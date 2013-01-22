@@ -17,9 +17,9 @@ $url = Router::getUri(2);
 Редактировать mp3 тегов
 -----------------------------------------------------------------
 */
-$req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
-$res_down = mysql_fetch_assoc($req_down);
-if (mysql_num_rows($req_down) == 0 || !is_file($res_down['dir'] . '/' . $res_down['name']) || functions::format($res_down['name']) != 'mp3' || Vars::$USER_RIGHTS < 6) {
+$req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `id` = '" . VARS::$ID . "' AND (`type` = 2 OR `type` = 3)  LIMIT 1");
+$res_down = $req_down->fetch();
+if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name']) || functions::format($res_down['name']) != 'mp3' || Vars::$USER_RIGHTS < 6) {
     echo Functions::displayError('<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
