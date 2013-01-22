@@ -30,7 +30,7 @@ class Advt extends Vars
                 //TODO: Переделать ссылку редиректа
                 @$ads[$result['type']] .= '<a href="' . ($result['show'] ? Validate::checkout($result['link']) : Vars::$HOME_URL . '/go.php?id=' . $result['id']) . '">' . $name . '</a><br/>';
                 if (($result['day'] != 0 && time() >= ($result['time'] + $result['day'] * 3600 * 24)) || ($result['count_link'] != 0 && $result['count'] >= $result['count_link']))
-                    mysql_query("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $result['id'] . "'");
+                    DB::PDO()->exec("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $result['id'] . "'");
             }
         }
 

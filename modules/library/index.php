@@ -184,7 +184,7 @@ if (isset($actions[Vars::$ACT])
             if (!isset($_SESSION['lib']) || isset($_SESSION['lib']) && $_SESSION['lib'] != Vars::$ID) {
                 $_SESSION['lib'] = Vars::$ID;
                 $libcount = intval($zag['count']) + 1;
-                mysql_query("UPDATE `lib` SET  `count` = '$libcount' WHERE `id` = " . Vars::$ID);
+                DB::PDO()->exec("UPDATE `lib` SET  `count` = '$libcount' WHERE `id` = " . Vars::$ID);
             }
             // Запрашиваем выбранную статью из базы
             $symbols = Vars::$IS_MOBILE ? 3000 : 7000;

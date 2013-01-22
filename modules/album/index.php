@@ -69,10 +69,10 @@ $actions = array(
 if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT])) {
     require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . $actions[Vars::$ACT]);
 } else {
-    $tpl->new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
-    $tpl->count_m = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` WHERE `users`.`sex` = 'm'"), 0);
-    $tpl->count_w = mysql_result(mysql_query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` WHERE `users`.`sex` = 'w'"), 0);
-    $tpl->count_my = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID), 0);
+    $tpl->new = DB::PDO()->query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'")->fetchColumn();
+    $tpl->count_m = DB::PDO()->query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` WHERE `users`.`sex` = 'm'")->fetchColumn();
+    $tpl->count_w = DB::PDO()->query("SELECT COUNT(DISTINCT `user_id`) FROM `cms_album_files` LEFT JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id` WHERE `users`.`sex` = 'w'")->fetchColumn();
+    $tpl->count_my = DB::PDO()->query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = " . Vars::$USER_ID)->fetchColumn();
 
     $tpl->link = Router::getUri(3);
     $tpl->contents = $tpl->includeTpl('index');

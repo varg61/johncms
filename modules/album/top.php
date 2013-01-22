@@ -20,7 +20,7 @@ switch (Vars::$ACT) {
         Последние комментарии по всем альбомам
         -----------------------------------------------------------------
         */
-        $total = mysql_result(mysql_query("SELECT COUNT(DISTINCT `sub_id`) FROM `cms_album_comments` WHERE `time` >" . (time() - 86400)), 0);
+        $total = DB::PDO()->query("SELECT COUNT(DISTINCT `sub_id`) FROM `cms_album_comments` WHERE `time` >" . (time() - 86400))->fetchColumn();
         $title = __('new_comments');
         $select = "";
         $join = "INNER JOIN `cms_album_comments` ON `cms_album_files`.`id` = `cms_album_comments`.`sub_id`";
@@ -108,13 +108,13 @@ unset($_SESSION['ref']);
 echo '<div class="phdr"><a href="' . $url . '"><b>' . __('photo_albums') . '</b></a> | ' . $title . '</div>';
 
 if (!isset($total)) {
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where"), 0);
+    $total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_album_files` WHERE $where")->fetchColumn();
 }
 
 if ($total) {
     if ($total > Vars::$USER_SET['page_size'])
         echo '<div class="topmenu">' . Functions::displayPagination($url . '?' . $url . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
-    $req = mysql_query("
+    $req = DB::PDO()->query("
         SELECT `cms_album_files`.*, `users`.`nickname` AS `user_name`, `cms_album_cat`.`name` AS `album_name` $select
         FROM `cms_album_files`
         INNER JOIN `users` ON `cms_album_files`.`user_id` = `users`.`id`
@@ -123,8 +123,8 @@ if ($total) {
         WHERE $where
         ORDER BY $order
         " . Vars::db_pagination()
-    ) or die(mysql_error());
-    for ($i = 0; ($res = mysql_fetch_assoc($req)) !== FALSE; ++$i) {
+    );
+    for ($i = 0; $res = $req->fetch(); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
             // Если доступ открыт всем, или смотрит Администратор

@@ -29,7 +29,7 @@ class Functions extends Vars
         switch ($af['mode']) {
             case 1:
                 // Адаптивный режим
-                $adm = mysql_result(mysql_query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0 AND `last_visit` > " . (time() - 300)), 0);
+                $adm = DB::PDO()->query("SELECT COUNT(*) FROM `users` WHERE `rights` > 0 AND `last_visit` > " . (time() - 300))->fetchColumn();
                 $limit = $adm > 0 ? $af['day'] : $af['night'];
                 break;
             case 3:
@@ -316,7 +316,7 @@ class Functions extends Vars
                     $out .= $ip . $iphist;
                 }
                 if (isset($arg['iphist'])) {
-                    $iptotal = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "'"), 0);
+                    $iptotal = DB::PDO()->query("SELECT COUNT(*) FROM `cms_user_ip` WHERE `user_id` = '" . $user['id'] . "'")->fetchColumn();
                     //TODO: Переделать ссылку
                     $out .= '<div><span class="gray">' . __('ip_history') . ':</span> <a href="' . Vars::$HOME_URL . '/profile?act=ip&amp;user=' . $user['id'] . '">[' . $iptotal . ']</a></div>';
                 }

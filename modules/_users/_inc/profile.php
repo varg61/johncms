@@ -43,9 +43,9 @@ if (empty($tpl->user['relationship'])) {
 
 if (Vars::$USER_ID) {
     // Получаем данные своего голосования
-    $req = mysql_query("SELECT `value` FROM `cms_user_relationship` WHERE `from` = '" . Vars::$USER_ID . "' AND `to` = '" . $tpl->user['id'] . "'");
-    if (mysql_num_rows($req)) {
-        $res = mysql_fetch_assoc($req);
+    $req = DB::PDO()->query("SELECT `value` FROM `cms_user_relationship` WHERE `from` = '" . Vars::$USER_ID . "' AND `to` = '" . $tpl->user['id'] . "'");
+    if ($req->rowCount()) {
+        $res = $req->fetch();
         $tpl->my_rel = $res['value'];
     } else {
         $tpl->my_rel = 10;
@@ -69,21 +69,25 @@ switch (Vars::$ACT) {
             && $_POST['vote'] <= 2
         ) {
             // Записываем голос в базу данных
-            mysql_query("INSERT INTO `cms_user_relationship` SET
-                    `from` = " . Vars::$USER_ID . ",
-                    `to` = " . $tpl->user['id'] . ",
-                    `value` = '" . intval($_POST['vote']) . "'
-                    ON DUPLICATE KEY UPDATE
-                    `value` = '" . intval($_POST['vote']) . "'
-                ");
+            DB::PDO()->exec("INSERT INTO `cms_user_relationship` SET
+                `from` = " . Vars::$USER_ID . ",
+                `to` = " . $tpl->user['id'] . ",
+                `value` = '" . intval($_POST['vote']) . "'
+                ON DUPLICATE KEY UPDATE
+                `value` = '" . intval($_POST['vote']) . "'
+            ");
 
             // Обновляем статистику пользователя, за которого голосовали
-            $rel['a'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '2'"), 0);
-            $rel['b'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '1'"), 0);
-            $rel['c'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '0'"), 0);
-            $rel['d'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-1'"), 0);
-            $rel['e'] = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-2'"), 0);
-            mysql_query("UPDATE `users` SET `relationship` = '" . mysql_real_escape_string(serialize($rel)) . "' WHERE `id` = " . $tpl->user['id']);
+            $rel['a'] = DB::PDO()->query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '2'")->fetchColumn();
+            $rel['b'] = DB::PDO()->query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '1'")->fetchColumn();
+            $rel['c'] = DB::PDO()->query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '0'")->fetchColumn();
+            $rel['d'] = DB::PDO()->query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-1'")->fetchColumn();
+            $rel['e'] = DB::PDO()->query("SELECT COUNT(*) FROM `cms_user_relationship` WHERE `to` = " . $tpl->user['id'] . " AND `value` = '-2'")->fetchColumn();
+
+            $data = DB::PDO()->quote(serialize($rel));
+
+            DB::PDO()->exec("UPDATE `users` SET `relationship` = '" . $data . "' WHERE `id` = " . $tpl->user['id']);
+
             //TODO: Переделать ссылку
             header('Location: ' . Vars::$HOME_URL . '/profile?act=reputation&user=' . $tpl->user['id']);
             exit;
@@ -110,8 +114,8 @@ switch (Vars::$ACT) {
         Анкета пользователя
         -----------------------------------------------------------------
         */
-        $tpl->total_photo = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $tpl->user['id'] . "'"), 0);
-        $tpl->bancount = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $tpl->user['id'] . "'"), 0);
+        $tpl->total_photo = DB::PDO()->query("SELECT COUNT(*) FROM `cms_album_files` WHERE `user_id` = '" . $tpl->user['id'] . "'")->fetchColumn();
+        $tpl->bancount = DB::PDO()->query("SELECT COUNT(*) FROM `cms_ban_users` WHERE `user_id` = '" . $tpl->user['id'] . "'")->fetchColumn();
 
         if ($tpl->user['id'] == Vars::$USER_ID || Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > $tpl->user['rights'])) {
             //TODO: Переделать ссылку
@@ -142,10 +146,10 @@ switch (Vars::$ACT) {
             $tpl->friend = Functions::checkFriend($tpl->user['id']);
 
             //Управление контактами
-            $contacts = mysql_query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $tpl->user['id'] . "'");
-            $tpl->num_cont = mysql_num_rows($contacts);
+            $contacts = DB::PDO()->query("SELECT * FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . $tpl->user['id'] . "'");
+            $tpl->num_cont = $contacts->rowCount();
             if ($tpl->num_cont) {
-                $rows = mysql_fetch_assoc($contacts);
+                $rows = $contacts->fetch();
                 $tpl->banned = $rows['banned'];
                 if ($rows['delete'] == 1) $tpl->num_cont = 0;
             }

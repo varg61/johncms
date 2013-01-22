@@ -19,10 +19,10 @@ class Users
             self::$data = Vars::$USER_DATA;
             return TRUE;
         }
-        //TODO: Перечислить нужные поля для запроса
-        $req = mysql_query("SELECT * FROM `users` WHERE `id` = " . intval($id));
-        if (mysql_num_rows($req)) {
-            self::$data = mysql_fetch_assoc($req);
+
+        $req = DB::PDO()->query("SELECT * FROM `users` WHERE `id` = " . intval($id));
+        if ($req->rowCount()) {
+            self::$data = $req->fetch();
             return TRUE;
         }
         return FALSE;

@@ -68,7 +68,7 @@ if (isset($_POST['submit'])
         && (Vars::$USER_RIGHTS == 9 || (Vars::$USER_RIGHTS == 7 && $rights < 7))
     ) {
         // Если пароль совпадает, обрабатываем форму
-        mysql_query("UPDATE `users` SET `rights` = '$rights' WHERE `id` = " . $tpl->user['id']);
+        DB::PDO()->exec("UPDATE `users` SET `rights` = '$rights' WHERE `id` = " . $tpl->user['id']);
         $tpl->user['rights'] = $rights;
         $tpl->save = 1;
         if ($tpl->user['id'] == Vars::$USER_ID) {
