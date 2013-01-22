@@ -18,18 +18,21 @@ if (!Vars::$USER_ID) {
     exit;
 }
 //Получаем список друзей
-$tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
+$tpl->total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts`
 LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
-WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1' AND `users`.`last_visit` > " . (time() - 300) . "
-"), 0);
+WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
+AND `cms_mail_contacts`.`access`='2'
+AND `cms_mail_contacts`.`friends`='1'
+AND `cms_mail_contacts`.`banned`!='1'
+AND `users`.`last_visit` > " . (time() - 300) . "")->fetchColumn();
 if ($tpl->total) {
-    $query = mysql_query("SELECT `users`.* FROM `cms_mail_contacts`
+    $query = DB::PDO()->query("SELECT `users`.* FROM `cms_mail_contacts`
 	LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
 	WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1' AND `users`.`last_visit` > " . (time() - 300) . " ORDER BY `users`.`last_visit` DESC" . Vars::db_pagination());
 
     $array = array();
     $i = 1;
-    while ($row = mysql_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
         $array[] = array(
             'id'       => $row['id'],
             'list'     => (($i % 2) ? 'list1' : 'list2'),
@@ -40,6 +43,6 @@ if ($tpl->total) {
         ++$i;
     }
     $tpl->query = $array;
-    $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?', Vars::$START, $total, Vars::$USER_SET['page_size']);
+    $tpl->display_pagination = Functions::displayPagination(Router::getUri(2) . '?', Vars::$START, $tpl->total, Vars::$USER_SET['page_size']);
 }
 $tpl->contents = $tpl->includeTpl('online');

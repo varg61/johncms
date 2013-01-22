@@ -32,24 +32,26 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
     require (FRIENDSPATH . '_inc' . DIRECTORY_SEPARATOR . $connect[$key] . '.php');
 } else {
     if (Vars::$ID && Vars::$ID != Vars::$USER_ID) {
-        $result = mysql_query("SELECT `id`, `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "'");
-        if (mysql_num_rows($result)) {
-            $user = mysql_fetch_assoc($result);
+        $result = DB::PDO()->query("SELECT `id`, `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "'");
+        if ($result->rowCount()) {
+            $user = $result->fetch();
             $tpl->id = $user['id'];
             $tpl->nickname = $user['nickname'];
             //Получаем список друзей
-            $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
+            $tpl->total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts`
     		LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
-    		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
-    		"), 0);
+    		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$ID . "'
+    		AND `cms_mail_contacts`.`access`='2'
+    		AND `cms_mail_contacts`.`friends`='1'
+    		AND `cms_mail_contacts`.`banned`!='1'")->fetchColumn();
             if ($tpl->total) {
-                $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`, `users`.`last_visit`, `users`.`sex` FROM `cms_mail_contacts`
+                $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`, `users`.`last_visit`, `users`.`sex` FROM `cms_mail_contacts`
                 LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
                 WHERE `cms_mail_contacts`.`user_id`='" . Vars::$ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1' ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination());
 
                 $array = array();
                 $i = 1;
-                while ($row = mysql_fetch_assoc($query)) {
+                while ($row = $query->fetch()) {
                     $array[] = array(
                         'id'       => $row['id'],
                         'list'     => (($i % 2) ? 'list1' : 'list2'),
@@ -68,21 +70,23 @@ if (Vars::$ACT && ($key = array_search(Vars::$ACT, $connect)) !== FALSE && file_
             $tpl->contents = Functions::displayError(__('user_does_not_exist'));
         }
     } else {
-        $tpl->offers = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `contact_id`='" . Vars::$USER_ID . "' AND `access`='2' AND `friends`='0' AND `banned`='0'"), 0);
-        $tpl->demands = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `access`='2' AND `friends`='0' AND `banned`='0'"), 0);
+        $tpl->offers = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `contact_id`='" . Vars::$USER_ID . "' AND `access`='2' AND `friends`='0' AND `banned`='0'")->fetchColumn();
+        $tpl->demands = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `access`='2' AND `friends`='0' AND `banned`='0'")->fetchColumn();
         //Получаем список друзей
-        $tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts`
+        $tpl->total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts`
 		LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
-		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1'
-		"), 0);
+		WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
+		AND `cms_mail_contacts`.`access`='2'
+		AND `cms_mail_contacts`.`friends`='1'
+		AND `cms_mail_contacts`.`banned`!='1'")->fetchColumn();
         if ($tpl->total) {
-            $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`, `users`.`last_visit`, `users`.`sex` FROM `cms_mail_contacts`
+            $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`, `users`.`last_visit`, `users`.`sex` FROM `cms_mail_contacts`
             LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id`
             WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`access`='2' AND `cms_mail_contacts`.`friends`='1' AND `cms_mail_contacts`.`banned`!='1' ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination());
 
             $array = array();
             $i = 1;
-            while ($row = mysql_fetch_assoc($query)) {
+            while ($row = $query->fetch()) {
                 $array[] = array(
                     'id'       => $row['id'],
                     'list'     => (($i % 2) ? 'list1' : 'list2'),

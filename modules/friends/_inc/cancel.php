@@ -17,15 +17,15 @@ if (!Vars::$USER_ID) {
     Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
-$fr = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . Vars::$ID . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'))"), 0);
+$fr = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" . Vars::$ID . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'))")->fetchColumn();
 if ($fr != 2) {
     if (isset($_POST['submit']) && isset($_POST['token']) && isset($_SESSION['token_status']) && $_POST['token'] == $_SESSION['token_status']) {
-        $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "'"), 0);
+        $fr_out = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "'")->fetchColumn();
         if ($fr_out == 0) {
             //TODO: Переделать ссылку
             $tpl->contents = Functions::displayError(__('not_offers_friendship'), '<a href="' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . '">' . $lng['back'] . '</a>');
         } else {
-            mysql_query("UPDATE `cms_mail_contacts` SET
+            DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 			`access`='0', `friends`='0' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "'");
             //TODO: Переделать под новую систему оповещения
             //$text = '[url=' . Vars::$HOME_URL . '/profile?user=' . Vars::$ID . ']' . $user['name'] . '[/url] ' . lng('complied_friends');

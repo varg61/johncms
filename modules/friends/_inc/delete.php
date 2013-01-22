@@ -17,15 +17,15 @@ if (!Vars::$USER_ID) {
     Header('Location: ' . Vars::$HOME_URL . '404');
     exit;
 }
-$fr = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" .
+$fr = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `access`='2' AND ((`contact_id`='" .
     Vars::$ID . "' AND `user_id`='" . Vars::$USER_ID . "') OR (`contact_id`='" .
-    Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'))"), 0);
+    Vars::$USER_ID . "' AND `user_id`='" . Vars::$ID . "'))")->fetchColumn();
 if ($fr == 2) {
     if (isset($_POST['submit'])) {
-        mysql_query("UPDATE `cms_mail_contacts` SET
+        DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 					`access`='0', `friends`='0' WHERE `user_id`='" . Vars::$ID .
             "' AND `contact_id`='" . Vars::$USER_ID . "'");
-        mysql_query("UPDATE `cms_mail_contacts` SET
+        DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 					`access`='0', `friends`='0' WHERE `user_id`='" . Vars::$USER_ID .
             "' AND `contact_id`='" . Vars::$ID . "'");
         //TODO: Переделать под новую систему оповещения
