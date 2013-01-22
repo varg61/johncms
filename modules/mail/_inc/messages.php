@@ -33,10 +33,13 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
     if (Vars::$ID && isset($_POST['delete_mess']) && is_array($_POST['delch']) && ValidMail::checkCSRF() === TRUE) {
         $delch = array_map('intval', $_POST['delch']);
         $delch = implode(',', $delch);
-        mysql_query("UPDATE `cms_mail_messages` SET
+
+        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 		`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `id` IN (" . $delch . ")");
-        mysql_query("UPDATE `cms_mail_messages` SET
+
+        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 		`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `id` IN (" . $delch . ")");
+
         Header('Location: ' . $backLink . '?act=messages&id=' . Vars::$ID);
         exit;
     } else if (Vars::$ID && Vars::$MOD == 'cleaning') {
@@ -44,23 +47,26 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
             $cl = isset($_POST['cl']) ? (int)$_POST['cl'] : '';
             switch ($cl) {
                 case 1:
-                    mysql_query("UPDATE `cms_mail_messages` SET
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `time`<='" . (time() - 604800) . "'");
-                    mysql_query("UPDATE `cms_mail_messages` SET
+
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `time`<='" . (time() - 604800) . "'");
                     break;
 
                 case 2:
-                    mysql_query("UPDATE `cms_mail_messages` SET
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "'");
-                    mysql_query("UPDATE `cms_mail_messages` SET
+
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "'");
                     break;
 
                 default:
-                    mysql_query("UPDATE `cms_mail_messages` SET
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_in`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `time`<='" . (time() - 2592000) . "'");
-                    mysql_query("UPDATE `cms_mail_messages` SET
+
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$ID . "' AND `time`<='" . (time() - 2592000) . "'");
             }
             Header('Location: ' . $backLink . '?act=messages&id=' . Vars::$ID);
@@ -74,23 +80,24 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
         $tpl->contents = $tpl->includeTpl('time');
     } else if (Vars::$ID && Vars::$MOD == 'delete') //Удаляем собщение
     {
-        $q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
-            Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "'");
-        if (mysql_num_rows($q)) {
-            $data = mysql_fetch_assoc($q);
+        $q = DB::PDO()->query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "'");
+        if ($q->rowCount()) {
+            $data = $q->fetch();
             if (isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE) {
                 if ($data['user_id'] == Vars::$USER_ID) {
                     if ($data['delete_out'] != Vars::$USER_ID) {
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`delete_out`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'");
                     }
                 }
+
                 if ($data['contact_id'] == Vars::$USER_ID) {
                     if ($data['delete_in'] != Vars::$USER_ID) {
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`delete_in`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'");
                     }
                 }
+
                 if ($data['user_id'] == Vars::$USER_ID) {
                     Header('Location: ' . $backLink . '?act=messages&id=' . $data['contact_id']);
                     exit;
@@ -119,22 +126,24 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
     } else {
         //Добавляем сообщение в избранные
         if (Vars::$ID && Vars::$MOD == 'elected') {
-            $q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
+            $q = DB::PDO()->query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
                 Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "'");
-            if (mysql_num_rows($q)) {
-                $data = mysql_fetch_assoc($q);
+            if ($q->rowCount()) {
+                $data = $q->fetch();
                 if ($data['user_id'] == Vars::$USER_ID) {
                     if ($data['elected_out'] != Vars::$USER_ID) {
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`elected_out`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'");
                     }
                 }
+
                 if ($data['contact_id'] == Vars::$USER_ID) {
                     if ($data['elected_in'] != Vars::$USER_ID) {
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`elected_in`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'");
                     }
                 }
+
                 if ($data['user_id'] == Vars::$USER_ID) {
                     Header('Location: ' . $backLink . '?act=messages&id=' . $data['contact_id']);
                     exit;
@@ -160,17 +169,17 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
             $tpl->token = mt_rand(100, 10000);
             $_SESSION['token_status'] = $tpl->token;
 
-            $total = mysql_result(mysql_query("SELECT COUNT(*)
+            $total = DB::PDO()->query("SELECT COUNT(*)
 			FROM `cms_mail_messages`
 			WHERE ((`user_id`='" . Vars::$USER_ID . "'
 			AND `contact_id`='" . Vars::$ID . "')
 			OR (`contact_id`='" . Vars::$USER_ID . "'
 			AND `user_id`='" . Vars::$ID . "'))
 			AND `delete_in`!='" . Vars::$USER_ID . "'
-			AND `delete_out`!='" . Vars::$USER_ID . "'"), 0);
+			AND `delete_out`!='" . Vars::$USER_ID . "'")->fetchColumn();
             if ($total) {
                 //Формируем список сообщений
-                $query = mysql_query("SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.*
+                $query = DB::PDO()->query("SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.*
 				FROM `cms_mail_messages`
 				LEFT JOIN `users` 
 				ON `cms_mail_messages`.`user_id`=`users`.`id` 
@@ -185,7 +194,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                 $array = array();
                 $i = 1;
                 $mass_read = array();
-                while ($row = mysql_fetch_assoc($query)) {
+                while ($row = $query->fetch()) {
                     if ($row['read'] == 0 && $row['contact_id'] == Vars::$USER_ID)
                         $mass_read[] = $row['mid'];
                     $text = Validate::checkout($row['text'], 1, 1);
@@ -221,7 +230,7 @@ if ($addmail->request() !== TRUE && empty(Vars::$MOD)) {
                 //Ставим метку о прочтении
                 if ($mass_read) {
                     $result = implode(',', $mass_read);
-                    mysql_query("UPDATE `cms_mail_messages` SET `read`='1' WHERE `contact_id`='" .
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET `read`='1' WHERE `contact_id`='" .
                         Vars::$USER_ID . "' AND `id` IN (" . $result . ")");
                 }
                 $tpl->query = $array;

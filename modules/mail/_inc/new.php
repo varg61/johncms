@@ -24,13 +24,13 @@ $backLink = Router::getUri(2);
 $tpl->title = __('mail') . ' | ' . __('new_messages');
 
 //Считаем новые сообщения
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM (SELECT DISTINCT `user_id` FROM `cms_mail_messages` WHERE `contact_id`='" .
+$total = DB::PDO()->query("SELECT COUNT(*) FROM (SELECT DISTINCT `user_id` FROM `cms_mail_messages` WHERE `contact_id`='" .
     Vars::$USER_ID . "' AND `cms_mail_messages`.`read`='0' AND `cms_mail_messages`.`delete_in`!='" .
-    Vars::$USER_ID . "' AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "') a;"), 0);
+    Vars::$USER_ID . "' AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "') a;")->fetchColumn();
 if ($total == 1) {
     //Если все новые сообщения от одного итого же чела показываем сразу переписку
-    $max = mysql_result(mysql_query("SELECT `user_id`, count(*) FROM `cms_mail_messages` WHERE `contact_id`='" .
-        Vars::$USER_ID . "' AND `read`='0' GROUP BY `user_id`;"), 0);
+    $max = DB::PDO()->query("SELECT `user_id`, count(*) FROM `cms_mail_messages` WHERE `contact_id`='" .
+        Vars::$USER_ID . "' AND `read`='0' GROUP BY `user_id`;")->fetchColumn();
     Header('Location: ' . $backLink . '?act=messages&id=' . $max);
     exit();
 }
@@ -43,28 +43,28 @@ if ($total) {
             if (!empty($id)) {
                 $mass = array();
                 $mass_contact = array();
-                $query = mysql_query("SELECT *
+                $query = DB::PDO()->query("SELECT *
                 FROM `cms_mail_contacts` 
                 WHERE `user_id`='" . Vars::$USER_ID . "' 
                 AND `contact_id` IN (" . $id . ")");
-                while ($rows = mysql_fetch_assoc($query)) {
+                while ($rows = $query->fetch()) {
                     $mass[] = $rows['id'];
                     $mass_contact[] = $rows['contact_id'];
                 }
                 if (!empty($mass)) {
                     $sms = implode(',', $mass_contact);
                     $out = array();
-                    $query1 = mysql_query("SELECT *
+                    $query1 = DB::PDO()->query("SELECT *
                     FROM `cms_mail_messages` 
                     WHERE `user_id` IN (" . $sms . ") 
                     AND `contact_id`='" . Vars::$USER_ID . "' 
                     AND `read`='0' AND `delete`!='" . Vars::$USER_ID . "'");
-                    while ($rows1 = mysql_fetch_assoc($query1)) {
+                    while ($rows1 = $query1->fetch()) {
                         $out[] = $rows1['id'];
                     }
                     if (!empty($out)) {
                         $in_str = implode(',', $out);
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`read`='1' 
                         WHERE `id` IN (" . $in_str . ")");
                     }
@@ -75,7 +75,7 @@ if ($total) {
         exit;
     }
     //Формируем список новых сообщений по контактам
-    $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`,
+    $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`,
 	`cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`user_id`, COUNT(*) as `count`
 	FROM `cms_mail_messages`
 	LEFT JOIN `cms_mail_contacts` 
@@ -90,7 +90,7 @@ if ($total) {
 	ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination());
     $array = array();
     $i = 1;
-    while ($row = mysql_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
         $array[] = array(
             'id'        => $row['id'],
             'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') . '.png', ''),

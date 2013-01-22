@@ -22,25 +22,24 @@ $backLink = Router::getUri(2);
 
 if (Vars::$ID) {
     //Проверяем выбранное сообщение
-    $q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
+    $q = DB::PDO()->query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
         Vars::$USER_ID . "') AND `id`='" . Vars::$ID . "' AND (`delete_in`='" . Vars::$USER_ID . "' OR `delete_out`='" .
         Vars::$USER_ID . "' OR `elected_in`='" . Vars::$USER_ID . "' OR `elected_out`='" . Vars::$USER_ID .
         "')  AND `delete`!='" . Vars::$USER_ID . "'");
-    if (mysql_num_rows($q)) {
+    if ($q->rowCount()) {
         //Удаление отдельных сообщений
-        $data = mysql_fetch_assoc($q);
+        $data = $q->fetch();
         if ($data['elected_in'] == Vars::$USER_ID || $data['elected_out'] == Vars::$USER_ID) {
             if (isset($_POST['submit']) && ValidMail::checkCSRF() === TRUE) {
                 if ($data['user_id'] == Vars::$USER_ID) {
                     if ($data['elected_out'] == Vars::$USER_ID) {
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`elected_out`='0' WHERE `id`='" . Vars::$ID . "'");
-
                     }
                 }
                 if ($data['contact_id'] == Vars::$USER_ID) {
                     if ($data['elected_in'] == Vars::$USER_ID) {
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`elected_in`='0' WHERE `id`='" . Vars::$ID . "'");
                     }
                 }
@@ -62,9 +61,9 @@ if (Vars::$ID) {
                 if ($data['delete']) {
                     if ($data['filename'])
                         @unlink(FILEPATH . 'users' . DIRECTORY_SEPARATOR . 'pm' . DIRECTORY_SEPARATOR . $data['filename']);
-                    mysql_query("DELETE FROM `cms_mail_messages` WHERE `id`='" . Vars::$ID . "'");
+                    DB::PDO()->exec("DELETE FROM `cms_mail_messages` WHERE `id`='" . Vars::$ID . "'");
                 } else {
-                    mysql_query("UPDATE `cms_mail_messages` SET
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete`='" . Vars::$USER_ID . "' WHERE `id`='" . Vars::$ID . "'");
                 }
                 if ($data['user_id'] == Vars::$USER_ID) {

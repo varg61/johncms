@@ -28,17 +28,17 @@ if (Vars::$MOD == 'cleaning') {
         $cl = isset($_POST['cl']) ? (int)$_POST['cl'] : '';
         switch ($cl) {
             case 1:
-                mysql_query("UPDATE `cms_mail_messages` SET
+                DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 				`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `time`<='" . (time() - 604800) . "'");
                 break;
 
             case 2:
-                mysql_query("UPDATE `cms_mail_messages` SET
+                DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 				`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "'");
                 break;
 
             default:
-                mysql_query("UPDATE `cms_mail_messages` SET
+                DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 				`delete_out`='" . Vars::$USER_ID . "' WHERE `user_id`='" . Vars::$USER_ID . "' AND `time`<='" . (time() - 2592000) . "'");
         }
         Header('Location: ' . $backLink . '?act=outmess');
@@ -51,9 +51,11 @@ if (Vars::$MOD == 'cleaning') {
     $_SESSION['token_status'] = $tpl->token;
     $tpl->contents = $tpl->includeTpl('time');
 } else {
-    $total = mysql_result(mysql_query("SELECT COUNT(*)
+    $total = DB::PDO()->query("SELECT COUNT(*)
 	FROM `cms_mail_messages`
-	WHERE `user_id`='" . Vars::$USER_ID . "' AND `delete_in`!='" . Vars::$USER_ID . "' AND `delete_out`!='" . Vars::$USER_ID . "'"), 0);
+	WHERE `user_id`='" . Vars::$USER_ID . "'
+	AND `delete_in`!='" . Vars::$USER_ID . "'
+	AND `delete_out`!='" . Vars::$USER_ID . "'")->fetchColumn();
     $tpl->total = $total;
     if ($total) {
         //Перемещаем контакты в корзину
@@ -64,17 +66,17 @@ if (Vars::$MOD == 'cleaning') {
                 if (!empty($id)) {
                     $out = array();
                     $in = array();
-                    $query = mysql_query("SELECT *
+                    $query = DB::PDO()->query("SELECT *
 					FROM `cms_mail_messages` 
 					WHERE (`user_id`='" . Vars::$USER_ID . "' 
 					OR `contact_id`='" . Vars::$USER_ID . "') AND `id` IN (" . $id . ")");
-                    while ($row = mysql_fetch_assoc($query)) {
+                    while ($row = $query->fetch()) {
                         if ($row['contact_id'] == Vars::$USER_ID) {
-                            mysql_query("UPDATE `cms_mail_messages` SET
+                            DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 							`delete_in`='" . Vars::$USER_ID . "' WHERE `id`='" . $row['id'] . "'");
                         }
                         if ($row['user_id'] == Vars::$USER_ID) {
-                            mysql_query("UPDATE `cms_mail_messages` SET
+                            DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 							`delete_out`='" . Vars::$USER_ID . "' WHERE `id`='" . $row['id'] . "'");
                         }
                     }
@@ -83,13 +85,13 @@ if (Vars::$MOD == 'cleaning') {
             Header('Location: ' . $backLink . '?act=outmess');
             exit;
         }
-        $query = mysql_query("SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.`nickname`, `users`.`last_visit` FROM `cms_mail_messages`
+        $query = DB::PDO()->query("SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.`nickname`, `users`.`last_visit` FROM `cms_mail_messages`
 		LEFT JOIN `users` ON
 		`cms_mail_messages`.`contact_id`=`users`.`id`
 		WHERE `cms_mail_messages`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "' AND `cms_mail_messages`.`delete_out`!='" . Vars::$USER_ID . "' ORDER BY `cms_mail_messages`.`time` DESC" . Vars::db_pagination());
         $array = array();
         $i = 1;
-        while ($row = mysql_fetch_assoc($query)) {
+        while ($row = $query->fetch()) {
             $array[] = array(
                 'list'     => (!$row['read'] ? 'gmenu' : (($i % 2) ? 'list1' : 'list2')),
                 'id'       => $row['id'],

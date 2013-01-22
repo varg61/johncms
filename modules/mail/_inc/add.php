@@ -32,11 +32,11 @@ if($addmail->validateForm() === false) {
 	$tpl->mail_error = Functions::displayError( $addmail->error_log );
 }
 
-$tpl->count_contact = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `delete`!='1' AND `archive`!='1' AND `banned`!='1'"), 0);
+$tpl->count_contact = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_contacts` WHERE `user_id`='" . Vars::$USER_ID . "' AND `delete`!='1' AND `archive`!='1' AND `banned`!='1'")->fetchColumn();
 if($tpl->count_contact) {
-	$query = mysql_query("SELECT `users`.`id`, `users`.`nickname` FROM `cms_mail_contacts` LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id` WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`delete`!='1' AND `cms_mail_contacts`.`archive`!='1' AND `cms_mail_contacts`.`banned`!='1' ORDER BY `cms_mail_contacts`.`time` DESC LIMIT 0,20");
+	$query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname` FROM `cms_mail_contacts` LEFT JOIN `users` ON `cms_mail_contacts`.`contact_id`=`users`.`id` WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "' AND `cms_mail_contacts`.`delete`!='1' AND `cms_mail_contacts`.`archive`!='1' AND `cms_mail_contacts`.`banned`!='1' ORDER BY `cms_mail_contacts`.`time` DESC LIMIT 0,20");
 	$array = array();
-	while($row = mysql_fetch_assoc($query)) {
+	while($row = $query->fetch()) {
 		$array[] = array(
 		'id' => $row['id'],
 		'nickname' => $row['nickname']);

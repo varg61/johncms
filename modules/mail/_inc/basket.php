@@ -27,10 +27,10 @@ if (Vars::$ID) {
         $delch = array_map('intval', $_POST['delch']);
         $delch = implode(',', $delch);
 
-        $q = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `id` IN (" . $delch . ")");
+        $q = DB::PDO()->query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `id` IN (" . $delch . ")");
         $delete = array();
         $update = array();
-        while ($row = mysql_fetch_assoc($q)) {
+        while ($row = $q->fetch()) {
             if (!empty($row['delete']) && $row['delete'] != Vars::$USER_ID) {
                 $delete[] = $row['id'];
                 if ($row['filename'])
@@ -42,12 +42,12 @@ if (Vars::$ID) {
 
         if ($delete) {
             $delete = implode(',', $delete);
-            mysql_query("DELETE FROM `cms_mail_messages`
+            DB::PDO()->exec("DELETE FROM `cms_mail_messages`
 			WHERE `id` IN (" . $delete . ")");
         }
         if ($update) {
             $update = implode(',', $update);
-            mysql_query("UPDATE `cms_mail_messages` SET
+            DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 			`delete`='" . Vars::$USER_ID . "' 
 			WHERE `id` IN (" . $update . ")");
         }
@@ -59,19 +59,19 @@ if (Vars::$ID) {
         if (Vars::$ID == Vars::$USER_ID) {
             $tpl->contents = Functions::displayError(__('error_request'), '<a href="' . $backLink . '">' . __('contacts') . '</a>');
         } else {
-            $q = mysql_query("SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
-            if (mysql_num_rows($q)) {
-                $total = mysql_result(mysql_query("SELECT COUNT(*)
+            $q = DB::PDO()->query("SELECT `nickname` FROM `users` WHERE `id`='" . Vars::$ID . "' LIMIT 1");
+            if ($q->rowCount()) {
+                $total = DB::PDO()->query("SELECT COUNT(*)
 				FROM `cms_mail_messages`
 				WHERE ((`user_id`='" . Vars::$USER_ID . "'
 				AND `contact_id`='" . Vars::$ID . "')
 				OR (`contact_id`='" . Vars::$USER_ID . "'
 				AND `user_id`='" . Vars::$ID . "'))
 				AND (`delete_in`='" . Vars::$USER_ID . "'
-				OR `delete_out`='" . Vars::$USER_ID . "') AND `delete`!='" . Vars::$USER_ID . "'"), 0);
+				OR `delete_out`='" . Vars::$USER_ID . "') AND `delete`!='" . Vars::$USER_ID . "'")->fetchColumn();
                 if ($total) {
                     //Формируем список удаленных сообщений определенного контакта
-                    $query = mysql_query("SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.*
+                    $query = DB::PDO()->query("SELECT `cms_mail_messages`.*, `cms_mail_messages`.`id` as `mid`, `users`.*
 					FROM `cms_mail_messages`
 					LEFT JOIN `users` 
 					ON `cms_mail_messages`.`user_id`=`users`.`id` 
@@ -86,7 +86,7 @@ if (Vars::$ID) {
                     $array = array();
 
                     $i = 1;
-                    while ($row = mysql_fetch_assoc($query)) {
+                    while ($row = $query->fetch()) {
                         $text = Validate::checkout($row['text'], 1, 1);
                         if (Vars::$USER_SET['smilies'])
                             $text = Functions::smilies($text, $row['rights'] >= 1 ? 1 : 0);
@@ -149,72 +149,82 @@ if (Vars::$ID) {
                 $id = array_map('intval', $_POST['delch']);
                 $id = implode(',', $id);
                 if (!empty($id)) {
-                    mysql_query("UPDATE `cms_mail_messages` SET
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_in`='0'
 					WHERE `user_id` IN (" . $id . ") AND `contact_id`='" . Vars::$USER_ID . "' AND `delete_in`='" . Vars::$USER_ID . "'");
-                    mysql_query("UPDATE `cms_mail_messages` SET
+
+                    DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 					`delete_out`='0'
 					WHERE `contact_id` IN (" . $id . ") AND `user_id`='" . Vars::$USER_ID . "' AND `delete_out`='" . Vars::$USER_ID . "'");
-                    mysql_query("UPDATE `cms_mail_contacts` SET
+
+                    DB::PDO()->exec("UPDATE `cms_mail_contacts` SET
 					`delete`='0'
 					WHERE `user_id`='" . Vars::$USER_ID . "' 
 					AND `contact_id` IN (" . $id . ")");
                 }
             }
+
             Header('Location: ' . $backLink . '?act=basket');
             exit;
         }
+
         //Удаляем сообщения
         if (isset($_POST['delete']) && ValidMail::checkCSRF() === TRUE) {
             if (!empty($_POST['delch']) && is_array($_POST['delch'])) {
                 $id = array_map('intval', $_POST['delch']);
                 $id = implode(',', $id);
                 if (!empty($id)) {
-                    $query = mysql_query("SELECT *
+                    $query = DB::PDO()->query("SELECT *
 					FROM `cms_mail_messages` 
 					WHERE ((`delete_out`='" . Vars::$USER_ID . "' AND `user_id`='" . Vars::$USER_ID . "' AND `contact_id` IN (" . $id . "))
 					OR (`delete_in`='" . Vars::$USER_ID . "' AND `contact_id`='" . Vars::$USER_ID . "' AND `user_id` IN (" . $id . ")))
 					AND `delete`!='" . Vars::$USER_ID . "'");
                     $update = array();
                     $delete = array();
-                    while ($row = mysql_fetch_assoc($query)) {
+                    while ($row = $query->fetch()) {
                         if ($row['delete'] && $row['delete'] != Vars::$USER_ID)
                             $delete[] = $row['id'];
                         else
                             $update[] = $row['id'];
                     }
+
                     if ($delete) {
                         $delete = implode(',', $delete);
-                        $q = mysql_query("SELECT * FROM `cms_mail_messages`
+                        $q = DB::PDO()->query("SELECT * FROM `cms_mail_messages`
 						WHERE `id` IN (" . $delete . ") AND `filename`!=''");
-                        while ($res = mysql_fetch_assoc($q)) {
+                        while ($res = $q->fetch()) {
                             if (file_exists(FILEPATH . 'users/pm/' . $res['filename']) !== FALSE)
                                 @unlink(FILEPATH . 'users/pm/' . $res['filename']);
                         }
-                        mysql_query("DELETE FROM `cms_mail_messages`
+
+                        DB::PDO()->exec("DELETE FROM `cms_mail_messages`
 						WHERE `id` IN (" . $delete . ")");
                     }
+
                     if ($update) {
                         $update = implode(',', $update);
-                        mysql_query("UPDATE `cms_mail_messages` SET
+                        DB::PDO()->exec("UPDATE `cms_mail_messages` SET
 						`delete`='" . Vars::$USER_ID . "' 
 						WHERE `id` IN (" . $update . ")");
                     }
+
                     unset($delete, $update);
                 }
             }
+
             Header('Location: ' . $backLink . '?act=basket');
             exit;
         }
+
         //Очищаем корзину
         if (isset($_POST['clear']) && ValidMail::checkCSRF() === TRUE) {
-            $query = mysql_query("SELECT *
+            $query = DB::PDO()->query("SELECT *
 			FROM `cms_mail_messages` 
 			WHERE `delete_in`='" . Vars::$USER_ID . "' 
 			OR `delete_out`='" . Vars::$USER_ID . "'");
             $update = array();
             $delete = array();
-            while ($row = mysql_fetch_assoc($query)) {
+            while ($row = $query->fetch()) {
                 if (!empty($row['delete']) && $row['delete'] != Vars::$USER_ID) {
                     $delete[] = $row['id'];
                 }
@@ -223,27 +233,30 @@ if (Vars::$ID) {
 
             if ($delete) {
                 $del = implode(',', $delete);
-                $qq1 = mysql_query("SELECT `filename`
+                $qq1 = DB::PDO()->query("SELECT `filename`
 				FROM `cms_mail_messages` 
 				WHERE `filename`!='' 
 				AND `id` IN (" . $del . ")");
-                while ($r1 = mysql_fetch_assoc($qq1)) {
+                while ($r1 = $qq1->fetch()) {
                     @unlink(FILEPATH . 'users/pm/' . $r1['filename']);
                 }
-                mysql_query("DELETE FROM `cms_mail_messages`
+
+                DB::PDO()->exec("DELETE FROM `cms_mail_messages`
 				WHERE `id` IN (" . $del . ")");
             }
 
             if ($update) {
                 $id = implode(',', $update);
-                mysql_query("UPDATE `cms_mail_messages` SET `delete`='" . Vars::$USER_ID . "'
+                DB::PDO()->exec("UPDATE `cms_mail_messages` SET `delete`='" . Vars::$USER_ID . "'
 				WHERE `id` IN (" . $id . ")");
             }
+
             Header('Location: ' . $backLink . '?act=basket');
             exit;
         }
+
         //Формируем список удаленных сообщений по контактам
-        $query = mysql_query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`, 
+        $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`,
 		`cms_mail_contacts`.`contact_id`, `cms_mail_contacts`.`user_id`, COUNT(*) as `count`
 		FROM `cms_mail_contacts`
 		LEFT JOIN `users`
@@ -264,7 +277,7 @@ if (Vars::$ID) {
 
         $array = array();
         $i = 1;
-        while ($row = mysql_fetch_assoc($query)) {
+        while ($row = $query->fetch()) {
             $array[] = array(
                 'id'        => $row['id'],
                 'icon'      => Functions::getImage('usr_' . ($row['sex'] == 'm' ? 'm' : 'w') . '.png',

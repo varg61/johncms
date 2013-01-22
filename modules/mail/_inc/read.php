@@ -15,7 +15,7 @@ defined('_IN_JOHNCMS_MAIL') or die('Error: restricted access');
 $backLink = Router::getUri(2);
 
 if (Vars::$ID) {
-    $result = mysql_fetch_assoc(mysql_query("SELECT * FROM `cms_mail_messages` WHERE `id`='" . Vars::$ID . "'"));
+    $result = DB::PDO()->query("SELECT * FROM `cms_mail_messages` WHERE `id`='" . Vars::$ID . "'")->fetch();
     if ($result) {
         if ($result['delete_in'] != Vars::$USER_ID && $result['delete_out'] != Vars::$USER_ID) {
             if ($result['user_id'] == Vars::$USER_ID) {
@@ -28,9 +28,8 @@ if (Vars::$ID) {
                 $tpl->back = 'inmess';
             }
             if ($result['read'] == 0 && $result['contact_id'] == Vars::$USER_ID)
-                mysql_query("UPDATE `cms_mail_messages` SET `read`='1' WHERE `contact_id`='" .
-                    Vars::$USER_ID . "' AND `id`='{$result['id']}'");
-            $row = mysql_fetch_assoc(mysql_query("SELECT * FROM `users` WHERE `id`='$id'"));
+                DB::PDO()->exec("UPDATE `cms_mail_messages` SET `read`='1' WHERE `contact_id`='" . Vars::$USER_ID . "' AND `id`='{$result['id']}'");
+            $row = DB::PDO()->query("SELECT * FROM `users` WHERE `id`='$id'")->fetch();
             $text = Validate::checkout($result['text'], 1, 1);
             if (Vars::$USER_SET['smilies'])
                 $text = Functions::smilies($text, $result['rights'] >= 1 ? 1 : 0);

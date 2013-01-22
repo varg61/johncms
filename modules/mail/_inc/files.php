@@ -20,18 +20,18 @@ if (!Vars::$USER_ID) {
 //Заголовок
 $tpl->title = __('mail') . ' | ' . __('files');
 //Считаем количество файлов
-$tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE `filename`!='' AND (`user_id`='" .
+$tpl->total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_mail_messages` WHERE `filename`!='' AND (`user_id`='" .
     Vars::$USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `delete_in`!='" . Vars::$USER_ID .
-    "' AND `delete_out`!='" . Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'"), 0);
+    "' AND `delete_out`!='" . Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "'")->fetchColumn();
 if ($tpl->total) {
     //Формируем список файлов
     $array = array();
-    $query = mysql_query("SELECT * FROM `cms_mail_messages` WHERE `filename`!='' AND (`user_id`='" . Vars::
+    $query = DB::PDO()->query("SELECT * FROM `cms_mail_messages` WHERE `filename`!='' AND (`user_id`='" . Vars::
     $USER_ID . "' OR `contact_id`='" . Vars::$USER_ID . "') AND `delete_in`!='" . Vars::$USER_ID .
         "' AND `delete_out`!='" . Vars::$USER_ID . "' AND `delete`!='" . Vars::$USER_ID . "' ORDER BY `time` DESC" .
         Vars::db_pagination());
     $i = 1;
-    while ($row = mysql_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
         $array[] = array(
             'id'        => $row['id'],
             'list'      => (($i % 2) ? 'list1' : 'list2'),

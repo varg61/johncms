@@ -21,19 +21,18 @@ if (!Vars::$USER_ID) {
 $backLink = Router::getUri(2);
 
 if (Vars::$ID) {
-    $req = mysql_query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
-        Vars::$USER_ID . "') AND `id` = '" . Vars::$ID . "' AND `filename` != '' AND `delete`!='" . Vars::
-    $USER_ID . "' LIMIT 1");
+    $req = DB::PDO()->query("SELECT * FROM `cms_mail_messages` WHERE (`user_id`='" . Vars::$USER_ID . "' OR `contact_id`='" .
+        Vars::$USER_ID . "') AND `id` = '" . Vars::$ID . "' AND `filename` != '' AND `delete`!='" . Vars::$USER_ID . "' LIMIT 1");
     //Проверяем существование файла в базе
-    if (mysql_num_rows($req) == 0) {
+    if (!$req->rowCount()) {
         //Выводим ошибку
         $tpl->contents = Functions::displayError(__('file_does_not_exist'), '<a href="' . $backLink . '">' . __('contacts') . '</a>');
     }
-    $res = mysql_fetch_assoc($req);
+    $res = $req->fetch();
     //Проверяем существование файла на сервере
     if (file_exists(FILEPATH . 'users/pm/' . $res['filename'])) {
         if (empty($_SESSION['file_' . Vars::$ID])) {
-            mysql_query("UPDATE `cms_mail_messages` SET `filecount` = `filecount`+1 WHERE `id` = '" . Vars::
+            DB::PDO()->exec("UPDATE `cms_mail_messages` SET `filecount` = `filecount`+1 WHERE `id` = '" . Vars::
             $ID . "' AND `user_id`!='" . Vars::$USER_ID . "' LIMIT 1");
             $_SESSION['file_' . Vars::$ID] = 1;
         }
