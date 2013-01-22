@@ -23,7 +23,7 @@ if (!Vars::$USER_ID) {
     exit;
 }
 echo '<div class="phdr"><b>' . $textl . '</b></div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_bookmark` WHERE `user_id` = " . Vars::$USER_ID), 0);
+$total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_bookmark` WHERE `user_id` = " . Vars::$USER_ID)->fetchColumn();
 /*
 -----------------------------------------------------------------
 Навигация
@@ -38,10 +38,10 @@ if ($total > Vars::$USER_SET['page_size'])
 */
 $i = 0;
 if ($total) {
-    $req_down = mysql_query("SELECT `cms_download_files`.*, `cms_download_bookmark`.`id` AS `bid`
+    $req_down = DB::PDO()->query("SELECT `cms_download_files`.*, `cms_download_bookmark`.`id` AS `bid`
     FROM `cms_download_files` LEFT JOIN `cms_download_bookmark` ON `cms_download_files`.`id` = `cms_download_bookmark`.`file_id`
     WHERE `cms_download_bookmark`.`user_id`=" . Vars::$USER_ID . " ORDER BY `cms_download_files`.`time` DESC " . Vars::db_pagination());
-	while ($res_down = mysql_fetch_assoc($req_down)) {
+	while ($res_down = $req_down->fetch()) {
         echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
     }
 } else {

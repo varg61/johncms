@@ -54,22 +54,23 @@ if ($search && !$error) {
     $search = preg_replace("/[^\w\x7F-\xFF\s]/", " ", $search);
     $search_db = strtr($search, array('_' => '\\_', '%' => '\\%', '*' => '%'));
     $search_db = '%' . $search_db . '%';
-    $sql = (Vars::$ID ? '`about`' : '`rus_name`') . ' LIKE \'' . mysql_real_escape_string($search_db) . '\'';
+    $search_db = DB::PDO()->quote($search_db);
+    $sql = (Vars::$ID ? '`about`' : '`rus_name`') . ' LIKE \'' . $search_db . '\'';
     /*
     -----------------------------------------------------------------
     Результаты поиска
     -----------------------------------------------------------------
     */
     echo '<div class="phdr"><b>' . __('search_result') . '</b></div>';
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND $sql"), 0);
+    $total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND $sql")->fetchColumn();
     if ($total > Vars::$USER_SET['page_size']) {
         $check_search = Validate::checkout(rawurlencode($search));
         echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=search&amp;search=' . $check_search . '&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
     if ($total) {
-        $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = '2'  AND $sql ORDER BY `rus_name` ASC " . Vars::db_pagination());
+        $req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `type` = '2'  AND $sql ORDER BY `rus_name` ASC " . Vars::db_pagination());
         $i = 0;
-        while ($res_down = mysql_fetch_assoc($req_down)) {
+        while ($res_down = $req_down->fetch()) {
             echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
         }
     } else {

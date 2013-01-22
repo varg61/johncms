@@ -131,16 +131,16 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
     */
     $notice = FALSE;
     if (Vars::$ID) {
-        $cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
-        $res_down_cat = mysql_fetch_assoc($cat);
-        if (mysql_num_rows($cat) == 0 || !is_dir($res_down_cat['dir'])) {
+        $cat = DB::PDO()->query("SELECT * FROM `cms_download_category` WHERE `id` = " . Vars::$ID);
+        $res_down_cat = $cat->fetch();
+        if (!$cat->rowCount() || !is_dir($res_down_cat['dir'])) {
             echo Functions::displayError(__('not_found_dir'), '<a href="' . $url . '">' . __('download_title') . '</a>');
             exit;
         }
         $title_pages = Validate::checkout(mb_substr($res_down_cat['rus_name'], 0, 30));
         $textl = mb_strlen($res_down_cat['rus_name']) > 30 ? $title_pages . '...' : $title_pages;
         $navigation = Download::navigation(array('dir' => $res_down_cat['dir'], 'refid' => $res_down_cat['refid'], 'name' => $res_down_cat['rus_name']));
-        $total_new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old AND `dir` LIKE '" . ($res_down_cat['dir']) . "%'"), 0);
+        $total_new = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old AND `dir` LIKE '" . ($res_down_cat['dir']) . "%'")->fetchColumn();
         if ($total_new)
             $notice = '<a href="' . $url . '?act=new_files&amp;id=' . Vars::$ID . '">' . __('new_files') . '</a> (' . $total_new . ')<br />';
     } else {
@@ -148,14 +148,16 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
             '<div class="topmenu"><a href="' . $url . '?act=search">' . __('search') . '</a> | ' .
             '<a href="' . $url . '?act=top_files&amp;id=0">' . __('top_files') . '</a> | ' .
             '<a href="' . $url . '?act=top_users">' . __('top_users') . '</a>';
-        $total_new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old"), 0);
-        if ($total_new)
+        $total_new = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old")->fetchColumn();
+        if ($total_new) {
             $notice = '<a href="' . $url . '?act=new_files&amp;id=' . Vars::$ID . '">' . __('new_files') . '</a> (' . $total_new . ')<br />';
+        }
     }
     if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
-        $mod_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '3'"), 0);
-        if ($mod_files > 0)
+        $mod_files = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '3'")->fetchColumn();
+        if ($mod_files > 0) {
             $notice .= '<a href="' . $url . '?act=mod_files">' . __('mod_files') . '</a> ' . $mod_files;
+        }
     }
     /*
     -----------------------------------------------------------------
@@ -174,8 +176,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
     Выводим список папок и файлов
     -----------------------------------------------------------------
     */
-    $total_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_category` WHERE `refid` = '" . Vars::$ID . "'"), 0);
-    $total_files = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `refid` = '" . Vars::$ID . "' AND `type` = 2"), 0);
+    $total_cat = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_category` WHERE `refid` = '" . Vars::$ID . "'")->fetchColumn();
+    $total_files = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `refid` = '" . Vars::$ID . "' AND `type` = 2")->fetchColumn();
     $sum_total = $total_files + $total_cat;
     if ($sum_total) {
         if ($total_cat > 0) {
@@ -185,9 +187,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
              -----------------------------------------------------------------
              */
             if ($total_files) echo '<div class="phdr"><b>' . __('list_category') . '</b></div>';
-            $req_down = mysql_query("SELECT * FROM `cms_download_category` WHERE `refid` = '" . Vars::$ID . "' ORDER BY `sort` ASC ");
+            $req_down = DB::PDO()->query("SELECT * FROM `cms_download_category` WHERE `refid` = '" . Vars::$ID . "' ORDER BY `sort` ASC ");
             $i = 0;
-            while ($res_down = mysql_fetch_assoc($req_down)) {
+            while ($res_down = $req_down->fetch()) {
                 echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') .
                     Functions::loadModuleImage('folder.png') . '&#160;' .
                     '<a href="' . $url . '?id=' . $res_down['id'] . '">' . Validate::checkout($res_down['rus_name']) . '</a> (' . $res_down['total'] . ')';
@@ -252,9 +254,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
               Выводи данные
               -----------------------------------------------------------------
               */
-            $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `refid` = '" . Vars::$ID . "' AND `type` < 3 ORDER BY `type` ASC $sql_sort " . Vars::db_pagination());
+            $req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `refid` = '" . Vars::$ID . "' AND `type` < 3 ORDER BY `type` ASC $sql_sort " . Vars::db_pagination());
             $i = 0;
-            while ($res_down = mysql_fetch_assoc($req_down)) {
+            while ($res_down = $req_down->fetch()) {
                 echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
             }
         }

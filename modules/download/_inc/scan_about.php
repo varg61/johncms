@@ -24,20 +24,27 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         } else {
             $file_id = abs(intval(preg_replace('#' . $down_path . '/about/([0-9]+)\.txt#si', '\1', $val, 1)));
             if ($file_id) {
-                $text = mysql_real_escape_string(file_get_contents($val));
-                mysql_query("UPDATE `cms_download_files` SET `about` = '$text' WHERE `id` = '$file_id' LIMIT 1");
+                $STH = DB::PDO()->prepare('
+                    UPDATE `cms_download_files`
+                    SET `about` = ?
+                    WHERE `id` = ?
+                ');
+
+                $STH->execute(array(file_get_contents($val), $file_id));
+                $STH = NULL;
             }
         }
     }
-    mysql_query("OPTIMIZE TABLE `cms_download_files`");
+
+    DB::PDO()->exec("OPTIMIZE TABLE `cms_download_files`");
     echo '<div class="phdr"><b>' . __('download_scan_about') . '</b></div>';
     if (isset($_GET['clean'])) {
         echo '<div class="rmenu"><p>' . __('scan_about_clean_ok') . '</p></div>';
     } else {
         echo '<div class="gmenu"><p>' . __('scan_about_ok') . '</p></div>' .
-        '<div class="rmenu"><a href="' . Router::getUri(2) . '?act=scan_about&amp;clean&amp;id=' . Vars::$ID . '">' . __('scan_about_clean') . '</a></div>';
+            '<div class="rmenu"><a href="' . Router::getUri(2) . '?act=scan_about&amp;clean&amp;id=' . Vars::$ID . '">' . __('scan_about_clean') . '</a></div>';
     }
-	echo '<div class="phdr"><a href="' . Router::getUri(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
+    echo '<div class="phdr"><a href="' . Router::getUri(2) . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
 } else {
     header('Location: ' . Vars::$HOME_URL . '404');
 }

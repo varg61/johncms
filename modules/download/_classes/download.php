@@ -354,8 +354,8 @@ class Download extends Vars
                	if($i > 2) $sql[]  =  $explode[$i];
 			}
             if($sql) {
-				$req_cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `dir` IN ('" . implode("','", $sql) . "') ORDER BY `id` ASC");
-				while ($res_cat = mysql_fetch_assoc($req_cat)) {
+				$req_cat = DB::PDO()->query("SELECT * FROM `cms_download_category` WHERE `dir` IN ('" . implode("','", $sql) . "') ORDER BY `id` ASC");
+				while ($res_cat = $req_cat->fetch()) {
                 	$category[] = '<a href="' . $url . '?id=' . $res_cat['id'] . '">' . Validate::checkout($res_cat['rus_name']) . '</a>';
 				}
 			}
