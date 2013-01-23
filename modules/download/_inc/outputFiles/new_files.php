@@ -20,9 +20,9 @@ $url = Router::getUri(2);
 $textl = __('new_files');
 $sql_down = '';
 if (Vars::$ID) {
-    $cat = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
-    $res_down_cat = mysql_fetch_assoc($cat);
-    if (mysql_num_rows($cat) == 0 || !is_dir($res_down_cat['dir'])) {
+    $cat = DB::PDO()->query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
+    $res_down_cat = $cat->fetch();
+    if (!$cat->rowCount() || !is_dir($res_down_cat['dir'])) {
         echo Functions::displayError(__('not_found_dir'), '<a href="' . $url . '">' . __('download_title') . '</a>');
         exit;
     }
@@ -31,7 +31,7 @@ if (Vars::$ID) {
     $sql_down = ' AND `dir` LIKE \'' . ($res_down_cat['dir']) . '%\' ';
 }
 echo '<div class="phdr"><b>' . $textl . '</b></div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old $sql_down"), 0);
+$total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $sql_down")->fetchColumn();
 /*
 -----------------------------------------------------------------
 Навигация
@@ -46,8 +46,8 @@ if ($total > Vars::$USER_SET['page_size'])
 */
 if ($total) {
     $i = 0;
-    $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old $sql_down ORDER BY `time` DESC " . Vars::db_pagination());
-    while ($res_down = mysql_fetch_assoc($req_down)) {
+    $req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `type` = '2'  AND `time` > $old $sql_down ORDER BY `time` DESC " . Vars::db_pagination());
+    while ($res_down = $req_down->fetch()) {
         echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
     }
 } else {

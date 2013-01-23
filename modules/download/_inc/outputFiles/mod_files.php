@@ -21,13 +21,15 @@ $textl = __('mod_files');
 if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
     echo '<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('downloads') . '</b></a> | ' . $textl . '</div>';
     if (Vars::$ID) {
-        mysql_query("UPDATE `cms_download_files` SET `type` = 2 WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
+        DB::PDO()->exec("UPDATE `cms_download_files` SET `type` = 2 WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
         echo '<div class="gmenu">' . __('file_accepted_ok') . '</div>';
     } else if (isset($_POST['all_mod'])) {
-        mysql_query("UPDATE `cms_download_files` SET `type` = 2 WHERE `type` = '3'");
+        DB::PDO()->exec("UPDATE `cms_download_files` SET `type` = 2 WHERE `type` = '3'");
         echo '<div class="gmenu">' . __('file_accepted_all_ok') . '</div>';
     }
-    $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '3'"), 0);
+
+    $total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '3'")->fetchColumn();
+
     /*
     -----------------------------------------------------------------
     Навигация
@@ -37,8 +39,8 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=mod_files&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     $i = 0;
     if ($total) {
-        $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = '3' ORDER BY `time` DESC " . Vars::db_pagination());
-        while ($res_down = mysql_fetch_assoc($req_down)) {
+        $req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `type` = '3' ORDER BY `time` DESC " . Vars::db_pagination());
+        while ($res_down = $req_down->fetch()) {
             echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) .
                 '<div class="sub"><a href="' . $url . '?act=mod_files&amp;id=' . $res_down['id'] . '">' . __('file_accepted') . '</a> | ' .
                 '<span class="red"><a href="' . $url . '?act=delete_file&amp;id=' . $res_down['id'] . '">' . __('delete') . '</a></span></div></div>';

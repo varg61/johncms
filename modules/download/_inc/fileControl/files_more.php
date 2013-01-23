@@ -48,7 +48,7 @@ if ($edit) {
 
         header('Location: ' . $url . '?act=files_more&id=' . Vars::$ID);
     } else {
-        $res_file_more = mysql_fetch_assoc($req_file_more);
+        $res_file_more = $req_file_more->fetch();
         echo '<div class="phdr"><b>' . Validate::checkout($res_down['rus_name']) . '</b></div>' .
             '<div class="gmenu"><b>' . __('edit_file') . '</b></div>' .
             '<div class="list1"><form action="' . $url . '?act=files_more&amp;id=' . Vars::$ID . '&amp;edit=' . $edit . '"  method="post">' .

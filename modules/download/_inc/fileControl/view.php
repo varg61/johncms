@@ -174,7 +174,7 @@ $file_rate = explode('|', $res_down['rate']);
 if ((isset($_GET['plus']) || isset($_GET['minus'])) && !isset($_SESSION['rate_file_' . Vars::$ID]) && Vars::$USER_ID) {
     if (isset($_GET['plus'])) $file_rate[0] = $file_rate[0] + 1;
     else $file_rate[1] = $file_rate[1] + 1;
-    mysql_query("UPDATE `cms_download_files` SET `rate`='" . $file_rate[0] . '|' . $file_rate[1] . "' WHERE `id`=" . Vars::$ID);
+    DB::PDO()->exec("UPDATE `cms_download_files` SET `rate`='" . $file_rate[0] . '|' . $file_rate[1] . "' WHERE `id`=" . Vars::$ID);
     echo '<b><span class="green">' . __('your_vote') . '</span></b><br />';
     $_SESSION['rate_file_' . Vars::$ID] = TRUE;
 }

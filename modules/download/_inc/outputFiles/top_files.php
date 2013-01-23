@@ -43,9 +43,9 @@ if (Vars::$ID == 2 && (Vars::$SYSTEM_SET['mod_down_comm'] || Vars::$USER_RIGHTS 
 Выводим список
 -----------------------------------------------------------------
 */
-$req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = 2 ORDER BY $sql DESC LIMIT " . $set_down['top']);
+$req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `type` = 2 ORDER BY $sql DESC LIMIT " . $set_down['top']);
 $i = 0;
-while ($res_down = mysql_fetch_assoc($req_down)) {
+while ($res_down = $req_down->fetch()) {
     echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down, 1) . '</div>';
 }
 echo '<div class="phdr"><a href="' . $url . '">' . __('download_title') . '</a></div>';

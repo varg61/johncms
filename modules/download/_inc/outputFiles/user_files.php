@@ -27,7 +27,7 @@ if (!Vars::$USER) Vars::$USER = Vars::$USER_ID;
 echo '<div class="phdr"><a href="/profile?user=' . Vars::$USER . '">' . __('profile') . '</a></div>' .
     '<div class="user"><p>' . functions::displayUser($user, array('iphide' => 0)) . '</p></div>' .
     '<div class="phdr"><b>' . __('user_files') . '</b></div>';
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `user_id` = " . Vars::$USER), 0);
+$total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND `user_id` = " . Vars::$USER)->fetchColumn();
 /*
 -----------------------------------------------------------------
 Навигация
@@ -42,8 +42,8 @@ if ($total > Vars::$USER_SET['page_size'])
 */
 $i = 0;
 if ($total) {
-    $req_down = mysql_query("SELECT * FROM `cms_download_files` WHERE `type` = '2'  AND `user_id` = " . Vars::$USER . " ORDER BY `time` DESC " . Vars::db_pagination());
-    while ($res_down = mysql_fetch_assoc($req_down)) {
+    $req_down = DB::PDO()->query("SELECT * FROM `cms_download_files` WHERE `type` = '2'  AND `user_id` = " . Vars::$USER . " ORDER BY `time` DESC " . Vars::db_pagination());
+    while ($res_down = $req_down->fetch()) {
         echo (($i++ % 2) ? '<div class="list2">' : '<div class="list1">') . Download::displayFile($res_down) . '</div>';
     }
 } else {

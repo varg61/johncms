@@ -288,7 +288,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         echo '<p><div class="func"><form action="' . $url . '?act=redirect" method="post"><select name="admin_act">' .
             '<option value="add_cat">' . __('download_add_cat') . '</option>';
         if (Vars::$ID) {
-            $del_cat = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_download_categoty` WHERE `refid` = '" . Vars::$ID . "'"), 0);
+            $del_cat = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_categoty` WHERE `refid` = '" . Vars::$ID . "'")->fetchColumn();
             if (!$del_cat) {
                 echo '<option value="delete_cat">' . __('download_del_cat') . '</option>';
             }

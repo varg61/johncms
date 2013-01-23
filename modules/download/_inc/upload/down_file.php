@@ -12,9 +12,9 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $url = Router::getUri(2);
 
-$req = mysql_query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
-$res = mysql_fetch_assoc($req);
-if (mysql_num_rows($req) && is_dir($res['dir'])) {
+$req = DB::PDO()->query("SELECT * FROM `cms_download_category` WHERE `id` = '" . Vars::$ID . "' LIMIT 1");
+$res = $req->fetch();
+if ($req->rowCount() && is_dir($res['dir'])) {
     if (($res['field'] && Vars::$USER_ID) || (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6)) {
         $al_ext = $res['field'] ? explode(', ', $res['text']) : $defaultExt;
         if (isset($_POST['submit'])) {
@@ -29,8 +29,8 @@ if (mysql_num_rows($req) && is_dir($res['dir'])) {
                 $error = array();
                 $new_file = isset($_POST['new_file']) ? trim($_POST['new_file']) : NULL;
                 $name = isset($_POST['text']) ? trim($_POST['text']) : NULL;
-                $name_link = isset($_POST['name_link']) ? mysql_real_escape_string(Validate::checkout(mb_substr($_POST['name_link'], 0, 200))) : NULL;
-                $text = isset($_POST['opis']) ? mysql_real_escape_string(trim($_POST['opis'])) : NULL;
+                $name_link = isset($_POST['name_link']) ? Validate::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
+                $text = isset($_POST['opis']) ? trim($_POST['opis']) : NULL;
                 $ext = explode(".", $fname);
                 if (!empty($new_file)) {
                     $fname = strtolower($new_file . '.' . $ext[1]);
@@ -64,21 +64,27 @@ if (mysql_num_rows($req) && is_dir($res['dir'])) {
                             $type = 3;
                         } else $type = 2;
                         echo '</div>';
-                        $fname = mysql_real_escape_string($fname);
-                        $name = mysql_real_escape_string(mb_substr($name, 0, 200));
-                        mysql_query("INSERT INTO `cms_download_files` SET
-                            `refid`='" . Vars::$ID . "',
-                            `dir`='$load_cat',
-                            `time`='" . time() . "',
-                            `name`='$fname',
-                            `text` = '$name_link',
-                            `rus_name`='$name',
-                            `type` = '$type',
-                            `user_id`='" . Vars::$USER_ID . "',
-                            `about` = '$text',
-                            `desc` = ''
-                        ") or die('77: ' . mysql_error());
-                        $file_id = mysql_insert_id();
+
+                        $STH = DB::PDO()->prepare('
+                            INSERT INTO `cms_download_files`
+                            (refid, dir, time, name, text, rus_name, type, user_id, about, desc)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "")
+                        ');
+
+                        $STH->execute(array(
+                            Vars::$ID,
+                            $load_cat,
+                            time(),
+                            $fname,
+                            $name_link,
+                            mb_substr($name, 0, 200),
+                            $type,
+                            Vars::$USER_ID,
+                            $text
+                        ));
+                        $file_id = DB::PDO()->lastInsertId();
+                        $STH = NULL;
+
                         $handle = new upload($_FILES['screen']);
                         if ($handle->uploaded) {
                             if (mkdir($screens_path . '/' . $file_id, 0777) == TRUE)
@@ -109,15 +115,14 @@ if (mysql_num_rows($req) && is_dir($res['dir'])) {
                             $sql = '';
                             $i = 0;
                             while ($dirid != '0' && $dirid != "") {
-                                $res_down = mysql_fetch_assoc(mysql_query("SELECT `refid` FROM `cms_download_category` WHERE `id` = '$dirid' LIMIT 1"));
+                                $res_down = DB::PDO()->query("SELECT `refid` FROM `cms_download_category` WHERE `id` = '$dirid' LIMIT 1")->fetch();
                                 if ($i)
                                     $sql .= ' OR ';
                                 $sql .= '`id` = \'' . $dirid . '\'';
                                 $dirid = $res_down['refid'];
                                 ++$i;
                             }
-                            mysql_query("UPDATE `cms_download_category` SET `total` = (`total`+1) WHERE $sql");
-                            mysql_query("OPTIMIZE TABLE `cms_download_files`");
+                            DB::PDO()->exec("UPDATE `cms_download_category` SET `total` = (`total`+1) WHERE $sql");
                         }
                         echo '<div class="phdr"><a href="' . $url . '?act=down_file&amp;id=' . Vars::$ID . '">' . __('upload_file_more') . '</a> | <a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a></div>';
                     } else

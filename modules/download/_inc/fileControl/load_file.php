@@ -32,7 +32,7 @@ if ($error) {
     header('Location: ' . Vars::$HOME_URL . '404');
 } else {
     if (!isset($_SESSION['down_' . VARS::$ID])) {
-        mysql_query("UPDATE `cms_download_files` SET `field`=`field`+1 WHERE `id`=" . VARS::$ID);
+        DB::PDO()->exec("UPDATE `cms_download_files` SET `field`=`field`+1 WHERE `id`=" . VARS::$ID);
     	$_SESSION['down_' . VARS::$ID] = 1;
 	}
     header('Location: ' . $link);
