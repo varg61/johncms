@@ -70,8 +70,6 @@ spl_autoload_register(
             'textparser'   => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
             'upload'       => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
             'validate'     => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
-            'statistic'    => 'classes' . DIRECTORY_SEPARATOR . 'statistic.php',
-            'robotsdetect' => 'classes' . DIRECTORY_SEPARATOR . 'robotsdetect.php',
             'users'        => 'classes' . DIRECTORY_SEPARATOR . 'users.php',
             'vars'         => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
         );
@@ -92,12 +90,6 @@ spl_autoload_register(
 new Network;
 new Session;
 new System;
-
-if (isset(Vars::$ACL['stat']) && Vars::$ACL['stat']) {
-    //TODO: После доработки модуля статистики удалить коментарий
-    //new statistic;
-}
-
 
 /**
  * Работа с языками

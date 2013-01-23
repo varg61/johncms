@@ -79,17 +79,6 @@ $form
     'label_inline' => __('comments'),
     'checked'      => Vars::$ACL['downcomm']))
 
-    ->fieldsetStart(__('statistic'))
-
-    ->add('radio', 'stat', array(
-    'checked' => Vars::$ACL['stat'],
-    'items'   => array(
-        '3' => __('stat_enable_for_all'),
-        '2' => __('stat_enable_for_aut'),
-        '1' => __('stat_enable_for_adm'),
-        '0' => __('stat_disable')
-    )))
-
     ->fieldsetStart()
 
     ->add('submit', 'submit', array(
