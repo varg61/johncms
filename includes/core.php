@@ -72,6 +72,7 @@ spl_autoload_register(
             'validate'     => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
             'statistic'    => 'classes' . DIRECTORY_SEPARATOR . 'statistic.php',
             'robotsdetect' => 'classes' . DIRECTORY_SEPARATOR . 'robotsdetect.php',
+            'users'        => 'classes' . DIRECTORY_SEPARATOR . 'users.php',
             'vars'         => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
         );
 
