@@ -49,29 +49,29 @@ spl_autoload_register(
     function ($name) {
         $name = strtolower($name);
         $system = array(
-            'advt'         => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
-            'captcha'      => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
-            'comments'     => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
-            'counters'     => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
-            'db'           => 'classes' . DIRECTORY_SEPARATOR . 'db.php',
-            'fields'       => 'classes' . DIRECTORY_SEPARATOR . 'fields.php',
-            'finfo'        => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
-            'form'         => 'classes' . DIRECTORY_SEPARATOR . 'form.php',
-            'functions'    => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
-            'languages'    => 'classes' . DIRECTORY_SEPARATOR . 'languages.php',
-            'login'        => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
-            'network'      => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
-            'pclzip'       => 'lib' . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
-            'router'       => 'classes' . DIRECTORY_SEPARATOR . 'router.php',
-            'session'      => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
-            'sitemap'      => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
-            'system'       => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
-            'template'     => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
-            'textparser'   => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
-            'upload'       => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
-            'validate'     => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
-            'users'        => 'classes' . DIRECTORY_SEPARATOR . 'users.php',
-            'vars'         => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
+            'advt'       => 'classes' . DIRECTORY_SEPARATOR . 'advt.php',
+            'captcha'    => 'classes' . DIRECTORY_SEPARATOR . 'captcha.php',
+            'comments'   => 'classes' . DIRECTORY_SEPARATOR . 'comments.php',
+            'counters'   => 'classes' . DIRECTORY_SEPARATOR . 'counters.php',
+            'db'         => 'classes' . DIRECTORY_SEPARATOR . 'db.php',
+            'fields'     => 'classes' . DIRECTORY_SEPARATOR . 'fields.php',
+            'finfo'      => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'form'       => 'classes' . DIRECTORY_SEPARATOR . 'form.php',
+            'functions'  => 'classes' . DIRECTORY_SEPARATOR . 'functions.php',
+            'languages'  => 'classes' . DIRECTORY_SEPARATOR . 'languages.php',
+            'login'      => 'classes' . DIRECTORY_SEPARATOR . 'login.php',
+            'network'    => 'classes' . DIRECTORY_SEPARATOR . 'network.php',
+            'pclzip'     => 'lib' . DIRECTORY_SEPARATOR . 'pclzip.lib.php',
+            'router'     => 'classes' . DIRECTORY_SEPARATOR . 'router.php',
+            'session'    => 'classes' . DIRECTORY_SEPARATOR . 'session.php',
+            'sitemap'    => 'classes' . DIRECTORY_SEPARATOR . 'sitemap.php',
+            'system'     => 'classes' . DIRECTORY_SEPARATOR . 'system.php',
+            'template'   => 'classes' . DIRECTORY_SEPARATOR . 'template.php',
+            'textparser' => 'classes' . DIRECTORY_SEPARATOR . 'textparser.php',
+            'upload'     => 'lib' . DIRECTORY_SEPARATOR . 'class.upload.php',
+            'validate'   => 'classes' . DIRECTORY_SEPARATOR . 'validate.php',
+            'users'      => 'classes' . DIRECTORY_SEPARATOR . 'users.php',
+            'vars'       => 'classes' . DIRECTORY_SEPARATOR . 'vars.php'
         );
 
         if (isset($system[$name])) {
@@ -101,11 +101,7 @@ new System;
  */
 function __($key, $system = FALSE)
 {
-    if (!$system && ($out = Languages::getInstance()->getModulePhrase($key)) !== FALSE) {
-        return $out;
-    } else {
-        return Languages::getInstance()->getSystemPhrase($key);
-    }
+    return Languages::getInstance()->getPhrase($key, $system);
 }
 
 /**

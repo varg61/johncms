@@ -100,14 +100,12 @@ if ($form->isSubmitted) {
     // Записываем настройки в базу
     $STH = DB::PDO()->prepare('
         REPLACE INTO `cms_settings` SET
-        `key` = :key,
-        `val` = :val
+        `key` = ?,
+        `val` = ?
     ');
 
     foreach ($form->validOutput as $key => $val) {
-        $STH->bindValue(':key', $key);
-        $STH->bindValue(':val', $val);
-        $STH->execute();
+        $STH->execute(array($key, $val));
     }
 
     header('Location: ' . Router::getUri(3) . '?save');

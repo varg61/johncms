@@ -11,104 +11,76 @@
 
 abstract class Vars
 {
-    /*
-    -----------------------------------------------------------------
-    Системные переменные
-    -----------------------------------------------------------------
-    */
-    public static $LNG_ISO = 'en'; // Двухбуквенный ISO код языка
-    public static $LNG_LIST = array(); // Список имеющихся языков
+    public static $HOME_URL;                     // URL сайта
+    public static $IP;                           // IP адрес
+    public static $IP_VIA_PROXY = 0;             // IP адрес за прокси-сервером
+    public static $IP_REQUESTS_LIST = array();   // Счетчик обращений с IP адреса
+    public static $USER_AGENT;                   // User Agent
+    public static $IS_MOBILE = FALSE;            // Мобильный браузер
+    public static $PLACE = '';                   // Текущее местоположение на сайте
+    public static $ACL = array();                // Контроль доступа к модулям
 
-    public static $HOME_URL; // URL сайта
-    public static $IP; // IP адрес
-    public static $IP_VIA_PROXY = 0; // IP адрес за прокси-сервером
-    public static $IP_REQUESTS_LIST = array(); // Счетчик обращений с IP адреса
-    public static $USER_AGENT; // User Agent
-    public static $IS_MOBILE = FALSE; // Мобильный браузер
-    public static $PLACE = ''; // Текущее местоположение на сайте
-    public static $SYSTEM_ERRORS = array(); //TODO: Написать вывод системных ошибок
+    public static $USER_ID = 0;                  // Идентификатор пользователя
+    public static $USER_NICKNAME = FALSE;        // Ник пользователя
+    public static $USER_RIGHTS = 0;              // Права доступа
+    public static $USER_DATA = array();          // Все данные пользователя
+    public static $USER_BAN = array();           // Бан
 
-    public static $ROUTE_FIRST = FALSE; //TODO: Удалить
+    public static $ID;                           // $_REQUEST['id']
+    public static $ACT;                          // $_REQUEST['act']
+    public static $MOD;                          // $_REQUEST['mod']
+    public static $PAGE = 1;                     // $_REQUEST['page']
+    public static $START = 0;                    // $_REQUEST['start']
 
-    // Системные настройки
+    // Системные настройки по-умолчанию
     public static $SYSTEM_SET = array(
-        'lng'        => '#',
-        'timeshift'  => 0,
-        'copyright'  => 'Powered by JohnCMS',
-        'email'      => '',
-        'filesize'   => 2000,
-        'generation' => 1,
-        'memory'     => 0,
-        'hometitle'  => 'Welcome!',
-        'meta_key'   => 'johncms',
-        'meta_desc'  => 'Powered by JohnCMS http://johncms.com'
-    );
-
-    // Контроль доступа к модулям
-    public static $ACL = array();
-
-    /*
-    -----------------------------------------------------------------
-    Пользовательские переменные
-    -----------------------------------------------------------------
-    */
-    public static $USER_ID = 0; // Идентификатор пользователя
-    public static $USER_NICKNAME = FALSE; // Ник пользователя
-    public static $USER_RIGHTS = 0; // Права доступа
-    public static $USER_DATA = array(); // Все данные пользователя
-    public static $USER_BAN = array(); // Бан
-
-    /*
-    -----------------------------------------------------------------
-    Пользователские настройки
-    -----------------------------------------------------------------
-    */
-
-    // Индивидуальные пользователские настройки по-умолчанию
-    public static $USER_SET = array(
-        'avatar'     => 1, // Показывать аватары
-        'direct_url' => 0, // Внешние ссылки
-        'field_h'    => 3, // Высота текстового поля ввода
-        'lng'        => '#', // Язык
-        'page_size'  => 10, // Число сообщений на страницу в списках
-        'skin'       => 'default', // Тема оформления
-        'smilies'    => 1, // Включить(1) выключить(0) смайлы
-        'timeshift'  => 0, // Временной сдвиг
+        'lng'        => 'en',                    // Системный язык
+        'lngswitch'  => TRUE,                    // Разрешить выбор языка
+        'timeshift'  => 0,                       // Сдвиг времени (+-12)
+        'copyright'  => 'Powered by JohnCMS',    // Копирайт сайта
+        'email'      => '',                      // E-mail сайта
+        'filesize'   => 2000,                    // Макс. размер выгружаемых файлов
+        'generation' => 1,                       // Профилировка: показывать время генерации
+        'memory'     => 0,                       // Профилировка: показывать используемую память
+        'hometitle'  => 'Welcome!',              // Заголовок Главной страницы
+        'meta_key'   => 'johncms',               // meta name="keywords"
+        'meta_desc'  => 'Powered by JohnCMS',    // meta name="description"
+        'clean_time' => 0
     );
 
     // Системные настройки для пользователей по-умолчанию
     public static $USER_SYS = array(
-        'autologin'       => 0, // Разрешить логин по ссылке (АвтоЛогин)
-        'change_nickname' => 0, // Разрешить смену Ника
-        'change_period'   => 30, // Разрешенный период (дней) для смены ника
-        'change_sex'      => 0, // Разрешить смену пола пользователем
-        'change_status'   => 1, // Разрешить смену статуса пользователем
-        'digits_only'     => 0, // Разрешить ники состоящие из одних цифр
-        'flood_day'       => 10, // Время АнтиФлуда днем (сек.)
-        'flood_mode'      => 2, // Режим работы системы АнтиФлуда
-        'flood_night'     => 30, // Время АнтиФлуда ночью (сек.)
-        'reg_email'       => 0, // Регистрация с подтверждением на E-mail
-        'registration'    => 2, // Открыть/закрыть регистрацию на сайте
-        'reg_quarantine'  => 0, // Включить карантин
-        'reg_welcome'     => 1, // Письмо с приветствем после регистрации
-        'upload_avatars'  => 1, // Разрешить выгрузку аватаров
-        'viev_history'    => 1, // Просмотр гостями истории онлайн
-        'view_online'     => 1, // Просмотр гостями списков онлайн
-        'view_profiles'   => 0, // Просмотр анкет гостями
-        'view_userlist'   => 1, // Просмотр гостями списка пользователей
+        'autologin'          => 0,               // Разрешить логин по ссылке (АвтоЛогин)
+        'change_nickname'    => 0,               // Разрешить смену Ника
+        'change_period'      => 30,              // Разрешенный период (дней) для смены ника
+        'change_sex'         => 0,               // Разрешить смену пола пользователем
+        'change_status'      => 1,               // Разрешить смену статуса пользователем
+        'digits_only'        => 0,               // Разрешить ники состоящие из одних цифр
+        'flood_day'          => 10,              // Время АнтиФлуда днем (сек.)
+        'flood_mode'         => 2,               // Режим работы системы АнтиФлуда
+        'flood_night'        => 30,              // Время АнтиФлуда ночью (сек.)
+        'reg_email'          => 0,               // Регистрация с подтверждением на E-mail
+        'registration'       => 2,               // Открыть/закрыть регистрацию на сайте
+        'reg_quarantine'     => 0,               // Включить карантин
+        'reg_welcome'        => 1,               // Письмо с приветствем после регистрации
+        'upload_avatars'     => 1,               // Разрешить выгрузку аватаров
+        'viev_history'       => 1,               // Просмотр гостями истории онлайн
+        'view_online'        => 1,               // Просмотр гостями списков онлайн
+        'view_profiles'      => 0,               // Просмотр анкет гостями
+        'view_userlist'      => 1,               // Просмотр гостями списка пользователей
     );
 
-    /*
-    -----------------------------------------------------------------
-    Суперглобальные переменные
-    -----------------------------------------------------------------
-    */
-    public static $ID;
-    public static $ACT;
-    public static $MOD;
-    public static $USER;
-    public static $PAGE = 1;
-    public static $START = 0;
+    // Индивидуальные пользователские настройки по-умолчанию
+    public static $USER_SET = array(
+        'avatar'             => 1,               // Показывать аватары
+        'direct_url'         => 0,               // Внешние ссылки
+        'field_h'            => 3,               // Высота текстового поля ввода
+        'lng'                => '#',             // Язык (# - автовыбор)
+        'page_size'          => 10,              // Число сообщений на страницу в списках
+        'skin'               => 'default',       // Тема оформления
+        'smilies'            => 1,               // Включить(1) выключить(0) смайлы
+        'timeshift'          => 0,               // Временной сдвиг
+    );
 
     /**
      * Получаем пользовательские настройки

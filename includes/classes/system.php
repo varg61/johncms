@@ -25,15 +25,10 @@ class System extends Vars
         // Автоочистка системы
         $this->_autoClean();
 
-        // Определяем и загружаем язык
-        $this->_lngDetect();
-        if (static::$LNG_ISO != 'ru' && static::$LNG_ISO != 'uk') static::$USER_SET['translit'] = 0;
-
         // Принимаем суперглобальные переменные
         static::$ID = isset($_REQUEST['id']) ? abs(intval($_REQUEST['id'])) : 0;
         static::$ACT = isset($_REQUEST['act']) ? substr(trim($_REQUEST['act']), 0, 30) : '';
         static::$MOD = isset($_REQUEST['mod']) ? substr(trim($_REQUEST['mod']), 0, 30) : '';
-        static::$USER = isset($_REQUEST['user']) ? abs(intval($_REQUEST['user'])) : 0;
         if (isset($_REQUEST['page']) && $_REQUEST['page'] > 0) {
             static::$PAGE = intval($_REQUEST['page']);
             static::$START = static::$PAGE * static::$USER_SET['page_size'] - static::$USER_SET['page_size'];
@@ -47,48 +42,19 @@ class System extends Vars
      */
     private function _sysSettings()
     {
-        $STH = DB::PDO()->query('SELECT * FROM `cms_settings`');
-        if ($STH->rowCount()) {
-            while ($result = $STH->fetch()) {
-                static::$SYSTEM_SET[$result['key']] = $result['val'];
-            }
+        $query = DB::PDO()->query('SELECT * FROM `cms_settings`');
+        foreach ($query as $result) {
+            static::$SYSTEM_SET[$result['key']] = $result['val'];
         }
-        $STH = NULL;
 
-        if (isset(static::$SYSTEM_SET['lng']) && !empty(static::$SYSTEM_SET['lng'])) {
-            static::$LNG_ISO = static::$SYSTEM_SET['lng'];
-        }
-        if (isset(static::$SYSTEM_SET['lng_list'])) {
-            static::$LNG_LIST = unserialize(static::$SYSTEM_SET['lng_list']);
-        }
         if (isset(static::$SYSTEM_SET['users'])) {
             static::$USER_SYS = unserialize(static::$SYSTEM_SET['users']);
         }
+
         static::$ACL = isset(static::$SYSTEM_SET['acl']) ? unserialize(static::$SYSTEM_SET['acl']) : array();
 
         $subpath = trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
         static::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . '/' . (!empty($subpath) ? $subpath . '/' : '');
-    }
-
-    /**
-     * Определяем язык
-     */
-    private function _lngDetect()
-    {
-        if (isset($_SESSION['lng'])) {
-            static::$LNG_ISO = $_SESSION['lng'];
-        } elseif (static::$USER_ID && isset(static::$USER_SET['lng']) && array_key_exists(static::$USER_SET['lng'], static::$LNG_LIST)) {
-            static::$LNG_ISO = static::$USER_SET['lng'];
-        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            $accept = explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE'])));
-            foreach ($accept as $var) {
-                $lng = substr($var, 0, 2);
-                if (in_array($lng, Languages::getInstance()->getLngList())) {
-                    static::$LNG_ISO = $lng;
-                    break;
-                }
-            }
-        }
     }
 
     /**
@@ -121,10 +87,13 @@ class System extends Vars
 
             if ($user->rowCount()) {
                 $result = $user->fetch();
-                $user = null;
+                $user = NULL;
 
                 // Допуск на авторизацию с COOKIE
-                if ($cookie && $result['login_try'] > 2 && ($result['ip'] != static::$IP || $result['ip_via_proxy'] != static::$IP_VIA_PROXY || $result['useragent'] != static::$USER_AGENT)) {
+                if ($cookie
+                    && $result['login_try'] > 2
+                    && ($result['ip'] != static::$IP || $result['ip_via_proxy'] != static::$IP_VIA_PROXY || $result['useragent'] != static::$USER_AGENT)
+                ) {
                     $permit = FALSE;
                 } else {
                     $permit = TRUE;
@@ -219,7 +188,7 @@ class System extends Vars
     private function _userIpHistory($ip, $ipvia)
     {
         if ($ip != static::$IP || $ipvia != static::$IP_VIA_PROXY) {
-            $iphist = DB::PDO()->query('
+            $q = DB::PDO()->query('
                 SELECT `id` FROM `cms_user_ip`
                 WHERE `user_id`    = ' . static::$USER_ID . '
                 AND `ip`           = ' . static::$IP . '
@@ -227,9 +196,9 @@ class System extends Vars
                 LIMIT 1
             ');
 
-            if ($iphist->rowCount()) {
+            if ($q->rowCount()) {
                 // Обновляем имеющуюся запись
-                $result = $iphist->fetch();
+                $result = $q->fetch();
 
                 $STH = DB::PDO()->prepare('
                     UPDATE `cms_user_ip` SET
@@ -242,7 +211,7 @@ class System extends Vars
                 $STH = NULL;
             } else {
                 // Вставляем новую запись
-                $STHI = DB::PDO()->prepare('
+                $STH = DB::PDO()->prepare('
                     INSERT INTO `cms_user_ip` SET
                     `user_id`      = ' . static::$USER_ID . ',
                     `ip`           = ' . static::$IP . ',
@@ -251,8 +220,8 @@ class System extends Vars
                     `timestamp`    = ' . time()
                 );
 
-                $STHI->execute(array(static::$USER_AGENT));
-                $STHI = NULL;
+                $STH->execute(array(static::$USER_AGENT));
+                $STH = NULL;
             }
         }
     }

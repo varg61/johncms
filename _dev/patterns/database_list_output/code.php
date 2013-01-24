@@ -10,14 +10,16 @@
  */
 
 $tpl = Template::getInstance();
+$tpl->uri = Router::getUri(2);
 
-$tpl->total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_news`"), 0);
+$tpl->total = DB::PDO()->query('SELECT COUNT(*) FROM `cms_news`')->fetchColumn();
+
 if ($tpl->total) {
-    $req = mysql_query("SELECT * FROM `cms_news` ORDER BY `id` DESC " . Vars::db_pagination());
-    for ($i = 0; $tpl->list[$i] = mysql_fetch_assoc($req); ++$i) {
-        $tpl->list[$i]['text'] = Validate::checkout($tpl->list[$i]['text'], 1, 1, 1);
+    $query = DB::PDO()->query('SELECT * FROM `cms_news` ORDER BY `id` DESC ' . Vars::db_pagination());
+    foreach($query as $val){
+        $val['text'] = Validate::checkout($val['text'], 1, 1, 1);
+        $tpl->list[] = $val;
     }
-    unset($tpl->list[$i]);
 }
 
 $tpl->contents = $tpl->includeTpl('index');

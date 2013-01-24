@@ -11,19 +11,27 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-class Languages extends Vars
+class Languages
 {
     private static $_instance = NULL;
 
+    private $_lng = NULL;
     private $_systemLanguage = NULL;
     private $_moduleLanguage = NULL;
-    private $_lngDescription = NULL;
     private $_lngList = NULL;
+
+    private function __construct()
+    {
+    }
+
+    private function __clone()
+    {
+    }
 
     /**
      * Инициализация объекта класса Languages
      *
-     * @return Languages|null
+     * @return Languages
      */
     public static function getInstance()
     {
@@ -36,9 +44,10 @@ class Languages extends Vars
 
     /**
      * Переключатель языков
-     * 
+     *
      * @return bool
      */
+    //TODO: Убрать и перенести в модуль переключения языков
     public function lngSwitch()
     {
         $setLng = isset($_POST['setlng']) ? substr(Validate::checkin($_POST['setlng']), 0, 2) : FALSE;
@@ -51,23 +60,42 @@ class Languages extends Vars
         return FALSE;
     }
 
-    public function lngDetect()
+    /**
+     * Автоматическое определение языка
+     *
+     * @return string
+     */
+    private function _lngDetect()
     {
-        //TODO: Доработать
-        if (isset($_SESSION['lng'])) {
-            static::$LNG_ISO = $_SESSION['lng'];
-        } elseif (static::$USER_ID && isset(static::$USER_SET['lng']) && array_key_exists(static::$USER_SET['lng'], static::$LNG_LIST)) {
-            static::$LNG_ISO = static::$USER_SET['lng'];
-        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            $accept = explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE'])));
-            foreach ($accept as $var) {
-                $lng = substr($var, 0, 2);
-                if (in_array($lng, Languages::getInstance()->getLngList())) {
-                    static::$LNG_ISO = $lng;
-                    break;
+        if (is_null($this->_lng)) {
+            $this->_lng = Vars::$SYSTEM_SET['lng'];
+
+            if (Vars::$SYSTEM_SET['lngswitch']) {
+                if (isset($_SESSION['lng'])) {
+                    $this->_lng = $_SESSION['lng'];
+                } else {
+                    if (Vars::$USER_ID
+                        && isset(Vars::$USER_SET['lng'])
+                        && Vars::$USER_SET['lng'] != '#'
+                        && in_array(Vars::$USER_SET['lng'], $this->getLngList())
+                    ) {
+                        $this->_lng = Vars::$USER_SET['lng'];
+                    } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                        $accept = explode(',', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE'])));
+                        foreach ($accept as $var) {
+                            $iso = substr($var, 0, 2);
+                            if (in_array($iso, $this->getLngList())) {
+                                $this->_lng = $iso;
+                                break;
+                            }
+                        }
+                    }
+                    $_SESSION['lng'] = $this->_lng;
                 }
             }
         }
+
+        return $this->_lng;
     }
 
     /**
@@ -87,104 +115,77 @@ class Languages extends Vars
     }
 
     /**
-     * Получаем список языков вместе с названиями
-     * 
+     * Получаем список языков вместе с названиями и флагами
+     *
      * @return array ISO код => название
      */
     public function getLngDescription()
     {
-        if (is_null($this->_lngDescription)) {
-            foreach ($this->getLngList() as $iso) {
-                $file = SYSPATH . 'languages' . DIRECTORY_SEPARATOR . $iso . '.ini';
-                if (is_file($file) && ($desc = parse_ini_file($file)) !== FALSE) {
-                    $this->_lngDescription[$iso] = isset($desc['name']) && !empty($desc['name']) ? $desc['name'] : $iso;
+        $description = array();
+        foreach ($this->getLngList() as $iso) {
+            $file = SYSPATH . 'languages' . DIRECTORY_SEPARATOR . $iso . '.ini';
+            if (is_file($file) && ($desc = parse_ini_file($file)) !== FALSE) {
+                $description[$iso] = Functions::loadImage('flag_' . $iso . '.gif') . '&#160; ';
+                $description[$iso] .= isset($desc['name']) && !empty($desc['name']) ? $desc['name'] : $iso;
+            }
+        }
+
+        return $description;
+    }
+
+    /**
+     * Выдача фразы по заданному ключу
+     *
+     * @param string $key
+     * @param bool   $forceSystem
+     *
+     * @return string
+     */
+    public function getPhrase($key, $forceSystem)
+    {
+        // Получаем фразы модуля
+        if (is_null($this->_moduleLanguage) && $this->_moduleLanguage !== FALSE) {
+            $this->_moduleLanguage = FALSE;
+
+            $module = array(
+                MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . $this->_lngDetect() . '.lng',
+                MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . 'en.lng',
+                MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . 'ru.lng'
+            );
+
+            foreach ($module as $file) {
+                if (is_file($file) && ($this->_moduleLanguage = parse_ini_file($file)) !== FALSE) {
+                    break;
                 }
             }
         }
 
-        return $this->_lngDescription;
-    }
-
-    /**
-     * Выдача фразы системного языка
-     * 
-     * @param string $key Ключ для фразы
-     *
-     * @return string Фраза по ключу
-     */
-    public function getSystemPhrase($key)
-    {
+        // Получаем системные фразы
         if (is_null($this->_systemLanguage)) {
-            $this->_systemLanguage = $this->_parseSystemLng();
+            $system = array(
+                SYSPATH . 'languages' . DIRECTORY_SEPARATOR . $this->_lngDetect() . '.lng',
+                SYSPATH . 'languages' . DIRECTORY_SEPARATOR . 'en.lng',
+                SYSPATH . 'languages' . DIRECTORY_SEPARATOR . 'ru.lng'
+            );
+
+            foreach ($system as $file) {
+                if (is_file($file) && ($this->_systemLanguage = parse_ini_file($file)) !== FALSE) {
+                    break;
+                }
+            }
         }
 
         if ($this->_systemLanguage === FALSE) {
-            Vars::$SYSTEM_ERRORS['system_language'] = 'System language error';
+            exit('System language error');
+        } elseif (!$forceSystem && isset($this->_moduleLanguage[$key])) {
+            // Возвращаем фразу модуля
+            return $this->_moduleLanguage[$key];
         } elseif (isset($this->_systemLanguage[$key])) {
+            // Возвращаем системную фразу
             return $this->_systemLanguage[$key];
         }
 
+        // если фразы не существует, возвращаем ключ
         return '# ' . $key . ' #';
-    }
-
-    /**
-     * Выдача фразы модульного языка
-     * 
-     * @param string $key Ключ для фразы
-     *
-     * @return string|bool Фраза по ключу
-     */
-    public function getModulePhrase($key)
-    {
-        if (is_null($this->_moduleLanguage)) {
-            $this->_moduleLanguage = $this->_parseModuleLng();
-        }
-
-        if ($this->_moduleLanguage === FALSE) {
-            Vars::$SYSTEM_ERRORS['module_language'] = 'Module language error';
-        } elseif (isset($this->_moduleLanguage[$key])) {
-            return $this->_moduleLanguage[$key];
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Парсинг системного языка
-     * 
-     * @return array|bool Массив с фразами
-     */
-    private function _parseSystemLng()
-    {
-        $file = SYSPATH . 'languages' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
-        $fileEN = SYSPATH . 'languages' . DIRECTORY_SEPARATOR . 'en.lng';
-        if (is_file($file)) {
-            return parse_ini_file($file);
-        } elseif (is_file($fileEN)) {
-            return parse_ini_file($fileEN);
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Парсинг языка модуля
-     * 
-     * @return array Массив с фразами
-     */
-    private function _parseModuleLng()
-    {
-        $file = MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . '.lng';
-        $fileEN = MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . 'en.lng';
-        $fileRU = MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . Vars::$LNG_ISO . 'ru.lng';
-        if (is_file($file)) {
-            return parse_ini_file($file);
-        } elseif (is_file($fileEN)) {
-            return parse_ini_file($fileEN);
-        } elseif (is_file($fileRU)) {
-            return parse_ini_file($fileRU);
-        }
-
-        return array();
     }
 }
