@@ -328,15 +328,6 @@ CREATE TABLE `cms_settings` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `cms_settings` (`key`, `val`) VALUES ('lng', 'ru'),
-        ('clean_time', ''),
-        ('acl', 'a:9:{s:5:"forum";i:2;s:5:"album";i:2;s:9:"albumcomm";i:1;s:9:"guestbook";i:2;s:7:"library";i:2;s:7:"libcomm";i:1;s:9:"downloads";i:2;s:8:"downcomm";i:1;s:4:"stat";i:3;}'),
-        ('meta_key', ''),
-        ('meta_desc', 'Powered by JohnCMS http://johncms.com'),
-        ('skindef', 'default'),
-        ('news', 'a:8:{s:4:"view";i:1;s:4:"size";i:200;s:8:"quantity";i:5;s:4:"days";i:3;s:6:"breaks";i:1;s:7:"smilies";i:1;s:4:"tags";i:1;s:3:"kom";i:1;}');
-
-
 DROP TABLE IF EXISTS `cms_user_guestbook`;
 CREATE TABLE `cms_user_guestbook` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

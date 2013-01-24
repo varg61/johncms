@@ -234,7 +234,7 @@ class System extends Vars
         if (static::$SYSTEM_SET['clean_time'] < time() - 86400) {
             DB::PDO()->exec("DELETE FROM `cms_sessions` WHERE `session_timestamp` < '" . (time() - 86400) . "'");
             DB::PDO()->exec("DELETE FROM `cms_user_ip` WHERE `timestamp` < '" . (time() - 2592000) . "'");
-            DB::PDO()->exec("UPDATE `cms_settings` SET  `val` = '" . time() . "' WHERE `key` = 'clean_time' LIMIT 1");
+            DB::PDO()->exec("REPLACE INTO `cms_settings` SET  `key` = 'clean_time', `val` = '" . time() . "'");
             DB::PDO()->query("OPTIMIZE TABLE `cms_sessions` , `cms_user_ip`, `cms_user_settings`");
         }
     }

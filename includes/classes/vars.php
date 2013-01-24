@@ -18,7 +18,6 @@ abstract class Vars
     public static $USER_AGENT;                   // User Agent
     public static $IS_MOBILE = FALSE;            // Мобильный браузер
     public static $PLACE = '';                   // Текущее местоположение на сайте
-    public static $ACL = array();                // Контроль доступа к модулям
 
     public static $USER_ID = 0;                  // Идентификатор пользователя
     public static $USER_NICKNAME = FALSE;        // Ник пользователя
@@ -26,26 +25,38 @@ abstract class Vars
     public static $USER_DATA = array();          // Все данные пользователя
     public static $USER_BAN = array();           // Бан
 
-    public static $ID;                           // $_REQUEST['id']
-    public static $ACT;                          // $_REQUEST['act']
-    public static $MOD;                          // $_REQUEST['mod']
-    public static $PAGE = 1;                     // $_REQUEST['page']
-    public static $START = 0;                    // $_REQUEST['start']
+    public static $ID;                           // int    $_REQUEST['id']
+    public static $ACT;                          // string $_REQUEST['act']
+    public static $MOD;                          // string $_REQUEST['mod']
+    public static $PAGE = 1;                     // int    $_REQUEST['page']
+    public static $START = 0;                    // int    $_REQUEST['start']
 
     // Системные настройки по-умолчанию
     public static $SYSTEM_SET = array(
-        'lng'        => 'en',                    // Системный язык
-        'lngswitch'  => TRUE,                    // Разрешить выбор языка
-        'timeshift'  => 0,                       // Сдвиг времени (+-12)
-        'copyright'  => 'Powered by JohnCMS',    // Копирайт сайта
-        'email'      => '',                      // E-mail сайта
-        'filesize'   => 2000,                    // Макс. размер выгружаемых файлов
-        'generation' => 1,                       // Профилировка: показывать время генерации
-        'memory'     => 0,                       // Профилировка: показывать используемую память
-        'hometitle'  => 'Welcome!',              // Заголовок Главной страницы
-        'meta_key'   => 'johncms',               // meta name="keywords"
-        'meta_desc'  => 'Powered by JohnCMS',    // meta name="description"
-        'clean_time' => 0
+        'lng'                => 'en',            // Системный язык
+        'lngswitch'          => TRUE,            // Разрешить выбор языка
+        'timeshift'          => 0,               // Сдвиг времени (+-12)
+        'copyright'          => 'Powered by JohnCMS',  // Копирайт сайта
+        'email'              => '',              // E-mail сайта
+        'filesize'           => 2000,            // Макс. размер выгружаемых файлов
+        'generation'         => 1,               // Профилировка: показывать время генерации
+        'memory'             => 0,               // Профилировка: показывать используемую память
+        'hometitle'          => 'Welcome!',      // Заголовок Главной страницы
+        'meta_key'           => 'johncms',       // meta name="keywords"
+        'meta_desc'          => 'JohnCMS',       // meta name="description"
+        'clean_time'         => 0                // Время последней очистки системы
+    );
+
+    // Контроль доступа к модулям
+    public static $ACL = array(
+        'forum'              => 2,
+        'album'              => 2,
+        'albumcomm'          => 1,
+        'guestbook'          => 1,
+        'library'            => 2,
+        'libcomm'            => 1,
+        'downloads'          => 2,
+        'downcomm'           => 1
     );
 
     // Системные настройки для пользователей по-умолчанию
@@ -94,21 +105,20 @@ abstract class Vars
         if (static::$USER_ID && !empty($key)) {
             $STH = DB::PDO()->prepare('
                 SELECT `value` FROM `cms_user_settings`
-                WHERE `user_id` = :uid
-                AND `key`       = :key
+                WHERE `user_id` = ' . static::$USER_ID . '
+                AND `key`       = ?
                 LIMIT 1
             ');
 
-            $STH->bindValue(':uid', static::$USER_ID);
-            $STH->bindParam(':key', $key);
-            $STH->execute();
+            $STH->execute(array($key));
 
             if ($STH->rowCount()) {
                 $result = $STH->fetch();
-                if (!empty($result['value'])) {
-                    return unserialize($result['value']);
-                }
+                $STH = NULL;
+
+                return unserialize($result['value']);
             }
+            $STH = NULL;
         }
 
         return FALSE;
@@ -132,26 +142,21 @@ abstract class Vars
             // Удаляем пользовательские данные
             $STH = DB::PDO()->prepare('
                 DELETE FROM `cms_user_settings`
-                WHERE `user_id` = :id
-                AND `key`       = :key
+                WHERE `user_id` = ' . static::$USER_ID . '
+                AND `key`       = ?
                 LIMIT 1
             ');
 
-            $STH->bindValue(':id', static::$USER_ID, PDO::PARAM_INT);
-            $STH->bindParam(':key', $key);
-            $STH->execute();
+            $STH->execute(array($key));
         } else {
             $STH = DB::PDO()->prepare('
             REPLACE INTO `cms_user_settings` SET
-            `user_id` = :id,
-            `key`     = :key,
-            `value`   = :value
+            `user_id` = ' . static::$USER_ID . ',
+            `key`     = ?,
+            `value`   = ?
             ');
 
-            $STH->bindValue(':id', static::$USER_ID, PDO::PARAM_INT);
-            $STH->bindParam(':key', $key);
-            $STH->bindValue(':value', serialize($val), PDO::PARAM_STR);
-            $STH->execute();
+            $STH->execute(array($key, serialize($val)));
         }
         $STH = NULL;
 
