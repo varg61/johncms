@@ -108,4 +108,4 @@ if ($form->isSubmitted) {
     $tpl->save = TRUE;
 }
 
-$tpl->contents = $tpl->includeTpl('access_control');
+$tpl->contents = $tpl->includeTpl('acl');

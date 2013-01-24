@@ -100,7 +100,7 @@ class Scanner
                             );
                         } else {
                             if ($this->snap) {
-                                if ($this->track_files[$folder . '/' . $file] != $file_crc)
+                                if (!isset($this->track_files[$folder . '/' . $file]) || $this->track_files[$folder . '/' . $file] != $file_crc)
                                     $this->bad_files[] = array(
                                         'file_path' => $folder . '/' . $file,
                                         'file_name' => $file,
