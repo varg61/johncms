@@ -25,8 +25,7 @@ $form
     ->add('checkbox', 'lngswitch', array(
     'checked'      => Vars::$SYSTEM_SET['lngswitch'],
     'label_inline' => __('allow_choose'),
-    'description' => __('allow_choose_help')
-))
+    'description' => __('allow_choose_help')))
 
     ->fieldsetStart()
 

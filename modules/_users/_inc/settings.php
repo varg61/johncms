@@ -22,9 +22,7 @@ array_unshift($tpl_list, '--default--');
 
 // Подготавливаем список имеющихся языков
 $items['#'] = __('select_automatically');
-foreach (Languages::getInstance()->getLngDescription() as $key => $val) {
-    $items[$key] = Functions::loadImage('flag_' . $key . '.gif') . '&#160; ' . $val;
-}
+$items = array_merge($items, Languages::getInstance()->getLngDescription());
 
 $tpl = Template::getInstance();
 $form = new Form($uri);
@@ -89,7 +87,6 @@ $form
 
     ->fieldsetStart(__('language'))
 
-    //TODO: Добавить проверку на удаленный язык
     ->add('radio', 'iso', array(
     'checked' => Vars::$USER_SET['lng'],
     'items'   => $items))

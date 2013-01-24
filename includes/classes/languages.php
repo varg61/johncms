@@ -43,29 +43,11 @@ class Languages
     }
 
     /**
-     * Переключатель языков
-     *
-     * @return bool
-     */
-    //TODO: Убрать и перенести в модуль переключения языков
-    public function lngSwitch()
-    {
-        $setLng = isset($_POST['setlng']) ? substr(Validate::checkin($_POST['setlng']), 0, 2) : FALSE;
-        if ($setLng && in_array($setLng, $this->_lngList)) {
-            $_SESSION['lng'] = $setLng;
-
-            return TRUE;
-        }
-
-        return FALSE;
-    }
-
-    /**
      * Автоматическое определение языка
      *
      * @return string
      */
-    private function _lngDetect()
+    public function getCurrentISO()
     {
         if (is_null($this->_lng)) {
             $this->_lng = Vars::$SYSTEM_SET['lng'];
@@ -148,7 +130,7 @@ class Languages
             $this->_moduleLanguage = FALSE;
 
             $module = array(
-                MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . $this->_lngDetect() . '.lng',
+                MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . $this->getCurrentISO() . '.lng',
                 MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . 'en.lng',
                 MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_lng' . DIRECTORY_SEPARATOR . 'ru.lng'
             );
@@ -163,7 +145,7 @@ class Languages
         // Получаем системные фразы
         if (is_null($this->_systemLanguage)) {
             $system = array(
-                SYSPATH . 'languages' . DIRECTORY_SEPARATOR . $this->_lngDetect() . '.lng',
+                SYSPATH . 'languages' . DIRECTORY_SEPARATOR . $this->getCurrentISO() . '.lng',
                 SYSPATH . 'languages' . DIRECTORY_SEPARATOR . 'en.lng',
                 SYSPATH . 'languages' . DIRECTORY_SEPARATOR . 'ru.lng'
             );

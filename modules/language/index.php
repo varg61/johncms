@@ -10,7 +10,6 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
+define('_IN_LNG', 1);
 
-$tpl = Template::getInstance();
-$tpl->referer = isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL;
-$tpl->contents = $tpl->includeTpl('index');
+require_once(MODPATH . Router::$PATH . DIRECTORY_SEPARATOR . '_inc' . DIRECTORY_SEPARATOR . 'index.php');
