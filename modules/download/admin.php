@@ -9,61 +9,83 @@
  * @author      http://johncms.com/about
  */
 
+defined('_IN_JOHNCMS') or die('Error: restricted access');
+$uri = Router::getUri(3);
+
 // Проверяем права доступа
 if (Vars::$USER_RIGHTS < 7) {
     echo Functions::displayError(__('access_forbidden'));
     exit;
 }
-echo'<div class="phdr"><a href="' . Vars::$HOME_URL . 'admin/"><b>' . __('admin_panel') . '</b></a> | ' . __('downloads') . '</div>';
 
-/*
------------------------------------------------------------------
-Настройки Загруз-центра
------------------------------------------------------------------
-*/
-if (!isset(Vars::$SYSTEM_SET['download']) || isset($_GET['reset'])) {
+if (!isset(Vars::$SYSTEM_SET['download'])) {
     // Задаем настройки по умолчанию
-    $settings = array('mod'           => 1,
-                      'theme_screen'  => 1,
-                      'top'           => 25,
-                      'icon_java'     => 1,
-                      'video_screen'  => 1,
-                      'screen_resize' => 1);
+    $settings = array(
+        'mod'           => 1,
+        'theme_screen'  => 1,
+        'top'           => 25,
+        'icon_java'     => 1,
+        'video_screen'  => 1,
+        'screen_resize' => 1
+    );
     $data = DB::PDO()->quote(serialize($settings));
     DB::PDO()->exec("INSERT INTO `cms_settings` SET `key` = 'download', `val` = " . $data);
-    echo '<div class="rmenu"><p>' . __('settings_default') . '</p></div>';
-} elseif (isset($_POST['submit'])) {
-    // Принимаем настройки из формы
-    $settings['mod'] = isset($_POST['mod']) ? 1 : 0;
-    $settings['icon_java'] = isset($_POST['icon_java']) ? 1 : 0;
-    $settings['theme_screen'] = isset($_POST['theme_screen']) ? 1 : 0;
-    $settings['video_screen'] = isset($_POST['video_screen']) ? 1 : 0;
-    $settings['screen_resize'] = isset($_POST['screen_resize']) ? 1 : 0;
-    $settings['top'] = isset($_POST['top']) ? intval($_POST['top']) : 25;
-    if ($settings['top'] < 25 || $settings['top'] > 100) $settings['top'] = 25;
-    $data = DB::PDO()->quote(serialize($settings));
-    DB::PDO()->exec("UPDATE `cms_settings` SET `val` = " . $data . " WHERE `key` = 'download'");
-    echo '<div class="gmenu"><p>' . __('settings_saved') . '</p></div>';
 } else {
-    // Получаем сохраненные настройки
+    // Получаем имеющиеся настройки
     $settings = unserialize(Vars::$SYSTEM_SET['download']);
 }
 
-/*
------------------------------------------------------------------
-Форма ввода настроек
------------------------------------------------------------------
-*/
-echo'<form action="' . Router::getUri(3) . '?act=download" method="post">' .
-    '<div class="menu"><p><h3>' . __('functions_download') . '</h3></p>' .
-    '<p>&nbsp;<input name="mod" type="checkbox" value="1" ' . ($settings['mod'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_files_mod') . '<br />' .
-    '&nbsp;<input name="theme_screen" type="checkbox" value="1" ' . ($settings['theme_screen'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_auto_screen') . '<br />' .
-    '&nbsp;<input name="video_screen" type="checkbox" value="1" ' . ($settings['video_screen'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_auto_screen_video') . '<br />' .
-    '&nbsp;<input name="icon_java" type="checkbox" value="1" ' . ($settings['icon_java'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_java_icons') . '<br />' .
-    '&nbsp;<input name="screen_resize" type="checkbox" value="1" ' . ($settings['screen_resize'] ? 'checked="checked"' : '') . ' />&nbsp;' . __('set_screen_resize') . '</p>' .
-    '<p><h3>' . __('set_top_files') . '</h3>&nbsp;<input type="text" size="3" maxlength="3" name="top" value="' . $settings['top'] . '" />&nbsp;(25 - 100)</p>' .
-    '<p><input type="submit" value="' . __('save') . '" name="submit" /></p></div>' .
-    '<div class="phdr"><a href="' . Router::getUri(3) . '?reset">' . __('reset_settings') . '</a>' .
-    '</div></form>' .
-    '<p><a href="' . Vars::$HOME_URL . 'admin/">' . __('admin_panel') . '</a><br />' .
-    '<a href="' . Router::getUri(2) . '">' . __('downloads') . '</a></p>';
+$tpl = Template::getInstance();
+$form = new Form($uri);
+
+$form
+    ->fieldsetStart(__('functions_download'))
+
+    ->add('checkbox', 'mod', array(
+    'checked'      => $settings['mod'],
+    'label_inline' => __('set_files_mod')))
+
+    ->add('checkbox', 'theme_screen', array(
+    'checked'      => $settings['theme_screen'],
+    'label_inline' => __('set_auto_screen')))
+
+    ->add('checkbox', 'video_screen', array(
+    'checked'      => $settings['video_screen'],
+    'label_inline' => __('set_auto_screen_video')))
+
+    ->add('checkbox', 'icon_java', array(
+    'checked'      => $settings['icon_java'],
+    'label_inline' => __('set_java_icons')))
+
+    ->add('checkbox', 'screen_resize', array(
+    'checked'      => $settings['screen_resize'],
+    'label_inline' => __('set_screen_resize')))
+
+    ->add('text', 'top', array(
+    'value'        => $settings['top'],
+    'label_inline' => __('set_top_files'),
+    'class'        => 'small',
+    'filter'       => array(
+        'type' => 'int',
+        'min'  => 25,
+        'max'  => 100
+    )))
+
+    ->fieldsetStart()
+
+    ->add('submit', 'submit', array(
+    'value' => __('save'),
+    'class' => 'btn btn-primary btn-large'))
+
+    ->addHtml('<a class="btn" href="' . Vars::$HOME_URL . 'admin/' . '">' . __('back') . '</a>');
+
+$tpl->form = $form->display();
+
+if ($form->isSubmitted) {
+    // Записываем настройки в базу
+    $data = DB::PDO()->quote(serialize($form->validOutput));
+    DB::PDO()->exec("UPDATE `cms_settings` SET `val` = " . $data . " WHERE `key` = 'download'");
+    $tpl->save = 1;
+}
+
+$tpl->contents = $tpl->includeTpl('admin');

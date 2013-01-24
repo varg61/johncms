@@ -10,9 +10,10 @@
  */
 
 defined('_IN_ADMIN') or die('Error: restricted access');
+$uri = Router::getUri(3);
 
 $tpl = Template::getInstance();
-$form = new Form(Router::getUri(3));
+$form = new Form($uri);
 
 $form
     ->fieldsetStart(__('language_default'))
@@ -50,7 +51,7 @@ if ($form->isSubmitted) {
     }
 
     unset($_SESSION['lng']);
-    header('Location: ' . Router::getUri(3) . '?save');
+    header('Location: ' . $uri . '?save');
 }
 
 $tpl->contents = $tpl->includeTpl('language');

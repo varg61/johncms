@@ -9,7 +9,7 @@
     <li><a href="<?= $this->uri ?>users_settings/"><i class="icn-settings"></i><?= __('settings') ?><i class="icn-arrow right"></i></a></li>
     <li><h2><?= __('modules') ?></h2></li>
     <li><a href="<?= Vars::$HOME_URL ?>forum/admin/"><i class="icn-comments"></i><?= __('forum') ?> //планируется<i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= Vars::$HOME_URL ?>download/admin/"><i class="icn-download"></i><?= __('downloads') ?> //планируется<i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= Vars::$HOME_URL ?>download/admin/"><i class="icn-download"></i><?= __('downloads') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>news/admin/"><i class="icn-news"></i><?= __('news') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= $this->uri ?>links/"><i class="icn-flower"></i><?= __('advertisement') ?> //планируется<i class="icn-arrow right"></i></a></li>
         <?php if (Vars::$USER_RIGHTS == 9): ?>
