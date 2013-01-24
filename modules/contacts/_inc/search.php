@@ -36,7 +36,7 @@ if ($search && Validate::nickname($search, 1) === TRUE) {
 	WHERE `cms_mail_contacts`.`user_id`='" . Vars::$USER_ID . "'
 	AND `cms_mail_contacts`.`delete`='0'
 	AND `users`.`nickname`
-	LIKE '" . $search_db . "'")->fetchColumn();
+	LIKE " . $search_db)->fetchColumn();
     if ($total) {
         //Формируем список контактов
         $query = DB::PDO()->query("SELECT `users`.`id`, `users`.`nickname`,  `users`.`sex`,  `users`.`last_visit`,
@@ -57,7 +57,7 @@ if ($search && Validate::nickname($search, 1) === TRUE) {
 		AND `cms_mail_messages`.`delete_in`!='" . Vars::$USER_ID . "'
 		AND `users`.`id` IS NOT NULL
 		AND `users`.`nickname`
-		LIKE '" . $search_db . "'
+		LIKE " . $search_db . "
 		GROUP BY `cms_mail_contacts`.`contact_id`
 		ORDER BY `cms_mail_contacts`.`time` DESC" . Vars::db_pagination());
 

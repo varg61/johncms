@@ -77,7 +77,7 @@ if (!$error) {
                 $res_u = $req_u->fetch();
                 DB::PDO()->exec("UPDATE `users` SET `count_forum` = '" . ($res_u['count_forum'] + 1) . "' WHERE `id` = '" . $res['user_id'] . "'");
             }
-            DB::PDO()->exec("UPDATE `forum` SET `close` = '0', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
+            DB::PDO()->exec("UPDATE `forum` SET `close` = '0', `close_who` = " . $nick . " WHERE `id` = " . Vars::$ID);
             $req_f = DB::PDO()->query("SELECT * FROM `cms_forum_files` WHERE `post` = " . Vars::$ID . " LIMIT 1");
             if ($req_f->rowCount()) {
                 DB::PDO()->exec("UPDATE `cms_forum_files` SET `del` = '0' WHERE `post` = " . Vars::$ID . " LIMIT 1");
@@ -128,10 +128,10 @@ if (!$error) {
                 if ($posts == 1) {
                     // Если это был последний пост темы, то скрываем саму тему
                     $res_l = DB::PDO()->query("SELECT `refid` FROM `forum` WHERE `id` = '" . $res['refid'] . "'")->fetch();
-                    DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = '" . $nick . "' WHERE `id` = '" . $res['refid'] . "' AND `type` = 't'");
+                    DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = " . $nick . " WHERE `id` = '" . $res['refid'] . "' AND `type` = 't'");
                     header('Location: ' . $url . '?id=' . $res_l['refid']);
                 } else {
-                    DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = " . $nick . " WHERE `id` = " . Vars::$ID);
                     header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
                 }
             }

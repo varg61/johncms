@@ -55,7 +55,7 @@ if ($search && !$error) {
     $search_db = strtr($search, array('_' => '\\_', '%' => '\\%', '*' => '%'));
     $search_db = '%' . $search_db . '%';
     $search_db = DB::PDO()->quote($search_db);
-    $sql = (Vars::$ID ? '`about`' : '`rus_name`') . ' LIKE \'' . $search_db . '\'';
+    $sql = (Vars::$ID ? '`about`' : '`rus_name`') . ' LIKE ' . $search_db;
     /*
     -----------------------------------------------------------------
     Результаты поиска

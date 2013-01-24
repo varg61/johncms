@@ -57,16 +57,16 @@ if ($search && !$error) {
     $query = DB::PDO()->quote($search);
     $total = DB::PDO()->query("
         SELECT COUNT(*) FROM `lib`
-        WHERE MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE)
+        WHERE MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ($query IN BOOLEAN MODE)
         AND `type` = 'bk'")->fetchColumn();
     echo '<div class="phdr">' . __('search_results') . '</div>';
     if ($total > Vars::$USER_SET['page_size'])
         echo '<div class="topmenu">' . Functions::displayPagination($url . '?' . ($search_t ? 't=1&amp;' : '') . 'search=' . urlencode($search) . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     if ($total) {
         $req = DB::PDO()->query("
-            SELECT *, MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE) as `rel`
+            SELECT *, MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ($query IN BOOLEAN MODE) as `rel`
             FROM `lib`
-            WHERE MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ('$query' IN BOOLEAN MODE)
+            WHERE MATCH (`" . ($search_t ? 'name' : 'text') . "`) AGAINST ($query IN BOOLEAN MODE)
             AND `type` = 'bk'
             ORDER BY `rel` DESC
             " . Vars::db_pagination()

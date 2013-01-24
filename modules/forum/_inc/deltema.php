@@ -50,7 +50,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
             -----------------------------------------------------------------
             */
             $nick = DB::PDO()->quote(Vars::$USER_NICKNAME);
-            DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
+            DB::PDO()->exec("UPDATE `forum` SET `close` = '1', `close_who` = " . $nick . " WHERE `id` = " . Vars::$ID);
             DB::PDO()->exec("UPDATE `cms_forum_files` SET `del` = '1' WHERE `topic` = " . Vars::$ID);
         }
         header('Location: ' . $url . '?id=' . $res['refid']);

@@ -44,20 +44,20 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
     } else if (isset($_POST['submit'])) {
         $vote_name = DB::PDO()->quote(mb_substr(trim($_POST['name_vote']), 0, 50));
         if (!empty($vote_name)) {
-            DB::PDO()->exec("UPDATE `cms_forum_vote` SET  `name` = '" . $vote_name . "'  WHERE `topic` = " . Vars::$ID . " AND `type` = '1'");
+            DB::PDO()->exec("UPDATE `cms_forum_vote` SET  `name` = " . $vote_name . "  WHERE `topic` = " . Vars::$ID . " AND `type` = '1'");
         }
         $vote_result = DB::PDO()->query("SELECT `id` FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID);
         while ($vote = $vote_result->fetch()) {
             if (!empty($_POST[$vote['id'] . 'vote'])) {
                 $text = DB::PDO()->quote(mb_substr(trim($_POST[$vote['id'] . 'vote']), 0, 30));
-                DB::PDO()->exec("UPDATE `cms_forum_vote` SET  `name` = '" . $text . "'  WHERE `id` = '" . $vote['id'] . "'");
+                DB::PDO()->exec("UPDATE `cms_forum_vote` SET  `name` = " . $text . "  WHERE `id` = '" . $vote['id'] . "'");
             }
         }
         $countvote = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID)->fetchColumn();
         for ($vote = $countvote; $vote < 20; $vote++) {
             if (!empty($_POST[$vote])) {
                 $text = DB::PDO()->quote(mb_substr(trim($_POST[$vote]), 0, 30));
-                DB::PDO()->exec("INSERT INTO `cms_forum_vote` SET `name` = '" . $text . "',  `type` = '2', `topic` = " . Vars::$ID);
+                DB::PDO()->exec("INSERT INTO `cms_forum_vote` SET `name` = " . $text . ",  `type` = '2', `topic` = " . Vars::$ID);
             }
         }
         echo '<div class="gmenu"><p>' . __('voting_changed') . '<br /><a href="' . $url . '?id=' . Vars::$ID . '">' . __('continue') . '</a></p></div>';

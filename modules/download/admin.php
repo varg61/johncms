@@ -30,7 +30,7 @@ if (!isset(Vars::$SYSTEM_SET['download']) || isset($_GET['reset'])) {
                       'video_screen'  => 1,
                       'screen_resize' => 1);
     $data = DB::PDO()->quote(serialize($settings));
-    DB::PDO()->exec("INSERT INTO `cms_settings` SET `key` = 'download', `val` = '" . $data . "'");
+    DB::PDO()->exec("INSERT INTO `cms_settings` SET `key` = 'download', `val` = " . $data);
     echo '<div class="rmenu"><p>' . __('settings_default') . '</p></div>';
 } elseif (isset($_POST['submit'])) {
     // Принимаем настройки из формы
@@ -42,7 +42,7 @@ if (!isset(Vars::$SYSTEM_SET['download']) || isset($_GET['reset'])) {
     $settings['top'] = isset($_POST['top']) ? intval($_POST['top']) : 25;
     if ($settings['top'] < 25 || $settings['top'] > 100) $settings['top'] = 25;
     $data = DB::PDO()->quote(serialize($settings));
-    DB::PDO()->exec("UPDATE `cms_settings` SET `val` = '" . $data . "' WHERE `key` = 'download'");
+    DB::PDO()->exec("UPDATE `cms_settings` SET `val` = " . $data . " WHERE `key` = 'download'");
     echo '<div class="gmenu"><p>' . __('settings_saved') . '</p></div>';
 } else {
     // Получаем сохраненные настройки

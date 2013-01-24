@@ -19,7 +19,7 @@ $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID . " AN
 if ($req->rowCount()) {
     $res = $req->fetch();
     $nick = DB::PDO()->quote(Vars::$USER_NICKNAME);
-    DB::PDO()->exec("UPDATE `forum` SET `close` = '0', `close_who` = '" . $nick . "' WHERE `id` = " . Vars::$ID);
+    DB::PDO()->exec("UPDATE `forum` SET `close` = '0', `close_who` = " . $nick . " WHERE `id` = " . Vars::$ID);
     if ($res['type'] == 't') {
         header('Location: ' . Router::getUri(2) . '?id=' . Vars::$ID);
     } else {

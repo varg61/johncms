@@ -86,7 +86,7 @@ switch (Vars::$ACT) {
 
             $data = DB::PDO()->quote(serialize($rel));
 
-            DB::PDO()->exec("UPDATE `users` SET `relationship` = '" . $data . "' WHERE `id` = " . $tpl->user['id']);
+            DB::PDO()->exec("UPDATE `users` SET `relationship` = " . $data . " WHERE `id` = " . $tpl->user['id']);
 
             //TODO: Переделать ссылку
             header('Location: ' . Vars::$HOME_URL . '/profile?act=reputation&user=' . $tpl->user['id']);
