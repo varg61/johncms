@@ -39,7 +39,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                     unlink(ROOTPATH . 'files' . DIRECTORY_SEPARATOR . 'forum' . DIRECTORY_SEPARATOR . $res1['filename']);
                 }
                 DB::PDO()->exec("DELETE FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID);
-                DB::PDO()->exec("OPTIMIZE TABLE `cms_forum_files`");
+                DB::PDO()->query("OPTIMIZE TABLE `cms_forum_files`");
             }
             DB::PDO()->exec("DELETE FROM `forum` WHERE `refid` = " . Vars::$ID);
             DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);

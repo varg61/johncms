@@ -53,7 +53,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         DB::PDO()->exec("DELETE FROM `cms_download_files` WHERE `refid` = " . VARS::$ID);
         DB::PDO()->exec("DELETE FROM `cms_download_category` WHERE `id` = " . VARS::$ID);
 
-        DB::PDO()->exec("OPTIMIZE TABLE `cms_download_bookmark`, `cms_download_files`, `cms_download_comments`, `cms_download_more`, `cms_download_category`");
+        DB::PDO()->query("OPTIMIZE TABLE `cms_download_bookmark`, `cms_download_files`, `cms_download_comments`, `cms_download_more`, `cms_download_category`");
 
         rmdir($res['dir']);
         header('location: ' . $url . '?id=' . $res['refid']);

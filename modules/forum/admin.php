@@ -138,7 +138,7 @@ switch ($mod) {
                         // Удаляем раздел
                         DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                         // Оптимизируем таблицы
-                        DB::PDO()->exec("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `cms_forum_vote` , `cms_forum_vote_users`");
+                        DB::PDO()->query("OPTIMIZE TABLE `cms_forum_files` , `cms_forum_rdm` , `forum` , `cms_forum_vote` , `cms_forum_vote_users`");
                         echo'<div class="rmenu"><p>' . __('section_themes_deleted') . '<br />' .
                             '<a href="index.php?act=forum&amp;mod=cat&amp;id=' . $res['refid'] . '">' . __('to_category') . '</a></p></div>';
                     } else {

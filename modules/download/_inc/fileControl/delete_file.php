@@ -60,7 +60,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         }
         DB::PDO()->exec("UPDATE `cms_download_category` SET `total` = (`total`-1) WHERE $sql");
         DB::PDO()->exec("DELETE FROM `cms_download_files` WHERE `id` = " . Vars::$ID);
-        DB::PDO()->exec("OPTIMIZE TABLE `cms_download_files`");
+        DB::PDO()->query("OPTIMIZE TABLE `cms_download_files`");
         header('Location: ' . $url . '?id=' . $res_down['refid']);
     } else {
         echo '<div class="phdr"><b>' . __('delete_file') . '</b></div>' .

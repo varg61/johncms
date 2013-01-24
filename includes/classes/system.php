@@ -19,11 +19,11 @@ class System extends Vars
         // Получаем системные настройки
         $this->_sysSettings();
 
-        // Автоочистка системы
-        $this->_autoClean();
-
         // Авторизация пользователей
         $this->_authorizeUser();
+
+        // Автоочистка системы
+        $this->_autoClean();
 
         // Определяем и загружаем язык
         $this->_lngDetect();
@@ -117,17 +117,11 @@ class System extends Vars
         }
 
         if ($id && $token) {
-            $STH = DB::PDO()->prepare('
-                SELECT * FROM `users`
-                WHERE `id` = :uid
-            ');
+            $user = DB::PDO()->query('SELECT * FROM `users` WHERE `id` = ' . $id);
 
-            $STH->bindParam(':uid', $id, PDO::PARAM_INT);
-            $STH->execute();
-
-            if ($STH->rowCount()) {
-                $result = $STH->fetch();
-                $STH = NULL;
+            if ($user->rowCount()) {
+                $result = $user->fetch();
+                $user = null;
 
                 // Допуск на авторизацию с COOKIE
                 if ($cookie && $result['login_try'] > 2 && ($result['ip'] != static::$IP || $result['ip_via_proxy'] != static::$IP_VIA_PROXY || $result['useragent'] != static::$USER_AGENT)) {
@@ -164,19 +158,14 @@ class System extends Vars
                     // Фиксация данных
                     $STHF = DB::PDO()->prepare('
                         UPDATE `users` SET
-                        `last_visit`   = :time,
-                        `ip`           = :ip,
-                        `ip_via_proxy` = :ipvia,
-                        `user_agent`   = :ua
-                        WHERE `id`     = :uid
-                    ');
+                        `last_visit`   = ' . time() . ',
+                        `ip`           = ' . static::$IP . ',
+                        `ip_via_proxy` = ' . static::$IP_VIA_PROXY . ',
+                        `user_agent`   = ?
+                        WHERE `id`     = ' . $id
+                    );
 
-                    $STHF->bindValue(':time', time(), PDO::PARAM_INT);
-                    $STHF->bindValue(':ip', static::$IP, PDO::PARAM_INT);
-                    $STHF->bindValue(':ipvia', static::$IP_VIA_PROXY, PDO::PARAM_INT);
-                    $STHF->bindValue(':ua', static::$USER_AGENT, PDO::PARAM_STR);
-                    $STHF->bindParam(':uid', $id, PDO::PARAM_INT);
-                    $STHF->execute();
+                    $STHF->execute(array(static::$USER_AGENT));
                     $STHF = NULL;
 
                     // Проверка на бан
@@ -185,16 +174,11 @@ class System extends Vars
                     }
                 } else {
                     // Если авторизация не прошла
-                    $STHT = DB::PDO()->prepare('
+                    DB::PDO()->exec('
                         UPDATE `users` SET
-                        `login_try` = :try
-                        WHERE `id`  = :uid
-                    ');
-
-                    $STHT->bindValue(':try', ++$result['login_try'], PDO::PARAM_INT);
-                    $STHT->bindValue(':uid', $result['id'], PDO::PARAM_INT);
-                    $STHT->execute();
-                    $STHT = NULL;
+                        `login_try` = ' . ++$result['login_try'] . '
+                        WHERE `id`  = ' . $result['id']
+                    );
 
                     static::userUnset();
                 }
@@ -212,23 +196,18 @@ class System extends Vars
      */
     private function _checkUserBan()
     {
-        $STH = DB::PDO()->prepare('
+        $ban = DB::PDO()->query('
             SELECT * FROM `cms_ban_users`
-            WHERE `user_id` = :uid
-            AND `ban_time`  > :time
-        ');
+            WHERE `user_id` = ' . static::$USER_ID . '
+            AND `ban_time`  > ' . time()
+        );
 
-        $STH->bindValue(':uid', static::$USER_ID, PDO::PARAM_INT);
-        $STH->bindValue(':time', time(), PDO::PARAM_INT);
-        $STH->execute();
-
-        if ($STH->rowCount()) {
+        if ($ban->rowCount()) {
             static::$USER_RIGHTS = 0;
-            while ($result = $STH->fetch()) {
+            while ($result = $ban->fetch()) {
                 static::$USER_BAN[$result['ban_type']] = 1;
             }
         }
-        $STH = NULL;
     }
 
     /**
@@ -240,53 +219,39 @@ class System extends Vars
     private function _userIpHistory($ip, $ipvia)
     {
         if ($ip != static::$IP || $ipvia != static::$IP_VIA_PROXY) {
-            $STH = DB::PDO()->prepare('
-                SELECT * FROM `cms_user_ip`
-                WHERE `user_id`    = :uid
-                AND `ip`           = :ip
-                AND `ip_via_proxy` = :ipvia
+            $iphist = DB::PDO()->query('
+                SELECT `id` FROM `cms_user_ip`
+                WHERE `user_id`    = ' . static::$USER_ID . '
+                AND `ip`           = ' . static::$IP . '
+                AND `ip_via_proxy` = ' . static::$IP_VIA_PROXY . '
                 LIMIT 1
             ');
 
-            $STH->bindValue(':uid', static::$USER_ID, PDO::PARAM_INT);
-            $STH->bindValue(':ip', static::$IP, PDO::PARAM_INT);
-            $STH->bindParam(':ipvia', static::$IP_VIA_PROXY, PDO::PARAM_INT);
-            $STH->execute();
-
-            if ($STH->rowCount()) {
+            if ($iphist->rowCount()) {
                 // Обновляем имеющуюся запись
-                $result = $STH->fetch();
-                $STH = NULL;
+                $result = $iphist->fetch();
 
-                $STHU = DB::PDO()->prepare('
+                $STH = DB::PDO()->prepare('
                     UPDATE `cms_user_ip` SET
-                    `user_agent` = :ua,
-                    `timestamp`  = :time
-                    WHERE `id`   = :id
-                ');
+                    `user_agent` = ?,
+                    `timestamp`  = ' . time() . '
+                    WHERE `id`   = ' . $result['id']
+                );
 
-                $STHU->bindValue(':ua', static::$USER_AGENT, PDO::PARAM_STR);
-                $STHU->bindValue(':time', time(), PDO::PARAM_INT);
-                $STHU->bindValue(':id', $result['id'], PDO::PARAM_INT);
-                $STHU->execute();
-                $STHU = NULL;
+                $STH->execute(array(static::$USER_AGENT));
+                $STH = NULL;
             } else {
                 // Вставляем новую запись
                 $STHI = DB::PDO()->prepare('
                     INSERT INTO `cms_user_ip` SET
-                    `user_id`      = :uid,
-                    `ip`           = :ip,
-                    `ip_via_proxy` = :ipvia,
-                    `user_agent`   = :ua,
-                    `timestamp`    = :time
-                ');
+                    `user_id`      = ' . static::$USER_ID . ',
+                    `ip`           = ' . static::$IP . ',
+                    `ip_via_proxy` = ' . static::$IP_VIA_PROXY . ',
+                    `user_agent`   = ?,
+                    `timestamp`    = ' . time()
+                );
 
-                $STHI->bindValue(':uid', static::$USER_ID, PDO::PARAM_INT);
-                $STHI->bindValue(':ip', static::$IP, PDO::PARAM_INT);
-                $STHI->bindValue(':ipvia', static::$IP_VIA_PROXY, PDO::PARAM_INT);
-                $STHI->bindValue(':ua', static::$USER_AGENT, PDO::PARAM_STR);
-                $STHI->bindValue(':time', time(), PDO::PARAM_INT);
-                $STHI->execute();
+                $STHI->execute(array(static::$USER_AGENT));
                 $STHI = NULL;
             }
         }

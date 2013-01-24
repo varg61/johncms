@@ -36,7 +36,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
         }
     }
 
-    DB::PDO()->exec("OPTIMIZE TABLE `cms_download_files`");
+    DB::PDO()->query("OPTIMIZE TABLE `cms_download_files`");
     echo '<div class="phdr"><b>' . __('download_scan_about') . '</b></div>';
     if (isset($_GET['clean'])) {
         echo '<div class="rmenu"><p>' . __('scan_about_clean_ok') . '</p></div>';

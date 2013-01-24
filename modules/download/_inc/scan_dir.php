@@ -65,7 +65,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 DB::PDO()->exec("UPDATE `cms_download_category` SET `total` = '$dir_files' WHERE `id` = '" . $res_down['id'] . "'");
             }
 
-            DB::PDO()->exec("OPTIMIZE TABLE `cms_download_bookmark`, `cms_download_files`, `cms_download_comments`,`cms_download_more`");
+            DB::PDO()->query("OPTIMIZE TABLE `cms_download_bookmark`, `cms_download_files`, `cms_download_comments`,`cms_download_more`");
 
             echo '<div class="phdr"><b>' . __('scan_dir_clean') . '</b></div>' .
                 '<div class="rmenu"><p>' . __('scan_dir_clean_ok') . '</p></div>' .
