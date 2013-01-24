@@ -48,10 +48,12 @@ class System extends Vars
         }
 
         if (isset(static::$SYSTEM_SET['users'])) {
-            static::$USER_SYS = unserialize(static::$SYSTEM_SET['users']);
+            static::$USER_SYS = array_merge(static::$USER_SYS, unserialize(static::$SYSTEM_SET['users']));
         }
 
-        static::$ACL = isset(static::$SYSTEM_SET['acl']) ? unserialize(static::$SYSTEM_SET['acl']) : array();
+        if(isset(static::$SYSTEM_SET['acl'])){
+            static::$ACL = array_merge(static::$ACL, unserialize(static::$SYSTEM_SET['acl']));
+        }
 
         $subpath = trim(ltrim(str_replace('\\', '/', ROOTPATH), $_SERVER['DOCUMENT_ROOT']), '/\\');
         static::$HOME_URL = 'http://' . trim($_SERVER['SERVER_NAME'], '/\\') . '/' . (!empty($subpath) ? $subpath . '/' : '');
