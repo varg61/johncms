@@ -9,14 +9,8 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_FORUM') or die('Error: restricted access');
 $uri = Router::getUri(3);
-
-// Проверяем права доступа
-if (Vars::$USER_RIGHTS < 7) {
-    header('Location: http://johncms.com/404');
-    exit;
-}
 
 // Задаем пользовательские настройки форума
 if (($set_forum = Vars::getUserData('set_forum')) === FALSE) {
@@ -30,6 +24,7 @@ if (($set_forum = Vars::getUserData('set_forum')) === FALSE) {
 }
 
 $mod = isset(Router::$ROUTE[2]) ? Router::$ROUTE[2] : FALSE;
+$tpl = Template::getInstance();
 
 switch ($mod) {
     case 'del':
@@ -641,28 +636,22 @@ switch ($mod) {
         Панель управления форумом
         -----------------------------------------------------------------
         */
-        $total_cat = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'f'")->fetchColumn();
-        $total_sub = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r'")->fetchColumn();
-        $total_thm = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'")->fetchColumn();
-        $total_thm_del = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1'")->fetchColumn();
-        $total_msg = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'")->fetchColumn();
-        $total_msg_del = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'")->fetchColumn();
-        $total_files = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files`")->fetchColumn();
-        $total_votes = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'")->fetchColumn();
+        $tpl->total_cat = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'f'")->fetchColumn();
+        $tpl->total_sub = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r'")->fetchColumn();
+        $tpl->total_thm = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'")->fetchColumn();
+        $tpl->total_thm_del = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `close` = '1'")->fetchColumn();
+        $tpl->total_msg = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm'")->fetchColumn();
+        $tpl->total_msg_del = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'")->fetchColumn();
+        $tpl->total_files = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files`")->fetchColumn();
+        $tpl->total_votes = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'")->fetchColumn();
+
         echo'<div class="phdr"><a href="' . Vars::$HOME_URL . 'admin/"><b>' . __('admin_panel') . '</b></a> | ' . __('forum_management') . '</div>' .
-            '<div class="gmenu"><p><h3>' . __('statistics') . '</h3><ul>' .
-            '<li>' . __('categories') . ':&#160;' . $total_cat . '</li>' .
-            '<li>' . __('sections') . ':&#160;' . $total_sub . '</li>' .
-            '<li>' . __('themes') . ':&#160;' . $total_thm . '&#160;/&#160;<span class="red">' . $total_thm_del . '</span></li>' .
-            '<li>' . __('posts_adm') . ':&#160;' . $total_msg . '&#160;/&#160;<span class="red">' . $total_msg_del . '</span></li>' .
-            '<li>' . __('files') . ':&#160;' . $total_files . '</li>' .
-            '<li>' . __('votes') . ':&#160;' . $total_votes . '</li>' .
-            '</ul></p></div>' .
-            '<div class="menu"><p><h3>' . __('settings') . '</h3><ul>' .
-            '<li><a href="' . $uri . 'cat/"><b>' . __('forum_structure') . '</b></a></li>' .
             '<li><a href="' . $uri . 'hposts/">' . __('hidden_posts') . '</a> (' . $total_msg_del . ')</li>' .
             '<li><a href="' . $uri . 'htopics/">' . __('hidden_topics') . '</a> (' . $total_thm_del . ')</li>' .
             '</ul></p></div>' .
             '<div class="phdr"><a href="' . Router::getUri(2) . '">' . __('to_forum') . '</a></div>';
+
+        $tpl->uri = $uri;
+        $tpl->contents = $tpl->includeTpl('admin_main');
 }
 echo '<p><a href="' . Vars::$HOME_URL . 'admin/">' . __('admin_panel') . '</a></p>';
