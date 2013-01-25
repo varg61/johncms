@@ -87,7 +87,7 @@ $form
 
     ->fieldsetStart(__('language'))
 
-    ->add('radio', 'iso', array(
+    ->add('radio', 'lng', array(
     'checked' => Vars::$USER_SET['lng'],
     'items'   => $items))
 
@@ -106,8 +106,9 @@ if ($form->isSubmitted) {
         Vars::$USER_SET[$key] = $val;
     }
     Vars::setUserData('user_set', Vars::$USER_SET);
-    unset($_SESSION['user_set']);
-    $tpl->save = 1;
+    unset($_SESSION['user_set'], $_SESSION['lng']);
+
+    header('Location: ' . $uri . '?save');
 }
 
 $tpl->contents = $tpl->includeTpl('settings');

@@ -122,34 +122,35 @@ if ($form->isSubmitted) {
 
     $STH = DB::PDO()->prepare('
       UPDATE `users` SET
-      `sex`      = :sex,
-      `imname`   = :imname,
-      `birth`    = :birth,
-      `live`     = :live,
-      `about`    = :about,
-      `tel`      = :tel,
-      `siteurl`  = :siteurl,
-      `email`    = :email,
-      `mailvis`  = :mailvis,
-      `icq`      = :icq,
-      `skype`    = :skype
-      WHERE `id` = :id
+      `sex`      = ?,
+      `imname`   = ?,
+      `birth`    = ?,
+      `live`     = ?,
+      `about`    = ?,
+      `tel`      = ?,
+      `siteurl`  = ?,
+      `email`    = ?,
+      `mailvis`  = ?,
+      `icq`      = ?,
+      `skype`    = ?
+      WHERE `id` = ?
     ');
 
-    $STH->bindValue(':sex', Users::$data['sex']);
-    $STH->bindValue(':imname', Users::$data['imname']);
-    $STH->bindValue(':birth', Users::$data['birth']);
-    $STH->bindValue(':live', Users::$data['live']);
-    $STH->bindValue(':about', Users::$data['about']);
-    $STH->bindValue(':tel', Users::$data['tel']);
-    $STH->bindValue(':siteurl', Users::$data['siteurl']);
-    $STH->bindValue(':email', Users::$data['email']);
-    $STH->bindValue(':mailvis', Users::$data['mailvis']);
-    $STH->bindValue(':icq', Users::$data['icq']);
-    $STH->bindValue(':skype', Users::$data['skype']);
-    $STH->bindValue(':id', Users::$data['id']);
-    $STH->execute();
-    $STH = null;
+    $STH->execute(array(
+        Users::$data['sex'],
+        Users::$data['imname'],
+        Users::$data['birth'],
+        Users::$data['live'],
+        Users::$data['about'],
+        Users::$data['tel'],
+        Users::$data['siteurl'],
+        Users::$data['email'],
+        Users::$data['mailvis'],
+        Users::$data['icq'],
+        Users::$data['skype'],
+        Users::$data['id']
+    ));
+    $STH = NULL;
 
     $tpl->save = 1;
 }

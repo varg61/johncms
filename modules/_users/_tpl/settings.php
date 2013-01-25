@@ -3,7 +3,7 @@
 </ul>
 
 <div class="form-container">
-    <?php if (isset($this->save)): ?>
+    <?php if (isset($_GET['save'])): ?>
     <div class="form-block confirm">
         <?= __('settings_saved') ?>
     </div>
