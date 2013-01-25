@@ -10,32 +10,15 @@
  */
 
 defined('_IN_FORUM') or die('Error: restricted access');
-$url = Router::getUri(2);
+$uri = Router::getUri(2);
 
 if (isset($_SESSION['ref']))
     unset($_SESSION['ref']);
 
+$settings = Forum::settings();
 
-/*
------------------------------------------------------------------
-Настройки форума
------------------------------------------------------------------
-*/
-if (!Vars::$USER_ID || ($set_forum = Vars::getUserData('set_forum')) === FALSE) {
-    $set_forum = array(
-        'farea'    => 0,
-        'upfp'     => 0,
-        'preview'  => 1,
-        'postclip' => 1,
-        'postcut'  => 2
-    );
-}
+// Список расширений файлов, разрешенных к выгрузке
 
-/*
------------------------------------------------------------------
-Список расширений файлов, разрешенных к выгрузке
------------------------------------------------------------------
-*/
 // Файлы архивов
 $ext_arch = array(
     'zip',
@@ -191,7 +174,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         $type = DB::PDO()->query("SELECT * FROM `forum` WHERE `id`= " . Vars::$ID);
         if (!$type->rowCount()) {
             // Если темы не существует, показываем ошибку
-            echo Functions::displayError(__('error_topic_deleted'), '<a href="' . $url . '">' . __('to_forum') . '</a>');
+            echo Functions::displayError(__('error_topic_deleted'), '<a href="' . $uri . '">' . __('to_forum') . '</a>');
             exit;
         }
         $type1 = $type->fetch();
@@ -223,10 +206,10 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
             $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
             $res = $req->fetch();
             if ($res['type'] == 'f' || $res['type'] == 'r')
-                $tree[] = '<a href="' . $url . '?id=' . $parent . '">' . $res['text'] . '</a>';
+                $tree[] = '<a href="' . $uri . '?id=' . $parent . '">' . $res['text'] . '</a>';
             $parent = $res['refid'];
         }
-        $tree[] = '<a href="' . $url . '">' . __('forum') . '</a>';
+        $tree[] = '<a href="' . $uri . '">' . __('forum') . '</a>';
         krsort($tree);
         if ($type1['type'] != 't' && $type1['type'] != 'm')
             $tree[] = '<b>' . $type1['text'] . '</b>';
@@ -240,15 +223,15 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         if ($type1['type'] == 'f') {
             $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `cat` = " . Vars::$ID . $sql)->fetchColumn();
             if ($count > 0)
-                $filelink = '<a href="' . $url . '?act=files&amp;c=' . Vars::$ID . '">' . __('files_category') . '</a>';
+                $filelink = '<a href="' . $uri . '?act=files&amp;c=' . Vars::$ID . '">' . __('files_category') . '</a>';
         } elseif ($type1['type'] == 'r') {
             $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `subcat` = " . Vars::$ID . $sql)->fetchColumn();
             if ($count > 0)
-                $filelink = '<a href="' . $url . '?act=files&amp;s=' . Vars::$ID . '">' . __('files_section') . '</a>';
+                $filelink = '<a href="' . $uri . '?act=files&amp;s=' . Vars::$ID . '">' . __('files_section') . '</a>';
         } elseif ($type1['type'] == 't') {
             $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files` WHERE `topic` = " . Vars::$ID . $sql)->fetchColumn();
             if ($count > 0)
-                $filelink = '<a href="' . $url . '?act=files&amp;t=' . Vars::$ID . '">' . __('files_topic') . '</a>';
+                $filelink = '<a href="' . $uri . '?act=files&amp;t=' . Vars::$ID . '">' . __('files_topic') . '</a>';
         } else {
             $count = 0;
         }
@@ -274,7 +257,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         */
         echo '<p>' . Counters::forumMessagesNew(1) . '</p>' .
             '<div class="phdr">' . Functions::displayMenu($tree) . '</div>' .
-            '<div class="topmenu"><a href="' . $url . '/search?id=' . Vars::$ID . '">' . __('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
+            '<div class="topmenu"><a href="' . $uri . '/search?id=' . Vars::$ID . '">' . __('search') . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
         /*
         -----------------------------------------------------------------
@@ -312,15 +295,11 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 break;
 
             case 'r':
-                /*
-                -----------------------------------------------------------------
-                Список топиков
-                -----------------------------------------------------------------
-                */
+                // Список топиков
                 $total = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'"))->fetchColumn();
                 if ((Vars::$USER_ID && !isset(Vars::$USER_BAN['1']) && !isset(Vars::$USER_BAN['11']) && Vars::$ACL['forum'] != 3) || Vars::$USER_RIGHTS) {
                     // Кнопка создания новой темы
-                    echo '<div class="gmenu"><form action="' . $url . '?act=nt&amp;id=' . Vars::$ID . '" method="post"><input type="submit" value="' . __('new_topic') . '" /></form></div>';
+                    echo '<div class="gmenu"><form action="' . $uri . 'new_topic/?id=' . Vars::$ID . '" method="post"><input type="submit" value="' . __('new_topic') . '" /></form></div>';
                 }
                 if ($total) {
                     $req = DB::PDO()->query("SELECT * FROM `forum` WHERE `type`='t'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close`!='1'") . " AND `refid` = " . Vars::$ID . " ORDER BY `vip` DESC, `time` DESC " . Vars::db_pagination());
@@ -343,9 +322,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                             ($res['edit'] ? Functions::getIcon('forum_closed.png') : '')
                         );
                         echo Functions::displayMenu($icons, '&#160;', '&#160;');
-                        echo '<a href="' . $url . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
+                        echo '<a href="' . $uri . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $colmes1 . ']';
                         if ($cpg > 1) {
-                            echo '<a href="' . $url . '?id=' . $res['id'] . '&amp;page=' . $cpg . '">&#160;&gt;&gt;</a>';
+                            echo '<a href="' . $uri . '?id=' . $res['id'] . '&amp;page=' . $cpg . '">&#160;&gt;&gt;</a>';
                         }
                         echo '<div class="sub">';
                         echo $res['from'];
@@ -362,8 +341,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 }
                 echo '<div class="phdr">' . __('total') . ': ' . $total . '</div>';
                 if ($total > Vars::$USER_SET['page_size']) {
-                    echo '<div class="topmenu">' . Functions::displayPagination($url . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
-                        '<p><form action="' . $url . '?id=' . Vars::$ID . '" method="post">' .
+                    echo '<div class="topmenu">' . Functions::displayPagination($uri . '?id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>' .
+                        '<p><form action="' . $uri . '?id=' . Vars::$ID . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                         '</form></p>';
@@ -405,7 +384,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 // Выводим название топика
                 echo '<div class="phdr"><a name="up" id="up"></a><a href="#down">' . Functions::getImage('down.png') . '</a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
                 if ($colmes > Vars::$USER_SET['page_size']) {
-                    echo '<div class="topmenu">' . Functions::displayPagination($url . '?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>';
+                    echo '<div class="topmenu">' . Functions::displayPagination($uri . '?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>';
                 }
                 // Метки удаления темы
                 if ($type1['close']) {
@@ -430,11 +409,11 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     $vote_result = DB::PDO()->query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID . " ORDER BY `id` ASC");
                     if (!$type1['edit'] && !isset($_GET['vote_result']) && Vars::$USER_ID && $vote_user == 0) {
                         // Выводим форму с опросами
-                        echo'<form action="' . $url . '?act=vote&amp;id=' . Vars::$ID . '" method="post">';
+                        echo'<form action="' . $uri . '?act=vote&amp;id=' . Vars::$ID . '" method="post">';
                         while ($vote = $vote_result->fetch()) {
                             echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . Validate::checkout($vote['name'], 0, 1) . '<br />';
                         }
-                        echo'<p><input type="submit" name="submit" value="' . __('vote') . '"/><br /><a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
+                        echo'<p><input type="submit" name="submit" value="' . __('vote') . '"/><br /><a href="' . $uri . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
                             '">' . __('results') . '</a></p></form></div>';
                     } else {
                         // Выводим результаты голосования
@@ -446,13 +425,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         }
                         echo '</small></div><div class="bmenu">' . __('total_votes') . ': ';
                         if (Vars::$USER_RIGHTS > 6) {
-                            echo '<a href="' . $url . '?act=users&amp;id=' . Vars::$ID . '">' . $topic_vote['count'] . '</a>';
+                            echo '<a href="' . $uri . '?act=users&amp;id=' . Vars::$ID . '">' . $topic_vote['count'] . '</a>';
                         } else {
                             echo $topic_vote['count'];
                         }
                         echo '</div>';
                         if (Vars::$USER_ID && $vote_user == 0) {
-                            echo '<div class="bmenu"><a href="' . $url . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . $clip_forum . '">' . __('vote') . '</a></div>';
+                            echo '<div class="bmenu"><a href="' . $uri . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . $clip_forum . '">' . __('vote') . '</a></div>';
                         }
                     }
                 }
@@ -466,7 +445,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 Фиксация первого поста в теме
                 -----------------------------------------------------------------
                 */
-                if (($set_forum['postclip'] == 2 && ($set_forum['upfp'] ? Vars::$START < (ceil($colmes - Vars::$USER_SET['page_size'])) : Vars::$START > 0)) || isset($_GET['clip'])) {
+                if (($settings['postclip'] == 2 && ($settings['upfp'] ? Vars::$START < (ceil($colmes - Vars::$USER_SET['page_size'])) : Vars::$START > 0)) || isset($_GET['clip'])) {
                     $postres = DB::PDO()->query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`last_visit`, `users`.`status`, `users`.`datereg`
                     FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
                     WHERE `forum`.`type` = 'm' AND `forum`.`refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "
@@ -474,8 +453,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     echo '<div class="topmenu"><p>';
                     if (Vars::$USER_ID && Vars::$USER_ID != $postres['user_id']) {
                         echo '<a href="../users/profile.php?user=' . $postres['user_id'] . '&amp;fid=' . $postres['id'] . '"><b>' . $postres['from'] . '</b></a> ' .
-                            '<a href="' . $url . '?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '"> ' . __('reply_btn') . '</a> ' .
-                            '<a href="' . $url . '?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> ' . __('cytate_btn') . '</a> ';
+                            '<a href="' . $uri . '?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '"> ' . __('reply_btn') . '</a> ' .
+                            '<a href="' . $uri . '?act=say&amp;id=' . $postres['id'] . '&amp;start=' . Vars::$START . '&amp;cyt"> ' . __('cytate_btn') . '</a> ';
                     } else {
                         echo '<b>' . $postres['from'] . '</b> ';
                     }
@@ -494,7 +473,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     }
                     echo Validate::checkout(mb_substr($postres['text'], 0, 500), 0, 2);
                     if (mb_strlen($postres['text']) > 500) {
-                        echo '...<a href="' . $url . '?act=post&amp;id=' . $postres['id'] . '">' . __('read_all') . '</a>';
+                        echo '...<a href="' . $uri . '?act=post&amp;id=' . $postres['id'] . '">' . __('read_all') . '</a>';
                     }
                     echo '</p></div>';
                 }
@@ -503,7 +482,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 }
                 // Задаем правила сортировки (новые внизу / вверху)
                 if (Vars::$USER_ID) {
-                    $order = $set_forum['upfp'] ? 'DESC' : 'ASC';
+                    $order = $settings['upfp'] ? 'DESC' : 'ASC';
                 } else {
                     $order = ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) ? 'ASC' : 'DESC';
                 }
@@ -512,16 +491,16 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
                 WHERE `forum`.`type` = 'm' AND `forum`.`refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order " . Vars::db_pagination());
                 // Верхнее поле "Написать"
-                if ((Vars::$USER_ID && !$type1['edit'] && $set_forum['upfp'] && Vars::$SYSTEM_SET['mod_forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && $set_forum['upfp'])) {
-                    echo '<div class="gmenu"><form name="form1" action="' . $url . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
-                    if ($set_forum['farea']) {
+                if ((Vars::$USER_ID && !$type1['edit'] && $settings['upfp'] && Vars::$SYSTEM_SET['mod_forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && $settings['upfp'])) {
+                    echo '<div class="gmenu"><form name="form1" action="' . $uri . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
+                    if ($settings['farea']) {
                         echo '<p>' .
                             (!Vars::$IS_MOBILE ? TextParser::autoBB('form1', 'msg') : '') .
                             '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg"></textarea></p>' .
                             '<p><input type="checkbox" name="addfiles" value="1" /> ' . __('add_file') .
                             (Vars::$USER_SET['translit'] ? '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . __('translit') : '') .
                             '</p><p><input type="submit" name="submit" value="' . __('write') . '" style="width: 107px; cursor: pointer;"/> ' .
-                            ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                            ($settings['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                             '</p></form></div>';
                     } else {
                         echo '<p><input type="submit" name="submit" value="' . __('write') . '"/></p></form></div>';
@@ -529,7 +508,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 }
 
                 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
-                    echo '<form action="' . $url . '?act=massdel" method="post">';
+                    echo '<form action="' . $uri . '?act=massdel" method="post">';
                 }
 
                 for ($i = 1; $res = $req->fetch(); ++$i) {
@@ -570,8 +549,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     echo (time() > $res['last_visit'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
                     // Ссылки на ответ и цитирование
                     if (Vars::$USER_ID && Vars::$USER_ID != $res['user_id']) {
-                        echo '<a href="' . $url . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '">' . __('reply_btn') . '</a>&#160;' .
-                            '<a href="' . $url . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt">' . __('cytate_btn') . '</a> ';
+                        echo '<a href="' . $uri . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '">' . __('reply_btn') . '</a>&#160;' .
+                            '<a href="' . $uri . '?act=say&amp;id=' . $res['id'] . '&amp;start=' . Vars::$START . '&amp;cyt">' . __('cytate_btn') . '</a> ';
                     }
                     // Время поста
                     echo ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br />';
@@ -588,9 +567,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     -----------------------------------------------------------------
                     */
                     $text = $res['text'];
-                    if ($set_forum['postcut']) {
+                    if ($settings['postcut']) {
                         // Если текст длинный, обрезаем и даем ссылку на полный вариант
-                        switch ($set_forum['postcut']) {
+                        switch ($settings['postcut']) {
                             case 2:
                                 $cut = 1000;
                                 break;
@@ -602,14 +581,14 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                                 $cut = 500;
                         }
                     }
-                    if ($set_forum['postcut'] && mb_strlen($text) > $cut) {
+                    if ($settings['postcut'] && mb_strlen($text) > $cut) {
                         $text = mb_substr($text, 0, $cut);
                         $text = Validate::checkout($text, 1, 1);
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         if (Vars::$USER_SET['smilies']) {
                             $text = Functions::smilies($text, $res['rights'] ? 1 : 0);
                         }
-                        echo TextParser::noTags($text) . '...<br /><a href="' . $url . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
+                        echo TextParser::noTags($text) . '...<br /><a href="' . $uri . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
                     } else {
                         // Или, обрабатываем тэги и выводим весь текст
                         $text = Validate::checkout($text, 1, 1);
@@ -637,21 +616,21 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                             'png'
                         );
                         if (in_array($att_ext, $pic_ext)) {
-                            echo '<div><a href="' . $url . '?act=file&amp;id=' . $fres['id'] . '">';
+                            echo '<div><a href="' . $uri . '?act=file&amp;id=' . $fres['id'] . '">';
                             echo '<img src="' . Vars::$HOME_URL . 'assets/misc/forum_thumbinal.php?file=' . (urlencode($fres['filename'])) . '" alt="' . __('click_to_view') . '" /></a></div>';
                         } else {
-                            echo '<br /><a href="' . $url . '?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
+                            echo '<br /><a href="' . $uri . '?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
                         }
                         echo ' (' . $fls . ' кб.)<br/>';
                         echo __('downloads') . ': ' . $fres['dlcount'] . ' ' . __('time') . '</span>';
                         $file_id = $fres['id'];
                     }
-                    if (((Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6 || $curator) && Vars::$USER_RIGHTS >= $res['rights']) || ($res['user_id'] == Vars::$USER_ID && !$set_forum['upfp'] && (Vars::$START + $i) == $colmes && $res['time'] > time() - 300) || ($res['user_id'] == Vars::$USER_ID && $set_forum['upfp'] && Vars::$START == 0 && $i == 1 && $res['time'] > time() - 300)) {
+                    if (((Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6 || $curator) && Vars::$USER_RIGHTS >= $res['rights']) || ($res['user_id'] == Vars::$USER_ID && !$settings['upfp'] && (Vars::$START + $i) == $colmes && $res['time'] > time() - 300) || ($res['user_id'] == Vars::$USER_ID && $settings['upfp'] && Vars::$START == 0 && $i == 1 && $res['time'] > time() - 300)) {
                         // Ссылки на редактирование / удаление постов
                         $menu = array(
-                            '<a href="' . $url . '?act=editpost&amp;id=' . $res['id'] . '">' . __('edit') . '</a>',
-                            (Vars::$USER_RIGHTS >= 7 && $res['close'] == 1 ? '<a href="' . $url . '?act=editpost&amp;mod=restore&amp;id=' . $res['id'] . '">' . __('restore') . '</a>' : ''),
-                            ($res['close'] == 1 ? '' : '<a href="' . $url . '?act=editpost&amp;mod=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>')
+                            '<a href="' . $uri . '?act=editpost&amp;id=' . $res['id'] . '">' . __('edit') . '</a>',
+                            (Vars::$USER_RIGHTS >= 7 && $res['close'] == 1 ? '<a href="' . $uri . '?act=editpost&amp;mod=restore&amp;id=' . $res['id'] . '">' . __('restore') . '</a>' : ''),
+                            ($res['close'] == 1 ? '' : '<a href="' . $uri . '?act=editpost&amp;mod=del&amp;id=' . $res['id'] . '">' . __('delete') . '</a>')
                         );
                         echo '<div class="sub">';
                         if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6)
@@ -682,9 +661,9 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     echo '</form>';
                 }
                 // Нижнее поле "Написать"
-                if ((Vars::$USER_ID && !$type1['edit'] && !$set_forum['upfp'] && Vars::$SYSTEM_SET['mod_forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && !$set_forum['upfp'])) {
-                    echo '<div class="gmenu"><form name="form2" action="' . $url . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
-                    if ($set_forum['farea']) {
+                if ((Vars::$USER_ID && !$type1['edit'] && !$settings['upfp'] && Vars::$ACL['forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && !$settings['upfp'])) {
+                    echo '<div class="gmenu"><form name="form2" action="' . $uri . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
+                    if ($settings['farea']) {
                         echo '<p>';
                         if (!Vars::$IS_MOBILE) {
                             echo TextParser::autoBB('form2', 'msg');
@@ -695,7 +674,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                             echo '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . __('translit');
                         }
                         echo'</p><p><input type="submit" name="submit" value="' . __('write') . '" style="width: 107px; cursor: pointer;"/> ' .
-                            ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                            ($settings['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                             '</p></form></div>';
                     } else {
                         echo '<p><input type="submit" name="submit" value="' . __('write') . '"/></p></form></div>';
@@ -704,8 +683,8 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 echo '<div class="phdr"><a name="down" id="down"></a><a href="#up">' . Functions::getImage('up.png') . '</a>' .
                     '&#160;&#160;' . __('total') . ': ' . $colmes . '</div>';
                 if ($colmes > Vars::$USER_SET['page_size']) {
-                    echo '<div class="topmenu">' . Functions::displayPagination($url . '?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>' .
-                        '<p><form action="' . $url . '?id=' . Vars::$ID . '" method="post">' .
+                    echo '<div class="topmenu">' . Functions::displayPagination($uri . '?id=' . Vars::$ID . '&amp;', Vars::$START, $colmes, Vars::$USER_SET['page_size']) . '</div>' .
+                        '<p><form action="' . $uri . '?id=' . Vars::$ID . '" method="post">' .
                         '<input type="text" name="page" size="2"/>' .
                         '<input type="submit" value="' . __('to_page') . ' &gt;&gt;"/>' .
                         '</form></p>';
@@ -727,39 +706,39 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
                     echo '<p><div class="func">';
                     if (Vars::$USER_RIGHTS >= 7) {
-                        echo '<a href="' . $url . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('curators_of_the_topic') . '</a><br />';
+                        echo '<a href="' . $uri . '?act=curators&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('curators_of_the_topic') . '</a><br />';
                     }
                     echo isset($topic_vote) && $topic_vote > 0
-                        ? '<a href="' . $url . '?act=editvote&amp;id=' . Vars::$ID . '">' . __('edit_vote') . '</a><br/><a href="' . $url . '?act=delvote&amp;id=' . Vars::$ID . '">' . __('delete_vote') . '</a><br/>'
-                        : '<a href="' . $url . '?act=addvote&amp;id=' . Vars::$ID . '">' . __('add_vote') . '</a><br/>';
-                    echo '<a href="' . $url . '?act=ren&amp;id=' . Vars::$ID . '">' . __('topic_rename') . '</a><br/>';
+                        ? '<a href="' . $uri . '?act=editvote&amp;id=' . Vars::$ID . '">' . __('edit_vote') . '</a><br/><a href="' . $uri . '?act=delvote&amp;id=' . Vars::$ID . '">' . __('delete_vote') . '</a><br/>'
+                        : '<a href="' . $uri . '?act=addvote&amp;id=' . Vars::$ID . '">' . __('add_vote') . '</a><br/>';
+                    echo '<a href="' . $uri . '?act=ren&amp;id=' . Vars::$ID . '">' . __('topic_rename') . '</a><br/>';
                     // Закрыть - открыть тему
                     if ($type1['edit'] == 1) {
-                        echo '<a href="' . $url . '?act=close&amp;id=' . Vars::$ID . '">' . __('topic_open') . '</a><br/>';
+                        echo '<a href="' . $uri . '?act=close&amp;id=' . Vars::$ID . '">' . __('topic_open') . '</a><br/>';
                     } else {
-                        echo '<a href="' . $url . '?act=close&amp;id=' . Vars::$ID . '&amp;closed">' . __('topic_close') . '</a><br/>';
+                        echo '<a href="' . $uri . '?act=close&amp;id=' . Vars::$ID . '&amp;closed">' . __('topic_close') . '</a><br/>';
                     }
                     // Удалить - восстановить тему
                     if ($type1['close'] == 1) {
-                        echo '<a href="' . $url . '?act=restore&amp;id=' . Vars::$ID . '">' . __('topic_restore') . '</a><br/>';
+                        echo '<a href="' . $uri . '?act=restore&amp;id=' . Vars::$ID . '">' . __('topic_restore') . '</a><br/>';
                     }
-                    echo '<a href="' . $url . '?act=deltema&amp;id=' . Vars::$ID . '">' . __('topic_delete') . '</a><br/>';
+                    echo '<a href="' . $uri . '?act=deltema&amp;id=' . Vars::$ID . '">' . __('topic_delete') . '</a><br/>';
                     if ($type1['vip'] == 1) {
-                        echo '<a href="' . $url . '?act=vip&amp;id=' . Vars::$ID . '">' . __('topic_unfix') . '</a>';
+                        echo '<a href="' . $uri . '?act=vip&amp;id=' . Vars::$ID . '">' . __('topic_unfix') . '</a>';
                     } else {
-                        echo '<a href="' . $url . '?act=vip&amp;id=' . Vars::$ID . '&amp;vip">' . __('topic_fix') . '</a>';
+                        echo '<a href="' . $uri . '?act=vip&amp;id=' . Vars::$ID . '&amp;vip">' . __('topic_fix') . '</a>';
                     }
-                    echo '<br/><a href="' . $url . '?act=per&amp;id=' . Vars::$ID . '">' . __('topic_move') . '</a></div></p>';
+                    echo '<br/><a href="' . $uri . '?act=per&amp;id=' . Vars::$ID . '">' . __('topic_move') . '</a></div></p>';
                 }
                 if ($wholink) {
                     echo '<div>' . $wholink . '</div>';
                 }
                 if ($filter) {
-                    echo '<div><a href="' . $url . '?act=filter&amp;id=' . Vars::$ID . '&amp;do=unset">' . __('filter_cancel') . '</a></div>';
+                    echo '<div><a href="' . $uri . '?act=filter&amp;id=' . Vars::$ID . '&amp;do=unset">' . __('filter_cancel') . '</a></div>';
                 } else {
-                    echo '<div><a href="' . $url . '?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('filter_on_author') . '</a></div>';
+                    echo '<div><a href="' . $uri . '?act=filter&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '">' . __('filter_on_author') . '</a></div>';
                 }
-                echo '<a href="' . $url . '?act=tema&amp;id=' . Vars::$ID . '">' . __('download_topic') . '</a>';
+                echo '<a href="' . $uri . '?act=tema&amp;id=' . Vars::$ID . '">' . __('download_topic') . '</a>';
                 break;
 
             default:
@@ -780,13 +759,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         $count = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files`" . (Vars::$USER_RIGHTS >= 7 ? '' : " WHERE `del` != '1'"))->fetchColumn();
         echo'<p>' . Counters::forumMessagesNew(1) . '</p>' .
             '<div class="phdr"><b>' . __('forum') . '</b></div>' .
-            '<div class="topmenu"><a href="' . $url . '/search">' . __('search') . '</a> | <a href="' . $url . '?act=files">' . __('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
+            '<div class="topmenu"><a href="' . $uri . '/search">' . __('search') . '</a> | <a href="' . $uri . '?act=files">' . __('files_forum') . '</a> <span class="red">(' . $count . ')</span></div>';
         $req = DB::PDO()->query("SELECT `id`, `text`, `soft` FROM `forum` WHERE `type`='f' ORDER BY `realid`");
         if ($req->rowCount()) {
             for ($i = 0; $res = $req->fetch(); ++$i) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $count = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type`='r' and `refid`='" . $res['id'] . "'")->fetchColumn();
-                echo '<a href="' . $url . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
+                echo '<a href="' . $uri . '?id=' . $res['id'] . '">' . $res['text'] . '</a> [' . $count . ']';
                 if (!empty($res['soft'])) {
                     echo '<div class="sub"><span class="gray">' . $res['soft'] . '</span></div>';
                 }
@@ -804,25 +783,25 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
         WHERE `session_timestamp` > " . (time() - 300) . "
         AND `user_id` = 0
         AND `place` LIKE 'forum%'")->fetchColumn();
-        echo '<div class="phdr">' . (Vars::$USER_ID ? '<a href="' . $url . '?act=who">' . __('who_in_forum') . '</a>' : __('who_in_forum')) . '&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</div>';
+        echo '<div class="phdr">' . (Vars::$USER_ID ? '<a href="' . $uri . '?act=who">' . __('who_in_forum') . '</a>' : __('who_in_forum')) . '&#160;(' . $online_u . '&#160;/&#160;' . $online_g . ')</div>';
         unset($_SESSION['fsort_id']);
         unset($_SESSION['fsort_users']);
     }
 
     // Навигация внизу страницы
-    echo '<p>' . (Vars::$ID ? '<a href="' . $url . '">' . __('to_forum') . '</a><br />' : '');
+    echo '<p>' . (Vars::$ID ? '<a href="' . $uri . '">' . __('to_forum') . '</a><br />' : '');
     if (!Vars::$ID) {
-        echo'<a href="' . $url . '/rules">' . __('forum_rules') . '</a><br/>';
+        echo'<a href="' . $uri . '/rules">' . __('forum_rules') . '</a><br/>';
         if (Vars::$USER_RIGHTS >= 7) {
-            echo'<a href="' . $url . '/admin">' . __('admin_panel') . '</a><br/>';
+            echo'<a href="' . $uri . '/admin">' . __('admin_panel') . '</a><br/>';
         }
     }
     echo '</p>';
     if (!Vars::$USER_ID) {
         if ((empty($_SESSION['uppost'])) || ($_SESSION['uppost'] == 0)) {
-            echo '<a href="' . $url . '?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newup">' . __('new_on_top') . '</a>';
+            echo '<a href="' . $uri . '?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newup">' . __('new_on_top') . '</a>';
         } else {
-            echo '<a href="' . $url . '?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newdown">' . __('new_on_bottom') . '</a>';
+            echo '<a href="' . $uri . '?id=' . Vars::$ID . '&amp;page=' . Vars::$PAGE . '&amp;newdown">' . __('new_on_bottom') . '</a>';
         }
     }
 }

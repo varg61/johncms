@@ -28,11 +28,7 @@ $tpl = Template::getInstance();
 
 switch ($mod) {
     case 'del':
-        /*
-        -----------------------------------------------------------------
-        Удаление категории, или раздела
-        -----------------------------------------------------------------
-        */
+        // Удаление категории, или раздела
         if (!Vars::$ID) {
             echo Functions::displayError(__('error_wrong_data'), '<a href="index.php?act=forum">' . __('forum_management') . '</a>');
             exit;
@@ -45,9 +41,7 @@ switch ($mod) {
             $total = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = " . Vars::$ID . " AND (`type` = 'f' OR `type` = 'r' OR `type` = 't')")->fetchColumn();
             if ($total) {
                 if ($res['type'] == 'f') {
-                    ////////////////////////////////////////////////////////////
-                    // Удаление категории с подчиненными данными              //
-                    ////////////////////////////////////////////////////////////
+                    // Удаление категории с подчиненными данными
                     if (isset($_POST['submit'])) {
                         $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
                         if (!$category || $category == Vars::$ID) {
@@ -89,9 +83,7 @@ switch ($mod) {
                         echo '</form>';
                     }
                 } else {
-                    ////////////////////////////////////////////////////////////
-                    // Удаление раздела с подчиненными данными                //
-                    ////////////////////////////////////////////////////////////
+                    // Удаление раздела с подчиненными данными
                     if (isset($_POST['submit'])) {
                         // Предварительные проверки
                         $subcat = isset($_POST['subcat']) ? intval($_POST['subcat']) : 0;
@@ -161,9 +153,7 @@ switch ($mod) {
                     }
                 }
             } else {
-                ////////////////////////////////////////////////////////////
-                // Удаление пустого раздела, или категории                //
-                ////////////////////////////////////////////////////////////
+                // Удаление пустого раздела, или категории
                 if (isset($_POST['submit'])) {
                     DB::PDO()->exec("DELETE FROM `forum` WHERE `id` = " . Vars::$ID);
                     echo '<div class="rmenu"><p>' . ($res['type'] == 'r' ? __('section_deleted') : __('category_deleted')) . '</p></div>';
@@ -181,11 +171,7 @@ switch ($mod) {
         break;
 
     case 'add':
-        /*
-        -----------------------------------------------------------------
-        Добавление категории
-        -----------------------------------------------------------------
-        */
+        // Добавление категории
         $cat_name = '';
         if (Vars::$ID) {
             // Проверяем наличие категории
@@ -403,11 +389,7 @@ switch ($mod) {
         break;
 
     case 'cat':
-        /*
-        -----------------------------------------------------------------
-        Управление категориями и разделами
-        -----------------------------------------------------------------
-        */
+        // Управление категориями и разделами
         echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('forum_management') . '</b></a> | ' . __('forum_structure') . '</div>';
         if (Vars::$ID) {
             // Управление разделами
@@ -631,11 +613,7 @@ switch ($mod) {
         break;
 
     default:
-        /*
-        -----------------------------------------------------------------
-        Панель управления форумом
-        -----------------------------------------------------------------
-        */
+        // Панель управления форумом
         $tpl->total_cat = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'f'")->fetchColumn();
         $tpl->total_sub = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'r'")->fetchColumn();
         $tpl->total_thm = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't'")->fetchColumn();
@@ -644,12 +622,6 @@ switch ($mod) {
         $tpl->total_msg_del = DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `close` = '1'")->fetchColumn();
         $tpl->total_files = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_files`")->fetchColumn();
         $tpl->total_votes = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_vote` WHERE `type` = '1'")->fetchColumn();
-
-        echo'<div class="phdr"><a href="' . Vars::$HOME_URL . 'admin/"><b>' . __('admin_panel') . '</b></a> | ' . __('forum_management') . '</div>' .
-            '<li><a href="' . $uri . 'hposts/">' . __('hidden_posts') . '</a> (' . $total_msg_del . ')</li>' .
-            '<li><a href="' . $uri . 'htopics/">' . __('hidden_topics') . '</a> (' . $total_thm_del . ')</li>' .
-            '</ul></p></div>' .
-            '<div class="phdr"><a href="' . Router::getUri(2) . '">' . __('to_forum') . '</a></div>';
 
         $tpl->uri = $uri;
         $tpl->contents = $tpl->includeTpl('admin_main');

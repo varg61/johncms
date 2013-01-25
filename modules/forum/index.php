@@ -12,6 +12,8 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 define('_IN_FORUM', 1);
 
+//TODO: Разобраться с предпросмотром сообщений
+
 $admin_actions = array(
     'admin' => 'admin.php',
 );
@@ -21,12 +23,11 @@ $moder_actions = array(
 );
 
 $users_action = array(
-    'acl'            => 'acl.php',
-    'users_settings' => 'users_settings.php',
+    'new_topic'            => 'new_topic.php',
 );
 
 $common_actions = array(
-    'assets' => 'profile_assets.php',
+    'uu' => 'profile_assets.php',
 );
 
 if (isset(Router::$ROUTE[1])) {

@@ -11,23 +11,16 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-/*
------------------------------------------------------------------
-Закрываем доступ для определенных ситуаций
------------------------------------------------------------------
-*/
-if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) || (!Vars::$USER_RIGHTS && Vars::$SYSTEM_SET['mod_forum'] == 3)) {
+// Закрываем доступ для определенных ситуаций
+if (!Vars::$ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) || (!Vars::$USER_RIGHTS && Vars::$SYSTEM_SET['mod_forum'] == 3)) {
     echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
 $url = Router::getUri(2);
+$settings = Forum::settings();
 
-/*
------------------------------------------------------------------
-Вспомогательная Функция обработки ссылок форума
------------------------------------------------------------------
-*/
+// Вспомогательная Функция обработки ссылок форума
 function forum_link($m)
 {
     if (!isset($m[3])) {
@@ -73,10 +66,6 @@ if (!$req_r->rowCount()) {
 }
 $th = isset($_POST['th']) ? Validate::checkout(mb_substr(trim($_POST['th']), 0, 100)) : '';
 $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
-if (isset($_POST['msgtrans'])) {
-    $th = Functions::translit($th);
-    $msg = Functions::translit($msg);
-}
 $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
 if (isset($_POST['submit'])) {
     $error = array();
@@ -117,7 +106,7 @@ if (isset($_POST['submit'])) {
         // Добавляем тему
         $STH = DB::PDO()->prepare('
             INSERT INTO `forum`
-            (refid, type, time, user_id, from, text, soft, edit, curators)
+            (`refid`, `type`, `time`, `user_id`, `from`, `text`, `soft`, `edit`, `curators`)
             VALUES (?, "t", ?, ?, ?, ?, "", "", "")
         ');
 
@@ -134,7 +123,7 @@ if (isset($_POST['submit'])) {
         // Добавляем текст поста
         $STH = DB::PDO()->prepare('
             INSERT INTO `forum`
-            (refid, type, time, user_id, from, ip, ip_via_proxy, soft, text, edit, curators)
+            (`refid`, `type`, `time`, `user_id`, `from`, `ip`, `ip_via_proxy`, `soft`, `text`, `edit`, `curators`)
             VALUES (?, "m", ?, ?, ?, ?, ?, ?, ?, "", "")
         ');
 
@@ -180,7 +169,7 @@ if (isset($_POST['submit'])) {
     if (!Vars::$USER_DATA['count_forum']) {
         if (!isset($_GET['yes'])) {
             echo '<p>' . __('forum_rules_text') . '</p>';
-            echo '<p><a href="' . $url . '?act=nt&amp;id=' . Vars::$ID . '&amp;yes">' . __('agree') . '</a> | <a href="' . $url . '?id=' . Vars::$ID . '">' . __('not_agree') . '</a></p>';
+            echo '<p><a href="' . $url . 'new_topic/?id=' . Vars::$ID . '&amp;yes">' . __('agree') . '</a> | <a href="' . $url . '?id=' . Vars::$ID . '">' . __('not_agree') . '</a></p>';
             exit;
         }
     }
@@ -194,7 +183,7 @@ if (isset($_POST['submit'])) {
             '<div class="list2">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                    'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
                                                                                    'body'   => $msg_pre)) . '</div>';
-    echo'<form name="form" action="' . $url . '?act=nt&amp;id=' . Vars::$ID . '" method="post">' .
+    echo'<form name="form" action="' . $url . 'new_topic/?id=' . Vars::$ID . '" method="post">' .
         '<div class="gmenu">' .
         '<p><h3>' . __('section') . '</h3>' .
         '<a href="' . $url . '?id=' . $res_c['id'] . '">' . $res_c['text'] . '</a> | <a href="' . $url . '?id=' . $res_r['id'] . '">' . $res_r['text'] . '</a></p>' .
@@ -205,10 +194,8 @@ if (isset($_POST['submit'])) {
         echo '</p><p>' . TextParser::autoBB('form', 'msg');
     echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? Validate::checkout($_POST['msg']) : '') . '</textarea></p>' .
         '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . __('add_file');
-    if (Vars::$USER_SET['translit'])
-        echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');
     echo'</p><p><input type="submit" name="submit" value="' . __('save') . '" style="width: 107px; cursor: pointer;"/> ' .
-        ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+        ($settings['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
         '</p></div></form>' .
         '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | ' .
         '<a href="../pages/faq.php?act=smilies">' . __('smilies') . '</a></div>' .
