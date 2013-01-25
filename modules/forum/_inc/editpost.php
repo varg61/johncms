@@ -170,7 +170,7 @@ if (!$error) {
 
                 $STH = DB::PDO()->prepare('
                     UPDATE `forum`
-                    (tedit, edit, kedit, text)
+                    (`tedit`, `edit`, `kedit`, `text`)
                     VALUES (?, ?, ?, ?)
                     WHERE `id` = ' . Vars::$ID
                 );

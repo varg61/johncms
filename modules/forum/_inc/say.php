@@ -24,44 +24,6 @@ if (!Vars::$ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) ||
 $url = Router::getUri(2);
 $settings = Forum::settings();
 
-/*
------------------------------------------------------------------
-Вспомогательная Функция обработки ссылок форума
------------------------------------------------------------------
-*/
-function forum_link($m)
-{
-    global $set;
-    if (!isset($m[3])) {
-        return '[url=' . $m[1] . ']' . $m[2] . '[/url]';
-    } else {
-        $p = parse_url($m[3]);
-        if ('http://' . $p['host'] . $p['path'] . '?id=' == Vars::$HOME_URL . 'forum/?id=') {
-            $thid = abs(intval(preg_replace('/(.*?)id=/si', '', $m[3])));
-            $req = DB::PDO()->query("SELECT `text` FROM `forum` WHERE `id`= '$thid' AND `type` = 't' AND `close` != '1'");
-            if ($req->rowCount()) {
-                $res = $req->fetch();
-                $name = strtr($res['text'], array(
-                    '&quot;' => '',
-                    '&amp;'  => '',
-                    '&lt;'   => '',
-                    '&gt;'   => '',
-                    '&#039;' => '',
-                    '['      => '',
-                    ']'      => ''
-                ));
-                if (mb_strlen($name) > 40)
-                    $name = mb_substr($name, 0, 40) . '...';
-
-                return '[url=' . $m[3] . ']' . $name . '[/url]';
-            } else {
-                return $m[3];
-            }
-        } else
-            return $m[3];
-    }
-}
-
 // Проверка на флуд
 $flood = Functions::antiFlood();
 if ($flood) {
@@ -79,8 +41,9 @@ switch ($type['type']) {
             exit;
         }
         $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
+
         //Обрабатываем ссылки
-        $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
+        $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'Forum::forum_link', $msg);
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
             // Проверяем на минимальную длину
             if (mb_strlen($msg) < 4) {
@@ -105,7 +68,7 @@ switch ($type['type']) {
             // Добавляем сообщение в базу
             $STH = $STH = DB::PDO()->prepare('
                 INSERT INTO `forum`
-                (refid, type, time, user_id, from, ip, ip_via_proxy, soft, text, edit, curators)
+                (`refid`, `type`, `time`, `user_id`, `from`, `ip`, `ip_via_proxy`, `soft`, `text`, `edit`, `curators`)
                 VALUES (?, "m", ?, ?, ?, ?, ?, ?, ?, "", "")
             ');
 
@@ -155,7 +118,7 @@ switch ($type['type']) {
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                             'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
                                                                                             'body'   => $msg_pre)) . '</div>';
-            echo '<form name="form" action="' . $url . '?act=say&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><div class="gmenu">' .
+            echo '<form name="form" action="' . $url . 'say/?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><div class="gmenu">' .
                 '<p><h3>' . __('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
@@ -245,7 +208,7 @@ switch ($type['type']) {
             // Добавляем сообщение в базу
             $STH = $STH = DB::PDO()->prepare('
                 INSERT INTO `forum`
-                (refid, type, time, user_id, from, ip, ip_via_proxy, soft, text, edit, curators)
+                (`refid`, `type`, `time`, `user_id`, `from`, `ip`, `ip_via_proxy`, `soft`, `text`, `edit`, `curators`)
                 VALUES (?, "m", ?, ?, ?, ?, ?, ?, ?, "", "")
             ');
 

@@ -146,19 +146,19 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 if ($arr_scan_dir) {
                     $STH_C = DB::PDO()->prepare('
                         INSERT INTO `cms_download_category`
-                        (refid, dir, sort, name, field, rus_name, text, desc)
+                        (`refid`, `dir`, `sort`, `name`, `field`, `rus_name`, `text`, `desc`)
                         VALUES (?, ?, ?, ?, 0, ?, "", "")
                     ');
 
                     $STH_M = DB::PDO()->prepare('
                         INSERT INTO `cms_download_more`
-                        (refid, time, name, rus_name, size)
+                        (`refid`, `time`, `name`, `rus_name`, `size`)
                         VALUES (?, ?, ?, ?, ?)
                     ');
 
                     $STH_F = DB::PDO()->prepare('
                         INSERT INTO `cms_download_files`
-                        (refid, dir, time, name, text, rus_name, type, user_id)
+                        (`refid`, `dir`, `time`, `name`, `text`, `rus_name`, `type, user_id`)
                         VALUES (?, ?, ?, ?, "Download", ?, 2, ?)
                     ');
 

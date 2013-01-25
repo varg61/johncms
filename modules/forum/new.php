@@ -53,7 +53,7 @@ if (Vars::$USER_ID) {
             );
             $STH = DB::PDO()->prepare('
                 INSERT INTO `cms_forum_rdm`
-                (topic_id, user_id, time)
+                (`topic_id`, `user_id`, `time`)
                 VALUES (?, ' . Vars::$USER_ID . ', ' . time() . ')
             ');
             while ($res = $req->fetch()) {

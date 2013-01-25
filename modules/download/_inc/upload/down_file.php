@@ -67,7 +67,7 @@ if ($req->rowCount() && is_dir($res['dir'])) {
 
                         $STH = DB::PDO()->prepare('
                             INSERT INTO `cms_download_files`
-                            (refid, dir, time, name, text, rus_name, type, user_id, about, desc)
+                            (`refid`, `dir`, `time`, `name`, `text`, `rus_name`, `type`, `user_id`, `about`, `desc`)
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "")
                         ');
 

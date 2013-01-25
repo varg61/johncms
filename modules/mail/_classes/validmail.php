@@ -239,7 +239,7 @@ Class ValidMail extends Vars
                 //Отправляем сообщение
                 $STH = DB::PDO()->prepare('
                     INSERT INTO `cms_mail_messages`
-                    (user_id, contact_id, text, time, filename, filesize)
+                    (`user_id`, `contact_id`, `text`, `time`, `filename`, `filesize`)
                     VALUES (?, ?, ?, ?, ?, ?)
                 ');
 

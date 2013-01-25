@@ -120,7 +120,7 @@ switch ($res['type']) {
                     // Заносим данные в базу
                     $STH = DB::PDO()->prepare('
                         INSERT INTO `cms_forum_files`
-                        (cat, subcat, topic, post, time, filename, filetype)
+                        (`cat`, `subcat`, `topic`, `post`, `time`, `filename`, `filetype`)
                         VALUES (?, ?, ?, ?, ?, ?, ?)
                     ');
 

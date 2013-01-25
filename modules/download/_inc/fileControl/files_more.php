@@ -145,7 +145,7 @@ if ($edit) {
 
                 $STH = DB::PDO()->prepare('
                     INSERT INTO `cms_download_more`
-                    (refid, time, name, rus_name, size)
+                    (`refid`, `time`, `name`, `rus_name`, `size`)
                     VALUES (?, ?, ?, ?, ?)
                 ');
 

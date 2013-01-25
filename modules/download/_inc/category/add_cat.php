@@ -57,7 +57,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
 
             $STH = DB::PDO()->prepare('
                 INSERT INTO `cms_download_category`
-                (refid, dir, sort, name, desc, field, text, rus_name)
+                (`refid`, `dir`, `sort`, `name`, `desc`, `field`, `text`, `rus_name`)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ');
 

@@ -33,7 +33,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
         if (!empty($vote_name) && !empty($_POST[0]) && !empty($_POST[1])) {
             $STH = DB::PDO()->prepare('
                 INSERT INTO `cms_forum_vote`
-                (name, time, type, topic)
+                (`name`, `time`, `type`, `topic`)
                 VALUES (?, ?, 1, ?)
             ');
 
@@ -48,7 +48,7 @@ if (Vars::$USER_RIGHTS == 3 || Vars::$USER_RIGHTS >= 6) {
 
             $STH = DB::PDO()->prepare('
                 INSERT INTO `cms_forum_vote`
-                (name, type, topic)
+                (`name`, `type`, `topic`)
                 VALUES (?, 2, ?)
             ');
             for ($vote = 0; $vote < $vote_count; $vote++) {
