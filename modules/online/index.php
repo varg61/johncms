@@ -229,7 +229,7 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         $sql_total = "SELECT COUNT(*) FROM `cms_sessions` WHERE `user_id` > 0 AND `session_timestamp` > " . (time() - 300);
-        $sql_list = "SELECT `cms_sessions`.`user_id` AS `id`, `cms_sessions`.`session_timestamp` AS `last_visit`, `cms_sessions`.`ip`, `cms_sessions`.`ip_via_proxy`, `cms_sessions`.`user_agent`, `cms_sessions`.`place`, `cms_sessions`.`views`, `cms_sessions`.`movings`, `cms_sessions`.`start_time`, `users`.`nickname`, `users`.`sex`, `users`.`rights`
+        $sql_list = "SELECT `cms_sessions`.`user_id` AS `id`, `cms_sessions`.`session_timestamp` AS `last_visit`, `cms_sessions`.`ip`, `cms_sessions`.`ip_via_proxy`, `cms_sessions`.`user_agent`, `cms_sessions`.`place`, `cms_sessions`.`views`, `cms_sessions`.`movings`, `users`.`nickname`, `users`.`sex`, `users`.`rights`
             FROM `cms_sessions` LEFT JOIN `users` ON `cms_sessions`.`user_id` = `users`.`id`
             WHERE `cms_sessions`.`user_id` > 0 AND `cms_sessions`.`session_timestamp` > " . (time() - 300) . "
             ORDER BY `users`.`nickname` ASC" . Vars::db_pagination();
@@ -241,18 +241,18 @@ switch (Vars::$ACT) {
 Показываем списки Онлайн
 -----------------------------------------------------------------
 */
-$tpl->total = mysql_result(mysql_query($sql_total), 0);
+$tpl->total = DB::PDO()->query($sql_total)->fetchColumn();
 if ($tpl->total) {
-    $req = mysql_query($sql_list);
-    for ($i = 0; $res = mysql_fetch_assoc($req); ++$i) {
+    $req = DB::PDO()->query($sql_list);
+    foreach ($req as $res) {
         $arg['header'] = ' <span class="gray">(';
         if (Vars::$ACT == 'history') {
             $arg['header'] .= Functions::displayDate($res['last_visit']) . ')</span>';
         } else {
-            $arg['header'] .= $res['views'] . '/' . $res['movings'] . ' - ' . Functions::timeCount(time() - $res['start_time']);
+            $arg['header'] .= $res['views'] . '/' . $res['movings'];
             $arg['header'] .= ')</span><br />' . Functions::getIcon('info.png', '', '', 'align="middle"') . '&#160;' . Functions::displayPlace($res['id'], $res['place']);
         }
-        $tpl->list[$i] = Functions::displayUser($res, $arg);
+        $tpl->list[] = Functions::displayUser($res, $arg);
     }
 } else {
     echo '<div class="menu"><p>' . __('list_empty') . '</p></div>';
