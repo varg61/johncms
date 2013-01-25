@@ -48,11 +48,6 @@ if ($form->isSubmitted) {
     $from = Vars::$USER_ID ? Vars::$USER_NICKNAME : mysql_real_escape_string($name);
     $trans = isset($_POST['msgtrans']);
 
-    // Транслит сообщения
-    if ($trans) {
-        $msg = Functions::translit($msg);
-    }
-
     // Проверяем на ошибки
     $error = array();
     $flood = FALSE;

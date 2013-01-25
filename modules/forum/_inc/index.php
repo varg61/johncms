@@ -132,12 +132,10 @@ $actions = array(
     'filter'   => 'filter.php',
     'loadtem'  => 'loadtem.php',
     'massdel'  => 'massdel.php',
-    'nt'       => 'nt.php',
     'per'      => 'per.php',
     'post'     => 'post.php',
     'ren'      => 'ren.php',
     'restore'  => 'restore.php',
-    'say'      => 'say.php',
     'tema'     => 'tema.php',
     'users'    => 'users.php',
     'vip'      => 'vip.php',
@@ -492,7 +490,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 WHERE `forum`.`type` = 'm' AND `forum`.`refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order " . Vars::db_pagination());
                 // Верхнее поле "Написать"
                 if ((Vars::$USER_ID && !$type1['edit'] && $settings['upfp'] && Vars::$SYSTEM_SET['mod_forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && $settings['upfp'])) {
-                    echo '<div class="gmenu"><form name="form1" action="' . $uri . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
+                    echo '<div class="gmenu"><form name="form1" action="' . $uri . 'say/?id=' . Vars::$ID . '" method="post">';
                     if ($settings['farea']) {
                         echo '<p>' .
                             (!Vars::$IS_MOBILE ? TextParser::autoBB('form1', 'msg') : '') .
@@ -662,7 +660,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                 }
                 // Нижнее поле "Написать"
                 if ((Vars::$USER_ID && !$type1['edit'] && !$settings['upfp'] && Vars::$ACL['forum'] != 3) || (Vars::$USER_RIGHTS >= 7 && !$settings['upfp'])) {
-                    echo '<div class="gmenu"><form name="form2" action="' . $uri . '?act=say&amp;id=' . Vars::$ID . '" method="post">';
+                    echo '<div class="gmenu"><form name="form2" action="' . $uri . 'say/?id=' . Vars::$ID . '" method="post">';
                     if ($settings['farea']) {
                         echo '<p>';
                         if (!Vars::$IS_MOBILE) {

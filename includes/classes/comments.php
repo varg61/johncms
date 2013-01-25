@@ -389,9 +389,6 @@ class Comments
             if (mb_strtolower($message) == mb_strtolower($res['text']))
                 $error[] = __('error_message_exists');
         }
-        // Транслит сообщения
-        if (!$error && $translit)
-            $message = Functions::translit($message);
         // Возвращаем результат
         return array(
             'code'  => $code,

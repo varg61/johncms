@@ -23,7 +23,8 @@ $moder_actions = array(
 );
 
 $users_action = array(
-    'new_topic'            => 'new_topic.php',
+    'new_topic' => 'new_topic.php',
+    'say'       => 'say.php',
 );
 
 $common_actions = array(

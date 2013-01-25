@@ -9,19 +9,20 @@
  * @author      http://johncms.com/about
  */
 
-defined('_IN_JOHNCMS') or die('Error: restricted access');
+defined('_IN_FORUM') or die('Error: restricted access');
 
 /*
 -----------------------------------------------------------------
 Закрываем доступ для определенных ситуаций
 -----------------------------------------------------------------
 */
-if (!Vars::$ID || !Vars::$USER_ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) || (!Vars::$USER_RIGHTS && Vars::$SYSTEM_SET['mod_forum'] == 3)) {
+if (!Vars::$ID || isset(Vars::$USER_BAN['1']) || isset(Vars::$USER_BAN['11']) || (!Vars::$USER_RIGHTS && Vars::$SYSTEM_SET['mod_forum'] == 3)) {
     echo Functions::displayError(__('access_forbidden'));
     exit;
 }
 
 $url = Router::getUri(2);
+$settings = Forum::settings();
 
 /*
 -----------------------------------------------------------------
@@ -71,19 +72,13 @@ if ($flood) {
 $type = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . Vars::$ID)->fetch();
 switch ($type['type']) {
     case 't':
-        /*
-        -----------------------------------------------------------------
-        Добавление простого сообщения
-        -----------------------------------------------------------------
-        */
+        // Добавление простого сообщения
         if (($type['edit'] == 1 || $type['close'] == 1) && Vars::$USER_RIGHTS < 7) {
             // Проверка, закрыта ли тема
             echo Functions::displayError(__('error_topic_closed'), '<a href="' . $url . '?id=' . Vars::$ID . '">' . __('back') . '</a>');
             exit;
         }
         $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
-        if (isset($_POST['msgtrans']))
-            $msg = Functions::translit($msg);
         //Обрабатываем ссылки
         $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
         if (isset($_POST['submit']) && !empty($_POST['msg'])) {
@@ -137,7 +132,7 @@ switch ($type['type']) {
             );
 
             // Вычисляем, на какую страницу попадает добавляемый пост
-            $page = $set_forum['upfp'] ? 1 : ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'"))->fetchColumn() / Vars::$USER_SET['page_size']);
+            $page = $settings['upfp'] ? 1 : ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = " . Vars::$ID . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'"))->fetchColumn() / Vars::$USER_SET['page_size']);
             if (isset($_POST['addfiles']))
                 header("Location: " . $url . "?id=$fadd&act=addfile");
             else
@@ -166,10 +161,8 @@ switch ($type['type']) {
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
             echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Validate::checkout($msg)) . '</textarea></p>' .
                 '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . __('add_file');
-            if (Vars::$USER_SET['translit'])
-                echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');
             echo '</p><p><input type="submit" name="submit" value="' . __('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
-                ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                ($settings['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                 '</p></div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | ' .
@@ -178,12 +171,7 @@ switch ($type['type']) {
         break;
 
     case 'm':
-        /*
-        -----------------------------------------------------------------
-        Добавление сообщения с цитированием поста
-        -----------------------------------------------------------------
-        */
-
+        // Добавление сообщения с цитированием поста
         $th = $type1['refid'];
         $th1 = DB::PDO()->query("SELECT * FROM `forum` WHERE `id` = " . $th)->fetch();
         if (($th1['edit'] == 1 || $th1['close'] == 1) && Vars::$USER_RIGHTS < 7) {
@@ -198,8 +186,6 @@ switch ($type['type']) {
         $vr = date("d.m.Y / H:i", $type['time'] + $shift);
         $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
         $txt = isset($_POST['txt']) ? intval($_POST['txt']) : FALSE;
-        if (isset($_POST['msgtrans']))
-            $msg = Functions::translit($msg);
         $to = $type['from'];
         if (!empty($_POST['citata'])) {
             // Если была цитата, форматируем ее и обрабатываем
@@ -289,7 +275,7 @@ switch ($type['type']) {
             );
 
             // Вычисляем, на какую страницу попадает добавляемый пост
-            $page = $set_forum['upfp'] ? 1 : ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'"))->fetchColumn() / Vars::$USER_SET['page_size']);
+            $page = $settings['upfp'] ? 1 : ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `type` = 'm' AND `refid` = '$th'" . (Vars::$USER_RIGHTS >= 7 ? '' : " AND `close` != '1'"))->fetchColumn() / Vars::$USER_SET['page_size']);
             $addfiles = intval($_POST['addfiles']);
             if ($addfiles == 1) {
                 header("Location: " . $url . "?id=$fadd&act=addfile");
@@ -341,7 +327,7 @@ switch ($type['type']) {
             if (Vars::$USER_SET['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');
             echo '</p><p><input type="submit" name="submit" value="' . __('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
-                ($set_forum['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
+                ($settings['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
                 '</p></div></form>';
         }
         echo '<div class="phdr"><a href="../pages/faq.php?act=trans">' . __('translit') . '</a> | ' .

@@ -162,8 +162,6 @@ if (!$error) {
             -----------------------------------------------------------------
             */
             $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
-            if (isset($_POST['msgtrans']))
-                $msg = Functions::translit($msg);
             if (isset($_POST['submit'])) {
                 if (empty($_POST['msg'])) {
                     echo Functions::displayError(__('error_empty_message'), '<a href="' . $url . '?act=editpost&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
