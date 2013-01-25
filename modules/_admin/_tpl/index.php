@@ -24,7 +24,7 @@
     <li><h2><?= __('security') ?></h2></li>
     <li><a href="<?= $this->uri ?>acl/"><i class="icn-shield"></i><?= __('acl') ?><i class="icn-arrow right"></i></a></li>
         <?php if (Vars::$USER_RIGHTS == 9) : ?>
-        <li><a href="<?= $this->uri ?>firewall/"><i class="icn-shield"></i><?= __('firewall') ?> //планируется<i class="icn-arrow right"></i></a></li>
+        <li><a href="<?= $this->uri ?>firewall/"><i class="icn-shield"></i><?= __('firewall') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->uri ?>scanner/"><i class="icn-shield"></i><?= __('antispy') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
     <?php endif ?>
