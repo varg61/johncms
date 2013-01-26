@@ -14,22 +14,18 @@ $uri = Router::getUri(3);
 
 switch (Vars::$ACT) {
     case 'view':
-        /*
-        -----------------------------------------------------------------
-        Предварительный просмотр счетчиков
-        -----------------------------------------------------------------
-        */
+        // Предварительный просмотр счетчиков
         if (Vars::$ID) {
-            $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($STH)) {
+            $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount()) {
                 if (isset($_GET['go']) && $_GET['go'] == 'on') {
-                    mysql_query("UPDATE `cms_counters` SET `switch` = '1' WHERE `id` = " . Vars::$ID);
-                    $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `cms_counters` SET `switch` = '1' WHERE `id` = " . Vars::$ID);
+                    $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 } elseif (isset($_GET['go']) && $_GET['go'] == 'off') {
-                    mysql_query("UPDATE `cms_counters` SET `switch` = '0' WHERE `id` = " . Vars::$ID);
-                    $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `cms_counters` SET `switch` = '0' WHERE `id` = " . Vars::$ID);
+                    $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 }
-                $res = mysql_fetch_array($STH);
+                $res = $req->fetch();
                 echo'<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('viewing') . '</div>' .
                     '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Validate::checkout($res['name']) . '</b></div>' .
                     ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . __('counter_mod1') . '</h3>' . $res['link1'] . '</p>' .
@@ -59,73 +55,63 @@ switch (Vars::$ACT) {
         break;
 
     case 'up':
-        /*
-        -----------------------------------------------------------------
-        Перемещение счетчика на одну позицию вверх
-        -----------------------------------------------------------------
-        */
+        // Перемещение счетчика на одну позицию вверх
         if (Vars::$ID) {
-            $STH = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($STH)) {
-                $res = mysql_fetch_assoc($STH);
+            $req = DB::PDO()->query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 $sort = $res['sort'];
-                $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
-                if (mysql_num_rows($STH)) {
-                    $res = mysql_fetch_assoc($STH);
+                $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `sort` < '$sort' ORDER BY `sort` DESC LIMIT 1");
+                if ($req->rowCount()) {
+                    $res = $req->fetch();
                     $id2 = $res['id'];
                     $sort2 = $res['sort'];
-                    mysql_query("UPDATE `cms_counters` SET `sort` = '$sort2' WHERE `id` = " . Vars::$ID);
-                    mysql_query("UPDATE `cms_counters` SET `sort` = '$sort' WHERE `id` = '$id2'");
+                    DB::PDO()->exec("UPDATE `cms_counters` SET `sort` = '$sort2' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `cms_counters` SET `sort` = '$sort' WHERE `id` = '$id2'");
                 }
             }
         }
+
         header('Location: ' . $uri);
         break;
 
     case 'down':
-        /*
-        -----------------------------------------------------------------
-        Перемещение счетчика на одну позицию вниз
-        -----------------------------------------------------------------
-        */
+        // Перемещение счетчика на одну позицию вниз
         if (Vars::$ID) {
-            $STH = mysql_query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($STH)) {
-                $res = mysql_fetch_assoc($STH);
+            $req = DB::PDO()->query("SELECT `sort` FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 $sort = $res['sort'];
-                $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
-                if (mysql_num_rows($STH)) {
-                    $res = mysql_fetch_assoc($STH);
+                $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `sort` > '$sort' ORDER BY `sort` ASC LIMIT 1");
+                if ($req->rowCount()) {
+                    $res = $req->fetch();
                     $id2 = $res['id'];
                     $sort2 = $res['sort'];
-                    mysql_query("UPDATE `cms_counters` SET `sort` = '$sort2' WHERE `id` = " . Vars::$ID);
-                    mysql_query("UPDATE `cms_counters` SET `sort` = '$sort' WHERE `id` = '$id2'");
+                    DB::PDO()->exec("UPDATE `cms_counters` SET `sort` = '$sort2' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `cms_counters` SET `sort` = '$sort' WHERE `id` = '$id2'");
                 }
             }
         }
+
         header('Location: ' . $uri);
         break;
 
     case 'del':
-        /*
-        -----------------------------------------------------------------
-        Удаление счетчика
-        -----------------------------------------------------------------
-        */
+        // Удаление счетчика
         if (!Vars::$ID) {
             echo Functions::displayError(__('error_wrong_data'), '<a href="' . $uri . '">' . __('back') . '</a>');
             exit;
         }
-        $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-        if (mysql_num_rows($STH)) {
+        $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+        if ($req->rowCount()) {
             if (isset($_POST['submit'])) {
-                mysql_query("DELETE FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+                DB::PDO()->exec("DELETE FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 echo '<p>' . __('counter_deleted') . '<br/><a href="' . $uri . '">' . __('continue') . '</a></p>';
                 exit;
             } else {
                 echo '<form action="' . $uri . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
                 echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('delete') . '</div>';
-                $res = mysql_fetch_array($STH);
+                $res = $req->fetch();
                 echo '<div class="rmenu"><p><h3>' . Validate::checkout($res['name']) . '</h3>' . __('delete_confirmation') . '</p><p><input type="submit" value="' . __('delete') . '" name="submit" /></p></div>';
                 echo '<div class="phdr"><a href="' . $uri . '">' . __('cancel') . '</a></div></form>';
             }
@@ -136,11 +122,7 @@ switch (Vars::$ACT) {
         break;
 
     case 'edit':
-        /*
-        -----------------------------------------------------------------
-        Форма добавления счетчика
-        -----------------------------------------------------------------
-        */
+        // Форма добавления счетчика
         if (isset($_POST['submit'])) {
             // Предварительный просмотр
             $name = isset($_POST['name']) ? mb_substr(trim($_POST['name']), 0, 25) : '';
@@ -173,9 +155,9 @@ switch (Vars::$ACT) {
             $mode = 0;
             if (Vars::$ID) {
                 // запрос к базе, если счетчик редактируется
-                $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-                if (mysql_num_rows($STH) > 0) {
-                    $res = mysql_fetch_array($STH);
+                $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+                if ($req->rowCount()) {
+                    $res = $req->fetch();
                     $name = Validate::checkout($res['name']);
                     $link1 = htmlspecialchars($res['link1']);
                     $link2 = htmlspecialchars($res['link2']);
@@ -204,11 +186,7 @@ switch (Vars::$ACT) {
         break;
 
     case 'add':
-        /*
-        -----------------------------------------------------------------
-        Запись счетчика в базу
-        -----------------------------------------------------------------
-        */
+        // Запись счетчика в базу
         $name = isset($_POST['name']) ? mb_substr($_POST['name'], 0, 25) : '';
         $link1 = isset($_POST['link1']) ? $_POST['link1'] : '';
         $link2 = isset($_POST['link2']) ? $_POST['link2'] : '';
@@ -219,33 +197,54 @@ switch (Vars::$ACT) {
         }
         if (Vars::$ID) {
             // Режим редактирования
-            $STH = mysql_query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($STH) != 1) {
+            $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount() != 1) {
                 echo Functions::displayError(__('error_wrong_data'));
                 exit;
             }
-            mysql_query("UPDATE `cms_counters` SET
-            `name` = '" . mysql_real_escape_string(Validate::checkout($name)) . "',
-            `link1` = '" . mysql_real_escape_string($link1) . "',
-            `link2` = '" . mysql_real_escape_string($link2) . "',
-            `mode` = '$mode'
-            WHERE `id` = " . Vars::$ID);
+
+            $STH = DB::PDO()->prepare('
+                UPDATE `cms_counters` SET
+                `name`     = ?,
+                `link1`    = ?,
+                `link2`    = ?,
+                `mode`     = ?
+                WHERE `id` = ?
+            ');
+
+            $STH->execute(array(
+                Validate::checkout($name),
+                $link1,
+                $link2,
+                $mode,
+                Vars::$ID
+            ));
+            $STH = NULL;
         } else {
             // Получаем значение сортировки
-            $STH = mysql_query("SELECT `sort` FROM `cms_counters` ORDER BY `sort` DESC LIMIT 1");
-            if (mysql_num_rows($STH) > 0) {
-                $res = mysql_fetch_array($STH);
+            $req = DB::PDO()->query("SELECT `sort` FROM `cms_counters` ORDER BY `sort` DESC LIMIT 1");
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 $sort = $res['sort'] + 1;
             } else {
                 $sort = 1;
             }
+
             // Режим добавления
-            mysql_query("INSERT INTO `cms_counters` SET
-            `name` = '" . mysql_real_escape_string(Validate::checkout($name)) . "',
-            `sort` = '$sort',
-            `link1` = '" . mysql_real_escape_string($link1) . "',
-            `link2` = '" . mysql_real_escape_string($link2) . "',
-            `mode` = '$mode'");
+            $STH = DB::PDO()->prepare('
+                INSERT INTO `cms_counters`
+                (`name`, `sort`, `link1`, `link2`, `mode`)
+                VALUES (?, ?, ?, ?, ?)
+            ');
+
+            $STH->execute(array(
+                Validate::checkout($name),
+                $sort,
+                $link1,
+                $link2,
+                $mode
+            ));
+            $STH = NULL;
         }
         echo'<div class="gmenu"><p>' . (Vars::$ID ? __('counter_edit_conf') : __('counter_add_conf')) . '<br/>' .
             '<a href="' . $uri . '">' . __('continue') . '</a>' .
@@ -260,10 +259,10 @@ switch (Vars::$ACT) {
         */
         echo'<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('admin_panel') . '</b></a> | ' . __('counters') . '</div>' .
             '<div class="gmenu"><form action="' . $uri . '?act=edit" method="post"><input type="submit" name="delete" value="' . __('add') . '"/></form></div>';
-        $STH = DB::PDO()->query('SELECT * FROM `cms_counters` ORDER BY `sort` ASC');
-        $total = $STH->rowCount();
+        $req = DB::PDO()->query('SELECT * FROM `cms_counters` ORDER BY `sort` ASC');
+        $total = $req->rowCount();
         if ($total) {
-            for ($i = 0; $res = $STH->fetch(); ++$i) {
+            for ($i = 0; $res = $req->fetch(); ++$i) {
                 echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                     Functions::getImage(($res['switch'] == 1 ? 'green' : 'red') . '.png', '', 'class="left"') . '&#160;' .
                     '<a href="' . $uri . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a><br />' .
