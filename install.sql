@@ -1,24 +1,24 @@
 DROP TABLE IF EXISTS `cms_ads`;
 CREATE TABLE `cms_ads` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` int(2) NOT NULL,
-  `view` int(2) NOT NULL,
-  `layout` int(2) NOT NULL,
-  `count` int(11) NOT NULL,
-  `count_link` int(11) NOT NULL,
-  `name` text NOT NULL,
-  `link` text NOT NULL,
-  `to` int(10) NOT NULL DEFAULT '0',
-  `color` varchar(10) NOT NULL,
-  `time` int(11) NOT NULL,
-  `day` int(11) NOT NULL,
-  `mesto` int(2) NOT NULL,
-  `bold` tinyint(1) NOT NULL DEFAULT '0',
-  `italic` tinyint(1) NOT NULL DEFAULT '0',
-  `underline` tinyint(1) NOT NULL DEFAULT '0',
-  `show` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `type` int(2) unsigned NOT NULL DEFAULT '0',
+    `view` int(2) unsigned NOT NULL DEFAULT '0',
+    `layout` int(2) unsigned NOT NULL DEFAULT '0',
+    `count` int(10) unsigned NOT NULL DEFAULT '0',
+    `count_link` int(10) unsigned NOT NULL DEFAULT '0',
+    `name` text NOT NULL,
+    `link` varchar(100) NOT NULL DEFAULT '',
+    `to` int(10) unsigned NOT NULL DEFAULT '0',
+    `color` varchar(10) NOT NULL DEFAULT '',
+    `time` int(10) unsigned NOT NULL DEFAULT '0',
+    `day` int(10) unsigned NOT NULL DEFAULT '0',
+    `mesto` int(2) unsigned NOT NULL DEFAULT '0',
+    `bold` tinyint(1) unsigned NOT NULL DEFAULT '0',
+    `italic` tinyint(1) unsigned NOT NULL DEFAULT '0',
+    `underline` tinyint(1) unsigned NOT NULL DEFAULT '0',
+    `show` tinyint(1) unsigned NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `cms_album_cat`;
