@@ -24,9 +24,9 @@ switch (Vars::$ACT) {
         echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('advertisement') . '</b></a> | ' . (Vars::$ID ? __('link_edit') : __('link_add')) . '</div>';
         if (Vars::$ID) {
             // Если ссылка редактироется, запрашиваем ее данные в базе
-            $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
+            $req = DB::PDO()->query("SELECT * FROM `cms_ads` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount()) {
+                $res = $req->fetch();
             } else {
                 echo Functions::displayError(__('error_wrong_data'), '<a href="' . $uri . '">' . __('back') . '</a>');
                 exit;
@@ -52,27 +52,25 @@ switch (Vars::$ACT) {
             && isset($_SESSION['form_token'])
             && $_POST['form_token'] == $_SESSION['form_token']
         ) {
-            $uri = isset($_POST['link']) ? mysql_real_escape_string(trim($_POST['link'])) : '';
-            $name = isset($_POST['name']) ? mysql_real_escape_string(trim($_POST['name'])) : '';
-            $bold = isset($_POST['bold']);
-            $italic = isset($_POST['italic']);
-            $underline = isset($_POST['underline']);
-            $show = isset($_POST['show']);
+            $url = isset($_POST['link']) ? trim($_POST['link']) : '';
+            $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+            $bold = isset($_POST['bold']) ? 1 : 0;
+            $italic = isset($_POST['italic']) ? 1 : 0;
+            $underline = isset($_POST['underline']) ? 1 : 0;
+            $show = isset($_POST['show']) ? 1 : 0;
             $view = isset($_POST['view']) ? abs(intval($_POST['view'])) : 0;
             $day = isset($_POST['day']) ? abs(intval($_POST['day'])) : 0;
             $count = isset($_POST['count']) ? abs(intval($_POST['count'])) : 0;
             $day = isset($_POST['day']) ? abs(intval($_POST['day'])) : 0;
             $layout = isset($_POST['layout']) ? abs(intval($_POST['layout'])) : 0;
-            $type = isset($_POST['type']) ? intval($_POST['type']) : 0;
+            $type = isset($_POST['type']) && $_POST['type'] >= 0 && $_POST['type'] <= 3 ? intval($_POST['type']) : 0;
             $mesto = isset($_POST['mesto']) ? abs(intval($_POST['mesto'])) : 0;
             $color = isset($_POST['color']) ? mb_substr(trim($_POST['color']), 0, 6) : '';
             $error = array();
-            if (!$uri || !$name)
+            if (!$url || !$name)
                 $error[] = __('error_empty_fields');
-            if ($type > 3 || $type < 0)
-                $type = 0;
             if (!$mesto) {
-                $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `mesto` = '" . $mesto . "' AND `type` = '" . $type . "'"), 0);
+                $total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_ads` WHERE `mesto` = '" . $mesto . "' AND `type` = '" . $type . "'")->fetchColumn();
                 if ($total != 0)
                     $error[] = __('links_place_occupied');
             }
@@ -88,51 +86,78 @@ switch (Vars::$ACT) {
             }
             if (Vars::$ID) {
                 // Обновляем ссылку после редактирования
-                mysql_query("UPDATE `cms_ads` SET
-                    `type` = '$type',
-                    `view` = '$view',
-                    `link` = '$uri',
-                    `name` = '$name',
-                    `color` = '$color',
-                    `count_link` = '$count',
-                    `day` = '$day',
-                    `layout` = '$layout',
-                    `bold` = '$bold',
-                    `show` = '$show',
-                    `italic` = '$italic',
-                    `underline` = '$underline'
-                    WHERE `id` = " . Vars::$ID);
+                $STH = DB::PDO()->prepare('
+                    UPDATE `cms_ads` SET
+                    `type` = ?,
+                    `view` = ?,
+                    `link` = ?,
+                    `name` = ?,
+                    `color` = ?,
+                    `count_link` = ?,
+                    `day` = ?,
+                    `layout` = ?,
+                    `bold` = ?,
+                    `show` = ?,
+                    `italic` = ?,
+                    `underline` = ?
+                    WHERE `id` = ?
+                ');
+
+                $STH->execute(array(
+                    $type,
+                    $view,
+                    $url,
+                    $name,
+                    $color,
+                    $count,
+                    $day,
+                    $layout,
+                    $bold,
+                    $show,
+                    $italic,
+                    $underline,
+                    Vars::$ID
+                ));
+                $STH = NULL;
             } else {
                 // Добавляем новую ссылку
-                $req = mysql_query("SELECT `mesto` FROM `cms_ads` ORDER BY `mesto` DESC LIMIT 1");
-                if (mysql_num_rows($req) > 0) {
-                    $res = mysql_fetch_array($req);
+                $req = DB::PDO()->query("SELECT `mesto` FROM `cms_ads` ORDER BY `mesto` DESC LIMIT 1");
+                if ($req->rowCount()) {
+                    $res = $req->fetch();
                     $mesto = $res['mesto'] + 1;
                 } else {
                     $mesto = 1;
                 }
-                mysql_query("INSERT INTO `cms_ads` SET
-                    `type` = '$type',
-                    `view` = '$view',
-                    `mesto` = '$mesto',
-                    `link` = '$uri',
-                    `name` = '$name',
-                    `color` = '$color',
-                    `count_link` = '$count',
-                    `day` = '$day',
-                    `layout` = '$layout',
-                    `to` = '0',
-                    `show` = '$show',
-                    `time` = '" . time() . "',
-                    `bold` = '$bold',
-                    `italic` = '$italic',
-                    `underline` = '$underline'
-                ") or die (mysql_error());
+                $STH = DB::PDO()->prepare('
+                    INSERT INTO `cms_ads`
+                    (`type`, `view`, `mesto`, `link`, `name`, `color`, `count_link`, `day`, `layout`, `show`, `time`, `bold`, `italic`, `underline`)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ');
+
+                $STH->execute(array(
+                    $type,
+                    $view,
+                    $mesto,
+                    $url,
+                    $name,
+                    $color,
+                    $count,
+                    $day,
+                    $layout,
+                    $show,
+                    time(),
+                    $bold,
+                    $italic,
+                    $underline
+                ));
+                $STH = NULL;
             }
-            mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$USER_ID);
+
+            DB::PDO()->exec("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = " . Vars::$USER_ID);
             echo'<div class="menu"><p>' . (Vars::$ID ? __('link_edit_ok') : __('link_add_ok')) . '<br />' .
                 '<a href="' . $uri . '?sort=' . $type . '">' . __('continue') . '</a></p></div>';
         } else {
+            //TODO: Переделать на конструктор форм
             $tpl->res = $res;
             $tpl->form_token = mt_rand(100, 10000);
             $_SESSION['form_token'] = $tpl->form_token;
@@ -147,20 +172,21 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT `mesto`, `type` FROM `cms_ads` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req) > 0) {
-                $res = mysql_fetch_array($req);
+            $req = DB::PDO()->query("SELECT `mesto`, `type` FROM `cms_ads` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 $mesto = $res['mesto'];
-                $req = mysql_query("SELECT * FROM `cms_ads` WHERE `mesto` > '$mesto' AND `type` = '" . $res['type'] . "' ORDER BY `mesto` ASC");
-                if (mysql_num_rows($req) > 0) {
-                    $res = mysql_fetch_array($req);
+                $req = DB::PDO()->query("SELECT * FROM `cms_ads` WHERE `mesto` > '$mesto' AND `type` = '" . $res['type'] . "' ORDER BY `mesto` ASC");
+                if ($req->rowCount()) {
+                    $res = $req->fetch();
                     $id2 = $res['id'];
                     $mesto2 = $res['mesto'];
-                    mysql_query("UPDATE `cms_ads` SET `mesto` = '$mesto2' WHERE `id` = " . Vars::$ID);
-                    mysql_query("UPDATE `cms_ads` SET `mesto` = '$mesto' WHERE `id` = '$id2'");
+                    DB::PDO()->exec("UPDATE `cms_ads` SET `mesto` = '$mesto2' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `cms_ads` SET `mesto` = '$mesto' WHERE `id` = '$id2'");
                 }
             }
         }
+
         header('Location: ' . getenv("HTTP_REFERER"));
         break;
 
@@ -171,20 +197,21 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT `mesto`, `type` FROM `cms_ads` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req) > 0) {
-                $res = mysql_fetch_array($req);
+            $req = DB::PDO()->query("SELECT `mesto`, `type` FROM `cms_ads` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount()) {
+                $res = $req->fetch();
                 $mesto = $res['mesto'];
-                $req = mysql_query("SELECT * FROM `cms_ads` WHERE `mesto` < '$mesto' AND `type` = '" . $res['type'] . "' ORDER BY `mesto` DESC");
-                if (mysql_num_rows($req) > 0) {
-                    $res = mysql_fetch_array($req);
+                $req = DB::PDO()->query("SELECT * FROM `cms_ads` WHERE `mesto` < '$mesto' AND `type` = '" . $res['type'] . "' ORDER BY `mesto` DESC");
+                if ($req->rowCount()) {
+                    $res = $req->fetch();
                     $id2 = $res['id'];
                     $mesto2 = $res['mesto'];
-                    mysql_query("UPDATE `cms_ads` SET `mesto` = '$mesto2' WHERE `id` = " . Vars::$ID);
-                    mysql_query("UPDATE `cms_ads` SET `mesto` = '$mesto' WHERE `id` = '$id2'");
+                    DB::PDO()->exec("UPDATE `cms_ads` SET `mesto` = '$mesto2' WHERE `id` = " . Vars::$ID);
+                    DB::PDO()->exec("UPDATE `cms_ads` SET `mesto` = '$mesto' WHERE `id` = '$id2'");
                 }
             }
         }
+
         header('Location: ' . getenv("HTTP_REFERER") . '');
         break;
 
@@ -196,7 +223,8 @@ switch (Vars::$ACT) {
         */
         if (Vars::$ID) {
             if (isset($_POST['submit'])) {
-                mysql_query("DELETE FROM `cms_ads` WHERE `id` = " . Vars::$ID);
+                DB::PDO()->exec("DELETE FROM `cms_ads` WHERE `id` = " . Vars::$ID);
+
                 header('Location: ' . $_POST['ref']);
             } else {
                 echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('advertisement') . '</b></a> | ' . __('delete') . '</div>' .
@@ -217,8 +245,9 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (isset($_POST['submit'])) {
-            mysql_query("DELETE FROM `cms_ads` WHERE `to` = '1'");
-            mysql_query("OPTIMIZE TABLE `cms_ads`");
+            DB::PDO()->exec("DELETE FROM `cms_ads` WHERE `to` = '1'");
+            DB::PDO()->query("OPTIMIZE TABLE `cms_ads`");
+
             header('location: ' . $uri);
         } else {
             echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('advertisement') . '</b></a> | ' . __('links_delete_hidden') . '</div>' .
@@ -237,12 +266,13 @@ switch (Vars::$ACT) {
         -----------------------------------------------------------------
         */
         if (Vars::$ID) {
-            $req = mysql_query("SELECT * FROM `cms_ads` WHERE `id` = " . Vars::$ID);
-            if (mysql_num_rows($req)) {
-                $res = mysql_fetch_assoc($req);
-                mysql_query("UPDATE `cms_ads` SET `to`='" . ($res['to'] ? 0 : 1) . "' WHERE `id` = " . Vars::$ID);
+            $req = DB::PDO()->query("SELECT * FROM `cms_ads` WHERE `id` = " . Vars::$ID);
+            if ($req->rowCount()) {
+                $res = $req->fetch();
+                DB::PDO()->exec("UPDATE `cms_ads` SET `to`='" . ($res['to'] ? 0 : 1) . "' WHERE `id` = " . Vars::$ID);
             }
         }
+
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         break;
 
@@ -271,14 +301,14 @@ switch (Vars::$ACT) {
             ($type == 3 ? __('below') : '<a href="' . $uri . '?type=3">' . __('below') . '</a>')
         );
         echo '<div class="topmenu">' . Functions::displayMenu($array_menu) . '</div>';
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'"), 0);
+        $total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_ads` WHERE `type` = '$type'")->fetchColumn();
         if ($total) {
-            $req = mysql_query("SELECT * FROM `cms_ads` WHERE `type` = '$type' ORDER BY `mesto` ASC " . Vars::db_pagination());
+            $req = DB::PDO()->query("SELECT * FROM `cms_ads` WHERE `type` = '$type' ORDER BY `mesto` ASC " . Vars::db_pagination());
             $i = 0;
-            while ($res = mysql_fetch_assoc($req)) {
+            while ($res = $req->fetch()) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $name = str_replace('|', '; ', $res['name']);
-                $name = htmlentities($name, ENT_QUOTES, 'UTF-8');
+                $name = Validate::checkout($name);
                 // Если был задан цвет, то применяем
                 if (!empty($res['color']))
                     $name = '<span style="color:#' . $res['color'] . '">' . $name . '</span>';
@@ -288,9 +318,8 @@ switch (Vars::$ACT) {
                 $font .= $res['underline'] ? ' text-decoration:underline;' : FALSE;
                 if ($font)
                     $name = '<span style="' . $font . '">' . $name . '</span>';
-                ////////////////////////////////////////////////////////////
-                // Выводим рекламмную ссылку с атрибутами                 //
-                ////////////////////////////////////////////////////////////
+
+                // Выводим рекламмную ссылку с атрибутами
                 echo '<p>' . Functions::getImage(($res['to'] ? 'red' : 'green') . '.png', '', 'class="left"') . '&#160;' .
                     '<a href="' . htmlspecialchars($res['link']) . '">' . htmlspecialchars($res['link']) . '</a>&nbsp;[' . $res['count'] . ']<br />' . $name . '</p>';
                 $menu = array(

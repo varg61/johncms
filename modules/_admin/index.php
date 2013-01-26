@@ -26,6 +26,7 @@ if (Vars::$USER_RIGHTS >= 2) {
 
     $admin_actions = array(
         'acl'            => 'acl.php',
+        'links'          => 'links.php',
         'users_settings' => 'users_settings.php',
     );
 

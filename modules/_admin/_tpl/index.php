@@ -11,7 +11,7 @@
     <li><a href="<?= Vars::$HOME_URL ?>forum/admin/"><i class="icn-comments"></i><?= __('forum') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>download/admin/"><i class="icn-download"></i><?= __('downloads') ?><i class="icn-arrow right"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>news/admin/"><i class="icn-news"></i><?= __('news') ?><i class="icn-arrow right"></i></a></li>
-    <li><a href="<?= $this->uri ?>links/"><i class="icn-flower"></i><?= __('advertisement') ?> //планируется<i class="icn-arrow right"></i></a></li>
+    <li><a href="<?= $this->uri ?>links/"><i class="icn-flower"></i><?= __('advertisement') ?><i class="icn-arrow right"></i></a></li>
         <?php if (Vars::$USER_RIGHTS == 9): ?>
         <li><a href="<?= $this->uri ?>counters/"><i class="icn-meter"></i><?= __('counters') ?> //планируется<i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->uri ?>sitemap/"><i class="icn-map"></i><?= __('sitemap') ?><i class="icn-arrow right"></i></a></li>
