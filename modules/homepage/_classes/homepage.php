@@ -18,7 +18,18 @@ class HomePage
 
     function __construct()
     {
-        $this->settings = unserialize(Vars::$SYSTEM_SET['news']);
+        $this->settings = isset(Vars::$SYSTEM_SET['news'])
+            ? unserialize(Vars::$SYSTEM_SET['news'])
+            : array(
+                'view'     => 1,
+                'breaks'   => 1,
+                'smilies'  => 1,
+                'tags'     => 1,
+                'comments' => 1,
+                'size'     => 500,
+                'quantity' => 3,
+                'days'     => 7
+            );
         $this->newscount = $this->_newsCount() . $this->_lastNewsCount();
         $this->news = $this->news();
     }
