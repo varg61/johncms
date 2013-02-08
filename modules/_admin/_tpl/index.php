@@ -1,6 +1,10 @@
-<ul class="nav">
-    <li><h1 class="section-warning"><?= __('admin_panel') ?></h1></li>
+<!-- Заголовок раздела -->
+<ul class="title admin">
+    <li class="center"><h1><?= __('admin_panel') ?></h1></li>
+</ul>
 
+<!-- Меню -->
+<ul class="nav">
     <li><h2><?= __('community') ?></h2></li>
     <li><a href="<?= Vars::$HOME_URL ?>users/search/"><i class="icn-man-woman"></i><?= __('users') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->usrTotal ?></span></a></li>
 
@@ -15,17 +19,19 @@
         <?php if (Vars::$USER_RIGHTS == 9): ?>
         <li><a href="<?= $this->uri ?>counters/"><i class="icn-meter"></i><?= __('counters') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->uri ?>sitemap/"><i class="icn-map"></i><?= __('sitemap') ?><i class="icn-arrow right"></i></a></li>
-        <li><h2><?= __('system') ?></h2></li>
+        <?php endif ?>
+    <li><h2><?= __('system') ?></h2></li>
+    <li><a href="<?= $this->uri ?>acl/"><i class="icn-group"></i><?= __('acl') ?><i class="icn-arrow right"></i></a></li>
+        <?php if (Vars::$USER_RIGHTS == 9): ?>
         <li><a href="<?= $this->uri ?>system_settings/"><i class="icn-settings"></i><?= __('system_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->uri ?>language/"><i class="icn-settings"></i><?= __('language_settings') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->uri ?>smilies/"><i class="icn-smile"></i><?= __('smilies') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
-    <li><a href="<?= $this->uri ?>whois/"><i class="icn-info"></i>WHOIS<i class="icn-arrow right"></i></a></li>
     <li><h2><?= __('security') ?></h2></li>
-    <li><a href="<?= $this->uri ?>acl/"><i class="icn-shield"></i><?= __('acl') ?><i class="icn-arrow right"></i></a></li>
         <?php if (Vars::$USER_RIGHTS == 9) : ?>
         <li><a href="<?= $this->uri ?>firewall/"><i class="icn-shield"></i><?= __('firewall') ?><i class="icn-arrow right"></i></a></li>
         <li><a href="<?= $this->uri ?>scanner/"><i class="icn-shield"></i><?= __('antispy') ?><i class="icn-arrow right"></i></a></li>
         <?php endif ?>
+    <li><a href="<?= $this->uri ?>whois/"><i class="icn-info"></i>WHOIS<i class="icn-arrow right"></i></a></li>
     <?php endif ?>
 </ul>
