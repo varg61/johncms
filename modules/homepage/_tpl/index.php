@@ -3,7 +3,7 @@
     <li class="center"><h1><?= __('welcome') ?></h1></li>
 </ul>
 
-<!-- Главное меню навигации -->
+<!-- Меню -->
 <ul class="nav">
     <li><h2><?= __('information') ?></h2></li>
     <li><a href="<?= Vars::$HOME_URL ?>news/"><i class="icn-news"></i><?= __('news_archive') ?><i class="icn-arrow"></i></a></li>

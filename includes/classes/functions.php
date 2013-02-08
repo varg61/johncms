@@ -251,7 +251,7 @@ class Functions extends Vars
                 $out .= '</td><td>';
             }
             if ($user['sex']) {
-                $out .= static::loadImage(($user['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', 'align="middle"');
+                $out .= static::loadImage(($user['sex'] == 'm' ? 'user.png' : 'user-female.png'), '', '', '', 'align="middle"');
             } else {
                 $out = static::loadImage('delete.png', '', 'align="middle"');
             }
@@ -405,7 +405,7 @@ class Functions extends Vars
             return FALSE;
         }
 
-        return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '"' . $style . '/>';
+        return '<img src="' . $file . '"' . (!empty($height) ? ' height="' . $height . '"' : '') . (!empty($width) ? ' width="' . $width . '"' : '') . ' alt="' . $alt . '" ' . $style . '/>';
     }
 
     /**

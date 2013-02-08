@@ -473,8 +473,14 @@ div.list > div {
 }
 
 /*======================================================
-Информационные блоки (новости и т.д.)
+Информационные блоки
 ======================================================*/
+
+.info-block {
+    background-color: #CFD3DA;
+    border-bottom: 1px solid #BCC0C6;
+    padding: 12px;
+}
 
 .news-title {
     color: #373e4a;
@@ -495,6 +501,17 @@ div.list > div {
 .news-text {
     font-size: small;
     padding: 3px 0;
+}
+
+.sub {
+    font-size: x-small;
+}
+
+.status {
+    color: #CD853F;
+    font-size: x-small;
+    font-weight: bold;
+    padding-left: 0;
 }
 
 /*======================================================
