@@ -1,23 +1,26 @@
-<ul class="nav">
-    <li><h1 class="section-warning"><?= __('antispy') ?></h1></li>
+<!-- Заголовок раздела -->
+<ul class="title admin">
+    <li class="left"><a href="<?= Router::getUri(2) ?>"><span class="icn icn-back"></span></a></li>
+    <li class="separator"></li>
+    <li class="center"><h1><?= __('antispy') ?></h1></li>
+    <li class="right"></li>
 </ul>
-<div class="form-container">
+
+<div class="content padding12">
     <?php if (isset($this->errormsg)): ?>
-    <div class="form-block error">
+    <div class="alert alert-danger">
         <?= $this->errormsg ?>
     </div>
     <?php elseif (isset($this->ok)): ?>
-    <div class="form-block confirm">
+    <div class="alert alert-success">
         <?= $this->ok ?>
     </div>
     <?php endif ?>
 
-    <div class="form-block">
-        <?= $this->form ?>
-    </div>
+    <?= $this->form ?>
 
     <?php if (isset($this->files)): ?>
-    <div class="form-block error">
+    <div class="alert alert-danger">
         <?= __('antispy_dist_bad_help') ?><br/>
         <?= __('total') ?>: <?= count($this->files) ?><br/><br/>
         <?php foreach ($this->files as $file): ?>
