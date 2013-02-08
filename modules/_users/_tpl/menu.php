@@ -1,7 +1,10 @@
-<ul class="nav">
-    <li><h1 class="section-personal"><?= __('my_assets') ?></h1></li>
+<!-- Заголовок раздела -->
+<ul class="title private">
+    <li class="center"><h1><?= __('my_assets') ?></h1></li>
 </ul>
-<div class="user-block"><?= Functions::displayUser(Vars::$USER_DATA) ?></div>
+
+<div class="user-bloc"><?= Functions::displayUser(Vars::$USER_DATA) ?></div>
+
 <ul class="nav">
     <li><a href="<?= $this->url ?>"><i class="icn-man"></i><?= __('my_profile') ?><i class="icn-arrow"></i></a></li>
     <li><a href="<?= Vars::$HOME_URL ?>album/?act=list"><i class="icn-image"></i><?= __('photo_album') ?><i class="icn-arrow"></i><span class="badge badge-right"><?= $this->total_photo ?></span></a></li>
