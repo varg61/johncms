@@ -1,9 +1,12 @@
-<ul class="nav">
-    <li><h1<?= Users::$data['id'] == Vars::$USER_ID ? ' class="section-personal"' : '' ?>><?= __('settings') ?></h1></li>
+<!-- Заголовок раздела -->
+<ul class="title <?= Users::$data['id'] == Vars::$USER_ID ? 'private' : 'admin' ?>">
+    <li class="center"><h1><?= __('settings') ?></h1></li>
 </ul>
-<div class="user-block">
-    <?= Functions::displayUser(Users::$data) ?>
-</div>
+
+<!-- Информация о пользователе -->
+<div class="info-block"><?= Functions::displayUser(Users::$data) ?></div>
+
+<!-- Меню -->
 <ul class="nav">
     <li><h2><?= __('profile') ?></h2></li>
     <li><a href="<?= $this->uri ?>edit/"><i class="icn-edit"></i><?= __('profile_edit') ?><i class="icn-arrow right"></i></a></li>
@@ -24,7 +27,7 @@
     <li><h2><?= __('settings') ?></h2></li>
     <li><a href="<?= $this->uri ?>settings/"><i class="icn-settings"></i><?= __('system_settings') ?><i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_RIGHTS >= 7): ?>
-    <li><a href="<?= $this->uri ?>rank/"><i class="icn-shield-red"></i><?= __('rank') ?> //планируется<i class="icn-arrow"></i></a></li>
+    <li><a href="<?= $this->uri ?>rank/" class="red"><i class="icn-shield-red"></i><?= __('rank') ?> //планируется<i class="icn-arrow"></i></a></li>
     <?php endif ?>
     <li><a href="<?= $this->uri ?>password/"><i class="icn-shield"></i><?= __('change_password') ?> //планируется<i class="icn-arrow"></i></a></li>
     <?php if (Vars::$USER_SYS['change_nickname'] || Vars::$USER_RIGHTS >= 7): ?>

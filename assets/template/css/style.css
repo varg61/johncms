@@ -548,7 +548,7 @@ div.list > div {
 
 .info-block {
     background-color: #CFD3DA;
-    border-bottom: 1px solid #BCC0C6;
+    border-bottom: 1px solid #b8bcc2;
     padding: 12px;
 }
 
@@ -806,6 +806,7 @@ span.icn.icn-user { background-position: 0 -132px }
 span.icn.icn-exit { background-position: 0 -176px }
 span.icn.icn-gear { background-position: 0 -220px }
 span.icn.icn-back { background-position: 0 -264px }
+span.icn.icn-info { background-position: 0 -308px }
 
 /*======================================================
 Корректировка стилей для маленьких экранов

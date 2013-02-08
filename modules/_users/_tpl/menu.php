@@ -6,6 +6,7 @@
 <!-- Информация о пользователе -->
 <div class="info-block"><?= Functions::displayUser(Vars::$USER_DATA) ?></div>
 
+
 <!-- Меню -->
 <ul class="nav">
     <li><a href="<?= $this->url ?>"><i class="icn-man"></i><?= __('my_profile') ?><i class="icn-arrow"></i></a></li>
