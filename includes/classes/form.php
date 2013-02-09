@@ -109,7 +109,7 @@ class Form
      *
      * @return string                  Готовая форма
      */
-    public function display()
+    public function build()
     {
         // Проверка формы на корректный Submit
         if (count(array_intersect($this->_submits, array_keys($this->input)))

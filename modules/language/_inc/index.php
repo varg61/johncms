@@ -30,7 +30,7 @@ $form
 
     ->addHtml('<a class="btn" href="' . Vars::$HOME_URL . '">' . __('back') . '</a>');
 
-$tpl->form = $form->display();
+$tpl->form = $form->build();
 
 if($form->isSubmitted){
     $_SESSION['lng'] = $form->validOutput['lng'];

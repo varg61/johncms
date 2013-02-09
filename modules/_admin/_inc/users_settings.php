@@ -134,7 +134,7 @@ if (Vars::$USER_RIGHTS == 9) {
     $form->add('submit', 'reset', array('value' => __('reset_settings'), 'class' => 'btn'));
 }
 $form->addHtml(' <a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
-$tpl->form = $form->display();
+$tpl->form = $form->build();
 
 if ($form->isSubmitted && isset($form->input['submit'])) {
     // Записываем настройки в базу

@@ -30,7 +30,7 @@ if (Vars::$USER_ID) {
 
         ->addHtml('<a class="btn" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL) . 'option/">' . __('back') . '</a>');
 
-    $tpl->form = $form->display();
+    $tpl->form = $form->build();
 
     if ($form->isSubmitted) {
         Vars::userUnset($form->validOutput['clear']);

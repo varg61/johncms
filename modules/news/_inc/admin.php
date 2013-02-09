@@ -105,7 +105,7 @@ $form
 
     ->addHtml('<a class="btn" href="' . Vars::$HOME_URL . 'admin/' . '">' . __('back') . '</a>');
 
-$tpl->form = $form->display();
+$tpl->form = $form->build();
 
 if ($form->isSubmitted && isset($form->input['submit'])) {
     foreach ($form->validOutput as $key => $val) {

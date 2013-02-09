@@ -99,7 +99,7 @@ $form
 
     ->addHtml('<a class="btn" href="' . Router::getUri(3) . 'option/">' . __('back') . '</a>');
 
-$tpl->form = $form->display();
+$tpl->form = $form->build();
 
 if ($form->isSubmitted) {
     foreach ($form->validOutput as $key => $val) {

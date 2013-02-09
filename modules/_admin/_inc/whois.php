@@ -33,7 +33,7 @@ $form
 
     ->addHtml('<a class="btn" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Router::getUri(2)) . '">' . __('back') . '</a>');
 //TODO: Доработать ссылку "Назад"
-$tpl->form = $form->display();
+$tpl->form = $form->build();
 
 if ($form->isSubmitted || $ip) {
     $ip = $form->isSubmitted ? trim($form->validOutput['ip']) : $ip;

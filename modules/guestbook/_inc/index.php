@@ -39,7 +39,7 @@ $form
     'value' => __('write'),
     'class' => 'btn btn-primary'));
 
-$tpl->form = $form->display();
+$tpl->form = $form->build();
 
 if ($form->isSubmitted) {
     // Принимаем и обрабатываем данные
