@@ -15,7 +15,7 @@ $tpl = Template::getInstance();
 $form = new Form(Router::getUri(3));
 
 $form
-    ->fieldsetStart(__('update_cache'))
+    ->fieldset(__('update_cache'))
 
     ->addHtml('<br/>')
 

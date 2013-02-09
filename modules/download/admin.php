@@ -39,7 +39,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('functions_download'))
+    ->fieldset(__('functions_download'))
 
     ->add('checkbox', 'mod', array(
     'checked'      => $settings['mod'],
@@ -71,7 +71,7 @@ $form
         'max'  => 100
     )))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

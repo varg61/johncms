@@ -18,11 +18,11 @@ if (Vars::$USER_ID) {
     $form = new Form($uri);
 
     $form
-        ->fieldsetStart(__('exit_warning'))
+        ->fieldset(__('exit_warning'))
 
         ->add('checkbox', 'clear', array('label_inline' => __('clear_authorisation')))
 
-        ->fieldsetStart()
+        ->fieldset()
 
         ->add('submit', 'submit', array(
         'value' => '   ' . __('exit') . '   ',

@@ -17,7 +17,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('add_article'))
+    ->fieldset(__('add_article'))
 
     ->add('text', 'name', array(
     'label' => __('article_title')))
@@ -26,7 +26,7 @@ $form
     'label'   => __('text'),
     'toolbar' => !Vars::$IS_MOBILE))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

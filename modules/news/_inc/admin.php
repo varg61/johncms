@@ -29,7 +29,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('apperance'))
+    ->fieldset(__('apperance'))
 
     ->add('radio', 'view', array(
     'checked' => $settings['view'],
@@ -40,7 +40,7 @@ $form
         '0' => __('dont_display')
     )))
 
-    ->fieldsetStart(__('text_processing'))
+    ->fieldset(__('text_processing'))
 
     ->add('checkbox', 'breaks', array(
     'label_inline' => __('line_foldings'),
@@ -58,7 +58,7 @@ $form
     'label_inline' => __('comments'),
     'checked'      => $settings['comments']))
 
-    ->fieldsetStart(__('output'))
+    ->fieldset(__('output'))
 
     ->add('text', 'quantity', array(
     'label_inline' => __('news_count') . ' <span class="note">(1 - 15)</span>',
@@ -93,7 +93,7 @@ $form
         'max'  => 5000
     )))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

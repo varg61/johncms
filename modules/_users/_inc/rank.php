@@ -18,7 +18,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('rank'))
+    ->fieldset(__('rank'))
 
     ->add('radio', 'rights', array(
     'checked' => Users::$data['rights'],
@@ -34,7 +34,7 @@ $form
 
     ->add('text', 'password', array('label' => __('your_password')))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

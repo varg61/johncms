@@ -21,7 +21,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('change_status'))
+    ->fieldset(__('change_status'))
 
     ->addHtml('<br/>')
 
@@ -34,7 +34,7 @@ $form
         'max'  => 50
     )))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

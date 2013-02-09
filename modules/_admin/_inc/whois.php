@@ -19,7 +19,7 @@ $form = new Form(Router::getUri(3));
 $ip = isset(Router::$ROUTE[2]) ? Router::$ROUTE[2] : FALSE;
 
 $form
-    ->fieldsetStart(__('ip_information'))
+    ->fieldset(__('ip_information'))
 
     ->add('text', 'ip', array(
     'value'        => ($ip ? $ip : ''),

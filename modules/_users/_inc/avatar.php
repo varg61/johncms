@@ -16,7 +16,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('upload_avatar'))
+    ->fieldset(__('upload_avatar'))
 
     ->add('file', 'image', array(
     'label'       => __('select_image'),
@@ -26,7 +26,7 @@ $form
     'label'       => __('animation'),
     'description' => __('select_animation_help')))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

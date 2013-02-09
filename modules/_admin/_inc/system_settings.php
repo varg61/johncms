@@ -15,7 +15,7 @@ $tpl = Template::getInstance();
 $form = new Form(Router::getUri(3));
 
 $form
-    ->fieldsetStart(__('system_time'))
+    ->fieldset(__('system_time'))
 
     ->add('text', 'timeshift', array(
     'value'        => Vars::$SYSTEM_SET['timeshift'],
@@ -27,7 +27,7 @@ $form
         'max'  => 13
     )))
 
-    ->fieldsetStart(__('file_upload'))
+    ->fieldset(__('file_upload'))
 
     ->add('text', 'filesize', array(
     'value'        => Vars::$SYSTEM_SET['filesize'],
@@ -40,7 +40,7 @@ $form
         'max'  => 50000
     )))
 
-    ->fieldsetStart(__('profiling'))
+    ->fieldset(__('profiling'))
 
     ->add('checkbox', 'generation', array(
     'checked'      => Vars::$SYSTEM_SET['generation'],
@@ -50,7 +50,7 @@ $form
     'checked'      => Vars::$SYSTEM_SET['memory'],
     'label_inline' => __('profiling_memory')))
 
-    ->fieldsetStart(__('site_details'))
+    ->fieldset(__('site_details'))
 
     ->add('text', 'email', array(
     'value' => Vars::$SYSTEM_SET['email'],
@@ -60,7 +60,7 @@ $form
     'value' => Vars::$SYSTEM_SET['copyright'],
     'label' => __('site_copyright')))
 
-    ->fieldsetStart(__('seo_attributes'))
+    ->fieldset(__('seo_attributes'))
 
     ->add('text', 'hometitle', array(
     'value'       => Vars::$SYSTEM_SET['hometitle'],
@@ -86,7 +86,7 @@ $form
         'max'  => 250
     )))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

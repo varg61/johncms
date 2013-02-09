@@ -28,7 +28,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('system_settings'))
+    ->fieldset(__('system_settings'))
 
     ->add('text', 'timeshift', array(
     'value'        => Vars::$USER_SET['timeshift'],
@@ -54,7 +54,7 @@ $form
     'checked'      => Vars::$USER_SET['smilies'],
     'label_inline' => __('smilies')))
 
-    ->fieldsetStart(__('apperance'))
+    ->fieldset(__('apperance'))
 
     ->add('text', 'page_size', array(
     'value'        => Vars::$USER_SET['page_size'],
@@ -85,13 +85,13 @@ $form
     'label'    => __('design_template'),
     'items'    => $tpl_list))
 
-    ->fieldsetStart(__('language'))
+    ->fieldset(__('language'))
 
     ->add('radio', 'lng', array(
     'checked' => Vars::$USER_SET['lng'],
     'items'   => $items))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

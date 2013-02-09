@@ -85,7 +85,7 @@ class Form
         return $this;
     }
 
-    public function fieldsetStart($legend = null)
+    public function fieldset($legend = null)
     {
         $option['type'] = 'fs_start';
         if (!is_null($legend)) {

@@ -16,7 +16,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('forum'))
+    ->fieldset(__('forum'))
 
     ->add('radio', 'forum', array(
     'checked' => Vars::$ACL['forum'],
@@ -27,7 +27,7 @@ $form
         '0' => __('access_disabled')
     )))
 
-    ->fieldsetStart(__('photo_albums'))
+    ->fieldset(__('photo_albums'))
 
     ->add('radio', 'album', array(
     'checked' => Vars::$ACL['album'],
@@ -41,7 +41,7 @@ $form
     'label_inline' => __('comments'),
     'checked'      => Vars::$ACL['albumcomm']))
 
-    ->fieldsetStart(__('guestbook'))
+    ->fieldset(__('guestbook'))
 
     ->add('radio', 'guestbook', array(
     'checked' => Vars::$ACL['guestbook'],
@@ -51,7 +51,7 @@ $form
         '0' => __('access_disabled')
     )))
 
-    ->fieldsetStart(__('library'))
+    ->fieldset(__('library'))
 
     ->add('radio', 'library', array(
     'checked' => Vars::$ACL['library'],
@@ -65,7 +65,7 @@ $form
     'label_inline' => __('comments'),
     'checked'      => Vars::$ACL['libcomm']))
 
-    ->fieldsetStart(__('downloads'))
+    ->fieldset(__('downloads'))
 
     ->add('radio', 'downloads', array(
     'checked' => Vars::$ACL['downloads'],
@@ -79,7 +79,7 @@ $form
     'label_inline' => __('comments'),
     'checked'      => Vars::$ACL['downcomm']))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

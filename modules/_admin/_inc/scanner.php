@@ -33,7 +33,7 @@ if (file_exists(CONFIGPATH . 'scanner.php')) {
 }
 
 $form
-    ->fieldsetStart(__('select_action'))
+    ->fieldset(__('select_action'))
 
     ->add('radio', 'mode', array(
     'checked' => 1,
@@ -47,7 +47,7 @@ $form
     'label'       => __('your_password'),
     'description' => __('snapshot_help')))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('do'),

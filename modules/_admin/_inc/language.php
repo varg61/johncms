@@ -16,7 +16,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('language_default'))
+    ->fieldset(__('language_default'))
 
     ->add('radio', 'lng', array(
     'checked'     => Vars::$SYSTEM_SET['lng'],
@@ -28,7 +28,7 @@ $form
     'label_inline' => __('allow_choose'),
     'description' => __('allow_choose_help')))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

@@ -16,13 +16,13 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('language_select'))
+    ->fieldset(__('language_select'))
 
     ->add('radio', 'lng', array(
     'checked'     => Languages::getInstance()->getCurrentISO(),
     'items'       => Languages::getInstance()->getLngDescription()))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

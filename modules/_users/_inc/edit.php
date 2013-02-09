@@ -16,7 +16,7 @@ $tpl = Template::getInstance();
 $form = new Form($uri);
 
 $form
-    ->fieldsetStart(__('profile_edit'))
+    ->fieldset(__('profile_edit'))
 
     ->add('text', 'imname', array(
     'label'       => __('name'),
@@ -60,7 +60,7 @@ $form
     'buttons'     => (Vars::$IS_MOBILE ? FALSE : TRUE),
     'description' => __('description_about')))
 
-    ->fieldsetStart(__('communication'))
+    ->fieldset(__('communication'))
 
     ->add('text', 'tel', array(
     'label'       => __('phone_number'),
@@ -91,7 +91,7 @@ $form
     'value'       => Users::$data['icq'],
     'description' => __('description_icq')))
 
-    ->fieldsetStart()
+    ->fieldset()
 
     ->add('submit', 'submit', array(
     'value' => __('save'),

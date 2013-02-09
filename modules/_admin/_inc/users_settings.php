@@ -15,7 +15,7 @@ $tpl = Template::getInstance();
 $form = new Form(Router::getUri(3));
 
 $form
-    ->fieldsetStart(__('registration'))
+    ->fieldset(__('registration'))
 
     ->add('radio', 'registration', array(
     'checked' => Vars::$USER_SYS['registration'],
@@ -41,7 +41,7 @@ $form
 
 if (Vars::$USER_RIGHTS == 9) {
     $form
-        ->fieldsetStart(__('for_users'))
+        ->fieldset(__('for_users'))
 
         ->add('checkbox', 'autologin', array(
         'label_inline' => __('autologin'),
@@ -77,7 +77,7 @@ if (Vars::$USER_RIGHTS == 9) {
             'max'  => 30
         )))
 
-        ->fieldsetStart(__('for_guests'))
+        ->fieldset(__('for_guests'))
 
         ->add('checkbox', 'view_online', array(
         'label_inline' => __('view_online'),
@@ -95,7 +95,7 @@ if (Vars::$USER_RIGHTS == 9) {
         'label_inline' => __('view_profiles'),
         'checked'      => Vars::$USER_SYS['view_profiles']))
 
-        ->fieldsetStart(__('antiflood'))
+        ->fieldset(__('antiflood'))
 
         ->add('radio', 'flood_mode', array(
         'checked' => Vars::$USER_SYS['flood_mode'],
@@ -128,7 +128,7 @@ if (Vars::$USER_RIGHTS == 9) {
 }
 
 $form
-    ->fieldsetStart()
+    ->fieldset()
     ->add('submit', 'submit', array('value' => __('save'), 'class' => 'btn btn-primary btn-large'));
 if (Vars::$USER_RIGHTS == 9) {
     $form->add('submit', 'reset', array('value' => __('reset_settings'), 'class' => 'btn'));
