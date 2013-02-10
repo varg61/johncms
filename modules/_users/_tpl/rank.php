@@ -8,7 +8,7 @@
 
 <div class="info-block"><?= Functions::displayUser(Users::$data) ?></div>
 
-<div class="content padding12">
+<div class="content form-container">
     <?php if (isset($this->save)): ?>
     <div class="form-block confirm">
         <?= __('settings_saved') ?>

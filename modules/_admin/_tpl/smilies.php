@@ -6,7 +6,7 @@
     <li class="right"></li>
 </ul>
 
-<div class="content padding12">
+<div class="content form-container">
     <?php if (isset($this->error)): ?>
     <div class="alert alert-danger">
         <?= $this->error ?>

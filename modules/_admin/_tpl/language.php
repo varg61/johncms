@@ -6,7 +6,7 @@
     <li class="right"></li>
 </ul>
 
-<div class="content padding12">
+<div class="content form-container">
     <?php if (isset($_GET['save'])): ?>
     <div class="alert alert-success">
         <?= __('settings_saved') ?>

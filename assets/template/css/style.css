@@ -275,6 +275,8 @@ ul.nav h1, ul.nav h2 {
 Формы и их элементы
 ======================================================*/
 
+.form-container { padding: 17px }
+
 fieldset {
     border: 0;
     padding: 0;
@@ -731,8 +733,6 @@ ul.reputation li.graph {
 .float-right { float: right; }
 
 .inline-block { display: inline-block; }
-
-.padding12 { padding: 12px }
 
 .slider { display: none }
 
