@@ -27,7 +27,7 @@ if (Vars::$USER_RIGHTS == 5 || Vars::$USER_RIGHTS >= 6) {
             echo Functions::displayError(__('error_empty_title'), '<a href="' . $url . '?act=mkcat&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
             exit;
         }
-        $text = Validate::checkout($_POST['text']);
+        $text = Functions::checkout($_POST['text']);
         $user = isset($_POST['user']);
         $typs = intval($_POST['typs']);
 

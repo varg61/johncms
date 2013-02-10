@@ -47,10 +47,10 @@ if (mysql_num_rows($req_obj)) {
         '<a href="' . $url . '?act=list&amp;user=' . $owner['id'] . '">' . __('personal_2') . '</a></div>' .
         '<div class="menu"><a href="' . $url . '?act=show&amp;al=' . $res_obj['album_id'] . '&amp;img=' . $img . '&amp;user=' . $owner['id'] . '&amp;view"><img src="' . Vars::$HOME_URL . 'files/users/album/' . $owner['id'] . '/' . $res_obj['tmb_name'] . '" /></a>';
     if (!empty($res_obj['description']))
-        $context_top .= '<div class="gray">' . Functions::smilies(Validate::checkout($res_obj['description'], 1)) . '</div>';
+        $context_top .= '<div class="gray">' . Functions::smilies(Functions::checkout($res_obj['description'], 1)) . '</div>';
     $context_top .= '<div class="sub">' .
         '<a href="profile.php?user=' . $owner['id'] . '"><b>' . $owner['nickname'] . '</b></a> | ' .
-        '<a href="' . $url . '?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . Validate::checkout($res_a['name']) . '</a>';
+        '<a href="' . $url . '?act=show&amp;al=' . $res_a['id'] . '&amp;user=' . $owner['id'] . '">' . Functions::checkout($res_a['name']) . '</a>';
     if ($res_obj['access'] == 4 || Vars::$USER_RIGHTS >= 7) {
         $context_top .= Album::vote($res_obj) .
             '<div class="gray">' . __('count_views') . ': ' . $res_obj['views'] . ', ' . __('count_downloads') . ': ' . $res_obj['downloads'] . '</div>' .

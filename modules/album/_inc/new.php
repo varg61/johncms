@@ -163,7 +163,7 @@ if ($total) {
             echo'<a href="' . $url . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '&amp;view">' .
                 '<img src="' . Vars::$HOME_URL . 'files/users/album/' . $res['user_id'] . '/' . $res['tmb_name'] . '" /></a>';
             if (!empty($res['description']))
-                echo '<div class="gray">' . Functions::smilies(Validate::checkout($res['description'], 1)) . '</div>';
+                echo '<div class="gray">' . Functions::smilies(Functions::checkout($res['description'], 1)) . '</div>';
         } elseif ($res['access'] == 3) {
             // Если доступ открыт друзьям
             echo 'Только для друзей';
@@ -172,7 +172,7 @@ if ($total) {
             echo '<a href="' . $url . '?act=show&amp;al=' . $res['album_id'] . '&amp;img=' . $res['id'] . '&amp;user=' . $res['user_id'] . '">' . Functions::getImage('password.gif') . '</a>';
         }
         echo '<div class="sub">' .
-            '<a href="' . $url . '?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="' . $url . '?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Validate::checkout($res['album_name']) . '</a>';
+            '<a href="' . $url . '?act=list&amp;user=' . $res['user_id'] . '"><b>' . $res['user_name'] . '</b></a> | <a href="' . $url . '?act=show&amp;al=' . $res['album_id'] . '&amp;user=' . $res['user_id'] . '">' . Functions::checkout($res['album_name']) . '</a>';
         if ($res['access'] == 4 || Vars::$USER_RIGHTS >= 6) {
             echo Album::vote($res) .
                 '<div class="gray">' . __('count_views') . ': ' . $res['views'] . ', ' . __('count_downloads') . ': ' . $res['downloads'] . '</div>' .

@@ -30,12 +30,12 @@ if(Vars::$ID) {
 		$add_message['text'] = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
 		$addmail = new ValidMail($add_message, ($id ? $id: FALSE));
 		
-		$tpl->text = Validate::checkout($result['text']);
+		$tpl->text = Functions::checkout($result['text']);
 		if($addmail->validateForm() === FALSE) {
 			if($error = $addmail->error_log) {
 				//Передаем переменные в шаблон
-				$tpl->login = Validate::checkout($add_message['login']);
-				$tpl->text = Validate::checkout($add_message['text']);
+				$tpl->login = Functions::checkout($add_message['login']);
+				$tpl->text = Functions::checkout($add_message['text']);
 				//Выводим на экран ошибку
 				$tpl->mail_error = Functions::displayError( $error );
 			}

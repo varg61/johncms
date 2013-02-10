@@ -87,7 +87,7 @@ if (Vars::$ID) {
 
                     $i = 1;
                     while ($row = $query->fetch()) {
-                        $text = Validate::checkout($row['text'], 1, 1);
+                        $text = Functions::checkout($row['text'], 1, 1);
                         if (Vars::$USER_SET['smilies'])
                             $text = Functions::smilies($text, $row['rights'] >= 1 ? 1 : 0);
                         $array[] = array(

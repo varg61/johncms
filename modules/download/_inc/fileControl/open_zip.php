@@ -47,7 +47,7 @@ if (isset($_GET['more'])) {
     $title_pages = $res_down['rus_name'];
     $isset_more = '';
 }
-$title_pages = Validate::checkout(mb_substr($title_pages, 0, 20));
+$title_pages = Functions::checkout(mb_substr($title_pages, 0, 20));
 $textl = __('open_archive') . ' &raquo; ' . (mb_strlen($res_down['rus_name']) > 20 ? $title_pages . '...' : $title_pages);
 require (SYSPATH . 'lib/pclzip.lib.php');
 $array = array('cgi', 'pl', 'asp', 'aspx', 'shtml', 'shtm', 'fcgi', 'fpl', 'jsp', 'py', 'htaccess', 'ini', 'php', 'php3', 'php4', 'php5', 'php6', 'phtml', 'phps');
@@ -80,7 +80,7 @@ if (!isset($_GET['file'])) {
 	Выводим список файлов
 	-----------------------------------------------------------------
 	*/
-    echo '<div class="phdr"><b>' . __('open_archive') . ':</b> ' . Validate::checkout($res_down['name']) . '</div>' .
+    echo '<div class="phdr"><b>' . __('open_archive') . ':</b> ' . Functions::checkout($res_down['name']) . '</div>' .
         '<div class="topmenu">' . __('open_archive_faq') . '</div>';
     $preview = explode('|', $save_list);
     $total = count($preview) - 1;
@@ -101,7 +101,7 @@ if (!isset($_GET['file'])) {
             $format = explode('.', $file_name);
             $format_file = strtolower($format[count($format) - 1]);
             echo (($i % 2) ? '<div class="list2">' : '<div class="list1">') .
-                '<b>' . ($i + 1) . ')</b> ' . $dir . '/' . Validate::checkout(mb_convert_encoding($file_name, "UTF-8", "Windows-1251"));
+                '<b>' . ($i + 1) . ')</b> ' . $dir . '/' . Functions::checkout(mb_convert_encoding($file_name, "UTF-8", "Windows-1251"));
             if ($file_size_two[$i] > 0) echo ' (' . Download::displayFileSize($file_size_two[$i]) . ')';
             if ($format_file)
                 echo ' - <a href="' . $url . '?act=open_zip&amp;id=' . Vars::$ID . '&amp;file=' . rawurlencode(mb_convert_encoding($path, "UTF-8", "Windows-1251")) . '&amp;page=' . Vars::$PAGE . $isset_more . '">' . (in_array($format_file, $array) ? __('open_archive_code') : __('download')) . '</a>';

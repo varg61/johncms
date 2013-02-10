@@ -98,7 +98,7 @@ class SiteMap
                 $STHA = DB::PDO()->query("SELECT * FROM `lib` WHERE `refid` = " . Vars::$ID . " AND `type` = 'bk' AND `moder` = '1' ORDER BY `time` ASC LIMIT " . ($this->page * $this->links_count) . ", " . $this->links_count);
                 if ($STHA->rowCount()) {
                     while ($article = $STHA->fetch()) {
-                        $row[] = '<a href="' . Vars::$HOME_URL . 'library/?id=' . $article['id'] . '">' . Validate::checkout($article['name']) . '</a>';
+                        $row[] = '<a href="' . Vars::$HOME_URL . 'library/?id=' . $article['id'] . '">' . Functions::checkout($article['name']) . '</a>';
                     }
                     $out = '<div class="phdr"><b>' . __('library') . '</b> | ' . $section['text'] . '</div><div class="menu">' . implode('<br />' . "\r\n", $row) . '</div>';
 
@@ -132,11 +132,11 @@ class SiteMap
                         if ($pages > 1) {
                             for ($i = 0; $i < $pages; $i++) {
                                 //TODO: Доработать ссылку
-                                $out[] = '<a href="' . Vars::$HOME_URL . 'forum/contents.php?id=' . $result['id'] . '&amp;p=' . $i . '">' . Validate::checkout($text) . ' (' . ($i + 1) . ')</a>';
+                                $out[] = '<a href="' . Vars::$HOME_URL . 'forum/contents.php?id=' . $result['id'] . '&amp;p=' . $i . '">' . Functions::checkout($text) . ' (' . ($i + 1) . ')</a>';
                             }
                         } else {
                             //TODO: Доработать ссылку
-                            $out[] = '<a href="' . Vars::$HOME_URL . 'forum/contents.php?id=' . $result['id'] . '">' . Validate::checkout($text) . '</a>';
+                            $out[] = '<a href="' . Vars::$HOME_URL . 'forum/contents.php?id=' . $result['id'] . '">' . Functions::checkout($text) . '</a>';
                         }
                     }
                 }
@@ -170,11 +170,11 @@ class SiteMap
                         if ($pages > 1) {
                             for ($i = 0; $i < $pages; $i++) {
                                 //TODO: Доработать ссылку
-                                $out[] = '<a href="' . Vars::$HOME_URL . 'library/contents.php?id=' . $result['id'] . '&amp;p=' . $i . '">' . Validate::checkout($text) . ' (' . ($i + 1) . ')</a>';
+                                $out[] = '<a href="' . Vars::$HOME_URL . 'library/contents.php?id=' . $result['id'] . '&amp;p=' . $i . '">' . Functions::checkout($text) . ' (' . ($i + 1) . ')</a>';
                             }
                         } else {
                             //TODO: Доработать ссылку
-                            $out [] = '<a href="../library/contents.php?id=' . $result['id'] . '">' . Validate::checkout($text) . '</a>';
+                            $out [] = '<a href="../library/contents.php?id=' . $result['id'] . '">' . Functions::checkout($text) . '</a>';
                         }
                     }
                 }

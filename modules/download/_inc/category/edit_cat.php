@@ -66,7 +66,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                     $error_format .= 1;
             }
             $user_down = 1;
-            $format_files = Validate::checkout($format);
+            $format_files = Functions::checkout($format);
         } else {
             $user_down = 0;
             $format_files = '';
@@ -100,11 +100,11 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
 
         header('location: ' . $url . '?id=' . VARS::$ID);
     } else {
-        $name = Validate::checkout($res['rus_name']);
+        $name = Functions::checkout($res['rus_name']);
         echo '<div class="phdr"><b>' . __('download_edit_cat') . ':</b> ' . $name . '</div>' .
             '<div class="menu"><form action="' . $url . '?act=edit_cat&amp;id=' . VARS::$ID . '" method="post">' .
             __('dir_name_view') . ':<br/><input type="text" name="rus_name" value="' . $name . '"/><br/>' .
-            __('dir_desc') . ' (max. 500):<br/><textarea name="desc" rows="4">' . Validate::checkout($res['desc']) . '</textarea><br/>';
+            __('dir_desc') . ' (max. 500):<br/><textarea name="desc" rows="4">' . Functions::checkout($res['desc']) . '</textarea><br/>';
         if (Vars::$USER_RIGHTS == 9) {
             echo '<div class="sub"><input type="checkbox" name="user_down" value="1"' . ($res['field'] ? ' checked="checked"' : '') . '/> ' . __('user_download') . '<br/>' .
                 __('extensions') . ':<br/><input type="text" name="format" value="' . $res['text'] . '"/></div>' .

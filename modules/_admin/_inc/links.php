@@ -308,7 +308,7 @@ switch (Vars::$ACT) {
             while ($res = $req->fetch()) {
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                 $name = str_replace('|', '; ', $res['name']);
-                $name = Validate::checkout($name);
+                $name = Functions::checkout($name);
                 // Если был задан цвет, то применяем
                 if (!empty($res['color']))
                     $name = '<span style="color:#' . $res['color'] . '">' . $name . '</span>';

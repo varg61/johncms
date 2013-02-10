@@ -26,7 +26,7 @@ if ($total) {
     for ($i = 0; $res = $req->fetch(); ++$i) {
         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
         echo '<b><a href="?id=' . $res['id'] . '">' . htmlspecialchars($res['name']) . '</a></b>';
-        echo '<div class="sub">' . Validate::checkout($res['announce']) . '<br/>';
+        echo '<div class="sub">' . Functions::checkout($res['announce']) . '<br/>';
         echo '<span class="gray">' . __('reads') . ': ' . $res['count'] . '</span>';
         echo'</div></div>';
     }

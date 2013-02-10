@@ -89,7 +89,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             } else {
                 $scan_dir = $files_path;
             }
-            echo '<div class="phdr"><b>' . __('download_scan_dir') . '</b>' . (Vars::$ID ? ': ' . Validate::checkout($res_down_cat['rus_name']) : '') . '</div>';
+            echo '<div class="phdr"><b>' . __('download_scan_dir') . '</b>' . (Vars::$ID ? ': ' . Functions::checkout($res_down_cat['rus_name']) : '') . '</div>';
             if (isset($_GET['yes'])) {
                 /*
                     -----------------------------------------------------------------
@@ -186,7 +186,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                                 if (preg_match("/^file([0-9]+)_/", $name)) {
                                     if (!in_array($name, $array_more)) {
                                         $refid = (int)str_replace('file', '', $name);
-                                        $name_link = Validate::checkout(mb_substr(str_replace('file' . $refid . '_', __('download') . ' ', $name), 0, 200));
+                                        $name_link = Functions::checkout(mb_substr(str_replace('file' . $refid . '_', __('download') . ' ', $name), 0, 200));
                                         $size = filesize($val);
 
                                         $STH_M->execute(array(

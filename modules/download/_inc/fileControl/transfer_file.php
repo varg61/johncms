@@ -90,7 +90,7 @@ if (Vars::$USER_RIGHTS > 6) {
                 while ($resCat = $queryCat->fetch()) {
                     echo ($i++ % 2) ? '<div class="list2">' : '<div class="list1">';
                     echo Functions::loadModuleImage('folder.png') . '&#160;' .
-                        '<a href="' . $url . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '">' . Validate::checkout($resCat['rus_name']) . '</a>';
+                        '<a href="' . $url . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '">' . Functions::checkout($resCat['rus_name']) . '</a>';
                     if ($resCat['id'] != $res_down['refid'])
                         echo '<br /><small><a href="' . $url . '?act=transfer_file&amp;id=' . VARS::$ID . '&amp;catId=' . $resCat['id'] . '&amp;do=transfer">' . __('move_this_folder') . '</a></small>';
                     echo '</div>';

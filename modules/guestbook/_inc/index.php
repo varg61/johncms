@@ -154,14 +154,14 @@ if ($tpl->total) {
         $text = ' <span class="gray">(' . Functions::displayDate($result['time']) . ')</span>';
         if ($result['user_id']) {
             // Для зарегистрированных показываем ссылки и смайлы
-            $post = Validate::checkout($result['text'], 1, 1);
+            $post = Functions::checkout($result['text'], 1, 1);
             if (Vars::$USER_SET['smilies']) {
                 $post = Functions::smilies($post, $result['rights'] >= 1 ? 1 : 0);
             }
         } else {
             // Для гостей обрабатываем имя и фильтруем ссылки
-            $result['nickname'] = Validate::checkout($result['nickname']);
-            $post = Functions::antiLink(Validate::checkout($result['text'], 0, 2));
+            $result['nickname'] = Functions::checkout($result['nickname']);
+            $post = Functions::antiLink(Functions::checkout($result['text'], 0, 2));
         }
         if ($result['edit_count']) {
             // Если пост редактировался, показываем кем и когда
@@ -169,7 +169,7 @@ if ($tpl->total) {
         }
         if (!empty($result['otvet'])) {
             // Ответ Администрации
-            $reply = Validate::checkout($result['otvet'], 1, 1);
+            $reply = Functions::checkout($result['otvet'], 1, 1);
             if (Vars::$USER_SET['smilies']) {
                 $reply = Functions::smilies($reply, 1);
             }

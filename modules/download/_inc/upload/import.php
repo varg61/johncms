@@ -34,7 +34,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             $fname = basename($url);
             $new_file = isset($_POST['new_file']) ? trim($_POST['new_file']) : NULL;
             $name = isset($_POST['text']) ? trim($_POST['text']) : NULL;
-            $name_link = isset($_POST['name_link']) ? Validate::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
+            $name_link = isset($_POST['name_link']) ? Functions::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
             $text = isset($_POST['opis']) ? trim($_POST['opis']) : NULL;
             $ext = explode(".", $fname);
             if (!empty($new_file)) {
@@ -61,7 +61,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
             if (file_exists("$load_cat/$fname"))
                 $fname = time() . $fname;
             if (copy('http://' . $url, "$load_cat/$fname")) {
-                echo '<div class="phdr"><b>' . __('download_import') . ': ' . Validate::checkout($res['rus_name']) . '</b></div>';
+                echo '<div class="phdr"><b>' . __('download_import') . ': ' . Functions::checkout($res['rus_name']) . '</b></div>';
                 echo '<div class="gmenu">' . __('upload_file_ok') . '</div>';
 
                 $STH = DB::PDO()->prepare('
@@ -124,7 +124,7 @@ if (Vars::$USER_RIGHTS == 4 || Vars::$USER_RIGHTS >= 6) {
                 echo '<div class="rmenu">' . __('upload_file_no') . '<br /><a href="' . $url . '?act=import&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a></div>';
         }
     } else {
-        echo '<div class="phdr"><b>' . __('download_import') . ': ' . Validate::checkout($res['rus_name']) . '</b></div>' .
+        echo '<div class="phdr"><b>' . __('download_import') . ': ' . Functions::checkout($res['rus_name']) . '</b></div>' .
             '<div class="list1"><form action="' . $url . '?act=import&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
             __('download_link') . '<span class="red">*</span>:<br /><input type="post" name="fail" value="http://"/><br />' .
             __('save_name_file') . ':<br /><input type="text" name="new_file"/><br />' .

@@ -185,7 +185,7 @@ if (!$error) {
 
                 header('Location: ' . $url . '?id=' . $res['refid'] . '&page=' . $page);
             } else {
-                $msg_pre = Validate::checkout($msg, 1, 1);
+                $msg_pre = Functions::checkout($msg, 1, 1);
                 if (Vars::$USER_SET['smilies'])
                     $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
                 $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
@@ -197,7 +197,7 @@ if (!$error) {
                 echo '<div class="rmenu"><form name="form" action="?act=editpost&amp;id=' . Vars::$ID . '&amp;start=' . Vars::$START . '" method="post"><p>';
                 if (!Vars::$IS_MOBILE)
                     echo TextParser::autoBB('form', 'msg');
-                echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? htmlentities($res['text'], ENT_QUOTES, 'UTF-8') : Validate::checkout($_POST['msg'])) . '</textarea><br/>';
+                echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? htmlentities($res['text'], ENT_QUOTES, 'UTF-8') : Functions::checkout($_POST['msg'])) . '</textarea><br/>';
                 if (Vars::$USER_SET['translit'])
                     echo '<input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');
                 echo '</p><p><input type="submit" name="submit" value="' . __('save') . '" style="width: 107px; cursor: pointer;"/> ' .

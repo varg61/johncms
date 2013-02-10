@@ -24,7 +24,7 @@ $search = isset($_REQUEST['q']) ? rawurldecode(trim($_REQUEST['q'])) : '';
 if ($search && Validate::nickname($search, 1) === TRUE) {
     //Проверяем валидность введенных данных
     $search_db = strtr($search, array('_' => '\\_', '%' => '\\%'));
-    $tpl->search = Validate::checkout($search);
+    $tpl->search = Functions::checkout($search);
     $search_db = '%' . $search_db . '%';
     $search_db = DB::PDO()->quote($search_db);
 

@@ -23,7 +23,7 @@ if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name'
     echo Functions::displayError(__('not_found_file'), '<a href="' . $url . '">' . __('download_title') . '</a>');
     exit;
 }
-$title_pages = Validate::checkout(mb_substr($res_down['rus_name'], 0, 30));
+$title_pages = Functions::checkout(mb_substr($res_down['rus_name'], 0, 30));
 $textl = mb_strlen($res_down['rus_name']) > 30 ? $title_pages . '...' : $title_pages;
 if ($res_down['type'] == 3) {
     echo '<div class="rmenu">' . __('file_mod') . '</div>';
@@ -33,7 +33,7 @@ if ($res_down['type'] == 3) {
 }
 
 
-echo '<div class="phdr"><b>' . Validate::checkout($res_down['rus_name']) . '</b></div>';
+echo '<div class="phdr"><b>' . Functions::checkout($res_down['rus_name']) . '</b></div>';
 $format_file = Functions::format($res_down['name']);
 
 /*
@@ -163,7 +163,7 @@ echo '<div class="list1"><b>' . __('name_for_server') . ':</b> ' . $res_down['na
     '<b>' . __('user_upload') . ':</b> ' . Functions::displayUser($user, array('iphide' => 1)) . '<br />' . $text_info .
     '<b>' . __('number_of_races') . ':</b> ' . $res_down['field'] . '<br />';
 if ($res_down['about'])
-    echo '<b>' . __('dir_desc') . ':</b> ' . Validate::checkout($res_down['about'], 1, 1);
+    echo '<b>' . __('dir_desc') . ':</b> ' . Functions::checkout($res_down['about'], 1, 1);
 echo '<div class="sub"></div>';
 /*
 -----------------------------------------------------------------

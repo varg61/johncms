@@ -186,8 +186,8 @@ switch ($mod) {
         }
         if (isset($_POST['submit'])) {
             // Принимаем данные
-            $name = isset($_POST['name']) ? Validate::checkout($_POST['name']) : '';
-            $desc = isset($_POST['desc']) ? Validate::checkout($_POST['desc']) : '';
+            $name = isset($_POST['name']) ? Functions::checkout($_POST['name']) : '';
+            $desc = isset($_POST['desc']) ? Functions::checkout($_POST['desc']) : '';
             // Проверяем на ошибки
             $error = array();
             if (!$name)
@@ -265,8 +265,8 @@ switch ($mod) {
             if ($res['type'] == 'f' || $res['type'] == 'r') {
                 if (isset($_POST['submit'])) {
                     // Принимаем данные
-                    $name = isset($_POST['name']) ? Validate::checkout($_POST['name']) : '';
-                    $desc = isset($_POST['desc']) ? Validate::checkout($_POST['desc']) : '';
+                    $name = isset($_POST['name']) ? Functions::checkout($_POST['name']) : '';
+                    $desc = isset($_POST['desc']) ? Functions::checkout($_POST['desc']) : '';
                     $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
                     // проверяем на ошибки
                     $error = array();
@@ -580,7 +580,7 @@ switch ($mod) {
                     $posttime = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
                     $page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['refid'] . "' AND `id` " . ($set_forum['upfp'] ? ">=" : "<=") . " '" . $res['fid'] . "'")->fetchColumn() / Vars::$USER_SET['page_size']);
                     $text = mb_substr($res['text'], 0, 500);
-                    $text = Validate::checkout($text, 1, 0);
+                    $text = Functions::checkout($text, 1, 0);
                     $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                     $theme = DB::PDO()->query("SELECT `id`, `text` FROM `forum` WHERE `id` = '" . $res['refid'] . "'")->fetch();
                     $text = '<b>' . $theme['text'] . '</b> <a href="../forum/index.php?id=' . $theme['id'] . '&amp;page=' . $page . '">&gt;&gt;</a><br />' . $text;

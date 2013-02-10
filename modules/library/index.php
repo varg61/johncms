@@ -114,7 +114,7 @@ if (isset($actions[Vars::$ACT])
                 while ($bk1 = $bk->fetch()) {
                     echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                     echo '<b><a href="' . $url . '?id=' . $bk1['id'] . '">' . htmlentities($bk1['name'], ENT_QUOTES, 'UTF-8') . '</a></b><br/>';
-                    echo Validate::checkout($bk1['announce']);
+                    echo Functions::checkout($bk1['announce']);
                     echo '<div class="sub"><span class="gray">' . __('added') . ':</span> ' . $bk1['avtor'] . ' (' . Functions::displayDate($bk1['time']) . ')<br />';
                     echo '<span class="gray">' . __('reads') . ':</span> ' . $bk1['count'] . '</div></div>';
                     ++$i;
@@ -215,7 +215,7 @@ if (isset($actions[Vars::$ACT])
                 echo '<div class="topmenu">' . Functions::displayPagination($url . '?id=' . Vars::$ID . '&amp;', Vars::$START, $count_pages, 1) . '</div>';
             }
             // Текст статьи
-            $text = Validate::checkout(mb_substr($req['text'], $int_start, $int_lenght), 1, 1);
+            $text = Functions::checkout(mb_substr($req['text'], $int_start, $int_lenght), 1, 1);
             if (Vars::$USER_SET['smilies'])
                 $text = Functions::smilies($text, Vars::$USER_RIGHTS ? 1 : 0);
             echo '<div class="list2">' . $text . '</div>';

@@ -70,8 +70,8 @@ if (!file_exists($file)) {
 Ссылка на файл
 -----------------------------------------------------------------
 */
-echo '<div class="phdr"><b>' . Validate::checkout($title_pages) . '</b></div>' .
-    '<div class="menu"><a href="' . Validate::checkout($file) . '">' . __('download_in') . ' ZIP</a></div>' .
-    '<div class="rmenu"><input type="text" value="' . Vars::$HOME_URL . Validate::checkout($file) . '"/><b></b></div>' .
+echo '<div class="phdr"><b>' . Functions::checkout($title_pages) . '</b></div>' .
+    '<div class="menu"><a href="' . Functions::checkout($file) . '">' . __('download_in') . ' ZIP</a></div>' .
+    '<div class="rmenu"><input type="text" value="' . Vars::$HOME_URL . Functions::checkout($file) . '"/><b></b></div>' .
     '<div class="phdr">' . __('time_limit') . '</div>' .
     '<p><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';

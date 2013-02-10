@@ -32,7 +32,7 @@ $search = $search_post ? $search_post : $search_get;
 $search_t = isset($_REQUEST['t']);
 echo '<div class="phdr"><a href="' . Router::getUri(2) . '"><b>' . __('library') . '</b></a> | ' . __('search') . '</div>' .
      '<div class="gmenu"><form action="' . $url . '" method="post"><p>' .
-     '<input type="text" value="' . ($search ? Validate::checkout($search) : '') . '" name="search" />' .
+     '<input type="text" value="' . ($search ? Functions::checkout($search) : '') . '" name="search" />' .
      '<input type="submit" value="' . __('search') . '" name="submit" /><br />' .
      '<input name="t" type="checkbox" value="1" ' . ($search_t ? 'checked="checked"' : '') . ' />&nbsp;' . __('search_name') .
      '</p></form></div>';
@@ -77,7 +77,7 @@ if ($search && !$error) {
             foreach ($array as $srch) if (($pos = mb_strpos(strtolower($res['text']), strtolower(str_replace('*', '', $srch)))) !== FALSE) break;
             if (!isset($pos) || $pos < 100) $pos = 100;
             $name = $res['name'];
-            $text = Validate::checkout(mb_substr($res['text'], ($pos - 100), 400), 1);
+            $text = Functions::checkout(mb_substr($res['text'], ($pos - 100), 400), 1);
             if ($search_t) foreach ($array as $val) $name = ReplaceKeywords($val, $name);
             else foreach ($array as $val) $text = ReplaceKeywords($val, $text);
             echo '<b><a href="' . Router::getUri(2) . '?id=' . $res['id'] . '">' . $name . '</a></b><br />' . $text .

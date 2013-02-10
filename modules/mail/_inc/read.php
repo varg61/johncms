@@ -30,7 +30,7 @@ if (Vars::$ID) {
             if ($result['read'] == 0 && $result['contact_id'] == Vars::$USER_ID)
                 DB::PDO()->exec("UPDATE `cms_mail_messages` SET `read`='1' WHERE `contact_id`='" . Vars::$USER_ID . "' AND `id`='{$result['id']}'");
             $row = DB::PDO()->query("SELECT * FROM `users` WHERE `id`='$id'")->fetch();
-            $text = Validate::checkout($result['text'], 1, 1);
+            $text = Functions::checkout($result['text'], 1, 1);
             if (Vars::$USER_SET['smilies'])
                 $text = Functions::smilies($text, $result['rights'] >= 1 ? 1 : 0);
             $tpl->contact_login = $row['nickname'];

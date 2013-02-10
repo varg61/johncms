@@ -96,7 +96,7 @@ if ($do || isset($_GET['new'])) {
             echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
             // Выводим текст поста
             $text = mb_substr($res['text'], 0, 500);
-            $text = Validate::checkout($text, 1, 1);
+            $text = Functions::checkout($text, 1, 1);
             $text = preg_replace('#\[c\](.*?)\[/c\]#si', '', $text);
             $page = ceil(DB::PDO()->query("SELECT COUNT(*) FROM `forum` WHERE `refid` = '" . $res['topic'] . "' AND `id` " . ($set_forum['upfp']
                                                           ? ">=" : "<=") . " '" . $res['post'] . "'")->fetchColumn() / Vars::$USER_SET['page_size']);

@@ -46,9 +46,9 @@ if ($total) {
         $text = '';
         echo ($i++ % 2) ? '<div class="list2">' : '<div class="list1">';
         $text = ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span>';
-        $post = Validate::checkout($res['text'], 1, 1);
+        $post = Functions::checkout($res['text'], 1, 1);
         if (Vars::$USER_SET['smilies']) $post = Functions::smilies($post, $res['rights'] >= 1 ? 1 : 0);
-        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Validate::checkout($res['rus_name']) . '</a> | <a href="' . $url . '?act=comments&amp;id=' . $res['sub_id'] . '">' . __('comments') . '</a>';
+        $subtext = '<a href="index.php?act=view&amp;id=' . $res['sub_id'] . '">' . Functions::checkout($res['rus_name']) . '</a> | <a href="' . $url . '?act=comments&amp;id=' . $res['sub_id'] . '">' . __('comments') . '</a>';
 		$attributes = unserialize($res['attributes']);
 		$res['nickname'] = $attributes['author_name'];
   		$res['ip'] = $attributes['author_ip'];
@@ -60,7 +60,7 @@ if ($total) {
           	'[' . $attributes['edit_count'] . ']</b></small></span>';
    		}
 		if (!empty($res['reply'])) {
-        	$reply = Validate::checkout($res['reply'], 1, 1);
+        	$reply = Functions::checkout($res['reply'], 1, 1);
          	if (Vars::$USER_SET['smilies']) $reply = functions::smilies($reply, $attributes['reply_rights'] >= 1 ? 1 : 0);
           	$post .= '<div class="reply"><small>' .
                   //TODO: Переделать ссылку

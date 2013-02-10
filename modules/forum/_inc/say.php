@@ -109,7 +109,7 @@ switch ($type['type']) {
                     exit;
                 }
             }
-            $msg_pre = Validate::checkout($msg, 1, 1);
+            $msg_pre = Functions::checkout($msg, 1, 1);
             if (Vars::$USER_SET['smilies'])
                 $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
             $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
@@ -122,7 +122,7 @@ switch ($type['type']) {
                 '<p><h3>' . __('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
-            echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Validate::checkout($msg)) . '</textarea></p>' .
+            echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Functions::checkout($msg)) . '</textarea></p>' .
                 '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . __('add_file');
             echo '</p><p><input type="submit" name="submit" value="' . __('sent') . '" style="width: 107px; cursor: pointer;"/> ' .
                 ($settings['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .
@@ -254,14 +254,14 @@ switch ($type['type']) {
                     exit;
                 }
             }
-            $msg_pre = Validate::checkout($msg, 1, 1);
+            $msg_pre = Functions::checkout($msg, 1, 1);
             if (Vars::$USER_SET['smilies'])
                 $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
             $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
             echo '<div class="phdr"><b>' . __('topic') . ':</b> ' . $th1['text'] . '</div>';
             $qt = str_replace("<br/>", "\r\n", $qt);
             $qt = trim(preg_replace('#\[c\](.*?)\[/c\]#si', '', $qt));
-            $qt = Validate::checkout($qt, 0, 2);
+            $qt = Functions::checkout($qt, 0, 2);
             if (!empty($_POST['msg']) && !isset($_POST['submit']))
                 echo '<div class="list1">' . Functions::displayUser(Vars::$USER_DATA, array('iphide' => 1,
                                                                                             'header' => '<span class="gray">(' . Functions::displayDate(time()) . ')</span>',
@@ -271,7 +271,7 @@ switch ($type['type']) {
                 // Форма с цитатой
                 echo '<p><b>' . $type['from'] . '</b> <span class="gray">(' . date("d.m.Y/H:i", $type['time']) . ')</span></p>' .
                     '<p><h3>' . __('cytate') . '</h3>' .
-                    '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="citata">' . (empty($_POST['citata']) ? $qt : Validate::checkout($_POST['citata'])) . '</textarea>' .
+                    '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="citata">' . (empty($_POST['citata']) ? $qt : Functions::checkout($_POST['citata'])) . '</textarea>' .
                     '<br /><small>' . __('cytate_help') . '</small></p>';
             } else {
                 // Форма с репликой
@@ -285,7 +285,7 @@ switch ($type['type']) {
             echo '<p><h3>' . __('post') . '</h3>';
             if (!Vars::$IS_MOBILE)
                 echo '</p><p>' . TextParser::autoBB('form', 'msg');
-            echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Validate::checkout($_POST['msg'])) . '</textarea></p>' .
+            echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (empty($_POST['msg']) ? '' : Functions::checkout($_POST['msg'])) . '</textarea></p>' .
                 '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . __('add_file');
             if (Vars::$USER_SET['translit'])
                 echo '<br /><input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . __('translit');

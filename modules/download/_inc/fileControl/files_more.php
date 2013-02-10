@@ -31,7 +31,7 @@ if ($edit) {
     Изменяем файл
     -----------------------------------------------------------------
     */
-    $name_link = isset($_POST['name_link']) ? Validate::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
+    $name_link = isset($_POST['name_link']) ? Functions::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
     $req_file_more = DB::PDO()->query("SELECT `rus_name` FROM `cms_download_more` WHERE `id` = '$edit' LIMIT 1");
     if ($name_link && $req_file_more->rowCount() && isset($_POST['submit'])) {
         $STH = DB::PDO()->prepare('
@@ -49,7 +49,7 @@ if ($edit) {
         header('Location: ' . $url . '?act=files_more&id=' . Vars::$ID);
     } else {
         $res_file_more = $req_file_more->fetch();
-        echo '<div class="phdr"><b>' . Validate::checkout($res_down['rus_name']) . '</b></div>' .
+        echo '<div class="phdr"><b>' . Functions::checkout($res_down['rus_name']) . '</b></div>' .
             '<div class="gmenu"><b>' . __('edit_file') . '</b></div>' .
             '<div class="list1"><form action="' . $url . '?act=files_more&amp;id=' . Vars::$ID . '&amp;edit=' . $edit . '"  method="post">' .
             __('link_file') . ' (мах. 200)<span class="red">*</span>:<br />' .
@@ -108,7 +108,7 @@ if ($edit) {
     }
     if ($do_file) {
         $new_file = isset($_POST['new_file']) ? trim($_POST['new_file']) : NULL;
-        $name_link = isset($_POST['name_link']) ? Validate::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
+        $name_link = isset($_POST['name_link']) ? Functions::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
         $ext = explode(".", $fname);
         if (!empty($new_file)) {
             $fname = strtolower($new_file . '.' . $ext[1]);
@@ -168,7 +168,7 @@ if ($edit) {
     Выводим форму
     -----------------------------------------------------------------
     */
-    echo '<div class="phdr"><b>' . __('files_more') . ':</b> ' . Validate::checkout($res_down['rus_name']) . '</div>' .
+    echo '<div class="phdr"><b>' . __('files_more') . ':</b> ' . Functions::checkout($res_down['rus_name']) . '</div>' .
         '<div class="menu"><form action="' . $url . '?act=files_more&amp;id=' . Vars::$ID . '"  method="post" enctype="multipart/form-data">' .
         __('select_file') . '<span class="red">*</span>::<br /><input type="file" name="fail"/><br />' .
         __('or_link_to_it') . ':<br /><input type="post" name="link_file" value=""/><br />' .

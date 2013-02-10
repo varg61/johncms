@@ -109,7 +109,7 @@ if (!Vars::$ID) {
         '&#039;' => ''
     ));
     $hdr = mb_substr($hdr, 0, 30);
-    $hdr = Validate::checkout($hdr);
+    $hdr = Functions::checkout($hdr);
     $textl = mb_strlen($res['text']) > 30 ? $hdr . '...' : $hdr;
 }
 
@@ -403,13 +403,13 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     $clip_forum = isset($_GET['clip']) ? '&amp;clip' : '';
                     $vote_user = DB::PDO()->query("SELECT COUNT(*) FROM `cms_forum_vote_users` WHERE `user` = " . Vars::$USER_ID . " AND `topic` = " . Vars::$ID)->fetchColumn();
                     $topic_vote = DB::PDO()->query("SELECT `name`, `time`, `count` FROM `cms_forum_vote` WHERE `type`='1' AND `topic` = " . Vars::$ID . " LIMIT 1")->fetch();
-                    echo '<div  class="gmenu"><b>' . Validate::checkout($topic_vote['name']) . '</b><br />';
+                    echo '<div  class="gmenu"><b>' . Functions::checkout($topic_vote['name']) . '</b><br />';
                     $vote_result = DB::PDO()->query("SELECT `id`, `name`, `count` FROM `cms_forum_vote` WHERE `type`='2' AND `topic` = " . Vars::$ID . " ORDER BY `id` ASC");
                     if (!$type1['edit'] && !isset($_GET['vote_result']) && Vars::$USER_ID && $vote_user == 0) {
                         // Выводим форму с опросами
                         echo'<form action="' . $uri . '?act=vote&amp;id=' . Vars::$ID . '" method="post">';
                         while ($vote = $vote_result->fetch()) {
-                            echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . Validate::checkout($vote['name'], 0, 1) . '<br />';
+                            echo '<input type="radio" value="' . $vote['id'] . '" name="vote"/> ' . Functions::checkout($vote['name'], 0, 1) . '<br />';
                         }
                         echo'<p><input type="submit" name="submit" value="' . __('vote') . '"/><br /><a href="' . $uri . '?id=' . Vars::$ID . '&amp;start=' . Vars::$START . '&amp;vote_result' . $clip_forum .
                             '">' . __('results') . '</a></p></form></div>';
@@ -418,7 +418,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         echo '<small>';
                         while ($vote = $vote_result->fetch()) {
                             $count_vote = $topic_vote['count'] ? round(100 / $topic_vote['count'] * $vote['count']) : 0;
-                            echo Validate::checkout($vote['name'], 0, 1) . ' [' . $vote['count'] . ']<br />';
+                            echo Functions::checkout($vote['name'], 0, 1) . ' [' . $vote['count'] . ']<br />';
                             echo '<img src="' . Vars::$HOME_URL . 'assets/misc/vote_img.php?img=' . $count_vote . '" alt="' . __('rating') . ': ' . $count_vote . '%" /><br />';
                         }
                         echo '</small></div><div class="bmenu">' . __('total_votes') . ': ';
@@ -469,7 +469,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     if ($postres['close']) {
                         echo '<span class="red">' . __('post_deleted') . '</span><br/>';
                     }
-                    echo Validate::checkout(mb_substr($postres['text'], 0, 500), 0, 2);
+                    echo Functions::checkout(mb_substr($postres['text'], 0, 500), 0, 2);
                     if (mb_strlen($postres['text']) > 500) {
                         echo '...<a href="' . $uri . '?act=post&amp;id=' . $postres['id'] . '">' . __('read_all') . '</a>';
                     }
@@ -554,7 +554,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     echo ' <span class="gray">(' . Functions::displayDate($res['time']) . ')</span><br />';
                     // Статус юзера
                     if (!empty($res['status'])) {
-                        echo '<div class="status">' . Functions::getImage('label.png', '', 'align="middle"') . '&#160;' . Validate::checkout($res['status']) . '</div>';
+                        echo '<div class="status">' . Functions::getImage('label.png', '', 'align="middle"') . '&#160;' . Functions::checkout($res['status']) . '</div>';
                     }
                     if (Vars::$USER_SET['avatar']) {
                         echo '</td></tr></table>';
@@ -581,7 +581,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                     }
                     if ($settings['postcut'] && mb_strlen($text) > $cut) {
                         $text = mb_substr($text, 0, $cut);
-                        $text = Validate::checkout($text, 1, 1);
+                        $text = Functions::checkout($text, 1, 1);
                         $text = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $text);
                         if (Vars::$USER_SET['smilies']) {
                             $text = Functions::smilies($text, $res['rights'] ? 1 : 0);
@@ -589,7 +589,7 @@ if (isset($actions[Vars::$ACT]) && is_file(MODPATH . Router::$PATH . DIRECTORY_S
                         echo TextParser::noTags($text) . '...<br /><a href="' . $uri . '?act=post&amp;id=' . $res['id'] . '">' . __('read_all') . ' &gt;&gt;</a>';
                     } else {
                         // Или, обрабатываем тэги и выводим весь текст
-                        $text = Validate::checkout($text, 1, 1);
+                        $text = Functions::checkout($text, 1, 1);
                         if (Vars::$USER_SET['smilies']) {
                             $text = Functions::smilies($text, $res['rights'] ? 1 : 0);
                         }

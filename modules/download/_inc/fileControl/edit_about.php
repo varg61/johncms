@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
 
     header('Location: ' . $url . '?act=view&id=' . Vars::$ID);
 } else {
-    echo '<div class="phdr"><b>' . __('dir_desc') . ':</b> ' . Validate::checkout($res_down['rus_name']) . '</div>' .
+    echo '<div class="phdr"><b>' . __('dir_desc') . ':</b> ' . Functions::checkout($res_down['rus_name']) . '</div>' .
         '<div class="list1"><form action="' . $url . '?act=edit_about&amp;id=' . Vars::$ID . '" method="post">' .
         '<small>' . __('desc_file_faq') . '</small><br />' .
         '<textarea name="opis">' . htmlentities($res_down['about'], ENT_QUOTES, 'UTF-8') . '</textarea><br />' .

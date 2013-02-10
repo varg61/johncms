@@ -26,8 +26,8 @@ $add_message['text'] = isset( $_POST['text'] ) ? trim( $_POST['text'] ) : '';
 $addmail = new ValidMail($add_message, ($id ? $id: false));
 if($addmail->validateForm() === false) {
 	//Передаем переменные в шаблон
-	$tpl->login = Validate::checkout($add_message['login']);
-	$tpl->text = Validate::checkout($add_message['text']);
+	$tpl->login = Functions::checkout($add_message['login']);
+	$tpl->text = Functions::checkout($add_message['text']);
 	//Выводим на экран ошибку
 	$tpl->mail_error = Functions::displayError( $addmail->error_log );
 }

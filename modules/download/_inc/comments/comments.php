@@ -29,7 +29,7 @@ if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name'
 }
 if (!Vars::$SYSTEM_SET['mod_down_comm'])
     echo '<div class="rmenu">' . __('comments_cloded') . '</div>';
-$title_pages = Validate::checkout(mb_substr($res_down['rus_name'], 0, 30));
+$title_pages = Functions::checkout(mb_substr($res_down['rus_name'], 0, 30));
 $textl = __('comments') . ': ' . (mb_strlen($res_down['rus_name']) > 30 ? $title_pages . '...' : $title_pages);
 /*
 -----------------------------------------------------------------

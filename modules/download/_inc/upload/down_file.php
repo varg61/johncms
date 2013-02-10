@@ -29,7 +29,7 @@ if ($req->rowCount() && is_dir($res['dir'])) {
                 $error = array();
                 $new_file = isset($_POST['new_file']) ? trim($_POST['new_file']) : NULL;
                 $name = isset($_POST['text']) ? trim($_POST['text']) : NULL;
-                $name_link = isset($_POST['name_link']) ? Validate::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
+                $name_link = isset($_POST['name_link']) ? Functions::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
                 $text = isset($_POST['opis']) ? trim($_POST['opis']) : NULL;
                 $ext = explode(".", $fname);
                 if (!empty($new_file)) {
@@ -55,7 +55,7 @@ if ($req->rowCount() && is_dir($res['dir'])) {
                     if (file_exists("$load_cat/$fname"))
                         $fname = time() . $fname;
                     if ((move_uploaded_file($_FILES["fail"]["tmp_name"], "$load_cat/$fname")) == TRUE) {
-                        echo '<div class="phdr"><b>' . __('download_upload_file') . ': ' . Validate::checkout($res['rus_name']) . '</b></div>';
+                        echo '<div class="phdr"><b>' . __('download_upload_file') . ': ' . Functions::checkout($res['rus_name']) . '</b></div>';
                         @chmod("$fname", 0777);
                         @chmod("$load_cat/$fname", 0777);
                         echo '<div class="gmenu">' . __('upload_file_ok');
@@ -131,7 +131,7 @@ if ($req->rowCount() && is_dir($res['dir'])) {
             } else
                 echo '<div class="rmenu">' . __('upload_file_no') . '<br /><a href="' . $url . '?act=down_file&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a></div>';
         } else {
-            echo '<div class="phdr"><b>' . __('download_upload_file') . ': ' . Validate::checkout($res['rus_name']) . '</b></div>' .
+            echo '<div class="phdr"><b>' . __('download_upload_file') . ': ' . Functions::checkout($res['rus_name']) . '</b></div>' .
                 '<div class="list1"><form action="' . $url . '?act=down_file&amp;id=' . Vars::$ID . '" method="post" enctype="multipart/form-data">' .
                 __('select_file') . '<span class="red">*</span>:<br /><input type="file" name="fail"/><br />' .
                 __('save_name_file') . ':<br /><input type="text" name="new_file"/><br />' .

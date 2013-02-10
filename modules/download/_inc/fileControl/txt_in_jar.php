@@ -121,7 +121,7 @@ MIDlet-Jar-URL: ' . Vars::$HOME_URL . '/' . $tmp; //TODO: Переделать �
 -----------------------------------------------------------------
 */
 
-echo '<div class="phdr"><b>' . Validate::checkout($title_pages) . '</b></div>' .
-    '<div class="menu">' . __('download') . ': <a href="' . Validate::checkout($tmp) . '">JAR</a> | <a href="' . Validate::checkout($tmp_jad) . '">JAD</a></div>' .
+echo '<div class="phdr"><b>' . Functions::checkout($title_pages) . '</b></div>' .
+    '<div class="menu">' . __('download') . ': <a href="' . Functions::checkout($tmp) . '">JAR</a> | <a href="' . Functions::checkout($tmp_jad) . '">JAD</a></div>' .
     '<div class="phdr">' . __('time_limit') . '</div>' .
     '<p><a href="' . $url . '?act=view&amp;id=' . Vars::$ID . '">' . __('back') . '</a></p>';

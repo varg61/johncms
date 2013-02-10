@@ -14,7 +14,7 @@
         </div>
         <div class="formblock">
             <label><?= __('description') ?></label><br/>
-            <textarea name="description" rows="<?= Vars::$USER_SET['field_h'] ?>"><?= Validate::checkout($this->description) ?></textarea><br/>
+            <textarea name="description" rows="<?= Vars::$USER_SET['field_h'] ?>"><?= Functions::checkout($this->description) ?></textarea><br/>
             <div class="desc"><?= __('not_mandatory_field') ?>, max. 500</div>
         </div>
     </div>

@@ -64,7 +64,7 @@ if (!$req_r->rowCount()) {
     echo Functions::displayError(__('error_wrong_data'));
     exit;
 }
-$th = isset($_POST['th']) ? Validate::checkout(mb_substr(trim($_POST['th']), 0, 100)) : '';
+$th = isset($_POST['th']) ? Functions::checkout(mb_substr(trim($_POST['th']), 0, 100)) : '';
 $msg = isset($_POST['msg']) ? trim($_POST['msg']) : '';
 $msg = preg_replace_callback('~\\[url=(http://.+?)\\](.+?)\\[/url\\]|(http://(www.)?[0-9a-zA-Z\.-]+\.[0-9a-zA-Z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', 'forum_link', $msg);
 if (isset($_POST['submit'])) {
@@ -173,7 +173,7 @@ if (isset($_POST['submit'])) {
             exit;
         }
     }
-    $msg_pre = Validate::checkout($msg, 1, 1);
+    $msg_pre = Functions::checkout($msg, 1, 1);
     if (Vars::$USER_SET['smilies'])
         $msg_pre = Functions::smilies($msg_pre, Vars::$USER_RIGHTS ? 1 : 0);
     $msg_pre = preg_replace('#\[c\](.*?)\[/c\]#si', '<div class="quote">\1</div>', $msg_pre);
@@ -192,7 +192,7 @@ if (isset($_POST['submit'])) {
         '<p><h3>' . __('post') . '</h3>';
     if (!Vars::$IS_MOBILE)
         echo '</p><p>' . TextParser::autoBB('form', 'msg');
-    echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? Validate::checkout($_POST['msg']) : '') . '</textarea></p>' .
+    echo '<textarea rows="' . Vars::$USER_SET['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? Functions::checkout($_POST['msg']) : '') . '</textarea></p>' .
         '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . __('add_file');
     echo'</p><p><input type="submit" name="submit" value="' . __('save') . '" style="width: 107px; cursor: pointer;"/> ' .
         ($settings['preview'] ? '<input type="submit" value="' . __('preview') . '" style="width: 107px; cursor: pointer;"/>' : '') .

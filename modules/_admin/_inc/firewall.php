@@ -291,7 +291,7 @@ switch (Vars::$ACT) {
                 echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                     '<input type="checkbox" name="del[]" value="' . $res['ip'] . '"/>&#160;' .
                     '<strong>IP: <span class="' . $color . '">' . long2ip($res['ip']) . ($res['ip'] != $res['ip_upto'] ? ' - ' . long2ip($res['ip_upto']) : '') . '</span></strong>' .
-                    (empty($res['description']) ? '' : '<div class="sub">' . Validate::checkout($res['description'], 1) . '</div>') .
+                    (empty($res['description']) ? '' : '<div class="sub">' . Functions::checkout($res['description'], 1) . '</div>') .
                     '<div class="sub"><span class="gray">' .
                     __('date') . ':&#160;' . Functions::displayDate($res['timestamp']) .
                     '<br />' . __('who_added') . ':&#160;' . $res['nickname'] .

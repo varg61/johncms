@@ -17,7 +17,7 @@ $tpl->total = DB::PDO()->query('SELECT COUNT(*) FROM `cms_news`')->fetchColumn()
 if ($tpl->total) {
     $query = DB::PDO()->query('SELECT * FROM `cms_news` ORDER BY `id` DESC ' . Vars::db_pagination());
     foreach($query as $val){
-        $val['text'] = Validate::checkout($val['text'], 1, 1, 1);
+        $val['text'] = Functions::checkout($val['text'], 1, 1, 1);
         $tpl->list[] = $val;
     }
 }

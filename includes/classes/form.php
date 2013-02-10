@@ -85,6 +85,12 @@ class Form
         return $this;
     }
 
+    /**
+     * Добавление блока fieldset
+     *
+     * @param string $legend
+     * @return Form
+     */
     public function fieldset($legend = null)
     {
         $option['type'] = 'fs_start';
@@ -96,6 +102,11 @@ class Form
         return $this;
     }
 
+    /**
+     * Принудительное закрытие блока fieldset
+     *
+     * @return Form
+     */
     public function fieldsetEnd()
     {
         $option['type'] = 'fs_end';

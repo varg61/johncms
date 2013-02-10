@@ -27,7 +27,7 @@ switch (Vars::$ACT) {
                 }
                 $res = $req->fetch();
                 echo'<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('viewing') . '</div>' .
-                    '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Validate::checkout($res['name']) . '</b></div>' .
+                    '<div class="menu">' . ($res['switch'] == 1 ? '<span class="green">[ON]</span>' : '<span class="red">[OFF]</span>') . '&#160;<b>' . Functions::checkout($res['name']) . '</b></div>' .
                     ($res['switch'] == 1 ? '<div class="gmenu">' : '<div class="rmenu">') . '<p><h3>' . __('counter_mod1') . '</h3>' . $res['link1'] . '</p>' .
                     '<p><h3>' . __('counter_mod2') . '</h3>' . $res['link2'] . '</p>' .
                     '<p><h3>' . __('display_mode') . '</h3>';
@@ -112,7 +112,7 @@ switch (Vars::$ACT) {
                 echo '<form action="' . $uri . '?act=del&amp;id=' . Vars::$ID . '" method="post">';
                 echo '<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('delete') . '</div>';
                 $res = $req->fetch();
-                echo '<div class="rmenu"><p><h3>' . Validate::checkout($res['name']) . '</h3>' . __('delete_confirmation') . '</p><p><input type="submit" value="' . __('delete') . '" name="submit" /></p></div>';
+                echo '<div class="rmenu"><p><h3>' . Functions::checkout($res['name']) . '</h3>' . __('delete_confirmation') . '</p><p><input type="submit" value="' . __('delete') . '" name="submit" /></p></div>';
                 echo '<div class="phdr"><a href="' . $uri . '">' . __('cancel') . '</a></div></form>';
             }
         } else {
@@ -134,7 +134,7 @@ switch (Vars::$ACT) {
                 exit;
             }
             echo'<div class="phdr"><a href="' . $uri . '"><b>' . __('counters') . '</b></a> | ' . __('preview') . '</div>' .
-                '<div class="menu"><p><h3>' . __('title') . '</h3><b>' . Validate::checkout($name) . '</b></p>' .
+                '<div class="menu"><p><h3>' . __('title') . '</h3><b>' . Functions::checkout($name) . '</b></p>' .
                 '<p><h3>' . __('counter_mod1') . '</h3>' . $link1 . '</p>' .
                 '<p><h3>' . __('counter_mod2') . '</h3>' . $link2 . '</p></div>' .
                 '<div class="rmenu">' . __('counter_preview_help') . '</div>' .
@@ -158,7 +158,7 @@ switch (Vars::$ACT) {
                 $req = DB::PDO()->query("SELECT * FROM `cms_counters` WHERE `id` = " . Vars::$ID);
                 if ($req->rowCount()) {
                     $res = $req->fetch();
-                    $name = Validate::checkout($res['name']);
+                    $name = Functions::checkout($res['name']);
                     $link1 = htmlspecialchars($res['link1']);
                     $link2 = htmlspecialchars($res['link2']);
                     $mode = $res['mode'];
@@ -213,7 +213,7 @@ switch (Vars::$ACT) {
             ');
 
             $STH->execute(array(
-                Validate::checkout($name),
+                Functions::checkout($name),
                 $link1,
                 $link2,
                 $mode,
@@ -238,7 +238,7 @@ switch (Vars::$ACT) {
             ');
 
             $STH->execute(array(
-                Validate::checkout($name),
+                Functions::checkout($name),
                 $sort,
                 $link1,
                 $link2,
@@ -265,7 +265,7 @@ switch (Vars::$ACT) {
             for ($i = 0; $res = $req->fetch(); ++$i) {
                 echo($i % 2 ? '<div class="list2">' : '<div class="list1">') .
                     Functions::getImage(($res['switch'] == 1 ? 'green' : 'red') . '.png', '', 'class="left"') . '&#160;' .
-                    '<a href="' . $uri . '?act=view&amp;id=' . $res['id'] . '"><b>' . Validate::checkout($res['name']) . '</b></a><br />' .
+                    '<a href="' . $uri . '?act=view&amp;id=' . $res['id'] . '"><b>' . Functions::checkout($res['name']) . '</b></a><br />' .
                     '<div class="sub">' .
                     '<a href="' . $uri . '?act=up&amp;id=' . $res['id'] . '">' . __('up') . '</a> | ' .
                     '<a href="' . $uri . '?act=down&amp;id=' . $res['id'] . '">' . __('down') . '</a> | ' .

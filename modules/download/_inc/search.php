@@ -28,7 +28,7 @@ $search = $search_post ? $search_post : $search_get;
 */
 echo '<div class="phdr"><a href="' . $url . '"><b>' . __('download_title') . '</b></a> | ' . __('search') . '</div>' .
     '<form action="' . $url . '?act=search" method="post"><div class="gmenu"><p>' .
-    __('name_file') . ':<br /><input type="text" name="search" value="' . Validate::checkout($search) . '" /><br />' .
+    __('name_file') . ':<br /><input type="text" name="search" value="' . Functions::checkout($search) . '" /><br />' .
     '<input name="id" type="checkbox" value="1" ' . (Vars::$ID ? 'checked="checked"' : '') . '/> ' . __('search_for_desc') . '<br />' .
     '<input type="submit" value="Поиск" name="submit" /><br />' .
     '</p></div></form>';
@@ -64,7 +64,7 @@ if ($search && !$error) {
     echo '<div class="phdr"><b>' . __('search_result') . '</b></div>';
     $total = DB::PDO()->query("SELECT COUNT(*) FROM `cms_download_files` WHERE `type` = '2'  AND $sql")->fetchColumn();
     if ($total > Vars::$USER_SET['page_size']) {
-        $check_search = Validate::checkout(rawurlencode($search));
+        $check_search = Functions::checkout(rawurlencode($search));
         echo '<div class="topmenu">' . Functions::displayPagination($url . '?act=search&amp;search=' . $check_search . '&amp;id=' . Vars::$ID . '&amp;', Vars::$START, $total, Vars::$USER_SET['page_size']) . '</div>';
     }
     if ($total) {

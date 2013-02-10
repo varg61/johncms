@@ -27,7 +27,7 @@ if (Vars::$USER_RIGHTS >= 7) {
                 $error[] = __('error_title');
             if (empty($_POST['text']))
                 $error[] = __('error_text');
-            $name = Validate::checkout($_POST['name']);
+            $name = Functions::checkout($_POST['name']);
             $text = mysql_real_escape_string(trim($_POST['text']));
             if (!$error) {
                 mysql_query("UPDATE `cms_news` SET
@@ -46,8 +46,8 @@ if (Vars::$USER_RIGHTS >= 7) {
             // Выводим форму добавления новости
             $req = mysql_query("SELECT * FROM `cms_news` WHERE `id` = " . Vars::$ID);
             $res = mysql_fetch_assoc($req);
-            $tpl->title = Validate::checkout($res['name']);
-            $tpl->text = Validate::checkout($res['text']);
+            $tpl->title = Functions::checkout($res['name']);
+            $tpl->text = Functions::checkout($res['text']);
             $tpl->form_token = mt_rand(100, 10000);
             $_SESSION['form_token'] = $tpl->form_token;
             $tpl->contents = $tpl->includeTpl('news_edit');

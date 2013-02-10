@@ -25,7 +25,7 @@ if (!$req_down->rowCount() || !is_file($res_down['dir'] . '/' . $res_down['name'
 }
 if (isset($_POST['submit'])) {
     $name = isset($_POST['text']) ? trim($_POST['text']) : NULL;
-    $name_link = isset($_POST['name_link']) ? Validate::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
+    $name_link = isset($_POST['name_link']) ? Functions::checkout(mb_substr($_POST['name_link'], 0, 200)) : NULL;
     if ($name_link && $name) {
         $STH = DB::PDO()->prepare('
             UPDATE `cms_download_files` SET
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
     } else
         echo functions::displayError(__('error_empty_fields'), '<a href="' . $url . '?act=edit_file&amp;id=' . Vars::$ID . '">' . __('repeat') . '</a>');
 } else {
-    $file_name = Validate::checkout($res_down['rus_name']);
+    $file_name = Functions::checkout($res_down['rus_name']);
     echo '<div class="phdr"><b>' . $file_name . '</b></div>' .
         '<div class="list1"><form action="' . $url . '?act=edit_file&amp;id=' . Vars::$ID . '" method="post">' .
         __('name_file') . '(мах. 200):<br /><input type="text" name="text" value="' . $file_name . '"/><br />' .

@@ -28,7 +28,7 @@ class Advt extends Vars
                 $font .= $result['underline'] ? ' text-decoration:underline;' : FALSE;
                 if ($font) $name = '<span style="' . $font . '">' . $name . '</span>';
                 //TODO: Переделать ссылку редиректа
-                @$ads[$result['type']] .= '<a href="' . ($result['show'] ? Validate::checkout($result['link']) : Vars::$HOME_URL . '/go.php?id=' . $result['id']) . '">' . $name . '</a><br/>';
+                @$ads[$result['type']] .= '<a href="' . ($result['show'] ? Functions::checkout($result['link']) : Vars::$HOME_URL . '/go.php?id=' . $result['id']) . '">' . $name . '</a><br/>';
                 if (($result['day'] != 0 && time() >= ($result['time'] + $result['day'] * 3600 * 24)) || ($result['count_link'] != 0 && $result['count'] >= $result['count_link']))
                     DB::PDO()->exec("UPDATE `cms_ads` SET `to` = '1'  WHERE `id` = '" . $result['id'] . "'");
             }
