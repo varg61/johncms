@@ -414,7 +414,20 @@ textarea.error {
 input.error:focus,
 textarea.error:focus {
     border-color: #953b39;
-    box-shadow: 0 0 6px #d59392;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+}
+
+input.success,
+textarea.success {
+    color: #468847;
+    background-color: #f0fff1;
+    border-color: #468847;
+}
+
+input.success:focus,
+textarea.success:focus {
+    border-color: #356635;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
 }
 
 /*======================================================
@@ -840,4 +853,13 @@ span.icn.icn-info { background-position: 0 -308px }
     height: 44px;
     line-height: 44px;
     text-align: center;
+}
+
+.error-text {
+    color: #ce0000;
+    font-size: x-small;
+    display: block;
+    font-weight: bold;
+    padding-bottom: 4px;
+    text-shadow: 0 1px 1px #ffffff;
 }

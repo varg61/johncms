@@ -60,6 +60,13 @@ class Fields
         if (isset($option['value']) && !is_numeric($option['value'])) {
             $option['value'] = htmlspecialchars($option['value'], ENT_QUOTES, 'UTF-8');
         }
+
+        if (isset($option['error']) && $option['error']) {
+            $option['class'] = isset($option['class']) ? $option['class'] . ' error' : 'error';
+        } elseif (isset($option['success']) && $option['success']) {
+            $option['class'] = isset($option['class']) ? $option['class'] . ' success' : 'success';
+        }
+
         $this->option = $option;
         $this->formname = is_null($formname) ? 'form' : $formname;
     }
@@ -80,6 +87,11 @@ class Fields
             }
             $this->option['for'] = $this->option['id'];
             $out[] = $this->_build('label', $this->option);
+        }
+
+        // Добавляем сообщение об ошибке
+        if(isset($this->option['error']) && !empty($this->option['error'])){
+            $out[] = '<span class="error-text">' . $this->option['error'] . '</span>';
         }
 
         switch ($this->type) {
