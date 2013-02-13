@@ -11,52 +11,133 @@
 
 class Validate
 {
-    public static $error = array();
+    public $error = array();
+    public $is = FALSE;
+
+    public function __construct($type, $value, array $option = array())
+    {
+        if (method_exists($this, $type)) {
+            $option['value'] = $value;
+            $this->is = call_user_func(array($this, $type), $option);
+        } else {
+            $this->error[] = 'Unknown Validator';
+        }
+    }
 
     /**
-     * Проверка корректности ввода NickName
+     * Валидация длины строки
      *
-     * @param string $var
-     * @param bool   $error_log
+     * @param array $option
      *
      * @return bool
      */
-    public static function nickname($var = '', $error_log = FALSE)
+    private function lenght(array $option)
     {
-        if (empty($var)) {
-            $error = __('error_empty_nickname');
-        } elseif (mb_strlen($var) < 2 || mb_strlen($var) > 20) {
-            $error = __('error_wrong_lenght');
-        } elseif (static::email($var) === TRUE) {
-            $error = __('error_email_login');
-        } elseif (preg_match('/[^\da-zа-я\-\.\ \@\*\(\)\?\!\~\_\=\[\]]+/iu', $var)) {
-            $error = __('error_wrong_symbols');
-        } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $var)) {
-            $error = __('error_double_charset');
-        } elseif (filter_var($var, FILTER_VALIDATE_INT) !== FALSE && !Vars::$USER_SYS['digits_only']) {
-            $error = __('error_digits_only');
-        } elseif (preg_match("/(.)\\1\\1\\1/", $var)) {
-            $error = __('error_recurring_characters');
-        } else {
-            return TRUE;
+        if (isset($option['min']) && mb_strlen($option['value']) < $option['min']) {
+            $this->error[] = __('minimum') . '&#160;' . $option['min'] . ' ' . __('characters');
+
+            return FALSE;
+        } elseif (isset($option['max']) && mb_strlen($option['value']) > $option['max']) {
+            $this->error[] = __('maximum') . '&#160;' . $option['max'] . ' ' . __('characters');
+
+            return FALSE;
         }
 
-        if ($error_log) {
-            static::$error['login'] = $error;
+        return TRUE;
+    }
+
+    /**
+     * Валидация числового значения
+     *
+     * @param array $option
+     *
+     * @return bool
+     */
+    private function numeric(array $option)
+    {
+        if (!filter_var($option['value'], FILTER_VALIDATE_INT)) {
+            $this->error[] = __('must_be_a_number');
+
+            return FALSE;
+        }
+
+        if (isset($option['min']) && $option['value'] < $option['min']) {
+            $this->error[] = __('minimum') . '&#160;' . $option['min'];
+
+            return FALSE;
+        } elseif (isset($option['max']) && $option['value'] > $option['max']) {
+            $this->error[] = __('maximum') . '&#160;' . $option['max'];
+
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    /**
+     * Валидация E-mail адреса
+     *
+     * @param array $option
+     *
+     * @return bool
+     */
+    protected function email(array $option)
+    {
+        if (!filter_var($option['value'], FILTER_VALIDATE_EMAIL)) {
+            $this->error = __('error_email');
+
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    /**
+     * Валидация IPv4 адреса
+     *
+     * @param array $option
+     *
+     * @return bool
+     */
+    protected function ip(array $option)
+    {
+        if (!filter_var($option['value'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $this->error[] = 'IP указан неверно';
+
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    /**
+     * Валидация Nickname
+     *
+     * @param array $option
+     *
+     * @return bool
+     */
+    private function nickname(array $option)
+    {
+        if (preg_match('/[^\da-zа-я\-\.\ \@\*\(\)\?\!\~\_\=\[\]]+/iu', $option['value'])) {
+            $this->error[] = __('error_wrong_symbols');
+        } elseif (preg_match('~(([a-z]+)([а-я]+)|([а-я]+)([a-z]+))~iu', $option['value'])) {
+            $this->error[] = __('error_double_charset');
+        } elseif (filter_var($option['value'], FILTER_VALIDATE_INT) !== FALSE && !Vars::$USER_SYS['digits_only']) {
+            $this->error[] = __('error_digits_only');
+        } elseif (preg_match("/(.)\\1\\1\\1/", $option['value'])) {
+            $this->error[] = __('error_recurring_characters');
+        } else {
+            return TRUE;
         }
 
         return FALSE;
     }
 
-    /**
-     * Проверка занятости Ника
-     *
-     * @param string $var
-     * @param bool   $error_log
-     *
-     * @return bool
+    /*
+     * Разобраться и переделать
      */
-    public static function nicknameAvailability($var = '', $error_log = FALSE)
+    protected function nicknameAvailability($var = '', $error_log = FALSE)
     {
         if (!static::email($var)
             || (static::email($var) && static::emailAvailability($var))
@@ -81,47 +162,10 @@ class Validate
         return FALSE;
     }
 
-    /**
-     * Проверка корректности ввода E-mail
-     *
-     * @param string $var
-     * @param bool   $error_log
-     * @param bool   $allow_empty
-     *
-     * @return bool
-     */
-    public static function email($var = '', $error_log = FALSE, $allow_empty = FALSE)
-    {
-        if ($allow_empty && empty($var)) {
-            return TRUE;
-        }
-
-        if (empty($var)) {
-            $error = __('error_email_empty');
-        } elseif (mb_strlen($var) < 5 || mb_strlen($var) > 50) {
-            $error = __('error_wrong_lenght');
-        } elseif (filter_var($var, FILTER_VALIDATE_EMAIL) == FALSE) {
-            $error = __('error_email');
-        } else {
-            return TRUE;
-        }
-
-        if ($error_log) {
-            static::$error['email'] = $error;
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Проверка занятости E-mail
-     *
-     * @param      $var
-     * @param bool $error_log
-     *
-     * @return bool
-     */
-    public static function emailAvailability($var, $error_log = FALSE)
+    /*
+    * Разобраться и переделать
+    */
+    protected function emailAvailability($var, $error_log = FALSE)
     {
         $STH = DB::PDO()->prepare('
             SELECT COUNT(*) FROM `users`
@@ -140,46 +184,5 @@ class Validate
         }
 
         return TRUE;
-    }
-
-    /**
-     * Проверка пароля на допустимую длину
-     *
-     * @param      $var                     Пароль
-     * @param bool $error_log               Включить журнал ошибок
-     *
-     * @return bool                    TRUE, если проверка прошла успешно
-     */
-    public static function password($var, $error_log = FALSE)
-    {
-        if (empty($var)) {
-            $error = __('error_empty_password');
-        } elseif (mb_strlen($var) < 3) {
-            $error = __('error_wrong_lenght');
-        } else {
-            return TRUE;
-        }
-
-        if ($error_log) {
-            static::$error['password'] = $error;
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Проверка корректности IP адреса
-     *
-     * @param string $ip  Строка с IP адресом
-     *
-     * @return bool       TRUE, если проверка прошла успешно
-     */
-    public static function ip($ip)
-    {
-        if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
-            return TRUE;
-        }
-
-        return FALSE;
     }
 }
