@@ -127,58 +127,62 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isValid) {
-    foreach ($form->output as $key => $val) {
-        Users::$data[$key] = $val;
-    }
+if ($form->isSubmitted) {
+    if ($form->isValid) {
+        foreach ($form->output as $key => $val) {
+            Users::$data[$key] = $val;
+        }
 
-    // Принимаем и обрабатываем дату рожденья
-    if (empty($form->output['day'])
-        && empty($form->output['month'])
-        && empty($form->output['year'])
-    ) {
-        // Удаляем дату рожденья
-        Users::$data['birth'] = '00-00-0000';
+        // Принимаем и обрабатываем дату рожденья
+        if (empty($form->output['day'])
+            && empty($form->output['month'])
+            && empty($form->output['year'])
+        ) {
+            // Удаляем дату рожденья
+            Users::$data['birth'] = '00-00-0000';
+        } else {
+            Users::$data['birth'] = intval($form->output['year']) . '-' . intval($form->output['month']) . '-' . intval($form->output['day']);
+        }
+
+        //TODO: Добавить валидацию даты
+        //TODO: Добавить валидацию E-mail
+
+        $STH = DB::PDO()->prepare('
+            UPDATE `users` SET
+            `sex`      = ?,
+            `imname`   = ?,
+            `birth`    = ?,
+            `live`     = ?,
+            `about`    = ?,
+            `tel`      = ?,
+            `siteurl`  = ?,
+            `email`    = ?,
+            `mailvis`  = ?,
+            `icq`      = ?,
+            `skype`    = ?
+            WHERE `id` = ?
+        ');
+
+        $STH->execute(array(
+            Users::$data['sex'],
+            Users::$data['imname'],
+            Users::$data['birth'],
+            Users::$data['live'],
+            Users::$data['about'],
+            Users::$data['tel'],
+            Users::$data['siteurl'],
+            Users::$data['email'],
+            Users::$data['mailvis'],
+            Users::$data['icq'],
+            Users::$data['skype'],
+            Users::$data['id']
+        ));
+        $STH = NULL;
+
+        $tpl->save = 1;
     } else {
-        Users::$data['birth'] = intval($form->output['year']) . '-' . intval($form->output['month']) . '-' . intval($form->output['day']);
+        $tpl->error = __('errors_occurred');
     }
-
-    //TODO: Добавить валидацию даты
-    //TODO: Добавить валидацию E-mail
-
-    $STH = DB::PDO()->prepare('
-      UPDATE `users` SET
-      `sex`      = ?,
-      `imname`   = ?,
-      `birth`    = ?,
-      `live`     = ?,
-      `about`    = ?,
-      `tel`      = ?,
-      `siteurl`  = ?,
-      `email`    = ?,
-      `mailvis`  = ?,
-      `icq`      = ?,
-      `skype`    = ?
-      WHERE `id` = ?
-    ');
-
-    $STH->execute(array(
-        Users::$data['sex'],
-        Users::$data['imname'],
-        Users::$data['birth'],
-        Users::$data['live'],
-        Users::$data['about'],
-        Users::$data['tel'],
-        Users::$data['siteurl'],
-        Users::$data['email'],
-        Users::$data['mailvis'],
-        Users::$data['icq'],
-        Users::$data['skype'],
-        Users::$data['id']
-    ));
-    $STH = NULL;
-
-    $tpl->save = 1;
 }
 
 $tpl->contents = $tpl->includeTpl('edit');

@@ -20,7 +20,6 @@ class Form
     private $_fieldset = FALSE;
 
     public $input;
-    public $errors = array();
     public $validationToken = TRUE;
     public $isSubmitted = FALSE;
     public $isValid = FALSE;
@@ -322,7 +321,7 @@ class Form
                 break;
 
             default:
-                $this->errors[] = 'Unknown filter: ' . $option['filter']['type'];
+                $option['error'] = 'Unknown filter: ' . $option['filter']['type'];
         }
     }
 }

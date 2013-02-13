@@ -9,10 +9,10 @@
 <div class="info-block"><?= Functions::displayUser(Users::$data) ?></div>
 
 <div class="content form-container">
-    <?php if (isset($this->save)): ?>
-    <div class="alert alert-success">
-        <?= __('settings_saved') ?>
-    </div>
+    <?php if (isset($this->error)): ?>
+    <div class="alert alert-danger"><?= $this->error ?></div>
+    <?php elseif (isset($this->save)): ?>
+    <div class="alert alert-success"><?= __('settings_saved') ?></div>
     <?php endif ?>
     <?= $this->form ?>
 </div>
