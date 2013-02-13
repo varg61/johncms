@@ -81,7 +81,7 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isSubmitted) {
+if ($form->isValid) {
     // Записываем настройки в базу
     $data = DB::PDO()->quote(serialize($form->output));
     DB::PDO()->exec("UPDATE `cms_settings` SET `val` = " . $data . " WHERE `key` = 'download'");

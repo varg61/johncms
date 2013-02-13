@@ -57,7 +57,7 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isSubmitted) {
+if ($form->isValid) {
     switch ($form->output['mode']) {
         case 1:
             // Сканируем на соответствие дистрибутиву

@@ -18,11 +18,13 @@ class Form
     private $_fields = array();
     private $_submits = array();
     private $_fieldset = FALSE;
+    private $_validators = array();
 
     public $input;
     public $errors = array();
     public $validationToken = TRUE;
     public $isSubmitted = FALSE;
+    public $isValid = FALSE;
     public $output = array();
 
     public function __construct($action, $method = '', $name = 'form')
@@ -45,9 +47,10 @@ class Form
     /**
      * Добавляем элементы формы
      *
-     * @param string $type             Тип добавляемого элемента
-     * @param string $name             Имя элемента
-     * @param array $option            Дополнительные параметры
+     * @param string $type              Тип добавляемого элемента
+     * @param string $name              Имя элемента
+     * @param array  $option            Дополнительные параметры
+     *
      * @return Form
      */
     public function add($type, $name, array $option = array())
@@ -56,7 +59,7 @@ class Form
             $this->_submits[] = $name;
         } elseif ($type == 'file') {
             $this->_form['enctype'] = TRUE;
-        } elseif($type == 'textarea' && !isset($option['rows'])){
+        } elseif ($type == 'textarea' && !isset($option['rows'])) {
             $option['rows'] = Vars::$USER_SET['field_h'];
         }
 
@@ -65,6 +68,7 @@ class Form
         $this->_fields[] = $option;
 
         unset($option);
+
         return $this;
     }
 
@@ -74,6 +78,7 @@ class Form
      * Строка ни как не обрабатывается и передается в форму как есть.
      *
      * @param $str
+     *
      * @return Form
      */
     public function addHtml($str)
@@ -82,6 +87,7 @@ class Form
         $option['content'] = $str;
         $this->_fields[] = $option;
         unset($option);
+
         return $this;
     }
 
@@ -89,6 +95,7 @@ class Form
      * Добавление блока fieldset
      *
      * @param string $legend
+     *
      * @return Form
      */
     public function fieldset($legend = NULL)
@@ -99,6 +106,7 @@ class Form
         }
         $this->_fields[] = $option;
         unset($option);
+
         return $this;
     }
 
@@ -112,6 +120,7 @@ class Form
         $option['type'] = 'fs_end';
         $this->_fields[] = $option;
         unset($option);
+
         return $this;
     }
 
@@ -129,6 +138,7 @@ class Form
             && (!$this->validationToken || $this->input['form_token'] == $_SESSION['form_token'])
         ) {
             $this->isSubmitted = TRUE;
+            $this->isValid = TRUE;
         }
 
         $out = array();
@@ -198,12 +208,21 @@ class Form
                 if (isset($this->input[$option['name']])) {
                     $option['value'] = trim($this->input[$option['name']]);
                     unset($this->input[$option['name']]);
+
+                    // Применяем фильтры
                     if (isset($option['filter'])) {
                         $this->_filter($option);
                     }
+
+                    // Проверка на обязательное поле
+                    if (isset($option['required']) && empty($option['value'])) {
+                        $option['error'] = __('error_empty_field');
+                        $this->isValid = FALSE;
+                    }
+
                     $this->output[$option['name']] = $option['value'];
                 } else {
-                    $this->isSubmitted = FALSE;
+                    $this->isValid = FALSE;
                 }
                 break;
 
@@ -214,7 +233,7 @@ class Form
                         $this->output[$option['name']] = $option['checked'];
                         unset($this->input[$option['name']]);
                     } else {
-                        $this->isSubmitted = FALSE;
+                        $this->isValid = FALSE;
                     }
                 }
                 break;
@@ -240,7 +259,7 @@ class Form
                         $this->output[$option['name']] = $option['selected'];
                         unset($this->input[$option['name']]);
                     } else {
-                        $this->isSubmitted = FALSE;
+                        $this->isValid = FALSE;
                     }
                 }
                 break;

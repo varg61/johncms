@@ -136,7 +136,7 @@ if (Vars::$USER_RIGHTS == 9) {
 $form->addHtml(' <a class="btn" href="' . Router::getUri(2) . '">' . __('back') . '</a>');
 $tpl->form = $form->build();
 
-if ($form->isSubmitted && isset($form->input['submit'])) {
+if ($form->isValid && isset($form->input['submit'])) {
     // Записываем настройки в базу
     foreach ($form->output as $key => $val) {
         Vars::$USER_SYS[$key] = $val;
@@ -154,7 +154,7 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
     $STH->execute();
 
     $tpl->save = TRUE;
-} elseif ($form->isSubmitted && isset($form->input['reset']) && Vars::$USER_RIGHTS == 9) {
+} elseif ($form->isValid && isset($form->input['reset']) && Vars::$USER_RIGHTS == 9) {
     // Сбрасываем настройки на значения по-умолчанию
     DB::PDO()->exec("DELETE FROM `cms_settings` WHERE `key` = 'users'");
     header('Location: ' . Router::getUri(3) . '?default');

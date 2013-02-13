@@ -38,7 +38,7 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isSubmitted) {
+if ($form->isValid) {
     // Записываем настройки в базу
     $STH = DB::PDO()->prepare('
         REPLACE INTO `cms_settings` SET

@@ -107,7 +107,7 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isSubmitted && isset($form->input['submit'])) {
+if ($form->isValid && isset($form->input['submit'])) {
     foreach ($form->output as $key => $val) {
         $settings[$key] = $val;
     }
@@ -125,7 +125,7 @@ if ($form->isSubmitted && isset($form->input['submit'])) {
     $STH = NULL;
 
     $tpl->save = TRUE;
-} elseif ($form->isSubmitted && isset($form->input['reset'])) {
+} elseif ($form->isValid && isset($form->input['reset'])) {
     DB::PDO()->query("DELETE FROM `cms_settings` WHERE `key` = 'news'");
     header('Location: ' . $uri . '?default');
     exit;

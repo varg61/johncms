@@ -27,7 +27,7 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isSubmitted) {
+if ($form->isValid) {
     $cache = array();
     $smilies = glob(ROOTPATH . 'assets' . DIRECTORY_SEPARATOR . 'smilies' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . '*.{gif,jpg,png}', GLOB_BRACE);
     foreach ($smilies as $val) {

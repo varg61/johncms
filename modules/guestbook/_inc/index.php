@@ -41,7 +41,7 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isSubmitted) {
+if ($form->isValid) {
     // Принимаем и обрабатываем данные
     $name = isset($_POST['name']) ? mb_substr(trim($_POST['name']), 0, 20) : '';
     $msg = isset($_POST['msg']) ? mb_substr(trim($_POST['msg']), 0, 5000) : '';

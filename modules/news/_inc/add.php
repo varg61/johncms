@@ -36,7 +36,7 @@ $form
 
 $tpl->form = $form->build();
 
-if ($form->isSubmitted) {
+if ($form->isValid) {
     $STH = DB::PDO()->prepare('
         INSERT INTO `cms_news` SET
         `time`      = :time,

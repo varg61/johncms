@@ -35,8 +35,8 @@ $form
 //TODO: Доработать ссылку "Назад"
 $tpl->form = $form->build();
 
-if ($form->isSubmitted || $ip) {
-    $ip = $form->isSubmitted ? trim($form->output['ip']) : $ip;
+if ($form->isValid || $ip) {
+    $ip = $form->isValid ? trim($form->output['ip']) : $ip;
     if ($ip && empty($ip) || !Validate::ip($ip)) {
         $tpl->errormsg = __('error_ip');
     } else {
