@@ -23,7 +23,7 @@ class Form
     public $errors = array();
     public $validationToken = TRUE;
     public $isSubmitted = FALSE;
-    public $validOutput = array();
+    public $output = array();
 
     public function __construct($action, $method = '', $name = 'form')
     {
@@ -91,7 +91,7 @@ class Form
      * @param string $legend
      * @return Form
      */
-    public function fieldset($legend = null)
+    public function fieldset($legend = NULL)
     {
         $option['type'] = 'fs_start';
         if (!is_null($legend)) {
@@ -201,7 +201,7 @@ class Form
                     if (isset($option['filter'])) {
                         $this->_filter($option);
                     }
-                    $this->validOutput[$option['name']] = $option['value'];
+                    $this->output[$option['name']] = $option['value'];
                 } else {
                     $this->isSubmitted = FALSE;
                 }
@@ -211,7 +211,7 @@ class Form
                 if (isset($this->input[$option['name']]) && isset($option['items'])) {
                     if (array_key_exists($this->input[$option['name']], $option['items'])) {
                         $option['checked'] = trim($this->input[$option['name']]);
-                        $this->validOutput[$option['name']] = $option['checked'];
+                        $this->output[$option['name']] = $option['checked'];
                         unset($this->input[$option['name']]);
                     } else {
                         $this->isSubmitted = FALSE;
@@ -237,7 +237,7 @@ class Form
 
                     if ($allow) {
                         $option['selected'] = $this->input[$option['name']];
-                        $this->validOutput[$option['name']] = $option['selected'];
+                        $this->output[$option['name']] = $option['selected'];
                         unset($this->input[$option['name']]);
                     } else {
                         $this->isSubmitted = FALSE;
@@ -249,10 +249,10 @@ class Form
                 if (isset($this->input[$option['name']])) {
                     unset($this->input[$option['name']]);
                     $option['checked'] = 1;
-                    $this->validOutput[$option['name']] = 1;
+                    $this->output[$option['name']] = 1;
                 } else {
                     unset($option['checked']);
-                    $this->validOutput[$option['name']] = 0;
+                    $this->output[$option['name']] = 0;
                 }
                 break;
         }

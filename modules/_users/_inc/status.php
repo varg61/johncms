@@ -45,7 +45,7 @@ $form
 $tpl->form = $form->build();
 
 if ($form->isSubmitted) {
-    Users::$data['status'] = $form->validOutput['status'];
+    Users::$data['status'] = $form->output['status'];
 
     $STH = DB::PDO()->prepare('
       UPDATE `users` SET

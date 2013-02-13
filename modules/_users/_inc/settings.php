@@ -102,7 +102,7 @@ $form
 $tpl->form = $form->build();
 
 if ($form->isSubmitted) {
-    foreach ($form->validOutput as $key => $val) {
+    foreach ($form->output as $key => $val) {
         Vars::$USER_SET[$key] = $val;
     }
     Vars::setUserData('user_set', Vars::$USER_SET);

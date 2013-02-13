@@ -46,7 +46,7 @@ if ($form->isSubmitted) {
         `val` = ?
     ');
 
-    foreach ($form->validOutput as $key => $val) {
+    foreach ($form->output as $key => $val) {
         $STH->execute(array($key, $val));
     }
 

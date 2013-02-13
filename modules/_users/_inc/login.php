@@ -33,7 +33,7 @@ if (Vars::$USER_ID) {
     $tpl->form = $form->build();
 
     if ($form->isSubmitted) {
-        Vars::userUnset($form->validOutput['clear']);
+        Vars::userUnset($form->output['clear']);
         header('Location: ' . Vars::$HOME_URL);
         exit;
     }

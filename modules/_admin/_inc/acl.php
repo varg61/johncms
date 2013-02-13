@@ -90,7 +90,7 @@ $form
 $tpl->form = $form->build();
 
 if ($form->isSubmitted) {
-    foreach ($form->validOutput as $key => $val) {
+    foreach ($form->output as $key => $val) {
         Vars::$ACL[$key] = $val;
     }
 

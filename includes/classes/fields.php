@@ -23,8 +23,8 @@ class Fields
         'radio'        => array('<input%s type="radio" value="%s"%s%s/>', 'name,value,class,checked'),
         'select'       => array('<select%s%s%s>%s</select>', 'name,class,multiple,content'),
         'submit'       => array('<button%s%s type="submit"%s>%s</button>', 'id,name,class,value'),
-        'text'         => array('<input%s%s type="text" value="%s"%s%s%s/>', 'id,name,value,class,style,maxlength'),
-        'textarea'     => array('<textarea%s%s%s%s%s>%s</textarea>', 'id,name,rows,class,style,value'),
+        'text'         => array('<input%s%s type="text" value="%s"%s%s%s%s/>', 'id,name,value,class,style,maxlength,required'),
+        'textarea'     => array('<textarea%s%s%s%s%s%s>%s</textarea>', 'id,name,rows,class,style,required,value'),
     );
 
     private $attributes = array(
@@ -43,6 +43,7 @@ class Fields
         'maxlength'          => ' maxlength="%u"',
         'multiple'           => ' multiple="multiple"',
         'name'               => ' name="%s"',
+        'required'           => ' required',
         'rows'               => ' rows="%u"',
         'selected'           => ' selected="selected"',
         'style'              => ' style="%s"',

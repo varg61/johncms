@@ -21,6 +21,7 @@ $form
     ->add('text', 'imname', array(
     'label'       => __('name'),
     'value'       => Users::$data['imname'],
+    'required'    => true,
     'description' => __('description_name')));
 
 if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) {
@@ -102,19 +103,19 @@ $form
 $tpl->form = $form->build();
 
 if ($form->isSubmitted) {
-    foreach ($form->validOutput as $key => $val) {
+    foreach ($form->output as $key => $val) {
         Users::$data[$key] = $val;
     }
 
     // Принимаем и обрабатываем дату рожденья
-    if (empty($form->validOutput['day'])
-        && empty($form->validOutput['month'])
-        && empty($form->validOutput['year'])
+    if (empty($form->output['day'])
+        && empty($form->output['month'])
+        && empty($form->output['year'])
     ) {
         // Удаляем дату рожденья
         Users::$data['birth'] = '00-00-0000';
     } else {
-        Users::$data['birth'] = intval($form->validOutput['year']) . '-' . intval($form->validOutput['month']) . '-' . intval($form->validOutput['day']);
+        Users::$data['birth'] = intval($form->output['year']) . '-' . intval($form->output['month']) . '-' . intval($form->output['day']);
     }
 
     //TODO: Добавить валидацию даты

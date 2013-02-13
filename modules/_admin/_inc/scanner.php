@@ -58,7 +58,7 @@ $form
 $tpl->form = $form->build();
 
 if ($form->isSubmitted) {
-    switch ($form->validOutput['mode']) {
+    switch ($form->output['mode']) {
         case 1:
             // Сканируем на соответствие дистрибутиву
             $scanner->scan();
@@ -87,7 +87,7 @@ if ($form->isSubmitted) {
 
         case 3:
             // Создаем снимок файлов
-            if(crypt($form->validOutput['password'], Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']){
+            if(crypt($form->output['password'], Vars::$USER_DATA['password']) === Vars::$USER_DATA['password']){
                 $scanner->snap();
                 $tpl->ok = __('antispy_snapshot_create_ok');
             } else {

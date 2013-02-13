@@ -58,7 +58,7 @@ $form
 $tpl->form = $form->build();
 
 if ($form->isSubmitted) {
-    foreach ($form->validOutput as $key => $val) {
+    foreach ($form->output as $key => $val) {
         $settings[$key] = $val;
     }
 

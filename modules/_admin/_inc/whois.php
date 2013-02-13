@@ -36,7 +36,7 @@ $form
 $tpl->form = $form->build();
 
 if ($form->isSubmitted || $ip) {
-    $ip = $form->isSubmitted ? trim($form->validOutput['ip']) : $ip;
+    $ip = $form->isSubmitted ? trim($form->output['ip']) : $ip;
     if ($ip && empty($ip) || !Validate::ip($ip)) {
         $tpl->errormsg = __('error_ip');
     } else {

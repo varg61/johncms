@@ -138,7 +138,7 @@ $tpl->form = $form->build();
 
 if ($form->isSubmitted && isset($form->input['submit'])) {
     // Записываем настройки в базу
-    foreach ($form->validOutput as $key => $val) {
+    foreach ($form->output as $key => $val) {
         Vars::$USER_SYS[$key] = $val;
     }
 

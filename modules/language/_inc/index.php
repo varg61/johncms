@@ -33,7 +33,7 @@ $form
 $tpl->form = $form->build();
 
 if($form->isSubmitted){
-    $_SESSION['lng'] = $form->validOutput['lng'];
+    $_SESSION['lng'] = $form->output['lng'];
     header('Location: ' . $uri . '?save');
 }
 

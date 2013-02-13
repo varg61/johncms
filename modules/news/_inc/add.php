@@ -49,8 +49,8 @@ if ($form->isSubmitted) {
     $STH->bindValue(':time', time());
     $STH->bindValue(':author', Vars::$USER_NICKNAME);
     $STH->bindValue(':uid', Vars::$USER_ID);
-    $STH->bindValue(':name', $form->validOutput['name']);
-    $STH->bindValue(':text', $form->validOutput['text']);
+    $STH->bindValue(':name', $form->output['name']);
+    $STH->bindValue(':text', $form->output['text']);
     $STH->execute();
     $STH = NULL;
 
