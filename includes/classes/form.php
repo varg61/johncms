@@ -223,7 +223,14 @@ class Form
 
                     // Валидация
                     if (isset($option['validate'])) {
-                        $this->_validate($option);
+                        foreach ($option['validate'] as $type => $opt) {
+                            $check = new Validate($type, $option['value'], $opt);
+                            if (!$check->is) {
+                                $option['error'] = implode('<br/>', $check->error);
+                                $this->isValid = FALSE;
+                            }
+                            unset($check);
+                        }
                     }
 
                     $this->output[$option['name']] = $option['value'];
@@ -316,17 +323,6 @@ class Form
 
             default:
                 $this->errors[] = 'Unknown filter: ' . $option['filter']['type'];
-        }
-    }
-
-    private function _validate(&$option)
-    {
-        foreach ($option['validate'] as $type => $opt) {
-            $check = new Validate($type, $option['value'], $opt);
-            if (!$check->is) {
-                $option['error'] = implode('<br/>', $check->error);
-                $this->isValid = FALSE;
-            }
         }
     }
 }
