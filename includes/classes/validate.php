@@ -55,7 +55,11 @@ class Validate
      */
     private function numeric(array $option)
     {
-        if (!filter_var($option['value'], FILTER_VALIDATE_INT)) {
+        if (isset($option['empty']) && $option['empty'] && empty($option['value'])) {
+            return TRUE;
+        }
+
+        if (!is_numeric($option['value'])) {
             $this->error[] = __('must_be_a_number');
 
             return FALSE;

@@ -21,8 +21,11 @@ $form
     ->add('text', 'imname', array(
     'label'       => __('name'),
     'value'       => Users::$data['imname'],
-    'required'    => true,
-    'description' => __('description_name')));
+    'required'    => TRUE,
+    'description' => __('description_name'),
+    'validate'    => array(
+        'lenght' => array('max' => 50)
+    )));
 
 if (Vars::$USER_SYS['change_sex'] || Vars::$USER_RIGHTS >= 7) {
     $form
@@ -53,24 +56,37 @@ $form
     ->add('text', 'live', array(
     'label'       => __('live'),
     'value'       => Users::$data['live'],
-    'description' => __('description_live')))
+    'description' => __('description_live'),
+    'validate'    => array(
+        'lenght' => array('max' => 100)
+    )))
 
     ->add('textarea', 'about', array(
     'label'       => __('about'),
     'value'       => Users::$data['about'],
     'buttons'     => (Vars::$IS_MOBILE ? FALSE : TRUE),
-    'description' => __('description_about')))
+    'description' => __('description_about'),
+    'validate'    => array(
+        'lenght' => array('max' => 5000)
+    )))
 
     ->fieldset(__('communication'))
 
     ->add('text', 'tel', array(
     'label'       => __('phone_number'),
     'value'       => Users::$data['tel'],
-    'description' => __('description_phone_number')))
+    'description' => __('description_phone_number'),
+    'validate'    => array(
+        'lenght' => array('max' => 100)
+    )))
 
     ->add('text', 'email', array(
-    'label' => 'E-mail',
-    'value' => Users::$data['email']))
+    'label'    => 'E-mail',
+    'value'    => Users::$data['email'],
+    'validate' => array(
+        'lenght' => array('min' => 6, 'max' => 50),
+        'email'  => array()
+    )))
 
     ->add('checkbox', 'mailvis', array(
     'label_inline' => __('show_in_profile'),
@@ -80,17 +96,26 @@ $form
     ->add('text', 'siteurl', array(
     'label'       => __('site'),
     'value'       => Users::$data['siteurl'],
-    'description' => __('description_siteurl')))
+    'description' => __('description_siteurl'),
+    'validate'    => array(
+        'lenght' => array('max' => 100)
+    )))
 
     ->add('text', 'skype', array(
     'label'       => 'Skype',
     'value'       => Users::$data['skype'],
-    'description' => __('description_skype')))
+    'description' => __('description_skype'),
+    'validate'    => array(
+        'lenght' => array('max' => 50)
+    )))
 
     ->add('text', 'icq', array(
     'label'       => 'ICQ',
     'value'       => Users::$data['icq'],
-    'description' => __('description_icq')))
+    'description' => __('description_icq'),
+    'validate'    => array(
+        'numeric' => array('min' => 10000, 'empty' => TRUE)
+    )))
 
     ->fieldset()
 

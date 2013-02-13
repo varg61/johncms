@@ -18,7 +18,6 @@ class Form
     private $_fields = array();
     private $_submits = array();
     private $_fieldset = FALSE;
-    private $_validators = array();
 
     public $input;
     public $errors = array();
@@ -196,6 +195,8 @@ class Form
     }
 
     /**
+     * Присвоение значений value после сабмита формы
+     *
      * @param array $option
      */
     private function _setValues(array &$option)
@@ -218,6 +219,11 @@ class Form
                     if (isset($option['required']) && empty($option['value'])) {
                         $option['error'] = __('error_empty_field');
                         $this->isValid = FALSE;
+                    }
+
+                    // Валидация
+                    if (isset($option['validate'])) {
+                        $this->_validate($option);
                     }
 
                     $this->output[$option['name']] = $option['value'];
@@ -310,6 +316,17 @@ class Form
 
             default:
                 $this->errors[] = 'Unknown filter: ' . $option['filter']['type'];
+        }
+    }
+
+    private function _validate(&$option)
+    {
+        foreach ($option['validate'] as $type => $opt) {
+            $check = new Validate($type, $option['value'], $opt);
+            if (!$check->is) {
+                $option['error'] = implode('<br/>', $check->error);
+                $this->isValid = FALSE;
+            }
         }
     }
 }
