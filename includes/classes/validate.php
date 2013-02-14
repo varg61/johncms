@@ -11,6 +11,8 @@
 
 class Validate
 {
+    private static $_userData = NULL;
+
     public $error = array();
     public $is = FALSE;
 
@@ -22,6 +24,77 @@ class Validate
         } else {
             $this->error[] = 'Unknown Validator';
         }
+    }
+
+    public static function getUserData()
+    {
+        return (is_null(static::$_userData) ? FALSE : static::$_userData);
+    }
+
+    /**
+     * Проверка Логина по базе пользователей
+     *
+     * @param array $option
+     *
+     * @return bool
+     */
+    private function login(array $option)
+    {
+        $query = FALSE;
+        if ($this->email($option, FALSE)) {
+            $query = 'SELECT * FROM `users` WHERE `email` = ? LIMIT 1';
+        } elseif ($this->nickname($option)) {
+            $query = 'SELECT * FROM `users` WHERE `nickname` = ? LIMIT 1';
+        }
+
+        if ($query) {
+            $STH = DB::PDO()->prepare($query);
+            $STH->execute(array($option['value']));
+
+            if ($STH->rowCount()) {
+                static::$_userData = $STH->fetch();
+                $STH = NULL;
+
+                return TRUE;
+            } else {
+                $this->error[] = __('error_user_not_exist');
+                $STH = NULL;
+
+                return FALSE;
+            }
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Проверка пароля
+     *
+     * @param array $option
+     *
+     * @return bool
+     */
+    private function password(array $option)
+    {
+        if (is_null(static::$_userData) && Vars::$USER_ID) {
+            static::$_userData =& Vars::$USER_DATA;
+        }
+
+        if (!is_null(static::$_userData)) {
+            if (crypt($option['value'], static::$_userData['password']) === static::$_userData['password']) {
+                return TRUE;
+            } else {
+                $this->error[] = __('error_wrong_password');
+
+                // Накручиваем счетчик неудачных логинов
+                if (!Vars::$USER_ID && static::$_userData['login_try'] < 3) {
+                    DB::PDO()->exec("UPDATE `users` SET `login_try` = " . ++static::$_userData['login_try'] . " WHERE `id` = " . static::$_userData['id']);
+                    static::$_userData = NULL;
+                }
+            }
+        }
+
+        return FALSE;
     }
 
     /**
@@ -82,13 +155,16 @@ class Validate
      * Валидация E-mail адреса
      *
      * @param array $option
+     * @param bool  $log
      *
      * @return bool
      */
-    protected function email(array $option)
+    protected function email(array $option, $log = TRUE)
     {
         if (!filter_var($option['value'], FILTER_VALIDATE_EMAIL)) {
-            $this->error = __('error_email');
+            if ($log) {
+                $this->error = __('error_email');
+            }
 
             return FALSE;
         }

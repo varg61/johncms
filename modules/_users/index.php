@@ -39,11 +39,15 @@ if (isset(Router::$ROUTE[1])) {
 
         // Работа с профилями
         if (isset(Router::$ROUTE[2])) {
-            if (isset($admin_actions[Router::$ROUTE[2]])
-                && Vars::$USER_RIGHTS >= 7
+            if (Vars::$USER_RIGHTS >= 7
+                && isset($admin_actions[Router::$ROUTE[2]])
             ) {
                 $include = $admin_actions[Router::$ROUTE[2]];
-            } elseif (isset($personal_actions[Router::$ROUTE[2]])) {
+            } elseif (Vars::$USER_RIGHTS == 9
+                || (Vars::$USER_RIGHTS == 7 && Vars::$USER_RIGHTS > Users::$data['rights'])
+                || (Vars::$USER_ID && Vars::$USER_ID == Users::$data['id'])
+                && isset($personal_actions[Router::$ROUTE[2]])
+            ) {
                 $include = $personal_actions[Router::$ROUTE[2]];
             } else {
                 $include = FALSE;

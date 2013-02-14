@@ -179,7 +179,7 @@ class Form
         // Добавляем токен валидации
         if ($this->validationToken) {
             if (!isset($_SESSION['form_token'])) {
-                $_SESSION['form_token'] = md5(mt_rand(1000, 100000) . microtime(TRUE));
+                $_SESSION['form_token'] = Functions::generateToken();
             }
             $out[] = new Fields('hidden', 'form_token', array('value' => $_SESSION['form_token']));
         }
@@ -214,21 +214,22 @@ class Form
                         $this->_filter($option);
                     }
 
-                    // Проверка на обязательное поле
                     if (isset($option['required']) && empty($option['value'])) {
+                        // Проверка на обязательное поле
                         $option['error'] = __('error_empty_field');
                         $this->isValid = FALSE;
-                    }
-
-                    // Валидация
-                    if (isset($option['validate'])) {
-                        foreach ($option['validate'] as $type => $opt) {
-                            $check = new Validate($type, $option['value'], $opt);
-                            if (!$check->is) {
-                                $option['error'] = implode('<br/>', $check->error);
-                                $this->isValid = FALSE;
+                    } else {
+                        // Валидация данных
+                        if (isset($option['validate'])) {
+                            foreach ($option['validate'] as $type => $opt) {
+                                $check = new Validate($type, $option['value'], $opt);
+                                if ($check->is !== TRUE) {
+                                    $option['error'] = implode('<br/>', $check->error);
+                                    $this->isValid = FALSE;
+                                    break;
+                                }
+                                unset($check);
                             }
-                            unset($check);
                         }
                     }
 
