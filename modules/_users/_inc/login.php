@@ -13,10 +13,10 @@ defined('_IN_USERS') or die('Error: restricted access');
 $uri = Router::getUri(3);
 
 $tpl = Template::getInstance();
+$form = new Form($uri);
 
 if (Vars::$USER_ID) {
-    $form = new Form($uri);
-
+    // Показываем форму выхода с сайта
     $form
         ->fieldset(__('exit_warning'))
 
@@ -38,6 +38,32 @@ if (Vars::$USER_ID) {
         exit;
     }
 } else {
+    // Показываем форму входа на сайт
+    $form
+        ->add('text', 'login', array(
+        'label' => __('login_caption'),
+        'class' => 'relative largetext'))
+
+        ->add('text', 'password', array(
+        'label' => __('password'),
+        'class' => 'relative largetext'))
+
+        ->add('checkbox', 'remember', array(
+        'checked'      => TRUE,
+        'label_inline' => __('remember')))
+
+        ->addHtml('<br/>')
+
+        ->add('submit', 'submit', array(
+        'value' => __('login'),
+        'class' => 'btn btn-primary btn-large btn-block'))
+
+        ->addHtml('<br/><a class="btn btn-large btn-block" href="' . Router::getUri(2) . 'registration/">' . __('registration') . '</a>')
+
+        ->addHtml('<br/><a class="btn" href="#">' . __('forgotten_password') . '</a>');
+
+    $tpl->form = $form->build();
+
     $error = array();
     $autologin = FALSE;
     $value = FALSE;
@@ -141,7 +167,7 @@ if (Vars::$USER_ID) {
         }
     }
 
-    $tpl->error = array_merge($error, Validate::$error);
+    $tpl->error = $error;
 }
 
 $tpl->contents = $tpl->includeTpl('login');

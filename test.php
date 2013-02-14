@@ -1,19 +1,25 @@
 <?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: Oleg Kasyanov
+ * Date: 20.01.13
+ * Time: 20:08
+ * To change this template use File | Settings | File Templates.
+ */
 
 define('_IN_JOHNCMS', 1);
+require('includes/core.php');
 
-require_once('includes/core.php');
+$STH = DB::PDO()->prepare('
+    INSERT INTO `test`
+    (`name`, `text`, `more`)
+    VALUES (?, ?, ?)
+');
 
-echo'<div class="content">';
-echo'<h3>Проверка валидатора</h3><br/><br/>';
+$STH->execute(array(
+    'TestName',
+    'SOME Text',
+    'm'
+));
 
-$val = '192.168.0.100';
-$valid = new Validate('ip', $val);
-
-if($valid->is){
-    echo'Done';
-} else {
-    echo implode('<br/>', $valid->error);
-}
-
-echo'</div>';
+echo DB::PDO()->lastInsertId();
