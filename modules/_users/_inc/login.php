@@ -22,13 +22,13 @@ if (Vars::$USER_ID) {
 
         ->add('checkbox', 'clear', array('label_inline' => __('clear_authorisation')))
 
-        ->fieldset()
+        ->addHtml('<br/>')
 
         ->add('submit', 'submit', array(
         'value' => '   ' . __('exit') . '   ',
-        'class' => 'btn btn-primary btn-large'))
+        'class' => 'btn btn-primary btn-large btn-block'))
 
-        ->addHtml('<a class="btn" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL) . 'option/">' . __('back') . '</a>');
+        ->addHtml('<br/><a class="btn btn-large btn-block" href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : Vars::$HOME_URL) . 'option/">' . __('back') . '</a>');
 
     $tpl->form = $form->build();
 

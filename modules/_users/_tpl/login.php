@@ -1,5 +1,5 @@
 <ul class="title">
-    <li class="center"><h1><?= __('login') ?></h1></li>
+    <li class="center"><h1><?= (Vars::$USER_ID ? __('exit') : __('login')) ?></h1></li>
 </ul>
 <div class="content form-container">
     <div style="text-align: center">
