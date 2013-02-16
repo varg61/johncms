@@ -98,13 +98,26 @@ class Form
      */
     public function fieldset($legend = NULL)
     {
-        $option['type'] = 'fs_start';
-        if (!is_null($legend)) {
-            $option['legend'] = $legend;
+        if ($this->_fieldset) {
+            $this->_fields[] = array(
+                'type'    => 'html',
+                'content' => '</fieldset>'
+            );
         }
-        $this->_fields[] = $option;
-        unset($option);
 
+        $this->_fields[] = array(
+            'type'    => 'html',
+            'content' => '<fieldset>'
+        );
+
+        if (!is_null($legend)) {
+            $this->_fields[] = array(
+                'type'    => 'html',
+                'content' => '<legend>' . $legend . '</legend>'
+            );
+        }
+
+        $this->_fieldset = TRUE;
         return $this;
     }
 
@@ -115,10 +128,12 @@ class Form
      */
     public function fieldsetEnd()
     {
-        $option['type'] = 'fs_end';
-        $this->_fields[] = $option;
-        unset($option);
+        $this->_fields[] = array(
+            'type'    => 'html',
+            'content' => '</fieldset>'
+        );
 
+        $this->_fieldset = FALSE;
         return $this;
     }
 
@@ -141,37 +156,24 @@ class Form
 
         $out = array();
         foreach ($this->_fields as &$element) {
-            switch ($element['type']) {
-                case'html':
-                    $out[] = $element['content'];
-                    break;
+            if ($element['type'] == 'html') {
+                // Если обычный HTML, то передаем на выход без обработки
+                $out[] = $element['content'];
+            } else {
+                // Если элемент формы, то обрабатываем согласно переданным параметрам
+                if ($this->isSubmitted === TRUE) {
+                    // Если был SUBMIT, то присваиваем значения VALUE
+                    $this->_setValues($element);
+                }
 
-                case'fs_start':
-                    if ($this->_fieldset) {
-                        $out[] = '</fieldset>';
-                    }
-                    $out[] = '<fieldset>' . (isset($element['legend']) ? '<legend>' . $element['legend'] . '</legend>' : '');
-                    $this->_fieldset = TRUE;
-                    break;
-
-                case'fs_end':
-                    $out[] = '</fieldset>';
-                    $this->_fieldset = FALSE;
-                    break;
-
-                default:
-                    // Если был SUBMIT, то присваиваем VALUE значения из суперглобальных массивов
-                    if ($this->isSubmitted === TRUE) {
-                        $this->_setValues($element);
-                    }
-
-                    // Создаем элемент формы
-                    $out[] = new Fields($element['type'], $element['name'], $element, $this->_form['name']);
+                // Создаем элемент формы
+                $out[] = new Fields($element['type'], $element['name'], $element, $this->_form['name']);
             }
         }
 
         if ($this->_fieldset) {
             $out[] = '</fieldset>';
+            $this->_fieldset = FALSE;
         }
 
         unset($this->_fields);
