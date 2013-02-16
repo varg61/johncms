@@ -46,7 +46,6 @@ if (Vars::$USER_ID) {
         'required' => TRUE,
         'validate' => array(
             'lenght' => array('min' => 2, 'max' => 20),
-            'login'  => array()
         )))
 
         ->add('password', 'password', array(
@@ -55,7 +54,6 @@ if (Vars::$USER_ID) {
         'required' => TRUE,
         'validate' => array(
             'lenght'   => array('min' => 3),
-            'password' => array()
         )))
 
         ->add('checkbox', 'remember', array(
@@ -70,7 +68,10 @@ if (Vars::$USER_ID) {
 
         ->addHtml('<br/><a class="btn btn-large btn-block" href="' . Router::getUri(2) . 'registration/">' . __('registration') . '</a>')
 
-        ->addHtml('<br/><a class="btn" href="#">' . __('forgotten_password') . '</a>');
+        ->addHtml('<br/><a class="btn" href="#">' . __('forgotten_password') . '</a>')
+
+        ->addRule('login', 'login')
+        ->addRule('password', 'password');
 
     $tpl->form = $form->build();
     $user = Validate::getUserData();

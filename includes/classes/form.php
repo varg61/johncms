@@ -18,6 +18,7 @@ class Form
     private $_fields = array();
     private $_submits = array();
     private $_fieldset = FALSE;
+    private $_rules = array();
 
     public $input;
     public $validationToken = TRUE;
@@ -138,6 +139,25 @@ class Form
     }
 
     /**
+     * Добавление правил заключительной валидации
+     *
+     * @param $fieldName
+     * @param $validatorType
+     * @param array $options
+     * @return Form
+     */
+    public function addRule($fieldName, $validatorType, $options = array())
+    {
+        if (array_key_exists($fieldName, $this->_rules)) {
+            $this->_rules[$fieldName] = array_merge($this->_rules[$fieldName], array($validatorType => $options));
+        } else {
+            $this->_rules[$fieldName] = array($validatorType => $options);
+        }
+
+        return $this;
+    }
+
+    /**
      * Сборка готовой формы
      *
      * @return string                  Готовая форма
@@ -152,6 +172,11 @@ class Form
         ) {
             $this->isSubmitted = TRUE;
             $this->isValid = TRUE;
+
+            foreach ($this->_fields as &$element) {
+                // Присваиваем значения VALUE
+                $this->_setValues($element);
+            }
         }
 
         $out = array();
@@ -160,10 +185,17 @@ class Form
                 // Если обычный HTML, то передаем на выход без обработки
                 $out[] = $element['content'];
             } else {
-                // Если элемент формы, то обрабатываем согласно переданным параметрам
-                if ($this->isSubmitted === TRUE) {
-                    // Если был SUBMIT, то присваиваем значения VALUE
-                    $this->_setValues($element);
+                // Проводим заключительную валидацию
+                if ($this->isValid && array_key_exists($element['name'], $this->_rules)) {
+                    foreach ($this->_rules[$element['name']] as $type => $opt) {
+                        $check = new Validate($type, $element['value'], $opt);
+                        if ($check->is !== TRUE) {
+                            $element['error'] = implode('<br/>', $check->error);
+                            $this->isValid = FALSE;
+                            break;
+                        }
+                        unset($check);
+                    }
                 }
 
                 // Создаем элемент формы
@@ -203,6 +235,9 @@ class Form
     private function _setValues(array &$option)
     {
         switch ($option['type']) {
+            case'html':
+                break;
+
             case'text':
             case'password':
             case'hidden':
