@@ -40,31 +40,25 @@ class Validate
      */
     private function login(array $option)
     {
-        $query = FALSE;
-        if ($this->email($option, FALSE)) {
-            $query = 'SELECT * FROM `users` WHERE `email` = ? LIMIT 1';
-        } elseif ($this->nickname($option)) {
-            $query = 'SELECT * FROM `users` WHERE `nickname` = ? LIMIT 1';
+        $STH = DB::PDO()->prepare('
+            SELECT * FROM `users`
+            WHERE `' . ($this->email($option, FALSE) ? 'email' : 'nickname') . '` = ?
+            LIMIT 1
+        ');
+
+        $STH->execute(array($option['value']));
+
+        if ($STH->rowCount()) {
+            static::$_userData = $STH->fetch();
+            $STH = NULL;
+
+            return TRUE;
+        } else {
+            $this->error[] = __('error_user_not_exist');
+            $STH = NULL;
+
+            return FALSE;
         }
-
-        if ($query) {
-            $STH = DB::PDO()->prepare($query);
-            $STH->execute(array($option['value']));
-
-            if ($STH->rowCount()) {
-                static::$_userData = $STH->fetch();
-                $STH = NULL;
-
-                return TRUE;
-            } else {
-                $this->error[] = __('error_user_not_exist');
-                $STH = NULL;
-
-                return FALSE;
-            }
-        }
-
-        return FALSE;
     }
 
     /**

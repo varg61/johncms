@@ -45,7 +45,8 @@ if (Vars::$USER_ID) {
         'class'    => 'relative largetext',
         'required' => TRUE,
         'validate' => array(
-            'lenght' => array('min' => 2, 'max' => 20),
+            'lenght'   => array('min' => 2, 'max' => 20),
+            'nickname' => array()
         )))
 
         ->add('password', 'password', array(
@@ -53,7 +54,7 @@ if (Vars::$USER_ID) {
         'class'    => 'relative largetext',
         'required' => TRUE,
         'validate' => array(
-            'lenght'   => array('min' => 3),
+            'lenght' => array('min' => 3),
         )))
 
         ->add('checkbox', 'remember', array(
@@ -74,9 +75,8 @@ if (Vars::$USER_ID) {
         ->addRule('password', 'password');
 
     $tpl->form = $form->build();
-    $user = Validate::getUserData();
 
-    if ($form->isValid) {
+    if ($form->isValid && ($user = Validate::getUserData()) !== FALSE) {
         // Авторизуем пользователя
         //TODO: Добавить Капчу
 
