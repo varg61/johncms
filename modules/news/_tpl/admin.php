@@ -1,7 +1,11 @@
-<ul class="nav">
-    <li><h1 class="section-warning"><?= __('news_on_frontpage') ?></h1></li>
+<!-- Заголовок раздела -->
+<ul class="title admin">
+    <li class="left"><a href="<?= Vars::$HOME_URL ?>/admin"><span class="icn icn-back"></span></a></li>
+    <li class="separator"></li>
+    <li class="center"><h1><?= __('news_on_frontpage') ?></h1></li>
+    <li class="right"></li>
 </ul>
-<div class="form-container">
+<div class="content form-container">
     <?php if (isset($this->save)): ?>
     <div class="form-block confirm">
         <?= __('settings_saved') ?>
