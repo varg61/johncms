@@ -164,7 +164,7 @@ class Form
      */
     public function build()
     {
-        // Проверка формы на корректный Submit
+        // Проверка формы на Submit
         if (count(array_intersect($this->_submits, array_keys($this->input)))
             && (!$this->validationToken || isset($this->input['form_token']))
             && (!$this->validationToken || isset($_SESSION['form_token']))
@@ -172,9 +172,11 @@ class Form
         ) {
             $this->isSubmitted = TRUE;
             $this->isValid = TRUE;
+        }
 
+        // Присваиваем значения VALUE
+        if ($this->isSubmitted) {
             foreach ($this->_fields as &$element) {
-                // Присваиваем значения VALUE
                 $this->_setValues($element);
             }
         }

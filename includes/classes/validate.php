@@ -175,13 +175,13 @@ class Validate
      */
     protected function ip(array $option)
     {
-        if (!filter_var($option['value'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            $this->error[] = 'IP указан неверно';
-
-            return FALSE;
+        if (filter_var($option['value'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            return TRUE;
         }
 
-        return TRUE;
+        $this->error[] = __('error_ip');
+
+        return FALSE;
     }
 
     /**
