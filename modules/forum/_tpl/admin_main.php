@@ -1,8 +1,12 @@
-<ul class="nav">
-    <li><h1 class="section-warning"><?= __('forum') ?></h1></li>
-    <li><h2><?= __('statistics') ?></h2></li>
+<!-- Заголовок раздела -->
+<ul class="title admin">
+    <li class="left"><a href="<?= Vars::$HOME_URL ?>/admin"><span class="icn icn-back"></span></a></li>
+    <li class="separator"></li>
+    <li class="center"><h1><?= __('forum') ?></h1></li>
+    <li class="right"></li>
 </ul>
-<div class="user-block">
+
+<div class="info-block">
     <?= __('sections') . ':&#160;' . $this->total_sub ?><br/>
     <?= __('categories') . ':&#160;' . $this->total_cat ?><br/>
     <?= __('themes') . ':&#160;' . $this->total_thm . '&#160;|&#160;' . __('deleted') . ':&#160;' . $this->total_thm_del ?><br/>

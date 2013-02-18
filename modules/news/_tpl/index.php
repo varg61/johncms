@@ -1,58 +1,54 @@
-<ul class="nav">
-    <li><h1><?= __('site_news') ?></h1></li>
+<!-- Заголовок раздела -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".slider-button").click(function () {
+            $(".slider").slideToggle();
+            $(this).toggleClass("close");
+        });
+    });
+</script>
+<ul class="title">
+    <li class="left"></li>
+    <li class="center"><h1><?= __('site_news') ?></h1></li>
+    <?php if (Vars::$USER_RIGHTS >= 7): ?>
+    <li class="separator"></li>
+    <li class="right"><a href="#" class="slider-button"><span class="icn icn-gear"></span></a></li>
+    <?php else: ?>
+    <li class="right"></li>
+    <?php endif ?>
 </ul>
 
-<?php if (isset($this->list)): ?>
-<?php foreach ($this->list as $key => $val): ?>
-    <div class="block-<?= $key % 2 ? 'odd' : 'even' ?>">
-        <div class="block-hdr">
-            <?= $val['name'] ?>
-        </div>
-        <div class="block-info">
-            <?= Functions::displayDate($val['time']) ?><br/>
-            <?= __('added') ?>: <a href="<?= Vars::$HOME_URL ?>users/<?= $val['author_id'] ?>/"><?= $val['author'] ?></a>
-        </div>
-        <div class="block-text">
-            <?= $val['text'] ?>
-        </div>
-        <?php if (isset($this->comments) || Vars::$USER_RIGHTS >= 7): ?>
-        <div class="block-tools">
-            <?php if (Vars::$USER_RIGHTS >= 7): ?>
-            <div style="display: inline-block">
-                <a class="btn btn-mini" href="<?= $this->uri ?>?act=edit&amp;id=<?= $val['id'] ?>"><?= __('edit') ?></a>
-                <a class="btn btn-mini" href="<?= $this->uri ?>?act=del&amp;id=<?= $val['id'] ?>"><?= __('delete') ?></a>
+<div class="content">
+    <div class="hdr-submenu slider">
+        <a href="<?= $this->uri ?>add/" class="btn btn-primary"><?= __('add') ?></a>
+        <a href="#" class="btn"><?= __('clear') ?></a>
+        <a href="<?= $this->uri ?>admin/" class="btn"><?= __('settings') ?></a>
+    </div>
+
+    <div class="list-header"><?= __('news') ?></div>
+    <div class="list striped">
+        <?php if (isset($this->list)): ?>
+        <?php foreach ($this->list as $key => $val): ?>
+            <div>
+                <div class="news-title"><?= $val['name'] ?></div>
+                <div class="news-info">
+                    <?= Functions::displayDate($val['time']) ?><br/>
+                    <?= __('added') ?>: <a href="<?= Vars::$HOME_URL ?>users/<?= $val['author_id'] ?>/"><?= $val['author'] ?></a>
+                </div>
+                <div class="news-text"><?= $val['text'] ?></div>
+                <div class="slider">
+                    <a href="#" class="btn btn-small"><?= __('edit') ?></a>
+                    <a href="#" class="btn btn-small"><?= __('delete') ?></a>
+                </div>
             </div>
-            <?php endif ?>
-            <?php if (isset($this->comments)): ?>
-            <a class="btn btn-mini" href="<?= Vars::$HOME_URL ?>forum/?id=<?= $this->comments_id ?>"><?= __('discuss_on_forum') ?>: <?= $this->comments ?></a>
-            <?php endif ?>
-        </div>
+            <?php endforeach ?>
+        <?php else: ?>
+        <div style="text-align: center; padding: 27px"><?= __('list_empty') ?></div>
         <?php endif ?>
     </div>
-    <?php endforeach ?>
+    <div class="list-footer"><?= __('total') ?>:&#160;<?= $this->total ?></div>
 
-<ul class="nav">
-    <li><h2><?= __('total') ?>:&#160;<?= $this->total ?></h2></li>
-</ul>
-
-<?php if ($this->total > Vars::$USER_SET['page_size']): ?>
-    <div class="align-center">
-        <?= Functions::displayPagination($this->uri . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
-        <form action="<?= $this->uri ?>" method="post">
-            <input class="mini" type="text" name="page" size="2"/>
-            <input type="submit" value="<?= __('to_page') ?> &gt;&gt;"/>
-        </form>
-    </div>
+    <?php if ($this->total > Vars::$USER_SET['page_size']): ?>
+    <?= Functions::displayPagination($this->uri . '?', Vars::$START, $this->total, Vars::$USER_SET['page_size']) ?>
     <?php endif ?>
-<?php else: ?>
-<div class="form-container">
-    <div class="form-block align-center"><?= __('list_empty') ?></div>
 </div>
-<?php endif ?>
-
-<?php if (Vars::$USER_RIGHTS >= 7): ?>
-<div class="btn-panel">
-    <a class="btn" href="<?= $this->uri ?>add/"><i class="icn-edit"></i><?= __('add') ?></a>
-    <a class="btn" href="<?= $this->uri ?>admin/"><i class="icn-settings"></i><?= __('settings') ?></a>
-</div>
-<?php endif ?>

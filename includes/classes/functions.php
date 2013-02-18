@@ -193,7 +193,6 @@ class Functions extends Vars
 
     /**
      * Постраничная навигация
-     * За основу взята доработанная функция от форума SMF 2.x.x
      *
      * @param string $url
      * @param int    $start
@@ -204,39 +203,63 @@ class Functions extends Vars
      */
     public static function displayPagination($url, $start, $total, $pagesize)
     {
-        $neighbors = 2;
-        if ($start >= $total)
+        $neighbors = 1;
+        if ($start >= $total) {
             $start = max(0, (int)$total - (((int)$total % (int)$pagesize) == 0 ? $pagesize : ((int)$total % (int)$pagesize)));
-        else
+        } else {
             $start = max(0, (int)$start - ((int)$start % (int)$pagesize));
-        $base_link = '<a class="pagenav" href="' . strtr($url, array('%' => '%%')) . 'page=%d' . '">%s</a>';
-        $out[] = $start == 0 ? '' : sprintf($base_link, $start / $pagesize, '&lt;&lt;');
-        if ($start > $pagesize * $neighbors)
-            $out[] = sprintf($base_link, 1, '1');
-        if ($start > $pagesize * ($neighbors + 1))
-            $out[] = '<span style="font-weight: bold;">...</span>';
-        for ($nCont = $neighbors; $nCont >= 1; $nCont--)
-            if ($start >= $pagesize * $nCont) {
-                $tmpStart = $start - $pagesize * $nCont;
-                $out[] = sprintf($base_link, $tmpStart / $pagesize + 1, $tmpStart / $pagesize + 1);
-            }
-        $out[] = '<span class="currentpage"><b>' . ($start / $pagesize + 1) . '</b></span>';
-        $tmpMaxPages = (int)(($total - 1) / $pagesize) * $pagesize;
-        for ($nCont = 1; $nCont <= $neighbors; $nCont++)
-            if ($start + $pagesize * $nCont <= $tmpMaxPages) {
-                $tmpStart = $start + $pagesize * $nCont;
-                $out[] = sprintf($base_link, $tmpStart / $pagesize + 1, $tmpStart / $pagesize + 1);
-            }
-        if ($start + $pagesize * ($neighbors + 1) < $tmpMaxPages)
-            $out[] = '<span style="font-weight: bold;">...</span>';
-        if ($start + $pagesize * $neighbors < $tmpMaxPages)
-            $out[] = sprintf($base_link, $tmpMaxPages / $pagesize + 1, $tmpMaxPages / $pagesize + 1);
-        if ($start + $pagesize < $total) {
-            $display_page = ($start + $pagesize) > $total ? $total : ($start / $pagesize + 2);
-            $out[] = sprintf($base_link, $display_page, '&gt;&gt;');
+        }
+        $base_link = '<a class="btn%s" href="' . strtr($url, array('%' => '%%')) . 'page=%d' . '">%s</a>';
+
+        // Кнопка "Назад"
+        $out[] = $start == 0 ? '' : '<a class="btn previous" href="' . $url . 'page=' . ($start / $pagesize) . '">«</a>';
+
+        // Кнопка 1-й страницы
+        if ($start > $pagesize * $neighbors) {
+            $out[] = '<a class="btn pbtn" href="' . $url . 'page=1">1</a>';
         }
 
-        return implode(' ', $out);
+        if ($start > $pagesize * ($neighbors + 1)) {
+            $out[] = ' ';
+        }
+
+        // Кнопки слева от текущей
+        for ($nCont = $neighbors; $nCont >= 1; $nCont--) {
+            if ($start >= $pagesize * $nCont) {
+                $tmpStart = $start - $pagesize * $nCont;
+                $out[] = '<a class="btn pbtn" href="' . $url . 'page=' . ($tmpStart / $pagesize + 1) . '">' . ($tmpStart / $pagesize + 1) . '</a>';
+            }
+        }
+
+        // Кнопка текущей страницы
+        $out[] = '<a class="btn btn-primary pbtn" href="' . $url . 'page=' . ($start / $pagesize + 1) . '">' . ($start / $pagesize + 1) . '</a>';
+
+        $tmpMaxPages = (int)(($total - 1) / $pagesize) * $pagesize;
+
+        // Кнопки справа от текущей
+        for ($nCont = 1; $nCont <= $neighbors; $nCont++) {
+            if ($start + $pagesize * $nCont <= $tmpMaxPages) {
+                $tmpStart = $start + $pagesize * $nCont;
+                $out[] = '<a class="btn pbtn" href="' . $url . 'page=' . ($tmpStart / $pagesize + 1) . '">' . ($tmpStart / $pagesize + 1) . '</a>';
+            }
+        }
+
+        if ($start + $pagesize * ($neighbors + 1) < $tmpMaxPages) {
+            $out[] = ' ';
+        }
+
+        // Кнопка последней страницы
+        if ($start + $pagesize * $neighbors < $tmpMaxPages) {
+            $out[] = '<a class="btn pbtn" href="' . $url . 'page=' . ($tmpMaxPages / $pagesize + 1) . '">' . ($tmpMaxPages / $pagesize + 1) . '</a>';
+        }
+
+        // Кнопка "Вперед"
+        if ($start + $pagesize < $total) {
+            $display_page = ($start + $pagesize) > $total ? $total : ($start / $pagesize + 2);
+            $out[] = sprintf($base_link, ' next', $display_page, '»');
+        }
+
+        return '<div class="pagination"><div class="inline-block">' . implode($out) . '</div></div>';
     }
 
     /**

@@ -20,11 +20,13 @@ $form
     ->fieldset(__('add_article'))
 
     ->add('text', 'name', array(
-    'label' => __('article_title')))
+    'label'    => __('article_title'),
+    'required' => TRUE))
 
     ->add('textarea', 'text', array(
     'label'   => __('text'),
-    'toolbar' => !Vars::$IS_MOBILE))
+    'toolbar' => !Vars::$IS_MOBILE,
+    'required' => TRUE))
 
     ->fieldset()
 
@@ -39,19 +41,20 @@ $tpl->form = $form->build();
 if ($form->isValid) {
     $STH = DB::PDO()->prepare('
         INSERT INTO `cms_news` SET
-        `time`      = :time,
-        `author`    = :author,
-        `author_id` = :uid,
-        `name`      = :name,
-        `text`      = :text
+        `time`      = ?,
+        `author`    = ?,
+        `author_id` = ?,
+        `name`      = ?,
+        `text`      = ?
     ');
 
-    $STH->bindValue(':time', time());
-    $STH->bindValue(':author', Vars::$USER_NICKNAME);
-    $STH->bindValue(':uid', Vars::$USER_ID);
-    $STH->bindValue(':name', $form->output['name']);
-    $STH->bindValue(':text', $form->output['text']);
-    $STH->execute();
+    $STH->execute(array(
+        time(),
+        Vars::$USER_NICKNAME,
+        Vars::$USER_ID,
+        $form->output['name'],
+        $form->output['text']
+    ));
     $STH = NULL;
 
     DB::PDO()->query('UPDATE `users` SET `lastpost` = ' . time() . ' WHERE `id` = ' . Vars::$USER_ID);
