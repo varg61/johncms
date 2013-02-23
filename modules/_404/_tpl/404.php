@@ -1,1 +1,0 @@
-<?= Functions::displayError(__('error_404')) ?>

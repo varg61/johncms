@@ -1,0 +1,39 @@
+*english version below*
+
+--------------------------------------------------------------------------------
+JohnCMS
+Обновление 4.4.0 - 4.5.1
+--------------------------------------------------------------------------------
+ВНИМАНИЕ!!!
+Данный пакет предназначен для обновления JohnCMS с версии 4.4.0 до 4.5.1
+С другими версиями несовместим!
+
+Если Вы использовали на своем сайте какие-либо моды, затрагивающие файлы
+которые входят в данный пакет, то возможность обновления и саму процедуру
+согласовывайте с авторами модов.
+
+Перед обновлением, ОБЯЗАТЕЛЬНО сделайте резервные копии сайта и базы данных.
+
+ПРОЦЕДУРА ОБНОВЛЕНИЯ
+    1) Загружаем распакованный пакет обновлений на сервер, с заменой всех файлов
+    2) Запускаем процедуру обновления по адресу http://ваш_сайт/install
+    3) Удаляем папку /install
+
+
+--------------------------------------------------------------------------------
+JohnCMS
+Update 4.4.0 - 4.5.1
+--------------------------------------------------------------------------------
+ATTENTION!!!
+This package is designed to update JohnCMS with version 4.4.0 to 4.5.1
+Not compatible with other versions!
+
+If you used on your site any mods that affect files within this package,
+the ability to update and the process itself coordinate with the authors of the mods.
+
+Prior to upgrading, BE SURE to backup your site and database.
+
+UPDATING PROCEDURE
+    1) Upoad the unzipped Service Pack to the server, and replace all files
+    2) Run the upgrade procedure at http://your_site/install
+    3) Delete folder /install

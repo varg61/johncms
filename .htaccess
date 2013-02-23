@@ -1,13 +1,22 @@
 Options -Indexes
-ErrorDocument 402 http://johncms.com/404.php
-ErrorDocument 403 http://johncms.com/404.php
-ErrorDocument 404 http://johncms.com/404.php
-ErrorDocument 500 http://johncms.com/404.php
+ErrorDocument 402 http://johncms.com/?err
+ErrorDocument 403 http://johncms.com/?err
+ErrorDocument 404 http://johncms.com/?err
+ErrorDocument 500 http://johncms.com/?err
 DirectoryIndex index.php
 
 RemoveHandler .phtml .php3 .php4 .php5 .php6 .phps .cgi .pl .asp .aspx .shtml .shtm .fcgi .fpl .jsp .py
 AddType application/x-httpd-php-source .phtml .php3 .php4 .php5 .php6 .phps .cgi .pl .asp .aspx .shtml .shtm .fcgi .fpl .jsp .py
 
+php_flag display_errors 0
+php_value error_reporting 7
+php_value register_globals 0
+php_flag session.use_trans_sid off
+php_value magic_quotes_gpc 0
+php_value magic_quotes_runtime 0
+php_value magic_quotes_sybase 0
+php_value allow_url_fopen 0
+php_value arg_separator.output "&amp;"
 AddDefaultCharset UTF-8
 
 <IfModule mod_expires.c>
@@ -19,14 +28,6 @@ AddDefaultCharset UTF-8
 </IfModule>
 
 RewriteEngine On
-
-RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
-RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
-RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
-RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
-RewriteRule .* index.php [F]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !=/favicon.ico
-RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
+RewriteCond %{REQUEST_METHOD} ^TRACE
+RewriteCond %{HTTP:range} !(^bytes=[^,]+(,[^,]+){0,4}$|^$)
+RewriteRule .* - [F]
