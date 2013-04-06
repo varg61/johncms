@@ -18,6 +18,7 @@ define('UPDATE_VERSION', '4.4.0');  // Обновление с версии
 // Задаем режим работы инсталлятора
 define('MODE', 'install');
 //define('MODE', 'update_440');
+//define('MODE', 'update_45x');
 
 class install
 {
