@@ -151,6 +151,7 @@ switch ($act) {
                     `about` = '',
                     `set_user` = '',
                     `set_forum` = '',
+                    `set_mail` = '',
                     `smileys` = '',
                     `rights` = '9',
                     `ip` = '" . ip2long($_SERVER["REMOTE_ADDR"]) . "',

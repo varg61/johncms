@@ -12,12 +12,12 @@
 define('_IN_JOHNCMS', 1);
 set_time_limit(1200);
 
-define('INSTALL_VERSION', '4.5.1'); // Инсталлируемая версия
-define('UPDATE_VERSION', '4.5.0');  // Обновление с версии
+define('INSTALL_VERSION', '4.6.0'); // Инсталлируемая версия
+define('UPDATE_VERSION', '4.4.0');  // Обновление с версии
 
 // Задаем режим работы инсталлятора
 define('MODE', 'install');
-//define('MODE', 'update_440-451');
+//define('MODE', 'update_440');
 
 class install
 {
@@ -38,7 +38,7 @@ class install
         '/files/users/album/',
         '/files/users/avatar/',
         '/files/users/photo/',
-        '/files/users/pm/',
+        '/files/mail/',
         '/gallery/foto/',
         '/gallery/temp/',
         '/incfiles/',
