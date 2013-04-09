@@ -54,3 +54,5 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES ('reg_message', '');
 INSERT INTO `cms_settings` ( `key` ,`val` )VALUES ('setting_mail', '');
 
 ALTER TABLE `users` ADD `set_mail` TINYTEXT NOT NULL AFTER `set_forum`;
+ALTER TABLE  `users` CHANGE  `karma_plus`  `karma_plus` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `users` CHANGE  `karma_minus`  `karma_minus` INT NOT NULL DEFAULT  '0';

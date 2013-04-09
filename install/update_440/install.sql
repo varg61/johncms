@@ -150,12 +150,7 @@ ALTER TABLE `users` CHANGE `movings` `movings` INT UNSIGNED NOT NULL DEFAULT '0'
 ALTER TABLE `users` CHANGE `place` `place` VARCHAR( 30 ) NOT NULL DEFAULT '';
 ALTER TABLE `users` CHANGE `karma_time` `karma_time` INT UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `users` CHANGE `karma_off` `karma_off` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0';
-ALTER TABLE `users` ADD `set_mail` TINYTEXT NOT NULL AFTER `set_forum`;
 OPTIMIZE TABLE `users`;
-
-INSERT INTO `cms_settings` (`key`, `val`) VALUES ('them_message', '');
-INSERT INTO `cms_settings` (`key`, `val`) VALUES ('reg_message', '');
-INSERT INTO `cms_settings` ( `key` ,`val` )VALUES ('setting_mail', '');
 
 --
 -- Структура таблицы `cms_contact`
@@ -207,3 +202,11 @@ CREATE TABLE IF NOT EXISTS `cms_mail` (
 )
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8;
+
+INSERT INTO `cms_settings` (`key`, `val`) VALUES ('them_message', '');
+INSERT INTO `cms_settings` (`key`, `val`) VALUES ('reg_message', '');
+INSERT INTO `cms_settings` ( `key` ,`val` )VALUES ('setting_mail', '');
+
+ALTER TABLE `users` ADD `set_mail` TINYTEXT NOT NULL AFTER `set_forum`;
+ALTER TABLE  `users` CHANGE  `karma_plus`  `karma_plus` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `users` CHANGE  `karma_minus`  `karma_minus` INT NOT NULL DEFAULT  '0';
