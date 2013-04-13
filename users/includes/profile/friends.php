@@ -116,7 +116,7 @@ if ($id && $id != $user_id && $do) {
 					</div></form></div>';
                 }
             } else {
-                echo functions::display_error($lng_profile['user_is_friends']);
+                echo functions::display_error($lng_profile['already_your_friend']);
             }
             break;
 
