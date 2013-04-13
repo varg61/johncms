@@ -13,6 +13,13 @@ defined('_IN_JOHNCMS') or die('Error: restricted access');
 $textl = $lng['mail'];
 require_once('../incfiles/head.php');
 echo '<div class="phdr"><b>' . $lng_mail['new_messages'] . '</b></div>';
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM (SELECT DISTINCT `user_id` FROM `cms_mail` WHERE `from_id`='$user_id' AND `read`='0' AND `spam`='0') a;"), 0);
+if($total == 1) {
+    //Если все новые сообщения от одного итого же чела показываем сразу переписку
+    $max = mysql_result(mysql_query("SELECT `user_id`, count(*) FROM `cms_mail` WHERE `from_id`='$user_id' AND `read`='0' AND `spam`='0' GROUP BY `user_id`"), 0);
+    Header('Location: index.php?act=write&id='.$max);
+    exit();
+}
 if($total) {
 	if($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>';
 	//Групируем по контактам

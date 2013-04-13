@@ -75,7 +75,7 @@ if (empty($_SESSION['error'])) {
     $_SESSION['error'] = '';
 }
 
-$out .= '<div class="phdr"><b>' . ($id ? $lng_mail['personal_correspondence'] . ' ' . $qs['name'] : $lng_mail['sending_the_message']) . '</b></div>';
+$out .= '<div class="phdr"><b>' . $lng['mail'] . '</b></div>';
 
 if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
     if (!$id) {
@@ -329,8 +329,6 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
             mysql_query("UPDATE `cms_contact` SET `time` = '" . time() . "' WHERE `user_id` = '" . $id . "' AND
 			`from_id` = '" . $user_id . "';");
         }
-
-        $_SESSION['error'] = '<div class="gmenu">' . $lng_mail['message_is_sent'] . '</div>';
         Header('Location: index.php?act=write' . ($id ? '&id=' . $id : ''));
         exit;
     } else {
@@ -339,7 +337,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
 }
 
 if (empty($ban['1']) && empty($ban['3'])) {
-    $out .= $_SESSION['error'];
+    $out .= isset($_SESSION['error']) ? $_SESSION['error'] : '';
     $out .= '<div class="gmenu">
 	<form name="form" action="index.php?act=write' . ($id ? '&amp;id=' . $id : '') . '" method="post"  enctype="multipart/form-data"><div>
 	' . ($id ? '' : '<b>' . $lng_mail['to_whom'] . ':</b><br/>
@@ -361,8 +359,8 @@ if (empty($ban['1']) && empty($ban['3'])) {
 	<br /><span style="font-size: x-small;">' . $lng_mail['max_file_size'] . ': ' . formatsize(1024 * $set['flsz']) . '</span>
 	</p><input type="submit" name="submit" value="' . $lng['sent'] . '"/>
 	</div></form>
-	</div>
-	<div class="phdr"><a href="../pages/faq.php?act=trans">Транслит</a> | <a href="../pages/faq.php?act=smileys">Смайлы</a></div>';
+	</div>' .
+    '<div class="phdr"><b>' . ($id && isset($qs) ? $lng_mail['personal_correspondence'] . ' ' . $qs['name'] : $lng_mail['sending_the_message']) . '</b></div>';
 } else {
     $out .= '<div class="rmenu">' . $lng_mail['user_blocked'] . '</div>';
 }
