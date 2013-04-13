@@ -105,9 +105,12 @@ if ($id && $id != $user_id && $do) {
                         exit;
                     }
                     mysql_query("UPDATE `cms_contact` SET
-					`type`='1' WHERE `user_id`='$user_id' AND `from_id`='$id'");
+					  `type`='1'
+					  WHERE `user_id`='$user_id'
+					  AND `from_id`='$id'
+					");
                     $text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $user_id . ']' . $user['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $user_id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . $home . '/users/profile.php?act=friends&do=no&id=' . $user_id . ']' . $lng_profile['decline'] . '[/url]';
-                    mysql_query("DELETE FROM `cms_mail` WHERE `text`='$text'");
+                    mysql_query("DELETE FROM `cms_mail` WHERE `text`='" . mysql_real_escape_string($text) . "'");
                     echo '<div class="rmenu">' . $lng_profile['demand_cancelled'] . '</div>';
                 } else {
                     echo '<div class="gmenu"><form action="profile.php?act=friends&amp;do=cancel&amp;id=' . $id . '" method="post"><div>
@@ -136,7 +139,7 @@ if ($id && $id != $user_id && $do) {
                             $lng_profile['you_my_relatives']);
 
                         $text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $arr_fr[$res['man']] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=okfriends&id=' . $id . ']' . $lng_profile['confirm'] . '[/url]';
-                        mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
+                        mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='" . mysql_real_escape_string($text) . "'");
                         $arr_fr1 = array(
                             1 => $lng_profile['you_friends'],
                             $lng_profile['you_classfriends'],
@@ -180,19 +183,26 @@ if ($id && $id != $user_id && $do) {
                         exit;
                     }
                     mysql_query("UPDATE `cms_contact` SET
-					`type`='2', `friends`='1' WHERE `user_id`='$user_id' AND `from_id`='$id'");
+					  `type`='2', `friends`='1'
+					  WHERE `user_id`='$user_id'
+					  AND `from_id`='$id'
+					");
                     mysql_query("UPDATE `cms_contact` SET
-					`friends`='1' WHERE `user_id`='$id' AND `from_id`='$user_id'");
+					  `friends`='1'
+					  WHERE `user_id`='$id'
+					  AND `from_id`='$user_id'
+					");
                     $text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $user_id . ']' . $user['name'] . '[/url] ' . $lng_profile['complied_friends'];
                     mysql_query("INSERT INTO `cms_mail` SET
-					`user_id` = '$user_id', 
-					`from_id` = '$id',
-					`text` = '$text',
-					`time` = '" . time() . "',
-					`sys` = '1',
-					`them` = '{$lng_profile['friendship']}'");
+					    `user_id` = '$user_id',
+					    `from_id` = '$id',
+					    `text` = '" . mysql_real_escape_string($text) . "',
+					    `time` = '" . time() . "',
+					    `sys` = '1',
+					    `them` = '{$lng_profile['friendship']}'
+					");
                     $text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=no&id=' . $id . ']' . $lng_profile['decline'] . '[/url]';
-                    mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
+                    mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='" . mysql_real_escape_string($text) . "'");
                     echo '<div class="gmenu"><p>' . $lng_profile['confirmed_friendship'] . ' ' . $result['name'] . ' ' . $lng_profile['your_friend'] . '.</p></div>';
                 } else {
                     echo '<div class="gmenu"><form action="profile.php?act=friends&amp;do=ok&amp;id=' . $id . '" method="post"><div>
@@ -210,17 +220,26 @@ if ($id && $id != $user_id && $do) {
             if ($fr == 2) {
                 if (isset($_POST['submit'])) {
                     mysql_query("UPDATE `cms_contact` SET
-					`type`='1', `friends`='0' WHERE `user_id`='$id' AND `from_id`='$user_id'");
+					  `type`='1',
+					  `friends`='0'
+					  WHERE `user_id`='$id'
+					  AND `from_id`='$user_id'
+					");
                     mysql_query("UPDATE `cms_contact` SET
-					`type`='1', `friends`='0' WHERE `user_id`='$user_id' AND `from_id`='$id'");
+					  `type`='1',
+					  `friends`='0'
+					  WHERE `user_id`='$user_id'
+					  AND `from_id`='$id'
+					");
                     $text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $user_id . ']' . $user['name'] . '[/url] ' . $lng_profile['deleted_you_friends'];
                     mysql_query("INSERT INTO `cms_mail` SET
-					`user_id` = '$user_id', 
-					`from_id` = '$id',
-					`text` = '$text',
-					`time` = '" . time() . "',
-					`sys` = '1',
-					`them` = '{$lng_profile['friendship']}'");
+					    `user_id` = '$user_id',
+					    `from_id` = '$id',
+					    `text` = '" . mysql_real_escape_string($text) . "',
+					    `time` = '" . time() . "',
+					    `sys` = '1',
+					    `them` = '{$lng_profile['friendship']}'
+					");
                     echo '<div class="rmenu">' . $lng_profile['you_deleted_friends'] . '</div>';
                 } else {
                     echo '<div class="gmenu"><form action="profile.php?act=friends&amp;do=delete&amp;id=' . $id . '" method="post"><div>
@@ -248,14 +267,15 @@ if ($id && $id != $user_id && $do) {
 					`type`='1' WHERE `user_id`='$id' AND `from_id`='$user_id'");
                     $text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $user_id . ']' . $user['name'] . '[/url] ' . $lng_profile['canceled_you_demand'];
                     mysql_query("INSERT INTO `cms_mail` SET
-					`user_id` = '$user_id', 
-					`from_id` = '$id',
-					`text` = '$text',
-					`time` = '" . time() . "',
-					`sys` = '1',
-					`them` = '{$lng_profile['friendship']}'");
+					    `user_id` = '$user_id',
+					    `from_id` = '$id',
+					    `text` = '" . mysql_real_escape_string($text) . "',
+					    `time` = '" . time() . "',
+					    `sys` = '1',
+					    `them` = '{$lng_profile['friendship']}'
+					    ");
                     $text = '[url=' . core::$system_set['homeurl'] . '/users/profile.php?user=' . $id . ']' . $result['name'] . '[/url] ' . $lng_profile['offers_friends'] . ' [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=ok&id=' . $id . ']' . $lng_profile['confirm'] . '[/url] | [url=' . core::$system_set['homeurl'] . '/users/profile.php?act=friends&do=no&id=' . $id . ']' . $lng_profile['decline'] . '[/url]';
-                    mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='$text'");
+                    mysql_query("DELETE FROM `cms_mail` WHERE `user_id` = '$id' AND `from_id` = '$user_id' AND `text`='" . mysql_real_escape_string($text) . "'");
                     echo '<div class="rmenu">' . $lng_profile['canceled_demand'] . '</div>';
                 } else {
                     echo '<div class="gmenu"><form action="profile.php?act=friends&amp;do=no&amp;id=' . $id . '" method="post"><div>
@@ -289,10 +309,7 @@ if ($id && $id != $user_id && $do) {
             $nav = '';
         }
         //Получаем список контактов
-        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact`
-		LEFT JOIN `users` ON `cms_contact`.`from_id`=`users`.`id`
-		WHERE `cms_contact`.`user_id`='{$user['id']}' AND `cms_contact`.`type`='2' AND `cms_contact`.`friends`='1' AND `cms_contact`.`ban`!='1'$sql
-		"), 0);
+        $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact` WHERE `user_id`='{$user['id']}' AND `type`='2' AND `friends`='1' AND `ban`!='1'" . $sql), 0);
         if ($total) {
             $req = mysql_query("SELECT `users`.* FROM `cms_contact`
 			LEFT JOIN `users` ON `cms_contact`.`from_id`=`users`.`id`

@@ -10,16 +10,9 @@
  */
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM (SELECT DISTINCT `user_id` FROM `cms_mail` WHERE `from_id`='$user_id' AND `read`='0' AND `spam`='0') a;"), 0);
-if($total == 1) {
-	//Если все новые сообщения от одного итого же чела показываем сразу переписку
-	$max = mysql_result(mysql_query("SELECT `user_id`, count(*) FROM `cms_mail` WHERE `from_id`='$user_id' AND `read`='0' AND `spam`='0' GROUP BY `user_id`;"), 0);
-	Header('Location: index.php?act=write&id='.$max);
-	exit();
-}
 $textl = $lng['mail'];
 require_once('../incfiles/head.php');
-echo '<div class="phdr"><h3>' . $lng_mail['new_messages'] . '</h3></div>';
+echo '<div class="phdr"><b>' . $lng_mail['new_messages'] . '</b></div>';
 if($total) {
 	if($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>';
 	//Групируем по контактам
@@ -40,17 +33,15 @@ if($total) {
 		echo functions::display_user($row, $arg);
 		echo '</div>';
 	}
-	echo '<div class="phdr">' . $lng['total'] . ': ' . $new_mail . '</div>';
-	//Навигация
-	if ($total > $kmess) {
-		echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>';
-		echo '<p><form action="index.php" method="get">
+} else {
+	echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+}
+echo '<div class="phdr">' . $lng['total'] . ': ' . $new_mail . '</div>';
+if ($total > $kmess) {
+    echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;', $start, $total, $kmess) . '</div>';
+    echo '<p><form action="index.php" method="get">
 		<input type="hidden" name="act" value="new"/>
 		<input type="text" name="page" size="2"/>
 		<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
-	}
-	echo '<div class="bmenu"><a href="../">' . $lng_mail['in_office'] . '</a></div>';
-} else {
-	echo '<div class="rmenu">' . $lng_mail['not_new_messages'] . '</div>';
-	echo '<div class="bmenu"><a href="../">' . $lng_mail['in_office'] . '</a></div>';
 }
+echo '<p><a href="../">' . $lng['personal'] . '</a></p>';

@@ -53,7 +53,6 @@ if ($id) {
                         }
                     }
                 }
-                mysql_query("OPTIMIZE TABLE `cms_mail`");
             }
             echo '<div class="gmenu">' . $lng_mail['messages_are_removed'] . '</div>';
         } else {
@@ -262,7 +261,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
             mysql_query("INSERT INTO `cms_contact` SET
 			`user_id` = '" . $user_id . "',
 			`from_id` = '" . $id . "',
-			`time` = '" . time() . "';");
+			`time` = '" . time() . "'");
             $ch = 1;
         }
         $q1 = mysql_query("SELECT * FROM `cms_contact`
@@ -271,7 +270,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
             mysql_query("INSERT INTO `cms_contact` SET
 			`user_id` = '" . $id . "',
 			`from_id` = '" . $user_id . "',
-			`time` = '" . time() . "';");
+			`time` = '" . time() . "'");
             $ch = 1;
         }
 
@@ -320,7 +319,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
 		`from_id` = '" . $id . "',
 		`text` = '" . mysql_real_escape_string($text) . "',
 		`time` = '" . time() . "',
-		`file_name` = '" . $newfile . "',
+		`file_name` = '" . mysql_real_escape_string($newfile) . "',
 		`size` = '" . $sizefile . "'") or die(mysql_error());
 
         mysql_query("UPDATE `users` SET `lastpost` = '" . time() . "' WHERE `id` = '$user_id';");

@@ -34,7 +34,6 @@ if ($id) {
                                 @unlink('../files/mail/' . $row['file_name']);
                         }
                         mysql_query("DELETE FROM `cms_mail` WHERE `id`='{$row['id']}' LIMIT 1");
-                        mysql_query("OPTIMIZE TABLE `cms_mail`");
                     } else {
                         if ($row['read'] == 0 && $row['user_id'] == $user_id) {
                             if ($row['file_name']) {
@@ -42,7 +41,6 @@ if ($id) {
                                     @unlink('../files/mail/' . $row['file_name']);
                             }
                             mysql_query("DELETE FROM `cms_mail` WHERE `id`='{$row['id']}' LIMIT 1");
-                            mysql_query("OPTIMIZE TABLE `cms_mail`");
                         } else {
                             mysql_query("UPDATE `cms_mail` SET `delete` = '" . $user_id . "' WHERE `id` = '" . $row['id'] . "' LIMIT 1");
                         }
@@ -51,7 +49,6 @@ if ($id) {
             }
             //Удаляем контакт
             mysql_query("DELETE FROM `cms_contact` WHERE `user_id`='$user_id' AND `from_id`='$id' LIMIT 1");
-            mysql_query("OPTIMIZE TABLE `cms_contact`");
             echo '<div class="gmenu">' . $lng_mail['contact_delete'] . '</div>';
         } else {
             echo '

@@ -17,8 +17,7 @@ require_once('../incfiles/head.php');
 
 echo '<div class="phdr"><b>' . $lng['files'] . '</b></div>';
 //Отображаем список файлов
-$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail`
-WHERE (`user_id`='$user_id' OR `from_id`='$user_id') AND `delete`!='$user_id' AND `file_name`!='';"), 0);
+$total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE (`user_id`='$user_id' OR `from_id`='$user_id') AND `delete`!='$user_id' AND `file_name`!=''"), 0);
 if ($total) {
 	if($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=files&amp;', $start, $total, $kmess) . '</div>';
 	$req = mysql_query("SELECT * FROM `cms_mail` WHERE (`user_id`='$user_id' OR `from_id`='$user_id') AND `delete`!='$user_id' AND `file_name`!=''  ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);

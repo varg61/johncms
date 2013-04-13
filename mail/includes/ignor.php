@@ -19,7 +19,7 @@ echo '<div class="phdr"><b>' . $lng_mail['blocklist'] . '</b></div>';
 if (isset($_GET['del'])) {
     if ($id) {
         //Проверяем существование пользователя
-        $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1;");
+        $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
         if (mysql_num_rows($req) == 0) {
             echo functions::display_error($lng['error_user_not_exist']);
             require_once("../incfiles/end.php");
@@ -27,8 +27,7 @@ if (isset($_GET['del'])) {
         }
         //Удаляем из заблокированных
         if (isset($_POST['submit'])) {
-            $q = mysql_query("SELECT * FROM `cms_contact`
-			WHERE `user_id`='" . $user_id . "' AND `from_id`='" . $id . "' AND `ban`='1';");
+            $q = mysql_query("SELECT * FROM `cms_contact` WHERE `user_id`='" . $user_id . "' AND `from_id`='" . $id . "' AND `ban`='1'");
             if (mysql_num_rows($q) == 0) {
                 echo '<div class="rmenu">' . $lng_mail['user_not_block'] . '</div>';
             } else {

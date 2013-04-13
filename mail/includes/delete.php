@@ -30,7 +30,6 @@ if ($id) {
         //Удаляем системное сообщение
         if ($res['sys']) {
             mysql_query("DELETE FROM `cms_mail` WHERE `from_id`='$user_id' AND `id` = '$id' AND `sys`='1' LIMIT 1");
-            mysql_query("OPTIMIZE TABLE `cms_mail`");
             echo '<div class="gmenu">' . $lng_mail['messages_delete_ok'] . '</div>';
             echo '<div class="bmenu"><a href="index.php?act=systems">' . $lng['back'] . '</a></div>';
         } else {
@@ -40,7 +39,6 @@ if ($id) {
                 if ($res['file_name'])
                     @unlink('../files/mail/' . $res['file_name']);
                 mysql_query("DELETE FROM `cms_mail` WHERE `user_id`='$user_id' AND `id` = '$id' LIMIT 1");
-                mysql_query("OPTIMIZE TABLE `cms_mail`");
             } else {
                 //Удаляем остальные сообщения
                 if ($res['delete']) {
@@ -48,7 +46,6 @@ if ($id) {
                     if ($res['file_name'])
                         @unlink('../files/mail/' . $res['file_name']);
                     mysql_query("DELETE FROM `cms_mail` WHERE (`user_id`='$user_id' OR `from_id`='$user_id') AND `id` = '$id' LIMIT 1");
-                    mysql_query("OPTIMIZE TABLE `cms_mail`");
                 } else {
                     mysql_query("UPDATE `cms_mail` SET `delete` = '$user_id' WHERE `id` = '$id' LIMIT 1");
                 }
