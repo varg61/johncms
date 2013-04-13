@@ -160,9 +160,10 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     echo '<br />' .
         '<div><img src="../images/photo.gif" width="16" height="16"/>&#160;<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng['photo_album'] . '</a>&#160;(' . $total_photo . ')</div>' .
         '<div><img src="../images/guestbook.gif" width="16" height="16"/>&#160;<a href="profile.php?act=guestbook&amp;user=' . $user['id'] . '">' . $lng['guestbook'] . '</a>&#160;(' . $user['comm_count'] . ')</div>' .
-        '<div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="profile.php?act=friends&amp;user=' . $user['id'] . '">' . $lng_profile['friends'] . '</a>&#160;(' . $total_friends . ')</div>';
+        '<div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="profile.php?act=friends&amp;user=' . $user['id'] . '">' . $lng_profile['friends'] . '</a>&#160;(' . $total_friends . ')</div>' .
+        '</p></div>';
     if ($user['id'] != $user_id) {
-        echo '</div><div class="menu">';
+        echo '<div class="menu"><p>';
         // Контакты
         $contacts = mysql_query("SELECT * FROM `cms_contact` WHERE `user_id`='" . $user_id . "' AND `from_id`='" . $user['id'] . "';");
         $result = mysql_fetch_assoc($contacts);
@@ -201,8 +202,8 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         if ($result['ban'] == 0 && empty($ban['1']) && empty($ban['3'])) {
             echo '<br/><div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="../mail/index.php?act=write&amp;id=' . $user['id'] . '">' . $lng['write'] . '</a></div>';
         }
+        echo '</p></div>';
     }
-    echo '</p></div>';
     echo '<div class="phdr"><a href="index.php">' . $lng['users'] . '</a></div>';
 }
 
