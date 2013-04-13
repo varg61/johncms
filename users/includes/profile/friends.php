@@ -514,31 +514,30 @@ if ($id && $id != $user_id && $do) {
                         echo functions::display_user($row, $arg);
                         echo '</div>';
                     }
-                    echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
-                    //Навигация
-                    if ($total > $kmess) {
-                        echo '<p>' . functions::display_pagination('profile.php?act=friends' . $nav . '&amp;', $start, $total, $kmess) . '</p>';
-                        echo '<p><form action="profile.php" method="get">
-					<input type="hidden" name="act" value="friends"/>
-					' . ($nav ? '<input type="hidden" name="sort" value="' . $sort . '"/>' : '') . '
-					<input type="text" name="page" size="2"/>
-					<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
-                    }
                 } else {
-                    echo '<div class="rmenu">' . $lng_profile['not_friends'] . '</div>';
+                    echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';
+                }
+                echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>';
+                if ($total > $kmess) {
+                    echo'<p>' . functions::display_pagination('profile.php?act=friends' . $nav . '&amp;', $start, $total, $kmess) . '</p>' .
+                        '<p><form action="profile.php" method="get">' .
+                        '<input type="hidden" name="act" value="friends"/>' .
+                        ($nav ? '<input type="hidden" name="sort" value="' . $sort . '"/>' : '') .
+                        '<input type="text" name="page" size="2"/>' .
+                        '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
                 }
                 if ($set_mail['cat_friends']) {
-                    echo '<div class="menu"><form action="profile.php?act=friends" method="post"><div>
-				<select name="sort">
-				<option value="0">Все</option>
-				<option value="1"' . ($sort == 1 ? ' selected="selected"' : '') . '>' . $lng_profile['friend'] . '</option>
-				<option value="2"' . ($sort == 2 ? ' selected="selected"' : '') . '>' . $lng_profile['classfriend'] . '</option>
-				<option value="3"' . ($sort == 3 ? ' selected="selected"' : '') . '>' . $lng_profile['colleague'] . '</option>
-				<option value="4"' . ($sort == 4 ? ' selected="selected"' : '') . '>' . $lng_profile['best_friend'] . '</option>
-				<option value="5"' . ($sort == 5 ? ' selected="selected"' : '') . '>' . $lng_profile['classmate'] . '</option>
-				<option value="6"' . ($sort == 6 ? ' selected="selected"' : '') . '>' . $lng_profile['relative'] . '</option>
-				</select>
-				<input type="submit" value="' . $lng_profile['sea_friends'] . ' &gt;&gt;"/></div></form></div>';
+                    echo'<div class="menu"><form action="profile.php?act=friends" method="post"><div>' .
+                        '<select name="sort">' .
+                        '<option value="0">Все</option>' .
+                        '<option value="1"' . ($sort == 1 ? ' selected="selected"' : '') . '>' . $lng_profile['friend'] . '</option>' .
+                        '<option value="2"' . ($sort == 2 ? ' selected="selected"' : '') . '>' . $lng_profile['classfriend'] . '</option>' .
+                        '<option value="3"' . ($sort == 3 ? ' selected="selected"' : '') . '>' . $lng_profile['colleague'] . '</option>' .
+                        '<option value="4"' . ($sort == 4 ? ' selected="selected"' : '') . '>' . $lng_profile['best_friend'] . '</option>' .
+                        '<option value="5"' . ($sort == 5 ? ' selected="selected"' : '') . '>' . $lng_profile['classmate'] . '</option>' .
+                        '<option value="6"' . ($sort == 6 ? ' selected="selected"' : '') . '>' . $lng_profile['relative'] . '</option>' .
+                        '</select>' .
+                        '<input type="submit" value="' . $lng_profile['sea_friends'] . ' &gt;&gt;"/></div></form></div>';
                 }
         }
         echo '<p><a href="profile.php?act=office">' . $lng['personal'] . '</a></p>';
