@@ -29,7 +29,7 @@ if ($id) {
     if ($mod == 'clear') {
         $textl = $lng['mail'];
         require_once('../incfiles/head.php');
-
+        echo'<div class="phdr"><b>' . $lng_mail['clear_messages'] . '</b></div>';
         if (isset($_POST['clear'])) {
             $count_message = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE ((`user_id`='$id' AND `from_id`='$user_id') OR (`user_id`='$user_id' AND `from_id`='$id')) AND `delete`!='$user_id';"), 0);
             if ($count_message) {
@@ -54,18 +54,17 @@ if ($id) {
                     }
                 }
             }
-            echo '<div class="gmenu">' . $lng_mail['messages_are_removed'] . '</div>';
+            echo '<div class="gmenu"><p>' . $lng_mail['messages_are_removed'] . '</p></div>';
         } else {
-            echo '
-			<div class="rmenu">' . $lng_mail['really_messages_removed'] . '</div>
-			<div class="gmenu">
-			<form action="index.php?act=write&amp;mod=clear&amp;id=' . $id . '" method="post"><div>
-			<input type="submit" name="clear" value="' . $lng['delete'] . '"/>
-			</div></form>
+            echo '<div class="rmenu">
+			<form action="index.php?act=write&amp;mod=clear&amp;id=' . $id . '" method="post">
+			<p>' . $lng_mail['really_messages_removed'] . '</p>
+			<p><input type="submit" name="clear" value="' . $lng['delete'] . '"/></p>
+			</form>
 			</div>';
         }
-        echo '<div class="menu"><a href="index.php?act=write&amp;id=' . $id . '">' . $lng['back'] . '</a></div>';
-        echo '<div class="menu"><a href="../users/profile.php?act=office">' . $lng_mail['in_office'] . '</a></div>';
+        echo '<div class="phdr"><a href="index.php?act=write&amp;id=' . $id . '">' . $lng['back'] . '</a></div>';
+        echo '<p><a href="../users/profile.php?act=office">' . $lng['personal'] . '</a></p>';
         require_once('../incfiles/end.php');
         exit;
     }
