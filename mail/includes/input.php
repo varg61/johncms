@@ -26,7 +26,7 @@ AND `cms_mail`.`sys`='0' AND `cms_mail`.`delete`!='$user_id'
 AND `cms_contact`.`ban`!='1' AND `cms_mail`.`spam`!='1'"), 0);
 
 if ($count) {
-    $req = mysql_query("SELECT `users`.*, `cms_mail`.`text`, `cms_mail`.`time`
+    $req = mysql_query("SELECT `users`.*, `cms_mail`.`text`, `cms_mail`.`time`, `cms_mail`.`read`
 		FROM `cms_mail`
 		LEFT JOIN `users` ON `cms_mail`.`user_id`=`users`.`id`
 		LEFT JOIN `cms_contact` ON `cms_mail`.`user_id`=`cms_contact`.`from_id`
@@ -40,7 +40,11 @@ if ($count) {
 		LIMIT " . $start . "," . $kmess);
     $i = 1;
     while ($row = mysql_fetch_assoc($req)) {
-        echo $i % 2 ? '<div class="list1">' : '<div class="list2">';
+        if(!$row['read']){
+            echo '<div class="gmenu">';
+        } else{
+            echo $i % 2 ? '<div class="list1">' : '<div class="list2">';
+        }
         $subtext = '<a href="index.php?act=write&amp;id=' . $row['id'] . '">' . $lng_mail['correspondence'] . '</a> | <a href="index.php?act=deluser&amp;id=' . $row['id'] . '">' . $lng['delete'] . '</a> | <a href="index.php?act=ignor&amp;id=' . $row['id'] . '&amp;add">' . $lng_mail['ban_contact'] . '</a>';
 
         $arg = array(

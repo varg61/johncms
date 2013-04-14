@@ -338,7 +338,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
 
 if (empty($ban['1']) && empty($ban['3'])) {
     $out .= isset($_SESSION['error']) ? $_SESSION['error'] : '';
-    $out .= '<div class="gmenu">
+    $out .= '<div class="menu">
 	<form name="form" action="index.php?act=write' . ($id ? '&amp;id=' . $id : '') . '" method="post"  enctype="multipart/form-data"><div>
 	' . ($id ? '' : '<b>' . $lng_mail['to_whom'] . ':</b><br/>
 	<input type="text" name="nick" maxlength="15" value="' . (!empty($_POST['nick']) ? functions::check($_POST['nick']) : '') . '" /><br />') . '
@@ -373,7 +373,11 @@ if ($id) {
         $i = 1;
         $mass_read = array();
         while (($row = mysql_fetch_assoc($req)) !== FALSE) {
-            $out .= $i % 2 ? '<div class="list1">' : '<div class="list2">';
+            if(!$row['read']){
+                $out .= '<div class="gmenu">';
+            }else{
+                $out .= $i % 2 ? '<div class="list1">' : '<div class="list2">';
+            }
             if ($row['read'] == 0 && $row['from_id'] == $user_id)
                 $mass_read[] = $row['mid'];
             $post = $row['text'];
