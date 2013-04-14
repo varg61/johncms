@@ -338,7 +338,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
 
 if (empty($ban['1']) && empty($ban['3'])) {
     $out .= isset($_SESSION['error']) ? $_SESSION['error'] : '';
-    $out .= '<div class="menu">
+    $out .= '<div class="gmenu">
 	<form name="form" action="index.php?act=write' . ($id ? '&amp;id=' . $id : '') . '" method="post"  enctype="multipart/form-data"><div>
 	' . ($id ? '' : '<b>' . $lng_mail['to_whom'] . ':</b><br/>
 	<input type="text" name="nick" maxlength="15" value="' . (!empty($_POST['nick']) ? functions::check($_POST['nick']) : '') . '" /><br />') . '
@@ -360,7 +360,7 @@ if (empty($ban['1']) && empty($ban['3'])) {
 	</p><input type="submit" name="submit" value="' . $lng['sent'] . '"/>
 	</div></form>
 	</div>' .
-    '<div class="phdr"><b>' . ($id && isset($qs) ? $lng_mail['personal_correspondence'] . ' ' . $qs['name'] : $lng_mail['sending_the_message']) . '</b></div>';
+        '<div class="phdr"><b>' . ($id && isset($qs) ? $lng_mail['personal_correspondence'] . ' ' . $qs['name'] : $lng_mail['sending_the_message']) . '</b></div>';
 } else {
     $out .= '<div class="rmenu">' . $lng_mail['user_blocked'] . '</div>';
 }
@@ -373,10 +373,14 @@ if ($id) {
         $i = 1;
         $mass_read = array();
         while (($row = mysql_fetch_assoc($req)) !== FALSE) {
-            if(!$row['read']){
+            if (!$row['read']) {
                 $out .= '<div class="gmenu">';
-            }else{
-                $out .= $i % 2 ? '<div class="list1">' : '<div class="list2">';
+            } else {
+                if ($row['from_id'] == $user_id) {
+                    $out .= '<div class="list2">';
+                } else {
+                    $out .= '<div class="list1">';
+                }
             }
             if ($row['read'] == 0 && $row['from_id'] == $user_id)
                 $mass_read[] = $row['mid'];
@@ -388,10 +392,12 @@ if ($id) {
                 $post .= '<div class="func">' . $lng_mail['file'] . ': <a href="index.php?act=load&amp;id=' . $row['mid'] . '">' . $row['file_name'] . '</a> (' . formatsize($row['size']) . ')(' . $row['count'] . ')</div>';
             $subtext = '<a href="index.php?act=delete&amp;id=' . $row['mid'] . '">' . $lng['delete'] . '</a>';
             $arg = array(
-                'header' => '(' . functions::display_date($row['mtime']) . ')',
-                'body'   => $post,
-                'sub'    => $subtext
+                'header'  => '(' . functions::display_date($row['mtime']) . ')',
+                'body'    => $post,
+                'sub'     => $subtext,
+                'stshide' => 1
             );
+            core::$user_set['avatar'] = 0;
             $out .= functions::display_user($row, $arg);
             $out .= '</div>';
             ++$i;
