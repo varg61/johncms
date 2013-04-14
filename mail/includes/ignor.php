@@ -72,10 +72,11 @@ if (isset($_GET['del'])) {
                 echo '<div class="rmenu">' . $lng_mail['user_block'] . '</div>';
             }
         } else {
-            echo '<div class="gmenu"><form action="index.php?act=ignor&amp;id=' . $id . '&amp;add" method="post"><div>
-			' . $lng_mail['really_block_contact'] . '<br />
-			<input type="submit" name="submit" value="' . $lng_mail['block'] . '"/>
-			</div></form></div>';
+            echo '<div class="rmenu"><form action="index.php?act=ignor&amp;id=' . $id . '&amp;add" method="post">
+			<p>' . $lng_mail['really_block_contact'] . '</p>
+			<p><input type="submit" name="submit" value="' . $lng_mail['block'] . '"/></p>
+			</form></div>';
+            echo '<div class="phdr"><a href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : 'index.php') . '">' . $lng['back'] . '</a></div>';
         }
     } else {
         echo functions::display_error($lng_mail['no_contact_is_chose']);

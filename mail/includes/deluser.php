@@ -51,12 +51,12 @@ if ($id) {
             mysql_query("DELETE FROM `cms_contact` WHERE `user_id`='$user_id' AND `from_id`='$id' LIMIT 1");
             echo '<div class="gmenu">' . $lng_mail['contact_delete'] . '</div>';
         } else {
-            echo '
-			<div class="rmenu">' . $lng_mail['really_delete_contact'] . '</div>
-			<div class="gmenu">
-			<form action="index.php?act=deluser&amp;id=' . $id . '" method="post"><div>
-			<input type="submit" name="submit" value="' . $lng['delete'] . '"/>
-			</div></form>
+            echo '<div class="phdr"><b>' . $lng['delete'] . '</b></div>
+			<div class="rmenu">
+			<form action="index.php?act=deluser&amp;id=' . $id . '" method="post">
+			<p>' . $lng_mail['really_delete_contact'] . '</p>
+			<p><input type="submit" name="submit" value="' . $lng['delete'] . '"/></p>
+			</form>
 			</div>';
         }
     } else {
@@ -65,4 +65,4 @@ if ($id) {
 } else {
     echo '<div class="rmenu">' . $lng_mail['not_contact_is_chose'] . '</div>';
 }
-echo '<div class="menu"><a href="index.php">' . $lng_mail['in_office'] . '</a></div>';
+echo '<div class="phdr"><a href="' . (isset($_SERVER['HTTP_REFERER']) ? htmlspecialchars($_SERVER['HTTP_REFERER']) : 'index.php') . '">' . $lng['back'] . '</a></div>';

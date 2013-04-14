@@ -102,7 +102,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
 			    LEFT JOIN `users` ON `cms_contact`.`from_id`=`users`.`id`
 			    WHERE `cms_contact`.`user_id`='" . $user_id . "'
 			    AND `cms_contact`.`ban`!='1'
-			    ORDER BY `cms_contact`.`time` DESC
+			    ORDER BY `users`.`name` ASC
 			    LIMIT $start, $kmess"
             );
 
