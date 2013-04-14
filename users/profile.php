@@ -200,7 +200,9 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         }
 
         if ($result['ban'] == 0 && empty($ban['1']) && empty($ban['3'])) {
-            echo '<br/><div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="../mail/index.php?act=write&amp;id=' . $user['id'] . '">' . $lng['write'] . '</a></div>';
+            echo '<br/><form action="../mail/index.php?act=write&amp;id=' . $user['id'] . '" method="post"><button type="submit" style="padding: 6px 12px"><img src="../images/write.gif" width="16" height="16" align="middle"/>&#160;&#160;' . $lng['write'] . '</button></form>';
+
+            //echo '<br/><div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="../mail/index.php?act=write&amp;id=' . $user['id'] . '">' . $lng['write'] . '</a></div>';
         }
         echo '</p></div>';
     }
