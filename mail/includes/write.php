@@ -312,6 +312,19 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
         }
     }
 
+    // Проверяем на повтор сообщения
+    $rq = mysql_query("SELECT * FROM `cms_mail`
+        WHERE `user_id` = $user_id
+        AND `from_id` = $id
+        ORDER BY `id` DESC
+        LIMIT 1
+    ") or die(mysql_error());
+    $rres = mysql_fetch_assoc($rq);
+    if($rres['text'] == $text){
+        $error[] = $lng['error_message_exists'];
+    }
+
+
     if (empty($error)) {
         mysql_query("INSERT INTO `cms_mail` SET
 		`user_id` = '" . $user_id . "',
