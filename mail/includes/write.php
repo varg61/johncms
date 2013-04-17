@@ -277,7 +277,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
 
     // Проверка наличия файла с таким же именем
     if (!empty($newfile) && file_exists('../files/mail/' . $newfile) !== FALSE) {
-        $newfile = $realtime . $newfile;
+        $newfile = time() . '_' . $newfile;
     }
 
     if (empty($error) && $do_file) {
