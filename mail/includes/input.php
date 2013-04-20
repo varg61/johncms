@@ -16,33 +16,28 @@ require_once('../incfiles/head.php');
 echo '<div class="phdr"><b>' . $lng_mail['input_messages'] . '</b></div>';
 
 $total = mysql_result(mysql_query("SELECT COUNT(*)
-	  FROM (SELECT DISTINCT `cms_mail`.`user_id`
-	  FROM `cms_mail`
-	  LEFT JOIN `cms_contact`
-	  ON `cms_mail`.`user_id`=`cms_contact`.`from_id`
-	  AND `cms_contact`.`user_id`='$user_id'
-	  WHERE `cms_mail`.`from_id`='$user_id'
-	  AND `cms_mail`.`sys`='0'
-	  AND `cms_mail`.`delete`!='$user_id'
-	  AND `cms_contact`.`ban`!='1') `tmp`"), 0);
+  FROM (SELECT DISTINCT `cms_mail`.`user_id`
+  FROM `cms_mail`
+  LEFT JOIN `cms_contact` ON `cms_mail`.`user_id`=`cms_contact`.`from_id`
+  WHERE `cms_mail`.`from_id`='$user_id'
+  AND `cms_mail`.`delete`!='$user_id'
+  AND `cms_mail`.`sys`='0'
+  AND `cms_contact`.`ban`!='1') `tmp`"), 0);
 
 if ($total) {
     $req = mysql_query("SELECT `users`.*, MAX(`cms_mail`.`time`) AS `time`
 		FROM `cms_mail`
-		LEFT JOIN `users`
-		ON `cms_mail`.`user_id`=`users`.`id`
-		LEFT JOIN `cms_contact`
-		ON `cms_mail`.`user_id`=`cms_contact`.`from_id`
+		LEFT JOIN `users` ON `cms_mail`.`user_id`=`users`.`id`
+		LEFT JOIN `cms_contact` ON `cms_mail`.`user_id`=`cms_contact`.`from_id` AND `cms_contact`.`user_id`='$user_id'
 		WHERE `cms_mail`.`from_id`='$user_id'
-		AND `cms_contact`.`user_id`='$user_id'
-		AND `cms_mail`.`sys`='0'
 		AND `cms_mail`.`delete`!='$user_id'
+		AND `cms_mail`.`sys`='0'
 		AND `cms_contact`.`ban`!='1'
 		GROUP BY `cms_mail`.`user_id`
-		ORDER BY MAX(`cms_mail`.`time`) DESC LIMIT " . $start . "," . $kmess);
+		ORDER BY MAX(`cms_mail`.`time`) DESC
+		LIMIT " . $start . "," . $kmess);
 
-    $i = 1;
-    while (($row = mysql_fetch_assoc($req)) !== FALSE) {
+    for ($i = 0; $row = mysql_fetch_assoc($req); ++$i) {
         $count_message = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail`
             WHERE `user_id`='{$row['id']}'
             AND `from_id`='$user_id'
@@ -50,7 +45,13 @@ if ($total) {
             AND `sys`!='1'
         "), 0);
 
-        $last_msg = mysql_fetch_assoc(mysql_query("SELECT * FROM `cms_mail` WHERE `from_id`='$user_id' AND `user_id` = '{$row['id']}' AND `delete` != '$user_id' ORDER BY `id` DESC LIMIT 1"));
+        $last_msg = mysql_fetch_assoc(mysql_query("SELECT *
+            FROM `cms_mail`
+            WHERE `from_id`='$user_id'
+            AND `user_id` = '{$row['id']}'
+            AND `delete` != '$user_id'
+            ORDER BY `id` DESC
+            LIMIT 1"));
         if (mb_strlen($last_msg['text']) > 500) {
             $text = mb_substr($last_msg['text'], 0, 500);
             $text = functions::checkout($text, 1, 1);
@@ -80,7 +81,6 @@ if ($total) {
         }
         echo functions::display_user($row, $arg);
         echo '</div>';
-        ++$i;
     }
 } else {
     echo '<div class="menu"><p>' . $lng['list_empty'] . '</p></div>';

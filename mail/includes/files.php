@@ -30,7 +30,7 @@ if ($total) {
 	    LIMIT " . $start . "," . $kmess);
     for ($i = 0; ($row = mysql_fetch_assoc($req)) !== FALSE; ++$i) {
         echo $i % 2 ? '<div class="list1">' : '<div class="list2">';
-        echo '[<a href="../users/profile.php?user=' . $row['user_id'] . '"><b>' . $row['name'] . '</b></a>] <a href="index.php?act=load&amp;id=' . $row['id'] . '">' . $row['file_name'] . '</a> (' . formatsize($row['size']) . ') (' . $row['count'] . ')';
+        echo '<a href="../users/profile.php?user=' . $row['user_id'] . '"><b>' . $row['name'] . '</b></a>:: <a href="index.php?act=load&amp;id=' . $row['id'] . '">' . $row['file_name'] . '</a> (' . formatsize($row['size']) . ') (' . $row['count'] . ')';
         echo '</div>';
     }
 } else {
