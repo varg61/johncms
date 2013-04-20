@@ -198,13 +198,11 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
         } else {
             echo '<div><img src="../images/del.png" width="16" height="16"/>&#160;<a href="../mail/index.php?act=ignor&amp;id=' . $user['id'] . '&amp;del">' . $lng_profile['delete_ignor'] . '</a></div>';
         }
-
+        echo'</p>';
         if ($result['ban'] == 0 && empty($ban['1']) && empty($ban['3'])) {
-            echo '<br/><form action="../mail/index.php?act=write&amp;id=' . $user['id'] . '" method="post"><button type="submit" style="padding: 6px 12px"><img src="../images/write.gif" width="16" height="16" align="middle"/>&#160;&#160;' . $lng['write'] . '</button></form>';
-
-            //echo '<br/><div><img src="../images/write.gif" width="16" height="16"/>&#160;<a href="../mail/index.php?act=write&amp;id=' . $user['id'] . '">' . $lng['write'] . '</a></div>';
+            echo '<p><form action="../mail/index.php?act=write&amp;id=' . $user['id'] . '" method="post"><button type="submit" style="padding: 4px 8px; margin-left: 18px"><img src="../images/write.gif" width="16" height="16" align="middle"/>&#160;&#160;<b>' . $lng['write'] . '</b></button></form></p>';
         }
-        echo '</p></div>';
+        echo '</div>';
     }
     echo '<div class="phdr"><a href="index.php">' . $lng['users'] . '</a></div>';
 }

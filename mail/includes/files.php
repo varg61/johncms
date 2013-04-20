@@ -19,11 +19,18 @@ echo '<div class="phdr"><b>' . $lng['files'] . '</b></div>';
 //Отображаем список файлов
 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE (`user_id`='$user_id' OR `from_id`='$user_id') AND `delete`!='$user_id' AND `file_name`!=''"), 0);
 if ($total) {
-	if($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=files&amp;', $start, $total, $kmess) . '</div>';
-	$req = mysql_query("SELECT * FROM `cms_mail` WHERE (`user_id`='$user_id' OR `from_id`='$user_id') AND `delete`!='$user_id' AND `file_name`!=''  ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
-    for ($i = 0; ($row = mysql_fetch_assoc($req)) !== false; ++$i) {
+    if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=files&amp;', $start, $total, $kmess) . '</div>';
+    $req = mysql_query("SELECT `cms_mail`.*, `users`.`name`
+        FROM `cms_mail`
+        LEFT JOIN `users` ON `cms_mail`.`user_id`=`users`.`id`
+	    WHERE (`cms_mail`.`user_id`='$user_id' OR `cms_mail`.`from_id`='$user_id')
+	    AND `cms_mail`.`delete`!='$user_id'
+	    AND `cms_mail`.`file_name`!=''
+	    ORDER BY `cms_mail`.`time` DESC
+	    LIMIT " . $start . "," . $kmess);
+    for ($i = 0; ($row = mysql_fetch_assoc($req)) !== FALSE; ++$i) {
         echo $i % 2 ? '<div class="list1">' : '<div class="list2">';
-        echo '<a href="index.php?act=load&amp;id=' . $row['id'] . '">' . $row['file_name'] . '</a> (' . formatsize($row['size']) . ')(' . $row['count'] . ')';
+        echo '[<a href="../users/profile.php?user=' . $row['user_id'] . '"><b>' . $row['name'] . '</b></a>] <a href="index.php?act=load&amp;id=' . $row['id'] . '">' . $row['file_name'] . '</a> (' . formatsize($row['size']) . ') (' . $row['count'] . ')';
         echo '</div>';
     }
 } else {

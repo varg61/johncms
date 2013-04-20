@@ -29,7 +29,7 @@ if ($id) {
     if ($mod == 'clear') {
         $textl = $lng['mail'];
         require_once('../incfiles/head.php');
-        echo'<div class="phdr"><b>' . $lng_mail['clear_messages'] . '</b></div>';
+        echo '<div class="phdr"><b>' . $lng_mail['clear_messages'] . '</b></div>';
         if (isset($_POST['clear'])) {
             $count_message = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE ((`user_id`='$id' AND `from_id`='$user_id') OR (`user_id`='$user_id' AND `from_id`='$id')) AND `delete`!='$user_id';"), 0);
             if ($count_message) {
@@ -320,7 +320,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
         LIMIT 1
     ") or die(mysql_error());
     $rres = mysql_fetch_assoc($rq);
-    if($rres['text'] == $text){
+    if ($rres['text'] == $text) {
         $error[] = $lng['error_message_exists'];
     }
 
@@ -380,8 +380,15 @@ if ($id) {
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE ((`user_id`='$id' AND `from_id`='$user_id') OR (`user_id`='$user_id' AND `from_id`='$id')) AND `sys`!='1' AND `delete`!='$user_id' AND `spam`='0'"), 0);
     if ($total) {
         if ($total > $kmess) $out .= '<div class="topmenu">' . functions::display_pagination('index.php?act=write&amp;id=' . $id . '&amp;', $start, $total, $kmess) . '</div>';
-        $req = mysql_query("SELECT `cms_mail`.*, `cms_mail`.`id` as `mid`, `cms_mail`.`time` as `mtime`, `users`.* FROM `cms_mail` LEFT JOIN `users` ON `cms_mail`.`user_id`=`users`.`id` WHERE ((`cms_mail`.`user_id`='$id' AND `cms_mail`.`from_id`='$user_id') OR (`cms_mail`.`user_id`='$user_id' AND `cms_mail`.`from_id`='$id')) AND `cms_mail`.`delete`!='$user_id' AND `cms_mail`.`sys`!='1' AND `cms_mail`.`spam`='0' ORDER BY `cms_mail`.`time` DESC LIMIT "
-            . $start . "," . $kmess);
+        $req = mysql_query("SELECT `cms_mail`.*, `cms_mail`.`id` as `mid`, `cms_mail`.`time` as `mtime`, `users`.*
+            FROM `cms_mail`
+            LEFT JOIN `users` ON `cms_mail`.`user_id`=`users`.`id`
+            WHERE ((`cms_mail`.`user_id`='$id' AND `cms_mail`.`from_id`='$user_id') OR (`cms_mail`.`user_id`='$user_id' AND `cms_mail`.`from_id`='$id'))
+            AND `cms_mail`.`delete`!='$user_id'
+            AND `cms_mail`.`sys`!='1'
+            AND `cms_mail`.`spam`='0'
+            ORDER BY `cms_mail`.`time` DESC
+            LIMIT " . $start . "," . $kmess);
         $i = 1;
         $mass_read = array();
         while (($row = mysql_fetch_assoc($req)) !== FALSE) {
