@@ -17,7 +17,7 @@ $ch = 0;
 $mod = isset($_REQUEST['mod']) ? $_REQUEST['mod'] : '';
 
 if ($id) {
-    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1;");
+    $req = mysql_query("SELECT * FROM `users` WHERE `id` = '$id' LIMIT 1");
     if (mysql_num_rows($req) == 0) {
         $textl = $lng['mail'];
         require_once('../incfiles/head.php');
@@ -31,7 +31,7 @@ if ($id) {
         require_once('../incfiles/head.php');
         echo '<div class="phdr"><b>' . $lng_mail['clear_messages'] . '</b></div>';
         if (isset($_POST['clear'])) {
-            $count_message = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE ((`user_id`='$id' AND `from_id`='$user_id') OR (`user_id`='$user_id' AND `from_id`='$id')) AND `delete`!='$user_id';"), 0);
+            $count_message = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE ((`user_id`='$id' AND `from_id`='$user_id') OR (`user_id`='$user_id' AND `from_id`='$id')) AND `delete`!='$user_id'"), 0);
             if ($count_message) {
                 $req = mysql_query("SELECT `cms_mail`.* FROM `cms_mail` WHERE ((`cms_mail`.`user_id`='$id' AND `cms_mail`.`from_id`='$user_id') OR (`cms_mail`.`user_id`='$user_id' AND `cms_mail`.`from_id`='$id')) AND `cms_mail`.`delete`!='$user_id' LIMIT " . $count_message);
                 while (($row = mysql_fetch_assoc($req)) !== FALSE) {
@@ -103,7 +103,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
         $error[] = $lng['error_flood'] . ' ' . $flood . $lng['sec'];
     if (empty($error)) {
         if (!$id) {
-            $query = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . mysql_real_escape_string($name) . "' LIMIT 1;");
+            $query = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . mysql_real_escape_string($name) . "' LIMIT 1");
             if (mysql_num_rows($query) == 0) {
                 $error[] = $lng['error_user_not_exist'];
             } else {
@@ -114,17 +114,18 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
         } else {
             $set_mail = unserialize($qs['set_mail']);
         }
+
         if (empty($error)) {
             if ($set_mail) {
                 if ($rights < 1) {
                     if ($set_mail['access']) {
                         if ($set_mail['access'] == 1) {
-                            $query = mysql_query("SELECT * FROM `cms_contact` WHERE `user_id`='" . $id . "' AND `from_id`='" . $user_id . "' LIMIT 1;");
+                            $query = mysql_query("SELECT * FROM `cms_contact` WHERE `user_id`='" . $id . "' AND `from_id`='" . $user_id . "' LIMIT 1");
                             if (mysql_num_rows($query) == 0) {
                                 $error[] = $lng_mail['write_contacts'];
                             }
                         } else if ($set_mail['access'] == 2) {
-                            $query = mysql_query("SELECT * FROM `cms_contact` WHERE `user_id`='" . $id . "' AND `from_id`='" . $user_id . "' AND `friends`='1' LIMIT 1;");
+                            $query = mysql_query("SELECT * FROM `cms_contact` WHERE `user_id`='" . $id . "' AND `from_id`='" . $user_id . "' AND `friends`='1' LIMIT 1");
                             if (mysql_num_rows($query) == 0) {
                                 $error[] = $lng_mail['write_friends'];
                             }
@@ -313,15 +314,17 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
     }
 
     // Проверяем на повтор сообщения
-    $rq = mysql_query("SELECT * FROM `cms_mail`
+    if (empty($error)) {
+        $rq = mysql_query("SELECT * FROM `cms_mail`
         WHERE `user_id` = $user_id
         AND `from_id` = $id
         ORDER BY `id` DESC
         LIMIT 1
-    ") or die(mysql_error());
-    $rres = mysql_fetch_assoc($rq);
-    if ($rres['text'] == $text) {
-        $error[] = $lng['error_message_exists'];
+        ") or die(mysql_error());
+        $rres = mysql_fetch_assoc($rq);
+        if ($rres['text'] == $text) {
+            $error[] = $lng['error_message_exists'];
+        }
     }
 
 
