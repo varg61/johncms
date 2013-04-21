@@ -12,6 +12,7 @@
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 $out = '';
 $total = 0;
+
 if ($mod == 'clear') {
     if (isset($_POST['clear'])) {
         $count_message = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE `from_id`='$user_id' AND `sys`='1';"), 0);
@@ -25,7 +26,6 @@ if ($mod == 'clear') {
                 $result = implode(',', $mass_del);
                 mysql_query("DELETE FROM `cms_mail` WHERE `id` IN (" . $result . ")");
             }
-            mysql_query("OPTIMIZE TABLE `cms_mail`");
         }
         $out .= '<div class="gmenu">' . $lng_mail['messages_are_removed'] . '</div>';
     } else {
@@ -45,7 +45,9 @@ if ($mod == 'clear') {
             return functions::display_date($var[1]);
         }
 
-        if ($total > $kmess) echo '<div class="topmenu">' . functions::display_pagination('index.php?act=systems&amp;', $start, $total, $kmess) . '</div>';
+        if ($total > $kmess) {
+            $out .= '<div class="topmenu">' . functions::display_pagination('index.php?act=systems&amp;', $start, $total, $kmess) . '</div>';
+        }
         $req = mysql_query("SELECT * FROM `cms_mail` WHERE `from_id`='$user_id' AND `sys`='1' AND `delete`!='$user_id' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
         $mass_read = array();
         for ($i = 0; ($row = mysql_fetch_assoc($req)) !== FALSE; ++$i) {
