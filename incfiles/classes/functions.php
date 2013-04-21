@@ -95,19 +95,8 @@ class functions extends core
             $str = iconv("UTF-8", "UTF-8", $str);
         }
 
-        // Удаляем лишние знаки препинания
-        $str = preg_replace('#(\.|\?|!|\(|\)){3,}#', '\1\1\1', $str);
-
-        // Фильтруем символы
-        $str = nl2br($str);
-        $str = preg_replace('!\p{C}!u', '', $str);
-        $str = str_replace('<br />', "\n", $str);
-
-        // Удаляем лишние пробелы
-        $str = preg_replace('# {2,}#', ' ', $str);
-
-        // Удаляем более 2-х переносов строк подряд
-        $str = preg_replace("/(\n)+(\n)/i", "\n\n", $str);
+        // Фильтруем невидимые символы
+        $str = preg_replace('/[^\P{C}\n]+/u', '', $str);
 
         return trim($str);
     }
