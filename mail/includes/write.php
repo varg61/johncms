@@ -364,7 +364,7 @@ if (empty($ban['1']) && empty($ban['3'])) {
     if ($set_user['translit'])
         $out .= '<input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'] . '<br />';
     $out .= '<p><input type="file" name="fail" style="width: 100%; max-width: 160px"/></p>';
-    $out .= '<p><button type="submit" style="padding: 4px 8px"><img src="../images/write.gif" width="16" height="16" align="middle"/>&#160;&#160;<b>' . $lng['write'] . '</b></button></p>' .
+    $out .= '<p><button type="submit" name="submit" style="padding: 4px 8px"><img src="../images/write.gif" width="16" height="16" align="middle"/>&#160;&#160;<b>' . $lng['write'] . '</b></button></p>' .
         '</form></div>' .
         '<div class="phdr"><b>' . ($id && isset($qs) ? $lng_mail['personal_correspondence'] . ' ' . $qs['name'] : $lng_mail['sending_the_message']) . '</b></div>';
 } else {
