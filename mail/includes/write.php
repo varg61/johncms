@@ -353,32 +353,24 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
 
 if (empty($ban['1']) && empty($ban['3'])) {
     $out .= isset($_SESSION['error']) ? $_SESSION['error'] : '';
-    $out .= '<div class="gmenu">
-	<form name="form" action="index.php?act=write' . ($id ? '&amp;id=' . $id : '') . '" method="post"  enctype="multipart/form-data"><div>
-	' . ($id ? '' : '<b>' . $lng_mail['to_whom'] . ':</b><br/>
-	<input type="text" name="nick" maxlength="15" value="' . (!empty($_POST['nick']) ? functions::check($_POST['nick']) : '') . '" /><br />') . '
-	<b>' . $lng['message'] . ':</b><br/>';
-    if (!$is_mobile)
+    $out .= '<div class="gmenu">' .
+        '<form name="form" action="index.php?act=write' . ($id ? '&amp;id=' . $id : '') . '" method="post"  enctype="multipart/form-data">' .
+        ($id ? '' : '<p><input type="text" name="nick" maxlength="15" value="' . (!empty($_POST['nick']) ? functions::check($_POST['nick']) : '') . '" placeholder="' . $lng_mail['to_whom'] . '?"/></p>') .
+        '<p>';
+    if (!$is_mobile) {
         $out .= bbcode::auto_bb('form', 'text');
-    $out .= '<textarea rows="' . $set_user['field_h'] . '" name="text"></textarea><br/>';
-    $out .= '<span style="font-size: x-small;">' . $lng_mail['recommended_long_message'] . '</span><p>';
+    }
+    $out .= '<textarea rows="' . $set_user['field_h'] . '" name="text"></textarea></p>';
     if ($set_user['translit'])
         $out .= '<input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'] . '<br />';
-    $out .= '<b>' . $lng_mail['file'] . ':</b><br />';
-    if (stristr($agn, 'Opera/8.01') && stristr($agn, 'Opera Mini/2')) {
-        $out .= '<input name="fail1" value =""/>&#160;<br/><a href="op:fileselect">' . $lng_mail['select_file'] . '</a>';
-    } else {
-        $out .= '<input type="file" name="fail"/>';
-    }
-    $out .= '
-	<br /><span style="font-size: x-small;">' . $lng_mail['max_file_size'] . ': ' . formatsize(1024 * $set['flsz']) . '</span>
-	</p><input type="submit" name="submit" value="' . $lng['sent'] . '"/>
-	</div></form>
-	</div>' .
+    $out .= '<p><input type="file" name="fail" style="width: 100%; max-width: 160px"/></p>';
+    $out .= '<p><button type="submit" style="padding: 4px 8px"><img src="../images/write.gif" width="16" height="16" align="middle"/>&#160;&#160;<b>' . $lng['write'] . '</b></button></p>' .
+        '</form></div>' .
         '<div class="phdr"><b>' . ($id && isset($qs) ? $lng_mail['personal_correspondence'] . ' ' . $qs['name'] : $lng_mail['sending_the_message']) . '</b></div>';
 } else {
     $out .= '<div class="rmenu">' . $lng_mail['user_blocked'] . '</div>';
 }
+
 if ($id) {
     $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail` WHERE ((`user_id`='$id' AND `from_id`='$user_id') OR (`user_id`='$user_id' AND `from_id`='$id')) AND `sys`!='1' AND `delete`!='$user_id' AND `spam`='0'"), 0);
     if ($total) {
