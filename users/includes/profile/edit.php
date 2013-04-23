@@ -127,7 +127,7 @@ if (isset($_GET['delavatar'])) {
     } else {
         echo functions::display_error($error);
     }
-    header('Location: profile.php?act=edit&amp;user=' . $user['id']);
+    header('Location: profile.php?act=edit&user=' . $user['id']);
     exit;
 }
 
