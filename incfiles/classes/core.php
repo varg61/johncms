@@ -73,7 +73,6 @@ class core
         $this->system_settings(); // Получаем системные настройки
         $this->auto_clean(); // Автоочистка системы
         $this->authorize(); // Авторизация пользователей
-        $this->site_access(); // Доступ к сайту                                                         /* Доступ к сайту */
         $this->lng_detect(); // Определяем язык системы
         self::$lng = self::load_lng(); // Загружаем язык
         // Оставляем транслит только для Русского
@@ -479,28 +478,4 @@ class core
         $_SESSION['is_mobile'] = 2;
         return FALSE;
     }
-
-    /*
-    ------------------------------------------------------------------------------------------
-    Закрытие сайта / выгоняем всех онлайн юзеров и редиректим их и гостей на страницу ожидания
-    ------------------------------------------------------------------------------------------
-    */
-    private function site_access()
-    {
-        if (self::$system_set['site_access'] == 0 && ((self::$user_id && self::$user_rights < 9) || !self::$user_id))   /* закрыто всем, кроме SV! */
-        {
-            self::user_unset();
-            session_destroy();
-            header('Location: '.self::$system_set['homeurl'].'/closed.php');
-        }
-
-        if (self::$system_set['site_access'] == 1 && ((self::$user_id && self::$user_rights == 0) || !self::$user_id))   /* закрыто всем, кроме администрации */
-        {
-            self::user_unset();
-            session_destroy();
-            header('Location: '.self::$system_set['homeurl'].'/closed.php');
-        }
-
-    }
-
 }

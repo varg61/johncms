@@ -52,8 +52,7 @@ CREATE TABLE IF NOT EXISTS `cms_mail` (
 INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('them_message', ''),
 ('setting_mail', ''),
-('reg_message', ''),
-('site_access', '2');
+('reg_message', '');
 
 ALTER TABLE `users` ADD `set_mail` TINYTEXT NOT NULL AFTER `set_forum`;
 ALTER TABLE  `users` CHANGE  `karma_plus`  `karma_plus` INT NOT NULL DEFAULT  '0';

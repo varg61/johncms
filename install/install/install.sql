@@ -373,8 +373,7 @@ INSERT INTO `cms_settings` (`key`, `val`) VALUES
 ('setting_mail', ''),
 ('skindef', 'default'),
 ('them_message', ''),
-('timeshift', '0'),
-('site_access', '2');
+('timeshift', '0');
 
 --
 -- Структура таблицы `cms_users_data`

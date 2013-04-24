@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @package     JohnCMS
- * @link        http://johncms.com
- * @copyright   Copyright (C) 2008-2011 JohnCMS Community
- * @license     LICENSE.txt (see attached file)
- * @version     VERSION.txt (see attached file)
- * @author      http://johncms.com/about
- */
+* @package     JohnCMS
+* @link        http://johncms.com
+* @copyright   Copyright (C) 2008-2011 JohnCMS Community
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      http://johncms.com/about
+*/
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -30,9 +30,8 @@ if (isset($_POST['submit'])) {
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['galcomm']) . "' WHERE `key`='mod_gal_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['downcomm']) . "' WHERE `key`='mod_down_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['active']) ? intval($_POST['active']) : 0) . "' WHERE `key`='active'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['closed']) ? intval($_POST['closed']) : 0) . "' WHERE `key`='site_access'"); /* Доступ к сайту */
     $req = mysql_query("SELECT * FROM `cms_settings`");
-    $set = array();
+    $set = array ();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
     mysql_free_result($req);
     echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
@@ -79,7 +78,7 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_lib']] . '.gif" width="16"
     '<input type="radio" value="0" name="lib" ' . (!$set['mod_lib'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] . '<br />' .
     '<input name="libcomm" type="checkbox" value="1" ' . ($set['mod_lib_comm'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['comments'] .
     '</div></p>';
-
+    
 /*
 -----------------------------------------------------------------
 Управление доступом к Галерее
@@ -116,7 +115,7 @@ echo '<p><h3><img src="../images/' . $color[$set['active'] + 1] . '.gif" width="
     '<input type="radio" value="1" name="active" ' . ($set['active'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
     '<input type="radio" value="0" name="active" ' . (!$set['active'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_authorised'] . '<br />' .
     '</div></p></div>';
-
+    
 /*
 -----------------------------------------------------------------
 Управление доступом к Регистрации
@@ -127,21 +126,7 @@ echo '<div class="gmenu"><h3><img src="../images/' . $color[$set['mod_reg']] . '
     '<input type="radio" value="2" name="reg" ' . ($set['mod_reg'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
     '<input type="radio" value="1" name="reg" ' . ($set['mod_reg'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_with_moderation'] . '<br />' .
     '<input type="radio" value="0" name="reg" ' . (!$set['mod_reg'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] .
-    '</div></div>';
-
-/*
------------------------------------------------------------------
-Управление доступом к Сайту (Закрытие сайта)
------------------------------------------------------------------
-*/
-echo '<div class="rmenu">' .
-    '<h3><img src="../images/' . $color[$set['site_access']] . '.gif" width="16" height="16" class="left"/>&#160;' . $lng['site_access'] . '</h3>' .
-    '<div style="font-size: x-small">' .
-    '<input class="btn btn-large" type="radio" value="2" name="closed" ' . ($set['site_access'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
-    '<input class="btn btn-large" type="radio" value="1" name="closed" ' . ($set['site_access'] == 1 ? 'checked="checked"' : '') . '/>&#160;закрыт для всех, кроме администрации<br />' .
-    '<input class="btn btn-large" type="radio" value="0" name="closed" ' . (!$set['site_access'] ? 'checked="checked"' : '') . '/>&#160;закрыт для всех, кроме SV!<br />' .
-    '</div></div>';
-
-echo '<div class="phdr"><small>' . $lng['access_help'] . '</small></div>' .
+    '</div></div>' .
+    '<div class="phdr"><small>' . $lng['access_help'] . '</small></div>' .
     '<p><input type="submit" name="submit" id="button" value="' . $lng['save'] . '" /></p>' .
     '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p></form>';
