@@ -33,6 +33,7 @@ error_icq                     =   "Numărul ICQ trebuie să fie de cel puţin 5 
 error_nick_lenght             =   "Durata minimă de nick - 2, max 20 de caractere"
 error_nick_symbols            =   "Simbole incorectă in nick"
 error_rights                  =   "Nu puteţi edita profilul dvs. de pe posturi mai top"
+friends_only                  =   "Doar pentru prieteni"
 guest_empty                   =   "Lista este goală.<br />Mesajele care utilizatorul va fi eliminat automat după curăţare programată clienţi"
 hidden                        =   "ascuns"
 image                         =   "Imagine"

@@ -33,6 +33,7 @@ error_icq                     =   "ICQ raqam minimum 5 ta simvoldan iborat bolis
 error_nick_lenght             =   "Nikni minimal uzunligi 2 simvol"
 error_nick_symbols            =   "Nikda taqiqlangan simvollar"
 error_rights                  =   "Вы не можете редактировать анкету старшего Вас по должности"
+friends_only                  =   "Friends only"
 guest_empty                   =   "Royhat bosh.<br />Mehmonhona tozalanishi rejalashtirilgandan song bu user habarlari ochirildi"
 hidden                        =   "berkitilgan"
 image                         =   "Rasm"

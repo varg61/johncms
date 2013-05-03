@@ -36,10 +36,15 @@ echo '<div class="phdr"><a href="album.php"><b>' . $lng['photo_albums'] . '</b><
 if ($user['id'] == $user_id || $rights >= 7) {
     echo '<div class="topmenu"><a href="album.php?act=image_upload&amp;al=' . $al . '&amp;user=' . $user['id'] . '">' . $lng_profile['image_add'] . '</a></div>';
 }
-echo '<div class="user"><p>' . functions::display_user($user, array('iphide' => 1,)) . '</p></div>' .
+echo '<div class="user"><p>' . functions::display_user($user) . '</p></div>' .
     '<div class="phdr">' . $lng_profile['album'] . ': ' .
-    $view ? '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . functions::checkout($album['name']) . '</b></a>' : '<b>' . functions::checkout($album['name']) . '</b>' .
-    '<br />' . functions::checkout($album['description'], 1) . '</div>';
+    ($view ? '<a href="album.php?act=show&amp;al=' . $al . '&amp;user=' . $user['id'] . '"><b>' . functions::checkout($album['name']) . '</b></a>' : '<b>' . functions::checkout($album['name']) . '</b>');
+
+if (!empty($album['description'])) {
+    echo '<div class="sub">' . functions::checkout($album['description'], 1) . '</div>';
+}
+
+echo '</div>';
 
 /*
 -----------------------------------------------------------------
@@ -49,14 +54,19 @@ echo '<div class="user"><p>' . functions::display_user($user, array('iphide' => 
 if ($album['access'] != 2) {
     unset($_SESSION['ap']);
 }
-if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 6) {
-    // Если доступ закрыт
-    echo functions::display_error($lng['access_forbidden']) .
-        '<div class="phdr"><a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a></div>';
+if ($album['access'] == 1
+    && $user['id'] != $user_id
+    && $rights < 6
+) {
+    // Доступ закрыт
+    echo functions::display_error($lng['access_forbidden'], '<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a>');
     require('../incfiles/end.php');
     exit;
-} elseif ($album['access'] == 2 && $user['id'] != $user_id && $rights < 6) {
-    // Если доступ через пароль
+} elseif ($album['access'] == 2
+    && $user['id'] != $user_id
+    && $rights < 6
+) {
+    // Доступ через пароль
     if (isset($_POST['password'])) {
         if ($album['password'] == trim($_POST['password'])) {
             $_SESSION['ap'] = $album['password'];
@@ -74,6 +84,15 @@ if ($album['access'] == 1 && $user['id'] != $user_id && $rights < 6) {
         require('../incfiles/end.php');
         exit;
     }
+} elseif ($album['access'] == 3
+    && $user['id'] != $user_id
+    && $rights < 6
+    && mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact` WHERE `type`='2' AND ((`from_id`='{$user['id']}' AND `user_id`='$user_id') OR (`from_id`='$user_id' AND `user_id`='{$user['id']}'))"), 0) != 2
+) {
+    // Доступ только для друзей
+    echo functions::display_error($lng_profile['friends_only'], '<a href="album.php?act=list&amp;user=' . $user['id'] . '">' . $lng_profile['album_list'] . '</a>');
+    require('../incfiles/end.php');
+    exit;
 }
 
 /*

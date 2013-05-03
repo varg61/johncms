@@ -33,6 +33,7 @@ error_icq                     =   "Kļūda! ICQ numuram kā minimumam ir jābūt
 error_nick_lenght             =   "Kļūda! Minimālais nika garums - 2, maksimālais nika garums 20 simboli"
 error_nick_symbols            =   "Kļūda! Nepieļaujami simboli nikā"
 error_rights                  =   "Kļūda! Jūs nevarat rediģēt augstāk stāvošu lietotāju datus, tākā Jums nav tiesību"
+friends_only                  =   "Tik už draugus"
 guest_empty                   =   "Saraksts tukšs.<br />Šī lietotāja ziņas tiks automātiski dzēst pēc plānotās viesenes tīrīšanas"
 hidden                        =   "slēpt"
 image                         =   "Attēls"

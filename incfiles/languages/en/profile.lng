@@ -33,6 +33,7 @@ error_icq                     =   "ICQ number must be at least 5 digits and max.
 error_nick_lenght             =   "Min. nick length 2, max. 20 characters"
 error_nick_symbols            =   "Nick contains invalid characters"
 error_rights                  =   "You cannot edit profile of higher administration"
+friends_only                  =   "Friends only"
 guest_empty                   =   "The list is empty.<br />All messages from this user were deleted during planned Guestbook clean-up. "
 hidden                        =   "hidden"
 image                         =   "Image"

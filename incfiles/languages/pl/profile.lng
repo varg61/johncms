@@ -33,6 +33,7 @@ error_icq                     =   "Numer GG musi mieć co najmniej 5 i max. 10 c
 error_nick_lenght             =   "Min. długość nicku 2, max. 20 znaków"
 error_nick_symbols            =   "Nick zawiera niedozwolone znaki"
 error_rights                  =   "Nie możesz edytować profilu administracji"
+friends_only                  =   "Tylko dla znajomych"
 guest_empty                   =   "Lista jest pusta.<br />Wszystkie wiadomości tego użytkownika zostały usunięte na czas zaplanowanego sprzątania księgi gości. "
 hidden                        =   "Ukryty"
 image                         =   "Obraz"

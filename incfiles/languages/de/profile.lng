@@ -33,6 +33,7 @@ error_icq                     =   "Nomer ICQ muss bestehen minimum aus 5 Ziffern
 error_nick_lenght             =   "Minimale Lange Nickname - 2, maximaler 20 Zeichen"
 error_nick_symbols            =   "Unzulassige Zeichen in Nickname"
 error_rights                  =   "Ihr nicht konnen cutten Enquete Alteste Sie von Amts wegen"
+friends_only                  =   "Nur für Freunde"
 guest_empty                   =   "Die Liste ist leer.<br />Nachrichten, die Benutzer automatisch nach der planmäßigen Reinigung Guest entfernt werden"
 hidden                        =   "latenter"
 image                         =   "Bild"

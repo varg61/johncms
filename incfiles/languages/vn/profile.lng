@@ -33,6 +33,7 @@ error_icq                     =   "ICQ số phải có ít nhất 5 chữ số v
 error_nick_lenght             =   "Độ dài tối thiểu nick 2, tối đa 20 ký tự"
 error_nick_symbols            =   "Nick nhân vật không hợp lệ"
 error_rights                  =   "Bạn không thể chỉnh sửa hồ sơ trên của bạn trở lên"
+friends_only                  =   "Chỉ cho bạn bè"
 guest_empty                   =   "Danh sách này có sản phẩm nào.<br />ất cả các tin nhắn của người sử dụng lựa chọn trong kế hoạch đã được xóa sạch. "
 hidden                        =   "ẩn"
 image                         =   "hình ảnh"

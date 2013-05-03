@@ -33,6 +33,7 @@ error_icq                     =   "İCQ nömreniz maks 5 ve min 10 reqemden ibar
 error_nick_lenght             =   "Nik min - 2, maks 20 herif olmalıdır"
 error_nick_symbols            =   "Nikde qadağan olunmuş işarelerden istifade olunub"
 error_rights                  =   "Sizden yuxarı selahiyyete malik istifadeçinin anketini deyişe bilmezsiniz"
+friends_only                  =   "Yalnız dost"
 guest_empty                   =   "Siyahı boşdur.<br />Bu istifadeçinin mesajlari sistem terefinden temizleme işleri aparılarken avtomatik silinib"
 hidden                        =   "gizlet"
 image                         =   "Şekil"

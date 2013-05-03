@@ -33,6 +33,7 @@ error_icq                     =   "nomor ICQ harus minimal 5 digit dan maksimal 
 error_nick_lenght             =   "Panjang julukan minimum - 2, maks 20 karakter"
 error_nick_symbols            =   "Karakter tidak valid dalam julukan"
 error_rights                  =   "Anda tidak dapat mengedit profil pada posting Anda yang sudah lama"
+friends_only                  =   "Hanya untuk teman-teman"
 guest_empty                   =   "Daftar ini kosong.<br />Pesan bahwa pengguna akan dihapus secara otomatis setelah pembersihan dijadwalkan Tamu"
 hidden                        =   "tersembunyi"
 image                         =   "Gambar"
