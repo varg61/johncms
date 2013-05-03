@@ -18,6 +18,7 @@ switch ($act) {
         Проверка настроек PHP и прав доступа
         -----------------------------------------------------------------
         */
+        unset($_SESSION['updated']);
         echo '<p><h3 class="green">' . $lng['check_1'] . '</h3>';
         // Проверка критических ошибок PHP
         if (($php_errors = install::check_php_errors()) !== false) {
