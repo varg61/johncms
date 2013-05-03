@@ -95,4 +95,3 @@ if (mysql_num_rows($req_obj)) {
 } else {
     echo functions::display_error($lng['error_wrong_data']);
 }
-?>

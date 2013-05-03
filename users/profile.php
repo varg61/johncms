@@ -123,7 +123,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             $images = 0;
             echo '<div class="menu">';
         }
-        echo'<table  width="100%"><tr><td width="22" valign="top"><img src="' . $set['homeurl'] . '/images/k_' . $images . '.gif"/></td><td>' .
+        echo '<table  width="100%"><tr><td width="22" valign="top"><img src="' . $set['homeurl'] . '/images/k_' . $images . '.gif"/></td><td>' .
             '<b>' . $lng['karma'] . ' (' . $karma . ')</b>' .
             '<div class="sub">' .
             '<span class="green"><a href="profile.php?act=karma&amp;user=' . $user['id'] . '&amp;type=1">' . $lng['vote_for'] . ' (' . $user['karma_plus'] . ')</a></span> | ' .
@@ -165,11 +165,8 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
     if ($user['id'] != $user_id) {
         echo '<div class="menu"><p>';
         // Контакты
-        $contacts = mysql_query("SELECT * FROM `cms_contact` WHERE `user_id`='" . $user_id . "' AND `from_id`='" . $user['id'] . "';");
-        $result = mysql_fetch_assoc($contacts);
-        if ($result['ban'] == 0) {
-            $fr = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact` WHERE `type`='2' AND ((`from_id`='{$user['id']}' AND `user_id`='$user_id') OR (`from_id`='$user_id' AND `user_id`='{$user['id']}'))"), 0);
-            if ($fr != 2) {
+        if (!functions::is_ignor($user['id']) && functions::is_contact($user['id']) != 2) {
+            if (!functions::is_friend($user['id'])) {
                 $fr_in = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact` WHERE `type`='2' AND `from_id`='$user_id' AND `user_id`='{$user['id']}'"), 0);
                 $fr_out = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact` WHERE `type`='2' AND `user_id`='$user_id' AND `from_id`='{$user['id']}'"), 0);
                 if ($fr_in == 1) {
@@ -185,21 +182,22 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             echo '<div><img src="../images/add.gif" width="16" height="16"/>&#160;' . $friend . '</div>';
         }
 
-        if ($result['ban'] == 0) {
-            if (mysql_num_rows($contacts) == 0) {
+        if (functions::is_contact($user['id']) != 2) {
+            if (!functions::is_contact($user['id'])) {
                 echo '<div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="../mail/index.php?id=' . $user['id'] . '">' . $lng_profile['add_contacts'] . '</a></div>';
             } else {
                 echo '<div><img src="../images/users.png" width="16" height="16"/>&#160;<a href="../mail/index.php?act=deluser&amp;id=' . $user['id'] . '">' . $lng_profile['delete_contacts'] . '</a></div>';
             }
         }
 
-        if ($result['ban'] == 0) {
+        if (functions::is_contact($user['id']) != 2) {
             echo '<div><img src="../images/del.png" width="16" height="16"/>&#160;<a href="../mail/index.php?act=ignor&amp;id=' . $user['id'] . '&amp;add">' . $lng_profile['add_ignor'] . '</a></div>';
         } else {
             echo '<div><img src="../images/del.png" width="16" height="16"/>&#160;<a href="../mail/index.php?act=ignor&amp;id=' . $user['id'] . '&amp;del">' . $lng_profile['delete_ignor'] . '</a></div>';
         }
-        echo'</p>';
-        if ($result['ban'] == 0 && empty($ban['1']) && empty($ban['3'])) {
+        echo '</p>';
+
+        if (!functions::is_ignor($user['id']) && functions::is_contact($user['id']) != 2 && empty($ban['1']) && empty($ban['3'])) {
             echo '<p><form action="../mail/index.php?act=write&amp;id=' . $user['id'] . '" method="post"><input type="submit" value="' . $lng['write'] . '" style="margin-left: 18px"/></form></p>';
         }
         echo '</div>';

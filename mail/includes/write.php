@@ -76,7 +76,7 @@ if (empty($_SESSION['error'])) {
 
 $out .= '<div class="phdr"><b>' . $lng['mail'] . '</b></div>';
 
-if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
+if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])  && !functions::is_ignor($id)) {
     if (!$id) {
         $name = isset($_POST['nick']) ? functions::rus_lat(mb_strtolower(trim($_POST['nick']))) : '';
     }
@@ -351,7 +351,7 @@ if (isset($_POST['submit']) && empty($ban['1']) && empty($ban['3'])) {
     }
 }
 
-if (empty($ban['1']) && empty($ban['3'])) {
+if (!functions::is_ignor($id) && empty($ban['1']) && empty($ban['3'])) {
     $out .= isset($_SESSION['error']) ? $_SESSION['error'] : '';
     $out .= '<div class="gmenu">' .
         '<form name="form" action="index.php?act=write' . ($id ? '&amp;id=' . $id : '') . '" method="post"  enctype="multipart/form-data">' .
@@ -367,8 +367,6 @@ if (empty($ban['1']) && empty($ban['3'])) {
     $out .= '<p><input type="submit" name="submit" value="' . $lng['sent'] . '"/></p>' .
         '</form></div>' .
         '<div class="phdr"><b>' . ($id && isset($qs) ? $lng_mail['personal_correspondence'] . ' ' . $qs['name'] : $lng_mail['sending_the_message']) . '</b></div>';
-} else {
-    $out .= '<div class="rmenu">' . $lng_mail['user_blocked'] . '</div>';
 }
 
 if ($id) {
