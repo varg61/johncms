@@ -68,9 +68,9 @@ if ($total) {
         }
 
         $arg = array(
-            'header' => '(' . $count_message . ') <a href="index.php?act=ignor&amp;id=' . $row['id'] . '&amp;add">[i]</a>&#160;<span class="red"><a href="index.php?act=deluser&amp;id=' . $row['id'] . '">[x]</a></span>',
-            'body'   => '<div class="sub" style="font-size: small"><span class="gray">(' . functions::display_date($last_msg['time']) . ')</span><br/>' . $text . '</div>',
-            'sub'    => '<p><form action="index.php?act=write&amp;id=' . $row['id'] . '" method="post"><input type="submit" value="' . $lng_mail['correspondence'] . '"/></form></p>',
+            'header' => '<span class="gray">(' . functions::display_date($last_msg['time']) . ')</span>',
+            'body'   => '<div style="font-size: small">' . $text . '</div>',
+            'sub'    => '<p><a href="index.php?act=write&amp;id=' . $row['id'] . '"><b>' . $lng_mail['correspondence'] . '</b></a> (' . $count_message . ') | <a href="index.php?act=ignor&amp;id=' . $row['id'] . '&amp;add">Игнор</a> | <a href="index.php?act=deluser&amp;id=' . $row['id'] . '">' . $lng['delete'] . '</a></p>',
             'iphide' => 1
         );
 

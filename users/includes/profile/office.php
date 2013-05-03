@@ -83,7 +83,7 @@ $count_file = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_mail`
 WHERE (`user_id`='$user_id' OR `from_id`='$user_id') AND `delete`!='$user_id' AND `file_name`!='';"), 0);
 echo '<li><a href="../mail/index.php?act=files">' . $lng['files'] . '</a>&nbsp;(' . $count_file . ')</li>';
 if (empty($ban['1']) && empty($ban['3'])) {
-    echo '<p><form action="../mail/index.php?act=write" method="post"><button type="submit" style="padding: 4px 8px"><img src="../images/write.gif" width="16" height="16" align="middle"/>&#160;&#160;<b>' . $lng['write'] . '</b></button></form></p>';
+    echo '<p><form action="../mail/index.php?act=write" method="post"><input type="submit" value="' . $lng['write'] . '"/></form></p>';
 }
 // Блок контактов
 echo '</ul><h3><img src="../images/contacts.png" width="16" height="16" class="left" />&nbsp;' . $lng['contacts'] . '</h3><ul>';
