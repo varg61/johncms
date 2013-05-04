@@ -22,9 +22,9 @@ class bbcode extends core
     {
         $var = self::parse_time($var);               // Обработка тэга времени
         $var = self::highlight_code($var);           // Подсветка кода
-        $var = self::highlight_bb($var);             // Обработка ссылок
         $var = self::highlight_url($var);            // Обработка ссылок
         $var = self::OLD_highlight_url($var);        // Обработка ссылок в BBcode
+        $var = self::highlight_bb($var);             // Обработка ссылок
         return $var;
     }
 
@@ -237,7 +237,7 @@ class bbcode extends core
             {
                     $tmp = parse_url($url[1]);
                     if ('http://' . $tmp['host'] == core::$system_set['homeurl'] || isset(core::$user_set['direct_url']) && core::$user_set['direct_url']) {
-                        return '<a href="' . $url[1] . '">' . $url[2] . '</a>';
+                        return '<a href="' . $url[1] . '">' . $url[3] . '</a>';
                     } else {
                         return '<a href="' . core::$system_set['homeurl'] . '/go.php?url=' . rawurlencode($url[1]) . '">' . $url[2] . '</a>';
                     }
