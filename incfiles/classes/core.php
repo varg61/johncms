@@ -57,9 +57,9 @@ class core
 
         // Получаем UserAgent
         if (isset($_SERVER["HTTP_X_OPERAMINI_PHONE_UA"]) && strlen(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])) > 5) {
-            self::$user_agent = 'Opera Mini: ' . htmlspecialchars(substr(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']), 0, 150));
+            self::$user_agent = 'Opera Mini: ' . htmlspecialchars(mb_substr(trim($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']), 0, 150));
         } elseif (isset($_SERVER['HTTP_USER_AGENT'])) {
-            self::$user_agent = htmlspecialchars(substr(trim($_SERVER['HTTP_USER_AGENT']), 0, 150));
+            self::$user_agent = htmlspecialchars(mb_substr(trim($_SERVER['HTTP_USER_AGENT']), 0, 150));
         } else {
             self::$user_agent = 'Not Recognised';
         }
