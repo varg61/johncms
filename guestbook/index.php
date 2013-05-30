@@ -199,7 +199,7 @@ switch ($act) {
                 $text = htmlentities($res['text'], ENT_QUOTES, 'UTF-8');
                 echo '<div class="phdr"><a href="index.php"><b>' . $lng['guestbook'] . '</b></a> | ' . $lng['edit'] . '</div>' .
                     '<div class="rmenu">' .
-                    '<form action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
+                    '<form name="form" action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
                     '<p><b>' . $lng['author'] . ':</b> ' . $res['name'] . '</p><p>';
                 if (!$is_mobile) {
                     echo bbcode::auto_bb('form', 'msg');
