@@ -30,6 +30,7 @@ if (isset($_POST['submit'])) {
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['galcomm']) . "' WHERE `key`='mod_gal_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['downcomm']) . "' WHERE `key`='mod_down_comm'");
     mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['active']) ? intval($_POST['active']) : 0) . "' WHERE `key`='active'");
+    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['access']) ? intval($_POST['access']) : 0) . "' WHERE `key`='site_access'");
     $req = mysql_query("SELECT * FROM `cms_settings`");
     $set = array ();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
@@ -126,7 +127,21 @@ echo '<div class="gmenu"><h3><img src="../images/' . $color[$set['mod_reg']] . '
     '<input type="radio" value="2" name="reg" ' . ($set['mod_reg'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
     '<input type="radio" value="1" name="reg" ' . ($set['mod_reg'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_with_moderation'] . '<br />' .
     '<input type="radio" value="0" name="reg" ' . (!$set['mod_reg'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] .
-    '</div></div>' .
-    '<div class="phdr"><small>' . $lng['access_help'] . '</small></div>' .
+    '</div></div>';
+
+/*
+-----------------------------------------------------------------
+Управление доступом к Сайту (Закрытие сайта)
+-----------------------------------------------------------------
+*/
+echo '<div class="rmenu">' .
+    '<h3><img src="../images/' . $color[$set['site_access']] . '.gif" width="16" height="16" class="left"/>&#160;' . $lng['site_access'] . '</h3>' .
+    '<div style="font-size: x-small">' .
+    '<input class="btn btn-large" type="radio" value="2" name="access" ' . ($set['site_access'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
+    '<input class="btn btn-large" type="radio" value="1" name="access" ' . ($set['site_access'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['site_closed_except_adm'] . '<br />' .
+    '<input class="btn btn-large" type="radio" value="0" name="access" ' . (!$set['site_access'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['site_closed_except_sv'] . '<br />' .
+    '</div></div>';
+
+echo '<div class="phdr"><small>' . $lng['access_help'] . '</small></div>' .
     '<p><input type="submit" name="submit" id="button" value="' . $lng['save'] . '" /></p>' .
     '<p><a href="index.php">' . $lng['admin_panel'] . '</a></p></form>';
