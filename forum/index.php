@@ -574,9 +574,10 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                     echo @$user_rights[$res['rights']];
                     // Метка Онлайн / Офлайн
                     echo (time() > $res['lastdate'] + 300 ? '<span class="red"> [Off]</span> ' : '<span class="green"> [ON]</span> ');
+                    echo '<a href="index.php?act=post&amp;id='.$res['id'].'" title="Link to post">[#]</a>';
                     // Ссылки на ответ и цитирование
                     if ($user_id && $user_id != $res['user_id']) {
-                        echo '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '">' . $lng_forum['reply_btn'] . '</a>&#160;' .
+                        echo '&#160;<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '">' . $lng_forum['reply_btn'] . '</a>&#160;' .
                              '<a href="index.php?act=say&amp;id=' . $res['id'] . '&amp;start=' . $start . '&amp;cyt">' . $lng_forum['cytate_btn'] . '</a> ';
                     }
                     // Время поста
