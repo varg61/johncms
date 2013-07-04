@@ -514,22 +514,6 @@ if ($id && $id != $user_id && $do) {
                 }
                 break;
 
-            case 'settings':
-                $set_mail_user = unserialize($datauser['set_mail']);
-                if (isset($_POST['submit'])) {
-                    $set_mail_user['access'] = isset($_POST['access']) && $_POST['access'] >= 0 && $_POST['access'] <= 2 ? abs(intval($_POST['access'])) : 0;
-                    mysql_query("UPDATE `users` SET `set_mail` = '" . mysql_real_escape_string(serialize($set_mail_user)) . "' WHERE `id` = '$user_id'");
-                }
-
-                echo '<div class="phdr"><h3>' . $lng_profile['settings_mail'] . '</h3></div>
-				<div><form method="post" action="profile.php?act=friends&amp;do=settings"><div class="gmenu">
-				<strong>' . $lng_profile['write_messages'] . '</strong><br />
-				<input type="radio" value="0" name="access" ' . (!$set_mail_user['access'] ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['write_all'] . '<br />
-				<input type="radio" value="1" name="access" ' . ($set_mail_user['access'] == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['write_contacts'] . '<br />
-				<input type="radio" value="2" name="access" ' . ($set_mail_user['access'] == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng_profile['write_friends'] . '</div>
-				<div class="rmenu"><input type="submit" name="submit" value="' . $lng['save'] . '"/></div></form></div>';
-                break;
-
             default:
                 $off = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact` WHERE `from_id`='$user_id' AND `type`='2' AND `friends`='0' AND `ban`='0'"), 0);
                 $dem = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_contact` WHERE `user_id`='$user_id' AND `type`='2' AND `friends`='0' AND `ban`='0'"), 0);
