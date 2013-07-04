@@ -630,7 +630,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                     if (mysql_num_rows($freq) > 0) {
                         $fres = mysql_fetch_assoc($freq);
                         $fls = round(@filesize('../files/forum/attach/' . $fres['filename']) / 1024, 2);
-                        echo '<br /><span class="gray">' . $lng_forum['attached_file'] . ':';
+                        echo '<div class="gray" style="font-size: x-small; background-color: rgba(128, 128, 128, 0.1); padding: 2px 4px; margin-top: 4px">' . $lng_forum['attached_file'] . ':';
                         // Предпросмотр изображений
                         $att_ext = strtolower(functions::format('./files/forum/attach/' . $fres['filename']));
                         $pic_ext = array(
@@ -646,7 +646,7 @@ if ($act && ($key = array_search($act, $mods)) !== false && file_exists('include
                             echo '<br /><a href="index.php?act=file&amp;id=' . $fres['id'] . '">' . $fres['filename'] . '</a>';
                         }
                         echo ' (' . $fls . ' кб.)<br/>';
-                        echo $lng_forum['downloads'] . ': ' . $fres['dlcount'] . ' ' . $lng_forum['time'] . '</span>';
+                        echo $lng_forum['downloads'] . ': ' . $fres['dlcount'] . ' ' . $lng_forum['time'] . '</div>';
                         $file_id = $fres['id'];
                     }
                     if ((($rights == 3 || $rights >= 6 || $curator) && $rights >= $res['rights']) || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > time() - 300) || ($res['user_id'] == $user_id && $set_forum['upfp'] && $start == 0 && $i == 1 && $res['time'] > time() - 300)) {
