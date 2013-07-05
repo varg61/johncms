@@ -219,7 +219,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
         -----------------------------------------------------------------
         */
         $res = TRUE;
-        $allow = array();
+        $allow = 0;
         $parent = $type1['refid'];
         while ($parent != '0' && $res != FALSE) {
             $req = mysql_query("SELECT * FROM `forum` WHERE `id` = '$parent' LIMIT 1");
@@ -227,7 +227,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
             if ($res['type'] == 'f' || $res['type'] == 'r') {
                 $tree[] = '<a href="index.php?id=' . $parent . '">' . $res['text'] . '</a>';
                 if ($res['type'] == 'r' && !empty($res['edit'])) {
-                    $allow = unserialize($res['edit']);
+                    $allow = intval($res['edit']);
                 }
             }
             $parent = $res['refid'];
@@ -662,7 +662,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                         (($rights == 3 || $rights >= 6 || $curator) && $rights >= $res['rights'])
                         || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > time() - 300)
                         || ($res['user_id'] == $user_id && $set_forum['upfp'] && $start == 0 && $i == 1 && $res['time'] > time() - 300)
-                        || ($i == 1 && $allow_edit && $res['user_id'] == $user_id)
+                        || ($i == 1 && $allow == 2 && $res['user_id'] == $user_id)
                     ) {
                         // Ссылки на редактирование / удаление постов
                         $menu = array(

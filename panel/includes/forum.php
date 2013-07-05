@@ -211,16 +211,7 @@ switch ($mod) {
             // Принимаем данные
             $name = isset($_POST['name']) ? functions::check($_POST['name']) : '';
             $desc = isset($_POST['desc']) ? functions::check($_POST['desc']) : '';
-            $firstpost = isset($_POST['firstpost']) ? 1 : 0;
-            $curators = isset($_POST['curators']) ? 1 : 0;
-            if ($firstpost || $curator) {
-                $attributes = serialize(array(
-                    'firstpost' => $firstpost,
-                    'curators'  => $curators
-                ));
-            } else {
-                $attributes = '';
-            }
+            $allow = isset($_POST['allow']) ? intval($_POST['allow']) : 0;
             // Проверяем на ошибки
             $error = array();
             if (!$name)
@@ -243,7 +234,7 @@ switch ($mod) {
                 `type` = '" . ($id ? 'r' : 'f') . "',
                 `text` = '$name',
                 `soft` = '$desc',
-                `edit` = '$attributes',
+                `edit` = '$allow',
                 `curators` = '',
                 `realid` = '$sort'")
                 ) {
@@ -269,8 +260,11 @@ switch ($mod) {
                 '<textarea name="desc" rows="' . $set_user['field_h'] . '"></textarea>' .
                 '<br /><small>' . $lng['not_mandatory_field'] . '<br />' . $lng['minmax_2_500'] . '</small></p>';
             if ($id) {
-                echo '<p><input type="checkbox" name="firstpost" value="1"/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
-                    '<input type="checkbox" name="curators" value="1"/>&#160;' . $lng['allow_autocurators'] . '</p>';
+                echo '<p><input type="radio" name="allow" value="0" checked="checked"/>&#160;' . $lng['allow_plain'] . '<br/>' .
+                    '<input type="radio" name="allow" value="4"/>&#160;' . $lng['allow_readonly'] . '<br/>' .
+                    '<input type="radio" name="allow" value="3"/>&#160;' . $lng['allow_only_admin'] . '<br/>' .
+                    '<input type="radio" name="allow" value="2"/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
+                    '<input type="radio" name="allow" value="1"/>&#160;' . $lng['allow_autocurators'] . '</p>';
             }
             echo '<p><input type="submit" value="' . $lng['add'] . '" name="submit" />' .
                 '</p></div></form>' .
@@ -298,16 +292,7 @@ switch ($mod) {
                     $name = isset($_POST['name']) ? functions::check($_POST['name']) : '';
                     $desc = isset($_POST['desc']) ? functions::check($_POST['desc']) : '';
                     $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
-                    $firstpost = isset($_POST['firstpost']) ? 1 : 0;
-                    $curators = isset($_POST['curators']) ? 1 : 0;
-                    if ($firstpost || $curator) {
-                        $attributes = serialize(array(
-                            'firstpost' => $firstpost,
-                            'curators'  => $curators
-                        ));
-                    } else {
-                        $attributes = '';
-                    }
+                    $allow = isset($_POST['allow']) ? intval($_POST['allow']) : 0;
                     // проверяем на ошибки
                     $error = array();
                     if ($res['type'] == 'r' && !$category)
@@ -325,7 +310,7 @@ switch ($mod) {
                         mysql_query("UPDATE `forum` SET
                             `text` = '$name',
                             `soft` = '$desc',
-                            `edit` = '$attributes'
+                            `edit` = '$allow'
                             WHERE `id` = '$id'");
                         if ($res['type'] == 'r' && $category != $res['refid']) {
                             // Вычисляем сортировку
@@ -354,9 +339,12 @@ switch ($mod) {
                         '<textarea name="desc" rows="' . $set_user['field_h'] . '">' . str_replace('<br />', "\r\n", $res['soft']) . '</textarea>' .
                         '<br /><small>' . $lng['not_mandatory_field'] . '<br />' . $lng['minmax_2_500'] . '</small></p>';
                     if ($res['type'] == 'r') {
-                        $allow = !empty($res['edit']) ? unserialize($res['edit']) : array();
-                        echo '<p><input type="checkbox" name="firstpost" value="1" ' . (isset($allow['firstpost']) && $allow['firstpost'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
-                            '<input type="checkbox" name="curators" value="1" ' . (isset($allow['curators']) && $allow['curators'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_autocurators'] . '</p>';
+                        $allow = !empty($res['edit']) ? intval($res['edit']) : 0;
+                        echo '<p><input type="radio" name="allow" value="0" ' . (!$allow ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_plain'] . '<br/>' .
+                            '<input type="radio" name="allow" value="4" ' . ($allow == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_readonly'] . '<br/>' .
+                            '<input type="radio" name="allow" value="3" ' . ($allow == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_only_admin'] . '<br/>' .
+                            '<input type="radio" name="allow" value="2" ' . ($allow == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
+                            '<input type="radio" name="allow" value="1" ' . ($allow == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_autocurators'] . '</p>';
                         echo '<p><h3>' . $lng_forum['category'] . '</h3><select name="category" size="1">';
                         $req_c = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid` ASC");
                         while ($res_c = mysql_fetch_assoc($req_c)) {

@@ -50,10 +50,10 @@ if (mysql_num_rows($req)) {
             $error = $lng_forum['error_edit_another'] . '<br /><a href="' . $link . '">' . $lng['back'] . '</a>';
         if (!$error) {
             $section = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `id` = " . $topic['refid']));
-            $allow = !empty($section['edit']) ? unserialize($section['edit']) : array();
+            $allow = !empty($section['edit']) ? intval($section['edit']) : 0;
 
             $check = TRUE;
-            if (isset($allow['firstpost']) && $allow['firstpost']) {
+            if ($allow == 2) {
                 $first = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `refid` = '" . $res['refid'] . "' ORDER BY `id` ASC LIMIT 1"));
                 if ($first['user_id'] == $user_id && $first['id'] == $id) {
                     $check = FALSE;
