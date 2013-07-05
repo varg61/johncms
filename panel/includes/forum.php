@@ -211,6 +211,16 @@ switch ($mod) {
             // Принимаем данные
             $name = isset($_POST['name']) ? functions::check($_POST['name']) : '';
             $desc = isset($_POST['desc']) ? functions::check($_POST['desc']) : '';
+            $firstpost = isset($_POST['firstpost']) ? 1 : 0;
+            $curators = isset($_POST['curators']) ? 1 : 0;
+            if ($firstpost || $curator) {
+                $attributes = serialize(array(
+                    'firstpost' => $firstpost,
+                    'curators'  => $curators
+                ));
+            } else {
+                $attributes = '';
+            }
             // Проверяем на ошибки
             $error = array();
             if (!$name)
@@ -233,7 +243,7 @@ switch ($mod) {
                 `type` = '" . ($id ? 'r' : 'f') . "',
                 `text` = '$name',
                 `soft` = '$desc',
-                `edit` = '',
+                `edit` = '$attributes',
                 `curators` = '',
                 `realid` = '$sort'")
                 ) {
@@ -257,8 +267,12 @@ switch ($mod) {
                 '<br /><small>' . $lng['minmax_2_30'] . '</small></p>' .
                 '<p><h3>' . $lng['description'] . '</h3>' .
                 '<textarea name="desc" rows="' . $set_user['field_h'] . '"></textarea>' .
-                '<br /><small>' . $lng['not_mandatory_field'] . '<br />' . $lng['minmax_2_500'] . '</small></p>' .
-                '<p><input type="submit" value="' . $lng['add'] . '" name="submit" />' .
+                '<br /><small>' . $lng['not_mandatory_field'] . '<br />' . $lng['minmax_2_500'] . '</small></p>';
+            if ($id) {
+                echo '<p><input type="checkbox" name="firstpost" value="1"/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
+                    '<input type="checkbox" name="curators" value="1"/>&#160;' . $lng['allow_autocurators'] . '</p>';
+            }
+            echo '<p><input type="submit" value="' . $lng['add'] . '" name="submit" />' .
                 '</p></div></form>' .
                 '<div class="phdr"><a href="index.php?act=forum&amp;mod=cat' . ($id ? '&amp;id=' . $id : '') . '">' . $lng['back'] . '</a></div>';
         }
@@ -284,6 +298,16 @@ switch ($mod) {
                     $name = isset($_POST['name']) ? functions::check($_POST['name']) : '';
                     $desc = isset($_POST['desc']) ? functions::check($_POST['desc']) : '';
                     $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
+                    $firstpost = isset($_POST['firstpost']) ? 1 : 0;
+                    $curators = isset($_POST['curators']) ? 1 : 0;
+                    if ($firstpost || $curator) {
+                        $attributes = serialize(array(
+                            'firstpost' => $firstpost,
+                            'curators'  => $curators
+                        ));
+                    } else {
+                        $attributes = '';
+                    }
                     // проверяем на ошибки
                     $error = array();
                     if ($res['type'] == 'r' && !$category)
@@ -300,7 +324,8 @@ switch ($mod) {
                         // Записываем в базу
                         mysql_query("UPDATE `forum` SET
                             `text` = '$name',
-                            `soft` = '$desc'
+                            `soft` = '$desc',
+                            `edit` = '$attributes'
                             WHERE `id` = '$id'");
                         if ($res['type'] == 'r' && $category != $res['refid']) {
                             // Вычисляем сортировку
@@ -329,6 +354,9 @@ switch ($mod) {
                         '<textarea name="desc" rows="' . $set_user['field_h'] . '">' . str_replace('<br />', "\r\n", $res['soft']) . '</textarea>' .
                         '<br /><small>' . $lng['not_mandatory_field'] . '<br />' . $lng['minmax_2_500'] . '</small></p>';
                     if ($res['type'] == 'r') {
+                        $allow = !empty($res['edit']) ? unserialize($res['edit']) : array();
+                        echo '<p><input type="checkbox" name="firstpost" value="1" ' . (isset($allow['firstpost']) && $allow['firstpost'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
+                            '<input type="checkbox" name="curators" value="1" ' . (isset($allow['curators']) && $allow['curators'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_autocurators'] . '</p>';
                         echo '<p><h3>' . $lng_forum['category'] . '</h3><select name="category" size="1">';
                         $req_c = mysql_query("SELECT * FROM `forum` WHERE `type` = 'f' ORDER BY `realid` ASC");
                         while ($res_c = mysql_fetch_assoc($req_c)) {
