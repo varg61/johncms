@@ -537,8 +537,9 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
                 WHERE `forum`.`type` = 'm' AND `forum`.`refid` = '$id'"
                 . ($rights >= 7 ? "" : " AND `forum`.`close` != '1'") . "$sql ORDER BY `forum`.`id` $order LIMIT $start, $kmess");
+
                 // Верхнее поле "Написать"
-                if (($user_id && !$type1['edit'] && $set_forum['upfp'] && $set['mod_forum'] != 3) || ($rights >= 7 && $set_forum['upfp'])) {
+                if (($user_id && !$type1['edit'] && $set_forum['upfp'] && $set['mod_forum'] != 3 && $allow != 4) || ($rights >= 7 && $set_forum['upfp'])) {
                     echo '<div class="gmenu"><form name="form1" action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
                         $token = mt_rand(1000, 100000);
@@ -708,7 +709,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                     echo '</form>';
                 }
                 // Нижнее поле "Написать"
-                if (($user_id && !$type1['edit'] && !$set_forum['upfp'] && $set['mod_forum'] != 3) || ($rights >= 7 && !$set_forum['upfp'])) {
+                if (($user_id && !$type1['edit'] && !$set_forum['upfp'] && $set['mod_forum'] != 3 && $allow != 4) || ($rights >= 7 && !$set_forum['upfp'])) {
                     echo '<div class="gmenu"><form name="form2" action="index.php?act=say&amp;id=' . $id . '" method="post">';
                     if ($set_forum['farea']) {
                         $token = mt_rand(1000, 100000);
