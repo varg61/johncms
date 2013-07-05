@@ -655,9 +655,6 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                         $file_id = $fres['id'];
                     }
 
-                    // Проверяем, разрешено ли редактирование 1-го поста темы
-                    $allow_edit = isset($allow['firstpost']) && $allow['firstpost'] ? 1 : 0;
-
                     if (
                         (($rights == 3 || $rights >= 6 || $curator) && $rights >= $res['rights'])
                         || ($res['user_id'] == $user_id && !$set_forum['upfp'] && ($start + $i) == $colmes && $res['time'] > time() - 300)
