@@ -18,6 +18,8 @@ if (empty($_GET['id'])) {
     exit;
 }
 
+
+
 // Запрос сообщения
 $req = mysql_query("SELECT `forum`.*, `users`.`sex`, `users`.`rights`, `users`.`lastdate`, `users`.`status`, `users`.`datereg`
 FROM `forum` LEFT JOIN `users` ON `forum`.`user_id` = `users`.`id`
@@ -25,7 +27,16 @@ WHERE `forum`.`type` = 'm' AND `forum`.`id` = '$id'" . ($rights >= 7 ? "" : " AN
 $res = mysql_fetch_array($req);
 
 // Запрос темы
-$them = mysql_fetch_array(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
+$them = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `type` = 't' AND `id` = '" . $res['refid'] . "'"));
+
+// Запрос раздела
+$section = mysql_fetch_assoc(mysql_query("SELECT * FROM `forum` WHERE `type` = 'r' AND `id` = '" . $them['refid'] . "'"));
+if($section['edit'] == 3 && !$rights){
+    echo functions::display_error($lng['access_forbidden'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
+    require('../incfiles/end.php');
+    exit;
+}
+
 echo '<div class="phdr"><b>' . $lng_forum['topic'] . ':</b> ' . $them['text'] . '</div><div class="menu">';
 // Значок пола
 if ($res['sex'])
