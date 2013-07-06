@@ -508,11 +508,10 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                         echo '<b>' . $postres['from'] . '</b> ';
                     }
                     $user_rights = array(
-                        1 => 'Kil',
-                        3 => 'Mod',
-                        6 => 'Smd',
-                        7 => 'Adm',
-                        8 => 'SV'
+                        3 => '(FMod)',
+                        6 => '(Smd)',
+                        7 => '(Adm)',
+                        9 => '(SV!)'
                     );
                     echo @$user_rights[$postres['rights']];
                     echo(time() > $postres['lastdate'] + 300 ? '<span class="red"> [Off]</span>' : '<span class="green"> [ON]</span>');
