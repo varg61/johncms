@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @package     JohnCMS
-* @link        http://johncms.com
-* @copyright   Copyright (C) 2008-2011 JohnCMS Community
-* @license     LICENSE.txt (see attached file)
-* @version     VERSION.txt (see attached file)
-* @author      http://johncms.com/about
-*/
+ * @package     JohnCMS
+ * @link        http://johncms.com
+ * @copyright   Copyright (C) 2008-2011 JohnCMS Community
+ * @license     LICENSE.txt (see attached file)
+ * @version     VERSION.txt (see attached file)
+ * @author      http://johncms.com/about
+ */
 
 defined('_IN_JOHNADM') or die('Error: restricted access');
 
@@ -20,19 +20,19 @@ if ($rights < 7) {
 echo '<div class="phdr"><a href="index.php"><b>' . $lng['admin_panel'] . '</b></a> | ' . $lng['access_rights'] . '</div>';
 if (isset($_POST['submit'])) {
     // Записываем настройки в базу
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['reg']) ? intval($_POST['reg']) : 0) . "' WHERE `key`='mod_reg'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['forum']) ? intval($_POST['forum']) : 0) . "' WHERE `key`='mod_forum'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['guest']) ? intval($_POST['guest']) : 0) . "' WHERE `key`='mod_guest'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['lib']) ? intval($_POST['lib']) : 0) . "' WHERE `key`='mod_lib'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['gal']) ? intval($_POST['gal']) : 0) . "' WHERE `key`='mod_gal'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['down']) ? intval($_POST['down']) : 0) . "' WHERE `key`='mod_down'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['libcomm']) . "' WHERE `key`='mod_lib_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['galcomm']) . "' WHERE `key`='mod_gal_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . isset($_POST['downcomm']) . "' WHERE `key`='mod_down_comm'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['active']) ? intval($_POST['active']) : 0) . "' WHERE `key`='active'");
-    mysql_query("UPDATE `cms_settings` SET `val`='" . (isset($_POST['access']) ? intval($_POST['access']) : 0) . "' WHERE `key`='site_access'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['reg']) ? intval($_POST['reg']) : 0) . "', `key`='mod_reg'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['forum']) ? intval($_POST['forum']) : 0) . "', `key`='mod_forum'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['guest']) ? intval($_POST['guest']) : 0) . "', `key`='mod_guest'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['lib']) ? intval($_POST['lib']) : 0) . "', `key`='mod_lib'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['gal']) ? intval($_POST['gal']) : 0) . "', `key`='mod_gal'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['down']) ? intval($_POST['down']) : 0) . "', `key`='mod_down'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . isset($_POST['libcomm']) . "', `key`='mod_lib_comm'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . isset($_POST['galcomm']) . "', `key`='mod_gal_comm'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . isset($_POST['downcomm']) . "', `key`='mod_down_comm'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['active']) ? intval($_POST['active']) : 0) . "', `key`='active'");
+    mysql_query("REPLACE `cms_settings` SET `val`='" . (isset($_POST['access']) ? intval($_POST['access']) : 0) . "', `key`='site_access'");
     $req = mysql_query("SELECT * FROM `cms_settings`");
-    $set = array ();
+    $set = array();
     while ($res = mysql_fetch_row($req)) $set[$res[0]] = $res[1];
     mysql_free_result($req);
     echo '<div class="rmenu">' . $lng['settings_saved'] . '</div>';
@@ -79,7 +79,7 @@ echo '<p><h3><img src="../images/' . $color[$set['mod_lib']] . '.gif" width="16"
     '<input type="radio" value="0" name="lib" ' . (!$set['mod_lib'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_disabled'] . '<br />' .
     '<input name="libcomm" type="checkbox" value="1" ' . ($set['mod_lib_comm'] ? 'checked="checked"' : '') . ' />&#160;' . $lng['comments'] .
     '</div></p>';
-    
+
 /*
 -----------------------------------------------------------------
 Управление доступом к Галерее
@@ -116,7 +116,7 @@ echo '<p><h3><img src="../images/' . $color[$set['active'] + 1] . '.gif" width="
     '<input type="radio" value="1" name="active" ' . ($set['active'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_enabled'] . '<br />' .
     '<input type="radio" value="0" name="active" ' . (!$set['active'] ? 'checked="checked"' : '') . '/>&#160;' . $lng['access_authorised'] . '<br />' .
     '</div></p></div>';
-    
+
 /*
 -----------------------------------------------------------------
 Управление доступом к Регистрации
