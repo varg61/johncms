@@ -175,6 +175,7 @@ class bbcode extends core
     {
         $var = preg_replace('#\[color=(.+?)\](.+?)\[/color]#si', '$2', $var);
         $var = preg_replace('!\[bg=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)](.+?)\[/bg]!is', '$2', $var);
+        $var = preg_replace('#\[spoiler=(.+?)\](.+?)\[/spoiler]#si', '$2', $var);
         $replace = array(
             '[small]' => '',
             '[/small]' => '',
@@ -199,9 +200,7 @@ class bbcode extends core
             '[c]' => '',
             '[/c]' => '',
             '[*]' => '',
-            '[/*]' => '',
-            '[spoiler]' => '',
-            '[/spoiler]' => ''
+            '[/*]' => ''
         );
         return strtr($var, $replace);
     }
@@ -270,7 +269,7 @@ class bbcode extends core
             '!\[bg=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)](.+?)\[/bg]!is', // Цвет фона
             '#\[(quote|c)](.+?)\[/(quote|c)]#is', // Цитата
             '#\[\*](.+?)\[/\*]#is', // Список
-            '#\[spoiler](.+?)\[/spoiler]#is' // Спойлер
+            '#\[spoiler=(.+?)](.+?)\[/spoiler]#is' // Спойлер
         );
         // Список замены
         $replace = array(
@@ -287,7 +286,7 @@ class bbcode extends core
             '<span style="background-color:$1">$2</span>', // Цвет фона
             '<span class="quote" style="display:block">$2</span>', // Цитата
             '<span class="bblist">$1</span>', // Список
-            '<div><div class="spoilerhead" style="cursor:pointer;" onclick="var _n=this.parentNode.getElementsByTagName(\'div\')[1];if(_n.style.display==\'none\'){_n.style.display=\'\';}else{_n.style.display=\'none\';}">Спойлер (+/-)</div><div class="spoilerbody" style="display:none">$1</div></div>' // Спойлер
+            '<div><div class="spoilerhead" style="cursor:pointer;" onclick="var _n=this.parentNode.getElementsByTagName(\'div\')[1];if(_n.style.display==\'none\'){_n.style.display=\'\';}else{_n.style.display=\'none\';}">$1 (+/-)</div><div class="spoilerbody" style="display:none">$2</div></div>' // Спойлер
         );
         return preg_replace($search, $replace, $var);
     }
@@ -320,7 +319,7 @@ class bbcode extends core
             $res_sm = '';
             $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=my_smileys">' . self::$lng['edit_list'] . '</a></small><br />';
             foreach ($smileys as $value)
-                $res_sm .= '<a href="javascript:tag(\'' . $value . '\', \':\'); show_hide(\'sm\');">:' . $value . ':</a> ';
+                $res_sm .= '<a href="javascript:tag(\':' . $value . '\', \':\'); show_hide(\'sm\');">:' . $value . ':</a> ';
             $bb_smileys .= functions::smileys($res_sm, self::$user_data['rights'] >= 1 ? 1 : 0);
         } else {
             $bb_smileys = '<small><a href="' . self::$system_set['homeurl'] . '/pages/faq.php?act=smileys">' . self::$lng['add_smileys'] . '</a></small>';
@@ -355,7 +354,7 @@ class bbcode extends core
             <a href="javascript:tag(\'[u]\', \'[/u]\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/underline.gif" alt="u" title="' . self::$lng['tag_underline'] . '" border="0"/></a>
             <a href="javascript:tag(\'[s]\', \'[/s]\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/strike.gif" alt="s" title="' . self::$lng['tag_strike'] . '" border="0"/></a>
             <a href="javascript:tag(\'[*]\', \'[/*]\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/list.gif" alt="s" title="' . self::$lng['tag_list'] . '" border="0"/></a>
-            <a href="javascript:tag(\'[spoiler]\', \'[/spoiler]\');"><img src="../images/bb/sp.gif" alt="spoiler" title="Спойлер" border="0"/></a>
+            <a href="javascript:tag(\'[spoiler=]\', \'[/spoiler]\');"><img src="../images/bb/sp.gif" alt="spoiler" title="Спойлер" border="0"/></a>
             <a href="javascript:tag(\'[c]\', \'[/c]\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/quote.gif" alt="quote" title="' . self::$lng['tag_quote'] . '" border="0"/></a>
             <a href="javascript:tag(\'[php]\', \'[/php]\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/php.gif" alt="cod" title="' . self::$lng['tag_code'] . '" border="0"/></a>
             <a href="javascript:tag(\'[url=]\', \'[/url]\')"><img src="' . self::$system_set['homeurl'] . '/images/bb/link.gif" alt="url" title="' . self::$lng['tag_link'] . '" border="0"/></a>
