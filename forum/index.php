@@ -291,16 +291,13 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                 Список разделов форума
                 -----------------------------------------------------------------
                 */
-                $req = mysql_query("SELECT `id`, `text`, `soft`, `edit` FROM `forum` WHERE `type`='r' AND `refid`='$id' " . ($rights ? '' : "AND `edit` != '3'") . " ORDER BY `realid`");
+                $req = mysql_query("SELECT `id`, `text`, `soft`, `edit` FROM `forum` WHERE `type`='r' AND `refid`='$id' ORDER BY `realid`");
                 $total = mysql_num_rows($req);
                 if ($total) {
                     $i = 0;
                     while (($res = mysql_fetch_assoc($req)) !== FALSE) {
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
                         $coltem = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type` = 't' AND `refid` = '" . $res['id'] . "'"), 0);
-                        if($res['edit'] == 3){
-                            echo '<img src="../theme/' . $set_user['skin'] . '/images/tz.gif" alt=""/>&#160;';
-                        }
                         echo '<a href="?id=' . $res['id'] . '">' . $res['text'] . '</a>';
                         if ($coltem)
                             echo " [$coltem]";
@@ -323,13 +320,8 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                 Список топиков
                 -----------------------------------------------------------------
                 */
-                if($type1['edit'] == 3 && !$rights){
-                    echo functions::display_error($lng['access_forbidden'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
-                    require('../incfiles/end.php');
-                    exit;
-                }
                 $total = mysql_result(mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `refid`='$id'" . ($rights >= 7 ? '' : " AND `close`!='1'")), 0);
-                if (($user_id && !isset($ban['1']) && !isset($ban['11']) && $set['mod_forum'] != 3) || core::$user_rights) {
+                if (($user_id && !isset($ban['1']) && !isset($ban['11']) && $set['mod_forum'] != 4) || core::$user_rights) {
                     // Кнопка создания новой темы
                     echo '<div class="gmenu"><form action="index.php?act=nt&amp;id=' . $id . '" method="post"><input type="submit" value="' . $lng_forum['new_topic'] . '" /></form></div>';
                 }
@@ -388,11 +380,6 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                 Читаем топик
                 -----------------------------------------------------------------
                 */
-                if($allow == 3 && !$rights){
-                    echo functions::display_error($lng['access_forbidden'], '<a href="index.php">' . $lng['to_forum'] . '</a>');
-                    require('../incfiles/end.php');
-                    exit;
-                }
                 $filter = isset($_SESSION['fsort_id']) && $_SESSION['fsort_id'] == $id ? 1 : 0;
                 $sql = '';
                 if ($filter && !empty($_SESSION['fsort_users'])) {

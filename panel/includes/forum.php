@@ -262,7 +262,6 @@ switch ($mod) {
             if ($id) {
                 echo '<p><input type="radio" name="allow" value="0" checked="checked"/>&#160;' . $lng['allow_plain'] . '<br/>' .
                     '<input type="radio" name="allow" value="4"/>&#160;' . $lng['allow_readonly'] . '<br/>' .
-                    '<input type="radio" name="allow" value="3"/>&#160;' . $lng['allow_only_admin'] . '<br/>' .
                     '<input type="radio" name="allow" value="2"/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
                     '<input type="radio" name="allow" value="1"/>&#160;' . $lng['allow_autocurators'] . '</p>';
             }
@@ -342,7 +341,6 @@ switch ($mod) {
                         $allow = !empty($res['edit']) ? intval($res['edit']) : 0;
                         echo '<p><input type="radio" name="allow" value="0" ' . (!$allow ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_plain'] . '<br/>' .
                             '<input type="radio" name="allow" value="4" ' . ($allow == 4 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_readonly'] . '<br/>' .
-                            '<input type="radio" name="allow" value="3" ' . ($allow == 3 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_only_admin'] . '<br/>' .
                             '<input type="radio" name="allow" value="2" ' . ($allow == 2 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_firstpost_edit'] . '<br/>' .
                             '<input type="radio" name="allow" value="1" ' . ($allow == 1 ? 'checked="checked"' : '') . '/>&#160;' . $lng['allow_autocurators'] . '</p>';
                         echo '<p><h3>' . $lng_forum['category'] . '</h3><select name="category" size="1">';
