@@ -205,8 +205,7 @@ if (isset($_POST['submit'])
         '<p><h3>' . $lng_forum['new_topic_name'] . '</h3>' .
         '<input type="text" size="20" maxlength="100" name="th" value="' . $th . '"/></p>' .
         '<p><h3>' . $lng_forum['post'] . '</h3>';
-    if (!$is_mobile)
-        echo '</p><p>' . bbcode::auto_bb('form', 'msg');
+    echo '</p><p>' . bbcode::auto_bb('form', 'msg');
     echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . (isset($_POST['msg']) ? functions::checkout($_POST['msg']) : '') . '</textarea></p>' .
         '<p><input type="checkbox" name="addfiles" value="1" ' . (isset($_POST['addfiles']) ? 'checked="checked" ' : '') . '/> ' . $lng_forum['add_file'];
     if ($set_user['translit']) {

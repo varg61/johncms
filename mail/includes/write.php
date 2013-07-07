@@ -359,9 +359,7 @@ if (!functions::is_ignor($id) && empty($ban['1']) && empty($ban['3'])) {
         '<form name="form" action="index.php?act=write' . ($id ? '&amp;id=' . $id : '') . '" method="post"  enctype="multipart/form-data">' .
         ($id ? '' : '<p><input type="text" name="nick" maxlength="15" value="' . (!empty($_POST['nick']) ? functions::check($_POST['nick']) : '') . '" placeholder="' . $lng_mail['to_whom'] . '?"/></p>') .
         '<p>';
-    if (!$is_mobile) {
-        $out .= bbcode::auto_bb('form', 'text');
-    }
+    $out .= bbcode::auto_bb('form', 'text');
     $out .= '<textarea rows="' . $set_user['field_h'] . '" name="text"></textarea></p>';
     if ($set_user['translit'])
         $out .= '<input type="checkbox" name="msgtrans" value="1" ' . (isset($_POST['msgtrans']) ? 'checked="checked" ' : '') . '/> ' . $lng['translit'] . '<br />';

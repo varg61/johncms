@@ -201,9 +201,7 @@ switch ($act) {
                     '<div class="rmenu">' .
                     '<form name="form" action="index.php?act=edit&amp;id=' . $id . '" method="post">' .
                     '<p><b>' . $lng['author'] . ':</b> ' . $res['name'] . '</p><p>';
-                if (!$is_mobile) {
-                    echo bbcode::auto_bb('form', 'msg');
-                }
+                echo bbcode::auto_bb('form', 'msg');
                 echo '<textarea rows="' . $set_user['field_h'] . '" name="msg">' . $text . '</textarea></p>' .
                     '<p><input type="submit" name="submit" value="' . $lng['save'] . '"/></p>' .
                     '<input type="hidden" name="token" value="' . $token . '"/>' .
@@ -299,9 +297,7 @@ switch ($act) {
             if (!$user_id)
                 echo $lng['name'] . ' (max 25):<br/><input type="text" name="name" maxlength="25"/><br/>';
             echo '<b>' . $lng['message'] . '</b> <small>(max 5000)</small>:<br/>';
-            if (!$is_mobile) {
-                echo bbcode::auto_bb('form', 'msg');
-            }
+            echo bbcode::auto_bb('form', 'msg');
             echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/>';
             if ($set_user['translit'])
                 echo '<input type="checkbox" name="msgtrans" value="1" />&nbsp;' . $lng['translit'] . '<br/>';

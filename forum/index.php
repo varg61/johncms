@@ -531,7 +531,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                         $token = mt_rand(1000, 100000);
                         $_SESSION['token'] = $token;
                         echo '<p>' .
-                            (!$is_mobile ? bbcode::auto_bb('form1', 'msg') : '') .
+                            bbcode::auto_bb('form1', 'msg') .
                             '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea></p>' .
                             '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'] .
                             ($set_user['translit'] ? '<br /><input type="checkbox" name="msgtrans" value="1" /> ' . $lng['translit'] : '') .
@@ -701,8 +701,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                         $token = mt_rand(1000, 100000);
                         $_SESSION['token'] = $token;
                         echo '<p>';
-                        if (!$is_mobile)
-                            echo bbcode::auto_bb('form2', 'msg');
+                        echo bbcode::auto_bb('form2', 'msg');
                         echo '<textarea rows="' . $set_user['field_h'] . '" name="msg"></textarea><br/></p>' .
                             '<p><input type="checkbox" name="addfiles" value="1" /> ' . $lng_forum['add_file'];
                         if ($set_user['translit'])
