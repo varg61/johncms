@@ -2,10 +2,10 @@
 
 --------------------------------------------------------------------------------
 JohnCMS
-Обновление 4.5.x - 5.0.0
+Обновление 4.5.x - 5.1.0
 --------------------------------------------------------------------------------
 ВНИМАНИЕ!!!
-Данный пакет предназначен для обновления JohnCMS с версии 4.5.0, или 4.5.1 до версии 5.0.0
+Данный пакет предназначен для обновления JohnCMS с версии 4.5.0, или 4.5.1 до версии 5.1.0
 С другими версиями несовместим!
 Если Вы использовали на своем сайте какие-либо моды, затрагивающие файлы
 которые входят в данный пакет, то возможность обновления и саму процедуру
@@ -30,10 +30,10 @@ JohnCMS
 
 --------------------------------------------------------------------------------
 JohnCMS
-Update 4.5.x - 5.0.0
+Update 4.5.x - 5.1.0
 --------------------------------------------------------------------------------
 ATTENTION!!!
-This package is designed to update JohnCMS with version 4.5.0, or 4.5.1 to version 5.0.0
+This package is designed to update JohnCMS with version 4.5.0, or 4.5.1 to version 5.1.0
 Not compatible with other versions!
 If you used on your site any mods that affect files within this package,
 the ability to update and the process itself coordinate with the authors of the mods.
