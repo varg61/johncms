@@ -1,12 +1,13 @@
 /*//////////////////////////////////////////////////
-/Designed by selemet , special for for johncms.com
+/Designed by selemet , special for  johncms.com
 /////////////////////////////////////////////////*/
 body {
-  background:#fff;
+  background:#F4F4FE url(images/bg.png);
   color: #000000;
   font-family: Arial, Tahoma, sans-serif;
   font-size: small;
-  margin: 0;
+  max-width: 700px;
+  margin: 0 auto;
   padding: 0;
 }
 
@@ -95,6 +96,8 @@ input[type="submit"] {
 .fmenu {
   background-color: #E8E8FF;
   border-top: 1px solid #D6D6F7;
+  border-left: 1px solid #D3D8DE;
+  border-right: 1px solid #D3D8DE;
   color: #FFFFFF;
   margin-top: 7px;
   padding: 6px;
@@ -117,9 +120,9 @@ input[type="submit"] {
 }
 
 .gmenu {
-  background-color: #F7F7F2;
+  background-color: #EDF7E8;
   margin: 1px 0px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #DBEDD3;
   padding: 3px 4px 3px 4px;
 }
 
@@ -157,31 +160,49 @@ input[type="submit"] {
 .list1 {
   background-color: #F7F7F5;
   border-bottom: 1px solid #D8DEE5;
+  text-shadow:0px 1px #fff;
   margin: 1px 0px;
   padding: 5px;
-  color: #444;
+  color: #222;
 }
 
 .list2 {
+  text-shadow:0px 1px #f0f0f0;
   background-color: #F0F2F5;
   border-bottom: 1px solid #D8DBE3;
   margin: 1px 0px;
   padding: 5px;
-  color: #444;
+  color: #222;
 }
 .list1 a:link ,.list1 a:visited ,.list2 a:link ,.list2 a:visited {
-  color:#1C5FBF;
+  color:#393698;
   text-decoration: underline;
 }
 .list1 a:hover ,.list2 a:hover {
   color: #D15D34;
   text-decoration: underline;
 }
+.spoilerhead {
+  background: #E8E8F2;
+  color: #211F67;
+  padding: 3px;
+  border: 1px  solid #9898AD;
+}
+.spoilerbody {
+  background: #FAFAFC;
+  border: 1px solid #AFAFC4;
+  border-top: none;
+  padding: 4px;
+  color:#333;
+  border-radius: 0px 0px 3px 3px;
+}
 .maintxt {
   background: #fff;
   font-weight: normal;
   margin: -6px 0px -6px 0px;
   padding: 0px;
+  border-left: 1px solid #D3D8DE;
+  border-right: 1px solid #D3D8DE;
 }
 .maintxt p a:link ,.maintxt p a:visited{
   padding-left: 8px;
@@ -260,7 +281,7 @@ input[type="submit"] {
 }
 
 .sub {
-  border-top: 1px dotted #c6c17f;
+  border-top: 1px dotted #ccc;
   font-size: x-small;
   margin-top: 4px;
 }
@@ -268,13 +289,15 @@ input[type="submit"] {
 .tmn {
   background-color: #E8E8FF;
   border-bottom: 1px solid #D6D6F7;
+  border-left: 1px solid #D3D8DE;
+  border-right: 1px solid #D3D8DE;
   color: #52432C;
-  margin-bottom: 7px;
+  margin-bottom: 6px;
   padding: 5px;
 }
 
 .topmenu {
-  background-color: #f9f9f9;
+  background-color: #EDEDF2;
   padding: 4px 8px;
   font-size: 12px;
   color: #555;
@@ -287,8 +310,8 @@ input[type="submit"] {
 
 .user {
   background-color: #E3E5E8;
-  border: 1px solid white;
-  margin: 0;
+  margin: 1px 0px;
+  border-bottom: 1px solid #C6CED3;
   padding: 3px 4px 3px 4px;
 }
 .user .gray {
@@ -356,5 +379,5 @@ a.pagenav:hover {
     border: 1px solid #A0AAB4;
 }
 /*//////////////////////////////////////////////////
-/Designed by selemet , special for for johncms.com
+/Designed by selemet , special for johncms.com
 /////////////////////////////////////////////////*/
