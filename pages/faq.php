@@ -60,6 +60,7 @@ switch ($act) {
             '<tr><td align="right">[bg=][/bg]</td><td>' . $lng['color_bg'] . '</td></tr>' .
             '<tr><td align="right">[c]...[/c]</td><td><span class="quote">' . $lng['tag_quote'] . '</span></td></tr>' .
             '<tr><td align="right" valign="top">[*]...[/*]</td><td><span class="bblist">' . $lng['tag_list'] . '</span></td></tr>' .
+            '<tr><td align="right" valign="top">Spoiler</td><td>[spoiler=' . $lng['title'] . ']' . $lng['text'] . '[/spoiler]</td></tr>' .
             '</table>' .
             '</p></div>' .
             '<div class="phdr"><a href="' . $_SESSION['ref'] . '">' . $lng['back'] . '</a></div>';
