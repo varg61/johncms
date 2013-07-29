@@ -21,21 +21,20 @@ $error = array();
 $captcha = FALSE;
 $display_form = 1;
 $user_login = isset($_POST['n']) ? functions::check($_POST['n']) : NULL;
-$user_pass = isset($_REQUEST['p']) ? functions::check($_REQUEST['p']) : NULL;
+$user_pass = isset($_POST['p']) ? functions::check($_POST['p']) : NULL;
 $user_mem = isset($_POST['mem']) ? 1 : 0;
 $user_code = isset($_POST['code']) ? trim($_POST['code']) : NULL;
-if ($user_pass && !$user_login && !$id)
+if ($user_pass && !$user_login)
     $error[] = $lng['error_login_empty'];
-if (($user_login || $id) && !$user_pass)
+if ($user_login && !$user_pass)
     $error[] = $lng['error_empty_password'];
 if ($user_login && (mb_strlen($user_login) < 2 || mb_strlen($user_login) > 20))
     $error[] = $lng['nick'] . ': ' . $lng['error_wrong_lenght'];
 if ($user_pass && (mb_strlen($user_pass) < 3 || mb_strlen($user_pass) > 15))
     $error[] = $lng['password'] . ': ' . $lng['error_wrong_lenght'];
-if (!$error && $user_pass && ($user_login || $id)) {
+if (!$error && $user_pass && $user_login) {
     // Запрос в базу на юзера
-    $sql = $id ? "`id` = '$id'" : "`name_lat`='" . functions::rus_lat(mb_strtolower($user_login)) . "'";
-    $req = mysql_query("SELECT * FROM `users` WHERE $sql LIMIT 1");
+    $req = mysql_query("SELECT * FROM `users` WHERE `name_lat`='" . functions::rus_lat(mb_strtolower($user_login)) . "' LIMIT 1");
     if (mysql_num_rows($req)) {
         $user = mysql_fetch_assoc($req);
         if ($user['failed_login'] > 2) {

@@ -114,14 +114,15 @@ if (isset($_POST['submit'])) {
 			");
         }
 
-        echo'<div class="menu"><p><h3>' . $lng_reg['you_registered'] . '</h3>' . $lng_reg['your_id'] . ': <b>' . $usid . '</b><br/>' . $lng_reg['your_login'] . ': <b>' . $reg_nick . '</b><br/>' . $lng_reg['your_password'] . ': <b>' . $reg_pass . '</b></p>' .
-            '<p><h3>' . $lng_reg['your_link'] . '</h3><input type="text" value="' . $set['homeurl'] . '/login.php?id=' . $usid . '&amp;p=' . $reg_pass . '" /><br/>';
+        echo'<div class="menu"><p><h3>' . $lng_reg['you_registered'] . '</h3>' . $lng_reg['your_id'] . ': <b>' . $usid . '</b><br/>' . $lng_reg['your_login'] . ': <b>' . $reg_nick . '</b><br/>' . $lng_reg['your_password'] . ': <b>' . $reg_pass . '</b></p>';
         if ($set['mod_reg'] == 1) {
             echo '<p><span class="red"><b>' . $lng_reg['moderation_note'] . '</b></span></p>';
         } else {
-            echo '<br /><a href="login.php?id=' . $usid . '&amp;p=' . $reg_pass . '">' . $lng_reg['enter'] . '</a><br/><br/>';
+            $_SESSION['uid'] = $usid;
+            $_SESSION['ups'] = md5(md5($reg_pass));
+            echo '<p><a href="' . $home . '">' . $lng_reg['enter'] . '</a></p>';
         }
-        echo '</p></div>';
+        echo '</div>';
         require('incfiles/end.php');
         exit;
     }
