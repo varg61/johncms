@@ -236,11 +236,12 @@ class bbcode extends core
         if (!function_exists('process_url')) {
             function process_url($url)
             {
-                    $tmp = parse_url($url[1]);
-                    if ('http://' . $tmp['host'] == core::$system_set['homeurl'] || isset(core::$user_set['direct_url']) && core::$user_set['direct_url']) {
+                $home = parse_url(core::$system_set['homeurl']);
+                $tmp = parse_url($url[1]);
+                    if ($home['host'] == $tmp['host'] || isset(core::$user_set['direct_url']) && core::$user_set['direct_url']) {
                         return '<a href="' . $url[1] . '">' . $url[2] . '</a>';
                     } else {
-                        return '<a href="' . core::$system_set['homeurl'] . '/go.php?url=' . rawurlencode($url[1]) . '">' . $url[2] . '</a>';
+                        return '<a href="' . core::$system_set['homeurl'] . '/go.php?url=' . urlencode(htmlspecialchars_decode($url[1])) . '">' . $url[2] . '</a>';
                     }
             }
         }
