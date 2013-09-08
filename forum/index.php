@@ -412,7 +412,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                 }
 
                 // Выводим название топика
-                echo '<div class="phdr"><a name="up" id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
+                echo '<div class="phdr"><a id="up"></a><a href="#down"><img src="../theme/' . $set_user['skin'] . '/images/down.png" alt="Вниз" width="20" height="10" border="0"/></a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
                 if ($colmes > $kmess) {
                     echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>';
                 }
@@ -560,7 +560,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                         echo '</td><td>';
                     }
                     if ($res['sex'])
-                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" />&#160;';
+                        echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt=""/>&#160;';
                     else
                         echo '<img src="../images/del.png" width="12" height="12" align="middle" alt=""/>&#160;';
                     // Ник юзера и ссылка на его анкету
@@ -714,7 +714,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                         echo '<p><input type="submit" name="submit" value="' . $lng['write'] . '"/></p></form></div>';
                     }
                 }
-                echo '<div class="phdr"><a name="down" id="down"></a><a href="#up">' .
+                echo '<div class="phdr"><a id="down"></a><a href="#up">' .
                     '<img src="../theme/' . $set_user['skin'] . '/images/up.png" alt="' . $lng['up'] . '" width="20" height="10" border="0"/></a>' .
                     '&#160;&#160;' . $lng['total'] . ': ' . $colmes . '</div>';
                 if ($colmes > $kmess) {
