@@ -79,10 +79,8 @@ class install
     */
     static function check_php_warnings()
     {
-        global $lng;
         $error = array();
         if (ini_get('register_globals')) $error[] = 'register_globals';
-        if (ini_get('arg_separator.output') != '&amp;') $error[] = 'arg_separator.output';
         return !empty($error) ? $error : false;
     }
 
