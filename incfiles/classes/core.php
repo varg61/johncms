@@ -34,7 +34,7 @@ class core
 
     private $flood_chk = 1; // Включение - выключение функции IP антифлуда
     private $flood_interval = '120'; // Интервал времени в секундах
-    private $flood_limit = '30'; // Число разрешенных запросов за интервал
+    private $flood_limit = '70'; // Число разрешенных запросов за интервал
 
     function __construct()
     {
@@ -171,9 +171,9 @@ class core
             for ($i = 0; $i < count($tmp); $i++) fwrite($in, pack('LL', $tmp[$i]['ip'], $tmp[$i]['time']));
             fwrite($in, pack('LL', self::$ip, $now));
             fclose($in);
-            //if ($requests > $this->flood_limit){
-            //    die('FLOOD: exceeded limit of allowed requests');
-            //}
+            if ($requests > $this->flood_limit){
+                die('FLOOD: exceeded limit of allowed requests');
+            }
         }
     }
 

@@ -38,8 +38,7 @@ function autoload($name)
 Инициализируем Ядро системы
 -----------------------------------------------------------------
 */
-$core = new core() or die('Error: Core System');
-unset($core);
+new core;
 
 /*
 -----------------------------------------------------------------
@@ -105,14 +104,6 @@ if ((core::$system_set['site_access'] == 0 || core::$system_set['site_access'] =
 
 /*
 -----------------------------------------------------------------
-Показываем Дайджест
------------------------------------------------------------------
-*/
-if ($user_id && $datauser['lastdate'] < (time() - 3600) && $set_user['digest'] && $headmod == 'mainpage')
-    header('Location: ' . $set['homeurl'] . '/index.php?act=digest&last=' . $datauser['lastdate']);
-
-/*
------------------------------------------------------------------
 Буфферизация вывода
 -----------------------------------------------------------------
 */
@@ -120,6 +111,7 @@ if (!isset($set['gzip'])) {
     mysql_query("INSERT INTO `cms_settings` SET `key` = 'gzip', `val` = '1'");
     $set['gzip'] = 1;
 }
+
 if ($set['gzip'] && @extension_loaded('zlib')) {
     @ini_set('zlib.output_compression_level', 3);
     ob_start('ob_gzhandler');
