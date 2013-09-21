@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-$rootpath = '';
 $headmod = 'login';
 require('incfiles/core.php');
 require('incfiles/head.php');

@@ -11,7 +11,6 @@
 
 define('_IN_JOHNCMS', 1);
 
-$rootpath = ''; // Внимание! Если файл находится в корневой папке, нужно указать $rootpath = '';
 require('incfiles/core.php');
 
 if (isset($_SESSION['ref']))

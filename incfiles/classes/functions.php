@@ -26,11 +26,11 @@ class functions extends core
     public static function antiflood()
     {
         $default = array(
-            'mode'    => 2,
-            'day'     => 10,
-            'night'   => 30,
+            'mode' => 2,
+            'day' => 10,
+            'night' => 30,
             'dayfrom' => 10,
-            'dayto'   => 22
+            'dayto' => 22
         );
         $af = isset(self::$system_set['antiflood']) ? unserialize(self::$system_set['antiflood']) : $default;
         switch ($af['mode']) {
@@ -72,18 +72,18 @@ class functions extends core
     {
         $var = preg_replace('~\\[url=(https?://.+?)\\](.+?)\\[/url\\]|(https?://(www.)?[0-9a-z\.-]+\.[0-9a-z]{2,6}[0-9a-zA-Z/\?\.\~&amp;_=/%-:#]*)~', '###', $var);
         $replace = array(
-            '.ru'   => '***',
-            '.com'  => '***',
-            '.biz'  => '***',
-            '.cn'   => '***',
-            '.in'   => '***',
-            '.net'  => '***',
-            '.org'  => '***',
+            '.ru' => '***',
+            '.com' => '***',
+            '.biz' => '***',
+            '.cn' => '***',
+            '.in' => '***',
+            '.net' => '***',
+            '.org' => '***',
             '.info' => '***',
             '.mobi' => '***',
-            '.wen'  => '***',
-            '.kmx'  => '***',
-            '.h2m'  => '***'
+            '.wen' => '***',
+            '.kmx' => '***',
+            '.h2m' => '***'
         );
 
         return strtr($var, $replace);
@@ -112,11 +112,11 @@ class functions extends core
      * Обработка текстов перед выводом на экран
      *
      * @param string $str
-     * @param int    $br   Параметр обработки переносов строк
+     * @param int $br   Параметр обработки переносов строк
      *                     0 - не обрабатывать (по умолчанию)
      *                     1 - обрабатывать
      *                     2 - вместо переносов строки вставляются пробелы
-     * @param int    $tags Параметр обработки тэгов
+     * @param int $tags Параметр обработки тэгов
      *                     0 - не обрабатывать (по умолчанию)
      *                     1 - обрабатывать
      *                     2 - вырезать тэги
@@ -183,7 +183,7 @@ class functions extends core
      * Сообщения об ошибках
      *
      * @param string|array $error Сообщение об ошибке (или массив с сообщениями)
-     * @param string       $link  Необязательная ссылка перехода
+     * @param string $link  Необязательная ссылка перехода
      *
      * @return bool|string
      */
@@ -191,8 +191,8 @@ class functions extends core
     {
         if (!empty($error)) {
             return '<div class="rmenu"><p><b>' . self::$lng['error'] . '!</b><br />' .
-                (is_array($error) ? implode('<br />', $error) : $error) . '</p>' .
-                (!empty($link) ? '<p>' . $link . '</p>' : '') . '</div>';
+            (is_array($error) ? implode('<br />', $error) : $error) . '</p>' .
+            (!empty($link) ? '<p>' . $link . '</p>' : '') . '</div>';
         } else {
             return FALSE;
         }
@@ -201,7 +201,7 @@ class functions extends core
     /**
      * Отображение различных меню
      *
-     * @param array  $val
+     * @param array $val
      * @param string $delimiter Разделитель между пунктами
      * @param string $end_space Выводится в конце
      *
@@ -217,9 +217,9 @@ class functions extends core
      * За основу взята доработанная функция от форума SMF 2.x.x
      *
      * @param string $url
-     * @param int    $start
-     * @param int    $total
-     * @param int    $kmess
+     * @param int $start
+     * @param int $total
+     * @param int $kmess
      *
      * @return string
      */
@@ -263,7 +263,7 @@ class functions extends core
     /**
      * Показываем местоположение пользователя
      *
-     * @param int    $user_id
+     * @param int $user_id
      * @param string $place
      *
      * @return mixed|string
@@ -295,7 +295,7 @@ class functions extends core
     /**
      * Отображения личных данных пользователя
      *
-     * @param int   $user Массив запроса в таблицу `users`
+     * @param int $user Массив запроса в таблицу `users`
      * @param array $arg  Массив параметров отображения
      *                    [lastvisit] (boolean)   Дата и время последнего визита
      *                    [stshide]   (boolean)   Скрыть статус (если есть)
@@ -311,7 +311,7 @@ class functions extends core
      */
     public static function display_user($user = 0, $arg = array())
     {
-        global $rootpath, $mod;
+        global $mod;
         $out = FALSE;
 
         if (!$user['id']) {
@@ -323,7 +323,7 @@ class functions extends core
         } else {
             if (self::$user_set['avatar']) {
                 $out .= '<table cellpadding="0" cellspacing="0"><tr><td>';
-                if (file_exists(($rootpath . 'files/users/avatar/' . $user['id'] . '.png')))
+                if (file_exists((ROOTPATH . 'files/users/avatar/' . $user['id'] . '.png')))
                     $out .= '<img src="' . self::$system_set['homeurl'] . '/files/users/avatar/' . $user['id'] . '.png" width="32" height="32" alt="" />&#160;';
                 else
                     $out .= '<img src="' . self::$system_set['homeurl'] . '/images/empty.png" width="32" height="32" alt="" />&#160;';
@@ -434,6 +434,11 @@ class functions extends core
         } else {
             return self::$user_data;
         }
+    }
+
+    public static function image($mame)
+    {
+
     }
 
     /**
@@ -580,10 +585,9 @@ class functions extends core
     */
     public static function smileys($str, $adm = FALSE)
     {
-        global $rootpath;
         static $smileys_cache = array();
         if (empty($smileys_cache)) {
-            $file = $rootpath . 'files/cache/smileys.dat';
+            $file = ROOTPATH . 'files/cache/smileys.dat';
             if (file_exists($file) && ($smileys = file_get_contents($file)) !== FALSE) {
                 $smileys_cache = unserialize($smileys);
 
@@ -621,68 +625,68 @@ class functions extends core
     public static function trans($str)
     {
         $replace = array(
-            'a'  => 'а',
-            'b'  => 'б',
-            'v'  => 'в',
-            'g'  => 'г',
-            'd'  => 'д',
-            'e'  => 'е',
+            'a' => 'а',
+            'b' => 'б',
+            'v' => 'в',
+            'g' => 'г',
+            'd' => 'д',
+            'e' => 'е',
             'yo' => 'ё',
             'zh' => 'ж',
-            'z'  => 'з',
-            'i'  => 'и',
-            'j'  => 'й',
-            'k'  => 'к',
-            'l'  => 'л',
-            'm'  => 'м',
-            'n'  => 'н',
-            'o'  => 'о',
-            'p'  => 'п',
-            'r'  => 'р',
-            's'  => 'с',
-            't'  => 'т',
-            'u'  => 'у',
-            'f'  => 'ф',
-            'h'  => 'х',
-            'c'  => 'ц',
+            'z' => 'з',
+            'i' => 'и',
+            'j' => 'й',
+            'k' => 'к',
+            'l' => 'л',
+            'm' => 'м',
+            'n' => 'н',
+            'o' => 'о',
+            'p' => 'п',
+            'r' => 'р',
+            's' => 'с',
+            't' => 'т',
+            'u' => 'у',
+            'f' => 'ф',
+            'h' => 'х',
+            'c' => 'ц',
             'ch' => 'ч',
-            'w'  => 'ш',
+            'w' => 'ш',
             'sh' => 'щ',
-            'q'  => 'ъ',
-            'y'  => 'ы',
-            'x'  => 'э',
+            'q' => 'ъ',
+            'y' => 'ы',
+            'x' => 'э',
             'yu' => 'ю',
             'ya' => 'я',
-            'A'  => 'А',
-            'B'  => 'Б',
-            'V'  => 'В',
-            'G'  => 'Г',
-            'D'  => 'Д',
-            'E'  => 'Е',
+            'A' => 'А',
+            'B' => 'Б',
+            'V' => 'В',
+            'G' => 'Г',
+            'D' => 'Д',
+            'E' => 'Е',
             'YO' => 'Ё',
             'ZH' => 'Ж',
-            'Z'  => 'З',
-            'I'  => 'И',
-            'J'  => 'Й',
-            'K'  => 'К',
-            'L'  => 'Л',
-            'M'  => 'М',
-            'N'  => 'Н',
-            'O'  => 'О',
-            'P'  => 'П',
-            'R'  => 'Р',
-            'S'  => 'С',
-            'T'  => 'Т',
-            'U'  => 'У',
-            'F'  => 'Ф',
-            'H'  => 'Х',
-            'C'  => 'Ц',
+            'Z' => 'З',
+            'I' => 'И',
+            'J' => 'Й',
+            'K' => 'К',
+            'L' => 'Л',
+            'M' => 'М',
+            'N' => 'Н',
+            'O' => 'О',
+            'P' => 'П',
+            'R' => 'Р',
+            'S' => 'С',
+            'T' => 'Т',
+            'U' => 'У',
+            'F' => 'Ф',
+            'H' => 'Х',
+            'C' => 'Ц',
             'CH' => 'Ч',
-            'W'  => 'Ш',
+            'W' => 'Ш',
             'SH' => 'Щ',
-            'Q'  => 'Ъ',
-            'Y'  => 'Ы',
-            'X'  => 'Э',
+            'Q' => 'Ъ',
+            'Y' => 'Ы',
+            'X' => 'Э',
             'YU' => 'Ю',
             'YA' => 'Я'
         );

@@ -84,9 +84,10 @@ ul {
 
 .fmenu {
     background-color: #586776;
+    border-bottom: 3px solid #45515D;
     color: #ffffff;
     margin: 0;
-    padding: 3px 1px 5px 3px;
+    padding: 5px 1px 6px 4px;
 }
 
 .footer {

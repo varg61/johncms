@@ -20,8 +20,7 @@ class counters
     */
     static function album()
     {
-        global $rootpath;
-        $file = $rootpath . 'files/cache/count_album.dat';
+        $file = ROOTPATH . 'files/cache/count_album.dat';
         if (file_exists($file) && filemtime($file) > (time() - 600)) {
             $res = unserialize(file_get_contents($file));
             $album = $res['album'];
@@ -43,8 +42,7 @@ class counters
     */
     static function downloads()
     {
-        global $rootpath;
-        $file = $rootpath . 'files/cache/count_downloads.dat';
+        $file = ROOTPATH . 'files/cache/count_downloads.dat';
         if (file_exists($file) && filemtime($file) > (time() - 900)) {
             $res = unserialize(file_get_contents($file));
             $total = $res['total'];
@@ -65,8 +63,7 @@ class counters
     */
     static function forum()
     {
-        global $rootpath;
-        $file = $rootpath . 'files/cache/count_forum.dat';
+        $file = ROOTPATH . 'files/cache/count_forum.dat';
         $new = '';
         if (file_exists($file) && filemtime($file) > (time() - 600)) {
             $res = unserialize(file_get_contents($file));
@@ -171,8 +168,7 @@ class counters
     */
     static function library()
     {
-        global $rootpath;
-        $file = $rootpath . 'files/cache/count_library.dat';
+        $file = ROOTPATH . 'files/cache/count_library.dat';
         if (file_exists($file) && filemtime($file) > (time() - 3200)) {
             $res = unserialize(file_get_contents($file));
             $total = $res['total'];
@@ -210,8 +206,7 @@ class counters
     */
     static function users()
     {
-        global $rootpath;
-        $file = $rootpath . 'files/cache/count_users.dat';
+        $file = ROOTPATH . 'files/cache/count_users.dat';
         if (file_exists($file) && filemtime($file) > (time() - 600)) {
             $res = unserialize(file_get_contents($file));
             $total = $res['total'];
