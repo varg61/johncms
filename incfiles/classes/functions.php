@@ -436,9 +436,19 @@ class functions extends core
         }
     }
 
-    public static function image($mame)
+    public static function image($name, $args = array())
     {
+        $src = core::$system_set['homeurl'] . '/images/' . $name;
+        if (is_file(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . core::$user_set['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $name)) {
+            $src = core::$system_set['homeurl'] . '/theme/' . core::$user_set['skin'] . '/images/' . $name;
+        } elseif (!is_file(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . $name)) {
+            return false;
+        }
 
+        return '<img src="' . $src . '" alt="' . (isset($args['alt']) ? $args['alt'] : '') . '"' .
+        (isset($args['width']) ? ' width="' . $args['width'] . '"' : '') .
+        (isset($args['height']) ? ' height="' . $args['height'] . '"' : '') .
+        ' class="icon"/>';
     }
 
     /**

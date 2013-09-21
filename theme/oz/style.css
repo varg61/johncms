@@ -47,6 +47,11 @@ input[type="submit"] {
   padding: 3px 8px;
 }
 
+.icon {
+    padding: 3px 6px 3px 1px;
+    vertical-align: middle;
+}
+
 p {
   margin: 1px;
 }

@@ -17,13 +17,10 @@ if (!empty($cms_ads[2])) {
 }
 
 echo '</div><div class="fmenu">';
-if ($headmod != "mainpage" || ($headmod == 'mainpage' && $act)) {
-    echo '<a href="' . $set['homeurl'] . '">' . $lng['homepage'] . '</a><br/>';
-}
-
+echo '<div>' . functions::image('menu_online.png') . counters::online() . '</div>';
 
 // Счетчик посетителей онлайн
-echo counters::online() . '</div>' .
+echo '</div>' .
     '<div style="text-align:center">' .
     '<p><b>' . $set['copyright'] . '</b></p>';
 

@@ -72,10 +72,10 @@ ul {
 }
 
 .bmenu {
-    background-color: #bfc6cf;
+    background-color: #ccd4dd;
     border: 1px solid white;
     margin: 0;
-    padding: 2px 4px 4px 4px;
+    padding: 4px;
 }
 
 .end {
@@ -111,7 +111,7 @@ ul {
     background-color: #c7e8d5;
     border: 1px solid white;
     margin: 0;
-    padding: 3px 4px 3px 4px;
+    padding: 4px;
 }
 
 .gray {
@@ -138,6 +138,11 @@ ul {
     color: #d0d7dd;
     margin: 0;
     padding: 5px 0 6px 4px;
+}
+
+.icon {
+    padding: 3px 6px 3px 1px;
+    vertical-align: middle;
 }
 
 .left {
@@ -169,7 +174,7 @@ ul {
     background-color: #eeecd9;
     border: 1px solid white;
     margin: 0;
-    padding: 3px 4px 3px 4px;
+    padding: 4px;
 }
 
 .news {
@@ -213,7 +218,7 @@ ul {
     background-color: #e9ccd2;
     border: 1px solid white;
     margin: 0;
-    padding: 2px 0 3px 4px;
+    padding: 4px;
 }
 
 .sitemap {
@@ -262,7 +267,7 @@ ul {
     border-top: 3px solid #45515d;
     color: #ffffff;
     margin: 0;
-    padding: 5px 0 5px 4px;
+    padding: 5px 0 4px 4px;
 }
 
 .topmenu {
@@ -316,7 +321,8 @@ ul {
     color: #dd0000;
 }
 
-.sub a:link, .sub a:visited { }
+.sub a:link, .sub a:visited {
+}
 
 .tmn a:hover, .fmenu a:hover {
     text-decoration: underline;
