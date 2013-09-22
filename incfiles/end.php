@@ -17,13 +17,11 @@ if (!empty($cms_ads[2])) {
 }
 
 echo '</div><div class="fmenu">';
-echo '<div>' . functions::image('menu_online.png') . counters::online() . '</div>';
 if (isset($_GET['err']) || $headmod != "mainpage" || ($headmod == 'mainpage' && $act)) {
     echo '<div><a href=\'' . $set['homeurl'] . '\'>' . functions::image('menu_home.png') . $lng['homepage'] . '</a></div>';
 }
-
-// Счетчик посетителей онлайн
-echo '</div>' .
+echo '<div>' . counters::online() . '</div>' .
+    '</div>' .
     '<div style="text-align:center">' .
     '<p><b>' . $set['copyright'] . '</b></p>';
 

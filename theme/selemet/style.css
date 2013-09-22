@@ -77,6 +77,10 @@ input[type="submit"] {
     vertical-align: middle;
 }
 
+img{
+    border: 0;
+}
+
 .alarm {
     background-color: #F23439;
     border-bottom: 1px solid #CB1A1C;

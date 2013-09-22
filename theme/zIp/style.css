@@ -47,6 +47,10 @@ input[type=submit] {
     font-size: 11px;
 }
 
+img{
+    border: 0;
+}
+
 .icon {
     padding: 3px 6px 3px 1px;
     vertical-align: middle;
