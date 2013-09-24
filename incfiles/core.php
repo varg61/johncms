@@ -18,7 +18,6 @@ mb_internal_encoding('UTF-8');
 
 // Корневая папка
 define('ROOTPATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
-$rootpath = ROOTPATH;
 
 /*
 -----------------------------------------------------------------
@@ -42,9 +41,10 @@ new core;
 
 /*
 -----------------------------------------------------------------
-Получаем системные переменные
+Получаем системные переменные для совместимости со старыми модулями
 -----------------------------------------------------------------
 */
+$rootpath = ROOTPATH;
 $ip = core::$ip; // Адрес IP
 $agn = core::$user_agent; // User Agent
 $set = core::$system_set; // Системные настройки
@@ -107,11 +107,6 @@ if ((core::$system_set['site_access'] == 0 || core::$system_set['site_access'] =
 Буфферизация вывода
 -----------------------------------------------------------------
 */
-if (!isset($set['gzip'])) {
-    mysql_query("INSERT INTO `cms_settings` SET `key` = 'gzip', `val` = '1'");
-    $set['gzip'] = 1;
-}
-
 if ($set['gzip'] && @extension_loaded('zlib')) {
     @ini_set('zlib.output_compression_level', 3);
     ob_start('ob_gzhandler');
