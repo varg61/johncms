@@ -95,6 +95,21 @@ img{
     padding: 0px 0px 0px 10px;
 }
 
+/*Панель bb*/
+.bbpopup {
+    margin-top: 3px;
+}
+
+/* Ссылки для панели bb*/
+.bbpopup a {
+    border: 1px solid #a7a7a7;
+    height: 10px;
+    display: inline-block;
+    margin: 1px;
+    vertical-align: middle;
+    width: 10px;
+}
+
 .bmenu {
     background-color: #D3D8DB;
     border-bottom: 1px solid #bbb;
