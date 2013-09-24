@@ -107,6 +107,7 @@ if(core::$user_id){
         if ($error)
             echo functions::display_error($error);
 
+        $info = '';
         if (core::$system_set['site_access'] == 0 || core::$system_set['site_access'] == 1) {
             if (core::$system_set['site_access'] == 0) {
                 $info = '<div class="rmenu">' . $lng['info_only_sv'] . '</div>';
