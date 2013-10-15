@@ -32,7 +32,7 @@ class counters
             $new = mysql_result(mysql_query("SELECT COUNT(*) FROM `cms_album_files` WHERE `time` > '" . (time() - 259200) . "' AND `access` > '1'"), 0);
             file_put_contents($file, serialize(array('album' => $album, 'photo' => $photo, 'new' => $new)));
         }
-        return $album . '&#160;/&#160;' .$photo . ($new ? '&#160;/&#160;<span class="red"><a href="' . core::$system_set['homeurl'] . '/users/album.php?act=top">+' . $new . '</a></span>' : '');
+        return $album . '&#160;/&#160;' . $photo . ($new ? '&#160;/&#160;<span class="red"><a href="' . core::$system_set['homeurl'] . '/users/album.php?act=top">+' . $new . '</a></span>' : '');
     }
 
     /*
@@ -97,15 +97,18 @@ class counters
                 AND (`cms_forum_rdm`.`topic_id` Is Null
                 OR `forum`.`time` > `cms_forum_rdm`.`time`)");
             $total = mysql_result($req, 0);
-            if ($mod)
-                return '<a href="index.php?act=new">' . core::$lng['unread'] . '</a>&#160;' . ($total ? '<span class="red">(<b>' . $total . '</b>)</span>' : '');
-            else
+            if ($mod) {
+                return '<a href="index.php?act=new&amp;do=period">' . core::$lng['show_for_period'] . '</a>' .
+                ($total ? '<br/><a href="index.php?act=new">' . core::$lng['unread'] . '</a>&#160;<span class="red">(<b>' . $total . '</b>)</span>' : '');
+            } else {
                 return $total;
+            }
         } else {
-            if ($mod)
+            if ($mod) {
                 return '<a href="index.php?act=new">' . core::$lng['last_activity'] . '</a>';
-            else
+            } else {
                 return false;
+            }
         }
     }
 

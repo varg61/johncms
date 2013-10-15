@@ -35,7 +35,7 @@ if ($user_id) {
             $req = mysql_query("SELECT `forum`.`id`
             FROM `forum` LEFT JOIN `cms_forum_rdm` ON `forum`.`id` = `cms_forum_rdm`.`topic_id` AND `cms_forum_rdm`.`user_id` = '$user_id'
             WHERE `forum`.`type`='t'
-            AND `cms_forum_rdm`.`topic_id` Is Null");
+            AND `cms_forum_rdm`.`topic_id` IS Null");
             while ($res = mysql_fetch_assoc($req)) {
                 mysql_query("INSERT INTO `cms_forum_rdm` SET
                     `topic_id` = '" . $res['id'] . "',
@@ -56,31 +56,13 @@ if ($user_id) {
             echo '<div class="menu"><p>' . $lng_forum['unread_reset_done'] . '<br /><a href="index.php">' . $lng_forum['to_forum'] . '</a></p></div>';
             break;
 
-        case 'select':
-            /*
-            -----------------------------------------------------------------
-            Форма выбора диапазона времени
-            -----------------------------------------------------------------
-            */
-            echo'<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['unread_show_for_period'] . '</div>' .
-                '<div class="menu"><p><form action="index.php?act=new&amp;do=period" method="post">' . $lng_forum['unread_period'] . ':<br/>' .
-                '<input type="text" maxlength="3" name="vr" value="24" size="3"/>' .
-                '<input type="submit" name="submit" value="' . $lng['show'] . '"/></form></p></div>' .
-                '<div class="phdr"><a href="index.php?act=new">' . $lng['back'] . '</a></div>';
-            break;
-
         case 'period':
             /*
             -----------------------------------------------------------------
             Показ новых тем за выбранный период
             -----------------------------------------------------------------
             */
-            $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : NULL;
-            if (!$vr) {
-                echo $lng_forum['error_time_empty'] . '<br/><a href="index.php?act=new&amp;do=all">' . $lng['repeat'] . '</a><br/>';
-                require('../incfiles/end.php');
-                exit;
-            }
+            $vr = isset($_REQUEST['vr']) ? abs(intval($_REQUEST['vr'])) : 24;
             $vr1 = time() - $vr * 3600;
             if ($rights == 9) {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1'");
@@ -88,9 +70,19 @@ if ($user_id) {
                 $req = mysql_query("SELECT COUNT(*) FROM `forum` WHERE `type`='t' AND `time` > '$vr1' AND `close` != '1'");
             }
             $count = mysql_result($req, 0);
+
             echo '<div class="phdr"><a href="index.php"><b>' . $lng['forum'] . '</b></a> | ' . $lng_forum['unread_all_for_period'] . ' ' . $vr . ' ' . $lng_forum['hours'] . '</div>';
-            if ($count > $kmess)
+
+            // Форма выбора периода времени
+            echo '<div class="topmenu"><form action="index.php?act=new&amp;do=period" method="post">' .
+                '<input type="text" maxlength="3" name="vr" value="' . $vr . '" size="3"/>' .
+                '<input type="submit" name="submit" value="' . $lng['show_for_period'] . '"/>' .
+                '</form></div>';
+
+            if ($count > $kmess) {
                 echo '<div class="topmenu">' . functions::display_pagination('index.php?act=new&amp;do=period&amp;vr=' . $vr . '&amp;', $start, $count, $kmess) . '</div>';
+            }
+
             if ($count > 0) {
                 if ($rights == 9) {
                     $req = mysql_query("SELECT * FROM `forum` WHERE `type`='t' AND `time` > '" . $vr1 . "' ORDER BY `time` DESC LIMIT " . $start . "," . $kmess);
@@ -136,7 +128,6 @@ if ($user_id) {
                     <input type="text" name="page" size="2"/>
                     <input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/></form></p>';
             }
-            echo '<p><a href="index.php?act=new">' . $lng['back'] . '</a></p>';
             break;
 
         default:
@@ -199,10 +190,11 @@ if ($user_id) {
                     '<input type="submit" value="' . $lng['to_page'] . ' &gt;&gt;"/>' .
                     '</form></p>';
             }
-            echo '<p>';
-            if ($total)
-                echo '<a href="index.php?act=new&amp;do=reset">' . $lng_forum['unread_reset'] . '</a><br/>';
-            echo '<a href="index.php?act=new&amp;do=select">' . $lng_forum['unread_show_for_period'] . '</a></p>';
+
+            if ($total) {
+                echo '<p><a href="index.php?act=new&amp;do=reset">' . $lng_forum['unread_reset'] . '</a></p>';
+            }
+
     }
 } else {
     /*
