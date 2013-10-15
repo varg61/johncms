@@ -53,14 +53,17 @@ $ext_doc = array(
     'txt',
     'pdf',
     'doc',
+    'docx',
     'rtf',
     'djvu',
-    'xls'
+    'xls',
+    'xlsx'
 );
 // Файлы Java
 $ext_java = array(
-    'jar',
-    'jad'
+    'sis',
+    'sisx',
+    'apk'
 );
 // Файлы картинок
 $ext_pic = array(
