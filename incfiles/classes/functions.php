@@ -330,10 +330,9 @@ class functions extends core
                 $out .= '</td><td>';
             }
             if ($user['sex'])
-                $out .= '<img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/' . ($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > time() - 86400 ? '_new' : '')
-                    . '.png" width="16" height="16" align="middle" alt="' . ($user['sex'] == 'm' ? 'М' : 'Ж') . '" />&#160;';
+                $out .= functions::image(($user['sex'] == 'm' ? 'm' : 'w') . ($user['datereg'] > time() - 86400 ? '_new' : '') . '.png', array('class' => 'icon-inline'));
             else
-                $out .= '<img src="' . self::$system_set['homeurl'] . '/images/del.png" width="12" height="12" align="middle" />&#160;';
+                $out .= functions::image('del.png');
             $out .= !self::$user_id || self::$user_id == $user['id'] ? '<b>' . $user['name'] . '</b>' : '<a href="' . self::$system_set['homeurl'] . '/users/profile.php?user=' . $user['id'] . '"><b>' . $user['name'] . '</b></a>';
             $rank = array(
                 0 => '',
@@ -351,7 +350,7 @@ class functions extends core
             if (!empty($arg['header']))
                 $out .= ' ' . $arg['header'];
             if (!isset($arg['stshide']) && !empty($user['status']))
-                $out .= '<div class="status"><img src="' . self::$system_set['homeurl'] . '/theme/' . self::$user_set['skin'] . '/images/label.png" alt="" align="middle" />&#160;' . $user['status'] . '</div>';
+                $out .= '<div class="status">' . functions::image('label.png', array('class' => 'icon-inline')) . $user['status'] . '</div>';
             if (self::$user_set['avatar'])
                 $out .= '</td></tr></table>';
         }
@@ -438,17 +437,18 @@ class functions extends core
 
     public static function image($name, $args = array())
     {
-        $src = core::$system_set['homeurl'] . '/images/' . $name;
         if (is_file(ROOTPATH . 'theme' . DIRECTORY_SEPARATOR . core::$user_set['skin'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $name)) {
             $src = core::$system_set['homeurl'] . '/theme/' . core::$user_set['skin'] . '/images/' . $name;
-        } elseif (!is_file(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . $name)) {
+        } elseif (is_file(ROOTPATH . 'images' . DIRECTORY_SEPARATOR . $name)) {
+            $src = core::$system_set['homeurl'] . '/images/' . $name;
+        } else {
             return false;
         }
 
         return '<img src="' . $src . '" alt="' . (isset($args['alt']) ? $args['alt'] : '') . '"' .
         (isset($args['width']) ? ' width="' . $args['width'] . '"' : '') .
         (isset($args['height']) ? ' height="' . $args['height'] . '"' : '') .
-        ' class="icon"/>';
+        ' class="' . (isset($args['class']) ? $args['class'] : 'icon') . '"/>';
     }
 
     /**

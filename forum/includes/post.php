@@ -40,9 +40,9 @@ if ($set_user['avatar']) {
     echo '</td><td>';
 }
 if ($res['sex'])
-    echo '<img src="../theme/' . $set_user['skin'] . '/images/' . ($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png" width="16" height="16" align="middle" alt=""/>&#160;';
+    echo functions::image(($res['sex'] == 'm' ? 'm' : 'w') . ($res['datereg'] > time() - 86400 ? '_new' : '') . '.png', array('class' => 'icon-inline'));
 else
-    echo '<img src="../images/del.png" width="12" height="12" align="middle" alt=""/>&#160;';
+    echo functions::image('del.png');
 // Ник юзера и ссылка на его анкету
 if ($user_id && $user_id != $res['user_id']) {
     echo '<a href="../users/profile.php?user=' . $res['user_id'] . '"><b>' . $res['from'] . '</b></a> ';
@@ -69,7 +69,7 @@ if ($user_id && $user_id != $res['user_id']) {
 echo ' <span class="gray">(' . functions::display_date($res['time']) . ')</span><br />';
 // Статус юзера
 if (!empty($res['status']))
-    echo '<div class="status"><img src="../theme/' . $set_user['skin'] . '/images/label.png" alt="" align="middle"/>&#160;' . $res['status'] . '</div>';
+    echo '<div class="status">' . functions::image('label.png', array('class' => 'icon-inline')) . $res['status'] . '</div>';
 if ($set_user['avatar'])
     echo '</td></tr></table>';
 

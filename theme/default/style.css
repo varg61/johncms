@@ -149,6 +149,11 @@ ul {
     vertical-align: middle;
 }
 
+.icon-inline {
+    padding-right: 6px;
+    vertical-align: middle;
+}
+
 .left {
     float: left;
 }

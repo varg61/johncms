@@ -179,7 +179,7 @@ if (array_key_exists($act, $array) && file_exists($path . $act . '.php')) {
             } else {
                 $friend = '<a href="profile.php?act=friends&amp;do=delete&amp;id=' . $user['id'] . '">' . $lng_profile['remov_friend'] . '</a>';
             }
-            echo '<div><img src="../images/add.gif" width="16" height="16"/>&#160;' . $friend . '</div>';
+            echo '<div>' . functions::image('add.gif') . $friend . '</div>';
         }
 
         if (functions::is_contact($user['id']) != 2) {

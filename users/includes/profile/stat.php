@@ -21,7 +21,7 @@ require('../incfiles/head.php');
 echo'<div class="phdr"><a href="profile.php?user=' . $user['id'] . '"><b>' . $lng['profile'] . '</b></a> | ' . $lng['statistics'] . '</div>' .
     '<div class="user"><p>' . functions::display_user($user, array('iphide' => 1,)) . '</p></div>' .
     '<div class="list2">' .
-    '<p><h3><img src="../images/rate.gif" width="16" height="16" class="left" />&#160;' . $lng['statistics'] . '</h3><ul>';
+    '<p><h3>' . functions::image('rate.gif') . $lng['statistics'] . '</h3><ul>';
 if ($rights >= 7) {
     if (!$user['preg'] && empty($user['regadm']))
         echo '<li>' . $lng_profile['awaiting_registration'] . '</li>';
