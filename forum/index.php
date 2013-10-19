@@ -278,7 +278,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
         Выводим верхнюю панель навигации
         -----------------------------------------------------------------
         */
-        echo '<p>' . counters::forum_new(1) . '</p>' .
+        echo '<a id="up"></a><p>' . counters::forum_new(1) . '</p>' .
             '<div class="phdr">' . functions::display_menu($tree) . '</div>' .
             '<div class="topmenu"><a href="search.php?id=' . $id . '">' . $lng['search'] . '</a>' . ($filelink ? ' | ' . $filelink : '') . ($wholink ? ' | ' . $wholink : '') . '</div>';
 
@@ -415,7 +415,7 @@ if ($act && ($key = array_search($act, $mods)) !== FALSE && file_exists('include
                 }
 
                 // Выводим название топика
-                echo '<div class="phdr"><a id="up"></a><a href="#down">' . functions::image('down.png', array('class' => '')) . '</a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
+                echo '<div class="phdr"><a href="#down">' . functions::image('down.png', array('class' => '')) . '</a>&#160;&#160;<b>' . $type1['text'] . '</b></div>';
                 if ($colmes > $kmess) {
                     echo '<div class="topmenu">' . functions::display_pagination('index.php?id=' . $id . '&amp;', $start, $colmes, $kmess) . '</div>';
                 }
