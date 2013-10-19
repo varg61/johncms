@@ -328,11 +328,10 @@ switch ($act) {
                     $end = $total;
                 if ($total > 0) {
                     for ($i = $start; $i < $end; $i++) {
-                        $ava = preg_replace('#^' . ROOTPATH . 'images/avatars/' . $id . '/(.*?).png$#isU', '$1', $array[$i], 1);
                         echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                        echo '<img src="' . $array[$i] . '" alt="" />';
+                        echo '<img src="../images/avatars/' . $id . '/' . basename($array[$i]) . '" alt="" />';
                         if ($user_id)
-                            echo ' - <a href="faq.php?act=avatars&amp;id=' . $id . '&amp;avatar=' . $ava . '">' . $lng['select'] . '</a>';
+                            echo ' - <a href="faq.php?act=avatars&amp;id=' . $id . '&amp;avatar=' . basename($array[$i]) . '">' . $lng['select'] . '</a>';
                         echo '</div>';
                     }
                 } else {
@@ -359,7 +358,7 @@ switch ($act) {
                 $count = (int)count(glob($dir[$i] . '/*.png'));
                 $total = $total + $count;
                 echo $i % 2 ? '<div class="list2">' : '<div class="list1">';
-                echo '<a href="faq.php?act=avatars&amp;id=' . preg_replace('#^' . ROOTPATH . 'images/avatars/#isU', '', $dir[$i], 1) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') .
+                echo '<a href="faq.php?act=avatars&amp;id=' . basename($dir[$i]) . '">' . htmlentities(file_get_contents($dir[$i] . '/name.dat'), ENT_QUOTES, 'utf-8') .
                     '</a> (' . $count . ')</div>';
             }
             echo '<div class="phdr">' . $lng['total'] . ': ' . $total . '</div>' .
