@@ -175,7 +175,7 @@ class bbcode extends core
     {
         $var = preg_replace('#\[color=(.+?)\](.+?)\[/color]#si', '$2', $var);
         $var = preg_replace('!\[bg=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)](.+?)\[/bg]!is', '$2', $var);
-        $var = preg_replace('#\[spoiler=(.+?)\](.+?)\[/spoiler]#si', '$2', $var);
+        $var = preg_replace('#\[spoiler=(.+?)\]#si', '$2', $var);
         $replace = array(
             '[small]' => '',
             '[/small]' => '',
