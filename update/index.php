@@ -13,7 +13,12 @@ define('_IN_JOHNCMS', 1);
 set_time_limit(1200);
 
 define('INSTALL_VERSION', '5.2.2'); // Инсталлируемая версия
-define('MODE', 'install');
+define('UPDATE_VERSION', '5.x.x'); // Обновление с версии
+
+// Задаем режим работы инсталлятора
+//define('MODE', 'update_440');
+//define('MODE', 'update_45x');
+define('MODE', 'update_5x');
 
 class install
 {
