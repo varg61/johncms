@@ -11,8 +11,9 @@
 
 defined('_IN_JOHNCMS') or die('Error: restricted access');
 
-if ($user_id && !$ban['1'] && !$ban['10'] && ($set['mod_down_comm'] || $rights < 7)) {
-    if ($_GET['id'] == "") {
+if ($id > 0 && $user_id && !$ban['1'] && !$ban['10'] && ($set['mod_down_comm'] || $rights < 7)) {
+    $file = mysql_query("SELECT * FROM `download` WHERE `type` = 'file' AND `id` = '" . $file . "'");
+    if (!mysql_num_rows($file)) {
         require_once("../incfiles/head.php");
         echo "Не выбран файл<br/><a href='?'>К категориям</a><br/>";
         require_once('../incfiles/end.php');
