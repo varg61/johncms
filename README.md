@@ -1,37 +1,7 @@
 # [JohnCMS](http://johncms.com)
 
-Система управления сайтом JohnCMS (Content Management System)
-Предназначена для построения сайтов, которые будут просматриваться
-с мобильных телефонов. Полностью соответствует спецификации
-XHTML Mobile Profile и имеет небольшой размер генерируемых страниц.
-
-## Основные возможности системы:
-- мультиязычность, возможность устанавливать / удалять языки интерфейса
-- высокий уровень безопасности
-- быстрая в работе, построена на MySQL
-- продвинутая система разграничений прав для админов/модеров
-- форум с возможностью закрепления/закрытия тем, созданием голосований,
-  возможностью прикрепления файлов в теме и т.д...
-- личные Фотоальбомы
-- личные Гостевые книги
-- продвинутая библиотека с неограниченной вложенностью разделов и
-  возможностью для посетителей сайта публиковать свои статьи.
-  Есть модерация статей, которые опубликовали посетители.
-  Автоматическая компиляция Java книг.
-- фотогалерея
-- загруз центр с неограниченной вложенностью разделов, счетчиком,
-  рейтингом и комментариями.
-- приват (личная почта) с возможностью прикрепления файлов
-- удобная работа со смайлами
-- смена стилей
-- и многое другое...
-
---------------------------------------------------------------------------------
-
-Content Management System JohnCMS
-is for the construction of the sites that will be looked through from mobiles. It 
-completely fits  the specification 
-XHTML Mobile Profile and has not a very big size of mechanized pages. 
+JohnCMS Content Management System is for the construction of the sites that will be looked through from mobiles.
+It fits  the specification XHTML Mobile Profile and has not a very big size of mechanized pages. 
 
 ## The main possibilities of the system:
 - multilingual, the possibility to install / delete the languages of the interface.
@@ -51,3 +21,51 @@ XHTML Mobile Profile and has not a very big size of mechanized pages.
 - easy work with smiles
 - change of styles
 - and many other things...
+
+## System Requirements
+- PHP version is not low than 5.1
+- MySQL version is not slow than 4.1
+- .htaccess support
+
+## Installation
+1. Input this address in browser: http://your.site/install
+2. Start the installer and folow the instructions
+3. After the installation **necessarily** delete the directory / install
+4. Set up permissions (CHMOD) 755 for the folder /incfiles
+5. Set up permissions (CHMOD) 644 for the file /incfiles/db.php
+
+---
+
+# [JohnCMS](http://johncms.com)
+
+Система управления сайтом JohnCMS предназначена для построения сайтов, которые будут просматриваться с мобильных телефонов.
+Соответствует спецификации XHTML Mobile Profile и имеет небольшой размер генерируемых страниц.
+
+## Основные возможности системы:
+- мультиязычность, возможность устанавливать / удалять языки интерфейса
+- высокий уровень безопасности
+- быстрая в работе, построена на MySQL
+- продвинутая система разграничений прав для админов/модеров
+- форум с возможностью закрепления/закрытия тем, созданием голосований,
+  возможностью прикрепления файлов в теме и т.д...
+- личные Фотоальбомы
+- личные Гостевые книги
+- библиотека с неограниченной вложенностью разделов и возможностью для посетителей сайта публиковать свои статьи. Модерация статей, компиляция Java книг.
+- фотогалерея
+- загруз центр с неограниченной вложенностью разделов, счетчиком, рейтингом и комментариями.
+- приват (личная почта) с возможностью прикрепления файлов
+- удобная работа со смайлами
+- смена стилей
+- и многое другое...
+
+## Системные требования
+- Версия PHP не ниже 5.1
+- MySQL версии не ниже 4.1
+- Поддержка .htaccess
+
+## Установка
+1. Наберите в браузере адрес: http://ваш.сайт/install
+2. Запустится Инсталлятор, далее следуйте его инструкциям
+3. После установки **обязательно** удалите каталог /install
+4. Установите права доступа 755 к папке /incfiles
+5. Установите права доступа 644 на файл /incfiles/db.php
